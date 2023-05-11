@@ -172,7 +172,7 @@ export const useOauth = () => {
   hellojs?.init(
     {
       google: '117868071955-dkealrsgucq1bkcmu5u6cljmko7i90b8.apps.googleusercontent.com',
-      twitter: 'Lcxb7E1quXZ8ltUcKK1BKkdeQ'
+      twitter: 'aXlqMi1pS21uYkZDYlhNZzIzMG86MTpjaQ'
     },
     {
       redirect_uri: '/'
