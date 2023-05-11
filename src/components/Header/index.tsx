@@ -124,7 +124,7 @@ const transparentRoutes = [
   routes.launchpad.projectIntro
 ]
 
-const whiteLogoRoutes = [routes.launchpad.projectIntro]
+export const whiteLogoRoutes = [routes.launchpad.projectIntro]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)

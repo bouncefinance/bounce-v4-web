@@ -32,7 +32,7 @@ import Telegram from 'assets/imgs/common/Telegram.png'
 import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.svg'
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 
-import BlodeAvatar from './avatar/BlodeAvatar.ico'
+import BlodeAvatar from './avatar/blade-icon.ico'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 
 export const Launchpad: React.FC = () => {
