@@ -7,6 +7,7 @@ import { ShowOnMobile } from 'themes/index'
 // import PlainSelect from 'components/Select/PlainSelect'
 import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
+import logoWhite from '../../assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkPopperSelect from './NetworkPopperSelect'
@@ -123,6 +124,8 @@ const transparentRoutes = [
   routes.launchpad.projectIntro
 ]
 
+const whiteLogoRoutes = [routes.launchpad.projectIntro]
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -151,7 +154,7 @@ export default function Header() {
       <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
         <Box display="flex" alignItems="center">
           <MainLogo id={'logo'} to={'/'}>
-            <Image src={logo} alt={'logo'} />
+            <Image src={whiteLogoRoutes.includes(pathname) ? logoWhite : logo} alt={'logo'} />
           </MainLogo>
 
           {!isTransparentRoute && <HeaderLink />}

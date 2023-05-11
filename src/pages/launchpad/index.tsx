@@ -30,6 +30,7 @@ import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.
 import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.svg'
+import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 
 import BlodeAvatar from './avatar/BlodeAvatar.ico'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
@@ -95,7 +96,9 @@ const SocialBg = styled(Box)`
   background: #ffffff;
   border: 1px solid rgba(18, 18, 18, 0.2);
   border-radius: 18px;
+`
 
+const SvgTwitterBlue = styled(SocialBg)`
   svg {
     fill: #0697f8;
     opacity: 1;
@@ -112,7 +115,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    link: '/projectIntro',
+    link: '/projectIntro/bladedao-intro',
     projectInfo: [
       {
         title: 'What is BladeDAO?',
@@ -136,10 +139,15 @@ export const PrivatePadList: IPrivatePadProp[] = [
     desc: 'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
     // desc: '',
     social: [
-      <Link key={1} href="https://twitter.com/blade_dao" target="_blank">
+      <Link key={1} href="https://www.bladedao.games/" target="_blank">
         <SocialBg>
-          <TwitterWhite />
+          <WebWhite />
         </SocialBg>
+      </Link>,
+      <Link key={1} href="https://twitter.com/blade_dao" target="_blank">
+        <SvgTwitterBlue>
+          <TwitterWhite />
+        </SvgTwitterBlue>
       </Link>
     ],
     moreData: [

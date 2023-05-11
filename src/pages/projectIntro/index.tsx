@@ -11,6 +11,7 @@ import TokenImage from '../../bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
+import { useNavigate } from 'react-router-dom'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -26,6 +27,11 @@ const GrayButton = styled(Button)`
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   border-radius: 8px;
+
+  :hover {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+  }
 `
 const WhiteButton = styled(Button)`
   display: flex;
@@ -96,8 +102,8 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
       value: 'BLADE'
     },
     {
-      title: 'Blockchain / Platform',
-      value: 'zkSync'
+      title: 'Blockchain',
+      value: 'zkSync Era'
     }
     // {
     //   title: 'Hard Cap Per User',
@@ -109,6 +115,7 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
     // }
   ]
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
+  const nav = useNavigate()
   return (
     <Box
       sx={{
@@ -144,24 +151,31 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
           borderRadius: '0 0 20px 20px',
           backgroundSize: 'cover',
           objectFit: 'scale-down',
-          zIndex: -1,
           left: '40px'
         }}
       >
-        <GrayButton>
+        <GrayButton
+          onClick={() => {
+            nav('/launch-pad')
+          }}
+        >
           <ArrowBackIcon />
           <Typography variant={'h5'}>Launchpad homepage</Typography>
         </GrayButton>
         <Upcoming>Upcoming</Upcoming>
         <AlignBottomBG
           sx={{
-            padding: '80px',
+            display: 'flex',
+            flexDirection: 'column',
             borderRadius: '0 0 20px 20px',
             alignItems: 'center',
+            paddingBottom: '80px',
+            paddingTop: '20px',
             background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
           }}
         >
-          <Typography variant={'h1'} sx={{ color: 'white' }}>
+          <img src={item.avatar} style={{ width: 60, height: 60, borderRadius: 6 }} />
+          <Typography mt={16} variant={'h1'} sx={{ color: 'white' }}>
             {item.title}
           </Typography>
           <Typography mt={14} variant={'body1'} sx={{ color: 'white', maxWidth: '800px', textAlign: 'center' }}>
@@ -185,7 +199,7 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
                 size={12}
               />
               <Typography variant={'h6'} color={'white'}>
-                zkSync
+                zkSync Era
               </Typography>
             </GrayBg>
             {/*<GrayBg>*/}
