@@ -78,6 +78,7 @@ export interface IPrivatePadProp {
   projectInfo: IProjectInfo[]
   tokenMetrics: IProjectInfo[]
   social: JSX.Element[]
+  link?: string
   moreData: {
     title: string
     content: string
@@ -111,6 +112,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
+    link: '/projectIntro',
     projectInfo: [
       {
         title: 'What is BladeDAO?',
@@ -131,8 +133,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
         info: 'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
       }
     ],
-    // desc: 'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
-    desc: '',
+    desc: 'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
+    // desc: '',
     social: [
       <Link key={1} href="https://twitter.com/blade_dao" target="_blank">
         <SocialBg>

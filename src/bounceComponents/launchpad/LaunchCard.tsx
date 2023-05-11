@@ -6,6 +6,7 @@ import PoolStatusBox from '../fixed-swap-nft/ActionBox/NftPoolStatus'
 import { Body02, Body03, H5, H6 } from '../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { IPrivatePadProp } from 'pages/launchpad'
+import { useNavigate } from 'react-router-dom'
 
 export function CardDesc({ title, content }: { title: string; content: string | React.ReactElement }) {
   return (
@@ -144,9 +145,15 @@ export function SocialMedia({ data }: { data: IPrivatePadProp }) {
 }
 
 export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadProp }> = props => {
+  const navigator = useNavigate()
   return (
     <Common
       img={props.data.img}
+      onClick={() => {
+        if (props.data.link) {
+          navigator(props.data.link)
+        }
+      }}
       child={
         <Box padding={'24px 40px'} display={'flex'} flexDirection={'column'} height={'100%'}>
           <CenterRow justifyContent={'space-between'}>
@@ -169,46 +176,48 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
     />
   )
 }
-export const LaunchCardFinish: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
-  return (
-    <LaunchCard
-      data={data}
-      child={
-        <CardContainer>
-          <LaunchPadDesc />
-          <TimeBlock isEnd={true} />
-        </CardContainer>
-      }
-    />
-  )
-}
+// export const LaunchCardFinish: React.FC<{
+//   data: IPrivatePadProp
+// }> = ({ data }) => {
+//   return (
+//     <LaunchCard
+//       data={data}
+//       child={
+//         <CardContainer>
+//           <LaunchPadDesc />
+//           <TimeBlock isEnd={true} />
+//         </CardContainer>
+//       }
+//     />
+//   )
+// }
 
-export const LaunchCardLive: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
-  return (
-    <LaunchCard
-      data={data}
-      child={
-        <CardContainer>
-          <LaunchPadDesc />
-          <Progress />
-        </CardContainer>
-      }
-    />
-  )
-}
-export const LaunchCardUpcoming: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
-  return (
-    <LaunchCard
-      data={data}
-      child={
-        <CardContainer>
-          <LaunchPadDesc />
-          <TimeBlock isEnd={false} />
-        </CardContainer>
-      }
-    />
-  )
-}
+// export const LaunchCardLive: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
+//   return (
+//     <LaunchCard
+//       data={data}
+//       child={
+//         <CardContainer>
+//           <LaunchPadDesc />
+//           <Progress />
+//         </CardContainer>
+//       }
+//     />
+//   )
+// }
+// export const LaunchCardUpcoming: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
+//   return (
+//     <LaunchCard
+//       data={data}
+//       child={
+//         <CardContainer>
+//           <LaunchPadDesc />
+//           <TimeBlock isEnd={false} />
+//         </CardContainer>
+//       }
+//     />
+//   )
+// }
 export const LaunchCardSocial: React.FC<{ data: IPrivatePadProp }> = ({ data }) => {
   return (
     <LaunchCard
