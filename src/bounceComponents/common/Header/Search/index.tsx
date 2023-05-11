@@ -5,13 +5,15 @@ import HeaderSearchInput, { ISearchOption } from '../../SearchInput/HeaderSearch
 import { searchUser } from 'api/optionsData'
 import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { USER_TYPE } from 'api/user/type'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import { whiteLogoRoutes } from '../../../../components/Header'
 
 const Search: React.FC = () => {
   const [userData, setUserData] = useState<ISearchOption[]>([])
   const [searchText, setSearchText] = useState<string>('')
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   useEffect(() => {
     searchUser({
@@ -43,8 +45,8 @@ const Search: React.FC = () => {
         position: 'relative',
         '.Mui-focused': {
           '.MuiOutlinedInput-root': {
-            background: 'var(--ps-text-4)',
-            color: 'var(--ps-text-5)',
+            background: whiteLogoRoutes.includes(pathname) ? 'white' : 'var(--ps-text-4)',
+            color: whiteLogoRoutes.includes(pathname) ? 'black' : 'var(--ps-text-5)',
             border: 'none !important',
             width: 400
           }
@@ -56,7 +58,7 @@ const Search: React.FC = () => {
           width: 44,
           height: 44,
           overflow: 'hidden',
-          background: 'rgba(18, 18, 18, 0.06)',
+          background: whiteLogoRoutes.includes(pathname) ? 'white' : 'rgba(18, 18, 18, 0.06)',
           padding: '0 !important',
           border: 'none',
           '& input': {
