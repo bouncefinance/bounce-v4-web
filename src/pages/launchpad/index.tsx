@@ -21,15 +21,14 @@ import {
 // } from '../../bounceComponents/launchpad/TokenCard'
 // import { PoolStatus } from '../../api/pool/type'
 import FooterPc from '../../components/Footer/FooterPc'
-import BlodeDaoImg from 'assets/imgs/auction/1.png'
-import PoseiSwapImg from 'assets/imgs/auction/3.png'
+// import BlodeDaoImg from 'assets/imgs/auction/1.png'
+// import PoseiSwapImg from 'assets/imgs/auction/3.png'
 import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
 import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitter.svg'
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
-
 import BlodeAvatar from './avatar/BlodeAvatar.ico'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 
@@ -78,7 +77,7 @@ const PrivatePad: React.FC = () => {
 
   const list: IPrivatePadProp[] = [
     {
-      img: BlodeDaoImg,
+      img: 'https://images-v3.bounce.finance/141976585869e842d9b8e17f21ec7037-1683799247.png',
       avatar: BlodeAvatar,
       title: 'BladeDAO',
       status: PoolStatus.Upcoming,
@@ -99,7 +98,7 @@ const PrivatePad: React.FC = () => {
       ]
     },
     {
-      img: PoseiSwapImg,
+      img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
       avatar: poseiswapAvatar,
       title: 'PoseiSwap',
       status: PoolStatus.Upcoming,
