@@ -21,7 +21,8 @@ export const routes = {
     index: '/TokenAuction'
   },
   launchpad: {
-    index: '/launch-pad'
+    index: '/launch-pad',
+    projectIntro: '/projectIntro'
   },
   realAuction: {
     index: '/real-auction'

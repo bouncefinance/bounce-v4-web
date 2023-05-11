@@ -119,7 +119,8 @@ const transparentRoutes = [
   routes.tokenAuction.index,
   routes.adsAuction.index,
   routes.realAuction.index,
-  routes.launchpad.index
+  routes.launchpad.index,
+  routes.launchpad.projectIntro
 ]
 
 export default function Header() {
