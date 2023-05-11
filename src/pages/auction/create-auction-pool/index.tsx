@@ -228,7 +228,8 @@ const CreateAuctionPoolIntroPage = () => {
                 </Typography>
 
                 <Stack direction="row" spacing={10} justifyContent="end">
-                  {account && userId && userInfo?.email && userInfo?.twitterName ? (
+                  {/* && userInfo?.twitterName */}
+                  {account && userId && userInfo?.email ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel

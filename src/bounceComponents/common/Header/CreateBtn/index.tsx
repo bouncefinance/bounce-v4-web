@@ -56,7 +56,7 @@ const CreateBtn: React.FC = () => {
     >
       <MenuItem
         onClick={() => {
-          navigate(`${routes.auction.createAuctionPool}?redirect=${location.pathname}${location.search}`)
+          navigate(`${routes.auction.createAuctionPool}`)
           setAnchorEl(null)
         }}
       >
