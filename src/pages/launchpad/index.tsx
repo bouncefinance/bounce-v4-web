@@ -115,7 +115,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    link: '/projectIntro/bladedao-intro',
+    link: '/launchpad/bladedao-intro',
     projectInfo: [
       {
         title: 'What is BladeDAO?',

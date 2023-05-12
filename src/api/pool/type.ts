@@ -19,9 +19,9 @@ export function getTextFromPoolType(type: PoolType) {
     case PoolType.ENGLISH_AUCTION_NFT:
       return 'English Auction'
     case PoolType.FixedSwap:
-      return 'Fix-Swap Auction'
+      return 'Fixed-Swap Auction'
     case PoolType.fixedSwapNft:
-      return 'Fix-Swap NFT'
+      return 'Fixed-Swap NFT'
     case PoolType.Lottery:
       return 'Lottery'
     case PoolType.SealedBid:
