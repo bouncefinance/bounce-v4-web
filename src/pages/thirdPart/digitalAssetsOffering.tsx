@@ -23,6 +23,8 @@ import { useActiveWeb3React } from 'hooks'
 import moment from 'moment'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useUserInfo } from 'state/users/hooks'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
@@ -69,6 +71,7 @@ const JoinBtn = styled(Button)(() => ({
 const DigitalAssetsOffering: React.FC = ({}) => {
   const { account } = useActiveWeb3React()
   const { userInfo } = useUserInfo()
+  const navigate = useNavigate()
   const showLoginModal = useShowLoginModal()
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
@@ -82,8 +85,9 @@ const DigitalAssetsOffering: React.FC = ({}) => {
       console.log('go next', userInfo?.email)
     } else {
       console.log('please binding your email')
+      navigate(routes.account.myAccount + `?redirectUrl=${routes.thirdPart.digitalAssetsOffering}`)
     }
-  }, [userInfo])
+  }, [navigate, userInfo?.email])
   return (
     <Box
       sx={{
