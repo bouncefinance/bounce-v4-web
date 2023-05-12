@@ -103,7 +103,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const { account } = useActiveWeb3React()
   const { userInfo } = useUserInfo()
   const navigate = useNavigate()
-  const [openSuccessTip, setOpenSuccessTip] = useState(true)
+  const [openSuccessTip, setOpenSuccessTip] = useState(false)
   const showLoginModal = useShowLoginModal()
 
   const { data: isJoined } = useRequest(async () => {
