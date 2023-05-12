@@ -154,7 +154,11 @@ export default function Header() {
       <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
         <Box display="flex" alignItems="center">
           <MainLogo id={'logo'} to={'/'}>
-            <Image src={whiteLogoRoutes.includes(pathname) ? logoWhite : logo} alt={'logo'} />
+            <Image
+              style={whiteLogoRoutes.includes(pathname) ? { mixBlendMode: 'difference' } : {}}
+              src={whiteLogoRoutes.includes(pathname) ? logoWhite : logo}
+              alt={'logo'}
+            />
           </MainLogo>
 
           {!isTransparentRoute && <HeaderLink />}
