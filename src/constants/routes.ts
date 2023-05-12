@@ -62,6 +62,6 @@ export const routes = {
     myPrivateLaunchpad: '/account/private_launchpad'
   },
   thirdPart: {
-    digitalAssetsOffering: '/thirdPart/digitalAssetsOffering'
+    digitalAssetsOffering: '/launchpad/poseiswap-intro'
   }
 }
