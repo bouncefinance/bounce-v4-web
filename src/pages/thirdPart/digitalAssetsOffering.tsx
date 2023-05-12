@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box, Typography, styled, Button } from '@mui/material'
 import BgImg from 'assets/imgs/thirdPart/digitalAssetsOffering/bg.png'
 import SlogenImg from 'assets/imgs/thirdPart/digitalAssetsOffering/slogen.png'
@@ -25,7 +25,12 @@ import { useShowLoginModal } from 'state/users/hooks'
 import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
-
+import { useRequest } from 'ahooks'
+import { joinWaiting, checkWaiting } from 'api/thirdPart'
+import TipsDialogIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/tipsDialogIcon.png'
+import TwitterSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TwitterIcon.svg'
+import DiscordSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/DiscordIcon.svg'
+import TelegramSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TelegramIcon.svg'
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
   fontWeight: 400,
@@ -98,7 +103,14 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const { account } = useActiveWeb3React()
   const { userInfo } = useUserInfo()
   const navigate = useNavigate()
+  const [openSuccessTip, setOpenSuccessTip] = useState(true)
   const showLoginModal = useShowLoginModal()
+
+  const { data: isJoined } = useRequest(async () => {
+    const resp = await checkWaiting()
+    return resp?.data
+  }, {})
+  console.log('isJoined>>', isJoined)
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
@@ -106,15 +118,204 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: endDate
   })
-  const handleJoin = useCallback(() => {
+  const handleJoin = useCallback(async () => {
+    if (isJoined) {
+      setOpenSuccessTip(true)
+      return
+    }
     if (userInfo?.email) {
       console.log('go next', userInfo?.email)
+      const joinResult = await joinWaiting()
+      if (joinResult?.code === 1 && joinResult?.msg && joinResult?.msg === 'success') {
+        setOpenSuccessTip(true)
+      }
     } else {
       console.log('please binding your email')
       navigate(routes.account.myAccount + `?redirectUrl=${routes.thirdPart.digitalAssetsOffering}`)
     }
-  }, [navigate, userInfo?.email])
+  }, [isJoined, navigate, userInfo?.email])
+  const SuccessDialog = () => {
+    const list = [
+      {
+        title: 'Twitter',
+        logo: TwitterSvg,
+        link: 'https://galxe.com/poseiswap/campaign/GCrUTUfLsC'
+      },
+      {
+        title: 'Discord',
+        logo: DiscordSvg,
+        link: 'https://galxe.com/poseiswap/campaign/GCrUTUfLsC'
+      },
+      {
+        title: 'Telegram',
+        logo: TelegramSvg,
+        link: 'https://galxe.com/poseiswap/campaign/GCrUTUfLsC'
+      }
+    ]
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 9
+        }}
+      >
+        <Box
+          sx={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            background: '#000000',
+            opacity: 0.7
+          }}
+          onClick={() => {
+            setOpenSuccessTip(false)
+          }}
+        ></Box>
+        <Box
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate3D(-50%, -50%, 0)',
+            width: 480,
+            background: '#fff',
+            borderRadius: 32,
+            overflow: 'hidden',
+            padding: '0 0 32px'
+          }}
+        >
+          <img
+            src={TipsDialogIcon}
+            style={{
+              width: '100%',
+              marginBottom: 20
+            }}
+            alt=""
+            srcSet=""
+          />
+          <Typography
+            sx={{
+              fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+              fontWeight: 500,
+              fontSize: 24,
+              marginBottom: 10,
+              textAlign: 'center'
+            }}
+          >
+            Registered Successfully
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 16,
+              marginBottom: 67,
+              textAlign: 'center',
+              padding: '0 30px'
+            }}
+          >
+            You are No.
+            <span
+              style={{
+                color: '#2C4ACC',
+                fontWeight: 700
+              }}
+            >
+              TBD
+            </span>{' '}
+            of the waiting list
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 600,
+              fontSize: 16,
+              marginBottom: 30,
+              textAlign: 'center',
+              padding: '0 30px'
+            }}
+          >
+            Congrats! Claim now all 3 Galxe NFTs below to be whitelisted for a unique lottery pool (optional):
+          </Typography>
 
+          {list.map((item, index) => {
+            return (
+              <Box
+                key={index}
+                sx={{
+                  padding: '0 40px'
+                }}
+                mb={20}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: `'Inter'`,
+                    fontWeight: 600,
+                    fontSize: 16,
+                    color: '#000',
+                    verticalAlign: 'middle',
+                    marginBottom: '10px'
+                  }}
+                >
+                  <img
+                    src={item.logo}
+                    style={{
+                      width: 24,
+                      marginRight: 16,
+                      verticalAlign: 'middle'
+                    }}
+                    alt=""
+                    srcSet=""
+                  />
+                  {item.title}
+                </Typography>
+                <Typography
+                  component={'a'}
+                  sx={{
+                    fontFamily: `'Inter'`,
+                    fontWeight: 600,
+                    fontSize: 14,
+                    color: '#2C4ACC'
+                  }}
+                  href={item.link}
+                  target={'_blank'}
+                >
+                  {item.link}
+                </Typography>
+              </Box>
+            )
+          })}
+          <Box
+            sx={{
+              width: 400,
+              height: 64,
+              lineHeight: '64px',
+              background: 'rgba(44, 74, 204, 0.1)',
+              textAlign: 'center',
+              borderRadius: 10,
+              margin: '0 auto',
+              fontFamily: `'Inter'`,
+              fontWeight: 700,
+              color: '#000000'
+            }}
+          >
+            Registration starts in:{' '}
+            <span
+              style={{
+                color: '#2C4ACC'
+              }}
+            >
+              TBD
+            </span>
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
   return (
     <Box
       sx={{
@@ -506,7 +707,9 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         >
           {account ? (
             <>
-              <JoinBtn onClick={() => handleJoin()}>Join waiting list</JoinBtn>
+              <JoinBtn onClick={handleJoin} disabled={isJoined}>
+                {isJoined ? 'You joined' : 'Join waiting list'}
+              </JoinBtn>
               {!userInfo?.email && (
                 <Typography
                   sx={{
@@ -544,6 +747,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         <TabsBtn>Listed</TabsBtn>
         <TabsBtn disabled={true}>Ended</TabsBtn>
       </Box>
+      {openSuccessTip && <SuccessDialog />}
     </Box>
   )
 }
