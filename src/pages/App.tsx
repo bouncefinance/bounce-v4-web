@@ -62,6 +62,7 @@ import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
 import { ProjectIntro } from './projectIntro'
+import { Game } from './game'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -139,6 +140,8 @@ export default function App() {
                     <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
+
+                    <Route path={routes.game.index} element={<Game />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
