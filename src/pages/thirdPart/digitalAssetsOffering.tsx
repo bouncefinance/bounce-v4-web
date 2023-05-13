@@ -109,17 +109,22 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const [openConfirmTip, setOpenConfirmTip] = useState(false)
   const showLoginModal = useShowLoginModal()
 
-  const { data: checkJoinData } = useRequest(async () => {
-    const resp = await checkWaiting()
-    if (resp?.data && resp?.data?.isJoin) {
-      setOpenSuccessTip(true)
+  const { data: checkJoinData } = useRequest(
+    async () => {
+      const resp = await checkWaiting()
+      if (resp?.data && resp?.data?.isJoin) {
+        setOpenSuccessTip(true)
+      }
+      return {
+        ranking: resp?.data?.ranking || 0,
+        timestamp: resp?.data?.timestamp || 0,
+        isJoin: !!resp?.data?.isJoin
+      }
+    },
+    {
+      refreshDeps: [openConfirmTip]
     }
-    return {
-      ranking: resp?.data?.ranking || 0,
-      timestamp: resp?.data?.timestamp || 0,
-      isJoin: !!resp?.data?.isJoin
-    }
-  }, {})
+  )
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
@@ -149,8 +154,13 @@ const DigitalAssetsOffering: React.FC = ({}) => {
       setOpenSuccessTip(true)
       return
     }
-    setOpenConfirmTip(true)
-  }, [checkJoinData?.isJoin])
+    if (userInfo?.email) {
+      setOpenConfirmTip(true)
+    } else {
+      console.log('please binding your email')
+      navigate(routes.account.myAccount + `?redirectUrl=${routes.thirdPart.digitalAssetsOffering}`)
+    }
+  }, [checkJoinData?.isJoin, navigate, userInfo?.email])
   const SuccessDialog = () => {
     const list = [
       {
