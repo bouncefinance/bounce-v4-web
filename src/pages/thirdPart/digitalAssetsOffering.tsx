@@ -31,6 +31,8 @@ import TipsDialogIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/tipsDial
 import TwitterSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TwitterIcon.svg'
 import DiscordSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/DiscordIcon.svg'
 import TelegramSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TelegramIcon.svg'
+import ReadySvg from 'assets/imgs/thirdPart/digitalAssetsOffering/ready.svg'
+
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
   fontWeight: 400,
@@ -104,13 +106,20 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const { userInfo } = useUserInfo()
   const navigate = useNavigate()
   const [openSuccessTip, setOpenSuccessTip] = useState(false)
+  const [openConfirmTip, setOpenConfirmTip] = useState(false)
   const showLoginModal = useShowLoginModal()
 
-  const { data: isJoined } = useRequest(async () => {
+  const { data: checkJoinData } = useRequest(async () => {
     const resp = await checkWaiting()
-    return resp?.data
+    if (resp?.data && resp?.data?.isJoin) {
+      setOpenSuccessTip(true)
+    }
+    return {
+      ranking: resp?.data?.ranking || 0,
+      timestamp: resp?.data?.timestamp || 0,
+      isJoin: !!resp?.data?.isJoin
+    }
   }, {})
-  console.log('isJoined>>', isJoined)
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
@@ -119,21 +128,29 @@ const DigitalAssetsOffering: React.FC = ({}) => {
     targetDate: endDate
   })
   const handleJoin = useCallback(async () => {
-    if (isJoined) {
+    if (checkJoinData?.isJoin) {
       setOpenSuccessTip(true)
       return
     }
     if (userInfo?.email) {
-      console.log('go next', userInfo?.email)
-      const joinResult = await joinWaiting()
-      if (joinResult?.code === 1 && joinResult?.msg && joinResult?.msg === 'success') {
+      const { code, msg } = await joinWaiting()
+      if (code === 200 && msg === 'ok') {
+        setOpenConfirmTip(false)
         setOpenSuccessTip(true)
       }
     } else {
       console.log('please binding your email')
       navigate(routes.account.myAccount + `?redirectUrl=${routes.thirdPart.digitalAssetsOffering}`)
     }
-  }, [isJoined, navigate, userInfo?.email])
+  }, [checkJoinData?.isJoin, navigate, userInfo?.email])
+  const handleConfirm = useCallback(async () => {
+    if (checkJoinData?.isJoin) {
+      setOpenConfirmTip(false)
+      setOpenSuccessTip(true)
+      return
+    }
+    setOpenConfirmTip(true)
+  }, [checkJoinData?.isJoin])
   const SuccessDialog = () => {
     const list = [
       {
@@ -213,7 +230,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
               fontFamily: `'Inter'`,
               fontWeight: 400,
               fontSize: 16,
-              marginBottom: 67,
+              marginBottom: 30,
               textAlign: 'center',
               padding: '0 30px'
             }}
@@ -225,10 +242,68 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 fontWeight: 700
               }}
             >
-              TBD
+              {checkJoinData?.ranking > 0 ? checkJoinData?.ranking : 'TBD'}
             </span>{' '}
             of the waiting list
           </Typography>
+          <Box
+            sx={{
+              padding: '0 40px'
+            }}
+            mb={10}
+          >
+            <Typography
+              sx={{
+                fontFamily: `'Inter'`,
+                fontWeight: 600,
+                fontSize: 16,
+                color: '#000',
+                verticalAlign: 'middle',
+                marginBottom: '10px'
+              }}
+            >
+              Wallet Address
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: `'Inter'`,
+                fontWeight: 600,
+                fontSize: 14,
+                color: '#2C4ACC'
+              }}
+            >
+              {account}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              padding: '0 40px'
+            }}
+            mb={10}
+          >
+            <Typography
+              sx={{
+                fontFamily: `'Inter'`,
+                fontWeight: 600,
+                fontSize: 16,
+                color: '#000',
+                verticalAlign: 'middle',
+                marginBottom: '10px'
+              }}
+            >
+              Email
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: `'Inter'`,
+                fontWeight: 600,
+                fontSize: 14,
+                color: '#2C4ACC'
+              }}
+            >
+              {userInfo?.email || '--'}
+            </Typography>
+          </Box>
           <Typography
             sx={{
               fontFamily: `'Inter'`,
@@ -241,7 +316,6 @@ const DigitalAssetsOffering: React.FC = ({}) => {
           >
             Congrats! Claim now all 3 Galxe NFTs below to be whitelisted for a unique lottery pool (optional):
           </Typography>
-
           {list.map((item, index) => {
             return (
               <Box
@@ -309,8 +383,184 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 color: '#2C4ACC'
               }}
             >
-              TBD
+              {checkJoinData?.timestamp ? moment(Number(checkJoinData?.timestamp * 1000)).format('YYYY-MM-DD') : 'TBD'}
             </span>
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
+  const ConfirmDialog = () => {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 9
+        }}
+      >
+        <Box
+          sx={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            background: '#000000',
+            opacity: 0.7
+          }}
+          onClick={() => {
+            setOpenConfirmTip(false)
+          }}
+        ></Box>
+        <Box
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate3D(-50%, -50%, 0)',
+            width: 580,
+            background: '#fff',
+            borderRadius: 32,
+            overflow: 'hidden',
+            padding: '30px 40px 32px'
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+              fontWeight: 500,
+              fontSize: 24,
+              marginBottom: 20,
+              textAlign: 'left'
+            }}
+          >
+            Join waiting list now!
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 14,
+              marginBottom: 30,
+              textAlign: 'left'
+            }}
+          >
+            Sign up now and unlock exclusive benefits and opportunities.Secure your spot in the IDO waiting list and be
+            part of the next big thing!
+          </Typography>
+          <Box mb={10}>
+            <Typography
+              sx={{
+                fontFamily: `'Inter'`,
+                fontWeight: 600,
+                fontSize: 16,
+                color: '#000',
+                verticalAlign: 'middle',
+                marginBottom: 20
+              }}
+            >
+              1.Connected wallet
+            </Typography>
+            <Box
+              sx={{
+                height: 64,
+                padding: '0 33px',
+                background: '#E7E7E8',
+                borderRadius: 30,
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'center',
+                alignItems: 'center',
+                boxSizing: 'border-box'
+              }}
+              mb={20}
+            >
+              <Typography
+                sx={{
+                  fontFamily: `'Inter'`,
+                  fontWeight: 600,
+                  fontSize: 14,
+                  color: '#000000'
+                }}
+              >
+                {account}
+              </Typography>
+              <img
+                src={ReadySvg}
+                style={{
+                  width: 24,
+                  marginLeft: 10
+                }}
+                alt=""
+              />
+            </Box>
+          </Box>
+          <Box mb={10}>
+            <Typography
+              sx={{
+                fontFamily: `'Inter'`,
+                fontWeight: 600,
+                fontSize: 16,
+                color: '#000',
+                verticalAlign: 'middle',
+                marginBottom: 20
+              }}
+            >
+              2.Enter your email address to not miss out on the latest IDO information
+            </Typography>
+            <Box
+              sx={{
+                height: 64,
+                padding: '0 33px',
+                background: '#E7E7E8',
+                borderRadius: 30,
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'center',
+                alignItems: 'center',
+                boxSizing: 'border-box'
+              }}
+              mb={20}
+            >
+              <Typography
+                sx={{
+                  fontFamily: `'Inter'`,
+                  fontWeight: 600,
+                  fontSize: 14,
+                  color: '#000000'
+                }}
+              >
+                {userInfo?.email}
+              </Typography>
+              <img
+                src={ReadySvg}
+                style={{
+                  width: 24,
+                  marginLeft: 10
+                }}
+                alt=""
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              width: 400,
+              height: 56,
+              lineHeight: '56px',
+              background: '#2C4ACC',
+              textAlign: 'center',
+              borderRadius: 30,
+              margin: '0 auto',
+              fontFamily: `'Inter'`,
+              fontWeight: 700,
+              color: '#fff',
+              cursor: 'pointer'
+            }}
+            onClick={handleJoin}
+          >
+            Confirm Registration
           </Box>
         </Box>
       </Box>
@@ -707,9 +957,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         >
           {account ? (
             <>
-              <JoinBtn onClick={handleJoin} disabled={isJoined}>
-                {isJoined ? 'You joined' : 'Join waiting list'}
-              </JoinBtn>
+              <JoinBtn onClick={handleConfirm}>{checkJoinData?.isJoin ? 'You joined' : 'Join waiting list'}</JoinBtn>
               {!userInfo?.email && (
                 <Typography
                   sx={{
@@ -747,6 +995,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         <TabsBtn>Listed</TabsBtn>
         <TabsBtn disabled={true}>Ended</TabsBtn>
       </Box>
+      {openConfirmTip && <ConfirmDialog />}
       {openSuccessTip && <SuccessDialog />}
     </Box>
   )
