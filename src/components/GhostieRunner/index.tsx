@@ -6,7 +6,7 @@ import { Unity, useUnityContext } from 'react-unity-webgl'
 export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: number) => void }) {
   const { unityProvider, isLoaded, addEventListener, removeEventListener, unload } = useUnityContext({
     loaderUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.loader.js',
-    dataUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.data',
+    dataUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.1.wasm',
     frameworkUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.framework.js',
     codeUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.wasm'
   })
