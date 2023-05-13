@@ -109,7 +109,7 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
       />
       <H4 mt={24}>{personalInfo?.fullName}</H4>
       <H6 mt={4} sx={{ color: '#2B51DA' }}>
-        {`#${personalInfo?.fullNameId}`}1
+        {`#${personalInfo?.fullNameId}`}
       </H6>
       <Row mt={24} gap={4}>
         <ProfileTag>{personalInfo?.location}</ProfileTag>

@@ -137,7 +137,18 @@ export function SocialMedia({ data }: { data: IPrivatePadProp }) {
   return (
     <AlignBottomBG>
       <Body03>{data.desc}</Body03>
-      <Row mt={24} gap={10}>
+      <Row
+        mt={24}
+        gap={10}
+        sx={{
+          '& img, & svg': {
+            transition: '0.5s',
+            '&:hover': {
+              transform: 'scale(1.2)'
+            }
+          }
+        }}
+      >
         {data.social.map(item => item)}
       </Row>
     </AlignBottomBG>
