@@ -5,12 +5,19 @@ import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
 import { ReactComponent as ThumbsDown } from 'assets/svg/thumbsDown.svg'
 import TokenImage from '../../bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from '../../constants/chain'
+import GhostieRunner from 'components/GhostieRunner'
+import { useCallback } from 'react'
 
 export function Game() {
+  const uploadGameScore = useCallback((score: number) => {
+    alert(score)
+  }, [])
+
   return (
     <Container maxWidth="lg">
       <Title />
       <Step />
+      <GhostieRunner scoreUpload={uploadGameScore} />
     </Container>
   )
 }
