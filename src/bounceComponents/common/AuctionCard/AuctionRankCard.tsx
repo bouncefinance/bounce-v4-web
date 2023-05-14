@@ -130,7 +130,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
       </H7Gray>
       <Avatar
         src={
-          props.token0.largeUrl
+          props.token0 && props.token0.largeUrl
             ? props.token0.largeUrl
             : props.tokenType === BackedTokenType.TOKEN
             ? EmptyToken
