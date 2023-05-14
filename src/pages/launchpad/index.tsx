@@ -80,6 +80,7 @@ export interface IPrivatePadProp {
   projectInfo: IProjectInfo[]
   tokenMetrics: IProjectInfo[]
   social: JSX.Element[]
+  detailSocial?: JSX.Element[]
   link?: string
   moreData: {
     title: string
@@ -140,6 +141,14 @@ export const PrivatePadList: IPrivatePadProp[] = [
     desc: 'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
     // desc: '',
     social: [
+      <Link key={1} href="https://www.bladedao.games/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/blade_dao" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    detailSocial: [
       <Link key={1} href="https://www.bladedao.games/" target="_blank">
         <SocialBg>
           <WebWhite />

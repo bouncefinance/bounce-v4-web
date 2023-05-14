@@ -42,6 +42,7 @@ const Search: React.FC = () => {
       sx={{
         height: 44,
         width: 44,
+        mixBlendMode: whiteLogoRoutes.includes(pathname) ? 'difference' : 'unset',
         position: 'relative',
         '.Mui-focused': {
           '.MuiOutlinedInput-root': {

@@ -182,7 +182,7 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
             {item.desc}
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16}>
-            {item.social}
+            {item.detailSocial}
             <WhiteButton>
               <IconBook />
               <H6>Whitepaper</H6>

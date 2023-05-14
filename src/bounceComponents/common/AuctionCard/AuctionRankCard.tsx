@@ -79,7 +79,7 @@ const Tab = styled(Box)`
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
   switch (status) {
     case StatusE.close:
-      return <StatusClose>Close</StatusClose>
+      return <StatusClose>Closed</StatusClose>
     case StatusE.live:
       return <StatusLive>Live</StatusLive>
     case StatusE.upcoming:
