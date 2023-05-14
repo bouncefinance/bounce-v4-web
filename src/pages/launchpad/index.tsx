@@ -31,6 +31,7 @@ import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.svg'
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
+import { routes } from 'constants/routes'
 
 import BlodeAvatar from './avatar/blade-icon.ico'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
@@ -115,7 +116,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    link: '/projectIntro/bladedao-intro',
+    link: routes.launchpad.projectIntro,
     projectInfo: [
       {
         title: 'What is BladeDAO?',
@@ -167,6 +168,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
+    link: routes.thirdPart.digitalAssetsOffering,
     projectInfo: [
       {
         title: '',
