@@ -19,9 +19,10 @@ import { ReactComponent as SuccessSvg } from 'assets/svg/success_small.svg'
 export type IEditInfoProps = {
   userInfoEmail: string
   userId?: number | string
+  handleEmailChange?: () => void
 }
 
-const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId }) => {
+const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmailChange }) => {
   const [mode, setMode] = useState<'unset' | 'set' | 'input'>(!!userInfoEmail ? 'set' : 'unset')
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false)
   const [btnDisable, setBtnDisable] = useState<boolean>(true)
@@ -69,6 +70,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId }) => {
         setTimeout(() => {
           setMode('set')
           setShowUpdateSuccess(false)
+          handleEmailChange && handleEmailChange()
         }, 2000)
       } else if (code === 10501) {
         return toast.error('Incorrect verification code')

@@ -60,5 +60,8 @@ export const routes = {
     realAuction: '/account/real_auction',
     adsAuction: '/account/ads_auction',
     myPrivateLaunchpad: '/account/private_launchpad'
+  },
+  thirdPart: {
+    digitalAssetsOffering: '/launchpad/poseiswap-intro'
   }
 }
