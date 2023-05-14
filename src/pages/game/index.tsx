@@ -7,11 +7,33 @@ import TokenImage from '../../bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
 import { useCallback } from 'react'
+import { useSignMessage } from 'hooks/useWeb3Instance'
+import { useActiveWeb3React } from 'hooks'
+import { useUserInfo } from 'state/users/hooks'
 
 export function Game() {
-  const uploadGameScore = useCallback((score: number) => {
-    alert(score)
-  }, [])
+  const signMessage = useSignMessage()
+  const { account } = useActiveWeb3React()
+  const { token } = useUserInfo()
+
+  const uploadGameScore = useCallback(
+    async (score: number) => {
+      const message = `game score: ${score}`
+      try {
+        if (!account || !token) return
+        const signature = signMessage(message)
+        // ! TOTD request backed; payableId need set
+        const req = {
+          message,
+          payableId: 1,
+          address: account,
+          signature
+        }
+        console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
+      } catch (error) {}
+    },
+    [account, signMessage, token]
+  )
 
   return (
     <Container maxWidth="lg">
