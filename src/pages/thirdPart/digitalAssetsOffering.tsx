@@ -101,20 +101,21 @@ const TabsBtn = styled(Button)(() => ({
     color: '#fff'
   }
 }))
+export enum DialogStep {
+  'Close' = 0,
+  'Connect' = 1,
+  'Confirm' = 2,
+  'Success' = 3
+}
 const DigitalAssetsOffering: React.FC = ({}) => {
   const { account } = useActiveWeb3React()
-  const { userInfo } = useUserInfo()
+  const { userInfo, token } = useUserInfo()
   const navigate = useNavigate()
-  const [openSuccessTip, setOpenSuccessTip] = useState(false)
-  const [openConfirmTip, setOpenConfirmTip] = useState(false)
+  const [dialogStep, setDialogStep] = useState<number>(DialogStep.Close)
   const showLoginModal = useShowLoginModal()
-
   const { data: checkJoinData } = useRequest(
     async () => {
       const resp = await checkWaiting()
-      if (resp?.data && resp?.data?.isJoin) {
-        setOpenSuccessTip(true)
-      }
       return {
         ranking: resp?.data?.ranking || 0,
         timestamp: resp?.data?.timestamp || 0,
@@ -122,7 +123,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
       }
     },
     {
-      refreshDeps: [openConfirmTip]
+      refreshDeps: [dialogStep, token]
     }
   )
   const openLink = (link: string) => {
@@ -134,31 +135,27 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   })
   const handleJoin = useCallback(async () => {
     if (checkJoinData?.isJoin) {
-      setOpenSuccessTip(true)
+      setDialogStep(DialogStep.Success)
       return
     }
     if (userInfo?.email) {
       const { code, msg } = await joinWaiting()
       if (code === 200 && msg === 'ok') {
-        setOpenConfirmTip(false)
-        setOpenSuccessTip(true)
+        setDialogStep(DialogStep.Success)
       }
     } else {
-      console.log('please binding your email')
       navigate(routes.account.myAccount + `?redirectUrl=${routes.thirdPart.digitalAssetsOffering}`)
     }
   }, [checkJoinData?.isJoin, navigate, userInfo?.email])
-  const handleConfirm = useCallback(async () => {
+  const handleConfirm = useCallback(() => {
     if (checkJoinData?.isJoin) {
-      setOpenConfirmTip(false)
-      setOpenSuccessTip(true)
+      setDialogStep(DialogStep.Success)
       return
     }
     if (userInfo?.email) {
-      setOpenConfirmTip(true)
+      setDialogStep(DialogStep.Confirm)
     } else {
-      console.log('please binding your email')
-      navigate(routes.account.myAccount + `?redirectUrl=${routes.thirdPart.digitalAssetsOffering}`)
+      navigate(routes.loginBase + `?redirect=${routes.thirdPart.digitalAssetsOffering}`)
     }
   }, [checkJoinData?.isJoin, navigate, userInfo?.email])
   const SuccessDialog = () => {
@@ -199,7 +196,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             opacity: 0.7
           }}
           onClick={() => {
-            setOpenSuccessTip(false)
+            setDialogStep(DialogStep.Close)
           }}
         ></Box>
         <Box
@@ -211,7 +208,6 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             width: 480,
             background: '#fff',
             borderRadius: 32,
-            overflow: 'hidden',
             padding: '0 0 32px'
           }}
         >
@@ -421,7 +417,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             opacity: 0.7
           }}
           onClick={() => {
-            setOpenConfirmTip(false)
+            setDialogStep(DialogStep.Close)
           }}
         ></Box>
         <Box
@@ -518,7 +514,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 marginBottom: 20
               }}
             >
-              2.Enter your email address to not miss out on the latest IDO information
+              2.Connect email address to not miss out on the latest IDO information
             </Typography>
             <Box
               sx={{
@@ -571,6 +567,91 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             onClick={handleJoin}
           >
             Confirm Registration
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
+  const ConnectWalletDialog = () => {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 9
+        }}
+      >
+        <Box
+          sx={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            background: '#000000',
+            opacity: 0.7
+          }}
+          onClick={() => {
+            setDialogStep(DialogStep.Close)
+          }}
+        ></Box>
+        <Box
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate3D(-50%, -50%, 0)',
+            width: 480,
+            background: '#fff',
+            borderRadius: 32,
+            overflow: 'hidden',
+            padding: '30px 40px 32px'
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+              fontWeight: 500,
+              fontSize: 24,
+              marginBottom: 20,
+              textAlign: 'center'
+            }}
+          >
+            Join waiting list now!
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 14,
+              marginBottom: 30,
+              textAlign: 'center'
+            }}
+          >
+            Sign up now and unlock exclusive benefits and opportunities.Secure your spot in the IDO waiting list and be
+            part of the next big thing!
+          </Typography>
+          <Box
+            sx={{
+              width: 400,
+              height: 56,
+              lineHeight: '56px',
+              background: '#2C4ACC',
+              textAlign: 'center',
+              borderRadius: 30,
+              margin: '0 auto',
+              fontFamily: `'Inter'`,
+              fontWeight: 700,
+              color: '#fff',
+              cursor: 'pointer'
+            }}
+            onClick={() => {
+              setDialogStep(DialogStep.Close)
+              showLoginModal()
+            }}
+          >
+            Connect your wallet
           </Box>
         </Box>
       </Box>
@@ -965,7 +1046,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             marginTop: 40
           }}
         >
-          {account ? (
+          {account && token ? (
             <>
               <JoinBtn onClick={handleConfirm}>{checkJoinData?.isJoin ? 'You joined' : 'Join waiting list'}</JoinBtn>
               {!userInfo?.email && (
@@ -984,7 +1065,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
               )}
             </>
           ) : (
-            <JoinBtn onClick={showLoginModal}>Connect Wallet</JoinBtn>
+            <JoinBtn onClick={() => setDialogStep(DialogStep.Connect)}>Join waiting list</JoinBtn>
           )}
         </Box>
       </Box>
@@ -1005,8 +1086,9 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         <TabsBtn>Listed</TabsBtn>
         <TabsBtn disabled={true}>Ended</TabsBtn>
       </Box>
-      {openConfirmTip && <ConfirmDialog />}
-      {openSuccessTip && <SuccessDialog />}
+      {dialogStep === DialogStep.Connect && <ConnectWalletDialog />}
+      {dialogStep === DialogStep.Confirm && <ConfirmDialog />}
+      {dialogStep === DialogStep.Success && <SuccessDialog />}
     </Box>
   )
 }
