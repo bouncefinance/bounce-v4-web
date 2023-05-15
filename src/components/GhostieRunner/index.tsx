@@ -1,15 +1,31 @@
 import { Box } from '@mui/material'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import { useEffect } from 'react'
+import { useActiveWeb3React } from 'hooks'
+import { useEffect, useState } from 'react'
 import { Unity, useUnityContext } from 'react-unity-webgl'
+import { useUserInfo } from 'state/users/hooks'
 
 export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: number) => void }) {
+  const { account } = useActiveWeb3React()
+  const { token } = useUserInfo()
+  const [hidden, setHidden] = useState(false)
+
   const { unityProvider, isLoaded, addEventListener, removeEventListener, unload } = useUnityContext({
     loaderUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.loader.js',
     dataUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.1.wasm',
     frameworkUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.framework.js',
     codeUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.wasm'
   })
+
+  useEffect(() => {
+    const reload = async () => {
+      await unload
+      setHidden(true)
+      setTimeout(() => setHidden(false), 100)
+    }
+    reload()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
 
   // SendHighScore
   useEffect(() => {
@@ -23,7 +39,11 @@ export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: nu
   return (
     <Box margin={'20px auto 0'} position={'relative'}>
       {!isLoaded && <BounceAnime />}
-      <Unity unityProvider={unityProvider} style={{ width: 1200, height: 748 }} />
+      {hidden || (account && !token) ? (
+        <Box height={600} />
+      ) : (
+        <Unity unityProvider={unityProvider} style={{ width: 1200, height: 748 }} />
+      )}
     </Box>
   )
 }
