@@ -61,14 +61,14 @@ export const ProfileSocialLinks: ILinksItem[] = [
 const DESCRIPTION_LENGTH = 350
 
 const validationSchema = yup.object({
-  // avatar: yup.object({
-  //   fileName: yup.string(),
-  //   fileSize: yup.number(),
-  //   fileThumbnailUrl: yup.string(),
-  //   fileType: yup.string(),
-  //   fileUrl: yup.string().required('Please upload your Profile Picture'),
-  //   id: yup.number()
-  // }),
+  avatar: yup.object({
+    fileName: yup.string(),
+    fileSize: yup.number(),
+    fileThumbnailUrl: yup.string(),
+    fileType: yup.string(),
+    fileUrl: yup.string().required('Please upload your Profile Picture'),
+    id: yup.number()
+  }),
   fullName: yup
     .string()
     .trim()
