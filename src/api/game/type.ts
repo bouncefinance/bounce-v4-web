@@ -4,6 +4,7 @@ interface RankItem {
   name: string
   totalCreated: string
   totalPart: number
+  userId?: string
 }
 export interface IRankResponse {
   list: RankItem[]
