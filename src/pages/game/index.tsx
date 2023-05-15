@@ -12,9 +12,8 @@ import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
 import InterNetIcon from 'assets/imgs/game/internet.png'
 import TwitterIcon from 'assets/imgs/game/twitter.png'
-import IgIcon from 'assets/imgs/game/ig.png'
-import EditIcon from 'assets/imgs/game/edit.png'
-import GithubIcon from 'assets/imgs/game/github.png'
+// import IgIcon from 'assets/imgs/game/ig.png'
+// import GithubIcon from 'assets/imgs/game/github.png'
 import NormalIcon from 'assets/imgs/game/normal.png'
 import ErrorIcon from 'assets/imgs/game/error.png'
 import WarningIcon from 'assets/imgs/game/warning.png'
@@ -147,6 +146,9 @@ export function Game() {
               }}
               src={InterNetIcon}
               alt=""
+              onClick={() => {
+                window.open('https://www.bladedao.games/', '_blank')
+              }}
             />
             <img
               style={{
@@ -155,15 +157,18 @@ export function Game() {
               }}
               src={TwitterIcon}
               alt=""
+              onClick={() => {
+                window.open('https://twitter.com/blade_dao', '_blank')
+              }}
             />
-            <img
+            {/* <img
               style={{
                 width: 36,
                 cursor: 'pointer'
               }}
               src={IgIcon}
               alt=""
-            />
+            /> */}
           </Box>
         </Box>
         <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
@@ -930,7 +935,7 @@ function PoolDetail() {
             fontWeight: 500
           }}
         >
-          Elon Musk
+          BladeDao
         </Typography>
         <Typography
           sx={{
@@ -961,15 +966,18 @@ function PoolDetail() {
             src={TwitterIcon}
             width={36}
             height={36}
+            onClick={() => {
+              window.open('https://twitter.com/blade_dao', '_blank')
+            }}
           />
-          <Image
+          {/* <Image
             style={{
               cursor: 'pointer'
             }}
             src={IgIcon}
             width={36}
             height={36}
-          />
+          /> */}
           <Image
             style={{
               cursor: 'pointer'
@@ -977,15 +985,18 @@ function PoolDetail() {
             src={InterNetIcon}
             width={36}
             height={36}
+            onClick={() => {
+              window.open('https://www.bladedao.games/', '_blank')
+            }}
           />
-          <Image
+          {/* <Image
             style={{
               cursor: 'pointer'
             }}
             src={GithubIcon}
             width={36}
             height={36}
-          />
+          /> */}
         </Box>
       </Box>
       <Box
@@ -1004,14 +1015,6 @@ function PoolDetail() {
           }}
         >
           Auction Background
-          <Image
-            style={{
-              cursor: 'pointer'
-            }}
-            src={EditIcon}
-            width={20}
-            height={20}
-          />
         </Typography>
         <Typography
           sx={{
@@ -1021,9 +1024,7 @@ function PoolDetail() {
             marginBottom: 20
           }}
         >
-          {`Hello, nice to meet you ^^... My Name is Eleanor Pena. I work as an Comic Artist, Freelance Illustrator, and
-          concepting Character Design. I can do drawing for personal or business. I started my career as an illustrator
-          in 2018. I'm an expert at manga and anime style artworks. `}
+          {`BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.`}
         </Typography>
         <Typography
           sx={{
@@ -1033,10 +1034,7 @@ function PoolDetail() {
             marginBottom: 20
           }}
         >
-          {`Hello, nice to meet you ^^... My Name is Eleanor
-          Pena. I work as an Comic Artist, Freelance Illustrator, and concepting Character Design. I can do drawing for
-          personal or business. I started my career as an illustrator in 2018. I'm an expert at manga and anime style
-          artworks. `}
+          {`BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.`}
         </Typography>
         <Typography
           sx={{
@@ -1046,9 +1044,7 @@ function PoolDetail() {
             marginBottom: 20
           }}
         >
-          {`Hello, nice to meet you ^^... My Name is Eleanor Pena. I work as an Comic Artist, Freelance
-          Illustrator, and concepting Character Design. I can do drawing for personal or business. I started my career
-          as an illustrator in 2018. I'm an expert at manga and anime style artworks.`}
+          {`BladeDAO also designed a single governance token with sustainable DeFi mechanisms with a publisher token model in mind.`}
         </Typography>
       </Box>
     </Box>

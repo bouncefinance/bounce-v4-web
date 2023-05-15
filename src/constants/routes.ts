@@ -62,6 +62,6 @@ export const routes = {
     myPrivateLaunchpad: '/account/private_launchpad'
   },
   game: {
-    index: '/game'
+    index: '/playable/ghositerunner'
   }
 }
