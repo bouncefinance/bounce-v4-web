@@ -58,6 +58,8 @@ import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
+import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
+
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
@@ -139,6 +141,7 @@ export default function App() {
                     <Route path={routes.account.realAuction} element={<AccountRealAuction />} />
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
+                    <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />

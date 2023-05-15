@@ -3,10 +3,16 @@ import AccountLayout from 'bounceComponents/account/AccountLayout'
 import EditInfo from 'bounceComponents/profile/account/components/EditInfo'
 import LoginOpton from 'bounceComponents/profile/account/components/LoginOption'
 import { useUserInfo } from 'state/users/hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
 
 export default function MyAccount() {
   const { userInfo, userId } = useUserInfo()
-
+  const navigate = useNavigate()
+  const { redirectUrl } = useQueryParams()
+  const handleEmailChange = () => {
+    redirectUrl && navigate(redirectUrl)
+  }
   return (
     <AccountLayout bgColor="#F6F6F3">
       <Box padding="40px 20px 80px">
@@ -44,7 +50,7 @@ export default function MyAccount() {
                 If you want to create an auction pool, you must connect to email and Twitter.
               </Typography>
 
-              <EditInfo userInfoEmail={userInfo?.email || ''} userId={userId} />
+              <EditInfo userInfoEmail={userInfo?.email || ''} handleEmailChange={handleEmailChange} userId={userId} />
               <LoginOpton twitter={userInfo?.twitterName || ''} />
             </Container>
           </Box>
