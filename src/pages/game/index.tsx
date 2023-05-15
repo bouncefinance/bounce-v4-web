@@ -22,12 +22,16 @@ import { getAllrank, sendScore, getUserRank } from 'api/game/index'
 import { useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
-import UserIcon from 'assets/imgs/game/userIcon.png'
 import Image from 'components/Image'
 import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
 import { useCountDown } from 'ahooks'
 import moment from 'moment'
+import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
+import { shortenAddress } from 'utils'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
+
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -333,14 +337,17 @@ function RankTopItem({
   score,
   userIcon,
   isNo1,
-  rank
+  rank,
+  userId
 }: {
+  userId?: string
   name: string
   score: string
   userIcon: string
   isNo1: boolean
   rank: number
 }) {
+  const navigate = useNavigate()
   return (
     <Box
       sx={{
@@ -361,11 +368,15 @@ function RankTopItem({
       >
         <Image
           style={{
-            borderRadius: '50%'
+            borderRadius: '50%',
+            cursor: 'pointer'
           }}
           src={userIcon}
           width={isNo1 ? 120 : 80}
           height={isNo1 ? 120 : 80}
+          onClick={() => {
+            userId && navigate(`${routes.profile.summary}?id=${userId}`)
+          }}
         />
         <Box
           sx={{
@@ -637,14 +648,8 @@ function RankSection() {
     const resp = await getAllrank({
       payableId: 1
     })
-    const list =
-      resp.data?.list && Array.isArray(resp.data?.list)
-        ? resp.data?.list.sort((a, b) => {
-            return Number(b.totalCreated) - Number(a.totalCreated)
-          })
-        : []
     return {
-      list: list || [],
+      list: resp.data?.list || [],
       total: resp.data?.total || 0
     }
   })
@@ -654,6 +659,7 @@ function RankSection() {
     })
     return resp
   })
+  const navigate = useNavigate()
   return (
     <Box
       sx={{
@@ -731,7 +737,8 @@ function RankSection() {
             >
               {rankData && rankData.list && rankData.list.length >= 2 ? (
                 <RankTopItem
-                  name={rankData.list[1]?.name || '--'}
+                  userId={rankData.list[1]?.userId || ''}
+                  name={rankData.list[1]?.name || shortenAddress(rankData.list[1]?.address) || '--'}
                   score={`${rankData.list[1]?.totalCreated}SCORE`}
                   userIcon={rankData.list[1]?.avatar || UserIcon}
                   isNo1={false}
@@ -746,7 +753,8 @@ function RankSection() {
               )}
               {rankData && rankData.list && rankData.list.length >= 1 && (
                 <RankTopItem
-                  name={rankData.list[0]?.name || '--'}
+                  userId={rankData.list[0]?.userId || ''}
+                  name={rankData.list[0]?.name || shortenAddress(rankData.list[0]?.address) || '--'}
                   score={`${rankData.list[0]?.totalCreated}SCORE`}
                   userIcon={rankData.list[0]?.avatar || UserIcon}
                   isNo1={true}
@@ -755,7 +763,8 @@ function RankSection() {
               )}
               {rankData && rankData.list && rankData.list.length >= 3 ? (
                 <RankTopItem
-                  name={rankData.list[2]?.name || '--'}
+                  userId={rankData.list[2]?.userId || ''}
+                  name={rankData.list[2]?.name || shortenAddress(rankData.list[2]?.address) || '--'}
                   score={`${rankData.list[2]?.totalCreated}SCORE`}
                   userIcon={rankData.list[2]?.avatar || UserIcon}
                   isNo1={false}
@@ -813,11 +822,15 @@ function RankSection() {
                       <Image
                         style={{
                           borderRadius: '50%',
-                          marginRight: 15
+                          marginRight: 15,
+                          cursor: 'pointer'
                         }}
                         src={item?.avatar || UserIcon}
                         width={52}
                         height={52}
+                        onClick={() => {
+                          item.userId && navigate(`${routes.profile.summary}?id=${item.userId}`)
+                        }}
                       />
                       <Typography
                         sx={{
@@ -828,7 +841,7 @@ function RankSection() {
                           color: '#2663FF'
                         }}
                       >
-                        {item?.name || '--'}
+                        {item?.name || shortenAddress(item?.address) || '--'}
                       </Typography>
                     </Box>
                     <Typography
