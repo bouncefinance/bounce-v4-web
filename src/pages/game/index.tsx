@@ -611,7 +611,7 @@ function RankSection() {
             fontSize: 20
           }}
         >
-          My rank: {userRankData?.data?.rank + 1}
+          My rank: {userRankData?.data?.rank}
         </Typography>
         <Typography
           component={'span'}
