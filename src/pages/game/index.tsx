@@ -58,7 +58,7 @@ export function Game() {
           address: account,
           signature
         }
-        const res = await sendScore(req)
+        sendScore(req)
         console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
