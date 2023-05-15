@@ -22,6 +22,9 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import UserIcon from 'assets/imgs/game/userIcon.png'
 import Image from 'components/Image'
+import { toast } from 'react-toastify'
+import { useShowLoginModal } from 'state/users/hooks'
+
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -38,7 +41,10 @@ export function Game() {
       const resultScore = score.toFixed(2)
       const message = `Bounce would like you to sign the game score: ${resultScore}`
       try {
-        if (!account || !token) return
+        if (!account || !token) {
+          toast.warning('Please login!')
+          return
+        }
         const signature = await signMessage(message)
         const req = {
           message,
@@ -58,6 +64,8 @@ export function Game() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
+  const showLoginModal = useShowLoginModal()
+
   return (
     <Container maxWidth="lg">
       <Title />
@@ -127,7 +135,15 @@ export function Game() {
             }}
             gap={9}
           >
-            <ParticipateBtn>Participate</ParticipateBtn>
+            <ParticipateBtn
+              onClick={() => {
+                if (!account || !token) {
+                  showLoginModal()
+                }
+              }}
+            >
+              Participate
+            </ParticipateBtn>
             <img
               style={{
                 width: 36,
@@ -312,14 +328,12 @@ export enum StatusType {
 function RankTopItem({
   name,
   score,
-  winNum,
   userIcon,
   isNo1,
   rank
 }: {
   name: string
   score: string
-  winNum: string
   userIcon: string
   isNo1: boolean
   rank: number
@@ -393,7 +407,7 @@ function RankTopItem({
       >
         {score}
       </Typography>
-      <Typography
+      {/* <Typography
         sx={{
           fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
           fontSize: isNo1 ? 16 : 14,
@@ -403,7 +417,7 @@ function RankTopItem({
         }}
       >
         {winNum}
-      </Typography>
+      </Typography> */}
     </Box>
   )
 }
@@ -651,35 +665,44 @@ function RankSection() {
               }}
               gap={80}
             >
-              {rankData && rankData.list && rankData.list.length >= 2 && (
+              {rankData && rankData.list && rankData.list.length >= 2 ? (
                 <RankTopItem
                   name={rankData.list[1]?.name || '--'}
                   score={`${rankData.list[1]?.totalCreated}SCORE`}
-                  winNum={`${rankData.list[1]?.totalPart}AUCTION`}
                   userIcon={rankData.list[1]?.avatar || UserIcon}
                   isNo1={false}
                   rank={2}
                 />
+              ) : (
+                <Box
+                  sx={{
+                    width: 180
+                  }}
+                ></Box>
               )}
               {rankData && rankData.list && rankData.list.length >= 1 && (
                 <RankTopItem
                   name={rankData.list[0]?.name || '--'}
                   score={`${rankData.list[0]?.totalCreated}SCORE`}
-                  winNum={`${rankData.list[0]?.totalPart}AUCTION`}
                   userIcon={rankData.list[0]?.avatar || UserIcon}
                   isNo1={true}
                   rank={1}
                 />
               )}
-              {rankData && rankData.list && rankData.list.length >= 3 && (
+              {rankData && rankData.list && rankData.list.length >= 3 ? (
                 <RankTopItem
                   name={rankData.list[2]?.name || '--'}
                   score={`${rankData.list[2]?.totalCreated}SCORE`}
-                  winNum={`${rankData.list[2]?.totalPart}AUCTION`}
                   userIcon={rankData.list[2]?.avatar || UserIcon}
                   isNo1={false}
                   rank={3}
                 />
+              ) : (
+                <Box
+                  sx={{
+                    width: 180
+                  }}
+                ></Box>
               )}
               <Typography
                 sx={{
