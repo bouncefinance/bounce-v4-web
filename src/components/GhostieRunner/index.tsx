@@ -21,7 +21,7 @@ export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: nu
   }, [addEventListener, scoreUpload, removeEventListener, unload])
 
   return (
-    <Box margin={'30px auto'} position={'relative'}>
+    <Box margin={'20px auto 0'} position={'relative'}>
       {!isLoaded && <BounceAnime />}
       <Unity unityProvider={unityProvider} style={{ width: 1200, height: 748 }} />
     </Box>
