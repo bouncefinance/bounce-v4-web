@@ -19,7 +19,7 @@ export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: nu
 
   useEffect(() => {
     const reload = async () => {
-      await unload
+      await unload()
       setHidden(true)
       setTimeout(() => setHidden(false), 100)
     }
