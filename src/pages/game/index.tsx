@@ -6,7 +6,7 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
@@ -644,6 +644,7 @@ const RankList = styled(Box)(() => ({
   }
 }))
 function RankSection() {
+  const { account } = useActiveWeb3React()
   const { data: rankData, loading: rankLoading } = useRequest(async () => {
     const resp = await getAllrank({
       payableId: 1
@@ -659,6 +660,25 @@ function RankSection() {
     })
     return resp
   })
+  const loginUserData = useMemo(() => {
+    const list = rankData?.list || []
+    let resultData
+    if (list.length > 0) {
+      list.map((item, index) => {
+        if (item.address === account) {
+          resultData = {
+            address: item.address,
+            rank: index + 1,
+            score: item?.totalCreated
+          }
+        }
+      })
+    }
+    if (!resultData) {
+      resultData = userRankData?.data
+    }
+    return resultData
+  }, [account, rankData?.list, userRankData])
   const navigate = useNavigate()
   return (
     <Box
@@ -694,7 +714,7 @@ function RankSection() {
             fontSize: 20
           }}
         >
-          My rank: {userRankData?.data?.rank + 1}
+          My rank: {loginUserData?.rank}
         </Typography>
         <Typography
           component={'span'}
@@ -709,7 +729,7 @@ function RankSection() {
             fontSize: 20
           }}
         >
-          {userRankData?.data?.score || '--'} SCORE
+          {loginUserData?.score || '--'} SCORE
         </Typography>
       </Box>
       {rankLoading ? (
