@@ -579,8 +579,14 @@ function RankSection() {
     const resp = await getAllrank({
       payableId: 1
     })
+    const list =
+      resp.data?.list && Array.isArray(resp.data?.list)
+        ? resp.data?.list.sort((a, b) => {
+            return Number(b.totalCreated) - Number(a.totalCreated)
+          })
+        : []
     return {
-      list: resp.data?.list || [],
+      list: list || [],
       total: resp.data?.total || 0
     }
   })
