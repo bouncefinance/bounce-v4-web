@@ -8,9 +8,11 @@ import { useUserInfo, useWeb3Login } from 'state/users/hooks'
 import { useCallback, useEffect } from 'react'
 import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 import { useWeb3React } from '@web3-react/core'
+import { useActiveWeb3React } from 'hooks'
 
 export default function LoginModal() {
   const { connector, deactivate } = useWeb3React()
+  const { account } = useActiveWeb3React()
   const walletModalOpen = useModalOpen(ApplicationModal.SIGN_LOGIN)
   const toggleSignLoginModal = useSignLoginModalToggle()
   const { run: login } = useWeb3Login()
@@ -23,10 +25,21 @@ export default function LoginModal() {
     }
   }, [toggleSignLoginModal, token, walletModalOpen])
 
+  const openModal = useCallback(() => {
+    if (!token && !walletModalOpen && account) {
+      toggleSignLoginModal()
+    }
+  }, [account, toggleSignLoginModal, token, walletModalOpen])
+
   useEffect(() => {
     closeModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token])
+
+  useEffect(() => {
+    openModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
 
   const cancel = useCallback(() => {
     setInjectedConnected()
