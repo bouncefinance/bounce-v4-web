@@ -11,7 +11,7 @@ import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { AllocationStatus, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
+import { AllocationStatus, IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
 
 interface Params {
@@ -27,6 +27,11 @@ interface Params {
   tokenToAddress: string
   tokenFormDecimal: string | number
   tokenToDecimal: string | number
+  releaseType: IReleaseType
+  releaseData: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 const NO_LIMIT_ALLOCATION = '0'
 
@@ -53,14 +58,44 @@ export function useCreateFixedSwapPool() {
           : NO_LIMIT_ALLOCATION,
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
-      delayUnlockingTime: values.shouldDelayUnlocking
-        ? values.delayUnlockingTime?.unix() || 0
-        : values.endTime?.unix() || 0,
+      delayUnlockingTime:
+        IReleaseType.Linear === values.releaseType || IReleaseType.Cliff === values.releaseType
+          ? values.releaseDataArr?.[0].startAt?.unix() || 0
+          : values.shouldDelayUnlocking
+          ? values.delayUnlockingTime?.unix() || 0
+          : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.tokenFrom.address,
       tokenFormDecimal: values.tokenFrom.decimals,
       tokenToAddress: values.tokenTo.address,
-      tokenToDecimal: values.tokenTo.decimals
+      tokenToDecimal: values.tokenTo.decimals,
+      releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
+      releaseData:
+        values.releaseType === 1000
+          ? [
+              {
+                startAt: values.endTime?.unix() || 0,
+                endAtOrRatio: 0
+              }
+            ]
+          : values.releaseType === IReleaseType.Cliff
+          ? [
+              {
+                startAt: values.shouldDelayUnlocking
+                  ? values.delayUnlockingTime?.unix() || 0
+                  : values.endTime?.unix() || 0,
+                endAtOrRatio: 0
+              }
+            ]
+          : values.releaseType === IReleaseType.Linear
+          ? values.releaseDataArr.map(item => ({
+              startAt: item.startAt?.unix() || 0,
+              endAtOrRatio: item.endAt?.unix() || 0
+            }))
+          : values.releaseDataArr.map(item => ({
+              startAt: item.startAt?.unix() || 0,
+              endAtOrRatio: item.ratio || 0
+            }))
     }
 
     if (!currencyFrom || !currencyTo) {
@@ -110,7 +145,9 @@ export function useCreateFixedSwapPool() {
       name: params.poolName,
       openAt: params.startTime,
       token0: params.tokenFromAddress,
-      token1: params.tokenToAddress
+      token1: params.tokenToAddress,
+      releaseType: params.releaseType,
+      releaseData: params.releaseData
     }
 
     const {
@@ -130,14 +167,14 @@ export function useCreateFixedSwapPool() {
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
-    const args = [contractCallParams, expiredTime, signature]
+    const args = [contractCallParams, params.releaseType, params.releaseData, false, expiredTime, signature]
 
-    const estimatedGas = await fixedSwapERC20Contract.estimateGas.create(...args).catch((error: Error) => {
+    const estimatedGas = await fixedSwapERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
       throw error
     })
     return fixedSwapERC20Contract
-      .create(...args, {
+      .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {
@@ -154,29 +191,7 @@ export function useCreateFixedSwapPool() {
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
         }
       })
-  }, [
-    account,
-    addTransaction,
-    chainConfigInBackend?.id,
-    currencyFrom,
-    currencyTo,
-    fixedSwapERC20Contract,
-    values.allocationPerWallet,
-    values.allocationStatus,
-    values.delayUnlockingTime,
-    values.endTime,
-    values.participantStatus,
-    values.poolName,
-    values.poolSize,
-    values.shouldDelayUnlocking,
-    values.startTime,
-    values.swapRatio,
-    values.tokenFrom.address,
-    values.tokenFrom.decimals,
-    values.tokenTo.address,
-    values.tokenTo.decimals,
-    values.whitelist
-  ])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
 }
 
 export function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {

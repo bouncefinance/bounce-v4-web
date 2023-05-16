@@ -2,6 +2,7 @@ import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -51,6 +52,11 @@ export interface GetPoolCreationSignatureParams {
   maxPlayer?: number
   totalShare?: string | number
   nShare?: string | number
+  releaseType?: IReleaseType
+  releaseData?: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 
 export interface GetPoolCreationSignatureResponse {

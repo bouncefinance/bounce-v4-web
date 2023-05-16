@@ -3,7 +3,7 @@ import Image from 'components/Image'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
+import { AllocationStatus, CreationStep, IReleaseType, ParticipantStatus } from '../types'
 import {
   ActionType,
   useAuctionERC20Currency,
@@ -45,6 +45,21 @@ const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?
 )
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
+
+const releaseTypeText = (key: IReleaseType | 1000) => {
+  switch (key) {
+    case IReleaseType.Instant:
+      return 'Unlock immediately'
+    case IReleaseType.Cliff:
+      return 'Delay unlocking'
+    case IReleaseType.Linear:
+      return 'Linear unlocking'
+    case IReleaseType.Fragment:
+      return 'Fragment unlocking'
+    default:
+      return 'Unset'
+  }
+}
 
 const CreatePoolButton = () => {
   const { redirect } = useQueryParams()
@@ -406,9 +421,10 @@ const CreationConfirmation = () => {
                   </Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Delay Unlocking Token">
+                <ConfirmationInfoItem title="Unlocking Token Type">
                   <Typography>
-                    {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'}
+                    {releaseTypeText(values.releaseType)}
+                    {/* {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'} */}
                   </Typography>
                 </ConfirmationInfoItem>
               </Stack>

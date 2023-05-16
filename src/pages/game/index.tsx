@@ -58,7 +58,6 @@ export function Game() {
           signature
         }
         sendScore(req)
-        console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
     [account, signMessage, token]

@@ -72,80 +72,83 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
         return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
       }),
     delayUnlockingTime: Yup.date()
-      // .nullable(true)
-      .typeError('Please select a valid time')
-      .test({
-        name: 'check-delayUnlockingTime',
-        test: (input, context) => {
-          if (context.parent.releaseType === IReleaseType.Cliff) {
-            if (!input) return context.createError({ message: 'Please select a valid time' })
-            if (moment(input) < moment()) {
-              return context.createError({ message: 'Please select a time earlier than current time' })
+      .nullable(true)
+      .when('releaseType', {
+        is: (val: any) => Number(val) === IReleaseType.Cliff,
+        then: Yup.date()
+          .typeError('Please select a valid time')
+          .required('Please select a valid time')
+          .test({
+            name: 'check-delayUnlockingTime',
+            test: (input, context) => {
+              if (moment(input) < moment()) {
+                return context.createError({ message: 'Please select a time earlier than current time' })
+              }
+              if (
+                !(
+                  !context.parent.endTime.valueOf() ||
+                  !context.parent.startTime.valueOf() ||
+                  ((input?.valueOf() || 0) > context.parent.startTime.valueOf() &&
+                    (input?.valueOf() || 0) > context.parent.endTime.valueOf())
+                )
+              ) {
+                return context.createError({ message: 'Please select a time later than start time and end time' })
+              }
+              return true
             }
-            if (
-              !(
-                !context.parent.endTime.valueOf() ||
-                !context.parent.startTime.valueOf() ||
-                ((input?.valueOf() || 0) > context.parent.startTime.valueOf() &&
-                  (input?.valueOf() || 0) > context.parent.endTime.valueOf())
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than start time and end time' })
-            }
-            return true
-          }
-          return true
-        }
+          })
       }),
     linearUnlockingStartTime: Yup.date()
       .nullable(true)
-      .typeError('Please select a valid time')
-      .test({
-        name: 'check-linearUnlockingStartTime',
-        test: (input, context) => {
-          if (context.parent.releaseType === IReleaseType.Linear) {
-            if (!input) return context.createError({ message: 'Please select a valid time' })
-            if (moment(input) < moment()) {
-              return context.createError({ message: 'Please select a time earlier than current time' })
+      .when('releaseType', {
+        is: (val: any) => Number(val) === IReleaseType.Linear,
+        then: Yup.date()
+          .typeError('Please select a valid time')
+          .required('Please select a valid time')
+          .test({
+            name: 'check-linearUnlockingStartTime',
+            test: (input, context) => {
+              if (moment(input) < moment()) {
+                return context.createError({ message: 'Please select a time earlier than current time' })
+              }
+              if (
+                !(
+                  !context.parent.endTime.valueOf() ||
+                  !context.parent.startTime.valueOf() ||
+                  ((input?.valueOf() || 0) > context.parent.startTime.valueOf() &&
+                    (input?.valueOf() || 0) > context.parent.endTime.valueOf())
+                )
+              ) {
+                return context.createError({ message: 'Please select a time later than start time and end time' })
+              }
+              return true
             }
-            if (
-              !(
-                !context.parent.endTime.valueOf() ||
-                !context.parent.startTime.valueOf() ||
-                ((input?.valueOf() || 0) > context.parent.startTime.valueOf() &&
-                  (input?.valueOf() || 0) > context.parent.endTime.valueOf())
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than start time and end time' })
-            }
-            return true
-          }
-          return true
-        }
+          })
       }),
     linearUnlockingEndTime: Yup.date()
       .nullable(true)
-      .typeError('Please select a valid time')
-      .test({
-        name: 'check-linearUnlockingEndTime',
-        test: (input, context) => {
-          if (context.parent.releaseType === IReleaseType.Linear) {
-            if (!input) return context.createError({ message: 'Please select a valid time' })
-            if (moment(input) < moment()) {
-              return context.createError({ message: 'Please select a time earlier than current time' })
+      .when('releaseType', {
+        is: (val: any) => Number(val) === IReleaseType.Linear,
+        then: Yup.date()
+          .typeError('Please select a valid time')
+          .required('Please select a valid time')
+          .test({
+            name: 'check-linearUnlockingEndTime',
+            test: (input, context) => {
+              if (moment(input) < moment()) {
+                return context.createError({ message: 'Please select a time earlier than current time' })
+              }
+              if (
+                !(
+                  !context.parent.linearUnlockingStartTime.valueOf() ||
+                  (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime.valueOf()
+                )
+              ) {
+                return context.createError({ message: 'Please select a time later than linear unlocking end time' })
+              }
+              return true
             }
-            if (
-              !(
-                !context.parent.linearUnlockingStartTime.valueOf() ||
-                (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime.valueOf()
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than linear unlocking end time' })
-            }
-            return true
-          }
-          return true
-        }
+          })
       }),
     whitelist: Yup.array()
       .of(Yup.string())
@@ -199,14 +202,18 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={async formValues => {
+            const releaseDataArr: IReleaseData[] = [
+              { startAt: formValues.linearUnlockingStartTime, endAt: formValues.linearUnlockingEndTime }
+            ]
             valuesDispatch({
               type: ActionType.CommitAdvancedSettings,
               payload: {
                 poolName: formValues.poolName,
                 startTime: formValues.startTime,
                 endTime: formValues.endTime,
-                releaseType: formValues.releaseType,
-                releaseTypeArr: formValues.releaseDataArr,
+                releaseType: Number(formValues.releaseType),
+                releaseDataArr: releaseDataArr,
+                delayUnlockingTime: formValues.delayUnlockingTime,
                 whitelist: formValues.whitelist,
                 participantStatus: formValues.participantStatus
               }
@@ -290,7 +297,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                           component={DateTimePickerFormItem}
                           disablePast
                           name="linearUnlockingStartTime"
-                          minDateTime={values.linearUnlockingStartTime}
+                          minDateTime={values.endTime}
                           textField={{ sx: { width: '100%' } }}
                         />
                       </Stack>
@@ -301,7 +308,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                           component={DateTimePickerFormItem}
                           disablePast
                           name="linearUnlockingEndTime"
-                          minDateTime={values.linearUnlockingEndTime}
+                          minDateTime={values.linearUnlockingStartTime}
                           textField={{ sx: { width: '100%' } }}
                         />
                       </Stack>
