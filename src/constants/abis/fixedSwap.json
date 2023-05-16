@@ -290,6 +290,62 @@
         "internalType": "address",
         "name": "sender",
         "type": "address"
+      }
+    ],
+    "name": "PlayableAuctionCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum BounceBase.ReleaseType",
+        "name": "releaseType",
+        "type": "uint8"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "startAt",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "endAtOrRatio",
+            "type": "uint64"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct BounceBase.ReleaseData[]",
+        "name": "releaseDataList",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "ReleaseDataSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
       },
       {
         "indexed": false,
@@ -417,6 +473,62 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "auctionHolders",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "auctionToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "myTotalRelease",
+        "type": "uint256"
+      }
+    ],
+    "name": "computeReleasableAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "components": [
           {
             "internalType": "string",
@@ -492,6 +604,210 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "token0",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token1",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountTotal0",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountTotal1",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint48",
+            "name": "openAt",
+            "type": "uint48"
+          },
+          {
+            "internalType": "uint48",
+            "name": "closeAt",
+            "type": "uint48"
+          },
+          {
+            "internalType": "uint48",
+            "name": "claimAt",
+            "type": "uint48"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxAmount1PerWallet",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "whitelistRoot",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct BounceFixedSwap.CreateReq",
+        "name": "poolReq",
+        "type": "tuple"
+      },
+      {
+        "internalType": "enum BounceBase.ReleaseType",
+        "name": "releaseType",
+        "type": "uint8"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "startAt",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "endAtOrRatio",
+            "type": "uint64"
+          }
+        ],
+        "internalType": "struct BounceBase.ReleaseData[]",
+        "name": "releaseData",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "needAuctionHolder",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expireAt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "createPlayableV2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "token0",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "token1",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountTotal0",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountTotal1",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint48",
+            "name": "openAt",
+            "type": "uint48"
+          },
+          {
+            "internalType": "uint48",
+            "name": "closeAt",
+            "type": "uint48"
+          },
+          {
+            "internalType": "uint48",
+            "name": "claimAt",
+            "type": "uint48"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxAmount1PerWallet",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "whitelistRoot",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct BounceFixedSwap.CreateReq",
+        "name": "poolReq",
+        "type": "tuple"
+      },
+      {
+        "internalType": "enum BounceBase.ReleaseType",
+        "name": "releaseType",
+        "type": "uint8"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint64",
+            "name": "startAt",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "endAtOrRatio",
+            "type": "uint64"
+          }
+        ],
+        "internalType": "struct BounceBase.ReleaseData[]",
+        "name": "releaseData",
+        "type": "tuple[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "needAuctionHolder",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expireAt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "createV2",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "index",
         "type": "uint256"
@@ -557,6 +873,25 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getReleaseDataListLength",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "_txFeeRatio",
         "type": "uint256"
       },
@@ -584,7 +919,39 @@
         "type": "uint256"
       }
     ],
+    "name": "isPlayableAuction",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "maxAmount1PerWalletP",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "minimumAuction",
     "outputs": [
       {
         "internalType": "uint256",
@@ -662,6 +1029,30 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "myReleased",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -759,6 +1150,54 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "releaseDataList",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "startAt",
+        "type": "uint64"
+      },
+      {
+        "internalType": "uint64",
+        "name": "endAtOrRatio",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "releaseTypes",
+    "outputs": [
+      {
+        "internalType": "enum BounceBase.ReleaseType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
@@ -779,6 +1218,24 @@
       }
     ],
     "name": "reverse",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_auctionToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minimumAuction",
+        "type": "uint256"
+      }
+    ],
+    "name": "setAuctionHolder",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -867,6 +1324,62 @@
       }
     ],
     "name": "swap",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount1",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expireAt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signature",
+        "type": "bytes"
+      }
+    ],
+    "name": "swapPermit",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount1",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "quota1",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "proof",
+        "type": "bytes32[]"
+      }
+    ],
+    "name": "swapPlayable",
     "outputs": [],
     "stateMutability": "payable",
     "type": "function"

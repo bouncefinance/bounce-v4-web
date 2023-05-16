@@ -109,6 +109,8 @@ const initialValues: AuctionPool = {
   endTime: null,
   shouldDelayUnlocking: false,
   delayUnlockingTime: null,
+  releaseType: 1000,
+  releaseDataArr: [],
   whitelist: [],
   activeStep: 0,
   completed: {},
