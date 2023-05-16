@@ -63,5 +63,8 @@ export const routes = {
   },
   thirdPart: {
     digitalAssetsOffering: '/launchpad/poseiswap-intro'
+  },
+  game: {
+    index: '/playable/ghositerunner'
   }
 }
