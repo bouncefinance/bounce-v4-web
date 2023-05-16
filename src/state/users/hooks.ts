@@ -10,7 +10,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
@@ -322,6 +322,20 @@ export function useRefreshUserInfoByFirstLoad() {
       })
     )
   }, [dispatch, first, token, userId])
+}
+
+export function useRefreshUserInfoCallback() {
+  const dispatch = useDispatch()
+  const { token, userId } = useUserInfo()
+
+  return useCallback(() => {
+    if (!token || !userId) return
+    dispatch(
+      fetchUserInfo({
+        userId: userId
+      })
+    )
+  }, [dispatch, token, userId])
 }
 
 export function useShowLoginModal() {

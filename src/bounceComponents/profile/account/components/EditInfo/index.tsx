@@ -154,7 +154,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmail
                             }}
                           >
                             <Typography variant="body1" color={'var(--ps-text-3)'}>
-                              Verification code sent
+                              Get code
                             </Typography>
                           </Box>
                         ) : (

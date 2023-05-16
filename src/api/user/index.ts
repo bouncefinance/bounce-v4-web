@@ -95,6 +95,10 @@ export const bindThirdpart = async (params: IBindThirdpartParams) => {
   return ApiInstance.post('/personal/update_thirdpart', params)
 }
 
+export const bindThirdpartGetUrlOfTwitter = async () => {
+  return ApiInstance.get<string>('/user/twitter/url', {})
+}
+
 export const checkEmail = async (params: ICheckEmailParams) => {
   return ApiInstance.get('/personal/email_check', params)
 }
