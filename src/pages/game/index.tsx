@@ -24,14 +24,15 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
 import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
-import { useCountDown } from 'ahooks'
-import moment from 'moment'
+// import { useCountDown } from 'ahooks'
+// import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import usePoolInfo from 'bounceHooks/auction/usePoseiSwapPoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
 function a11yProps(index: number) {
   return {
@@ -44,6 +45,7 @@ export function Game() {
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
   const [step, setStep] = useState(0)
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const uploadGameScore = useCallback(
     async (score: number) => {
       const resultScore = score.toFixed(2)
@@ -69,9 +71,9 @@ export function Game() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  const [countdown, { days, hours, minutes }] = useCountDown({
-    targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
-  })
+  //   const [countdown, { days, hours, minutes }] = useCountDown({
+  //     targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
+  //   })
   return (
     <Container maxWidth="lg">
       <Title />
@@ -120,7 +122,7 @@ export function Game() {
             >
               Ghostie Game
             </Typography>
-            <Typography
+            {/* <Typography
               sx={{
                 height: 26,
                 lineHeight: '26px',
@@ -135,7 +137,16 @@ export function Game() {
               }}
             >
               Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
-            </Typography>
+            </Typography> */}
+            {poolInfo && (
+              <PoolStatusBox
+                status={poolInfo.status}
+                claimAt={poolInfo.claimAt}
+                openTime={poolInfo.openAt}
+                closeTime={poolInfo.closeAt}
+                onEnd={getPoolInfo}
+              />
+            )}
           </Box>
           {/* socia link */}
           <Box
@@ -244,6 +255,7 @@ const StepBg = styled(Box)`
   height: 56px;
   background: #171717;
   border-radius: 10px;
+  cursor: pointer;
 `
 const StepText = styled(Typography)`
   font-family: 'Sharp Grotesk DB Cyr Medium 22';
@@ -1099,5 +1111,13 @@ function UserBlock() {
       </Box>
     )
   }
-  return <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+  return (
+    <UserMainBlock
+      style={{
+        marginTop: '-25px'
+      }}
+      poolInfo={poolInfo}
+      getPoolInfo={getPoolInfo}
+    />
+  )
 }
