@@ -30,6 +30,8 @@ import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import usePoolInfo from 'bounceHooks/auction/usePoseiSwapPoolInfo'
+import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 
 function a11yProps(index: number) {
   return {
@@ -41,7 +43,7 @@ export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-
+  const [step, setStep] = useState(0)
   const uploadGameScore = useCallback(
     async (score: number) => {
       const resultScore = score.toFixed(2)
@@ -73,7 +75,12 @@ export function Game() {
   return (
     <Container maxWidth="lg">
       <Title />
-      <Step />
+      <Step
+        step={step}
+        hanldeChange={(num: number) => {
+          setStep(num)
+        }}
+      />
       <Box
         sx={{
           borderRadius: 20,
@@ -93,6 +100,7 @@ export function Game() {
             alignItems: 'center'
           }}
         >
+          {/* title */}
           <Box
             sx={{
               height: 83,
@@ -129,6 +137,7 @@ export function Game() {
               Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
             </Typography>
           </Box>
+          {/* socia link */}
           <Box
             sx={{
               height: 83,
@@ -171,8 +180,17 @@ export function Game() {
             /> */}
           </Box>
         </Box>
-        <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
-        <GhostieRunner scoreUpload={uploadGameScore} />
+        {step === 0 && (
+          <>
+            <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
+            <GhostieRunner scoreUpload={uploadGameScore} />
+          </>
+        )}
+        {step === 1 && (
+          <>
+            <UserBlock />
+          </>
+        )}
       </Box>
       <Box
         sx={{
@@ -309,25 +327,47 @@ function Title() {
     </Row>
   )
 }
-function Step() {
+function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number) => void }) {
   return (
     <Row alignItems={'center'} mt={47}>
-      <StepBg>
-        <StepText>1</StepText>
-        <Typography sx={{ color: 'white' }} variant={'h4'}>
-          Stage One: Game Competition
-        </Typography>
-      </StepBg>
+      {step === 0 && (
+        <StepBg onClick={() => hanldeChange(0)}>
+          <StepText>1</StepText>
+          <Typography sx={{ color: 'white' }} variant={'h4'}>
+            Stage One: Game Competition
+          </Typography>
+        </StepBg>
+      )}
+      {step === 1 && (
+        <StepBgLine onClick={() => hanldeChange(0)}>
+          <StepText2>1</StepText2>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+            Stage One: Game Competition
+          </Typography>
+        </StepBgLine>
+      )}
       <Box
         sx={{
           border: '2px dashed #171717',
           width: 89
         }}
       />
-      <StepBgLine>
-        <StepText2>2</StepText2>
-        <Typography variant={'h4'}>Stage Two: Token Auction</Typography>
-      </StepBgLine>
+      {step === 0 && (
+        <StepBgLine onClick={() => hanldeChange(1)}>
+          <StepText2>2</StepText2>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+            Stage Two: Token Auction
+          </Typography>
+        </StepBgLine>
+      )}
+      {step === 1 && (
+        <StepBg onClick={() => hanldeChange(0)}>
+          <StepText>2</StepText>
+          <Typography sx={{ color: 'white' }} variant={'h4'}>
+            Stage Two: Token Auction
+          </Typography>
+        </StepBg>
+      )}
     </Row>
   )
 }
@@ -1049,4 +1089,15 @@ function PoolDetail() {
       </Box>
     </Box>
   )
+}
+function UserBlock() {
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  if (!poolInfo) {
+    return (
+      <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <BounceAnime />
+      </Box>
+    )
+  }
+  return <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
 }

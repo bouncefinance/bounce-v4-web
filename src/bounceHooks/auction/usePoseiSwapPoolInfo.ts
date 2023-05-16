@@ -11,7 +11,7 @@ import { useSingleCallResult } from 'state/multicall/hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 
-export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
+const usePoseiSwapPoolInfo = () => {
   const { poolId, chainShortName } = useQueryParams()
   const { account } = useActiveWeb3React()
 
@@ -22,17 +22,17 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
       if (typeof poolId !== 'string' || !chainConfigInBackend?.id) {
         return Promise.reject(new Error('Invalid poolId'))
       }
-      // tokenType erc20:1 , erc1155:2
-      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
+
       const response = await getPoolInfo({
         poolId,
-        category,
-        tokenType,
+        category: PoolType.FixedSwap,
         chainId: chainConfigInBackend.id,
-        address: account || ''
+        address: account || '',
+        // tokenType erc20:1 , erc1155:2
+        tokenType: 1
       })
 
-      const rawPoolInfo = category === PoolType.FixedSwap ? response.data.fixedSwapPool : response.data.fixedSwapNftPool
+      const rawPoolInfo = response.data.fixedSwapPool
 
       return {
         ...rawPoolInfo,
@@ -52,15 +52,13 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
       ready: !!poolId && !!chainConfigInBackend?.id,
       pollingInterval: 30000,
       refreshDeps: [account],
-      retryInterval: 10000,
-      retryCount: 20
+      retryInterval: 5000
     }
   )
 }
-
 const usePoolInfo = () => {
   const { poolId } = useQueryParams()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo()
+  const { data: poolInfo, run: getPoolInfo, loading } = usePoseiSwapPoolInfo()
 
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
   const { account } = useActiveWeb3React()
@@ -106,7 +104,6 @@ const usePoolInfo = () => {
     undefined,
     poolInfo?.ethChainId
   ).result
-
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
     const _t0 = poolInfo.token0
