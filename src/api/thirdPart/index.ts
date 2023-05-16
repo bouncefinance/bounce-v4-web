@@ -5,3 +5,6 @@ export const joinWaiting = async () => {
 export const checkWaiting = () => {
   return ApiInstance.get('/ido/waiting/check', {})
 }
+export const waitingCount = () => {
+  return ApiInstance.get('/ido/waiting/count', {})
+}

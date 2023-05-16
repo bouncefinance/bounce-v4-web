@@ -26,7 +26,7 @@ import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useRequest } from 'ahooks'
-import { joinWaiting, checkWaiting } from 'api/thirdPart'
+import { joinWaiting, checkWaiting, waitingCount } from 'api/thirdPart'
 import TipsDialogIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/tipsDialogIcon.png'
 import TwitterSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TwitterIcon.svg'
 import DiscordSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/DiscordIcon.svg'
@@ -121,6 +121,15 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         timestamp: resp?.data?.timestamp || 0,
         isJoin: !!resp?.data?.isJoin
       }
+    },
+    {
+      refreshDeps: [dialogStep, token]
+    }
+  )
+  const { data: countData } = useRequest(
+    async () => {
+      const resp = await waitingCount()
+      return resp
     },
     {
       refreshDeps: [dialogStep, token]
@@ -904,7 +913,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 >
                   Estimated IDO Date:
                 </LabelItem>
-                <ValueItem>2023.xx.xx</ValueItem>
+                <ValueItem>TBD</ValueItem>
               </Box>
               <Box sx={{}}>
                 <LabelItem
@@ -914,7 +923,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 >
                   Waiting List:
                 </LabelItem>
-                <ValueItem>15435</ValueItem>
+                <ValueItem>{countData?.data || '--'}</ValueItem>
               </Box>
             </Box>
             {/* Investors */}
