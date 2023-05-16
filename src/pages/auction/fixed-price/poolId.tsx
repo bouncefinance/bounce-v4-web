@@ -14,6 +14,7 @@ import NoService from 'components/NoService'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  console.log('🚀 ~ file: poolId.tsx:17 ~ FixedSwapPoolPageContent ~ poolInfo:', poolInfo)
   const isBlock = useCurrentRegionBlock()
 
   if (isBlock) {

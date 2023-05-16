@@ -178,10 +178,15 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     swappedAmount0?: string
     currencySwappedAmount0: CurrencyAmount | undefined
     currencySwappedAmount1: CurrencyAmount | undefined
+    currencyMyAmountSwapped0: CurrencyAmount | undefined // all 0
+    currencyCurReleasableAmount: CurrencyAmount | undefined // current claimable
+    currencyMyReleased: CurrencyAmount | undefined //current my Released token
   }
   totalShare?: string | number
   maxPlayere?: string | number
   curPlayer?: string | number
+  releaseType: IReleaseType | undefined
+  releaseData: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
 }
 
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {

@@ -258,12 +258,17 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
 
                   <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
                     <FormControlLabel value={1000} control={<Radio disableRipple />} label={<span>Unset</span>} />
+                    {/* <FormControlLabel
+                      value={IReleaseType.Instant}
+                      control={<Radio disableRipple />}
+                      label={<span>Instant</span>}
+                    /> */}
                     <FormControlLabel
                       value={IReleaseType.Cliff}
                       control={<Radio disableRipple />}
                       label={
                         <Tooltip title="Set a date so traders can only claim tokens by that time.">
-                          <span>Cliff</span>
+                          <span>Delay</span>
                         </Tooltip>
                       }
                     />
@@ -276,9 +281,20 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                         </Tooltip>
                       }
                     />
+                    {/* <FormControlLabel
+                      value={IReleaseType.Fragment}
+                      control={<Radio disableRipple />}
+                      label={
+                        <Tooltip title="Set multiple time intervals and proportions for batch token releases">
+                          <span>Fragment</span>
+                        </Tooltip>
+                      }
+                    /> */}
                   </Field>
 
-                  {Number(values.releaseType) === IReleaseType.Cliff ? (
+                  {Number(values.releaseType) === IReleaseType.Instant ? (
+                    <FormLabel>Participate in the auction to get tokens immediately</FormLabel>
+                  ) : Number(values.releaseType) === IReleaseType.Cliff ? (
                     <Stack spacing={6}>
                       <FormLabel>Unlocking Start Time</FormLabel>
                       <Field

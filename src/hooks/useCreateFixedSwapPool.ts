@@ -11,7 +11,12 @@ import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { AllocationStatus, IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
+import {
+  AllocationStatus,
+  IReleaseData,
+  IReleaseType,
+  ParticipantStatus
+} from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
 
 interface Params {
@@ -34,6 +39,10 @@ interface Params {
   }[]
 }
 const NO_LIMIT_ALLOCATION = '0'
+
+const getMinStartTime = (releaseData: IReleaseData[]) => {
+  return releaseData.map(item => item.startAt?.unix() || 0).reduce((a, b) => Math.min(a, b), 0)
+}
 
 export function useCreateFixedSwapPool() {
   const { account, chainId } = useActiveWeb3React()
@@ -59,8 +68,8 @@ export function useCreateFixedSwapPool() {
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
       delayUnlockingTime:
-        IReleaseType.Linear === values.releaseType || IReleaseType.Cliff === values.releaseType
-          ? values.releaseDataArr?.[0].startAt?.unix() || 0
+        IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
+          ? getMinStartTime(values.releaseDataArr)
           : values.shouldDelayUnlocking
           ? values.delayUnlockingTime?.unix() || 0
           : values.endTime?.unix() || 0,

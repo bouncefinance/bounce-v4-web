@@ -7,9 +7,10 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useActiveWeb3React } from 'hooks'
 import { ChainId } from 'constants/chain'
-import { useSingleCallResult } from 'state/multicall/hooks'
+import { useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 
 export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
   const { poolId, chainShortName } = useQueryParams()
@@ -29,8 +30,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
         category,
         tokenType,
         chainId: chainConfigInBackend.id,
-        address: account || '',
-        tokenType: category === PoolType.FixedSwap ? 1 : 2
+        address: account || ''
       })
 
       const rawPoolInfo = category === PoolType.FixedSwap ? response.data.fixedSwapPool : response.data.fixedSwapNftPool
@@ -108,6 +108,8 @@ const usePoolInfo = () => {
     poolInfo?.ethChainId
   ).result
 
+  const v2FixedSwapData = useV2FixedSwapData(true, poolId, poolInfo)
+
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
     const _t0 = poolInfo.token0
@@ -133,7 +135,16 @@ const usePoolInfo = () => {
           t0,
           myAmountSwapped0Res?.[0].toString() || poolInfo.participant.swappedAmount0 || '0'
         ),
-        currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0')
+        currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0'),
+        currencyMyAmountSwapped0: v2FixedSwapData.myAmountSwapped0
+          ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myAmountSwapped0)
+          : undefined,
+        currencyCurReleasableAmount: v2FixedSwapData.curReleasableAmount
+          ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.curReleasableAmount)
+          : undefined,
+        currencyMyReleased: v2FixedSwapData.myReleased
+          ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased)
+          : undefined
       },
       creatorClaimed: creatorClaimedPRes?.[0] || poolInfo.creatorClaimed,
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
@@ -144,7 +155,12 @@ const usePoolInfo = () => {
       ),
       currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
       currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0),
-      currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1)
+      currencySwappedTotal1: CurrencyAmount.fromRawAmount(
+        t1,
+        amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
+      ),
+      releaseType: v2FixedSwapData.releaseType,
+      releaseData: v2FixedSwapData.releaseData
     }
   }, [
     amountSwap0PRes,
@@ -153,7 +169,8 @@ const usePoolInfo = () => {
     myAmountSwapped0Res,
     myAmountSwapped1Res,
     myClaimedRes,
-    poolInfo
+    poolInfo,
+    v2FixedSwapData
   ])
 
   return {
@@ -164,3 +181,99 @@ const usePoolInfo = () => {
 }
 
 export default usePoolInfo
+
+function useV2FixedSwapData(
+  isV2: boolean,
+  poolId: string | undefined,
+  poolInfo:
+    | (FixedSwapPool & {
+        ethChainId: ChainId
+      })
+    | undefined
+): {
+  myAmountSwapped0: string | undefined
+  curReleasableAmount: string | undefined
+  myReleased: string | undefined
+  releaseType: IReleaseType | undefined
+  releaseData: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+} {
+  const _fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const fixedSwapERC20Contract = useMemo(() => (isV2 ? _fixedSwapERC20Contract : null), [_fixedSwapERC20Contract, isV2])
+  const { account } = useActiveWeb3React()
+
+  const myAmountSwapped0Res = useSingleCallResult(
+    account ? fixedSwapERC20Contract : null,
+    'myAmountSwapped0',
+    [account || undefined, poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  const myReleasedRes = useSingleCallResult(
+    account ? fixedSwapERC20Contract : null,
+    'myReleased',
+    [account || undefined, poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  const curReleasableAmountRes = useSingleCallResult(
+    myAmountSwapped0Res ? fixedSwapERC20Contract : null,
+    'computeReleasableAmount',
+    [poolId, myAmountSwapped0Res?.[0].toString()],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  const releaseTypesRes = useSingleCallResult(
+    fixedSwapERC20Contract,
+    'releaseTypes',
+    [poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const getReleaseDataListLengthRes = useSingleCallResult(
+    fixedSwapERC20Contract,
+    'getReleaseDataListLength',
+    [poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  const queryReleaseDataListParams = useMemo(() => {
+    if (getReleaseDataListLengthRes?.[0] === undefined) return undefined
+    return Array.from({ length: Number(getReleaseDataListLengthRes[0]) }, (_, i) => i).map(item => [poolId, item])
+  }, [getReleaseDataListLengthRes, poolId])
+
+  const releaseDataListRes = useSingleContractMultipleData(
+    queryReleaseDataListParams ? fixedSwapERC20Contract : null,
+    'releaseDataList',
+    queryReleaseDataListParams || [],
+    undefined,
+    poolInfo?.ethChainId
+  )
+
+  return useMemo(() => {
+    if (!isV2 || !releaseTypesRes || !releaseDataListRes) {
+      return {
+        myAmountSwapped0: myAmountSwapped0Res?.[0].toString(),
+        curReleasableAmount: curReleasableAmountRes?.[0].toString(),
+        myReleased: myReleasedRes?.[0].toString(),
+        releaseType: undefined,
+        releaseData: []
+      }
+    }
+    const releaseType: IReleaseType = Number(releaseTypesRes?.[0])
+    return {
+      myAmountSwapped0: myAmountSwapped0Res?.[0].toString(),
+      curReleasableAmount: curReleasableAmountRes?.[0].toString(),
+      myReleased: myReleasedRes?.[0].toString(),
+      releaseType,
+      releaseData: releaseDataListRes.map(item => ({
+        startAt: Number(item.result?.[0]),
+        endAt: releaseType === IReleaseType.Fragment ? undefined : Number(item.result?.[1]),
+        ratio: releaseType === IReleaseType.Fragment ? item.result?.[1].toString() : undefined
+      }))
+    }
+  }, [curReleasableAmountRes, isV2, myAmountSwapped0Res, myReleasedRes, releaseDataListRes, releaseTypesRes])
+}
