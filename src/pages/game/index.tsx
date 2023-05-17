@@ -33,6 +33,7 @@ import { useNavigate } from 'react-router-dom'
 import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 function a11yProps(index: number) {
   return {
@@ -340,10 +341,16 @@ function Title() {
   )
 }
 function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number) => void }) {
+  const { poolId, chainShortName } = useQueryParams()
+  const stepChange = (num: number) => {
+    if (poolId && chainShortName) {
+      hanldeChange(num)
+    }
+  }
   return (
     <Row alignItems={'center'} mt={47}>
       {step === 0 && (
-        <StepBg onClick={() => hanldeChange(0)}>
+        <StepBg onClick={() => stepChange(0)}>
           <StepText>1</StepText>
           <Typography sx={{ color: 'white' }} variant={'h4'}>
             Stage One: Game Competition
@@ -351,7 +358,7 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
         </StepBg>
       )}
       {step === 1 && (
-        <StepBgLine onClick={() => hanldeChange(0)}>
+        <StepBgLine onClick={() => stepChange(0)}>
           <StepText2>1</StepText2>
           <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
             Stage One: Game Competition
@@ -365,7 +372,7 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
         }}
       />
       {step === 0 && (
-        <StepBgLine onClick={() => hanldeChange(1)}>
+        <StepBgLine onClick={() => stepChange(1)}>
           <StepText2>2</StepText2>
           <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
             Stage Two: Token Auction
@@ -373,7 +380,7 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
         </StepBgLine>
       )}
       {step === 1 && (
-        <StepBg onClick={() => hanldeChange(0)}>
+        <StepBg onClick={() => stepChange(0)}>
           <StepText>2</StepText>
           <Typography sx={{ color: 'white' }} variant={'h4'}>
             Stage Two: Token Auction

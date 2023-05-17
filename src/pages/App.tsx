@@ -147,7 +147,7 @@ export default function App() {
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     <Route path={routes.game.index} element={<Game />} />
-
+                    <Route path={routes.game.poolDetail} element={<Game />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>

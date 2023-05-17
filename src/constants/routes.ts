@@ -66,6 +66,7 @@ export const routes = {
     digitalAssetsOffering: '/launchpad/poseiswap-intro'
   },
   game: {
-    index: '/playable/ghositerunner/:chainShortName/:poolId'
+    index: '/playable/ghositerunner',
+    poolDetail: '/playable/ghositerunner/:chainShortName/:poolId'
   }
 }
