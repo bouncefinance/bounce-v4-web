@@ -46,6 +46,7 @@ export function Game() {
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
   const [step, setStep] = useState(0)
+  const [score, setScore] = useState(0)
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const uploadGameScore = useCallback(
     async (score: number) => {
@@ -63,6 +64,7 @@ export function Game() {
           signature
         }
         sendScore(req)
+        setScore(resultScore)
         console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
@@ -218,7 +220,7 @@ export function Game() {
           <Tab label="Auction Details" {...a11yProps(1)} />
           <Tab label="Auction History" {...a11yProps(2)} />
         </NewTabs>
-        {value === 0 && <RankSection />}
+        {value === 0 && <RankSection score={score} />}
         {value === 1 && <PoolDetail />}
         {value === 2 && (
           <Box
@@ -707,17 +709,22 @@ const RankList = styled(Box)(() => ({
     background: '#F5F5F5'
   }
 }))
-function RankSection() {
+function RankSection({ score }: { score: number | string }) {
   const { account } = useActiveWeb3React()
-  const { data: rankData, loading: rankLoading } = useRequest(async () => {
-    const resp = await getAllrank({
-      payableId: 1
-    })
-    return {
-      list: resp.data?.list || [],
-      total: resp.data?.total || 0
+  const { data: rankData, loading: rankLoading } = useRequest(
+    async () => {
+      const resp = await getAllrank({
+        payableId: 1
+      })
+      return {
+        list: resp.data?.list || [],
+        total: resp.data?.total || 0
+      }
+    },
+    {
+      refreshDeps: [score]
     }
-  })
+  )
   const { data: userRankData } = useRequest(async () => {
     const resp = await getUserRank({
       payableId: 1
