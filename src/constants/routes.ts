@@ -22,7 +22,8 @@ export const routes = {
   },
   launchpad: {
     index: '/launchpad',
-    projectIntro: '/launchpad/bladedao-intro'
+    bladeDao: '/launchpad/bladedao-intro',
+    projectInfo: '/launchpad/bladedao-intro'
   },
   realAuction: {
     index: '/real-auction'

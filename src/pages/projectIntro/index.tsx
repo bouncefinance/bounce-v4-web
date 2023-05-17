@@ -84,7 +84,7 @@ function Price({ title, value }: { title: string; value: string }) {
   )
 }
 
-export function ProjectIntro() {
+export function BladeDao() {
   const item = PrivatePadList[0]
   return (
     <Box>
@@ -95,7 +95,7 @@ export function ProjectIntro() {
   )
 }
 
-function ProjectHead({ item }: { item: IPrivatePadProp }) {
+export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const prices = [
     {
       title: 'Token Name',
@@ -241,7 +241,7 @@ const TabBg = styled(H4)`
   }
 `
 
-function Tabs({ item }: { item: IPrivatePadProp }) {
+export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = ['Project Information', 'Investment and Partners']
   const [tab, setTab] = useState(tabs[0])
