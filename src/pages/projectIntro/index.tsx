@@ -256,7 +256,13 @@ export function Tabs({ item }: { item: IPrivatePadProp }) {
           </TabBg>
         ))}
       </Row>
-      <Box sx={{ background: 'white', padding: '20px 72px', minHeight: '486px' }}>
+      <Box
+        sx={{
+          background: 'white',
+          padding: '20px 72px',
+          minHeight: '486px'
+        }}
+      >
         {tab === tabs[0] && <ProjectInfo item={item} />}
         {/*{tab === tabs[1] && <STEPNToken item={item} />}*/}
         {tab === tabs[2] && <TokenMetrics item={item} />}
@@ -301,6 +307,9 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
   return (
     <Box
       sx={{
+        width: '100%',
+        maxWidth: '1296px',
+        margin: '0 auto',
         display: 'flex',
         justifyContent: 'space-between'
       }}

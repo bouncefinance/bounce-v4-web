@@ -30,7 +30,7 @@ import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
-import usePoolInfo from 'bounceHooks/auction/usePoseiSwapPoolInfo'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
