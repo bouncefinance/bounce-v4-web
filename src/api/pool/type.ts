@@ -161,6 +161,7 @@ export interface FixedSwapPool {
   token1: TokenFromApi
   tokenId: string
   is721?: 0 | 1
+  poolVersion?: number
 }
 
 export interface FixedSwapPoolProp extends FixedSwapPool {
@@ -176,10 +177,10 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     claimed?: boolean
     regreted?: boolean
     swappedAmount0?: string
-    currencySwappedAmount0: CurrencyAmount | undefined
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
     currencySwappedAmount1: CurrencyAmount | undefined
-    currencyMyAmountSwapped0: CurrencyAmount | undefined // all 0
-    currencyCurReleasableAmount: CurrencyAmount | undefined // current claimable
+    currencyCurReleasableAmount: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount: CurrencyAmount | undefined // current claimable
     currencyMyReleased: CurrencyAmount | undefined //current my Released token
   }
   totalShare?: string | number
@@ -224,6 +225,7 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
 }
 
 export interface GetPoolInfoResponse {
+  poolVersion: number | undefined
   dutchPool: any
   fixedSwapPool: FixedSwapPool
   lotteryPool: any

@@ -46,7 +46,7 @@ const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
-const releaseTypeText = (key: IReleaseType | 1000) => {
+export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
   switch (key) {
     case IReleaseType.Instant:
       return 'Unlock immediately'
@@ -423,7 +423,7 @@ const CreationConfirmation = () => {
 
                 <ConfirmationInfoItem title="Unlocking Token Type">
                   <Typography>
-                    {releaseTypeText(values.releaseType)}
+                    {tokenReleaseTypeText(values.releaseType)}
                     {/* {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'} */}
                   </Typography>
                 </ConfirmationInfoItem>

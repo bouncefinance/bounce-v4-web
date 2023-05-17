@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import moment from 'moment'
 import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import BidOrRegret from './BidOrRegret'
@@ -21,6 +21,7 @@ import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { BigNumber } from 'bignumber.js'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -36,6 +37,11 @@ export type UserAction =
   | 'WAIT_FOR_DELAY'
 
 const getInitialAction = (
+  v2Data: {
+    poolVersion: number | undefined
+    releaseType: IReleaseType | undefined
+    currencyCurClaimableAmount: CurrencyAmount | undefined
+  },
   isJoined?: boolean,
   isClaimed?: boolean,
   poolStatus?: PoolStatus,
@@ -57,13 +63,20 @@ const getInitialAction = (
     if (isJoined) {
       if (isClaimed) {
         return 'CLAIMED'
-      } else {
+      }
+      if (v2Data.poolVersion === 1) {
         if (moment().unix() > (claimAt || 0)) {
           return 'NEED_TO_CLAIM'
-        } else {
-          return 'WAIT_FOR_DELAY'
         }
+        return 'WAIT_FOR_DELAY'
       }
+      if (v2Data.releaseType === IReleaseType.Instant) {
+        return 'CLAIMED'
+      }
+      if (v2Data.currencyCurClaimableAmount?.greaterThan('0')) {
+        return 'NEED_TO_CLAIM'
+      }
+      return 'WAIT_FOR_DELAY'
     } else {
       return 'POOL_CLOSED_AND_NOT_JOINED'
     }
@@ -204,15 +217,21 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       ret
         .then(() => {
           hideDialogConfirmation()
-          setAction('CLAIMED')
+
+          const content =
+            poolInfo.poolVersion === 1
+              ? `You have successfully claimed ${poolInfo.participant.currencySwappedAmount0?.toSignificant()} ${
+                  poolInfo.token0.symbol
+                }`
+              : `You have successfully claimed ${poolInfo.participant.currencyCurClaimableAmount?.toSignificant()} ${
+                  poolInfo.token0.symbol
+                }`
 
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed ${poolInfo.participant.currencySwappedAmount0?.toSignificant()} ${
-              poolInfo.token0.symbol
-            }`
+            content
           })
         })
         .catch()
@@ -229,7 +248,13 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         onAgain: toClaim
       })
     }
-  }, [claim, poolInfo.participant.currencySwappedAmount0, poolInfo.token0.symbol])
+  }, [
+    claim,
+    poolInfo.participant.currencyCurClaimableAmount,
+    poolInfo.participant.currencySwappedAmount0,
+    poolInfo.poolVersion,
+    poolInfo.token0.symbol
+  ])
 
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
@@ -237,8 +262,29 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       return
     }
 
-    setAction(getInitialAction(isJoined, isUserClaimed, poolInfo?.status, poolInfo?.claimAt))
-  }, [isCurrentChainEqualChainOfPool, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
+    setAction(
+      getInitialAction(
+        {
+          poolVersion: poolInfo.poolVersion,
+          releaseType: poolInfo.releaseType,
+          currencyCurClaimableAmount: poolInfo.participant.currencyCurClaimableAmount
+        },
+        isJoined,
+        isUserClaimed,
+        poolInfo?.status,
+        poolInfo?.claimAt
+      )
+    )
+  }, [
+    isCurrentChainEqualChainOfPool,
+    isJoined,
+    isUserClaimed,
+    poolInfo?.claimAt,
+    poolInfo.participant.currencyCurClaimableAmount,
+    poolInfo.poolVersion,
+    poolInfo.releaseType,
+    poolInfo?.status
+  ])
 
   useEffect(() => {
     if (action === 'BID_OR_REGRET') {
@@ -325,7 +371,17 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
 
       {action === 'CLAIMED' && <SuccessfullyClaimedAlert />}
 
-      {action === 'WAIT_FOR_DELAY' && <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />}
+      {action === 'WAIT_FOR_DELAY' && (
+        <>
+          {poolInfo.poolVersion === 1 || poolInfo.releaseType === IReleaseType.Cliff ? (
+            <ClaimingCountdownButton claimAt={poolInfo.claimAt} getPoolInfo={getPoolInfo} />
+          ) : (
+            <Button variant="contained" fullWidth sx={{ px: 36 }} disabled>
+              Waiting for token release.
+            </Button>
+          )}
+        </>
+      )}
 
       {action === 'NEED_TO_CLAIM' && <ClaimButton onClick={toClaim} loading={claimBidSubmitted.submitted} />}
     </Box>

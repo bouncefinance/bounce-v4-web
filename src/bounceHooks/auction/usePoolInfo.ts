@@ -37,6 +37,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
 
       return {
         ...rawPoolInfo,
+        poolVersion: response.data.poolVersion,
         token0: {
           ...rawPoolInfo.token0,
           symbol: rawPoolInfo.token0.symbol.toUpperCase()
@@ -108,7 +109,7 @@ const usePoolInfo = () => {
     poolInfo?.ethChainId
   ).result
 
-  const v2FixedSwapData = useV2FixedSwapData(true, poolId, poolInfo)
+  const v2FixedSwapData = useV2FixedSwapData(poolInfo?.poolVersion === 2, poolId, poolInfo)
 
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
@@ -136,12 +137,12 @@ const usePoolInfo = () => {
           myAmountSwapped0Res?.[0].toString() || poolInfo.participant.swappedAmount0 || '0'
         ),
         currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0'),
-        currencyMyAmountSwapped0: v2FixedSwapData.myAmountSwapped0
-          ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myAmountSwapped0)
-          : undefined,
         currencyCurReleasableAmount: v2FixedSwapData.curReleasableAmount
           ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.curReleasableAmount)
           : undefined,
+        currencyCurClaimableAmount: CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myAmountSwapped0 || '0').subtract(
+          CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased || '0')
+        ),
         currencyMyReleased: v2FixedSwapData.myReleased
           ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased)
           : undefined
