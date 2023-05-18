@@ -35,7 +35,7 @@ import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
-import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+// import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 import { ShareBtn } from '../projectIntro/index'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
@@ -96,7 +96,7 @@ export function Game() {
     },
     [account, isLive, signMessage, token]
   )
-  useBladeDaoSharer()
+  // useBladeDaoSharer()
   useEffect(() => {
     return () => {
       if (!loading) {
@@ -113,7 +113,7 @@ export function Game() {
   })
   return (
     <Container maxWidth="lg">
-      <Title step={step} poolInfo={poolInfo} />
+      {/* <Title step={step} poolInfo={poolInfo} /> */}
       <Step step={step} />
       <Box
         sx={{
@@ -328,7 +328,7 @@ const NewTabs = styled(Tabs)(() => ({
   }
 }))
 
-function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
+export function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
   const { userId } = useUserInfo()
   const navigate = useNavigate()
 
