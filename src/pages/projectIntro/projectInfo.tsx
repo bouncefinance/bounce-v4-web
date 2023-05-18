@@ -5,25 +5,13 @@ import { ProjectHead, Tabs } from './index'
 import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
-import { useEffect } from 'react'
-import { shareAdd } from 'api/bladeDao/index'
-import { useActiveWeb3React } from 'hooks'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 
 export function ProjectInfo() {
   const item = PrivatePadList[0]
-  const { account } = useActiveWeb3React()
-  const { sharer } = useQueryParams()
-  useEffect(() => {
-    if (!sharer || !account) return
-    const sharerAddress = decodeURIComponent(atob(sharer))
-    shareAdd({
-      sharer: sharerAddress,
-      invitee: account,
-      side: 'BladeDao'
-    })
-  }, [account, sharer])
+  useBladeDaoSharer()
+
   return (
     <Box>
       <ProjectHead item={item} />
