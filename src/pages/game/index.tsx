@@ -42,6 +42,7 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
+
 const NoData = () => {
   return (
     <Box
@@ -53,6 +54,7 @@ const NoData = () => {
     </Box>
   )
 }
+
 export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
@@ -262,7 +264,7 @@ const StepBg = styled(Box)`
   align-items: center;
   padding: 18px 140px 18px 30px;
   gap: 67px;
-  width: 556px;
+  width: 560px;
   height: 56px;
   background: #171717;
   border-radius: 10px;
@@ -311,6 +313,7 @@ const NewTabs = styled(Tabs)(() => ({
     opacity: 1
   }
 }))
+
 function Title() {
   return (
     <Row mt={67} width={'100%'} justifyContent={'space-between'}>
@@ -350,6 +353,7 @@ function Title() {
     </Row>
   )
 }
+
 function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number) => void }) {
   const { poolId, chainShortName } = useQueryParams()
   const stepChange = (num: number) => {
@@ -370,7 +374,7 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
       {step === 1 && (
         <StepBgLine onClick={() => stepChange(0)}>
           <StepText2>1</StepText2>
-          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)', width: 'max-content' }}>
             Stage One: Game Competition
           </Typography>
         </StepBgLine>
@@ -400,12 +404,14 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
     </Row>
   )
 }
+
 export enum StatusType {
   'Rules' = 0,
   'NotWhitelist' = 1,
   'Warning' = 2,
   'NeedLogin' = 3
 }
+
 function RankTopItem({
   name,
   score,
@@ -509,6 +515,7 @@ function RankTopItem({
     </Box>
   )
 }
+
 function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType }) {
   const showLoginModal = useShowLoginModal()
 
@@ -700,6 +707,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
     </>
   )
 }
+
 const RankList = styled(Box)(() => ({
   position: 'relative',
   '.row': {
@@ -717,6 +725,7 @@ const RankList = styled(Box)(() => ({
     background: '#F5F5F5'
   }
 }))
+
 function RankSection({ score }: { score: number | string }) {
   const { account } = useActiveWeb3React()
   const { data: rankData, loading: rankLoading } = useRequest(
@@ -966,6 +975,7 @@ function RankSection({ score }: { score: number | string }) {
     </Box>
   )
 }
+
 function PoolDetail() {
   return (
     <Box
@@ -1124,6 +1134,7 @@ function PoolDetail() {
     </Box>
   )
 }
+
 function UserBlock() {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   if (!poolInfo) {
