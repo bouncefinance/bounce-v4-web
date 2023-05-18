@@ -6,7 +6,7 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo, useEffect } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
@@ -35,7 +35,7 @@ import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
-// import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 import { ShareBtn } from '../projectIntro/index'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
@@ -69,9 +69,10 @@ export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-  const [step, setStep] = useState(1)
+  const { poolId } = useQueryParams()
+  const [step] = useState(poolId ? 1 : 0)
   const [score, setScore] = useState(0)
-  const { data: poolInfo, run: getPoolInfo, loading } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const isLive = new Date().valueOf() > gameTimeStamp.start && new Date().valueOf() < gameTimeStamp.end
 
   const uploadGameScore = useCallback(
@@ -96,14 +97,14 @@ export function Game() {
     },
     [account, isLive, signMessage, token]
   )
-  // useBladeDaoSharer()
-  useEffect(() => {
-    return () => {
-      if (!loading) {
-        setStep(poolInfo ? 1 : 0)
-      }
-    }
-  }, [poolInfo, loading])
+  useBladeDaoSharer()
+  // useEffect(() => {
+  //   return () => {
+  //     if (!loading) {
+  //       setStep(poolInfo ? 1 : 0)
+  //     }
+  //   }
+  // }, [poolInfo, loading])
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
@@ -113,7 +114,7 @@ export function Game() {
   })
   return (
     <Container maxWidth="lg">
-      {/* <Title step={step} poolInfo={poolInfo} /> */}
+      <Title step={step} poolInfo={poolInfo} />
       <Step step={step} />
       <Box
         sx={{
@@ -328,7 +329,7 @@ const NewTabs = styled(Tabs)(() => ({
   }
 }))
 
-export function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
+function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
   const { userId } = useUserInfo()
   const navigate = useNavigate()
 
