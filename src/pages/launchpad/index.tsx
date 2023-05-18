@@ -31,6 +31,8 @@ import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.svg'
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
+import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
+import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
 import { routes } from 'constants/routes'
 
 import BlodeAvatar from './avatar/blade-icon.ico'
@@ -63,7 +65,7 @@ const PrivatePadBg = styled(CenterColumn)`
 
 export interface IProjectInfo {
   title: string
-  info: string
+  info: string[]
 }
 
 export interface IPrivatePadProp {
@@ -120,22 +122,25 @@ export const PrivatePadList: IPrivatePadProp[] = [
     link: routes.launchpad.bladeDao,
     projectInfo: [
       {
-        title: 'What is BladeDAO?',
-        info: 'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.We also designed a single governance token with sustainable DeFi mechanisms with a publisher token model in mind.'
+        title: 'what is BladeDao?',
+        info: [
+          'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
+          'BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.'
+        ]
       },
       {
-        title: 'What is $BLADE tokenomics?',
-        info: 'The $BLADE tokenomics borrow from the positive ecosystem circulation like $vecrv, where $BLADE will serve as the utility token to boost yield stream for each crypto game published on BladeDAO.On the other hand, NFT royalty and NFT AMM fee in each game will be captured by BladeDAO. This part of the income will go to the $veblade token holders as dividends. Additionally, $veblade token holders will enjoy preferred whitelists and airdrops for future game launches.We’d expect $bladewar to happen with top games in the ecosystem, each bidding for more $veblade power to direct more token emission reward into their games. In turn, $veblade token holders enjoy a tax-like return on all in-game economic activities.'
-      },
-      {
-        title: 'Is BladeDAO’s Team Anon or Public?',
-        info: 'Mixed'
+        title: 'what is $BLADE tokennomics?',
+        info: [
+          'The $BLADE tokenomics borrow from the positive ecosystem circulation like $vecrv, where $BLADE will serve as the utility token to boost yield stream for each crypto game published on BladeDAO. $veblade token holders enjoy a tax-like return on all in-game economic activities.'
+        ]
       }
     ],
     tokenMetrics: [
       {
         title: 'Key Features and Highlights',
-        info: 'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+        info: [
+          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+        ]
       }
     ],
     desc: 'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
@@ -154,10 +159,20 @@ export const PrivatePadList: IPrivatePadProp[] = [
           <WebWhite />
         </SocialBg>
       </Link>,
-      <Link key={1} href="https://twitter.com/blade_dao" target="_blank">
+      <Link key={2} href="https://t.me/bladedao_real" target="_blank">
+        <SocialBg>
+          <TgSvg />
+        </SocialBg>
+      </Link>,
+      <Link key={3} href="https://twitter.com/blade_dao" target="_blank">
         <SvgTwitterBlue>
           <TwitterWhite />
         </SvgTwitterBlue>
+      </Link>,
+      <Link key={4} href="https://discord.gg/BladeDAO" target="_blank">
+        <SocialBg>
+          <DiscordSvg />
+        </SocialBg>
       </Link>
     ],
     moreData: [
@@ -181,13 +196,15 @@ export const PrivatePadList: IPrivatePadProp[] = [
     projectInfo: [
       {
         title: '',
-        info: ''
+        info: []
       }
     ],
     tokenMetrics: [
       {
         title: 'Token Metrics',
-        info: 'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+        info: [
+          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+        ]
       }
     ],
     desc: 'PoseiSwap, the first decentralized exchange (DEX) on the Nautilus Chain (Zebec Protocol), provides an efficient and secure platform for cryptocurrency trading. Its key features include quick, cost-effective transactions, and privacy thanks to the scalable L3 Nautilus Chain, addressing high gas fees and network congestion prevalent in other DEXs.',

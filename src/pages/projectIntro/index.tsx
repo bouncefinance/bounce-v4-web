@@ -327,7 +327,13 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
       </Stack>
       <ProjectContentBg>
         <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
-        <Typography variant={'body1'}>{info[currentIdx].info}</Typography>
+        {Array.isArray(info[currentIdx].info) &&
+          info[currentIdx].info.length > 0 &&
+          info[currentIdx].info.map((item: string, index: number) => (
+            <Typography key={index} variant={'body1'}>
+              {item}
+            </Typography>
+          ))}
       </ProjectContentBg>
     </Box>
   )
