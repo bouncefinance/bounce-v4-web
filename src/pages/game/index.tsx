@@ -1029,7 +1029,7 @@ function PoolDetail() {
       <Box
         sx={{
           width: 270,
-          minHeight: 521,
+          minHeight: 400,
           padding: '0 20px',
           background: `var(--ps-gray-50)`,
           borderRadius: 20,
@@ -1060,7 +1060,7 @@ function PoolDetail() {
         >
           BladeDao
         </Typography>
-        <Typography
+        {/* <Typography
           sx={{
             marginBottom: 24,
             color: 'var(--ps-gray-700)',
@@ -1072,7 +1072,7 @@ function PoolDetail() {
         >
           AWS provides customers with the broadest and deepest cloud platform cloud platform cloud platform the broadest
           and deepest cloud platform...
-        </Typography>
+        </Typography> */}
         <Box
           sx={{
             display: 'flex',
