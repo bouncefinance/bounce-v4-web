@@ -133,6 +133,13 @@ export const PrivatePadList: IPrivatePadProp[] = [
         info: [
           'The $BLADE tokenomics borrow from the positive ecosystem circulation like $vecrv, where $BLADE will serve as the utility token to boost yield stream for each crypto game published on BladeDAO. $veblade token holders enjoy a tax-like return on all in-game economic activities.'
         ]
+      },
+      {
+        title: 'Is BladeDAO’s Team Anon or Public?',
+        info: [
+          'The team comes from a variety of backgrounds of game developer, defi builder, smart contract developer, economic research, crypto media and zkp researcher.',
+          'The founder 0xBrawler previously built a crypto media company in Asia, and served as advisor for a few crypto game studios in the region. The team has plans to dox themselves overtime.'
+        ]
       }
     ],
     tokenMetrics: [
@@ -149,8 +156,14 @@ export const PrivatePadList: IPrivatePadProp[] = [
       <Link key={1} href="https://www.bladedao.games/" target="_blank">
         <Web />
       </Link>,
-      <Link key={1} href="https://twitter.com/blade_dao" target="_blank">
+      <Link key={2} href="https://t.me/bladedao_real" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={3} href="https://twitter.com/blade_dao" target="_blank">
         <Twitter />
+      </Link>,
+      <Link key={4} href="https://discord.gg/BladeDAO" target="_blank">
+        <DiscordSVG />
       </Link>
     ],
     detailSocial: [

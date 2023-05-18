@@ -183,7 +183,11 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16}>
             {item.detailSocial}
-            <WhiteButton>
+            <WhiteButton
+              onClick={() => {
+                window.open('https://bladedao.gitbook.io/bladedao/', '_blank')
+              }}
+            >
               <IconBook />
               <H6>Whitepaper</H6>
             </WhiteButton>
