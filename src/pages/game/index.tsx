@@ -6,7 +6,7 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useState, useMemo, useEffect } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
@@ -57,9 +57,9 @@ export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(1)
   const [score, setScore] = useState(0)
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo, loading } = usePoolInfo()
   const uploadGameScore = useCallback(
     async (score: number) => {
       const resultScore = score.toFixed(2)
@@ -82,6 +82,13 @@ export function Game() {
     },
     [account, signMessage, token]
   )
+  useEffect(() => {
+    return () => {
+      if (!loading) {
+        setStep(poolInfo ? 1 : 0)
+      }
+    }
+  }, [poolInfo, loading])
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
@@ -92,12 +99,7 @@ export function Game() {
   return (
     <Container maxWidth="lg">
       <Title />
-      <Step
-        step={step}
-        hanldeChange={(num: number) => {
-          setStep(num)
-        }}
-      />
+      <Step step={step} />
       <Box
         sx={{
           borderRadius: 20,
@@ -266,7 +268,6 @@ const StepBg = styled(Box)`
   height: 56px;
   background: #171717;
   border-radius: 10px;
-  cursor: pointer;
 `
 const StepText = styled(Typography)`
   font-family: 'Sharp Grotesk DB Cyr Medium 22';
@@ -350,11 +351,11 @@ function Title() {
     </Row>
   )
 }
-function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number) => void }) {
+function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: number) => void }) {
   const { poolId, chainShortName } = useQueryParams()
   const stepChange = (num: number) => {
     if (poolId && chainShortName) {
-      hanldeChange(num)
+      hanldeChange && hanldeChange(num)
     }
   }
   return (
