@@ -322,6 +322,8 @@ const NewTabs = styled(Tabs)(() => ({
 
 function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
   const { userId } = useUserInfo()
+  const navigate = useNavigate()
+
   return (
     <Row mt={67} width={'100%'} justifyContent={'space-between'}>
       <CenterRow>
@@ -333,7 +335,11 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: 'white'
+            background: 'white',
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            navigate(-1)
           }}
         >
           <LeftArrow />

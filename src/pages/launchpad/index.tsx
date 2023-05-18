@@ -140,6 +140,12 @@ export const PrivatePadList: IPrivatePadProp[] = [
           'The team comes from a variety of backgrounds of game developer, defi builder, smart contract developer, economic research, crypto media and zkp researcher.',
           'The founder 0xBrawler previously built a crypto media company in Asia, and served as advisor for a few crypto game studios in the region. The team has plans to dox themselves overtime.'
         ]
+      },
+      {
+        title: 'What about Investment and Partners?',
+        info: [
+          'The team raised a small round from angel investors and degen groups for game development and working capital.'
+        ]
       }
     ],
     tokenMetrics: [
