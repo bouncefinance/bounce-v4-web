@@ -12,14 +12,14 @@ import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useMemo } from 'react'
-import { shareAdd } from 'api/bladeDao/index'
+import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
-import { useQueryParams } from 'hooks/useQueryParams'
 import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
+import { ReactComponent as CopyBlackSvg } from 'assets/svg/copy-black.svg'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -83,7 +83,6 @@ const Sharebtn = styled(Box)({
     color: '#fff'
   }
 })
-
 const GrayBg = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -97,7 +96,6 @@ const GrayBg = styled(Box)`
   backdrop-filter: blur(5px);
   border-radius: 100px;
 `
-
 const VerticalDivider = styled(Box)`
   width: 1px;
   height: 32px;
@@ -115,17 +113,7 @@ function Price({ title, value }: { title: string; value: string }) {
 
 export function BladeDao() {
   const item = PrivatePadList[0]
-  const { account } = useActiveWeb3React()
-  const { sharer } = useQueryParams()
-  useEffect(() => {
-    if (!sharer || !account) return
-    const sharerAddress = atob(sharer)
-    shareAdd({
-      sharer: sharerAddress,
-      invitee: account,
-      side: 'BladeDao'
-    })
-  }, [account, sharer])
+  useBladeDaoSharer()
   return (
     <Box>
       <ProjectHead item={item} />
@@ -135,9 +123,59 @@ export function BladeDao() {
   )
 }
 
-export function ProjectHead({ item }: { item: IPrivatePadProp }) {
+export function ShareBtn({ style, children }: { style?: React.CSSProperties; children?: React.ReactNode }) {
   const { account } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
+  const copyValue = useMemo(() => {
+    if (!account) {
+      return ''
+    }
+    return window.location.href + `?sharer=${btoa(account)}`
+  }, [account])
+  const [isHover, setIsHover] = useState(false)
+  if (account) {
+    return (
+      <ReactCopyToClipboard text={copyValue} onCopy={() => toast.success('Successfully copied')}>
+        <Sharebtn
+          sx={{ ...style }}
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+        >
+          Share
+          {isHover ? (
+            <CopySvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          ) : (
+            <CopyBlackSvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          )}
+        </Sharebtn>
+      </ReactCopyToClipboard>
+    )
+  } else {
+    return (
+      <Sharebtn onClick={toggleWalletModal}>
+        Share
+        <CopySvg
+          style={{
+            marginLeft: 7
+          }}
+        />
+      </Sharebtn>
+    )
+  }
+}
+export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const prices = [
     {
       title: 'Token Name',
@@ -158,12 +196,6 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   ]
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
-  const copyValue = useMemo(() => {
-    if (!account) {
-      return ''
-    }
-    return window.location.href + `?sharer=${btoa(account)}`
-  }, [account])
   return (
     <Box
       sx={{
@@ -219,29 +251,8 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           }}
         >
           <Upcoming>Upcoming</Upcoming>
-          {account ? (
-            <ReactCopyToClipboard text={copyValue} onCopy={() => toast.success('Successfully copied')}>
-              <Sharebtn>
-                Share
-                <CopySvg
-                  style={{
-                    marginLeft: 7
-                  }}
-                />
-              </Sharebtn>
-            </ReactCopyToClipboard>
-          ) : (
-            <Sharebtn onClick={toggleWalletModal}>
-              Share
-              <CopySvg
-                style={{
-                  marginLeft: 7
-                }}
-              />
-            </Sharebtn>
-          )}
+          <ShareBtn />
         </Box>
-
         <AlignBottomBG
           sx={{
             display: 'flex',

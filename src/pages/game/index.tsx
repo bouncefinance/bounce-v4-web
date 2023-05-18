@@ -1,8 +1,8 @@
 import { Box, Container, styled, Typography, Tabs, Tab } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
-// import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
-// import { ReactComponent as ThumbsDown } from 'assets/svg/thumbsDown.svg'
+import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
+import { ReactComponent as ThumbsDown } from 'assets/svg/thumbsDown.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
@@ -35,6 +35,10 @@ import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import { ShareBtn } from '../projectIntro/index'
+import Favorite from 'bounceComponents/common/Favorite'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 function a11yProps(index: number) {
   return {
@@ -42,6 +46,7 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
+
 const NoData = () => {
   return (
     <Box
@@ -53,6 +58,7 @@ const NoData = () => {
     </Box>
   )
 }
+
 export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
@@ -82,6 +88,7 @@ export function Game() {
     },
     [account, signMessage, token]
   )
+  useBladeDaoSharer()
   useEffect(() => {
     return () => {
       if (!loading) {
@@ -98,7 +105,7 @@ export function Game() {
   //   })
   return (
     <Container maxWidth="lg">
-      <Title />
+      <Title step={step} poolInfo={poolInfo} />
       <Step step={step} />
       <Box
         sx={{
@@ -246,25 +253,25 @@ export function Game() {
   )
 }
 
-// const ThumbBg = styled(Box)`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: center;
-//   padding: 6px 16px;
-//   gap: 6px;
-//   width: auto;
-//   height: 32px;
-//   background: #ffffff;
-//   border-radius: 50px;
-// `
+const ThumbBg = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 16px;
+  gap: 6px;
+  width: auto;
+  height: 32px;
+  background: #ffffff;
+  border-radius: 50px;
+`
 const StepBg = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 18px 140px 18px 30px;
   gap: 67px;
-  width: 556px;
+  width: 560px;
   height: 56px;
   background: #171717;
   border-radius: 10px;
@@ -312,7 +319,9 @@ const NewTabs = styled(Tabs)(() => ({
     opacity: 1
   }
 }))
-function Title() {
+
+function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
+  const { userId } = useUserInfo()
   return (
     <Row mt={67} width={'100%'} justifyContent={'space-between'}>
       <CenterRow>
@@ -332,14 +341,30 @@ function Title() {
         <Typography ml={20} variant={'h3'}>
           Ghistie Fixed Price Auction Pool
         </Typography>
-        {/* <ThumbBg ml={35}>
-          <ThumbsUp />
-          <Typography variant={'body1'}>16</Typography>
-        </ThumbBg>
-        <ThumbBg ml={6}>
-          <ThumbsDown />
-          <Typography variant={'body1'}>16</Typography>
-        </ThumbBg> */}
+      </CenterRow>
+      <CenterRow>
+        {step === 1 && (
+          <>
+            {/* <ThumbBg ml={35}>
+              <ThumbsUp />
+              <Typography variant={'body1'}>16</Typography>
+            </ThumbBg>
+            <ThumbBg ml={6} mr={6}>
+              <ThumbsDown />
+              <Typography variant={'body1'}>16</Typography>
+            </ThumbBg> */}
+            {!!userId && poolInfo && (
+              <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+            )}
+          </>
+        )}
+        <ShareBtn
+          style={{
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6
+          }}
+        ></ShareBtn>
       </CenterRow>
       {/* <CenterRow>
         <Typography variant={'h3'}>#000123</Typography>
@@ -371,7 +396,7 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: numbe
       {step === 1 && (
         <StepBgLine onClick={() => stepChange(0)}>
           <StepText2>1</StepText2>
-          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)', width: 'max-content' }}>
             Stage One: Game Competition
           </Typography>
         </StepBgLine>
@@ -401,12 +426,14 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: numbe
     </Row>
   )
 }
+
 export enum StatusType {
   'Rules' = 0,
   'NotWhitelist' = 1,
   'Warning' = 2,
   'NeedLogin' = 3
 }
+
 function RankTopItem({
   name,
   score,
@@ -510,6 +537,7 @@ function RankTopItem({
     </Box>
   )
 }
+
 function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType }) {
   const showLoginModal = useShowLoginModal()
 
@@ -701,6 +729,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
     </>
   )
 }
+
 const RankList = styled(Box)(() => ({
   position: 'relative',
   '.row': {
@@ -718,6 +747,7 @@ const RankList = styled(Box)(() => ({
     background: '#F5F5F5'
   }
 }))
+
 function RankSection({ score }: { score: number | string }) {
   const { account } = useActiveWeb3React()
   const { data: rankData, loading: rankLoading } = useRequest(
@@ -967,6 +997,7 @@ function RankSection({ score }: { score: number | string }) {
     </Box>
   )
 }
+
 function PoolDetail() {
   return (
     <Box
@@ -1125,6 +1156,7 @@ function PoolDetail() {
     </Box>
   )
 }
+
 function UserBlock() {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   if (!poolInfo) {
@@ -1139,6 +1171,7 @@ function UserBlock() {
       style={{
         marginTop: '-25px'
       }}
+      contentGap={50}
       poolInfo={poolInfo}
       getPoolInfo={getPoolInfo}
     />
