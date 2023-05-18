@@ -258,11 +258,11 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
 
                   <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
                     <FormControlLabel value={1000} control={<Radio disableRipple />} label={<span>Unset</span>} />
-                    {/* <FormControlLabel
+                    <FormControlLabel
                       value={IReleaseType.Instant}
                       control={<Radio disableRipple />}
                       label={<span>Instant</span>}
-                    /> */}
+                    />
                     <FormControlLabel
                       value={IReleaseType.Cliff}
                       control={<Radio disableRipple />}
