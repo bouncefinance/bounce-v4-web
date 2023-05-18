@@ -34,12 +34,24 @@ import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
+import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`
   }
+}
+const NoData = () => {
+  return (
+    <Box
+      sx={{
+        padding: '100px 0 100px'
+      }}
+    >
+      <EmptyData title={`No History Data`} />
+    </Box>
+  )
 }
 export function Game() {
   const signMessage = useSignMessage()
@@ -64,7 +76,7 @@ export function Game() {
           signature
         }
         sendScore(req)
-        setScore(resultScore)
+        setScore(Number(resultScore))
         console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
@@ -223,13 +235,9 @@ export function Game() {
         {value === 0 && <RankSection score={score} />}
         {value === 1 && <PoolDetail />}
         {value === 2 && (
-          <Box
-            sx={{
-              padding: '100px 0 100px'
-            }}
-          >
-            <EmptyData title={`No History Data`} />
-          </Box>
+          <ActionHistory noTitle={true}>
+            <NoData />
+          </ActionHistory>
         )}
       </Box>
     </Container>
