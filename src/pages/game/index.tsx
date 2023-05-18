@@ -6,7 +6,7 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo, useEffect } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
@@ -69,9 +69,10 @@ export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-  const [step, setStep] = useState(1)
+  const { poolId } = useQueryParams()
+  const [step] = useState(poolId ? 1 : 0)
   const [score, setScore] = useState(0)
-  const { data: poolInfo, run: getPoolInfo, loading } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const isLive = new Date().valueOf() > gameTimeStamp.start && new Date().valueOf() < gameTimeStamp.end
 
   const uploadGameScore = useCallback(
@@ -97,13 +98,13 @@ export function Game() {
     [account, isLive, signMessage, token]
   )
   useBladeDaoSharer()
-  useEffect(() => {
-    return () => {
-      if (!loading) {
-        setStep(poolInfo ? 1 : 0)
-      }
-    }
-  }, [poolInfo, loading])
+  // useEffect(() => {
+  //   return () => {
+  //     if (!loading) {
+  //       setStep(poolInfo ? 1 : 0)
+  //     }
+  //   }
+  // }, [poolInfo, loading])
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
