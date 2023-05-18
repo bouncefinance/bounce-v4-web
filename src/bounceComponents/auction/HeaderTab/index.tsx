@@ -41,7 +41,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
       ? tabs[4]
       : location.pathname === '/ads-auction'
       ? tabs[5]
-      : location.pathname === '/launch-pad'
+      : location.pathname === '/launchpad'
       ? tabs[1]
       : tabs[0]
   const [currentTab, setCurrentTab] = useState(path)

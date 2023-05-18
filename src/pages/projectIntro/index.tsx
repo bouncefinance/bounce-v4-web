@@ -25,6 +25,7 @@ import { LIKE_OBJ } from 'api/idea/type'
 import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
+import { routes } from 'constants/routes'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -258,7 +259,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
       >
         <GrayButton
           onClick={() => {
-            nav('/launch-pad')
+            nav(routes.launchpad.index)
           }}
         >
           <ArrowBackIcon />
