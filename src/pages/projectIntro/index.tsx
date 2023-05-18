@@ -12,6 +12,14 @@ import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useMemo } from 'react'
+import { shareAdd } from 'api/bladeDao/index'
+import { useActiveWeb3React } from 'hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
+import ReactCopyToClipboard from 'react-copy-to-clipboard'
+import { toast } from 'react-toastify'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -50,11 +58,32 @@ const Upcoming = styled(H6)`
   width: min-content;
   padding: 4px 12px;
   height: 32px;
-  margin-right: 40px;
+  margin-right: 10px;
   background: rgba(18, 18, 18, 0.2);
   backdrop-filter: blur(2px);
   border-radius: 100px;
 `
+const Sharebtn = styled(Box)({
+  color: 'white',
+  width: 107,
+  height: 32,
+  lineHeight: '32px',
+  textAlign: 'center',
+  background: 'transparent',
+  border: '1px solid white',
+  borderRadius: '32px',
+  cursor: 'pointer',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '&:hover': {
+    background: 'var(--ps-gray-900)',
+    border: '1px solid var(--ps-gray-900)',
+    color: '#fff'
+  }
+})
+
 const GrayBg = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -86,6 +115,17 @@ function Price({ title, value }: { title: string; value: string }) {
 
 export function BladeDao() {
   const item = PrivatePadList[0]
+  const { account } = useActiveWeb3React()
+  const { sharer } = useQueryParams()
+  useEffect(() => {
+    if (!sharer || !account) return
+    const sharerAddress = atob(sharer)
+    shareAdd({
+      sharer: sharerAddress,
+      invitee: account,
+      side: 'BladeDao'
+    })
+  }, [account, sharer])
   return (
     <Box>
       <ProjectHead item={item} />
@@ -96,6 +136,8 @@ export function BladeDao() {
 }
 
 export function ProjectHead({ item }: { item: IPrivatePadProp }) {
+  const { account } = useActiveWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
   const prices = [
     {
       title: 'Token Name',
@@ -116,6 +158,12 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   ]
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
+  const copyValue = useMemo(() => {
+    if (!account) {
+      return ''
+    }
+    return window.location.href + `?sharer=${btoa(account)}`
+  }, [account])
   return (
     <Box
       sx={{
@@ -162,7 +210,38 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           <ArrowBackIcon />
           <Typography variant={'h5'}>Launchpad homepage</Typography>
         </GrayButton>
-        <Upcoming>Upcoming</Upcoming>
+        <Box
+          sx={{
+            alignSelf: 'end',
+            marginRight: 40,
+            display: 'flex',
+            flexFlow: 'row nowrap'
+          }}
+        >
+          <Upcoming>Upcoming</Upcoming>
+          {account ? (
+            <ReactCopyToClipboard text={copyValue} onCopy={() => toast.success('Successfully copied')}>
+              <Sharebtn>
+                Share
+                <CopySvg
+                  style={{
+                    marginLeft: 7
+                  }}
+                />
+              </Sharebtn>
+            </ReactCopyToClipboard>
+          ) : (
+            <Sharebtn onClick={toggleWalletModal}>
+              Share
+              <CopySvg
+                style={{
+                  marginLeft: 7
+                }}
+              />
+            </Sharebtn>
+          )}
+        </Box>
+
         <AlignBottomBG
           sx={{
             display: 'flex',
