@@ -20,6 +20,11 @@ import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import LikeUnlike from 'bounceComponents/common/LikeUnlike'
+import { LIKE_OBJ } from 'api/idea/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import Favorite from 'bounceComponents/common/Favorite'
+import { useUserInfo } from 'state/users/hooks'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -123,7 +128,7 @@ export function BladeDao() {
   )
 }
 
-export function ShareBtn({ style, children }: { style?: React.CSSProperties; children?: React.ReactNode }) {
+export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSProperties; isDefaultBlackIcon?: boolean }) {
   const { account } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
   const copyValue = useMemo(() => {
@@ -152,8 +157,14 @@ export function ShareBtn({ style, children }: { style?: React.CSSProperties; chi
                 marginLeft: 7
               }}
             />
-          ) : (
+          ) : isDefaultBlackIcon ? (
             <CopyBlackSvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          ) : (
+            <CopySvg
               style={{
                 marginLeft: 7
               }}
@@ -175,7 +186,18 @@ export function ShareBtn({ style, children }: { style?: React.CSSProperties; chi
     )
   }
 }
+const styles = {
+  p: '7px 16px',
+  borderRadius: '50px',
+  background: '#FFFFFF',
+  '&:hover': {
+    background: '#FFFFFF'
+  }
+}
 export function ProjectHead({ item }: { item: IPrivatePadProp }) {
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { userId } = useUserInfo()
+
   const prices = [
     {
       title: 'Token Name',
@@ -249,9 +271,51 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
             display: 'flex',
             flexFlow: 'row nowrap'
           }}
+          gap={8}
         >
-          <Upcoming>Upcoming</Upcoming>
-          <ShareBtn />
+          <Upcoming
+            style={{
+              marginRight: 0
+            }}
+          >
+            Upcoming
+          </Upcoming>
+          {poolInfo && (
+            <LikeUnlike
+              likeObj={LIKE_OBJ.pool}
+              objId={poolInfo?.id}
+              likeAmount={{
+                dislikeCount: poolInfo?.likeInfo?.dislikeCount,
+                likeCount: poolInfo?.likeInfo?.likeCount,
+                myDislike: poolInfo?.likeInfo?.myDislike,
+                myLike: poolInfo?.likeInfo?.myLike
+              }}
+              onSuccess={getPoolInfo}
+              likeSx={{
+                ...styles,
+                '&:hover': {
+                  color: '#259C4A',
+                  background: '#FFFFFF'
+                }
+              }}
+              unlikeSx={{
+                ...styles,
+                '&:hover': {
+                  color: '#CA2020',
+                  background: '#FFFFFF'
+                }
+              }}
+            />
+          )}
+          {!!userId && poolInfo && (
+            <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+          )}
+          <ShareBtn
+            style={{
+              border: '1px solid #fff',
+              color: '#fff'
+            }}
+          />
         </Box>
         <AlignBottomBG
           sx={{

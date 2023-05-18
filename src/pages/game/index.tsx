@@ -1,8 +1,8 @@
 import { Box, Container, styled, Typography, Tabs, Tab } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
-import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
-import { ReactComponent as ThumbsDown } from 'assets/svg/thumbsDown.svg'
+// import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
+// import { ReactComponent as ThumbsDown } from 'assets/svg/thumbsDown.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
@@ -253,18 +253,18 @@ export function Game() {
   )
 }
 
-const ThumbBg = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 6px 16px;
-  gap: 6px;
-  width: auto;
-  height: 32px;
-  background: #ffffff;
-  border-radius: 50px;
-`
+// const ThumbBg = styled(Box)`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: center;
+//   align-items: center;
+//   padding: 6px 16px;
+//   gap: 6px;
+//   width: auto;
+//   height: 32px;
+//   background: #ffffff;
+//   border-radius: 50px;
+// `
 const StepBg = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -364,6 +364,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
             color: 'var(--ps-gray-900)',
             marginLeft: 6
           }}
+          isDefaultBlackIcon={true}
         ></ShareBtn>
       </CenterRow>
       {/* <CenterRow>
