@@ -8,11 +8,13 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 const UserMainBlock = ({
   poolInfo,
   getPoolInfo,
-  style
+  style,
+  contentGap
 }: {
   poolInfo: FixedSwapPoolProp
   getPoolInfo: () => void
   style?: React.CSSProperties
+  contentGap?: number
 }): JSX.Element => {
   return (
     <Box
@@ -28,8 +30,7 @@ const UserMainBlock = ({
       }}
     >
       <Alert poolInfo={poolInfo} />
-
-      <Box sx={{ display: 'flex', columnGap: 12 }}>
+      <Box sx={{ display: 'flex', columnGap: contentGap ? contentGap : 12 }}>
         <LeftBox poolInfo={poolInfo} />
         {/* <UserActionBox /> */}
         <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} />

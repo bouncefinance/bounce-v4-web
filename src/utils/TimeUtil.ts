@@ -1,6 +1,6 @@
 export function timestampToCountdown(timestamp: number | string): string[] {
   const current_time = Date.now() / 1000
-  const timestampNum = Number(timestamp)
+  const timestampNum = Number(timestamp) * 1000
   let time_remaining = timestampNum - current_time
 
   if (time_remaining <= 0) {

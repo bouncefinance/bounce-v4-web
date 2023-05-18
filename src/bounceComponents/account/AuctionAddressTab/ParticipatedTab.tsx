@@ -107,8 +107,12 @@ export default function ParticipatedTab({
             <MenuItem key={0} value={0}>
               All
             </MenuItem>
-            <MenuItem value={DashboardQueryType.ongoing}>ongoing</MenuItem>
-            <MenuItem value={DashboardQueryType.claim}>claim</MenuItem>
+            <MenuItem key={1} value={DashboardQueryType.ongoing}>
+              ongoing
+            </MenuItem>
+            <MenuItem key={2} value={DashboardQueryType.claim}>
+              claim
+            </MenuItem>
           </Select>
           <AuctionTypeSelect
             tokenType={backedTokenType}

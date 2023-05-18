@@ -12,6 +12,21 @@ import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
 import { useNavigate } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useActiveWeb3React } from 'hooks'
+import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
+import { ReactComponent as CopyBlackSvg } from 'assets/svg/copy-black.svg'
+import ReactCopyToClipboard from 'react-copy-to-clipboard'
+import { toast } from 'react-toastify'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import LikeUnlike from 'bounceComponents/common/LikeUnlike'
+import { LIKE_OBJ } from 'api/idea/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import Favorite from 'bounceComponents/common/Favorite'
+import { useUserInfo } from 'state/users/hooks'
+import { routes } from 'constants/routes'
+import { PoolStatus } from 'api/pool/type'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -50,11 +65,31 @@ const Upcoming = styled(H6)`
   width: min-content;
   padding: 4px 12px;
   height: 32px;
-  margin-right: 40px;
+  margin-right: 10px;
   background: rgba(18, 18, 18, 0.2);
   backdrop-filter: blur(2px);
   border-radius: 100px;
 `
+const Sharebtn = styled(Box)({
+  color: 'white',
+  width: 107,
+  height: 32,
+  lineHeight: '32px',
+  textAlign: 'center',
+  background: 'transparent',
+  border: '1px solid white',
+  borderRadius: '32px',
+  cursor: 'pointer',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '&:hover': {
+    background: 'var(--ps-gray-900)',
+    border: '1px solid var(--ps-gray-900)',
+    color: '#fff'
+  }
+})
 const GrayBg = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -68,13 +103,22 @@ const GrayBg = styled(Box)`
   backdrop-filter: blur(5px);
   border-radius: 100px;
 `
-
 const VerticalDivider = styled(Box)`
   width: 1px;
   height: 32px;
   border: 1px solid rgba(255, 255, 255, 0.6);
 `
-
+const TabBg = styled(H4)`
+  padding: 24px;
+  min-width: 320px;
+  height: 76px;
+  border-radius: 20px 20px 0 0;
+  color: #959595;
+  &.select {
+    background: #ffffff;
+    color: #121212;
+  }
+`
 function Price({ title, value }: { title: string; value: string }) {
   return (
     <Box gap={8} sx={{ color: 'white' }}>
@@ -86,6 +130,7 @@ function Price({ title, value }: { title: string; value: string }) {
 
 export function BladeDao() {
   const item = PrivatePadList[0]
+  useBladeDaoSharer()
   return (
     <Box>
       <ProjectHead item={item} />
@@ -95,7 +140,76 @@ export function BladeDao() {
   )
 }
 
+export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSProperties; isDefaultBlackIcon?: boolean }) {
+  const { account } = useActiveWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
+  const copyValue = useMemo(() => {
+    if (!account) {
+      return ''
+    }
+    return window.location.href + `?sharer=${btoa(account)}`
+  }, [account])
+  const [isHover, setIsHover] = useState(false)
+  if (account) {
+    return (
+      <ReactCopyToClipboard text={copyValue} onCopy={() => toast.success('Successfully copied')}>
+        <Sharebtn
+          sx={{ ...style }}
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+        >
+          Share
+          {isHover ? (
+            <CopySvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          ) : isDefaultBlackIcon ? (
+            <CopyBlackSvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          ) : (
+            <CopySvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          )}
+        </Sharebtn>
+      </ReactCopyToClipboard>
+    )
+  } else {
+    return (
+      <Sharebtn onClick={toggleWalletModal}>
+        Share
+        <CopySvg
+          style={{
+            marginLeft: 7
+          }}
+        />
+      </Sharebtn>
+    )
+  }
+}
+const styles = {
+  p: '7px 16px',
+  borderRadius: '50px',
+  background: '#FFFFFF',
+  '&:hover': {
+    background: '#FFFFFF'
+  }
+}
 export function ProjectHead({ item }: { item: IPrivatePadProp }) {
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { userId } = useUserInfo()
+
   const prices = [
     {
       title: 'Token Name',
@@ -114,6 +228,24 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     //   value: item.singleInitialInvestment
     // }
   ]
+  const poolStatusText = useMemo(() => {
+    let result = 'Upcoming'
+    if (!poolInfo) return result
+    switch (Number(poolInfo.status)) {
+      case PoolStatus.Live:
+        result = 'Live'
+        break
+      case PoolStatus.Upcoming:
+        result = 'Upcoming'
+        break
+      case PoolStatus.Closed || PoolStatus.Cancelled:
+        result = 'Closed'
+        break
+      default:
+        break
+    }
+    return result
+  }, [poolInfo])
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
   return (
@@ -156,13 +288,65 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
       >
         <GrayButton
           onClick={() => {
-            nav('/launch-pad')
+            nav(routes.launchpad.index)
           }}
         >
           <ArrowBackIcon />
           <Typography variant={'h5'}>Launchpad homepage</Typography>
         </GrayButton>
-        <Upcoming>Upcoming</Upcoming>
+        <Box
+          sx={{
+            alignSelf: 'end',
+            marginRight: 40,
+            display: 'flex',
+            flexFlow: 'row nowrap'
+          }}
+          gap={8}
+        >
+          <Upcoming
+            style={{
+              marginRight: 0
+            }}
+          >
+            {poolStatusText}
+          </Upcoming>
+          {poolInfo && (
+            <LikeUnlike
+              likeObj={LIKE_OBJ.pool}
+              objId={poolInfo?.id}
+              likeAmount={{
+                dislikeCount: poolInfo?.likeInfo?.dislikeCount,
+                likeCount: poolInfo?.likeInfo?.likeCount,
+                myDislike: poolInfo?.likeInfo?.myDislike,
+                myLike: poolInfo?.likeInfo?.myLike
+              }}
+              onSuccess={getPoolInfo}
+              likeSx={{
+                ...styles,
+                '&:hover': {
+                  color: '#259C4A',
+                  background: '#FFFFFF'
+                }
+              }}
+              unlikeSx={{
+                ...styles,
+                '&:hover': {
+                  color: '#CA2020',
+                  background: '#FFFFFF'
+                }
+              }}
+            />
+          )}
+          {!!userId && poolInfo && (
+            <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+          )}
+          <ShareBtn
+            style={{
+              border: '1px solid #fff',
+              color: '#fff'
+            }}
+          />
+        </Box>
         <AlignBottomBG
           sx={{
             display: 'flex',
@@ -225,25 +409,6 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     </Box>
   )
 }
-
-const TabBg = styled(H4)`
-  padding: 24px;
-  min-width: 320px;
-  height: 76px;
-  border-radius: 20px 20px 0 0;
-  color: #959595;
-
-  //&:hover {
-  //  cursor: pointer;
-  //  background: #e1f25c;
-  //  color: #121212;
-  //}
-
-  &.select {
-    background: #ffffff;
-    color: #121212;
-  }
-`
 
 export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']

@@ -6,7 +6,7 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useState, useMemo, useEffect } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
@@ -24,8 +24,8 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
 import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
-// import { useCountDown } from 'ahooks'
-// import moment from 'moment'
+import { useCountDown } from 'ahooks'
+import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
@@ -35,6 +35,10 @@ import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import { ShareBtn } from '../projectIntro/index'
+import Favorite from 'bounceComponents/common/Favorite'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
 function a11yProps(index: number) {
   return {
@@ -42,6 +46,7 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
+
 const NoData = () => {
   return (
     <Box
@@ -53,15 +58,25 @@ const NoData = () => {
     </Box>
   )
 }
+
+const gameTimeStamp = {
+  // start: 1684461600000, //online
+  start: 1684426317000,
+  end: 1684674000000
+}
+
 export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(1)
   const [score, setScore] = useState(0)
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo, loading } = usePoolInfo()
+  const isLive = new Date().valueOf() > gameTimeStamp.start && new Date().valueOf() < gameTimeStamp.end
+
   const uploadGameScore = useCallback(
     async (score: number) => {
+      if (!isLive) return
       const resultScore = score.toFixed(2)
       const message = `Bounce would like you to sign the game score: ${resultScore}`
       try {
@@ -77,27 +92,29 @@ export function Game() {
         }
         sendScore(req)
         setScore(Number(resultScore))
-        console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
-    [account, signMessage, token]
+    [account, isLive, signMessage, token]
   )
+  useBladeDaoSharer()
+  useEffect(() => {
+    return () => {
+      if (!loading) {
+        setStep(poolInfo ? 1 : 0)
+      }
+    }
+  }, [poolInfo, loading])
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  //   const [countdown, { days, hours, minutes }] = useCountDown({
-  //     targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
-  //   })
+  const [countdown, { days, hours, minutes }] = useCountDown({
+    targetDate: moment(gameTimeStamp.end).valueOf()
+  })
   return (
     <Container maxWidth="lg">
-      <Title />
-      <Step
-        step={step}
-        hanldeChange={(num: number) => {
-          setStep(num)
-        }}
-      />
+      <Title step={step} poolInfo={poolInfo} />
+      <Step step={step} />
       <Box
         sx={{
           borderRadius: 20,
@@ -137,7 +154,7 @@ export function Game() {
             >
               Ghostie Game
             </Typography>
-            {/* <Typography
+            <Typography
               sx={{
                 height: 26,
                 lineHeight: '26px',
@@ -152,7 +169,7 @@ export function Game() {
               }}
             >
               Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
-            </Typography> */}
+            </Typography>
             {poolInfo && (
               <PoolStatusBox
                 status={poolInfo.status}
@@ -262,11 +279,10 @@ const StepBg = styled(Box)`
   align-items: center;
   padding: 18px 140px 18px 30px;
   gap: 67px;
-  width: 556px;
+  width: 560px;
   height: 56px;
   background: #171717;
   border-radius: 10px;
-  cursor: pointer;
 `
 const StepText = styled(Typography)`
   font-family: 'Sharp Grotesk DB Cyr Medium 22';
@@ -311,7 +327,11 @@ const NewTabs = styled(Tabs)(() => ({
     opacity: 1
   }
 }))
-function Title() {
+
+function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
+
   return (
     <Row mt={67} width={'100%'} justifyContent={'space-between'}>
       <CenterRow>
@@ -323,7 +343,11 @@ function Title() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: 'white'
+            background: 'white',
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            navigate(-1)
           }}
         >
           <LeftArrow />
@@ -331,14 +355,31 @@ function Title() {
         <Typography ml={20} variant={'h3'}>
           Ghistie Fixed Price Auction Pool
         </Typography>
-        {/* <ThumbBg ml={35}>
-          <ThumbsUp />
-          <Typography variant={'body1'}>16</Typography>
-        </ThumbBg>
-        <ThumbBg ml={6}>
-          <ThumbsDown />
-          <Typography variant={'body1'}>16</Typography>
-        </ThumbBg> */}
+      </CenterRow>
+      <CenterRow>
+        {step === 1 && (
+          <>
+            {/* <ThumbBg ml={35}>
+              <ThumbsUp />
+              <Typography variant={'body1'}>16</Typography>
+            </ThumbBg>
+            <ThumbBg ml={6} mr={6}>
+              <ThumbsDown />
+              <Typography variant={'body1'}>16</Typography>
+            </ThumbBg> */}
+            {!!userId && poolInfo && (
+              <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+            )}
+          </>
+        )}
+        <ShareBtn
+          style={{
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6
+          }}
+          isDefaultBlackIcon={true}
+        ></ShareBtn>
       </CenterRow>
       {/* <CenterRow>
         <Typography variant={'h3'}>#000123</Typography>
@@ -350,11 +391,11 @@ function Title() {
     </Row>
   )
 }
-function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number) => void }) {
+function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: number) => void }) {
   const { poolId, chainShortName } = useQueryParams()
   const stepChange = (num: number) => {
     if (poolId && chainShortName) {
-      hanldeChange(num)
+      hanldeChange && hanldeChange(num)
     }
   }
   return (
@@ -370,7 +411,7 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
       {step === 1 && (
         <StepBgLine onClick={() => stepChange(0)}>
           <StepText2>1</StepText2>
-          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)', width: 'max-content' }}>
             Stage One: Game Competition
           </Typography>
         </StepBgLine>
@@ -400,12 +441,14 @@ function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number
     </Row>
   )
 }
+
 export enum StatusType {
   'Rules' = 0,
   'NotWhitelist' = 1,
   'Warning' = 2,
   'NeedLogin' = 3
 }
+
 function RankTopItem({
   name,
   score,
@@ -509,6 +552,7 @@ function RankTopItem({
     </Box>
   )
 }
+
 function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType }) {
   const showLoginModal = useShowLoginModal()
 
@@ -553,7 +597,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
             >
               Rules:
             </span>{' '}
-            Play the game and try to get higher scores. The top 50 players before Jul 25 will get allocation.
+            Play the game and try to get higher scores. The top 50 players before May 21 will get allocation.
           </Typography>
         </Box>
       )}
@@ -700,6 +744,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
     </>
   )
 }
+
 const RankList = styled(Box)(() => ({
   position: 'relative',
   '.row': {
@@ -717,6 +762,7 @@ const RankList = styled(Box)(() => ({
     background: '#F5F5F5'
   }
 }))
+
 function RankSection({ score }: { score: number | string }) {
   const { account } = useActiveWeb3React()
   const { data: rankData, loading: rankLoading } = useRequest(
@@ -966,6 +1012,7 @@ function RankSection({ score }: { score: number | string }) {
     </Box>
   )
 }
+
 function PoolDetail() {
   return (
     <Box
@@ -1124,6 +1171,7 @@ function PoolDetail() {
     </Box>
   )
 }
+
 function UserBlock() {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   if (!poolInfo) {
@@ -1138,6 +1186,7 @@ function UserBlock() {
       style={{
         marginTop: '-25px'
       }}
+      contentGap={50}
       poolInfo={poolInfo}
       getPoolInfo={getPoolInfo}
     />

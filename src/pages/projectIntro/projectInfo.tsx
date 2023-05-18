@@ -6,9 +6,12 @@ import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 
 export function ProjectInfo() {
   const item = PrivatePadList[0]
+  useBladeDaoSharer()
+
   return (
     <Box>
       <ProjectHead item={item} />
