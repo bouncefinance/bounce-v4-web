@@ -63,8 +63,9 @@ import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
-import { ProjectIntro } from './projectIntro'
+import { BladeDao } from './projectIntro'
 import { Game } from './game'
+import { ProjectInfo } from './projectIntro/projectInfo'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -116,7 +117,8 @@ export default function App() {
                     <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
                     <Route path={routes.launchpad.index} element={<Launchpad />} />
-                    <Route path={routes.launchpad.projectIntro} element={<ProjectIntro />} />
+                    <Route path={routes.launchpad.bladeDao} element={<BladeDao />} />
+                    <Route path={routes.launchpad.projectInfo} element={<ProjectInfo />} />
 
                     <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
                     <Route path={routes.adsAuction.index} element={<AdsAuction />} />
@@ -145,7 +147,7 @@ export default function App() {
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     <Route path={routes.game.index} element={<Game />} />
-
+                    <Route path={routes.game.poolDetail} element={<Game />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>

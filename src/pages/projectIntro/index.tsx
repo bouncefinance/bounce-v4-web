@@ -84,7 +84,7 @@ function Price({ title, value }: { title: string; value: string }) {
   )
 }
 
-export function ProjectIntro() {
+export function BladeDao() {
   const item = PrivatePadList[0]
   return (
     <Box>
@@ -95,7 +95,7 @@ export function ProjectIntro() {
   )
 }
 
-function ProjectHead({ item }: { item: IPrivatePadProp }) {
+export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const prices = [
     {
       title: 'Token Name',
@@ -183,7 +183,11 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16}>
             {item.detailSocial}
-            <WhiteButton>
+            <WhiteButton
+              onClick={() => {
+                window.open('https://bladedao.gitbook.io/bladedao/', '_blank')
+              }}
+            >
               <IconBook />
               <H6>Whitepaper</H6>
             </WhiteButton>
@@ -241,7 +245,7 @@ const TabBg = styled(H4)`
   }
 `
 
-function Tabs({ item }: { item: IPrivatePadProp }) {
+export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = ['Project Information', 'Investment and Partners']
   const [tab, setTab] = useState(tabs[0])
@@ -256,7 +260,13 @@ function Tabs({ item }: { item: IPrivatePadProp }) {
           </TabBg>
         ))}
       </Row>
-      <Box sx={{ background: 'white', padding: '20px 72px', minHeight: '486px' }}>
+      <Box
+        sx={{
+          background: 'white',
+          padding: '20px 72px',
+          minHeight: '486px'
+        }}
+      >
         {tab === tabs[0] && <ProjectInfo item={item} />}
         {/*{tab === tabs[1] && <STEPNToken item={item} />}*/}
         {tab === tabs[2] && <TokenMetrics item={item} />}
@@ -301,6 +311,9 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
   return (
     <Box
       sx={{
+        width: '100%',
+        maxWidth: '1296px',
+        margin: '0 auto',
         display: 'flex',
         justifyContent: 'space-between'
       }}
@@ -318,7 +331,13 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
       </Stack>
       <ProjectContentBg>
         <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
-        <Typography variant={'body1'}>{info[currentIdx].info}</Typography>
+        {Array.isArray(info[currentIdx].info) &&
+          info[currentIdx].info.length > 0 &&
+          info[currentIdx].info.map((item: string, index: number) => (
+            <Typography key={index} variant={'body1'}>
+              {item}
+            </Typography>
+          ))}
       </ProjectContentBg>
     </Box>
   )

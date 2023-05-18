@@ -20,7 +20,7 @@ const NFTAcution: React.FC = ({}) => {
       <HeaderTab />
       <ArrowBanner type={'NFT'} />
       <TypesOfAuction />
-      <Notable1155 />
+      <Notable1155 handleViewAll={handleOpen} />
       <Notable721 handleViewAll={handleOpen} />
       <FooterPc />
       <NftListDialog open={open} handleClose={handleClose} />

@@ -7,14 +7,25 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 
 const UserMainBlock = ({
   poolInfo,
-  getPoolInfo
+  getPoolInfo,
+  style
 }: {
   poolInfo: FixedSwapPoolProp
   getPoolInfo: () => void
+  style?: React.CSSProperties
 }): JSX.Element => {
   return (
     <Box
-      sx={{ borderRadius: 20, px: 24, py: 20, bgcolor: '#fff', display: 'flex', flexDirection: 'column', rowGap: 12 }}
+      sx={{
+        borderRadius: 20,
+        px: 24,
+        py: 20,
+        bgcolor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: 12,
+        ...style
+      }}
     >
       <Alert poolInfo={poolInfo} />
 

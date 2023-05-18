@@ -1,6 +1,6 @@
 import { H3, H4 } from '../../../components/Text'
-import { Box, Container, Grid, MenuItem, Select, Skeleton } from '@mui/material'
-import React, { useState } from 'react'
+import { Box, Container, Grid, MenuItem, Select, Skeleton, Button } from '@mui/material'
+import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { routes } from '../../../constants/routes'
 import { getLabelById } from '../../../utils'
@@ -15,8 +15,11 @@ import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
-
-export const Notable1155: React.FC = () => {
+interface Notable1155Props {
+  handleViewAll?: () => void
+}
+export const Notable1155 = (props: Notable1155Props) => {
+  const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
@@ -118,6 +121,30 @@ export const Notable1155: React.FC = () => {
               : []}
           </SlideProgress>
         )}
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: '40px 0 0'
+          }}
+        >
+          <Button
+            onClick={() => {
+              handleViewAll && handleViewAll()
+            }}
+            variant="contained"
+            // href={AuctionList[currentIndex].checkAllLink}
+            sx={{
+              // background: 'var(--ps-yellow-1)',
+              padding: '16px 20px'
+            }}
+          >
+            View all auctions
+          </Button>
+        </Box>
       </Container>
     </Box>
   )

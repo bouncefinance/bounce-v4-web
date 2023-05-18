@@ -22,7 +22,8 @@ export const routes = {
   },
   launchpad: {
     index: '/launchpad',
-    projectIntro: '/launchpad/bladedao-intro'
+    bladeDao: '/launchpad/bladedao-intro',
+    projectInfo: '/launchpad/bladedao-intro/:chainShortName/:poolId'
   },
   realAuction: {
     index: '/real-auction'
@@ -65,6 +66,7 @@ export const routes = {
     digitalAssetsOffering: '/launchpad/poseiswap-intro'
   },
   game: {
-    index: '/playable/ghositerunner'
+    index: '/playable/ghositerunner',
+    poolDetail: '/playable/ghositerunner/:chainShortName/:poolId'
   }
 }

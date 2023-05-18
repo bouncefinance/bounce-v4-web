@@ -29,8 +29,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
         category,
         tokenType,
         chainId: chainConfigInBackend.id,
-        address: account || '',
-        tokenType: category === PoolType.FixedSwap ? 1 : 2
+        address: account || ''
       })
 
       const rawPoolInfo = category === PoolType.FixedSwap ? response.data.fixedSwapPool : response.data.fixedSwapNftPool

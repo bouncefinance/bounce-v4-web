@@ -121,10 +121,10 @@ const transparentRoutes = [
   routes.adsAuction.index,
   routes.realAuction.index,
   routes.launchpad.index,
-  routes.launchpad.projectIntro
+  routes.launchpad.bladeDao
 ]
 
-export const whiteLogoRoutes = [routes.launchpad.projectIntro]
+export const whiteLogoRoutes = [routes.launchpad.bladeDao]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)

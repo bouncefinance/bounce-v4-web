@@ -24,12 +24,17 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
 import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
-import { useCountDown } from 'ahooks'
-import moment from 'moment'
+// import { useCountDown } from 'ahooks'
+// import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { useQueryParams } from 'hooks/useQueryParams'
+import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 
 function a11yProps(index: number) {
   return {
@@ -37,11 +42,24 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
+const NoData = () => {
+  return (
+    <Box
+      sx={{
+        padding: '100px 0 100px'
+      }}
+    >
+      <EmptyData title={`No History Data`} />
+    </Box>
+  )
+}
 export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-
+  const [step, setStep] = useState(0)
+  const [score, setScore] = useState(0)
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const uploadGameScore = useCallback(
     async (score: number) => {
       const resultScore = score.toFixed(2)
@@ -58,6 +76,7 @@ export function Game() {
           signature
         }
         sendScore(req)
+        setScore(Number(resultScore))
         console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
@@ -67,13 +86,18 @@ export function Game() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  const [countdown, { days, hours, minutes }] = useCountDown({
-    targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
-  })
+  //   const [countdown, { days, hours, minutes }] = useCountDown({
+  //     targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
+  //   })
   return (
     <Container maxWidth="lg">
       <Title />
-      <Step />
+      <Step
+        step={step}
+        hanldeChange={(num: number) => {
+          setStep(num)
+        }}
+      />
       <Box
         sx={{
           borderRadius: 20,
@@ -93,6 +117,7 @@ export function Game() {
             alignItems: 'center'
           }}
         >
+          {/* title */}
           <Box
             sx={{
               height: 83,
@@ -112,7 +137,7 @@ export function Game() {
             >
               Ghostie Game
             </Typography>
-            <Typography
+            {/* <Typography
               sx={{
                 height: 26,
                 lineHeight: '26px',
@@ -127,8 +152,18 @@ export function Game() {
               }}
             >
               Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
-            </Typography>
+            </Typography> */}
+            {poolInfo && (
+              <PoolStatusBox
+                status={poolInfo.status}
+                claimAt={poolInfo.claimAt}
+                openTime={poolInfo.openAt}
+                closeTime={poolInfo.closeAt}
+                onEnd={getPoolInfo}
+              />
+            )}
           </Box>
+          {/* socia link */}
           <Box
             sx={{
               height: 83,
@@ -171,8 +206,17 @@ export function Game() {
             /> */}
           </Box>
         </Box>
-        <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
-        <GhostieRunner scoreUpload={uploadGameScore} />
+        {step === 0 && (
+          <>
+            <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
+            <GhostieRunner scoreUpload={uploadGameScore} />
+          </>
+        )}
+        {step === 1 && (
+          <>
+            <UserBlock />
+          </>
+        )}
       </Box>
       <Box
         sx={{
@@ -188,16 +232,12 @@ export function Game() {
           <Tab label="Auction Details" {...a11yProps(1)} />
           <Tab label="Auction History" {...a11yProps(2)} />
         </NewTabs>
-        {value === 0 && <RankSection />}
+        {value === 0 && <RankSection score={score} />}
         {value === 1 && <PoolDetail />}
         {value === 2 && (
-          <Box
-            sx={{
-              padding: '100px 0 100px'
-            }}
-          >
-            <EmptyData title={`No History Data`} />
-          </Box>
+          <ActionHistory noTitle={true}>
+            <NoData />
+          </ActionHistory>
         )}
       </Box>
     </Container>
@@ -226,6 +266,7 @@ const StepBg = styled(Box)`
   height: 56px;
   background: #171717;
   border-radius: 10px;
+  cursor: pointer;
 `
 const StepText = styled(Typography)`
   font-family: 'Sharp Grotesk DB Cyr Medium 22';
@@ -309,25 +350,53 @@ function Title() {
     </Row>
   )
 }
-function Step() {
+function Step({ step, hanldeChange }: { step: number; hanldeChange: (num: number) => void }) {
+  const { poolId, chainShortName } = useQueryParams()
+  const stepChange = (num: number) => {
+    if (poolId && chainShortName) {
+      hanldeChange(num)
+    }
+  }
   return (
     <Row alignItems={'center'} mt={47}>
-      <StepBg>
-        <StepText>1</StepText>
-        <Typography sx={{ color: 'white' }} variant={'h4'}>
-          Stage One: Game Competition
-        </Typography>
-      </StepBg>
+      {step === 0 && (
+        <StepBg onClick={() => stepChange(0)}>
+          <StepText>1</StepText>
+          <Typography sx={{ color: 'white' }} variant={'h4'}>
+            Stage One: Game Competition
+          </Typography>
+        </StepBg>
+      )}
+      {step === 1 && (
+        <StepBgLine onClick={() => stepChange(0)}>
+          <StepText2>1</StepText2>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+            Stage One: Game Competition
+          </Typography>
+        </StepBgLine>
+      )}
       <Box
         sx={{
           border: '2px dashed #171717',
           width: 89
         }}
       />
-      <StepBgLine>
-        <StepText2>2</StepText2>
-        <Typography variant={'h4'}>Stage Two: Token Auction</Typography>
-      </StepBgLine>
+      {step === 0 && (
+        <StepBgLine onClick={() => stepChange(1)}>
+          <StepText2>2</StepText2>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+            Stage Two: Token Auction
+          </Typography>
+        </StepBgLine>
+      )}
+      {step === 1 && (
+        <StepBg onClick={() => stepChange(0)}>
+          <StepText>2</StepText>
+          <Typography sx={{ color: 'white' }} variant={'h4'}>
+            Stage Two: Token Auction
+          </Typography>
+        </StepBg>
+      )}
     </Row>
   )
 }
@@ -648,17 +717,22 @@ const RankList = styled(Box)(() => ({
     background: '#F5F5F5'
   }
 }))
-function RankSection() {
+function RankSection({ score }: { score: number | string }) {
   const { account } = useActiveWeb3React()
-  const { data: rankData, loading: rankLoading } = useRequest(async () => {
-    const resp = await getAllrank({
-      payableId: 1
-    })
-    return {
-      list: resp.data?.list || [],
-      total: resp.data?.total || 0
+  const { data: rankData, loading: rankLoading } = useRequest(
+    async () => {
+      const resp = await getAllrank({
+        payableId: 1
+      })
+      return {
+        list: resp.data?.list || [],
+        total: resp.data?.total || 0
+      }
+    },
+    {
+      refreshDeps: [score]
     }
-  })
+  )
   const { data: userRankData } = useRequest(async () => {
     const resp = await getUserRank({
       payableId: 1
@@ -1048,5 +1122,24 @@ function PoolDetail() {
         </Typography>
       </Box>
     </Box>
+  )
+}
+function UserBlock() {
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  if (!poolInfo) {
+    return (
+      <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <BounceAnime />
+      </Box>
+    )
+  }
+  return (
+    <UserMainBlock
+      style={{
+        marginTop: '-25px'
+      }}
+      poolInfo={poolInfo}
+      getPoolInfo={getPoolInfo}
+    />
   )
 }

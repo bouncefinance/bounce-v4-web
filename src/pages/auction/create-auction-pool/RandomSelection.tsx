@@ -12,7 +12,9 @@ export default function RandomSelection() {
     <Stack alignItems="center">
       {valuesState.activeStep !== CreationStep.CREATION_CONFIRMATION ? (
         <Box sx={{ pb: 48, maxWidth: 660, width: '100%' }}>
-          {valuesState.activeStep === CreationStep.TOKEN_INFORMATION && <TokenInformationForm />}
+          {valuesState.activeStep === CreationStep.TOKEN_INFORMATION && (
+            <TokenInformationForm title={'Random Selection Auction'} />
+          )}
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <RandomSelectionAuctionParametersForm />}
           {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
         </Box>

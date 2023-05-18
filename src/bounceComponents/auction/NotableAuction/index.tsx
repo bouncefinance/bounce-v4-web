@@ -1,4 +1,4 @@
-import { Box, Container, Grid, MenuItem, Select, Skeleton, Typography } from '@mui/material'
+import { Box, Container, Grid, MenuItem, Select, Skeleton, Typography, Button } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
@@ -30,9 +30,14 @@ const poolType: Record<PoolType, string> = {
   [PoolType.Duch]: 'Dutch Auction',
   [PoolType.SealedBid]: 'SealedBid',
   [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
+  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT',
+  [PoolType['PlayableAuction']]: 'Playable-Auction'
 }
-export const NotableAuction: React.FC = () => {
+interface Notable1155Props {
+  handleViewAll?: () => void
+}
+export const NotableAuction = (props: Notable1155Props) => {
+  const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
@@ -216,6 +221,29 @@ export const NotableAuction: React.FC = () => {
             ))}
           </SlideProgress>
         )}
+        <Box
+          sx={{
+            marginTop: '40px',
+            width: '100%',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'center'
+          }}
+        >
+          <Button
+            onClick={() => {
+              handleViewAll && handleViewAll()
+            }}
+            variant="contained"
+            // href={AuctionList[currentIndex].checkAllLink}
+            sx={{
+              // background: 'var(--ps-yellow-1)',
+              padding: '16px 20px'
+            }}
+          >
+            View all auctions
+          </Button>
+        </Box>
       </Container>
     </Box>
   )
