@@ -12,14 +12,13 @@ import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useMemo } from 'react'
-import { shareAdd } from 'api/bladeDao/index'
+import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
-import { useQueryParams } from 'hooks/useQueryParams'
 import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -115,17 +114,8 @@ function Price({ title, value }: { title: string; value: string }) {
 
 export function BladeDao() {
   const item = PrivatePadList[0]
-  const { account } = useActiveWeb3React()
-  const { sharer } = useQueryParams()
-  useEffect(() => {
-    if (!sharer || !account) return
-    const sharerAddress = atob(sharer)
-    shareAdd({
-      sharer: sharerAddress,
-      invitee: account,
-      side: 'BladeDao'
-    })
-  }, [account, sharer])
+  useBladeDaoSharer()
+
   return (
     <Box>
       <ProjectHead item={item} />
