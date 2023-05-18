@@ -26,6 +26,7 @@ import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
+import { PoolStatus } from 'api/pool/type'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -107,7 +108,17 @@ const VerticalDivider = styled(Box)`
   height: 32px;
   border: 1px solid rgba(255, 255, 255, 0.6);
 `
-
+const TabBg = styled(H4)`
+  padding: 24px;
+  min-width: 320px;
+  height: 76px;
+  border-radius: 20px 20px 0 0;
+  color: #959595;
+  &.select {
+    background: #ffffff;
+    color: #121212;
+  }
+`
 function Price({ title, value }: { title: string; value: string }) {
   return (
     <Box gap={8} sx={{ color: 'white' }}>
@@ -217,6 +228,24 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     //   value: item.singleInitialInvestment
     // }
   ]
+  const poolStatusText = useMemo(() => {
+    let result = 'Upcoming'
+    if (!poolInfo) return result
+    switch (Number(poolInfo.status)) {
+      case PoolStatus.Live:
+        result = 'Live'
+        break
+      case PoolStatus.Upcoming:
+        result = 'Upcoming'
+        break
+      case PoolStatus.Closed || PoolStatus.Cancelled:
+        result = 'Closed'
+        break
+      default:
+        break
+    }
+    return result
+  }, [poolInfo])
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
   return (
@@ -279,7 +308,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
               marginRight: 0
             }}
           >
-            Upcoming
+            {poolStatusText}
           </Upcoming>
           {poolInfo && (
             <LikeUnlike
@@ -380,25 +409,6 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     </Box>
   )
 }
-
-const TabBg = styled(H4)`
-  padding: 24px;
-  min-width: 320px;
-  height: 76px;
-  border-radius: 20px 20px 0 0;
-  color: #959595;
-
-  //&:hover {
-  //  cursor: pointer;
-  //  background: #e1f25c;
-  //  color: #121212;
-  //}
-
-  &.select {
-    background: #ffffff;
-    color: #121212;
-  }
-`
 
 export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']

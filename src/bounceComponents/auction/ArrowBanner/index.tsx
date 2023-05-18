@@ -4,14 +4,14 @@ import 'swiper/swiper-bundle.css'
 import { Box, styled, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import { timestampToCountdown } from '../../../utils/TimeUtil'
+// import { timestampToCountdown } from '../../../utils/TimeUtil'
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
 import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 import { useNavigate } from 'react-router-dom'
-
+import { useCountDown } from 'ahooks'
 SwiperCore.use([Autoplay, Pagination])
 
 export interface IBanner {
@@ -65,7 +65,7 @@ function ArrowBanner({ type }: { type?: string }) {
       >
         {data?.list?.map((item: BannerType, index: number) => (
           <SwiperSlide key={index}>
-            <Banner banner={item} />
+            <Banner key={index} banner={item} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -166,7 +166,9 @@ const ChainBg = styled(Box)`
 `
 
 function Banner({ banner }: { banner: BannerType }) {
-  const countDown = timestampToCountdown(banner.openAt)
+  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
+    targetDate: banner.openAt * 1000
+  })
   const navigate = useNavigate()
   const handleClick = (url: string) => {
     if (!url) return
@@ -227,9 +229,16 @@ function Banner({ banner }: { banner: BannerType }) {
             right: '38px'
           }}
         >
-          {countDown.map((time, idx) => (
-            <CountDownBg key={idx}>{time}</CountDownBg>
-          ))}
+          {countdown > 0 ? (
+            <>
+              <CountDownBg key={'banner0'}>{days}D</CountDownBg>
+              <CountDownBg key={'banner1'}>{hours}H</CountDownBg>
+              <CountDownBg key={'banner2'}>{minutes}M</CountDownBg>
+              <CountDownBg key={'banner3'}>{seconds}S</CountDownBg>
+            </>
+          ) : (
+            <></>
+          )}
         </Box>
       )}
     </Box>
