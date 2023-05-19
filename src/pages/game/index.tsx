@@ -36,7 +36,7 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
-import { ShareBtn } from '../projectIntro/index'
+import { ShareBtn, InviteBtn } from '../projectIntro/index'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 
@@ -381,6 +381,19 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
           }}
           isDefaultBlackIcon={true}
         ></ShareBtn>
+        <InviteBtn
+          style={{
+            width: 34,
+            padding: 0,
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          isDefaultBlackIcon={true}
+        ></InviteBtn>
       </CenterRow>
       {/* <CenterRow>
         <Typography variant={'h3'}>#000123</Typography>
