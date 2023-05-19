@@ -216,7 +216,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
   },
   {
     liveTimeStamp: {
-      start: 1684490400000,
+      start: 1684494000000,
       end: 1685080800000
     },
     poolTypeName: 'Playable Auction',

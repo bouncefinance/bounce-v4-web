@@ -54,7 +54,7 @@ const NoData = () => {
 const payableId = 2
 
 const gameTimeStamp = {
-  start: 1684490400000,
+  start: 1684494000000,
   end: 1684821600000
 }
 
