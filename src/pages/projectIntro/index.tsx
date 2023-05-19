@@ -165,12 +165,16 @@ const RankList = styled(Box)(() => ({
 }))
 export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { data: inviteData, loading } = useRequest(async () => {
-    const resp = await getInviteList()
+    const resp = await getInviteList({
+      poolId: 1,
+      side: 'BladeDao'
+    })
     return {
       list: resp?.data?.list,
       total: resp?.data?.total
     }
   })
+  console.log('inviteData>>>', inviteData)
   return (
     <Box
       sx={{
@@ -288,7 +292,7 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
                       color: 'var(--ps-text-3)'
                     }}
                   >
-                    {item.address}
+                    {item?.account || '--'}
                   </Typography>
                   <Typography
                     component={'span'}
@@ -296,10 +300,10 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
                       fontFamily: `'Public Sans'`,
                       fontWeight: 600,
                       fontSize: 14,
-                      color: item.status === 'Valid' ? 'var(--ps-green-1)' : '#FD3333'
+                      color: item.isValid ? 'var(--ps-green-1)' : '#FD3333'
                     }}
                   >
-                    {item.status}
+                    {item?.isValid ? 'Valid' : 'Invalid'}
                   </Typography>
                 </Box>
               )
@@ -448,7 +452,6 @@ export function InviteBtn({
     )
   }
 }
-
 export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { userId } = useUserInfo()
@@ -662,7 +665,6 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     </Box>
   )
 }
-
 export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = ['Project Information', 'Investment and Partners']
