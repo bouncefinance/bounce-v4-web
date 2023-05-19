@@ -30,7 +30,7 @@ import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 import { ShareBtn } from '../projectIntro'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown, { ReactNode } from 'react-markdown'
 import EquilibriaAvatar from '../launchpad/avatar/equilibria-logo.png'
 
 function a11yProps(index: number) {
@@ -1108,7 +1108,19 @@ function PoolDetail() {
           padding: '30px 0 0'
         }}
       >
-        <ReactMarkdown>{EquilibriaIntroMd}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            a({ children, href }: { children: ReactNode; href: string }) {
+              return (
+                <a href={href} style={{ color: 'blue', textDecoration: 'underline' }}>
+                  {children}
+                </a>
+              )
+            }
+          }}
+        >
+          {EquilibriaIntroMd}
+        </ReactMarkdown>
       </Box>
     </Box>
   )
