@@ -1201,16 +1201,4 @@ const EquilibriaIntroMd = `
 - Before the DeFi experience, core team graduated from the top CS university in US and worked for Facebook, Airbnb, Microsoft, Huobi;
 - They have lots of experience on Web2/3 development and operations.
 
-## 7. Milestones
-
-- April 28th - Announce the Bootstrap Campaign;
-- May 1st 2PM UTC +0 Launch the Bootstrap Campaign;
-- May 7th 2PM UTC +0 Airdrop Announcement, after TGE do;
-- May 7th - 12th Pre Sale Investors Announcement and Comments;
-- [Estimated Time]May 14th - Announce the IDO Information;
-- May 15th - Full Tokenomics;
-- May 17th - AMA with PENDLE and IDO platform;
-- May 21th - Audits Announcement;
-- May 25th - Launch the Testnet;
-- May 30th - IDO and launch the token;
 `
