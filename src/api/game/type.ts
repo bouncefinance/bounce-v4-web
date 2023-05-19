@@ -2,8 +2,8 @@ interface RankItem {
   address: string
   avatar: string
   name: string
-  totalCreated: string
-  totalPart: number
+  score: string
+  rank: number
   userId?: string
 }
 export interface IRankResponse {
