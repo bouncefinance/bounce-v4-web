@@ -51,10 +51,11 @@ const NoData = () => {
   )
 }
 
+const payableId = 2
+
 const gameTimeStamp = {
-  // start: 1684461600000, //online
-  start: 1684426317000,
-  end: 1684674000000
+  start: 1684490400000,
+  end: 1684821600000
 }
 
 export function Equilibria() {
@@ -79,7 +80,7 @@ export function Equilibria() {
         const signature = await signMessage(message)
         const req = {
           message,
-          payableId: 1,
+          payableId,
           address: account,
           signature
         }
@@ -763,7 +764,7 @@ function RankSection({ score }: { score: number | string }) {
   const { data: rankData, loading: rankLoading } = useRequest(
     async () => {
       const resp = await getAllrank({
-        payableId: 1
+        payableId
       })
       return {
         list: resp.data?.list || [],
@@ -777,7 +778,7 @@ function RankSection({ score }: { score: number | string }) {
   const { data: userRankData } = useRequest(
     async () => {
       return await getUserRank({
-        payableId: 1
+        payableId
       })
     },
     {

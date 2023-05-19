@@ -216,8 +216,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
   },
   {
     liveTimeStamp: {
-      start: 1690147200000,
-      end: 1690468800000
+      start: 1684490400000,
+      end: 1685080800000
     },
     poolTypeName: 'Playable Auction',
     img: 'https://images-v3.bounce.finance/d784fb0ad9c334c6780034699cb9a239-1684479810.png',
