@@ -771,16 +771,22 @@ function RankSection({ score }: { score: number | string }) {
       refreshDeps: [score]
     }
   )
-  const { data: userRankData } = useRequest(async () => {
-    const resp = await getUserRank({
-      payableId: 1
-    })
-    return resp
-  })
+  const { data: userRankData } = useRequest(
+    async () => {
+      const resp = await getUserRank({
+        payableId: 1
+      })
+      return resp
+    },
+    {
+      refreshDeps: [score]
+    }
+  )
   const loginUserData = useMemo(() => {
     const list = rankData?.list || []
     let resultData
-    if (list.length > 0) {
+    resultData = userRankData?.data
+    if (!resultData && list.length > 0) {
       list.map((item, index) => {
         if (item.address === account) {
           resultData = {
@@ -790,9 +796,6 @@ function RankSection({ score }: { score: number | string }) {
           }
         }
       })
-    }
-    if (!resultData) {
-      resultData = userRankData?.data
     }
     return resultData
   }, [account, rankData?.list, userRankData])
