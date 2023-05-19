@@ -1,31 +1,22 @@
-import { Box, Container, styled, Typography, Tabs, Tab } from '@mui/material'
+import { Box, Container, styled, Tab, Tabs, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
-// import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
-// import { ReactComponent as ThumbsDown } from 'assets/svg/thumbsDown.svg'
-// import TokenImage from '../../bounceComponents/common/TokenImage'
-// import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
-import { useUserInfo } from 'state/users/hooks'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import InterNetIcon from 'assets/imgs/game/internet.png'
 import TwitterIcon from 'assets/imgs/game/twitter.png'
-// import IgIcon from 'assets/imgs/game/ig.png'
-// import GithubIcon from 'assets/imgs/game/github.png'
 import NormalIcon from 'assets/imgs/game/normal.png'
 import ErrorIcon from 'assets/imgs/game/error.png'
 import WarningIcon from 'assets/imgs/game/warning.png'
-import { getAllrank, sendScore, getUserRank } from 'api/game/index'
-import { useRequest } from 'ahooks'
+import { getAllrank, getUserRank, sendScore } from 'api/game/index'
+import { useCountDown, useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
-import { useShowLoginModal } from 'state/users/hooks'
-import PoolLogo from 'assets/imgs/game/poolLogo.png'
-// import { useCountDown } from 'ahooks'
-// import moment from 'moment'
+import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
@@ -36,9 +27,10 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
-import { ShareBtn } from '../projectIntro/index'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
+import ReactMarkdown, { ReactNode } from 'react-markdown'
+import EquilibriaAvatar from '../launchpad/avatar/equilibria-logo.png'
 
 function a11yProps(index: number) {
   return {
@@ -59,12 +51,14 @@ const NoData = () => {
   )
 }
 
+const payableId = 2
+
 const gameTimeStamp = {
-  start: 1684461600000, //online
-  end: 1684674000000
+  start: 1684494000000,
+  end: 1684821600000
 }
 
-export function Game() {
+export function Equilibria() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
@@ -86,7 +80,7 @@ export function Game() {
         const signature = await signMessage(message)
         const req = {
           message,
-          payableId: 1,
+          payableId,
           address: account,
           signature
         }
@@ -108,9 +102,9 @@ export function Game() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  // const [countdown, { days, hours, minutes }] = useCountDown({
-  //   targetDate: moment(gameTimeStamp.end).valueOf()
-  // })
+  const [countdown, { days, hours, minutes }] = useCountDown({
+    targetDate: moment(gameTimeStamp.end).valueOf()
+  })
   return (
     <Container maxWidth="lg">
       <Title step={step} poolInfo={poolInfo} />
@@ -152,7 +146,7 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              BladeDao Ghositerunner Game
+              Ghostie Runner Game
             </Typography>
             <Typography
               sx={{
@@ -168,9 +162,7 @@ export function Game() {
                 fontSize: 14
               }}
             >
-              Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
-              {new Date(gameTimeStamp.end).toLocaleString()}
-              {/* Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'} */}
+              Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
             </Typography>
             {poolInfo && (
               <PoolStatusBox
@@ -201,7 +193,7 @@ export function Game() {
               src={InterNetIcon}
               alt=""
               onClick={() => {
-                window.open('https://www.bladedao.games/', '_blank')
+                window.open('https://equilibria.fi', '_blank')
               }}
             />
             <img
@@ -212,7 +204,7 @@ export function Game() {
               src={TwitterIcon}
               alt=""
               onClick={() => {
-                window.open('https://twitter.com/blade_dao', '_blank')
+                window.open('https://twitter.com/Equilibriafi', '_blank')
               }}
             />
             {/* <img
@@ -247,12 +239,12 @@ export function Game() {
         }}
       >
         <NewTabs value={value} onChange={handleChange}>
-          <Tab label="Leaderboard" {...a11yProps(0)} />
           <Tab label="Auction Details" {...a11yProps(1)} />
+          <Tab label="Leaderboard" {...a11yProps(0)} />
           <Tab label="Auction History" {...a11yProps(2)} />
         </NewTabs>
-        {value === 0 && <RankSection score={score} />}
-        {value === 1 && <PoolDetail />}
+        {value === 0 && <PoolDetail />}
+        {value === 1 && <RankSection score={score} />}
         {value === 2 && (
           <ActionHistory noTitle={true}>
             <NoData />
@@ -355,7 +347,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
           <LeftArrow />
         </Box>
         <Typography ml={20} variant={'h3'}>
-          BladeDao Playable Auction Pool
+          Equilibria Playable Auction Pool
         </Typography>
       </CenterRow>
       <CenterRow>
@@ -374,14 +366,14 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
             )}
           </>
         )}
-        <ShareBtn
-          style={{
-            border: '1px solid var(--ps-gray-900)',
-            color: 'var(--ps-gray-900)',
-            marginLeft: 6
-          }}
-          isDefaultBlackIcon={true}
-        ></ShareBtn>
+        {/*<ShareBtn*/}
+        {/*  style={{*/}
+        {/*    border: '1px solid var(--ps-gray-900)',*/}
+        {/*    color: 'var(--ps-gray-900)',*/}
+        {/*    marginLeft: 6*/}
+        {/*  }}*/}
+        {/*  isDefaultBlackIcon={true}*/}
+        {/*></ShareBtn>*/}
       </CenterRow>
       {/* <CenterRow>
         <Typography variant={'h3'}>#000123</Typography>
@@ -393,6 +385,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
     </Row>
   )
 }
+
 function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: number) => void }) {
   const { poolId, chainShortName } = useQueryParams()
   const stepChange = (num: number) => {
@@ -598,8 +591,9 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
               }}
             >
               Rules:
-            </span>{' '}
-            Play the game and try to get higher scores. The top 50 players before May 21 will get allocation.
+            </span>
+            Play the game and try to get higher scores. The top 50 Ranked Players will receive a Whitelist to join stage
+            2.
           </Typography>
         </Box>
       )}
@@ -770,7 +764,7 @@ function RankSection({ score }: { score: number | string }) {
   const { data: rankData, loading: rankLoading } = useRequest(
     async () => {
       const resp = await getAllrank({
-        payableId: 1
+        payableId
       })
       return {
         list: resp.data?.list || [],
@@ -783,10 +777,9 @@ function RankSection({ score }: { score: number | string }) {
   )
   const { data: userRankData } = useRequest(
     async () => {
-      const resp = await getUserRank({
-        payableId: 1
+      return await getUserRank({
+        payableId
       })
-      return resp
     },
     {
       refreshDeps: [score]
@@ -797,12 +790,12 @@ function RankSection({ score }: { score: number | string }) {
     let resultData
     resultData = userRankData?.data
     if (!resultData && list.length > 0) {
-      list.map(item => {
+      list.map((item, index) => {
         if (item.address === account) {
           resultData = {
             address: item.address,
-            rank: item.rank,
-            score: item?.score
+            rank: index + 1,
+            score: item?.totalCreated
           }
         }
       })
@@ -967,7 +960,7 @@ function RankSection({ score }: { score: number | string }) {
                           color: '#171717'
                         }}
                       >
-                        {item.rank}
+                        {index + 4}
                       </Typography>
                       <Image
                         style={{
@@ -1032,7 +1025,7 @@ function PoolDetail() {
       <Box
         sx={{
           width: 270,
-          minHeight: 400,
+          minHeight: 521,
           padding: '0 20px',
           background: `var(--ps-gray-50)`,
           borderRadius: 20,
@@ -1048,7 +1041,7 @@ function PoolDetail() {
             borderRadius: '50%',
             margin: '0 auto 24px'
           }}
-          src={PoolLogo}
+          src={EquilibriaAvatar}
           width={120}
           height={120}
         />
@@ -1061,9 +1054,9 @@ function PoolDetail() {
             fontWeight: 500
           }}
         >
-          BladeDao
+          Equilibria
         </Typography>
-        {/* <Typography
+        <Typography
           sx={{
             marginBottom: 24,
             color: 'var(--ps-gray-700)',
@@ -1073,9 +1066,9 @@ function PoolDetail() {
             textAlign: 'center'
           }}
         >
-          AWS provides customers with the broadest and deepest cloud platform cloud platform cloud platform the broadest
-          and deepest cloud platform...
-        </Typography> */}
+          Equilibria Finance is designed exclusively for $PENDLE holders and liquidity providers, offering an
+          easy-to-use platform to maximize your profits.
+        </Typography>
         <Box
           sx={{
             display: 'flex',
@@ -1093,17 +1086,9 @@ function PoolDetail() {
             width={36}
             height={36}
             onClick={() => {
-              window.open('https://twitter.com/blade_dao', '_blank')
+              window.open('https://twitter.com/Equilibriafi', '_blank')
             }}
           />
-          {/* <Image
-            style={{
-              cursor: 'pointer'
-            }}
-            src={IgIcon}
-            width={36}
-            height={36}
-          /> */}
           <Image
             style={{
               cursor: 'pointer'
@@ -1112,17 +1097,9 @@ function PoolDetail() {
             width={36}
             height={36}
             onClick={() => {
-              window.open('https://www.bladedao.games/', '_blank')
+              window.open('https://equilibria.fi', '_blank')
             }}
           />
-          {/* <Image
-            style={{
-              cursor: 'pointer'
-            }}
-            src={GithubIcon}
-            width={36}
-            height={36}
-          /> */}
         </Box>
       </Box>
       <Box
@@ -1131,47 +1108,19 @@ function PoolDetail() {
           padding: '30px 0 0'
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
-            fontWeight: 500,
-            fontSize: 14,
-            color: '#000000',
-            marginBottom: 17
+        <ReactMarkdown
+          components={{
+            a({ children, href }: { children: ReactNode; href: string }) {
+              return (
+                <a href={href} style={{ color: 'blue', textDecoration: 'underline' }}>
+                  {children}
+                </a>
+              )
+            }
           }}
         >
-          Auction Background
-        </Typography>
-        <Typography
-          sx={{
-            fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-            fontSize: 14,
-            color: 'var(--ps-gray-700)',
-            marginBottom: 20
-          }}
-        >
-          {`BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.`}
-        </Typography>
-        <Typography
-          sx={{
-            fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-            fontSize: 14,
-            color: 'var(--ps-gray-700)',
-            marginBottom: 20
-          }}
-        >
-          {`BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.`}
-        </Typography>
-        <Typography
-          sx={{
-            fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-            fontSize: 14,
-            color: 'var(--ps-gray-700)',
-            marginBottom: 20
-          }}
-        >
-          {`BladeDAO also designed a single governance token with sustainable DeFi mechanisms with a publisher token model in mind.`}
-        </Typography>
+          {EquilibriaIntroMd}
+        </ReactMarkdown>
       </Box>
     </Box>
   )
@@ -1197,3 +1146,70 @@ function UserBlock() {
     />
   )
 }
+
+const EquilibriaIntroMd = `
+## 1. Introduction:
+
+- Equilibria Finance is designed exclusively for $PENDLE holders and liquidity providers, offering an easy-to-use platform to maximize your profits. It leverages the veToken/boosted yield model adopted by Pendle Finance to provide a boosted yield for LPs and extra reward to PENDLE holders with a tokenized version of vePENDLE, ePENDLE. If you are not familiar with veToken/boosted yield model, read the Pendle Finance doc [here](https://docs.pendle.finance/Governance/vePENDLE).
+- Inspired by the fast swing of a pendulum at its equilibrium position that represents the point of maximum kinetic energy in the system, Equilibria Finance is on a mission to help you achieve your maximum potential.
+- Led by a team of DeFi OGs with years of experience in the industry, our platform is customized and optimized for Pendle Finance. And with the support of our community, we plan to extend our platform to other leading protocols in the future.
+- Join us today and swing into action with Equilibria Finance!
+
+## 2. Benefits for different participants:
+
+- For Pendle Finance
+  1. Provide a more attractive yield for wider user base who don’t have any Pendle position;
+  2. Make boosting yield more effective and fair, which means without us the LPs may have huge differences from PENDLE holders, so the PENDLE boosting power may be somehow wasted;
+  3. Lock PENDLE forever, this will reduce the selling pressure of PENDLE;
+- For LPs
+  1. Receive higher yield including boosting PENDLE/other reward and EQB emission.
+- For PENDLE holders
+  1. Receive extra PENDLE reward and EQB emission rather than the normal reward from vePENDLE, such as YT swap fees;
+  2. Liquid version of vePENDLE, and can exit position back to PENDLE anytime from the ePENDLE/PENDLE liquidity on the DEX.
+
+## 3. Why Equilibria?
+
+- Proven veToken Model
+
+  The efficacy of the veToken model has been proven by successful projects such as Curve/Convex and Balancer/Aura. As we enter the era of vePendle, we are confident that this model will create long-term alignment between stakers and the protocol, leading to exponential growth and huge potential for our project.
+
+- **Uncovered Market Opportunities**
+
+  Pendle Finance brings the trillion-dollar traditional finance interest derivative market into DeFi, making it accessible to all. As the industry leader in this space, Pendle Finance is well-positioned to capture billions of TVL and take a significant share of the market as the DeFi space grows. With its innovative approach and commitment to driving value for users, we are poised to revolutionize the world of interest derivatives and drive the DeFi industry forward.
+
+- Beyond the Curve Wars.
+
+  Equilibria’s vision is to drive innovation in the field. Our goal is not just to create a Convex layer on Pendle. We also intend to introduce several novel features, such as the YT market for vlEQB, limit order for the PT/YT trading, cross chain implementation.
+
+- Professional Team
+
+  Our team of contributors are DeFi experts, with a deep understanding of the veToken model and successful experience in developing and operating veToken aggregators. With multiple years of web2/web3 development experience, we have the skill and will to drive Equilibria Finance to success.
+
+## 4. Protocol Overviews:
+
+- Check [here](https://equilibria-finance.gitbook.io/equilibria-finance/mechanism/boost-usdpendle-lp-yield)
+
+## 5. Tokenomics:
+
+- The total supply will be 100,000,000 and more than 70% will be used for incentives and community.
+- More details cannot disclose right now because still discussing some very important things with 3rd parties. Will announce in 1 or 2 weeks.
+
+## 6. Core team intro:
+
+- Core team combines of DeFi degens who have much experience on yield booster; They have built yield booster on BNB chain and cross chain infrastructures on Cosmos ecosystem;
+- Before the DeFi experience, core team graduated from the top CS university in US and worked for Facebook, Airbnb, Microsoft, Huobi;
+- They have lots of experience on Web2/3 development and operations.
+
+## 7. Milestones
+
+- April 28th - Announce the Bootstrap Campaign;
+- May 1st 2PM UTC +0 Launch the Bootstrap Campaign;
+- May 7th 2PM UTC +0 Airdrop Announcement, after TGE do;
+- May 7th - 12th Pre Sale Investors Announcement and Comments;
+- [Estimated Time]May 14th - Announce the IDO Information;
+- May 15th - Full Tokenomics;
+- May 17th - AMA with PENDLE and IDO platform;
+- May 21th - Audits Announcement;
+- May 25th - Launch the Testnet;
+- May 30th - IDO and launch the token;
+`
