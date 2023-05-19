@@ -296,10 +296,10 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
                       fontFamily: `'Public Sans'`,
                       fontWeight: 600,
                       fontSize: 14,
-                      color: item.isValid ? 'var(--ps-green-1)' : '#FD3333'
+                      color: item.isValid ? 'var(--ps-green-1)' : '#FFC700'
                     }}
                   >
-                    {item?.isValid ? 'Valid' : 'Invalid'}
+                    {item?.isValid ? 'Valid' : 'Waiting'}
                   </Typography>
                 </Box>
               )
