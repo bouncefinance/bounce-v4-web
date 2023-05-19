@@ -36,6 +36,7 @@ import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
 import { routes } from 'constants/routes'
 
 import BlodeAvatar from './avatar/blade-icon.ico'
+import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 
 export const Launchpad: React.FC = () => {
@@ -211,6 +212,104 @@ export const PrivatePadList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'zkSync Era' },
       { title: 'Game Start Time', content: '19/05/23 12:00 am.(UTC+8)' },
       { title: 'Game End Time', content: '21/05/23 09:00 pm.(UTC+8)' }
+    ]
+  },
+  {
+    liveTimeStamp: {
+      start: 1690147200000,
+      end: 1690468800000
+    },
+    poolTypeName: 'Playable Auction',
+    img: 'https://images-v3.bounce.finance/d784fb0ad9c334c6780034699cb9a239-1684479810.png',
+    avatar: EquilibriaAvatar,
+    title: 'Equilibria',
+    // status: PoolStatus.Upcoming,
+    backendChainId: 42161,
+    salePrice: '1 GMT = 0.00002514 BNB',
+    tokenOffered: '420,000,000.0000 GMT',
+    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
+    singleInitialInvestment: '0.1 BNB',
+    upcomingLink: routes.game.equilibriaIndex,
+    liveLink: routes.game.equilibriaIndex,
+    projectInfo: [
+      {
+        title: 'what is BladeDao?',
+        info: [
+          'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.',
+          'BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.'
+        ]
+      },
+      {
+        title: 'what is $BLADE tokennomics?',
+        info: [
+          'The $BLADE tokenomics borrow from the positive ecosystem circulation like $vecrv, where $BLADE will serve as the utility token to boost yield stream for each crypto game published on BladeDAO. $veblade token holders enjoy a tax-like return on all in-game economic activities.'
+        ]
+      },
+      {
+        title: 'Is BladeDAO’s Team Anon or Public?',
+        info: [
+          'The team comes from a variety of backgrounds of game developer, defi builder, smart contract developer, economic research, crypto media and zkp researcher.',
+          'The founder 0xBrawler previously built a crypto media company in Asia, and served as advisor for a few crypto game studios in the region. The team has plans to dox themselves overtime.'
+        ]
+      },
+      {
+        title: 'What about Investment and Partners?',
+        info: [
+          'The team raised a small round from angel investors and degen groups for game development and working capital.'
+        ]
+      }
+    ],
+    tokenMetrics: [
+      {
+        title: 'Key Features and Highlights',
+        info: [
+          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+        ]
+      }
+    ],
+    desc: 'Equilibria Finance is designed exclusively for $PENDLE holders and liquidity providers, offering an easy-to-use platform to maximize your profits. It leverages the veToken/boosted yield model adopted by Pendle Finance to provide a boosted yield for LPs and extra reward to PENDLE holders with a tokenized version of vePENDLE, ePENDLE.',
+    // desc: '',
+    social: [
+      <Link key={1} href="https://equilibria.fi" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://t.me/+PYCzlXH93sU3YWFl" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={3} href="https://twitter.com/Equilibriafi" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={4} href="https://discord.gg/5xDyEEPNyU" target="_blank">
+        <DiscordSVG />
+      </Link>
+    ],
+    detailSocial: [
+      <Link key={1} href="https://equilibria.fi" target="_blank">
+        <SocialBg>
+          <WebWhite />
+        </SocialBg>
+      </Link>,
+      <Link key={2} href="ttps://t.me/+PYCzlXH93sU3YWFl" target="_blank">
+        <SocialBg>
+          <TgSvg />
+        </SocialBg>
+      </Link>,
+      <Link key={3} href="https://twitter.com/Equilibriafi" target="_blank">
+        <SvgTwitterBlue>
+          <TwitterWhite />
+        </SvgTwitterBlue>
+      </Link>,
+      <Link key={4} href="https://discord.gg/5xDyEEPNyU" target="_blank">
+        <SocialBg>
+          <DiscordSvg />
+        </SocialBg>
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$EQB' },
+      { title: 'Blockchain', content: 'Arbitrum' },
+      { title: 'Total Value', content: '$10K' },
+      { title: 'Swap Ratio', content: '0.2 USDC per $EQB' }
     ]
   },
   {

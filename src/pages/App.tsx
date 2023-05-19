@@ -66,6 +66,7 @@ import { Launchpad } from './launchpad'
 import { BladeDao } from './projectIntro'
 import { Game } from './game'
 import { ProjectInfo } from './projectIntro/projectInfo'
+import { Equilibria } from './game/equilibria'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -147,6 +148,7 @@ export default function App() {
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     <Route path={routes.game.bladeDaoIndex} element={<Game />} />
+                    <Route path={routes.game.equilibriaIndex} element={<Equilibria />} />
                     <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
