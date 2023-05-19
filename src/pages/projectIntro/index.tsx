@@ -171,7 +171,6 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
     })
     return resp?.data?.list
   })
-  console.log('inviteData>>>', inviteData)
   return (
     <Box
       sx={{
