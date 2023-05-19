@@ -15,7 +15,10 @@ import { useNavigate } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
+import { ReactComponent as InviteSvg } from 'assets/svg/invite.svg'
+import { ReactComponent as InviteBlackSvg } from 'assets/svg/invite-black.svg'
 import { ReactComponent as CopyBlackSvg } from 'assets/svg/copy-black.svg'
+import { ReactComponent as ColseSvg } from 'assets/imgs/common/closeIcon.svg'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from 'state/application/hooks'
@@ -27,6 +30,10 @@ import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
 import { PoolStatus } from 'api/pool/type'
+import { useRequest } from 'ahooks'
+import { getInviteList } from 'api/bladeDao/index'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 const GrayButton = styled(Button)`
   display: flex;
@@ -139,7 +146,172 @@ export function BladeDao() {
     </Box>
   )
 }
-
+const RankList = styled(Box)(() => ({
+  position: 'relative',
+  '.row': {
+    width: '100%',
+    height: 53,
+    borderRadius: 8,
+    cursor: 'pointer',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 16px 0 24px'
+  },
+  '.row:nth-child(odd)': {
+    background: '#F6F6F3'
+  }
+}))
+export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) => {
+  const { data: inviteData, loading } = useRequest(async () => {
+    const resp = await getInviteList({
+      poolId: 1,
+      side: 'BladeDao'
+    })
+    return resp?.data?.list
+  })
+  return (
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9
+      }}
+    >
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          background: '#000000',
+          opacity: 0.7
+        }}
+        onClick={() => {
+          handleClose && handleClose()
+        }}
+      ></Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate3D(-50%, -50%, 0)',
+          width: 800,
+          background: '#fff',
+          borderRadius: 20,
+          padding: '48px'
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: `'Public Sans'`,
+            fontWeight: 600,
+            fontSize: 28,
+            textAlign: 'left',
+            marginBottom: 15
+          }}
+        >
+          InvitationStatus
+        </Typography>
+        <ColseSvg
+          style={{
+            position: 'absolute',
+            top: 30,
+            right: 30,
+            width: 40,
+            height: 40,
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            handleClose && handleClose()
+          }}
+        />
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexFlow: 'row nowarap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0 24px',
+            height: 50,
+            lineHeight: '50px',
+            borderBottom: '1px solid var(--ps-gray-20)'
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 13,
+              color: 'var(--ps-gray-600)'
+            }}
+          >
+            Address
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 13,
+              color: 'var(--ps-gray-600)'
+            }}
+          >
+            Status
+          </Typography>
+        </Box>
+        {loading ? (
+          <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <BounceAnime />
+          </Box>
+        ) : Array.isArray(inviteData) && inviteData.length > 0 ? (
+          <RankList
+            sx={{
+              width: '100%',
+              maxHeight: 420,
+              overflowY: 'auto'
+            }}
+          >
+            {inviteData.map((item, index) => {
+              return (
+                <Box className={'row'} key={index}>
+                  <Typography
+                    component={'span'}
+                    sx={{
+                      fontFamily: `'Inter'`,
+                      fontWeight: 400,
+                      fontSize: 14,
+                      color: 'var(--ps-text-3)'
+                    }}
+                  >
+                    {item?.account || '--'}
+                  </Typography>
+                  <Typography
+                    component={'span'}
+                    sx={{
+                      fontFamily: `'Public Sans'`,
+                      fontWeight: 600,
+                      fontSize: 14,
+                      color: item.isValid ? 'var(--ps-green-1)' : '#FFC700'
+                    }}
+                  >
+                    {item?.isValid ? 'Valid' : 'Waiting'}
+                  </Typography>
+                </Box>
+              )
+            })}
+          </RankList>
+        ) : (
+          <EmptyData />
+        )}
+      </Box>
+    </Box>
+  )
+}
 export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSProperties; isDefaultBlackIcon?: boolean }) {
   const { account } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
@@ -187,23 +359,93 @@ export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSPrope
     )
   } else {
     return (
-      <Sharebtn onClick={toggleWalletModal}>
+      <Sharebtn
+        sx={{ ...style }}
+        onMouseEnter={() => {
+          setIsHover(true)
+        }}
+        onMouseLeave={() => {
+          setIsHover(false)
+        }}
+        onClick={toggleWalletModal}
+      >
         Share
-        <CopySvg
-          style={{
-            marginLeft: 7
-          }}
-        />
+        {isHover ? (
+          <CopySvg
+            style={{
+              marginLeft: 7
+            }}
+          />
+        ) : isDefaultBlackIcon ? (
+          <CopyBlackSvg
+            style={{
+              marginLeft: 7
+            }}
+          />
+        ) : (
+          <CopySvg
+            style={{
+              marginLeft: 7
+            }}
+          />
+        )}
       </Sharebtn>
     )
   }
 }
-const styles = {
-  p: '7px 16px',
-  borderRadius: '50px',
-  background: '#FFFFFF',
-  '&:hover': {
-    background: '#FFFFFF'
+export function InviteBtn({
+  style,
+  isDefaultBlackIcon
+}: {
+  style?: React.CSSProperties
+  isDefaultBlackIcon?: boolean
+}) {
+  const { account } = useActiveWeb3React()
+  const { token } = useUserInfo()
+  const toggleWalletModal = useWalletModalToggle()
+  const [isHover, setIsHover] = useState(false)
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
+  if (account && token) {
+    return (
+      <>
+        <Sharebtn
+          sx={{
+            borderRadius: '50%',
+            ...style
+          }}
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+          onClick={() => {
+            setInviteDialogOpen(true)
+          }}
+        >
+          {isHover ? <InviteSvg /> : isDefaultBlackIcon ? <InviteBlackSvg /> : <InviteSvg />}
+        </Sharebtn>
+        {inviteDialogOpen && <InviteListDialog handleClose={() => setInviteDialogOpen(false)} />}
+      </>
+    )
+  } else {
+    return (
+      <Sharebtn
+        sx={{
+          borderRadius: '50%',
+          ...style
+        }}
+        onMouseEnter={() => {
+          setIsHover(true)
+        }}
+        onMouseLeave={() => {
+          setIsHover(false)
+        }}
+        onClick={toggleWalletModal}
+      >
+        {isHover ? <InviteSvg /> : isDefaultBlackIcon ? <InviteBlackSvg /> : <InviteSvg />}
+      </Sharebtn>
+    )
   }
 }
 export function ProjectHead({ item }: { item: IPrivatePadProp }) {
@@ -322,14 +564,12 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
               }}
               onSuccess={getPoolInfo}
               likeSx={{
-                ...styles,
                 '&:hover': {
                   color: '#259C4A',
                   background: '#FFFFFF'
                 }
               }}
               unlikeSx={{
-                ...styles,
                 '&:hover': {
                   color: '#CA2020',
                   background: '#FFFFFF'
@@ -344,6 +584,18 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
             style={{
               border: '1px solid #fff',
               color: '#fff'
+            }}
+          />
+          <InviteBtn
+            style={{
+              border: '1px solid #fff',
+              color: '#fff',
+              width: 34,
+              padding: 0,
+              marginLeft: 6,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}
           />
         </Box>
@@ -409,7 +661,6 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     </Box>
   )
 }
-
 export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = ['Project Information', 'Investment and Partners']
