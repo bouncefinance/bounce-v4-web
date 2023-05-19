@@ -248,7 +248,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
   }
   return (
     <NFTDialog
-      fullScreen={true}
+      fullScreen={false}
       open={open}
       TransitionComponent={Transition}
       keepMounted
