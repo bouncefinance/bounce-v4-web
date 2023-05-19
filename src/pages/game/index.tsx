@@ -152,7 +152,7 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              BladeDao Ghositerunner Game
+              Ghositerunner Game
             </Typography>
             <Typography
               sx={{
