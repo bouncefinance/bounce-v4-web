@@ -11,6 +11,7 @@ import { useSingleCallResult, useSingleContractMultipleData } from 'state/multic
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 
 export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
   const { poolId, chainShortName } = useQueryParams()
@@ -110,6 +111,7 @@ const usePoolInfo = () => {
   ).result
 
   const v2FixedSwapData = useV2FixedSwapData(poolInfo?.poolVersion === 2, poolId, poolInfo)
+  const whitelistData = useIsUserInAllWhitelist(poolInfo?.enableWhiteList || false, poolInfo?.category)
 
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
@@ -128,6 +130,7 @@ const usePoolInfo = () => {
         ...poolInfo.token1,
         symbol: poolInfo.token1.symbol.toUpperCase()
       },
+      whitelistData,
       participant: {
         ...poolInfo.participant,
         claimed: myClaimedRes?.[0] || poolInfo.participant.claimed,
@@ -171,7 +174,8 @@ const usePoolInfo = () => {
     myAmountSwapped1Res,
     myClaimedRes,
     poolInfo,
-    v2FixedSwapData
+    v2FixedSwapData,
+    whitelistData
   ])
 
   return {

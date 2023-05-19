@@ -104,13 +104,14 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount)
   const currencyRegretAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal0.currency, slicedRegretAmount)
 
-  const { run: bid, submitted: placeBidSubmitted } = usePlaceBid(poolInfo)
+  const { swapCallback: bid, swapPermitCallback, submitted: placeBidSubmitted } = usePlaceBid(poolInfo)
 
   const toBid = useCallback(async () => {
     if (!currencyBidAmount) return
     showRequestConfirmDialog()
     try {
-      const { transactionReceipt } = await bid(currencyBidAmount)
+      const func = poolInfo.enableWhiteList && poolInfo.whitelistData.isPermit ? swapPermitCallback : bid
+      const { transactionReceipt } = await func(currencyBidAmount)
       setBidAmount('')
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
@@ -151,7 +152,15 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         onAgain: toBid
       })
     }
-  }, [bid, currencyBidAmount, poolInfo.ratio, poolInfo.token0.symbol])
+  }, [
+    bid,
+    currencyBidAmount,
+    poolInfo.enableWhiteList,
+    poolInfo.ratio,
+    poolInfo.token0.symbol,
+    poolInfo.whitelistData.isPermit,
+    swapPermitCallback
+  ])
 
   const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
 

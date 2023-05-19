@@ -188,6 +188,11 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   curPlayer?: string | number
   releaseType: IReleaseType | undefined
   releaseData: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
 }
 
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {
