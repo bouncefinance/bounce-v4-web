@@ -152,7 +152,7 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              Ghostie Game
+              BladeDao Ghositerunner Game
             </Typography>
             <Typography
               sx={{
@@ -355,7 +355,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
           <LeftArrow />
         </Box>
         <Typography ml={20} variant={'h3'}>
-          Ghistie Fixed Price Auction Pool
+          BladeDao Playable Auction Pool
         </Typography>
       </CenterRow>
       <CenterRow>
