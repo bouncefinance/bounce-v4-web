@@ -791,12 +791,12 @@ function RankSection({ score }: { score: number | string }) {
     const list = rankData?.list || []
     let resultData
     if (list.length > 0) {
-      list.map((item, index) => {
+      list.map(item => {
         if (item.address === account) {
           resultData = {
             address: item.address,
-            rank: index + 1,
-            score: item?.totalCreated
+            rank: item.rank,
+            score: item?.score
           }
         }
       })
@@ -886,7 +886,7 @@ function RankSection({ score }: { score: number | string }) {
                 <RankTopItem
                   userId={rankData.list[1]?.userId || ''}
                   name={rankData.list[1]?.name || shortenAddress(rankData.list[1]?.address) || '--'}
-                  score={`${rankData.list[1]?.totalCreated}SCORE`}
+                  score={`${rankData.list[1]?.score}SCORE`}
                   userIcon={rankData.list[1]?.avatar || UserIcon}
                   isNo1={false}
                   rank={2}
@@ -902,7 +902,7 @@ function RankSection({ score }: { score: number | string }) {
                 <RankTopItem
                   userId={rankData.list[0]?.userId || ''}
                   name={rankData.list[0]?.name || shortenAddress(rankData.list[0]?.address) || '--'}
-                  score={`${rankData.list[0]?.totalCreated}SCORE`}
+                  score={`${rankData.list[0]?.score}SCORE`}
                   userIcon={rankData.list[0]?.avatar || UserIcon}
                   isNo1={true}
                   rank={1}
@@ -912,7 +912,7 @@ function RankSection({ score }: { score: number | string }) {
                 <RankTopItem
                   userId={rankData.list[2]?.userId || ''}
                   name={rankData.list[2]?.name || shortenAddress(rankData.list[2]?.address) || '--'}
-                  score={`${rankData.list[2]?.totalCreated}SCORE`}
+                  score={`${rankData.list[2]?.score}SCORE`}
                   userIcon={rankData.list[2]?.avatar || UserIcon}
                   isNo1={false}
                   rank={3}
@@ -964,7 +964,7 @@ function RankSection({ score }: { score: number | string }) {
                           color: '#171717'
                         }}
                       >
-                        {index + 4}
+                        {item.rank}
                       </Typography>
                       <Image
                         style={{
@@ -1002,7 +1002,7 @@ function RankSection({ score }: { score: number | string }) {
                         color: '#000'
                       }}
                     >
-                      {item?.totalCreated || '--'} SCORE
+                      {item?.score || '--'} SCORE
                     </Typography>
                   </Box>
                 )
