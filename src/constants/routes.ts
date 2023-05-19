@@ -67,7 +67,7 @@ export const routes = {
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
-    equilibriaIndex: '/playable/ghositerunner/equilibria',
+    equilibriaIndex: '/playable/ghostierunner/equilibria',
     bladeDaoPoolDetail: '/playable/ghositerunner/:chainShortName/:poolId'
   }
 }

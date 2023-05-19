@@ -307,9 +307,9 @@ export const PrivatePadList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$EQB' },
-      { title: 'Blockchain', content: 'Arbitrum' },
-      { title: 'Total Value', content: '$10K' },
-      { title: 'Swap Ratio', content: '0.2 USDC per $EQB' }
+      { title: 'Token Price', content: '0.2 USDC' },
+      { title: 'Total Value', content: '10000 USDC' },
+      { title: 'Blockchain', content: 'Arbitrum' }
     ]
   },
   {

@@ -27,7 +27,7 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
-import { ShareBtn } from '../projectIntro/index'
+import { ShareBtn } from '../projectIntro'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 import ReactMarkdown from 'react-markdown'
@@ -146,7 +146,7 @@ export function Equilibria() {
                 marginRight: 10
               }}
             >
-              Equilibria Game
+              Ghostie Runner Game
             </Typography>
             <Typography
               sx={{
@@ -347,7 +347,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
           <LeftArrow />
         </Box>
         <Typography ml={20} variant={'h3'}>
-          Ghistie Fixed Price Auction Pool
+          Equilibria Playable Auction Pool
         </Typography>
       </CenterRow>
       <CenterRow>
@@ -777,10 +777,9 @@ function RankSection({ score }: { score: number | string }) {
   )
   const { data: userRankData } = useRequest(
     async () => {
-      const resp = await getUserRank({
+      return await getUserRank({
         payableId: 1
       })
-      return resp
     },
     {
       refreshDeps: [score]
