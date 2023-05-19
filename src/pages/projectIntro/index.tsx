@@ -169,10 +169,7 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
       poolId: 1,
       side: 'BladeDao'
     })
-    return {
-      list: resp?.data?.list,
-      total: resp?.data?.total
-    }
+    return resp?.data?.list
   })
   console.log('inviteData>>>', inviteData)
   return (
