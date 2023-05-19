@@ -193,7 +193,7 @@ export function Equilibria() {
               src={InterNetIcon}
               alt=""
               onClick={() => {
-                window.open('https://www.bladedao.games/', '_blank')
+                window.open('https://equilibria.fi', '_blank')
               }}
             />
             <img
@@ -204,7 +204,7 @@ export function Equilibria() {
               src={TwitterIcon}
               alt=""
               onClick={() => {
-                window.open('https://twitter.com/blade_dao', '_blank')
+                window.open('https://twitter.com/Equilibriafi', '_blank')
               }}
             />
             {/* <img
