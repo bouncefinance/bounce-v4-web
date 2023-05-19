@@ -24,8 +24,8 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
 import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
-import { useCountDown } from 'ahooks'
-import moment from 'moment'
+// import { useCountDown } from 'ahooks'
+// import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
@@ -60,8 +60,7 @@ const NoData = () => {
 }
 
 const gameTimeStamp = {
-  // start: 1684461600000, //online
-  start: 1684426317000,
+  start: 1684461600000, //online
   end: 1684674000000
 }
 
@@ -109,9 +108,9 @@ export function Game() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  const [countdown, { days, hours, minutes }] = useCountDown({
-    targetDate: moment(gameTimeStamp.end).valueOf()
-  })
+  // const [countdown, { days, hours, minutes }] = useCountDown({
+  //   targetDate: moment(gameTimeStamp.end).valueOf()
+  // })
   return (
     <Container maxWidth="lg">
       <Title step={step} poolInfo={poolInfo} />
@@ -153,7 +152,7 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              Ghostie Game
+              BladeDao Ghositerunner Game
             </Typography>
             <Typography
               sx={{
@@ -169,7 +168,9 @@ export function Game() {
                 fontSize: 14
               }}
             >
-              Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
+              Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
+              {new Date(gameTimeStamp.end).toLocaleString()}
+              {/* Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'} */}
             </Typography>
             {poolInfo && (
               <PoolStatusBox
@@ -354,7 +355,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
           <LeftArrow />
         </Box>
         <Typography ml={20} variant={'h3'}>
-          Ghistie Fixed Price Auction Pool
+          BladeDao Playable Auction Pool
         </Typography>
       </CenterRow>
       <CenterRow>
@@ -979,7 +980,7 @@ function RankSection({ score }: { score: number | string }) {
                           color: '#171717'
                         }}
                       >
-                        {index + 4}
+                        {item.rank}
                       </Typography>
                       <Image
                         style={{
@@ -1044,7 +1045,7 @@ function PoolDetail() {
       <Box
         sx={{
           width: 270,
-          minHeight: 521,
+          minHeight: 400,
           padding: '0 20px',
           background: `var(--ps-gray-50)`,
           borderRadius: 20,
@@ -1075,7 +1076,7 @@ function PoolDetail() {
         >
           BladeDao
         </Typography>
-        <Typography
+        {/* <Typography
           sx={{
             marginBottom: 24,
             color: 'var(--ps-gray-700)',
@@ -1087,7 +1088,7 @@ function PoolDetail() {
         >
           AWS provides customers with the broadest and deepest cloud platform cloud platform cloud platform the broadest
           and deepest cloud platform...
-        </Typography>
+        </Typography> */}
         <Box
           sx={{
             display: 'flex',

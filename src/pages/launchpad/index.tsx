@@ -406,7 +406,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     moreData: [
       { title: 'Token Name', content: '$BLADE' },
       { title: 'Token Price', content: '0.0008333 ETH' },
-      { title: 'Token Amount', content: '500ETH' },
+      { title: 'Total Value', content: '500ETH' },
       { title: 'Blockchain', content: 'zkSync Era' }
     ]
   },
