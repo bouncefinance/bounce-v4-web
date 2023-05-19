@@ -6,7 +6,7 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo, useEffect } from 'react'
+import { useCallback, useState, useMemo } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
@@ -24,8 +24,8 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
 import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
-// import { useCountDown } from 'ahooks'
-// import moment from 'moment'
+import { useCountDown } from 'ahooks'
+import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
@@ -59,15 +59,25 @@ const NoData = () => {
   )
 }
 
+const gameTimeStamp = {
+  // start: 1684461600000, //online
+  start: 1684426317000,
+  end: 1684674000000
+}
+
 export function Game() {
   const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-  const [step, setStep] = useState(1)
+  const { poolId } = useQueryParams()
+  const [step] = useState(poolId ? 1 : 0)
   const [score, setScore] = useState(0)
-  const { data: poolInfo, run: getPoolInfo, loading } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const isLive = new Date().valueOf() > gameTimeStamp.start && new Date().valueOf() < gameTimeStamp.end
+
   const uploadGameScore = useCallback(
     async (score: number) => {
+      if (!isLive) return
       const resultScore = score.toFixed(2)
       const message = `Bounce would like you to sign the game score: ${resultScore}`
       try {
@@ -83,26 +93,25 @@ export function Game() {
         }
         sendScore(req)
         setScore(Number(resultScore))
-        console.log('🚀 ~ file: index.tsx:25 ~ uploadGameScore ~ req:', req)
       } catch (error) {}
     },
-    [account, signMessage, token]
+    [account, isLive, signMessage, token]
   )
   useBladeDaoSharer()
-  useEffect(() => {
-    return () => {
-      if (!loading) {
-        setStep(poolInfo ? 1 : 0)
-      }
-    }
-  }, [poolInfo, loading])
+  // useEffect(() => {
+  //   return () => {
+  //     if (!loading) {
+  //       setStep(poolInfo ? 1 : 0)
+  //     }
+  //   }
+  // }, [poolInfo, loading])
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  //   const [countdown, { days, hours, minutes }] = useCountDown({
-  //     targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
-  //   })
+  const [countdown, { days, hours, minutes }] = useCountDown({
+    targetDate: moment(gameTimeStamp.end).valueOf()
+  })
   return (
     <Container maxWidth="lg">
       <Title step={step} poolInfo={poolInfo} />
@@ -146,7 +155,7 @@ export function Game() {
             >
               Ghostie Game
             </Typography>
-            {/* <Typography
+            <Typography
               sx={{
                 height: 26,
                 lineHeight: '26px',
@@ -161,7 +170,7 @@ export function Game() {
               }}
             >
               Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
-            </Typography> */}
+            </Typography>
             {poolInfo && (
               <PoolStatusBox
                 status={poolInfo.status}
@@ -589,7 +598,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
             >
               Rules:
             </span>{' '}
-            Play the game and try to get higher scores. The top 50 players before Jul 25 will get allocation.
+            Play the game and try to get higher scores. The top 50 players before May 21 will get allocation.
           </Typography>
         </Box>
       )}
