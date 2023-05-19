@@ -3,3 +3,7 @@ export interface IShareParam {
   invitee: string
   side: string
 }
+export interface IInviteParam {
+  side: string
+  poolId: number
+}

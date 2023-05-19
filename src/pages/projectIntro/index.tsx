@@ -165,12 +165,16 @@ const RankList = styled(Box)(() => ({
 }))
 export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { data: inviteData, loading } = useRequest(async () => {
-    const resp = await getInviteList()
+    const resp = await getInviteList({
+      poolId: 1,
+      side: 'BladeDao'
+    })
     return {
       list: resp?.data?.list,
       total: resp?.data?.total
     }
   })
+  console.log('inviteData>>>', inviteData)
   return (
     <Box
       sx={{
