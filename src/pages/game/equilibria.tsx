@@ -11,11 +11,11 @@ import NormalIcon from 'assets/imgs/game/normal.png'
 import ErrorIcon from 'assets/imgs/game/error.png'
 import WarningIcon from 'assets/imgs/game/warning.png'
 import { getAllrank, getUserRank } from 'api/game/index'
-import { useCountDown, useRequest } from 'ahooks'
+import { useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
-import moment from 'moment'
+// import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
@@ -89,9 +89,9 @@ export function Equilibria() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  const [countdown, { days, hours, minutes }] = useCountDown({
-    targetDate: moment(gameTimeStamp.end).valueOf()
-  })
+  // const [countdown, { days, hours, minutes }] = useCountDown({
+  //   targetDate: moment(gameTimeStamp.end).valueOf()
+  // })
   return (
     <Container maxWidth="lg">
       <Title step={step} poolInfo={poolInfo} />
@@ -149,7 +149,8 @@ export function Equilibria() {
                 fontSize: 14
               }}
             >
-              Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
+              Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
+              {new Date(gameTimeStamp.end).toLocaleString()}
             </Typography>
             {poolInfo && (
               <PoolStatusBox
@@ -824,7 +825,7 @@ function RankSection({ score }: { score: number | string }) {
             fontSize: 20
           }}
         >
-          My rank: {loginUserData?.rank}
+          My rank: {loginUserData?.rank || '--'}
         </Typography>
         <Typography
           component={'span'}

@@ -141,7 +141,7 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              BladeDao Ghositerunner Game
+              Ghositerunner Game
             </Typography>
             <Typography
               sx={{
@@ -846,7 +846,7 @@ function RankSection({ score }: { score: number | string }) {
             fontSize: 20
           }}
         >
-          My rank: {loginUserData?.rank}
+          My rank: {loginUserData?.rank || '--'}
         </Typography>
         <Typography
           component={'span'}
