@@ -6,18 +6,19 @@ import { sendScore } from 'api/game'
 const CryptoJS = require('crypto-js')
 import { getCurrentTimeStamp } from 'utils'
 
+function encryptData(data: string, key: string) {
+  const secretKey = CryptoJS.enc.Utf8.parse(key)
+  return CryptoJS.AES.encrypt(data, secretKey, {
+    iv: secretKey,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  }).toString()
+}
+
 export default function useUploadGameScoreCrypto() {
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
   const signMessage = useSignMessage()
-
-  // function encryptData(data: string, key: string) {
-  //   const encrypted = CryptoJS.AES.encrypt(data, key, {
-  //     mode: CryptoJS.mode.CFB,
-  //     padding: CryptoJS.pad.Pkcs7
-  //   })
-  //   return encrypted.toString()
-  // }
 
   const uploadGameScore = useCallback(
     async (score: number, payableId: number) => {
@@ -35,13 +36,13 @@ export default function useUploadGameScoreCrypto() {
       }
       try {
         const signature = await signMessage(JSON.stringify(_signMsg))
+        const _key = account + signTimeStamp
+        const secretKey = CryptoJS.SHA256(CryptoJS.MD5(_key).toString()).toString().slice(0, 16)
+        const secretData = encryptData(signature, secretKey)
+
         const req = {
-          message: _message,
-          payableId,
+          data: secretData,
           address: account,
-          score: resultScore,
-          signature,
-          expired,
           signTimeStamp
         }
         sendScore(req)
