@@ -3,7 +3,6 @@ import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 import GhostieRunner from 'components/GhostieRunner'
 import { useCallback, useMemo, useState } from 'react'
-import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import InterNetIcon from 'assets/imgs/game/internet.png'
@@ -11,7 +10,7 @@ import TwitterIcon from 'assets/imgs/game/twitter.png'
 import NormalIcon from 'assets/imgs/game/normal.png'
 import ErrorIcon from 'assets/imgs/game/error.png'
 import WarningIcon from 'assets/imgs/game/warning.png'
-import { getAllrank, getUserRank, sendScore } from 'api/game/index'
+import { getAllrank, getUserRank } from 'api/game/index'
 import { useCountDown, useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
@@ -31,6 +30,7 @@ import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 import ReactMarkdown, { ReactNode } from 'react-markdown'
 import EquilibriaAvatar from '../launchpad/avatar/equilibria-logo.png'
+import useUploadGameScoreCrypto from 'hooks/useUploadGameScoreCrypto'
 
 function a11yProps(index: number) {
   return {
@@ -59,10 +59,9 @@ const gameTimeStamp = {
 }
 
 export function Equilibria() {
-  const signMessage = useSignMessage()
   const { account } = useActiveWeb3React()
-  const { token } = useUserInfo()
   const { poolId } = useQueryParams()
+  const uploadGameScoreCrypto = useUploadGameScoreCrypto()
   const [step] = useState(poolId ? 1 : 0)
   const [score, setScore] = useState(0)
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
@@ -72,23 +71,11 @@ export function Equilibria() {
     async (score: number) => {
       if (!isLive) return
       const resultScore = score.toFixed(2)
-      const message = `Bounce would like you to sign the game score: ${resultScore}`
-      try {
-        if (!account || !token) {
-          return
-        }
-        const signature = await signMessage(message)
-        const req = {
-          message,
-          payableId,
-          address: account,
-          signature
-        }
-        sendScore(req)
-        setScore(Number(resultScore))
-      } catch (error) {}
+      await uploadGameScoreCrypto(score, payableId)
+
+      setScore(Number(resultScore))
     },
-    [account, isLive, signMessage, token]
+    [isLive, uploadGameScoreCrypto]
   )
   useBladeDaoSharer()
   // useEffect(() => {

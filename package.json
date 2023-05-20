@@ -121,6 +121,7 @@
     "big.js": "^6.2.0",
     "bignumber.js": "^9.1.1",
     "country-flag-icons": "^1.5.5",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.3",
     "decimal.js-light": "^2.5.1",
     "formik": "2.2.9",

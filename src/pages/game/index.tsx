@@ -7,8 +7,6 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
 import { useCallback, useState, useMemo } from 'react'
-import { useSignMessage } from 'hooks/useWeb3Instance'
-import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
 import InterNetIcon from 'assets/imgs/game/internet.png'
 import TwitterIcon from 'assets/imgs/game/twitter.png'
@@ -17,7 +15,7 @@ import TwitterIcon from 'assets/imgs/game/twitter.png'
 import NormalIcon from 'assets/imgs/game/normal.png'
 import ErrorIcon from 'assets/imgs/game/error.png'
 import WarningIcon from 'assets/imgs/game/warning.png'
-import { getAllrank, sendScore, getUserRank } from 'api/game/index'
+import { getAllrank, getUserRank } from 'api/game/index'
 import { useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
@@ -39,6 +37,8 @@ import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 import { ShareBtn, InviteBtn } from '../projectIntro/index'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
+import useUploadGameScoreCrypto from 'hooks/useUploadGameScoreCrypto'
+import { useActiveWeb3React } from 'hooks'
 
 function a11yProps(index: number) {
   return {
@@ -64,11 +64,12 @@ const gameTimeStamp = {
   end: 1684674000000
 }
 
+const payableId = 1
+
 export function Game() {
-  const signMessage = useSignMessage()
-  const { account } = useActiveWeb3React()
-  const { token } = useUserInfo()
+  const uploadGameScoreCrypto = useUploadGameScoreCrypto()
   const { poolId } = useQueryParams()
+  const { account } = useActiveWeb3React()
   const [step] = useState(poolId ? 1 : 0)
   const [score, setScore] = useState(0)
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
@@ -78,23 +79,11 @@ export function Game() {
     async (score: number) => {
       if (!isLive) return
       const resultScore = score.toFixed(2)
-      const message = `Bounce would like you to sign the game score: ${resultScore}`
-      try {
-        if (!account || !token) {
-          return
-        }
-        const signature = await signMessage(message)
-        const req = {
-          message,
-          payableId: 1,
-          address: account,
-          signature
-        }
-        sendScore(req)
-        setScore(Number(resultScore))
-      } catch (error) {}
+      await uploadGameScoreCrypto(score, payableId)
+
+      setScore(Number(resultScore))
     },
-    [account, isLive, signMessage, token]
+    [isLive, uploadGameScoreCrypto]
   )
   useBladeDaoSharer()
   // useEffect(() => {
@@ -783,7 +772,7 @@ function RankSection({ score }: { score: number | string }) {
   const { data: rankData, loading: rankLoading } = useRequest(
     async () => {
       const resp = await getAllrank({
-        payableId: 1
+        payableId
       })
       return {
         list: resp.data?.list || [],
@@ -797,7 +786,7 @@ function RankSection({ score }: { score: number | string }) {
   const { data: userRankData } = useRequest(
     async () => {
       const resp = await getUserRank({
-        payableId: 1
+        payableId
       })
       return resp
     },
