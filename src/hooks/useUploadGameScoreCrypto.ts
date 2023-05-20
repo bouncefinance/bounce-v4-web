@@ -32,7 +32,7 @@ export default function useUploadGameScoreCrypto() {
         score: resultScore,
         expired,
         payableId,
-        key: CryptoJS.MD5(account + payableId + score + expired + signTimeStamp).toString()
+        key: CryptoJS.MD5(account + payableId + resultScore + expired + signTimeStamp).toString()
       }
       try {
         const signature = await signMessage(JSON.stringify(_signMsg))
