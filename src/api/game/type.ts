@@ -14,8 +14,7 @@ export interface IAllRankParams {
   payableId: number
 }
 export interface IScoreParams {
+  data: string
   address: string
-  message: string
-  payableId: number
-  signature: string
+  signTimeStamp: number
 }
