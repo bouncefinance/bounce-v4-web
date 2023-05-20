@@ -42,7 +42,11 @@ export default function useUploadGameScoreCrypto() {
 
         const req = {
           data: secretData,
+          message: _message,
+          payableId,
           address: account,
+          score: resultScore,
+          expired,
           signTimeStamp
         }
         sendScore(req)
