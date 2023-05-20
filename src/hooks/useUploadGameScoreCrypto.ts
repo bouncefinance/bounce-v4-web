@@ -38,15 +38,22 @@ export default function useUploadGameScoreCrypto() {
         const signature = await signMessage(JSON.stringify(_signMsg))
         const _key = account + signTimeStamp
         const secretKey = CryptoJS.SHA256(CryptoJS.MD5(_key).toString()).toString().slice(0, 16)
-        const secretData = encryptData(signature, secretKey)
+        const secretData = encryptData(
+          JSON.stringify({
+            message: _message,
+            payableId,
+            score: resultScore,
+            expired,
+            signature,
+            address: account,
+            signTimeStamp
+          }),
+          secretKey
+        )
 
         const req = {
           data: secretData,
-          message: _message,
-          payableId,
           address: account,
-          score: resultScore,
-          expired,
           signTimeStamp
         }
         sendScore(req)
