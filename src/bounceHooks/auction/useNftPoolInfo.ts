@@ -80,12 +80,16 @@ const useNftPoolInfo = () => {
         currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0')
       },
       creatorClaimed: creatorClaimedRes?.[0] || poolInfo.creatorClaimed,
-      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
-      ratio: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1)
-        .divide(JSBI.BigInt(poolInfo.amountTotal0))
-        .toSignificant(64),
+      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1) as CurrencyAmount,
+      ratio:
+        CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1)
+          ?.divide(JSBI.BigInt(poolInfo.amountTotal0))
+          .toSignificant(64) || '0',
       swappedAmount0: amountSwap0Res?.[0].toString() || poolInfo.swappedAmount0 || '0',
-      currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1)
+      currencySwappedTotal1: CurrencyAmount.fromRawAmount(
+        t1,
+        amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
+      ) as CurrencyAmount
     }
   }, [
     amountSwap0Res,
