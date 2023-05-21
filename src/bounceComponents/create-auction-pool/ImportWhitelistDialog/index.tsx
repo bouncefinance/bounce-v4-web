@@ -49,7 +49,7 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
 
   return (
     <Dialog title="Import whitelist" {...muiDialogV5(modal)} onClose={handleReject}>
-      <Typography variant="h4">Enter one address on each line. You can enter up to 300 addresses.</Typography>
+      <Typography variant="h4">Enter one address on each line. </Typography>
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}

@@ -74,6 +74,7 @@ export interface IPrivatePadProp {
     start: number
     end: number
   }
+  showStartEnd?: true
   poolTypeName: string
   salePrice: string
   tokenOffered: string
@@ -118,9 +119,10 @@ const SvgTwitterBlue = styled(SocialBg)`
 export const PrivatePadList: IPrivatePadProp[] = [
   {
     liveTimeStamp: {
-      start: 1684461600000,
+      start: 1684679400000,
       end: 1684807200000
     },
+    showStartEnd: true,
     poolTypeName: 'Playable Auction',
     img: 'https://images-v3.bounce.finance/141976585869e842d9b8e17f21ec7037-1683799247.png',
     avatar: BlodeAvatar,

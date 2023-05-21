@@ -163,7 +163,7 @@ export default function App() {
             </ContentWrapper>
           </AppWrapper>
         </NiceModalProvider>
-      </ModalProvider>{' '}
+      </ModalProvider>
     </Suspense>
   )
 }
