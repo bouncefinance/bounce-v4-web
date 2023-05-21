@@ -25,8 +25,8 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
 
 const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
   const { chainId } = useActiveWeb3React()
-  const swapedPercent = poolInfo?.swappedAmount0
-    ? new BigNumber(poolInfo.swappedAmount0).div(poolInfo.amountTotal0).times(100).toNumber()
+  const swapedPercent = poolInfo?.currencySwappedAmount0
+    ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
 
   const isCertifiedAddress = useCertifiedTokenAddress(poolInfo.ethChainId, poolInfo.token0.address)
