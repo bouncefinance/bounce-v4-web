@@ -30,3 +30,7 @@ export const getAuctionTypeCountData = () => {
 export const getAuctionVolumeCountData = () => {
   return ApiInstance.get('/pools/stat/volume', {})
 }
+
+export const getRank = (way: string) => {
+  return ApiInstance.get('/share/rankings', { way: way, isToday: 0, side: 'BladeDao', poolId: 6, limit: 20 })
+}
