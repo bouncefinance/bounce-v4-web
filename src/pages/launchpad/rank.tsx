@@ -1,5 +1,5 @@
 import { Box } from '@mui/system'
-import Bg from 'assets/images/blade-dao-bg.png'
+// import Bg from 'assets/images/blade-dao-bg.png'
 import { ReactComponent as H1 } from 'assets/images/blade-dao-h1.svg'
 import { ReactComponent as Rank1 } from 'assets/images/rank-1.svg'
 import { ReactComponent as Rank2 } from 'assets/images/rank-2.svg'
@@ -8,6 +8,7 @@ import { Stack, styled, Typography } from '@mui/material'
 import { useRequest } from 'ahooks'
 import { getRank } from '../../api/market'
 import { useState } from 'react'
+import ProjectBg from 'assets/images/project-bg.png'
 
 export function Rank() {
   const [currentTab, setCurrentTab] = useState('contribution')
@@ -64,7 +65,7 @@ export function Rank() {
   return (
     <Box
       sx={{
-        background: `url(${Bg}) no-repeat`,
+        background: `url(${ProjectBg}) no-repeat`,
         backgroundSize: 'cover',
         flexDirection: 'column',
         display: 'flex',
