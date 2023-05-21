@@ -147,9 +147,13 @@ export default function App() {
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
-                    <Route path={routes.game.bladeDaoIndex} element={<Game />} />
-                    <Route path={routes.game.equilibriaIndex} element={<Equilibria />} />
+                    {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
+                    <Route
+                      path={routes.game.bladeDaoIndex}
+                      element={<Navigate to={{ pathname: routes.game.bladeDaoIndex + `/zksyncera/6` }} replace />}
+                    />
                     <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} />
+                    <Route path={routes.game.equilibriaIndex} element={<Equilibria />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>

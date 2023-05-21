@@ -143,24 +143,27 @@ export function Game() {
             >
               Ghositerunner Game
             </Typography>
-            <Typography
-              sx={{
-                height: 26,
-                lineHeight: '26px',
-                marginRight: 10,
-                padding: '0 12px',
-                background: 'rgba(222, 81, 245, 0.2)',
-                borderRadius: '20px',
-                color: '#DE51F5',
-                fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                fontWeight: 400,
-                fontSize: 14
-              }}
-            >
-              Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
-              {new Date(gameTimeStamp.end).toLocaleString()}
-              {/* Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'} */}
-            </Typography>
+            {!poolId && (
+              <Typography
+                sx={{
+                  height: 26,
+                  lineHeight: '26px',
+                  marginRight: 10,
+                  padding: '0 12px',
+                  background: 'rgba(222, 81, 245, 0.2)',
+                  borderRadius: '20px',
+                  color: '#DE51F5',
+                  fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+                  fontWeight: 400,
+                  fontSize: 14
+                }}
+              >
+                Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
+                {new Date(gameTimeStamp.end).toLocaleString()}
+                {/* Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'} */}
+              </Typography>
+            )}
+
             {poolInfo && (
               <PoolStatusBox
                 status={poolInfo.status}

@@ -14,6 +14,8 @@ import { shortenAddress } from 'utils'
 import { FixedSwapPoolProp } from 'api/pool/type'
 import { addTokenToWallet } from 'utils/addTokenToWallet'
 import { useActiveWeb3React } from 'hooks'
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
+import { useCertifiedTokenAddress } from 'hooks/useCertifiedTokenAddress'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -27,6 +29,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
     ? new BigNumber(poolInfo.swappedAmount0).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
 
+  const isCertifiedAddress = useCertifiedTokenAddress(poolInfo.ethChainId, poolInfo.token0.address)
+
   return (
     <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
       <Stack spacing={36}>
@@ -37,6 +41,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               {poolInfo.token0.coingeckoId ? (
                 <Image src={CoingeckoSVG} width={20} height={20} alt="coingecko" />
+              ) : isCertifiedAddress ? (
+                <CheckCircleOutlineIcon color="success" />
               ) : (
                 <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
               )}
