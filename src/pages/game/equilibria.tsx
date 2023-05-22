@@ -783,7 +783,7 @@ function RankSection({ score }: { score: number | string }) {
           resultData = {
             address: item.address,
             rank: index + 1,
-            score: item?.totalCreated
+            score: item?.score
           }
         }
       })
