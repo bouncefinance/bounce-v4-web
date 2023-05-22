@@ -1,5 +1,4 @@
 import { Box } from '@mui/system'
-// import Bg from 'assets/images/blade-dao-bg.png'
 import { ReactComponent as H1 } from 'assets/images/blade-dao-h1.svg'
 import Rank1 from 'assets/images/rank-1.png'
 import Rank2 from 'assets/images/rank-2.png'
@@ -14,62 +13,30 @@ import { CurrencyAmount } from '../../constants/token'
 
 export function Rank() {
   const [currentTab, setCurrentTab] = useState('contribution')
-  // const fakeData = [
-  //   {
-  //     index: 0,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   },
-  //   {
-  //     index: 1,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   },
-  //   {
-  //     index: 2,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   },
-  //   {
-  //     index: 3,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   },
-  //   {
-  //     index: 4,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   },
-  //   {
-  //     index: 5,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   },
-  //   {
-  //     index: 6,
-  //     sharer: 'xxxx',
-  //     custom: 'cccc'
-  //   }
-  // ]
+  // const [page, setPage] = useState(1)
+  const pageSize = 1000
+
+  function calcuE18(list: any[]) {
+    return list.map((l: any) => {
+      return { ...l, custom: CurrencyAmount.ether(Number(l.custom).toString()).toSignificant() }
+    })
+  }
+
   const { data } = useRequest(
     async () => {
-      const resp = await getRank(currentTab)
-      if (!resp.data.total) {
-        return {
-          total: 3,
-          list: [
-            { sharer: '0xbD9e35E349416124fDffa20fA2F84B90936fB2Ad', custom: '3.0000000001e18' },
-            { sharer: '0x0accd95BB8c5443BA5f123aFA4e3f34E155c7B17', custom: '2e18' },
-            { sharer: '0xdDCb698c459BC99eD0476e058c1aaB02680aA5c5', custom: '1.250000001e18' }
-          ].map((l: any) => {
-            return { ...l, custom: CurrencyAmount.ether(Number(l.custom).toString()).toFixed(6) }
-          })
-        }
-      }
+      const resp = await getRank(currentTab, 1, pageSize)
+      // if (!resp.data.total) {
+      //   return {
+      //     total: 3,
+      //     list: calcuE18([
+      //       { sharer: '0xbD9e35E349416124fDffa20fA2F84B90936fB2Ad', custom: '3.0000000001e18' },
+      //       { sharer: '0x0accd95BB8c5443BA5f123aFA4e3f34E155c7B17', custom: '2e18' },
+      //       { sharer: '0xdDCb698c459BC99eD0476e058c1aaB02680aA5c5', custom: '1.250000001e18' }
+      //     ])
+      //   }
+      // }
       return {
-        list: resp.data.list.map((l: any) => {
-          return { ...l, custom: CurrencyAmount.ether(Number(l.custom).toString()).toFixed(6) }
-        }),
+        list: calcuE18(resp.data.list),
         total: resp.data.total
       }
     },
@@ -77,7 +44,6 @@ export function Rank() {
       refreshDeps: [currentTab]
     }
   )
-  console.log('data', data)
   return (
     <Box
       sx={{
@@ -85,6 +51,7 @@ export function Rank() {
         backgroundSize: 'cover',
         flexDirection: 'column',
         display: 'flex',
+        position: 'relative',
         height: '100vh',
         justifyContent: 'center',
         alignItems: 'center'
@@ -112,9 +79,18 @@ export function Rank() {
       </Row>
       <Stack spacing={10}>
         {data?.list.map((r: any, i: number) => (
-          <RankItem key={i} rank={{ index: i, ...r }} />
+          <RankItem key={i} rank={{ index: i + 1, ...r }} />
         ))}
       </Stack>
+      {/*<Pagination*/}
+      {/*  sx={{*/}
+      {/*    position: 'absolute',*/}
+      {/*    bottom: '100px',*/}
+      {/*    color: 'white'*/}
+      {/*  }}*/}
+      {/*  count={data ? (data.total % pageSize) + 1 : 0}*/}
+      {/*  onChange={(event, p) => setPage(p)}*/}
+      {/*/>*/}
     </Box>
   )
 }
@@ -136,9 +112,9 @@ function RankItem({ rank }: { rank: RankData }) {
           {shortenAddress(rank.sharer)}
         </Typography>
         <Box ml={90} position={'absolute'} left={200}>
-          {rank.index === 0 && <img src={Rank1} />}
-          {rank.index === 1 && <img src={Rank2} />}
-          {rank.index === 2 && <img src={Rank3} />}
+          {rank.index === 1 && <img src={Rank1} />}
+          {rank.index === 2 && <img src={Rank2} />}
+          {rank.index === 3 && <img src={Rank3} />}
         </Box>
       </Row>
       <Typography ml={90} fontSize={18} sx={{ color: '#E0E0E9' }}>
