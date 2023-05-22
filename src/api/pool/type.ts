@@ -168,6 +168,7 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   currencySurplusTotal0: CurrencyAmount
   currencySwappedTotal1: CurrencyAmount
   ethChainId: ChainId
+  currentBounceContractAddress: string | undefined
   participant: {
     address?: string
     claimed?: boolean

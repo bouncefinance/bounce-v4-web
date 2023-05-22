@@ -139,6 +139,18 @@ export const IS_TEST_ENV = !!process.env.REACT_APP_IS_TEST_ENV
 
 export const NULL_BYTES = '0x0000000000000000000000000000000000000000000000000000000000000000'
 
+export const OLD_FIXED_SWAP_ERC20_ADDRESSES: {
+  [chainId in ChainId]?: {
+    maxId: number
+    address: string
+  }
+} = {
+  [ChainId.ZKSYNC_ERA]: {
+    maxId: 7,
+    address: '0x88313626Fb4EA033af12308feCd8afB1eBA853cE'
+  }
+}
+
 export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x9e2C12D9240BF267fbeBD510d47Ac3AbD4D9d9ee',
   [ChainId.GÖRLI]: process.env.REACT_APP_GOERLI_FIXED_SWAP_ERC20_ADDRESS || '',

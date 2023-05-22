@@ -16,7 +16,11 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
 
   const isAllTokenSwapped = useIsAllTokenSwapped(poolInfo)
 
-  const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name)
+  const { run: claim, submitted } = useCreatorClaim(
+    poolInfo.poolId,
+    poolInfo.name,
+    poolInfo.currentBounceContractAddress
+  )
 
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = poolInfo.currencySurplusTotal0.greaterThan('0')
