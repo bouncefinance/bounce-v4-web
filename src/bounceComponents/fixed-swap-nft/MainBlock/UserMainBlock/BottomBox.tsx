@@ -29,7 +29,7 @@ const BottomBox = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }): JSX.Elemen
       <Stack direction={'row'} spacing={36}>
         <Stack flex={1} spacing={10}>
           <Title>Token Information</Title>
-          <PoolInfoItem title="Contact address" tip="Token Contract Address.">
+          <PoolInfoItem title="Contract address" tip="Token Contract Address.">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               {/* poolInfo.token0.coingeckoId only work on erc20,so hidden below code */}
               {/* {poolInfo.token0.coingeckoId ? (

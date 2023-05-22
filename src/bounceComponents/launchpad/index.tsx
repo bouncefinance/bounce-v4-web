@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, styled, SxProps } from '@mui/material'
+import { Box, Stack, styled, SxProps } from '@mui/material'
 // import Temp1 from 'assets/imgs/auction/1.png'
 // import Temp2 from 'assets/imgs/auction/3.png'
 
@@ -21,6 +21,7 @@ export function Common({
   child,
   sx,
   poolTypeName,
+  startAndEnd,
   onClick
 }: {
   img: string
@@ -28,12 +29,20 @@ export function Common({
   onClick: () => void
   sx?: SxProps
   poolTypeName: string
+  startAndEnd:
+    | {
+        start: number
+        end: number
+      }
+    | undefined
 }) {
   return (
     <CommonBg sx={sx} mb={24} onClick={onClick} position={'relative'}>
       <img style={{ width: '600px', backgroundSize: 'cover', borderRadius: '30px 0 0 30px' }} src={img} />
       <Box sx={{ width: '100%', height: '100%' }}>{child}</Box>
-      <Box
+      <Stack
+        spacing={10}
+        direction={'row'}
         sx={{
           position: 'absolute',
           left: 24,
@@ -54,7 +63,21 @@ export function Common({
             {poolTypeName}
           </Box>
         )}
-      </Box>
+        {startAndEnd && (
+          <Box
+            padding="5px 14px"
+            color="#B5E629"
+            sx={{
+              fontFamily: 'Public Sans',
+              background: 'rgba(18, 18, 18, 0.6)',
+              backdropFilter: 'blur(5px)',
+              borderRadius: '100px'
+            }}
+          >
+            {new Date(startAndEnd.start).toLocaleString() + ' - ' + new Date(startAndEnd.end).toLocaleString()}
+          </Box>
+        )}
+      </Stack>
     </CommonBg>
   )
 }

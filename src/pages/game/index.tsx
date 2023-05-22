@@ -140,7 +140,7 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              Ghositerunner Game
+              BladeDao Playable Auction
             </Typography>
             {!poolId && (
               <Typography

@@ -172,6 +172,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
     <Common
       img={props.data.img}
       poolTypeName={props.data.poolTypeName}
+      startAndEnd={props.data.showStartEnd ? props.data.liveTimeStamp : undefined}
       onClick={() => {
         if (status === PoolStatus.Upcoming && props.data.upcomingLink) {
           navigator(props.data.upcomingLink)
