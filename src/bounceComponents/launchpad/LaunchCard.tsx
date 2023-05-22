@@ -11,11 +11,11 @@ import { PoolStatus } from 'api/pool/type'
 
 export function CardDesc({ title, content }: { title: string; content: string | React.ReactElement }) {
   return (
-    <Box sx={{ color: 'white', gap: 4 }}>
+    <Box sx={{ gap: 4 }}>
       <Typography fontSize={13} lineHeight={'18px'}>
         {title}
       </Typography>
-      <H6 sx={{ color: 'white' }}>{content}</H6>
+      <H6>{content}</H6>
     </Box>
   )
 }
@@ -187,7 +187,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
           <CenterRow justifyContent={'space-between'}>
             <Row gap={16}>
               <Avatar sx={{ width: 60, height: 60 }} src={props.data.avatar} />
-              <Box sx={{ color: 'white', display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography fontSize={28} lineHeight={'36px'}>
                   {props.data.title}
                 </Typography>

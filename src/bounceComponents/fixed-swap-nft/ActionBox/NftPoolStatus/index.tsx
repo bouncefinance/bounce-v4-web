@@ -43,8 +43,9 @@ export const PoolStatusBox = ({
             display: 'inline-block',
             px: 12,
             py: 4,
-            bgcolor: '#E6E6E6',
+            bgcolor: '#D7D6D9',
             borderRadius: 20,
+            color: '#626262',
             ...style
           }}
         >

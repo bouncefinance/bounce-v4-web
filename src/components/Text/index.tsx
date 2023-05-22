@@ -87,5 +87,5 @@ export const Body03 = styled(Typography)`
   font-weight: 400;
   font-size: 13px;
   line-height: 140%;
-  color: rgba(255, 255, 255, 0.8);
+  color: #121212;
 `
