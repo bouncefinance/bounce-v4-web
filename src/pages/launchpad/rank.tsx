@@ -76,7 +76,7 @@ export function Rank() {
           <RankIdxText>Rank</RankIdxText>
           <RankIdxText ml={60}>Address</RankIdxText>
         </Row>
-        <RankIdxText>Contribution</RankIdxText>
+        <RankIdxText>{currentTab === 'contribution' ? 'Contribution' : 'Referrals'}</RankIdxText>
       </Row>
       <Stack
         sx={{
