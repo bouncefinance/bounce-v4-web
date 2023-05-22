@@ -1,14 +1,16 @@
 import { Box } from '@mui/system'
 // import Bg from 'assets/images/blade-dao-bg.png'
 import { ReactComponent as H1 } from 'assets/images/blade-dao-h1.svg'
-import { ReactComponent as Rank1 } from 'assets/images/rank-1.svg'
-import { ReactComponent as Rank2 } from 'assets/images/rank-2.svg'
-import { ReactComponent as Rank3 } from 'assets/images/rank-3.svg'
+import Rank1 from 'assets/images/rank-1.png'
+import Rank2 from 'assets/images/rank-2.png'
+import Rank3 from 'assets/images/rank-3.png'
 import { Stack, styled, Typography } from '@mui/material'
 import { useRequest } from 'ahooks'
 import { getRank } from '../../api/market'
 import { useState } from 'react'
 import ProjectBg from 'assets/images/project-bg.png'
+import { shortenAddress } from '../../utils'
+import { CurrencyAmount } from '../../constants/token'
 
 export function Rank() {
   const [currentTab, setCurrentTab] = useState('contribution')
@@ -59,11 +61,15 @@ export function Rank() {
             { sharer: '0xbD9e35E349416124fDffa20fA2F84B90936fB2Ad', custom: '3.0000000001e18' },
             { sharer: '0x0accd95BB8c5443BA5f123aFA4e3f34E155c7B17', custom: '2e18' },
             { sharer: '0xdDCb698c459BC99eD0476e058c1aaB02680aA5c5', custom: '1.250000001e18' }
-          ]
+          ].map((l: any) => {
+            return { ...l, custom: CurrencyAmount.ether(Number(l.custom).toString()).toFixed(6) }
+          })
         }
       }
       return {
-        list: resp.data.list,
+        list: resp.data.list.map((l: any) => {
+          return { ...l, custom: CurrencyAmount.ether(Number(l.custom).toString()).toFixed(6) }
+        }),
         total: resp.data.total
       }
     },
@@ -127,12 +133,12 @@ function RankItem({ rank }: { rank: RankData }) {
           {rank.index}
         </Typography>
         <Typography ml={70} fontSize={25} sx={{ color: '#FFDF8E' }}>
-          {rank.sharer}
+          {shortenAddress(rank.sharer)}
         </Typography>
         <Box ml={90} position={'absolute'} left={200}>
-          {rank.index === 0 && <Rank1 />}
-          {rank.index === 1 && <Rank2 />}
-          {rank.index === 2 && <Rank3 />}
+          {rank.index === 0 && <img src={Rank1} />}
+          {rank.index === 1 && <img src={Rank2} />}
+          {rank.index === 2 && <img src={Rank3} />}
         </Box>
       </Row>
       <Typography ml={90} fontSize={18} sx={{ color: '#E0E0E9' }}>
@@ -160,7 +166,7 @@ const Divider = styled(Box)`
 
 const Btn = styled(Box)`
   background: linear-gradient(194.68deg, rgba(255, 239, 95, 0.1) 11.27%, rgba(179, 139, 61, 0.1) 90.4%);
-  border: 2px solid #ffdf8e;
+  border: 2px solid #56503b;
   padding: 25px 60px;
   color: #ffdf8e;
   font-size: 20px;
@@ -168,7 +174,11 @@ const Btn = styled(Box)`
   border-radius: 5px;
 
   &.select {
-    border: 2px solid #56503b;
+    border: 2px solid #ffdf8e;
+  }
+
+  &:hover {
+    border: 2px solid #ffdf8e;
   }
 `
 
