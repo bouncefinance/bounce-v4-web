@@ -35,7 +35,7 @@ import { getInviteList } from 'api/bladeDao/index'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 
-const GrayButton = styled(Button)`
+export const GrayButton = styled(Button)`
   display: flex;
   flex-direction: row;
   justify-content: center;

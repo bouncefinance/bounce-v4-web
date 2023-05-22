@@ -11,6 +11,8 @@ import ProjectBg from 'assets/images/project-bg.png'
 import { shortenAddress } from '../../utils'
 import { CurrencyAmount } from '../../constants/token'
 import BigNumber from 'bignumber.js'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { GrayButton } from '../projectIntro'
 
 export function Rank() {
   const [currentTab, setCurrentTab] = useState('contribution')
@@ -58,6 +60,9 @@ export function Rank() {
         alignItems: 'center'
       }}
     >
+      <GrayButton onClick={() => history.back()} sx={{ position: 'absolute', left: '50px', top: '10px' }}>
+        <ArrowBackIcon />
+      </GrayButton>
       <H1 />
       <Typography mt={10} variant={'h3'} sx={{ color: 'white' }}>
         $BLADE IDO RANKINGS
