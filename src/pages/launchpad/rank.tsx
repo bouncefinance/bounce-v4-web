@@ -27,14 +27,14 @@ export function Rank() {
     async () => {
       const resp = await getRank(currentTab, 1, pageSize)
       // if (!resp.data.total) {
-      //   return {
-      //     total: 3,
-      //     list: calcuE18([
-      //       { sharer: '0xbD9e35E349416124fDffa20fA2F84B90936fB2Ad', custom: '3.0000000001e18' },
-      //       { sharer: '0x0accd95BB8c5443BA5f123aFA4e3f34E155c7B17', custom: '2e18' },
-      //       { sharer: '0xdDCb698c459BC99eD0476e058c1aaB02680aA5c5', custom: '1.250000001e18' }
-      //     ])
-      //   }
+      // return {
+      //   total: 3,
+      //   list: calcuE18([
+      //     { sharer: '0xbD9e35E349416124fDffa20fA2F84B90936fB2Ad', custom: '3.0000000001e18' },
+      //     { sharer: '0x0accd95BB8c5443BA5f123aFA4e3f34E155c7B17', custom: '2e18' },
+      //     { sharer: '0xdDCb698c459BC99eD0476e058c1aaB02680aA5c5', custom: '1.250000001e18' }
+      //   ])
+      // }
       // }
       return {
         list: calcuE18(resp.data.list),
@@ -78,7 +78,13 @@ export function Rank() {
         </Row>
         <RankIdxText>Contribution</RankIdxText>
       </Row>
-      <Stack spacing={10}>
+      <Stack
+        sx={{
+          maxHeight: '50vh',
+          overflow: 'auto'
+        }}
+        spacing={10}
+      >
         {data?.list.map((r: any, i: number) => (
           <RankItem key={i} rank={{ index: i + 1, ...r }} />
         ))}
