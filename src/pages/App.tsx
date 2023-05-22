@@ -67,6 +67,7 @@ import { BladeDao } from './projectIntro'
 import { Game } from './game'
 import { ProjectInfo } from './projectIntro/projectInfo'
 import { Equilibria } from './game/equilibria'
+import { Rank } from './launchpad/rank'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -152,6 +153,8 @@ export default function App() {
                       path={routes.game.bladeDaoIndex}
                       element={<Navigate to={{ pathname: routes.game.bladeDaoIndex + `/zksyncera/6` }} replace />}
                     />
+                    <Route path={routes.game.bladeDaoRank} element={<Rank />} />
+                    <Route path={routes.game.equilibriaIndex} element={<Equilibria />} />
                     <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} />
                     <Route path={routes.game.equilibriaIndex} element={<Equilibria />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
