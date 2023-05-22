@@ -5,9 +5,13 @@ import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transacti
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 
-export function useCreatorClaim(poolId: number | string, name: string) {
+export function useCreatorClaim(
+  poolId: number | string,
+  name: string,
+  currentBounceContractAddress: string | undefined
+) {
   const { account } = useActiveWeb3React()
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract(currentBounceContractAddress)
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 
