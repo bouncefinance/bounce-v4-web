@@ -10,6 +10,7 @@ import { useState } from 'react'
 import ProjectBg from 'assets/images/project-bg.png'
 import { shortenAddress } from '../../utils'
 import { CurrencyAmount } from '../../constants/token'
+import BigNumber from 'bignumber.js'
 
 export function Rank() {
   const [currentTab, setCurrentTab] = useState('contribution')
@@ -17,8 +18,8 @@ export function Rank() {
   const pageSize = 1000
 
   function calcuE18(list: any[]) {
-    return list.map((l: any) => {
-      return { ...l, custom: CurrencyAmount.ether(Number(l.custom).toString()).toSignificant() }
+    return list.map((item: any) => {
+      return { ...item, custom: CurrencyAmount.ether(new BigNumber(Number(item.custom)).toString()).toSignificant() }
     })
   }
 
