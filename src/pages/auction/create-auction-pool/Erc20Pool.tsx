@@ -16,7 +16,7 @@ export default function Erc20Pool() {
 
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <AuctionParametersForm />}
 
-          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
+          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm hideRefundable />}
         </Box>
       ) : (
         <CreationConfirmation />
