@@ -288,7 +288,7 @@ const Activitie: React.FC<IActivitieProps> = ({ personalInfoId }) => {
                       </Box>
                       <Box display={'flex'} justifyContent="space-between" alignItems="center">
                         <Typography variant="body2" color={'var(--ps-gray-700)'}>
-                          Contact address
+                          Contract address
                         </Typography>
                         <Box display={'flex'} height={20} alignItems="center">
                           <Typography variant="body2">

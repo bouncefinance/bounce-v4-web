@@ -5,7 +5,7 @@ export interface BidOrRegretBlockProps {
   onRegretButtonClick: () => void
 }
 
-const BidOrRegret = ({ onBidButtonClick, onRegretButtonClick }: BidOrRegretBlockProps) => {
+const BidOrRegret = ({ onBidButtonClick }: BidOrRegretBlockProps) => {
   return (
     <Box>
       <Stack spacing={16}>
@@ -13,9 +13,9 @@ const BidOrRegret = ({ onBidButtonClick, onRegretButtonClick }: BidOrRegretBlock
           Place a Bid
         </Button>
 
-        <Button variant="outlined" fullWidth onClick={onRegretButtonClick}>
+        {/* <Button variant="outlined" fullWidth onClick={onRegretButtonClick}>
           Regret and Get fund back
-        </Button>
+        </Button> */}
       </Stack>
     </Box>
   )

@@ -25,8 +25,8 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
 
 const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
   const { chainId } = useActiveWeb3React()
-  const swapedPercent = poolInfo?.swappedAmount0
-    ? new BigNumber(poolInfo.swappedAmount0).div(poolInfo.amountTotal0).times(100).toNumber()
+  const swapedPercent = poolInfo?.currencySwappedAmount0
+    ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
 
   const isCertifiedAddress = useCertifiedTokenAddress(poolInfo.ethChainId, poolInfo.token0.address)
@@ -37,7 +37,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
         <Stack spacing={10}>
           <Title>Token Information</Title>
 
-          <PoolInfoItem title="Contact address" tip="Token Contract Address.">
+          <PoolInfoItem title="Contract address" tip="Token Contract Address.">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               {poolInfo.token0.coingeckoId ? (
                 <Image src={CoingeckoSVG} width={20} height={20} alt="coingecko" />

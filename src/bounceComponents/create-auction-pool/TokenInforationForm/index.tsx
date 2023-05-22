@@ -100,7 +100,7 @@ const TokenInformationForm = ({ title }: { title?: string }): JSX.Element => {
                 />
               </FormItem>
 
-              <FormItem name="tokenFromAddress" label="Token contact address">
+              <FormItem name="tokenFromAddress" label="Token Contract address">
                 <FakeOutlinedInput disabled />
               </FormItem>
 
