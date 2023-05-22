@@ -77,7 +77,7 @@ const Upcoming = styled(H6)`
   backdrop-filter: blur(2px);
   border-radius: 100px;
 `
-const Sharebtn = styled(Box)({
+export const LineStyleBtn = styled(Box)({
   color: 'white',
   width: 107,
   height: 32,
@@ -325,7 +325,7 @@ export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSPrope
   if (account) {
     return (
       <ReactCopyToClipboard text={copyValue} onCopy={() => toast.success('Successfully copied')}>
-        <Sharebtn
+        <LineStyleBtn
           sx={{ ...style }}
           onMouseEnter={() => {
             setIsHover(true)
@@ -354,12 +354,12 @@ export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSPrope
               }}
             />
           )}
-        </Sharebtn>
+        </LineStyleBtn>
       </ReactCopyToClipboard>
     )
   } else {
     return (
-      <Sharebtn
+      <LineStyleBtn
         sx={{ ...style }}
         onMouseEnter={() => {
           setIsHover(true)
@@ -389,7 +389,7 @@ export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSPrope
             }}
           />
         )}
-      </Sharebtn>
+      </LineStyleBtn>
     )
   }
 }
@@ -408,7 +408,7 @@ export function InviteBtn({
   if (account && token) {
     return (
       <>
-        <Sharebtn
+        <LineStyleBtn
           sx={{
             borderRadius: '50%',
             ...style
@@ -424,13 +424,13 @@ export function InviteBtn({
           }}
         >
           {isHover ? <InviteSvg /> : isDefaultBlackIcon ? <InviteBlackSvg /> : <InviteSvg />}
-        </Sharebtn>
+        </LineStyleBtn>
         {inviteDialogOpen && <InviteListDialog handleClose={() => setInviteDialogOpen(false)} />}
       </>
     )
   } else {
     return (
-      <Sharebtn
+      <LineStyleBtn
         sx={{
           borderRadius: '50%',
           ...style
@@ -444,7 +444,7 @@ export function InviteBtn({
         onClick={toggleWalletModal}
       >
         {isHover ? <InviteSvg /> : isDefaultBlackIcon ? <InviteBlackSvg /> : <InviteSvg />}
-      </Sharebtn>
+      </LineStyleBtn>
     )
   }
 }

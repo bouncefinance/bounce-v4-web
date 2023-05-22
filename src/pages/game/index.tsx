@@ -1,4 +1,4 @@
-import { Box, Container, styled, Typography, Tabs, Tab } from '@mui/material'
+import { Box, Container, styled, Tab, Tabs, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
@@ -6,8 +6,8 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo } from 'react'
-import { useUserInfo } from 'state/users/hooks'
+import { useCallback, useMemo, useState } from 'react'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import InterNetIcon from 'assets/imgs/game/internet.png'
 import TwitterIcon from 'assets/imgs/game/twitter.png'
 // import IgIcon from 'assets/imgs/game/ig.png'
@@ -20,7 +20,6 @@ import { useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
-import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
 // import { useCountDown } from 'ahooks'
 // import moment from 'moment'
@@ -34,7 +33,7 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useQueryParams } from 'hooks/useQueryParams'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
-import { ShareBtn, InviteBtn } from '../projectIntro/index'
+import { InviteBtn, LineStyleBtn, ShareBtn } from '../projectIntro'
 import Favorite from 'bounceComponents/common/Favorite'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 import useUploadGameScoreCrypto from 'hooks/useUploadGameScoreCrypto'
@@ -366,6 +365,18 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
             )}
           </>
         )}
+        <LineStyleBtn
+          sx={{
+            width: 'max-content',
+            padding: '0 12px',
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6
+          }}
+          onClick={() => navigate(routes.game.bladeDaoRank)}
+        >
+          IDO Bonus leaderboard
+        </LineStyleBtn>
         <ShareBtn
           style={{
             border: '1px solid var(--ps-gray-900)',
@@ -398,6 +409,7 @@ function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
     </Row>
   )
 }
+
 function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: number) => void }) {
   const { poolId, chainShortName } = useQueryParams()
   const stepChange = (num: number) => {
