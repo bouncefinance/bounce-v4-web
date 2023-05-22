@@ -580,6 +580,18 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           {!!userId && poolInfo && (
             <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
           )}
+          <LineStyleBtn
+            sx={{
+              width: 'max-content',
+              padding: '0 12px',
+              border: '1px solid #fff',
+              color: '#fff',
+              marginLeft: 6
+            }}
+            onClick={() => nav(routes.game.bladeDaoRank)}
+          >
+            IDO Bonus leaderboard
+          </LineStyleBtn>
           <ShareBtn
             style={{
               border: '1px solid #fff',
