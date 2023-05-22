@@ -15,7 +15,7 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
 
   // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract(poolInfo.currentBounceContractAddress)
 
   const run = useCallback(
     async (
