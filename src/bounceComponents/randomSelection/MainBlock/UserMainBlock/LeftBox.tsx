@@ -61,7 +61,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
             sx={{
               marginBottom: '12px'
             }}
-            title="Contact address"
+            title="Contract address"
             tip="Token Contract Address."
           >
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>

@@ -71,7 +71,7 @@ const TopInfoBox = (): JSX.Element => {
                 <Typography>ERC721</Typography>
               </Stack>
             </PoolInfoItem>
-            <PoolInfoItem title="Contact address" tip="Token Contract Address.">
+            <PoolInfoItem title="Contract address" tip="Token Contract Address.">
               <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
                 <Typography>{shortenAddress(poolInfo.token0.address)}</Typography>
                 <CopyToClipboard text={poolInfo.token0.address} />

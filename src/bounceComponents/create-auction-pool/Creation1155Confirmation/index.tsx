@@ -336,7 +336,7 @@ const CreationConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Token Contact address">
+                <ConfirmationInfoItem title="Token Contract address">
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Image
                       src={ChainListMap[auctionChainId]?.logo || ''}

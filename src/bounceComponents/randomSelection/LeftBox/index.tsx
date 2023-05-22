@@ -46,7 +46,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
       <Stack spacing={36}>
         <Stack spacing={10}>
           <Title>Token Information</Title>
-          <PoolInfoItem title="Contact address" tip="Token Contract Address.">
+          <PoolInfoItem title="Contract address" tip="Token Contract Address.">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               {poolInfo.token0.coingeckoId ? (
                 <Image src={CoingeckoSVG} width={20} height={20} alt="coingecko" />

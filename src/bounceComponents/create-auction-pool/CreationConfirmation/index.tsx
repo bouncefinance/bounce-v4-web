@@ -334,7 +334,7 @@ const CreationConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Token Contact address">
+                <ConfirmationInfoItem title="Token Contract address">
                   <Typography>{shortenAddress(values.tokenFrom.address)}</Typography>
                 </ConfirmationInfoItem>
 

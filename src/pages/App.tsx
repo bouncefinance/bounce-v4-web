@@ -3,6 +3,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
+import BigNumber from 'bignumber.js'
+BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
 import Web3ReactManager from '../components/essential/Web3ReactManager'
 // import WarningModal from '../components/Modal/WarningModal'
 // import ComingSoon from './ComingSoon'
@@ -166,7 +168,7 @@ export default function App() {
             </ContentWrapper>
           </AppWrapper>
         </NiceModalProvider>
-      </ModalProvider>{' '}
+      </ModalProvider>
     </Suspense>
   )
 }

@@ -72,7 +72,7 @@ const TokensList: React.FC<ITokensListProps> = ({ list, onEdit, onDelete }) => {
           </Stack>
           <Stack direction="row" justifyContent="space-between" sx={{ lineHeight: '15px' }}>
             <Typography variant="body2" sx={{ color: 'var(--ps-gray-700)' }}>
-              Contact address
+              Contract address
             </Typography>
             <Typography variant="body2">{v.tokenAddress ? shortenAddress(v.tokenAddress) : '-'}</Typography>
           </Stack>
