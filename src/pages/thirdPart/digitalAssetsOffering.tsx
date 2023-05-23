@@ -1069,7 +1069,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                     margin: '10px auto 0'
                   }}
                 >
-                  you need to connecting your email
+                  you need to connect your email
                 </Typography>
               )}
             </>
