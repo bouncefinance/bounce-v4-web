@@ -25,6 +25,7 @@ import { routes } from 'constants/routes'
 import { useUserInfo } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import { Link } from 'react-router-dom'
 
 export type IActivtiesProps = { type: UserType }
 const poolType: Record<PoolType, string> = {
