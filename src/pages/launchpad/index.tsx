@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Container, Link, MenuItem, Pagination, Select, styled } from '@mui/material'
+import { Box, Container, Link, MenuItem, Pagination, Select, Stack, styled } from '@mui/material'
 import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
 import { H2 } from '../../components/Text'
@@ -505,9 +505,11 @@ const PrivatePad: React.FC = () => {
       {/* <LaunchCardFinish />
       <LaunchCardLive />
       <LaunchCardUpcoming /> */}
-      {PrivatePadList.map(item => (
-        <LaunchCardSocial key={item.title} data={item} />
-      ))}
+      <Stack spacing={40}>
+        {PrivatePadList.map(item => (
+          <LaunchCardSocial key={item.title} data={item} />
+        ))}
+      </Stack>
       {/* <TokenCardFinish />
       <TokenCardLive />
       <TokenCardUpcoming />

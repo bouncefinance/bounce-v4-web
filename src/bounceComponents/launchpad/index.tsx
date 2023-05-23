@@ -8,11 +8,12 @@ const CommonBg = styled(Box)`
   flex-direction: row;
   width: 1320px;
   height: 400px;
-  background: #20201e;
+  background: #e8e9e4;
   border-radius: 30px;
 
   :hover {
     cursor: pointer;
+    background: #e1f25c;
   }
 `
 
@@ -37,8 +38,8 @@ export function Common({
     | undefined
 }) {
   return (
-    <CommonBg sx={sx} mb={24} onClick={onClick} position={'relative'}>
-      <img style={{ width: '600px', backgroundSize: 'cover', borderRadius: '30px 0 0 30px' }} src={img} />
+    <CommonBg sx={sx} onClick={onClick} position={'relative'}>
+      <img style={{ width: '600px', objectFit: 'cover', borderRadius: '30px 0 0 30px' }} src={img} />
       <Box sx={{ width: '100%', height: '100%' }}>{child}</Box>
       <Stack
         spacing={10}
