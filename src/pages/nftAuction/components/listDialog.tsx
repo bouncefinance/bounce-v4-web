@@ -46,7 +46,8 @@ const NFTDialog = styled(Dialog)(({ theme }) => ({
   },
   '.MuiDialog-paper': {
     borderRadius: '30px 30px 0 0',
-    backgroundColor: 'var(--ps-text-8)'
+    backgroundColor: 'var(--ps-text-8)',
+    maxWidth: '100%'
   }
 }))
 interface TitleProps {
