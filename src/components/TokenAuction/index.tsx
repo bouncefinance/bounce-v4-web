@@ -17,12 +17,10 @@ import { routes } from 'constants/routes'
 import { getLabelById, shortenAddress } from 'utils'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import Image from 'components/Image'
 import BigNumber from 'bignumber.js'
-import ErrorSVG from 'assets/imgs/icon/error_solid.svg'
-import GreenCheck from 'assets/imgs/icon/green_check.svg'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { PoolType } from 'api/pool/type'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
 
 interface InfoBoxParams {
   title: string
@@ -685,11 +683,12 @@ const TokenAuction: React.FC = () => {
                                     label="Contract address"
                                     value={
                                       <Stack direction="row" alignItems="center" spacing={4}>
-                                        {fixedSwaptem.token0.coingeckoId ? (
-                                          <TokenImage src={GreenCheck} alt="coingecko" size={20} />
-                                        ) : (
-                                          <Image src={ErrorSVG} width={16} height={16} alt="Dangerous" />
-                                        )}
+                                        <CertifiedTokenImage
+                                          address={fixedSwaptem.token0.address}
+                                          coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                          ethChainId={fixedSwaptem.ethChainId}
+                                          backedChainId={fixedSwaptem.chainId}
+                                        />
                                         <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                                         <CopyToClipboard text={fixedSwaptem.token0.address} />
                                       </Stack>

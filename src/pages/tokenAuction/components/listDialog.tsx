@@ -17,16 +17,14 @@ import { useNavigate } from 'react-router-dom'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import { useActiveWeb3React } from 'hooks'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import Image from 'components/Image'
 import BigNumber from 'bignumber.js'
-import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
-import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import { getLabelById, shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { PoolType } from 'api/pool/type'
 import { formatNumber } from 'utils/number'
 import FixedSelected from 'components/FixedSelected'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
   [PoolType.Lottery]: 'Lottery',
@@ -347,11 +345,12 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                               label="Contract address"
                               value={
                                 <Stack direction="row" alignItems="center" spacing={4}>
-                                  {fixedSwaptem.token0.coingeckoId ? (
-                                    <TokenImage src={CoingeckoSVG} alt="coingecko" size={20} />
-                                  ) : (
-                                    <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
-                                  )}
+                                  <CertifiedTokenImage
+                                    address={fixedSwaptem.token0.address}
+                                    coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                    ethChainId={fixedSwaptem.ethChainId}
+                                    backedChainId={fixedSwaptem.chainId}
+                                  />
                                   <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                                   <CopyToClipboard text={fixedSwaptem.token0.address} />
                                 </Stack>
