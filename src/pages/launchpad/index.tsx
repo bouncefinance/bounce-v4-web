@@ -317,8 +317,9 @@ export const PrivatePadList: IPrivatePadProp[] = [
   {
     liveTimeStamp: {
       start: 1684814400000,
-      end: 1684857600000
+      end: 1684900800000
     },
+    showStartEnd: true,
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/141976585869e842d9b8e17f21ec7037-1683799247.png',
     avatar: BlodeAvatar,

@@ -5,5 +5,5 @@ export interface IShareParam {
 }
 export interface IInviteParam {
   side: string
-  poolId: number
+  poolId: number | string
 }

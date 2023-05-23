@@ -1,5 +1,5 @@
 import { PrivatePadList } from '../launchpad'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import FooterPc from '../../components/Footer/FooterPc'
 import { ProjectHead, Tabs } from './index'
 import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
@@ -46,7 +46,7 @@ function UserBlock() {
         margin: '200px auto 0'
       }}
     >
-      <Typography
+      {/* <Typography
         sx={{
           fontFamily: `'Public Sans'`,
           fontWeight: 600,
@@ -55,7 +55,7 @@ function UserBlock() {
         }}
       >
         Join The Pool
-      </Typography>
+      </Typography> */}
       <UserMainBlock
         style={{
           maxWidth: '1296px',

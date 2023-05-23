@@ -121,7 +121,7 @@ function RankItem({ rank }: { rank: RankData }) {
           {rank.index}
         </Typography>
         <Typography ml={70} fontSize={25} sx={{ color: '#FFDF8E' }}>
-          {shortenAddress(rank.sharer)}
+          {shortenAddress(rank.sharer, 3)}
         </Typography>
         <Box ml={90} position={'absolute'} left={200}>
           {rank.index === 1 && <img src={Rank1} />}

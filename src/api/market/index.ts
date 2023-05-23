@@ -36,7 +36,7 @@ export const getRank = (way: string, page: number, pageSize: number) => {
     way: way,
     isToday: 0,
     side: 'BladeDao',
-    poolId: 6,
+    poolId: '6,13',
     limit: pageSize,
     offset: (page - 1) * pageSize
   })

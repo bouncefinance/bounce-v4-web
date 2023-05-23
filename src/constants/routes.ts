@@ -23,7 +23,7 @@ export const routes = {
   launchpad: {
     index: '/launchpad',
     bladeDao: '/launchpad/bladedao',
-    projectInfo: '/launchpad/bladedao/:chainShortName/:poolId'
+    bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId'
   },
   realAuction: {
     index: '/real-auction'
@@ -68,7 +68,7 @@ export const routes = {
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
     bladeDaoRank: '/playable/bladedao/rank',
-    equilibriaIndex: '/playable/ghostierunner/equilibria',
-    bladeDaoPoolDetail: '/playable/ghositerunner/:chainShortName/:poolId'
+    bladeDaoPoolDetail: '/playable/ghositerunner/:chainShortName/:poolId',
+    equilibriaIndex: '/playable/ghostierunner/equilibria'
   }
 }

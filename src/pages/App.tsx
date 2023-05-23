@@ -121,8 +121,12 @@ export default function App() {
                     <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
                     <Route path={routes.launchpad.index} element={<Launchpad />} />
+                    <Route
+                      path={routes.launchpad.bladeDao}
+                      element={<Navigate to={{ pathname: routes.launchpad.bladeDao + `/zksyncera/13` }} replace />}
+                    />
                     <Route path={routes.launchpad.bladeDao} element={<BladeDao />} />
-                    <Route path={routes.launchpad.projectInfo} element={<ProjectInfo />} />
+                    <Route path={routes.launchpad.bladeDaoInfo} element={<ProjectInfo />} />
 
                     <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
                     <Route path={routes.adsAuction.index} element={<AdsAuction />} />
