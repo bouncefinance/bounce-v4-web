@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Box, Button, styled, Typography } from '@mui/material'
 import BgImg from 'assets/imgs/thirdPart/digitalAssetsOffering/bg.png'
 import SlogenImg from 'assets/imgs/thirdPart/digitalAssetsOffering/slogen.png'
@@ -37,6 +37,7 @@ import { LineStyleBtn } from '../projectIntro'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import { shortenAddress } from '../../utils'
 
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
@@ -120,8 +121,6 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const navigate = useNavigate()
   const [dialogStep, setDialogStep] = useState<number>(DialogStep.Close)
   const showLoginModal = useShowLoginModal()
-  const referral = new URLSearchParams(location.search).get('referral')
-  const [referralCode, setReferralCode] = useState<string>(referral || '')
   const toggleWalletModal = useWalletModalToggle()
   const currentLink = window.location.href.split('?')[0]
   const [requestBind, setRequestBind] = useState(0)
@@ -151,15 +150,27 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const { data: bindStatus } = useRequest(
     async () => {
       const resp = await getBindStatus('PoseiSwap')
+      if (resp.data.isBound) {
+        setReferralCode(shortenAddress(resp.data.sharer))
+      }
       return {
         isBind: resp.data.isBound,
-        code: resp.data.code
+        code: resp.data.code,
+        addr: resp.data.sharer
       }
     },
     {
       refreshDeps: [token, requestBind]
     }
   )
+  const referral = useMemo(() => {
+    if (bindStatus?.isBind) {
+      return shortenAddress(bindStatus?.addr)
+    }
+    return new URLSearchParams(location.search).get('referral')
+  }, [bindStatus?.addr, bindStatus?.isBind])
+  const [referralCode, setReferralCode] = useState<string>(referral || '')
+
   const inviteLink = bindStatus ? `${currentLink}?referral=${bindStatus?.code}` : '--'
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
@@ -895,6 +906,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
               <Row gap={10} mt={10} alignItems={'center'}>
                 <Input
                   value={referralCode}
+                  disabled={bindStatus?.isBind}
                   onChange={e => setReferralCode(e.target.value)}
                   style={{
                     width: '300px'
