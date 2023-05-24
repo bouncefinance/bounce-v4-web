@@ -21,7 +21,7 @@ export function Rank() {
 
   function calcuE18(list: any[]) {
     return list.map((item: any) => {
-      return { ...item, custom: CurrencyAmount.ether(new BigNumber(Number(item.custom)).toString()).toSignificant() }
+      return { ...item, custom: CurrencyAmount.ether(new BigNumber(Number(item.custom)).toFixed(0)).toSignificant() }
     })
   }
 

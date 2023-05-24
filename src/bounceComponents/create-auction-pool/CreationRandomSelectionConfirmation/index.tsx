@@ -226,7 +226,7 @@ const CreatePoolButton = () => {
         loading: true
       }
     }
-    if (!auctionAccountBalance || !auctionPoolSizeAmount || !auctionAccountBalance.greaterThan(auctionPoolSizeAmount)) {
+    if (!auctionAccountBalance || !auctionPoolSizeAmount || auctionPoolSizeAmount.greaterThan(auctionAccountBalance)) {
       return {
         text: 'Insufficient Balance',
         disabled: true

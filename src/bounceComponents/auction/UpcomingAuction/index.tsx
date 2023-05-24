@@ -15,14 +15,12 @@ import TokenImage from '../../common/TokenImage'
 import CopyToClipboard from '../../common/CopyToClipboard'
 import { PoolType } from '../../../api/pool/type'
 import { BigNumber } from 'bignumber.js'
-import GreenCheck from 'assets/imgs/icon/green_check.svg'
-import ErrorSVG from 'assets/imgs/icon/error_solid.svg'
-import Image from 'components/Image'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getRoute } from 'bounceComponents/common/AuctionCard/AuctionRankCard'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
 
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
@@ -30,7 +28,8 @@ const poolType: Record<PoolType, string> = {
   [PoolType.Duch]: 'Dutch Auction',
   [PoolType.SealedBid]: 'SealedBid',
   [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
+  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT',
+  [PoolType['PlayableAuction']]: ''
 }
 
 interface Notable1155Props {
@@ -187,11 +186,12 @@ export const UpcomingAuction = (props: Notable1155Props) => {
                           label="Contract address"
                           value={
                             <Stack direction="row" alignItems="center" spacing={4}>
-                              {fixedSwaptem.token0.coingeckoId ? (
-                                <TokenImage src={GreenCheck} alt="coingecko" size={20} />
-                              ) : (
-                                <Image src={ErrorSVG} width={16} height={16} alt="Dangerous" />
-                              )}
+                              <CertifiedTokenImage
+                                address={fixedSwaptem.token0.address}
+                                coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                ethChainId={fixedSwaptem.ethChainId}
+                                backedChainId={fixedSwaptem.chainId}
+                              />
                               <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                               <CopyToClipboard text={fixedSwaptem.token0.address} />
                             </Stack>

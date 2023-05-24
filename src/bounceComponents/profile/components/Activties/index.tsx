@@ -6,7 +6,6 @@ import { useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
 import BigNumber from 'bignumber.js'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -18,12 +17,11 @@ import { getLabelById, shortenAddress } from 'utils'
 import { getIdeasList } from 'api/idea'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { UserType } from 'api/market/type'
-import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import { Link, useNavigate } from 'react-router-dom'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
-import Image from 'components/Image'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
 
 export type IActivtiesProps = { type: UserType }
 
@@ -292,11 +290,12 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                               label="Contract address"
                               value={
                                 <Stack direction="row" alignItems="center" spacing={4}>
-                                  {fixedSwaptem.token0.coingeckoId ? (
-                                    <TokenImage src={CoingeckoSVG} alt="coingecko" size={20} />
-                                  ) : (
-                                    <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
-                                  )}
+                                  <CertifiedTokenImage
+                                    address={fixedSwaptem.token0.address}
+                                    coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                    ethChainId={fixedSwaptem.ethChainId}
+                                    backedChainId={fixedSwaptem.chainId}
+                                  />
                                   <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                                   <CopyToClipboard text={fixedSwaptem.token0.address} />
                                 </Stack>
@@ -420,11 +419,12 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                             label="Contract address"
                             value={
                               <Stack direction="row" alignItems="center" spacing={4}>
-                                {fixedSwaptem.token0.coingeckoId ? (
-                                  <TokenImage src={CoingeckoSVG} alt="coingecko" size={20} />
-                                ) : (
-                                  <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
-                                )}
+                                <CertifiedTokenImage
+                                  address={fixedSwaptem.token0.address}
+                                  coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                  ethChainId={fixedSwaptem.ethChainId}
+                                  backedChainId={fixedSwaptem.chainId}
+                                />
                                 <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                                 <CopyToClipboard text={fixedSwaptem.token0.address} />
                               </Stack>

@@ -54,8 +54,8 @@ const NoData = () => {
 const payableId = 2
 
 const gameTimeStamp = {
-  start: 1684494000000,
-  end: 1684821600000
+  start: 1684908000000,
+  end: 1685080800000
 }
 
 export function Equilibria() {
@@ -133,25 +133,27 @@ export function Equilibria() {
                 marginRight: 10
               }}
             >
-              Ghostie Runner Game
+              Equilibria Playable Auction
             </Typography>
-            <Typography
-              sx={{
-                height: 26,
-                lineHeight: '26px',
-                marginRight: 10,
-                padding: '0 12px',
-                background: 'rgba(222, 81, 245, 0.2)',
-                borderRadius: '20px',
-                color: '#DE51F5',
-                fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                fontWeight: 400,
-                fontSize: 14
-              }}
-            >
-              Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
-              {new Date(gameTimeStamp.end).toLocaleString()}
-            </Typography>
+            {!poolId && (
+              <Typography
+                sx={{
+                  height: 26,
+                  lineHeight: '26px',
+                  marginRight: 10,
+                  padding: '0 12px',
+                  background: 'rgba(222, 81, 245, 0.2)',
+                  borderRadius: '20px',
+                  color: '#DE51F5',
+                  fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+                  fontWeight: 400,
+                  fontSize: 14
+                }}
+              >
+                Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
+                {new Date(gameTimeStamp.end).toLocaleString()}
+              </Typography>
+            )}
             {poolInfo && (
               <PoolStatusBox
                 status={poolInfo.status}

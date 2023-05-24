@@ -1,17 +1,15 @@
-import Image from 'components/Image'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import GreenCheck from 'assets/imgs/icon/green_check.svg'
 import { VerifyStatus } from 'api/profile/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { FixedSwapPool, PoolType } from 'api/pool/type'
 import { getLabelById, shortenAddress } from 'utils'
-import ErrorSVG from 'assets/imgs/icon/error_solid.svg'
 import { routes } from 'constants/routes'
 import BigNumber from 'bignumber.js'
 import { Box, Stack, Typography } from '@mui/material'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { formatNumber } from 'utils/number'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
 
 export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: FixedSwapPool }) {
   const optionDatas = useOptionDatas()
@@ -72,11 +70,11 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
               label="Contract address"
               value={
                 <Stack direction="row" alignItems="center" spacing={4}>
-                  {auctionPoolItem.token0.coingeckoId ? (
-                    <TokenImage src={GreenCheck} alt="coingecko" size={20} />
-                  ) : (
-                    <Image src={ErrorSVG} width={16} height={16} alt="Dangerous" />
-                  )}
+                  <CertifiedTokenImage
+                    address={auctionPoolItem.token0.address}
+                    coingeckoId={auctionPoolItem.token0.coingeckoId}
+                    backedChainId={auctionPoolItem.chainId}
+                  />
                   <span>{shortenAddress(auctionPoolItem.token0.address)}</span>
                   <CopyToClipboard text={auctionPoolItem.token0.address} />
                 </Stack>

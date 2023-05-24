@@ -18,14 +18,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
-import Image from 'components/Image'
 // import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import BigNumber from 'bignumber.js'
-import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import { ReactComponent as SearchSVG } from 'assets/imgs/companies/search.svg'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
 import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import FormItem from 'bounceComponents/common/FormItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -44,6 +41,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useNavigate } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
 import { formatNumber } from 'utils/number'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
 
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
@@ -434,11 +432,12 @@ const Pools: React.FC = ({}) => {
                                         label="Contract address"
                                         value={
                                           <Stack direction="row" alignItems="center" spacing={4}>
-                                            {fixedSwaptem.token0.coingeckoId ? (
-                                              <TokenImage src={CoingeckoSVG} alt="coingecko" size={20} />
-                                            ) : (
-                                              <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
-                                            )}
+                                            <CertifiedTokenImage
+                                              address={fixedSwaptem.token0.address}
+                                              coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                              ethChainId={fixedSwaptem.ethChainId}
+                                              backedChainId={fixedSwaptem.chainId}
+                                            />
                                             <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                                             <CopyToClipboard text={fixedSwaptem.token0.address} />
                                           </Stack>
