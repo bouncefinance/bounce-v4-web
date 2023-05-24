@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Box, Button, styled, Typography } from '@mui/material'
 import BgImg from 'assets/imgs/thirdPart/digitalAssetsOffering/bg.png'
 import SlogenImg from 'assets/imgs/thirdPart/digitalAssetsOffering/slogen.png'
@@ -120,9 +120,10 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const navigate = useNavigate()
   const [dialogStep, setDialogStep] = useState<number>(DialogStep.Close)
   const showLoginModal = useShowLoginModal()
-  const referral = new URLSearchParams(location.search).get('referral')
-  const [referralCode, setReferralCode] = useState<string>(referral || '')
   const toggleWalletModal = useWalletModalToggle()
+  const currentLink = window.location.href.split('?')[0]
+  const [requestBind, setRequestBind] = useState(0)
+  const [bindErr, setBindErr] = useState('')
 
   const { data: checkJoinData } = useRequest(
     async () => {
@@ -149,18 +150,29 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const { data: bindStatus } = useRequest(
     async () => {
       const resp = await getBindStatus('PoseiSwap')
+      if (resp.data.isBound) {
+        setReferralCode(resp.data.sharerCode)
+      }
       return {
         isBind: resp.data.isBound,
-        code: resp.data.code
+        code: resp.data.code,
+        addr: resp.data.sharer,
+        sharerCode: resp.data.sharerCode
       }
     },
     {
-      refreshDeps: [account]
+      refreshDeps: [token, requestBind]
     }
   )
-  const inviteLink = bindStatus
-    ? `https://app.bounce.finance/playable/ghositerunner?referral=${bindStatus?.code}`
-    : '--'
+  const referral = useMemo(() => {
+    if (bindStatus?.isBind) {
+      return bindStatus?.sharerCode
+    }
+    return new URLSearchParams(location.search).get('referral')
+  }, [bindStatus?.isBind, bindStatus?.sharerCode])
+  const [referralCode, setReferralCode] = useState<string>(referral || '')
+
+  const inviteLink = bindStatus ? `${currentLink}?referral=${bindStatus?.code}` : '--'
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
@@ -895,6 +907,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
               <Row gap={10} mt={10} alignItems={'center'}>
                 <Input
                   value={referralCode}
+                  disabled={bindStatus?.isBind}
                   onChange={e => setReferralCode(e.target.value)}
                   style={{
                     width: '300px'
@@ -913,12 +926,27 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                     }
                   }}
                   onClick={async () => {
+                    if (bindStatus?.isBind) return
+                    if (referralCode === bindStatus?.code) {
+                      setBindErr('Cannot bind your own referral code')
+                      return
+                    }
                     if (account) {
-                      const resp = await bindCode('PoseiSwap', referralCode)
-                      if (resp.code === 200) {
-                        toast.success('Successfully bound')
-                      } else {
-                        toast.error(resp.msg)
+                      try {
+                        const resp = await bindCode('PoseiSwap', referralCode)
+                        if (resp.code === 200) {
+                          setBindErr('')
+                          toast.success('Successfully bound')
+                          setRequestBind(req => req + 1)
+                        } else if (resp.code === 400) {
+                          setBindErr('Invalid referral code')
+                          toast.error('Invalid referral code')
+                        } else {
+                          toast.error('Error')
+                        }
+                      } catch (e) {
+                        setBindErr('Invalid referral code')
+                        toast.error('Invalid referral code')
                       }
                     } else {
                       toggleWalletModal()
@@ -928,6 +956,9 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                   {bindStatus?.isBind ? 'Bound' : 'Bind'}
                 </LineStyleBtn>
               </Row>
+              <Typography mt={10} color={'red'}>
+                {bindErr}
+              </Typography>
             </Box>
           </Box>
           {/* right info block */}
