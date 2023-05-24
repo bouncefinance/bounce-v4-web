@@ -123,6 +123,8 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const referral = new URLSearchParams(location.search).get('referral')
   const [referralCode, setReferralCode] = useState<string>(referral || '')
   const toggleWalletModal = useWalletModalToggle()
+  const currentLink = window.location.href.split('?')[0]
+  const [requestBind, setRequestBind] = useState(0)
 
   const { data: checkJoinData } = useRequest(
     async () => {
@@ -155,12 +157,10 @@ const DigitalAssetsOffering: React.FC = ({}) => {
       }
     },
     {
-      refreshDeps: [account]
+      refreshDeps: [token, requestBind]
     }
   )
-  const inviteLink = bindStatus
-    ? `https://app.bounce.finance/playable/ghositerunner?referral=${bindStatus?.code}`
-    : '--'
+  const inviteLink = bindStatus ? `${currentLink}?referral=${bindStatus?.code}` : '--'
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
@@ -913,10 +913,12 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                     }
                   }}
                   onClick={async () => {
+                    if (bindStatus?.isBind) return
                     if (account) {
                       const resp = await bindCode('PoseiSwap', referralCode)
                       if (resp.code === 200) {
                         toast.success('Successfully bound')
+                        setRequestBind(req => req + 1)
                       } else {
                         toast.error(resp.msg)
                       }
