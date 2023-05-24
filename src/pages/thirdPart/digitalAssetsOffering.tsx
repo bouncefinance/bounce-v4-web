@@ -123,6 +123,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const toggleWalletModal = useWalletModalToggle()
   const currentLink = window.location.href.split('?')[0]
   const [requestBind, setRequestBind] = useState(0)
+  const [bindErr, setBindErr] = useState('')
 
   const { data: checkJoinData } = useRequest(
     async () => {
@@ -926,18 +927,25 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                   }}
                   onClick={async () => {
                     if (bindStatus?.isBind) return
+                    if (referralCode === bindStatus?.code) {
+                      setBindErr('Cannot bind your own referral code')
+                      return
+                    }
                     if (account) {
                       try {
                         const resp = await bindCode('PoseiSwap', referralCode)
                         if (resp.code === 200) {
+                          setBindErr('')
                           toast.success('Successfully bound')
                           setRequestBind(req => req + 1)
                         } else if (resp.code === 400) {
+                          setBindErr('Invalid referral code')
                           toast.error('Invalid referral code')
                         } else {
                           toast.error('Error')
                         }
                       } catch (e) {
+                        setBindErr('Invalid referral code')
                         toast.error('Invalid referral code')
                       }
                     } else {
@@ -948,6 +956,9 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                   {bindStatus?.isBind ? 'Bound' : 'Bind'}
                 </LineStyleBtn>
               </Row>
+              <Typography mt={10} color={'red'}>
+                {bindErr}
+              </Typography>
             </Box>
           </Box>
           {/* right info block */}
