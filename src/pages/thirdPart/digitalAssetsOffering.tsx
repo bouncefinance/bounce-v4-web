@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Box, Typography, styled, Button } from '@mui/material'
+import { Box, Button, styled, Typography } from '@mui/material'
 import BgImg from 'assets/imgs/thirdPart/digitalAssetsOffering/bg.png'
 import SlogenImg from 'assets/imgs/thirdPart/digitalAssetsOffering/slogen.png'
 import ProductIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/productIcon.svg'
@@ -9,7 +9,7 @@ import TelegramIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/Telegram.s
 import MediumIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/Medium.svg'
 import WebsiteIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/Website.svg'
 import DiscordIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/Discord.svg'
-import { useCountDown } from 'ahooks'
+import { useCountDown, useRequest } from 'ahooks'
 import Investors1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors1.svg'
 import Investors2 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors2.svg'
 import Investors3 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors3.svg'
@@ -21,17 +21,22 @@ import Partners4 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners4.svg
 import Partners5 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners5.svg'
 import { useActiveWeb3React } from 'hooks'
 import moment from 'moment'
-import { useShowLoginModal } from 'state/users/hooks'
-import { useUserInfo } from 'state/users/hooks'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
-import { useRequest } from 'ahooks'
-import { joinWaiting, checkWaiting, waitingCount } from 'api/thirdPart'
+import { bindCode, checkWaiting, getBindStatus, joinWaiting, waitingCount } from 'api/thirdPart'
 import TipsDialogIcon from 'assets/imgs/thirdPart/digitalAssetsOffering/tipsDialogIcon.png'
 import TwitterSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TwitterIcon.svg'
 import DiscordSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/DiscordIcon.svg'
 import TelegramSvg from 'assets/imgs/thirdPart/digitalAssetsOffering/TelegramIcon.svg'
 import ReadySvg from 'assets/imgs/thirdPart/digitalAssetsOffering/ready.svg'
+import Input from '../../components/Input'
+import { Row } from '../../components/Layout'
+import { ReactComponent as CopySvg } from '../../assets/svg/copy.svg'
+import { LineStyleBtn } from '../projectIntro'
+import ReactCopyToClipboard from 'react-copy-to-clipboard'
+import { toast } from 'react-toastify'
+import { useWalletModalToggle } from '../../state/application/hooks'
 
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
@@ -101,18 +106,24 @@ const TabsBtn = styled(Button)(() => ({
     color: '#fff'
   }
 }))
+
 export enum DialogStep {
   'Close' = 0,
   'Connect' = 1,
   'Confirm' = 2,
   'Success' = 3
 }
+
 const DigitalAssetsOffering: React.FC = ({}) => {
   const { account } = useActiveWeb3React()
   const { userInfo, token } = useUserInfo()
   const navigate = useNavigate()
   const [dialogStep, setDialogStep] = useState<number>(DialogStep.Close)
   const showLoginModal = useShowLoginModal()
+  const referral = new URLSearchParams(location.search).get('referral')
+  const [referralCode, setReferralCode] = useState<string>(referral || '')
+  const toggleWalletModal = useWalletModalToggle()
+
   const { data: checkJoinData } = useRequest(
     async () => {
       const resp = await checkWaiting()
@@ -135,6 +146,21 @@ const DigitalAssetsOffering: React.FC = ({}) => {
       refreshDeps: [dialogStep, token]
     }
   )
+  const { data: bindStatus } = useRequest(
+    async () => {
+      const resp = await getBindStatus('PoseiSwap')
+      return {
+        isBind: resp.data.isBound,
+        code: resp.data.code
+      }
+    },
+    {
+      refreshDeps: [account]
+    }
+  )
+  const inviteLink = bindStatus
+    ? `https://app.bounce.finance/playable/ghositerunner?referral=${bindStatus?.code}`
+    : '--'
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
@@ -730,101 +756,178 @@ const DigitalAssetsOffering: React.FC = ({}) => {
           mb={40}
         >
           {/* left info block */}
-          <Box
-            sx={{
-              position: 'relative',
-              width: 480,
-              height: 380,
-              borderRadius: 32,
-              overflow: 'hidden',
-              background: `url(${ShadowIcon}) no-repeat bottom center`
-            }}
-          >
-            <img
-              src={SlogenImg}
-              style={{
-                width: '100%'
-              }}
-              alt=""
-              srcSet=""
-            />
+          <Box>
             <Box
               sx={{
-                position: 'absolute',
-                top: 29,
-                left: 34,
-                width: 100,
-                height: 100,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                background: '#fff',
-                borderRadius: '50%'
+                position: 'relative',
+                width: 480,
+                height: 380,
+                borderRadius: 32,
+                overflow: 'hidden',
+                background: `url(${ShadowIcon}) no-repeat bottom center`
               }}
             >
               <img
-                src={ProductIcon}
+                src={SlogenImg}
                 style={{
-                  display: 'block',
-                  width: 78
+                  width: '100%'
                 }}
                 alt=""
                 srcSet=""
               />
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 29,
+                  left: 34,
+                  width: 100,
+                  height: 100,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  background: '#fff',
+                  borderRadius: '50%'
+                }}
+              >
+                <img
+                  src={ProductIcon}
+                  style={{
+                    display: 'block',
+                    width: 78
+                  }}
+                  alt=""
+                  srcSet=""
+                />
+              </Box>
+              <Box
+                sx={{
+                  padding: '20px 40px'
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+                    fontWeight: 500,
+                    fontSize: 24,
+                    textAlign: 'left',
+                    marginBottom: 20,
+                    color: '#FAFAFA'
+                  }}
+                >
+                  PoseiSwap
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: `'Inter'`,
+                    fontWeight: 500,
+                    fontSize: 14,
+                    textAlign: 'left',
+                    marginBottom: 31,
+                    color: '#FAFAFA'
+                  }}
+                >
+                  PoseiSwap is the very first DEX on the Nautilus Chain,built to provide the best trading experience for
+                  users,liquidity providers and project developers.
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    img: {
+                      cursor: 'pointer'
+                    }
+                  }}
+                  gap={31}
+                >
+                  <img src={TwitterIcon} alt="" srcSet="" onClick={() => openLink('https://twitter.com/poseiswap')} />
+                  <img src={TelegramIcon} alt="" srcSet="" onClick={() => openLink('https://t.me/PoseiSwapChat')} />
+                  <img src={MediumIcon} alt="" srcSet="" onClick={() => openLink('https://poseiswap.medium.com/')} />
+                  <img src={WebsiteIcon} alt="" srcSet="" onClick={() => openLink('https://www.poseiswap.xyz/')} />
+                  <img
+                    src={DiscordIcon}
+                    alt=""
+                    srcSet=""
+                    onClick={() => openLink('https://discord.com/invite/rWdHnb45UG')}
+                  />
+                </Box>
+              </Box>
             </Box>
             <Box
               sx={{
-                padding: '20px 40px'
+                padding: 20
               }}
             >
-              <Typography
-                sx={{
-                  fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
-                  fontWeight: 500,
-                  fontSize: 24,
-                  textAlign: 'left',
-                  marginBottom: 20,
-                  color: '#FAFAFA'
-                }}
-              >
-                PoseiSwap
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: `'Inter'`,
-                  fontWeight: 500,
-                  fontSize: 14,
-                  textAlign: 'left',
-                  marginBottom: 31,
-                  color: '#FAFAFA'
-                }}
-              >
-                PoseiSwap is the very first DEX on the Nautilus Chain,built to provide the best trading experience for
-                users,liquidity providers and project developers.
-              </Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexFlow: 'row nowrap',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  img: {
-                    cursor: 'pointer'
-                  }
-                }}
-                gap={31}
-              >
-                <img src={TwitterIcon} alt="" srcSet="" onClick={() => openLink('https://twitter.com/poseiswap')} />
-                <img src={TelegramIcon} alt="" srcSet="" onClick={() => openLink('https://t.me/PoseiSwapChat')} />
-                <img src={MediumIcon} alt="" srcSet="" onClick={() => openLink('https://poseiswap.medium.com/')} />
-                <img src={WebsiteIcon} alt="" srcSet="" onClick={() => openLink('https://www.poseiswap.xyz/')} />
-                <img
-                  src={DiscordIcon}
-                  alt=""
-                  srcSet=""
-                  onClick={() => openLink('https://discord.com/invite/rWdHnb45UG')}
+              <Row justifyContent={'space-between'} alignItems={'center'}>
+                <Typography
+                  sx={{
+                    fontFamily: `'Inter'`,
+                    fontWeight: 500,
+                    width: '300px',
+                    fontSize: 14,
+                    overflowWrap: 'break-word',
+                    color: '#FAFAFA'
+                  }}
+                >
+                  {inviteLink}
+                </Typography>
+                <ReactCopyToClipboard
+                  text={inviteLink}
+                  onCopy={() => {
+                    if (account) {
+                      toast.success('Successfully copied')
+                    } else {
+                      toggleWalletModal()
+                    }
+                  }}
+                >
+                  <LineStyleBtn>
+                    Referral
+                    <CopySvg
+                      style={{
+                        marginLeft: 7
+                      }}
+                    />
+                  </LineStyleBtn>
+                </ReactCopyToClipboard>
+              </Row>
+              <Row gap={10} mt={10} alignItems={'center'}>
+                <Input
+                  value={referralCode}
+                  onChange={e => setReferralCode(e.target.value)}
+                  style={{
+                    width: '300px'
+                  }}
                 />
-              </Box>
+                <LineStyleBtn
+                  className={bindStatus?.isBind ? 'bound' : ''}
+                  sx={{
+                    width: '107px',
+                    padding: '0 42px',
+                    '&.bound': {
+                      cursor: 'not-allowed',
+                      background: 'var(--ps-gray-900)',
+                      border: '1px solid var(--ps-gray-900)',
+                      color: '#fff'
+                    }
+                  }}
+                  onClick={async () => {
+                    if (account) {
+                      const resp = await bindCode('PoseiSwap', referralCode)
+                      if (resp.code === 200) {
+                        toast.success('Successfully bound')
+                      } else {
+                        toast.error(resp.msg)
+                      }
+                    } else {
+                      toggleWalletModal()
+                    }
+                  }}
+                >
+                  {bindStatus?.isBind ? 'Bound' : 'Bind'}
+                </LineStyleBtn>
+              </Row>
             </Box>
           </Box>
           {/* right info block */}

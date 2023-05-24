@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
+
 BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
 import Web3ReactManager from '../components/essential/Web3ReactManager'
 // import WarningModal from '../components/Modal/WarningModal'
@@ -153,6 +154,10 @@ export default function App() {
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
+                    <Route
+                      path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
+                      element={<DigitalAssetsOffering />}
+                    />
 
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     <Route
