@@ -37,7 +37,6 @@ import { LineStyleBtn } from '../projectIntro'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from '../../state/application/hooks'
-import { shortenAddress } from '../../utils'
 
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
@@ -151,12 +150,13 @@ const DigitalAssetsOffering: React.FC = ({}) => {
     async () => {
       const resp = await getBindStatus('PoseiSwap')
       if (resp.data.isBound) {
-        setReferralCode(shortenAddress(resp.data.sharer))
+        setReferralCode(resp.data.sharerCode)
       }
       return {
         isBind: resp.data.isBound,
         code: resp.data.code,
-        addr: resp.data.sharer
+        addr: resp.data.sharer,
+        sharerCode: resp.data.sharerCode
       }
     },
     {
@@ -165,10 +165,10 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   )
   const referral = useMemo(() => {
     if (bindStatus?.isBind) {
-      return shortenAddress(bindStatus?.addr)
+      return bindStatus?.sharerCode
     }
     return new URLSearchParams(location.search).get('referral')
-  }, [bindStatus?.addr, bindStatus?.isBind])
+  }, [bindStatus?.isBind, bindStatus?.sharerCode])
   const [referralCode, setReferralCode] = useState<string>(referral || '')
 
   const inviteLink = bindStatus ? `${currentLink}?referral=${bindStatus?.code}` : '--'
