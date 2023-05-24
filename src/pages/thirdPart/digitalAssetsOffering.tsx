@@ -927,12 +927,18 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                   onClick={async () => {
                     if (bindStatus?.isBind) return
                     if (account) {
-                      const resp = await bindCode('PoseiSwap', referralCode)
-                      if (resp.code === 200) {
-                        toast.success('Successfully bound')
-                        setRequestBind(req => req + 1)
-                      } else {
-                        toast.error(resp.msg)
+                      try {
+                        const resp = await bindCode('PoseiSwap', referralCode)
+                        if (resp.code === 200) {
+                          toast.success('Successfully bound')
+                          setRequestBind(req => req + 1)
+                        } else if (resp.code === 400) {
+                          toast.error('Invalid referral code')
+                        } else {
+                          toast.error('Error')
+                        }
+                      } catch (e) {
+                        toast.error('Invalid referral code')
                       }
                     } else {
                       toggleWalletModal()
