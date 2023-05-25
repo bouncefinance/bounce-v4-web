@@ -3,6 +3,7 @@ import EthUrl from 'assets/images/eth_logo.png'
 import BSCUrl from 'assets/svg/binance.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 import ZkSyncSrc from '../assets/images/zksync_logo.png'
+import scrollLogo from '../assets/images/scroll_logo.png'
 
 export function numberToHex(number: number) {
   return '0x' + new BigNumberjs(number).toString(16)
@@ -419,12 +420,12 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.SCROLL_ALPHA]: {
     id: ChainId.SCROLL_ALPHA,
     hexChainId: numberToHex(ChainId.SCROLL_ALPHA),
-    chainName: 'Scroll Alpha Testnet',
+    chainName: 'Scroll Alpha',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: 'https://icons.llamao.fi/icons/chains/rsz_palm.jpg'
+      logo: scrollLogo
     },
     rpcUrls: ['https://scroll-alphanet.public.blastapi.io'],
     blockExplorerUrls: ['https://blockscout.scroll.io']
