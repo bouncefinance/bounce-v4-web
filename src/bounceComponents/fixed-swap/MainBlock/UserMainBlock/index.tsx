@@ -9,11 +9,13 @@ const UserMainBlock = ({
   poolInfo,
   getPoolInfo,
   style,
+  extraAlert,
   contentGap
 }: {
   poolInfo: FixedSwapPoolProp
   getPoolInfo: () => void
   style?: React.CSSProperties
+  extraAlert?: JSX.Element
   contentGap?: number
 }): JSX.Element => {
   return (
@@ -29,6 +31,7 @@ const UserMainBlock = ({
         ...style
       }}
     >
+      {extraAlert}
       <Alert poolInfo={poolInfo} />
       <Box sx={{ display: 'flex', columnGap: contentGap ? contentGap : 12 }}>
         <LeftBox poolInfo={poolInfo} />

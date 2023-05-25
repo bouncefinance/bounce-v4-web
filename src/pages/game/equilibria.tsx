@@ -1,4 +1,4 @@
-import { Box, Container, styled, Tab, Tabs, Typography } from '@mui/material'
+import { Alert, Box, Container, styled, Tab, Tabs, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 import GhostieRunner from 'components/GhostieRunner'
@@ -668,7 +668,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
               }}
             >
               Please pay attention.
-            </span>{' '}
+            </span>
             Check the auction creator, token contract and price. Bounce auction is a decentralized tool where anyone can
             launch.
           </Typography>
@@ -1130,6 +1130,12 @@ function UserBlock() {
       style={{
         marginTop: '-25px'
       }}
+      extraAlert={
+        <Alert severity="warning">
+          The $mEQB in this auction is the mirror token of $EQB. After the auction is over, the unlocking rules will be
+          the same as the official. The official will redeem $mEQB according to the rules.
+        </Alert>
+      }
       contentGap={50}
       poolInfo={poolInfo}
       getPoolInfo={getPoolInfo}

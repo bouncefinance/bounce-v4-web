@@ -12,6 +12,8 @@ import { BannerType } from '../../../api/market/type'
 // import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+
 SwiperCore.use([Autoplay, Pagination])
 
 export interface IBanner {
@@ -87,6 +89,7 @@ const ArrowBg = styled(Box)`
   height: 60px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 8px;
+
   &:hover {
     cursor: pointer;
   }
@@ -188,7 +191,7 @@ function Banner({ banner }: { banner: BannerType }) {
       }}
       onClick={() => handleClick(banner.url || '')}
     >
-      <img
+      <LazyLoadImage
         src={banner.avatar}
         alt=""
         style={{
