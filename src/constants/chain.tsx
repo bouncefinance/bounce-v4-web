@@ -36,6 +36,7 @@ export enum ChainId {
   CELO = 42220,
   AVALANCHE = 43114,
   SEPOLIA = 11155111,
+  SCROLL_ALPHA = 534353,
   AUROEA = 1313161554,
   HARMONY = 1666600000,
   PALM = 11297108109
@@ -414,6 +415,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://palm-mainnet.public.blastapi.io'],
     blockExplorerUrls: ['https://explorer.palm.io/']
+  },
+  [ChainId.SCROLL_ALPHA]: {
+    id: ChainId.SCROLL_ALPHA,
+    hexChainId: numberToHex(ChainId.SCROLL_ALPHA),
+    chainName: 'Scroll Alpha Testnet',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://icons.llamao.fi/icons/chains/rsz_palm.jpg'
+    },
+    rpcUrls: ['https://scroll-alphanet.public.blastapi.io'],
+    blockExplorerUrls: ['https://blockscout.scroll.io']
   }
 }
 
