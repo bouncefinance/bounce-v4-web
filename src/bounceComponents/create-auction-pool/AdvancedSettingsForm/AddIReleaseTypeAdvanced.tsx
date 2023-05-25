@@ -25,6 +25,16 @@ import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { isAddress } from 'utils'
+import { sortReleaseData } from 'hooks/useCreateFixedSwapPool'
+import { useCallback } from 'react'
+import ControlPointIcon from '@mui/icons-material/ControlPoint'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
+
+interface IFragmentReleaseTimes {
+  startAt: Moment | null
+  radio: string
+  key?: number
+}
 
 interface MyFormValues {
   poolName: string
@@ -33,10 +43,16 @@ interface MyFormValues {
   delayUnlockingTime: moment.Moment | null
   linearUnlockingStartTime: moment.Moment | null
   linearUnlockingEndTime: moment.Moment | null
+  fragmentReleaseTimes: IFragmentReleaseTimes[]
   releaseType: IReleaseType | 1000
   releaseDataArr: IReleaseData[]
   whitelist: string[]
   participantStatus: ParticipantStatus
+}
+
+const defaultFragmentRelease = {
+  startAt: null,
+  radio: ''
 }
 
 export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: boolean }) => {
@@ -51,6 +67,12 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
     delayUnlockingTime: valuesState.delayUnlockingTime,
     linearUnlockingStartTime: valuesState.releaseDataArr?.[0]?.startAt || null,
     linearUnlockingEndTime: valuesState.releaseDataArr?.[0]?.endAt || null,
+    fragmentReleaseTimes: valuesState.releaseDataArr.length
+      ? valuesState.releaseDataArr.map(item => ({
+          startAt: item.startAt,
+          radio: item.ratio || ''
+        }))
+      : [defaultFragmentRelease],
     releaseDataArr: valuesState.releaseDataArr,
     whitelist: valuesState.whitelist,
     participantStatus: valuesState.participantStatus
@@ -150,6 +172,15 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
             }
           })
       }),
+    fragmentReleaseTimes: Yup.array().when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Fragment,
+      then: Yup.array().of(
+        Yup.object().shape({
+          startAt: Yup.date().typeError('Please select a valid time').required('Please select a valid time'),
+          radio: Yup.string().required('Must enter the release ratio')
+        })
+      )
+    }),
     whitelist: Yup.array()
       .of(Yup.string())
       .test(
@@ -202,9 +233,19 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={async formValues => {
-            const releaseDataArr: IReleaseData[] = [
-              { startAt: formValues.linearUnlockingStartTime, endAt: formValues.linearUnlockingEndTime }
-            ]
+            let releaseDataArr: IReleaseData[] = []
+            if (Number(formValues.releaseType) === IReleaseType.Linear) {
+              releaseDataArr = [
+                { startAt: formValues.linearUnlockingStartTime, endAt: formValues.linearUnlockingEndTime }
+              ]
+            } else if (Number(formValues.releaseType) === IReleaseType.Fragment) {
+              releaseDataArr = formValues.fragmentReleaseTimes.map(item => ({
+                startAt: item.startAt,
+                ratio: item.radio
+              }))
+              releaseDataArr = sortReleaseData(releaseDataArr)
+            }
+
             valuesDispatch({
               type: ActionType.CommitAdvancedSettings,
               payload: {
@@ -220,7 +261,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
             })
           }}
         >
-          {({ values, setValues, errors }) => {
+          {({ values, setValues, errors, setFieldValue }) => {
             return (
               <Form>
                 <FormItem label="Pool name" name="poolName">
@@ -281,7 +322,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                         </Tooltip>
                       }
                     />
-                    {/* <FormControlLabel
+                    <FormControlLabel
                       value={IReleaseType.Fragment}
                       control={<Radio disableRipple />}
                       label={
@@ -289,7 +330,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                           <span>Fragment</span>
                         </Tooltip>
                       }
-                    /> */}
+                    />
                   </Field>
 
                   {Number(values.releaseType) === IReleaseType.Instant ? (
@@ -329,6 +370,15 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                         />
                       </Stack>
                     </Stack>
+                  ) : Number(values.releaseType) === IReleaseType.Fragment ? (
+                    <SetFragmentReleaseTime
+                      minDateTime={values.endTime}
+                      errors={errors.fragmentReleaseTimes}
+                      releaseTimes={values.fragmentReleaseTimes}
+                      setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) =>
+                        setFieldValue('fragmentReleaseTimes', val)
+                      }
+                    />
                   ) : (
                     <Stack spacing={6}>
                       <FormLabel>No unlocking method is set; tokens can be claimed after the specified end.</FormLabel>
@@ -422,3 +472,82 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
 }
 
 export default AddIReleaseTypeAdvanced
+
+function SetFragmentReleaseTime({
+  releaseTimes,
+  minDateTime,
+  errors,
+  setFragmentReleaseTimes
+}: {
+  setFragmentReleaseTimes: (val: IFragmentReleaseTimes[]) => void
+  minDateTime: Moment | null
+  releaseTimes: IFragmentReleaseTimes[]
+  errors?: any
+}) {
+  const setItemValue = useCallback(
+    (idx: number, _key: keyof IFragmentReleaseTimes, val: any) => {
+      const ret = [...releaseTimes]
+      ret[idx] = {
+        ...ret[idx],
+        [_key]: val
+      }
+      setFragmentReleaseTimes(ret)
+    },
+    [releaseTimes, setFragmentReleaseTimes]
+  )
+
+  const addOne = useCallback(() => {
+    if (releaseTimes.length <= 9) {
+      setFragmentReleaseTimes([...releaseTimes, { ...defaultFragmentRelease, key: Math.random() }])
+    }
+  }, [releaseTimes, setFragmentReleaseTimes])
+
+  const removeOne = useCallback(
+    (idx: number) => {
+      if (idx < releaseTimes.length) {
+        const ret = [...releaseTimes]
+        ret.splice(idx, 1)
+        setFragmentReleaseTimes(ret)
+      }
+    },
+    [releaseTimes, setFragmentReleaseTimes]
+  )
+
+  return (
+    <Stack spacing={5}>
+      <Box display={'flex'} justifyContent={'space-between'}>
+        <FormLabel>You can add or delete</FormLabel>
+        <ControlPointIcon onClick={addOne} sx={{ cursor: 'pointer' }} />
+      </Box>
+      {releaseTimes.map((item, idx) => (
+        <Box key={item.key || idx}>
+          <Stack spacing={15} direction={'row'}>
+            <Field
+              component={DateTimePickerFormItem}
+              disablePast
+              name={`startAt[${item.key || idx}]`}
+              value={item.startAt}
+              onChange={(e: any) => {
+                console.log('aaaaaa', idx, item.startAt, e)
+                setItemValue(idx, 'startAt', e)
+              }}
+              minDateTime={minDateTime}
+              textField={{ sx: { width: '100%' } }}
+            />
+            <FormItem label="radio">
+              <OutlinedInput value={item.radio} onChange={e => setItemValue(idx, 'radio', e.target.value)} />
+            </FormItem>
+
+            <RemoveCircleOutlineIcon
+              sx={{ opacity: idx > 0 ? 1 : 0.5, cursor: 'pointer', alignSelf: 'center' }}
+              onClick={() => idx > 0 && removeOne(idx)}
+            />
+          </Stack>
+          <FormHelperText error={!!errors?.length}>
+            {(typeof errors !== 'string' && errors?.[idx]?.startAt) || errors?.[idx]?.radio}
+          </FormHelperText>
+        </Box>
+      ))}
+    </Stack>
+  )
+}

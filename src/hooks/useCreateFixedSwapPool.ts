@@ -44,6 +44,22 @@ const getMinStartTime = (releaseData: IReleaseData[]) => {
   return releaseData.map(item => item.startAt?.unix() || 0).reduce((a, b) => Math.min(a, b), 0)
 }
 
+export function sortReleaseData(releaseData: IReleaseData[]): IReleaseData[] {
+  return releaseData.sort((a, b) => {
+    if (a.startAt === null || b.startAt === null) {
+      if (a.startAt === null && b.startAt === null) {
+        return 0
+      } else if (a.startAt === null) {
+        return 1
+      } else {
+        return -1
+      }
+    }
+
+    return a.startAt.diff(b.startAt)
+  })
+}
+
 export function useCreateFixedSwapPool() {
   const { account, chainId } = useActiveWeb3React()
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
