@@ -48,6 +48,7 @@ interface MyFormValues {
   releaseDataArr: IReleaseData[]
   whitelist: string[]
   participantStatus: ParticipantStatus
+  fragmentReleaseSize?: string
 }
 
 const defaultFragmentRelease = {
@@ -180,6 +181,16 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
           radio: Yup.string().required('Must enter the release ratio')
         })
       )
+    }),
+    fragmentReleaseSize: Yup.string().when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Fragment,
+      then: Yup.string().test('TEST_FRAGMENT_TOTAL', 'The total release ratio should be 100%', (_, context) => {
+        return (
+          context.parent.fragmentReleaseTimes
+            .map((item: { radio: string }) => item.radio)
+            .reduce((a: any, b: any) => (Number(a) || 0) + (Number(b) || 0), [0]) === 100
+        )
+      })
     }),
     whitelist: Yup.array()
       .of(Yup.string())
@@ -384,6 +395,8 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       <FormLabel>No unlocking method is set; tokens can be claimed after the specified end.</FormLabel>
                     </Stack>
                   )}
+
+                  <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
                 </Box>
 
                 {!hideRefundable && (
@@ -535,7 +548,19 @@ function SetFragmentReleaseTime({
               textField={{ sx: { width: '100%' } }}
             />
             <FormItem label="radio">
-              <OutlinedInput value={item.radio} onChange={e => setItemValue(idx, 'radio', e.target.value)} />
+              <OutlinedInput
+                value={item.radio}
+                onChange={e => {
+                  const val = Number(e.target.value.replace(/[^\d]/g, ''))
+                  if (val > 100) {
+                    setItemValue(idx, 'radio', '100')
+                  } else if (val < 1) {
+                    setItemValue(idx, 'radio', '')
+                  } else {
+                    setItemValue(idx, 'radio', Number(val).toFixed())
+                  }
+                }}
+              />
             </FormItem>
 
             <RemoveCircleOutlineIcon
