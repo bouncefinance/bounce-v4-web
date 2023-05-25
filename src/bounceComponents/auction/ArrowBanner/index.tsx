@@ -194,6 +194,7 @@ function Banner({ banner }: { banner: BannerType }) {
       <LazyLoadImage
         src={banner.avatar}
         alt=""
+        effect="blur"
         style={{
           position: 'absolute',
           top: 0,
