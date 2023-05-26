@@ -90,5 +90,8 @@ export const AuctionConfig: {
   },
   [ChainId.PALM]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+  },
+  [ChainId.SCROLL_ALPHA]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   }
 }
