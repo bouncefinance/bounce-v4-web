@@ -3,9 +3,10 @@ import { Box, Button, Stack } from '@mui/material'
 export interface BidOrRegretBlockProps {
   onBidButtonClick: () => void
   onRegretButtonClick: () => void
+  hideRegret?: boolean
 }
 
-const BidOrRegret = ({ onBidButtonClick }: BidOrRegretBlockProps) => {
+const BidOrRegret = ({ onBidButtonClick, onRegretButtonClick, hideRegret }: BidOrRegretBlockProps) => {
   return (
     <Box>
       <Stack spacing={16}>
@@ -13,9 +14,11 @@ const BidOrRegret = ({ onBidButtonClick }: BidOrRegretBlockProps) => {
           Place a Bid
         </Button>
 
-        {/* <Button variant="outlined" fullWidth onClick={onRegretButtonClick}>
-          Regret and Get fund back
-        </Button> */}
+        {!hideRegret && (
+          <Button variant="outlined" fullWidth onClick={onRegretButtonClick}>
+            Regret and Get fund back
+          </Button>
+        )}
       </Stack>
     </Box>
   )
