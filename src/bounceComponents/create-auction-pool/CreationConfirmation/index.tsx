@@ -55,7 +55,7 @@ export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
     case IReleaseType.Linear:
       return 'Linear unlocking'
     case IReleaseType.Fragment:
-      return 'Fragment unlocking'
+      return 'Staged unlocking'
     default:
       return 'Unset'
   }

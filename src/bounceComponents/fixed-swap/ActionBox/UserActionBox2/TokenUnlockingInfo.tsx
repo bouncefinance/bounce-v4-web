@@ -1,9 +1,11 @@
+import { Box } from '@mui/material'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { tokenReleaseTypeText } from 'bounceComponents/create-auction-pool/CreationConfirmation'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import PopperCard from 'components/PopperCard'
+import { CurrencyAmount } from 'constants/token'
 
 export default function TokenUnlockingInfo({
   releaseType,
@@ -50,7 +52,20 @@ export default function TokenUnlockingInfo({
           )}
           {releaseType === IReleaseType.Fragment && (
             <>
-              <Typography>Fragment</Typography>
+              <Typography mb={10}>Staged release</Typography>
+              <Box display="grid" gridTemplateColumns={'1fr 40px'} gap={5}>
+                {releaseData.map((item, idx) => {
+                  const ca = CurrencyAmount.ether(item.ratio || '0').multiply('100')
+                  return (
+                    <>
+                      <Typography key={idx + 'a'}>
+                        {item.startAt ? new Date(item.startAt * 1000).toLocaleString() : '-'}
+                      </Typography>
+                      <Typography key={idx}>{ca.toFixed(0)} %</Typography>
+                    </>
+                  )
+                })}
+              </Box>
             </>
           )}
         </Stack>

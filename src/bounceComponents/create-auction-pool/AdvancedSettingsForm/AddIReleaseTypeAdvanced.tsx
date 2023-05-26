@@ -338,17 +338,17 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       control={<Radio disableRipple />}
                       label={
                         <Tooltip title="Set multiple time intervals and proportions for batch token releases">
-                          <span>Fragment</span>
+                          <span>Staged</span>
                         </Tooltip>
                       }
                     />
                   </Field>
 
                   {Number(values.releaseType) === IReleaseType.Instant ? (
-                    <FormLabel>Participate in the auction to get tokens immediately</FormLabel>
+                    <LabelTitle>Participate in the auction to get tokens immediately</LabelTitle>
                   ) : Number(values.releaseType) === IReleaseType.Cliff ? (
                     <Stack spacing={6}>
-                      <FormLabel>Unlocking Start Time</FormLabel>
+                      <LabelTitle>Unlocking Start Time</LabelTitle>
                       <Field
                         component={DateTimePickerFormItem}
                         disablePast
@@ -358,9 +358,9 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       />
                     </Stack>
                   ) : Number(values.releaseType) === IReleaseType.Linear ? (
-                    <Stack spacing={6}>
+                    <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
                       <Stack spacing={6}>
-                        <FormLabel>Linear Unlocking Start Time</FormLabel>
+                        <LabelTitle>Start Time</LabelTitle>
                         <Field
                           component={DateTimePickerFormItem}
                           disablePast
@@ -371,7 +371,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       </Stack>
 
                       <Stack spacing={6}>
-                        <FormLabel>Linear Unlocking End Time</FormLabel>
+                        <LabelTitle>End Time</LabelTitle>
                         <Field
                           component={DateTimePickerFormItem}
                           disablePast
@@ -380,7 +380,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                           textField={{ sx: { width: '100%' } }}
                         />
                       </Stack>
-                    </Stack>
+                    </Box>
                   ) : Number(values.releaseType) === IReleaseType.Fragment ? (
                     <SetFragmentReleaseTime
                       minDateTime={values.endTime}
@@ -391,9 +391,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       }
                     />
                   ) : (
-                    <Stack spacing={6}>
-                      <FormLabel>No unlocking method is set; tokens can be claimed after the specified end.</FormLabel>
-                    </Stack>
+                    <LabelTitle>No unlocking method is set; tokens can be claimed after the specified end.</LabelTitle>
                   )}
 
                   <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
@@ -528,51 +526,64 @@ function SetFragmentReleaseTime({
 
   return (
     <Stack spacing={5}>
-      <Box display={'flex'} justifyContent={'space-between'}>
-        <FormLabel>You can add or delete</FormLabel>
+      <Box display="grid" gap={10} gridTemplateColumns="60fr 30fr 20px">
+        <LabelTitle>Release start time</LabelTitle>
+        <LabelTitle>Release ratio</LabelTitle>
         <ControlPointIcon onClick={addOne} sx={{ cursor: 'pointer' }} />
       </Box>
       {releaseTimes.map((item, idx) => (
         <Box key={item.key || idx}>
-          <Stack spacing={15} direction={'row'}>
-            <Field
-              component={DateTimePickerFormItem}
-              disablePast
-              name={`startAt[${item.key || idx}]`}
-              value={item.startAt}
-              onChange={(e: any) => {
-                console.log('aaaaaa', idx, item.startAt, e)
-                setItemValue(idx, 'startAt', e)
-              }}
-              minDateTime={minDateTime}
-              textField={{ sx: { width: '100%' } }}
-            />
-            <FormItem label="radio">
-              <OutlinedInput
-                value={item.radio}
-                onChange={e => {
-                  const val = Number(e.target.value.replace(/[^\d]/g, ''))
-                  if (val > 100) {
-                    setItemValue(idx, 'radio', '100')
-                  } else if (val < 1) {
-                    setItemValue(idx, 'radio', '')
-                  } else {
-                    setItemValue(idx, 'radio', Number(val).toFixed())
-                  }
+          <Box>
+            <Box display="grid" gap={10} gridTemplateColumns="60fr 30fr 20px">
+              <Field
+                component={DateTimePickerFormItem}
+                disablePast
+                name={`startAt[${item.key || idx}]`}
+                value={item.startAt}
+                onChange={(e: any) => {
+                  setItemValue(idx, 'startAt', e)
                 }}
+                minDateTime={minDateTime}
+                textField={{ sx: { width: '100%' } }}
               />
-            </FormItem>
+              <FormItem label="radio">
+                <OutlinedInput
+                  value={item.radio}
+                  onChange={e => {
+                    const val = Number(e.target.value.replace(/[^\d]/g, ''))
+                    if (val > 100) {
+                      setItemValue(idx, 'radio', '100')
+                    } else if (val < 1) {
+                      setItemValue(idx, 'radio', '')
+                    } else {
+                      setItemValue(idx, 'radio', Number(val).toFixed())
+                    }
+                  }}
+                  endAdornment={<>%</>}
+                />
+              </FormItem>
 
-            <RemoveCircleOutlineIcon
-              sx={{ opacity: idx > 0 ? 1 : 0.5, cursor: 'pointer', alignSelf: 'center' }}
-              onClick={() => idx > 0 && removeOne(idx)}
-            />
-          </Stack>
-          <FormHelperText error={!!errors?.length}>
-            {(typeof errors !== 'string' && errors?.[idx]?.startAt) || errors?.[idx]?.radio}
-          </FormHelperText>
+              <RemoveCircleOutlineIcon
+                sx={{ opacity: idx > 0 ? 1 : 0.5, cursor: 'pointer', alignSelf: 'center' }}
+                onClick={() => idx > 0 && removeOne(idx)}
+              />
+            </Box>
+            <Box display="grid" gap={10} gridTemplateColumns="60fr 30fr 20px">
+              <FormHelperText error={!!errors?.length}>
+                {typeof errors !== 'string' && errors?.[idx]?.startAt}
+              </FormHelperText>
+              <FormHelperText error={!!errors?.length}>
+                {typeof errors !== 'string' && errors?.[idx]?.radio}
+              </FormHelperText>
+              <div />
+            </Box>
+          </Box>
         </Box>
       ))}
     </Stack>
   )
+}
+
+function LabelTitle({ children }: { children: any }) {
+  return <FormLabel sx={{ fontWeight: 600, color: '#222223', mt: 10 }}>{children}</FormLabel>
 }
