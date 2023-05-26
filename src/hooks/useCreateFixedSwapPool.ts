@@ -6,7 +6,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
@@ -60,6 +60,23 @@ export function sortReleaseData(releaseData: IReleaseData[]): IReleaseData[] {
   })
 }
 
+function getFragmentRawArr(releaseData: IReleaseData[]) {
+  if (!releaseData.length) return []
+  const arr = releaseData.map(item => {
+    const _ca = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), Number(item.ratio) / 100)
+    if (!_ca) throw new Error('releaseData error')
+    return _ca
+  })
+  const all = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), '1') as CurrencyAmount
+
+  const arrEnd = arr.slice(0, -1).reduce((a, b) => {
+    return a.subtract(b)
+  }, all)
+
+  arr[arr.length - 1] = arrEnd
+  return arr
+}
+
 export function useCreateFixedSwapPool() {
   const { account, chainId } = useActiveWeb3React()
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
@@ -73,6 +90,7 @@ export function useCreateFixedSwapPool() {
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
+    const fragmentRawArr = getFragmentRawArr(values.releaseDataArr)
     const params: Params = {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       poolSize: values.poolSize,
@@ -116,6 +134,11 @@ export function useCreateFixedSwapPool() {
           ? values.releaseDataArr.map(item => ({
               startAt: item.startAt?.unix() || 0,
               endAtOrRatio: item.endAt?.unix() || 0
+            }))
+          : values.releaseType === IReleaseType.Fragment
+          ? values.releaseDataArr.map((item, idx) => ({
+              startAt: item.startAt?.unix() || 0,
+              endAtOrRatio: fragmentRawArr[idx].raw.toString()
             }))
           : values.releaseDataArr.map(item => ({
               startAt: item.startAt?.unix() || 0,

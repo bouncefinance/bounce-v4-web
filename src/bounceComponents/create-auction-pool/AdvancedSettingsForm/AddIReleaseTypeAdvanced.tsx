@@ -184,7 +184,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
     }),
     fragmentReleaseSize: Yup.string().when('releaseType', {
       is: (val: any) => Number(val) === IReleaseType.Fragment,
-      then: Yup.string().test('TEST_FRAGMENT_TOTAL', 'The total release ratio should be 100%', (_, context) => {
+      then: Yup.string().test('TEST_FRAGMENT_TOTAL', 'Release ratio must add up to 100%', (_, context) => {
         return (
           context.parent.fragmentReleaseTimes
             .map((item: { radio: string }) => item.radio)
