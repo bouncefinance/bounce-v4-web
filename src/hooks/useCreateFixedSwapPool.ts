@@ -3,7 +3,7 @@ import { GetPoolCreationSignatureParams, GetWhitelistMerkleTreeRootParams, PoolT
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { NULL_BYTES } from '../constants'
 import { useActiveWeb3React } from 'hooks'
-import { useNewFixedSwapERC20Contract } from 'hooks/useContract'
+import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { Currency, CurrencyAmount } from 'constants/token'
@@ -79,7 +79,7 @@ function getFragmentRawArr(releaseData: IReleaseData[]) {
 
 export function useCreateFixedSwapPool() {
   const { account, chainId } = useActiveWeb3React()
-  const fixedSwapERC20Contract = useNewFixedSwapERC20Contract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()

@@ -12,7 +12,7 @@ import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
-import { FIXED_SWAP_ERC20_ADDRESSES, OLD_FIXED_SWAP_ERC20_ADDRESSES } from '../../constants'
+// import { FIXED_SWAP_ERC20_ADDRESSES, OLD_FIXED_SWAP_ERC20_ADDRESSES } from '../../constants'
 
 export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
   const { poolId, chainShortName } = useQueryParams()
@@ -62,25 +62,22 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
   )
 }
 
-const getCurrentFixedSwapERC20Contract = (poolId?: number | string, chainId?: ChainId) => {
-  if (!poolId || !chainId) return undefined
+// const getCurrentFixedSwapERC20Contract = (poolId?: number | string, chainId?: ChainId) => {
+//   if (!poolId || !chainId) return undefined
 
-  poolId = Number(poolId)
-  const old = OLD_FIXED_SWAP_ERC20_ADDRESSES[chainId]
-  if (old && old.maxId >= poolId) {
-    return old.address
-  }
-  return FIXED_SWAP_ERC20_ADDRESSES[chainId]
-}
+//   poolId = Number(poolId)
+//   const old = OLD_FIXED_SWAP_ERC20_ADDRESSES[chainId]
+//   if (old && old.maxId >= poolId) {
+//     return old.address
+//   }
+//   return FIXED_SWAP_ERC20_ADDRESSES[chainId]
+// }
 
 const usePoolInfo = () => {
   const { poolId } = useQueryParams()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo()
 
-  const currentBounceContractAddress = useMemo(
-    () => getCurrentFixedSwapERC20Contract(poolInfo?.poolId, poolInfo?.ethChainId),
-    [poolInfo?.ethChainId, poolInfo?.poolId]
-  )
+  const currentBounceContractAddress = useMemo(() => poolInfo?.contract, [poolInfo?.contract])
   const fixedSwapERC20Contract = useFixedSwapERC20Contract(currentBounceContractAddress)
   const { account } = useActiveWeb3React()
   const amountSwap0PRes = useSingleCallResult(
