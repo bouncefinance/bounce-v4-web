@@ -179,6 +179,7 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.SEPOLIA]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
   [ChainId.AUROEA]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
   [ChainId.PALM]: ''
 }
 
@@ -209,6 +210,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.SEPOLIA]: '',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: ''
 }
 // REACT_APP_RANDOM_SELECTION_ADDRESS
@@ -239,6 +241,7 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.SEPOLIA]: process.env.REACT_APP_RANDOM_SELECTION_ADDRESS || '',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: ''
 }
 
@@ -269,5 +272,6 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.SEPOLIA]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: ''
 }
