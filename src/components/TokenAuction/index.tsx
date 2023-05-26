@@ -570,8 +570,8 @@ const TokenAuction: React.FC = () => {
                 <>
                   {nftLoading && (
                     <Grid container spacing={18}>
-                      {Array.from(new Array(6)).map((_, index) => (
-                        <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={index}>
+                      {Array.from(new Array(4)).map((_, index) => (
+                        <Grid item xs={3} key={index}>
                           <Box>
                             <Skeleton
                               variant="rounded"
@@ -606,8 +606,8 @@ const TokenAuction: React.FC = () => {
                 <>
                   {loading ? (
                     <Grid container spacing={18}>
-                      {Array.from(new Array(8)).map((lodingItem, index) => (
-                        <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
+                      {Array.from(new Array(4)).map((lodingItem, index) => (
+                        <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
                           <Box>
                             <Skeleton
                               variant="rounded"

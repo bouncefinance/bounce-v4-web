@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, MenuItem, Select, styled } from '@mui/material'
+import { Box, MenuItem, Select, styled, Skeleton } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
@@ -170,7 +170,41 @@ export function AuctionRow(props: any): ReactJSXElement[] {
     <Status key={3} status={status} />
   ]
 }
-
+const SkeletonBox = () => {
+  return (
+    <Box sx={{ display: 'flex' }}>
+      {new Array(2).fill(0).map((j, k) => (
+        <Box
+          key={k}
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            width: '100%',
+            height: '516px',
+            padding: '20px',
+            background: 'white',
+            overflow: 'hidden'
+          }}
+        >
+          <Skeleton
+            component={'div'}
+            variant="rounded"
+            sx={{ width: '100%', height: '36px', borderRadius: '8px' }}
+          ></Skeleton>
+          {new Array(5).fill(0).map((i, v) => (
+            <Skeleton
+              component={'div'}
+              variant="rounded"
+              sx={{ width: '100%', height: '40px', borderRadius: '8px' }}
+              key={v}
+            ></Skeleton>
+          ))}
+        </Box>
+      ))}
+    </Box>
+  )
+}
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
   const [currentTab, setTab] = useState(Tabs[0])
@@ -190,7 +224,6 @@ export const AuctionRankCard: React.FC = () => {
     },
     { refreshDeps: [action, chainFilter] }
   )
-
   return (
     <Box
       sx={{
@@ -233,7 +266,7 @@ export const AuctionRankCard: React.FC = () => {
           ))}
         </Select>
       </CenterRow>
-      {data && Array.isArray(data.list) && data.list.length > 0 && (
+      {data && Array.isArray(data.list) && data.list.length > 0 ? (
         <Box
           sx={{
             padding: '12px',
@@ -274,7 +307,10 @@ export const AuctionRankCard: React.FC = () => {
             }
           />
         </Box>
+      ) : (
+        <SkeletonBox />
       )}
+
       {data?.list && data?.list?.length === 0 && (
         <Box
           sx={{
