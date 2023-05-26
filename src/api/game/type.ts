@@ -2,8 +2,8 @@ interface RankItem {
   address: string
   avatar: string
   name: string
-  totalCreated: string
-  totalPart: number
+  score: string
+  rank: number
   userId?: string
 }
 export interface IRankResponse {
@@ -14,8 +14,7 @@ export interface IAllRankParams {
   payableId: number
 }
 export interface IScoreParams {
+  data: string
   address: string
-  message: string
-  payableId: number
-  signature: string
+  signTimeStamp: number
 }

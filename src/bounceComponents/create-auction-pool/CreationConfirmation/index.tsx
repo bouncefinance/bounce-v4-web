@@ -237,7 +237,7 @@ const CreatePoolButton = () => {
         loading: true
       }
     }
-    if (!auctionAccountBalance || !auctionPoolSizeAmount || !auctionAccountBalance.greaterThan(auctionPoolSizeAmount)) {
+    if (!auctionAccountBalance || !auctionPoolSizeAmount || auctionPoolSizeAmount.greaterThan(auctionAccountBalance)) {
       return {
         text: 'Insufficient Balance',
         disabled: true
@@ -349,7 +349,7 @@ const CreationConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Token Contact address">
+                <ConfirmationInfoItem title="Token Contract address">
                   <Typography>{shortenAddress(values.tokenFrom.address)}</Typography>
                 </ConfirmationInfoItem>
 

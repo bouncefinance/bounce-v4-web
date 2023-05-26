@@ -57,14 +57,16 @@ const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Reversed: RegretTypography
 }
 
-const ActionHistory = () => {
+const ActionHistory = ({ noTitle = false, children }: { noTitle?: boolean; children?: React.ReactNode }) => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory()
 
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
-      <Typography variant="h2" sx={{ ml: 12 }}>
-        Auction History
-      </Typography>
+      {!noTitle && (
+        <Typography variant="h2" sx={{ ml: 12 }}>
+          Auction History
+        </Typography>
+      )}
 
       {data && data?.list.length > 0 && !isGettingPoolHistory ? (
         <TableContainer sx={{ mt: 20 }}>
@@ -101,9 +103,7 @@ const ActionHistory = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Box sx={{ width: '100%' }}>
-          <NoData />
-        </Box>
+        <Box sx={{ width: '100%' }}>{children ? children : <NoData />}</Box>
       )}
     </Box>
   )

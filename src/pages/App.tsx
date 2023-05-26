@@ -3,6 +3,9 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
+import BigNumber from 'bignumber.js'
+
+BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
 import Web3ReactManager from '../components/essential/Web3ReactManager'
 // import WarningModal from '../components/Modal/WarningModal'
 // import ComingSoon from './ComingSoon'
@@ -63,8 +66,11 @@ import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
-import { ProjectIntro } from './projectIntro'
+import { BladeDao } from './projectIntro'
 import { Game } from './game'
+import { ProjectInfo } from './projectIntro/projectInfo'
+import { Equilibria } from './game/equilibria'
+import { Rank } from './launchpad/rank'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -116,7 +122,12 @@ export default function App() {
                     <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
                     <Route path={routes.launchpad.index} element={<Launchpad />} />
-                    <Route path={routes.launchpad.projectIntro} element={<ProjectIntro />} />
+                    <Route
+                      path={routes.launchpad.bladeDao}
+                      element={<Navigate to={{ pathname: routes.launchpad.bladeDao + `/zksyncera/13` }} replace />}
+                    />
+                    <Route path={routes.launchpad.bladeDao} element={<BladeDao />} />
+                    <Route path={routes.launchpad.bladeDaoInfo} element={<ProjectInfo />} />
 
                     <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
                     <Route path={routes.adsAuction.index} element={<AdsAuction />} />
@@ -143,9 +154,24 @@ export default function App() {
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
+                    <Route
+                      path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
+                      element={<DigitalAssetsOffering />}
+                    />
 
-                    <Route path={routes.game.index} element={<Game />} />
-
+                    {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
+                    <Route
+                      path={routes.game.bladeDaoIndex}
+                      element={<Navigate to={{ pathname: routes.game.bladeDaoIndex + `/zksyncera/6` }} replace />}
+                    />
+                    <Route
+                      path={routes.game.equilibriaIndex}
+                      element={<Navigate to={{ pathname: routes.game.equilibriaIndex + `/ARBI/15` }} replace />}
+                    />
+                    <Route path={routes.game.bladeDaoRank} element={<Rank />} />
+                    {/* <Route path={routes.game.equilibriaIndex} element={<Equilibria />} /> */}
+                    <Route path={routes.game.equilibriaDetail} element={<Equilibria />} />
+                    <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>
@@ -155,7 +181,7 @@ export default function App() {
             </ContentWrapper>
           </AppWrapper>
         </NiceModalProvider>
-      </ModalProvider>{' '}
+      </ModalProvider>
     </Suspense>
   )
 }

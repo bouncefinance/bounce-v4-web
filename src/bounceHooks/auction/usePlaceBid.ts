@@ -15,7 +15,7 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
   const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_swap', poolInfo.poolId)
 
   const isToken1Native = poolInfo.currencySwappedTotal1.currency.isNative
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract(poolInfo.currentBounceContractAddress)
 
   const swapCallback = useCallback(
     async (

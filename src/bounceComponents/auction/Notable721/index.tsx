@@ -128,7 +128,7 @@ export const Notable721 = (props: Notable721Props) => {
             flexFlow: 'row nowrap',
             justifyContent: 'center',
             alignItems: 'center',
-            margin: '40px 0 160px'
+            margin: '40px 0 0'
           }}
         >
           <Button

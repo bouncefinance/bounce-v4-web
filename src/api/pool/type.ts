@@ -10,7 +10,8 @@ export enum PoolType {
   'Lottery' = 3,
   'SealedBid' = 4,
   'fixedSwapNft' = 5,
-  ENGLISH_AUCTION_NFT = 6
+  ENGLISH_AUCTION_NFT = 6,
+  'PlayableAuction' = 100
 }
 
 export function getTextFromPoolType(type: PoolType) {
@@ -27,6 +28,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Lottery'
     case PoolType.SealedBid:
       return 'Sealed Bid'
+    case PoolType.PlayableAuction:
+      return 'Playable Auction'
   }
 }
 
@@ -172,6 +175,7 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   currencySurplusTotal0: CurrencyAmount
   currencySwappedTotal1: CurrencyAmount
   ethChainId: ChainId
+  currentBounceContractAddress: string | undefined
   participant: {
     address?: string
     claimed?: boolean

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Common } from './index'
 import { Avatar, Box, Grid, Stack, styled, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
@@ -7,14 +7,15 @@ import { Body02, Body03, H5, H6 } from '../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { IPrivatePadProp } from 'pages/launchpad'
 import { useNavigate } from 'react-router-dom'
+import { PoolStatus } from 'api/pool/type'
 
 export function CardDesc({ title, content }: { title: string; content: string | React.ReactElement }) {
   return (
-    <Box sx={{ color: 'white', gap: 4 }}>
+    <Box sx={{ gap: 4 }}>
       <Typography fontSize={13} lineHeight={'18px'}>
         {title}
       </Typography>
-      <H6 sx={{ color: 'white' }}>{content}</H6>
+      <H6>{content}</H6>
     </Box>
   )
 }
@@ -140,6 +141,7 @@ export function SocialMedia({ data }: { data: IPrivatePadProp }) {
       <Row
         mt={24}
         gap={10}
+        onClick={e => e.stopPropagation()}
         sx={{
           '& img, & svg': {
             transition: '0.5s',
@@ -157,12 +159,27 @@ export function SocialMedia({ data }: { data: IPrivatePadProp }) {
 
 export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadProp }> = props => {
   const navigator = useNavigate()
+  const { start, end } = props.data.liveTimeStamp
+
+  const status = useMemo(() => {
+    const cur = new Date().valueOf()
+    if (cur < start) return PoolStatus.Upcoming
+    if (cur >= start && cur <= end) return PoolStatus.Live
+    return PoolStatus.Closed
+  }, [end, start])
+
   return (
     <Common
       img={props.data.img}
+      poolTypeName={props.data.poolTypeName}
+      startAndEnd={props.data.showStartEnd ? props.data.liveTimeStamp : undefined}
       onClick={() => {
-        if (props.data.link) {
-          navigator(props.data.link)
+        if (status === PoolStatus.Upcoming && props.data.upcomingLink) {
+          navigator(props.data.upcomingLink)
+        } else {
+          if (props.data.liveLink) {
+            navigator(props.data.liveLink)
+          }
         }
       }}
       child={
@@ -170,7 +187,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
           <CenterRow justifyContent={'space-between'}>
             <Row gap={16}>
               <Avatar sx={{ width: 60, height: 60 }} src={props.data.avatar} />
-              <Box sx={{ color: 'white', display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography fontSize={28} lineHeight={'36px'}>
                   {props.data.title}
                 </Typography>
@@ -179,7 +196,13 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
                 </Typography> */}
               </Box>
             </Row>
-            <PoolStatusBox status={props.data.status} claimAt={0} closeTime={1685376000} openTime={1685376000} />
+            <PoolStatusBox
+              status={status}
+              claimAt={0}
+              hideClaim={true}
+              closeTime={end / 1000}
+              openTime={start / 1000}
+            />
           </CenterRow>
           {props.child}
         </Box>

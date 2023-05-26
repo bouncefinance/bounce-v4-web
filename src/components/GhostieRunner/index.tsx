@@ -42,7 +42,9 @@ export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: nu
       {hidden || (account && !token) ? (
         <Box height={600} />
       ) : (
-        <Unity unityProvider={unityProvider} style={{ width: 1200, height: 748 }} />
+        <Box padding={'0 50px'}>
+          <Unity unityProvider={unityProvider} style={{ width: 1100, height: 550 }} />
+        </Box>
       )}
     </Box>
   )

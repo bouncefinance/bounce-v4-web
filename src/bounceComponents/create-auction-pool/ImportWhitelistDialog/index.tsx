@@ -26,22 +26,21 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
   }
 
   const validationSchema = Yup.object({
-    whitelist: Yup.string()
-      .test(
-        'VALID_ADDRESS_ARRAY',
-        'Please make sure all addresses are valid',
-        addressInput =>
-          !addressInput ||
-          addressInput
-            .trim()
-            .split(/[\n,]/g)
-            .every(input => isAddress(input))
-      )
-      .test(
-        'NOT_GRATER_THAN_300_ADDRESSES',
-        'Only allow addresses up to 300',
-        addressInput => !addressInput || addressInput.split(/[\n,]/g).length <= 300
-      )
+    whitelist: Yup.string().test(
+      'VALID_ADDRESS_ARRAY',
+      'Please make sure all addresses are valid',
+      addressInput =>
+        !addressInput ||
+        addressInput
+          .trim()
+          .split(/[\n,]/g)
+          .every(input => isAddress(input))
+    )
+    // .test(
+    //   'NOT_GRATER_THAN_300_ADDRESSES',
+    //   'Only allow addresses up to 300',
+    //   addressInput => !addressInput || addressInput.split(/[\n,]/g).length <= 300
+    // )
   })
 
   const initialValues: FormValues = {
@@ -50,7 +49,7 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
 
   return (
     <Dialog title="Import whitelist" {...muiDialogV5(modal)} onClose={handleReject}>
-      <Typography variant="h4">Enter one address on each line. You can enter up to 300 addresses.</Typography>
+      <Typography variant="h4">Enter one address on each line. </Typography>
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}

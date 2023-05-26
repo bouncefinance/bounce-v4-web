@@ -4,13 +4,15 @@ import 'swiper/swiper-bundle.css'
 import { Box, styled, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import { timestampToCountdown } from '../../../utils/TimeUtil'
+// import { timestampToCountdown } from '../../../utils/TimeUtil'
 import { useState } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
-import EthIcon from 'assets/imgs/auction/eth-icon.svg'
+// import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 import { useNavigate } from 'react-router-dom'
+import { useCountDown } from 'ahooks'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -65,7 +67,7 @@ function ArrowBanner({ type }: { type?: string }) {
       >
         {data?.list?.map((item: BannerType, index: number) => (
           <SwiperSlide key={index}>
-            <Banner banner={item} />
+            <Banner key={index} banner={item} />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -87,6 +89,7 @@ const ArrowBg = styled(Box)`
   height: 60px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 8px;
+
   &:hover {
     cursor: pointer;
   }
@@ -153,20 +156,22 @@ const Shadow = styled(Box)`
   border-radius: 0 0 30px 30px;
 `
 
-const ChainBg = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(18, 18, 18, 0.2);
-  backdrop-filter: blur(2px);
-  border-radius: 100px;
-  color: white;
-  font-size: 13px;
-  line-height: 140%;
-`
+// const ChainBg = styled(Box)`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   background: rgba(18, 18, 18, 0.2);
+//   backdrop-filter: blur(2px);
+//   border-radius: 100px;
+//   color: white;
+//   font-size: 13px;
+//   line-height: 140%;
+// `
 
 function Banner({ banner }: { banner: BannerType }) {
-  const countDown = timestampToCountdown(banner.openAt)
+  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
+    targetDate: banner.openAt * 1000
+  })
   const navigate = useNavigate()
   const handleClick = (url: string) => {
     if (!url) return
@@ -186,9 +191,10 @@ function Banner({ banner }: { banner: BannerType }) {
       }}
       onClick={() => handleClick(banner.url || '')}
     >
-      <img
+      <LazyLoadImage
         src={banner.avatar}
         alt=""
+        effect="blur"
         style={{
           position: 'absolute',
           top: 0,
@@ -207,12 +213,12 @@ function Banner({ banner }: { banner: BannerType }) {
             left: '40px'
           }}
         >
-          <Box display={'flex'} gap={4}>
+          {/* <Box display={'flex'} gap={4}>
             <ChainBg width={32} height={32}>
               <img src={EthIcon} />
             </ChainBg>
             <ChainBg padding={'0 12px'}>Coming soon</ChainBg>
-          </Box>
+          </Box> */}
           <BannerH3>{banner.name}</BannerH3>
           <BannerH6>{banner.types}</BannerH6>
         </Box>
@@ -227,9 +233,16 @@ function Banner({ banner }: { banner: BannerType }) {
             right: '38px'
           }}
         >
-          {countDown.map((time, idx) => (
-            <CountDownBg key={idx}>{time}</CountDownBg>
-          ))}
+          {countdown > 0 ? (
+            <>
+              <CountDownBg key={'banner0'}>{days}D</CountDownBg>
+              <CountDownBg key={'banner1'}>{hours}H</CountDownBg>
+              <CountDownBg key={'banner2'}>{minutes}M</CountDownBg>
+              <CountDownBg key={'banner3'}>{seconds}S</CountDownBg>
+            </>
+          ) : (
+            <></>
+          )}
         </Box>
       )}
     </Box>

@@ -1,17 +1,15 @@
-import { Button, IconButton, OutlinedInput, Typography } from '@mui/material'
+import { Button, OutlinedInput, Typography } from '@mui/material'
 import { Box, Stack } from '@mui/system'
 import * as yup from 'yup'
 import { Form, Formik } from 'formik'
 import React, { useState } from 'react'
 import { useCountDown, useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
-import { ReactComponent as EmailSVG } from 'assets/imgs/profile/links/email40.svg'
 import { changeEmail, verifyCode } from 'api/user'
 import { IChangeEmailParams } from 'api/user/type'
 import { isEmail } from 'utils'
 import { fetchUserInfo } from 'state/users/reducer'
 import { useDispatch } from 'react-redux'
-import { Cancel } from '@mui/icons-material'
 import FormItem from 'bounceComponents/common/FormItem'
 import { LoadingButton } from '@mui/lab'
 import { ReactComponent as SuccessSvg } from 'assets/svg/success_small.svg'
@@ -23,7 +21,7 @@ export type IEditInfoProps = {
 }
 
 const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmailChange }) => {
-  const [mode, setMode] = useState<'unset' | 'set' | 'input'>(!!userInfoEmail ? 'set' : 'unset')
+  const [mode, setMode] = useState<'unset' | 'set' | 'input1' | 'input2'>(!!userInfoEmail ? 'set' : 'unset')
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false)
   const [btnDisable, setBtnDisable] = useState<boolean>(true)
   const [showCountDown, setShowCountDown] = useState<number>()
@@ -42,7 +40,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmail
       .required('Please enter your email address')
       .email('Incorrect email address')
       .test('CHECK_EMAIL', 'Email must be inconsistent', val => {
-        return val !== userInfoEmail
+        return mode === 'set' || val !== userInfoEmail
       }),
     code: yup
       .string()
@@ -105,88 +103,83 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmail
   return (
     <Box mt={40}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-        {({ values, setFieldValue }) => (
+        {({ values, setFieldValue, errors }) => (
           <Box>
             <Stack
               component={Form}
               sx={{
-                mb: 10,
-                borderBottom: '1px solid rgba(18, 18, 18, 0.2)'
+                mb: 10
               }}
             >
-              <Box display={'flex'} height={80} alignItems={'center'} justifyContent={'space-between'}>
-                <Box display={'flex'} alignItems="center">
-                  <EmailSVG />
-                  <Typography variant="body1" color={'var(--ps-text-3)'} ml={10}>
-                    Email
-                  </Typography>
-                </Box>
-                <>
-                  <Box display={'flex'} alignItems={'center'}>
-                    {mode === 'input' && (
-                      <>
-                        <FormItem name="email" required>
-                          <OutlinedInput
-                            value={values.email}
-                            onChange={e => setFieldValue('email', e.target.value)}
-                            sx={{
-                              width: 160,
-                              height: 34,
-                              background: '#F6F7F3',
-                              borderRadius: '100px'
-                            }}
-                          />
-                        </FormItem>
-                        {countdown === 0 ? (
-                          <Box
-                            sx={{ display: 'flex', cursor: 'pointer', mx: 15 }}
-                            onClick={() => {
-                              if (!values.email || !isEmail(values.email)) {
-                                toast('Incorrect email address')
-                                return
-                              }
-                              if (values.email === userInfoEmail) {
-                                toast('Email must be inconsistent')
-                                return
-                              }
-                              sendVerifyCode(values.email)
-                              setShowCountDown(Date.now() + 60000)
-                            }}
-                          >
-                            <Typography variant="body1" color={'var(--ps-text-3)'}>
-                              Verification code sent
-                            </Typography>
-                          </Box>
-                        ) : (
-                          <Typography mx={15} variant="body1" color={'var(--ps-gray-900)'}>
-                            Verification code sent ({Math.round(countdown / 1000)}s)
-                          </Typography>
-                        )}
-                      </>
-                    )}
-                    {mode === 'set' && <Typography>{userInfoEmail}</Typography>}
-                    {mode !== 'unset' && (
-                      <IconButton
-                        onClick={() => {
-                          setMode(mode === 'input' ? (userInfoEmail ? 'set' : 'unset') : 'input')
+              <Typography mb={8} className="PSans" fontWeight={600} fontSize={20} color={'var(--ps-black)'}>
+                Email
+              </Typography>
+
+              <FormItem name="email" required label="Email" style={{ marginBottom: 16 }}>
+                <OutlinedInput
+                  value={values.email}
+                  onChange={e => setFieldValue('email', e.target.value)}
+                  readOnly={mode === 'set'}
+                  sx={{
+                    height: 54,
+                    background: '#F6F7F3'
+                  }}
+                  endAdornment={
+                    mode === 'set' ? (
+                      <Box display={'flex'} alignItems={'center'}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="12" cy="12" r="12" fill="#20994B" />
+                          <path d="M7.5 12.7181L10.6702 15.5L16.5 8.5" stroke="white" strokeLinecap="round" />
+                        </svg>
+                        <Typography
+                          ml={5}
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            setMode('input1')
+                            setFieldValue('email', '')
+                          }}
+                        >
+                          Replace
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Button
+                        sx={{
+                          minWidth: 'max-content',
+                          height: 30,
+                          color:
+                            errors.email || !values.email || showCountDown ? 'var(--ps-text-2)' : 'var(--ps-black)',
+                          fontWeight: 600,
+                          fontSize: 14,
+                          '&:hover': {
+                            border: 'none',
+                            backgroundColor: 'transparent'
+                          }
                         }}
+                        onClick={() => {
+                          if (!values.email || !isEmail(values.email)) {
+                            toast('Incorrect email address')
+                            return
+                          }
+                          if (values.email === userInfoEmail) {
+                            toast('Email must be inconsistent')
+                            return
+                          }
+                          sendVerifyCode(values.email)
+                          setShowCountDown(Date.now() + 60000)
+                          setMode('input2')
+                        }}
+                        variant="text"
                       >
-                        <Cancel sx={{ color: '#000' }} />
-                      </IconButton>
-                    )}
-                  </Box>
-                  {mode === 'unset' && (
-                    <Button
-                      sx={{ width: 102, height: 32, backgroundColor: 'var(--ps-yellow-1)' }}
-                      onClick={() => setMode('input')}
-                    >
-                      Connect
-                    </Button>
-                  )}
-                </>
-              </Box>
-              {mode === 'input' && (
-                <FormItem name="code" required style={{ marginBottom: 30 }}>
+                        {showCountDown ? `Verification code sent (${Math.round(countdown / 1000)}s)` : 'Send A Code'}
+                      </Button>
+                    )
+                  }
+                />
+              </FormItem>
+
+              {mode === 'input2' && (
+                <FormItem name="code" required>
                   <OutlinedInput
                     placeholder="Email verification code"
                     endAdornment={

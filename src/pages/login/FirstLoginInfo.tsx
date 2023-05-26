@@ -5,13 +5,14 @@ import { LoginLayout } from '.'
 import Box from '@mui/material/Box'
 import { Button, Stack, Typography, styled } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 import EditInfo from 'bounceComponents/profile/account/components/EditInfo'
 import LoginOpton from 'bounceComponents/profile/account/components/LoginOption'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import FirstProfileOverview from 'bounceComponents/account/FirstProfileOverview'
 import { useQueryParams } from 'hooks/useQueryParams'
+import { routes } from 'constants/routes'
 
 const CurStepper = styled(Box)({
   display: 'grid',
@@ -36,6 +37,14 @@ const steps = ['Complete Account', 'Complete Profile']
 
 export default function FirstLoginInfo() {
   const [activeStep, setActiveStep] = useState(1)
+  const { token } = useUserInfo()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!token) {
+      navigate(routes.market.index, { replace: true })
+    }
+  }, [navigate, token])
 
   return (
     <section>

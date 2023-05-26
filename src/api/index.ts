@@ -7,7 +7,9 @@ const request = (url: string, options?: any) => {
   // TODO: add request/response interceptors
   return fetch(url, options).then(async response => {
     if (response.status === 401) {
-      toast.error('Login has expired, please login again.')
+      toast.error('Login has expired, please login again.', {
+        toastId: 'loginHasExpired'
+      })
       store.dispatch(removeLoginInfo())
       store.dispatch(removeUserInfo())
       // location.href = '/login'

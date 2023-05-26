@@ -19,7 +19,7 @@ export interface PlaceBidButtonProps {
 }
 
 const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidButtonProps): JSX.Element => {
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract(poolInfo.currentBounceContractAddress)
 
   // console.log('>>>>>> isUserInWhitelist: ', isUserInWhitelist)
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, bidAmount)

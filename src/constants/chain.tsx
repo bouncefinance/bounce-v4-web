@@ -2,6 +2,7 @@ import BigNumberjs from 'bignumber.js'
 import EthUrl from 'assets/images/eth_logo.png'
 import BSCUrl from 'assets/svg/binance.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
+import ZkSyncSrc from '../assets/images/zksync_logo.png'
 
 export function numberToHex(number: number) {
   return '0x' + new BigNumberjs(number).toString(16)
@@ -201,7 +202,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: 'https://zksync.io/favicon-32x32.png'
+      logo: ZkSyncSrc
     },
     rpcUrls: ['https://mainnet.era.zksync.io'],
     blockExplorerUrls: ['https://explorer.zksync.io/']
@@ -214,7 +215,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'ETH',
       symbol: 'ETH',
       decimals: 18,
-      logo: 'https://zksync.io/favicon-32x32.png'
+      logo: ZkSyncSrc
     },
     rpcUrls: ['https://zksync2-testnet.zksync.dev'],
     blockExplorerUrls: ['https://goerli.explorer.zksync.io/']

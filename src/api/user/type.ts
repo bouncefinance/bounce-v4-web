@@ -3,6 +3,7 @@ import { PoolType } from '../pool/type'
 import { VerifyStatus } from '../profile/type'
 import { IFile } from 'bounceComponents/common/Uploader'
 import { Post } from '../type'
+import { ChainId } from 'constants/chain'
 
 export enum ACCOUNT_TYPE {
   EMAIL = 1,
@@ -43,7 +44,7 @@ export interface IAddressRegisterLoginParams {
 export interface ChainInfoOpt {
   chainName: string
   chain_type: number
-  ethChainId: number
+  ethChainId: ChainId
   id: number
   shortName: string
 }

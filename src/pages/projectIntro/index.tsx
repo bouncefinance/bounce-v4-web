@@ -12,8 +12,30 @@ import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
 import { useNavigate } from 'react-router-dom'
+import { useMemo } from 'react'
+import { useActiveWeb3React } from 'hooks'
+import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
+import { ReactComponent as InviteSvg } from 'assets/svg/invite.svg'
+import { ReactComponent as InviteBlackSvg } from 'assets/svg/invite-black.svg'
+import { ReactComponent as CopyBlackSvg } from 'assets/svg/copy-black.svg'
+import { ReactComponent as ColseSvg } from 'assets/imgs/common/closeIcon.svg'
+import ReactCopyToClipboard from 'react-copy-to-clipboard'
+import { toast } from 'react-toastify'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import LikeUnlike from 'bounceComponents/common/LikeUnlike'
+import { LIKE_OBJ } from 'api/idea/type'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import Favorite from 'bounceComponents/common/Favorite'
+import { useUserInfo } from 'state/users/hooks'
+import { routes } from 'constants/routes'
+import { PoolStatus } from 'api/pool/type'
+import { useRequest } from 'ahooks'
+import { getInviteList } from 'api/bladeDao/index'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
-const GrayButton = styled(Button)`
+export const GrayButton = styled(Button)`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -50,11 +72,31 @@ const Upcoming = styled(H6)`
   width: min-content;
   padding: 4px 12px;
   height: 32px;
-  margin-right: 40px;
+  margin-right: 10px;
   background: rgba(18, 18, 18, 0.2);
   backdrop-filter: blur(2px);
   border-radius: 100px;
 `
+export const LineStyleBtn = styled(Box)({
+  color: 'white',
+  width: 107,
+  height: 32,
+  lineHeight: '32px',
+  textAlign: 'center',
+  background: 'transparent',
+  border: '1px solid white',
+  borderRadius: '32px',
+  cursor: 'pointer',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  '&:hover': {
+    background: 'var(--ps-gray-900)',
+    border: '1px solid var(--ps-gray-900)',
+    color: '#fff'
+  }
+})
 const GrayBg = styled(Box)`
   display: flex;
   flex-direction: row;
@@ -68,13 +110,22 @@ const GrayBg = styled(Box)`
   backdrop-filter: blur(5px);
   border-radius: 100px;
 `
-
 const VerticalDivider = styled(Box)`
   width: 1px;
   height: 32px;
   border: 1px solid rgba(255, 255, 255, 0.6);
 `
-
+const TabBg = styled(H4)`
+  padding: 24px;
+  min-width: 320px;
+  height: 76px;
+  border-radius: 20px 20px 0 0;
+  color: #959595;
+  &.select {
+    background: #ffffff;
+    color: #121212;
+  }
+`
 function Price({ title, value }: { title: string; value: string }) {
   return (
     <Box gap={8} sx={{ color: 'white' }}>
@@ -84,8 +135,9 @@ function Price({ title, value }: { title: string; value: string }) {
   )
 }
 
-export function ProjectIntro() {
+export function BladeDao() {
   const item = PrivatePadList[0]
+  useBladeDaoSharer()
   return (
     <Box>
       <ProjectHead item={item} />
@@ -94,8 +146,312 @@ export function ProjectIntro() {
     </Box>
   )
 }
+const RankList = styled(Box)(() => ({
+  position: 'relative',
+  '.row': {
+    width: '100%',
+    height: 53,
+    borderRadius: 8,
+    cursor: 'pointer',
+    display: 'flex',
+    flexFlow: 'row nowrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 16px 0 24px'
+  },
+  '.row:nth-child(odd)': {
+    background: '#F6F6F3'
+  }
+}))
+export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) => {
+  const { data: inviteData, loading } = useRequest(async () => {
+    const resp = await getInviteList({
+      poolId: '6,13',
+      side: 'BladeDao'
+    })
+    return resp?.data?.list
+  })
+  return (
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9
+      }}
+    >
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          background: '#000000',
+          opacity: 0.7
+        }}
+        onClick={() => {
+          handleClose && handleClose()
+        }}
+      ></Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate3D(-50%, -50%, 0)',
+          width: 800,
+          background: '#fff',
+          borderRadius: 20,
+          padding: '48px'
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: `'Public Sans'`,
+            fontWeight: 600,
+            fontSize: 28,
+            textAlign: 'left',
+            marginBottom: 15
+          }}
+        >
+          InvitationStatus
+        </Typography>
+        <ColseSvg
+          style={{
+            position: 'absolute',
+            top: 30,
+            right: 30,
+            width: 40,
+            height: 40,
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            handleClose && handleClose()
+          }}
+        />
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexFlow: 'row nowarap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0 24px',
+            height: 50,
+            lineHeight: '50px',
+            borderBottom: '1px solid var(--ps-gray-20)'
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 13,
+              color: 'var(--ps-gray-600)'
+            }}
+          >
+            Address
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              fontWeight: 400,
+              fontSize: 13,
+              color: 'var(--ps-gray-600)'
+            }}
+          >
+            Status
+          </Typography>
+        </Box>
+        {loading ? (
+          <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <BounceAnime />
+          </Box>
+        ) : Array.isArray(inviteData) && inviteData.length > 0 ? (
+          <RankList
+            sx={{
+              width: '100%',
+              maxHeight: 420,
+              overflowY: 'auto'
+            }}
+          >
+            {inviteData.map((item, index) => {
+              return (
+                <Box className={'row'} key={index}>
+                  <Typography
+                    component={'span'}
+                    sx={{
+                      fontFamily: `'Inter'`,
+                      fontWeight: 400,
+                      fontSize: 14,
+                      color: 'var(--ps-text-3)'
+                    }}
+                  >
+                    {item?.account || '--'}
+                  </Typography>
+                  <Typography
+                    component={'span'}
+                    sx={{
+                      fontFamily: `'Public Sans'`,
+                      fontWeight: 600,
+                      fontSize: 14,
+                      color: item.isValid ? 'var(--ps-green-1)' : '#FFC700'
+                    }}
+                  >
+                    {item?.isValid ? 'Valid' : 'Waiting'}
+                  </Typography>
+                </Box>
+              )
+            })}
+          </RankList>
+        ) : (
+          <EmptyData />
+        )}
+      </Box>
+    </Box>
+  )
+}
+export function ShareBtn({ style, isDefaultBlackIcon }: { style?: React.CSSProperties; isDefaultBlackIcon?: boolean }) {
+  const { account } = useActiveWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
+  const copyValue = useMemo(() => {
+    if (!account) {
+      return ''
+    }
+    return window.location.href + `?sharer=${btoa(account)}`
+  }, [account])
+  const [isHover, setIsHover] = useState(false)
+  if (account) {
+    return (
+      <ReactCopyToClipboard text={copyValue} onCopy={() => toast.success('Successfully copied')}>
+        <LineStyleBtn
+          sx={{ ...style }}
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+        >
+          Share
+          {isHover ? (
+            <CopySvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          ) : isDefaultBlackIcon ? (
+            <CopyBlackSvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          ) : (
+            <CopySvg
+              style={{
+                marginLeft: 7
+              }}
+            />
+          )}
+        </LineStyleBtn>
+      </ReactCopyToClipboard>
+    )
+  } else {
+    return (
+      <LineStyleBtn
+        sx={{ ...style }}
+        onMouseEnter={() => {
+          setIsHover(true)
+        }}
+        onMouseLeave={() => {
+          setIsHover(false)
+        }}
+        onClick={toggleWalletModal}
+      >
+        Share
+        {isHover ? (
+          <CopySvg
+            style={{
+              marginLeft: 7
+            }}
+          />
+        ) : isDefaultBlackIcon ? (
+          <CopyBlackSvg
+            style={{
+              marginLeft: 7
+            }}
+          />
+        ) : (
+          <CopySvg
+            style={{
+              marginLeft: 7
+            }}
+          />
+        )}
+      </LineStyleBtn>
+    )
+  }
+}
+export function InviteBtn({
+  style,
+  isDefaultBlackIcon
+}: {
+  style?: React.CSSProperties
+  isDefaultBlackIcon?: boolean
+}) {
+  const { account } = useActiveWeb3React()
+  const { token } = useUserInfo()
+  const toggleWalletModal = useWalletModalToggle()
+  const [isHover, setIsHover] = useState(false)
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false)
+  if (account && token) {
+    return (
+      <>
+        <LineStyleBtn
+          sx={{
+            borderRadius: '50%',
+            ...style
+          }}
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+          onClick={() => {
+            setInviteDialogOpen(true)
+          }}
+        >
+          {isHover ? <InviteSvg /> : isDefaultBlackIcon ? <InviteBlackSvg /> : <InviteSvg />}
+        </LineStyleBtn>
+        {inviteDialogOpen && <InviteListDialog handleClose={() => setInviteDialogOpen(false)} />}
+      </>
+    )
+  } else {
+    return (
+      <LineStyleBtn
+        sx={{
+          borderRadius: '50%',
+          ...style
+        }}
+        onMouseEnter={() => {
+          setIsHover(true)
+        }}
+        onMouseLeave={() => {
+          setIsHover(false)
+        }}
+        onClick={toggleWalletModal}
+      >
+        {isHover ? <InviteSvg /> : isDefaultBlackIcon ? <InviteBlackSvg /> : <InviteSvg />}
+      </LineStyleBtn>
+    )
+  }
+}
+export function ProjectHead({ item }: { item: IPrivatePadProp }) {
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { userId } = useUserInfo()
 
-function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const prices = [
     {
       title: 'Token Name',
@@ -114,6 +470,24 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
     //   value: item.singleInitialInvestment
     // }
   ]
+  const poolStatusText = useMemo(() => {
+    let result = 'Upcoming'
+    if (!poolInfo) return result
+    switch (Number(poolInfo.status)) {
+      case PoolStatus.Live:
+        result = 'Live'
+        break
+      case PoolStatus.Upcoming:
+        result = 'Upcoming'
+        break
+      case PoolStatus.Closed || PoolStatus.Cancelled:
+        result = 'Closed'
+        break
+      default:
+        break
+    }
+    return result
+  }, [poolInfo])
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
   return (
@@ -156,13 +530,87 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
       >
         <GrayButton
           onClick={() => {
-            nav('/launch-pad')
+            nav(routes.launchpad.index)
           }}
         >
           <ArrowBackIcon />
           <Typography variant={'h5'}>Launchpad homepage</Typography>
         </GrayButton>
-        <Upcoming>Upcoming</Upcoming>
+        <Box
+          sx={{
+            alignSelf: 'end',
+            marginRight: 40,
+            display: 'flex',
+            flexFlow: 'row nowrap'
+          }}
+          gap={8}
+        >
+          <Upcoming
+            style={{
+              marginRight: 0
+            }}
+          >
+            {poolStatusText}
+          </Upcoming>
+          {poolInfo && (
+            <LikeUnlike
+              likeObj={LIKE_OBJ.pool}
+              objId={poolInfo?.id}
+              likeAmount={{
+                dislikeCount: poolInfo?.likeInfo?.dislikeCount,
+                likeCount: poolInfo?.likeInfo?.likeCount,
+                myDislike: poolInfo?.likeInfo?.myDislike,
+                myLike: poolInfo?.likeInfo?.myLike
+              }}
+              onSuccess={getPoolInfo}
+              likeSx={{
+                '&:hover': {
+                  color: '#259C4A',
+                  background: '#FFFFFF'
+                }
+              }}
+              unlikeSx={{
+                '&:hover': {
+                  color: '#CA2020',
+                  background: '#FFFFFF'
+                }
+              }}
+            />
+          )}
+          {!!userId && poolInfo && (
+            <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+          )}
+          <LineStyleBtn
+            sx={{
+              width: 'max-content',
+              padding: '0 12px',
+              border: '1px solid #fff',
+              color: '#fff',
+              marginLeft: 6
+            }}
+            onClick={() => nav(routes.game.bladeDaoRank)}
+          >
+            IDO Bonus leaderboard
+          </LineStyleBtn>
+          <ShareBtn
+            style={{
+              border: '1px solid #fff',
+              color: '#fff'
+            }}
+          />
+          <InviteBtn
+            style={{
+              border: '1px solid #fff',
+              color: '#fff',
+              width: 34,
+              padding: 0,
+              marginLeft: 6,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          />
+        </Box>
         <AlignBottomBG
           sx={{
             display: 'flex',
@@ -183,7 +631,11 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16}>
             {item.detailSocial}
-            <WhiteButton>
+            <WhiteButton
+              onClick={() => {
+                window.open('https://bladedao.gitbook.io/bladedao/', '_blank')
+              }}
+            >
               <IconBook />
               <H6>Whitepaper</H6>
             </WhiteButton>
@@ -221,27 +673,7 @@ function ProjectHead({ item }: { item: IPrivatePadProp }) {
     </Box>
   )
 }
-
-const TabBg = styled(H4)`
-  padding: 24px;
-  min-width: 320px;
-  height: 76px;
-  border-radius: 20px 20px 0 0;
-  color: #959595;
-
-  //&:hover {
-  //  cursor: pointer;
-  //  background: #e1f25c;
-  //  color: #121212;
-  //}
-
-  &.select {
-    background: #ffffff;
-    color: #121212;
-  }
-`
-
-function Tabs({ item }: { item: IPrivatePadProp }) {
+export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = ['Project Information', 'Investment and Partners']
   const [tab, setTab] = useState(tabs[0])
@@ -256,7 +688,13 @@ function Tabs({ item }: { item: IPrivatePadProp }) {
           </TabBg>
         ))}
       </Row>
-      <Box sx={{ background: 'white', padding: '20px 72px', minHeight: '486px' }}>
+      <Box
+        sx={{
+          background: 'white',
+          padding: '20px 72px',
+          minHeight: '486px'
+        }}
+      >
         {tab === tabs[0] && <ProjectInfo item={item} />}
         {/*{tab === tabs[1] && <STEPNToken item={item} />}*/}
         {tab === tabs[2] && <TokenMetrics item={item} />}
@@ -301,6 +739,9 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
   return (
     <Box
       sx={{
+        width: '100%',
+        maxWidth: '1296px',
+        margin: '0 auto',
         display: 'flex',
         justifyContent: 'space-between'
       }}
@@ -318,7 +759,13 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
       </Stack>
       <ProjectContentBg>
         <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
-        <Typography variant={'body1'}>{info[currentIdx].info}</Typography>
+        {Array.isArray(info[currentIdx].info) &&
+          info[currentIdx].info.length > 0 &&
+          info[currentIdx].info.map((item: string, index: number) => (
+            <Typography key={index} variant={'body1'}>
+              {item}
+            </Typography>
+          ))}
       </ProjectContentBg>
     </Box>
   )

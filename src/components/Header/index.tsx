@@ -1,6 +1,6 @@
-import { useState, useCallback, useMemo } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AppBar, Box, Button, IconButton, Stack, Typography, styled } from '@mui/material'
+import { useCallback, useMemo, useState } from 'react'
+import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom'
+import { AppBar, Box, Button, IconButton, Stack, styled, Typography } from '@mui/material'
 // import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
 import { ShowOnMobile } from 'themes/index'
@@ -121,14 +121,26 @@ const transparentRoutes = [
   routes.adsAuction.index,
   routes.realAuction.index,
   routes.launchpad.index,
-  routes.launchpad.projectIntro
+  routes.launchpad.bladeDao,
+  routes.launchpad.bladeDaoInfo
 ]
 
-export const whiteLogoRoutes = [routes.launchpad.projectIntro]
+// const transparentRoutesWithParams = [routes.launchpad.projectInfo]
+
+export const whiteLogoRoutes = [routes.launchpad.bladeDao, routes.launchpad.bladeDaoInfo]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
+  // const routesWithoutParams = transparentRoutesWithParams.map(r => {
+  //   const pattern = /^(\/[^/:]+\/[^/:]+)/
+  //   const match = r.match(pattern)
+  //   if (match) {
+  //     return match[1]
+  //   } else {
+  //     return ''
+  //   }
+  // })
 
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
@@ -139,7 +151,15 @@ export default function Header() {
   const navigate = useNavigate()
   const headerBgOpacity = useHeaderBgOpacity()
 
-  const isTransparentRoute = useMemo(() => transparentRoutes.includes(pathname), [pathname])
+  const isTransparentRoute = useMemo(
+    () => transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname)),
+    [pathname]
+  )
+
+  const isWhiteLogo = useMemo(
+    () => whiteLogoRoutes.includes(pathname) || whiteLogoRoutes.some(route => matchPath(route, pathname)),
+    [pathname]
+  )
 
   const headerBg = useMemo(() => {
     if (!isTransparentRoute) return {}
@@ -155,8 +175,8 @@ export default function Header() {
         <Box display="flex" alignItems="center">
           <MainLogo id={'logo'} to={'/'}>
             <Image
-              style={whiteLogoRoutes.includes(pathname) ? { mixBlendMode: 'difference' } : {}}
-              src={whiteLogoRoutes.includes(pathname) ? logoWhite : logo}
+              style={isWhiteLogo ? { mixBlendMode: 'difference' } : {}}
+              src={isWhiteLogo ? logoWhite : logo}
               alt={'logo'}
             />
           </MainLogo>

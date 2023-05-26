@@ -1,4 +1,4 @@
-import { Box, Container, styled, Typography, Tabs, Tab } from '@mui/material'
+import { Box, Container, styled, Tab, Tabs, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import { ReactComponent as ThumbsUp } from 'assets/svg/thumbsUp.svg'
@@ -6,10 +6,8 @@ import { ReactComponent as LeftArrow } from 'assets/svg/chevron-left.svg'
 // import TokenImage from '../../bounceComponents/common/TokenImage'
 // import { ChainId, ChainListMap } from '../../constants/chain'
 import GhostieRunner from 'components/GhostieRunner'
-import { useCallback, useState, useMemo } from 'react'
-import { useSignMessage } from 'hooks/useWeb3Instance'
-import { useActiveWeb3React } from 'hooks'
-import { useUserInfo } from 'state/users/hooks'
+import { useCallback, useMemo, useState } from 'react'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import InterNetIcon from 'assets/imgs/game/internet.png'
 import TwitterIcon from 'assets/imgs/game/twitter.png'
 // import IgIcon from 'assets/imgs/game/ig.png'
@@ -17,19 +15,29 @@ import TwitterIcon from 'assets/imgs/game/twitter.png'
 import NormalIcon from 'assets/imgs/game/normal.png'
 import ErrorIcon from 'assets/imgs/game/error.png'
 import WarningIcon from 'assets/imgs/game/warning.png'
-import { getAllrank, sendScore, getUserRank } from 'api/game/index'
+import { getAllrank, getUserRank } from 'api/game/index'
 import { useRequest } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import Image from 'components/Image'
-import { useShowLoginModal } from 'state/users/hooks'
 import PoolLogo from 'assets/imgs/game/poolLogo.png'
-import { useCountDown } from 'ahooks'
-import moment from 'moment'
+// import { useCountDown } from 'ahooks'
+// import moment from 'moment'
 import UserIcon from 'assets/imgs/profile/yellow_avatar.svg'
 import { shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { useQueryParams } from 'hooks/useQueryParams'
+import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
+import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
+import { InviteBtn, LineStyleBtn, ShareBtn } from '../projectIntro'
+import Favorite from 'bounceComponents/common/Favorite'
+import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
+import useUploadGameScoreCrypto from 'hooks/useUploadGameScoreCrypto'
+import { useActiveWeb3React } from 'hooks'
 
 function a11yProps(index: number) {
   return {
@@ -37,42 +45,64 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
+
+const NoData = () => {
+  return (
+    <Box
+      sx={{
+        padding: '100px 0 100px'
+      }}
+    >
+      <EmptyData title={`No History Data`} />
+    </Box>
+  )
+}
+
+const gameTimeStamp = {
+  start: 1684461600000, //online
+  end: 1684674000000
+}
+
+const payableId = 1
+
 export function Game() {
-  const signMessage = useSignMessage()
+  const uploadGameScoreCrypto = useUploadGameScoreCrypto()
+  const { poolId } = useQueryParams()
   const { account } = useActiveWeb3React()
-  const { token } = useUserInfo()
+  const [step] = useState(poolId ? 1 : 0)
+  const [score, setScore] = useState(0)
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const isLive = new Date().valueOf() > gameTimeStamp.start && new Date().valueOf() < gameTimeStamp.end
 
   const uploadGameScore = useCallback(
     async (score: number) => {
+      if (!isLive) return
       const resultScore = score.toFixed(2)
-      const message = `Bounce would like you to sign the game score: ${resultScore}`
-      try {
-        if (!account || !token) {
-          return
-        }
-        const signature = await signMessage(message)
-        const req = {
-          message,
-          payableId: 1,
-          address: account,
-          signature
-        }
-        sendScore(req)
-      } catch (error) {}
+      await uploadGameScoreCrypto(score, payableId)
+
+      setScore(Number(resultScore))
     },
-    [account, signMessage, token]
+    [isLive, uploadGameScoreCrypto]
   )
+  useBladeDaoSharer()
+  // useEffect(() => {
+  //   return () => {
+  //     if (!loading) {
+  //       setStep(poolInfo ? 1 : 0)
+  //     }
+  //   }
+  // }, [poolInfo, loading])
   const [value, setValue] = useState(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
-  const [countdown, { days, hours, minutes }] = useCountDown({
-    targetDate: moment('2023-07-25', 'YYYY-MM-DD').valueOf()
-  })
+  // const [countdown, { days, hours, minutes }] = useCountDown({
+  //   targetDate: moment(gameTimeStamp.end).valueOf()
+  // })
   return (
     <Container maxWidth="lg">
-      <Title />
-      <Step />
+      <Title step={step} poolInfo={poolInfo} />
+      <Step step={step} />
       <Box
         sx={{
           borderRadius: 20,
@@ -92,6 +122,7 @@ export function Game() {
             alignItems: 'center'
           }}
         >
+          {/* title */}
           <Box
             sx={{
               height: 83,
@@ -109,25 +140,40 @@ export function Game() {
                 marginRight: 10
               }}
             >
-              Ghostie Game
+              BladeDao Playable Auction
             </Typography>
-            <Typography
-              sx={{
-                height: 26,
-                lineHeight: '26px',
-                marginRight: 10,
-                padding: '0 12px',
-                background: 'rgba(222, 81, 245, 0.2)',
-                borderRadius: '20px',
-                color: '#DE51F5',
-                fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                fontWeight: 400,
-                fontSize: 14
-              }}
-            >
-              Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'}
-            </Typography>
+            {!poolId && (
+              <Typography
+                sx={{
+                  height: 26,
+                  lineHeight: '26px',
+                  marginRight: 10,
+                  padding: '0 12px',
+                  background: 'rgba(222, 81, 245, 0.2)',
+                  borderRadius: '20px',
+                  color: '#DE51F5',
+                  fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+                  fontWeight: 400,
+                  fontSize: 14
+                }}
+              >
+                Game Live: {new Date(gameTimeStamp.start).toLocaleString()} -{' '}
+                {new Date(gameTimeStamp.end).toLocaleString()}
+                {/* Game Live {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m` : '0'} */}
+              </Typography>
+            )}
+
+            {poolInfo && (
+              <PoolStatusBox
+                status={poolInfo.status}
+                claimAt={poolInfo.claimAt}
+                openTime={poolInfo.openAt}
+                closeTime={poolInfo.closeAt}
+                onEnd={getPoolInfo}
+              />
+            )}
           </Box>
+          {/* socia link */}
           <Box
             sx={{
               height: 83,
@@ -170,8 +216,17 @@ export function Game() {
             /> */}
           </Box>
         </Box>
-        <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
-        <GhostieRunner scoreUpload={uploadGameScore} />
+        {step === 0 && (
+          <>
+            <StatusTitle status={!account ? StatusType.NeedLogin : StatusType.Rules} />
+            <GhostieRunner scoreUpload={uploadGameScore} />
+          </>
+        )}
+        {step === 1 && (
+          <>
+            <UserBlock />
+          </>
+        )}
       </Box>
       <Box
         sx={{
@@ -187,16 +242,12 @@ export function Game() {
           <Tab label="Auction Details" {...a11yProps(1)} />
           <Tab label="Auction History" {...a11yProps(2)} />
         </NewTabs>
-        {value === 0 && <RankSection />}
+        {value === 0 && <RankSection score={score} />}
         {value === 1 && <PoolDetail />}
         {value === 2 && (
-          <Box
-            sx={{
-              padding: '100px 0 100px'
-            }}
-          >
-            <EmptyData title={`No History Data`} />
-          </Box>
+          <ActionHistory noTitle={true}>
+            <NoData />
+          </ActionHistory>
         )}
       </Box>
     </Container>
@@ -221,7 +272,7 @@ const StepBg = styled(Box)`
   align-items: center;
   padding: 18px 140px 18px 30px;
   gap: 67px;
-  width: 556px;
+  width: 560px;
   height: 56px;
   background: #171717;
   border-radius: 10px;
@@ -269,7 +320,11 @@ const NewTabs = styled(Tabs)(() => ({
     opacity: 1
   }
 }))
-function Title() {
+
+function Title({ step, poolInfo }: { step: number; poolInfo?: PoolInfoProp }) {
+  const { userId } = useUserInfo()
+  const navigate = useNavigate()
+
   return (
     <Row mt={67} width={'100%'} justifyContent={'space-between'}>
       <CenterRow>
@@ -281,22 +336,68 @@ function Title() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            background: 'white'
+            background: 'white',
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            navigate(-1)
           }}
         >
           <LeftArrow />
         </Box>
         <Typography ml={20} variant={'h3'}>
-          Ghistie Fixed Price Auction Pool
+          BladeDao Playable Auction Pool
         </Typography>
-        {/* <ThumbBg ml={35}>
-          <ThumbsUp />
-          <Typography variant={'body1'}>16</Typography>
-        </ThumbBg>
-        <ThumbBg ml={6}>
-          <ThumbsDown />
-          <Typography variant={'body1'}>16</Typography>
-        </ThumbBg> */}
+      </CenterRow>
+      <CenterRow>
+        {step === 1 && (
+          <>
+            {/* <ThumbBg ml={35}>
+              <ThumbsUp />
+              <Typography variant={'body1'}>16</Typography>
+            </ThumbBg>
+            <ThumbBg ml={6} mr={6}>
+              <ThumbsDown />
+              <Typography variant={'body1'}>16</Typography>
+            </ThumbBg> */}
+            {!!userId && poolInfo && (
+              <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+            )}
+          </>
+        )}
+        <LineStyleBtn
+          sx={{
+            width: 'max-content',
+            padding: '0 12px',
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6
+          }}
+          onClick={() => navigate(routes.game.bladeDaoRank)}
+        >
+          IDO Bonus leaderboard
+        </LineStyleBtn>
+        <ShareBtn
+          style={{
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6
+          }}
+          isDefaultBlackIcon={true}
+        ></ShareBtn>
+        <InviteBtn
+          style={{
+            width: 34,
+            padding: 0,
+            border: '1px solid var(--ps-gray-900)',
+            color: 'var(--ps-gray-900)',
+            marginLeft: 6,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          isDefaultBlackIcon={true}
+        ></InviteBtn>
       </CenterRow>
       {/* <CenterRow>
         <Typography variant={'h3'}>#000123</Typography>
@@ -308,34 +409,65 @@ function Title() {
     </Row>
   )
 }
-function Step() {
+
+function Step({ step, hanldeChange }: { step: number; hanldeChange?: (num: number) => void }) {
+  const { poolId, chainShortName } = useQueryParams()
+  const stepChange = (num: number) => {
+    if (poolId && chainShortName) {
+      hanldeChange && hanldeChange(num)
+    }
+  }
   return (
     <Row alignItems={'center'} mt={47}>
-      <StepBg>
-        <StepText>1</StepText>
-        <Typography sx={{ color: 'white' }} variant={'h4'}>
-          Stage One: Game Competition
-        </Typography>
-      </StepBg>
+      {step === 0 && (
+        <StepBg onClick={() => stepChange(0)}>
+          <StepText>1</StepText>
+          <Typography sx={{ color: 'white' }} variant={'h4'}>
+            Stage One: Game Competition
+          </Typography>
+        </StepBg>
+      )}
+      {step === 1 && (
+        <StepBgLine onClick={() => stepChange(0)}>
+          <StepText2>1</StepText2>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)', width: 'max-content' }}>
+            Stage One: Game Competition
+          </Typography>
+        </StepBgLine>
+      )}
       <Box
         sx={{
           border: '2px dashed #171717',
           width: 89
         }}
       />
-      <StepBgLine>
-        <StepText2>2</StepText2>
-        <Typography variant={'h4'}>Stage Two: Token Auction</Typography>
-      </StepBgLine>
+      {step === 0 && (
+        <StepBgLine onClick={() => stepChange(1)}>
+          <StepText2>2</StepText2>
+          <Typography variant={'h4'} sx={{ color: 'var(--ps-gray-900)' }}>
+            Stage Two: Token Auction
+          </Typography>
+        </StepBgLine>
+      )}
+      {step === 1 && (
+        <StepBg onClick={() => stepChange(0)}>
+          <StepText>2</StepText>
+          <Typography sx={{ color: 'white' }} variant={'h4'}>
+            Stage Two: Token Auction
+          </Typography>
+        </StepBg>
+      )}
     </Row>
   )
 }
+
 export enum StatusType {
   'Rules' = 0,
   'NotWhitelist' = 1,
   'Warning' = 2,
   'NeedLogin' = 3
 }
+
 function RankTopItem({
   name,
   score,
@@ -439,6 +571,7 @@ function RankTopItem({
     </Box>
   )
 }
+
 function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType }) {
   const showLoginModal = useShowLoginModal()
 
@@ -483,7 +616,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
             >
               Rules:
             </span>{' '}
-            Play the game and try to get higher scores. The top 50 players before Jul 25 will get allocation.
+            Play the game and try to get higher scores. The top 50 players before May 21 will get allocation.
           </Typography>
         </Box>
       )}
@@ -630,6 +763,7 @@ function StatusTitle({ status = StatusType.NotWhitelist }: { status: StatusType 
     </>
   )
 }
+
 const RankList = styled(Box)(() => ({
   position: 'relative',
   '.row': {
@@ -647,39 +781,48 @@ const RankList = styled(Box)(() => ({
     background: '#F5F5F5'
   }
 }))
-function RankSection() {
+
+function RankSection({ score }: { score: number | string }) {
   const { account } = useActiveWeb3React()
-  const { data: rankData, loading: rankLoading } = useRequest(async () => {
-    const resp = await getAllrank({
-      payableId: 1
-    })
-    return {
-      list: resp.data?.list || [],
-      total: resp.data?.total || 0
+  const { data: rankData, loading: rankLoading } = useRequest(
+    async () => {
+      const resp = await getAllrank({
+        payableId
+      })
+      return {
+        list: resp.data?.list || [],
+        total: resp.data?.total || 0
+      }
+    },
+    {
+      refreshDeps: [score]
     }
-  })
-  const { data: userRankData } = useRequest(async () => {
-    const resp = await getUserRank({
-      payableId: 1
-    })
-    return resp
-  })
+  )
+  const { data: userRankData } = useRequest(
+    async () => {
+      const resp = await getUserRank({
+        payableId
+      })
+      return resp
+    },
+    {
+      refreshDeps: [score]
+    }
+  )
   const loginUserData = useMemo(() => {
     const list = rankData?.list || []
     let resultData
-    if (list.length > 0) {
-      list.map((item, index) => {
+    resultData = userRankData?.data
+    if (!resultData && list.length > 0) {
+      list.map(item => {
         if (item.address === account) {
           resultData = {
             address: item.address,
-            rank: index + 1,
-            score: item?.totalCreated
+            rank: item.rank,
+            score: item?.score
           }
         }
       })
-    }
-    if (!resultData) {
-      resultData = userRankData?.data
     }
     return resultData
   }, [account, rankData?.list, userRankData])
@@ -718,7 +861,7 @@ function RankSection() {
             fontSize: 20
           }}
         >
-          My rank: {loginUserData?.rank}
+          My rank: {loginUserData?.rank || '--'}
         </Typography>
         <Typography
           component={'span'}
@@ -763,7 +906,7 @@ function RankSection() {
                 <RankTopItem
                   userId={rankData.list[1]?.userId || ''}
                   name={rankData.list[1]?.name || shortenAddress(rankData.list[1]?.address) || '--'}
-                  score={`${rankData.list[1]?.totalCreated}SCORE`}
+                  score={`${rankData.list[1]?.score}SCORE`}
                   userIcon={rankData.list[1]?.avatar || UserIcon}
                   isNo1={false}
                   rank={2}
@@ -779,7 +922,7 @@ function RankSection() {
                 <RankTopItem
                   userId={rankData.list[0]?.userId || ''}
                   name={rankData.list[0]?.name || shortenAddress(rankData.list[0]?.address) || '--'}
-                  score={`${rankData.list[0]?.totalCreated}SCORE`}
+                  score={`${rankData.list[0]?.score}SCORE`}
                   userIcon={rankData.list[0]?.avatar || UserIcon}
                   isNo1={true}
                   rank={1}
@@ -789,7 +932,7 @@ function RankSection() {
                 <RankTopItem
                   userId={rankData.list[2]?.userId || ''}
                   name={rankData.list[2]?.name || shortenAddress(rankData.list[2]?.address) || '--'}
-                  score={`${rankData.list[2]?.totalCreated}SCORE`}
+                  score={`${rankData.list[2]?.score}SCORE`}
                   userIcon={rankData.list[2]?.avatar || UserIcon}
                   isNo1={false}
                   rank={3}
@@ -841,7 +984,7 @@ function RankSection() {
                           color: '#171717'
                         }}
                       >
-                        {index + 4}
+                        {item.rank}
                       </Typography>
                       <Image
                         style={{
@@ -879,7 +1022,7 @@ function RankSection() {
                         color: '#000'
                       }}
                     >
-                      {item?.totalCreated || '--'} SCORE
+                      {item?.score || '--'} SCORE
                     </Typography>
                   </Box>
                 )
@@ -891,6 +1034,7 @@ function RankSection() {
     </Box>
   )
 }
+
 function PoolDetail() {
   return (
     <Box
@@ -905,7 +1049,7 @@ function PoolDetail() {
       <Box
         sx={{
           width: 270,
-          minHeight: 521,
+          minHeight: 400,
           padding: '0 20px',
           background: `var(--ps-gray-50)`,
           borderRadius: 20,
@@ -936,7 +1080,7 @@ function PoolDetail() {
         >
           BladeDao
         </Typography>
-        <Typography
+        {/* <Typography
           sx={{
             marginBottom: 24,
             color: 'var(--ps-gray-700)',
@@ -948,7 +1092,7 @@ function PoolDetail() {
         >
           AWS provides customers with the broadest and deepest cloud platform cloud platform cloud platform the broadest
           and deepest cloud platform...
-        </Typography>
+        </Typography> */}
         <Box
           sx={{
             display: 'flex',
@@ -1047,5 +1191,26 @@ function PoolDetail() {
         </Typography>
       </Box>
     </Box>
+  )
+}
+
+function UserBlock() {
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  if (!poolInfo) {
+    return (
+      <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <BounceAnime />
+      </Box>
+    )
+  }
+  return (
+    <UserMainBlock
+      style={{
+        marginTop: '-25px'
+      }}
+      contentGap={50}
+      poolInfo={poolInfo}
+      getPoolInfo={getPoolInfo}
+    />
   )
 }

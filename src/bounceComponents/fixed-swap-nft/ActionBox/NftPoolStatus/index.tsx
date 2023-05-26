@@ -8,6 +8,7 @@ export interface PoolStatusBoxProps {
   status: PoolStatus
   openTime: number
   closeTime: number
+  hideClaim?: true
   claimAt: number
   onEnd?: () => void
   style?: React.CSSProperties
@@ -19,6 +20,7 @@ export const PoolStatusBox = ({
   closeTime,
   claimAt,
   onEnd,
+  hideClaim,
   style
 }: PoolStatusBoxProps): JSX.Element => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -41,8 +43,9 @@ export const PoolStatusBox = ({
             display: 'inline-block',
             px: 12,
             py: 4,
-            bgcolor: '#E6E6E6',
+            bgcolor: '#D7D6D9',
             borderRadius: 20,
+            color: '#626262',
             ...style
           }}
         >
@@ -103,7 +106,7 @@ export const PoolStatusBox = ({
           </Box>
           <span
             style={{
-              display: 'inline-block',
+              display: hideClaim ? 'none' : 'inline-block',
               padding: '4px 8px',
               background: '#000000',
               borderRadius: 20,

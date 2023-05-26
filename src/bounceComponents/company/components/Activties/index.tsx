@@ -5,7 +5,6 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { useRequest } from 'ahooks'
 import { toast } from 'react-toastify'
 import BigNumber from 'bignumber.js'
-import Image from 'components/Image'
 import { ReactComponent as NoPoolFoundSVG } from 'assets/imgs/noPoolFound.svg'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 // import CoingeckoSVG from 'assets/imgs/chains/coingecko.svg'
@@ -21,12 +20,12 @@ import { getLabelById, shortenAddress } from 'utils'
 import { getIdeasList } from 'api/idea'
 import InstitutionCard from 'bounceComponents/companies/InstitutionCard'
 import { UserType } from 'api/market/type'
-import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
-import { Link, useNavigate } from 'react-router-dom'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { routes } from 'constants/routes'
 import { useUserInfo } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import { Link } from 'react-router-dom'
 
 export type IActivtiesProps = { type: UserType }
 const poolType: Record<PoolType, string> = {
@@ -265,11 +264,12 @@ const Activties: React.FC<IActivtiesProps> = ({ type }) => {
                             label="Contract address"
                             value={
                               <Stack direction="row" alignItems="center" spacing={4}>
-                                {fixedSwaptem.token0.coingeckoId ? (
-                                  <TokenImage src={ErrorSVG} alt="coingecko" size={20} />
-                                ) : (
-                                  <Image src={ErrorSVG} width={20} height={20} alt="Dangerous" />
-                                )}
+                                <CertifiedTokenImage
+                                  address={fixedSwaptem.token0.address}
+                                  coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                  ethChainId={fixedSwaptem.ethChainId}
+                                  backedChainId={fixedSwaptem.chainId}
+                                />
                                 <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
                                 <CopyToClipboard text={fixedSwaptem.token0.address} />
                               </Stack>
