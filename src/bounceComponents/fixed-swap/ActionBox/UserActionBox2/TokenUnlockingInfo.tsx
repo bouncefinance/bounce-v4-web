@@ -53,7 +53,7 @@ export default function TokenUnlockingInfo({
           {releaseType === IReleaseType.Fragment && (
             <>
               <Typography mb={10}>Staged release</Typography>
-              <Box display="grid" gridTemplateColumns={'1fr 40px'} gap={5}>
+              <Box display="grid" gridTemplateColumns={'1fr 40px'} gap={5} width={300}>
                 {releaseData.map((item, idx) => {
                   const ca = CurrencyAmount.ether(item.ratio || '0').multiply('100')
                   return (

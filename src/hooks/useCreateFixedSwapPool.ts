@@ -86,7 +86,7 @@ export function useCreateFixedSwapPool() {
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
-    const fragmentRawArr = getFragmentRawArr(values.releaseDataArr)
+    const fragmentRawArr = IReleaseType.Fragment === values.releaseType ? getFragmentRawArr(values.releaseDataArr) : []
     const params: Params = {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       poolSize: values.poolSize,
@@ -136,7 +136,7 @@ export function useCreateFixedSwapPool() {
           : values.releaseType === IReleaseType.Fragment
           ? values.releaseDataArr.map((item, idx) => ({
               startAt: item.startAt?.unix() || 0,
-              endAtOrRatio: fragmentRawArr[idx].raw.toString()
+              endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
             }))
           : values.releaseDataArr.map(item => ({
               startAt: item.startAt?.unix() || 0,
@@ -213,7 +213,14 @@ export function useCreateFixedSwapPool() {
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
-    const args = [contractCallParams, params.releaseType, params.releaseData, false, expiredTime, signature]
+    const args = [
+      contractCallParams,
+      params.releaseType,
+      params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
+      false,
+      expiredTime,
+      signature
+    ]
 
     const estimatedGas = await fixedSwapERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
