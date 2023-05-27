@@ -109,10 +109,10 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
               }
               if (
                 !(
-                  !context.parent.endTime.valueOf() ||
-                  !context.parent.startTime.valueOf() ||
-                  ((input?.valueOf() || 0) > context.parent.startTime.valueOf() &&
-                    (input?.valueOf() || 0) > context.parent.endTime.valueOf())
+                  !context.parent.endTime?.valueOf() ||
+                  !context.parent.startTime?.valueOf() ||
+                  ((input?.valueOf() || 0) >= context.parent.startTime?.valueOf() &&
+                    (input?.valueOf() || 0) >= context.parent.endTime?.valueOf())
                 )
               ) {
                 return context.createError({ message: 'Please select a time later than start time and end time' })
@@ -138,8 +138,8 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                 !(
                   !context.parent.endTime.valueOf() ||
                   !context.parent.startTime.valueOf() ||
-                  ((input?.valueOf() || 0) > context.parent.startTime.valueOf() &&
-                    (input?.valueOf() || 0) > context.parent.endTime.valueOf())
+                  ((input?.valueOf() || 0) >= context.parent.startTime.valueOf() &&
+                    (input?.valueOf() || 0) >= context.parent.endTime.valueOf())
                 )
               ) {
                 return context.createError({ message: 'Please select a time later than start time and end time' })
@@ -177,7 +177,18 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
       is: (val: any) => Number(val) === IReleaseType.Fragment,
       then: Yup.array().of(
         Yup.object().shape({
-          startAt: Yup.date().typeError('Please select a valid time').required('Please select a valid time'),
+          startAt: Yup.date()
+            .typeError('Please select a valid time')
+            .required('Please select a valid time')
+            .test({
+              name: 'check-fragmentReleaseTimes',
+              test: (input, context) => {
+                if (moment(input) < moment()) {
+                  return context.createError({ message: 'Please select a time earlier than current time' })
+                }
+                return true
+              }
+            }),
           radio: Yup.string().required('Must enter the release ratio')
         })
       )
@@ -185,6 +196,12 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
     fragmentReleaseSize: Yup.string().when('releaseType', {
       is: (val: any) => Number(val) === IReleaseType.Fragment,
       then: Yup.string().test('TEST_FRAGMENT_TOTAL', 'Release ratio must add up to 100%', (_, context) => {
+        const endTime = context.parent.endTime?.valueOf() || 0
+        for (const item of context.parent.fragmentReleaseTimes) {
+          if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
+            return context.createError({ message: 'Please select a time earlier than end time' })
+          }
+        }
         return (
           context.parent.fragmentReleaseTimes
             .map((item: { radio: string }) => item.radio)

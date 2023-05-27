@@ -40,10 +40,6 @@ interface Params {
 }
 const NO_LIMIT_ALLOCATION = '0'
 
-const getMinStartTime = (releaseData: IReleaseData[]) => {
-  return releaseData.map(item => item.startAt?.unix() || 0).reduce((a, b) => Math.min(a, b), 0)
-}
-
 export function sortReleaseData(releaseData: IReleaseData[]): IReleaseData[] {
   return releaseData.sort((a, b) => {
     if (a.startAt === null || b.startAt === null) {
@@ -103,7 +99,9 @@ export function useCreateFixedSwapPool() {
       endTime: values.endTime?.unix() || 0,
       delayUnlockingTime:
         IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
-          ? getMinStartTime(values.releaseDataArr)
+          ? values.releaseDataArr?.[0].startAt?.unix() || 0
+          : IReleaseType.Instant === values.releaseType
+          ? 0
           : values.shouldDelayUnlocking
           ? values.delayUnlockingTime?.unix() || 0
           : values.endTime?.unix() || 0,
