@@ -9,6 +9,21 @@ export enum CreationStep {
   'ADVANCED_SETTINGS',
   'CREATION_CONFIRMATION'
 }
+
+export enum IReleaseType {
+  Instant, // 0
+  Cliff, // 1
+  Linear, // 2
+  Fragment // 3
+}
+
+export interface IReleaseData {
+  startAt: Moment | null
+  // entAt in timestamp or ratio in 1e18
+  endAt?: Moment | null
+  ratio?: string
+}
+
 export interface NFTToken {
   // address: string
   // chainId?: number
@@ -66,6 +81,8 @@ export interface AuctionPool {
   endTime: Moment | null
   shouldDelayUnlocking: boolean
   delayUnlockingTime: Moment | null
+  releaseType: IReleaseType | 1000
+  releaseDataArr: IReleaseData[]
   whitelist: string[]
   activeStep: CreationStep
   completed: CompletedSteps

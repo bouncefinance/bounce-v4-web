@@ -2,6 +2,7 @@ import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -54,6 +55,11 @@ export interface GetPoolCreationSignatureParams {
   maxPlayer?: number
   totalShare?: string | number
   nShare?: string | number
+  releaseType?: IReleaseType
+  releaseData?: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 
 export interface GetPoolCreationSignatureResponse {
@@ -158,6 +164,7 @@ export interface FixedSwapPool {
   token1: TokenFromApi
   tokenId: string
   is721?: 0 | 1
+  poolVersion?: number
 }
 
 export interface FixedSwapPoolProp extends FixedSwapPool {
@@ -174,12 +181,22 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     claimed?: boolean
     regreted?: boolean
     swappedAmount0?: string
-    currencySwappedAmount0: CurrencyAmount | undefined
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
     currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount: CurrencyAmount | undefined // current claimable
+    currencyMyReleased: CurrencyAmount | undefined //current my Released token
   }
   totalShare?: string | number
   maxPlayere?: string | number
   curPlayer?: string | number
+  releaseType: IReleaseType | undefined
+  releaseData: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
 }
 
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {
@@ -217,6 +234,7 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
 }
 
 export interface GetPoolInfoResponse {
+  poolVersion: number | undefined
   dutchPool: any
   fixedSwapPool: FixedSwapPool
   lotteryPool: any

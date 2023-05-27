@@ -12,7 +12,9 @@ import {
   NFTToken,
   ParticipantStatus,
   TokenType,
-  AuctionType
+  AuctionType,
+  IReleaseType,
+  IReleaseData
 } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
@@ -109,6 +111,8 @@ const initialValues: AuctionPool = {
   endTime: null,
   shouldDelayUnlocking: false,
   delayUnlockingTime: null,
+  releaseType: 1000,
+  releaseDataArr: [],
   whitelist: [],
   activeStep: 0,
   completed: {},
@@ -199,6 +203,8 @@ type Payload = {
     whitelist: string[]
     participantStatus: ParticipantStatus
     shouldDelayUnlocking: boolean
+    releaseType: IReleaseType
+    releaseDataArr: IReleaseData[]
   }
   [ActionType.HandleStep]: {
     activeStep: number
@@ -302,6 +308,8 @@ const reducer = (state: AuctionPool, action: Actions) => {
         startTime: action.payload.startTime,
         endTime: action.payload.endTime,
         whitelist: action.payload.whitelist,
+        releaseType: action.payload.releaseType,
+        releaseDataArr: action.payload.releaseDataArr,
         delayUnlockingTime: action.payload.delayUnlockingTime,
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true },

@@ -28,7 +28,8 @@ import {
   IUserUpdateBannerParams,
   GetUserNFTsParams,
   IAddressRegisterLoginParams,
-  IChangeEmailParams
+  IChangeEmailParams,
+  GetUserPermitSignResponse
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -85,6 +86,10 @@ export const bindAddress = async (params: IBindAddressParams) => {
 
 export const getUserWhitelistProof = async (params: GetUserWhitelistProofParams) => {
   return ApiInstance.post<GetUserWhitelistProofResponse>('/user/whitelist', params)
+}
+
+export const getUserPermitSign = async (params: GetUserWhitelistProofParams) => {
+  return ApiInstance.post<GetUserPermitSignResponse>('/user/permit/sign', params)
 }
 
 export const getUserActivities = async (params: IPaginationParams) => {
