@@ -147,19 +147,23 @@ const usePoolInfo = () => {
       whitelistData,
       participant: {
         ...poolInfo.participant,
-        claimed: myClaimedRes?.[0] || poolInfo.participant.claimed,
+        claimed: myClaimedRes?.[0] === undefined ? poolInfo.participant.claimed : myClaimedRes?.[0],
         swappedAmount0: myAmountSwapped0Res?.[0].toString() || poolInfo.participant.swappedAmount0,
         currencySwappedAmount0: CurrencyAmount.fromRawAmount(
           t0,
           myAmountSwapped0Res?.[0].toString() || poolInfo.participant.swappedAmount0 || '0'
         ),
         currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0'),
-        currencyCurReleasableAmount: v2FixedSwapData.curReleasableAmount
-          ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.curReleasableAmount)
-          : undefined,
-        currencyCurClaimableAmount: CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myAmountSwapped0 || '0').subtract(
-          CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased || '0')
-        ),
+        currencyCurReleasableAmount:
+          v2FixedSwapData.releaseType === IReleaseType.Instant
+            ? CurrencyAmount.fromRawAmount(t0, myAmountSwapped0Res?.[0].toString() || '0')
+            : v2FixedSwapData.curReleasableAmount
+            ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.curReleasableAmount)
+            : undefined,
+        currencyCurClaimableAmount: CurrencyAmount.fromRawAmount(
+          t0,
+          v2FixedSwapData.curReleasableAmount || '0'
+        ).subtract(CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased || '0')),
         currencyMyReleased: v2FixedSwapData.myReleased
           ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased)
           : undefined

@@ -65,7 +65,7 @@ const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getP
               {poolInfo.participant.currencySwappedAmount0?.toSignificant()}
             </PoolInfoItem>
             <PoolInfoItem title="Claimable">
-              {poolInfo.participant.currencyCurClaimableAmount?.toSignificant()}
+              {poolInfo.participant.currencyCurClaimableAmount?.toSignificant() || '-'}
             </PoolInfoItem>
           </>
         )}
