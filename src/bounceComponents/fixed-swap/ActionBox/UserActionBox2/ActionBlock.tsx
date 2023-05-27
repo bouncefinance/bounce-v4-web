@@ -41,7 +41,7 @@ const getInitialAction = (
   v2Data: {
     poolVersion: number | undefined
     releaseType: IReleaseType | undefined
-    currencyCurClaimableAmount: CurrencyAmount | undefined
+    v2ParticipantClaimable: boolean
   },
   isJoined?: boolean,
   isClaimed?: boolean,
@@ -74,7 +74,7 @@ const getInitialAction = (
       if (v2Data.releaseType === IReleaseType.Instant) {
         return 'CLAIMED'
       }
-      if (v2Data.currencyCurClaimableAmount?.greaterThan('0')) {
+      if (v2Data.v2ParticipantClaimable) {
         return 'NEED_TO_CLAIM'
       }
       return 'WAIT_FOR_DELAY'
@@ -266,6 +266,14 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     poolInfo.token0.symbol
   ])
 
+  const v2ParticipantClaimable = useMemo(() => {
+    console.log('sssssss')
+    if (poolInfo.participant.currencyCurClaimableAmount?.greaterThan('0')) {
+      return true
+    }
+    return false
+  }, [poolInfo.participant.currencyCurClaimableAmount])
+
   useEffect(() => {
     if (!isCurrentChainEqualChainOfPool) {
       setAction('GO_TO_CHECK')
@@ -277,7 +285,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
         {
           poolVersion: poolInfo.poolVersion,
           releaseType: poolInfo.releaseType,
-          currencyCurClaimableAmount: poolInfo.participant.currencyCurClaimableAmount
+          v2ParticipantClaimable
         },
         isJoined,
         isUserClaimed,
@@ -290,10 +298,10 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     isJoined,
     isUserClaimed,
     poolInfo?.claimAt,
-    poolInfo.participant.currencyCurClaimableAmount,
     poolInfo.poolVersion,
     poolInfo.releaseType,
-    poolInfo?.status
+    poolInfo?.status,
+    v2ParticipantClaimable
   ])
 
   useEffect(() => {
