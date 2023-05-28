@@ -201,7 +201,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                 <Stack width={'100%'} direction="row" alignItems="center" spacing={8} height={63}>
                   <picture>
                     <img
-                      src={option.values.token0.smallUrl || EmptyToken}
+                      src={option.values?.token0?.smallUrl || EmptyToken}
                       style={{ width: 32, height: 32, borderRadius: '6px' }}
                     />
                   </picture>
