@@ -6,6 +6,9 @@ import { USER_TYPE } from 'api/user/type'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { PoolType } from 'api/pool/type'
+import EmptyToken from 'assets/imgs/auction/token-default.svg'
 
 export type ISearchOption = {
   label?: string
@@ -15,7 +18,7 @@ export type ISearchOption = {
   poolId?: number
   chainId?: number
   tokenType?: number
-  category?: number
+  category?: PoolType
 }
 
 export type ISearchAllOption = { type: string; values: ISearchOption }
@@ -169,7 +172,14 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
           {option.type === 'Auction' ? (
             <>
               {index === 0 ? (
-                <Typography ml={18} fontSize={14} fontWeight={600} color={'#959595'} lineHeight={'21px'}>
+                <Typography
+                  fontFamily={'Public Sans'}
+                  ml={18}
+                  fontSize={14}
+                  fontWeight={600}
+                  color={'#959595'}
+                  lineHeight={'21px'}
+                >
                   {option.type}
                 </Typography>
               ) : (
@@ -179,38 +189,59 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                 onClick={() => {
                   const element = document.querySelector('.OInput input') as HTMLInputElement
                   element && element.blur()
+                  const _to = getAuctionPoolLink(
+                    option.values.category ?? 1,
+                    option.values.chainId ?? 1,
+                    option.values.poolId ?? 0
+                  )
+                  navigate(_to)
                 }}
               >
-                <Stack direction="row" alignItems="center" spacing={8} height={63}>
-                  {option.values?.icon && (
-                    <picture>
-                      <img src={option.values.icon} style={{ width: 32, height: 32, borderRadius: '50%' }} />
-                    </picture>
-                  )}
-                  <div>
+                <Stack width={'100%'} direction="row" alignItems="center" spacing={8} height={63}>
+                  <picture>
+                    <img
+                      src={option.values.icon || EmptyToken}
+                      style={{ width: 32, height: 32, borderRadius: '6px' }}
+                    />
+                  </picture>
+                  <Box
+                    width={'100%'}
+                    sx={{
+                      '& p': {
+                        width: '100%',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                      }
+                    }}
+                  >
                     <Typography
-                      width={'100%'}
                       color={'#121212'}
                       fontSize={14}
                       lineHeight={'21px'}
                       fontWeight={600}
                       fontFamily={'Public Sans'}
-                      noWrap
-                      sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
                     >
                       {option.values.name}
                     </Typography>
                     <Typography color={'#959595'} fontSize={12} lineHeight={'18px'}>
                       {option.values.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
                     </Typography>
-                  </div>
+                  </Box>
                 </Stack>
               </MenuItem>
             </>
           ) : (
             <>
               {idx === index ? (
-                <Typography ml={18} fontSize={14} fontWeight={600} color={'#959595'} lineHeight={'21px'}>
+                <Typography
+                  fontFamily={'Public Sans'}
+                  ml={18}
+                  fontSize={14}
+                  fontWeight={600}
+                  color={'#959595'}
+                  lineHeight={'21px'}
+                >
                   {option.type}
                 </Typography>
               ) : (

@@ -7,6 +7,7 @@ import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { whiteLogoRoutes } from '../../../../components/Header'
+import { PoolType } from 'api/pool/type'
 
 const Search: React.FC = () => {
   const [userData, setUserData] = useState<ISearchAllOption[]>([])
@@ -37,19 +38,21 @@ const Search: React.FC = () => {
           }
         }
       })
-      const pool = data?.pools?.map((pl: any) => {
-        return {
-          type: 'Auction',
-          values: {
-            name: pl?.name,
-            poolId: pl?.poolId,
-            chainId: pl?.chainId,
-            tokenType: pl?.tokenType,
-            category: pl?.category,
-            value: pl
+      const pool = data?.pools?.map(
+        (pl: { name: string; poolId: string | number; chainId: number; tokenType: string; category: PoolType }) => {
+          return {
+            type: 'Auction',
+            values: {
+              name: pl?.name,
+              poolId: pl?.poolId,
+              chainId: pl?.chainId,
+              tokenType: pl?.tokenType,
+              category: pl?.category,
+              value: pl
+            }
           }
         }
-      })
+      )
       const obj: ISearchAllOption[] = [...pool, ...temp]
       setUserData(obj)
     })
