@@ -7,6 +7,7 @@ import { getLabelById, shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import BigNumber from 'bignumber.js'
 import { Box, Stack, Typography } from '@mui/material'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
@@ -17,9 +18,7 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
     <Box
       component={'a'}
       target="_blank"
-      href={(auctionPoolItem.category === PoolType.Lottery ? routes.auction.randomSelection : routes.auction.fixedPrice)
-        .replace(':chainShortName', getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
-        .replace(':poolId', auctionPoolItem.poolId)}
+      href={getAuctionPoolLink(auctionPoolItem.category, auctionPoolItem.chainId, auctionPoolItem.poolId)}
     >
       <AuctionCard
         style={{ minWidth: 'unset' }}

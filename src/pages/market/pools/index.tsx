@@ -42,6 +42,7 @@ import { useNavigate } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
 import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
@@ -193,21 +194,7 @@ const Pools: React.FC = ({}) => {
     poolsPagination.changeCurrent(p)
   }
   const navigate = useNavigate()
-  const linkToDetail = (item: any) => {
-    if (item.category === 3) {
-      const linkUrl = routes.auction.randomSelection
-        .replace(':chainShortName', getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
-        .replace(':poolId', item.poolId)
-      console.log('randomSelection>>>', linkUrl)
-      navigate(linkUrl)
-    } else {
-      const linkUrl = routes.auction.fixedPrice
-        .replace(':chainShortName', getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
-        .replace(':poolId', item.poolId)
-      console.log('fixedPrice>>>', linkUrl)
-      navigate(linkUrl)
-    }
-  }
+
   return (
     <section>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
@@ -366,7 +353,13 @@ const Pools: React.FC = ({}) => {
                         <Grid container spacing={18}>
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                              <Box onClick={() => linkToDetail(fixedSwaptem)}>
+                              <Box
+                                onClick={() =>
+                                  navigate(
+                                    getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)
+                                  )
+                                }
+                              >
                                 <AuctionCard
                                   style={{ minWidth: 'unset' }}
                                   poolId={fixedSwaptem.poolId}

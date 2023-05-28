@@ -18,9 +18,9 @@ import { BigNumber } from 'bignumber.js'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
-import { getRoute } from 'bounceComponents/common/AuctionCard/AuctionRankCard'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 const poolType: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed-Price',
@@ -127,14 +127,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
           >
             {data?.list?.map((fixedSwaptem: any, index: number) => (
               <SwiperSlide key={index}>
-                <Link
-                  to={getRoute(fixedSwaptem.category)
-                    .replace(
-                      ':chainShortName',
-                      getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                    )
-                    .replace(':poolId', fixedSwaptem.poolId)}
-                >
+                <Link to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}>
                   <AuctionCard
                     style={{ minWidth: 'unset' }}
                     poolId={fixedSwaptem.poolId}

@@ -3,6 +3,7 @@ import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -163,6 +164,7 @@ export interface FixedSwapPool {
   token0: TokenFromApi
   token1: TokenFromApi
   tokenId: string
+  tokenType: BackedTokenType
   is721?: 0 | 1
   poolVersion?: number
 }

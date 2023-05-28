@@ -87,6 +87,30 @@ export function useENSRegistrarContract(withSignerIfPossible?: boolean, queryCha
   return useContract(address, ENS_ABI, withSignerIfPossible, queryChainId)
 }
 
+export function useSpaceIdRegistrarContract(withSignerIfPossible?: boolean, queryChainId?: ChainId): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  const curChainId = queryChainId || chainId
+  let address: string | undefined
+  if (curChainId) {
+    switch (curChainId) {
+      case ChainId.MAINNET:
+      case ChainId.GÖRLI:
+        address = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
+        break
+      case ChainId.BSCTEST:
+        address = '0xfFB52185b56603e0fd71De9de4F6f902f05EEA23'
+        break
+      case ChainId.BSC:
+        address = '0x08CEd32a7f3eeC915Ba84415e9C07a7286977956'
+        break
+      case ChainId.ARBITRUM:
+        address = '0x4a067EE58e73ac5E4a43722E008DFdf65B2bF348'
+        break
+    }
+  }
+  return useContract(address, ENS_ABI, withSignerIfPossible, queryChainId)
+}
+
 export function useENSResolverContract(
   address: string | undefined,
   withSignerIfPossible?: boolean,

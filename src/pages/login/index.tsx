@@ -13,6 +13,9 @@ import { useActiveWeb3React } from 'hooks'
 import { useOpenModal } from 'state/application/hooks'
 import { ApplicationModal } from 'state/application/actions'
 import { useWeb3React } from '@web3-react/core'
+import { routes } from 'constants/routes'
+import { useQueryParams } from 'hooks/useQueryParams'
+import { useNavigate } from 'react-router-dom'
 
 const illustrationWidth = 500
 
@@ -49,11 +52,11 @@ export function LoginLayout({ image, children }: { image: string; children: JSX.
 }
 
 const Login: React.FC = () => {
-  // const {redirect} = useQueryParams()
+  const { redirect } = useQueryParams()
   const { token } = useUserInfo()
   const { error } = useWeb3React()
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const getWalletOptions = useGetWalletOptions()
   const { account } = useActiveWeb3React()
   const openSignLoginModal = useOpenModal(ApplicationModal.SIGN_LOGIN)
@@ -70,6 +73,16 @@ const Login: React.FC = () => {
       openSignLoginModal()
     }
   }, [account, openSignLoginModal, token])
+
+  useEffect(() => {
+    if (token) {
+      setTimeout(() => {
+        if (window.location.pathname.includes(routes.login)) {
+          navigate(redirect || routes.market.index)
+        }
+      }, 2000)
+    }
+  }, [navigate, redirect, token])
 
   return (
     <section>
