@@ -12,7 +12,7 @@ const Header = ({
   isJoined: boolean
 }) => {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
       <Typography variant="h2">{!!isJoined ? 'You Joined' : 'Join The Pool'}</Typography>
       {poolInfo && (
         <PoolStatusBox
