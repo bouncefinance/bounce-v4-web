@@ -5,6 +5,7 @@ import VerifiedIcon from '../VerifiedIcon'
 import { USER_TYPE } from 'api/user/type'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export type ISearchOption = {
   label?: string
@@ -89,7 +90,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
         onSelect?.(ev, value)
         setSelect(value as ISearchOption)
       }}
-      value={value}
+      inputValue={value}
       renderInput={params => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { InputProps, InputLabelProps, ...rest } = params
@@ -97,6 +98,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
           <OutlinedInput
             {...InputProps}
             {...rest}
+            className="OInput"
             value={value}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
@@ -173,7 +175,12 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
               ) : (
                 ''
               )}
-              <MenuItem>
+              <MenuItem
+                onClick={() => {
+                  const element = document.querySelector('.OInput input') as HTMLInputElement
+                  element && element.blur()
+                }}
+              >
                 <Stack direction="row" alignItems="center" spacing={8} height={63}>
                   {option.values?.icon && (
                     <picture>
@@ -181,9 +188,20 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                     </picture>
                   )}
                   <div>
-                    <Typography variant="h6">{option.values.name}</Typography>
+                    <Typography
+                      width={'100%'}
+                      color={'#121212'}
+                      fontSize={14}
+                      lineHeight={'21px'}
+                      fontWeight={600}
+                      fontFamily={'Public Sans'}
+                      noWrap
+                      sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }}
+                    >
+                      {option.values.name}
+                    </Typography>
                     <Typography color={'#959595'} fontSize={12} lineHeight={'18px'}>
-                      NFT
+                      {option.values.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
                     </Typography>
                   </div>
                 </Stack>
@@ -200,6 +218,8 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
               )}
               <MenuItem
                 onClick={() => {
+                  const element = document.querySelector('.OInput input') as HTMLInputElement
+                  element && element.blur()
                   navigate(`${routes.profile.summary}?id=${option?.values.value?.userId}`)
                 }}
               >
@@ -210,12 +230,12 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                     </picture>
                   )}
                   <div>
-                    {option.values.label}
-                    {option?.values.value?.userType === USER_TYPE.USER && (
-                      <span style={{ color: 'rgba(23, 23, 23, 0.7)', marginLeft: 8 }}>
-                        #{option?.values.value?.fullNameId}
-                      </span>
-                    )}
+                    <Typography>{option.values.label}</Typography>
+                    <Typography>
+                      {option?.values.value?.userType === USER_TYPE.USER && (
+                        <span style={{ color: 'rgba(23, 23, 23, 0.7)' }}>#{option?.values.value?.fullNameId}</span>
+                      )}
+                    </Typography>
                   </div>
                   <VerifiedIcon isVerify={option?.values?.value?.isVerify} />
                 </Stack>
