@@ -21,16 +21,7 @@ import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
-
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT',
-  [PoolType['PlayableAuction']]: ''
-}
+import { poolTypeText } from 'pages/market/pools'
 
 interface Notable1155Props {
   handleViewAll?: () => void
@@ -254,7 +245,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
                         />
                       </>
                     }
-                    categoryName={poolType[fixedSwaptem.category as PoolType]}
+                    categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                     whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                     chainId={fixedSwaptem.chainId}
                   />

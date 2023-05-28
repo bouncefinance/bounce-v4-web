@@ -42,7 +42,7 @@ const NFTLaunchpadCard: React.FC<INFTLaunchpadCardProps> = ({
               border: '1px solid var(--ps-gray-50)'
             }}
           />
-          <AuctionStatus status={status} dateStr={dateStr} />
+          <AuctionStatus status={status} dateStr={dateStr || ''} />
         </Box>
         <CardMedia component="img" alt="green iguana" height="204" image="/imgs/company/banner.png"></CardMedia>
       </Box>

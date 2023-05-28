@@ -14,7 +14,7 @@ interface BidProps {
   setBidAmount: (value: string) => void
   handleGoToCheck: () => void
   handleCancelButtonClick: () => void
-  handlePlaceBid: (bidAmount: string) => void
+  handlePlaceBid: () => void
   isBidding?: boolean
 }
 

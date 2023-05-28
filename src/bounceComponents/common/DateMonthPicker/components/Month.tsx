@@ -76,7 +76,7 @@ const Month: React.FC<IMonthProps> = ({ month, onChange }) => {
     onChange(val)
   }, [onChange, val])
 
-  const handleClick = useCallback(val => {
+  const handleClick = useCallback((val: React.SetStateAction<number>) => {
     setVal(val)
   }, [])
 

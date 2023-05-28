@@ -1,7 +1,7 @@
 import { Stack } from '@mui/system'
 import React, { useCallback, useEffect } from 'react'
 // import { ReactComponent as LinkedInSVG } from '../../../../signup/assets/linkedIn.svg'
-import { ReactComponent as TwitterSVG } from '../../../../signup/assets/twitter.svg'
+import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/round-icon-twitter.svg'
 // import { ReactComponent as GoogleSVG } from './BoxLayout/googleLog.svg'
 import BoxLayout from './BoxLayout/BoxLayout'
 // import { ACCOUNT_TYPE } from 'api/user/type'

@@ -106,7 +106,7 @@ export interface CreatorUserInfo {
   companyIntroduction: string
   companyName: string
   name: string
-  publicRole?: null[] | null
+  publicRole?: string[]
   userId: number
   userType: number
   isVerify?: VerifyStatus

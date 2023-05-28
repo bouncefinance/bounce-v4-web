@@ -22,6 +22,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { PoolType } from 'api/pool/type'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { poolTypeText } from 'pages/market/pools'
 
 interface InfoBoxParams {
   title: string
@@ -83,14 +84,6 @@ const enum AuctionType {
   NFTAuction = 'NFT Auction',
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
-}
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
 interface PaginationParams {
   index: number
@@ -748,7 +741,7 @@ const TokenAuction: React.FC = () => {
                                   />
                                 </>
                               }
-                              categoryName={poolType[fixedSwaptem.category as PoolType]}
+                              categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                               whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                               chainId={fixedSwaptem.chainId}
                             />

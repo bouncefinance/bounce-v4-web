@@ -70,7 +70,7 @@ const useRandomSelectionPoolInfo = () => {
     poolInfo?.ethChainId
   ).result
   // console.log('myClaimedRes---', myClaimedRes?.[0], poolInfo?.participant.claimed)
-
+  // !TOTD contract data
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
     const _t0 = poolInfo.token0
@@ -80,6 +80,7 @@ const useRandomSelectionPoolInfo = () => {
 
     return {
       ...poolInfo,
+      currentBounceContractAddress: poolInfo.contract,
       token0: {
         ...poolInfo.token0,
         symbol: poolInfo.token0.symbol.toUpperCase()
@@ -90,8 +91,13 @@ const useRandomSelectionPoolInfo = () => {
       },
       participant: {
         ...poolInfo.participant,
-        claimed: myClaimedRes?.[0] || poolInfo.participant.claimed
+        claimed: myClaimedRes?.[0] || poolInfo.participant.claimed,
+        currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, poolInfo.participant.swappedAmount0 || '0'),
+        // !TOTD
+        currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, '0')
       },
+      currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, poolInfo.swappedAmount0),
+      currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.currentTotal1),
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),

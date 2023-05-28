@@ -264,7 +264,7 @@ export function useUserInfo(): ICacheLoginInfo & {
       token: '',
       userId: 0,
       userType: '0',
-      userInfo: {},
+      userInfo: undefined,
       companyInfo: {}
     }
   }

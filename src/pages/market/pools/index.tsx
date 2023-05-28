@@ -47,13 +47,14 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
 
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
+export const poolTypeText: Record<PoolType, string> = {
+  [PoolType.FixedSwap]: 'Fixed Price',
   [PoolType.Lottery]: 'Lottery',
   [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
+  [PoolType.SealedBid]: 'Sealed Bid',
+  [PoolType.fixedSwapNft]: 'Fixed Swap NFT',
+  [PoolType.ENGLISH_AUCTION_NFT]: 'ENGLISH AUCTION NFT',
+  [PoolType.PlayableAuction]: 'Playable Auction'
 }
 const initialValues = {
   searchText: '',
@@ -485,7 +486,7 @@ const Pools: React.FC = ({}) => {
                                       />
                                     </>
                                   }
-                                  categoryName={poolType[fixedSwaptem.category as PoolType]}
+                                  categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                                   whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                                   chainId={fixedSwaptem.chainId}
                                 />

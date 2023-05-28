@@ -44,14 +44,6 @@ import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { FixedSwapPool } from 'api/pool/type'
 
-// export type IPoolsProps = {}
-// const poolType: Record<PoolType, string> = {
-//   [PoolType.FixedSwap]: 'Fixed-Swap',
-//   [PoolType.Lottery]: 'Lottery',
-//   [PoolType.Duch]: 'Dutch Auction',
-//   [PoolType.SealedBid]: 'SealedBid',
-//   [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-// }
 const initialValues = {
   searchText: '',
   searchType: 0,

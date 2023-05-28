@@ -8,9 +8,9 @@ import { show } from '@ebay/nice-modal-react'
 import Image from 'components/Image'
 
 import DangerousTokenDialog from '../DangerousTokenDialog'
-import { Token } from '../types'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenImage from 'bounceComponents/common/TokenImage'
+import { Token } from 'bounceComponents/fixed-swap/type'
 
 function ItemRender(
   listChildComponentProps: ListChildComponentProps<Token[]>,

@@ -152,18 +152,15 @@ const usePoolInfo = () => {
         currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Res?.[0].toString() || '0')
       },
       creatorClaimed: creatorClaimedPRes?.[0] || poolInfo.creatorClaimed,
-      currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0) as CurrencyAmount,
-      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1) as CurrencyAmount,
+      currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
+      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(
         t0,
         amountSwap0PRes?.[0].toString() || poolInfo.swappedAmount0
-      ) as CurrencyAmount,
-      currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet) as CurrencyAmount,
-      currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0) as CurrencyAmount,
-      currencySwappedTotal1: CurrencyAmount.fromRawAmount(
-        t1,
-        amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
-      ) as CurrencyAmount
+      ),
+      currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
+      currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0),
+      currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1)
     }
   }, [
     amountSwap0PRes,

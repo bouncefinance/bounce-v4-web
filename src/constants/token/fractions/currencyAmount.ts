@@ -75,8 +75,8 @@ export class CurrencyAmount extends Fraction {
    * @param currency the currency in the amount
    * @param rawAmount the raw token or ether amount
    */
-  public static fromRawAmount(currency: Currency, rawAmount: BigintIsh | undefined): CurrencyAmount | undefined {
-    return rawAmount !== undefined ? new CurrencyAmount(currency, rawAmount) : undefined
+  public static fromRawAmount(currency: Currency, rawAmount: BigintIsh): CurrencyAmount {
+    return new CurrencyAmount(currency, rawAmount)
   }
 
   /**

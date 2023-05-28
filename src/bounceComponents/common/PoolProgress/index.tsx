@@ -30,6 +30,12 @@ const ProgressColorStyles: Record<
       '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Cancelled] }
     }
   },
+  [PoolStatus.Finish]: {
+    '&.MuiLinearProgress-root': {
+      bgcolor: '#D6DFF6',
+      '.MuiLinearProgress-bar': { bgcolor: AuctionProgressPrimaryColor[PoolStatus.Cancelled] }
+    }
+  },
   [PoolStatus.Closed]: {
     '&.MuiLinearProgress-root': {
       bgcolor: '#D6DFF6',

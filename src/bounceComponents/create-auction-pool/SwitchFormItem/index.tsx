@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { SwitchProps as MuiSwitchProps } from '@mui/material/Switch'
 import { FieldProps } from 'formik'
 import Switch from 'bounceComponents/common/Switch'
