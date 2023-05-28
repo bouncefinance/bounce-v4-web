@@ -77,7 +77,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
   )
 }
 
-const SkeletonCard = () => {
+const ActiveUserSkeletonCard = () => {
   return (
     <Box
       sx={{
@@ -162,7 +162,7 @@ export const ActiveUser: React.FC = () => {
             ))
           : new Array(5).fill(0).map((item, index) => (
               <SwiperSlide key={index}>
-                <SkeletonCard />
+                <ActiveUserSkeletonCard />
               </SwiperSlide>
             ))}
       </SlideProgress>

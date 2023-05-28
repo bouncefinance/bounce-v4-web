@@ -1,5 +1,5 @@
 import { H3, H4 } from '../../../components/Text'
-import { Box, Container, MenuItem, Select, Skeleton, Button } from '@mui/material'
+import { Box, Container, MenuItem, Select, Button } from '@mui/material'
 import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { routes } from '../../../constants/routes'
@@ -15,6 +15,7 @@ import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import { HomeNFTSkeletonCard } from '../Notable721'
 interface Notable1155Props {
   handleViewAll?: () => void
 }
@@ -49,58 +50,7 @@ export const Notable1155 = (props: Notable1155Props) => {
       refreshDeps: [auction, chainFilter]
     }
   )
-  const SkeletonCard = () => {
-    return (
-      <Box display={'flex'} flexWrap={'nowrap'} gap={60}>
-        {Array.from(new Array(4)).map((lodingItem, index) => (
-          <Box
-            key={index}
-            width="309px"
-            sx={{
-              padding: '12px',
-              background: '#fff',
-              boxShadow: '0px 5px 20px rgba(0, 0, 0, 0.08)',
-              borderRadius: '24px'
-            }}
-          >
-            <Box width="309px" height={236} display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-              <Box display="flex" gap={40}>
-                <Skeleton component={'div'} variant="circular" width={32} height={32} />
-                <Box width={'100%'}>
-                  <Skeleton variant="text" width={'20%'} sx={{ fontSize: '1rem' }} />
-                  <Skeleton variant="text" width={'40%'} sx={{ fontSize: '1rem' }} />
-                </Box>
-              </Box>
-              <Box>
-                <Box display="flex" gap={10} sx={{ '& > div': { borderRadius: '15px' } }}>
-                  <Skeleton component={'div'} variant="rectangular" width={'80%'} height={30} />
-                  {/* <Skeleton component={'div'} variant="rectangular" width={'30%'} height={30} /> */}
-                </Box>
-                <Box display="flex" gap={10} mt={10} sx={{ '& > div': { borderRadius: '15px' } }}>
-                  <Skeleton component={'div'} variant="rectangular" width={'20%'} height={30} />
-                  <Skeleton component={'div'} variant="rectangular" width={'20%'} height={30} />
-                  <Skeleton component={'div'} variant="rectangular" width={'20%'} height={30} />
-                </Box>
-              </Box>
-            </Box>
-            <Box sx={{ margin: '16px 12px 22px' }}>
-              <Skeleton width={'90%'} />
-              <Box display="flex" justifyContent={'space-between'} sx={{ marginTop: '10px' }}>
-                <Skeleton width={'40%'} height={30} />
-                <Skeleton
-                  component={'div'}
-                  variant="rectangular"
-                  width={'30%'}
-                  height={30}
-                  sx={{ borderRadius: '15px' }}
-                />
-              </Box>
-            </Box>
-          </Box>
-        ))}
-      </Box>
-    )
-  }
+
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
@@ -129,7 +79,7 @@ export const Notable1155 = (props: Notable1155Props) => {
           </Row>
         </CenterRow>
         {loading ? (
-          <SkeletonCard />
+          <HomeNFTSkeletonCard />
         ) : data?.list?.length === 0 ? (
           <Box>
             <EmptyData />
