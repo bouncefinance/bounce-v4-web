@@ -111,7 +111,7 @@ const initialValues: AuctionPool = {
   endTime: null,
   shouldDelayUnlocking: false,
   delayUnlockingTime: null,
-  releaseType: 1000,
+  releaseType: IReleaseType.Cliff,
   releaseDataArr: [],
   whitelist: [],
   activeStep: 0,
