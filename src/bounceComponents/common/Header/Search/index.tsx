@@ -39,7 +39,14 @@ const Search: React.FC = () => {
         }
       })
       const pool = data?.pools?.map(
-        (pl: { name: string; poolId: string | number; chainId: number; tokenType: string; category: PoolType }) => {
+        (pl: {
+          name: string
+          poolId: string | number
+          chainId: number
+          tokenType: string
+          category: PoolType
+          token0: any
+        }) => {
           return {
             type: 'Auction',
             values: {
@@ -48,6 +55,7 @@ const Search: React.FC = () => {
               chainId: pl?.chainId,
               tokenType: pl?.tokenType,
               category: pl?.category,
+              token0: pl?.token0,
               value: pl
             }
           }

@@ -19,6 +19,7 @@ export type ISearchOption = {
   chainId?: number
   tokenType?: number
   category?: PoolType
+  token0?: any
 }
 
 export type ISearchAllOption = { type: string; values: ISearchOption }
@@ -200,13 +201,14 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                 <Stack width={'100%'} direction="row" alignItems="center" spacing={8} height={63}>
                   <picture>
                     <img
-                      src={option.values.icon || EmptyToken}
+                      src={option.values.token0.smallUrl || EmptyToken}
                       style={{ width: 32, height: 32, borderRadius: '6px' }}
                     />
                   </picture>
                   <Box
                     width={'100%'}
                     sx={{
+                      overflow: 'hidden',
                       '& p': {
                         width: '100%',
                         textOverflow: 'ellipsis',
