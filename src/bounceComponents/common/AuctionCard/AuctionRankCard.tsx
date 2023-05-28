@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, MenuItem, Select, styled } from '@mui/material'
+import { Box, MenuItem, Select, styled, Skeleton, Grid } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
@@ -170,7 +170,70 @@ export function AuctionRow(props: any): ReactJSXElement[] {
     <Status key={3} status={status} />
   ]
 }
-
+const SkeletonBox = () => {
+  return (
+    <Box sx={{ display: 'flex', height: '516px', borderRadius: '0px 30px 30px 30px', overflow: 'hidden' }}>
+      {new Array(2).fill(0).map((item, index) => (
+        <Box
+          key={index}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '50%',
+            padding: '20px',
+            background: 'white'
+          }}
+        >
+          <Box
+            display="flex"
+            gap={40}
+            sx={{
+              '& > span': {
+                borderRadius: '20px'
+              }
+            }}
+          >
+            <Skeleton variant="rectangular" width={'40%'} height={40} />
+            <Skeleton variant="rectangular" width={'40%'} height={40} />
+            <Skeleton variant="rectangular" width={'10%'} height={40} />
+          </Box>
+          {new Array(5).fill(0).map((i, v) => (
+            <Grid key={v} container spacing={40} sx={{ marginTop: '20px' }}>
+              <Grid item xs={5} display={'flex'} justifyContent={'space-between'} gap={20}>
+                <Skeleton variant="rounded" animation={false} width={40} height={40} sx={{ borderRadius: '8px' }} />
+                <Skeleton
+                  variant="rectangular"
+                  animation={false}
+                  width={'calc(100% - 60px)'}
+                  height={40}
+                  sx={{ borderRadius: '20px' }}
+                />
+              </Grid>
+              <Grid item xs={5} display={'flex'} justifyContent={'space-between'} gap={20}>
+                <Skeleton
+                  variant="rectangular"
+                  animation={false}
+                  width={'100%'}
+                  height={40}
+                  sx={{ borderRadius: '20px' }}
+                />
+              </Grid>
+              <Grid item xs={2} display={'flex'} justifyContent={'space-between'} gap={20}>
+                <Skeleton
+                  variant="rectangular"
+                  animation={false}
+                  width={'100%'}
+                  height={40}
+                  sx={{ borderRadius: '20px' }}
+                />
+              </Grid>
+            </Grid>
+          ))}
+        </Box>
+      ))}
+    </Box>
+  )
+}
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
   const [currentTab, setTab] = useState(Tabs[0])
@@ -190,7 +253,6 @@ export const AuctionRankCard: React.FC = () => {
     },
     { refreshDeps: [action, chainFilter] }
   )
-
   return (
     <Box
       sx={{
@@ -233,7 +295,7 @@ export const AuctionRankCard: React.FC = () => {
           ))}
         </Select>
       </CenterRow>
-      {data && Array.isArray(data.list) && data.list.length > 0 && (
+      {data && Array.isArray(data.list) && data.list.length > 0 ? (
         <Box
           sx={{
             padding: '12px',
@@ -274,6 +336,8 @@ export const AuctionRankCard: React.FC = () => {
             }
           />
         </Box>
+      ) : (
+        <SkeletonBox />
       )}
       {data?.list && data?.list?.length === 0 && (
         <Box
