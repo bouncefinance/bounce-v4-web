@@ -193,12 +193,12 @@ const SkeletonBox = () => {
               }
             }}
           >
-            <Skeleton variant="rectangular" width={'40%'} height={40} />
-            <Skeleton variant="rectangular" width={'40%'} height={40} />
-            <Skeleton variant="rectangular" width={'10%'} height={40} />
+            <Skeleton variant="rectangular" width={'40%'} height={30} />
+            <Skeleton variant="rectangular" width={'40%'} height={30} />
+            <Skeleton variant="rectangular" width={'10%'} height={30} />
           </Box>
           {new Array(5).fill(0).map((i, v) => (
-            <Grid key={v} container spacing={40} sx={{ marginTop: '20px' }}>
+            <Grid key={v} container spacing={40} sx={{ marginTop: '5px' }}>
               <Grid item xs={5} display={'flex'} justifyContent={'space-between'} gap={20}>
                 <Skeleton variant="rounded" animation={false} width={40} height={40} sx={{ borderRadius: '8px' }} />
                 <Skeleton
