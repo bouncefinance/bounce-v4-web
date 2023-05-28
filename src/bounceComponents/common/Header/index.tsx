@@ -96,12 +96,10 @@ const Header: React.FC = () => {
                 <LogoSVG />
               </a>
             </Link>
-
             <HeartMenu />
-            <Stack direction={'row'} alignItems="center" spacing={24}>
+            <Stack direction={'row'} alignItems="center" spacing={24} flex={'1'}>
               <Search />
               <CreateBtn />
-
               <Stack direction="row" alignItems="center" spacing={20}>
                 {token ? (
                   <div>
