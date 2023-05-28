@@ -184,7 +184,7 @@ export default function Header() {
           {!isTransparentRoute && <HeaderLink />}
         </Box>
 
-        <Stack direction={'row'} alignItems="center" spacing={8}>
+        <Stack direction={'row'} alignItems="center" spacing={8} flex={1}>
           <Search />
           <Resources />
           <CreateBtn />
@@ -201,6 +201,7 @@ export default function Header() {
                 navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
               }}
               sx={{
+                minWidth: 212,
                 borderRadius: 8,
                 padding: '0 12px',
                 border: '1px solid var(--ps-gray-20)',

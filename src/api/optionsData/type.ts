@@ -28,6 +28,12 @@ export interface ISearchUserParams {
   value: string
 }
 
+export interface ISearchUserPoolParams {
+  limit: number
+  offset: number
+  value: string
+}
+
 export interface ISearchCreator {
   limit: number
   offset: number

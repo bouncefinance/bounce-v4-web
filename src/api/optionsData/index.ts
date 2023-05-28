@@ -1,4 +1,4 @@
-import { ISearchCreator, IsearchEduInfoParams, ISearchUserParams, ResOptionsData } from './type'
+import { ISearchCreator, IsearchEduInfoParams, ISearchUserParams, ISearchUserPoolParams, ResOptionsData } from './type'
 import { ApiInstance } from 'api'
 
 export const getOptionsData = async () => {
@@ -15,6 +15,10 @@ export const searchCompanyInfo = (body: IsearchEduInfoParams) => {
 
 export const searchUser = (body: ISearchUserParams) => {
   return ApiInstance.post('/com/search/user', body)
+}
+
+export const searchPoolAndUser = (body: ISearchUserPoolParams) => {
+  return ApiInstance.post('/com/search/top', body)
 }
 
 export const searchToken = (body: IsearchEduInfoParams) => {
