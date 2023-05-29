@@ -27,7 +27,7 @@ export function Common({
 }: {
   img: string
   child: React.ReactElement
-  onClick: () => void
+  onClick?: () => void
   sx?: SxProps
   poolTypeName: string
   startAndEnd:

@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 import { Avatar, Box, Stack, styled, Typography } from '@mui/material'
 import styles from './styles'
 import { IProfileUserInfo } from 'api/user/type'
-import { ITabsListProps } from 'bounceComponents/profile/ProfileLayout'
 import { Link } from 'react-router-dom'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { routes } from 'constants/routes'
@@ -55,6 +54,13 @@ const AuctionCountBg = styled(Box)`
   border: 1px solid #e8e9e4;
   border-radius: 8px;
 `
+
+export interface ITabsListProps {
+  labelKey: number | string
+  label: string | ReactNode
+  content?: string | ReactNode
+  href?: string
+}
 
 function AuctionCount({ title, count }: { title: string; count: number }) {
   return (

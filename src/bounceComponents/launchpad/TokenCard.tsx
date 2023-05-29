@@ -57,6 +57,8 @@ function TokenDesc() {
 export function TokenCard({ child, state }: { child?: ReactJSXElement; state: PoolStatus }) {
   return (
     <Common
+      poolTypeName=""
+      startAndEnd={undefined}
       img={''}
       child={
         <Box padding={'24px 40px'} display={'flex'} flexDirection={'column'} height={'100%'}>

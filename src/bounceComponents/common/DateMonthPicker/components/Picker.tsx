@@ -24,11 +24,11 @@ const Picker: React.FC<IPickerProps> = ({ date, onChange, onClose }) => {
     onClose?.()
   }, [month, onChange, onClose, year])
 
-  const yearChange = useCallback(val => {
+  const yearChange = useCallback((val: number) => {
     setYear(val)
   }, [])
 
-  const monthChange = useCallback(val => {
+  const monthChange = useCallback((val: number) => {
     setMonth(val)
   }, [])
 

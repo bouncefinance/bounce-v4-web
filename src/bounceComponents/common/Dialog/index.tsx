@@ -8,7 +8,7 @@ import {
   IconButton,
   DialogProps as MuiDialogProps
 } from '@mui/material'
-import { create, useModal } from '@ebay/nice-modal-react'
+import { NiceModalHocProps, create, useModal } from '@ebay/nice-modal-react'
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 
 export interface IDialogProps extends MuiDialogProps {
@@ -16,11 +16,12 @@ export interface IDialogProps extends MuiDialogProps {
   children: React.ReactNode
 }
 
-const Dialog: React.FC<IDialogProps> = create(props => {
+const Dialog: React.FC<IDialogProps & NiceModalHocProps> = create(props => {
   const { title, children, ...rest } = props
   const modal = useModal()
   return (
     <MuiDialog
+      {...rest}
       open={modal.visible}
       onClose={() => modal.hide()}
       sx={{
@@ -29,7 +30,6 @@ const Dialog: React.FC<IDialogProps> = create(props => {
           borderRadius: 20
         }
       }}
-      {...rest}
     >
       <DialogTitle sx={{ padding: '20px 20px 40px 102px' }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">

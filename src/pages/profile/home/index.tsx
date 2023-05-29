@@ -48,8 +48,3 @@ export default function Home() {
     </Box>
   )
 }
-
-{
-  /* <PersonalOverview personalInfo={personalInfo} />
-<Activitie personalInfoId={personalInfo?.id} />*/
-}

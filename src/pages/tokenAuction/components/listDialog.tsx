@@ -26,14 +26,8 @@ import FixedSelected from 'components/FixedSelected'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
-}
+import { poolTypeText } from 'pages/market/pools'
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>
@@ -391,7 +385,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                             />
                           </>
                         }
-                        categoryName={poolType[fixedSwaptem.category as PoolType]}
+                        categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                         whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                         chainId={fixedSwaptem.chainId}
                       />

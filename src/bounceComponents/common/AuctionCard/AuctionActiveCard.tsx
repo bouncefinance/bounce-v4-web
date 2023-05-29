@@ -1,4 +1,4 @@
-import { Box, Container, styled } from '@mui/material'
+import { Box, Container, Skeleton, styled } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
@@ -77,6 +77,34 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
   )
 }
 
+const ActiveUserSkeletonCard = () => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        padding: '16px',
+        cursor: 'pointer',
+        width: 'fit-content',
+        gap: '20px',
+        background: '#FFFFFF',
+        borderRadius: '20px'
+      }}
+    >
+      <Box sx={{ width: '150px', height: '150px', borderRadius: '14px' }}>
+        <Skeleton
+          variant="rectangular"
+          component={'div'}
+          sx={{ width: '150px', height: '150px', borderRadius: '14px' }}
+        />
+      </Box>
+
+      <Box width={'220px'} display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
+        <Skeleton width={'30%'} height={28} variant="text" component={'div'} />
+        <Skeleton width={'100%'} height={80} variant="rounded" component={'div'} sx={{ borderRadius: '10px' }} />
+      </Box>
+    </Box>
+  )
+}
 export const ActiveUser: React.FC = () => {
   const { data } = useRequest(async () => {
     const resp = await getActiveUsers()
@@ -119,18 +147,24 @@ export const ActiveUser: React.FC = () => {
           freeMode: true
         }}
       >
-        {data?.list.map((data: any, idx: number) => (
-          <SwiperSlide key={idx}>
-            <AuctionActiveCard
-              userId={data.creatorUserInfo.userId}
-              img={data.creatorUserInfo.avatar}
-              name={data.creatorUserInfo.name}
-              desc={data.creatorUserInfo.companyIntroduction}
-              createdCount={data.totalCreated}
-              participated={data.totalPart}
-            />
-          </SwiperSlide>
-        ))}
+        {data && data?.list && data.list.length
+          ? data?.list.map((data: any, idx: number) => (
+              <SwiperSlide key={idx}>
+                <AuctionActiveCard
+                  userId={data.creatorUserInfo.userId}
+                  img={data.creatorUserInfo.avatar}
+                  name={data.creatorUserInfo.name}
+                  desc={data.creatorUserInfo.companyIntroduction}
+                  createdCount={data.totalCreated}
+                  participated={data.totalPart}
+                />
+              </SwiperSlide>
+            ))
+          : new Array(8).fill(0).map((item, index) => (
+              <SwiperSlide key={index}>
+                <ActiveUserSkeletonCard />
+              </SwiperSlide>
+            ))}
       </SlideProgress>
     </Box>
   )
