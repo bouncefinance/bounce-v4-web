@@ -21,7 +21,7 @@ export function useScrollHeight() {
 
 export function useHeaderBgOpacity() {
   const height = useScrollHeight()
-  const opacity1H = 200
+  const opacity1H = 80
   const curH = useMemo(() => ((height || 0) > opacity1H ? opacity1H : height || 0), [height])
 
   return useMemo(() => {

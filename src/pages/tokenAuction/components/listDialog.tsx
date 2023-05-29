@@ -25,14 +25,9 @@ import { formatNumber } from 'utils/number'
 import FixedSelected from 'components/FixedSelected'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
-}
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { poolTypeText } from 'pages/market/pools'
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>
@@ -231,21 +226,6 @@ const NFTAuctionListDialog = (props: DialogParams) => {
   }, [handleSubmit, open, filterValues])
   const navigate = useNavigate()
 
-  const linkToDetail = (item: any) => {
-    if (item.category === 3) {
-      const linkUrl = routes.auction.randomSelection
-        .replace(':chainShortName', getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
-        .replace(':poolId', item.poolId)
-      console.log('randomSelection>>>', linkUrl)
-      navigate(linkUrl)
-    } else {
-      const linkUrl = routes.auction.fixedPrice
-        .replace(':chainShortName', getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || []))
-        .replace(':poolId', item.poolId)
-      console.log('fixedPrice>>>', linkUrl)
-      navigate(linkUrl)
-    }
-  }
   return (
     <NFTDialog
       fullScreen={false}
@@ -290,7 +270,11 @@ const NFTAuctionListDialog = (props: DialogParams) => {
               <Grid container spacing={18}>
                 {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                   <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
-                    <Box onClick={() => linkToDetail(fixedSwaptem)}>
+                    <Box
+                      onClick={() =>
+                        navigate(getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId))
+                      }
+                    >
                       <AuctionCard
                         style={{ minWidth: 'unset' }}
                         poolId={fixedSwaptem.poolId}
@@ -401,7 +385,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                             />
                           </>
                         }
-                        categoryName={poolType[fixedSwaptem.category as PoolType]}
+                        categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                         whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                         chainId={fixedSwaptem.chainId}
                       />

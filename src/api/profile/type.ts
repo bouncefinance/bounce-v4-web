@@ -1,8 +1,6 @@
 // import { PoolType } from '../pool/type'
 import { IAvatarLinkType, IFileType } from '../upload/type'
-import { BasicStep } from 'pages/profile/basic'
-import { CompletedSteps } from 'components/create-auction-pool/types'
-import { ResumeStep } from 'pages/profile/resume'
+import { CompletedSteps } from 'bounceComponents/create-auction-pool/types'
 
 export interface IupdateBasicParams {
   avatar: IFileType
@@ -23,8 +21,6 @@ export interface IupdateBasicParams {
   twitter: string
   university: IAvatarLinkType
   website: string
-  activeStep?: BasicStep
-  completed?: CompletedSteps
 }
 
 export interface educationItems {
@@ -63,7 +59,6 @@ export interface IUpdatePersonalParams {
   resumes: IFileType[]
   skills: string
   years: number
-  activeStep?: ResumeStep
   completed?: CompletedSteps
 }
 

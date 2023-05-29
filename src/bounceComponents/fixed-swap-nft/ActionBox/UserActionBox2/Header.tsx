@@ -8,7 +8,7 @@ const Header = (props: FixedSwapPoolParams) => {
   const { poolInfo, getPoolInfo } = props
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
       <JoinStatus poolInfo={poolInfo} />
       <PoolStatusBox
         status={poolInfo.status}

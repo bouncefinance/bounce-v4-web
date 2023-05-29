@@ -15,13 +15,13 @@ const DateMonthPicker: React.FC<IDateMonthPickerProps> = ({ value, onChange, dis
   const [anchorEl, setAnchorEl] = useState<HTMLInputElement | null>(null)
 
   const handleDateChange = useCallback(
-    val => {
+    (val: IDateProps) => {
       onChange(val)
     },
     [onChange]
   )
 
-  const handleClick = useCallback(ev => {
+  const handleClick = useCallback((ev: any) => {
     setAnchorEl(ev.currentTarget)
   }, [])
 

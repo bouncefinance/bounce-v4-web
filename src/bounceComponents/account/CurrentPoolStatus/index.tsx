@@ -9,13 +9,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { PoolType } from 'api/pool/type'
-import { routes } from 'constants/routes'
-import { getLabelById } from 'utils'
 import { NFTCard } from 'pages/market/nftAuctionPool'
-import { useOptionDatas } from 'state/configOptions/hooks'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import styles from 'pages/account/tabStyles'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 const StatusText = {
   [DashboardQueryType.ongoing]: 'Ongoing Auctions',
@@ -31,7 +29,6 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
   const { account } = useActiveWeb3React()
   const [curPage, setCurPage] = useState(1)
   const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
-  const optionDatas = useOptionDatas()
 
   const { data: createdData, loading: createdLoading } = useUserPoolsTokenCreated(
     account || undefined,
@@ -126,19 +123,17 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
                 .slice((curPage - 1) * defaultPageSize, curPage * defaultPageSize)
                 .map((auctionPoolItem, index) => (
                   <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
-                    {auctionPoolItem.category === PoolType.FixedSwap ||
-                    auctionPoolItem.category === PoolType.Lottery ? (
+                    {auctionPoolItem.tokenType === BackedTokenType.TOKEN ? (
                       <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                     ) : (
                       <Box
                         component={'a'}
                         target="_blank"
-                        href={routes.auction.fixedSwapNft
-                          .replace(
-                            ':chainShortName',
-                            getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                          )
-                          .replace(':poolId', auctionPoolItem.poolId)}
+                        href={getAuctionPoolLink(
+                          auctionPoolItem.category,
+                          auctionPoolItem.chainId,
+                          auctionPoolItem.poolId
+                        )}
                       >
                         <NFTCard nft={auctionPoolItem} hiddenStatus={true} />
                       </Box>

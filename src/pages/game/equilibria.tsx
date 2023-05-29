@@ -31,6 +31,7 @@ import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 import ReactMarkdown, { ReactNode } from 'react-markdown'
 import EquilibriaAvatar from '../launchpad/avatar/equilibria-logo.png'
 import useUploadGameScoreCrypto from 'hooks/useUploadGameScoreCrypto'
+import { NormalComponent } from 'react-markdown/src/ast-to-react'
 
 function a11yProps(index: number) {
   return {
@@ -1100,13 +1101,11 @@ function PoolDetail() {
       >
         <ReactMarkdown
           components={{
-            a({ children, href }: { children: ReactNode; href: string }) {
-              return (
-                <a href={href} style={{ color: 'blue', textDecoration: 'underline' }}>
-                  {children}
-                </a>
-              )
-            }
+            a: (({ children, href }: { children: ReactNode; href: string }) => (
+              <a href={href} style={{ color: 'blue', textDecoration: 'underline' }}>
+                {children}
+              </a>
+            )) as unknown as NormalComponent
           }}
         >
           {EquilibriaIntroMd}

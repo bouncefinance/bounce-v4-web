@@ -14,6 +14,7 @@ import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
+import { useShowLoginModal } from 'state/users/hooks'
 
 interface BidButtonBlockProps {
   action: UserBidAction
@@ -35,6 +36,7 @@ const BidButtonBlock = ({
   handleCancelButtonClick
 }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
 
   const slicedBidAmount = useMemo(
@@ -57,6 +59,14 @@ const BidButtonBlock = ({
 
   if (poolInfo.status === PoolStatus.Upcoming) {
     return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />
+  }
+
+  if (!account) {
+    return (
+      <Button variant="contained" fullWidth onClick={showLoginModal}>
+        Connect Wallet
+      </Button>
+    )
   }
 
   if (!isCurrentChainEqualChainOfPool) {

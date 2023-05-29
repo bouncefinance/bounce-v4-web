@@ -10,11 +10,10 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { getPools } from 'api/market'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import { NFTCard } from 'pages/market/nftAuctionPool/index'
-import { getLabelById } from 'utils'
-import { routes } from 'constants/routes'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 export type IActivitieProps = {
   userInfo: IProfileUserInfo
@@ -107,18 +106,17 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
             <Grid container spacing={18}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                  {auctionPoolItem.category !== PoolType.fixedSwapNft ? (
+                  {auctionPoolItem.tokenType === BackedTokenType.TOKEN ? (
                     <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                   ) : (
                     <Box
                       component={'a'}
                       target="_blank"
-                      href={routes.auction.fixedSwapNft
-                        .replace(
-                          ':chainShortName',
-                          getLabelById(auctionPoolItem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                        )
-                        .replace(':poolId', auctionPoolItem.poolId)}
+                      href={getAuctionPoolLink(
+                        auctionPoolItem.category,
+                        auctionPoolItem.chainId,
+                        auctionPoolItem.poolId
+                      )}
                     >
                       <NFTCard nft={auctionPoolItem} hiddenStatus={true} />
                     </Box>

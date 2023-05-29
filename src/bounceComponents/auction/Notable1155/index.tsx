@@ -1,5 +1,5 @@
 import { H3, H4 } from '../../../components/Text'
-import { Box, Container, Grid, MenuItem, Select, Skeleton, Button } from '@mui/material'
+import { Box, Container, MenuItem, Select, Button } from '@mui/material'
 import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { routes } from '../../../constants/routes'
@@ -15,9 +15,11 @@ import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import { HomeNFTSkeletonCard } from '../Notable721'
 interface Notable1155Props {
   handleViewAll?: () => void
 }
+
 export const Notable1155 = (props: Notable1155Props) => {
   const { handleViewAll } = props
   const optionDatas = useOptionDatas()
@@ -48,6 +50,7 @@ export const Notable1155 = (props: Notable1155Props) => {
       refreshDeps: [auction, chainFilter]
     }
   )
+
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
@@ -76,18 +79,7 @@ export const Notable1155 = (props: Notable1155Props) => {
           </Row>
         </CenterRow>
         {loading ? (
-          <Grid container spacing={18}>
-            {Array.from(new Array(4)).map((lodingItem, index) => (
-              <Grid item xs={3} sm={3} md={3} lg={3} xl={3} key={index}>
-                <Skeleton
-                  key={index}
-                  variant="rounded"
-                  height={400}
-                  sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <HomeNFTSkeletonCard />
         ) : data?.list?.length === 0 ? (
           <Box>
             <EmptyData />

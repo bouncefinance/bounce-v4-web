@@ -3,12 +3,12 @@ import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 
 export interface GetUserPoolsDashboardParams {
-  address: string
+  address?: string
   category: PoolType | 0 // 1="fixed_swap", 2="dutch", 3="lottery", 4="sealed_bid", 5="fixed_swap_nft"
   chainId: number
   limit?: number
   offset?: number
-  tokenType: 1 | 2
+  tokenType?: 1 | 2
   queryType: DashboardQueryType | 0
 }
 
