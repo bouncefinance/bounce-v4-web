@@ -336,10 +336,7 @@ export const AuctionRankCard: React.FC = () => {
             }
           />
         </Box>
-      ) : (
-        <SkeletonBox />
-      )}
-      {data?.list && data?.list?.length === 0 && (
+      ) : data?.list && data?.list?.length === 0 ? (
         <Box
           sx={{
             background: 'white'
@@ -347,6 +344,8 @@ export const AuctionRankCard: React.FC = () => {
         >
           <EmptyData />
         </Box>
+      ) : (
+        <SkeletonBox />
       )}
     </Box>
   )

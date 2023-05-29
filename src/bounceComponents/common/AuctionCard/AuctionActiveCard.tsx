@@ -160,7 +160,7 @@ export const ActiveUser: React.FC = () => {
                 />
               </SwiperSlide>
             ))
-          : new Array(5).fill(0).map((item, index) => (
+          : new Array(8).fill(0).map((item, index) => (
               <SwiperSlide key={index}>
                 <ActiveUserSkeletonCard />
               </SwiperSlide>
