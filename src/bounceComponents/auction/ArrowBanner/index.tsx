@@ -24,6 +24,7 @@ export interface IBanner {
 
 function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
   const { data } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
@@ -31,6 +32,13 @@ function ArrowBanner({ type }: { type?: string }) {
       total: resp.data
     }
   })
+
+  const EnterSwiper = () => {
+    setShowSwiperIcon(true)
+  }
+  const LeaveSwiper = () => {
+    setShowSwiperIcon(false)
+  }
   return (
     <Box
       position={'relative'}
@@ -43,14 +51,18 @@ function ArrowBanner({ type }: { type?: string }) {
         minHeight: 460,
         margin: '16px auto 0'
       }}
+      onMouseEnter={EnterSwiper}
+      onMouseLeave={LeaveSwiper}
     >
       <ArrowBgLeft
+        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
         onClick={() => {
           swiper?.slidePrev()
         }}
       >
         <ArrowBackIcon />
       </ArrowBgLeft>
+
       <Swiper
         onSwiper={setSwiper}
         spaceBetween={0}
@@ -70,7 +82,11 @@ function ArrowBanner({ type }: { type?: string }) {
           </SwiperSlide>
         ))}
       </Swiper>
-      <ArrowBgRight onClick={() => swiper?.slideNext()}>
+
+      <ArrowBgRight
+        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+        onClick={() => swiper?.slideNext()}
+      >
         <ArrowForwardIcon />
       </ArrowBgRight>
     </Box>
@@ -98,12 +114,18 @@ const ArrowBgLeft = styled(ArrowBg)`
   left: -30px;
   top: 50%;
   transform: translateY(-50%);
+  '&.show-icon': {
+    display: 'none';
+  }
 `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
   right: -30px;
   top: 50%;
   transform: translateY(-50%);
+  '&.show-icon': {
+    display: 'none';
+  }
 `
 
 const BannerH3 = styled(Typography)`
