@@ -14,7 +14,7 @@ const GoToCheckButton = ({ onClick, bidAmount, poolInfo }: GoToCheckButtonProps)
       fullWidth
       sx={{ mt: 24 }}
       onClick={onClick}
-      disabled={!bidAmount || !poolInfo.whitelistData.isUserInWhitelist || poolInfo.whitelistData.loading}
+      disabled={!bidAmount || !poolInfo.whitelistData?.isUserInWhitelist || poolInfo.whitelistData?.loading}
     >
       Place a Bid
     </Button>

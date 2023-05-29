@@ -8,11 +8,11 @@ import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 const Alert = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const isUserJoinedPool = useIsUserJoinedPool(poolInfo)
 
-  if (poolInfo.whitelistData.loading) {
+  if (poolInfo.whitelistData?.loading) {
     return null
   }
 
-  if (!poolInfo.whitelistData.isUserInWhitelist) {
+  if (!poolInfo.whitelistData?.isUserInWhitelist) {
     return <NotEligibleAlert />
   }
 

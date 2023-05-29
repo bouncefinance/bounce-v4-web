@@ -90,7 +90,7 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
       sx={{ ...sx }}
       loadingPosition="start"
       loading={loading}
-      disabled={!bidAmount || !poolInfo.whitelistData.isUserInWhitelist || poolInfo.whitelistData.loading}
+      disabled={!bidAmount || !poolInfo.whitelistData?.isUserInWhitelist || poolInfo.whitelistData?.loading}
       onClick={onClick}
     >
       {loading ? (

@@ -185,16 +185,16 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     swappedAmount0?: string
     currencySwappedAmount0: CurrencyAmount | undefined // all token0
     currencySwappedAmount1: CurrencyAmount | undefined
-    currencyCurReleasableAmount: CurrencyAmount | undefined // current releasable
-    currencyCurClaimableAmount: CurrencyAmount | undefined // current claimable
-    currencyMyReleased: CurrencyAmount | undefined //current my Released token
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
   }
   totalShare?: string | number
   maxPlayere?: string | number
   curPlayer?: string | number
-  releaseType: IReleaseType | undefined
-  releaseData: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
-  whitelistData: {
+  releaseType?: IReleaseType | undefined
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined
     loading: boolean

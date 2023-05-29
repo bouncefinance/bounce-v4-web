@@ -65,7 +65,7 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       {poolInfo.poolVersion === 1 && isClaimingDelayed && (
         <PoolInfoItem title="Delay Unlocking Token Date">{formattedClaimTime}</PoolInfoItem>
       )}
-      {poolInfo.poolVersion === 2 && poolInfo.releaseType !== undefined && (
+      {poolInfo.poolVersion === 2 && poolInfo.releaseType !== undefined && poolInfo.releaseData && (
         <TokenUnlockingInfo releaseData={poolInfo.releaseData} releaseType={poolInfo.releaseType} />
       )}
     </Stack>

@@ -111,7 +111,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     if (!currencyBidAmount) return
     showRequestConfirmDialog()
     try {
-      const func = poolInfo.enableWhiteList && poolInfo.whitelistData.isPermit ? swapPermitCallback : bid
+      const func = poolInfo.enableWhiteList && poolInfo.whitelistData?.isPermit ? swapPermitCallback : bid
       const { transactionReceipt } = await func(currencyBidAmount)
       setBidAmount('')
       const ret = new Promise((resolve, rpt) => {
@@ -159,7 +159,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     poolInfo.enableWhiteList,
     poolInfo.ratio,
     poolInfo.token0.symbol,
-    poolInfo.whitelistData.isPermit,
+    poolInfo.whitelistData?.isPermit,
     swapPermitCallback
   ])
 
