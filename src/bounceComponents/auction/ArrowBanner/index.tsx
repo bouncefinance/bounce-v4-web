@@ -114,18 +114,12 @@ const ArrowBgLeft = styled(ArrowBg)`
   left: -30px;
   top: 50%;
   transform: translateY(-50%);
-  '&.show-icon': {
-    display: 'none';
-  }
 `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
   right: -30px;
   top: 50%;
   transform: translateY(-50%);
-  '&.show-icon': {
-    display: 'none';
-  }
 `
 
 const BannerH3 = styled(Typography)`
