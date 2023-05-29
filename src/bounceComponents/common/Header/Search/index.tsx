@@ -100,7 +100,7 @@ const Search: React.FC = () => {
       <HeaderSearchInput
         options={userData}
         filterOptions={(list: any) => list}
-        placeholder={'Search by Auction Name, ID, User Name, User ID'}
+        placeholder={'Search by Auction Name, Token Address, User Name, User ID'}
         startIcon
         loadingText={'No result'}
         value={searchText}
