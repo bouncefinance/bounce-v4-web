@@ -139,10 +139,10 @@ export const useWeb3Login = (path?: string) => {
         if (path) {
           return navigate(path)
         }
-        if (redirect) {
-          return navigate(redirect)
-        }
         if (location.pathname === routes.login) {
+          if (redirect) {
+            return navigate(redirect)
+          }
           return navigate(routes.market.index)
         }
       }
