@@ -21,6 +21,7 @@ import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { BigNumber } from 'bignumber.js'
+import { ChainId } from 'constants/chain'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -288,6 +289,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
           onRegretButtonClick={() => {
             setAction('INPUT_REGRET_AMOUNT')
           }}
+          hideRegret={ChainId.ZKSYNC_ERA === poolInfo.ethChainId}
         />
       )}
 

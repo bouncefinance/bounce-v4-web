@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { isAddress } from '../utils'
 import isZero from '../utils/isZero'
-import { useENSRegistrarContract, useENSResolverContract } from './useContract'
+import { useENSRegistrarContract, useENSResolverContract, useSpaceIdRegistrarContract } from './useContract'
 import useDebounce from './useDebounce'
 
 /**
@@ -11,6 +11,16 @@ import useDebounce from './useDebounce'
  * Note this is not the same as looking up an ENS name to find an address.
  */
 export default function useENSName(address?: string): { ENSName: string | null; loading: boolean } {
+  const ens = useENSNameForETH(address)
+  const space = useSpaceIdName(address)
+
+  return {
+    ENSName: ens.ENSName || space.ENSName,
+    loading: ens.loading || space.loading
+  }
+}
+
+export function useENSNameForETH(address?: string): { ENSName: string | null; loading: boolean } {
   const debouncedAddress = useDebounce(address, 200)
   const ensNodeArgument = useMemo(() => {
     if (!debouncedAddress || !isAddress(debouncedAddress)) return [undefined]
@@ -21,6 +31,32 @@ export default function useENSName(address?: string): { ENSName: string | null; 
     }
   }, [debouncedAddress])
   const registrarContract = useENSRegistrarContract(false)
+  const resolverAddress = useSingleCallResult(registrarContract, 'resolver', ensNodeArgument)
+  const resolverAddressResult = resolverAddress.result?.[0]
+  const resolverContract = useENSResolverContract(
+    resolverAddressResult && !isZero(resolverAddressResult) ? resolverAddressResult : undefined,
+    false
+  )
+  const name = useSingleCallResult(resolverContract, 'name', ensNodeArgument)
+
+  const changed = debouncedAddress !== address
+  return {
+    ENSName: changed ? null : name.result?.[0] ?? null,
+    loading: changed || resolverAddress.loading || name.loading
+  }
+}
+
+export function useSpaceIdName(address?: string): { ENSName: string | null; loading: boolean } {
+  const debouncedAddress = useDebounce(address, 200)
+  const ensNodeArgument = useMemo(() => {
+    if (!debouncedAddress || !isAddress(debouncedAddress)) return [undefined]
+    try {
+      return debouncedAddress ? [namehash(`${debouncedAddress.toLowerCase().substr(2)}.addr.reverse`)] : [undefined]
+    } catch (error) {
+      return [undefined]
+    }
+  }, [debouncedAddress])
+  const registrarContract = useSpaceIdRegistrarContract(false)
   const resolverAddress = useSingleCallResult(registrarContract, 'resolver', ensNodeArgument)
   const resolverAddressResult = resolverAddress.result?.[0]
   const resolverContract = useENSResolverContract(

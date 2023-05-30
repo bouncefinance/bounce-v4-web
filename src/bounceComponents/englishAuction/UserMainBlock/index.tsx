@@ -18,7 +18,7 @@ const UserMainBlock = (): JSX.Element => {
 
       <TopInfoBox />
 
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 20 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', pt: 20 }}>
         <Typography variant="h2">{poolInfo.isUserJoinedPool ? 'You Joined' : 'Join The Pool'}</Typography>
 
         {poolInfo && (

@@ -26,16 +26,30 @@ const ImportWhitelistDialog = create<{ whitelist: string[] }>(({ whitelist }) =>
   }
 
   const validationSchema = Yup.object({
-    whitelist: Yup.string().test(
-      'VALID_ADDRESS_ARRAY',
-      'Please make sure all addresses are valid',
-      addressInput =>
-        !addressInput ||
-        addressInput
-          .trim()
-          .split(/[\n,]/g)
-          .every(input => isAddress(input))
-    )
+    whitelist: Yup.string()
+      .test(
+        'VALID_ADDRESS_ARRAY',
+        'Please make sure all addresses are valid',
+        addressInput =>
+          !addressInput ||
+          addressInput
+            .trim()
+            .split(/[\n,]/g)
+            .every(input => isAddress(input))
+      )
+      .test({
+        name: 'DIFFERENT_ADDRESSES',
+        test: (addressInput, ctx) => {
+          if (!addressInput) return true
+          const ads = addressInput.split(/[\n,]/g)
+          for (const item of ads) {
+            if (ads.filter(i => item.toLowerCase() === i.toLowerCase()).length > 1) {
+              return ctx.createError({ message: `Address Repeat: ${item}` })
+            }
+          }
+          return true
+        }
+      })
     // .test(
     //   'NOT_GRATER_THAN_300_ADDRESSES',
     //   'Only allow addresses up to 300',

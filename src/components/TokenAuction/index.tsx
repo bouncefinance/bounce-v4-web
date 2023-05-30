@@ -21,6 +21,8 @@ import BigNumber from 'bignumber.js'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { PoolType } from 'api/pool/type'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { poolTypeText } from 'pages/market/pools'
 
 interface InfoBoxParams {
   title: string
@@ -82,14 +84,6 @@ const enum AuctionType {
   NFTAuction = 'NFT Auction',
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
-}
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT'
 }
 interface PaginationParams {
   index: number
@@ -587,14 +581,7 @@ const TokenAuction: React.FC = () => {
                     {optionDatas?.chainInfoOpt &&
                       nftPoolData?.list.map((nft: any, i: number) => (
                         <Grid key={i} xs={3} item>
-                          <Link
-                            to={routes.auction.fixedSwapNft
-                              .replace(
-                                ':chainShortName',
-                                getLabelById(nft.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                              )
-                              .replace(':poolId', nft.poolId)}
-                          >
+                          <Link to={getAuctionPoolLink(nft.category, nft.chainId, nft.poolId)}>
                             <NFTCard nft={nft} hiddenStatus={true} />
                           </Link>
                         </Grid>
@@ -659,12 +646,7 @@ const TokenAuction: React.FC = () => {
                       {data?.list?.map((fixedSwaptem: any, index: number) => (
                         <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
                           <Link
-                            to={routes.auction.fixedPrice
-                              .replace(
-                                ':chainShortName',
-                                getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                              )
-                              .replace(':poolId', fixedSwaptem.poolId)}
+                            to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}
                           >
                             <AuctionCard
                               style={{ minWidth: 'unset' }}
@@ -759,7 +741,7 @@ const TokenAuction: React.FC = () => {
                                   />
                                 </>
                               }
-                              categoryName={poolType[fixedSwaptem.category as PoolType]}
+                              categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                               whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                               chainId={fixedSwaptem.chainId}
                             />

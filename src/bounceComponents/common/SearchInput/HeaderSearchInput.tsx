@@ -1,20 +1,37 @@
-import { Autocomplete, IconButton, MenuItem, OutlinedInput, Stack, SxProps } from '@mui/material'
+import { Autocomplete, Box, IconButton, MenuItem, OutlinedInput, Stack, Typography } from '@mui/material'
 import React, { ReactNode, useEffect, useState } from 'react'
-import VerifiedIcon from '../VerifiedIcon'
 import { ReactComponent as IconSVG } from './icon.svg'
+import VerifiedIcon from '../VerifiedIcon'
+import { USER_TYPE } from 'api/user/type'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { PoolType } from 'api/pool/type'
+import EmptyToken from 'assets/imgs/auction/token-default.svg'
 
 export type ISearchOption = {
-  label: string
+  label?: string
   icon?: string
-  value: any
+  value?: any
+  name?: string
+  poolId?: number
+  chainId?: number
+  tokenType?: number
+  category?: PoolType
+  token0?: any
 }
+
+export type ISearchAllOption = { type: string; values: ISearchOption }
+
 export type ISearchProps = {
   disabled?: boolean
   freeSolo?: boolean
   value?: string
+  idx?: number
   selected?: ISearchOption
   multiple?: boolean
-  options: ISearchOption[]
+  options: ISearchAllOption[]
   renderOption?: (option: any) => ReactNode
   onChange?: (ev: React.SyntheticEvent<Element, Event>, value: string) => void
   onSearch?: (value: string) => void
@@ -25,13 +42,14 @@ export type ISearchProps = {
   [key: string]: any
 }
 
-const noFocusStyle: SxProps = {
-  width: 44,
-  height: 44,
-  border: '1px solid var(--ps-border-1)',
-  borderRadius: 8,
-  fontSize: 0
-}
+// const noFocusStyle: SxProps = {
+//   width: 44,
+//   width: '100%',
+//   height: 44,
+//   border: '1px solid var(--ps-border-1)',
+//   borderRadius: 8,
+//   fontSize: 0
+// }
 
 const HeaderSearchInput: React.FC<ISearchProps> = ({
   disabled = false,
@@ -39,7 +57,6 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   value,
   selected,
   options,
-  renderOption,
   multiple = false,
   onSearch,
   onChange,
@@ -47,8 +64,10 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   placeholder,
   startIcon,
   loadingText,
+  idx,
   ...restProps
 }) => {
+  const navigate = useNavigate()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [, setSelect] = useState<ISearchOption | null>(null)
   const handleSearch = (_value?: string) => {
@@ -57,10 +76,11 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   useEffect(() => {
     setSelect(selected || null)
   }, [selected])
-  const [focus, setFocus] = useState(false)
+  const [, setFocus] = useState(false)
 
   return (
     <Autocomplete
+      fullWidth
       disabled={disabled}
       freeSolo={freeSolo}
       disableClearable
@@ -68,13 +88,13 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
       loadingText={loadingText ? loadingText : ''}
       multiple={multiple}
       options={options}
-      getOptionLabel={option => (typeof option === 'string' ? option : option.label)}
+      getOptionLabel={option => (typeof option === 'string' ? option : option.type)}
       {...restProps}
       onChange={(ev, value) => {
         onSelect?.(ev, value)
         setSelect(value as ISearchOption)
       }}
-      value={value}
+      inputValue={value}
       renderInput={params => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { InputProps, InputLabelProps, ...rest } = params
@@ -82,15 +102,19 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
           <OutlinedInput
             {...InputProps}
             {...rest}
+            className="OInput"
             value={value}
             onFocus={() => setFocus(true)}
             onBlur={() => setFocus(false)}
-            placeholder={focus ? placeholder : ''}
+            placeholder={placeholder}
             sx={{
+              fontSize: 13,
+              borderRadius: 8,
+              height: 44,
+              width: 44,
               '& fieldset': {
                 border: 'none'
-              },
-              ...(focus ? { fontSize: 13, borderRadius: 8, height: 44 } : noFocusStyle)
+              }
             }}
             onChange={ev => {
               onChange?.(ev, ev.target.value)
@@ -113,13 +137,13 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                     transition: 'all 0.4s',
                     background: 'transparent',
                     '& svg path': {
-                      stroke: focus ? 'var(--ps-text-5)' : '#232323'
+                      stroke: '#232323'
                     },
                     '&:hover': {
                       '& svg path': {
-                        stroke: 'var(--ps-text-5)'
-                      },
-                      background: 'var(--ps-text-4)'
+                        // stroke: 'var(--ps-text-5)'
+                      }
+                      // background: 'var(--ps-text-4)'
                     }
                   }}
                   onClick={() => {
@@ -144,24 +168,115 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
           />
         )
       }}
-      renderOption={(props: any, option) => {
-        return (
-          <MenuItem {...props} key={`${props.id}_${props.key}`}>
-            <Stack direction="row" alignItems="center" spacing={8}>
-              {/* {option.icon && (
-                <Image src={option.icon} width={32} height={32} alt={option.label} style={{ borderRadius: '50%' }} />
-              )} */}
-              {option.icon && (
-                <picture>
-                  <img src={option.icon} style={{ width: 32, height: 32, borderRadius: '50%' }} />
-                </picture>
+      renderOption={(props: any, option, { index }) => (
+        <Box key={`${props.id}_${props.key}`}>
+          {option.type === 'Auction' ? (
+            <>
+              {index === 0 ? (
+                <Typography
+                  fontFamily={'Public Sans'}
+                  ml={18}
+                  fontSize={14}
+                  fontWeight={600}
+                  color={'#959595'}
+                  lineHeight={'21px'}
+                >
+                  {option.type}
+                </Typography>
+              ) : (
+                ''
               )}
-              <div>{renderOption ? renderOption(option) : option.label}</div>
-              <VerifiedIcon isVerify={option?.value?.isVerify} />
-            </Stack>
-          </MenuItem>
-        )
-      }}
+              <MenuItem
+                onClick={() => {
+                  const element = document.querySelector('.OInput input') as HTMLInputElement
+                  element && element.blur()
+                  const _to = getAuctionPoolLink(
+                    option.values.category ?? 1,
+                    option.values.chainId ?? 1,
+                    option.values.poolId ?? 0
+                  )
+                  navigate(_to)
+                }}
+              >
+                <Stack width={'100%'} direction="row" alignItems="center" spacing={8} height={63}>
+                  <picture>
+                    <img
+                      src={option.values?.token0?.smallUrl || EmptyToken}
+                      style={{ width: 32, height: 32, borderRadius: '6px' }}
+                    />
+                  </picture>
+                  <Box
+                    width={'100%'}
+                    sx={{
+                      overflow: 'hidden',
+                      '& p': {
+                        width: '100%',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                      }
+                    }}
+                  >
+                    <Typography
+                      color={'#121212'}
+                      fontSize={14}
+                      lineHeight={'21px'}
+                      fontWeight={600}
+                      fontFamily={'Public Sans'}
+                    >
+                      {option.values.name}
+                    </Typography>
+                    <Typography color={'#959595'} fontSize={12} lineHeight={'18px'}>
+                      {option.values.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </MenuItem>
+            </>
+          ) : (
+            <>
+              {idx === index ? (
+                <Typography
+                  fontFamily={'Public Sans'}
+                  ml={18}
+                  fontSize={14}
+                  fontWeight={600}
+                  color={'#959595'}
+                  lineHeight={'21px'}
+                >
+                  {option.type}
+                </Typography>
+              ) : (
+                ''
+              )}
+              <MenuItem
+                onClick={() => {
+                  const element = document.querySelector('.OInput input') as HTMLInputElement
+                  element && element.blur()
+                  navigate(`${routes.profile.summary}?id=${option?.values.value?.userId}`)
+                }}
+              >
+                <Stack direction="row" alignItems="center" spacing={8} height={63}>
+                  {option.values?.icon && (
+                    <picture>
+                      <img src={option.values.icon} style={{ width: 32, height: 32, borderRadius: '50%' }} />
+                    </picture>
+                  )}
+                  <div>
+                    <Typography>{option.values.label}</Typography>
+                    <Typography>
+                      {option?.values.value?.userType === USER_TYPE.USER && (
+                        <span style={{ color: 'rgba(23, 23, 23, 0.7)' }}>#{option?.values.value?.fullNameId}</span>
+                      )}
+                    </Typography>
+                  </div>
+                  <VerifiedIcon isVerify={option?.values?.value?.isVerify} />
+                </Stack>
+              </MenuItem>
+            </>
+          )}
+        </Box>
+      )}
     />
   )
 }

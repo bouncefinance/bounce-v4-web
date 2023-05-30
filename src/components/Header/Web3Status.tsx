@@ -291,15 +291,17 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                   sx={{ marginRight: 18, width: 40, height: 40 }}
                   src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
                 />
-                <Box>
-                  <Typography fontSize={12} fontWeight={500}>
-                    {shortenAddress(account || '')}
-                  </Typography>
+                <Stack>
+                  <Box display={'flex'} alignItems={'center'}>
+                    <Typography fontSize={12} fontWeight={500}>
+                      {shortenAddress(account || '')}
+                    </Typography>
+                    <Tooltip title="Copy address">
+                      <Copy toCopy={account || ''} />
+                    </Tooltip>
+                  </Box>
                   <Typography fontSize={12}>{ENSName}</Typography>
-                </Box>
-                <Tooltip title="Copy address">
-                  <Copy toCopy={account || ''} />
-                </Tooltip>
+                </Stack>
               </Box>
               <Stack direction={'row'} spacing={8}>
                 <Tooltip title="Transactions">

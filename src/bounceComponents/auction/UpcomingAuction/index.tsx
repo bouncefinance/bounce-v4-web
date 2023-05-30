@@ -18,19 +18,10 @@ import { BigNumber } from 'bignumber.js'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
-import { getRoute } from 'bounceComponents/common/AuctionCard/AuctionRankCard'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
-
-const poolType: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed-Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'SealedBid',
-  [PoolType.fixedSwapNft]: 'Fixed-Swap-Nft',
-  [PoolType['ENGLISH_AUCTION_NFT']]: 'ENGLISH_AUCTION_NFT',
-  [PoolType['PlayableAuction']]: ''
-}
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { poolTypeText } from 'pages/market/pools'
 
 interface Notable1155Props {
   handleViewAll?: () => void
@@ -168,14 +159,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
           >
             {data?.list?.map((fixedSwaptem: any, index: number) => (
               <SwiperSlide key={index}>
-                <Link
-                  to={getRoute(fixedSwaptem.category)
-                    .replace(
-                      ':chainShortName',
-                      getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                    )
-                    .replace(':poolId', fixedSwaptem.poolId)}
-                >
+                <Link to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}>
                   <AuctionCard
                     style={{ minWidth: 'unset' }}
                     poolId={fixedSwaptem.poolId}
@@ -261,7 +245,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
                         />
                       </>
                     }
-                    categoryName={poolType[fixedSwaptem.category as PoolType]}
+                    categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
                     whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
                     chainId={fixedSwaptem.chainId}
                   />

@@ -2,6 +2,7 @@ import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
+import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -105,7 +106,7 @@ export interface CreatorUserInfo {
   companyIntroduction: string
   companyName: string
   name: string
-  publicRole?: null[] | null
+  publicRole?: string[]
   userId: number
   userType: number
   isVerify?: VerifyStatus
@@ -157,6 +158,7 @@ export interface FixedSwapPool {
   token0: TokenFromApi
   token1: TokenFromApi
   tokenId: string
+  tokenType: BackedTokenType
   is721?: 0 | 1
 }
 
