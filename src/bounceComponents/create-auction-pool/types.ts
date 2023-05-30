@@ -93,4 +93,5 @@ export interface AuctionPool {
   winnerNumber?: number
   ticketPrice?: string
   maxParticipantAllowed?: number
+  enableReverse?: boolean
 }

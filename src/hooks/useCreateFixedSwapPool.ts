@@ -218,6 +218,7 @@ export function useCreateFixedSwapPool() {
       params.releaseType,
       params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
       false,
+      !!values.enableReverse,
       expiredTime,
       signature
     ]

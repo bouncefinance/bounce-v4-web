@@ -26,9 +26,11 @@ import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { isAddress } from 'utils'
 import { sortReleaseData } from 'hooks/useCreateFixedSwapPool'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
+import SwitchFormItem from '../SwitchFormItem'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -45,6 +47,7 @@ interface MyFormValues {
   linearUnlockingEndTime: moment.Moment | null
   fragmentReleaseTimes: IFragmentReleaseTimes[]
   releaseType: IReleaseType | 1000
+  enableReverse: boolean
   releaseDataArr: IReleaseData[]
   whitelist: string[]
   participantStatus: ParticipantStatus
@@ -59,6 +62,8 @@ const defaultFragmentRelease = {
 export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: boolean }) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
+  const { lunchPad } = useQueryParams()
+  const isLunchPad = useMemo(() => !!lunchPad, [lunchPad])
 
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -76,6 +81,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
       : [defaultFragmentRelease],
     releaseDataArr: valuesState.releaseDataArr,
     whitelist: valuesState.whitelist,
+    enableReverse: !!valuesState.enableReverse,
     participantStatus: valuesState.participantStatus
   }
 
@@ -284,6 +290,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                 releaseDataArr: releaseDataArr,
                 delayUnlockingTime: formValues.delayUnlockingTime,
                 whitelist: formValues.whitelist,
+                enableReverse: formValues.enableReverse,
                 participantStatus: formValues.participantStatus
               }
             })
@@ -415,15 +422,19 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
 
                 {!hideRefundable && (
                   <Box sx={{ mt: 38, mb: 34 }}>
-                    <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
-                      <Typography variant="h3" sx={{ fontSize: 16 }}>
-                        Refundable
-                      </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Stack direction="row" alignItems="center" spacing={8}>
+                        <Typography variant="h3" sx={{ fontSize: 16 }}>
+                          Refundable
+                        </Typography>
 
-                      <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
-                        <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-                      </Tooltip>
-                    </Stack>
+                        <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
+                          <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                        </Tooltip>
+                      </Stack>
+
+                      {isLunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                    </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography variant="body1">Auction will be refundable before the end time</Typography>

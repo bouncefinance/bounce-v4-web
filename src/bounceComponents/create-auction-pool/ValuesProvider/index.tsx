@@ -120,6 +120,7 @@ const initialValues: AuctionPool = {
   auctionType: AuctionType.FIXED_PRICE,
   winnerNumber: 0,
   ticketPrice: '',
+  enableReverse: true,
   maxParticipantAllowed: 0
 }
 
@@ -201,6 +202,7 @@ type Payload = {
     endTime: Moment
     delayUnlockingTime: Moment
     whitelist: string[]
+    enableReverse: boolean
     participantStatus: ParticipantStatus
     shouldDelayUnlocking: boolean
     releaseType: IReleaseType
@@ -311,6 +313,7 @@ const reducer = (state: AuctionPool, action: Actions) => {
         releaseType: action.payload.releaseType,
         releaseDataArr: action.payload.releaseDataArr,
         delayUnlockingTime: action.payload.delayUnlockingTime,
+        enableReverse: action.payload.enableReverse === undefined ? true : action.payload.enableReverse || false,
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true },
         participantStatus: action.payload.participantStatus,
