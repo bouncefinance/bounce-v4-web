@@ -14,6 +14,7 @@ import * as React from 'react'
 SwiperCore.use([Autoplay, Pagination])
 import 'swiper/swiper-bundle.css'
 import 'swiper/swiper.min.css'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 interface ISlideProgress {
   swiperStyle: React.RefAttributes<SwiperRef> & SwiperProps
@@ -40,6 +41,12 @@ const ArrowBg = styled(Box)`
   &.gray {
     background: #f6f6f3;
   }
+
+  @media (max-width: 600px) {
+    width: 30px;
+    height: 30px;
+    padding: 18px;
+  }
 `
 const ProgressLight = styled(Box)`
   height: 4px;
@@ -52,12 +59,13 @@ const ProgressGray = styled(ProgressLight)`
 `
 
 export function SlideProgress(props: ISlideProgress) {
+  const isSm = useBreakpoint('sm')
   const { swiperStyle, children } = props
   const [swiper, setSwiper] = useState<SwiperCore>()
   const totalSlides = swiper?.slides ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
   return (
-    <Box width={'100%'}>
+    <Box width={'100%'} ml={isSm ? 12 : 0}>
       <Swiper
         onSlideChange={s => {
           const endIdx = s?.realIndex ? s.realIndex + Number(s.params.slidesPerView) : Number(swiperStyle.slidesPerView)
@@ -73,7 +81,7 @@ export function SlideProgress(props: ISlideProgress) {
         alignItems={'center'}
         sx={{
           maxWidth: 1440,
-          margin: '34px auto 0'
+          margin: isSm ? '8px auto 0' : '34px auto 0'
         }}
       >
         <ArrowBg className={props.grayArrow ? 'gray' : ''} onClick={() => swiper?.slidePrev()}>

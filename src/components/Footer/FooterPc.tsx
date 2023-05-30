@@ -8,6 +8,8 @@ import TwitterIcon from 'assets/imgs/common/Twitter.png'
 import FooterLogo from 'assets/imgs/common/LogoBlack.svg'
 import { routes } from 'constants/routes'
 import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
+import useBreakpoint from '../../hooks/useBreakpoint'
+
 export const FooterSocialLink: React.FC = () => {
   const Links = useMemo(
     () => [
@@ -105,6 +107,7 @@ interface FooterLinksProps {
     className: string
   }[]
 }
+
 export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
   return (
     <div>
@@ -198,6 +201,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
 }
 
 const FooterPc: React.FC = () => {
+  const isSm = useBreakpoint('sm')
   const ProductsLinks = useMemo(
     () => [
       {
@@ -355,10 +359,11 @@ const FooterPc: React.FC = () => {
           sx={{
             position: 'relative',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isSm ? 'column' : 'row nowrap',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
             paddingBottom: 32,
+            paddingLeft: isSm ? '16px' : 0,
             marginBottom: 32,
             '&::after': {
               position: 'absolute',
@@ -376,11 +381,11 @@ const FooterPc: React.FC = () => {
           <Box
             sx={{
               display: 'flex',
-              flexFlow: 'row nowrap',
+              flexFlow: isSm ? 'column' : 'row nowrap',
               justifyContent: 'flex-end',
               alignItems: 'flex-start'
             }}
-            gap={120}
+            gap={isSm ? 32 : 120}
           >
             <FooterLinks title={'Products'} links={ProductsLinks} />
             <FooterLinks title={'Solutions'} links={SolutionsLinks} />
@@ -390,7 +395,7 @@ const FooterPc: React.FC = () => {
         <Box
           sx={{
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isSm ? 'column' : 'row nowrap',
             justifyContent: 'space-between',
             alignItems: 'center'
           }}

@@ -14,8 +14,8 @@ import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
 import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Mobile } from 'bounceComponents/common/Mobile'
-import { ShowOnMobile } from 'themes/context'
+// import { Mobile } from 'bounceComponents/common/Mobile'
+// import { ShowOnMobile } from 'themes/context'
 import { ToastContainer } from 'react-toastify'
 import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
@@ -96,9 +96,9 @@ export default function App() {
               <Header />
               <ToastContainer />
               <Questions />
-              <ShowOnMobile breakpoint="md">
-                <Mobile />
-              </ShowOnMobile>
+              {/*<ShowOnMobile breakpoint="md">*/}
+              {/*  <Mobile />*/}
+              {/*</ShowOnMobile>*/}
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, MenuItem, Select, styled, Skeleton, Grid } from '@mui/material'
+import { Box, Divider, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
@@ -8,13 +8,14 @@ import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
 import { getPoolsFilter } from '../../../api/market'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
-import Table from '../../../components/Table'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from '../EmptyData'
 import { getTextFromPoolType, PoolType } from '../../../api/pool/type'
 import { routes } from '../../../constants/routes'
 import { getLabelById } from '../../../utils'
 import { useNavigate } from 'react-router-dom'
+import useBreakpoint from '../../../hooks/useBreakpoint'
+import CustomMobileTable from '../../../components/Table/CustomMobileTable'
 
 enum StatusE {
   'live',
@@ -27,6 +28,11 @@ const Avatar = styled('img')`
   width: 40px;
   height: 40px;
   border-radius: 6px;
+  @media (max-width: 600px) {
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+  }
 `
 
 const StatusLive = styled(Box)`
@@ -42,6 +48,10 @@ const StatusLive = styled(Box)`
   text-align: center;
   color: #20994b;
   border-radius: 100px;
+  @media (max-width: 600px) {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
 `
 
 const StatusUpcoming = styled(StatusLive)`
@@ -67,13 +77,21 @@ const Tab = styled(Box)`
     background: #ffffff;
     border-radius: 20px 20px 0 0;
   }
+
   &:hover {
     background: var(--ps-yellow-1);
     border-radius: 20px 20px 0 0;
   }
+
   &.active:hover {
     background: #ffffff;
     border-radius: 20px 20px 0 0;
+  }
+
+  @media (max-width: 600px) {
+    padding: 12px;
+    height: 36px;
+    width: max-content;
   }
 `
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
@@ -108,6 +126,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
+  const isSm = props.isSm
   const url = getRoute(props.category)
     .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
     .replace(':poolId', props.poolId)
@@ -138,6 +157,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         }
       />
       <H7
+        className={isSm ? 'mobile' : ''}
         sx={{
           maxWidth: 160,
           overflow: 'hidden',
@@ -170,6 +190,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
     <Status key={3} status={status} />
   ]
 }
+
 const SkeletonBox = () => {
   return (
     <Box sx={{ display: 'flex', height: '516px', borderRadius: '0px 30px 30px 30px', overflow: 'hidden' }}>
@@ -236,6 +257,7 @@ const SkeletonBox = () => {
 }
 export const AuctionRankCard: React.FC = () => {
   const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
+  const isSm = useBreakpoint('sm')
   const [currentTab, setTab] = useState(Tabs[0])
   const optionDatas = useOptionDatas()
   const action = Tabs.indexOf(currentTab) + 1
@@ -253,15 +275,41 @@ export const AuctionRankCard: React.FC = () => {
     },
     { refreshDeps: [action, chainFilter] }
   )
+  const ChainSelect = (
+    <Select
+      sx={{
+        width: '200px',
+        height: isSm ? '30px' : '38px',
+        fontSize: isSm ? '12px' : 'inherit',
+        fieldset: {
+          border: isSm ? '1' : 0
+        },
+        '& .css-hpln3v-MuiSelect-icon': {
+          top: 'inherit'
+        }
+      }}
+      value={chainFilter}
+      onChange={e => setChainFilter(Number(e.target.value))}
+    >
+      <MenuItem key={0} value={0}>
+        All Chains
+      </MenuItem>
+      {optionDatas?.chainInfoOpt?.map((item, index) => (
+        <MenuItem key={index} value={item.id}>
+          {item.chainName}
+        </MenuItem>
+      ))}
+    </Select>
+  )
   return (
     <Box
       sx={{
         width: '100%',
         maxWidth: '1296px',
-        margin: '40px auto 0'
+        margin: isSm ? '16px auto 0' : '40px auto 0'
       }}
     >
-      <CenterRow justifyContent={'space-between'}>
+      <CenterRow flexDirection={isSm ? 'column' : 'row'} justifyContent={'space-between'}>
         <Row>
           {Tabs.map((tab, idx) => (
             <Tab
@@ -274,26 +322,13 @@ export const AuctionRankCard: React.FC = () => {
             </Tab>
           ))}
         </Row>
-        <Select
-          sx={{
-            width: '200px',
-            height: '38px',
-            fieldset: {
-              border: 0
-            }
-          }}
-          value={chainFilter}
-          onChange={e => setChainFilter(Number(e.target.value))}
-        >
-          <MenuItem key={0} value={0}>
-            All Chains
-          </MenuItem>
-          {optionDatas?.chainInfoOpt?.map((item, index) => (
-            <MenuItem key={index} value={item.id}>
-              {item.chainName}
-            </MenuItem>
-          ))}
-        </Select>
+        {isSm && <Divider />}
+        {isSm && (
+          <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0' }}>
+            {ChainSelect}
+          </Box>
+        )}
+        {!isSm && ChainSelect}
       </CenterRow>
       {data && Array.isArray(data.list) && data.list.length > 0 ? (
         <Box
@@ -301,16 +336,17 @@ export const AuctionRankCard: React.FC = () => {
             padding: '12px',
             display: 'flex',
             background: 'white',
-            overflow: 'hidden',
-            borderRadius: '0px 30px 30px 30px'
+            overflow: isSm ? 'scroll' : 'hidden',
+            borderRadius: isSm ? 0 : '0px 30px 30px 30px'
           }}
         >
-          <Table
+          <CustomMobileTable
             header={['Auction', 'Asset', 'Auction', 'Status']}
             rows={
               data
                 ? data.list?.slice(0, 5)?.map((d: any, idx: number) =>
                     AuctionRow({
+                      isSm: isSm,
                       ...d,
                       index: idx + 1,
                       opt: optionDatas,
@@ -320,12 +356,13 @@ export const AuctionRankCard: React.FC = () => {
                 : []
             }
           />
-          <Table
+          <CustomMobileTable
             header={['Auction', 'Asset', 'Auction', 'Status']}
             rows={
               data
                 ? data.list?.slice(5)?.map((d: any, idx: number) =>
                     AuctionRow({
+                      isSm: isSm,
                       ...d,
                       index: idx + 6,
                       opt: optionDatas,

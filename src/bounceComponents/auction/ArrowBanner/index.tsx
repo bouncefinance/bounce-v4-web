@@ -12,6 +12,8 @@ import { BannerType } from '../../../api/market/type'
 // import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
+import useBreakpoint from '../../../hooks/useBreakpoint'
+
 SwiperCore.use([Autoplay, Pagination])
 
 export interface IBanner {
@@ -23,6 +25,7 @@ export interface IBanner {
 
 function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  const isSm = useBreakpoint('sm')
   const { data } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
@@ -38,8 +41,8 @@ function ArrowBanner({ type }: { type?: string }) {
       alignItems={'center'}
       sx={{
         maxWidth: '1296px',
-        width: '100%',
-        minHeight: 460,
+        width: isSm ? '90%' : '100%',
+        minHeight: isSm ? 125 : 460,
         margin: '16px auto 0'
       }}
     >
@@ -91,18 +94,31 @@ const ArrowBg = styled(Box)`
   &:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 600px) {
+    width: 30px;
+    height: 30px;
+  }
 `
 const ArrowBgLeft = styled(ArrowBg)`
   position: absolute;
   left: -30px;
   top: 50%;
   transform: translateY(-50%);
+
+  @media (max-width: 600px) {
+    left: -25px;
+  }
 `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
   right: -30px;
   top: 50%;
   transform: translateY(-50%);
+
+  @media (max-width: 600px) {
+    right: -25px;
+  }
 `
 
 const BannerH3 = styled(Typography)`
@@ -116,6 +132,10 @@ const BannerH3 = styled(Typography)`
   color: #ffffff;
   align-self: stretch;
   flex-grow: 0;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `
 const BannerH6 = styled(Typography)`
   font-style: normal;
@@ -124,6 +144,10 @@ const BannerH6 = styled(Typography)`
   line-height: 150%;
   letter-spacing: -0.02em;
   color: #ffffff;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
 `
 
 const CountDownBg = styled(Box)`
@@ -152,6 +176,11 @@ const Shadow = styled(Box)`
   mix-blend-mode: multiply;
   opacity: 0.8;
   border-radius: 0 0 30px 30px;
+
+  @media (max-width: 600px) {
+    height: 100px;
+    border-radius: 0 0 15px 15px;
+  }
 `
 
 // const ChainBg = styled(Box)`
@@ -167,6 +196,7 @@ const Shadow = styled(Box)`
 // `
 
 function Banner({ banner }: { banner: BannerType }) {
+  const isSm = useBreakpoint('sm')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: banner.openAt * 1000
   })
@@ -183,7 +213,7 @@ function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: '460px',
+        height: isSm ? '125px' : '460px',
         width: '100%',
         position: 'relative'
       }}
@@ -198,7 +228,7 @@ function Banner({ banner }: { banner: BannerType }) {
           left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: '30px'
+          borderRadius: isSm ? '15px' : '30px'
         }}
       />
       {Number(banner.category) !== 0 && <Shadow style={{ position: 'absolute', bottom: 0, left: 0 }} />}
@@ -206,8 +236,8 @@ function Banner({ banner }: { banner: BannerType }) {
         <Box
           sx={{
             position: 'absolute',
-            bottom: '40px',
-            left: '40px'
+            bottom: isSm ? '16px' : '40px',
+            left: isSm ? '16px' : '40px'
           }}
         >
           {/* <Box display={'flex'} gap={4}>

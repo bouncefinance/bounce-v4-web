@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Box, Button, styled } from '@mui/material'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
-const StyledTab = styled(Button)(({}) => ({
+const StyledTab = styled(Button)(({ theme }) => ({
   padding: '8px 12px',
   color: 'white',
   borderRadius: '8px',
@@ -19,11 +20,17 @@ const StyledTab = styled(Button)(({}) => ({
   '&.selected': {
     background: '#E1F25C',
     color: '#121212'
+  },
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '14px',
+    height: 'auto',
+    display: 'inline-block'
   }
 }))
 
 const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ onTabChange }) => {
   const navigate = useNavigate()
+  const isSm = useBreakpoint('sm')
   const tabs = [
     'All',
     'Private Launchpad',
@@ -80,9 +87,11 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         background: '#20201E',
         backdropFilter: 'blur(4px)',
         borderRadius: '10px',
-        width: '100%',
+        width: isSm ? 'auto' : '100%',
+        overflowX: isSm ? 'scroll' : 'inherit',
+        whiteSpace: isSm ? 'nowrap' : 'inherit',
         maxWidth: 1296,
-        margin: '0 auto'
+        margin: isSm ? '0 16px' : '0 auto'
       }}
     >
       {tabs.map((tab: string) => (

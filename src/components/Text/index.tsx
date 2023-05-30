@@ -9,6 +9,10 @@ export const H2 = styled(Typography)`
   letter-spacing: -0.02em;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: #121212;
+
+  @media (max-width: 600px) {
+    font-size: 20px;
+  }
 `
 export const H3 = styled(Typography)`
   font-family: 'Public Sans';
@@ -38,6 +42,10 @@ export const H5 = styled(Typography)`
   line-height: 140%;
   letter-spacing: -0.02em;
   color: #121212;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
 `
 export const H6 = styled(Typography)`
   font-family: 'Public Sans';
@@ -57,10 +65,20 @@ export const H7 = styled(Typography)`
   text-align: center;
   letter-spacing: -0.02em;
   color: #121212;
+  @media (max-width: 600px) {
+    font-size: 11px !important;
+  }
+
+  &.mobile {
+    font-size: 12px !important;
+  }
 `
 
 export const H7Gray = styled(H7)`
   color: rgba(18, 18, 18, 0.4);
+  @media (max-width: 600px) {
+    font-size: 11px;
+  }
 `
 
 export const SmallText = styled(Typography)`
@@ -71,6 +89,9 @@ export const SmallText = styled(Typography)`
   line-height: 140%;
   letter-spacing: -0.02em;
   color: var(--ps-text-3);
+  @media (max-width: 600px) {
+    font-size: 10px !important;
+  }
 `
 export const Body02 = styled(Typography)`
   font-family: 'Inter';
