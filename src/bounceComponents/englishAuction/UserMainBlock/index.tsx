@@ -6,6 +6,7 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import PriceChartView from '../PriceChartView'
+import UserBidPanel from './UserBidPanel'
 
 const UserMainBlock = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
@@ -33,7 +34,7 @@ const UserMainBlock = (): JSX.Element => {
       </Box>
 
       <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap="40px">
-        <Stack spacing={10}>
+        <Stack spacing={10} pt={12}>
           <PoolInfoItem title="Current Highest Bid" tip="The current highest bid for the auction">
             <Stack direction="row" spacing={6} alignItems="center">
               <Typography>{poolInfo.currentBidderAmount1?.toSignificant() || '-'}</Typography>
@@ -58,6 +59,7 @@ const UserMainBlock = (): JSX.Element => {
             <PriceChartView />
           </Box>
         </Stack>
+        <UserBidPanel />
       </Box>
     </Stack>
   )
