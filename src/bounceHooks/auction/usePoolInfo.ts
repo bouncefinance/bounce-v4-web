@@ -11,6 +11,7 @@ import { useSingleCallResult } from 'state/multicall/hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { FIXED_SWAP_ERC20_ADDRESSES, OLD_FIXED_SWAP_ERC20_ADDRESSES } from '../../constants'
+import getBackedTokenType from 'utils/auction/getBackedTokenType'
 
 export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
   const { poolId, chainShortName } = useQueryParams()
@@ -23,12 +24,11 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
       if (typeof poolId !== 'string' || !chainConfigInBackend?.id) {
         return Promise.reject(new Error('Invalid poolId'))
       }
-      // tokenType erc20:1 , erc1155:2
-      const tokenType = category === PoolType.fixedSwapNft ? 2 : 1
+
       const response = await getPoolInfo({
         poolId,
         category,
-        tokenType,
+        tokenType: getBackedTokenType(category),
         chainId: chainConfigInBackend.id,
         address: account || ''
       })
