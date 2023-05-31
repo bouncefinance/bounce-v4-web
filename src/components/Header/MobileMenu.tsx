@@ -43,8 +43,8 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
     >
       <Stack spacing={10} padding={16}>
         <Search />
-        <Resources />
         <CreateBtn />
+        <Resources />
       </Stack>
     </Drawer>
   )

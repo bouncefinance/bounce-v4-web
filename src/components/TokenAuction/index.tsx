@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from 'react'
-import { Box, Grid, Typography, Button, Skeleton, Stack } from '@mui/material'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Box, Button, Grid, Skeleton, Stack, styled, Typography } from '@mui/material'
 import TokenAuctionImg from 'assets/imgs/common/TokenAuction.png'
 import NFTAuctionImg from 'assets/imgs/common/NFTAuction.png'
 import AdSpaceAuctionImg from 'assets/imgs/common/AdSpaceAuction.png'
@@ -9,7 +9,7 @@ import leftArrowGrayImg from 'assets/imgs/common/leftArrowGray.svg'
 import rightArrayLightImg from 'assets/imgs/common/rightArrayLight.svg'
 import rightArrayGrayImg from 'assets/imgs/common/rightArrayGray.svg'
 import { useRequest } from 'ahooks'
-import { getPools, getAuctionTypeCountData } from 'api/market'
+import { getAuctionTypeCountData, getPools } from 'api/market'
 import { Link } from 'react-router-dom'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -23,12 +23,14 @@ import { PoolType } from 'api/pool/type'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { poolTypeText } from 'pages/market/pools'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 interface InfoBoxParams {
   title: string
   value: string
   style?: React.CSSProperties
 }
+
 const InfoBox = (props: InfoBoxParams) => {
   const { title, value, style } = props
   return (
@@ -79,35 +81,41 @@ const InfoBox = (props: InfoBoxParams) => {
     </Box>
   )
 }
+
 const enum AuctionType {
   TokenAuction = 'Token Auction',
   NFTAuction = 'NFT Auction',
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
 }
+
 interface PaginationParams {
   index: number
   total: number
   style?: React.CSSProperties
   setCurrent: (index: number) => void
 }
+
 const PaginationBox = (props: PaginationParams) => {
   const { index, total, style, setCurrent } = props
+  const isSm = useBreakpoint('sm')
   return (
     <Box
       sx={{
-        width: 128,
+        padding: isSm ? 16 : 'inherit',
+        width: isSm ? '100%' : 128,
         height: 60,
         display: 'flex',
         flexFlow: 'row nowrap',
+        alignItems: isSm ? 'center' : 'inherit',
         justifyContent: 'space-between',
         ...style
       }}
     >
       <Box
         sx={{
-          width: 60,
-          height: 60,
+          width: isSm ? 44 : 60,
+          height: isSm ? 44 : 60,
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'center',
@@ -121,6 +129,7 @@ const PaginationBox = (props: PaginationParams) => {
         }}
         onClick={() => {
           const value = index - 1 <= 0 ? 0 : index - 1
+          console.log('value>>>', value)
           setCurrent && setCurrent(value)
         }}
       >
@@ -144,10 +153,15 @@ const PaginationBox = (props: PaginationParams) => {
           />
         )}
       </Box>
+      {isSm && (
+        <Typography sx={{ color: '#E1F25C' }}>
+          {index + 1}/{total}
+        </Typography>
+      )}
       <Box
         sx={{
-          width: 60,
-          height: 60,
+          width: isSm ? 44 : 60,
+          height: isSm ? 44 : 60,
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'center',
@@ -191,6 +205,8 @@ const PaginationBox = (props: PaginationParams) => {
 const TokenAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [currentIndex, setCurrentIndex] = useState(0)
+  const isSm = useBreakpoint('sm')
+
   const { data: nftPoolData, loading: nftLoading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -293,6 +309,31 @@ const TokenAuction: React.FC = () => {
   useEffect(() => {
     setCurrentIndex(0)
   }, [])
+  const AuctionImg = styled('img')(({}) => ({
+    position: 'absolute',
+    top: isSm ? 217 : 100,
+    display: 'block',
+    width: isSm ? 283 : 350,
+    left: '50%',
+    transform: 'translateX(-50%)'
+  }))
+
+  function NftSkeleton() {
+    return (
+      <Box>
+        <Skeleton variant="rounded" height={400} sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }} />
+      </Box>
+    )
+  }
+
+  function NftLink({ nft }: { nft: any }) {
+    return (
+      <Link to={getAuctionPoolLink(nft.category, nft.chainId, nft.poolId)}>
+        <NFTCard nft={nft} hiddenStatus={true} />
+      </Link>
+    )
+  }
+
   return (
     <Box
       sx={{
@@ -300,7 +341,7 @@ const TokenAuction: React.FC = () => {
         width: '100%',
         maxWidth: 1540,
         height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1188 : 622,
-        margin: '120px auto 0'
+        margin: isSm ? '80px auto 0' : '120px auto 0'
       }}
     >
       <Box
@@ -314,9 +355,9 @@ const TokenAuction: React.FC = () => {
         <Box
           sx={{
             position: 'relative',
-            width: 1296,
+            width: isSm ? '100%' : 1296,
             height: 622,
-            paddingTop: 80,
+            padding: isSm ? '40px 16px 20px' : '80px 0 0 0',
             margin: '0 auto',
             overflow: 'hidden'
           }}
@@ -326,7 +367,7 @@ const TokenAuction: React.FC = () => {
               textAlign: 'left',
               fontFamily: `'Public Sans'`,
               fontWeight: 700,
-              fontSize: 44,
+              fontSize: isSm ? 24 : 44,
               width: '100%',
               lineHeight: '32px',
               color: 'var(--ps-yellow-1)',
@@ -342,7 +383,7 @@ const TokenAuction: React.FC = () => {
               width: 420,
               fontFamily: `'Public Sans'`,
               fontWeight: 400,
-              fontSize: 16,
+              fontSize: isSm ? 14 : 16,
               lineHeight: '21px',
               color: 'var(--ps-primary)',
               marginBottom: 30,
@@ -351,65 +392,61 @@ const TokenAuction: React.FC = () => {
           >
             {showData.subTitle}
           </Typography>
-          <Typography
-            sx={{
-              position: 'absolute',
-              right: 0,
-              bottom: 172,
-              textAlign: 'right',
-              fontFamily: `'Inter'`,
-              fontWeight: 400,
-              fontSize: 14,
-              width: 200,
-              lineHeight: '20px',
-              color: 'var(--ps-yellow-1)'
-            }}
-          >
-            {`${currentIndex + 1} / ${AuctionList.length}`}
-          </Typography>
-          <PaginationBox
-            index={currentIndex}
-            total={AuctionList.length}
-            setCurrent={setCurrentIndex}
-            style={{
-              position: 'absolute',
-              bottom: 80,
-              right: 0
-            }}
-          />
-          <InfoBox
-            title={'total value'}
-            value={showData.totalValue}
-            style={{
-              position: 'absolute',
-              bottom: 161,
-              left: 0
-            }}
-          />
-          <InfoBox
-            title={'Total Auction'}
-            value={showData.totalAuction}
-            style={{
-              position: 'absolute',
-              bottom: 161,
-              left: 110
-            }}
-          />
-          <InfoBox
-            title={'Trending Token Auction'}
-            value={showData.trendingTokenAuction}
-            style={{
-              position: 'absolute',
-              width: 220,
-              background: 'var(--ps-yellow-1)',
-              bottom: 80,
-              left: 0
-            }}
-          />
+          {!isSm && (
+            <Typography
+              sx={{
+                position: 'absolute',
+                right: 0,
+                bottom: 172,
+                textAlign: 'right',
+                fontFamily: `'Inter'`,
+                fontWeight: 400,
+                fontSize: 14,
+                width: 200,
+                lineHeight: '20px',
+                color: 'var(--ps-yellow-1)'
+              }}
+            >
+              {`${currentIndex + 1} / ${AuctionList.length}`}
+            </Typography>
+          )}
+          {!isSm && (
+            <>
+              <InfoBox
+                title={'total value'}
+                value={showData.totalValue}
+                style={{
+                  position: 'absolute',
+                  bottom: 161,
+                  left: 0
+                }}
+              />
+              <InfoBox
+                title={'Total Auction'}
+                value={showData.totalAuction}
+                style={{
+                  position: 'absolute',
+                  bottom: 161,
+                  left: 110
+                }}
+              />
+              <InfoBox
+                title={'Trending Token Auction'}
+                value={showData.trendingTokenAuction}
+                style={{
+                  position: 'absolute',
+                  width: 220,
+                  background: 'var(--ps-yellow-1)',
+                  bottom: 80,
+                  left: 0
+                }}
+              />
+            </>
+          )}
           <Box
             sx={{
               position: 'absolute',
-              bottom: '-50%',
+              bottom: isSm ? '-80%' : '-50%',
               left: '50%',
               transform: 'translateX(-50%)',
               width: 763,
@@ -436,18 +473,7 @@ const TokenAuction: React.FC = () => {
               animationTimingFunction: 'ease-in-out'
             }}
           >
-            <img
-              style={{
-                position: 'absolute',
-                top: 100,
-                display: 'block',
-                width: 350,
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
-              src={AuctionList[0].auctionImg}
-              alt=""
-            />
+            <AuctionImg src={AuctionList[0].auctionImg} alt="" />
           </Box>
           {/* NFT Auctioin */}
           <Box
@@ -465,18 +491,7 @@ const TokenAuction: React.FC = () => {
               animationTimingFunction: 'ease-in-out'
             }}
           >
-            <img
-              style={{
-                position: 'absolute',
-                top: 100,
-                display: 'block',
-                width: 350,
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
-              src={AuctionList[1].auctionImg}
-              alt=""
-            />
+            <AuctionImg src={AuctionList[1].auctionImg} alt="" />
           </Box>
           {/* Real World Auction */}
           <Box
@@ -494,18 +509,7 @@ const TokenAuction: React.FC = () => {
               animationTimingFunction: 'ease-in-out'
             }}
           >
-            <img
-              style={{
-                position: 'absolute',
-                top: 100,
-                display: 'block',
-                width: 350,
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
-              src={AuctionList[2].auctionImg}
-              alt=""
-            />
+            <AuctionImg src={AuctionList[2].auctionImg} alt="" />
           </Box>
           {/* Ad Space Auction */}
           <Box
@@ -523,19 +527,27 @@ const TokenAuction: React.FC = () => {
               animationTimingFunction: 'ease-in-out'
             }}
           >
-            <img
-              style={{
-                position: 'absolute',
-                top: 100,
-                display: 'block',
-                width: 350,
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
-              src={AuctionList[3].auctionImg}
-              alt=""
-            />
+            <AuctionImg src={AuctionList[3].auctionImg} alt="" />
           </Box>
+          <PaginationBox
+            index={currentIndex}
+            total={AuctionList.length}
+            setCurrent={setCurrentIndex}
+            style={
+              isSm
+                ? {
+                    position: 'absolute',
+                    bottom: '30px',
+                    left: '50%',
+                    transform: 'translateX(-50%)'
+                  }
+                : {
+                    position: 'absolute',
+                    bottom: 80,
+                    right: 0
+                  }
+            }
+          />
         </Box>
       </Box>
       {(showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction) && (
@@ -543,7 +555,7 @@ const TokenAuction: React.FC = () => {
           <Box
             sx={{
               position: 'absolute',
-              width: 1440,
+              width: isSm ? '100%' : 1440,
               minHeight: 496,
               top: 622,
               left: '50%',
@@ -562,193 +574,194 @@ const TokenAuction: React.FC = () => {
             >
               {showData.title === AuctionType.NFTAuction && (
                 <>
-                  {nftLoading && (
+                  {nftLoading &&
+                    (isSm ? (
+                      <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
+                        {Array.from(new Array(4)).map((_, index) => (
+                          <NftSkeleton key={index} />
+                        ))}
+                      </Stack>
+                    ) : (
+                      <Grid container spacing={18}>
+                        {Array.from(new Array(4)).map((_, index) => (
+                          <Grid item key={index} xs={3}>
+                            <NftSkeleton />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    ))}
+                  {isSm ? (
+                    <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
+                      {optionDatas?.chainInfoOpt &&
+                        nftPoolData?.list.map((nft: any, i: number) => <NftLink nft={nft} key={i} />)}
+                    </Stack>
+                  ) : (
                     <Grid container spacing={18}>
-                      {Array.from(new Array(4)).map((_, index) => (
-                        <Grid item xs={3} key={index}>
-                          <Box>
-                            <Skeleton
-                              variant="rounded"
-                              height={400}
-                              sx={{ bgcolor: 'var(--ps-gray-30)', borderRadius: 20 }}
-                            />
-                          </Box>
-                        </Grid>
-                      ))}
+                      {optionDatas?.chainInfoOpt &&
+                        nftPoolData?.list.map((nft: any, i: number) => (
+                          <Grid item xs={3} key={i}>
+                            <NftLink nft={nft} />
+                          </Grid>
+                        ))}
                     </Grid>
                   )}
-                  <Grid container spacing={18}>
-                    {optionDatas?.chainInfoOpt &&
-                      nftPoolData?.list.map((nft: any, i: number) => (
-                        <Grid key={i} xs={3} item>
-                          <Link to={getAuctionPoolLink(nft.category, nft.chainId, nft.poolId)}>
-                            <NFTCard nft={nft} hiddenStatus={true} />
-                          </Link>
-                        </Grid>
-                      ))}
-                  </Grid>
                 </>
               )}
               {showData.title === AuctionType.TokenAuction && (
                 <>
                   {loading ? (
-                    <Grid container spacing={18}>
+                    <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
                       {Array.from(new Array(4)).map((lodingItem, index) => (
-                        <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
-                          <Box display={'flex'} flexDirection={'column'}>
-                            <Box
-                              height={400}
-                              sx={{
-                                bgcolor: 'var(--ps-white)',
-                                borderRadius: 20,
-                                padding: '16px',
-                                border: '1px solid rgba(0, 0, 0, 0.1)'
-                              }}
-                            >
-                              <Box display="flex" width={'100%'} gap={20} sx={{ '& > span': { borderRadius: '12px' } }}>
-                                <Skeleton variant="rectangular" width={'15%'} height={24} />
-                                <Skeleton variant="rectangular" width={'25%'} height={24} />
-                                <Skeleton variant="rectangular" width={'60%'} height={24} />
-                              </Box>
-                              <Skeleton
-                                component={'div'}
-                                variant="rectangular"
-                                width={'50%'}
-                                height={24}
-                                sx={{ marginTop: '20px', borderRadius: '12px' }}
-                              />
-                              <Skeleton
-                                component={'div'}
-                                variant="rectangular"
-                                width={'100%'}
-                                height={24}
-                                sx={{ marginTop: '10px', borderRadius: '12px' }}
-                              />
-                              <Box mt={20} display={'flex'}>
-                                <Skeleton variant="circular" width={52} height={52} />
-                                <Box width={'calc(100% - 52px)'} sx={{ marginLeft: '10px' }}>
-                                  <Skeleton variant="text" width={'20%'} />
-                                  <Skeleton variant="text" width={'40%'} />
-                                </Box>
-                              </Box>
-                              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                            </Box>
-                          </Box>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  ) : (
-                    <Grid container spacing={18}>
-                      {data?.list?.map((fixedSwaptem: any, index: number) => (
-                        <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
-                          <Link
-                            to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}
+                        <Box display={'flex'} flexDirection={'column'} key={index}>
+                          <Box
+                            height={400}
+                            sx={{
+                              bgcolor: 'var(--ps-white)',
+                              borderRadius: 20,
+                              padding: '16px',
+                              border: '1px solid rgba(0, 0, 0, 0.1)'
+                            }}
                           >
-                            <AuctionCard
-                              style={{ minWidth: 'unset' }}
-                              poolId={fixedSwaptem.poolId}
-                              title={fixedSwaptem.name}
-                              status={fixedSwaptem.status}
-                              claimAt={fixedSwaptem.claimAt}
-                              closeAt={fixedSwaptem.closeAt}
-                              dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
-                              holder={
-                                <AuctionHolder
-                                  href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                  avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                                  name={fixedSwaptem.creatorUserInfo?.name}
-                                  description={
-                                    fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                      ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
-                                          return (
-                                            getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                            `${
-                                              index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''
-                                            }`
-                                          )
-                                        })
-                                      : 'Individual account'
+                            <Box display="flex" width={'100%'} gap={20} sx={{ '& > span': { borderRadius: '12px' } }}>
+                              <Skeleton variant="rectangular" width={'15%'} height={24} />
+                              <Skeleton variant="rectangular" width={'25%'} height={24} />
+                              <Skeleton variant="rectangular" width={'60%'} height={24} />
+                            </Box>
+                            <Skeleton
+                              component={'div'}
+                              variant="rectangular"
+                              width={'50%'}
+                              height={24}
+                              sx={{ marginTop: '20px', borderRadius: '12px' }}
+                            />
+                            <Skeleton
+                              component={'div'}
+                              variant="rectangular"
+                              width={'100%'}
+                              height={24}
+                              sx={{ marginTop: '10px', borderRadius: '12px' }}
+                            />
+                            <Box mt={20} display={'flex'}>
+                              <Skeleton variant="circular" width={52} height={52} />
+                              <Box width={'calc(100% - 52px)'} sx={{ marginLeft: '10px' }}>
+                                <Skeleton variant="text" width={'20%'} />
+                                <Skeleton variant="text" width={'40%'} />
+                              </Box>
+                            </Box>
+                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+                          </Box>
+                        </Box>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
+                      {data?.list?.map((fixedSwaptem: any, index: number) => (
+                        <Link
+                          key={index}
+                          to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}
+                        >
+                          <AuctionCard
+                            style={{ minWidth: 'unset' }}
+                            poolId={fixedSwaptem.poolId}
+                            title={fixedSwaptem.name}
+                            status={fixedSwaptem.status}
+                            claimAt={fixedSwaptem.claimAt}
+                            closeAt={fixedSwaptem.closeAt}
+                            dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
+                            holder={
+                              <AuctionHolder
+                                href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+                                avatar={fixedSwaptem.creatorUserInfo?.avatar}
+                                name={fixedSwaptem.creatorUserInfo?.name}
+                                description={
+                                  fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
+                                    ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
+                                        return (
+                                          getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
+                                          `${
+                                            index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''
+                                          }`
+                                        )
+                                      })
+                                    : 'Individual account'
+                                }
+                                isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
+                              />
+                            }
+                            progress={{
+                              symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
+                              decimals: fixedSwaptem.token0.decimals,
+                              sold: fixedSwaptem.swappedAmount0,
+                              supply: fixedSwaptem.amountTotal0
+                            }}
+                            listItems={
+                              <>
+                                <AuctionListItem
+                                  label="Token symbol"
+                                  value={
+                                    <Stack direction="row" alignItems="center" spacing={4}>
+                                      <TokenImage
+                                        src={fixedSwaptem.token0.largeUrl}
+                                        alt={fixedSwaptem.token0.symbol}
+                                        size={20}
+                                      />
+                                      <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
+                                    </Stack>
                                   }
-                                  isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
                                 />
-                              }
-                              progress={{
-                                symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
-                                decimals: fixedSwaptem.token0.decimals,
-                                sold: fixedSwaptem.swappedAmount0,
-                                supply: fixedSwaptem.amountTotal0
-                              }}
-                              listItems={
-                                <>
-                                  <AuctionListItem
-                                    label="Token symbol"
-                                    value={
-                                      <Stack direction="row" alignItems="center" spacing={4}>
-                                        <TokenImage
-                                          src={fixedSwaptem.token0.largeUrl}
-                                          alt={fixedSwaptem.token0.symbol}
-                                          size={20}
-                                        />
-                                        <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
-                                      </Stack>
-                                    }
-                                  />
-                                  <AuctionListItem
-                                    label="Contract address"
-                                    value={
-                                      <Stack direction="row" alignItems="center" spacing={4}>
-                                        <CertifiedTokenImage
-                                          address={fixedSwaptem.token0.address}
-                                          coingeckoId={fixedSwaptem.token0.coingeckoId}
-                                          ethChainId={fixedSwaptem.ethChainId}
-                                          backedChainId={fixedSwaptem.chainId}
-                                        />
-                                        <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
-                                        <CopyToClipboard text={fixedSwaptem.token0.address} />
-                                      </Stack>
-                                    }
-                                  />
-                                  <AuctionListItem
-                                    label="Fixed price ratio"
-                                    value={
-                                      <Stack direction="row" spacing={8}>
-                                        <Typography fontSize={12}>1</Typography>
-                                        <Typography fontSize={12}>
-                                          {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
-                                          {new BigNumber(fixedSwaptem.ratio)
-                                            .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                            .toFormat()}
-                                        </Typography>
-                                        <Typography fontSize={12}>
-                                          {fixedSwaptem.token1.symbol.toUpperCase()}
-                                        </Typography>
-                                      </Stack>
-                                    }
-                                  />
-                                  <AuctionListItem
-                                    label="Price,$"
-                                    value={
-                                      <span>
-                                        {new BigNumber(fixedSwaptem.poolPrice)
+                                <AuctionListItem
+                                  label="Contract address"
+                                  value={
+                                    <Stack direction="row" alignItems="center" spacing={4}>
+                                      <CertifiedTokenImage
+                                        address={fixedSwaptem.token0.address}
+                                        coingeckoId={fixedSwaptem.token0.coingeckoId}
+                                        ethChainId={fixedSwaptem.ethChainId}
+                                        backedChainId={fixedSwaptem.chainId}
+                                      />
+                                      <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
+                                      <CopyToClipboard text={fixedSwaptem.token0.address} />
+                                    </Stack>
+                                  }
+                                />
+                                <AuctionListItem
+                                  label="Fixed price ratio"
+                                  value={
+                                    <Stack direction="row" spacing={8}>
+                                      <Typography fontSize={12}>1</Typography>
+                                      <Typography fontSize={12}>
+                                        {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
+                                        {new BigNumber(fixedSwaptem.ratio)
                                           .decimalPlaces(6, BigNumber.ROUND_DOWN)
                                           .toFormat()}
-                                      </span>
-                                    }
-                                  />
-                                </>
-                              }
-                              categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
-                              whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
-                              chainId={fixedSwaptem.chainId}
-                            />
-                          </Link>
-                        </Grid>
+                                      </Typography>
+                                      <Typography fontSize={12}>{fixedSwaptem.token1.symbol.toUpperCase()}</Typography>
+                                    </Stack>
+                                  }
+                                />
+                                <AuctionListItem
+                                  label="Price,$"
+                                  value={
+                                    <span>
+                                      {new BigNumber(fixedSwaptem.poolPrice)
+                                        .decimalPlaces(6, BigNumber.ROUND_DOWN)
+                                        .toFormat()}
+                                    </span>
+                                  }
+                                />
+                              </>
+                            }
+                            categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
+                            whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
+                            chainId={fixedSwaptem.chainId}
+                          />
+                        </Link>
                       ))}
-                    </Grid>
+                    </Stack>
                   )}
                 </>
               )}
