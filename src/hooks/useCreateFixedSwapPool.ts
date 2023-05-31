@@ -197,7 +197,7 @@ export function useCreateFixedSwapPool() {
     }
 
     const {
-      data: { expiredTime, signature }
+      data: { id, expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
@@ -214,6 +214,7 @@ export function useCreateFixedSwapPool() {
     }
 
     const args = [
+      id,
       contractCallParams,
       params.releaseType,
       params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),

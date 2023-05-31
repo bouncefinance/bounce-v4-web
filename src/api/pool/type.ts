@@ -66,6 +66,7 @@ export interface GetPoolCreationSignatureParams {
 export interface GetPoolCreationSignatureResponse {
   expiredTime: number
   signature: string
+  id: number
 }
 
 export interface GetWhitelistMerkleTreeRootParams {

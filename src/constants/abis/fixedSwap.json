@@ -202,6 +202,30 @@
         "internalType": "uint256",
         "name": "maxAmount1PerWallet",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "auctionHodlerEnabled",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "reverseEnabled",
+        "type": "bool"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isPlayableAuction",
+        "type": "bool"
       }
     ],
     "name": "Created",
@@ -274,25 +298,6 @@
       }
     ],
     "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      }
-    ],
-    "name": "PlayableAuctionCreated",
     "type": "event"
   },
   {
@@ -529,80 +534,10 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "internalType": "address",
-            "name": "token0",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "token1",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountTotal0",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountTotal1",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint48",
-            "name": "openAt",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "closeAt",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "claimAt",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint256",
-            "name": "maxAmount1PerWallet",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "whitelistRoot",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct BounceFixedSwap.CreateReq",
-        "name": "poolReq",
-        "type": "tuple"
-      },
-      {
         "internalType": "uint256",
-        "name": "expireAt",
+        "name": "id",
         "type": "uint256"
       },
-      {
-        "internalType": "bytes",
-        "name": "signature",
-        "type": "bytes"
-      }
-    ],
-    "name": "create",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       {
         "components": [
           {
@@ -684,7 +619,12 @@
       },
       {
         "internalType": "bool",
-        "name": "needAuctionHolder",
+        "name": "enableAuctionHolder",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "enableReverse",
         "type": "bool"
       },
       {
@@ -706,6 +646,11 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
         "components": [
           {
             "internalType": "string",
@@ -786,7 +731,12 @@
       },
       {
         "internalType": "bool",
-        "name": "needAuctionHolder",
+        "name": "enableAuctionHolder",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "enableReverse",
         "type": "bool"
       },
       {
@@ -845,6 +795,25 @@
         "type": "uint256"
       }
     ],
+    "name": "enableReverses",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "name": "filledAtP",
     "outputs": [
       {
@@ -883,6 +852,25 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "ids",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
