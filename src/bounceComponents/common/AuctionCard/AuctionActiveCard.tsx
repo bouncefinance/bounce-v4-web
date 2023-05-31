@@ -126,7 +126,7 @@ export const ActiveUser: React.FC = () => {
     return () => {
       window.addEventListener('resize', resetView)
     }
-  }, [])
+  }, [slideCardWidth])
   return (
     <Box
       className={'ActiveUser'}
