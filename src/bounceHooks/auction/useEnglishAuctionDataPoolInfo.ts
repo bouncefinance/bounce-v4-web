@@ -14,7 +14,7 @@ export function useEnglishAuctionDataPoolInfo() {
   const { account } = useActiveWeb3React()
 
   const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT)
 
   const englishAuctionNftContract = useEnglishAuctionNftContract()
 
@@ -25,6 +25,15 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const poolsData = useMemo(
+    () => ({
+      amountTotal0: poolsRes?.amountTotal0.toString(),
+      amountMin1: poolsRes?.amountMin1.toString(),
+      amountMinIncr1: poolsRes?.amountMinIncr1.toString()
+    }),
+    [poolsRes]
+  )
+
   const creatorClaimedRes = useSingleCallResult(
     englishAuctionNftContract,
     'creatorClaimed',
@@ -32,6 +41,8 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const creatorClaimed = useMemo(() => creatorClaimedRes?.[0], [creatorClaimedRes])
+
   const currentBidderRes = useSingleCallResult(
     englishAuctionNftContract,
     'currentBidder',
@@ -39,6 +50,8 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const currentBidder = useMemo(() => currentBidderRes?.[0].toString(), [currentBidderRes])
+
   const currentBidderAmount1Res = useSingleCallResult(
     englishAuctionNftContract,
     'currentBidderAmount1',
@@ -46,6 +59,8 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const currentBidderAmount1 = useMemo(() => currentBidderAmount1Res?.[0].toString(), [currentBidderAmount1Res])
+
   const currentBidderMinAmountRes = useSingleCallResult(
     englishAuctionNftContract,
     'currentBidderAmount',
@@ -53,6 +68,8 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const currentBidderMinAmount = useMemo(() => currentBidderMinAmountRes?.[0].toString(), [currentBidderMinAmountRes])
+
   const gasFeeRes = useSingleCallResult(
     englishAuctionNftContract,
     'gasFee',
@@ -60,6 +77,8 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const gasFee = useMemo(() => gasFeeRes?.[0].toString(), [gasFeeRes])
+
   const myClaimedRes = useSingleCallResult(
     englishAuctionNftContract,
     'myClaimed',
@@ -67,6 +86,7 @@ export function useEnglishAuctionDataPoolInfo() {
     undefined,
     chainConfigInBackend?.ethChainId
   ).result
+  const myClaimed = useMemo(() => myClaimedRes?.[0], [myClaimedRes])
 
   const data = useMemo(() => {
     if (!poolInfo || !chainConfigInBackend?.ethChainId) return undefined
@@ -81,9 +101,11 @@ export function useEnglishAuctionDataPoolInfo() {
     )
 
     const _pools = {
-      amountTotal0: poolsRes?.amountTotal0.toString() || poolInfo.amountTotal0,
-      currencyAmountMin1: CurrencyAmount.fromRawAmount(t1, poolsRes?.amountMin1.toString()),
-      currencyAmountMinIncr1: CurrencyAmount.fromRawAmount(t1, poolsRes?.currencyAmountMinIncr1.toString())
+      amountTotal0: poolsData.amountTotal0 || poolInfo.amountTotal0,
+      currencyAmountMin1: poolsData.amountMin1 ? CurrencyAmount.fromRawAmount(t1, poolsData.amountMin1) : undefined,
+      currencyAmountMinIncr1: poolsData.amountMinIncr1
+        ? CurrencyAmount.fromRawAmount(t1, poolsData.amountMinIncr1)
+        : undefined
     }
 
     const result: EnglishAuctionNFTPoolProp = {
@@ -91,17 +113,18 @@ export function useEnglishAuctionDataPoolInfo() {
       ..._pools,
       participant: {
         ...poolInfo.participant,
-        claimed: myClaimedRes?.[0]
+        claimed: myClaimed
       },
-      creatorClaimed: creatorClaimedRes?.[0] || poolInfo.creatorClaimed,
-      currentBidder: currentBidderRes?.[0].toString(),
-      currentBidderAmount1: CurrencyAmount.fromRawAmount(t1, currentBidderAmount1Res?.[0].toString()),
-      currentBidderMinAmount: CurrencyAmount.fromRawAmount(t1, currentBidderMinAmountRes?.[0].toString()),
-      gasFee: CurrencyAmount.fromRawAmount(
-        Currency.getNativeCurrency(chainConfigInBackend.ethChainId),
-        gasFeeRes?.[0].toString()
-      ),
-      isWinner: !!account && currentBidderRes?.[0].toString().toLowerCase() === account.toLowerCase(),
+      creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
+      currentBidder: currentBidder,
+      currentBidderAmount1: currentBidderAmount1 ? CurrencyAmount.fromRawAmount(t1, currentBidderAmount1) : undefined,
+      currentBidderMinAmount: currentBidderMinAmount
+        ? CurrencyAmount.fromRawAmount(t1, currentBidderMinAmount)
+        : undefined,
+      gasFee: gasFee
+        ? CurrencyAmount.fromRawAmount(Currency.getNativeCurrency(chainConfigInBackend.ethChainId), gasFee)
+        : undefined,
+      isWinner: !!account && currentBidder?.toLowerCase() === account.toLowerCase(),
       isUserJoinedPool: false
     }
 
@@ -109,21 +132,24 @@ export function useEnglishAuctionDataPoolInfo() {
   }, [
     account,
     chainConfigInBackend?.ethChainId,
-    creatorClaimedRes,
-    currentBidderAmount1Res,
-    currentBidderMinAmountRes,
-    currentBidderRes,
-    gasFeeRes,
-    myClaimedRes,
+    creatorClaimed,
+    currentBidder,
+    currentBidderAmount1,
+    currentBidderMinAmount,
+    gasFee,
+    myClaimed,
     poolInfo,
-    poolsRes?.amountMin1,
-    poolsRes?.amountTotal0,
-    poolsRes?.currencyAmountMinIncr1
+    poolsData.amountMin1,
+    poolsData.amountMinIncr1,
+    poolsData.amountTotal0
   ])
 
-  return {
-    loading,
-    run: getPoolInfo,
-    data
-  }
+  return useMemo(
+    () => ({
+      loading,
+      run: getPoolInfo,
+      data
+    }),
+    [data, getPoolInfo, loading]
+  )
 }

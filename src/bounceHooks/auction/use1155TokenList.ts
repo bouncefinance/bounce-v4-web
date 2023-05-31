@@ -38,15 +38,15 @@ export function use1155TokenList(
           }
           nftCollection[item.contractAddr].push(item)
         })
-        nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'] = []
-        nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'].push({
+        nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
+        nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
           balance: '1',
-          contractAddr: '0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA',
+          contractAddr: '0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6',
           contractName: 'test',
           description: 'test',
           image: '',
           name: 'test',
-          tokenId: '5010'
+          tokenId: '2'
         })
         setList(nftCollection)
       } catch (error) {

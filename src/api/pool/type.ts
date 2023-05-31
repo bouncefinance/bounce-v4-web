@@ -152,7 +152,7 @@ export interface FixedSwapPool {
     claimed?: boolean
     regreted?: boolean
     swappedAmount0?: string
-    is721?: 0 | 1
+    is721?: 1 | 2 // 2 721
     tokenId?: string
   }
   ifCollect: boolean
@@ -166,7 +166,7 @@ export interface FixedSwapPool {
   token1: TokenFromApi
   tokenId: string
   tokenType: BackedTokenType
-  is721?: 0 | 1
+  is721?: 1 | 2
   poolVersion?: number
 }
 
@@ -212,7 +212,7 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
     regreted?: boolean
     swappedAmount0?: string
     currencySwappedAmount1: CurrencyAmount | undefined
-    is721?: 0 | 1
+    is721?: 1 | 2
     tokenId?: string
   }
 }
@@ -224,7 +224,7 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   participant: {
     address?: string
     claimed?: boolean
-    is721?: 0 | 1
+    is721?: 1 | 2
     tokenId?: string
   }
   creatorClaimed: boolean
@@ -233,6 +233,7 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   currentBidderMinAmount: CurrencyAmount | undefined
   gasFee: CurrencyAmount | undefined
   isWinner: boolean
+  // !TOTD
   isUserJoinedPool: boolean
 }
 
