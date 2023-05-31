@@ -253,7 +253,7 @@ export default function Header() {
                   setMobileMenuOpen(open => !open)
                 }}
               >
-                <MenuIcon />
+                <MenuIcon sx={{ color: 'black' }} />
               </IconButton>
             </Stack>
           </ShowOnMobile>
