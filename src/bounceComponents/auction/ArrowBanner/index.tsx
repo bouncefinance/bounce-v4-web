@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Autoplay, Pagination } from 'swiper'
 import 'swiper/swiper-bundle.css'
-import { Box, styled, Typography } from '@mui/material'
+import { Box, styled, Skeleton, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
@@ -21,8 +21,61 @@ export interface IBanner {
   countDown: string
 }
 
+const SwiperSkeleton = () => {
+  return (
+    <Box
+      sx={{ width: '100%', height: '460px', backgroundColor: '#e3e3e0', borderRadius: '30px', position: 'relative' }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          position: 'absolute',
+          left: '0',
+          bottom: '40px',
+          width: '100%',
+          padding: '0 38px 0 40px',
+          boxSizing: 'border-box',
+          '& .MuiSkeleton-root': {
+            backgroundColor: 'rgba(255, 255, 255, 0.4)'
+          }
+        }}
+      >
+        <Box display="flex" flexDirection="column" width="61%" maxWidth="800px" gap="24px">
+          <Box display="flex" flexDirection="row" gap="4px">
+            <Skeleton width="32px" height="32px" variant="circular" animation="wave" />
+            <Skeleton
+              width="107px"
+              height="32px"
+              variant="rectangular"
+              sx={{ borderRadius: '100px' }}
+              animation="wave"
+            />
+          </Box>
+          <Skeleton variant="rectangular" width="100%" height="26px" animation="wave" />
+          <Skeleton variant="rectangular" width="262px" height="24px" animation="wave" />
+        </Box>
+        <Box
+          display="flex"
+          gap="8px"
+          flexDirection="row"
+          alignItems="end"
+          sx={{
+            '& .MuiSkeleton-root': { width: '60px', height: '60px', borderRadius: '8px' }
+          }}
+        >
+          {new Array(4).fill(0).map((i, v) => (
+            <Skeleton key={v} variant="rectangular" animation="wave" />
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
 function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
   const { data } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
@@ -30,6 +83,12 @@ function ArrowBanner({ type }: { type?: string }) {
       total: resp.data
     }
   })
+  const EnterSwiper = () => {
+    setShowSwiperIcon(true)
+  }
+  const LeaveSwiper = () => {
+    setShowSwiperIcon(false)
+  }
   return (
     <Box
       position={'relative'}
@@ -42,14 +101,18 @@ function ArrowBanner({ type }: { type?: string }) {
         minHeight: 460,
         margin: '16px auto 0'
       }}
+      onMouseEnter={EnterSwiper}
+      onMouseLeave={LeaveSwiper}
     >
       <ArrowBgLeft
+        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
         onClick={() => {
           swiper?.slidePrev()
         }}
       >
         <ArrowBackIcon />
       </ArrowBgLeft>
+
       <Swiper
         onSwiper={setSwiper}
         spaceBetween={0}
@@ -68,8 +131,15 @@ function ArrowBanner({ type }: { type?: string }) {
             <Banner key={index} banner={item} />
           </SwiperSlide>
         ))}
+        <SwiperSlide style={{ display: data ? 'none' : 'block' }}>
+          <SwiperSkeleton />
+        </SwiperSlide>
       </Swiper>
-      <ArrowBgRight onClick={() => swiper?.slideNext()}>
+
+      <ArrowBgRight
+        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+        onClick={() => swiper?.slideNext()}
+      >
         <ArrowForwardIcon />
       </ArrowBgRight>
     </Box>
