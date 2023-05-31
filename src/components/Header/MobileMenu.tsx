@@ -1,12 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ExpandMore } from '@mui/icons-material'
-import { NavLink } from 'react-router-dom'
-import { Box, MenuItem, styled, Theme, Drawer } from '@mui/material'
-
-import { ExternalLink } from 'themes/components'
-import { Tabs } from '.'
-
-const StyledNavLink = styled(NavLink)({})
+import { Box, Drawer, Stack, Theme } from '@mui/material'
+import Search from '../../bounceComponents/common/Header/Search'
+import Resources from './Resources'
+import CreateBtn from '../../bounceComponents/common/Header/CreateBtn'
 
 const navLinkSx = {
   cursor: 'pointer',
@@ -44,46 +41,16 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
         top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
       }}
     >
-      <Box display="grid" gap="15px">
-        {Tabs.map(({ title, route, link, titleContent, subTab }) => {
-          const content = titleContent ?? title
-          return subTab ? (
-            <Accordion placeholder={title} key={title}>
-              {subTab.map(sub => {
-                const subContent = sub.titleContent ?? sub.title
-                return sub.link ? (
-                  <MenuItem key={sub.link}>
-                    <ExternalLink href={sub.link} sx={navLinkSx}>
-                      {subContent}
-                    </ExternalLink>
-                  </MenuItem>
-                ) : (
-                  <MenuItem key={sub.title} onClick={onDismiss}>
-                    <StyledNavLink to={sub.route ?? ''} className={'link'} sx={navLinkSx}>
-                      {subContent}
-                    </StyledNavLink>
-                  </MenuItem>
-                )
-              })}
-            </Accordion>
-          ) : link ? (
-            <ExternalLink href={link} sx={navLinkSx} key={link}>
-              {content}
-            </ExternalLink>
-          ) : (
-            route && (
-              <StyledNavLink key={title} id={`${route}-nav-link`} to={route} sx={navLinkSx} onClick={onDismiss}>
-                {content}
-              </StyledNavLink>
-            )
-          )
-        })}
-      </Box>
+      <Stack spacing={10} padding={16}>
+        <Search />
+        <Resources />
+        <CreateBtn />
+      </Stack>
     </Drawer>
   )
 }
 
-function Accordion({ children, placeholder }: { children: React.ReactNode; placeholder: string }) {
+export function Accordion({ children, placeholder }: { children: React.ReactNode; placeholder: string }) {
   const [isOpen, setIsOpen] = useState(false)
   const handleClick = useCallback(() => {
     setIsOpen(state => !state)

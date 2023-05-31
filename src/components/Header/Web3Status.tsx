@@ -124,9 +124,9 @@ function Web3StatusInner() {
               cursor: 'pointer',
               borderRadius: 8,
               padding: '0 12px',
-              minWidth: 64,
+              minWidth: isDownSm ? 54 : 64,
               border: '1px solid var(--ps-gray-20)',
-              height: 44,
+              height: isDownSm ? 40 : 44,
               backgroundColor: theme.palette.background.paper,
               '&:hover .line': {
                 borderColor: 'var(--ps-text-4)'

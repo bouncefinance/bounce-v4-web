@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { whiteLogoRoutes } from '../../../../components/Header'
 import { PoolType } from 'api/pool/type'
+import useBreakpoint from '../../../../hooks/useBreakpoint'
 
 const Search: React.FC = () => {
   const [userData, setUserData] = useState<ISearchAllOption[]>([])
@@ -15,6 +16,7 @@ const Search: React.FC = () => {
   const [idx, setIdx] = useState(0)
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const isSm = useBreakpoint('sm')
 
   useEffect(() => {
     if (searchText.trim().length < 2) return
@@ -69,11 +71,11 @@ const Search: React.FC = () => {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: isSm ? '95%' : '100%',
         height: 44,
         mixBlendMode: whiteLogoRoutes.includes(pathname) ? 'difference' : 'unset',
         position: 'relative',
-        marginLeft: 48,
+        marginLeft: isSm ? 0 : 48,
         // background: whiteLogoRoutes.includes(pathname) ? 'white' : 'var(--ps-text-4)',
         // color: whiteLogoRoutes.includes(pathname) ? 'black' : 'var(--ps-text-5)',
         '.Mui-focused': {
