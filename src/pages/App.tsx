@@ -7,8 +7,6 @@ import BigNumber from 'bignumber.js'
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
 import Web3ReactManager from '../components/essential/Web3ReactManager'
-// import WarningModal from '../components/Modal/WarningModal'
-// import ComingSoon from './ComingSoon'
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
@@ -40,16 +38,7 @@ import RealWorldAuction from 'pages/realWorldAuction'
 import AdsAuction from 'pages/adsAuction'
 
 import TokenAuctionPage from 'pages/tokenAuction'
-// import AccountSettings from 'pages/profile/account/settings'
-// import ProfileActivities from 'pages/profile/activities'
-// import ProfileBasic from 'pages/profile/basic'
-// import ProfileEditInvestments from 'pages/profile/edit/investments'
-// import ProfileEditOverview from 'pages/profile/edit/overview'
-// import ProfileEditSocial from 'pages/profile/edit/social'
 import ProfileHome from 'pages/profile/home'
-
-// import SignupThirdPartiesAccount from 'pages/signup/thirdPartiesAccount'
-// import SignupAccount from 'pages/signup/account'
 
 import AccountDashboard from 'pages/account/Dashboard'
 import AccountMyProfile from 'pages/account/MyProfile'
@@ -112,6 +101,10 @@ export default function App() {
                     <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
                     <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
+                    <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
+                    <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
+                    <Route path={routes.auction.v2.englishAuction} element={<EnglishAuctionNFTPoolId />} />
+                    <Route path={routes.auction.v2.randomSelection} element={<RandomSelectionPricePoolId />} />
 
                     <Route path={routes.login} element={<Login />} />
                     <Route path={routes.loginBase} element={<FirstLoginInfo />} />
@@ -132,17 +125,7 @@ export default function App() {
                     <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
                     <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
-                    {/* <Route path={routes.profile.account.settings} element={<AccountSettings />} />
-                    <Route path={routes.profile.activities} element={<ProfileActivities />} />
-                    <Route path={routes.profile.basic} element={<ProfileBasic />} />
-                    <Route path={routes.profile.edit.investments} element={<ProfileEditInvestments />} />
-                    <Route path={routes.profile.edit.overview} element={<ProfileEditOverview />} />
-                    <Route path={routes.profile.edit.social} element={<ProfileEditSocial />} /> */}
-
                     <Route path={routes.profile.summary} element={<ProfileHome />} />
-
-                    {/* <Route path={routes.signup.account} element={<SignupAccount />} /> */}
-                    {/* <Route path={routes.signup.thirdPartiesAccount} element={<SignupThirdPartiesAccount />} /> */}
 
                     <Route path={routes.account.dashboard} element={<AccountDashboard />} />
                     <Route path={routes.account.myProfile} element={<AccountMyProfile />} />

@@ -44,6 +44,7 @@ export function useCreateEnglishAuctionPool() {
   return useCallback(async (): Promise<{
     hash: string
     transactionReceipt: Promise<TransactionReceipt>
+    sysId: number
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
     const params: Params = {
@@ -116,7 +117,7 @@ export function useCreateEnglishAuctionPool() {
     }
 
     const {
-      data: { expiredTime, signature }
+      data: { id, expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
@@ -155,6 +156,7 @@ export function useCreateEnglishAuctionPool() {
         return {
           hash: response.hash,
           transactionReceipt: response.wait(1),
+          sysId: id,
           getPoolId: (logs: Log[]) => getEventLog(englishAuctionNftContract, logs, 'Created', 'index')
         }
       })

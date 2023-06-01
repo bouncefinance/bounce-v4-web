@@ -11,10 +11,9 @@ import { useOptionDatas } from '../../../state/configOptions/hooks'
 import Table from '../../../components/Table'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from '../EmptyData'
-import { getTextFromPoolType, PoolType } from '../../../api/pool/type'
-import { routes } from '../../../constants/routes'
-import { getLabelById } from '../../../utils'
+import { getTextFromPoolType } from '../../../api/pool/type'
 import { useNavigate } from 'react-router-dom'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 enum StatusE {
   'live',
@@ -88,29 +87,12 @@ const Status: React.FC<{ status: StatusE }> = ({ status }) => {
       return <></>
   }
 }
-export const getRoute = (category: PoolType) => {
-  let route = routes.auction.fixedPrice
-  switch (category) {
-    case PoolType.Lottery:
-      route = routes.auction.randomSelection
-      break
-    case PoolType.FixedSwap:
-      route = routes.auction.fixedPrice
-      break
-    case PoolType.fixedSwapNft:
-      route = routes.auction.fixedSwapNft
-      break
-  }
-  return route
-}
 
 export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
-  const url = getRoute(props.category)
-    .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
-    .replace(':poolId', props.poolId)
+  const url = getAuctionPoolLink(props.id, props.category, props.chainId, props.poolId)
 
   return [
     <CenterRow

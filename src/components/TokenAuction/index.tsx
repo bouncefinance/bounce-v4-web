@@ -581,7 +581,7 @@ const TokenAuction: React.FC = () => {
                     {optionDatas?.chainInfoOpt &&
                       nftPoolData?.list.map((nft: any, i: number) => (
                         <Grid key={i} xs={3} item>
-                          <Link to={getAuctionPoolLink(nft.category, nft.chainId, nft.poolId)}>
+                          <Link to={getAuctionPoolLink(nft.id, nft.category, nft.chainId, nft.poolId)}>
                             <NFTCard nft={nft} hiddenStatus={true} />
                           </Link>
                         </Grid>
@@ -646,7 +646,12 @@ const TokenAuction: React.FC = () => {
                       {data?.list?.map((fixedSwaptem: any, index: number) => (
                         <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
                           <Link
-                            to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}
+                            to={getAuctionPoolLink(
+                              fixedSwaptem.id,
+                              fixedSwaptem.category,
+                              fixedSwaptem.chainId,
+                              fixedSwaptem.poolId
+                            )}
                           >
                             <AuctionCard
                               style={{ minWidth: 'unset' }}

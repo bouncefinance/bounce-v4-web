@@ -88,9 +88,10 @@ export enum PoolStatus {
 }
 
 export interface GetPoolInfoParams {
-  category: PoolType
-  chainId: number
-  poolId: string
+  category?: PoolType
+  chainId?: number
+  poolId?: string
+  id?: number
   address?: string
   tokenType: 1 | 2
 }

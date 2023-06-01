@@ -43,6 +43,7 @@ import { Token } from 'bounceComponents/fixed-swap/type'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { FixedSwapPool } from 'api/pool/type'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 const initialValues = {
   searchText: '',
@@ -641,12 +642,12 @@ const Pools: React.FC = ({}) => {
                               <Box
                                 component={'a'}
                                 target="_blank"
-                                href={routes.auction.fixedSwapNft
-                                  .replace(
-                                    ':chainShortName',
-                                    getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                                  )
-                                  .replace(':poolId', fixedSwaptem.poolId)}
+                                href={getAuctionPoolLink(
+                                  fixedSwaptem.id,
+                                  fixedSwaptem.category,
+                                  fixedSwaptem.chainId,
+                                  fixedSwaptem.poolId.toString()
+                                )}
                               >
                                 <NFTCard nft={fixedSwaptem} hiddenStatus={true} />
                               </Box>

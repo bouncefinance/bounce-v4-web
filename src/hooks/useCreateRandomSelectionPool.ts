@@ -39,6 +39,7 @@ export function useCreateRandomSelectionPool() {
   const values = useValuesState()
   return useCallback(async (): Promise<{
     hash: string
+    sysId: number
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
@@ -115,7 +116,7 @@ export function useCreateRandomSelectionPool() {
     }
 
     const {
-      data: { expiredTime, signature }
+      data: { id, expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
@@ -154,6 +155,7 @@ export function useCreateRandomSelectionPool() {
         return {
           hash: response.hash,
           transactionReceipt: response.wait(1),
+          sysId: id,
           getPoolId: (logs: Log[]) => getEventLog(randomSelectionERC20Contract, logs, 'Created', 'index')
         }
       })

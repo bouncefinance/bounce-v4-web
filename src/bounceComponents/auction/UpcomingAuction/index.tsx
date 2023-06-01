@@ -159,7 +159,14 @@ export const UpcomingAuction = (props: Notable1155Props) => {
           >
             {data?.list?.map((fixedSwaptem: any, index: number) => (
               <SwiperSlide key={index}>
-                <Link to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}>
+                <Link
+                  to={getAuctionPoolLink(
+                    fixedSwaptem.id,
+                    fixedSwaptem.category,
+                    fixedSwaptem.chainId,
+                    fixedSwaptem.poolId
+                  )}
+                >
                   <AuctionCard
                     style={{ minWidth: 'unset' }}
                     poolId={fixedSwaptem.poolId}

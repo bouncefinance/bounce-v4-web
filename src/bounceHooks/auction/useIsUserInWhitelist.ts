@@ -2,9 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { PoolType } from 'api/pool/type'
 import { getUserPermitSign, getUserWhitelistProof } from 'api/user'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useActiveWeb3React } from 'hooks'
-import { useQueryParams } from 'hooks/useQueryParams'
 import { PoolInfoProp } from 'bounceComponents/fixed-swap/type'
 import getTokenType from 'utils/getTokenType'
 import { useUserInfo } from 'state/users/hooks'
@@ -13,12 +11,8 @@ const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolT
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
 
-  const { poolId, chainShortName } = useQueryParams()
-
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
-
   const [isUserInWhitelist, setIsUserInWhitelist] = useState<boolean>()
-  const [isCheckingWhitelist, setisCheckingWhitelist] = useState(true)
+  const [isCheckingWhitelist, setIsCheckingWhitelist] = useState(true)
 
   const checkIsUserInWhitelist = useCallback(async () => {
     // console.log('account: ', account)
@@ -27,13 +21,13 @@ const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolT
 
     if (!poolInfo.enableWhiteList) {
       setIsUserInWhitelist(true)
-      setisCheckingWhitelist(false)
+      setIsCheckingWhitelist(false)
       return
     }
 
-    if (!account || !chainConfigInBackend?.id || !poolId) {
+    if (!account) {
       setIsUserInWhitelist(undefined)
-      setisCheckingWhitelist(false)
+      setIsCheckingWhitelist(false)
       return
     }
 
@@ -41,18 +35,18 @@ const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolT
       const proof = await getUserWhitelistProof({
         address: account,
         category: category,
-        chainId: chainConfigInBackend?.id,
-        poolId: String(poolId)
+        chainId: poolInfo.chainId,
+        poolId: String(poolInfo.poolId)
       })
 
       setIsUserInWhitelist(!!proof)
     } catch (error) {
       setIsUserInWhitelist(false)
     } finally {
-      setisCheckingWhitelist(false)
+      setIsCheckingWhitelist(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, category, chainConfigInBackend?.id, poolId, poolInfo.enableWhiteList, token])
+  }, [account, category, poolInfo.chainId, poolInfo.enableWhiteList, poolInfo.poolId, token])
 
   useEffect(() => {
     checkIsUserInWhitelist()
@@ -62,30 +56,31 @@ const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolT
 }
 export default useIsUserInWhitelist
 
-export function useIsUserInAllWhitelist(enableWhiteList: boolean, category: PoolType = PoolType.FixedSwap) {
+export function useIsUserInAllWhitelist(
+  backedChainId: number | undefined,
+  poolId: string | number | undefined,
+  enableWhiteList: boolean,
+  category: PoolType = PoolType.FixedSwap
+) {
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
-
-  const { poolId, chainShortName } = useQueryParams()
-
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
 
   const [isUserInWhitelist, setIsUserInWhitelist] = useState<boolean>()
   const [isUserPermitWhitelist, setIsUserPermitWhitelist] = useState<boolean>()
 
-  const [isCheckingWhitelist1, setisCheckingWhitelist1] = useState(true)
-  const [isCheckingWhitelist2, setisCheckingWhitelist2] = useState(true)
+  const [isCheckingWhitelist1, setIsCheckingWhitelist1] = useState(true)
+  const [isCheckingWhitelist2, setIsCheckingWhitelist2] = useState(true)
 
   const checkIsUserInWhitelist = useCallback(async () => {
     if (!enableWhiteList) {
       setIsUserInWhitelist(true)
-      setisCheckingWhitelist1(false)
+      setIsCheckingWhitelist1(false)
       return
     }
 
-    if (!account || !chainConfigInBackend?.id || !poolId) {
+    if (!account || !backedChainId || !poolId) {
       setIsUserInWhitelist(undefined)
-      setisCheckingWhitelist1(false)
+      setIsCheckingWhitelist1(false)
       return
     }
 
@@ -93,7 +88,7 @@ export function useIsUserInAllWhitelist(enableWhiteList: boolean, category: Pool
       const params = {
         address: account,
         category: category,
-        chainId: chainConfigInBackend?.id,
+        chainId: backedChainId,
         poolId: String(poolId),
         tokenType: getTokenType(category)
       }
@@ -103,21 +98,21 @@ export function useIsUserInAllWhitelist(enableWhiteList: boolean, category: Pool
     } catch (error) {
       setIsUserInWhitelist(false)
     } finally {
-      setisCheckingWhitelist1(false)
+      setIsCheckingWhitelist1(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, category, chainConfigInBackend?.id, enableWhiteList, poolId])
+  }, [token, category, backedChainId, enableWhiteList, poolId])
 
   const checkIsUserInPermitWhitelist = useCallback(async () => {
     if (!enableWhiteList) {
       setIsUserPermitWhitelist(true)
-      setisCheckingWhitelist2(false)
+      setIsCheckingWhitelist2(false)
       return
     }
 
-    if (!account || !chainConfigInBackend?.id || !poolId) {
+    if (!account || !backedChainId || !poolId) {
       setIsUserPermitWhitelist(undefined)
-      setisCheckingWhitelist2(false)
+      setIsCheckingWhitelist2(false)
       return
     }
 
@@ -125,7 +120,7 @@ export function useIsUserInAllWhitelist(enableWhiteList: boolean, category: Pool
       const params = {
         address: account,
         category: category,
-        chainId: chainConfigInBackend?.id,
+        chainId: backedChainId,
         poolId: String(poolId),
         tokenType: getTokenType(category)
       }
@@ -135,10 +130,10 @@ export function useIsUserInAllWhitelist(enableWhiteList: boolean, category: Pool
     } catch (error) {
       setIsUserPermitWhitelist(false)
     } finally {
-      setisCheckingWhitelist2(false)
+      setIsCheckingWhitelist2(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, category, chainConfigInBackend?.id, enableWhiteList, poolId])
+  }, [enableWhiteList, account, backedChainId, poolId, category, token])
 
   useEffect(() => {
     checkIsUserInWhitelist()

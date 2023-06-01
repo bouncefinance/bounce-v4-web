@@ -83,6 +83,7 @@ export function useCreateFixedSwapPool() {
 
   return useCallback(async (): Promise<{
     hash: string
+    sysId: number
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
@@ -243,6 +244,7 @@ export function useCreateFixedSwapPool() {
         return {
           hash: response.hash,
           transactionReceipt: response.wait(1),
+          sysId: id,
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
         }
       })

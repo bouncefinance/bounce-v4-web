@@ -33,6 +33,8 @@ import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
 import JSBI from 'jsbi'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useShowLoginModal } from 'state/users/hooks'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { PoolType } from 'api/pool/type'
 
 export const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
@@ -76,7 +78,7 @@ const CreatePoolButton = () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt } = await createFixedSwap1155Pool()
+      const { getPoolId, transactionReceipt, sysId } = await createFixedSwap1155Pool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -113,11 +115,8 @@ const CreatePoolButton = () => {
       ret
         .then(poolId => {
           const goToPoolInfoPage = () => {
-            navigate(
-              routes.auction.fixedSwapNft
-                .replace(':chainShortName', chainConfigInBackend?.shortName || '')
-                .replace(':poolId', poolId)
-            )
+            const route = getAuctionPoolLink(sysId, PoolType.fixedSwapNft, chainConfigInBackend?.id as number, poolId)
+            navigate(route)
           }
 
           hideDialogConfirmation()
@@ -147,7 +146,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.shortName, createFixedSwap1155Pool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createFixedSwap1155Pool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()

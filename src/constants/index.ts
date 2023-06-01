@@ -275,3 +275,5 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: ''
 }
+
+export const defaultPoolVersionRoute: 1 | 2 = 2

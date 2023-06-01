@@ -236,8 +236,13 @@ export function Equilibria() {
         </NewTabs>
         {value === 0 && <PoolDetail />}
         {value === 1 && <RankSection score={score} />}
-        {value === 2 && (
-          <ActionHistory noTitle={true}>
+        {value === 2 && poolInfo && (
+          <ActionHistory
+            noTitle={true}
+            backedChainId={poolInfo.chainId}
+            category={poolInfo.category}
+            poolId={poolInfo.poolId}
+          >
             <NoData />
           </ActionHistory>
         )}

@@ -1,6 +1,5 @@
 import { Currency } from 'constants/token/currency'
 import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
-import { useQueryParams } from 'hooks/useQueryParams'
 import { useMemo } from 'react'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useBackedPoolInfo } from './usePoolInfo'
@@ -10,7 +9,6 @@ import { FixedSwapNFTPoolProp, PoolType } from 'api/pool/type'
 import JSBI from 'jsbi'
 
 const useNftPoolInfo = () => {
-  const { poolId } = useQueryParams()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
 
   const fixedSwapNftContract = useFixedSwapNftContract()
@@ -18,42 +16,42 @@ const useNftPoolInfo = () => {
   const amountSwap0Res = useSingleCallResult(
     fixedSwapNftContract,
     'amountSwap0',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const amountSwap1PRes = useSingleCallResult(
     fixedSwapNftContract,
     'amountSwap1',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const creatorClaimedRes = useSingleCallResult(
     fixedSwapNftContract,
     'creatorClaimed',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped0Res = useSingleCallResult(
     fixedSwapNftContract,
     'myAmountSwapped0',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped1Res = useSingleCallResult(
     fixedSwapNftContract,
     'myAmountSwapped1',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myClaimedRes = useSingleCallResult(
     fixedSwapNftContract,
     'myClaimed',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result

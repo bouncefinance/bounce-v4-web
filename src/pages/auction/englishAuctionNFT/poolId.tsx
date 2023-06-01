@@ -45,7 +45,7 @@ function EnglishAuctionNFTContent() {
             <Stack sx={{ flex: 1 }} spacing={20}>
               {account === poolInfo.creator ? <CreatorMainBlock /> : <UserMainBlock />}
 
-              <ActionHistory />
+              <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
             </Stack>
           </Box>
         </Box>

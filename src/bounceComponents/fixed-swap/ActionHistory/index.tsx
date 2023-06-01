@@ -14,7 +14,7 @@ import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
-import { PoolEvent } from 'api/pool/type'
+import { PoolEvent, PoolType } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { shortenAddress } from 'utils'
@@ -57,8 +57,20 @@ const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Reversed: RegretTypography
 }
 
-const ActionHistory = ({ noTitle = false, children }: { noTitle?: boolean; children?: React.ReactNode }) => {
-  const { data, loading: isGettingPoolHistory } = usePoolHistory()
+const ActionHistory = ({
+  noTitle = false,
+  children,
+  backedChainId,
+  poolId,
+  category
+}: {
+  noTitle?: boolean
+  children?: React.ReactNode
+  backedChainId: number
+  poolId: string
+  category: PoolType
+}) => {
+  const { data, loading: isGettingPoolHistory } = usePoolHistory(backedChainId, poolId, category)
 
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>

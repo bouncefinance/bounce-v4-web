@@ -14,28 +14,36 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 // import { FIXED_SWAP_ERC20_ADDRESSES, OLD_FIXED_SWAP_ERC20_ADDRESSES } from '../../constants'
 import getBackedTokenType from 'utils/auction/getBackedTokenType'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { getLabelById } from 'utils'
 
 export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
-  const { poolId, chainShortName } = useQueryParams()
+  const { poolId, chainShortName, sysId } = useQueryParams()
   const { account } = useActiveWeb3React()
+  const { chainInfoOpt } = useOptionDatas()
 
   const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
 
   return useRequest(
     async (): Promise<FixedSwapPool & { ethChainId: ChainId }> => {
-      if (typeof poolId !== 'string' || !chainConfigInBackend?.id) {
-        return Promise.reject(new Error('Invalid poolId'))
+      if (!sysId) {
+        if (typeof poolId !== 'string' || !chainConfigInBackend?.id) {
+          return Promise.reject(new Error('Invalid poolId'))
+        }
       }
+      const args = sysId
+        ? { id: Number(sysId), tokenType: getBackedTokenType(category) }
+        : {
+            poolId,
+            category,
+            tokenType: getBackedTokenType(category),
+            chainId: chainConfigInBackend?.id as number,
+            address: account || ''
+          }
 
-      const response = await getPoolInfo({
-        poolId,
-        category,
-        tokenType: getBackedTokenType(category),
-        chainId: chainConfigInBackend.id,
-        address: account || ''
-      })
+      const response = await getPoolInfo(args)
 
-      const rawPoolInfo = category === PoolType.FixedSwap ? response.data.fixedSwapPool : response.data.fixedSwapNftPool
+      const rawPoolInfo = response.data.fixedSwapPool || response.data.fixedSwapNftPool
 
       return {
         ...rawPoolInfo,
@@ -48,14 +56,14 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
           ...rawPoolInfo.token1,
           symbol: rawPoolInfo.token1.symbol.toUpperCase()
         },
-        ethChainId: chainConfigInBackend.ethChainId
+        ethChainId: getLabelById(rawPoolInfo.chainId, 'ethChainId', chainInfoOpt || [])
       }
     },
     {
       // cacheKey: `POOL_INFO_${poolId}`,
-      ready: !!poolId && !!chainConfigInBackend?.id,
+      ready: (!!poolId && !!chainConfigInBackend?.id) || !!(sysId && chainInfoOpt),
       pollingInterval: 30000,
-      refreshDeps: [account, poolId],
+      refreshDeps: [account, poolId, sysId, chainInfoOpt],
       retryInterval: 10000,
       retryCount: 20
     }
@@ -74,7 +82,6 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
 // }
 
 const usePoolInfo = () => {
-  const { poolId } = useQueryParams()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo()
 
   const currentBounceContractAddress = useMemo(() => poolInfo?.contract, [poolInfo?.contract])
@@ -83,48 +90,53 @@ const usePoolInfo = () => {
   const amountSwap0PRes = useSingleCallResult(
     fixedSwapERC20Contract,
     'amountSwap0P',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const amountSwap1PRes = useSingleCallResult(
     fixedSwapERC20Contract,
     'amountSwap1P',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const creatorClaimedPRes = useSingleCallResult(
     fixedSwapERC20Contract,
     'creatorClaimedP',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped0Res = useSingleCallResult(
     fixedSwapERC20Contract,
     'myAmountSwapped0',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped1Res = useSingleCallResult(
     fixedSwapERC20Contract,
     'myAmountSwapped1',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myClaimedRes = useSingleCallResult(
     fixedSwapERC20Contract,
     'myClaimed',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
 
-  const v2FixedSwapData = useV2FixedSwapData(poolInfo?.poolVersion === 2, poolId, poolInfo)
-  const whitelistData = useIsUserInAllWhitelist(poolInfo?.enableWhiteList || false, poolInfo?.category)
+  const v2FixedSwapData = useV2FixedSwapData(poolInfo?.poolVersion === 2, poolInfo?.poolId, poolInfo)
+  const whitelistData = useIsUserInAllWhitelist(
+    poolInfo?.chainId,
+    poolInfo?.poolId,
+    poolInfo?.enableWhiteList || false,
+    poolInfo?.category
+  )
 
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
