@@ -62,6 +62,8 @@ import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
+import FundoHome from 'pages/fundo/home'
+import FundoDetail from 'pages/fundo/detail'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
@@ -71,7 +73,7 @@ import { Game } from './game'
 import { ProjectInfo } from './projectIntro/projectInfo'
 import { Equilibria } from './game/equilibria'
 import { Rank } from './launchpad/rank'
-
+import 'react-toastify/dist/ReactToastify.css'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -158,6 +160,9 @@ export default function App() {
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
                     />
+                    <Route path={routes.fundo.home} element={<FundoHome />} />
+                    <Route path={routes.fundo.detail} element={<FundoDetail />} />
+                    <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     <Route
