@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Grid } from '@mui/material'
+import { Box, Typography, Grid, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
 import LogoIcon from 'components/Fundo/assets/img/detail/logo.png'
@@ -11,17 +11,20 @@ require('@lottiefiles/lottie-player')
 
 const TokenDetail: React.FC = () => {
   const isSm = useIsSMDown()
+  const theme = useTheme()
   return (
     <Box
       sx={{
         width: '100%',
         height: '100%',
+        minHeight: `calc(100vh - ${theme.height.header})`,
         display: 'flex',
         flexFlow: isSm ? 'column nowrap' : 'row nowrap',
         justifyContent: isSm ? 'flex-start' : 'center',
         alignItems: 'center',
         padding: isSm ? '150px 40px 0' : '',
         overflowY: 'auto',
+        background: '#000',
         overflowX: 'hidden'
       }}
     >

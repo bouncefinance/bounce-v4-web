@@ -142,7 +142,7 @@ export default function Header() {
   //   }
   // })
   const showBounseHead = useMemo(() => {
-    return location.pathname !== routes.fundo.home && location.pathname !== routes.fundo.detail
+    return location.pathname.indexOf('fundo') === -1
   }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)

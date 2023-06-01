@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import One from '../components/one'
 import TextAniamte from '../components/textAnimate'
 import Four from '../components/four'
@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react'
 import Necklace from '../components/pcAnimation/necklace'
 import { BigNumber } from 'bignumber.js'
 const PcHome: React.FC = () => {
+  const theme = useTheme()
   const _AnimateHeight1 = 1000
   const [stopScroll, setStopscroll] = useState(true)
   // 1. necklack
@@ -197,6 +198,7 @@ const PcHome: React.FC = () => {
         position: 'relative',
         width: '100%',
         height: '100%',
+        minHeight: `calc(100vh - ${theme.height.header})`,
         minWidth: '1000px',
         overflowX: 'hidden',
         overflowY: stopScroll ? 'hidden' : 'auto',
