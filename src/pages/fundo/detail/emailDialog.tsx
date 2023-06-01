@@ -3,6 +3,10 @@ import EmailIcon from 'components/Fundo/assets/img/email.png'
 import CloseIcon from 'components/Fundo/assets/img/mobile/x.svg'
 import { useIsSMDown } from 'themes/useTheme'
 import SendBtn from 'components/Fundo/assets/img/sendEmail.svg'
+import { fundoRegisterEmail } from 'api/fundo'
+import { useState } from 'react'
+import { useActiveWeb3React } from 'hooks'
+import { toast } from 'react-toastify'
 const InputEl = styled('input')(({ theme }) => ({
   textDecoration: 'none',
   width: '100%',
@@ -20,6 +24,25 @@ const InputEl = styled('input')(({ theme }) => ({
 }))
 export default function EmailDialog({ handleClose }: { handleClose?: () => void }) {
   const isSm = useIsSMDown()
+  const { account } = useActiveWeb3React()
+  const [email, setEmail] = useState('')
+  const sendEmail = async () => {
+    if (!email) {
+      toast.warning(`email can't be empty~`)
+      return
+    }
+    const { code, msg } = await fundoRegisterEmail({
+      side: 'fundo',
+      account: account || '',
+      email: email
+    })
+    if (code === 200 && msg === 'ok') {
+      toast.success('Successful operation~')
+      handleClose && handleClose()
+    } else {
+      toast.warning(msg)
+    }
+  }
   return (
     <Box
       sx={{
@@ -133,12 +156,20 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
             }}
             gap={'30px'}
           >
-            <InputEl type="text" placeholder="Email adress" />
+            <InputEl
+              type="text"
+              onChange={e => {
+                const value = e.target.value
+                setEmail(value)
+              }}
+              placeholder="Email adress"
+            />
             <img
               src={SendBtn}
               style={{
                 cursor: 'pointer'
               }}
+              onClick={sendEmail}
               alt=""
             />
           </Box>
