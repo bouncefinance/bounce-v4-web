@@ -100,6 +100,7 @@ const CreatorMainBlock = (): JSX.Element => {
             {/* {!!nftGoInfo?.data?.suspicious && <SuspiciousTips />} */}
           </Box>
 
+          {poolInfo.contract && <ButtonBlock />}
           <ButtonBlock />
         </Stack>
 
