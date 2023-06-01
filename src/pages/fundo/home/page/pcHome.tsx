@@ -199,6 +199,7 @@ const PcHome: React.FC = () => {
         width: '100%',
         height: '100%',
         minHeight: `calc(100vh - ${theme.height.header})`,
+        maxHeight: `calc(100vh - ${theme.height.header})`,
         minWidth: '1000px',
         overflowX: 'hidden',
         overflowY: stopScroll ? 'hidden' : 'auto',

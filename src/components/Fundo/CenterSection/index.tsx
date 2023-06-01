@@ -14,14 +14,13 @@ export default function CenterSection(props: CenterSectionParams) {
     <Box
       sx={{
         position: 'relative',
-        width: '100%',
+        width: isSm ? 'calc(100% - 20px)' : 'calc(100% - 75px)',
         // maxWidth: isSm ? "350px" : "1200px",
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'space-between',
         alignItems: 'center',
         margin: ' 0 auto',
-        padding: isSm ? '0 20px' : '0 75px',
         // [theme.breakpoints.up("lg")]: {
         //     maxWidth: "1400px !important",
         //   },

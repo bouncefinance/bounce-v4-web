@@ -6,7 +6,6 @@ export default function One() {
   return (
     <CenterSection
       style={{
-        width: '100%',
         height: '100vh',
         minHeight: '880px',
         display: 'flex',
