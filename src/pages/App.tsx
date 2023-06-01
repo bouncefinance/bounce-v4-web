@@ -14,8 +14,8 @@ import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
 import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Mobile } from 'bounceComponents/common/Mobile'
-import { ShowOnMobile } from 'themes/context'
+// import { Mobile } from 'bounceComponents/common/Mobile'
+// import { ShowOnMobile } from 'themes/context'
 import { ToastContainer } from 'react-toastify'
 import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
@@ -72,6 +72,8 @@ import { ProjectInfo } from './projectIntro/projectInfo'
 import { Equilibria } from './game/equilibria'
 import { Rank } from './launchpad/rank'
 
+import OkxActivity from './okxActivity/OkxActivity'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -96,9 +98,9 @@ export default function App() {
               <Header />
               <ToastContainer />
               <Questions />
-              <ShowOnMobile breakpoint="md">
+              {/* <ShowOnMobile breakpoint="md">
                 <Mobile />
-              </ShowOnMobile>
+              </ShowOnMobile> */}
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
@@ -172,6 +174,7 @@ export default function App() {
                     {/* <Route path={routes.game.equilibriaIndex} element={<Equilibria />} /> */}
                     <Route path={routes.game.equilibriaDetail} element={<Equilibria />} />
                     <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} />
+                    <Route path={routes.okxActivity} element={<OkxActivity />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>

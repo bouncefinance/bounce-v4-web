@@ -7,6 +7,7 @@ export const routes = {
     englishAuction: '/auction/english-auction/:chainShortName/:poolId',
     randomSelection: '/auction/random-selection/:chainShortName/:poolId'
   },
+  okxActivity: '/okxActivity/:chainShortName/:poolId',
   login: '/login',
   loginBase: '/login_base',
   market: {
