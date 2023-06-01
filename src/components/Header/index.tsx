@@ -170,15 +170,33 @@ export default function Header() {
     return { backgroundColor: `rgba(255,255,255,${headerBgOpacity})` }
   }, [headerBgOpacity, isTransparentRoute])
 
-  const walletWithoutToken = (
+  const walletClick = () => {
+    if (location.pathname === routes.login) {
+      return
+    }
+    const _redirect = location.pathname + location.search
+    navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+  }
+  const walletWithoutToken = isSm ? (
     <Button
-      onClick={() => {
-        if (location.pathname === routes.login) {
-          return
-        }
-        const _redirect = location.pathname + location.search
-        navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+      onClick={walletClick}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '0px 12px',
+        width: '78px',
+        height: '40px',
+        background: '#E1F25C',
+        borderRadius: '6px'
       }}
+    >
+      Connect
+    </Button>
+  ) : (
+    <Button
+      onClick={walletClick}
       sx={{
         minWidth: 212,
         borderRadius: 8,

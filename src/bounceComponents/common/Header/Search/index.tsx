@@ -71,7 +71,7 @@ const Search: React.FC = () => {
   return (
     <Box
       sx={{
-        width: isSm ? '95%' : '100%',
+        width: '100%',
         height: 44,
         mixBlendMode: whiteLogoRoutes.includes(pathname) ? 'difference' : 'unset',
         position: 'relative',

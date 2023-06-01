@@ -1,29 +1,54 @@
-import React, { useCallback, useState } from 'react'
-import { ExpandMore } from '@mui/icons-material'
-import { Box, Drawer, Stack, Theme } from '@mui/material'
+import { useState } from 'react'
+import { ArrowBackIosNew } from '@mui/icons-material'
+import { Box, Drawer, Stack, Typography } from '@mui/material'
 import Search from '../../bounceComponents/common/Header/Search'
-import Resources from './Resources'
+import { CenterRow } from '../Layout'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import CreateBtn from '../../bounceComponents/common/Header/CreateBtn'
+import { SocialLinkList } from '../Footer/FooterPc'
 
-const navLinkSx = {
-  cursor: 'pointer',
-  textDecoration: 'none',
-  fontSize: 24,
-  color: (theme: Theme) => theme.palette.text.secondary,
-  padding: '13px 24px',
-  width: '100%',
-  textAlign: 'left',
-  display: 'flex',
-  justifyContent: 'flex-start',
-  '&.active': {
-    color: (theme: Theme) => theme.palette.primary.main
-  },
-  '&:hover': {
-    color: (theme: Theme) => theme.palette.text.primary
-  }
-} as const
+interface MenuItem {
+  title: string
+  link?: string
+  subTitle?: MenuItem[]
+}
 
 export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onDismiss: () => void }) {
+  const [currentTab, setCurrentTab] = useState<MenuItem>()
+  // const nav = useNavigate()
+  const menuContent: MenuItem[] = [
+    {
+      title: 'Auction',
+      subTitle: [
+        { link: '', title: 'Home' },
+        { link: '', title: 'Private Launchpad' },
+        { link: '', title: 'Token Auction' },
+        { link: '', title: 'NFT Auction' },
+        { link: '', title: 'Real World Collectibles Auction' },
+        { link: '', title: 'Ads Auction' }
+      ]
+    },
+    {
+      title: 'Token',
+      link: ''
+    },
+    {
+      title: 'Resources',
+      subTitle: [
+        { link: '', title: 'Document' },
+        { link: '', title: 'Help Center' },
+        { link: '', title: 'Bounce Token' },
+        { link: '', title: 'Token Authentication' },
+        {
+          link: '',
+          title: 'SDKs&Plug-Ins'
+        },
+        { link: '', title: 'Community' },
+        { link: '', title: 'Become a Partner' },
+        { link: '', title: 'Contact Us' }
+      ]
+    }
+  ]
   return (
     <Drawer
       open={isOpen}
@@ -32,6 +57,8 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
       BackdropProps={{ sx: { backgroundColor: 'transparent' } }}
       PaperProps={{
         sx: {
+          height: '100%',
+          paddingBottom: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header }),
           top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
         }
       }}
@@ -41,36 +68,98 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
         top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
       }}
     >
-      <Stack spacing={10} padding={16}>
-        <Search />
-        <CreateBtn />
-        <Resources />
-      </Stack>
+      <Box
+        sx={{
+          height: '100%',
+          background: '#F6F6F3',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Stack spacing={10} padding={16}>
+          <Search />
+          {!currentTab &&
+            menuContent.map((m, i) => (
+              <Box
+                key={i}
+                onClick={() => {
+                  if (m.subTitle) {
+                    setCurrentTab(m)
+                  } else {
+                    // nav(m.link)
+                    onDismiss()
+                  }
+                }}
+              >
+                <MenuSubTitle menuItem={m} />
+              </Box>
+            ))}
+          {currentTab && (
+            <>
+              <Box
+                onClick={() => {
+                  setCurrentTab(undefined)
+                }}
+              >
+                <MenuTitle title={currentTab.title} />
+              </Box>
+              {currentTab.subTitle?.map((m, i) => (
+                <Box
+                  key={i}
+                  onClick={() => {
+                    // nav(m.link)
+                    onDismiss()
+                  }}
+                >
+                  <MenuSubTitle menuItem={m} />
+                </Box>
+              ))}
+            </>
+          )}
+        </Stack>
+        {!currentTab && (
+          <Stack spacing={22} p={'0 16px 22px'} onClick={onDismiss}>
+            <CreateBtn
+              sx={{
+                width: '100%'
+              }}
+            />
+            <SocialLinkList
+              sx={{
+                justifyContent: 'center'
+              }}
+            />
+          </Stack>
+        )}
+      </Box>
     </Drawer>
   )
 }
 
-export function Accordion({ children, placeholder }: { children: React.ReactNode; placeholder: string }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const handleClick = useCallback(() => {
-    setIsOpen(state => !state)
-  }, [])
+function MenuSubTitle({ menuItem }: { menuItem: MenuItem }) {
   return (
-    <>
-      <Box sx={navLinkSx} display="flex" alignItems="center" gap={12} onClick={handleClick}>
-        {placeholder}{' '}
-        <ExpandMore
-          sx={{
-            transform: isOpen ? 'rotate(180deg)' : ''
-          }}
-        />
-      </Box>
+    <CenterRow justifyContent={'space-between'} sx={{ height: 45 }}>
+      <Typography>{menuItem.title}</Typography>
+      {menuItem.subTitle && <ArrowForwardIosIcon sx={{ fontSize: 16 }} />}
+    </CenterRow>
+  )
+}
 
-      {isOpen && (
-        <Box mt={-25} mb={12}>
-          {children}
-        </Box>
-      )}
-    </>
+function MenuTitle({ title }: { title: string }) {
+  return (
+    <CenterRow
+      sx={{
+        gap: 10,
+        height: 45,
+        background: '#E1F25C',
+        paddingLeft: 16,
+        marginLeft: '-16px !important',
+        marginRight: '-16px !important'
+      }}
+    >
+      <ArrowBackIosNew sx={{ fontSize: 16 }} />
+      <Typography>{title}</Typography>
+    </CenterRow>
   )
 }

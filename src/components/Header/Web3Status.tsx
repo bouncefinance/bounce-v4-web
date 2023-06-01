@@ -32,6 +32,7 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import { useLogout, useUserInfo } from 'state/users/hooks'
 import { ReactComponent as DisconnectSvg } from 'assets/svg/account/disconnect.svg'
 import { ReactComponent as TransactionsSvg } from 'assets/svg/account/transactions.svg'
+import { ReactComponent as UserSvg } from 'assets/svg/account/user.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 
@@ -91,6 +92,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 
 function Web3StatusInner() {
   const { account, error } = useWeb3React()
+  const isSm = useBreakpoint('sm')
   const { userInfo } = useUserInfo()
   const { chainId } = useActiveWeb3React()
   const allTransactions = useAllTransactions()
@@ -117,58 +119,82 @@ function Web3StatusInner() {
           setAnchorEl(null)
         }}
       >
-        <Box>
-          <Button
-            onClick={handleClick}
-            sx={{
-              cursor: 'pointer',
-              borderRadius: 8,
-              padding: '0 12px',
-              minWidth: isDownSm ? 54 : 64,
-              border: '1px solid var(--ps-gray-20)',
-              height: isDownSm ? 40 : 44,
-              backgroundColor: theme.palette.background.paper,
-              '&:hover .line': {
-                borderColor: 'var(--ps-text-4)'
-              }
-            }}
-          >
-            <Avatar
-              sx={{ marginRight: 10, width: 24, height: 24 }}
-              src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
-            />
-            <Box
-              className={'line'}
+        {isSm ? (
+          <>
+            <Button
+              onClick={handleClick}
               sx={{
-                borderRight: '1px solid var(--ps-gray-20)',
-                mr: 10,
-                height: '100%'
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '40px',
+                height: '40px',
+                minWidth: '40px',
+                padding: 0,
+                background: '#E1F25C',
+                borderRadius: '6px',
+                fontSize: 18
               }}
-            />
-            {pending?.length ? (
-              <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 9 } }}>
-                <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
-                <Box component="span" sx={{ ml: 3 }}>
-                  <Typography sx={{ fontSize: { xs: 9, sm: 14 }, ml: 8, color: theme.palette.text.primary }} noWrap>
-                    {pending?.length} Pending
-                  </Typography>
-                </Box>
-              </Box>
-            ) : (
-              <Typography
+            >
+              <UserSvg />
+            </Button>
+            <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
+          </>
+        ) : (
+          <Box>
+            <Button
+              onClick={handleClick}
+              sx={{
+                cursor: 'pointer',
+                borderRadius: 8,
+                padding: '0 12px',
+                minWidth: isDownSm ? 54 : 64,
+                border: '1px solid var(--ps-gray-20)',
+                height: isDownSm ? 40 : 44,
+                backgroundColor: theme.palette.background.paper,
+                '&:hover .line': {
+                  borderColor: 'var(--ps-text-4)'
+                }
+              }}
+            >
+              <Avatar
+                sx={{ marginRight: 10, width: 24, height: 24 }}
+                src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
+              />
+              <Box
+                className={'line'}
                 sx={{
-                  lineHeight: '16px',
-                  fontSize: { xs: 9, sm: 14 },
-                  color: theme.palette.text.primary
+                  borderRight: '1px solid var(--ps-gray-20)',
+                  mr: 10,
+                  height: '100%'
                 }}
-              >
-                {ENSName || shortenAddress(account)}
-              </Typography>
-            )}
-            {anchorEl ? <ExpandLess /> : <ExpandMore />}
-          </Button>
-          <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
-        </Box>
+              />
+              {pending?.length ? (
+                <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 9 } }}>
+                  <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
+                  <Box component="span" sx={{ ml: 3 }}>
+                    <Typography sx={{ fontSize: { xs: 9, sm: 14 }, ml: 8, color: theme.palette.text.primary }} noWrap>
+                      {pending?.length} Pending
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : (
+                <Typography
+                  sx={{
+                    lineHeight: '16px',
+                    fontSize: { xs: 9, sm: 14 },
+                    color: theme.palette.text.primary
+                  }}
+                >
+                  {ENSName || shortenAddress(account)}
+                </Typography>
+              )}
+              {anchorEl ? <ExpandLess /> : <ExpandMore />}
+            </Button>
+            <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
+          </Box>
+        )}
       </ClickAwayListener>
     )
   } else if (error) {
@@ -271,7 +297,10 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
       sx={{
         top: '20px !important',
         width: 360,
-        zIndex: theme.zIndex.modal
+        zIndex: theme.zIndex.modal,
+        [theme.breakpoints.down('md')]: {
+          width: '100%'
+        }
       }}
     >
       <Box
