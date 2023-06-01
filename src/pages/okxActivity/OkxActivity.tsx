@@ -3,14 +3,17 @@ import BounceOkxIcon from 'assets/images/bounceOkxIcon.png'
 import MNftLogo from 'assets/images/nftLogo.png'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
-import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { shortenAddress } from 'utils'
+import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyCollectionIcon.png'
 import { useCallback } from 'react'
-import BidButtonBlock from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import CounterDownBox from './components/CounterDownBox'
-import { PoolStatus } from 'api/pool/type'
+import useNftPoolInfo from 'bounceHooks/auction/useNftPoolInfo'
+import BidButtonBlock from 'bounceComponents/fixed-swap-nft/ActionBox/UserActionBox2/BidButtonBlock'
+import usePlaceBid1155 from 'bounceHooks/auction/usePlaceBid1155'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { FixedSwapNFTPoolProp } from 'api/pool/type'
 
 const PoolCard = styled(Box)({
   borderRadius: '12px',
@@ -63,13 +66,12 @@ const myAnimation = keyframes`
     transform: translate(0px, 200px);
   }
   100% {
-    transform: translate(-100px, 100px);
+    transform: translate(-100px, 100px);        
   }
 `
 
 export default function OkxActivity() {
-  const handlePlaceBid = useCallback(() => {}, [])
-  const { data: poolInfo } = usePoolInfo()
+  const { data: poolInfo } = useNftPoolInfo()
 
   if (!poolInfo) {
     return (
@@ -86,6 +88,52 @@ export default function OkxActivity() {
       </Box>
     )
   }
+  return <Activity poolInfo={poolInfo} />
+}
+
+export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
+  const handlePlaceBid = useCallback(() => {}, [])
+  console.log(poolInfo)
+
+  const { run: bid } = usePlaceBid1155(poolInfo)
+  const toBid = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await bid('1')
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          // TOTD ?
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully bid 1 ${poolInfo?.token0.symbol}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toBid
+      })
+    }
+  }, [bid, poolInfo?.token0.symbol])
 
   return (
     <Box
@@ -165,61 +213,48 @@ export default function OkxActivity() {
         <img width={182.5} style={{ marginTop: 40 }} src={MNftLogo} alt="bounce" />
         <CounterDownBox
           style={{ marginTop: 16 }}
-          status={PoolStatus.Live}
-          openTime={1685589495}
-          closeTime={1685589495 + 7 * 86400}
-          claimAt={1685589495 + 7 * 86400}
+          status={poolInfo.status}
+          openTime={poolInfo.openAt}
+          closeTime={poolInfo.closeAt}
+          claimAt={poolInfo.claimAt}
         />
         <PoolCard>
           <Box className="poolTitle">Join The Pool</Box>
-          <PoolInfoItem
-            sx={{ marginTop: 12 }}
-            title="Successful Sold Amount"
-            tip="The amount of token you successfully secured."
-          >
-            <Stack direction="row" spacing={6}>
-              <Typography color={'#E1F25C'}>0</Typography>
-              <Typography color={'#959595'}>NFT</Typography>
-            </Stack>
-          </PoolInfoItem>
-          <PoolInfoItem
-            sx={{ marginTop: 12 }}
-            title="Successful Fund Raised"
-            tip="The amount of token you successfully secured."
-          >
-            <Stack direction="row" spacing={6}>
-              <Typography color={'#E1F25C'}>0</Typography>
-              <TokenImage alt="" src={''} size={20} />
-              <Typography color={'#959595'}>ETH</Typography>
-            </Stack>
-          </PoolInfoItem>
-          <PoolInfoItem
-            sx={{ marginTop: 12 }}
-            title="Fund Receiving Wallet"
-            tip="The amount of token you successfully secured."
-          >
-            <Stack direction="row" spacing={6}>
-              <Typography color={'#E1F25C'}>{shortenAddress('0x8127c9680F8fd394330f1A14eA508aA89333E72D')}</Typography>
-              <CopyToClipboard text={''} />
-            </Stack>
-          </PoolInfoItem>
-          <PoolInfoItem
-            sx={{ marginTop: 12 }}
-            title="Platform Fee Charged"
-            tip="The amount of token you successfully secured."
-          >
-            <Stack direction="row" spacing={6}>
-              <Typography>
-                <span style={{ color: '#E1F25C' }}>0</span>
-                <span style={{ color: '#959595' }}> / 0</span>
+          <PoolInfoItem title="Unit Price" sx={{ marginTop: 12 }}>
+            <Stack direction="row" spacing={8}>
+              <Typography color={'#E1F25C'}>1</Typography>
+              <TokenImage
+                alt={poolInfo.token0.symbol}
+                src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
+                size={20}
+              />
+              <Typography color={'#E1F25C'}>
+                {poolInfo.token0.symbol} = {poolInfo.ratio}
               </Typography>
-              <Typography color={'#959595'}> ETH</Typography>
+              <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
+              <Typography color={'#959595'}>{poolInfo.token1.symbol}</Typography>
+            </Stack>
+          </PoolInfoItem>
+
+          <PoolInfoItem
+            sx={{ marginTop: 12 }}
+            title="Successful bid amount"
+            tip="The amount of token you successfully secured."
+          >
+            <Stack direction="row" spacing={6}>
+              <Typography color={'#E1F25C'}>{poolInfo.swappedAmount0}</Typography>
+              <TokenImage
+                alt={poolInfo.token0.symbol}
+                src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
+                size={20}
+              />
+              <Typography>{poolInfo.token0.symbol}</Typography>
             </Stack>
           </PoolInfoItem>
         </PoolCard>
         <BidButtonBlock
           action={'FIRST_BID'}
-          bidAmount={'0.001'}
+          bidAmount={'1'}
           handlePlaceBid={handlePlaceBid}
           isBidding={false}
           handleGoToCheck={() => {}}

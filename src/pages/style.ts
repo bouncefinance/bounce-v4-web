@@ -32,8 +32,8 @@ const BodyWrapper = styled(Box)(({ theme }) => ({
   overflowX: 'hidden',
   position: 'relative',
   [theme.breakpoints.down('md')]: {
-    minHeight: `calc(100vh - ${theme.height.header} - ${theme.height.mobileHeader})`,
-    paddingTop: 20
+    // minHeight: `calc(100vh - ${theme.height.header} - ${theme.height.mobileHeader})`,
+    paddingTop: 0
   }
 }))
 

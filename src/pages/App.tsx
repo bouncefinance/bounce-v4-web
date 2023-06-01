@@ -73,6 +73,7 @@ import { Equilibria } from './game/equilibria'
 import { Rank } from './launchpad/rank'
 
 import OkxActivity from './okxActivity/OkxActivity'
+import LoginModal from 'components/Header/LoginModal'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -83,6 +84,8 @@ const GlobalHooks = () => {
 
 export default function App() {
   const { pathname } = useLocation()
+  const firstLevelRoute = pathname.split('/')[1]
+  console.log(firstLevelRoute)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -95,7 +98,8 @@ export default function App() {
           <AppWrapper id="app">
             <ContentWrapper>
               <GlobalHooks />
-              <Header />
+              <LoginModal />
+              {firstLevelRoute === 'okxActivity' ? '' : <Header />}
               <ToastContainer />
               <Questions />
               {/* <ShowOnMobile breakpoint="md">
