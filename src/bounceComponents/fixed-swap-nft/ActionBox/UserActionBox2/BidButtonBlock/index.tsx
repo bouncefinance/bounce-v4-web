@@ -15,6 +15,7 @@ import UpcomingPoolCountdownButton from 'bounceComponents/fixed-swap/ActionBox/U
 import WrongNetworkAlert from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock/WrongNetworkAlert'
 import BidButtonGroup from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock/BidButtonGroup'
 import GetFundBackAlert from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock/GetFundBackAlert'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 
 interface BidButtonBlockProps {
   action: UserBidAction
@@ -51,6 +52,10 @@ const BidButtonBlock = ({
   }, [currencySlicedBidAmount, userToken1Balance])
 
   const isLimitExceeded = useIsLimitExceeded1155(bidAmount, poolInfo)
+
+  if (!account) {
+    return <ConnectWalletButton />
+  }
 
   if (!isCurrentChainEqualChainOfPool) {
     return (

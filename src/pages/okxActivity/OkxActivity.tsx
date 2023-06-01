@@ -13,7 +13,15 @@ import usePlaceBid1155 from 'bounceHooks/auction/usePlaceBid1155'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { FixedSwapNFTPoolProp } from 'api/pool/type'
+import { FixedSwapNFTPoolProp, PoolStatus } from 'api/pool/type'
+import BigNumber from 'bignumber.js'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useActiveWeb3React } from 'hooks'
+import { shortenAddress } from 'utils'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
+import ClaimButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ClaimButton'
+import useUserClaim1155 from 'bounceHooks/auction/useUserClaim1155'
 
 const PoolCard = styled(Box)({
   borderRadius: '12px',
@@ -66,7 +74,7 @@ const myAnimation = keyframes`
     transform: translate(0px, 200px);
   }
   100% {
-    transform: translate(-100px, 100px);        
+    transform: translate(-100px, 100px);
   }
 `
 
@@ -91,15 +99,17 @@ export default function OkxActivity() {
   return <Activity poolInfo={poolInfo} />
 }
 
+const bidAmount = '1'
 export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
-  const handlePlaceBid = useCallback(() => {}, [])
-  console.log(poolInfo)
+  const { account } = useActiveWeb3React()
+  const slicedBid1Amount = bidAmount ? new BigNumber(bidAmount).times(poolInfo.ratio).toString() : ''
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
 
-  const { run: bid } = usePlaceBid1155(poolInfo)
+  const { run: bid, submitted: isBidding } = usePlaceBid1155(poolInfo)
   const toBid = useCallback(async () => {
     showRequestConfirmDialog()
     try {
-      const { transactionReceipt } = await bid('1')
+      const { transactionReceipt } = await bid(bidAmount)
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -134,6 +144,47 @@ export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
       })
     }
   }, [bid, poolInfo?.token0.symbol])
+
+  const { run: claim, submitted: claimBidSubmitted } = useUserClaim1155(poolInfo)
+  const toClaim = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await claim()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully claimed ${poolInfo.participant.swappedAmount0} ${poolInfo.token0.symbol}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toClaim
+      })
+    }
+  }, [claim, poolInfo.participant.swappedAmount0, poolInfo.token0.symbol])
 
   return (
     <Box
@@ -236,31 +287,69 @@ export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
             </Stack>
           </PoolInfoItem>
 
-          <PoolInfoItem
-            sx={{ marginTop: 12 }}
-            title="Successful bid amount"
-            tip="The amount of token you successfully secured."
-          >
+          <PoolInfoItem sx={{ marginTop: 12 }} title="Sold Limit">
+            <Typography color={'#E1F25C'}>
+              {poolInfo.swappedAmount0} / {poolInfo.amountTotal0}
+            </Typography>
+          </PoolInfoItem>
+
+          <PoolInfoItem title="Contract address" sx={{ marginTop: 12 }} tip="ERC1155 #1">
+            <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
+              <Typography color={'#959595'}>{shortenAddress(poolInfo.token0.address)}</Typography>
+
+              <CopyToClipboard text={poolInfo.token0.address} />
+            </Stack>
+          </PoolInfoItem>
+
+          <PoolInfoItem sx={{ marginTop: 12 }} title="Token you will pay">
             <Stack direction="row" spacing={6}>
-              <Typography color={'#E1F25C'}>{poolInfo.swappedAmount0}</Typography>
-              <TokenImage
-                alt={poolInfo.token0.symbol}
-                src={poolInfo.token0.largeUrl || poolInfo.token0.smallUrl || poolInfo.token0.thumbUrl || DefaultNftIcon}
-                size={20}
-              />
-              <Typography>{poolInfo.token0.symbol}</Typography>
+              <Typography color={'#E1F25C'}>{slicedBid1Amount}</Typography>
+              <Typography color={'#959595'}>{poolInfo.token1.symbol}</Typography>
+            </Stack>
+          </PoolInfoItem>
+          <PoolInfoItem sx={{ marginTop: 12 }} title="Bid amount limit">
+            <Stack direction="row" spacing={6}>
+              <Typography color={'#959595'}>
+                {poolInfo.participant.swappedAmount0 || 0} NFT / {poolInfo.maxAmount1PerWallet || '-'}&nbsp; NFT
+              </Typography>
+            </Stack>
+          </PoolInfoItem>
+          <PoolInfoItem sx={{ marginTop: 12 }} title="Claim At">
+            <Stack direction="row" spacing={6}>
+              <Typography color={'#959595'}>{new Date(poolInfo.claimAt * 1000).toLocaleString()}</Typography>
             </Stack>
           </PoolInfoItem>
         </PoolCard>
-        <BidButtonBlock
-          action={'FIRST_BID'}
-          bidAmount={'1'}
-          handlePlaceBid={handlePlaceBid}
-          isBidding={false}
-          handleGoToCheck={() => {}}
-          handleCancelButtonClick={() => {}}
-          poolInfo={poolInfo}
-        />
+
+        {poolInfo.status === PoolStatus.Live && (
+          <>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="h5"></Typography>
+              <Typography color={'#959595'}>
+                Balance: {userToken1Balance?.toSignificant() || '-'} {poolInfo.token1.symbol}
+              </Typography>
+            </Box>
+            <BidButtonBlock
+              action={'FIRST_BID'}
+              bidAmount={bidAmount}
+              handlePlaceBid={toBid}
+              isBidding={isBidding.submitted}
+              handleGoToCheck={() => {}}
+              handleCancelButtonClick={() => {}}
+              poolInfo={poolInfo}
+            />
+          </>
+        )}
+        {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Finish) &&
+          Number(poolInfo.participant.swappedAmount0) > 0 && (
+            <>
+              {poolInfo.participant.claimed ? (
+                <SuccessfullyClaimedAlert />
+              ) : (
+                <ClaimButton onClick={toClaim} loading={claimBidSubmitted.submitted} />
+              )}
+            </>
+          )}
       </Box>
     </Box>
   )

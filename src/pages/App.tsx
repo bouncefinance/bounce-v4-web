@@ -84,8 +84,6 @@ const GlobalHooks = () => {
 
 export default function App() {
   const { pathname } = useLocation()
-  const firstLevelRoute = pathname.split('/')[1]
-  console.log(firstLevelRoute)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -99,7 +97,7 @@ export default function App() {
             <ContentWrapper>
               <GlobalHooks />
               <LoginModal />
-              {firstLevelRoute === 'okxActivity' ? '' : <Header />}
+              <Header />
               <ToastContainer />
               <Questions />
               {/* <ShowOnMobile breakpoint="md">

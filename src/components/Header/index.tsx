@@ -147,6 +147,11 @@ export default function Header() {
 
   const { token } = useUserInfo()
   const { pathname } = useLocation()
+
+  const mobileHideHeader = useMemo(() => {
+    return pathname.includes('okxActivity')
+  }, [pathname])
+
   const navigate = useNavigate()
   const headerBgOpacity = useHeaderBgOpacity()
 
@@ -166,7 +171,11 @@ export default function Header() {
   }, [headerBgOpacity, isTransparentRoute])
 
   return (
-    <>
+    <Box
+      sx={{
+        display: { xs: mobileHideHeader ? 'none' : 'block', md: 'block' }
+      }}
+    >
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
       <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
@@ -252,6 +261,6 @@ export default function Header() {
           </ShowOnMobile>
         </Box>
       </StyledAppBar>
-    </>
+    </Box>
   )
 }
