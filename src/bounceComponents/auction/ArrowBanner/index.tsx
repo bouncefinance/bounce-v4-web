@@ -46,13 +46,16 @@ function ArrowBanner({ type }: { type?: string }) {
         margin: '16px auto 0'
       }}
     >
-      <ArrowBgLeft
-        onClick={() => {
-          swiper?.slidePrev()
-        }}
-      >
-        <ArrowBackIcon />
-      </ArrowBgLeft>
+      {!isSm && (
+        <ArrowBgLeft
+          onClick={() => {
+            swiper?.slidePrev()
+          }}
+        >
+          <ArrowBackIcon />
+        </ArrowBgLeft>
+      )}
+
       <Swiper
         onSwiper={setSwiper}
         spaceBetween={0}
@@ -72,9 +75,11 @@ function ArrowBanner({ type }: { type?: string }) {
           </SwiperSlide>
         ))}
       </Swiper>
-      <ArrowBgRight onClick={() => swiper?.slideNext()}>
-        <ArrowForwardIcon />
-      </ArrowBgRight>
+      {!isSm && (
+        <ArrowBgRight onClick={() => swiper?.slideNext()}>
+          <ArrowForwardIcon />
+        </ArrowBgRight>
+      )}
     </Box>
   )
 }
@@ -134,7 +139,7 @@ const BannerH3 = styled(Typography)`
   flex-grow: 0;
 
   @media (max-width: 600px) {
-    font-size: 16px;
+    font-size: 22px;
   }
 `
 const BannerH6 = styled(Typography)`
@@ -146,7 +151,7 @@ const BannerH6 = styled(Typography)`
   color: #ffffff;
 
   @media (max-width: 600px) {
-    font-size: 12px;
+    font-size: 14px;
   }
 `
 
@@ -167,6 +172,12 @@ const CountDownBg = styled(Box)`
   font-size: 16px;
   line-height: 19px;
   color: #ffffff;
+
+  @media (max-width: 600px) {
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
+  }
 `
 const Shadow = styled(Box)`
   position: absolute;
@@ -178,7 +189,7 @@ const Shadow = styled(Box)`
   border-radius: 0 0 30px 30px;
 
   @media (max-width: 600px) {
-    height: 100px;
+    height: 327px;
     border-radius: 0 0 15px 15px;
   }
 `
@@ -213,8 +224,8 @@ function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: isSm ? '125px' : '460px',
-        width: '100%',
+        height: isSm ? '400px' : '460px',
+        width: { sm: '328px', lg: '100%' },
         position: 'relative'
       }}
       onClick={() => handleClick(banner.url || '')}

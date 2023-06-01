@@ -94,7 +94,7 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
 const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
   variant: 'outlined' | 'grey'
   fontSize?: string
-}>(({ variant, theme, fontSize }) => ({
+}>(({ variant, theme }) => ({
   height: 80,
   borderRadius: '16px',
   overflow: 'hidden',
@@ -105,16 +105,13 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
     background: variant === 'outlined' ? 'transparent' : theme.palette.background.default
   },
   '& .MuiTableCell-root': {
-    fontSize: fontSize ?? '16px',
     justifyContent: 'flex-start',
     paddingLeft: 0,
     border: '1px solid',
     borderColor: variant === 'outlined' ? '#00000010' : 'transparent',
     borderRight: 'none',
     borderLeft: 'none',
-    '& .MuiTypography-root': {
-      fontSize: fontSize ?? '16px'
-    },
+    '& .MuiTypography-root': {},
     '&:first-of-type': {
       borderLeft: '1px solid',
       borderColor: variant === 'outlined' ? '#00000010' : 'transparent',

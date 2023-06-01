@@ -1,4 +1,4 @@
-import { Container, Link as ExternalLink, Typography, Box } from '@mui/material'
+import { Box, Container, Link as ExternalLink, Typography, useTheme } from '@mui/material'
 import React, { useMemo } from 'react'
 import APIIcon from 'assets/imgs/common/Api.png'
 import GithubIcon from 'assets/imgs/common/Github.png'
@@ -11,6 +11,7 @@ import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
 import useBreakpoint from '../../hooks/useBreakpoint'
 
 export const FooterSocialLink: React.FC = () => {
+  const isSm = useBreakpoint('md')
   const Links = useMemo(
     () => [
       {
@@ -66,7 +67,10 @@ export const FooterSocialLink: React.FC = () => {
         {Links.map((item, index) => {
           return (
             <ExternalLink key={'link' + index} target="_blank" href={item.href}>
-              <img src={item.icon} style={{ width: 36, height: 36, marginRight: 8, cursor: 'pointer' }} />
+              <img
+                src={item.icon}
+                style={{ width: isSm ? 44 : 36, height: isSm ? 44 : 36, marginRight: isSm ? 12 : 8, cursor: 'pointer' }}
+              />
             </ExternalLink>
           )
         })}
@@ -202,6 +206,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
 
 const FooterPc: React.FC = () => {
   const isSm = useBreakpoint('sm')
+  const theme = useTheme()
   const ProductsLinks = useMemo(
     () => [
       {
@@ -352,7 +357,10 @@ const FooterPc: React.FC = () => {
         sx={{
           width: '100%',
           maxWidth: '1296px !important',
-          padding: '52px 0'
+          padding: '52px 0',
+          [theme.breakpoints.down('md')]: {
+            padding: '40px 30px'
+          }
         }}
       >
         <Box
@@ -363,7 +371,6 @@ const FooterPc: React.FC = () => {
             justifyContent: 'space-between',
             alignItems: 'flex-start',
             paddingBottom: 32,
-            paddingLeft: isSm ? '16px' : 0,
             marginBottom: 32,
             '&::after': {
               position: 'absolute',
@@ -373,11 +380,12 @@ const FooterPc: React.FC = () => {
               left: 0,
               width: '100%',
               height: '1px',
-              background: 'var(--ps-text-3)'
+              background: isSm ? 'var(--ps-text-5)' : 'var(--ps-text-3)'
             }
           }}
         >
           <FooterSocialLink />
+          {isSm && <Box sx={{ border: '1px solid #D7D6D9', width: '100%', mb: '40px' }} />}
           <Box
             sx={{
               display: 'flex',
@@ -397,7 +405,7 @@ const FooterPc: React.FC = () => {
             display: 'flex',
             flexFlow: isSm ? 'column' : 'row nowrap',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: isSm ? 'left' : 'center'
           }}
         >
           <Typography
