@@ -21,6 +21,7 @@ import Check from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/Check'
 import BidOrRegret from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidOrRegret'
 import ClaimingCountdownButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ClaimingCountdownButton'
 import ClaimButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ClaimButton'
+import { ChainId } from 'constants/chain'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -277,6 +278,7 @@ const ActionBlock = (props: FixedSwapPoolParams) => {
           onRegretButtonClick={() => {
             setAction('INPUT_REGRET_AMOUNT')
           }}
+          hideRegret={ChainId.ZKSYNC_ERA === poolInfo.ethChainId}
         />
       )}
 
