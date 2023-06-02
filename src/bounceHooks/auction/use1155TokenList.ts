@@ -38,16 +38,16 @@ export function use1155TokenList(
           }
           nftCollection[item.contractAddr].push(item)
         })
-        nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'] = []
-        nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'].push({
-          balance: '1',
-          contractAddr: '0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA',
-          contractName: 'test',
-          description: 'test',
-          image: '',
-          name: 'test',
-          tokenId: '5010'
-        })
+        // nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'] = []
+        // nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'].push({
+        //   balance: '1',
+        //   contractAddr: '0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA',
+        //   contractName: 'test',
+        //   description: 'test',
+        //   image: '',
+        //   name: 'test',
+        //   tokenId: '5010'
+        // })
         setList(nftCollection)
       } catch (error) {
         console.error('fetch user nfts error', error)
