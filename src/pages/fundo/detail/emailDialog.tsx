@@ -13,7 +13,7 @@ const InputEl = styled('input')(({ theme }) => ({
   background: '0',
   outline: 'none',
   border: 'none',
-  color: '#959595',
+  color: 'var(--ps-text-2)',
   fontSize: '16px',
   '&:focus': {
     border: 'none'
@@ -126,7 +126,7 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
                 fontWeight: 600,
                 fontSize: isSm ? '16px' : '20px',
                 letterSpacing: '-0.02em',
-                color: '#D7D6D9'
+                color: 'var(--ps-text-5)'
               }}
             >
               WE DON’T WANT YOU TO MISS THIS!
@@ -138,7 +138,7 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
                 fontWeight: 400,
                 fontSize: isSm ? '14px' : '16px',
                 letterSpacing: '-0.02em',
-                color: '#D7D6D9'
+                color: 'var(--ps-text-2)'
               }}
             >
               Get notified when auctions start, make sure you didn’t miss it. Enter your email below, so we can invite

@@ -43,7 +43,8 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 700,
-                fontSize: '24px'
+                fontSize: '24px',
+                color: 'var(--ps-text-5)'
               }}
               mb={'24px'}
             >
@@ -52,8 +53,8 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 500,
-                color: '#959595',
-                fontSize: '14px'
+                fontSize: '14px',
+                color: 'var(--ps-text-2)'
               }}
               mb={'12px'}
             >
@@ -63,7 +64,8 @@ const TokenDetail: React.FC = () => {
               sx={{
                 fontWeight: 500,
                 fontSize: '14px',
-                wordBreak: 'break-all'
+                wordBreak: 'break-all',
+                color: 'var(--ps-text-5)'
               }}
               mb={'24px'}
             >
@@ -72,8 +74,8 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 500,
-                color: '#959595',
-                fontSize: '14px'
+                fontSize: '14px',
+                color: 'var(--ps-text-2)'
               }}
               mb={'12px'}
             >
@@ -83,7 +85,8 @@ const TokenDetail: React.FC = () => {
               sx={{
                 fontWeight: 500,
                 fontSize: '14px',
-                lineHeight: '24px'
+                lineHeight: '24px',
+                color: 'var(--ps-text-5)'
               }}
               mb={'24px'}
             >
@@ -122,7 +125,7 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 500,
-                color: '#959595',
+                color: 'var(--ps-text-2)',
                 fontSize: '14px'
               }}
               mb={'12px'}
@@ -132,7 +135,8 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 500,
-                fontSize: '14px'
+                fontSize: '14px',
+                color: 'var(--ps-text-5)'
               }}
               mb={'24px'}
             >
@@ -141,7 +145,7 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 500,
-                color: '#959595',
+                color: 'var(--ps-text-2)',
                 fontSize: '16px'
               }}
               mb={'12px'}
@@ -151,7 +155,8 @@ const TokenDetail: React.FC = () => {
             <Typography
               sx={{
                 fontWeight: 500,
-                fontSize: '16px'
+                fontSize: '16px',
+                color: 'var(--ps-text-5)'
               }}
             >
               ERC721
@@ -251,7 +256,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 700,
-                      fontSize: '44px'
+                      fontSize: '44px',
+                      color: 'var(--ps-text-5)'
                     }}
                   >
                     TOKEN DETAILS
@@ -261,8 +267,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      color: '#959595',
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-2)'
                     }}
                   >
                     CONTRACT ADRESS
@@ -272,7 +278,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-5)'
                     }}
                   >
                     0xEBf19415d94be89A1d692F82af391685dC1Bff79
@@ -282,8 +289,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      color: '#959595',
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-2)'
                     }}
                   >
                     NETWORK
@@ -294,7 +301,8 @@ const TokenDetail: React.FC = () => {
                     sx={{
                       fontWeight: 500,
                       fontSize: '16px',
-                      lineHeight: '24px'
+                      lineHeight: '24px',
+                      color: 'var(--ps-text-5)'
                     }}
                   >
                     <img
@@ -337,8 +345,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      color: '#959595',
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-2)'
                     }}
                   >
                     TOKEN ID
@@ -348,7 +356,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-5)'
                     }}
                   >
                     100
@@ -358,8 +367,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      color: '#959595',
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-2)'
                     }}
                   >
                     TOKEN TYPE
@@ -369,7 +378,8 @@ const TokenDetail: React.FC = () => {
                   <Typography
                     sx={{
                       fontWeight: 500,
-                      fontSize: '16px'
+                      fontSize: '16px',
+                      color: 'var(--ps-text-5)'
                     }}
                   >
                     ERC721
