@@ -14,8 +14,8 @@ import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
 import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-// import { Mobile } from 'bounceComponents/common/Mobile'
-// import { ShowOnMobile } from 'themes/context'
+import { Mobile } from 'bounceComponents/common/Mobile'
+import { ShowOnMobile } from 'themes/context'
 import { ToastContainer } from 'react-toastify'
 import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
@@ -82,6 +82,17 @@ const GlobalHooks = () => {
   return null
 }
 
+const UnSupportedMobileRouter = () => {
+  const { pathname } = useLocation()
+
+  const show = !pathname.includes('okxActivity')
+  return show ? (
+    <ShowOnMobile breakpoint="md">
+      <Mobile />
+    </ShowOnMobile>
+  ) : null
+}
+
 export default function App() {
   const { pathname } = useLocation()
 
@@ -100,9 +111,7 @@ export default function App() {
               <Header />
               <ToastContainer />
               <Questions />
-              {/* <ShowOnMobile breakpoint="md">
-                <Mobile />
-              </ShowOnMobile> */}
+              <UnSupportedMobileRouter />
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
