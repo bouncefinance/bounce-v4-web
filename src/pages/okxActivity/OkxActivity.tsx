@@ -249,17 +249,17 @@ export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
           lineHeight={'26px'}
           fontFamily={'Public Sans'}
         >
-          ZKsync Era Profile Mint
+          Bounce Fixed Swap Auction
         </Typography>
         <Typography
           mt={7}
           color={'#959595'}
-          fontSize={13}
+          fontSize={16}
           fontWeight={600}
           lineHeight={'19.5px'}
           fontFamily={'Public Sans'}
         >
-          Limited offer during activity
+          on zkSync Era.
         </Typography>
         <img width={182.5} style={{ marginTop: 40 }} src={MNftLogo} alt="bounce" />
         <CounterDownBox
