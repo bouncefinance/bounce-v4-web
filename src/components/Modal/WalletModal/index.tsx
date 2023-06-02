@@ -182,6 +182,7 @@ export default function WalletModal({
   ENSName?: string
 }) {
   const isUpToMD = useBreakpoint('md')
+
   // important that these are destructed from the account-specific web3-react context
   const { active, account, connector, activate, error } = useWeb3React()
 
@@ -433,7 +434,13 @@ export default function WalletModal({
             </Button>
           </PendingView>
         ) : (
-          <Box display="grid" gap="16px" width="100%" gridTemplateColumns={'1fr 1fr'}>
+          <Box
+            display="grid"
+            gap="16px"
+            width="100%"
+            gridTemplateColumns={isUpToMD ? '1fr' : '1fr 1fr'}
+            flexDirection={isUpToMD ? 'column' : 'unset'}
+          >
             {getWalletOptions}
           </Box>
         )}
