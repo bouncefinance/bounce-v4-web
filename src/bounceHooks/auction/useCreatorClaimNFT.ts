@@ -51,9 +51,9 @@ export function useCreatorClaimNFT(poolId: number | string, name: string) {
   return { submitted, run }
 }
 
-export function useCreatorClaimEnglishAuctionNFT(poolId: number | string, name: string) {
+export function useCreatorClaimEnglishAuctionNFT(poolId: number | string, name: string, contract?: string) {
   const { account } = useActiveWeb3React()
-  const englishAuctionNftContract = useEnglishAuctionNftContract()
+  const englishAuctionNftContract = useEnglishAuctionNftContract(contract)
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 

@@ -9,7 +9,7 @@ import { CurrencyAmount } from 'constants/token'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
+import { IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { useEnglishAuctionNftContract } from './useContract'
 import { getEventLog } from './useCreateFixedSwapPool'
 import { useERC721MultiOwner } from 'hooks/useNFTTokenBalance'
@@ -25,6 +25,11 @@ interface Params {
   tokenIds: string[]
   priceFloor: string
   amountMinIncr1: string
+  releaseType: IReleaseType
+  releaseData: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 
 export function useCreateEnglishAuctionPool() {
@@ -57,7 +62,14 @@ export function useCreateEnglishAuctionPool() {
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.nft721TokenFrom[0].contractAddr || '',
       tokenIds: values.nft721TokenFrom.map(i => i.tokenId?.toString() || ''),
-      tokenToAddress: values.tokenTo.address
+      tokenToAddress: values.tokenTo.address,
+      releaseType: IReleaseType.Cliff,
+      releaseData: [
+        {
+          startAt: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() || 0 : values.endTime?.unix() || 0,
+          endAtOrRatio: 0
+        }
+      ]
     }
 
     if (!currencyTo) {
@@ -135,14 +147,14 @@ export function useCreateEnglishAuctionPool() {
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
-    const args = [contractCallParams, expiredTime, signature]
+    const args = [id, contractCallParams, params.releaseType, params.releaseData, false, expiredTime, signature]
 
-    const estimatedGas = await englishAuctionNftContract.estimateGas.create(...args).catch((error: Error) => {
+    const estimatedGas = await englishAuctionNftContract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create english auction', error)
       throw error
     })
     return englishAuctionNftContract
-      .create(...args, {
+      .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {
@@ -168,11 +180,13 @@ export function useCreateEnglishAuctionPool() {
     englishAuctionNftContract,
     ownerIds.length,
     values.amountMinIncr1,
+    values.delayUnlockingTime,
     values.endTime,
     values.nft721TokenFrom,
     values.participantStatus,
     values.poolName,
     values.priceFloor,
+    values.shouldDelayUnlocking,
     values.startTime,
     values.tokenTo.address,
     values.whitelist

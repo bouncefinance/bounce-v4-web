@@ -11,7 +11,7 @@ export function useEnglishAuctionDataPoolInfo() {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT)
 
-  const englishAuctionNftContract = useEnglishAuctionNftContract()
+  const englishAuctionNftContract = useEnglishAuctionNftContract(poolInfo?.contract, poolInfo?.ethChainId)
 
   const poolsRes = useSingleCallResult(
     englishAuctionNftContract,

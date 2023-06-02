@@ -179,13 +179,10 @@ export function useFixedSwapNftContract(queryChainId?: ChainId) {
   return useContract(cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined, FIXED_SWAP_NFT_ABI, true, queryChainId)
 }
 
-export function useEnglishAuctionNftContract(queryChainId?: ChainId) {
+export function useEnglishAuctionNftContract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(
-    cur ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined,
-    ENGLISH_AUCTION_NFT_ABI,
-    true,
-    queryChainId
-  )
+  const curAddress =
+    address === '' ? undefined : address || (cur ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, ENGLISH_AUCTION_NFT_ABI, true, queryChainId)
 }
