@@ -1,9 +1,9 @@
-import { Box, Container, Grid, MenuItem, Select, Skeleton, Typography, Button } from '@mui/material'
+import { Box, Button, Container, Grid, MenuItem, Select, Skeleton, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
 import { SwiperSlide } from 'swiper/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { getPools } from '../../../api/market'
 import { routes } from '../../../constants/routes'
@@ -22,14 +22,28 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { poolTypeText } from 'pages/market/pools'
+import useBreakpoint from '../../../hooks/useBreakpoint'
+
 interface Notable1155Props {
   handleViewAll?: () => void
 }
+
 export const NotableAuction = (props: Notable1155Props) => {
   const { handleViewAll } = props
   const optionDatas = useOptionDatas()
+  const isSm = useBreakpoint('sm')
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
+  const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / 442)
+  useEffect(() => {
+    const resetView = () => {
+      setSlidesPerView(window.innerWidth / 442)
+    }
+    window.addEventListener('resize', resetView)
+    return () => {
+      window.addEventListener('resize', resetView)
+    }
+  }, [])
   const { data, loading } = useRequest(
     async () => {
       const resp = await getPools({
@@ -57,7 +71,16 @@ export const NotableAuction = (props: Notable1155Props) => {
   return (
     <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
-        <CenterRow mb={33} justifyContent={'space-between'}>
+        <CenterRow
+          mb={33}
+          justifyContent={'space-between'}
+          sx={{
+            flexDirection: ['column', 'row'],
+            alignItems: ['flex-start', 'center'],
+            padding: ['0 16px', 'inherit'],
+            gap: [20, 'inherit']
+          }}
+        >
           <H4>Notable Auctions</H4>
           <Row gap={8}>
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />
@@ -138,9 +161,11 @@ export const NotableAuction = (props: Notable1155Props) => {
         ) : (
           <SlideProgress
             grayArrow
+            hideArrow={isSm}
             swiperStyle={{
               spaceBetween: 20,
-              slidesPerView: 4,
+              autoplay: isSm,
+              slidesPerView: slidesPerView,
               loop: false
             }}
           >

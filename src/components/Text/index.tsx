@@ -33,6 +33,10 @@ export const H4 = styled(Typography)`
   letter-spacing: -0.02em;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: #121212;
+
+  @media (max-width: 600px) {
+    font-size: 20px;
+
 `
 export const H5 = styled(Typography)`
   font-family: 'Public Sans';
