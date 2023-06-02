@@ -382,7 +382,11 @@ export const AuctionRankCard: React.FC = () => {
         margin: '40px auto 0'
       }}
     >
-      <CenterRow flexDirection={isSm ? 'column' : 'row'} justifyContent={'space-between'}>
+      <CenterRow
+        flexDirection={isSm ? 'column' : 'row'}
+        justifyContent="flex-start"
+        style={{ alignItems: isSm ? 'flex-start' : 'center' }}
+      >
         <Row
           sx={{
             overflowX: 'scroll',
@@ -418,7 +422,10 @@ export const AuctionRankCard: React.FC = () => {
             display: 'flex',
             background: 'white',
             overflow: isSm ? 'scroll' : 'hidden',
-            borderRadius: isSm ? 0 : '0px 30px 30px 30px'
+            borderRadius: isSm ? 0 : '0px 30px 30px 30px',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
           }}
         >
           <CustomMobileTable
