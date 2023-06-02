@@ -48,7 +48,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   OKEX: {
     connector: injected,
-    name: 'OKEX',
+    name: 'OKX',
     iconName: 'okxIcon.png',
     description: 'Easy-to-use browser extension.',
     href: null,
