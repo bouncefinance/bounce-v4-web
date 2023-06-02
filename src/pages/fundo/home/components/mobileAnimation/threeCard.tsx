@@ -24,6 +24,9 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
     }
     return result
   }, [step, animationRatio])
+  const hideProductImg = useMemo(() => {
+    return step === AnimateStep.enter && Number(animationRatio) < 0.9
+  }, [animationRatio, step])
   return (
     <Box
       style={{
@@ -40,7 +43,7 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
       }}
       gap={'96px'}
     >
-      <ProductCard hideProduct={false} />
+      <ProductCard hideProductImg={hideProductImg} />
       <FundoInfo />
       <ArtistCard />
       <ArtistInfo />

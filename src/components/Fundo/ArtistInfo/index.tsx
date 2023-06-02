@@ -23,7 +23,7 @@ export default function FundoInfo() {
           fontSize: isSm ? '14px' : '16px',
           lineHeight: '24px',
           marginBottom: isSm ? '12px' : '24px',
-          color: '#959595'
+          color: 'var(--ps-text-2)'
         }}
       >
         Jewelry Artist
@@ -32,7 +32,8 @@ export default function FundoInfo() {
         sx={{
           fontWeight: 700,
           fontSize: isSm ? '24px' : '44px',
-          marginBottom: isSm ? '32px' : '40px'
+          marginBottom: isSm ? '32px' : '40px',
+          color: 'var(--ps-text-5)'
         }}
       >
         Joshua Davis
@@ -44,7 +45,7 @@ export default function FundoInfo() {
           fontSize: isSm ? '14px' : '16px',
           lineHeight: '24px',
           marginBottom: isSm ? '12px' : '24px',
-          color: '#959595'
+          color: 'var(--ps-text-2)'
         }}
       >
         Joshua Davis is often referred to as a legend in the digital art space. His history in pushing the boundaries of

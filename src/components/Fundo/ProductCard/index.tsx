@@ -51,7 +51,7 @@ export default function ProductCard({
         backdropFilter: 'blur(25px)',
         borderRadius: '16px',
         opacity: hideProduct ? 0 : 1,
-        padding: '26px 19px 0'
+        padding: isSm ? '16px 16px 0' : '26px 19px 0'
       }}
     >
       <Box
@@ -62,11 +62,13 @@ export default function ProductCard({
           alignItems: 'center',
           marginBottom: isSm ? '26px' : '37px'
         }}
+        gap={'2px'}
       >
         <Typography
           sx={{
             fontWeight: 500,
-            fontSize: isSm ? '14px' : '16px'
+            fontSize: isSm ? '14px' : '16px',
+            color: 'var(--ps-text-5)'
           }}
         >
           Details
@@ -75,13 +77,15 @@ export default function ProductCard({
           src={LineImg}
           alt=""
           style={{
+            flex: 1,
             height: isSm ? '8px' : '16px'
           }}
         />
         <Typography
           sx={{
             fontWeight: 500,
-            fontSize: isSm ? '14px' : '16px'
+            fontSize: isSm ? '14px' : '16px',
+            color: 'var(--ps-text-5)'
           }}
         >
           Ref: 356934
@@ -111,7 +115,7 @@ export default function ProductCard({
                 <Typography
                   sx={{
                     fontFamily: `'Inter'`,
-                    color: '#959595',
+                    color: 'var(--ps-text-2)',
                     fontSize: isSm ? '14px' : '16px'
                   }}
                 >

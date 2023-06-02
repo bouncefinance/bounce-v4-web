@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
@@ -87,7 +87,9 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
-
+  const isFundoPage = useMemo(() => {
+    return pathname.indexOf('fundo') > -1
+  }, [pathname])
   return (
     <Suspense fallback={null}>
       <ModalProvider>
@@ -98,9 +100,7 @@ export default function App() {
               <Header />
               <ToastContainer />
               <Questions />
-              <ShowOnMobile breakpoint="md">
-                <Mobile />
-              </ShowOnMobile>
+              <ShowOnMobile breakpoint="md">{!isFundoPage && <Mobile />}</ShowOnMobile>
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />

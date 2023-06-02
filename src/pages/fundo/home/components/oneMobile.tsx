@@ -2,13 +2,14 @@ import { Box, Typography } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
 import FixedLeft from 'components/Fundo/Banner/FixedLeft'
-
-export default function oneMobile() {
+import { useIsSMDown } from 'themes/useTheme'
+import React from 'react'
+const OneMobile: React.FC = () => {
+  const isSm = useIsSMDown()
   return (
     <CenterSection
       style={{
         position: 'relative',
-        width: '100%',
         minHeight: '100vh',
         display: 'flex',
         flexFlow: 'column nowrap',
@@ -26,7 +27,7 @@ export default function oneMobile() {
             fontSize: '36px',
             height: '26px',
             lineHeight: '26px',
-            color: '#626262',
+            color: 'var(--ps-text-1)',
             textAlign: 'left',
             marginBottom: '14px'
           }}
@@ -41,7 +42,7 @@ export default function oneMobile() {
             textAlign: 'right',
             height: '29px',
             lineHeight: '29px',
-            color: '#959595',
+            color: isSm ? 'var(--ps-text-5)' : 'var(--ps-text-2)',
             marginBottom: '14px'
           }}
         >
@@ -55,7 +56,7 @@ export default function oneMobile() {
             textAlign: 'left',
             height: '29px',
             lineHeight: '29px',
-            color: '#959595',
+            color: isSm ? 'var(--ps-text-5)' : 'var(--ps-text-2)',
             marginBottom: '59px'
           }}
         >
@@ -76,7 +77,8 @@ export default function oneMobile() {
               flex: 470,
               fontFamily: `'Inter'`,
               fontWight: 400,
-              fontSize: '14px'
+              fontSize: '14px',
+              color: 'var(--ps-text-2)'
             }}
           >{`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful`}</Typography>
           <Typography
@@ -84,7 +86,8 @@ export default function oneMobile() {
               flex: 688,
               fontFamily: `'Inter'`,
               fontWight: 400,
-              fontSize: '14px'
+              fontSize: '14px',
+              color: 'var(--ps-text-2)'
             }}
           >{`words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}</Typography>
         </Box>
@@ -106,3 +109,4 @@ export default function oneMobile() {
     </CenterSection>
   )
 }
+export default OneMobile

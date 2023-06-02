@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import OneMobile from '../components/oneMobile'
 import Four from '../components/four'
 import VideoSection from '../components/video'
@@ -13,6 +13,7 @@ import TextAniamte from '../components/textAnimate'
 import { AnimateStep } from '../components/pcAnimation/threeCard'
 const MobileHome: React.FC = () => {
   const _AnimateHeight1 = 1000
+  const theme = useTheme()
   const [stopScroll, setStopscroll] = useState(true)
   // 1. necklack
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
@@ -54,7 +55,7 @@ const MobileHome: React.FC = () => {
       const animate3Range = [_AnimateHeight1 + winH + 800, _AnimateHeight1 + winH + 1600]
       // 1. necklack down and scale
       if (animate1Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate1Range[1]) {
-        setAnimate1Ratio(BigNumber(event.target.scrollTop / animate1Range[1]).toFixed(2))
+        setAnimate1Ratio(BigNumber(event.target.scrollTop).div(animate1Range[1]).toFixed(2))
         setAnimate1Show(true)
       } else {
         setAnimate1Show(false)
@@ -110,9 +111,13 @@ const MobileHome: React.FC = () => {
     <Box
       id={'scrollBox'}
       sx={{
-        position: 'relative',
+        position: 'fixed',
+        top: `${theme.height.header}`,
+        left: 0,
         width: '100%',
         height: '100%',
+        minHeight: `calc(100vh - ${theme.height.header})`,
+        maxHeight: `calc(100vh - ${theme.height.header})`,
         overflowX: 'hidden',
         overflowY: stopScroll ? 'hidden' : 'auto',
         backgroundColor: '#000',
@@ -135,7 +140,7 @@ const MobileHome: React.FC = () => {
           zIndex: 1
         }}
       ></Box>
-      {animate1Show && <Necklace onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
+      {animate1Show && <Necklace style={{}} onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
       {animate2Step !== AnimateStep.notShow && <ThreeCard step={animate2Step} animationRatio={animate2Ratio} />}
       {animate2_1Step !== AnimateStep.notShow && <TextAniamte step={animate2_1Step} animationRatio={animate2_1Ratio} />}
       <OneMobile />
@@ -143,7 +148,7 @@ const MobileHome: React.FC = () => {
         sx={{
           position: 'relative',
           width: '100%',
-          height: `${_AnimateHeight1 + 2200}px`
+          height: `${_AnimateHeight1 + 1800}px`
         }}
       ></Box>
       <VideoSection />

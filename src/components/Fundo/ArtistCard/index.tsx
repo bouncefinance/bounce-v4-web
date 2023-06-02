@@ -158,7 +158,8 @@ export default function ProductCard() {
         <Typography
           sx={{
             fontWeight: 500,
-            fontSize: '16px'
+            fontSize: '16px',
+            color: 'var(--ps-text-5)'
           }}
         >
           Details
@@ -166,7 +167,8 @@ export default function ProductCard() {
         <Typography
           sx={{
             fontWeight: 500,
-            fontSize: '16px'
+            fontSize: '16px',
+            color: 'var(--ps-text-5)'
           }}
         >
           Ref: 356934
@@ -183,7 +185,8 @@ export default function ProductCard() {
           fontWeight: 600,
           fontSize: isSm ? '16px' : '20px',
           marginBottom: isSm ? '0px' : '16px',
-          lineHeight: '28px'
+          lineHeight: '28px',
+          color: '#fff'
         }}
       >
         Artist
@@ -193,7 +196,8 @@ export default function ProductCard() {
           fontWeight: 700,
           fontSize: isSm ? '24px' : '44px',
           marginBottom: '16px',
-          lineHeight: '32px'
+          lineHeight: '32px',
+          color: '#fff'
         }}
       >
         Joshua Davis

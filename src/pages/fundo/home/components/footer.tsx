@@ -210,7 +210,8 @@ export default function Footer() {
                 fontSize: isSm ? '24px' : '80px',
                 lineHeight: isSm ? '17px' : '58px',
                 textAlign: 'center',
-                marginBottom: isSm ? '16px' : '30px'
+                marginBottom: isSm ? '16px' : '30px',
+                color: 'var(--ps-text-5)'
               }}
             >
               ENGLISH AUCTION
@@ -222,7 +223,8 @@ export default function Footer() {
                   fontSize: '24px',
                   lineHeight: '17px',
                   textAlign: 'center',
-                  marginBottom: '16px'
+                  marginBottom: '16px',
+                  color: 'var(--ps-text-5)'
                 }}
               >
                 COMING
@@ -245,7 +247,8 @@ export default function Footer() {
                   fontWeight: 600,
                   fontSize: isSm ? '24px' : '80px',
                   lineHeight: isSm ? '17px' : '58px',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  color: 'var(--ps-text-5)'
                 }}
               >
                 {isSm ? 'S' : 'COMING S'}
@@ -264,7 +267,8 @@ export default function Footer() {
                   fontWeight: 600,
                   fontSize: isSm ? '24px' : '80px',
                   lineHeight: isSm ? '17px' : '58px',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  color: 'var(--ps-text-5)'
                 }}
               >
                 ON

@@ -41,7 +41,8 @@ export default function FixedLeft({ style }: { style?: React.CSSProperties }) {
           width: '100%',
           textAlign: 'left',
           fontWeight: 400,
-          fontSize: '12px'
+          fontSize: '12px',
+          color: 'var(--ps-text-5)'
         }}
       >
         THE BEST CERTIFIED MATERIALS
