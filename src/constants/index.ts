@@ -195,7 +195,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
-  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
