@@ -65,6 +65,7 @@ export function useGetWalletOptions(
   return Object.keys(SUPPORTED_WALLETS).map(key => {
     const option = SUPPORTED_WALLETS[key]
     // check for mobile options
+
     if (isMobile) {
       //disable portis on mobile for now
       if (option.connector === portis) {
@@ -98,7 +99,22 @@ export function useGetWalletOptions(
             active={option.connector && option.connector === connector}
             link={option.href}
             header={option.name}
-            icon={require('../../../assets/walletIcon/' + option.iconName)?.default}
+            icon={require('../../../assets/walletIcon/' + option.iconName)}
+          />
+        )
+      } else if (option.name === 'OKEX') {
+        return (
+          <Option
+            onClick={() => {
+              option.connector !== connector && !option.href && tryActivation(option.connector)
+            }}
+            id={`connect-${key}`}
+            clickable={!option.disabled}
+            key={key}
+            active={option.connector && option.connector === connector}
+            link={option.href}
+            header={option.name}
+            icon={require('../../../assets/walletIcon/' + option.iconName)}
           />
         )
       }
