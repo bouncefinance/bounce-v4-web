@@ -5,7 +5,9 @@ import Search from '../../bounceComponents/common/Header/Search'
 import { CenterRow } from '../Layout'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import CreateBtn from '../../bounceComponents/common/Header/CreateBtn'
-import { SocialLinkList } from '../Footer/FooterPc'
+import { ResourcesLinks, SocialLinkList } from '../Footer/FooterPc'
+import { routes } from '../../constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 interface MenuItem {
   title: string
@@ -15,17 +17,17 @@ interface MenuItem {
 
 export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onDismiss: () => void }) {
   const [currentTab, setCurrentTab] = useState<MenuItem>()
-  // const nav = useNavigate()
+  const nav = useNavigate()
   const menuContent: MenuItem[] = [
     {
       title: 'Auction',
       subTitle: [
-        { link: '', title: 'Home' },
-        { link: '', title: 'Private Launchpad' },
-        { link: '', title: 'Token Auction' },
-        { link: '', title: 'NFT Auction' },
-        { link: '', title: 'Real World Collectibles Auction' },
-        { link: '', title: 'Ads Auction' }
+        { link: routes.market.index, title: 'Home' },
+        { link: routes.launchpad.index, title: 'Private Launchpad' },
+        { link: routes.tokenAuction.index, title: 'Token Auction' },
+        { link: routes.nftAuction.index, title: 'NFT Auction' },
+        { link: routes.realAuction.index, title: 'Real World Collectibles Auction' },
+        { link: routes.adsAuction.index, title: 'Ads Auction' }
       ]
     },
     {
@@ -34,21 +36,21 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
     },
     {
       title: 'Resources',
-      subTitle: [
-        { link: '', title: 'Document' },
-        { link: '', title: 'Help Center' },
-        { link: '', title: 'Bounce Token' },
-        { link: '', title: 'Token Authentication' },
-        {
-          link: '',
-          title: 'SDKs&Plug-Ins'
-        },
-        { link: '', title: 'Community' },
-        { link: '', title: 'Become a Partner' },
-        { link: '', title: 'Contact Us' }
-      ]
+      subTitle: ResourcesLinks.map(res => {
+        return { link: res.href, title: res.label }
+      })
     }
   ]
+
+  function openLink(m: MenuItem) {
+    if (m.link?.startsWith('/')) {
+      nav(m.link)
+    } else {
+      window.open(m.link, '_blank')
+    }
+    onDismiss()
+  }
+
   return (
     <Drawer
       open={isOpen}
@@ -87,8 +89,7 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
                   if (m.subTitle) {
                     setCurrentTab(m)
                   } else {
-                    // nav(m.link)
-                    onDismiss()
+                    openLink(m)
                   }
                 }}
               >
@@ -108,8 +109,7 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
                 <Box
                   key={i}
                   onClick={() => {
-                    // nav(m.link)
-                    onDismiss()
+                    openLink(m)
                   }}
                 >
                   <MenuSubTitle menuItem={m} />
@@ -139,7 +139,7 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
 
 function MenuSubTitle({ menuItem }: { menuItem: MenuItem }) {
   return (
-    <CenterRow justifyContent={'space-between'} sx={{ height: 45 }}>
+    <CenterRow justifyContent={'space-between'} sx={{ height: 45, paddingLeft: 14 }}>
       <Typography>{menuItem.title}</Typography>
       {menuItem.subTitle && <ArrowForwardIosIcon sx={{ fontSize: 16 }} />}
     </CenterRow>
@@ -150,10 +150,10 @@ function MenuTitle({ title }: { title: string }) {
   return (
     <CenterRow
       sx={{
-        gap: 10,
+        gap: 4,
         height: 45,
         background: '#E1F25C',
-        paddingLeft: 16,
+        paddingLeft: 10,
         marginLeft: '-16px !important',
         marginRight: '-16px !important'
       }}

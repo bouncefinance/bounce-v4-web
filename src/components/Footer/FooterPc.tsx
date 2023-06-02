@@ -210,7 +210,72 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
     </div>
   )
 }
-
+export const ResourcesLinks = [
+  {
+    label: 'Document',
+    isExternal: true,
+    href: 'https://docs.bounce.finance/welcome-to-bounce-docs/welcome',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  {
+    label: 'Help Center',
+    isExternal: true,
+    href: 'https://www.bounce.finance/FAQ',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  {
+    label: 'Bounce Token',
+    isExternal: true,
+    href: 'https://www.bounce.finance/tools/token',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  //   {
+  //     label: 'Token Authentication',
+  //     isExternal: true,
+  //     href: '',
+  //     isDisabled: false,
+  //     extraIcon: '',
+  //     className: ''
+  //   },
+  {
+    label: 'SDKs&Plug-Ins',
+    isExternal: true,
+    href: 'https://www.bounce.finance/sdkAndPlugins',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  {
+    label: 'Community',
+    isExternal: true,
+    href: 'https://community.bounce.finance/',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  {
+    label: 'Become a Partner',
+    isExternal: true,
+    href: 'https://www.bounce.finance/joinCommunity',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  {
+    label: 'Contact Us',
+    isExternal: true,
+    href: 'https://docs.google.com/forms/d/1DJxbqqfv6MnN5-kOwDGU-_DGpXDxbJJkUT2UqKgvbUs/viewform?edit_requested=true',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  }
+]
 const FooterPc: React.FC = () => {
   const isSm = useBreakpoint('sm')
   const theme = useTheme()
@@ -280,75 +345,7 @@ const FooterPc: React.FC = () => {
     ],
     []
   )
-  const ResourcesLinks = useMemo(
-    () => [
-      {
-        label: 'Document',
-        isExternal: true,
-        href: 'https://docs.bounce.finance/welcome-to-bounce-docs/welcome',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
-      {
-        label: 'Help Center',
-        isExternal: true,
-        href: 'https://www.bounce.finance/FAQ',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
-      {
-        label: 'Bounce Token',
-        isExternal: true,
-        href: 'https://www.bounce.finance/tools/token',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
-      //   {
-      //     label: 'Token Authentication',
-      //     isExternal: true,
-      //     href: '',
-      //     isDisabled: false,
-      //     extraIcon: '',
-      //     className: ''
-      //   },
-      {
-        label: 'SDKs&Plug-Ins',
-        isExternal: true,
-        href: 'https://www.bounce.finance/sdkAndPlugins',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
-      {
-        label: 'Community',
-        isExternal: true,
-        href: 'https://community.bounce.finance/',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
-      {
-        label: 'Become a Partner',
-        isExternal: true,
-        href: 'https://www.bounce.finance/joinCommunity',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      },
-      {
-        label: 'Contact Us',
-        isExternal: true,
-        href: 'https://docs.google.com/forms/d/1DJxbqqfv6MnN5-kOwDGU-_DGpXDxbJJkUT2UqKgvbUs/viewform?edit_requested=true',
-        isDisabled: false,
-        extraIcon: '',
-        className: ''
-      }
-    ],
-    []
-  )
+
   return (
     <footer
       style={{
