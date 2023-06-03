@@ -29,6 +29,7 @@ interface Params {
   tokenFormDecimal: string | number
   tokenToDecimal: string | number
   tokenId: string
+  tokenIds: string[]
 }
 
 export function useCreateFixedSwap1155Pool() {
@@ -61,6 +62,7 @@ export function useCreateFixedSwap1155Pool() {
       tokenFromAddress: values.nftTokenFrom.contractAddr || '',
       tokenFormDecimal: 0,
       tokenId: values.nftTokenFrom.tokenId || '0',
+      tokenIds: [values.nftTokenFrom.tokenId || '0'],
       tokenToAddress: values.tokenTo.address,
       tokenToDecimal: values.tokenTo.decimals
     }
@@ -112,7 +114,8 @@ export function useCreateFixedSwap1155Pool() {
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      tokenId: params.tokenId
+      tokenId: params.tokenId,
+      tokenIds: params.tokenIds
     }
 
     const {
@@ -123,7 +126,7 @@ export function useCreateFixedSwap1155Pool() {
       name: signatureParams.name,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
-      tokenIds: [signatureParams.tokenId],
+      tokenIds: signatureParams.tokenIds,
       amountTotal0: signatureParams.amountTotal0,
       amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
@@ -135,6 +138,7 @@ export function useCreateFixedSwap1155Pool() {
     }
 
     const args = [contractCallParams, expiredTime, signature]
+    console.log('🚀 ~ file: useCreateFixedSwap1155Pool.ts:138 ~ returnuseCallback ~ args:', args, JSON.stringify(args))
 
     const estimatedGas = await fixedSwapNftContract.estimateGas.create(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
