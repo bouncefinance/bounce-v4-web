@@ -108,7 +108,7 @@ export function useCreateFixedSwap1155Pool() {
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
       creator: account,
-      maxAmount0PerWallet: params.allocationPerWallet.toString(),
+      maxAmount1PerWallet: params.allocationPerWallet.toString(),
       merkleroot: merkleroot,
       name: params.poolName,
       openAt: params.startTime,
@@ -117,6 +117,7 @@ export function useCreateFixedSwap1155Pool() {
       tokenId: params.tokenId,
       tokenIds: params.tokenIds
     }
+    console.log('🚀 ~ file: useCreateFixedSwap1155Pool.ts:120 ~ returnuseCallback ~ signatureParams:', signatureParams)
 
     const {
       data: { expiredTime, signature }
@@ -133,7 +134,7 @@ export function useCreateFixedSwap1155Pool() {
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
       isERC721: false,
-      maxAmount0PerWallet: signatureParams.maxAmount0PerWallet,
+      maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
