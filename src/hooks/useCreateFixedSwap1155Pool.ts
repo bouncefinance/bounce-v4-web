@@ -65,7 +65,7 @@ export function useCreateFixedSwap1155Pool() {
           ? values.releaseDataArr?.[0].startAt?.unix() || 0
           : IReleaseType.Instant === values.releaseType
           ? 0
-          : values.shouldDelayUnlocking
+          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
           ? values.delayUnlockingTime?.unix() || 0
           : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
@@ -161,12 +161,12 @@ export function useCreateFixedSwap1155Pool() {
       signature
     ]
 
-    const estimatedGas = await fixedSwapNftContract.estimateGas.create(...args).catch((error: Error) => {
+    const estimatedGas = await fixedSwapNftContract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap 1155', error)
       throw error
     })
     return fixedSwapNftContract
-      .create(...args, {
+      .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {

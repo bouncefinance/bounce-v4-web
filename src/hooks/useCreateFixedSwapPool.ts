@@ -136,7 +136,7 @@ export function useCreateFixedSwapPool() {
           ? values.releaseDataArr?.[0].startAt?.unix() || 0
           : IReleaseType.Instant === values.releaseType
           ? 0
-          : values.shouldDelayUnlocking
+          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
           ? values.delayUnlockingTime?.unix() || 0
           : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),

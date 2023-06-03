@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import TokenERC1155InforationForm from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm'
 import Auction1155ParametersForm from 'bounceComponents/create-auction-pool/Auction1155ParametersForm'
-import AddIReleaseTypeAdvanced from 'bounceComponents/create-auction-pool/AdvancedSettingsForm/AddIReleaseTypeAdvanced'
+import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
 import Creation1155Confirmation from 'bounceComponents/create-auction-pool/Creation1155Confirmation'
 import { CreationStep } from 'bounceComponents/create-auction-pool/types'
 import { useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
@@ -16,7 +16,7 @@ export default function Erc1155Pool() {
 
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <Auction1155ParametersForm />}
 
-          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AddIReleaseTypeAdvanced />}
+          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
         </Box>
       ) : (
         <Creation1155Confirmation />

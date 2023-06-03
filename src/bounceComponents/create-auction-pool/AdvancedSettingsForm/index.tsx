@@ -26,6 +26,8 @@ import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { isAddress } from 'utils'
 import { ChainId } from 'constants/chain'
+import { useMemo } from 'react'
+import { useQueryParams } from 'hooks/useQueryParams'
 
 interface MyFormValues {
   poolName: string
@@ -33,6 +35,7 @@ interface MyFormValues {
   endTime: Moment | null
   shouldDelayUnlocking: boolean
   delayUnlockingTime: Moment | null
+  enableReverse: boolean
   whitelist: string[]
   participantStatus: ParticipantStatus
 }
@@ -47,6 +50,8 @@ export const AdvancedSettingsForm = ({
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const auctionInChain = useAuctionInChain()
+  const { lunchPad } = useQueryParams()
+  const isLunchPad = useMemo(() => !!lunchPad, [lunchPad])
 
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -54,6 +59,7 @@ export const AdvancedSettingsForm = ({
     endTime: valuesState.endTime,
     shouldDelayUnlocking: valuesState.shouldDelayUnlocking,
     delayUnlockingTime: valuesState.delayUnlockingTime,
+    enableReverse: !!valuesState.enableReverse,
     whitelist: valuesState.whitelist,
     participantStatus: valuesState.participantStatus
   }
@@ -153,6 +159,7 @@ export const AdvancedSettingsForm = ({
                 endTime: formValues.endTime,
                 shouldDelayUnlocking: formValues.shouldDelayUnlocking,
                 delayUnlockingTime: formValues.delayUnlockingTime,
+                enableReverse: formValues.enableReverse,
                 whitelist: formValues.whitelist,
                 participantStatus: formValues.participantStatus
               }
@@ -214,15 +221,19 @@ export const AdvancedSettingsForm = ({
 
                 {!hideRefundable && ChainId.ZKSYNC_ERA !== auctionInChain && (
                   <Box sx={{ mt: 38, mb: 34 }}>
-                    <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
-                      <Typography variant="h3" sx={{ fontSize: 16 }}>
-                        Refundable
-                      </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
+                        <Typography variant="h3" sx={{ fontSize: 16 }}>
+                          Refundable
+                        </Typography>
 
-                      <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
-                        <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-                      </Tooltip>
-                    </Stack>
+                        <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
+                          <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                        </Tooltip>
+                      </Stack>
+
+                      {isLunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                    </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography variant="body1">Auction will be refundable before the end time</Typography>
