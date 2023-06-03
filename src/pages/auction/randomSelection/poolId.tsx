@@ -17,7 +17,11 @@ const FixedSwapPoolPageContent = () => {
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
   const isBlock = useCurrentRegionBlock()
   // load winners list if isWinnerSeedDone is true
-  const isWinnerSeedDone = useIsWinnerSeedDone(poolInfo?.poolId ? Number(poolInfo?.poolId) : '')
+  const isWinnerSeedDone = useIsWinnerSeedDone(
+    poolInfo?.poolId ? Number(poolInfo?.poolId) : '',
+    poolInfo?.contract || '',
+    poolInfo?.ethChainId
+  )
   if (isBlock) {
     return <NoService />
   }

@@ -85,7 +85,7 @@ const usePoolInfo = () => {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo()
 
   const currentBounceContractAddress = useMemo(() => poolInfo?.contract, [poolInfo?.contract])
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract(currentBounceContractAddress)
+  const fixedSwapERC20Contract = useFixedSwapERC20Contract(currentBounceContractAddress || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
   const amountSwap0PRes = useSingleCallResult(
     fixedSwapERC20Contract,

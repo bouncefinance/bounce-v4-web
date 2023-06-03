@@ -11,7 +11,7 @@ import JSBI from 'jsbi'
 const useNftPoolInfo = () => {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
 
-  const fixedSwapNftContract = useFixedSwapNftContract(poolInfo?.contract)
+  const fixedSwapNftContract = useFixedSwapNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
   const amountSwap0Res = useSingleCallResult(
     fixedSwapNftContract,

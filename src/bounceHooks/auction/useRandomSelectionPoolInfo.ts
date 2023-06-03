@@ -9,7 +9,7 @@ import { useBackedPoolInfo } from './usePoolInfo'
 const useRandomSelectionPoolInfo = () => {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.Lottery)
 
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
   const myClaimedRes = useSingleCallResult(
     randomSelectionERC20Contract,

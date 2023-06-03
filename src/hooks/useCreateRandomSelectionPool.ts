@@ -11,9 +11,11 @@ import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
+import { IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
 import { useSingleCallResult } from '../state/multicall/hooks'
+import { makeValuesReleaseData } from './useCreateFixedSwapPool'
+import { ChainId } from 'constants/chain'
 interface Params {
   whitelist: string[]
   swapRatio: string
@@ -28,6 +30,11 @@ interface Params {
   totalShare: string | number
   ticketPrice: string | number
   maxPlayer: number
+  releaseType: IReleaseType
+  releaseData: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 
 export function useCreateRandomSelectionPool() {
@@ -48,9 +55,14 @@ export function useCreateRandomSelectionPool() {
       swapRatio: values.swapRatio,
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
-      delayUnlockingTime: values.shouldDelayUnlocking
-        ? values.delayUnlockingTime?.unix() || 0
-        : values.endTime?.unix() || 0,
+      delayUnlockingTime:
+        IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
+          ? values.releaseDataArr?.[0].startAt?.unix() || 0
+          : IReleaseType.Instant === values.releaseType
+          ? 0
+          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
+          ? values.delayUnlockingTime?.unix() || 0
+          : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.tokenFrom.address,
       tokenFormDecimal: values.tokenFrom.decimals,
@@ -58,7 +70,9 @@ export function useCreateRandomSelectionPool() {
       tokenToDecimal: values.tokenTo.decimals,
       totalShare: Number(values.winnerNumber) || 0,
       ticketPrice: values.ticketPrice || 0,
-      maxPlayer: Number(values.maxParticipantAllowed) || 0
+      maxPlayer: Number(values.maxParticipantAllowed) || 0,
+      releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
+      releaseData: makeValuesReleaseData(values)
     }
 
     if (!currencyFrom || !currencyTo) {
@@ -112,7 +126,9 @@ export function useCreateRandomSelectionPool() {
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      totalShare: params.totalShare
+      totalShare: params.totalShare,
+      releaseType: params.releaseType,
+      releaseData: params.releaseData
     }
 
     const {
@@ -132,15 +148,23 @@ export function useCreateRandomSelectionPool() {
       nShare: signatureParams.totalShare,
       whitelistRoot: merkleroot || NULL_BYTES
     }
-    const args = [contractCallParams, expiredTime, signature]
-    console.log('args>>>', args)
-    const estimatedGas = await randomSelectionERC20Contract.estimateGas.create(...args).catch((error: Error) => {
+    const args = [
+      id,
+      contractCallParams,
+      params.releaseType,
+      params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
+      false,
+      expiredTime,
+      signature
+    ]
+
+    const estimatedGas = await randomSelectionERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create Random Selection', error)
       throw error
     })
-    console.log('estimatedGas>>>', estimatedGas)
+
     return randomSelectionERC20Contract
-      .create(...args, {
+      .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
         // gasLimit: 3500000
       })
@@ -166,21 +190,7 @@ export function useCreateRandomSelectionPool() {
     currencyFrom,
     currencyTo,
     randomSelectionERC20Contract,
-    values.delayUnlockingTime,
-    values.endTime,
-    values.maxParticipantAllowed,
-    values.participantStatus,
-    values.poolName,
-    values.shouldDelayUnlocking,
-    values.startTime,
-    values.swapRatio,
-    values.ticketPrice,
-    values.tokenFrom.address,
-    values.tokenFrom.decimals,
-    values.tokenTo.address,
-    values.tokenTo.decimals,
-    values.whitelist,
-    values.winnerNumber
+    values
   ])
 }
 
@@ -201,9 +211,11 @@ export function getEventLog(contract: Contract, logs: Log[], eventName: string, 
 }
 export function useIsWinnerForRandomSelectionPool(
   poolId: string | number,
-  address: string | undefined
+  address: string | undefined,
+  contract: string,
+  chainId?: ChainId
 ): { isWinner: boolean } {
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
   const args = [Number(poolId), address]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'isWinner', args)
   const isWinner = Array.isArray(result) && result[0]
@@ -211,16 +223,21 @@ export function useIsWinnerForRandomSelectionPool(
     isWinner: !!isWinner
   }
 }
-export function useIsJoinedRandomSelectionPool(poolId: string | number, address: string | undefined) {
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+export function useIsJoinedRandomSelectionPool(
+  poolId: string | number,
+  address: string | undefined,
+  contract: string,
+  chainId?: ChainId
+) {
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
   const args = [address, Number(poolId)]
   const { result } = useSingleCallResult(randomSelectionERC20Contract, 'betNo', args)
   // betNo more that 0 means joined
   return !!result ? !!(Number(result?.toString && result?.toString()) > 0) : false
 }
 // winnerSeed more than 0 means winners list is ready
-export function useIsWinnerSeedDone(poolId: number | string) {
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+export function useIsWinnerSeedDone(poolId: number | string, contract: string, chainId?: ChainId) {
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
   const args = [Number(poolId)]
   const res = useSingleCallResult(randomSelectionERC20Contract, 'winnerSeed', args)
   const { result } = res
