@@ -444,9 +444,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
+            "internalType": "uint256[]",
+            "name": "tokenIds",
+            "type": "uint256[]"
           },
           {
             "internalType": "uint256",
@@ -480,7 +480,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "maxAmount1PerWallet",
+            "name": "maxAmount0PerWallet",
             "type": "uint256"
           },
           {

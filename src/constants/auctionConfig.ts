@@ -41,7 +41,8 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.ZKSYNC_ERA]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.POLYGON_ZK_EVM]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
