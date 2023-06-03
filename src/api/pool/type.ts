@@ -41,7 +41,8 @@ export interface GetPoolCreationSignatureParams {
   claimAt: number
   closeAt: number
   creator: string
-  maxAmount1PerWallet: string
+  maxAmount1PerWallet?: string
+  maxAmount0PerWallet?: string
   merkleroot: string
   name: string
   openAt: number
