@@ -66,7 +66,7 @@ export function useCreateFixedSwap1155Pool() {
           : IReleaseType.Instant === values.releaseType
           ? 0
           : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
-          ? values.delayUnlockingTime?.unix() || 0
+          ? values.delayUnlockingTime?.unix() || values.endTime?.unix() || 0
           : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.nftTokenFrom.contractAddr || '',
@@ -146,7 +146,7 @@ export function useCreateFixedSwap1155Pool() {
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
       isERC721: false,
-      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
