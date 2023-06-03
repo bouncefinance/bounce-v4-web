@@ -123,7 +123,7 @@ export function useCreateFixedSwap1155Pool() {
       name: signatureParams.name,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
-      tokenId: signatureParams.tokenId,
+      tokenIds: [signatureParams.tokenId],
       amountTotal0: signatureParams.amountTotal0,
       amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
