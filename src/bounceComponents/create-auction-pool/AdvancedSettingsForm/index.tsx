@@ -37,7 +37,7 @@ interface MyFormValues {
   participantStatus: ParticipantStatus
 }
 
-export const DateRangePickerDemo = ({
+export const AdvancedSettingsForm = ({
   hideDelayUnlocking,
   hideRefundable
 }: {
@@ -297,4 +297,4 @@ export const DateRangePickerDemo = ({
   )
 }
 
-export default DateRangePickerDemo
+export default AdvancedSettingsForm

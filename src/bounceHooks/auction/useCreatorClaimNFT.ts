@@ -5,9 +5,9 @@ import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transacti
 import { useActiveWeb3React } from 'hooks'
 import { useEnglishAuctionNftContract, useFixedSwapNftContract } from 'hooks/useContract'
 
-export function useCreatorClaimNFT(poolId: number | string, name: string) {
+export function useCreatorClaimNFT(poolId: number | string, name: string, contract?: string) {
   const { account } = useActiveWeb3React()
-  const fixedSwapNftContract = useFixedSwapNftContract()
+  const fixedSwapNftContract = useFixedSwapNftContract(contract)
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 

@@ -14,7 +14,7 @@ const useRegretBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
 
   // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const fixedSwapNftContract = useFixedSwapNftContract()
+  const fixedSwapNftContract = useFixedSwapNftContract(poolInfo.contract)
 
   const run = useCallback(
     async (

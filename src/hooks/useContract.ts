@@ -162,21 +162,19 @@ export function useFixedSwapERC20Contract(address?: string, queryChainId?: Chain
   return useContract(curAddress, FIXED_SWAP_ABI, true, queryChainId)
 }
 
-export function useRandomSelectionERC20Contract(queryChainId?: ChainId) {
+export function useRandomSelectionERC20Contract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(
-    cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined,
-    RANDOM_SELECTION_ABI,
-    true,
-    queryChainId
-  )
+  const curAddress =
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, RANDOM_SELECTION_ABI, true, queryChainId)
 }
 
-export function useFixedSwapNftContract(queryChainId?: ChainId) {
+export function useFixedSwapNftContract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined, FIXED_SWAP_NFT_ABI, true, queryChainId)
+  const curAddress = address === '' ? undefined : address || (cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, FIXED_SWAP_NFT_ABI, true, queryChainId)
 }
 
 export function useEnglishAuctionNftContract(address?: string, queryChainId?: ChainId) {

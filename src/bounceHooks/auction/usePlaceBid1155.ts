@@ -18,7 +18,7 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
   // const isNotInWhitelist = useIsNotInWhitelist()
 
   const isToken1Native = poolInfo.currencySwappedTotal1.currency.isNative
-  const fixedSwapNFTContract = useFixedSwapNftContract()
+  const fixedSwapNFTContract = useFixedSwapNftContract(poolInfo.contract)
 
   const run = useCallback(
     async (

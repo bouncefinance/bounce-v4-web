@@ -15,7 +15,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
 
   const isAllTokenSwapped = useMemo(() => Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0), [poolInfo])
 
-  const { run: claim, submitted } = useCreatorClaimNFT(poolInfo.poolId, poolInfo.name)
+  const { run: claim, submitted } = useCreatorClaimNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = !isAllTokenSwapped

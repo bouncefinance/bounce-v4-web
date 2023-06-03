@@ -13,6 +13,7 @@ import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/pro
 import { useTransactionAdder } from 'state/transactions/hooks'
 import {
   AllocationStatus,
+  AuctionPool,
   IReleaseData,
   IReleaseType,
   ParticipantStatus
@@ -56,7 +57,7 @@ export function sortReleaseData(releaseData: IReleaseData[]): IReleaseData[] {
   })
 }
 
-function getFragmentRawArr(releaseData: IReleaseData[]) {
+export function getFragmentRawArr(releaseData: IReleaseData[]) {
   if (!releaseData.length) return []
   const arr = releaseData.map(item => {
     const _ca = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), Number(item.ratio) / 100)
@@ -73,6 +74,39 @@ function getFragmentRawArr(releaseData: IReleaseData[]) {
   return arr
 }
 
+export function makeValuesReleaseData(values: AuctionPool) {
+  const fragmentRawArr = IReleaseType.Fragment === values.releaseType ? getFragmentRawArr(values.releaseDataArr) : []
+
+  return values.releaseType === 1000
+    ? [
+        {
+          startAt: values.endTime?.unix() || 0,
+          endAtOrRatio: 0
+        }
+      ]
+    : values.releaseType === IReleaseType.Cliff
+    ? [
+        {
+          startAt: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() || 0 : values.endTime?.unix() || 0,
+          endAtOrRatio: 0
+        }
+      ]
+    : values.releaseType === IReleaseType.Linear
+    ? values.releaseDataArr.map(item => ({
+        startAt: item.startAt?.unix() || 0,
+        endAtOrRatio: item.endAt?.unix() || 0
+      }))
+    : values.releaseType === IReleaseType.Fragment
+    ? values.releaseDataArr.map((item, idx) => ({
+        startAt: item.startAt?.unix() || 0,
+        endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
+      }))
+    : values.releaseDataArr.map(item => ({
+        startAt: item.startAt?.unix() || 0,
+        endAtOrRatio: item.ratio || 0
+      }))
+}
+
 export function useCreateFixedSwapPool() {
   const { account, chainId } = useActiveWeb3React()
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
@@ -87,7 +121,6 @@ export function useCreateFixedSwapPool() {
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
-    const fragmentRawArr = IReleaseType.Fragment === values.releaseType ? getFragmentRawArr(values.releaseDataArr) : []
     const params: Params = {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       poolSize: values.poolSize,
@@ -112,37 +145,7 @@ export function useCreateFixedSwapPool() {
       tokenToAddress: values.tokenTo.address,
       tokenToDecimal: values.tokenTo.decimals,
       releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
-      releaseData:
-        values.releaseType === 1000
-          ? [
-              {
-                startAt: values.endTime?.unix() || 0,
-                endAtOrRatio: 0
-              }
-            ]
-          : values.releaseType === IReleaseType.Cliff
-          ? [
-              {
-                startAt: values.shouldDelayUnlocking
-                  ? values.delayUnlockingTime?.unix() || 0
-                  : values.endTime?.unix() || 0,
-                endAtOrRatio: 0
-              }
-            ]
-          : values.releaseType === IReleaseType.Linear
-          ? values.releaseDataArr.map(item => ({
-              startAt: item.startAt?.unix() || 0,
-              endAtOrRatio: item.endAt?.unix() || 0
-            }))
-          : values.releaseType === IReleaseType.Fragment
-          ? values.releaseDataArr.map((item, idx) => ({
-              startAt: item.startAt?.unix() || 0,
-              endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
-            }))
-          : values.releaseDataArr.map(item => ({
-              startAt: item.startAt?.unix() || 0,
-              endAtOrRatio: item.ratio || 0
-            }))
+      releaseData: makeValuesReleaseData(values)
     }
 
     if (!currencyFrom || !currencyTo) {
