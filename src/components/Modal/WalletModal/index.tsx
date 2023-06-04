@@ -102,7 +102,7 @@ export function useGetWalletOptions(
             icon={require('../../../assets/walletIcon/' + option.iconName)}
           />
         )
-      } else if (option.name === 'OKX') {
+      } else if (option.name === 'OKX Wallet') {
         return (
           <Option
             onClick={() => {
