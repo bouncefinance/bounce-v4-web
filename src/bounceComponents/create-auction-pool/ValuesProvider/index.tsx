@@ -310,7 +310,7 @@ const reducer = (state: AuctionPool, action: Actions) => {
         startTime: action.payload.startTime,
         endTime: action.payload.endTime,
         whitelist: action.payload.whitelist,
-        releaseType: action.payload.releaseType || IReleaseType.Cliff,
+        releaseType: action.payload.releaseType !== undefined ? action.payload.releaseType : IReleaseType.Cliff,
         releaseDataArr: action.payload.releaseDataArr || [],
         delayUnlockingTime: action.payload.delayUnlockingTime,
         enableReverse: action.payload.enableReverse === undefined ? true : action.payload.enableReverse || false,
