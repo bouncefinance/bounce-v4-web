@@ -5,8 +5,9 @@ import { useSingleCallResult } from 'state/multicall/hooks'
 import { useBackedPoolInfo } from './usePoolInfo'
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapNftContract } from 'hooks/useContract'
-import { FixedSwapNFTPoolProp, PoolType } from 'api/pool/type'
+import { FixedSwapNFTPoolProp, FixedSwapPool, PoolType } from 'api/pool/type'
 import JSBI from 'jsbi'
+import { ChainId } from 'constants/chain'
 
 const useNftPoolInfo = () => {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
@@ -56,6 +57,8 @@ const useNftPoolInfo = () => {
     poolInfo?.ethChainId
   ).result
 
+  const v2FixedSwapNFTData = useV2FixedSwapNFTData(poolInfo?.poolVersion === 2, poolInfo)
+
   const data: FixedSwapNFTPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
     const _t1 = poolInfo.token1
@@ -87,7 +90,8 @@ const useNftPoolInfo = () => {
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(
         t1,
         amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
-      ) as CurrencyAmount
+      ) as CurrencyAmount,
+      enableReverses: v2FixedSwapNFTData.enableReverses
     }
   }, [
     amountSwap0Res,
@@ -96,7 +100,8 @@ const useNftPoolInfo = () => {
     myAmountSwapped0Res,
     myAmountSwapped1Res,
     myClaimedRes,
-    poolInfo
+    poolInfo,
+    v2FixedSwapNFTData.enableReverses
   ])
 
   return {
@@ -107,3 +112,38 @@ const useNftPoolInfo = () => {
 }
 
 export default useNftPoolInfo
+
+function useV2FixedSwapNFTData(
+  isV2: boolean,
+  poolInfo:
+    | (FixedSwapPool & {
+        ethChainId: ChainId
+      })
+    | undefined
+): {
+  enableReverses: boolean
+} {
+  const _fixedSwapNftContract = useFixedSwapNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
+
+  const fixedSwapNftContract = useMemo(() => (isV2 ? _fixedSwapNftContract : null), [_fixedSwapNftContract, isV2])
+  const { account } = useActiveWeb3React()
+
+  const enableReversesRes = useSingleCallResult(
+    account ? fixedSwapNftContract : null,
+    'enableReverses',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  return useMemo(() => {
+    if (!isV2) {
+      return {
+        enableReverses: true
+      }
+    }
+    return {
+      enableReverses: enableReversesRes?.[0]
+    }
+  }, [enableReversesRes, isV2])
+}

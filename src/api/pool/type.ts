@@ -195,6 +195,7 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   maxPlayere?: string | number
   curPlayer?: string | number
   releaseType?: IReleaseType | undefined
+  enableReverses?: boolean
   releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
@@ -216,6 +217,7 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
     is721?: 1 | 2
     tokenId?: string
   }
+  enableReverses?: boolean
 }
 
 export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {

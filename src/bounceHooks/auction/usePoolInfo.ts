@@ -193,6 +193,7 @@ const usePoolInfo = () => {
         t1,
         amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
       ),
+      enableReverses: v2FixedSwapData.enableReverses,
       releaseType: v2FixedSwapData.releaseType,
       releaseData: v2FixedSwapData.releaseData
     }
@@ -227,6 +228,7 @@ function useV2FixedSwapData(
       })
     | undefined
 ): {
+  enableReverses: boolean
   myAmountSwapped0: string | undefined
   curReleasableAmount: string | undefined
   myReleased: string | undefined
@@ -241,6 +243,14 @@ function useV2FixedSwapData(
     account ? fixedSwapERC20Contract : null,
     'myAmountSwapped0',
     [account || undefined, poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  const enableReversesRes = useSingleCallResult(
+    account ? fixedSwapERC20Contract : null,
+    'enableReverses',
+    [poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
@@ -292,6 +302,7 @@ function useV2FixedSwapData(
   return useMemo(() => {
     if (!isV2 || !releaseTypesRes || !releaseDataListRes) {
       return {
+        enableReverses: true,
         myAmountSwapped0: myAmountSwapped0Res?.[0].toString(),
         curReleasableAmount: curReleasableAmountRes?.[0].toString(),
         myReleased: myReleasedRes?.[0].toString(),
@@ -301,6 +312,7 @@ function useV2FixedSwapData(
     }
     const releaseType: IReleaseType = Number(releaseTypesRes?.[0])
     return {
+      enableReverses: enableReversesRes?.[0],
       myAmountSwapped0: myAmountSwapped0Res?.[0].toString(),
       curReleasableAmount: curReleasableAmountRes?.[0].toString(),
       myReleased: myReleasedRes?.[0].toString(),
@@ -311,5 +323,13 @@ function useV2FixedSwapData(
         ratio: releaseType === IReleaseType.Fragment ? item.result?.[1].toString() : undefined
       }))
     }
-  }, [curReleasableAmountRes, isV2, myAmountSwapped0Res, myReleasedRes, releaseDataListRes, releaseTypesRes])
+  }, [
+    curReleasableAmountRes,
+    enableReversesRes,
+    isV2,
+    myAmountSwapped0Res,
+    myReleasedRes,
+    releaseDataListRes,
+    releaseTypesRes
+  ])
 }

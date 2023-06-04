@@ -277,6 +277,7 @@ const ActionBlock = (props: FixedSwapPoolParams) => {
           onRegretButtonClick={() => {
             setAction('INPUT_REGRET_AMOUNT')
           }}
+          hideRegret={!poolInfo.enableReverses}
         />
       )}
 

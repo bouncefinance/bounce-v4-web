@@ -352,7 +352,11 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
           onRegretButtonClick={() => {
             setAction('INPUT_REGRET_AMOUNT')
           }}
-          hideRegret={ChainId.ZKSYNC_ERA === poolInfo.ethChainId || poolInfo.releaseType === IReleaseType.Instant}
+          hideRegret={
+            !poolInfo.enableReverses ||
+            ChainId.ZKSYNC_ERA === poolInfo.ethChainId ||
+            poolInfo.releaseType === IReleaseType.Instant
+          }
         />
       )}
 
