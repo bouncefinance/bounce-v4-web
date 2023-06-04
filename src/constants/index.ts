@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { injected, walletconnect, walletlink } from '../connectors'
+import { OKXWalletConnector, injected, walletconnect, walletlink } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -46,15 +46,24 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     href: null,
     color: '#E8831D'
   },
+  // OKEX: {
+  //   connector: injected,
+  //   name: 'OKX',
+  //   iconName: 'okxIcon.png',
+  //   description: 'Easy-to-use browser extension.',
+  //   href: null,
+  //   color: '#E8831D',
+  //   mobile: true,
+  //   mobileOnly: true
+  // },
   OKEX: {
-    connector: injected,
-    name: 'OKX',
+    connector: OKXWalletConnector,
+    name: 'OKX Wallet',
     iconName: 'okxIcon.png',
     description: 'Easy-to-use browser extension.',
-    href: null,
+    href: '',
     color: '#E8831D',
-    mobile: true,
-    mobileOnly: true
+    mobile: true
   },
   WALLET_CONNECT: {
     connector: walletconnect,
