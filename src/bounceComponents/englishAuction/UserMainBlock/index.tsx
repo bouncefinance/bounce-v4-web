@@ -59,7 +59,7 @@ const UserMainBlock = (): JSX.Element => {
             <PriceChartView />
           </Box>
         </Stack>
-        <UserBidPanel />
+        {poolInfo.contract && <UserBidPanel />}
       </Box>
     </Stack>
   )
