@@ -87,7 +87,7 @@ export function makeValuesReleaseData(values: AuctionPool) {
     : values.releaseType === IReleaseType.Cliff
     ? [
         {
-          startAt: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() || 0 : values.endTime?.unix() || 0,
+          startAt: values.delayUnlockingTime?.unix() || values.endTime?.unix() || 0,
           endAtOrRatio: 0
         }
       ]
@@ -227,6 +227,7 @@ export function useCreateFixedSwapPool() {
       expiredTime,
       signature
     ]
+    console.log('🚀 ~ file: useCreateFixedSwapPool.ts:230 ~ returnuseCallback ~ args:', args)
 
     const estimatedGas = await fixedSwapERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)

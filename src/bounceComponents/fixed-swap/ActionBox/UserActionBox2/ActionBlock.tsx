@@ -267,7 +267,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
   ])
 
   const v2ParticipantClaimable = useMemo(() => {
-    console.log('sssssss')
     if (poolInfo.participant.currencyCurClaimableAmount?.greaterThan('0')) {
       return true
     }

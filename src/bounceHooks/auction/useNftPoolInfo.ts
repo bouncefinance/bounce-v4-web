@@ -8,6 +8,7 @@ import { useFixedSwapNftContract } from 'hooks/useContract'
 import { FixedSwapNFTPoolProp, FixedSwapPool, PoolType } from 'api/pool/type'
 import JSBI from 'jsbi'
 import { ChainId } from 'constants/chain'
+import BigNumber from 'bignumber.js'
 
 const useNftPoolInfo = () => {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
@@ -91,7 +92,10 @@ const useNftPoolInfo = () => {
         t1,
         amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
       ) as CurrencyAmount,
-      enableReverses: v2FixedSwapNFTData.enableReverses
+      enableReverses: v2FixedSwapNFTData.enableReverses,
+      currentTotal0: new BigNumber(poolInfo.amountTotal0)
+        .minus(amountSwap0Res?.[0].toString() || poolInfo.swappedAmount0 || '0')
+        .toFixed()
     }
   }, [
     amountSwap0Res,
