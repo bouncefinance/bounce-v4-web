@@ -53,7 +53,7 @@ const InfoBox = (props: InfoBoxParams) => {
           width: '100%',
           height: '21px',
           lineHeight: '21px',
-          color: 'var(--ps-text-1)',
+          color: '#626262',
           marginBottom: 12,
           letterSpacing: '-0.02em'
         }}
@@ -67,7 +67,7 @@ const InfoBox = (props: InfoBoxParams) => {
           fontWeight: 600,
           fontSize: 14,
           lineHeight: '21px',
-          color: 'var(--ps-text-1)',
+          color: '#959595',
           width: '100%',
           height: '21px',
           overflow: 'hidden',
@@ -109,6 +109,9 @@ const PaginationBox = (props: PaginationParams) => {
         flexFlow: 'row nowrap',
         alignItems: isSm ? 'center' : 'inherit',
         justifyContent: 'space-between',
+        '@media(max-width:1347px)': {
+          right: 20
+        },
         ...style
       }}
     >
@@ -314,8 +317,17 @@ const TokenAuction: React.FC = () => {
     top: isSm ? 217 : 100,
     display: 'block',
     width: isSm ? 283 : 350,
-    left: '50%',
-    transform: 'translateX(-50%)'
+    '@media(max-width:640px)': {
+      left: '50%',
+      transform: 'translateX(-50%)'
+    },
+    '@media(max-width:996px)': {
+      right: 0
+    },
+    '@media(min-width:996px)': {
+      left: '50%',
+      transform: 'translateX(-50%)'
+    }
   }))
 
   function NftSkeleton() {
@@ -355,11 +367,14 @@ const TokenAuction: React.FC = () => {
         <Box
           sx={{
             position: 'relative',
-            width: isSm ? '100%' : 1296,
+            maxWidth: isSm ? '100%' : 1296,
             height: 622,
             padding: isSm ? '40px 16px 20px' : '80px 0 0 0',
             margin: '0 auto',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            '@media(max-width:1360px)': {
+              paddingLeft: 20
+            }
           }}
         >
           <Typography
@@ -404,14 +419,31 @@ const TokenAuction: React.FC = () => {
                 fontSize: 14,
                 width: 200,
                 lineHeight: '20px',
-                color: 'var(--ps-yellow-1)'
+                color: 'var(--ps-yellow-1)',
+                '@media(max-width:1347px)': {
+                  right: 20
+                }
               }}
             >
               {`${currentIndex + 1} / ${AuctionList.length}`}
             </Typography>
           )}
           {!isSm && (
-            <>
+            <Box
+              sx={{
+                '@media(max-width:1360px)': {
+                  '&>div:nth-child(1)': {
+                    left: 20
+                  },
+                  '&>div:nth-child(2)': {
+                    left: 130
+                  },
+                  '&>div:nth-child(3)': {
+                    left: 20
+                  }
+                }
+              }}
+            >
               <InfoBox
                 title={'total value'}
                 value={showData.totalValue}
@@ -441,7 +473,7 @@ const TokenAuction: React.FC = () => {
                   left: 0
                 }}
               />
-            </>
+            </Box>
           )}
           <Box
             sx={{
@@ -558,12 +590,15 @@ const TokenAuction: React.FC = () => {
               width: isSm ? '100%' : 1440,
               minHeight: 496,
               top: 622,
-              left: '50%',
-              transform: 'translateX(-50%)',
+              left: 0,
+              '@media(min-width:1440px)': {
+                transform: 'translateX(-50%)',
+                left: '50%'
+              },
               borderRadius: 30,
               margin: '0 auto',
               background: '#fff',
-              padding: 24
+              padding: isSm ? 8 : 24
             }}
           >
             <Box
@@ -670,7 +705,7 @@ const TokenAuction: React.FC = () => {
                     </Stack>
                   ) : (
                     <Stack
-                      spacing={18}
+                      spacing={isSm ? 8 : 18}
                       direction={'row'}
                       sx={{
                         overflowX: 'scroll',
