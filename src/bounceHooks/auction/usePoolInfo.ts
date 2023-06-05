@@ -56,7 +56,8 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
           ...rawPoolInfo.token1,
           symbol: rawPoolInfo.token1.symbol.toUpperCase()
         },
-        ethChainId: getLabelById(rawPoolInfo.chainId, 'ethChainId', chainInfoOpt || [])
+        ethChainId: getLabelById(rawPoolInfo.chainId, 'ethChainId', chainInfoOpt || []),
+        swappedAmount0: Number(rawPoolInfo.swappedAmount0) > 0 ? rawPoolInfo.swappedAmount0 : '0'
       }
     },
     {
@@ -186,7 +187,7 @@ const usePoolInfo = () => {
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(
         t0,
-        amountSwap0PRes?.[0].toString() || (Number(poolInfo.swappedAmount0) > 0 ? poolInfo.swappedAmount0 : '0')
+        amountSwap0PRes?.[0].toString() || poolInfo.swappedAmount0
       ),
       currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
       currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0).subtract(
@@ -273,11 +274,6 @@ function useV2FixedSwapData(
     undefined,
     poolInfo?.ethChainId
   ).result
-  console.log(
-    '🚀 ~ file: usePoolInfo.ts:276 ~ curReleasableAmountRes:11111',
-    curReleasableAmountRes?.[0].toString(),
-    myReleasedRes?.[0].toString()
-  )
 
   const releaseTypesRes = useSingleCallResult(
     fixedSwapERC20Contract,
