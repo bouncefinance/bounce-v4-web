@@ -172,10 +172,11 @@ const usePoolInfo = () => {
             : v2FixedSwapData.curReleasableAmount
             ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.curReleasableAmount)
             : undefined,
-        currencyCurClaimableAmount: CurrencyAmount.fromRawAmount(
-          t0,
-          v2FixedSwapData.curReleasableAmount || '0'
-        ).subtract(CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased || '0')),
+        currencyCurClaimableAmount: v2FixedSwapData.curReleasableAmount
+          ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.curReleasableAmount).subtract(
+              CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased || '0')
+            )
+          : undefined,
         currencyMyReleased: v2FixedSwapData.myReleased
           ? CurrencyAmount.fromRawAmount(t0, v2FixedSwapData.myReleased)
           : undefined
@@ -272,6 +273,11 @@ function useV2FixedSwapData(
     undefined,
     poolInfo?.ethChainId
   ).result
+  console.log(
+    '🚀 ~ file: usePoolInfo.ts:276 ~ curReleasableAmountRes:11111',
+    curReleasableAmountRes?.[0].toString(),
+    myReleasedRes?.[0].toString()
+  )
 
   const releaseTypesRes = useSingleCallResult(
     fixedSwapERC20Contract,
