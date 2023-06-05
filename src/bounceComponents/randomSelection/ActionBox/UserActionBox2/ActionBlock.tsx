@@ -114,7 +114,7 @@ const ActionBlock = ({
     decimalPlaces: 6
   })
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
-  console.log('betAmound, currencyBidAmount>>>', betAmound, currencyBidAmount)
+
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
 
   const toBid = useCallback(async () => {

@@ -9,7 +9,7 @@ export interface GoToCheckButtonProps {
 }
 
 const GoToCheckButton = ({ onClick, bidAmount, poolInfo }: GoToCheckButtonProps) => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo, poolInfo.category)
 
   return (
     <Button

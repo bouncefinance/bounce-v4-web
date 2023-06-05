@@ -36,7 +36,8 @@ const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolT
         address: account,
         category: category,
         chainId: poolInfo.chainId,
-        poolId: String(poolInfo.poolId)
+        poolId: String(poolInfo.poolId),
+        tokenType: getTokenType(category)
       })
 
       setIsUserInWhitelist(!!proof)

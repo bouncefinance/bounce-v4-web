@@ -4,7 +4,6 @@ import PlaceBidButton from '../PlaceBidButton'
 import UpcomingPoolCountdownButton from './UpcomingPoolCountdownButton'
 import WrongNetworkAlert from './WrongNetworkAlert'
 import BidButtonGroup from './BidButtonGroup'
-import GetFundBackAlert from './GetFundBackAlert'
 import GoToCheckButton from './GoToCheckButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsLimitExceeded from 'bounceHooks/auction/useIsRandomSelectionLimitExceeded'
@@ -74,7 +73,6 @@ const BidButtonBlock = ({
             Limit Exceeded
           </Button>
         </BidButtonGroup>
-        <GetFundBackAlert />
       </>
     )
   }
@@ -91,7 +89,6 @@ const BidButtonBlock = ({
             {!userBalance ? 'Loading' : 'Insufficient balance'}
           </Button>
         </BidButtonGroup>
-        <GetFundBackAlert />
       </>
     )
   }
@@ -100,7 +97,6 @@ const BidButtonBlock = ({
     return (
       <>
         <GoToCheckButton poolInfo={poolInfo} bidAmount={bidAmount} onClick={handleGoToCheck} />
-        <GetFundBackAlert />
       </>
     )
   }
@@ -117,7 +113,6 @@ const BidButtonBlock = ({
           loading={isBidding}
           poolInfo={poolInfo}
         />
-        <GetFundBackAlert />
       </>
     )
   }
@@ -140,7 +135,6 @@ const BidButtonBlock = ({
             loading={isBidding}
           />
         </BidButtonGroup>
-        <GetFundBackAlert />
       </>
     )
   }

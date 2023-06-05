@@ -7,6 +7,7 @@ import { CurrencyAmount } from 'constants/token'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
+import getTokenType from 'utils/getTokenType'
 
 export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
   const { account } = useActiveWeb3React()
@@ -37,9 +38,10 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
           data: { proof: rawProofStr }
         } = await getUserWhitelistProof({
           address: account,
-          category: PoolType.FixedSwap,
+          category: poolInfo.category,
           chainId: poolInfo.chainId,
-          poolId: String(poolInfo.poolId)
+          poolId: String(poolInfo.poolId),
+          tokenType: getTokenType(poolInfo.category)
         })
 
         const rawProofJson = JSON.parse(rawProofStr)
@@ -82,6 +84,7 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
       addTransaction,
       fixedSwapERC20Contract,
       isToken1Native,
+      poolInfo.category,
       poolInfo.chainId,
       poolInfo.enableWhiteList,
       poolInfo.poolId,

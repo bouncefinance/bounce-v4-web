@@ -1,5 +1,4 @@
 import { Box, Button } from '@mui/material'
-import GetFundBackAlert from './BidButtonBlock/GetFundBackAlert'
 export interface BidOrRegretBlockProps {
   onBidButtonClick: () => void
   onRegretButtonClick?: () => void
@@ -44,7 +43,6 @@ const BidOrRegret = ({ onBidButtonClick }: BidOrRegretBlockProps) => {
           Get fund back
         </Button> */}
       </Box>
-      <GetFundBackAlert />
     </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { FixedSwapNFTPoolProp, PoolType } from 'api/pool/type'
+import { FixedSwapNFTPoolProp } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapNftContract } from 'hooks/useContract'
@@ -8,6 +8,7 @@ import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import { CurrencyAmount } from 'constants/token'
 import JSBI from 'jsbi'
+import getTokenType from 'utils/getTokenType'
 
 const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
   const { account } = useActiveWeb3React()
@@ -43,9 +44,10 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
           data: { proof: rawProofStr }
         } = await getUserWhitelistProof({
           address: account,
-          category: PoolType.fixedSwapNft,
+          category: poolInfo.category,
           chainId: poolInfo.chainId,
-          poolId: String(poolInfo.poolId)
+          poolId: String(poolInfo.poolId),
+          tokenType: getTokenType(poolInfo.category)
         })
 
         const rawProofJson = JSON.parse(rawProofStr)
@@ -100,6 +102,7 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
       isToken1Native,
       poolInfo.amountTotal0,
       poolInfo.amountTotal1,
+      poolInfo.category,
       poolInfo.chainId,
       poolInfo.currencyAmountTotal1.currency,
       poolInfo.enableWhiteList,

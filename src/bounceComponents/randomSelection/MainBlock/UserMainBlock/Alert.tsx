@@ -7,7 +7,7 @@ import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 
 const Alert = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo, poolInfo.category)
   const isUserJoinedPool = useIsUserJoinedPool(poolInfo)
 
   if (isCheckingWhitelist) {
