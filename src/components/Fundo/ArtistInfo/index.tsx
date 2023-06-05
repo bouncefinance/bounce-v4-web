@@ -13,8 +13,8 @@ export default function FundoInfo() {
         minHeight: isSm ? 'unset' : '640px',
         display: 'flex',
         flexFlow: 'column nowrap',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
     >
       <Typography

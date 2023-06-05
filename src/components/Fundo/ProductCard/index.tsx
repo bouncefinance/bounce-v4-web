@@ -12,10 +12,12 @@ import { useIsSMDown } from 'themes/useTheme'
 
 export default function ProductCard({
   hideProductImg,
-  hideProduct
+  hideProduct,
+  noBg
 }: {
   hideProductImg?: boolean
   hideProduct?: boolean
+  noBg?: boolean
 }) {
   const isSm = useIsSMDown()
   const config = [
@@ -46,9 +48,9 @@ export default function ProductCard({
         position: 'relative',
         width: isSm ? '258px' : '458px',
         height: isSm ? '360px' : '640px',
-        background: 'rgba(73, 73, 73, 0.11)',
+        background: noBg ? 'unset' : 'rgba(73, 73, 73, 0.11)',
         border: '2px solid rgba(255, 255, 255, 0.2)',
-        backdropFilter: 'blur(25px)',
+        backdropFilter: noBg ? 'unset' : 'blur(25px)',
         borderRadius: '16px',
         opacity: hideProduct ? 0 : 1,
         padding: isSm ? '16px 16px 0' : '26px 19px 0'

@@ -10,6 +10,7 @@ import Necklace from '../components/pcAnimation/necklace'
 import { BigNumber } from 'bignumber.js'
 import ThreeCard from '../components/mobileAnimation/threeCard'
 import TextAniamte from '../components/textAnimate'
+import LeftBar from 'components/Fundo/LeftBar'
 import { AnimateStep } from '../components/pcAnimation/threeCard'
 const MobileHome: React.FC = () => {
   const _AnimateHeight1 = 1000
@@ -52,7 +53,7 @@ const MobileHome: React.FC = () => {
       // 2.2 text leave up
       const animate2_2range = [_AnimateHeight1 + winH, _AnimateHeight1 + winH + 800]
       // 3 three card leave
-      const animate3Range = [_AnimateHeight1 + winH + 800, _AnimateHeight1 + winH + 1600]
+      const animate3Range = [_AnimateHeight1 + winH + 800, _AnimateHeight1 + winH + 1800]
       // 1. necklack down and scale
       if (animate1Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate1Range[1]) {
         setAnimate1Ratio(BigNumber(event.target.scrollTop).div(animate1Range[1]).toFixed(2))
@@ -154,6 +155,7 @@ const MobileHome: React.FC = () => {
       <VideoSection />
       <Four />
       <Footer />
+      <LeftBar />
     </Box>
   )
 }

@@ -287,8 +287,8 @@ export default function Footer() {
               <Typography
                 sx={{
                   fontWeight: 600,
-                  lineHeight: isSm ? '16px' : '24px',
-                  fontSize: '20px',
+                  lineHeight: '24px',
+                  fontSize: isSm ? '16px' : '20px',
                   color: '#fff'
                 }}
               >
@@ -297,10 +297,10 @@ export default function Footer() {
               <Typography
                 sx={{
                   fontWeight: 600,
-                  fontSize: '20px',
+                  fontSize: isSm ? '16px' : '20px',
                   color: '#fff',
                   lineHeight: '24px',
-                  margin: '0 40px'
+                  margin: isSm ? '0 16px' : '0 40px'
                 }}
               >
                 |

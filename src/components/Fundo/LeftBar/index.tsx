@@ -96,7 +96,7 @@ export default function LeftBar() {
       sx={{
         position: 'fixed',
         top: 0,
-        left: isSm ? 0 : 30,
+        left: isSm ? 0 : 5,
         width: '18px',
         height: '100vh',
         zIndex: 1,

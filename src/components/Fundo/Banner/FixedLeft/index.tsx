@@ -1,7 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import BackVideo from 'components/Fundo/assets/video/backVideo.mp4'
+import { useIsSMDown } from 'themes/useTheme'
 
 export default function FixedLeft({ style }: { style?: React.CSSProperties }) {
+  const isSm = useIsSMDown()
   return (
     <Box
       sx={{
@@ -20,8 +22,10 @@ export default function FixedLeft({ style }: { style?: React.CSSProperties }) {
       <video
         style={{
           position: 'relative',
-          width: '100%',
-          height: '100%',
+          width: isSm ? '90px' : '140px',
+          height: isSm ? '90px' : '140px',
+          overflow: 'hidden',
+          borderRadius: '4px',
           marginBottom: '15px',
           objectFit: 'cover'
         }}

@@ -8,6 +8,7 @@ import { useIsSMDown } from 'themes/useTheme'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 require('@lottiefiles/lottie-player')
+import BgImg from 'components/Fundo/assets/img/back.png'
 
 const TokenDetail: React.FC = () => {
   const isSm = useIsSMDown()
@@ -22,10 +23,15 @@ const TokenDetail: React.FC = () => {
         flexFlow: isSm ? 'column nowrap' : 'row nowrap',
         justifyContent: isSm ? 'flex-start' : 'center',
         alignItems: 'center',
-        padding: isSm ? '150px 40px 0' : '',
+        padding: isSm ? '64px 40px 0' : '',
         overflowY: 'auto',
-        background: '#000',
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        backgroundColor: '#000',
+        backgroundImage: `url(${BgImg})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'auto 100%',
+        backgroundPosition: 'top center',
+        backgroundAttachment: 'fixed'
       }}
     >
       {isSm && (
@@ -397,8 +403,8 @@ const TokenDetail: React.FC = () => {
                   src={JSON.stringify(NecklaceJson)}
                   loop={true}
                   style={{
-                    width: '100%',
-                    height: 'auto',
+                    width: '380px',
+                    height: '380px',
                     cursor: 'pointer'
                   }}
                 ></lottie-player>

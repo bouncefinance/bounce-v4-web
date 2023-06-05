@@ -15,7 +15,7 @@ export default function CenterSection(props: CenterSectionParams) {
       sx={{
         position: 'relative',
         width: isSm ? 'calc(100% - 20px)' : 'calc(100% - 75px)',
-        // maxWidth: isSm ? "350px" : "1200px",
+        maxWidth: isSm ? 'unset' : '1920px',
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'space-between',

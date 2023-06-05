@@ -53,7 +53,7 @@ export default function One() {
             display: 'flex',
             flexFlow: 'row nowrap',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'flex-start'
           }}
           gap={'40px'}
         >
@@ -62,7 +62,8 @@ export default function One() {
               flex: 470,
               fontFamily: `'Inter'`,
               fontWight: 400,
-              fontSize: '16px'
+              fontSize: '16px',
+              color: 'var(--ps-text-2)'
             }}
           >{`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful`}</Typography>
           <Typography
@@ -70,7 +71,8 @@ export default function One() {
               flex: 688,
               fontFamily: `'Inter'`,
               fontWight: 400,
-              fontSize: '16px'
+              fontSize: '16px',
+              color: 'var(--ps-text-2)'
             }}
           >{`words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}</Typography>
         </Box>

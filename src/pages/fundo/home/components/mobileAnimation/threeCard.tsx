@@ -43,7 +43,7 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
       }}
       gap={'96px'}
     >
-      <ProductCard hideProductImg={hideProductImg} />
+      <ProductCard noBg={true} hideProductImg={hideProductImg} />
       <FundoInfo />
       <ArtistCard />
       <ArtistInfo />

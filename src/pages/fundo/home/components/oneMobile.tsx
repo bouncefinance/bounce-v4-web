@@ -15,7 +15,7 @@ const OneMobile: React.FC = () => {
         flexFlow: 'column nowrap',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        paddingTop: '70vh'
+        padding: '70vh 30px 0'
       }}
     >
       <>
@@ -95,14 +95,14 @@ const OneMobile: React.FC = () => {
           style={{
             width: '50px',
             top: '250px',
-            right: '20px'
+            right: '40px'
           }}
         />
         <FixedLeft
           style={{
             width: '90px',
             top: '100px',
-            left: '20px'
+            left: '40px'
           }}
         />
       </>

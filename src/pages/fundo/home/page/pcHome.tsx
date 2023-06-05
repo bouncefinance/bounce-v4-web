@@ -9,6 +9,7 @@ import ThreeCard, { AnimateStep } from '../components/pcAnimation/threeCard'
 import NftIssued from '../components/pcAnimation/nftIssued'
 import Partner from '../components/pcAnimation/partner'
 import ProductInfo from '../components/pcAnimation/productInfo'
+import LeftBar from 'components/Fundo/LeftBar'
 import Footer from '../components/footer'
 import { useEffect, useState } from 'react'
 import Necklace from '../components/pcAnimation/necklace'
@@ -241,6 +242,7 @@ const PcHome: React.FC = () => {
       {animate5Step !== AnimateStep.notShow && <Partner animationRatio={animate5Ratio} step={animate5Step} />}
       <Four />
       <Footer />
+      <LeftBar />
     </Box>
   )
 }
