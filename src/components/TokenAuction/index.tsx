@@ -591,7 +591,16 @@ const TokenAuction: React.FC = () => {
                       </Grid>
                     ))}
                   {isSm ? (
-                    <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
+                    <Stack
+                      spacing={18}
+                      direction={'row'}
+                      sx={{
+                        overflowX: 'scroll',
+                        '&::-webkit-scrollbar': {
+                          display: 'none'
+                        }
+                      }}
+                    >
                       {optionDatas?.chainInfoOpt &&
                         nftPoolData?.list.map((nft: any, i: number) => <NftLink nft={nft} key={i} />)}
                     </Stack>
@@ -658,7 +667,16 @@ const TokenAuction: React.FC = () => {
                       ))}
                     </Stack>
                   ) : (
-                    <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
+                    <Stack
+                      spacing={18}
+                      direction={'row'}
+                      sx={{
+                        overflowX: 'scroll',
+                        '&::-webkit-scrollbar': {
+                          display: 'none'
+                        }
+                      }}
+                    >
                       {data?.list?.map((fixedSwaptem: any, index: number) => (
                         <Link
                           key={index}
