@@ -86,7 +86,7 @@ export const NotableAuction = (props: Notable1155Props) => {
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />
             <Select
               sx={{
-                width: '200px',
+                width: [160, '200px'],
                 height: '38px'
               }}
               value={chainFilter}
