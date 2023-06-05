@@ -96,7 +96,7 @@ export default function Modal(props: Props) {
         BackdropProps={{
           sx: {
             ...{
-              backgroundColor: backdropColor || 'rgba(0,0,0,0.6)',
+              backgroundColor: backdropColor || { xs: 'transparent', sm: 'rgba(0,0,0,0.6)' },
               [theme.breakpoints.down('sm')]: { top: theme.height.mobileHeader }
             }
           }

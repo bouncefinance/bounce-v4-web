@@ -128,7 +128,6 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
                     ) : (
                       <Box
                         component={'a'}
-                        target="_blank"
                         href={getAuctionPoolLink(
                           auctionPoolItem.id,
                           auctionPoolItem.category,

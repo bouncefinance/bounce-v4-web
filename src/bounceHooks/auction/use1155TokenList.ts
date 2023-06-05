@@ -50,6 +50,19 @@ export function use1155TokenList(
             tokenId: '1'
           })
         }
+        if (chainId === 25) {
+          nftCollection['0x755d8bb9959058DB2E6128E7435BC04Cd8704404'] = []
+          nftCollection['0x755d8bb9959058DB2E6128E7435BC04Cd8704404'].push({
+            balance: '',
+            contractAddr: '0x755d8bb9959058DB2E6128E7435BC04Cd8704404',
+            contractName: 'Bounce x zkSync',
+            description: 'Bounce x zkSync',
+            image: '',
+            name: 'Bounce x zkSync',
+            tokenId: '0'
+          })
+        }
+
         setList(nftCollection)
       } catch (error) {
         console.error('fetch user nfts error', error)

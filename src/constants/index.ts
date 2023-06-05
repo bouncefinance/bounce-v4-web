@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { injected, walletconnect, walletlink } from '../connectors'
+import { OKXWalletConnector, injected, walletconnect, walletlink } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -45,6 +45,25 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Easy-to-use browser extension.',
     href: null,
     color: '#E8831D'
+  },
+  // OKEX: {
+  //   connector: injected,
+  //   name: 'OKX',
+  //   iconName: 'okxIcon.png',
+  //   description: 'Easy-to-use browser extension.',
+  //   href: null,
+  //   color: '#E8831D',
+  //   mobile: true,
+  //   mobileOnly: true
+  // },
+  OKEX: {
+    connector: OKXWalletConnector,
+    name: 'OKX Wallet',
+    iconName: 'okxIcon.png',
+    description: 'Easy-to-use browser extension.',
+    href: '',
+    color: '#E8831D',
+    mobile: true
   },
   WALLET_CONNECT: {
     connector: walletconnect,
@@ -195,7 +214,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
-  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '',

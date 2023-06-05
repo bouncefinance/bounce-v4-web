@@ -34,6 +34,7 @@ interface Params {
     startAt: number | string
     endAtOrRatio: number | string
   }[]
+  tokenIds: string[]
 }
 
 export function useCreateFixedSwap1155Pool() {
@@ -72,6 +73,7 @@ export function useCreateFixedSwap1155Pool() {
       tokenFromAddress: values.nftTokenFrom.contractAddr || '',
       tokenFormDecimal: 0,
       tokenId: values.nftTokenFrom.tokenId || '0',
+      tokenIds: [values.nftTokenFrom.tokenId || '0'],
       tokenToAddress: values.tokenTo.address,
       tokenToDecimal: values.tokenTo.decimals,
       releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
@@ -126,9 +128,9 @@ export function useCreateFixedSwap1155Pool() {
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
       tokenId: params.tokenId,
-      tokenIds: [params.tokenId],
       releaseType: params.releaseType,
-      releaseData: params.releaseData
+      releaseData: params.releaseData,
+      tokenIds: params.tokenIds
     }
 
     const {

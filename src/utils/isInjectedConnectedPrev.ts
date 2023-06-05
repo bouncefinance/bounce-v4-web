@@ -1,4 +1,4 @@
-import { injected } from 'connectors'
+import { OKXWalletConnector, injected } from 'connectors'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { autoConnectInjectedEveryone } from '../constants'
 
@@ -14,5 +14,8 @@ export function setInjectedConnected(connector?: AbstractConnector) {
     localStorage.setItem(localSaveConnectedWalletKey, '')
     return
   }
-  localStorage.setItem(localSaveConnectedWalletKey, connector === injected ? 'injected' : '')
+  localStorage.setItem(
+    localSaveConnectedWalletKey,
+    connector === injected || connector === OKXWalletConnector ? 'injected' : ''
+  )
 }

@@ -17,7 +17,6 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
   return (
     <Box
       component={'a'}
-      target="_blank"
       href={getAuctionPoolLink(
         auctionPoolItem.id,
         auctionPoolItem.category,

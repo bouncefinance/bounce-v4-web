@@ -61,11 +61,25 @@ import { ProjectInfo } from './projectIntro/projectInfo'
 import { Equilibria } from './game/equilibria'
 import { Rank } from './launchpad/rank'
 
+import OkxActivity from './okxActivity/OkxActivity'
+import LoginModal from 'components/Header/LoginModal'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
   useRefreshUserInfoByFirstLoad()
   return null
+}
+
+const UnSupportedMobileRouter = () => {
+  const { pathname } = useLocation()
+
+  const show = !pathname.includes('okxActivity')
+  return show ? (
+    <ShowOnMobile breakpoint="md">
+      <Mobile />
+    </ShowOnMobile>
+  ) : null
 }
 
 export default function App() {
@@ -82,12 +96,11 @@ export default function App() {
           <AppWrapper id="app">
             <ContentWrapper>
               <GlobalHooks />
+              <LoginModal />
               <Header />
               <ToastContainer />
               <Questions />
-              <ShowOnMobile breakpoint="md">
-                <Mobile />
-              </ShowOnMobile>
+              <UnSupportedMobileRouter />
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
@@ -155,6 +168,7 @@ export default function App() {
                     {/* <Route path={routes.game.equilibriaIndex} element={<Equilibria />} /> */}
                     <Route path={routes.game.equilibriaDetail} element={<Equilibria />} />
                     <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} />
+                    <Route path={routes.okxActivity} element={<OkxActivity />} />
                     <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                     <Route path="/" element={<Navigate to={routes.market.index} replace />} />
                   </Routes>

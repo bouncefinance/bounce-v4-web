@@ -8,6 +8,7 @@ import { useRequest } from 'ahooks'
 import { getActiveUsers } from '../../../api/market'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 interface IAuctionActiveCard {
   userId: number
@@ -23,6 +24,7 @@ const YellowSpan = styled('span')`
 `
 
 const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
+  const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
   return (
     <Box
@@ -32,15 +34,15 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         padding: '16px',
         cursor: 'pointer',
         width: 'fit-content',
-        gap: '20px',
+        gap: isSm ? '10px' : '20px',
         background: '#FFFFFF',
         borderRadius: '20px'
       }}
     >
       <img
         style={{
-          width: '150px',
-          height: '150px',
+          width: isSm ? '100px' : '150px',
+          height: isSm ? '100px' : '150px',
           borderRadius: '14px'
         }}
         src={props.img ? props.img : EmptyImg}
@@ -106,6 +108,7 @@ const ActiveUserSkeletonCard = () => {
   )
 }
 export const ActiveUser: React.FC = () => {
+  const isSm = useBreakpoint('sm')
   const { data } = useRequest(async () => {
     const resp = await getActiveUsers()
     return {
@@ -113,21 +116,23 @@ export const ActiveUser: React.FC = () => {
       total: resp.data.total
     }
   })
-  const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / 442)
+  const slideCardWidth = isSm ? 329 : 442
+  const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / slideCardWidth)
   useEffect(() => {
     const resetView = () => {
-      setSlidesPerView(window.innerWidth / 442)
+      setSlidesPerView(window.innerWidth / slideCardWidth)
     }
     window.addEventListener('resize', resetView)
     return () => {
       window.addEventListener('resize', resetView)
     }
-  }, [])
+  }, [slideCardWidth])
   return (
     <Box
+      className={'ActiveUser'}
       style={{
         width: '100%',
-        padding: '100px 0 140px'
+        padding: isSm ? '42px 0' : '100px 0 140px'
       }}
     >
       <Container
@@ -135,7 +140,7 @@ export const ActiveUser: React.FC = () => {
           maxWidth: '1440px !important'
         }}
       >
-        <H2 mb={80}>
+        <H2 mb={isSm ? 20 : 80} ml={isSm ? 12 : 0}>
           Most active <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
         </H2>
       </Container>

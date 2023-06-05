@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Autoplay, Pagination } from 'swiper'
 import 'swiper/swiper-bundle.css'
-import { Box, styled, Typography } from '@mui/material'
+import { Box, styled, Skeleton, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
@@ -12,6 +12,8 @@ import { BannerType } from '../../../api/market/type'
 // import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
+import useBreakpoint from '../../../hooks/useBreakpoint'
+
 SwiperCore.use([Autoplay, Pagination])
 
 export interface IBanner {
@@ -21,8 +23,62 @@ export interface IBanner {
   countDown: string
 }
 
+const SwiperSkeleton = () => {
+  return (
+    <Box
+      sx={{ width: '100%', height: '460px', backgroundColor: '#e3e3e0', borderRadius: '30px', position: 'relative' }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          position: 'absolute',
+          left: '0',
+          bottom: '40px',
+          width: '100%',
+          padding: '0 38px 0 40px',
+          boxSizing: 'border-box',
+          '& .MuiSkeleton-root': {
+            backgroundColor: 'rgba(255, 255, 255, 0.4)'
+          }
+        }}
+      >
+        <Box display="flex" flexDirection="column" width="61%" maxWidth="800px" gap="24px">
+          <Box display="flex" flexDirection="row" gap="4px">
+            <Skeleton width="32px" height="32px" variant="circular" animation="wave" />
+            <Skeleton
+              width="107px"
+              height="32px"
+              variant="rectangular"
+              sx={{ borderRadius: '100px' }}
+              animation="wave"
+            />
+          </Box>
+          <Skeleton variant="rectangular" width="100%" height="26px" animation="wave" />
+          <Skeleton variant="rectangular" width="262px" height="24px" animation="wave" />
+        </Box>
+        <Box
+          display="flex"
+          gap="8px"
+          flexDirection="row"
+          alignItems="end"
+          sx={{
+            '& .MuiSkeleton-root': { width: '60px', height: '60px', borderRadius: '8px' }
+          }}
+        >
+          {new Array(4).fill(0).map((i, v) => (
+            <Skeleton key={v} variant="rectangular" animation="wave" />
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  )
+}
+
 function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  const isSm = useBreakpoint('sm')
+  const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
   const { data } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
@@ -30,6 +86,12 @@ function ArrowBanner({ type }: { type?: string }) {
       total: resp.data
     }
   })
+  const EnterSwiper = () => {
+    setShowSwiperIcon(true)
+  }
+  const LeaveSwiper = () => {
+    setShowSwiperIcon(false)
+  }
   return (
     <Box
       position={'relative'}
@@ -38,18 +100,22 @@ function ArrowBanner({ type }: { type?: string }) {
       alignItems={'center'}
       sx={{
         maxWidth: '1296px',
-        width: '100%',
-        minHeight: 460,
+        width: isSm ? '90%' : '100%',
+        minHeight: isSm ? 125 : 460,
         margin: '16px auto 0'
       }}
+      onMouseEnter={EnterSwiper}
+      onMouseLeave={LeaveSwiper}
     >
       <ArrowBgLeft
+        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
         onClick={() => {
           swiper?.slidePrev()
         }}
       >
         <ArrowBackIcon />
       </ArrowBgLeft>
+
       <Swiper
         onSwiper={setSwiper}
         spaceBetween={0}
@@ -68,8 +134,15 @@ function ArrowBanner({ type }: { type?: string }) {
             <Banner key={index} banner={item} />
           </SwiperSlide>
         ))}
+        <SwiperSlide style={{ display: data ? 'none' : 'block' }}>
+          <SwiperSkeleton />
+        </SwiperSlide>
       </Swiper>
-      <ArrowBgRight onClick={() => swiper?.slideNext()}>
+
+      <ArrowBgRight
+        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+        onClick={() => swiper?.slideNext()}
+      >
         <ArrowForwardIcon />
       </ArrowBgRight>
     </Box>
@@ -91,18 +164,31 @@ const ArrowBg = styled(Box)`
   &:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 600px) {
+    width: 30px;
+    height: 30px;
+  }
 `
 const ArrowBgLeft = styled(ArrowBg)`
   position: absolute;
   left: -30px;
   top: 50%;
   transform: translateY(-50%);
+
+  @media (max-width: 600px) {
+    left: -25px;
+  }
 `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
   right: -30px;
   top: 50%;
   transform: translateY(-50%);
+
+  @media (max-width: 600px) {
+    right: -25px;
+  }
 `
 
 const BannerH3 = styled(Typography)`
@@ -116,6 +202,10 @@ const BannerH3 = styled(Typography)`
   color: #ffffff;
   align-self: stretch;
   flex-grow: 0;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `
 const BannerH6 = styled(Typography)`
   font-style: normal;
@@ -124,6 +214,10 @@ const BannerH6 = styled(Typography)`
   line-height: 150%;
   letter-spacing: -0.02em;
   color: #ffffff;
+
+  @media (max-width: 600px) {
+    font-size: 12px;
+  }
 `
 
 const CountDownBg = styled(Box)`
@@ -152,6 +246,11 @@ const Shadow = styled(Box)`
   mix-blend-mode: multiply;
   opacity: 0.8;
   border-radius: 0 0 30px 30px;
+
+  @media (max-width: 600px) {
+    height: 100px;
+    border-radius: 0 0 15px 15px;
+  }
 `
 
 // const ChainBg = styled(Box)`
@@ -167,6 +266,7 @@ const Shadow = styled(Box)`
 // `
 
 function Banner({ banner }: { banner: BannerType }) {
+  const isSm = useBreakpoint('sm')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: banner.openAt * 1000
   })
@@ -183,7 +283,7 @@ function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: '460px',
+        height: isSm ? '125px' : '460px',
         width: '100%',
         position: 'relative'
       }}
@@ -198,7 +298,7 @@ function Banner({ banner }: { banner: BannerType }) {
           left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: '30px'
+          borderRadius: isSm ? '15px' : '30px'
         }}
       />
       {Number(banner.category) !== 0 && <Shadow style={{ position: 'absolute', bottom: 0, left: 0 }} />}
@@ -206,8 +306,8 @@ function Banner({ banner }: { banner: BannerType }) {
         <Box
           sx={{
             position: 'absolute',
-            bottom: '40px',
-            left: '40px'
+            bottom: isSm ? '16px' : '40px',
+            left: isSm ? '16px' : '40px'
           }}
         >
           {/* <Box display={'flex'} gap={4}>

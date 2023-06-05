@@ -257,7 +257,6 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                   <Grid item xs={3} sm={3} md={3} lg={3} xl={3} key={index}>
                     <Box
                       component={'a'}
-                      target="_blank"
                       href={getAuctionPoolLink(
                         fixedSwaptem.id,
                         fixedSwaptem.category,

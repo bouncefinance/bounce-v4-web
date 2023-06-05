@@ -14,6 +14,7 @@ export const routes = {
       randomSelection: '/auction/random-selection/:sysId'
     }
   },
+  okxActivity: '/okxActivity/:chainShortName/:poolId',
   login: '/login',
   loginBase: '/login_base',
   market: {
