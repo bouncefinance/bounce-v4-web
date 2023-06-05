@@ -186,7 +186,7 @@ const usePoolInfo = () => {
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(
         t0,
-        amountSwap0PRes?.[0].toString() || poolInfo.swappedAmount0
+        amountSwap0PRes?.[0].toString() || (Number(poolInfo.swappedAmount0) > 0 ? poolInfo.swappedAmount0 : '0')
       ),
       currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
       currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0).subtract(
