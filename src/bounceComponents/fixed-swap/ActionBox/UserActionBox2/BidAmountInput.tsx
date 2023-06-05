@@ -54,7 +54,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
               Max
             </Button>
             <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={24} />
-            <Typography sx={{ ml: 8 }}>{poolInfo.token1.symbol}</Typography>
+            <Typography sx={{ ml: 8, whiteSpace: 'nowrap' }}>{poolInfo.token1.symbol}</Typography>
           </>
         }
       />
