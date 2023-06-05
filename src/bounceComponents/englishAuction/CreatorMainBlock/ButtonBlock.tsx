@@ -1,5 +1,5 @@
 import { PoolStatus } from 'api/pool/type'
-import { useCreatorClaimNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
+import { useCreatorClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback, useMemo } from 'react'
 import { LoadingButton } from '@mui/lab'
@@ -9,6 +9,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+import isZero from 'utils/isZero'
 
 const ButtonBlock = () => {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
@@ -18,9 +19,13 @@ const ButtonBlock = () => {
     [chainId, poolInfo?.ethChainId]
   )
 
-  const isAllTokenSwapped = useMemo(() => !!poolInfo?.currentBidder, [poolInfo])
+  const isAllTokenSwapped = useMemo(() => !!poolInfo?.currentBidder && !isZero(poolInfo.currentBidder), [poolInfo])
 
-  const { run: claim, submitted } = useCreatorClaimNFT(poolInfo?.poolId || '', poolInfo?.name || '')
+  const { run: claim, submitted } = useCreatorClaimEnglishAuctionNFT(
+    poolInfo?.poolId || '',
+    poolInfo?.name || '',
+    poolInfo?.contract
+  )
 
   const successDialogContent = useMemo(() => {
     const token1ToClaimText = `${poolInfo?.currentBidderAmount1?.toSignificant()} ${poolInfo?.token1.symbol}`

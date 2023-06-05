@@ -153,8 +153,8 @@ export default function ParticipatedTab({
                   ) : (
                     <Box
                       component={'a'}
-                      target="_blank"
                       href={getAuctionPoolLink(
+                        auctionPoolItem.id,
                         auctionPoolItem.category,
                         auctionPoolItem.chainId,
                         auctionPoolItem.poolId

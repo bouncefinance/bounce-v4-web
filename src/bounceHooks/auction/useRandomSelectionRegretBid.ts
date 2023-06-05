@@ -14,7 +14,7 @@ const useRegretBid = (poolInfo: FixedSwapPoolProp) => {
 
   // const isNotInWhitelist = useIsNotInWhitelist()
 
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
 
   const run = useCallback(async (): Promise<{
     hash: string

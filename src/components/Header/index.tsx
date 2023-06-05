@@ -15,7 +15,6 @@ import NetworkPopperSelect from './NetworkPopperSelect'
 import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { useUserInfo } from 'state/users/hooks'
-import LoginModal from './LoginModal'
 import { ReactComponent as UserIcon } from 'assets/svg/account/user.svg'
 import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
 import { useHeaderBgOpacity } from 'hooks/useScroll'
@@ -152,6 +151,11 @@ export default function Header() {
 
   const { token } = useUserInfo()
   const { pathname } = useLocation()
+
+  const mobileHideHeader = useMemo(() => {
+    return pathname.includes('okxActivity')
+  }, [pathname])
+
   const navigate = useNavigate()
   const headerBgOpacity = useHeaderBgOpacity()
 
@@ -226,8 +230,11 @@ export default function Header() {
   )
 
   return (
-    <>
-      <LoginModal />
+    <Box
+      sx={{
+        display: { xs: mobileHideHeader ? 'none' : 'block', md: 'block' }
+      }}
+    >
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
       <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
@@ -277,6 +284,6 @@ export default function Header() {
           </ShowOnMobile>
         </Box>
       </StyledAppBar>
-    </>
+    </Box>
   )
 }

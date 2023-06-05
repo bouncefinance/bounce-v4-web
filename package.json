@@ -75,6 +75,7 @@
     "start": "craco start",
     "start:service-worker": "yarn build && yarn serve -s build",
     "build": "yarn lint:fix && craco build",
+    "build:alpha": "env-cmd -f ./.env.alpha.production yarn build",
     "build:test": "env-cmd -f ./.env.test.production yarn build",
     "test": "craco test --env=jsdom",
     "eject": "craco eject",

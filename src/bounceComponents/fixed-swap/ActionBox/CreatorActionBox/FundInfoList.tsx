@@ -7,6 +7,8 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { FixedSwapPoolProp } from 'api/pool/type'
 import CurrencyLogo from 'components/essential/CurrencyLogo'
 import { shortenAddress } from 'utils'
+import TokenUnlockingInfo from '../UserActionBox2/TokenUnlockingInfo'
+import moment from 'moment'
 
 const TX_FEE_RATIO = 0.025
 
@@ -15,6 +17,8 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
     .times(poolInfo.ratio)
     .times(TX_FEE_RATIO)
     .toFormat(6)
+  const isClaimingDelayed = poolInfo.claimAt > poolInfo.closeAt
+  const formattedClaimTime = moment(poolInfo.claimAt * 1000).format('MMM D, YYYY hh:mm A')
 
   return (
     <Stack spacing={10} sx={{ mt: 16, mb: 24 }}>
@@ -57,6 +61,13 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
           <CopyToClipboard text={poolInfo.creator} />
         </Stack>
       </PoolInfoItem>
+
+      {poolInfo.poolVersion === 1 && isClaimingDelayed && (
+        <PoolInfoItem title="Delay Unlocking Token Date">{formattedClaimTime}</PoolInfoItem>
+      )}
+      {poolInfo.poolVersion === 2 && poolInfo.releaseType !== undefined && poolInfo.releaseData && (
+        <TokenUnlockingInfo releaseData={poolInfo.releaseData} releaseType={poolInfo.releaseType} />
+      )}
     </Stack>
   )
 }

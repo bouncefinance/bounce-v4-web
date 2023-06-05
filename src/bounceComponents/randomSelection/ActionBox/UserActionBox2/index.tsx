@@ -16,7 +16,12 @@ const UserActionBox2 = ({
   isWinnerSeedDone?: boolean
 }) => {
   const { account } = useActiveWeb3React()
-  const isJoined = useIsJoinedRandomSelectionPool(Number(poolInfo.poolId), account || undefined)
+  const isJoined = useIsJoinedRandomSelectionPool(
+    Number(poolInfo.poolId),
+    account || undefined,
+    poolInfo.contract,
+    poolInfo.ethChainId
+  )
   return (
     <Box sx={{ width: '100%', maxWidth: '444px', margin: '0 auto', flex: 1, pt: 28 }}>
       <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} isJoined={isJoined} />

@@ -16,9 +16,7 @@ export default function Erc721Pool() {
 
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <Auction721ParametersForm />}
 
-          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && (
-            <AdvancedSettingsForm hideDelayUnlocking hideRefundable />
-          )}
+          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm hideRefundable />}
         </Box>
       ) : (
         <Creation721Confirmation />

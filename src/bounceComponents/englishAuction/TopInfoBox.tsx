@@ -17,7 +17,15 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => <Typograph
 const TopInfoBox = (): JSX.Element => {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
 
-  const list = [1]
+  const list = useMemo(() => {
+    if (!poolInfo) return []
+    const ids = poolInfo.tokenId.split(',')
+    return ids.map(id => ({
+      name: poolInfo.token0.symbol || `nft #${id}`,
+      tokenId: id,
+      image: poolInfo.token0.largeUrl
+    }))
+  }, [poolInfo])
 
   const isOneNft = useMemo(() => list.length === 1, [list.length])
 
@@ -38,11 +46,11 @@ const TopInfoBox = (): JSX.Element => {
         <Box display={isOneNft ? 'contents' : 'inline-flex'} gap={10}>
           {list.map(item => (
             <ShowNFTCard
-              key={item}
+              key={item.tokenId}
               hideClose
-              name={'test'}
-              tokenId={'1'}
-              image={''}
+              name={item.name}
+              tokenId={item.tokenId}
+              image={item.image}
               boxH={isOneNft ? 320 : 220}
               imgH={isOneNft ? 248 : 170}
               style={{

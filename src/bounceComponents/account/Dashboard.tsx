@@ -2,11 +2,11 @@ import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { Link } from 'react-router-dom'
-import { routes } from 'constants/routes'
 import { PoolType } from 'api/pool/type'
 import { useMemo } from 'react'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from 'constants/chain'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 const StyledStatCard = styled(Box)({
   height: 100,
@@ -151,23 +151,8 @@ export function DashboardToPoolButton({
   poolId: number
   backedChainId: number
 }) {
-  const optionDatas = useOptionDatas()
   return (
-    <Link
-      to={
-        category === PoolType.fixedSwapNft
-          ? routes.auction.fixedSwapNft
-              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
-              .replace(':poolId', poolId.toString())
-          : category === PoolType.Lottery
-          ? routes.auction.randomSelection
-              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
-              .replace(':poolId', poolId.toString())
-          : routes.auction.fixedPrice
-              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
-              .replace(':poolId', poolId.toString())
-      }
-    >
+    <Link to={getAuctionPoolLink(undefined, category, backedChainId, poolId.toString())}>
       <Button color="secondary" variant="contained" sx={btnStyle}>
         {text}
       </Button>

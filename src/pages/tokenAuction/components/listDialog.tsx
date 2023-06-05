@@ -272,7 +272,14 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                   <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
                     <Box
                       onClick={() =>
-                        navigate(getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId))
+                        navigate(
+                          getAuctionPoolLink(
+                            fixedSwaptem.id,
+                            fixedSwaptem.category,
+                            fixedSwaptem.chainId,
+                            fixedSwaptem.poolId
+                          )
+                        )
                       }
                     >
                       <AuctionCard

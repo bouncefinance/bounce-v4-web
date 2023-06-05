@@ -2,8 +2,6 @@ import { H3, H4 } from '../../../components/Text'
 import { Box, Container, MenuItem, Select, Button } from '@mui/material'
 import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
-import { routes } from '../../../constants/routes'
-import { getLabelById } from '../../../utils'
 import { NFTCard } from '../../../pages/market/nftAuctionPool'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
 import { useRequest } from 'ahooks'
@@ -16,6 +14,7 @@ import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import { HomeNFTSkeletonCard } from '../Notable721'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 interface Notable1155Props {
   handleViewAll?: () => void
 }
@@ -97,14 +96,7 @@ export const Notable1155 = (props: Notable1155Props) => {
               ? data.list.map((item: FixedSwapPool, idx: number) => (
                   <SwiperSlide key={idx}>
                     <Box style={{ width: '309px' }}>
-                      <Link
-                        to={routes.auction.fixedSwapNft
-                          .replace(
-                            ':chainShortName',
-                            getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                          )
-                          .replace(':poolId', item.poolId)}
-                      >
+                      <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
                         <NFTCard nft={item} hiddenStatus={true} />
                       </Link>
                     </Box>

@@ -13,11 +13,11 @@ import {
 import moment from 'moment'
 
 import NoData from 'bounceComponents/common/NoData'
-import usePoolHistory from 'bounceHooks/auction/useNftPoolHistory'
-import { PoolEvent } from 'api/pool/type'
+import { PoolEvent, PoolType } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { shortenAddress } from 'utils'
 import { removeRedundantZeroOfFloat } from 'utils/number'
+import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,8 +57,16 @@ const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Reversed: RegretTypography
 }
 
-const ActionHistory = () => {
-  const { data, loading: isGettingPoolHistory } = usePoolHistory()
+const ActionHistory = ({
+  backedChainId,
+  poolId,
+  category
+}: {
+  backedChainId: number
+  poolId: string
+  category: PoolType
+}) => {
+  const { data, loading: isGettingPoolHistory } = usePoolHistory(backedChainId, poolId, category)
 
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>

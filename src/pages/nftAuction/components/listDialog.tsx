@@ -10,13 +10,11 @@ import { NFTCard } from 'pages/market/nftAuctionPool/index'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { getPools } from 'api/market'
-import { routes } from 'constants/routes'
-import { getLabelById } from 'utils'
-import { useOptionDatas } from 'state/configOptions/hooks'
 import FooterPc from 'components/Footer/FooterPc'
 import FixedSelected from 'components/FixedNftSelected'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -127,7 +125,6 @@ export interface InitialValuesPros {
 const defaultIdeaPageSize = 16
 const NFTAuctionListDialog = (props: DialogParams) => {
   const { open, handleClose } = props
-  const optionDatas = useOptionDatas()
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
   const {
     pagination: poolsPagination,
@@ -260,13 +257,12 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                   <Grid item xs={3} sm={3} md={3} lg={3} xl={3} key={index}>
                     <Box
                       component={'a'}
-                      target="_blank"
-                      href={routes.auction.fixedSwapNft
-                        .replace(
-                          ':chainShortName',
-                          getLabelById(fixedSwaptem.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                        )
-                        .replace(':poolId', fixedSwaptem.poolId)}
+                      href={getAuctionPoolLink(
+                        fixedSwaptem.id,
+                        fixedSwaptem.category,
+                        fixedSwaptem.chainId,
+                        fixedSwaptem.poolId.toString()
+                      )}
                     >
                       <NFTCard nft={fixedSwaptem} hiddenStatus={true} />
                     </Box>

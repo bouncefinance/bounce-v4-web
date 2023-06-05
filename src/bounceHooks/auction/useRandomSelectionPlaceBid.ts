@@ -18,7 +18,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
   const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
 
   const run = useCallback(
     async (

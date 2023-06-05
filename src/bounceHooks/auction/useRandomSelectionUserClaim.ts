@@ -12,7 +12,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
 
   const submitted = useUserHasSubmittedRecords(account || undefined, 'random_selection_user_claim', poolInfo.poolId)
 
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
 
   const run = useCallback(async (): Promise<{
     hash: string
