@@ -100,9 +100,13 @@ function ArrowBanner({ type }: { type?: string }) {
       alignItems={'center'}
       sx={{
         maxWidth: '1296px',
-        width: isSm ? '90%' : '100%',
+        width: '100%',
         minHeight: isSm ? 125 : 460,
-        margin: '16px auto 0'
+        margin: '16px auto 0',
+        '@media(max-width:1296px)': {
+          padding: '0 16px',
+          margin: '16px auto'
+        }
       }}
       onMouseEnter={EnterSwiper}
       onMouseLeave={LeaveSwiper}
@@ -293,7 +297,8 @@ function Banner({ banner }: { banner: BannerType }) {
       sx={{
         display: 'flex',
         height: isSm ? '400px' : '460px',
-        width: { sm: '328px', lg: '100%' },
+        // width: { sm: '328px', lg: '100%' },
+        width: '100%',
         position: 'relative'
       }}
       onClick={() => handleClick(banner.url || '')}

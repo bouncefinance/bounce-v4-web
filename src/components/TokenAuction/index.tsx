@@ -209,7 +209,7 @@ const TokenAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [currentIndex, setCurrentIndex] = useState(0)
   const isSm = useBreakpoint('sm')
-
+  const isMd = useBreakpoint('md')
   const { data: nftPoolData, loading: nftLoading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -229,6 +229,7 @@ const TokenAuction: React.FC = () => {
       total: resp.data.fixedSwapNftList.total
     }
   })
+
   const { data: countData } = useRequest(async () => {
     const resp = await getAuctionTypeCountData()
     return {
@@ -587,18 +588,21 @@ const TokenAuction: React.FC = () => {
           <Box
             sx={{
               position: 'absolute',
-              width: isSm ? '100%' : 1440,
+              width: 1440,
               minHeight: 496,
               top: 622,
               left: 0,
+              borderRadius: 30,
+              margin: '0 auto',
+              background: '#fff',
+              padding: isSm ? 8 : 24,
               '@media(min-width:1440px)': {
                 transform: 'translateX(-50%)',
                 left: '50%'
               },
-              borderRadius: 30,
-              margin: '0 auto',
-              background: '#fff',
-              padding: isSm ? 8 : 24
+              '@media(max-width:1440px)': {
+                width: '100%'
+              }
             }}
           >
             <Box
@@ -625,9 +629,9 @@ const TokenAuction: React.FC = () => {
                         ))}
                       </Grid>
                     ))}
-                  {isSm ? (
+                  {isMd ? (
                     <Stack
-                      spacing={18}
+                      gap={18}
                       direction={'row'}
                       sx={{
                         overflowX: 'scroll',
@@ -832,7 +836,10 @@ const TokenAuction: React.FC = () => {
                 width: '100%',
                 display: 'flex',
                 flexFlow: 'row nowrap',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                '@media(max-width:1440px)': {
+                  width: '100vw'
+                }
               }}
             >
               <Button
