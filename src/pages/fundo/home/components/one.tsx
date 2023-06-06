@@ -1,13 +1,13 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
 import FixedLeft from 'components/Fundo/Banner/FixedLeft'
 export default function One() {
+  const theme = useTheme()
   return (
     <CenterSection
       style={{
-        height: '100vh',
-        minHeight: '880px',
+        height: `calc(100vh - ${theme.height.header})`,
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'flex-end',
@@ -53,7 +53,8 @@ export default function One() {
             display: 'flex',
             flexFlow: 'row nowrap',
             justifyContent: 'center',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
+            marginBottom: '40px'
           }}
           gap={'40px'}
         >

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
 import FixedLeft from 'components/Fundo/Banner/FixedLeft'
@@ -6,11 +6,13 @@ import { useIsSMDown } from 'themes/useTheme'
 import React from 'react'
 const OneMobile: React.FC = () => {
   const isSm = useIsSMDown()
+  const theme = useTheme()
+
   return (
     <CenterSection
       style={{
         position: 'relative',
-        minHeight: '100vh',
+        minHeight: `calc(100vh - ${theme.height.header})`,
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'flex-end',

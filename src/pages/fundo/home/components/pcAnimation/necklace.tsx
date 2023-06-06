@@ -62,7 +62,7 @@ const Necklace = ({
       style={{
         position: 'fixed',
         top: `${animationRatio ? Number(animationRatio) * 50 : 0}%`,
-        width: isSm ? '80%' : '600px',
+        width: isSm ? '100%' : '600px',
         height: isSm ? 'auto' : '750px',
         left: '50%',
         transform: `translate3D(-50%, -${

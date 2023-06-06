@@ -109,6 +109,7 @@ export default function Four() {
 
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             width: isSm ? '280px' : '950px',
             margin: '0 auto',
             fontWeight: 600,

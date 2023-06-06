@@ -141,9 +141,9 @@ const MobileHome: React.FC = () => {
           zIndex: 1
         }}
       ></Box>
-      {animate1Show && <Necklace style={{}} onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
       {animate2Step !== AnimateStep.notShow && <ThreeCard step={animate2Step} animationRatio={animate2Ratio} />}
       {animate2_1Step !== AnimateStep.notShow && <TextAniamte step={animate2_1Step} animationRatio={animate2_1Ratio} />}
+      {animate1Show && <Necklace style={{}} onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
       <OneMobile />
       <Box
         sx={{

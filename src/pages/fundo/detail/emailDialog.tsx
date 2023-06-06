@@ -2,9 +2,10 @@ import { Box, Typography, styled } from '@mui/material'
 import EmailIcon from 'components/Fundo/assets/img/email.png'
 import CloseIcon from 'components/Fundo/assets/img/mobile/x.svg'
 import { useIsSMDown } from 'themes/useTheme'
-import SendBtn from 'components/Fundo/assets/img/sendEmail.svg'
+import SendBtnImg from 'components/Fundo/assets/img/sendEmail.svg'
+import sendEmailBlack from 'components/Fundo/assets/img/sendEmailBlack.svg'
 import { fundoRegisterEmail } from 'api/fundo'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { toast } from 'react-toastify'
 const InputEl = styled('input')(({ theme }) => ({
@@ -22,10 +23,45 @@ const InputEl = styled('input')(({ theme }) => ({
     fontSize: '14px'
   }
 }))
+const SendBtn = ({ sendEmail }: { sendEmail?: () => void }) => {
+  const [isHover, setIsHover] = useState(false)
+  const imgBg = useMemo(() => {
+    return isHover ? sendEmailBlack : SendBtnImg
+  }, [isHover])
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: '20px',
+        '&:hover': {
+          background: '#fff'
+        }
+      }}
+      onMouseEnter={() => {
+        setIsHover(true)
+      }}
+      onMouseLeave={() => {
+        setIsHover(false)
+      }}
+    >
+      <img
+        src={imgBg}
+        style={{
+          cursor: 'pointer'
+        }}
+        onClick={sendEmail}
+        alt=""
+      />
+    </Box>
+  )
+}
 export default function EmailDialog({ handleClose }: { handleClose?: () => void }) {
   const isSm = useIsSMDown()
   const { account } = useActiveWeb3React()
   const [email, setEmail] = useState('')
+  const [isRegisterDone, setIsRegisterDone] = useState(false)
   const sendEmail = async () => {
     if (!email) {
       toast.warning(`email can't be empty~`)
@@ -38,7 +74,7 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
     })
     if (code === 200 && msg === 'ok') {
       toast.success('Successful operation~')
-      handleClose && handleClose()
+      setIsRegisterDone(true)
     } else {
       toast.warning(msg)
     }
@@ -99,6 +135,7 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
           src={CloseIcon}
           alt=""
           onClick={() => {
+            setIsRegisterDone(false)
             handleClose && handleClose()
           }}
         />
@@ -145,34 +182,44 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
               you to join the party.
             </Typography>
           </Box>
-          <Box
-            sx={{
-              height: '56px',
-              borderBottom: '1px solid #626262',
-              display: 'flex',
-              flexFlow: 'row nowrap',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-            gap={'30px'}
-          >
-            <InputEl
-              type="text"
-              onChange={e => {
-                const value = e.target.value
-                setEmail(value)
+          {!isRegisterDone && (
+            <Box
+              sx={{
+                height: '56px',
+                borderBottom: '1px solid #626262',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
-              placeholder="Email adress"
-            />
-            <img
-              src={SendBtn}
-              style={{
-                cursor: 'pointer'
+              gap={'30px'}
+            >
+              <InputEl
+                type="text"
+                onChange={e => {
+                  const value = e.target.value
+                  setEmail(value)
+                }}
+                placeholder="Email adress"
+              />
+              <SendBtn sendEmail={sendEmail} />
+            </Box>
+          )}
+          {isRegisterDone && (
+            <Typography
+              sx={{
+                width: '100%',
+                fontFamily: `'Inter'`,
+                fontWeight: 400,
+                fontSize: isSm ? '14px' : '16px',
+                letterSpacing: '-0.02em',
+                color: '#fff',
+                marginTop: '56px'
               }}
-              onClick={sendEmail}
-              alt=""
-            />
-          </Box>
+            >
+              Email has been sent, please wait for our auction to start
+            </Typography>
+          )}
         </Box>
       </Box>
     </Box>

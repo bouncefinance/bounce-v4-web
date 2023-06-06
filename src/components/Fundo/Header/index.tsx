@@ -45,15 +45,18 @@ export default function Header() {
   const menuList = [
     {
       title: 'TOKEN DETAILS',
-      link: routes.fundo.detail
+      link: routes.fundo.detail,
+      external: false
     },
     {
       title: 'AUCTION  DETAILS',
-      link: routes.fundo.detail
+      link: routes.fundo.detail,
+      external: false
     },
     {
       title: 'JOIN DISCORD',
-      link: routes.fundo.detail
+      link: 'https://discord.com/invite/EFQC6jYd8e',
+      external: true
     }
   ]
   return (
@@ -133,22 +136,43 @@ export default function Header() {
               gap={'16px'}
             >
               {menuList.reverse().map((item, index) => {
-                return (
-                  <Link
-                    key={index}
-                    to={item.link}
-                    style={{
-                      textDecoration: 'none'
-                    }}
-                    onClick={() => {
-                      setIsOpen(false)
-                    }}
-                  >
-                    <LinkItem key={index} className={index === 0 ? 'hover' : ''}>
-                      {item.title}
-                    </LinkItem>
-                  </Link>
-                )
+                if (item.external) {
+                  return (
+                    <a
+                      key={index}
+                      href={item.link}
+                      target={'_blank'}
+                      style={{
+                        textDecoration: 'none'
+                      }}
+                      onClick={() => {
+                        setIsOpen(false)
+                      }}
+                      rel="noreferrer"
+                    >
+                      <LinkItem key={index} className={index === 0 ? 'hover' : ''}>
+                        {item.title}
+                      </LinkItem>
+                    </a>
+                  )
+                } else {
+                  return (
+                    <Link
+                      key={index}
+                      to={item.link}
+                      style={{
+                        textDecoration: 'none'
+                      }}
+                      onClick={() => {
+                        setIsOpen(false)
+                      }}
+                    >
+                      <LinkItem key={index} className={index === 0 ? 'hover' : ''}>
+                        {item.title}
+                      </LinkItem>
+                    </Link>
+                  )
+                }
               })}
             </Box>
           )}
@@ -164,17 +188,38 @@ export default function Header() {
               gap={'64px'}
             >
               {menuList.map((item, index) => {
-                return (
-                  <Link
-                    key={index}
-                    to={item.link}
-                    style={{
-                      textDecoration: 'none'
-                    }}
-                  >
-                    <LinkItem key={index}>{item.title}</LinkItem>
-                  </Link>
-                )
+                if (item.external) {
+                  return (
+                    <a
+                      key={index}
+                      href={item.link}
+                      target={'_blank'}
+                      style={{
+                        textDecoration: 'none'
+                      }}
+                      onClick={() => {
+                        setIsOpen(false)
+                      }}
+                      rel="noreferrer"
+                    >
+                      <LinkItem key={index} className={index === 0 ? 'hover' : ''}>
+                        {item.title}
+                      </LinkItem>
+                    </a>
+                  )
+                } else {
+                  return (
+                    <Link
+                      key={index}
+                      to={item.link}
+                      style={{
+                        textDecoration: 'none'
+                      }}
+                    >
+                      <LinkItem key={index}>{item.title}</LinkItem>
+                    </Link>
+                  )
+                }
               })}
             </Box>
           )}

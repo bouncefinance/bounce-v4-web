@@ -70,7 +70,7 @@ const PcHome: React.FC = () => {
         _AnimateHeight1 + 2800 + winH + winH / 2 + 1600
       ]
       // 6 partner enter animation
-      const animate6range = [_AnimateHeight1 + 2800 + winH + 2400, _AnimateHeight1 + 2800 + winH + 3200]
+      const animate6range = [_AnimateHeight1 + 2800 + winH + 1500, _AnimateHeight1 + 2800 + winH + 3200]
       // 7 partner active rotate animation
       const animate7range = [_AnimateHeight1 + 2800 + winH + 3200, _AnimateHeight1 + 2800 + winH + 4000]
       // 8 partner leave animation

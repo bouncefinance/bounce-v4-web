@@ -23,8 +23,11 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
       <Typography
         sx={{
           fontWeight: 600,
-          fontSize: isMs ? '22px' : '36px',
-          marginBottom: isMs ? '10px' : '38px'
+          fontSize: isMs ? '22px' : '34px',
+          marginBottom: isMs ? '10px' : '38px',
+          color: 'var(--ps-text-5)',
+          whiteSpace: 'nowrap',
+          textAlign: 'center'
         }}
       >
         # 01

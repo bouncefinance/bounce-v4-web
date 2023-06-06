@@ -13,20 +13,83 @@ const LoopColumn = styled(Box)(() => ({
   overflow: 'hidden',
   '.centent': {
     width: ' 18px',
-    animation: `columnLoop 15s linear 0s infinite`
+    animation: `columnLoop 3s linear 0s infinite`
   },
   '@keyframes columnLoop': {
     '0%': {
       transform: 'translateY(0)'
     },
     '100%': {
-      transform: 'translateY(-100%)'
+      transform: 'translateY(-236px)'
     }
   }
 }))
 export default function LeftBar() {
   const isSm = useIsSMDown()
   const imgList = [
+    {
+      src: LeftP1,
+      style: {
+        width: '10px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP2,
+      style: {
+        width: '10px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP3,
+      style: {
+        width: '18px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP1,
+      style: {
+        width: '10px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP2,
+      style: {
+        width: '10px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP3,
+      style: {
+        width: '18px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP1,
+      style: {
+        width: '10px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP2,
+      style: {
+        width: '10px',
+        marginBottom: '15px'
+      }
+    },
+    {
+      src: LeftP3,
+      style: {
+        width: '18px',
+        marginBottom: '15px'
+      }
+    },
     {
       src: LeftP1,
       style: {
