@@ -11,7 +11,7 @@ export function useCreatorClaim(poolId: number | string, name: string, contract?
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 
-  const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId)
+  const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId + '_random')
 
   const run = useCallback(async (): Promise<{
     hash: string
@@ -37,7 +37,7 @@ export function useCreatorClaim(poolId: number | string, name: string, contract?
         summary: `Creator claim assets for ${name}`,
         userSubmitted: {
           account,
-          action: funcName,
+          action: funcName + '_random',
           key: poolId
         }
       })
