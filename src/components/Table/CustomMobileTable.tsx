@@ -41,6 +41,9 @@ export function OwnerCell({ url, name }: { url?: string; name: string }) {
 }
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: '90%'
+  },
   display: 'table',
   borderRadius: '40px',
   '& .MuiTableCell-root': {
@@ -82,6 +85,9 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
     },
     '&:first-of-type': {
       paddingLeft: 20,
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: 5
+      },
       borderTopLeftRadius: 8
     },
     '&:last-child': {
@@ -115,7 +121,10 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
     '&:first-of-type': {
       borderLeft: '1px solid',
       borderColor: variant === 'outlined' ? '#00000010' : 'transparent',
-      paddingLeft: '20px',
+      paddingLeft: 20,
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: 0
+      },
       borderTopLeftRadius: 16,
       borderBottomLeftRadius: 16
     },
@@ -152,7 +161,11 @@ const sortIcon = ({ className }: { className: string }) => (
     />
   </svg>
 )
-
+const StyledTable = styled('table')(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: 'calc(100vw - 12px - 30px) !important'
+  }
+}))
 export default function CustomMobileTable({
   header,
   rows,
@@ -179,7 +192,7 @@ export default function CustomMobileTable({
   return (
     <>
       <StyledTableContainer>
-        <table>
+        <StyledTable>
           <StyledTableHead>
             <TableRow>
               {header.map((string, idx) => (
@@ -214,10 +227,6 @@ export default function CustomMobileTable({
                       }}
                     >
                       {string}
-
-                      {/* <Box component="span" sx={visuallyHidden}>
-                          {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                        </Box> */}
                     </TableSortLabel>
                   ) : (
                     string
@@ -238,7 +247,7 @@ export default function CustomMobileTable({
               />
             ))}
           </TableBody>
-        </table>
+        </StyledTable>
       </StyledTableContainer>
     </>
   )
