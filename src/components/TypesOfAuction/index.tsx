@@ -365,7 +365,20 @@ const TypesOfAuction: React.FC = () => {
               padding: [8, 16]
             }}
           >
-            <Grid container sx={{ width: ['100%', 'min-content'] }} spacing={[8, 16]}>
+            <Grid
+              container
+              sx={{
+                width: ['100%', 'min-content'],
+                '@media(max-width:600px)': {
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2,1fr)',
+                  justifyItems: 'center'
+                },
+                display: 'grid',
+                gridTemplateColumns: 'repeat(1,1fr)'
+              }}
+              spacing={[8, 16]}
+            >
               {leftAuctioinList.map((item, index) => (
                 <Grid item key={index} sm={6} lg={12}>
                   <AuctionItem
@@ -446,7 +459,20 @@ const TypesOfAuction: React.FC = () => {
               padding: 16
             }}
           >
-            <Grid container sx={{ width: ['100%', 'min-content'] }} spacing={[8, 16]}>
+            <Grid
+              container
+              sx={{
+                width: ['100%', 'min-content'],
+                '@media(max-width:600px)': {
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2,1fr)',
+                  justifyItems: 'center'
+                },
+                display: 'grid',
+                gridTemplateColumns: 'repeat(1,1fr)'
+              }}
+              spacing={[8, 16]}
+            >
               {rightAuctioinList.map((item, index) => (
                 <Grid item key={index} sm={6} lg={12}>
                   <AuctionItem
