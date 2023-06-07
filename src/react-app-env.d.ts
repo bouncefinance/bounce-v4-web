@@ -10,6 +10,21 @@ interface Window {
     request?: (...args: any[]) => void
     removeListener?: (...args: any[]) => void
   }
+  okxwallet?: {
+    isMetaMask?: false
+    on?: (...args: any[]) => void
+    send: (...args: any[]) => Promise<any>
+    enable: (...args: any[]) => Promise<any>
+    request?: (...args: any[]) => Promise<any>
+    removeListener?: (...args: any[]) => void
+    autoRefreshOnNetworkChange?: any
+    cachedResults?: any
+    isDapper?: boolean
+    chainId?: number
+    netVersion?: number
+    networkVersion?: number
+    _chainId?: number
+  }
   // eslint-disable-next-line @typescript-eslint/ban-types
   web3?: {}
 }

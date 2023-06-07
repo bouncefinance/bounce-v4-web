@@ -9,18 +9,15 @@ import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 import { FixedSwapPoolProp } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { shortenAddress } from 'utils'
+import TokenUnlockingInfo from './TokenUnlockingInfo'
 
 const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
-  const formatedSwappedAmount0 = poolInfo.participant.currencySwappedAmount0?.greaterThan('0')
-    ? poolInfo.participant.currencySwappedAmount0.toSignificant()
-    : '0'
-
   const isJoined = useIsUserJoinedPool(poolInfo)
-  const isClaimmingDelayed = poolInfo.claimAt > poolInfo.closeAt
+  const isClaimingDelayed = poolInfo.claimAt > poolInfo.closeAt
   const formattedClaimTime = moment(poolInfo.claimAt * 1000).format('MMM D, YYYY hh:mm A')
 
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate: isClaimmingDelayed ? poolInfo.claimAt * 1000 : poolInfo.closeAt * 1000,
+    targetDate: isClaimingDelayed ? poolInfo.claimAt * 1000 : poolInfo.closeAt * 1000,
     onEnd: getPoolInfo
   })
 
@@ -41,7 +38,7 @@ const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getP
 
         <PoolInfoItem title="Successful bid amount" tip="The amount of token you successfully secured.">
           <Stack direction="row" spacing={6}>
-            <Typography>{formatedSwappedAmount0}</Typography>
+            <Typography>{poolInfo.participant?.currencySwappedAmount0?.toSignificant() || '0'}</Typography>
             <TokenImage alt={poolInfo.token0.symbol} src={poolInfo.token0.largeUrl} size={20} />
             <Typography>{poolInfo.token0.symbol}</Typography>
           </Stack>
@@ -54,7 +51,24 @@ const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getP
           </Stack>
         </PoolInfoItem>
 
-        {isClaimmingDelayed && <PoolInfoItem title="Delay Unlocking Token Date">{formattedClaimTime}</PoolInfoItem>}
+        {poolInfo.poolVersion === 1 && isClaimingDelayed && (
+          <PoolInfoItem title="Delay Unlocking Token Date">{formattedClaimTime}</PoolInfoItem>
+        )}
+        {poolInfo.poolVersion === 2 && poolInfo.releaseType !== undefined && poolInfo.releaseData && (
+          <TokenUnlockingInfo releaseData={poolInfo.releaseData} releaseType={poolInfo.releaseType} />
+        )}
+
+        {poolInfo.poolVersion === 2 && poolInfo.participant.currencySwappedAmount0?.greaterThan('0') && (
+          <>
+            <PoolInfoItem title="Unlock progress">
+              {poolInfo.participant.currencyCurReleasableAmount?.toSignificant()}/
+              {poolInfo.participant.currencySwappedAmount0?.toSignificant()}
+            </PoolInfoItem>
+            <PoolInfoItem title="Claimable">
+              {poolInfo.participant.currencyCurClaimableAmount?.toSignificant() || '-'}
+            </PoolInfoItem>
+          </>
+        )}
       </Stack>
 
       {isJoined && countdown > 0 ? (

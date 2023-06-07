@@ -2,8 +2,6 @@ import { H4 } from '../../../components/Text'
 import { Box, Button, Container, MenuItem, Select, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
-import { routes } from '../../../constants/routes'
-import { getLabelById } from '../../../utils'
 import { NFTCard } from '../../../pages/market/nftAuctionPool'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
 import { useRequest } from 'ahooks'
@@ -15,6 +13,9 @@ import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import useBreakpoint from 'hooks/useBreakpoint'
+import useResizeView from 'utils/useResizeView'
 
 interface Notable721Props {
   handleViewAll?: () => void
@@ -78,6 +79,8 @@ export const Notable721 = (props: Notable721Props) => {
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
+  const isSm = useBreakpoint('sm')
+  const [slidesPerView] = useResizeView()
   const { data, loading } = useRequest(
     async () => {
       const resp = await getPools({
@@ -107,13 +110,18 @@ export const Notable721 = (props: Notable721Props) => {
   return (
     <Box sx={{ padding: '80px 0 100px' }}>
       <Container>
-        <CenterRow mb={33} justifyContent={'space-between'}>
+        <CenterRow
+          mb={33}
+          justifyContent={'space-between'}
+          p={16}
+          sx={{ flexDirection: isSm ? 'column' : 'row', alignItems: isSm ? 'flex-start' : 'center' }}
+        >
           <H4>ERC721</H4>
-          <Row gap={8}>
+          <Row gap={8} mt={20}>
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.NFT} />
             <Select
               sx={{
-                width: '200px',
+                width: isSm ? '160px' : '200px',
                 height: '38px'
               }}
               value={chainFilter}
@@ -136,11 +144,33 @@ export const Notable721 = (props: Notable721Props) => {
           <Box>
             <EmptyData />
           </Box>
+        ) : isSm ? (
+          <Box
+            pl={16}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'nowrap',
+              overflowX: 'auto',
+              gap: 12,
+              '&::-webkit-scrollbar': { display: 'none' }
+            }}
+          >
+            {data
+              ? data.list.map((item: FixedSwapPool, idx: number) => (
+                  <Box style={{ width: '309px' }} key={idx}>
+                    <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
+                      <NFTCard nft={item} hiddenStatus={true} />
+                    </Link>
+                  </Box>
+                ))
+              : []}
+          </Box>
         ) : (
           <SlideProgress
             swiperStyle={{
               spaceBetween: 20,
-              slidesPerView: 4,
+              slidesPerView: slidesPerView,
               loop: false
             }}
           >
@@ -148,14 +178,7 @@ export const Notable721 = (props: Notable721Props) => {
               ? data.list.map((item: FixedSwapPool, idx: number) => (
                   <SwiperSlide key={idx}>
                     <Box style={{ width: '309px' }}>
-                      <Link
-                        to={routes.auction.fixedSwapNft
-                          .replace(
-                            ':chainShortName',
-                            getLabelById(item.chainId, 'shortName', optionDatas?.chainInfoOpt || [])
-                          )
-                          .replace(':poolId', item.poolId)}
-                      >
+                      <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
                         <NFTCard nft={item} hiddenStatus={true} />
                       </Link>
                     </Box>

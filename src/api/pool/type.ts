@@ -2,6 +2,7 @@ import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
 import { CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export enum PoolType {
@@ -41,7 +42,7 @@ export interface GetPoolCreationSignatureParams {
   claimAt: number
   closeAt: number
   creator: string
-  maxAmount1PerWallet: string
+  maxAmount1PerWallet?: string
   merkleroot: string
   name: string
   openAt: number
@@ -55,11 +56,17 @@ export interface GetPoolCreationSignatureParams {
   maxPlayer?: number
   totalShare?: string | number
   nShare?: string | number
+  releaseType?: IReleaseType
+  releaseData?: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 
 export interface GetPoolCreationSignatureResponse {
   expiredTime: number
   signature: string
+  id: number
 }
 
 export interface GetWhitelistMerkleTreeRootParams {
@@ -81,9 +88,10 @@ export enum PoolStatus {
 }
 
 export interface GetPoolInfoParams {
-  category: PoolType
-  chainId: number
-  poolId: string
+  category?: PoolType
+  chainId?: number
+  poolId?: string
+  id?: number
   address?: string
   tokenType: 1 | 2
 }
@@ -145,7 +153,7 @@ export interface FixedSwapPool {
     claimed?: boolean
     regreted?: boolean
     swappedAmount0?: string
-    is721?: 0 | 1
+    is721?: 1 | 2 // 2 721
     tokenId?: string
   }
   ifCollect: boolean
@@ -159,7 +167,8 @@ export interface FixedSwapPool {
   token1: TokenFromApi
   tokenId: string
   tokenType: BackedTokenType
-  is721?: 0 | 1
+  is721?: 1 | 2
+  poolVersion?: number
 }
 
 export interface FixedSwapPoolProp extends FixedSwapPool {
@@ -176,12 +185,23 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     claimed?: boolean
     regreted?: boolean
     swappedAmount0?: string
-    currencySwappedAmount0: CurrencyAmount | undefined
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
     currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
   }
   totalShare?: string | number
   maxPlayere?: string | number
   curPlayer?: string | number
+  releaseType?: IReleaseType | undefined
+  enableReverses?: boolean
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
 }
 
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {
@@ -194,9 +214,10 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
     regreted?: boolean
     swappedAmount0?: string
     currencySwappedAmount1: CurrencyAmount | undefined
-    is721?: 0 | 1
+    is721?: 1 | 2
     tokenId?: string
   }
+  enableReverses?: boolean
 }
 
 export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
@@ -206,7 +227,7 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   participant: {
     address?: string
     claimed?: boolean
-    is721?: 0 | 1
+    is721?: 1 | 2
     tokenId?: string
   }
   creatorClaimed: boolean
@@ -215,10 +236,12 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   currentBidderMinAmount: CurrencyAmount | undefined
   gasFee: CurrencyAmount | undefined
   isWinner: boolean
+  // !TOTD
   isUserJoinedPool: boolean
 }
 
 export interface GetPoolInfoResponse {
+  poolVersion: number | undefined
   dutchPool: any
   fixedSwapPool: FixedSwapPool
   lotteryPool: any

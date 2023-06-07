@@ -12,7 +12,7 @@ const useUserClaim1155 = (poolInfo: FixedSwapNFTPoolProp) => {
 
   const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_user_claim_1155', poolInfo.poolId)
 
-  const fixedSwapNftContract = useFixedSwapNftContract()
+  const fixedSwapNftContract = useFixedSwapNftContract(poolInfo.contract)
 
   const run = useCallback(async (): Promise<{
     hash: string

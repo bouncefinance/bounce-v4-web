@@ -14,6 +14,7 @@ import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import styles from 'pages/account/tabStyles'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 const StatusText = {
   [DashboardQueryType.ongoing]: 'Ongoing Auctions',
@@ -29,6 +30,7 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
   const { account } = useActiveWeb3React()
   const [curPage, setCurPage] = useState(1)
   const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
+  const isSm = useBreakpoint('sm')
 
   const { data: createdData, loading: createdLoading } = useUserPoolsTokenCreated(
     account || undefined,
@@ -63,7 +65,11 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
                   variant="h4"
                   onClick={() => setCurQueryType(item)}
                   key={item}
-                  sx={{ ...styles.menu, ...(curQueryType === item ? styles.menuActive : ({} as any)) }}
+                  sx={{
+                    ...styles.menu,
+                    ...(curQueryType === item ? styles.menuActive : ({} as any)),
+                    padding: isSm ? '12px 16px 36px' : '16px 32px 40px'
+                  }}
                 >
                   {StatusText[item]}
                 </Typography>
@@ -72,32 +78,34 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
           </Stack>
         </Stack>
 
-        <Stack
-          direction={'row'}
-          alignItems={'center'}
-          gap="10px"
-          sx={{
-            transform: 'translateY(-5px)'
-          }}
-        >
-          <AuctionTypeSelect
-            tokenType={backedTokenType}
-            curPoolType={curPoolType}
-            setCurPoolType={t => setCurPoolType(t)}
-          />
-
-          <Pagination
-            onChange={(_, p) => handlePageChange(p)}
-            sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
-            count={Math.ceil(curList.length / defaultPageSize)}
-            renderItem={item => {
-              if (item.type === 'previous' || item.type === 'next') {
-                return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
-              }
-              return null
+        {!isSm && (
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            gap="10px"
+            sx={{
+              transform: 'translateY(-5px)'
             }}
-          />
-        </Stack>
+          >
+            <AuctionTypeSelect
+              tokenType={backedTokenType}
+              curPoolType={curPoolType}
+              setCurPoolType={t => setCurPoolType(t)}
+            />
+
+            <Pagination
+              onChange={(_, p) => handlePageChange(p)}
+              sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
+              count={Math.ceil(curList.length / defaultPageSize)}
+              renderItem={item => {
+                if (item.type === 'previous' || item.type === 'next') {
+                  return <PaginationItem components={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />
+                }
+                return null
+              }}
+            />
+          </Stack>
+        )}
       </Box>
 
       <Box
@@ -128,8 +136,8 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
                     ) : (
                       <Box
                         component={'a'}
-                        target="_blank"
                         href={getAuctionPoolLink(
+                          auctionPoolItem.id,
                           auctionPoolItem.category,
                           auctionPoolItem.chainId,
                           auctionPoolItem.poolId

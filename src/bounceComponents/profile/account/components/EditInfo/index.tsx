@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import FormItem from 'bounceComponents/common/FormItem'
 import { LoadingButton } from '@mui/lab'
 import { ReactComponent as SuccessSvg } from 'assets/svg/success_small.svg'
+import useBreakpoint from '../../../../../hooks/useBreakpoint'
 
 export type IEditInfoProps = {
   userInfoEmail: string
@@ -25,6 +26,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmail
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false)
   const [btnDisable, setBtnDisable] = useState<boolean>(true)
   const [showCountDown, setShowCountDown] = useState<number>()
+  const isSm = useBreakpoint('sm')
   const dispatch = useDispatch()
   const [countdown] = useCountDown({
     targetDate: showCountDown,
@@ -101,7 +103,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmail
   })
 
   return (
-    <Box mt={40}>
+    <Box mt={isSm ? 20 : 40}>
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {({ values, setFieldValue, errors }) => (
           <Box>
@@ -111,7 +113,7 @@ const EditInfo: React.FC<IEditInfoProps> = ({ userInfoEmail, userId, handleEmail
                 mb: 10
               }}
             >
-              <Typography mb={8} className="PSans" fontWeight={600} fontSize={20} color={'var(--ps-black)'}>
+              <Typography mb={8} className="PSans" fontWeight={600} fontSize={isSm ? 16 : 20} color={'var(--ps-black)'}>
                 Email
               </Typography>
 

@@ -9,11 +9,13 @@ import { Box, IconButton, OutlinedInput } from '@mui/material'
 import LogoText from 'components/LogoText'
 import { ReactComponent as IconSVG } from 'bounceComponents/common/SearchInput/icon.svg'
 import { useMemo, useState } from 'react'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 export default function NetworkPopperSelect() {
   const { chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const [searchVal, setSearchVal] = useState('')
+  const isSm = useBreakpoint('sm')
 
   const filterChainList = useMemo(() => {
     return ChainList.filter(
@@ -32,15 +34,15 @@ export default function NetworkPopperSelect() {
       targetElement={
         <Button
           sx={{
-            width: 62,
+            width: isSm ? 58 : 62,
             fontSize: 16,
-            height: 44
+            height: isSm ? 40 : 44
           }}
           variant="outlined"
           color="secondary"
         >
-          <Image width={24} height={24} src={ChainListMap[chainId]?.logo || ''} />
-          <ExpandMoreIcon />
+          <Image width={isSm ? 20 : 24} height={isSm ? 20 : 24} src={ChainListMap[chainId]?.logo || ''} />
+          <ExpandMoreIcon style={{ fontSize: 20 }} />
         </Button>
       }
     >

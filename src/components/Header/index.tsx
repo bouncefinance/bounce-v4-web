@@ -8,18 +8,20 @@ import { ShowOnMobile } from 'themes/index'
 import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
 import logoWhite from '../../assets/svg/logo-white.svg'
+import logoIcon from '../../assets/svg/logo-icon.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkPopperSelect from './NetworkPopperSelect'
 import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { useUserInfo } from 'state/users/hooks'
-import LoginModal from './LoginModal'
 import { ReactComponent as UserIcon } from 'assets/svg/account/user.svg'
 import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
 import { useHeaderBgOpacity } from 'hooks/useScroll'
 import Resources from './Resources'
 import HeaderLink from './HeaderLink'
+import useBreakpoint from '../../hooks/useBreakpoint'
+import MenuIcon from '@mui/icons-material/Menu'
 import FundoHead from 'components/Fundo/Header'
 interface TabContent {
   title: string
@@ -108,7 +110,7 @@ const MainLogo = styled(Link)(({ theme }) => ({
     cursor: 'pointer'
   },
   [theme.breakpoints.down('sm')]: {
-    '& img': { width: 100, height: 'auto' },
+    '& img': { width: 'auto', height: '22px' },
     marginBottom: -10
   }
 }))
@@ -131,6 +133,7 @@ export const whiteLogoRoutes = [routes.launchpad.bladeDao, routes.launchpad.blad
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const isSm = useBreakpoint('sm')
   const location = useLocation()
   // const routesWithoutParams = transparentRoutesWithParams.map(r => {
   //   const pattern = /^(\/[^/:]+\/[^/:]+)/
@@ -150,6 +153,11 @@ export default function Header() {
 
   const { token } = useUserInfo()
   const { pathname } = useLocation()
+
+  const mobileHideHeader = useMemo(() => {
+    return pathname.includes('okxActivity')
+  }, [pathname])
+
   const navigate = useNavigate()
   const headerBgOpacity = useHeaderBgOpacity()
 
@@ -168,9 +176,67 @@ export default function Header() {
     return { backgroundColor: `rgba(255,255,255,${headerBgOpacity})` }
   }, [headerBgOpacity, isTransparentRoute])
 
+  const walletClick = () => {
+    if (location.pathname === routes.login) {
+      return
+    }
+    const _redirect = location.pathname + location.search
+    navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+  }
+  const walletWithoutToken = isSm ? (
+    <Button
+      onClick={walletClick}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '0px 12px',
+        width: '78px',
+        height: '40px',
+        background: '#E1F25C',
+        borderRadius: '6px'
+      }}
+    >
+      Connect
+    </Button>
+  ) : (
+    <Button
+      onClick={walletClick}
+      sx={{
+        minWidth: 212,
+        borderRadius: 8,
+        padding: '0 12px',
+        border: '1px solid var(--ps-gray-20)',
+        height: isSm ? 40 : 44,
+        backgroundColor: theme => theme.palette.background.paper,
+        '&:hover .line': {
+          borderColor: 'var(--ps-text-4)'
+        }
+      }}
+    >
+      <UserIcon />
+      <Box
+        className="line"
+        sx={{
+          borderRight: '1px solid var(--ps-gray-20)',
+          mx: 10,
+          height: '100%'
+        }}
+      />
+      <WalletIcon />
+      <Typography variant="h5" ml={5}>
+        Connect wallet
+      </Typography>
+    </Button>
+  )
+
   return (
-    <>
-      <LoginModal />
+    <Box
+      sx={{
+        display: { xs: mobileHideHeader ? 'none' : 'block', md: 'block' }
+      }}
+    >
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
       {showBounseHead && (
@@ -179,86 +245,50 @@ export default function Header() {
             <MainLogo id={'logo'} to={'/'}>
               <Image
                 style={isWhiteLogo ? { mixBlendMode: 'difference' } : {}}
-                src={isWhiteLogo ? logoWhite : logo}
+                src={isSm ? logoIcon : isWhiteLogo ? logoWhite : logo}
                 alt={'logo'}
               />
             </MainLogo>
 
-            {!isTransparentRoute && <HeaderLink />}
+            {!isTransparentRoute && !isSm && <HeaderLink />}
           </Box>
 
-          <Stack direction={'row'} alignItems="center" spacing={8} flex={1}>
+          <Stack display={isSm ? 'none' : 'inherit'} direction={'row'} alignItems="center" spacing={8} flex={1}>
             <Search />
             <Resources />
             <CreateBtn />
-            <NetworkPopperSelect />
             <Web3Status />
 
-            {!token && (
-              <Button
-                onClick={() => {
-                  if (location.pathname === routes.login) {
-                    return
-                  }
-                  const _redirect = location.pathname + location.search
-                  navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
-                }}
-                sx={{
-                  minWidth: 212,
-                  borderRadius: 8,
-                  padding: '0 12px',
-                  border: '1px solid var(--ps-gray-20)',
-                  height: 44,
-                  backgroundColor: theme => theme.palette.background.paper,
-                  '&:hover .line': {
-                    borderColor: 'var(--ps-text-4)'
-                  }
-                }}
-              >
-                <UserIcon />
-                <Box
-                  className="line"
-                  sx={{
-                    borderRight: '1px solid var(--ps-gray-20)',
-                    mx: 10,
-                    height: '100%'
-                  }}
-                />
-                <WalletIcon />
-                <Typography variant="h5" ml={5}>
-                  Connect wallet
-                </Typography>
-              </Button>
-            )}
+            {!token && walletWithoutToken}
           </Stack>
 
-          <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
+          <Box display={isSm ? 'inherit' : 'none'} alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
             {/* <Web3Status /> */}
             <ShowOnMobile breakpoint="md">
-              <IconButton
-                sx={{
-                  border: '1px solid rgba(0, 0, 0, 0.1)',
-                  height: { xs: 24, sm: 32 },
-                  width: { xs: 24, sm: 32 },
-                  mb: { xs: 0, sm: 15 },
-                  mt: { xs: 0, sm: 8 },
-                  padding: '4px',
-                  borderRadius: '8px'
-                }}
-                onClick={() => {
-                  setMobileMenuOpen(open => !open)
-                }}
-              >
-                <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="#252525">
-                  <path d="M1 1H13" strokeWidth="1.4" strokeLinecap="round" />
-                  <path d="M1 7H13" strokeWidth="1.4" strokeLinecap="round" />
-                </svg>
-              </IconButton>
+              <Stack direction={'row'} spacing={10} display={'flex'} alignItems={'center'}>
+                <NetworkPopperSelect />
+                <Web3Status />
+                {!token && walletWithoutToken}
+                <IconButton
+                  sx={{
+                    height: { xs: 24, sm: 32 },
+                    width: { xs: 24, sm: 32 },
+                    mb: { xs: 0, sm: 15 },
+                    mt: { xs: 0, sm: 8 },
+                    padding: '4px'
+                  }}
+                  onClick={() => {
+                    setMobileMenuOpen(open => !open)
+                  }}
+                >
+                  <MenuIcon sx={{ color: 'black' }} />
+                </IconButton>
+              </Stack>
             </ShowOnMobile>
           </Box>
         </StyledAppBar>
       )}
       {!showBounseHead && <FundoHead />}
-    </>
+    </Box>
   )
 }

@@ -176,7 +176,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const openLink = (link: string) => {
     link && window.open(link, '_blank')
   }
-  const endDate = 1686700740000
+  const endDate = 1687046400000
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: endDate
   })

@@ -30,6 +30,8 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
 import { useShowLoginModal } from 'state/users/hooks'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { PoolType } from 'api/pool/type'
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
@@ -54,7 +56,7 @@ const CreatePoolButton = () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt } = await createEnglishAuctionPool()
+      const { getPoolId, transactionReceipt, sysId } = await createEnglishAuctionPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -91,11 +93,13 @@ const CreatePoolButton = () => {
       ret
         .then(poolId => {
           const goToPoolInfoPage = () => {
-            navigate(
-              routes.auction.englishAuction
-                .replace(':chainShortName', chainConfigInBackend?.shortName || '')
-                .replace(':poolId', poolId)
+            const route = getAuctionPoolLink(
+              sysId,
+              PoolType.ENGLISH_AUCTION_NFT,
+              chainConfigInBackend?.id as number,
+              poolId
             )
+            navigate(route)
           }
 
           hideDialogConfirmation()
@@ -125,7 +129,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.shortName, createEnglishAuctionPool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createEnglishAuctionPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()

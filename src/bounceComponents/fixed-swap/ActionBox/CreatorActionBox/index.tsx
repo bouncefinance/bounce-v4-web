@@ -30,7 +30,7 @@ const CreatorActionBox = ({
 
       <FundInfoList poolInfo={poolInfo} />
 
-      <ButtonBlock poolInfo={poolInfo} />
+      {poolInfo.contract && <ButtonBlock poolInfo={poolInfo} />}
 
       {poolInfo.status === PoolStatus.Upcoming && <UpcomingPoolCreatorAlert />}
       {poolInfo.status === PoolStatus.Live && <LivePoolCreatorAlert />}

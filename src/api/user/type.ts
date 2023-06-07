@@ -158,10 +158,16 @@ export interface GetUserWhitelistProofParams {
   category: PoolType
   chainId: number
   poolId: string
+  tokenType?: 1 | 2
 }
 
 export interface GetUserWhitelistProofResponse {
   proof: string
+}
+
+export interface GetUserPermitSignResponse {
+  expiredTime: number
+  signature: string
 }
 
 export interface IBindThirdpartParams {

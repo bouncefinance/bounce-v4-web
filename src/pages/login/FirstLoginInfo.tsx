@@ -13,6 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import FirstProfileOverview from 'bounceComponents/account/FirstProfileOverview'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { routes } from 'constants/routes'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const CurStepper = styled(Box)({
   display: 'grid',
@@ -39,6 +40,7 @@ export default function FirstLoginInfo() {
   const [activeStep, setActiveStep] = useState(1)
   const { token } = useUserInfo()
   const navigate = useNavigate()
+  const isSm = useBreakpoint('sm')
 
   useEffect(() => {
     if (!token) {
@@ -48,7 +50,7 @@ export default function FirstLoginInfo() {
 
   return (
     <section>
-      <LoginLayout image={activeStep === 1 ? Complete0Img : Complete1Img}>
+      <LoginLayout image={activeStep === 1 ? Complete0Img : Complete1Img} isSm={isSm}>
         <Container
           sx={{
             maxWidth: '640px !important',

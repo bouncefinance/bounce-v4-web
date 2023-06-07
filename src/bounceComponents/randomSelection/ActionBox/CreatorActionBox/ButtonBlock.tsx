@@ -18,7 +18,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
 
   const isAllTokenSwapped = useIsAllRandomSelectionTokenSwapped(poolInfo)
 
-  const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name)
+  const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const successDialogContent = useMemo(() => {
     const singleShare = new BigNumber(poolInfo?.amountTotal0).div(Number(poolInfo?.totalShare)).toString()

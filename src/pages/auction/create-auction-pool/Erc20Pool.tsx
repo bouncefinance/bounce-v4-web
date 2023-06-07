@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import TokenInformationForm from 'bounceComponents/create-auction-pool/TokenInforationForm'
 import AuctionParametersForm from 'bounceComponents/create-auction-pool/AuctionParametersForm'
-import AdvancedSettingsForm from 'bounceComponents/create-auction-pool/AdvancedSettingsForm'
+import AddIReleaseTypeAdvanced from 'bounceComponents/create-auction-pool/AdvancedSettingsForm/AddIReleaseTypeAdvanced'
 import CreationConfirmation from 'bounceComponents/create-auction-pool/CreationConfirmation'
 import { CreationStep } from 'bounceComponents/create-auction-pool/types'
 import { useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
@@ -16,7 +16,7 @@ export default function Erc20Pool() {
 
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <AuctionParametersForm />}
 
-          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
+          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AddIReleaseTypeAdvanced />}
         </Box>
       ) : (
         <CreationConfirmation />

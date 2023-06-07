@@ -4,7 +4,7 @@ export const ColorOptions = {
     black: '#121212',
     primary: '#fff',
     secondary: '#121212',
-    text: '#121212',
+    text: '#171717',
     success: '#73D491',
     warn: '#EBBC42',
     error: '#EB4242',

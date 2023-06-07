@@ -3,18 +3,16 @@ import ClaimYourTokenAlert from '../../Alerts/ClaimYourTokenAlert'
 import AuctionClosedAlert from '../../Alerts/AuctionClosedAlert'
 import NotEligibleAlert from '../../Alerts/NotEligibleAlert'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
-import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 
 const Alert = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
   const isUserJoinedPool = useIsUserJoinedPool(poolInfo)
 
-  if (isCheckingWhitelist) {
+  if (poolInfo.whitelistData?.loading) {
     return null
   }
 
-  if (typeof isUserInWhitelist !== 'undefined' && !isUserInWhitelist) {
+  if (!poolInfo.whitelistData?.isUserInWhitelist) {
     return <NotEligibleAlert />
   }
 

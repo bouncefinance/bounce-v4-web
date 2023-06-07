@@ -1,71 +1,20 @@
-import { useRequest } from 'ahooks'
-
-import useChainConfigInBackend from '../web3/useChainConfigInBackend'
-import { getPoolInfo } from 'api/pool'
-import { FixedSwapPool, FixedSwapPoolProp, PoolType } from 'api/pool/type'
-import { useQueryParams } from 'hooks/useQueryParams'
+import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useActiveWeb3React } from 'hooks'
-import { ChainId } from 'constants/chain'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
-
-export const useBackedPoolInfo = (category: PoolType = PoolType.Lottery) => {
-  const { poolId, chainShortName } = useQueryParams()
-  const { account } = useActiveWeb3React()
-
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
-
-  return useRequest(
-    async (): Promise<FixedSwapPool & { ethChainId: ChainId }> => {
-      if (typeof poolId !== 'string' || !chainConfigInBackend?.id) {
-        return Promise.reject(new Error('Invalid poolId'))
-      }
-
-      const response = await getPoolInfo({
-        poolId,
-        category,
-        tokenType: 1, // tokenType erc20:1 , erc1155:2
-        chainId: chainConfigInBackend.id,
-        address: account || ''
-      })
-      const rawPoolInfo = response.data.fixedSwapPool
-      return {
-        ...rawPoolInfo,
-        token0: {
-          ...rawPoolInfo.token0,
-          symbol: rawPoolInfo.token0.symbol.toUpperCase()
-        },
-        token1: {
-          ...rawPoolInfo.token1,
-          symbol: rawPoolInfo.token1.symbol.toUpperCase()
-        },
-        maxAmount1PerWallet: rawPoolInfo.maxAmount1PerWallet,
-        ethChainId: chainConfigInBackend.ethChainId
-      }
-    },
-    {
-      // cacheKey: `POOL_INFO_${poolId}`,
-      ready: !!poolId && !!chainConfigInBackend?.id,
-      pollingInterval: 30000,
-      refreshDeps: [account],
-      retryInterval: 10000,
-      retryCount: 20
-    }
-  )
-}
+import { useBackedPoolInfo } from './usePoolInfo'
 
 const useRandomSelectionPoolInfo = () => {
-  const { poolId } = useQueryParams()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo()
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.Lottery)
 
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
   const myClaimedRes = useSingleCallResult(
     randomSelectionERC20Contract,
     'myClaimed',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result

@@ -41,7 +41,8 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.ZKSYNC_ERA]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.POLYGON_ZK_EVM]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
@@ -77,10 +78,9 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.SEPOLIA]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
-    [TokenType.ERC721]: [],
-    // [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.AUROEA]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]

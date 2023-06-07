@@ -93,7 +93,7 @@ const ValuesProvider = ({ children }: { children: ReactNode }) => {
         loading
       }
     })
-  }, [data, dispatch, loading, run])
+  }, [data, loading, run])
 
   return <ValuesStateContext.Provider value={state}>{children}</ValuesStateContext.Provider>
 }

@@ -357,7 +357,12 @@ const Pools: React.FC = ({}) => {
                               <Box
                                 onClick={() =>
                                   navigate(
-                                    getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)
+                                    getAuctionPoolLink(
+                                      fixedSwaptem.id,
+                                      fixedSwaptem.category,
+                                      fixedSwaptem.chainId,
+                                      fixedSwaptem.poolId
+                                    )
                                   )
                                 }
                               >

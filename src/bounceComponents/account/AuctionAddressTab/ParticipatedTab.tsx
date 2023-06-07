@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom'
 import ChainSelect from 'bounceComponents/common/ChainSelect'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import useBreakpoint from '../../../hooks/useBreakpoint'
+import { SelectGroupMobile } from './SelectGroupMobile'
 
 const defaultPageSize = 6
 
@@ -35,6 +37,7 @@ export default function ParticipatedTab({
   const { account } = useActiveWeb3React()
   const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
   const navigate = useNavigate()
+  const isSm = useBreakpoint('sm')
 
   const {
     pagination,
@@ -94,42 +97,53 @@ export default function ParticipatedTab({
 
   return (
     <Box>
-      <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
-        <Stack spacing={10} direction="row">
-          <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
-          <Select
-            value={queryType}
-            sx={{ width: 200, height: 38 }}
-            onChange={e => setQueryType(Number(e.target?.value) || 0)}
-          >
-            <MenuItem key={0} value={0}>
-              All
-            </MenuItem>
-            <MenuItem key={1} value={DashboardQueryType.ongoing}>
-              ongoing
-            </MenuItem>
-            <MenuItem key={2} value={DashboardQueryType.claim}>
-              claim
-            </MenuItem>
-          </Select>
-          <AuctionTypeSelect
-            tokenType={backedTokenType}
-            curPoolType={curPoolType}
-            setCurPoolType={t => setCurPoolType(t)}
+      {!isSm && (
+        <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
+          <Stack spacing={10} direction="row">
+            <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
+            <Select
+              value={queryType}
+              sx={{ width: 200, height: 38 }}
+              onChange={e => setQueryType(Number(e.target?.value) || 0)}
+            >
+              <MenuItem key={0} value={0}>
+                All
+              </MenuItem>
+              <MenuItem key={1} value={DashboardQueryType.ongoing}>
+                ongoing
+              </MenuItem>
+              <MenuItem key={2} value={DashboardQueryType.claim}>
+                claim
+              </MenuItem>
+            </Select>
+            <AuctionTypeSelect
+              tokenType={backedTokenType}
+              curPoolType={curPoolType}
+              setCurPoolType={t => setCurPoolType(t)}
+            />
+          </Stack>
+          {type === 'created' && (
+            <Button
+              sx={{ height: 44 }}
+              variant="contained"
+              color="secondary"
+              onClick={() => navigate(routes.auction.createAuctionPool)}
+            >
+              <Add /> Create a pool
+            </Button>
+          )}
+        </Box>
+      )}
+      {isSm && (
+        <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
+          <SelectGroupMobile
+            curChain={curChain}
+            setCurChain={setCurChain}
+            queryType={queryType}
+            setQueryType={setQueryType}
           />
-        </Stack>
-
-        {type === 'created' && (
-          <Button
-            sx={{ height: 44 }}
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate(routes.auction.createAuctionPool)}
-          >
-            <Add /> Create a pool
-          </Button>
-        )}
-      </Box>
+        </Box>
+      )}
 
       {loading ? (
         <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -153,8 +167,8 @@ export default function ParticipatedTab({
                   ) : (
                     <Box
                       component={'a'}
-                      target="_blank"
                       href={getAuctionPoolLink(
+                        auctionPoolItem.id,
                         auctionPoolItem.category,
                         auctionPoolItem.chainId,
                         auctionPoolItem.poolId
@@ -177,6 +191,18 @@ export default function ParticipatedTab({
           count={Math.ceil((auctionPoolData?.total || 0) / (defaultPageSize || 0))}
         />
       </Box>
+      {isSm && type === 'created' && (
+        <Box sx={{ textAlign: 'center', mt: 16, mb: 8 }}>
+          <Button
+            sx={{ height: 44 }}
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate(routes.auction.createAuctionPool)}
+          >
+            <Add /> Create a pool
+          </Button>
+        </Box>
+      )}
     </Box>
   )
 }

@@ -24,6 +24,7 @@ import SocialMediaButtonGroup from 'bounceComponents/fixed-swap/CreatorInfoCard/
 import { useActiveWeb3React } from 'hooks'
 import Copy from 'components/essential/Copy'
 import Divider from 'components/Divider'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const btnStyle = {
   height: 26,
@@ -39,20 +40,135 @@ export default function Dashboard() {
   const { account } = useActiveWeb3React()
   const navigate = useNavigate()
   const { data: dashboardStat } = useDashboardStat()
+  const isSm = useBreakpoint('sm')
 
   return (
     <AccountLayout>
-      <Box padding="0 20px">
+      <Box padding="0 20px" sx={{ background: isSm ? '#fff' : '' }}>
         <Container maxWidth="lg">
-          <Box padding="40px 0">
-            <Typography variant="h3" fontSize={30}>
+          <Box padding={isSm ? `20px 0` : `40px 0`}>
+            <Typography variant="h3" fontSize={isSm ? 22 : 30}>
               Dashboard
             </Typography>
-            <Box pt={40}>
-              <Box display="flex" alignItems={'center'}>
-                <Box sx={{ position: 'relative', width: '120px' }}>
+            {!isSm && (
+              <Box pt={40}>
+                <Box display="flex" alignItems={'center'}>
+                  <Box sx={{ position: 'relative', width: '120px' }}>
+                    {!userInfo?.avatar ? (
+                      <Skeleton variant="circular" width={120} height={120} sx={{ background: 'var(--ps-gray-50)' }} />
+                    ) : (
+                      <AccountAvatar src={userInfo?.avatar?.fileThumbnailUrl || userInfo?.avatar?.fileUrl} />
+                    )}
+                    {userInfo?.isVerify && (
+                      <VerifiedIcon
+                        isVerify={userInfo.isVerify}
+                        width={42}
+                        height={42}
+                        showVerify
+                        sx={{ position: 'absolute', right: 0, bottom: 0 }}
+                      />
+                    )}
+                  </Box>
+                  <Stack sx={{ width: '100%', ml: 16 }} spacing={5}>
+                    <Stack direction={'row'} alignItems={'center'}>
+                      {!userInfo?.fullName && !userInfo?.fullNameId ? (
+                        <Skeleton
+                          variant="rectangular"
+                          width={280}
+                          height={46}
+                          sx={{ background: 'var(--ps-gray-50)' }}
+                        />
+                      ) : (
+                        <Stack direction={'row'} alignItems="center">
+                          <Typography variant="h1" fontWeight={500}>
+                            {userInfo?.fullName}
+                          </Typography>
+                          <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
+                            {userInfo?.fullNameId && `#${userInfo?.fullNameId}`}
+                          </Typography>
+                        </Stack>
+                      )}
+                    </Stack>
+
+                    {userInfo?.location && (
+                      <Box height={32}>
+                        <Chip
+                          sx={{
+                            width: 84,
+                            height: '100%'
+                          }}
+                          label={userInfo.location}
+                        />
+                      </Box>
+                    )}
+
+                    <Stack direction={'row'} alignItems="center" justifyContent="space-between" spacing={12}>
+                      <SocialMediaButtonGroup
+                        style={{ margin: 0 }}
+                        email={userInfo?.contactEmail}
+                        shouldShowEmailButton={true}
+                        twitter={userInfo?.twitter}
+                        instagram={userInfo?.instagram}
+                        website={userInfo?.website}
+                        linkedin={userInfo?.linkedin}
+                        github={userInfo?.github}
+                      />
+                    </Stack>
+                  </Stack>
+                </Box>
+
+                <Box display={'flex'} justifyContent={'flex-end'}>
+                  <Box
+                    sx={{
+                      mt: -50,
+                      backgroundColor: '#F6F7F3',
+                      borderRadius: '8px',
+                      height: 45,
+                      width: 320,
+                      padding: '12px',
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1px 1fr',
+                      alignContent: 'center',
+                      justifyItems: 'center'
+                    }}
+                  >
+                    <Box display={'flex'} alignItems={'center'}>
+                      <Typography mr={5}>{account ? shortenAddress(account) : '-'}</Typography>
+                      <Copy toCopy={account || ''} />
+                    </Box>
+                    <Box
+                      sx={{
+                        borderRight: '1px solid var(--ps-border-1)',
+                        height: '100%'
+                      }}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        navigate(routes.account.myProfile)
+                      }}
+                      size="small"
+                      sx={{
+                        background: 'none',
+                        '&:hover': {
+                          border: 'none',
+                          background: 'none',
+                          color: 'var(--ps-blue)'
+                        }
+                      }}
+                    >
+                      <EditSVG style={{ marginRight: 10 }} />
+                      Edit portfolio
+                    </Button>
+                  </Box>
+                </Box>
+              </Box>
+            )}
+            {isSm && (
+              <Box pt={26}>
+                <Box sx={{ position: 'relative', width: '120px', left: 'calc(50% - 60px)' }}>
                   {!userInfo?.avatar ? (
-                    <Skeleton variant="circular" width={120} height={120} sx={{ background: 'var(--ps-gray-50)' }} />
+                    <Skeleton variant="circular" width={72} height={72} sx={{ background: 'var(--ps-gray-50)' }} />
                   ) : (
                     <AccountAvatar src={userInfo?.avatar?.fileThumbnailUrl || userInfo?.avatar?.fileUrl} />
                   )}
@@ -66,100 +182,74 @@ export default function Dashboard() {
                     />
                   )}
                 </Box>
-                <Stack sx={{ width: '100%', ml: 16 }} spacing={5}>
-                  <Stack direction={'row'} alignItems={'center'}>
-                    {!userInfo?.fullName && !userInfo?.fullNameId ? (
-                      <Skeleton
-                        variant="rectangular"
-                        width={280}
-                        height={46}
-                        sx={{ background: 'var(--ps-gray-50)' }}
-                      />
-                    ) : (
-                      <Stack direction={'row'} alignItems="center">
-                        <Typography variant="h1" fontWeight={500}>
-                          {userInfo?.fullName}
-                        </Typography>
-                        <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
-                          {userInfo?.fullNameId && `#${userInfo?.fullNameId}`}
-                        </Typography>
-                      </Stack>
-                    )}
-                  </Stack>
-
-                  {userInfo?.location && (
-                    <Box height={32}>
-                      <Chip
-                        sx={{
-                          width: 84,
-                          height: '100%'
-                        }}
-                        label={userInfo.location}
-                      />
-                    </Box>
+                <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} mt={20} mb={8}>
+                  {!userInfo?.fullName && !userInfo?.fullNameId ? (
+                    <Skeleton variant="rectangular" width={280} height={46} sx={{ background: 'var(--ps-gray-50)' }} />
+                  ) : (
+                    <Stack direction={'row'} alignItems="center">
+                      <Typography variant="h1" fontWeight={500}>
+                        {userInfo?.fullName}
+                      </Typography>
+                      <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
+                        {userInfo?.fullNameId && `#${userInfo?.fullNameId}`}
+                      </Typography>
+                    </Stack>
                   )}
-
-                  <Stack direction={'row'} alignItems="center" justifyContent="space-between" spacing={12}>
-                    <SocialMediaButtonGroup
-                      style={{ margin: 0 }}
-                      email={userInfo?.contactEmail}
-                      shouldShowEmailButton={true}
-                      twitter={userInfo?.twitter}
-                      instagram={userInfo?.instagram}
-                      website={userInfo?.website}
-                      linkedin={userInfo?.linkedin}
-                      github={userInfo?.github}
-                    />
-                  </Stack>
                 </Stack>
-              </Box>
-
-              <Box display={'flex'} justifyContent={'flex-end'}>
-                <Box
-                  sx={{
-                    mt: -50,
-                    backgroundColor: '#F6F7F3',
-                    borderRadius: '8px',
-                    height: 45,
-                    width: 320,
-                    padding: '12px',
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1px 1fr',
-                    alignContent: 'center',
-                    justifyItems: 'center'
-                  }}
-                >
-                  <Box display={'flex'} alignItems={'center'}>
-                    <Typography mr={5}>{account ? shortenAddress(account) : '-'}</Typography>
-                    <Copy toCopy={account || ''} />
+                {userInfo?.location && (
+                  <Box height={32} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
+                    <Chip
+                      sx={{
+                        width: 84,
+                        height: '100%'
+                      }}
+                      label={userInfo.location}
+                    />
                   </Box>
+                )}
+                <Box display={'flex'} justifyContent={'center'} mt={20}>
                   <Box
                     sx={{
-                      borderRight: '1px solid var(--ps-border-1)',
-                      height: '100%'
-                    }}
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      navigate(routes.account.myProfile)
-                    }}
-                    size="small"
-                    sx={{
-                      background: 'none',
-                      '&:hover': {
-                        border: 'none',
-                        background: 'none',
-                        color: 'var(--ps-blue)'
-                      }
+                      display: 'flex',
+                      alignItem: 'center',
+                      width: '100%',
+                      borderRadius: '6px',
+                      background: '#F6F7F3'
                     }}
                   >
-                    <EditSVG style={{ marginRight: 10 }} />
-                    Edit portfolio
-                  </Button>
+                    <Box display={'flex'} alignItems={'center'} justifyContent={'center'} flexBasis={'50%'}>
+                      <Typography mr={5}>{account ? shortenAddress(account) : '-'}</Typography>
+                      <Copy toCopy={account || ''} />
+                    </Box>
+                    <Box
+                      sx={{
+                        borderRight: '1px solid var(--ps-border-1)',
+                        height: '100%'
+                      }}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        navigate(routes.account.myProfile)
+                      }}
+                      size="small"
+                      sx={{
+                        flexBasis: '50%',
+                        background: 'none',
+                        '&:hover': {
+                          border: 'none',
+                          background: 'none',
+                          color: 'var(--ps-blue)'
+                        }
+                      }}
+                    >
+                      <EditSVG style={{ marginRight: 10 }} />
+                      Edit portfolio
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+            )}
 
             <Box py={50}>
               <Divider />
@@ -186,8 +276,8 @@ export default function Dashboard() {
               borderRadius: '20px 20px 0 0'
             }}
           >
-            <Box padding="50px 60px">
-              <Typography variant="h3" fontSize={24}>
+            <Box padding={isSm ? '34px 26px' : '50px 60px'}>
+              <Typography variant="h3" fontSize={isSm ? 16 : 24}>
                 Auction Statistics
               </Typography>
               <Box

@@ -22,9 +22,103 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { poolTypeText } from 'pages/market/pools'
+import useBreakpoint from '../../../hooks/useBreakpoint'
+import useResizeView from 'utils/useResizeView'
 
 interface Notable1155Props {
   handleViewAll?: () => void
+}
+
+const AuctionItem = ({ fixedSwaptem, optionDatas }: { fixedSwaptem: any; optionDatas: any }) => {
+  return (
+    fixedSwaptem && (
+      <Link to={getAuctionPoolLink(fixedSwaptem.id, fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}>
+        <AuctionCard
+          style={{ minWidth: '280px', gap: 20, boxSizing: 'border-box' }}
+          poolId={fixedSwaptem.poolId}
+          title={fixedSwaptem.name}
+          status={fixedSwaptem.status}
+          claimAt={fixedSwaptem.claimAt}
+          closeAt={fixedSwaptem.closeAt}
+          dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
+          holder={
+            <AuctionHolder
+              href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
+              avatar={fixedSwaptem.creatorUserInfo?.avatar}
+              name={fixedSwaptem.creatorUserInfo?.name}
+              description={
+                fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
+                  ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
+                      return (
+                        getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
+                        `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''}`
+                      )
+                    })
+                  : 'Individual account'
+              }
+              isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
+            />
+          }
+          progress={{
+            symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
+            decimals: fixedSwaptem.token0.decimals,
+            sold: fixedSwaptem.swappedAmount0,
+            supply: fixedSwaptem.amountTotal0
+          }}
+          listItems={
+            <>
+              <AuctionListItem
+                label="Token symbol"
+                value={
+                  <Stack direction="row" alignItems="center" spacing={4}>
+                    <TokenImage src={fixedSwaptem.token0.largeUrl} alt={fixedSwaptem.token0.symbol} size={20} />
+                    <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
+                  </Stack>
+                }
+              />
+              <AuctionListItem
+                label="Contract address"
+                value={
+                  <Stack direction="row" alignItems="center" spacing={4}>
+                    <CertifiedTokenImage
+                      address={fixedSwaptem.token0.address}
+                      coingeckoId={fixedSwaptem.token0.coingeckoId}
+                      ethChainId={fixedSwaptem.ethChainId}
+                      backedChainId={fixedSwaptem.chainId}
+                    />
+                    <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
+                    <CopyToClipboard text={fixedSwaptem.token0.address} />
+                  </Stack>
+                }
+              />
+              <AuctionListItem
+                label="Fixed price ratio"
+                value={
+                  <Stack direction="row" spacing={8}>
+                    <Typography fontSize={12}>1</Typography>
+                    <Typography fontSize={12}>
+                      {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
+                      {new BigNumber(fixedSwaptem.ratio).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
+                    </Typography>
+                    <Typography fontSize={12}>{fixedSwaptem.token1.symbol.toUpperCase()}</Typography>
+                  </Stack>
+                }
+              />
+              <AuctionListItem
+                label="Price,$"
+                value={
+                  <span>{new BigNumber(fixedSwaptem.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}</span>
+                }
+              />
+            </>
+          }
+          categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
+          whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
+          chainId={fixedSwaptem.chainId}
+        />
+      </Link>
+    )
+  )
 }
 
 export const UpcomingAuction = (props: Notable1155Props) => {
@@ -32,6 +126,9 @@ export const UpcomingAuction = (props: Notable1155Props) => {
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
+  const [slidesPerView] = useResizeView()
+  const isSm = useBreakpoint('sm')
+
   const { data, loading } = useRequest(
     async () => {
       const resp = await getPools({
@@ -60,8 +157,17 @@ export const UpcomingAuction = (props: Notable1155Props) => {
   return (
     <Box sx={{ padding: '80px 0 100px' }}>
       <Container>
-        <CenterRow justifyContent={'space-between'}>
-          <H4 mb={33}>Upcoming Auctions</H4>
+        <CenterRow
+          mb={33}
+          justifyContent={'space-between'}
+          sx={{
+            flexDirection: ['column', 'row'],
+            alignItems: ['flex-start', 'center'],
+            padding: ['0 16px', 'inherit'],
+            gap: [20, 'inherit']
+          }}
+        >
+          <H4>Upcoming Auctions</H4>
           <Row gap={8}>
             <AuctionTypeSelect
               noBorder={true}
@@ -71,7 +177,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
             />
             <Select
               sx={{
-                width: '200px',
+                width: [160, '200px'],
                 height: '38px',
                 fieldset: {
                   border: 0
@@ -149,107 +255,38 @@ export const UpcomingAuction = (props: Notable1155Props) => {
           <Box>
             <EmptyData />
           </Box>
+        ) : isSm ? (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 12,
+              flexDirection: 'row',
+              overflowX: 'auto',
+              paddingLeft: '16px',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              },
+              '&>a>div>ul>li': {
+                whiteSpace: 'nowrap'
+              }
+            }}
+          >
+            {data?.list?.map((fixedSwaptem: any, index: number) => (
+              <AuctionItem fixedSwaptem={fixedSwaptem} optionDatas={optionDatas} key={index} />
+            ))}
+          </Box>
         ) : (
           <SlideProgress
+            hideArrow={isSm}
             swiperStyle={{
               spaceBetween: 20,
-              slidesPerView: 4,
+              slidesPerView: slidesPerView,
               loop: false
             }}
           >
             {data?.list?.map((fixedSwaptem: any, index: number) => (
               <SwiperSlide key={index}>
-                <Link to={getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)}>
-                  <AuctionCard
-                    style={{ minWidth: 'unset' }}
-                    poolId={fixedSwaptem.poolId}
-                    title={fixedSwaptem.name}
-                    status={fixedSwaptem.status}
-                    claimAt={fixedSwaptem.claimAt}
-                    closeAt={fixedSwaptem.closeAt}
-                    dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
-                    holder={
-                      <AuctionHolder
-                        href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                        avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                        name={fixedSwaptem.creatorUserInfo?.name}
-                        description={
-                          fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                            ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
-                                return (
-                                  getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                  `${index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''}`
-                                )
-                              })
-                            : 'Individual account'
-                        }
-                        isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                      />
-                    }
-                    progress={{
-                      symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
-                      decimals: fixedSwaptem.token0.decimals,
-                      sold: fixedSwaptem.swappedAmount0,
-                      supply: fixedSwaptem.amountTotal0
-                    }}
-                    listItems={
-                      <>
-                        <AuctionListItem
-                          label="Token symbol"
-                          value={
-                            <Stack direction="row" alignItems="center" spacing={4}>
-                              <TokenImage
-                                src={fixedSwaptem.token0.largeUrl}
-                                alt={fixedSwaptem.token0.symbol}
-                                size={20}
-                              />
-                              <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
-                            </Stack>
-                          }
-                        />
-                        <AuctionListItem
-                          label="Contract address"
-                          value={
-                            <Stack direction="row" alignItems="center" spacing={4}>
-                              <CertifiedTokenImage
-                                address={fixedSwaptem.token0.address}
-                                coingeckoId={fixedSwaptem.token0.coingeckoId}
-                                ethChainId={fixedSwaptem.ethChainId}
-                                backedChainId={fixedSwaptem.chainId}
-                              />
-                              <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
-                              <CopyToClipboard text={fixedSwaptem.token0.address} />
-                            </Stack>
-                          }
-                        />
-                        <AuctionListItem
-                          label="Fixed price ratio"
-                          value={
-                            <Stack direction="row" spacing={8}>
-                              <Typography fontSize={12}>1</Typography>
-                              <Typography fontSize={12}>
-                                {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
-                                {new BigNumber(fixedSwaptem.ratio).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
-                              </Typography>
-                              <Typography fontSize={12}>{fixedSwaptem.token1.symbol.toUpperCase()}</Typography>
-                            </Stack>
-                          }
-                        />
-                        <AuctionListItem
-                          label="Price,$"
-                          value={
-                            <span>
-                              {new BigNumber(fixedSwaptem.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
-                            </span>
-                          }
-                        />
-                      </>
-                    }
-                    categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
-                    whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
-                    chainId={fixedSwaptem.chainId}
-                  />
-                </Link>
+                <AuctionItem fixedSwaptem={fixedSwaptem} optionDatas={optionDatas} />
               </SwiperSlide>
             ))}
           </SlideProgress>

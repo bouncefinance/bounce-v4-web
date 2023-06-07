@@ -48,7 +48,7 @@ const FixedSwapPoolPageContent = () => {
               <UserMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
             )}
 
-            <ActionHistory />
+            <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
           </Stack>
         </Box>
       </Box>

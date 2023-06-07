@@ -1,4 +1,4 @@
-import { Box, Button, Menu, MenuItem } from '@mui/material'
+import { Box, Button, Menu, MenuItem, SxProps, Theme } from '@mui/material'
 import React, { useState } from 'react'
 // import { ReactComponent as ArrowDownSVG } from 'assets/imgs/user/arrow_down.svg'
 // import { ReactComponent as ArrowUpSVG } from 'assets/imgs/user/arrow_up.svg'
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
 
-const CreateBtn: React.FC = () => {
+const CreateBtn: React.FC<{ sx?: SxProps<Theme> }> = ({ sx }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
   const { token } = useUserInfo()
@@ -85,7 +85,8 @@ const CreateBtn: React.FC = () => {
           width: 109,
           height: 44,
           borderRadius: 8,
-          border: 'none'
+          border: 'none',
+          ...sx
         }}
         onClick={handleMenuOpen}
         startIcon={<AddSvg />}

@@ -16,7 +16,7 @@ export default function RandomSelection() {
             <TokenInformationForm title={'Random Selection Auction'} />
           )}
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <RandomSelectionAuctionParametersForm />}
-          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm />}
+          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AdvancedSettingsForm hideRefundable />}
         </Box>
       ) : (
         <CreationRandomSelectionConfirmation />

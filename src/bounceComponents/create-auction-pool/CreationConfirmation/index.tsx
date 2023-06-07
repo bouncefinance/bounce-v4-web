@@ -3,7 +3,7 @@ import Image from 'components/Image'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
+import { AllocationStatus, CreationStep, IReleaseType, ParticipantStatus } from '../types'
 import {
   ActionType,
   useAuctionERC20Currency,
@@ -34,6 +34,8 @@ import {
 } from 'utils/auction'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useShowLoginModal } from 'state/users/hooks'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { PoolType } from 'api/pool/type'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -45,6 +47,21 @@ const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?
 )
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
+
+export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
+  switch (key) {
+    case IReleaseType.Instant:
+      return 'Unlock immediately'
+    case IReleaseType.Cliff:
+      return 'Delay unlocking'
+    case IReleaseType.Linear:
+      return 'Linear unlocking'
+    case IReleaseType.Fragment:
+      return 'Staged unlocking'
+    default:
+      return 'Unset'
+  }
+}
 
 const CreatePoolButton = () => {
   const { redirect } = useQueryParams()
@@ -75,7 +92,7 @@ const CreatePoolButton = () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt } = await createFixedSwapPool()
+      const { getPoolId, transactionReceipt, sysId } = await createFixedSwapPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -112,11 +129,8 @@ const CreatePoolButton = () => {
       ret
         .then(poolId => {
           const goToPoolInfoPage = () => {
-            navigate(
-              routes.auction.fixedPrice
-                .replace(':chainShortName', chainConfigInBackend?.shortName || '')
-                .replace(':poolId', poolId)
-            )
+            const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
+            navigate(route)
           }
 
           hideDialogConfirmation()
@@ -149,7 +163,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.shortName, createFixedSwapPool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -406,9 +420,10 @@ const CreationConfirmation = () => {
                   </Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Delay Unlocking Token">
+                <ConfirmationInfoItem title="Unlocking Token Type">
                   <Typography>
-                    {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'}
+                    {tokenReleaseTypeText(values.releaseType)}
+                    {/* {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'} */}
                   </Typography>
                 </ConfirmationInfoItem>
               </Stack>

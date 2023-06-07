@@ -100,7 +100,12 @@ const ActionBlock = ({
     unit: poolInfo.token1.decimals,
     decimalPlaces: poolInfo.token1.decimals
   })
-  const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.poolId, account || undefined)
+  const { isWinner } = useIsWinnerForRandomSelectionPool(
+    poolInfo.poolId,
+    account || undefined,
+    poolInfo.contract,
+    poolInfo.ethChainId
+  )
   useEffect(() => {
     setBidAmount(poolInfo.maxAmount1PerWallet)
   }, [poolInfo])

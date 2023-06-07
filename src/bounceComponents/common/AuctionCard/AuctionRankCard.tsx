@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, Divider, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
+import { Box, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
@@ -10,10 +10,9 @@ import { getPoolsFilter } from '../../../api/market'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import EmptyData from '../EmptyData'
-import { getTextFromPoolType, PoolType } from '../../../api/pool/type'
-import { routes } from '../../../constants/routes'
-import { getLabelById } from '../../../utils'
+import { getTextFromPoolType } from '../../../api/pool/type'
 import { useNavigate } from 'react-router-dom'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import CustomMobileTable from '../../../components/Table/CustomMobileTable'
 
@@ -28,11 +27,6 @@ const Avatar = styled('img')`
   width: 40px;
   height: 40px;
   border-radius: 6px;
-  @media (max-width: 600px) {
-    width: 24px;
-    height: 24px;
-    border-radius: 3px;
-  }
 `
 
 const StatusLive = styled(Box)`
@@ -89,8 +83,8 @@ const Tab = styled(Box)`
   }
 
   @media (max-width: 600px) {
-    padding: 12px;
-    height: 36px;
+    padding: 12px 16px;
+    height: 45px;
     width: max-content;
   }
 `
@@ -106,89 +100,149 @@ const Status: React.FC<{ status: StatusE }> = ({ status }) => {
       return <></>
   }
 }
-export const getRoute = (category: PoolType) => {
-  let route = routes.auction.fixedPrice
-  switch (category) {
-    case PoolType.Lottery:
-      route = routes.auction.randomSelection
-      break
-    case PoolType.FixedSwap:
-      route = routes.auction.fixedPrice
-      break
-    case PoolType.fixedSwapNft:
-      route = routes.auction.fixedSwapNft
-      break
-  }
-  return route
-}
 
 export function AuctionRow(props: any): ReactJSXElement[] {
   const nowTimestamp = Date.now() / 1000
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
+  const url = getAuctionPoolLink(props.id, props.category, props.chainId, props.poolId)
   const isSm = props.isSm
-  const url = getRoute(props.category)
-    .replace(':chainShortName', getLabelById(props.chainId, 'shortName', props.opt?.chainInfoOpt || []))
-    .replace(':poolId', props.poolId)
 
-  return [
-    <CenterRow
-      key={0}
-      onClick={() => props.navigate(url)}
-      sx={{
-        cursor: 'pointer'
-      }}
-    >
-      <H7Gray
-        mr={14}
-        sx={{
-          width: 16
-        }}
-      >
-        {props.index}
-      </H7Gray>
-      <Avatar
-        src={
-          props.token0?.largeUrl
-            ? props.token0?.largeUrl
-            : props.tokenType === BackedTokenType.TOKEN
-            ? EmptyToken
-            : EmptyAvatar
-        }
-      />
-      <H7
-        className={isSm ? 'mobile' : ''}
-        sx={{
-          maxWidth: 160,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap'
-        }}
-      >
-        {props.name}
-      </H7>
-    </CenterRow>,
-    <SmallText
-      sx={{
-        cursor: 'pointer'
-      }}
-      maxWidth={164}
-      onClick={() => props.navigate(url)}
-      key={1}
-    >
-      {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-    </SmallText>,
-    <SmallText
-      sx={{
-        cursor: 'pointer'
-      }}
-      onClick={() => props.navigate(url)}
-      key={2}
-    >
-      {getTextFromPoolType(props.category)}
-    </SmallText>,
-    <Status key={3} status={status} />
-  ]
+  return isSm
+    ? [
+        <CenterRow
+          key={0}
+          onClick={() => props.navigate(url)}
+          sx={{
+            cursor: 'pointer'
+          }}
+        >
+          {/* index */}
+          <H7Gray
+            mr={16}
+            sx={{
+              width: 16
+            }}
+          >
+            {props.index}
+          </H7Gray>
+          <Avatar
+            src={
+              props.token0?.largeUrl
+                ? props.token0?.largeUrl
+                : props.tokenType === BackedTokenType.TOKEN
+                ? EmptyToken
+                : EmptyAvatar
+            }
+          />
+          <Box key={1}>
+            <H7
+              className={isSm ? 'mobile' : ''}
+              sx={{
+                maxWidth: 160,
+                overflow: 'hidden',
+                textAlign: 'left',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {props.name}
+            </H7>
+            <CenterRow>
+              <SmallText
+                sx={{
+                  cursor: 'pointer',
+                  maxWidth: 88,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}
+                maxWidth={164}
+                onClick={() => props.navigate(url)}
+                key={1}
+              >
+                {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
+              </SmallText>
+              <Box
+                sx={{
+                  width: '0px',
+                  height: '8px',
+                  margin: '0 4px',
+                  border: '1px solid #959595'
+                }}
+              />
+              <SmallText
+                sx={{
+                  cursor: 'pointer'
+                }}
+                onClick={() => props.navigate(url)}
+                key={2}
+              >
+                {getTextFromPoolType(props.category)}
+              </SmallText>
+            </CenterRow>
+          </Box>
+        </CenterRow>,
+        <Status key={3} status={status} />
+      ]
+    : [
+        <CenterRow
+          key={0}
+          onClick={() => props.navigate(url)}
+          sx={{
+            cursor: 'pointer'
+          }}
+        >
+          <H7Gray
+            mr={14}
+            sx={{
+              width: 16
+            }}
+          >
+            {props.index}
+          </H7Gray>
+          <Avatar
+            src={
+              props.token0?.largeUrl
+                ? props.token0?.largeUrl
+                : props.tokenType === BackedTokenType.TOKEN
+                ? EmptyToken
+                : EmptyAvatar
+            }
+          />
+          <H7
+            className={isSm ? 'mobile' : ''}
+            sx={{
+              maxWidth: 160,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {props.name}
+          </H7>
+        </CenterRow>,
+        <SmallText
+          sx={{
+            cursor: 'pointer'
+          }}
+          maxWidth={164}
+          onClick={() => props.navigate(url)}
+          key={1}
+        >
+          {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
+        </SmallText>,
+        <SmallText
+          sx={{
+            cursor: 'pointer'
+          }}
+          onClick={() => props.navigate(url)}
+          key={2}
+        >
+          {getTextFromPoolType(props.category)}
+        </SmallText>,
+        <Status key={3} status={status} />
+      ]
 }
 
 const SkeletonBox = () => {
@@ -263,6 +317,7 @@ export const AuctionRankCard: React.FC = () => {
   const action = Tabs.indexOf(currentTab) + 1
   const [chainFilter, setChainFilter] = useState<number>(0)
   const navigate = useNavigate()
+  const TableHeader = isSm ? ['Auction', 'Status'] : ['Auction', 'Asset', 'Auction', 'Status']
   const { data } = useRequest(
     async () => {
       const resp = await getPoolsFilter({
@@ -306,11 +361,24 @@ export const AuctionRankCard: React.FC = () => {
       sx={{
         width: '100%',
         maxWidth: '1296px',
-        margin: isSm ? '16px auto 0' : '40px auto 0'
+        margin: '40px auto 0'
       }}
     >
-      <CenterRow flexDirection={isSm ? 'column' : 'row'} justifyContent={'space-between'}>
-        <Row>
+      <CenterRow
+        flexDirection={isSm ? 'column' : 'row'}
+        justifyContent="flex-start"
+        style={{ alignItems: isSm ? 'flex-start' : 'center' }}
+      >
+        <Row
+          sx={{
+            overflowX: 'scroll',
+            '&::-webkit-scrollbar': {
+              width: 0,
+              height: 0,
+              background: 'transparent'
+            }
+          }}
+        >
           {Tabs.map((tab, idx) => (
             <Tab
               sx={{ cursor: tab === currentTab ? 'auto' : 'pointer' }}
@@ -322,7 +390,6 @@ export const AuctionRankCard: React.FC = () => {
             </Tab>
           ))}
         </Row>
-        {isSm && <Divider />}
         {isSm && (
           <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0' }}>
             {ChainSelect}
@@ -337,11 +404,14 @@ export const AuctionRankCard: React.FC = () => {
             display: 'flex',
             background: 'white',
             overflow: isSm ? 'scroll' : 'hidden',
-            borderRadius: isSm ? 0 : '0px 30px 30px 30px'
+            borderRadius: isSm ? 0 : '0px 30px 30px 30px',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
           }}
         >
           <CustomMobileTable
-            header={['Auction', 'Asset', 'Auction', 'Status']}
+            header={TableHeader}
             rows={
               data
                 ? data.list?.slice(0, 5)?.map((d: any, idx: number) =>
@@ -357,7 +427,7 @@ export const AuctionRankCard: React.FC = () => {
             }
           />
           <CustomMobileTable
-            header={['Auction', 'Asset', 'Auction', 'Status']}
+            header={TableHeader}
             rows={
               data
                 ? data.list?.slice(5)?.map((d: any, idx: number) =>

@@ -65,7 +65,7 @@ function UserBlock() {
         poolInfo={poolInfo}
         getPoolInfo={getPoolInfo}
       />
-      <ActionHistory />
+      <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
     </Box>
   )
 }
