@@ -38,6 +38,18 @@ export function use1155TokenList(
           }
           nftCollection[item.contractAddr].push(item)
         })
+        if (chainId === 5 && isERC721) {
+          nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
+          nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
+            balance: '1',
+            contractAddr: '0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '3'
+          })
+        }
         if (chainId === 5 && !isERC721) {
           nftCollection['0xe382FBd068d373dbe3186176af788a60a9CC13e8'] = []
           nftCollection['0xe382FBd068d373dbe3186176af788a60a9CC13e8'].push({

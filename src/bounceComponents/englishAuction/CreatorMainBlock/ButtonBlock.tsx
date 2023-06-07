@@ -21,11 +21,11 @@ const ButtonBlock = () => {
 
   const isAllTokenSwapped = useMemo(() => !!poolInfo?.currentBidder && !isZero(poolInfo.currentBidder), [poolInfo])
 
-  const { run: claim, submitted } = useCreatorClaimEnglishAuctionNFT(
-    poolInfo?.poolId || '',
-    poolInfo?.name || '',
-    poolInfo?.contract
-  )
+  const {
+    run: claim,
+    submitted,
+    creatorClaimed
+  } = useCreatorClaimEnglishAuctionNFT(poolInfo?.poolId || '', poolInfo?.name || '', poolInfo?.contract)
 
   const successDialogContent = useMemo(() => {
     const token1ToClaimText = `${poolInfo?.currentBidderAmount1?.toSignificant()} ${poolInfo?.token1.symbol}`
@@ -112,9 +112,10 @@ const ButtonBlock = () => {
         loadingPosition="start"
         sx={{ mt: 24, mb: 12 }}
         loading={submitted.complete || submitted.submitted}
+        disabled={creatorClaimed}
         onClick={() => toClaim(true)}
       >
-        Cancel & Claim tokens
+        {creatorClaimed ? 'Claimed' : 'Cancel & Claim tokens'}
       </LoadingButton>
     )
   }

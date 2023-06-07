@@ -13,7 +13,7 @@ import {
   Typography
 } from '@mui/material'
 import moment from 'moment'
-import { PoolEvent, PoolType } from 'api/pool/type'
+import { PoolType } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -33,6 +33,7 @@ import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import ChainSelect from 'bounceComponents/common/ChainSelect'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import { PoolEventTypography } from 'bounceComponents/fixed-swap/ActionHistory'
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,14 +63,6 @@ const StyledTableRow = styled(TableRow)(() => ({
     border: 0
   }
 }))
-
-const SaleTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Sale</Typography>
-const RegretTypography = <Typography sx={theme => ({ color: theme.palette.error.main })}>Regret</Typography>
-
-const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
-  Swapped: SaleTypography,
-  Reversed: RegretTypography
-}
 
 const defaultPageSize = 10
 

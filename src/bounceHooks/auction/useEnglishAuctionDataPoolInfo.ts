@@ -6,12 +6,26 @@ import { useBackedPoolInfo } from './usePoolInfo'
 import { useActiveWeb3React } from 'hooks'
 import { useEnglishAuctionNftContract } from 'hooks/useContract'
 import { EnglishAuctionNFTPoolProp, PoolType } from 'api/pool/type'
+import usePoolHistory from './usePoolHistory'
+
+function useEnglishAuctionAccountBidAmount(backedChainId?: number, poolId?: string) {
+  const { account } = useActiveWeb3React()
+  const { data } = usePoolHistory(
+    account && backedChainId ? backedChainId : 0,
+    poolId || '',
+    PoolType.ENGLISH_AUCTION_NFT
+  )
+  const rawAmount = useMemo(() => (account ? data?.list?.[0]?.token1Amount : undefined), [account, data?.list])
+
+  return rawAmount
+}
 
 export function useEnglishAuctionDataPoolInfo() {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT)
 
   const englishAuctionNftContract = useEnglishAuctionNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
+  const accountBidRawAmount = useEnglishAuctionAccountBidAmount(poolInfo?.chainId, poolInfo?.poolId)
 
   const poolsRes = useSingleCallResult(
     englishAuctionNftContract,
@@ -102,7 +116,8 @@ export function useEnglishAuctionDataPoolInfo() {
       ..._pools,
       participant: {
         ...poolInfo.participant,
-        claimed: myClaimed
+        claimed: myClaimed,
+        accountBidAmount: accountBidRawAmount ? CurrencyAmount.fromRawAmount(t1, accountBidRawAmount) : undefined
       },
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
       currentBidder: currentBidder,
@@ -124,6 +139,7 @@ export function useEnglishAuctionDataPoolInfo() {
     poolsData.amountMin1,
     poolsData.amountMinIncr1,
     myClaimed,
+    accountBidRawAmount,
     creatorClaimed,
     currentBidder,
     currentBidderAmount1,

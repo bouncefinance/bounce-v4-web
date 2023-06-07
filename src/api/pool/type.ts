@@ -229,6 +229,7 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
     claimed?: boolean
     is721?: 1 | 2
     tokenId?: string
+    accountBidAmount: CurrencyAmount | undefined
   }
   creatorClaimed: boolean
   currentBidder: string | undefined
@@ -264,7 +265,7 @@ export interface GetWinnersListParams {
   poolId: string
 }
 
-export type PoolEvent = 'Swapped' | 'Reversed'
+export type PoolEvent = 'Swapped' | 'CreatorClaimed' | 'Reversed' | 'Bid' | 'Bet'
 
 export interface PoolHistory {
   //block timestamp
@@ -301,6 +302,8 @@ export interface PoolHistory {
 
   //token sold (token0) total volume. unit is USD. calculated by price of token 1
   token0Volume: number
+
+  token1Amount?: string
 
   //tx hash
   txHash: string

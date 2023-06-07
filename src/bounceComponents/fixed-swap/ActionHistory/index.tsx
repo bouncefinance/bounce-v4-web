@@ -19,7 +19,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { shortenAddress } from 'utils'
 
-const StyledTableCell = styled(TableCell)(() => ({
+export const StyledHistoryTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     color: '#908E96',
     backgroundColor: '#FFFFFF',
@@ -31,7 +31,7 @@ const StyledTableCell = styled(TableCell)(() => ({
   }
 }))
 
-const StyledTableRow = styled(TableRow)(() => ({
+export const StyledHistoryTableRow = styled(TableRow)(() => ({
   '&:nth-of-type(even)': {
     backgroundColor: '#F5F5F5',
 
@@ -50,11 +50,19 @@ const StyledTableRow = styled(TableRow)(() => ({
 }))
 
 const SaleTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Sale</Typography>
+const CreatorClaimedTypography = (
+  <Typography sx={theme => ({ color: theme.palette.success.main })}>CreatorClaimed</Typography>
+)
+const BidTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Bid</Typography>
+const BetTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Bet</Typography>
 const RegretTypography = <Typography sx={theme => ({ color: theme.palette.error.main })}>Regret</Typography>
 
-const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
+export const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Swapped: SaleTypography,
-  Reversed: RegretTypography
+  Reversed: RegretTypography,
+  CreatorClaimed: CreatorClaimedTypography,
+  Bid: BidTypography,
+  Bet: BetTypography
 }
 
 const ActionHistory = ({
@@ -80,43 +88,45 @@ const ActionHistory = ({
         </Typography>
       )}
 
-      {data && data?.list.length > 0 && !isGettingPoolHistory ? (
+      {data && data?.list.length > 0 ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-              <StyledTableRow>
-                <StyledTableCell>Event</StyledTableCell>
-                <StyledTableCell>Amount</StyledTableCell>
-                <StyledTableCell>Address</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
-              </StyledTableRow>
+              <StyledHistoryTableRow>
+                <StyledHistoryTableCell>Event</StyledHistoryTableCell>
+                <StyledHistoryTableCell>Amount</StyledHistoryTableCell>
+                <StyledHistoryTableCell>Address</StyledHistoryTableCell>
+                <StyledHistoryTableCell>Date</StyledHistoryTableCell>
+              </StyledHistoryTableRow>
             </TableHead>
             <TableBody>
               {data.list.map(record => (
-                <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>
-                  <StyledTableCell>
+                <StyledHistoryTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <StyledHistoryTableCell>{PoolEventTypography[record.event]}</StyledHistoryTableCell>
+                  <StyledHistoryTableCell>
                     {removeRedundantZeroOfFloat(
                       formatNumber(record.token0Amount, { unit: record.token0Decimals, decimalPlaces: 4 })
                     )}
                     &nbsp;
                     {record.token0Symbol}
-                  </StyledTableCell>
-                  <StyledTableCell>
+                  </StyledHistoryTableCell>
+                  <StyledHistoryTableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography>{shortenAddress(record.requestor)}</Typography>
                       <CopyToClipboard text={record.requestor} />
                     </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>{moment(record.blockTs * 1000).format('Y/M/D hh:mm A')}</StyledTableCell>
-                </StyledTableRow>
+                  </StyledHistoryTableCell>
+                  <StyledHistoryTableCell>
+                    {moment(record.blockTs * 1000).format('Y/M/D hh:mm A')}
+                  </StyledHistoryTableCell>
+                </StyledHistoryTableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-      ) : (
+      ) : !isGettingPoolHistory ? (
         <Box sx={{ width: '100%' }}>{children ? children : <NoData />}</Box>
-      )}
+      ) : null}
     </Box>
   )
 }

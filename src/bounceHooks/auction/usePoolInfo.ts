@@ -32,7 +32,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
         }
       }
       const args = sysId
-        ? { id: Number(sysId), tokenType: getBackedTokenType(category) }
+        ? { id: Number(sysId), tokenType: getBackedTokenType(category), address: account || '' }
         : {
             poolId,
             category,
