@@ -162,9 +162,9 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
                 <Typography
                   sx={{
                     padding: '0 12px',
-                    lineHeight: '40px',
+                    lineHeight: '39px',
                     borderBottom: !!(item.route && pathname.includes(item.route))
-                      ? '1px solid var(--ps-yellow-1)'
+                      ? '2px solid var(--ps-yellow-1)'
                       : 'none'
                   }}
                   onClick={() =>

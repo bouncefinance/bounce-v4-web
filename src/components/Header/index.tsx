@@ -247,7 +247,7 @@ export default function Header() {
             />
           </MainLogo>
 
-          {!isTransparentRoute && <HeaderLink />}
+          {!isTransparentRoute && !isSm && <HeaderLink />}
         </Box>
 
         <Stack display={isSm ? 'none' : 'inherit'} direction={'row'} alignItems="center" spacing={8} flex={1}>
