@@ -18,6 +18,7 @@ import { ReactComponent as InstagramSVG } from 'assets/imgs/profile/links/instag
 import { ReactNode, useState } from 'react'
 import Divider from 'components/Divider'
 import { Cancel } from '@mui/icons-material'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 export interface ILinksItem {
   name: string
@@ -126,6 +127,7 @@ export interface IProfileOverviewValue extends ISocialEditInputProp {
 
 export default function ProfileOverview() {
   const { userInfo } = useUserInfo()
+  const isSm = useBreakpoint('sm')
 
   const { loading, runAsync: runUpdateBasic } = useUpdateBasic()
 
@@ -169,21 +171,22 @@ export default function ProfileOverview() {
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h3" fontSize={36}>
+              <Typography variant="h3" fontSize={isSm ? 22 : 36}>
                 My Profile
               </Typography>
-
-              <LoadingButton
-                loading={loading}
-                loadingPosition="start"
-                startIcon={<></>}
-                variant="contained"
-                color="secondary"
-                sx={{ width: 116, height: 52, textAlign: 'right' }}
-                type="submit"
-              >
-                Save
-              </LoadingButton>
+              {!isSm && (
+                <LoadingButton
+                  loading={loading}
+                  loadingPosition="start"
+                  startIcon={<></>}
+                  variant="contained"
+                  color="secondary"
+                  sx={{ width: 116, height: 52, textAlign: 'right' }}
+                  type="submit"
+                >
+                  Save
+                </LoadingButton>
+              )}
             </Box>
 
             <FormItem
@@ -269,6 +272,20 @@ export default function ProfileOverview() {
                 </Stack>
               </Box>
             </Box>
+
+            {isSm && (
+              <LoadingButton
+                loading={loading}
+                loadingPosition="start"
+                startIcon={<></>}
+                variant="contained"
+                color="secondary"
+                sx={{ width: 81, height: 42, textAlign: 'right', margin: '48px auto 0!important' }}
+                type="submit"
+              >
+                Save
+              </LoadingButton>
+            )}
           </Stack>
         )
       }}

@@ -141,7 +141,7 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
         </Box>
       )}
       {isMd && (
-        <Box>
+        <Box sx={{ backgroundColor: bgColor || '#fff', minHeight: '100vh' }}>
           <Box
             sx={{
               height: '41px',
