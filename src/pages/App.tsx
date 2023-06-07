@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
@@ -62,6 +62,8 @@ import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
+import FundoHome from 'pages/fundo/home'
+import FundoDetail from 'pages/fundo/detail'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
@@ -71,7 +73,7 @@ import { Game } from './game'
 import { ProjectInfo } from './projectIntro/projectInfo'
 import { Equilibria } from './game/equilibria'
 import { Rank } from './launchpad/rank'
-
+import 'react-toastify/dist/ReactToastify.css'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -85,7 +87,9 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
-
+  const isFundoPage = useMemo(() => {
+    return pathname.indexOf('fundo') > -1
+  }, [pathname])
   return (
     <Suspense fallback={null}>
       <ModalProvider>
@@ -96,9 +100,7 @@ export default function App() {
               <Header />
               <ToastContainer />
               <Questions />
-              <ShowOnMobile breakpoint="md">
-                <Mobile />
-              </ShowOnMobile>
+              <ShowOnMobile breakpoint="md">{!isFundoPage && <Mobile />}</ShowOnMobile>
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
@@ -158,6 +160,9 @@ export default function App() {
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
                     />
+                    <Route path={routes.fundo.home} element={<FundoHome />} />
+                    <Route path={routes.fundo.detail} element={<FundoDetail />} />
+                    <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     <Route

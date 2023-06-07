@@ -20,7 +20,7 @@ import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
 import { useHeaderBgOpacity } from 'hooks/useScroll'
 import Resources from './Resources'
 import HeaderLink from './HeaderLink'
-
+import FundoHead from 'components/Fundo/Header'
 interface TabContent {
   title: string
   route?: string
@@ -141,7 +141,9 @@ export default function Header() {
   //     return ''
   //   }
   // })
-
+  const showBounseHead = useMemo(() => {
+    return location.pathname.indexOf('fundo') === -1
+  }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
@@ -171,89 +173,92 @@ export default function Header() {
       <LoginModal />
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
-      <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
-        <Box display="flex" alignItems="center">
-          <MainLogo id={'logo'} to={'/'}>
-            <Image
-              style={isWhiteLogo ? { mixBlendMode: 'difference' } : {}}
-              src={isWhiteLogo ? logoWhite : logo}
-              alt={'logo'}
-            />
-          </MainLogo>
-
-          {!isTransparentRoute && <HeaderLink />}
-        </Box>
-
-        <Stack direction={'row'} alignItems="center" spacing={8} flex={1}>
-          <Search />
-          <Resources />
-          <CreateBtn />
-          <NetworkPopperSelect />
-          <Web3Status />
-
-          {!token && (
-            <Button
-              onClick={() => {
-                if (location.pathname === routes.login) {
-                  return
-                }
-                const _redirect = location.pathname + location.search
-                navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
-              }}
-              sx={{
-                minWidth: 212,
-                borderRadius: 8,
-                padding: '0 12px',
-                border: '1px solid var(--ps-gray-20)',
-                height: 44,
-                backgroundColor: theme => theme.palette.background.paper,
-                '&:hover .line': {
-                  borderColor: 'var(--ps-text-4)'
-                }
-              }}
-            >
-              <UserIcon />
-              <Box
-                className="line"
-                sx={{
-                  borderRight: '1px solid var(--ps-gray-20)',
-                  mx: 10,
-                  height: '100%'
-                }}
+      {showBounseHead && (
+        <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
+          <Box display="flex" alignItems="center">
+            <MainLogo id={'logo'} to={'/'}>
+              <Image
+                style={isWhiteLogo ? { mixBlendMode: 'difference' } : {}}
+                src={isWhiteLogo ? logoWhite : logo}
+                alt={'logo'}
               />
-              <WalletIcon />
-              <Typography variant="h5" ml={5}>
-                Connect wallet
-              </Typography>
-            </Button>
-          )}
-        </Stack>
+            </MainLogo>
 
-        <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
-          {/* <Web3Status /> */}
-          <ShowOnMobile breakpoint="md">
-            <IconButton
-              sx={{
-                border: '1px solid rgba(0, 0, 0, 0.1)',
-                height: { xs: 24, sm: 32 },
-                width: { xs: 24, sm: 32 },
-                mb: { xs: 0, sm: 15 },
-                mt: { xs: 0, sm: 8 },
-                padding: '4px',
-                borderRadius: '8px'
-              }}
-              onClick={() => {
-                setMobileMenuOpen(open => !open)
-              }}
-            >
-              <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="#252525">
-                <path d="M1 1H13" strokeWidth="1.4" strokeLinecap="round" />
-                <path d="M1 7H13" strokeWidth="1.4" strokeLinecap="round" />
-              </svg>
-            </IconButton>
-          </ShowOnMobile>
-        </Box>
-      </StyledAppBar>
+            {!isTransparentRoute && <HeaderLink />}
+          </Box>
+
+          <Stack direction={'row'} alignItems="center" spacing={8} flex={1}>
+            <Search />
+            <Resources />
+            <CreateBtn />
+            <NetworkPopperSelect />
+            <Web3Status />
+
+            {!token && (
+              <Button
+                onClick={() => {
+                  if (location.pathname === routes.login) {
+                    return
+                  }
+                  const _redirect = location.pathname + location.search
+                  navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
+                }}
+                sx={{
+                  minWidth: 212,
+                  borderRadius: 8,
+                  padding: '0 12px',
+                  border: '1px solid var(--ps-gray-20)',
+                  height: 44,
+                  backgroundColor: theme => theme.palette.background.paper,
+                  '&:hover .line': {
+                    borderColor: 'var(--ps-text-4)'
+                  }
+                }}
+              >
+                <UserIcon />
+                <Box
+                  className="line"
+                  sx={{
+                    borderRight: '1px solid var(--ps-gray-20)',
+                    mx: 10,
+                    height: '100%'
+                  }}
+                />
+                <WalletIcon />
+                <Typography variant="h5" ml={5}>
+                  Connect wallet
+                </Typography>
+              </Button>
+            )}
+          </Stack>
+
+          <Box display="none" alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
+            {/* <Web3Status /> */}
+            <ShowOnMobile breakpoint="md">
+              <IconButton
+                sx={{
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  height: { xs: 24, sm: 32 },
+                  width: { xs: 24, sm: 32 },
+                  mb: { xs: 0, sm: 15 },
+                  mt: { xs: 0, sm: 8 },
+                  padding: '4px',
+                  borderRadius: '8px'
+                }}
+                onClick={() => {
+                  setMobileMenuOpen(open => !open)
+                }}
+              >
+                <svg width="14" height="8" viewBox="0 0 14 8" fill="none" stroke="#252525">
+                  <path d="M1 1H13" strokeWidth="1.4" strokeLinecap="round" />
+                  <path d="M1 7H13" strokeWidth="1.4" strokeLinecap="round" />
+                </svg>
+              </IconButton>
+            </ShowOnMobile>
+          </Box>
+        </StyledAppBar>
+      )}
+      {!showBounseHead && <FundoHead />}
     </>
   )
 }
