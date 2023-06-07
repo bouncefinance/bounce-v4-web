@@ -53,7 +53,7 @@ export default function MyProfile() {
                 <Typography variant={isSm ? 'h5' : 'h3'} color="#fff">
                   Profile Picture
                 </Typography>
-                <Typography fontSize={isSm && 12} color="#fff">
+                <Typography fontSize={isSm ? 12 : ''} color="#fff">
                   The most suitable size is 1200 * 300px
                 </Typography>
               </Box>

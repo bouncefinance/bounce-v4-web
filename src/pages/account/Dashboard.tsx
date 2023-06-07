@@ -44,7 +44,7 @@ export default function Dashboard() {
 
   return (
     <AccountLayout>
-      <Box padding="0 20px" sx={{ background: isSm && '#fff' }}>
+      <Box padding="0 20px" sx={{ background: isSm ? '#fff' : '' }}>
         <Container maxWidth="lg">
           <Box padding={isSm ? `20px 0` : `40px 0`}>
             <Typography variant="h3" fontSize={isSm ? 22 : 30}>
@@ -197,7 +197,7 @@ export default function Dashboard() {
                   )}
                 </Stack>
                 {userInfo?.location && (
-                  <Box height={32} direction={'row'} alignItems={'center'} justifyContent={'center'}>
+                  <Box height={32} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
                     <Chip
                       sx={{
                         width: 84,

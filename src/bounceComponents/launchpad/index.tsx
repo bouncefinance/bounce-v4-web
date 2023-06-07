@@ -1,21 +1,28 @@
 import React from 'react'
 import { Box, Stack, styled, SxProps } from '@mui/material'
+import useBreakpoint from 'hooks/useBreakpoint'
+
 // import Temp1 from 'assets/imgs/auction/1.png'
 // import Temp2 from 'assets/imgs/auction/3.png'
 
-const CommonBg = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  width: 1320px;
-  height: 400px;
-  background: #e8e9e4;
-  border-radius: 30px;
-
-  :hover {
-    cursor: pointer;
-    background: #e1f25c;
+const CommonBg = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  maxWidth: '1320px',
+  height: '400px',
+  background: '#e8e9e4',
+  borderRadius: '30px',
+  '&:hover': {
+    cursor: 'pointer',
+    background: '#e1f25c'
+  },
+  [theme.breakpoints.down('md')]: {
+    width: 'calc(100vw - 32px)',
+    height: 'auto',
+    flexDirection: 'column'
   }
-`
+}))
 
 export function Common({
   img,
@@ -37,16 +44,26 @@ export function Common({
       }
     | undefined
 }) {
+  const isSm = useBreakpoint('sm')
+  const isMd = useBreakpoint('md')
   return (
     <CommonBg sx={sx} onClick={onClick} position={'relative'}>
-      <img style={{ width: '600px', objectFit: 'cover', borderRadius: '30px 0 0 30px' }} src={img} />
+      <img
+        style={{
+          width: isSm ? '100%' : isMd ? 'calc(100vw - 32px)' : '600px',
+          objectFit: 'cover',
+          borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
+          maxHeight: isMd ? 350 : 400
+        }}
+        src={img}
+      />
       <Box sx={{ width: '100%', height: '100%' }}>{child}</Box>
       <Stack
         spacing={10}
         direction={'row'}
         sx={{
           position: 'absolute',
-          left: 24,
+          left: isSm ? 0 : 24,
           top: 24
         }}
       >
