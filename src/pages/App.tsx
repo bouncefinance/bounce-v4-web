@@ -88,7 +88,7 @@ export default function App() {
     window.scrollTo(0, 0)
   }, [pathname])
   const isFundoPage = useMemo(() => {
-    return pathname.indexOf('fundo') > -1
+    return pathname.indexOf('fundo') > -1 || pathname.indexOf('/real-auction') > -1
   }, [pathname])
   return (
     <Suspense fallback={null}>
