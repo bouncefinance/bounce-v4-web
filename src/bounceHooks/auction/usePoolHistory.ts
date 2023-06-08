@@ -2,12 +2,9 @@ import { useRequest } from 'ahooks'
 
 import { getPoolHistory } from 'api/pool'
 import { PoolType } from 'api/pool/type'
-import { useActiveWeb3React } from 'hooks'
 import getTokenType from 'utils/getTokenType'
 
-const usePoolHistory = (backedChainId: number, poolId: string, category: PoolType) => {
-  const { account } = useActiveWeb3React()
-
+const usePoolHistory = (backedChainId: number, poolId: string, category: PoolType, account?: string) => {
   return useRequest(
     async () => {
       if (typeof poolId !== 'string') {
@@ -28,7 +25,7 @@ const usePoolHistory = (backedChainId: number, poolId: string, category: PoolTyp
       // cacheKey: `POOL_HISTORY_${account}`,
       ready: !!poolId && !!backedChainId,
       pollingInterval: 30000,
-      refreshDeps: [account]
+      refreshDeps: [account, poolId, backedChainId]
     }
   )
 }

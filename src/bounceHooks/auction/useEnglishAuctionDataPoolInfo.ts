@@ -13,7 +13,8 @@ function useEnglishAuctionAccountBidAmount(backedChainId?: number, poolId?: stri
   const { data } = usePoolHistory(
     account && backedChainId ? backedChainId : 0,
     poolId || '',
-    PoolType.ENGLISH_AUCTION_NFT
+    PoolType.ENGLISH_AUCTION_NFT,
+    account || undefined
   )
   const rawAmount = useMemo(() => (account ? data?.list?.[0]?.token1Amount : undefined), [account, data?.list])
 
