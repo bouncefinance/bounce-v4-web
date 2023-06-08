@@ -663,7 +663,6 @@ const Pools: React.FC = ({}) => {
                             onChange={handlePageChange}
                             count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
                             variant="outlined"
-                            siblingCount={0}
                           />
                         </Box>
                       )}
