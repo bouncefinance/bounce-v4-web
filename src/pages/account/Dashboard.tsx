@@ -44,7 +44,7 @@ export default function Dashboard() {
 
   return (
     <AccountLayout>
-      <Box padding="0 20px" sx={{ background: isSm && '#fff' }}>
+      <Box padding="0 20px" sx={{ background: isSm ? '#fff' : '' }}>
         <Container maxWidth="lg">
           <Box padding={isSm ? `20px 0` : `40px 0`}>
             <Typography variant="h3" fontSize={isSm ? 22 : 30}>
@@ -259,7 +259,7 @@ export default function Dashboard() {
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { lg: '346fr 346fr 346fr', md: '346fr 346fr', xs: '1fr' },
-                gap: isSm ? 24 : 30
+                gap: 30
               }}
             >
               <CreateAuctionsList title="Ongoing Auctions" queryType={DashboardQueryType.ongoing} />
