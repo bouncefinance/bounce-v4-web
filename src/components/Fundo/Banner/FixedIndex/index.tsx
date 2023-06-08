@@ -68,6 +68,7 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
           sx={{
             width: '100%',
             textAlign: 'center',
+            fontFamily: `'Public Sans'`,
             fontWeight: 500,
             fontSize: '16px',
             color: '#fff'
@@ -78,6 +79,7 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
         <Typography
           sx={{
             width: '100%',
+            fontFamily: `'Public Sans'`,
             textAlign: 'center',
             fontWeight: 400,
             fontSize: '12px',

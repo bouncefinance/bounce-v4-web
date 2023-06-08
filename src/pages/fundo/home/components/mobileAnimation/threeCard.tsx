@@ -25,7 +25,7 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
     return result
   }, [step, animationRatio])
   const hideProductImg = useMemo(() => {
-    return step === AnimateStep.enter && Number(animationRatio) < 0.9
+    return step === AnimateStep.enter && Number(animationRatio) < 1
   }, [animationRatio, step])
   return (
     <Box

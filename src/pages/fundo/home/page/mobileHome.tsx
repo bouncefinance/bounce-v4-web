@@ -68,6 +68,12 @@ const MobileHome: React.FC = () => {
             .toFixed(2)
         )
         setanimate2Step(AnimateStep.enter)
+      } else if (event.target.scrollTop > animate3Range[0]) {
+        setanimate2Ratio('1')
+        setanimate2Step(AnimateStep.notShow)
+      } else if (event.target.scrollTop > animate2Range[1]) {
+        setanimate2Ratio('1')
+        setanimate2Step(AnimateStep.enter)
       }
       event.target.scrollTop <= animate2Range[0] && setanimate2Step(AnimateStep.notShow)
       if (animate3Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate3Range[1]) {
@@ -131,7 +137,7 @@ const MobileHome: React.FC = () => {
     >
       {/* scroll empty box */}
       <Box
-        id={'animation'}
+        id={'animation1'}
         style={{
           width: '2px',
           height: `${_AnimateHeight1}px`,
@@ -143,7 +149,7 @@ const MobileHome: React.FC = () => {
       ></Box>
       {animate2Step !== AnimateStep.notShow && <ThreeCard step={animate2Step} animationRatio={animate2Ratio} />}
       {animate2_1Step !== AnimateStep.notShow && <TextAniamte step={animate2_1Step} animationRatio={animate2_1Ratio} />}
-      {animate1Show && <Necklace style={{}} onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
+      {animate1Show && <Necklace onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
       <OneMobile />
       <Box
         sx={{

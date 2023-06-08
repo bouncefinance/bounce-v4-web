@@ -20,7 +20,7 @@ const LinkItem = styled(Typography)(() => ({
     content: `''`,
     display: 'inline-block',
     width: '0',
-    height: '18px',
+    height: '8px',
     background: `url(${ArrowRight}) no-repeat center center / 100% auto`,
     verticalAlign: 'middle',
     marginLeft: '8px',
