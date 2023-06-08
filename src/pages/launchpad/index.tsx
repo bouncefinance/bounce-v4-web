@@ -479,7 +479,12 @@ const PrivatePad: React.FC = () => {
   return (
     <PrivatePadBg>
       <Container>
-        <CenterRow mb={54} width={'100%'} justifyContent={'space-between'}>
+        <CenterRow
+          mb={54}
+          width={'100%'}
+          sx={{ maxWidth: 1320, margin: '0 auto', marginBottom: 54 }}
+          justifyContent={'space-between'}
+        >
           <H2>Private launchpad</H2>
           <CenterRow gap={8} display={'none !important'}>
             <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.TOKEN} />

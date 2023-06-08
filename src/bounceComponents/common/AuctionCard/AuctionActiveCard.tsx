@@ -100,28 +100,31 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
 }
 
 const ActiveUserSkeletonCard = () => {
+  const isMd = useBreakpoint('md')
   return (
     <Box
       sx={{
         display: 'flex',
         padding: '16px',
+        flexDirection: isMd ? 'column' : 'row',
         cursor: 'pointer',
-        width: 'fit-content',
+        width: isMd ? 230 : 'fit-content',
+        height: isMd ? 364 : 'auto',
         gap: '20px',
         background: '#FFFFFF',
         borderRadius: '20px'
       }}
     >
-      <Box sx={{ width: '150px', height: '150px', borderRadius: '14px' }}>
+      <Box sx={{ width: isMd ? '198px' : '150px', height: isMd ? '198px' : '150px', borderRadius: '14px' }}>
         <Skeleton
           variant="rectangular"
           component={'div'}
-          sx={{ width: '150px', height: '150px', borderRadius: '14px' }}
+          sx={{ width: '100%', height: '100%', borderRadius: '14px' }}
         />
       </Box>
 
-      <Box width={'220px'} display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-        <Skeleton width={'30%'} height={28} variant="text" component={'div'} />
+      <Box width={isMd ? '100%' : '220px'} display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
+        <Skeleton width={'30%'} height={28} variant="text" component={'div'} sx={{ marginBottom: isMd ? 16 : 0 }} />
         <Skeleton width={'100%'} height={80} variant="rounded" component={'div'} sx={{ borderRadius: '10px' }} />
       </Box>
     </Box>
@@ -140,13 +143,14 @@ export const ActiveUser: React.FC = () => {
   const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / slideCardWidth)
   useEffect(() => {
     const resetView = () => {
-      setSlidesPerView(window.innerWidth / slideCardWidth)
+      setSlidesPerView(Math.ceil(window.innerWidth / slideCardWidth))
     }
     window.addEventListener('resize', resetView)
     return () => {
-      window.addEventListener('resize', resetView)
+      window.removeEventListener('resize', resetView)
     }
   }, [slideCardWidth])
+
   return (
     <Box
       className={'ActiveUser'}
@@ -167,7 +171,7 @@ export const ActiveUser: React.FC = () => {
       <SlideProgress
         hideArrow={isSm}
         swiperStyle={{
-          spaceBetween: 16,
+          spaceBetween: 20,
           slidesPerView: slidesPerView,
           loop: isSm,
           autoplay: isSm,
