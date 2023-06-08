@@ -61,7 +61,9 @@ export function useCreateRandomSelectionPool() {
           : IReleaseType.Instant === values.releaseType
           ? 0
           : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
-          ? values.delayUnlockingTime?.unix() || values.endTime?.unix() || 0
+          ? values.shouldDelayUnlocking
+            ? values.delayUnlockingTime?.unix() || 0
+            : values.endTime?.unix() || 0
           : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.tokenFrom.address,
