@@ -157,7 +157,7 @@ export default function ParticipatedTab({
           prompt="Go and explore auctions."
         />
       ) : (
-        <Box mt={40}>
+        <Box mt={isSm ? 0 : 40}>
           {auctionPoolData && auctionPoolData?.total > 0 && (
             <Grid container spacing={{ xs: 10, xl: 18 }}>
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
@@ -187,7 +187,17 @@ export default function ParticipatedTab({
       <Box mt={40} display={'flex'} justifyContent="center">
         <Pagination
           onChange={handlePageChange}
-          sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
+          sx={{
+            '.MuiPagination-ul li button': { border: '1px solid' },
+            alignItems: 'end',
+            overflowX: 'scroll',
+            '> ul': {
+              flexWrap: 'nowrap'
+            },
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
+          }}
           count={Math.ceil((auctionPoolData?.total || 0) / (defaultPageSize || 0))}
         />
       </Box>

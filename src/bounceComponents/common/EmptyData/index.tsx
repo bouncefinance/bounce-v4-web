@@ -17,7 +17,7 @@ export default function EmptyData({
 }) {
   const isSm = useBreakpoint('sm')
   return (
-    <Box sx={{ padding: isSm ? 0 : 40, ...sx }}>
+    <Box sx={{ padding: 40, ...sx }}>
       <Container
         maxWidth="lg"
         sx={{

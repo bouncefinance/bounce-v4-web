@@ -197,7 +197,7 @@ export default function Dashboard() {
                   )}
                 </Stack>
                 {userInfo?.location && (
-                  <Box height={32} direction={'row'} alignItems={'center'} justifyContent={'center'}>
+                  <Box height={32} display={'flex'} direction={'row'} alignItems={'center'} justifyContent={'center'}>
                     <Chip
                       sx={{
                         width: 84,
@@ -259,7 +259,7 @@ export default function Dashboard() {
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { lg: '346fr 346fr 346fr', md: '346fr 346fr', xs: '1fr' },
-                gap: 30
+                gap: isSm ? 24 : 30
               }}
             >
               <CreateAuctionsList title="Ongoing Auctions" queryType={DashboardQueryType.ongoing} />
