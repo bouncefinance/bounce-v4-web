@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 
 interface BidButtonBlockProps {
   action: UserBidAction
@@ -50,6 +51,10 @@ const BidButtonBlock = ({
 
   if (poolInfo.status === PoolStatus.Upcoming) {
     return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />
+  }
+
+  if (!account) {
+    return <ConnectWalletButton />
   }
 
   if (!isCurrentChainEqualChainOfPool) {
