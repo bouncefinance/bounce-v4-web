@@ -5,5 +5,5 @@
   "trailingComma": "none",
   "arrowParens": "avoid",
   "arrayExpand": false,
-  "endOfLine": "auto"
+  "endOfLine": "crlf"
 }
