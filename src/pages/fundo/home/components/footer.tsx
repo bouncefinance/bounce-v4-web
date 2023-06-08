@@ -346,7 +346,7 @@ export default function Footer() {
                 <Typography
                   key={`text${index}`}
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Semibold'`,
                     fontWeight: 600,
                     fontSize: isSm ? '24px' : '80px',
                     leadingTrim: 'both',
@@ -376,7 +376,7 @@ export default function Footer() {
                 >
                   <Typography
                     sx={{
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Semibold'`,
                       fontWeight: 600,
                       fontSize: isSm ? '24px' : '80px',
                       leadingTrim: 'both',
@@ -391,7 +391,7 @@ export default function Footer() {
                   </Typography>
                   <Typography
                     sx={{
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Semibold'`,
                       fontWeight: 600,
                       fontSize: isSm ? '16px' : '20px',
                       color: '#959595'

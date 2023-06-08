@@ -14,7 +14,7 @@ export default function FundoInfo() {
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'flex-start'
       }}
     >
       <Typography

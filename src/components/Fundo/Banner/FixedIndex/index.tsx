@@ -3,14 +3,14 @@ import Diamond from 'components/Fundo/assets/img/diamond.svg'
 import { useIsSMDown } from 'themes/useTheme'
 
 export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
-  const isMs = useIsSMDown()
+  const isSm = useIsSMDown()
   return (
     <Box
       sx={{
         position: 'absolute',
         width: '73px',
         top: '40%',
-        right: '0',
+        right: isSm ? '0' : '-20px',
         transform: 'translate3D(0, -40%,0)',
         zIndex: 997,
         display: 'flex',
@@ -23,8 +23,9 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
       <Typography
         sx={{
           fontWeight: 600,
-          fontSize: isMs ? '22px' : '34px',
-          marginBottom: isMs ? '10px' : '38px',
+          fontFamily: `'Public Sans'`,
+          fontSize: isSm ? '22px' : '34px',
+          marginBottom: isSm ? '10px' : '38px',
           color: 'var(--ps-text-5)',
           whiteSpace: 'nowrap',
           textAlign: 'center'

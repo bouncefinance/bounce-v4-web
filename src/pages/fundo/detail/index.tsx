@@ -253,7 +253,8 @@ const TokenDetail: React.FC = () => {
           <CenterSection
             style={{
               flexFlow: isSm ? 'column nowrap' : 'row nowrap',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              paddingLeft: '120px'
             }}
           >
             <>

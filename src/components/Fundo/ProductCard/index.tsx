@@ -68,6 +68,7 @@ export default function ProductCard({
           sx={{
             fontWeight: 500,
             fontSize: isSm ? '14px' : '16px',
+            fontFamily: `'Public Sans'`,
             color: 'var(--ps-text-5)'
           }}
         >
@@ -85,6 +86,7 @@ export default function ProductCard({
           sx={{
             fontWeight: 500,
             fontSize: isSm ? '14px' : '16px',
+            fontFamily: `'Public Sans'`,
             color: 'var(--ps-text-5)'
           }}
         >

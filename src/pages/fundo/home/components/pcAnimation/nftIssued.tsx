@@ -56,7 +56,7 @@ export default function NftIssued({ animationRatio, step }: { animationRatio?: s
               fontWeight: 100,
               fontSize: isSm ? '56px' : '200px',
               textAlign: 'center',
-              fontFamily: 'Public Sans',
+              fontFamily: `'Thin italic'`,
               fontStyle: 'italic',
               lineHeight: isSm ? '40px' : '145px',
               color: 'rgba(255, 255, 255, 0.8)',
@@ -100,7 +100,6 @@ export default function NftIssued({ animationRatio, step }: { animationRatio?: s
               fontSize: isSm ? '56px' : '200px',
               textAlign: 'center',
               fontFamily: 'Public Sans',
-              fontStyle: 'italic',
               lineHeight: isSm ? '40px' : '145px',
               color: 'rgba(255, 255, 255, 0.8)',
               whiteSpace: 'nowrap'

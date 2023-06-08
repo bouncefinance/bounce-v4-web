@@ -2,8 +2,11 @@ import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
 import FixedLeft from 'components/Fundo/Banner/FixedLeft'
+import { useIsSMDown } from 'themes/useTheme'
+
 export default function One() {
   const theme = useTheme()
+  const isSm = useIsSMDown()
   return (
     <CenterSection
       style={{
@@ -11,7 +14,8 @@ export default function One() {
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: isSm ? 'calc(100% - 20px)' : 'calc(100% - 75px - 45px)'
       }}
     >
       <>

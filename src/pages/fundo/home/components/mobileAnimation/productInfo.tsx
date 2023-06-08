@@ -32,6 +32,8 @@ export default function ProductInfo({ animationRatio, step }: { animationRatio?:
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'flex-start',
+        background: `rgba(73, 73, 73, 0.11)`,
+        border: `2px solid rgba(255, 255, 255, 0.2)`,
         alignItems: 'center'
       }}
       gap={'120px'}

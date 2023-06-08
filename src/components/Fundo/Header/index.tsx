@@ -78,7 +78,7 @@ export default function Header() {
       >
         <>
           <Link
-            to={routes.market.index}
+            to={routes.realAuction.index}
             style={{
               zIndex: 999
             }}
