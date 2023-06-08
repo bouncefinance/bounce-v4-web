@@ -16,7 +16,7 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
         cursor: 'pointer'
       }}
       onClick={() => {
-        navigate(routes.market.index)
+        navigate(routes.fundo.home)
       }}
     >
       <Box
@@ -41,7 +41,9 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
             color: '#fff',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            background: `rgba(18, 18, 18, 0.2)`,
+            backdropFilter: `blur(5px)`
           }}
         >
           {item.tips}

@@ -1,5 +1,6 @@
 import { Box, Typography, Grid, Pagination } from '@mui/material'
 import Marketplace from './marketplace'
+import MarketplaceMobile from './marketplaceMobile'
 import { usePagination } from 'ahooks'
 import P2Img from 'assets/imgs/realWorld/p2.png'
 import PoolCardSkeleton from './poolCardSkeleton'
@@ -8,6 +9,8 @@ import { useState, useEffect } from 'react'
 import PoolCard from './poolCard'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { ActionType, useValuesDispatch } from 'bounceComponents/real-world-collectibles/ValuesProvider'
+import { useIsSMDown } from 'themes/useTheme'
+
 export const filterConfig: FilterSearchConfig[] = [
   {
     // select type return one of values
@@ -38,6 +41,7 @@ export interface PoolItemParams {
 const BuynowContent = () => {
   const [setOpen, setSetOpen] = useState(false)
   const valuesDispatch = useValuesDispatch()
+  const isSm = useIsSMDown()
   useEffect(() => {
     valuesDispatch({
       type: ActionType.ClearParams,
@@ -92,7 +96,7 @@ const BuynowContent = () => {
       <Box
         sx={{
           width: '100%',
-          padding: '80px 0 80px',
+          padding: isSm ? '68px 24px 76px' : '80px 0 80px',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'center',
@@ -102,49 +106,87 @@ const BuynowContent = () => {
         <Typography
           sx={{
             fontFamily: `'Public Sans'`,
-            width: '700px',
+            width: isSm ? '100%' : '700px',
             fontWeight: 600,
-            fontSize: '28px',
-            lineHeight: '30px'
+            fontSize: isSm ? '20px' : '28px',
+            lineHeight: '30px',
+            textAlign: 'center'
           }}
         >
           You can buy Now or go to the details page to make an offer. You are buying for a physical backed NFTs and you
           can redeem it post deal done.
         </Typography>
       </Box>
-      <Marketplace handleSearch={handleSearch} filterConfig={filterConfig} handleSetOpen={setSetOpen}>
-        <>
-          {loading ? (
-            <Grid container spacing={{ xs: 10, xl: 20 }}>
-              <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3}>
-                <PoolCardSkeleton />
+      {!isSm && (
+        <Marketplace handleSearch={handleSearch} filterConfig={filterConfig} handleSetOpen={setSetOpen}>
+          <>
+            {loading ? (
+              <Grid container spacing={{ xs: 10, xl: 20 }}>
+                <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3}>
+                  <PoolCardSkeleton />
+                </Grid>
               </Grid>
-            </Grid>
-          ) : (
-            <Grid container spacing={{ xs: 10, xl: 20 }}>
-              {poolList &&
-                poolList?.list &&
-                poolList.list.map((item: PoolItemParams, index: number) => {
-                  return (
-                    <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3} key={index}>
-                      <PoolCard item={item} key={index} />
-                    </Grid>
-                  )
-                })}
-            </Grid>
-          )}
-          {poolList?.total >= 0 && (
-            <Box mt={58} display={'flex'} justifyContent={'center'}>
-              <Pagination
-                onChange={handlePageChange}
-                count={Math.ceil(poolList?.total / 10) || 0}
-                variant="outlined"
-                siblingCount={0}
-              />
-            </Box>
-          )}
-        </>
-      </Marketplace>
+            ) : (
+              <Grid container spacing={{ xs: 10, xl: 20 }}>
+                {poolList &&
+                  poolList?.list &&
+                  poolList.list.map((item: PoolItemParams, index: number) => {
+                    return (
+                      <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3} key={index}>
+                        <PoolCard item={item} key={index} />
+                      </Grid>
+                    )
+                  })}
+              </Grid>
+            )}
+            {poolList?.total >= 0 && (
+              <Box mt={58} display={'flex'} justifyContent={'center'}>
+                <Pagination
+                  onChange={handlePageChange}
+                  count={Math.ceil(poolList?.total / 10) || 0}
+                  variant="outlined"
+                  siblingCount={0}
+                />
+              </Box>
+            )}
+          </>
+        </Marketplace>
+      )}
+      {isSm && (
+        <MarketplaceMobile handleSearch={handleSearch} filterConfig={filterConfig}>
+          <>
+            {loading ? (
+              <Grid container spacing={{ xs: 10, xl: 20 }}>
+                <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3}>
+                  <PoolCardSkeleton />
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid container spacing={{ xs: 10, xl: 20 }}>
+                {poolList &&
+                  poolList?.list &&
+                  poolList.list.map((item: PoolItemParams, index: number) => {
+                    return (
+                      <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3} key={index}>
+                        <PoolCard item={item} key={index} />
+                      </Grid>
+                    )
+                  })}
+              </Grid>
+            )}
+            {poolList?.total >= 0 && (
+              <Box mt={58} display={'flex'} justifyContent={'center'}>
+                <Pagination
+                  onChange={handlePageChange}
+                  count={Math.ceil(poolList?.total / 10) || 0}
+                  variant="outlined"
+                  siblingCount={0}
+                />
+              </Box>
+            )}
+          </>
+        </MarketplaceMobile>
+      )}
     </Box>
   )
 }

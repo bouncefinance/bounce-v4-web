@@ -25,6 +25,7 @@ const TabsItem = styled(Box)(({ theme }) => ({
     color: 'var(--ps-text-3)'
   },
   [theme.breakpoints.down('md')]: {
+    borderRadius: '16px 16px 0 0 ',
     fontSize: '14px',
     width: '110px',
     height: '45px'
@@ -39,7 +40,7 @@ const Tabs = ({ index, setIndex }: { index: TabsType; setIndex: (type: TabsType)
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'center',
-        marginTop: '67px'
+        marginTop: isSm ? '31px' : '67px'
       }}
     >
       <TabsItem

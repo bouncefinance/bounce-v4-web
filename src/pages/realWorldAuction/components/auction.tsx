@@ -1,11 +1,15 @@
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography, Button, Pagination } from '@mui/material'
 import Marketplace from './marketplace'
-import { useRequest } from 'ahooks'
+import MarketplaceMobile from './marketplaceMobile'
+import { usePagination } from 'ahooks'
+import { Params } from 'ahooks/lib/usePagination/types'
 import P1Img from 'assets/imgs/realWorld/p1.png'
 import { routes } from 'constants/routes'
 import { Banner, SwiperSkeleton } from 'bounceComponents/auction/ArrowBanner'
 import { ActionType, useValuesDispatch } from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useEffect } from 'react'
+import { useIsSMDown } from 'themes/useTheme'
+import AuctionCard from './auctionCard'
 export enum AuctionFilterKey {
   categories = 'categories',
   status = 'status',
@@ -59,6 +63,7 @@ export function waitFun(ms: number) {
 }
 const AuctionContent = () => {
   const valuesDispatch = useValuesDispatch()
+  const isSm = useIsSMDown()
   useEffect(() => {
     valuesDispatch({
       type: ActionType.ClearParams,
@@ -67,31 +72,44 @@ const AuctionContent = () => {
     return () => {}
   }, [valuesDispatch])
   const {
+    pagination: poolsPagination,
     data: poolList,
     loading,
     run
-  } = useRequest(async () => {
-    await waitFun(500)
-    const result = {
-      types: 'Token',
-      avatar: P1Img,
-      url: routes.market.index,
-      name: 'NFT issued by 4K Alpha Vault',
-      openAt: 1686343871,
-      category: 1,
-      chainId: 0,
-      token0: '',
-      tokenAmount0: ''
+  } = usePagination<any, Params>(
+    async () => {
+      await waitFun(500)
+      const result = {
+        types: 'Token',
+        avatar: P1Img,
+        url: routes.fundo.home,
+        name: 'NFT issued by 4K Alpha Vault',
+        openAt: 1686343871,
+        category: 1,
+        chainId: 0,
+        token0: '',
+        tokenAmount0: ''
+      }
+      return {
+        list: [result],
+        total: 1
+      }
+    },
+    {
+      manual: true,
+      defaultPageSize: 10
     }
-    return {
-      list: [result],
-      total: 1
-    }
-  }, {})
-  const handleSearch = () => {
-    run()
+  )
+  const handlePageChange = (_: any, p: number) => {
+    poolsPagination.changeCurrent(p)
   }
-
+  const handleSearch = () => {
+    run({ current: 1, pageSize: 10 })
+  }
+  useEffect(() => {
+    run({ current: 1, pageSize: 10 })
+    return () => {}
+  }, [run])
   return (
     <Box
       sx={{
@@ -104,7 +122,7 @@ const AuctionContent = () => {
       <Box
         sx={{
           width: '100%',
-          padding: '80px 0 100px',
+          padding: isSm ? '68px 24px 76px' : '80px 0 100px',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'center',
@@ -114,10 +132,11 @@ const AuctionContent = () => {
         <Typography
           sx={{
             fontFamily: `'Public Sans'`,
-            width: '700px',
+            width: isSm ? '100%' : '700px',
             fontWeight: 600,
-            fontSize: '28px',
-            lineHeight: '30px'
+            fontSize: isSm ? '20px' : '28px',
+            lineHeight: '30px',
+            textAlign: 'center'
           }}
         >
           The physical auction supports the English auction mode. You are bidding for a physical backed NFTs and you can
@@ -139,37 +158,86 @@ const AuctionContent = () => {
             target={'_blank'}
             variant="contained"
             sx={{
+              height: isSm ? '42px' : '52px',
               // background: 'var(--ps-yellow-1)',
-              padding: '16px 20px'
+              padding: '16px 20px',
+              fontSize: isSm ? '14px' : '16px'
             }}
           >
             Apply for auction
           </Button>
         </Box>
       </Box>
-      <Marketplace handleSearch={handleSearch} filterConfig={filterConfig}>
-        <>
-          {loading ? (
-            <SwiperSkeleton />
-          ) : (
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexFlow: 'column nowrap',
-                justifyContent: 'flex-start'
-              }}
-              gap={'24px'}
-            >
-              {poolList &&
-                poolList?.list &&
-                poolList.list.map((item, index) => {
-                  return <Banner key={index} banner={item}></Banner>
-                })}
-            </Box>
-          )}
-        </>
-      </Marketplace>
+      {!isSm && (
+        <Marketplace handleSearch={handleSearch} filterConfig={filterConfig}>
+          <>
+            {loading ? (
+              <SwiperSkeleton />
+            ) : (
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexFlow: 'column nowrap',
+                  justifyContent: 'flex-start'
+                }}
+                gap={'24px'}
+              >
+                {poolList &&
+                  poolList?.list &&
+                  poolList.list.map((item: any, index: number) => {
+                    return <Banner key={index} banner={item}></Banner>
+                  })}
+              </Box>
+            )}
+            {poolList?.total >= 10 && (
+              <Box mt={58} display={'flex'} justifyContent={'center'}>
+                <Pagination
+                  onChange={handlePageChange}
+                  count={Math.ceil(poolList?.total / 10) || 0}
+                  variant="outlined"
+                  siblingCount={0}
+                />
+              </Box>
+            )}
+          </>
+        </Marketplace>
+      )}
+      {isSm && (
+        <MarketplaceMobile handleSearch={handleSearch} filterConfig={filterConfig}>
+          <>
+            {loading ? (
+              <SwiperSkeleton />
+            ) : (
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexFlow: 'column nowrap',
+                  justifyContent: 'flex-start'
+                }}
+                gap={'24px'}
+              >
+                {poolList &&
+                  poolList?.list &&
+                  poolList.list.map((item: any, index: number) => {
+                    return <AuctionCard key={index} banner={item}></AuctionCard>
+                  })}
+              </Box>
+            )}
+            {poolList?.total >= 10 && (
+              <Box mt={58} display={'flex'} justifyContent={'center'}>
+                <Pagination
+                  onChange={handlePageChange}
+                  count={Math.ceil(poolList?.total / 10) || 0}
+                  variant="outlined"
+                  siblingCount={0}
+                />
+              </Box>
+            )}
+          </>
+        </MarketplaceMobile>
+      )}
     </Box>
   )
 }

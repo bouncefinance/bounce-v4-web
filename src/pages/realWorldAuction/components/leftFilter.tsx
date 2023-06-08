@@ -5,6 +5,7 @@ import AddIcon from 'assets/imgs/realWorld/add.svg'
 import DscIcon from 'assets/imgs/realWorld/dsc.svg'
 import { ComBtn } from './marketplace'
 import { AuctionFilterKey } from './auction'
+import { useIsSMDown } from 'themes/useTheme'
 import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/real-world-collectibles/ValuesProvider'
 interface SelectItemProps {
   config: FilterSearchConfig
@@ -13,7 +14,7 @@ interface SelectItemProps {
   min?: string
   max?: string
 }
-const SelectItemBtn = styled(Box)(() => ({
+const SelectItemBtn = styled(Box)(({ theme }) => ({
   display: 'inline-block',
   height: '44px',
   lineHeight: '44px',
@@ -32,16 +33,26 @@ const SelectItemBtn = styled(Box)(() => ({
   '&:hover': {
     background: '#E1F25C',
     color: 'var(--ps-text-3)'
+  },
+  [theme.breakpoints.down('md')]: {
+    height: '34px',
+    lineHeight: '34px',
+    padding: '0 8px'
   }
 }))
-const FilterItem = styled(Box)(() => ({
+const FilterItem = styled(Box)(({ theme }) => ({
   maxHeight: 'auto',
   overflow: 'hidden',
   '&.slide': {
     maxHeight: '64px'
+  },
+  [theme.breakpoints.down('sm')]: {
+    '&.slide': {
+      maxHeight: '34px'
+    }
   }
 }))
-const InputNum = styled('input')(() => ({
+const InputNum = styled('input')(({ theme }) => ({
   flex: 1,
   minWidth: '126px',
   height: '44px',
@@ -53,17 +64,22 @@ const InputNum = styled('input')(() => ({
   border: 'none',
   lightingColor: 'none',
   outline: 'none',
-  borderRadius: '8px'
+  borderRadius: '8px',
+  [theme.breakpoints.down('sm')]: {
+    minWidth: '85px',
+    height: '52px'
+  }
 }))
 export const SelectItem = (props: SelectItemProps) => {
   const { config, handleSelect, value } = props
   const [open, setOpen] = useState<boolean>(true)
+  const isSm = useIsSMDown()
   return (
     <FilterItem className={open ? '' : 'slide'}>
       <Box
         sx={{
           width: '100%',
-          height: '64px',
+          height: isSm ? '34px' : '64px',
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'space-between',
@@ -317,10 +333,11 @@ const LeftFilter = ({ config, handleSearch }: { config: FilterSearchConfig[]; ha
         break
     }
   }
+  const isSm = useIsSMDown()
   return (
     <Box
       sx={{
-        padding: '0 40px 0 0'
+        padding: isSm ? '0 16px 70px' : '0 40px 0 0'
       }}
     >
       {config.map((item, index) => {
@@ -370,8 +387,11 @@ const LeftFilter = ({ config, handleSearch }: { config: FilterSearchConfig[]; ha
       })}
       <ComBtn
         sx={{
-          width: '100%',
-          height: '53px',
+          position: isSm ? 'fixed' : 'relative',
+          bottom: isSm ? '16px' : 'unset',
+          left: isSm ? '16px' : 'unset',
+          width: isSm ? '208px' : '100%',
+          height: isSm ? '42px' : '53px',
           lineHeight: '53px',
           textAlign: 'center',
           fontFamily: `'Inter'`,

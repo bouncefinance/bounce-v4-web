@@ -1,4 +1,4 @@
-import { Box, Typography, Select, MenuItem, styled } from '@mui/material'
+import { Box, Typography, Select, MenuItem, styled, useTheme } from '@mui/material'
 import { FilterSearchConfig } from './auction'
 import ArrowRight from 'assets/imgs/realWorld/arrow_right.svg'
 import ArrowLeft from 'assets/imgs/realWorld/arrow_left.svg'
@@ -56,6 +56,7 @@ const Marketplace = ({
   const [openFilter, setOpenFilter] = useState<boolean>(false)
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
+  const theme = useTheme()
   const refreshData = () => {
     valuesDispatch({
       type: ActionType.ClearParams,
@@ -76,6 +77,7 @@ const Marketplace = ({
       sx={{
         position: 'relative',
         width: 'calc(100% - 40px)',
+        minHeight: `calc(100vh - ${theme.height.header})`,
         margin: '0 auto',
         background: '#121212',
         borderRadius: '30px',

@@ -58,7 +58,14 @@ type Payload = {
   [ActionType.SetKeyword]: {
     keyword: string
   }
-  [ActionType.ClearParams]: { categories: string; status: string; range: string; min: string; max: string }
+  [ActionType.ClearParams]: {
+    categories: string
+    status: string
+    range: string
+    min: string
+    max: string
+    keyword: string
+  }
 }
 
 type ActionMap<M extends { [index: string]: any }> = {
@@ -114,7 +121,8 @@ const reducer = (state: RealWorldPool, action: Actions) => {
         status: '',
         range: '',
         min: '',
-        max: ''
+        max: '',
+        keyword: ''
       }
     default:
       return state
