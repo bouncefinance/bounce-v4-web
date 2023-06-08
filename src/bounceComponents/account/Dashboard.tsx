@@ -155,7 +155,7 @@ export function DashboardToPoolButton({
   const isSm = useBreakpoint('sm')
   return (
     <Link to={getAuctionPoolLink(undefined, category, backedChainId, poolId.toString())}>
-      <Button color="secondary" variant="contained" sx={{ ...btnStyle, borderRadius: isSm && '6px' }}>
+      <Button color="secondary" variant="contained" sx={{ ...btnStyle, borderRadius: isSm ? '6px' : '' }}>
         {text}
       </Button>
     </Link>
