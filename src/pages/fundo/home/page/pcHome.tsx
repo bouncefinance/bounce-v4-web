@@ -87,7 +87,8 @@ const PcHome: React.FC = () => {
         const raiod = BigNumber(event.target.scrollTop - animate2range[0])
           .div(animate2range[1] - animate2range[0])
           .toFixed(2)
-        setanimate2Ratio(Number(raiod) >= 0.95 ? '1' : raiod)
+        console.log('raiod>>>', raiod)
+        setanimate2Ratio(Number(raiod) >= 1 ? '1.00' : raiod)
         setanimate2Step(AnimateStep.enter)
         setanimate2_1Ratio(
           BigNumber(event.target.scrollTop - animate2_1range[0])
@@ -95,6 +96,12 @@ const PcHome: React.FC = () => {
             .toFixed(2)
         )
         setanimate2_1Step(AnimateStep.enter)
+      } else if (event.target.scrollTop > animate3range[0]) {
+        setanimate2Ratio('1')
+        setanimate2Step(AnimateStep.notShow)
+      } else if (event.target.scrollTop > animate2range[1]) {
+        setanimate2Ratio('1')
+        setanimate2Step(AnimateStep.enter)
       }
       event.target.scrollTop <= animate2range[0] && setanimate2Step(AnimateStep.notShow)
       // 2.1 text active left
@@ -118,17 +125,12 @@ const PcHome: React.FC = () => {
       event.target.scrollTop <= animate2_1range[0] && setanimate2_1Step(AnimateStep.notShow)
       // 3. three card enter left
       if (animate3range[0] <= event.target.scrollTop && event.target.scrollTop <= animate3range[1]) {
-        setanimate2Ratio(
-          BigNumber(event.target.scrollTop - animate3range[0])
-            .div(animate3range[1] - animate3range[0])
-            .toFixed(2)
-        )
+        const animation3Result = BigNumber(event.target.scrollTop - animate3range[0])
+          .div(animate3range[1] - animate3range[0])
+          .toFixed(2)
+        setanimate2Ratio(animation3Result)
         setanimate2Step(AnimateStep.leave)
-        setanimate3Ratio(
-          BigNumber(event.target.scrollTop - animate3range[0])
-            .div(animate3range[1] - animate3range[0])
-            .toFixed(2)
-        )
+        setanimate3Ratio(animation3Result)
         setanimate3Step(AnimateStep.enter)
       }
       event.target.scrollTop <= animate3range[0] && setanimate3Step(AnimateStep.notShow)
@@ -181,6 +183,7 @@ const PcHome: React.FC = () => {
         setanimate5Step(AnimateStep.leave)
       }
       event.target.scrollTop >= animate8range[1] && setanimate5Step(AnimateStep.notShow)
+      console.log('event.target.scrollTop>>>', event.target.scrollTop)
     }
     const scrollBox = document.getElementById('scrollBox')
     if (scrollBox) {
