@@ -55,10 +55,9 @@ export default function LineChart({
       grid: { vertLines: { visible: false }, horzLines: { visible: false } },
       leftPriceScale: {
         visible: true,
-        textColor: style.layoutTextColor,
+        // topColor: style.layoutTextColor,
         borderColor: style.borderColor,
         borderVisible: false,
-        ticksVisible: false,
         autoScale: true
       },
       rightPriceScale: { visible: false },
@@ -91,9 +90,9 @@ export default function LineChart({
         setInfoPoint({ x: 10000, y: 10000 })
         return
       }
-      if (param.seriesData.values().next()?.value) {
-        const { value, time } = param.seriesData.values().next().value
-        // const { value, time } = param.seriesData.values().next().value
+      if (param.seriesPrices.values().next()?.value) {
+        const { value, time } = param.seriesPrices.values().next().value
+        // const { value, time } = param.seriesPrices.values().next().value
         let x = chart.timeScale().timeToCoordinate(time) as Coordinate
         const y = lineSeries.priceToCoordinate(value) as Coordinate
 
