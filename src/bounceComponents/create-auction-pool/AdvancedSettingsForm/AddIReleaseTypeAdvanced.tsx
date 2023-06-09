@@ -291,7 +291,8 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                 delayUnlockingTime: formValues.delayUnlockingTime,
                 whitelist: formValues.whitelist,
                 enableReverse: formValues.enableReverse,
-                participantStatus: formValues.participantStatus
+                participantStatus: formValues.participantStatus,
+                shouldDelayUnlocking: Number(formValues.releaseType) === IReleaseType.Cliff ? true : false
               }
             })
           }}
@@ -420,7 +421,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                   <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
                 </Box>
 
-                {!hideRefundable && (
+                {!hideRefundable && Number(values.releaseType) !== IReleaseType.Cliff && (
                   <Box sx={{ mt: 38, mb: 34 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Stack direction="row" alignItems="center" spacing={8}>

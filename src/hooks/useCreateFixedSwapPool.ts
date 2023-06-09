@@ -87,7 +87,7 @@ export function makeValuesReleaseData(values: AuctionPool) {
     : values.releaseType === IReleaseType.Cliff
     ? [
         {
-          startAt: values.delayUnlockingTime?.unix() || values.endTime?.unix() || 0,
+          startAt: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() || 0 : values.endTime?.unix() || 0,
           endAtOrRatio: 0
         }
       ]
