@@ -74,7 +74,8 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
         alignItems: 'center',
         py: 28,
         px: 24,
-        mb: 28
+        mb: 28,
+        mt: isMobile ? '20px' : ''
       }}
     >
       <Avatar

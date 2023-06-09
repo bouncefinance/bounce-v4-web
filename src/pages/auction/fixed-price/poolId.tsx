@@ -36,12 +36,14 @@ const FixedSwapPoolPageContent = () => {
         <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
 
         <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
-          <CreatorInfoCard
-            poolInfo={poolInfo}
-            creator={poolInfo.creator}
-            getPoolInfo={getPoolInfo}
-            creatorUserInfo={poolInfo.creatorUserInfo}
-          />
+          {!isMobile && (
+            <CreatorInfoCard
+              poolInfo={poolInfo}
+              creator={poolInfo.creator}
+              getPoolInfo={getPoolInfo}
+              creatorUserInfo={poolInfo.creatorUserInfo}
+            />
+          )}
 
           <Stack sx={{ flex: 1 }} spacing={20}>
             {account === poolInfo.creator ? (
@@ -52,6 +54,14 @@ const FixedSwapPoolPageContent = () => {
 
             <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
           </Stack>
+          {isMobile && (
+            <CreatorInfoCard
+              poolInfo={poolInfo}
+              creator={poolInfo.creator}
+              getPoolInfo={getPoolInfo}
+              creatorUserInfo={poolInfo.creatorUserInfo}
+            />
+          )}
         </Box>
       </Box>
     </Container>
