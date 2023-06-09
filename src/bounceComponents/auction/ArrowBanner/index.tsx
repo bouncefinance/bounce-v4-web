@@ -295,7 +295,7 @@ const Shadow = styled(Box)`
 //   line-height: 140%;
 // `
 
-function Banner({ banner }: { banner: BannerType }) {
+export function Banner({ banner }: { banner: BannerType }) {
   const isSm = useBreakpoint('sm')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: banner.openAt * 1000
@@ -316,6 +316,7 @@ function Banner({ banner }: { banner: BannerType }) {
         height: isSm ? '400px' : '460px',
         // width: { sm: '328px', lg: '100%' },
         width: '100%',
+        cursor: 'pointer',
         position: 'relative'
       }}
       onClick={() => handleClick(banner.url || '')}

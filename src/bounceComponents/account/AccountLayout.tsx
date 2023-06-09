@@ -173,7 +173,7 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
                       : item.link
                       ? item._blank
                         ? window.open(item.link)
-                        : (location.href = item.link!)
+                        : (location.href = item.link)
                       : {}
                   }
                   key={item.name}

@@ -197,7 +197,7 @@ export default function Dashboard() {
                   )}
                 </Stack>
                 {userInfo?.location && (
-                  <Box height={32} flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
+                  <Box height={32} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                     <Chip
                       sx={{
                         width: 84,
