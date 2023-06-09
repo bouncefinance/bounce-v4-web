@@ -287,7 +287,7 @@ function CreateAuctionsList({ title, queryType }: { title: string; queryType: Da
               sx={{
                 padding: '4px 0 4px 10px',
                 alignItems: 'center',
-                background: '#F5F5F5',
+                background: '#F6F6F3',
                 borderRadius: 8
               }}
             >
