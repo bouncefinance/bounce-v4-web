@@ -22,7 +22,7 @@ export const H3 = styled(Typography)`
   line-height: 130%;
   display: flex;
   letter-spacing: -0.02em;
-  color: #c8f056;
+  color: #b5e529;
 `
 export const H4 = styled(Typography)`
   font-family: 'Public Sans';
