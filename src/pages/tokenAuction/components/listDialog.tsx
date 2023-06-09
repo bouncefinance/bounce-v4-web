@@ -433,10 +433,14 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                   onChange={handlePageChange}
                   count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
                   variant="outlined"
-                  siblingCount={isSm ? -1 : 0}
+                  siblingCount={0}
                   sx={{
+                    '.MuiPaginationItem-root': {
+                      margin: isSm ? '0 4px' : '0 12px'
+                    },
                     '.MuiPagination-ul': {
-                      flexWrap: 'nowrap'
+                      flexWrap: 'nowrap',
+                      alignItems: 'center'
                     }
                   }}
                 />
