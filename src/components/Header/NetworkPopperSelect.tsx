@@ -62,6 +62,7 @@ export default function NetworkPopperSelect() {
               backgroundColor: 'var(--ps-black)'
             }
           }}
+          value={searchVal}
           onChange={e => setSearchVal(e.target.value)}
           placeholder="Search..."
           startAdornment={
