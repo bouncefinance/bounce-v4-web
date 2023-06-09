@@ -26,7 +26,7 @@ const btnStyle = {
   alignItems: 'center',
   fontSize: 12,
   padding: '0 8px',
-  borderRadius: 20
+  borderRadius: 6
 }
 
 export function DashboardPoolCard({ title, children }: { title: string; children?: JSX.Element }) {

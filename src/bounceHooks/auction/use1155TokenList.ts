@@ -73,6 +73,16 @@ export function use1155TokenList(
             name: 'Bounce x zkSync',
             tokenId: '0'
           })
+          nftCollection['0x95C2ebf0ed75Eab534ffB02D42e9f047290Ca647'] = []
+          nftCollection['0x95C2ebf0ed75Eab534ffB02D42e9f047290Ca647'].push({
+            balance: '',
+            contractAddr: '0x95C2ebf0ed75Eab534ffB02D42e9f047290Ca647',
+            contractName: 'Bounce x zkSync',
+            description: 'Bounce x zkSync',
+            image: '',
+            name: 'Bounce x zkSync',
+            tokenId: '0'
+          })
         }
 
         setList(nftCollection)
