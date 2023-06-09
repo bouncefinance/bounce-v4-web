@@ -70,6 +70,7 @@ export interface IProjectInfo {
 }
 
 export interface IPrivatePadProp {
+  keyId: number
   liveTimeStamp: {
     start: number
     end: number
@@ -118,6 +119,63 @@ const SvgTwitterBlue = styled(SocialBg)`
 `
 export const PrivatePadList: IPrivatePadProp[] = [
   {
+    keyId: 2,
+    liveTimeStamp: {
+      start: 1686794400000,
+      end: 1687226400000
+    },
+    poolTypeName: '',
+    img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
+    avatar: poseiswapAvatar,
+    title: 'PoseiSwap',
+    backendChainId: 12,
+    // status: PoolStatus.Upcoming,
+    salePrice: '1 GMT = 0.00002514 BNB',
+    tokenOffered: '420,000,000.0000 GMT',
+    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
+    singleInitialInvestment: '0.1 BNB',
+    upcomingLink: routes.thirdPart.digitalAssetsOffering,
+    projectInfo: [
+      {
+        title: '',
+        info: []
+      }
+    ],
+    tokenMetrics: [
+      {
+        title: 'Token Metrics',
+        info: [
+          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+        ]
+      }
+    ],
+    desc: 'PoseiSwap, the first decentralized exchange (DEX) on the Nautilus Chain (Zebec Protocol), provides an efficient and secure platform for cryptocurrency trading. Its key features include quick, cost-effective transactions, and privacy thanks to the scalable L3 Nautilus Chain, addressing high gas fees and network congestion prevalent in other DEXs.',
+    social: [
+      <Link key={0} href="https://www.poseiswap.xyz/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/poseiswap" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/rWdHnb45UG" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://poseiswap.medium.com/" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/PoseiSwapChat" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$POSE' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'BNB Chain' }
+    ]
+  },
+  {
+    keyId: 1,
     liveTimeStamp: {
       start: 1684908000000,
       end: 1685080800000
@@ -217,61 +275,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     ]
   },
   {
-    liveTimeStamp: {
-      start: 1686794400000,
-      end: 1687226400000
-    },
-    poolTypeName: '',
-    img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
-    avatar: poseiswapAvatar,
-    title: 'PoseiSwap',
-    backendChainId: 12,
-    // status: PoolStatus.Upcoming,
-    salePrice: '1 GMT = 0.00002514 BNB',
-    tokenOffered: '420,000,000.0000 GMT',
-    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
-    singleInitialInvestment: '0.1 BNB',
-    upcomingLink: routes.thirdPart.digitalAssetsOffering,
-    projectInfo: [
-      {
-        title: '',
-        info: []
-      }
-    ],
-    tokenMetrics: [
-      {
-        title: 'Token Metrics',
-        info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
-        ]
-      }
-    ],
-    desc: 'PoseiSwap, the first decentralized exchange (DEX) on the Nautilus Chain (Zebec Protocol), provides an efficient and secure platform for cryptocurrency trading. Its key features include quick, cost-effective transactions, and privacy thanks to the scalable L3 Nautilus Chain, addressing high gas fees and network congestion prevalent in other DEXs.',
-    social: [
-      <Link key={0} href="https://www.poseiswap.xyz/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={1} href="https://twitter.com/poseiswap" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={2} href="https://discord.com/invite/rWdHnb45UG" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={3} href="https://poseiswap.medium.com/" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>,
-      <Link key={4} href="https://t.me/PoseiSwapChat" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$POSE' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'BNB Chain' }
-    ]
-  },
-  {
+    keyId: 3,
     liveTimeStamp: {
       start: 1684814400000,
       end: 1684900800000
@@ -371,6 +375,7 @@ export const PrivatePadList: IPrivatePadProp[] = [
     ]
   },
   {
+    keyId: 4,
     liveTimeStamp: {
       start: 1684679400000,
       end: 1684807200000
@@ -508,7 +513,7 @@ const PrivatePad: React.FC = () => {
       <LaunchCardUpcoming /> */}
       <Stack spacing={40}>
         {PrivatePadList.map(item => (
-          <LaunchCardSocial key={item.title} data={item} />
+          <LaunchCardSocial key={item.keyId} data={item} />
         ))}
       </Stack>
       {/* <TokenCardFinish />

@@ -136,7 +136,7 @@ function Price({ title, value }: { title: string; value: string }) {
 }
 
 export function BladeDao() {
-  const item = PrivatePadList[0]
+  const item = PrivatePadList.find(i => i.keyId === 2) as IPrivatePadProp
   useBladeDaoSharer()
   return (
     <Box>
