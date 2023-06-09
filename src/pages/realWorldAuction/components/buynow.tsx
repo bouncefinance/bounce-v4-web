@@ -39,7 +39,7 @@ export interface PoolItemParams {
   tips: string
 }
 const BuynowContent = () => {
-  const [setOpen, setSetOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
   useEffect(() => {
@@ -89,7 +89,8 @@ const BuynowContent = () => {
       sx={{
         position: 'relative',
         width: '100%',
-        background: '#fff'
+        background: '#fff',
+        padding: '0 0 20px'
       }}
       mb={144}
     >
@@ -118,11 +119,11 @@ const BuynowContent = () => {
         </Typography>
       </Box>
       {!isSm && (
-        <Marketplace handleSearch={handleSearch} filterConfig={filterConfig} handleSetOpen={setSetOpen}>
+        <Marketplace handleSearch={handleSearch} filterConfig={filterConfig} handleSetOpen={setIsOpen}>
           <>
             {loading ? (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
-                <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3}>
+                <Grid item xs={12} sm={12} md={6} lg={isOpen ? 4 : 3} xl={isOpen ? 4 : 3}>
                   <PoolCardSkeleton />
                 </Grid>
               </Grid>
@@ -132,7 +133,7 @@ const BuynowContent = () => {
                   poolList?.list &&
                   poolList.list.map((item: PoolItemParams, index: number) => {
                     return (
-                      <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3} key={index}>
+                      <Grid item lg={isOpen ? 4 : 3} xl={isOpen ? 4 : 3} key={index}>
                         <PoolCard item={item} key={index} />
                       </Grid>
                     )
@@ -157,7 +158,7 @@ const BuynowContent = () => {
           <>
             {loading ? (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
-                <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3}>
+                <Grid item xs={12} sm={12} md={6} lg={isOpen ? 4 : 3} xl={isOpen ? 4 : 3}>
                   <PoolCardSkeleton />
                 </Grid>
               </Grid>
@@ -167,7 +168,7 @@ const BuynowContent = () => {
                   poolList?.list &&
                   poolList.list.map((item: PoolItemParams, index: number) => {
                     return (
-                      <Grid item xs={12} sm={12} md={6} lg={setOpen ? 4 : 3} xl={setOpen ? 4 : 3} key={index}>
+                      <Grid item xs={12} sm={12} md={6} lg={isOpen ? 4 : 3} xl={isOpen ? 4 : 3} key={index}>
                         <PoolCard item={item} key={index} />
                       </Grid>
                     )

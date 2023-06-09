@@ -115,7 +115,8 @@ const AuctionContent = () => {
       sx={{
         position: 'relative',
         width: '100%',
-        background: '#fff'
+        background: '#fff',
+        padding: ' 0 0 20px'
       }}
       mb={144}
     >
