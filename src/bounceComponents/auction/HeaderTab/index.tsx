@@ -23,8 +23,7 @@ const StyledTab = styled(Button)(({ theme }) => ({
   },
   [theme.breakpoints.down('sm')]: {
     fontSize: '14px',
-    height: 'auto',
-    display: 'inline-block'
+    height: 'auto'
   }
 }))
 
@@ -87,27 +86,31 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         background: '#20201E',
         backdropFilter: 'blur(4px)',
         borderRadius: '10px',
-        width: isSm ? 'auto' : '100%',
         overflowX: isSm ? 'scroll' : 'inherit',
         whiteSpace: isSm ? 'nowrap' : 'inherit',
         maxWidth: 1296,
-        margin: isSm ? '0 16px' : '0 auto'
+        margin: isSm ? ' 8px 14px' : '0 auto',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
       }}
     >
-      {tabs.map((tab: string) => (
-        <StyledTab
-          variant="contained"
-          key={tab}
-          className={tab === currentTab ? 'selected' : ''}
-          onClick={() => {
-            setCurrentTab(tab)
-            onTabChange && onTabChange(tab)
-            linkTo(tab)
-          }}
-        >
-          {tab}
-        </StyledTab>
-      ))}
+      <Box>
+        {tabs.map((tab: string) => (
+          <StyledTab
+            variant="contained"
+            key={tab}
+            className={tab === currentTab ? 'selected' : ''}
+            onClick={() => {
+              setCurrentTab(tab)
+              onTabChange && onTabChange(tab)
+              linkTo(tab)
+            }}
+          >
+            {tab}
+          </StyledTab>
+        ))}
+      </Box>
     </Box>
   )
 }

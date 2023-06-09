@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Popper from '@mui/material/Popper'
 import React, { useState } from 'react'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 export default function PopperCard({
   popperSx,
@@ -17,6 +18,7 @@ export default function PopperCard({
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = !!anchorEl
+  const isSm = useBreakpoint('sm')
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget)
@@ -43,7 +45,7 @@ export default function PopperCard({
           <Box
             sx={{
               bgcolor: 'background.paper',
-              border: '1px solid rgba(18, 18, 18, 0.06)',
+              border: isSm ? 0 : '1px solid rgba(18, 18, 18, 0.06)',
               borderRadius: '8px',
               padding: '6px',
               ...sx

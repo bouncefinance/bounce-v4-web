@@ -104,6 +104,8 @@
     "@ebay/nice-modal-react": "1.2.8",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@lottiefiles/lottie-interactivity": "^1.6.2",
+    "@lottiefiles/lottie-player": "^1.7.1",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "5.0.0-alpha.111",
     "@mui/material": "^5.10.8",

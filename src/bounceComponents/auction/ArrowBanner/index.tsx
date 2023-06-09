@@ -23,10 +23,18 @@ export interface IBanner {
   countDown: string
 }
 
-const SwiperSkeleton = () => {
+export const SwiperSkeleton = () => {
+  const isSm = useBreakpoint('sm')
+  const isMd = useBreakpoint('md')
   return (
     <Box
-      sx={{ width: '100%', height: '460px', backgroundColor: '#e3e3e0', borderRadius: '30px', position: 'relative' }}
+      sx={{
+        width: '100%',
+        height: isSm ? 400 : 460,
+        backgroundColor: '#e3e3e0',
+        borderRadius: '30px',
+        position: 'relative'
+      }}
     >
       <Box
         sx={{
@@ -36,7 +44,7 @@ const SwiperSkeleton = () => {
           left: '0',
           bottom: '40px',
           width: '100%',
-          padding: '0 38px 0 40px',
+          padding: isSm ? '0 16px' : '0 38px 0 40px',
           boxSizing: 'border-box',
           '& .MuiSkeleton-root': {
             backgroundColor: 'rgba(255, 255, 255, 0.4)'
@@ -57,19 +65,28 @@ const SwiperSkeleton = () => {
           <Skeleton variant="rectangular" width="100%" height="26px" animation="wave" />
           <Skeleton variant="rectangular" width="262px" height="24px" animation="wave" />
         </Box>
-        <Box
-          display="flex"
-          gap="8px"
-          flexDirection="row"
-          alignItems="end"
-          sx={{
-            '& .MuiSkeleton-root': { width: '60px', height: '60px', borderRadius: '8px' }
-          }}
-        >
-          {new Array(4).fill(0).map((i, v) => (
-            <Skeleton key={v} variant="rectangular" animation="wave" />
-          ))}
-        </Box>
+      </Box>
+      <Box
+        display="flex"
+        gap="8px"
+        flexDirection="row"
+        alignItems="end"
+        sx={{
+          position: 'absolute',
+          right: isSm ? 16 : 38,
+          top: isSm ? 16 : 420,
+          transform: isSm ? 'translateY(0)' : 'translateY(-100%)',
+          '& .MuiSkeleton-root': {
+            width: isMd ? 44 : 60,
+            height: isMd ? 44 : 60,
+            borderRadius: '8px',
+            backgroundColor: 'rgba(255, 255, 255, 0.4)'
+          }
+        }}
+      >
+        {new Array(4).fill(0).map((i, v) => (
+          <Skeleton key={v} variant="rectangular" animation="wave" />
+        ))}
       </Box>
     </Box>
   )
@@ -100,21 +117,27 @@ function ArrowBanner({ type }: { type?: string }) {
       alignItems={'center'}
       sx={{
         maxWidth: '1296px',
-        width: isSm ? '90%' : '100%',
+        width: '100%',
         minHeight: isSm ? 125 : 460,
-        margin: '16px auto 0'
+        margin: '16px auto 0',
+        '@media(max-width:1296px)': {
+          padding: '0 16px',
+          margin: '16px auto'
+        }
       }}
       onMouseEnter={EnterSwiper}
       onMouseLeave={LeaveSwiper}
     >
-      <ArrowBgLeft
-        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-        onClick={() => {
-          swiper?.slidePrev()
-        }}
-      >
-        <ArrowBackIcon />
-      </ArrowBgLeft>
+      {!isSm && (
+        <ArrowBgLeft
+          sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+          onClick={() => {
+            swiper?.slidePrev()
+          }}
+        >
+          <ArrowBackIcon />
+        </ArrowBgLeft>
+      )}
 
       <Swiper
         onSwiper={setSwiper}
@@ -138,13 +161,14 @@ function ArrowBanner({ type }: { type?: string }) {
           <SwiperSkeleton />
         </SwiperSlide>
       </Swiper>
-
-      <ArrowBgRight
-        sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-        onClick={() => swiper?.slideNext()}
-      >
-        <ArrowForwardIcon />
-      </ArrowBgRight>
+      {!isSm && (
+        <ArrowBgRight
+          sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+          onClick={() => swiper?.slideNext()}
+        >
+          <ArrowForwardIcon />
+        </ArrowBgRight>
+      )}
     </Box>
   )
 }
@@ -204,7 +228,7 @@ const BannerH3 = styled(Typography)`
   flex-grow: 0;
 
   @media (max-width: 600px) {
-    font-size: 16px;
+    font-size: 22px;
   }
 `
 const BannerH6 = styled(Typography)`
@@ -216,7 +240,7 @@ const BannerH6 = styled(Typography)`
   color: #ffffff;
 
   @media (max-width: 600px) {
-    font-size: 12px;
+    font-size: 14px;
   }
 `
 
@@ -237,6 +261,12 @@ const CountDownBg = styled(Box)`
   font-size: 16px;
   line-height: 19px;
   color: #ffffff;
+
+  @media (max-width: 600px) {
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
+  }
 `
 const Shadow = styled(Box)`
   position: absolute;
@@ -248,7 +278,7 @@ const Shadow = styled(Box)`
   border-radius: 0 0 30px 30px;
 
   @media (max-width: 600px) {
-    height: 100px;
+    height: 327px;
     border-radius: 0 0 15px 15px;
   }
 `
@@ -265,7 +295,7 @@ const Shadow = styled(Box)`
 //   line-height: 140%;
 // `
 
-function Banner({ banner }: { banner: BannerType }) {
+export function Banner({ banner }: { banner: BannerType }) {
   const isSm = useBreakpoint('sm')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: banner.openAt * 1000
@@ -283,8 +313,10 @@ function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: isSm ? '125px' : '460px',
+        height: isSm ? '400px' : '460px',
+        // width: { sm: '328px', lg: '100%' },
         width: '100%',
+        cursor: 'pointer',
         position: 'relative'
       }}
       onClick={() => handleClick(banner.url || '')}

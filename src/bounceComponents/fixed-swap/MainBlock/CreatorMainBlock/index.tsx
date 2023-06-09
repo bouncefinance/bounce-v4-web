@@ -28,7 +28,7 @@ const CreatorMainBlock = ({
         <AllTokenAuctionedAlert />
       )}
 
-      <Box sx={{ display: 'flex', columnGap: 12 }}>
+      <Box sx={{ display: 'flex', columnGap: 12, flexWrap: 'wrap', minWidth: '300px' }}>
         <LeftBox poolInfo={poolInfo} />
         <CreatorActionBox getPoolInfo={getPoolInfo} poolInfo={poolInfo} />
       </Box>

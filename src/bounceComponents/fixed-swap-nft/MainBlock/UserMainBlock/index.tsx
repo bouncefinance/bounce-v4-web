@@ -6,6 +6,7 @@ import Alert from './Alert'
 import NFTDefaultIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
 import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
+import useBreakpoint from '../../../../hooks/useBreakpoint'
 
 export interface NftCardParams {
   nft: FixedSwapNFTPoolProp
@@ -15,6 +16,7 @@ export const NftCard = (props: NftCardParams) => {
   const { name, symbol, largeUrl, smallUrl, thumbUrl } = props.nft?.token0
   const { swappedAmount0, amountTotal0, tokenId } = props.nft
   const { suspicious } = props
+  const isMobile = useBreakpoint('lg')
   const formatPrice = (num: number) => {
     return String(num)
       .split('')
@@ -26,7 +28,7 @@ export const NftCard = (props: NftCardParams) => {
   return (
     <Box
       sx={{
-        width: 368,
+        width: isMobile ? '100%' : 368,
         padding: '24px',
         border: suspicious ? '1px solid #F53030' : '1px solid rgba(23, 23, 23, 0.1)',
         borderRadius: '20px'
@@ -35,19 +37,21 @@ export const NftCard = (props: NftCardParams) => {
       <Box
         sx={{
           position: 'relative',
-          width: '320px',
-          height: '320px',
+          width: isMobile ? '100%' : '320px',
+          height: isMobile ? '220px' : '320px',
           borderRadius: '10px',
           overflow: 'hidden',
-          marginBottom: '10px'
+          marginBottom: '10px',
+          textAlign: 'center'
         }}
       >
         <picture>
           <img
             src={largeUrl || thumbUrl || smallUrl || NFTDefaultIcon}
             style={{
-              width: '320px',
-              height: '320px'
+              width: isMobile ? '220px' : '320px',
+              height: isMobile ? '220px' : '320px',
+              borderRadius: '10px'
             }}
             alt="nft"
             srcSet=""
