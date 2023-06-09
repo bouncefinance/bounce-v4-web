@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
 import { Box, Divider, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
-import EmptyAvatar from 'assets/imgs/auction/empty-avatar.svg'
+import EmptyAvatar from 'assets/imgs/auction/default-nft-cover.png'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
