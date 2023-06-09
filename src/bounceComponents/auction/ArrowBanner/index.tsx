@@ -23,7 +23,7 @@ export interface IBanner {
   countDown: string
 }
 
-const SwiperSkeleton = () => {
+export const SwiperSkeleton = () => {
   const isSm = useBreakpoint('sm')
   const isMd = useBreakpoint('md')
   return (
