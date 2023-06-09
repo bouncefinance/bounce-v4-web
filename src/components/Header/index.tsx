@@ -86,7 +86,7 @@ const StyledAppBar = styled(AppBar)<{ isTransparent?: boolean }>(({ theme, isTra
   },
   [theme.breakpoints.down('sm')]: {
     height: theme.height.mobileHeader,
-    padding: '0 20px!important'
+    padding: '12px 20px !important'
   }
 }))
 

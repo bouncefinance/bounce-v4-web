@@ -33,7 +33,7 @@ const UserMainBlock = ({
     >
       {extraAlert}
       <Alert poolInfo={poolInfo} />
-      <Box sx={{ display: 'flex', columnGap: contentGap ? contentGap : 12 }}>
+      <Box sx={{ display: 'flex', columnGap: contentGap ? contentGap : 12, flexWrap: 'wrap', minWidth: '300px' }}>
         <LeftBox poolInfo={poolInfo} />
         {/* <UserActionBox /> */}
         <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} />

@@ -346,7 +346,57 @@ const TokenAuction: React.FC = () => {
       </Link>
     )
   }
-
+  const TokenAuctionSkeleton = () => {
+    return (
+      <Stack spacing={18} direction={'row'} sx={{ width: 1380, overflowX: 'scroll' }}>
+        {Array.from(new Array(4)).map((lodingItem, index) => (
+          <Box display={'flex'} flexDirection={'column'} key={index} flex={1}>
+            <Box
+              height={400}
+              sx={{
+                bgcolor: 'var(--ps-white)',
+                borderRadius: 20,
+                padding: '16px',
+                border: '1px solid rgba(0, 0, 0, 0.1)'
+              }}
+            >
+              <Box display="flex" width={'100%'} gap={20} sx={{ '& > span': { borderRadius: '12px' } }}>
+                <Skeleton variant="rectangular" width={'15%'} height={24} />
+                <Skeleton variant="rectangular" width={'25%'} height={24} />
+                <Skeleton variant="rectangular" width={'60%'} height={24} />
+              </Box>
+              <Skeleton
+                component={'div'}
+                variant="rectangular"
+                width={'50%'}
+                height={24}
+                sx={{ marginTop: '20px', borderRadius: '12px' }}
+              />
+              <Skeleton
+                component={'div'}
+                variant="rectangular"
+                width={'100%'}
+                height={24}
+                sx={{ marginTop: '10px', borderRadius: '12px' }}
+              />
+              <Box mt={20} display={'flex'}>
+                <Skeleton variant="circular" width={52} height={52} />
+                <Box width={'calc(100% - 52px)'} sx={{ marginLeft: '10px' }}>
+                  <Skeleton variant="text" width={'20%'} />
+                  <Skeleton variant="text" width={'40%'} />
+                </Box>
+              </Box>
+              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+              <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
+            </Box>
+          </Box>
+        ))}
+      </Stack>
+    )
+  }
   return (
     <Box
       sx={{
@@ -660,53 +710,7 @@ const TokenAuction: React.FC = () => {
               {showData.title === AuctionType.TokenAuction && (
                 <>
                   {loading ? (
-                    <Stack spacing={18} direction={'row'} sx={{ overflowX: 'scroll' }}>
-                      {Array.from(new Array(4)).map((lodingItem, index) => (
-                        <Box display={'flex'} flexDirection={'column'} key={index}>
-                          <Box
-                            height={400}
-                            sx={{
-                              bgcolor: 'var(--ps-white)',
-                              borderRadius: 20,
-                              padding: '16px',
-                              border: '1px solid rgba(0, 0, 0, 0.1)'
-                            }}
-                          >
-                            <Box display="flex" width={'100%'} gap={20} sx={{ '& > span': { borderRadius: '12px' } }}>
-                              <Skeleton variant="rectangular" width={'15%'} height={24} />
-                              <Skeleton variant="rectangular" width={'25%'} height={24} />
-                              <Skeleton variant="rectangular" width={'60%'} height={24} />
-                            </Box>
-                            <Skeleton
-                              component={'div'}
-                              variant="rectangular"
-                              width={'50%'}
-                              height={24}
-                              sx={{ marginTop: '20px', borderRadius: '12px' }}
-                            />
-                            <Skeleton
-                              component={'div'}
-                              variant="rectangular"
-                              width={'100%'}
-                              height={24}
-                              sx={{ marginTop: '10px', borderRadius: '12px' }}
-                            />
-                            <Box mt={20} display={'flex'}>
-                              <Skeleton variant="circular" width={52} height={52} />
-                              <Box width={'calc(100% - 52px)'} sx={{ marginLeft: '10px' }}>
-                                <Skeleton variant="text" width={'20%'} />
-                                <Skeleton variant="text" width={'40%'} />
-                              </Box>
-                            </Box>
-                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                            <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                          </Box>
-                        </Box>
-                      ))}
-                    </Stack>
+                    <TokenAuctionSkeleton />
                   ) : (
                     <Stack
                       spacing={isSm ? 8 : 18}

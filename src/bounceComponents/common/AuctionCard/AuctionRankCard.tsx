@@ -246,16 +246,25 @@ export function AuctionRow(props: any): ReactJSXElement[] {
 }
 
 const SkeletonBox = () => {
+  const isSm = useBreakpoint('sm')
   return (
-    <Box sx={{ display: 'flex', height: '516px', borderRadius: '0px 30px 30px 30px', overflow: 'hidden' }}>
+    <Box
+      sx={{
+        minWidth: 1070,
+        display: 'flex',
+        height: '516px',
+        borderRadius: '0px 30px 30px 30px',
+        overflow: isSm ? 'scroll' : 'hidden'
+      }}
+    >
       {new Array(2).fill(0).map((item, index) => (
         <Box
           key={index}
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            width: '50%',
-            padding: '20px',
+            width: isSm ? '100vw' : '50%',
+            padding: isSm ? 12 : 20,
             background: 'white'
           }}
         >
@@ -274,33 +283,27 @@ const SkeletonBox = () => {
           </Box>
           {new Array(5).fill(0).map((i, v) => (
             <Grid key={v} container spacing={40} sx={{ marginTop: '5px' }}>
-              <Grid item xs={5} display={'flex'} justifyContent={'space-between'} gap={20}>
-                <Skeleton variant="rounded" animation={false} width={40} height={40} sx={{ borderRadius: '8px' }} />
+              <Grid item xs={isSm ? 8 : 5} display={'flex'} justifyContent={'space-between'} gap={20}>
+                <Skeleton variant="rounded" width={40} height={40} sx={{ borderRadius: '8px' }} />
                 <Skeleton
                   variant="rectangular"
-                  animation={false}
                   width={'calc(100% - 60px)'}
-                  height={40}
+                  height={isSm ? 30 : 40}
                   sx={{ borderRadius: '20px' }}
                 />
               </Grid>
-              <Grid item xs={5} display={'flex'} justifyContent={'space-between'} gap={20}>
-                <Skeleton
-                  variant="rectangular"
-                  animation={false}
-                  width={'100%'}
-                  height={40}
-                  sx={{ borderRadius: '20px' }}
-                />
-              </Grid>
-              <Grid item xs={2} display={'flex'} justifyContent={'space-between'} gap={20}>
-                <Skeleton
-                  variant="rectangular"
-                  animation={false}
-                  width={'100%'}
-                  height={40}
-                  sx={{ borderRadius: '20px' }}
-                />
+              {!isSm && (
+                <Grid item xs={5} display={'flex'} justifyContent={'space-between'} gap={20}>
+                  <Skeleton
+                    variant="rectangular"
+                    width={'100%'}
+                    height={isSm ? 30 : 40}
+                    sx={{ borderRadius: '20px' }}
+                  />
+                </Grid>
+              )}
+              <Grid item xs={isSm ? 4 : 2} display={'flex'} justifyContent={'space-between'} gap={20}>
+                <Skeleton variant="rectangular" width={'100%'} height={isSm ? 30 : 40} sx={{ borderRadius: '20px' }} />
               </Grid>
             </Grid>
           ))}
@@ -334,7 +337,7 @@ export const AuctionRankCard: React.FC = () => {
     <Select
       sx={{
         width: '200px',
-        height: isSm ? '30px' : '38px',
+        height: isSm ? '37px' : '38px',
         fontSize: isSm ? '12px' : 'inherit',
         fieldset: {
           border: isSm ? '1' : 0
@@ -356,6 +359,24 @@ export const AuctionRankCard: React.FC = () => {
       ))}
     </Select>
   )
+  const AuctionTabs = (
+    <Row
+      sx={{
+        width: isSm ? 470 : 'auto'
+      }}
+    >
+      {Tabs.map((tab, idx) => (
+        <Tab
+          sx={{ cursor: tab === currentTab ? 'auto' : 'pointer' }}
+          key={idx}
+          onClick={() => setTab(tab)}
+          className={tab === currentTab ? 'active' : ''}
+        >
+          <H5>{tab}</H5>
+        </Tab>
+      ))}
+    </Row>
+  )
   return (
     <Box
       sx={{
@@ -369,27 +390,18 @@ export const AuctionRankCard: React.FC = () => {
         justifyContent="flex-start"
         style={{ alignItems: isSm ? 'flex-start' : 'center' }}
       >
-        <Row
-          sx={{
-            overflowX: 'scroll',
-            '&::-webkit-scrollbar': {
-              width: 0,
-              height: 0,
-              background: 'transparent'
-            }
-          }}
-        >
-          {Tabs.map((tab, idx) => (
-            <Tab
-              sx={{ cursor: tab === currentTab ? 'auto' : 'pointer' }}
-              key={idx}
-              onClick={() => setTab(tab)}
-              className={tab === currentTab ? 'active' : ''}
-            >
-              <H5>{tab}</H5>
-            </Tab>
-          ))}
-        </Row>
+        {isSm && (
+          <Box
+            sx={{
+              overflowX: 'scroll',
+              width: '100%',
+              '&::-webkit-scrollbar': { display: 'none', background: 'transparent' }
+            }}
+          >
+            {AuctionTabs}
+          </Box>
+        )}
+        {!isSm && AuctionTabs}
         {isSm && (
           <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0' }}>
             {ChainSelect}

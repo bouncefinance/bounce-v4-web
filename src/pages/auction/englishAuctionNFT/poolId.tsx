@@ -10,11 +10,13 @@ import ActionHistory from 'bounceComponents/fixed-swap-nft/ActionHistory'
 import ValuesProvider, { useEnglishAuctionPoolInfo } from './ValuesProvider'
 import CreatorMainBlock from 'bounceComponents/englishAuction/CreatorMainBlock'
 import UserMainBlock from 'bounceComponents/englishAuction/UserMainBlock'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 function EnglishAuctionNFTContent() {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
   const isBlock = useCurrentRegionBlock()
+  const isMobile = useBreakpoint('lg')
 
   if (isBlock) {
     return <NoService />
@@ -34,19 +36,29 @@ function EnglishAuctionNFTContent() {
         <Box sx={{ mt: 60 }}>
           <Header poolInfo={poolInfo} typeName="English Auction" getPoolInfo={getPoolInfo} />
 
-          <Box sx={{ mt: 40, display: 'flex', columnGap: 20 }}>
-            <CreatorInfoCard
-              creator={poolInfo.creator}
-              poolInfo={poolInfo}
-              getPoolInfo={getPoolInfo}
-              creatorUserInfo={poolInfo.creatorUserInfo}
-            />
+          <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
+            {!isMobile && (
+              <CreatorInfoCard
+                creator={poolInfo.creator}
+                poolInfo={poolInfo}
+                getPoolInfo={getPoolInfo}
+                creatorUserInfo={poolInfo.creatorUserInfo}
+              />
+            )}
 
             <Stack sx={{ flex: 1 }} spacing={20}>
               {account === poolInfo.creator ? <CreatorMainBlock /> : <UserMainBlock />}
 
               <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
             </Stack>
+            {isMobile && (
+              <CreatorInfoCard
+                creator={poolInfo.creator}
+                poolInfo={poolInfo}
+                getPoolInfo={getPoolInfo}
+                creatorUserInfo={poolInfo.creatorUserInfo}
+              />
+            )}
           </Box>
         </Box>
       </Container>

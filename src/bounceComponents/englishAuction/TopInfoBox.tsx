@@ -11,11 +11,13 @@ import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import ShowNFTCard from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/ShowNFTCard'
 import { ChainListMap } from 'constants/chain'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => <Typography variant="h6">{children}</Typography>
 
 const TopInfoBox = (): JSX.Element => {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const isMobile = useBreakpoint('lg')
 
   const list = useMemo(() => {
     if (!poolInfo) return []
@@ -39,7 +41,7 @@ const TopInfoBox = (): JSX.Element => {
         padding: 16,
         display: isOneNft ? 'grid' : 'block',
         gap: 20,
-        gridTemplateColumns: isOneNft ? '340px 1fr' : 'unset'
+        gridTemplateColumns: isOneNft ? (isMobile ? '1fr' : '340px 1fr') : 'unset'
       }}
     >
       <Box sx={{ overflowX: 'auto', width: isOneNft ? '100%' : '900px' }} padding={isOneNft ? '0' : '0 30px'}>

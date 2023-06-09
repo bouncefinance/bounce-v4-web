@@ -89,7 +89,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         overflowX: isSm ? 'scroll' : 'inherit',
         whiteSpace: isSm ? 'nowrap' : 'inherit',
         maxWidth: 1296,
-        margin: isSm ? '0 16px' : '0 auto',
+        margin: isSm ? ' 8px 14px' : '0 auto',
         '&::-webkit-scrollbar': {
           display: 'none'
         }

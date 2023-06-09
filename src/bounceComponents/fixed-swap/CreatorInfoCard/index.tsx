@@ -22,6 +22,7 @@ import { routes } from 'constants/routes'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { useActiveWeb3React } from 'hooks'
 import { PoolInfoProp } from '../type'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 interface ICreatorInfoCardProps {
   creatorUserInfo: CreatorUserInfo
@@ -34,6 +35,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
   const { token } = useUserInfo()
   const navigate = useNavigate()
   const { account } = useActiveWeb3React()
+  const isMobile = useBreakpoint('lg')
 
   const [userInfo, setUserInfo] = useState<any>(null)
 
@@ -64,14 +66,16 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
       sx={{
         bgcolor: '#fff',
         borderRadius: 20,
-        width: 275,
+        width: isMobile ? '100%' : 275,
         flexShrink: 0,
         height: 'fit-content',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         py: 28,
-        px: 24
+        px: 24,
+        mb: 28,
+        mt: isMobile ? '20px' : ''
       }}
     >
       <Avatar

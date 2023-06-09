@@ -24,9 +24,17 @@ export interface IBanner {
 }
 
 export const SwiperSkeleton = () => {
+  const isSm = useBreakpoint('sm')
+  const isMd = useBreakpoint('md')
   return (
     <Box
-      sx={{ width: '100%', height: '460px', backgroundColor: '#e3e3e0', borderRadius: '30px', position: 'relative' }}
+      sx={{
+        width: '100%',
+        height: isSm ? 400 : 460,
+        backgroundColor: '#e3e3e0',
+        borderRadius: '30px',
+        position: 'relative'
+      }}
     >
       <Box
         sx={{
@@ -36,7 +44,7 @@ export const SwiperSkeleton = () => {
           left: '0',
           bottom: '40px',
           width: '100%',
-          padding: '0 38px 0 40px',
+          padding: isSm ? '0 16px' : '0 38px 0 40px',
           boxSizing: 'border-box',
           '& .MuiSkeleton-root': {
             backgroundColor: 'rgba(255, 255, 255, 0.4)'
@@ -57,19 +65,28 @@ export const SwiperSkeleton = () => {
           <Skeleton variant="rectangular" width="100%" height="26px" animation="wave" />
           <Skeleton variant="rectangular" width="262px" height="24px" animation="wave" />
         </Box>
-        <Box
-          display="flex"
-          gap="8px"
-          flexDirection="row"
-          alignItems="end"
-          sx={{
-            '& .MuiSkeleton-root': { width: '60px', height: '60px', borderRadius: '8px' }
-          }}
-        >
-          {new Array(4).fill(0).map((i, v) => (
-            <Skeleton key={v} variant="rectangular" animation="wave" />
-          ))}
-        </Box>
+      </Box>
+      <Box
+        display="flex"
+        gap="8px"
+        flexDirection="row"
+        alignItems="end"
+        sx={{
+          position: 'absolute',
+          right: isSm ? 16 : 38,
+          top: isSm ? 16 : 420,
+          transform: isSm ? 'translateY(0)' : 'translateY(-100%)',
+          '& .MuiSkeleton-root': {
+            width: isMd ? 44 : 60,
+            height: isMd ? 44 : 60,
+            borderRadius: '8px',
+            backgroundColor: 'rgba(255, 255, 255, 0.4)'
+          }
+        }}
+      >
+        {new Array(4).fill(0).map((i, v) => (
+          <Skeleton key={v} variant="rectangular" animation="wave" />
+        ))}
       </Box>
     </Box>
   )

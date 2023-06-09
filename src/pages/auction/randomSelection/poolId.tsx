@@ -12,10 +12,12 @@ import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
 import { PoolStatus } from 'api/pool/type'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
   const isBlock = useCurrentRegionBlock()
+  const isMobile = useBreakpoint('lg')
   // load winners list if isWinnerSeedDone is true
   const isWinnerSeedDone = useIsWinnerSeedDone(
     poolInfo?.poolId ? Number(poolInfo?.poolId) : '',
@@ -37,13 +39,16 @@ const FixedSwapPoolPageContent = () => {
     <Container maxWidth="lg">
       <Box sx={{ mt: 60 }}>
         <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
-        <Box sx={{ mt: 40, display: 'flex', columnGap: 20 }}>
-          <CreatorInfoCard
-            poolInfo={poolInfo}
-            creator={poolInfo.creator}
-            getPoolInfo={getPoolInfo}
-            creatorUserInfo={poolInfo.creatorUserInfo}
-          />
+        <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
+          {!isMobile && (
+            <CreatorInfoCard
+              poolInfo={poolInfo}
+              creator={poolInfo.creator}
+              getPoolInfo={getPoolInfo}
+              creatorUserInfo={poolInfo.creatorUserInfo}
+            />
+          )}
+
           <Stack sx={{ flex: 1 }} spacing={20}>
             {account === poolInfo.creator ? (
               <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
@@ -52,6 +57,14 @@ const FixedSwapPoolPageContent = () => {
             )}
             {poolInfo.status === PoolStatus.Closed && isWinnerSeedDone && <AuctionWinnerList poolInfo={poolInfo} />}
           </Stack>
+          {isMobile && (
+            <CreatorInfoCard
+              poolInfo={poolInfo}
+              creator={poolInfo.creator}
+              getPoolInfo={getPoolInfo}
+              creatorUserInfo={poolInfo.creatorUserInfo}
+            />
+          )}
         </Box>
       </Box>
     </Container>
