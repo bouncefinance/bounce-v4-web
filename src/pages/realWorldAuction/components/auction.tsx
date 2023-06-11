@@ -10,6 +10,7 @@ import { ActionType, useValuesDispatch } from 'bounceComponents/real-world-colle
 import { useEffect } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
 import AuctionCard from './auctionCard'
+import UpcomingAuction from './upcomingAuction'
 export enum AuctionFilterKey {
   categories = 'categories',
   status = 'status',
@@ -169,6 +170,7 @@ const AuctionContent = () => {
           </Button>
         </Box>
       </Box>
+      <UpcomingAuction></UpcomingAuction>
       {!isSm && (
         <Marketplace handleSearch={handleSearch} filterConfig={filterConfig}>
           <>

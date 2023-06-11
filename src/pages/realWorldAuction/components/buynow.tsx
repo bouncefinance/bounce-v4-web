@@ -175,7 +175,7 @@ const BuynowContent = () => {
                   })}
               </Grid>
             )}
-            {poolList?.total >= 0 && (
+            {poolList?.total >= 10 && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
                   onChange={handlePageChange}
