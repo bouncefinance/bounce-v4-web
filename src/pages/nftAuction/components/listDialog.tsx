@@ -16,7 +16,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from 'hooks/useBreakpoint'
-import MobileFixedSelected from 'components/FixedSelected/mobileFixedSelected'
+import MobileFixedNftSelected from 'components/FixedNftSelected/mobileFixedNftSelected'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -195,8 +195,8 @@ const NFTAuctionListDialog = (props: DialogParams) => {
     }
   )
   const handleSubmit = useCallback(
-    (values: InitialValuesPros) =>
-      run({
+    (values: InitialValuesPros) => {
+      return run({
         current: 1,
         pageSize: 16,
         category: values.auctionType,
@@ -208,7 +208,8 @@ const NFTAuctionListDialog = (props: DialogParams) => {
         poolName: values.searchType === 0 ? values.searchText : '',
         poolStatusFrontend: values.poolStatus,
         token0Address: values.tokenFromAddress
-      }),
+      })
+    },
     [run]
   )
 
@@ -320,7 +321,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
           <FooterPc />
         </Box>
         {!isSm && <FixedSelected handleSubmit={filterSubmit} />}
-        {isSm && <MobileFixedSelected handleSubmit={filterSubmit} />}
+        {isSm && <MobileFixedNftSelected handleSubmit={filterSubmit} />}
       </DialogContent>
     </NFTDialog>
   )

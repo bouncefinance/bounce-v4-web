@@ -4,8 +4,8 @@ import { useDebounce } from 'ahooks'
 import { ReactComponent as BottomArrowIcon } from 'assets/imgs/common/bottomArrow.svg'
 import { ReactComponent as SearchSvg } from 'assets/imgs/common/search.svg'
 import useTokenList from 'bounceHooks/auction/useTokenList'
-import { InitialValuesPros, initialValues } from 'pages/tokenAuction/components/listDialog'
-import { useEffect, useMemo, useState } from 'react'
+import { initialValues, InitialValuesPros } from 'pages/nftAuction/components/listDialog'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { getLabelById } from 'utils'
 export interface IDrawerOpen {
@@ -17,15 +17,15 @@ const filterType = { Chain: '', Auction: '', Status: '', Token: '', 'Sort By': '
 const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialValuesPros) => void }) => {
   const optionDatas = useOptionDatas()
   const [currOpen, setCurrOpen] = useState<IDrawerOpen>({ open: false, title: '' })
-  const [chain] = useState<number>(0)
+  const [chain] = useState<number>(3)
   const [searchVal, setSearchVal] = useState('')
   const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
   const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
   const { tokenList: tokenList } = useTokenList(chainId, debouncedSearchVal, false)
   const [filterValues, setFilterValues] = useState(initialValues)
-
   const [selectButton, setSelectButton] = useState('')
   const [selectMenuItem, setSelectMenuItem] = useState<any>(filterType)
+
   useEffect(() => {
     setValues({ type: 'Search Val', item: { value: searchVal } })
   }, [searchVal])
@@ -85,7 +85,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
       {
         title: 'Token',
         name: 'tokenFromSymbol',
-        list: []
+        list: tokenList || []
       },
       {
         title: 'Sort By',
@@ -157,9 +157,12 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
     setSelectMenuItem(filterType)
     setFilterValues(initialValues)
   }
-  const menuItemStatus = ({ title, item }: { title: string; item: any }) => {
-    return selectMenuItem[title] === (title === 'Token' ? item.symbol : item.label)
-  }
+  const menuItemStatus = useCallback(
+    ({ title, item }: { title: string; item: any }) => {
+      return selectMenuItem[title] === (title === 'Token' ? item.symbol : item.label)
+    },
+    [selectMenuItem]
+  )
   const closeDrawer = () => {
     setCurrOpen({ open: false, title: '' })
   }
