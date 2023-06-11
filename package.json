@@ -115,6 +115,8 @@
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.3",
     "decimal.js-light": "^2.5.1",
+    "echarts": "^5.4.2",
+    "echarts-for-react": "^3.0.2",
     "formik": "2.2.9",
     "hellojs": "1.19.5",
     "i18n-iso-countries": "7.5.0",
@@ -128,7 +130,7 @@
     "react-markdown": "6.0.1",
     "react-toastify": "9.1.1",
     "react-unity-webgl": "^9.4.0",
-    "swiper": "^9.1.0",
+    "swiper": "^9.3.2",
     "toformat": "^2.0.0",
     "web3": "^1.7.4",
     "yup": "0.32.11"
