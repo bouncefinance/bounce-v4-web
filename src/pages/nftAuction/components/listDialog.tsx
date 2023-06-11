@@ -16,6 +16,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from 'hooks/useBreakpoint'
+import MobileFixedSelected from 'components/FixedSelected/mobileFixedSelected'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -319,6 +320,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
           <FooterPc />
         </Box>
         {!isSm && <FixedSelected handleSubmit={filterSubmit} />}
+        {isSm && <MobileFixedSelected handleSubmit={filterSubmit} />}
       </DialogContent>
     </NFTDialog>
   )
