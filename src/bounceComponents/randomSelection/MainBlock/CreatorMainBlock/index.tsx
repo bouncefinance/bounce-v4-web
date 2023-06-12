@@ -7,6 +7,7 @@ import AllTokenAuctionedAlert from '../../Alerts/AllTokenAuctionedAlert'
 import AuctionLiveAlert from '../../Alerts/AuctionLiveAlert'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsAllTokenSwapped from 'bounceHooks/auction/useIsAllTokenSwapped'
+import useBreakpoint from '../../../../hooks/useBreakpoint'
 
 const CreatorMainBlock = ({
   poolInfo,
@@ -16,6 +17,7 @@ const CreatorMainBlock = ({
   getPoolInfo: () => void
 }): JSX.Element => {
   const isAllTokenSwapped = useIsAllTokenSwapped(poolInfo)
+  const isMobile = useBreakpoint('lg')
 
   return (
     <Box
@@ -28,7 +30,7 @@ const CreatorMainBlock = ({
         <AllTokenAuctionedAlert />
       )}
 
-      <Box sx={{ display: 'flex', columnGap: 12 }}>
+      <Box sx={{ display: isMobile ? 'block' : 'flex', columnGap: 12 }}>
         <LeftBox poolInfo={poolInfo} />
         <CreatorActionBox getPoolInfo={getPoolInfo} poolInfo={poolInfo} />
       </Box>

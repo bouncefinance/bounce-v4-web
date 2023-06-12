@@ -16,17 +16,18 @@ import { useWeb3React } from '@web3-react/core'
 import { routes } from 'constants/routes'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const illustrationWidth = 500
 
-export function LoginLayout({ image, children }: { image: string; children: JSX.Element }) {
+export function LoginLayout({ image, isSm, children }: { image: string; isSm: boolean; children: JSX.Element }) {
   const theme = useTheme()
   return (
     <Box
       sx={{
         backgroundColor: '#fff'
       }}
-      display={'grid'}
+      display={isSm ? 'inherit' : 'grid'}
       gridTemplateColumns={`1fr ${illustrationWidth}px`}
     >
       <Box>
@@ -44,7 +45,8 @@ export function LoginLayout({ image, children }: { image: string; children: JSX.
           backgroundImage: `url(${image})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'contain',
-          backgroundPosition: 'center center'
+          backgroundPosition: 'center center',
+          display: isSm ? 'none' : 'inherit'
         }}
       />
     </Box>
@@ -61,6 +63,7 @@ const Login: React.FC = () => {
   const { account } = useActiveWeb3React()
   const openSignLoginModal = useOpenModal(ApplicationModal.SIGN_LOGIN)
   const openWalletModal = useOpenModal(ApplicationModal.WALLET)
+  const isSm = useBreakpoint('sm')
 
   useEffect(() => {
     if (error) {
@@ -86,16 +89,28 @@ const Login: React.FC = () => {
 
   return (
     <section>
-      <LoginLayout image={loginIllustration}>
+      <LoginLayout image={loginIllustration} isSm={isSm}>
         <Container
           sx={{
             maxWidth: '676px !important',
-            py: 94
+            py: isSm ? 40 : 94,
+            paddingX: isSm ? '16px' : ''
           }}
         >
-          <Typography variant="h1">Login</Typography>
+          <Typography fontSize={isSm ? 22 : 40}>Login</Typography>
           <Typography mt={10}>Connect to a wallet</Typography>
-          <Box mt={40} display="grid" gap="16px" width="100%" gridTemplateColumns={'1fr 1fr'}>
+          <Box
+            mt={isSm ? 20 : 40}
+            display={isSm ? 'inherit' : 'grid'}
+            gap="16px"
+            width="100%"
+            gridTemplateColumns={'1fr 1fr'}
+            sx={{
+              '> button': {
+                mb: isSm ? 16 : 0
+              }
+            }}
+          >
             {getWalletOptions}
           </Box>
         </Container>

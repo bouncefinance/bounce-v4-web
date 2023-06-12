@@ -33,7 +33,7 @@ export default function AuctionTypeSelect({
   return (
     <Select
       sx={{
-        width: 200,
+        width: [160, '200px'],
         height: 38,
         fieldset: {
           border: noBorder ? 0 : '1px solid var(--ps-text-8)'

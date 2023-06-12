@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import FixedPriceWhite from 'assets/imgs/home/TypeOfAuction/FixedPriced-white.svg'
 import FixedPriceBlack from 'assets/imgs/home/TypeOfAuction/FixedPriced-black.svg'
 import DutchAuctionWhite from 'assets/imgs/home/TypeOfAuction/DutchAuction-white.svg'
@@ -9,6 +9,8 @@ import EnglishAuctionBlack from 'assets/imgs/home/TypeOfAuction/EnglishAuction-b
 import SealedBidAuctionBlack from 'assets/imgs/home/TypeOfAuction/Sealed-BidAuction-black.svg'
 import SealedBidAuctionWhite from 'assets/imgs/home/TypeOfAuction/Sealed-BidAuction-white.svg'
 import LeftArrow from 'assets/imgs/home/TypeOfAuction/leftArrow.svg'
+import TopArrow from 'assets/imgs/home/TypeOfAuction/type-arrow-down.svg'
+import BottomArrow from 'assets/imgs/home/TypeOfAuction/type-arrow-up.svg'
 import CenterBottomArrow from 'assets/imgs/home/TypeOfAuction/centerBottomArrow.svg'
 import Logo from 'assets/imgs/home/TypeOfAuction/logo.svg'
 import RightArrow from 'assets/imgs/home/TypeOfAuction/rightArrow.svg'
@@ -35,6 +37,7 @@ import { useRequest } from 'ahooks'
 import { PoolType } from 'api/pool/type'
 import PoolListDialog from 'pages/tokenAuction/components/listDialog'
 import NftListDialog from 'pages/nftAuction/components/listDialog'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 interface AuctionItemParams {
   title: string
@@ -46,6 +49,7 @@ interface AuctionItemParams {
   handleOpenTokenAuction?: () => void
   handleOpenNFTAuction?: () => void
 }
+
 const AuctionItem = (props: AuctionItemParams) => {
   const { title, defaultImg, hoverImg, totalValue, link, handleOpenTokenAuction, handleOpenNFTAuction, poolType } =
     props
@@ -54,8 +58,8 @@ const AuctionItem = (props: AuctionItemParams) => {
     <Box
       sx={{
         position: 'relative',
-        width: 230,
-        height: 110,
+        width: [152, 230],
+        height: [90, 110],
         cursor: 'pointer'
       }}
       onMouseEnter={() => {
@@ -80,8 +84,8 @@ const AuctionItem = (props: AuctionItemParams) => {
             position: 'absolute',
             top: 0,
             left: 0,
-            width: 230,
-            height: 110,
+            width: [152, 230],
+            height: [90, 110],
             background: 'var(--ps-text-3)',
             borderRadius: 24,
             display: 'flex',
@@ -105,6 +109,7 @@ const AuctionItem = (props: AuctionItemParams) => {
               fontFamily: `'Inter'`,
               fontWeight: 400,
               fontSize: 14,
+              textAlign: 'center',
               color: '#fff'
             }}
           >
@@ -118,8 +123,8 @@ const AuctionItem = (props: AuctionItemParams) => {
             position: 'absolute',
             top: 0,
             left: 0,
-            width: 230,
-            height: 110,
+            width: [152, 230],
+            height: [90, 110],
             background: 'var(--ps-yellow-1)',
             borderRadius: 24,
             display: 'flex',
@@ -181,12 +186,18 @@ const AuctionItem = (props: AuctionItemParams) => {
   )
 }
 const logoDown = keyframes`
-  25% { transform: translateY(-3px); }
-  50% { transform: translateY(0); }
-  75% { transform: translateY(3px); }
+  25% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(3px);
+  }
 `
 const scrollX = keyframes`
-from {
+  from {
     transform: translateX(0);
   }
   to {
@@ -203,6 +214,7 @@ const SlideBox = styled(Box)(() => ({
   }
 }))
 const TypesOfAuction: React.FC = () => {
+  const isSm = useBreakpoint('sm')
   const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
   const { data: volumnCountData } = useRequest(async () => {
     const resp = await getAuctionVolumeCountData()
@@ -316,7 +328,7 @@ const TypesOfAuction: React.FC = () => {
           margin: '60px auto 20px',
           background: `var(--ps-text-4)`,
           borderRadius: 30,
-          padding: '60px 0 0',
+          padding: ['40px 0', '60px 0 0'],
           marginBottom: 20
         }}
       >
@@ -325,20 +337,20 @@ const TypesOfAuction: React.FC = () => {
             color: 'var(--ps-yellow-1)',
             fontFamily: `'Public Sans'`,
             fontWeight: 600,
-            fontSize: 36,
+            fontSize: [22, 36],
             lineHeight: '26px',
             marginBottom: 46,
             textAlign: 'center'
           }}
         >
-          Types of Auction On Bounce Finance
+          Types of Auction {isSm && <br />}On Bounce Finance
         </Typography>
         <Box
           sx={{
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: ['column nowrap', 'row nowrap'],
             justifyContent: 'center',
-            alignItems: 'flex-start'
+            alignItems: ['center', 'flex-start']
           }}
         >
           <Box
@@ -349,28 +361,45 @@ const TypesOfAuction: React.FC = () => {
               alignItems: 'center',
               borderRadius: 24,
               border: '1px solid var(--ps-yellow-1)',
-              padding: 16
+              margin: ['0 16px', 0],
+              padding: [8, 16]
             }}
-            gap={16}
           >
-            {leftAuctioinList.map((item, index) => (
-              <AuctionItem
-                key={index}
-                title={item.title}
-                defaultImg={item.defaultImg}
-                hoverImg={item.hoverImg}
-                totalValue={item.totalValue}
-                link={item.link}
-                poolType={item.poolType}
-                handleOpenTokenAuction={handleOpenToken}
-                handleOpenNFTAuction={handleOpenNft}
-              />
-            ))}
+            <Grid
+              container
+              sx={{
+                width: ['100%', 'min-content'],
+                '@media(max-width:600px)': {
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2,1fr)',
+                  justifyItems: 'center'
+                },
+                display: 'grid',
+                gridTemplateColumns: 'repeat(1,1fr)'
+              }}
+              spacing={[8, 16]}
+            >
+              {leftAuctioinList.map((item, index) => (
+                <Grid item key={index} sm={6} lg={12}>
+                  <AuctionItem
+                    key={index}
+                    title={item.title}
+                    defaultImg={item.defaultImg}
+                    hoverImg={item.hoverImg}
+                    totalValue={item.totalValue}
+                    link={item.link}
+                    poolType={item.poolType}
+                    handleOpenTokenAuction={handleOpenToken}
+                    handleOpenNFTAuction={handleOpenNft}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Box>
           <img
-            src={LeftArrow}
+            src={isSm ? TopArrow : LeftArrow}
             style={{
-              width: 120
+              width: isSm ? 224 : 120
             }}
             alt=""
             srcSet=""
@@ -379,14 +408,16 @@ const TypesOfAuction: React.FC = () => {
             sx={{
               display: 'flex',
               flexFlow: 'column nowrap',
+              width: ['100%', 'inherit'],
+              padding: ['0 16px', 0],
               justifyContent: 'center',
               alignItems: 'center'
             }}
           >
             <Box
               sx={{
-                width: 300,
-                height: 300,
+                width: ['100%', 300],
+                height: [160, 300],
                 borderRadius: 30,
                 border: '1px solid var(--ps-yellow-1)',
                 display: 'flex',
@@ -397,19 +428,21 @@ const TypesOfAuction: React.FC = () => {
             >
               <LogoDown src={Logo} alt="" srcSet="" />
             </Box>
-            <img
-              src={CenterBottomArrow}
-              style={{
-                width: 24
-              }}
-              alt=""
-              srcSet=""
-            />
+            {!isSm && (
+              <img
+                src={CenterBottomArrow}
+                style={{
+                  width: 24
+                }}
+                alt=""
+                srcSet=""
+              />
+            )}
           </Box>
           <img
-            src={RightArrow}
+            src={isSm ? BottomArrow : RightArrow}
             style={{
-              width: 120
+              width: isSm ? 224 : 120
             }}
             alt=""
             srcSet=""
@@ -422,23 +455,40 @@ const TypesOfAuction: React.FC = () => {
               alignItems: 'center',
               borderRadius: 24,
               border: '1px solid var(--ps-yellow-1)',
+              margin: ['0 16px', 0],
               padding: 16
             }}
-            gap={16}
           >
-            {rightAuctioinList.map((item, index) => (
-              <AuctionItem
-                key={index}
-                title={item.title}
-                defaultImg={item.defaultImg}
-                hoverImg={item.hoverImg}
-                totalValue={item.totalValue}
-                link={item.link}
-                poolType={item.poolType}
-                handleOpenTokenAuction={handleOpenToken}
-                handleOpenNFTAuction={handleOpenNft}
-              />
-            ))}
+            <Grid
+              container
+              sx={{
+                width: ['100%', 'min-content'],
+                '@media(max-width:600px)': {
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(2,1fr)',
+                  justifyItems: 'center'
+                },
+                display: 'grid',
+                gridTemplateColumns: 'repeat(1,1fr)'
+              }}
+              spacing={[8, 16]}
+            >
+              {rightAuctioinList.map((item, index) => (
+                <Grid item key={index} sm={6} lg={12}>
+                  <AuctionItem
+                    key={index}
+                    title={item.title}
+                    defaultImg={item.defaultImg}
+                    hoverImg={item.hoverImg}
+                    totalValue={item.totalValue}
+                    link={item.link}
+                    poolType={item.poolType}
+                    handleOpenTokenAuction={handleOpenToken}
+                    handleOpenNFTAuction={handleOpenNft}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           </Box>
         </Box>
       </Box>
@@ -446,7 +496,7 @@ const TypesOfAuction: React.FC = () => {
       <SlideBox
         sx={{
           width: '100%',
-          height: 90,
+          height: [62, 90],
           maxWidth: 1296,
           margin: '0 auto 20px',
           background: 'var(--ps-yellow-1)',
@@ -458,7 +508,7 @@ const TypesOfAuction: React.FC = () => {
         <Box
           sx={{
             width: '100%',
-            height: 90,
+            height: [62, 90],
             maxWidth: '1100px',
             margin: '0 auto',
             display: 'flex',
@@ -467,7 +517,7 @@ const TypesOfAuction: React.FC = () => {
             alignItems: 'center'
           }}
           className={'marqueeGroup'}
-          gap={100}
+          gap={isSm ? 30 : 100}
         >
           {[...slideImgList, ...slideImgList].map((item, index) => {
             return (
@@ -475,7 +525,7 @@ const TypesOfAuction: React.FC = () => {
                 key={index}
                 src={item}
                 style={{
-                  width: 50
+                  width: isSm ? 30 : 50
                 }}
                 alt="logo"
               />

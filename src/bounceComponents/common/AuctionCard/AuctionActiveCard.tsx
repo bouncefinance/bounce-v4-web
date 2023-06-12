@@ -1,4 +1,4 @@
-import { Box, Container, Skeleton, styled } from '@mui/material'
+import { Box, Container, Skeleton, styled, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
@@ -26,6 +26,7 @@ const YellowSpan = styled('span')`
 const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
   const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
+  const theme = useTheme()
   return (
     <Box
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
@@ -34,23 +35,38 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         padding: '16px',
         cursor: 'pointer',
         width: 'fit-content',
-        gap: isSm ? '10px' : '20px',
+        gap: '20px',
         background: '#FFFFFF',
-        borderRadius: '20px'
+        borderRadius: '20px',
+        flexDirection: 'row',
+        [theme.breakpoints.down('md')]: {
+          flexDirection: 'column',
+          height: '364px',
+          boxSizing: 'border-box',
+          width: '230px',
+          gap: '16px'
+        }
       }}
     >
       <img
         style={{
-          width: isSm ? '100px' : '150px',
-          height: isSm ? '100px' : '150px',
+          width: isSm ? '198px' : '150px',
+          height: isSm ? '198px' : '150px',
           borderRadius: '14px'
         }}
         src={props.img ? props.img : EmptyImg}
       />
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-        <Box>
+        <Box mb={16}>
           <H5>{props.name}</H5>
-          <SmallText>{props.desc}</SmallText>
+          <SmallText
+            sx={{
+              color: '#1B1B1B66'
+            }}
+          >
+            {/* to remain space of description  */}
+            {props.desc || '\u00A0'}
+          </SmallText>
         </Box>
         <Box
           sx={{
@@ -59,10 +75,14 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
             alignItems: 'flex-start',
             padding: '16px 20px',
             gap: '24px',
-            width: 'fit-content',
             height: 'fit-content',
             background: '#F6F7F3',
-            borderRadius: '6px'
+            borderRadius: '6px',
+            [theme.breakpoints.down('md')]: {
+              gap: '12px',
+              padding: '8px 12px',
+              width: '198px'
+            }
           }}
         >
           <Box>
@@ -80,35 +100,38 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
 }
 
 const ActiveUserSkeletonCard = () => {
+  const isMd = useBreakpoint('md')
   return (
     <Box
       sx={{
         display: 'flex',
         padding: '16px',
+        flexDirection: isMd ? 'column' : 'row',
         cursor: 'pointer',
-        width: 'fit-content',
+        width: isMd ? 230 : 'fit-content',
+        height: isMd ? 364 : 'auto',
         gap: '20px',
         background: '#FFFFFF',
         borderRadius: '20px'
       }}
     >
-      <Box sx={{ width: '150px', height: '150px', borderRadius: '14px' }}>
+      <Box sx={{ width: isMd ? '198px' : '150px', height: isMd ? '198px' : '150px', borderRadius: '14px' }}>
         <Skeleton
           variant="rectangular"
           component={'div'}
-          sx={{ width: '150px', height: '150px', borderRadius: '14px' }}
+          sx={{ width: '100%', height: '100%', borderRadius: '14px' }}
         />
       </Box>
 
-      <Box width={'220px'} display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-        <Skeleton width={'30%'} height={28} variant="text" component={'div'} />
+      <Box width={isMd ? '100%' : '220px'} display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
+        <Skeleton width={'30%'} height={28} variant="text" component={'div'} sx={{ marginBottom: isMd ? 16 : 0 }} />
         <Skeleton width={'100%'} height={80} variant="rounded" component={'div'} sx={{ borderRadius: '10px' }} />
       </Box>
     </Box>
   )
 }
 export const ActiveUser: React.FC = () => {
-  const isSm = useBreakpoint('sm')
+  const isSm = useBreakpoint('md')
   const { data } = useRequest(async () => {
     const resp = await getActiveUsers()
     return {
@@ -116,23 +139,24 @@ export const ActiveUser: React.FC = () => {
       total: resp.data.total
     }
   })
-  const slideCardWidth = isSm ? 329 : 442
+  const slideCardWidth = isSm ? 230 : 442
   const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / slideCardWidth)
   useEffect(() => {
     const resetView = () => {
-      setSlidesPerView(window.innerWidth / slideCardWidth)
+      setSlidesPerView(Math.ceil(window.innerWidth / slideCardWidth))
     }
     window.addEventListener('resize', resetView)
     return () => {
-      window.addEventListener('resize', resetView)
+      window.removeEventListener('resize', resetView)
     }
   }, [slideCardWidth])
+
   return (
     <Box
       className={'ActiveUser'}
       style={{
         width: '100%',
-        padding: isSm ? '42px 0' : '100px 0 140px'
+        padding: isSm ? '22px 0 116px' : '100px 0 140px'
       }}
     >
       <Container
@@ -141,14 +165,16 @@ export const ActiveUser: React.FC = () => {
         }}
       >
         <H2 mb={isSm ? 20 : 80} ml={isSm ? 12 : 0}>
-          Most active <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
+          Most active {isSm && <br />} <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
         </H2>
       </Container>
       <SlideProgress
+        hideArrow={isSm}
         swiperStyle={{
-          spaceBetween: 16,
+          spaceBetween: 20,
           slidesPerView: slidesPerView,
-          loop: false,
+          loop: isSm,
+          autoplay: isSm,
           freeMode: true
         }}
       >

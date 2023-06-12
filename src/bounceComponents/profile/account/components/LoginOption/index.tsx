@@ -8,6 +8,7 @@ import BoxLayout from './BoxLayout/BoxLayout'
 import { bindThirdpartGetUrlOfTwitter } from 'api/user'
 import { useIsWindowFocus } from 'hooks/useIsWindowVisible'
 import { useRefreshUserInfoCallback } from 'state/users/hooks'
+import useBreakpoint from '../../../../../hooks/useBreakpoint'
 // import { useBindThirdPart } from 'bounceHooks/user/useBindThirdPart'
 // import { useOauth } from 'state/users/hooks'
 export type ILoginOptonProps = {
@@ -37,6 +38,7 @@ const LoginOpton: React.FC<ILoginOptonProps> = ({ twitter }) => {
 
   const isWindowFocus = useIsWindowFocus()
   const refreshUserInfoCallback = useRefreshUserInfoCallback()
+  const isSm = useBreakpoint('sm')
 
   useEffect(() => {
     if (isWindowFocus) {
@@ -62,7 +64,12 @@ const LoginOpton: React.FC<ILoginOptonProps> = ({ twitter }) => {
           emailSvg={<GoogleSVG />}
           onBind={() => handleThirdBind('google', ACCOUNT_TYPE.GMAIL)}
         /> */}
-      <BoxLayout link={twitter} title={'Twitter'} image={<TwitterSVG />} onBind={bindTwitter} />
+      <BoxLayout
+        link={twitter}
+        title={'Twitter'}
+        image={<TwitterSVG height={isSm ? 24 : 40} width={isSm ? 24 : 40} />}
+        onBind={bindTwitter}
+      />
     </Stack>
   )
 }

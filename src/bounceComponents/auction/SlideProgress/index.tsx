@@ -19,6 +19,7 @@ import useBreakpoint from '../../../hooks/useBreakpoint'
 interface ISlideProgress {
   swiperStyle: React.RefAttributes<SwiperRef> & SwiperProps
   children: ReactJSXElement[]
+  hideArrow?: boolean
   grayArrow?: boolean
 }
 
@@ -60,7 +61,7 @@ const ProgressGray = styled(ProgressLight)`
 
 export function SlideProgress(props: ISlideProgress) {
   const isSm = useBreakpoint('sm')
-  const { swiperStyle, children } = props
+  const { swiperStyle, children, hideArrow } = props
   const [swiper, setSwiper] = useState<SwiperCore>()
   const totalSlides = swiper?.slides ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
@@ -77,7 +78,7 @@ export function SlideProgress(props: ISlideProgress) {
         {children}
       </Swiper>
       <Box
-        display={'flex'}
+        display={hideArrow ? 'none' : 'flex'}
         alignItems={'center'}
         sx={{
           maxWidth: 1440,

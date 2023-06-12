@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { ThemeProvider, CssBaseline, createTheme, styled } from '@mui/material'
+import { createTheme, CssBaseline, styled, ThemeProvider } from '@mui/material'
 import Colors from './options/color'
-import { RootThemes, CustomTheme } from './RootOptions'
+import { CustomTheme, RootThemes } from './RootOptions'
 
 type Mode = 'light' | 'dark'
 
