@@ -81,21 +81,13 @@ const AuctionContent = () => {
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
-  useEffect(() => {
-    valuesDispatch({
-      type: ActionType.ClearParams,
-      payload: {}
-    })
-    return () => {}
-  }, [valuesDispatch])
   const {
     pagination: poolsPagination,
     data: poolList,
     loading,
     run
   } = usePagination<any, Params>(
-    async ({ current, pageSize }) => {
-      console.log('values>>>', values)
+    async ({ current, pageSize = defaultPageSize }) => {
       await waitFun(500)
       const marketList: BannerType[] = [
         {
@@ -105,7 +97,8 @@ const AuctionContent = () => {
           img: P1Img,
           link: routes.fundo.home,
           startTime: '',
-          endTime: ''
+          endTime: '',
+          categories: 'Sneakers'
         },
         {
           categories: 'Fashion',
@@ -333,7 +326,17 @@ const AuctionContent = () => {
           })
         }
       }
+      if (values.categories) {
+        searchResult = marketList.filter(item => {
+          return values.categories === item.categories
+        })
+      }
       const result = searchResult.slice((current - 1) * pageSize, current * pageSize)
+      setTimeout(() => {
+        document
+          .getElementById('Marketplace')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+      })
       return {
         list: result,
         total: searchResult.length
@@ -348,12 +351,17 @@ const AuctionContent = () => {
     poolsPagination.changeCurrent(p)
   }
   const handleSearch = () => {
-    run({ current: 1, pageSize: 10 })
+    run({ current: 1, pageSize: defaultPageSize })
   }
   useEffect(() => {
-    run({ current: 1, pageSize: 10 })
+    valuesDispatch({
+      type: ActionType.ClearParams,
+      payload: {}
+    })
+    run({ current: 1, pageSize: defaultPageSize })
     return () => {}
-  }, [run])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <Box
       sx={{
@@ -415,7 +423,7 @@ const AuctionContent = () => {
       </Box>
       <UpcomingAuction></UpcomingAuction>
       {!isSm && (
-        <Marketplace poolList={poolList?.list || []} handleSearch={handleSearch} filterConfig={filterConfig}>
+        <Marketplace poolLength={poolList?.total || 0} handleSearch={handleSearch} filterConfig={filterConfig}>
           <>
             {loading ? (
               <SwiperSkeleton />
@@ -431,7 +439,7 @@ const AuctionContent = () => {
               >
                 {poolList &&
                   poolList?.list &&
-                  poolList.list.map((item: any, index: number) => {
+                  poolList.list.map((item: BannerType, index: number) => {
                     return <Banner key={index} banner={item}></Banner>
                   })}
               </Box>
@@ -439,6 +447,7 @@ const AuctionContent = () => {
             {poolList?.total >= 10 && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
+                  page={poolsPagination.current}
                   onChange={handlePageChange}
                   count={Math.ceil(poolList?.total / defaultPageSize) || 0}
                   variant="outlined"
@@ -489,7 +498,7 @@ const AuctionContent = () => {
               >
                 {poolList &&
                   poolList?.list &&
-                  poolList.list.map((item: any, index: number) => {
+                  poolList.list.map((item: BannerType, index: number) => {
                     return <AuctionCard key={index} banner={item}></AuctionCard>
                   })}
               </Box>
@@ -497,10 +506,34 @@ const AuctionContent = () => {
             {poolList?.total >= 1 && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
+                  page={poolsPagination.current}
                   onChange={handlePageChange}
                   count={Math.ceil(poolList?.total / defaultPageSize) || 0}
                   variant="outlined"
                   siblingCount={0}
+                  sx={{
+                    '.MuiPagination-ul li button': {
+                      color: '#fff',
+                      border: '1px solid var(--ps-text-3)'
+                    },
+                    '.MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
+                      border: 0,
+                      color: '#fff',
+                      fontFamily: `'Inter'`,
+                      fontWight: 400,
+                      fontSize: 16,
+                      background: 'var(--ps-text-2)',
+                      '&.Mui-selected': {
+                        color: 'var(--ps-text-3)',
+                        background: 'var(--ps-yellow-1)'
+                      },
+                      '&:hover': {
+                        backgroundColor: 'var(--ps-text-1)',
+                        color: '#fff'
+                      }
+                    },
+                    alignItems: 'end'
+                  }}
                 />
               </Box>
             )}

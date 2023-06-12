@@ -392,7 +392,7 @@ const LeftFilter = ({ config, handleSearch }: { config: FilterSearchConfig[]; ha
           left: isSm ? '16px' : 'unset',
           width: isSm ? '208px' : '100%',
           height: isSm ? '42px' : '53px',
-          lineHeight: '53px',
+          lineHeight: isSm ? '42px' : '53px',
           textAlign: 'center',
           fontFamily: `'Inter'`,
           fontSize: '16px'

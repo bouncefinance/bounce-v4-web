@@ -28,6 +28,7 @@ const MarketplaceMobile = ({
   const [openFilter, setOpenFilter] = useState<boolean>(false)
   return (
     <Box
+      id={'Marketplace'}
       sx={{
         position: 'relative',
         width: 'calc(100% - 16px)',

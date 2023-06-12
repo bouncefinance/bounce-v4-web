@@ -1,7 +1,7 @@
 import { Box, Typography, styled } from '@mui/material'
-import { BannerType } from 'api/market/type'
+import { BannerType } from './banner'
 import { useCountDown } from 'ahooks'
-import P2Img from 'assets/imgs/realWorld/p2.png'
+// import P2Img from 'assets/imgs/realWorld/p2.png'
 import EthIcon from 'assets/imgs/realWorld/eth.png'
 import { useNavigate } from 'react-router-dom'
 const CountDownBg = styled(Box)`
@@ -30,7 +30,7 @@ const CountDownBg = styled(Box)`
 `
 const AuctionCard = ({ banner }: { banner: BannerType }) => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate: banner.openAt * 1000
+    targetDate: Number(banner.startTime) * 1000
   })
   const navigate = useNavigate()
   const handleClick = (url: string) => {
@@ -49,11 +49,11 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
         margin: '0 auto',
         height: '360px',
         borderRadius: '8px',
-        background: `url(${P2Img}) no-repeat top center / auto 100%`,
+        background: `url(${banner.img}) no-repeat top center / auto 100%`,
         backgroundColor: '#000'
       }}
       onClick={() => {
-        handleClick(banner.url)
+        handleClick(banner.link)
       }}
     >
       <Box
@@ -96,123 +96,132 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
       <Box
         sx={{
           position: 'absolute',
-          top: '182px',
-          right: '16px',
+          bottom: '16px',
           left: '16px',
-          height: '24px',
+          right: '16px',
           display: 'flex',
-          flexFlow: 'row nowrap',
-          alignItems: 'center',
-          background: 'rgba(18, 18, 18, 0.2)',
-          backdropFilter: `blur(2px)`
+          flexFlow: 'column nowrap',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-start'
         }}
+        gap={'16px'}
       >
-        <img
-          style={{
-            width: '24px',
+        <Box
+          sx={{
             height: '24px',
-            marginRight: '10px'
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            alignItems: 'center',
+            background: 'rgba(18, 18, 18, 0.2)',
+            backdropFilter: `blur(2px)`
           }}
-          src={EthIcon}
-          alt=""
-          srcSet=""
-        />
+        >
+          <img
+            style={{
+              width: '24px',
+              height: '24px',
+              marginRight: '10px'
+            }}
+            src={EthIcon}
+            alt=""
+            srcSet=""
+          />
+          <Typography
+            sx={{
+              fontSize: '13px',
+              color: '#fff',
+              fontFamily: `'Public Sans'`,
+              fontWeight: 600
+            }}
+          >
+            NFT issued by 4K Alpha Vault
+          </Typography>
+        </Box>
         <Typography
           sx={{
-            fontSize: '13px',
+            lineHeight: '22px',
+            fontSize: '22px',
             color: '#fff',
             fontFamily: `'Public Sans'`,
-            fontWeight: 600
+            fontWeight: 600,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            wordBreak: 'break-all'
           }}
         >
-          NFT issued by 4K Alpha Vault
+          {banner.name}
         </Typography>
-      </Box>
-      <Typography
-        sx={{
-          position: 'absolute',
-          top: '222px',
-          right: '16px',
-          left: '16px',
-          height: '45px',
-          fontSize: '22px',
-          color: '#fff',
-          fontFamily: `'Public Sans'`,
-          fontWeight: 600
-        }}
-      >
-        The 1st Sabotage Hi Top Studio Pr...
-      </Typography>
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '16px',
-          right: '16px',
-          left: '16px',
-          height: '21px',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          alignItems: 'center',
-          background: 'rgba(18, 18, 18, 0.2)',
-          backdropFilter: `blur(2px)`
-        }}
-        gap={'10px'}
-      >
-        <Typography
+        <Box
           sx={{
             height: '21px',
-            fontSize: '14px',
-            color: '#D7D6D9',
-            fontFamily: `'Public Sans'`,
-            fontWeight: 500
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            alignItems: 'center',
+            background: 'rgba(18, 18, 18, 0.2)',
+            backdropFilter: `blur(2px)`
           }}
+          gap={'10px'}
         >
-          Real World Col...
-        </Typography>
-        <Typography
-          sx={{
-            height: '21px',
-            fontSize: '14px',
-            color: '#D7D6D9',
-            fontFamily: `'Public Sans'`,
-            fontWeight: 500
-          }}
-        >
-          |
-        </Typography>
-        <Typography
-          sx={{
-            height: '21px',
-            fontSize: '14px',
-            color: '#D7D6D9',
-            fontFamily: `'Public Sans'`,
-            fontWeight: 500
-          }}
-        >
-          Top bid
-        </Typography>
-        <Typography
-          sx={{
-            height: '21px',
-            fontSize: '14px',
-            color: '#D7D6D9',
-            fontFamily: `'Public Sans'`,
-            fontWeight: 500
-          }}
-        >
-          |
-        </Typography>
-        <Typography
-          sx={{
-            height: '21px',
-            fontSize: '14px',
-            color: '#D7D6D9',
-            fontFamily: `'Public Sans'`,
-            fontWeight: 500
-          }}
-        >
-          23.00 BNB
-        </Typography>
+          <Typography
+            sx={{
+              height: '21px',
+              fontSize: '14px',
+              color: '#D7D6D9',
+              fontFamily: `'Public Sans'`,
+              fontWeight: 500
+            }}
+          >
+            Real World Col...
+          </Typography>
+          <Typography
+            sx={{
+              height: '21px',
+              fontSize: '14px',
+              color: '#D7D6D9',
+              fontFamily: `'Public Sans'`,
+              fontWeight: 500
+            }}
+          >
+            |
+          </Typography>
+          <Typography
+            sx={{
+              height: '21px',
+              fontSize: '14px',
+              color: '#D7D6D9',
+              fontFamily: `'Public Sans'`,
+              fontWeight: 500
+            }}
+          >
+            Top bid
+          </Typography>
+          <Typography
+            sx={{
+              height: '21px',
+              fontSize: '14px',
+              color: '#D7D6D9',
+              fontFamily: `'Public Sans'`,
+              fontWeight: 500
+            }}
+          >
+            |
+          </Typography>
+          <Typography
+            sx={{
+              height: '21px',
+              fontSize: '14px',
+              color: '#D7D6D9',
+              fontFamily: `'Public Sans'`,
+              fontWeight: 500
+            }}
+          >
+            {/* 23.00 BNB */}
+            {'ON VIEW'}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   )
