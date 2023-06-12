@@ -77,6 +77,7 @@ const Marketplace = ({
       sx={{
         position: 'relative',
         width: 'calc(100% - 40px)',
+        maxWidth: '1296px',
         minHeight: `calc(100vh - ${theme.height.header})`,
         margin: '0 auto',
         background: '#121212',
@@ -160,7 +161,7 @@ const Marketplace = ({
               <ComBtn
                 onClick={() => {
                   setOpenFilter(true)
-                  handleSetOpen && handleSetOpen(false)
+                  handleSetOpen && handleSetOpen(true)
                 }}
               >
                 Filter

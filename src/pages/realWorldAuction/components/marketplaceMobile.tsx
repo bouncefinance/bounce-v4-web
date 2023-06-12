@@ -30,7 +30,7 @@ const MarketplaceMobile = ({
     <Box
       sx={{
         position: 'relative',
-        width: '100%',
+        width: 'calc(100% - 16px)',
         margin: '0 auto',
         background: '#121212',
         borderRadius: '16px',
