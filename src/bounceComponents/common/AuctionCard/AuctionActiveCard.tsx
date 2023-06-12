@@ -20,7 +20,7 @@ interface IAuctionActiveCard {
 }
 
 const YellowSpan = styled('span')`
-  color: #c8f056;
+  color: #b5e529;
 `
 
 const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {

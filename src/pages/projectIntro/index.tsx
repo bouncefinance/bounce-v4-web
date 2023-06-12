@@ -655,7 +655,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
               </Typography>
             </GrayBg>
             {/*<GrayBg>*/}
-            {/*  <Typography color={'#C8F056'}>Playable Auction</Typography>*/}
+            {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
             {/*</GrayBg>*/}
           </Row>
           <Row gap={24} mt={16}>

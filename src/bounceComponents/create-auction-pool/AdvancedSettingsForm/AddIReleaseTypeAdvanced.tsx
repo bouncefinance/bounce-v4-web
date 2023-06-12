@@ -31,6 +31,7 @@ import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import SwitchFormItem from '../SwitchFormItem'
 import { useQueryParams } from 'hooks/useQueryParams'
+import NumberInput from 'bounceComponents/common/NumberInput'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -575,17 +576,21 @@ function SetFragmentReleaseTime({
                 textField={{ sx: { width: '100%' } }}
               />
               <FormItem label="radio">
-                <OutlinedInput
+                <NumberInput
                   value={item.radio}
-                  onChange={e => {
-                    const val = Number(e.target.value.replace(/[^\d]/g, ''))
-                    if (val > 100) {
-                      setItemValue(idx, 'radio', '100')
-                    } else if (val < 1) {
-                      setItemValue(idx, 'radio', '')
-                    } else {
-                      setItemValue(idx, 'radio', Number(val).toFixed())
-                    }
+                  onBlur={() => {
+                    setItemValue(idx, 'radio', Number(item.radio).toFixed(2))
+                  }}
+                  onUserInput={value => {
+                    setItemValue(idx, 'radio', value.toString())
+
+                    // if (val > 100) {
+                    //   setItemValue(idx, 'radio', '100')
+                    // } else if (val < 0.01) {
+                    //   setItemValue(idx, 'radio', '')
+                    // } else {
+                    //   setItemValue(idx, 'radio', val)
+                    // }
                   }}
                   endAdornment={<>%</>}
                 />

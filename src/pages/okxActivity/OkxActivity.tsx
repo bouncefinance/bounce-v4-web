@@ -293,7 +293,7 @@ export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
             </Typography>
           </PoolInfoItem>
 
-          <PoolInfoItem title="Contract address" sx={{ marginTop: 12 }} tip="ERC1155 #1">
+          <PoolInfoItem title="Contract address" sx={{ marginTop: 12 }} tip="ERC1155 #0">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               <Typography color={'#959595'}>{shortenAddress(poolInfo.token0.address)}</Typography>
 

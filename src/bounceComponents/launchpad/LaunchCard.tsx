@@ -67,7 +67,7 @@ export function LaunchPadProcess({
             width: '10px',
             height: '10px',
             borderRadius: '5px',
-            background: isAchieve ? '#C8F056' : '#FFFFFF33'
+            background: isAchieve ? '#B5E529' : '#FFFFFF33'
           }}
         />
         {!isLast && (
@@ -75,7 +75,7 @@ export function LaunchPadProcess({
             sx={{
               height: '4px',
               width: '100%',
-              background: isAchieve ? '#C8F056' : '#FFFFFF33'
+              background: isAchieve ? '#B5E529' : '#FFFFFF33'
             }}
           />
         )}
