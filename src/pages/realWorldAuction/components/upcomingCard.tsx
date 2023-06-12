@@ -8,7 +8,7 @@ const AuctionItem = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
   maxWidth: '309px',
-  height: '370',
+  height: '370px',
   borderRadius: '24px',
   overflow: 'hidden',
   cursor: `url(${CursorIcon}), pointer`,
@@ -32,6 +32,8 @@ const AuctionItem = styled(Box)(({ theme }) => ({
     alignItems: 'flex-start',
     background: `rgba(18, 18, 18, 0.4)`,
     backdropFilter: `blur(5px)`,
+    borderRadius: '24px',
+    overflow: 'hidden',
     '.head': {
       display: 'flex',
       flexFlow: 'row nowrap',

@@ -143,7 +143,7 @@ function ArrowBanner({ type }: { type?: string }) {
         onSwiper={setSwiper}
         spaceBetween={0}
         slidesPerView={1}
-        loop
+        loop={true}
         autoplay={{
           delay: 3000
         }}
