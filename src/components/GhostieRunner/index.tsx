@@ -11,10 +11,10 @@ export default function GhostieRunner({ scoreUpload }: { scoreUpload: (score: nu
   const [hidden, setHidden] = useState(false)
 
   const { unityProvider, isLoaded, addEventListener, removeEventListener, unload } = useUnityContext({
-    loaderUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.loader.js',
-    dataUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.1.wasm',
-    frameworkUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.framework.js',
-    codeUrl: 'https://gr.z-crypto.ml/GhostieRunnerWebGL_0.2.0.wasm'
+    loaderUrl: 'https://api-testnet.bounce.finance/ghostie-runner/GhostieRunnerWebGL_0.2.0.loader.js',
+    dataUrl: 'https://api-testnet.bounce.finance/ghostie-runner/GhostieRunnerWebGL_0.2.1.wasm',
+    frameworkUrl: 'https://api-testnet.bounce.finance/ghostie-runner/GhostieRunnerWebGL_0.2.0.framework.js',
+    codeUrl: 'https://api-testnet.bounce.finance/ghostie-runner/GhostieRunnerWebGL_0.2.0.wasm'
   })
 
   useEffect(() => {
