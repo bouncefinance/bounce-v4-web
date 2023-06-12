@@ -19,17 +19,17 @@ export const filterConfig: FilterSearchConfig[] = [
     key: AuctionFilterKey.categories,
     values: ['Watches', 'Sneakers', 'Electronics', 'Fashion', 'Cards', 'Casascius', 'Collectibles'],
     value: ''
-  },
-  {
-    // range type return type、max、min, like ['SOL', 100, 0]
-    type: 'range',
-    key: AuctionFilterKey.range,
-    label: 'Price range',
-    values: ['SOL'],
-    value: '',
-    max: '',
-    min: ''
   }
+  //   {
+  //     // range type return type、max、min, like ['SOL', 100, 0]
+  //     type: 'range',
+  //     key: AuctionFilterKey.range,
+  //     label: 'Price range',
+  //     values: ['SOL'],
+  //     value: '',
+  //     max: '',
+  //     min: ''
+  //   }
 ]
 export interface PoolItemParams {
   bgImg: string

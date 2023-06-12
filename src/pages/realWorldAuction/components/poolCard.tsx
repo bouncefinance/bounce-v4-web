@@ -108,7 +108,7 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
               whiteSpace: 'nowrap'
             }}
           >
-            {item.price}
+            {/* {item.price} */}
           </Typography>
           <Button
             variant="contained"

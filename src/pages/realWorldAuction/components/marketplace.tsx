@@ -1,14 +1,15 @@
-import { Box, Typography, Select, MenuItem, styled, useTheme } from '@mui/material'
+// import { Box, Typography, Select, MenuItem, styled, useTheme } from '@mui/material'
+import { Box, Typography, styled, useTheme } from '@mui/material'
 import { FilterSearchConfig } from './auction'
 import ArrowRight from 'assets/imgs/realWorld/arrow_right.svg'
 import ArrowLeft from 'assets/imgs/realWorld/arrow_left.svg'
 import RefreshSvg from 'assets/imgs/realWorld/refresh.svg'
-import RangeSvg from 'assets/imgs/realWorld/range.svg'
+// import RangeSvg from 'assets/imgs/realWorld/range.svg'
 import LeftFilter from './leftFilter'
 import { useState } from 'react'
 import IconSVG from 'bounceComponents/common/SearchInput/icon.svg'
 import { useValuesState, ActionType, useValuesDispatch } from 'bounceComponents/real-world-collectibles/ValuesProvider'
-
+import { BannerType } from './banner'
 export const ComBtn = styled(Box)(() => ({
   height: '38px',
   lineHeight: '38px',
@@ -45,14 +46,16 @@ const Marketplace = ({
   filterConfig,
   children,
   handleSetOpen,
-  handleSearch
+  handleSearch,
+  poolList
 }: {
   filterConfig: FilterSearchConfig[]
   children: JSX.Element
   handleSetOpen?: (open: boolean) => void
   handleSearch?: () => void
+  poolList?: BannerType[]
 }) => {
-  const [chainFilter, setChainFilter] = useState<number>(0)
+  //   const [chainFilter, setChainFilter] = useState<number>(0)
   const [openFilter, setOpenFilter] = useState<boolean>(false)
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
@@ -191,7 +194,7 @@ const Marketplace = ({
               marginRight: '9px'
             }}
           >
-            1 items
+            {poolList?.length || 1} items
           </Typography>
           <img
             style={{
@@ -239,7 +242,7 @@ const Marketplace = ({
               }}
             />
           </ComSearch>
-          <Select
+          {/* <Select
             sx={{
               width: '200px',
               height: '38px',
@@ -264,7 +267,7 @@ const Marketplace = ({
               />
               Recently added
             </MenuItem>
-          </Select>
+          </Select> */}
         </Box>
       </Box>
       {/* list content */}
