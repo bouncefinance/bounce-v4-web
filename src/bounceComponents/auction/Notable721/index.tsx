@@ -22,8 +22,9 @@ interface Notable721Props {
 }
 
 export const HomeNFTSkeletonCard = () => {
+  const isSm = useBreakpoint('sm')
   return (
-    <Box display={'flex'} flexWrap={'nowrap'} gap={60}>
+    <Box display={'flex'} flexWrap={'nowrap'} gap={isSm ? 12 : 60}>
       {Array.from(new Array(4)).map((_, index) => (
         <Box
           key={index}

@@ -13,6 +13,7 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import { addTokenToWallet } from 'utils/addTokenToWallet'
 import { useActiveWeb3React } from 'hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import useBreakpoint from '../../../../hooks/useBreakpoint'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -22,6 +23,7 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
 
 const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
   const { chainId } = useActiveWeb3React()
+  const isMobile = useBreakpoint('md')
   //   const swapedPercent =
   //     poolInfo?.curPlayer && poolInfo?.maxPlayere
   //       ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
@@ -43,14 +45,14 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
     <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
       <Box
         sx={{
-          display: 'flex',
+          display: isMobile ? 'block' : 'flex',
           flexFlow: 'row nowrap',
           gap: '39px'
         }}
       >
         <Box
           sx={{
-            width: '50%',
+            width: isMobile ? '100%' : '50%',
             flex: 1
           }}
         >
@@ -104,7 +106,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
         </Box>
         <Box
           sx={{
-            width: '50%',
+            width: isMobile ? '100%' : '50%',
+            pt: isMobile ? '20px' : '',
             flex: 1
           }}
         >

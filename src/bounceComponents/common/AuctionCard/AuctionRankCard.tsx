@@ -361,6 +361,7 @@ export const AuctionRankCard: React.FC = () => {
   )
   const AuctionTabs = (
     <Row
+      mr={20}
       sx={{
         width: isSm ? 470 : 'auto'
       }}
@@ -387,8 +388,16 @@ export const AuctionRankCard: React.FC = () => {
     >
       <CenterRow
         flexDirection={isSm ? 'column' : 'row'}
-        justifyContent="flex-start"
-        style={{ alignItems: isSm ? 'flex-start' : 'center' }}
+        sx={{
+          alignItems: isSm ? 'flex-start' : 'center',
+          justifyContent: isSm ? 'flex-start' : 'space-between',
+          '@media(max-width:862px)': {
+            flexWrap: 'nowrap',
+            overflowX: 'scroll',
+            overflowY: 'hidden',
+            '&::-webkit-scrollbar': { display: 'none' }
+          }
+        }}
       >
         {isSm && (
           <Box
@@ -403,7 +412,7 @@ export const AuctionRankCard: React.FC = () => {
         )}
         {!isSm && AuctionTabs}
         {isSm && (
-          <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0' }}>
+          <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0', overflowY: 'hidden' }}>
             {ChainSelect}
           </Box>
         )}
@@ -415,7 +424,7 @@ export const AuctionRankCard: React.FC = () => {
             padding: '12px',
             display: 'flex',
             background: 'white',
-            overflow: isSm ? 'scroll' : 'hidden',
+            overflowX: 'scroll',
             borderRadius: isSm ? 0 : '0px 30px 30px 30px',
             '&::-webkit-scrollbar': {
               display: 'none'
