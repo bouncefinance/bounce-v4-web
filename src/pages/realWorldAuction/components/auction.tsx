@@ -36,7 +36,18 @@ export const filterConfig: FilterSearchConfig[] = [
     type: 'select',
     label: 'Categories',
     key: AuctionFilterKey.categories,
-    values: ['Watches', 'Sneakers', 'Electronics', 'Fashion', 'Cards', 'Casascius', 'Collectibles'],
+    values: [
+      'Watches',
+      'Sneakers',
+      'Electronics',
+      'Fashion',
+      'Cards',
+      'Casascius',
+      'Collectibles',
+      'Wines',
+      'Art',
+      'Jewellery'
+    ],
     value: ''
   },
   {
@@ -88,6 +99,7 @@ const AuctionContent = () => {
       await waitFun(500)
       const marketList: BannerType[] = [
         {
+          categories: 'Collectibles',
           name: 'The 1st Sabotage Hi Top Studio Pr...',
           time: '--',
           img: P1Img,
@@ -96,6 +108,7 @@ const AuctionContent = () => {
           endTime: ''
         },
         {
+          categories: 'Fashion',
           name: 'Handbags Online: The New York Edit',
           time: '30 MAY 10AM - 12 JUN 10AM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-22070-05302023-1.jpg',
@@ -104,6 +117,7 @@ const AuctionContent = () => {
           endTime: 1686571200
         },
         {
+          categories: 'Wines',
           name: 'Fine and Rare Wines Online: Featuring the Time Capsule Collection of Undisturbed Legends of the Côte d’Or',
           time: '31 MAY 7AM - 13 JUN 7AM PDT',
           img: 'https://www.christies.com/img/SaleImages/LAW-22064-05312023-1.jpg',
@@ -112,6 +126,7 @@ const AuctionContent = () => {
           endTime: 1686639600
         },
         {
+          categories: 'Art',
           name: 'Modern British Art Selling Exhibition',
           time: '3 - 14 JUNE',
           img: 'https://www.christies.com/img/eventimages/PrivateSalesExhibiti-1-20230602111457.jpg',
@@ -120,6 +135,7 @@ const AuctionContent = () => {
           endTime: 1686672000
         },
         {
+          categories: 'Art',
           name: 'The Ann and Gordon Getty Collection: Temple of Wings',
           time: '14 JUNE 10:00 AM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-22125-06142023-1.jpg',
@@ -128,6 +144,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Art',
           name: "Art d'Asie",
           time: '14 JUNE 10:30 AM CEST ',
           img: 'https://www.christies.com/img/SaleImages/PAR-22151-06142023-1.jpg',
@@ -136,6 +153,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Art',
           name: 'The Ann and Gordon Getty Collection: Aesthetic Decoration from Temple of Wings',
           time: '31 MAY 10AM - 15 JUN 10AM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-21107-05312023-1.jpg',
@@ -144,6 +162,7 @@ const AuctionContent = () => {
           endTime: 1686830400
         },
         {
+          categories: 'Art',
           name: 'The Ann and Gordon Getty Collection: Early Modern Design from Temple of Wings',
           time: '31 MAY 10AM - 15 JUN 2PM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-21108-05312023-1.jpg',
@@ -152,6 +171,7 @@ const AuctionContent = () => {
           endTime: 1686852000
         },
         {
+          categories: 'Jewellery',
           name: 'Jewels Online: The London Edit',
           time: '2 JUN 11AM - 15 JUN 11AM BST',
           img: 'https://www.christies.com/img/SaleImages/CKS-21938-06022023-1.jpg',
@@ -160,6 +180,7 @@ const AuctionContent = () => {
           endTime: 1686823200
         },
         {
+          categories: 'Art',
           name: 'Maîtres Anciens : Peintures - Sculptures',
           time: '15 JUNE 03:00 PM CEST',
           img: 'https://www.christies.com/img/SaleImages/PAR-20692-06152023-1.jpg',
@@ -168,6 +189,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Art',
           name: 'The Bruce M. Lisman Collection of Important American Literature: Part One',
           time: '15 JUNE 10:00 AM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-22474-06152023-1.jpg',
@@ -176,6 +198,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Art',
           name: 'Maîtres Anciens : Peintures – Sculptures, Online',
           time: '1 JUN 10AM - 16 JUN 2PM CEST',
           img: 'https://www.christies.com/img/SaleImages/PAR-22155-06012023-1.jpg',
@@ -184,6 +207,7 @@ const AuctionContent = () => {
           endTime: 1686916800
         },
         {
+          categories: 'Collectibles',
           name: 'The Bruce M. Lisman Collection of Important American Literature: Part Two',
           time: '2 JUN 10AM - 16 JUN 12PM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-22475-06022023-1.jpg',
@@ -192,6 +216,7 @@ const AuctionContent = () => {
           endTime: 1686844800
         },
         {
+          categories: 'Art',
           name: 'The Magnificent Library of Norman Bobins: Part One, American Color',
           time: '16 JUNE 10:00 AM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-22547-06162023-1.jpg',
@@ -200,6 +225,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Art',
           name: 'Art of Asia',
           time: '6 JUN 10AM - 20 JUN 2PM CEST',
           img: 'https://www.christies.com/img/SaleImages/PAR-22045-06062023-1.jpg',
@@ -208,6 +234,7 @@ const AuctionContent = () => {
           endTime: 1687262400
         },
         {
+          categories: 'Wines',
           name: 'The Two Continents Collection - The Private Cellar of Irwin Kotovsky Online: Part II',
           time: '8 JUN 10AM - 21 JUN 11AM BST',
           img: 'https://www.christies.com/img/SaleImages/CKS-21935-06082023-1.jpg',
@@ -216,6 +243,7 @@ const AuctionContent = () => {
           endTime: 1687341600
         },
         {
+          categories: 'Collectibles',
           name: 'Joaillerie Paris',
           time: '9 JUN 10AM - 21 JUN 2PM CEST',
           img: 'https://www.christies.com/img/SaleImages/PAR-22153-06092023-1.jpg',
@@ -224,6 +252,7 @@ const AuctionContent = () => {
           endTime: 1687348800
         },
         {
+          categories: 'Fashion',
           name: 'The Two Continents Collection - The Private Spirits Collection Of Irwin Kotovsky Online: Part III',
           time: '8 JUN 12PM - 22 JUN 12PM BST',
           img: 'https://www.christies.com/img/SaleImages/CKS-22636-06082023-1.jpg',
@@ -232,6 +261,7 @@ const AuctionContent = () => {
           endTime: 1687431600
         },
         {
+          categories: 'Art',
           name: "Arts d'Afrique, d'Océanie et des Amériques",
           time: '22 JUNE 04:00 PM CEST',
           img: 'https://www.christies.com/img/SaleImages/PAR-22147-06222023-1.jpg',
@@ -240,6 +270,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Fashion',
           name: 'Inside the Orange Box: Part III',
           time: '13 JUNE 02:00 PM - 27 JUNE 02:00 PM CEST',
           img: 'https://www.christies.com/img/SaleImages/AMS-22528-06132023-1.jpg',
@@ -248,6 +279,7 @@ const AuctionContent = () => {
           endTime: 1687867200
         },
         {
+          categories: 'Art',
           name: '20th/21st Century: London Evening Sale',
           time: '28 JUNE 02:00 PM BST',
           img: 'https://www.christies.com/img/SaleImages/CKS-21886-06282023-1.jpg',
@@ -256,6 +288,7 @@ const AuctionContent = () => {
           endTime: 0
         },
         {
+          categories: 'Art',
           name: 'The Collection of Donna Summer',
           time: '15 JUN 10AM - 29 JUN 10AM EDT',
           img: 'https://www.christies.com/img/SaleImages/NYR-21005-06152023-1.jpg',
@@ -264,6 +297,7 @@ const AuctionContent = () => {
           endTime: 1688040000
         },
         {
+          categories: 'Art',
           name: 'Post-War and Contemporary Art Day Sale',
           time: '29 JUNE 01:00 PM BST',
           img: 'https://www.christies.com/img/SaleImages/CKS-21887-06292023-1.jpg',
@@ -276,6 +310,11 @@ const AuctionContent = () => {
       if (values.keyword) {
         searchResult = marketList.filter(item => {
           return item.name.indexOf(values.keyword) > -1
+        })
+      }
+      if (values.categories) {
+        searchResult = marketList.filter(item => {
+          return item.categories?.includes(values.categories)
         })
       }
       if (values.status) {
