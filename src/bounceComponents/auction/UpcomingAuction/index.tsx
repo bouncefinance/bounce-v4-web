@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, MenuItem, Select, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Container, MenuItem, Select, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
@@ -24,7 +24,7 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { poolTypeText } from 'pages/market/pools'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
-
+import { TokenSkeleton } from '../NotableAuction/index'
 interface Notable1155Props {
   handleViewAll?: () => void
 }
@@ -198,59 +198,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
           </Row>
         </CenterRow>
         {loading ? (
-          <Grid container spacing={18}>
-            {Array.from(new Array(4)).map((lodingItem, index) => (
-              <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
-                <Box display={'flex'} flexDirection={'column'}>
-                  <Box
-                    height={400}
-                    sx={{
-                      bgcolor: 'var(--ps-white)',
-                      borderRadius: 20,
-                      padding: '16px',
-                      border: '1px solid rgba(0, 0, 0, 0.1)'
-                    }}
-                  >
-                    <Box
-                      display="flex"
-                      width={'100%'}
-                      justifyContent={'space-between'}
-                      sx={{ '& > span': { borderRadius: '12px' } }}
-                    >
-                      <Skeleton variant="rectangular" width={'15%'} height={24} />
-                      <Skeleton variant="rectangular" width={'40%'} height={24} />
-                    </Box>
-                    <Skeleton
-                      component={'div'}
-                      variant="rectangular"
-                      width={'50%'}
-                      height={24}
-                      sx={{ marginTop: '20px', borderRadius: '12px' }}
-                    />
-                    <Skeleton
-                      component={'div'}
-                      variant="rectangular"
-                      width={'100%'}
-                      height={24}
-                      sx={{ marginTop: '10px', borderRadius: '12px' }}
-                    />
-                    <Box mt={20} display={'flex'}>
-                      <Skeleton variant="circular" width={52} height={52} />
-                      <Box width={'calc(100% - 52px)'} sx={{ marginLeft: '10px' }}>
-                        <Skeleton variant="text" width={'20%'} />
-                        <Skeleton variant="text" width={'40%'} />
-                      </Box>
-                    </Box>
-                    <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                    <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                    <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                    <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                    <Skeleton variant="text" width={'100%'} sx={{ marginTop: '20px' }} height={20} />
-                  </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+          <TokenSkeleton />
         ) : data?.list?.length === 0 ? (
           <Box>
             <EmptyData />

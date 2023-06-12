@@ -109,10 +109,6 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
             value: index
           }
         })
-      },
-      {
-        title: 'Clear',
-        list: []
       }
     ],
     [chainList, tokenList]
@@ -148,14 +144,16 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
     setFilterValues({ ...body })
   }
   const submit = () => {
-    if (selectButton === 'Clear') setSelectButton('')
     handleSubmit(filterValues)
     closeDrawer()
   }
   const clear = () => {
     setSearchVal('')
     setSelectMenuItem(filterType)
+    setSelectButton('')
     setFilterValues(initialValues)
+    handleSubmit(initialValues)
+    closeDrawer()
   }
   const menuItemStatus = ({ title, item }: { title: string; item: any }) => {
     return selectMenuItem[title] === (title === 'Token' ? item.symbol : item.label)
@@ -186,7 +184,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         spacing={6}
         sx={{
           position: 'fixed',
-          top: '50%',
+          top: '76%',
           right: 110,
           width: 139,
           height: 50,
@@ -232,14 +230,11 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         <FilterButton
           onClick={() => {
             selectButton === data.title ? setSelectButton('') : setSelectButton(data.title)
-            if (data.title === 'Clear') {
-              clear()
-            }
           }}
           sx={{ border: selectButton === data.title ? '1px solid #E1F25C' : '' }}
         >
           <Typography>{data.title}</Typography>
-          {data.title !== 'Clear' && <BottomArrowIcon />}
+          <BottomArrowIcon />
         </FilterButton>
         {data.list?.length > 0 && (
           <Stack
@@ -341,14 +336,38 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
       </>
     )
   }
+  const DrawerBtn = () => {
+    return (
+      <Stack>
+        <Button
+          variant="outlined"
+          sx={{
+            backgroundColor: 'transparent',
+            color: 'white',
+            marginBottom: 10,
+            border: '1px solid var(--ps-yellow-1)',
+            '&.MuiButton-root:hover': {
+              backgroundColor: 'transparent'
+            }
+          }}
+          onClick={() => clear()}
+        >
+          Clear
+        </Button>
+        <Button onClick={() => submit()} variant="contained" sx={{ fontSize: 14, backgroundColor: '#E1F25C' }}>
+          Apply
+        </Button>
+      </Stack>
+    )
+  }
   return (
     <>
       <FixedIcon />
       <DrawerBox key="drawer" open={currOpen.open} anchor="left" onClose={closeDrawer}>
-        <Stack height={'100%'} direction={'column'} justifyContent={'space-between'}>
+        <Stack height={'calc(100% - 130px)'} direction={'column'} sx={{ overflowY: 'scroll' }}>
           <Box
             sx={{
-              height: 'calc(100% - 60px)',
+              height: '100%',
               overflowY: 'scroll',
               overflowX: 'hidden',
               '&::-webkit-scrollbar': { display: 'none' }
@@ -357,10 +376,8 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
             {currOpen.title === 'filter' && <FilterContainer />}
             {currOpen.title === 'search' && <SearchContainer />}
           </Box>
-          <Button onClick={() => submit()} variant="contained" sx={{ fontSize: 14, backgroundColor: '#E1F25C' }}>
-            Apply
-          </Button>
         </Stack>
+        <DrawerBtn />
       </DrawerBox>
     </>
   )
