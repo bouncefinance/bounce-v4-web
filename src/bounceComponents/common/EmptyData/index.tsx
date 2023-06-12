@@ -7,13 +7,15 @@ export default function EmptyData({
   title,
   height,
   prompt,
-  bgColor
+  bgColor,
+  isLight
 }: {
   sx?: SxProps<Theme> | undefined
   title?: string
   prompt?: string
   bgColor?: string
   height?: number | string
+  isLight?: boolean
 }) {
   const isSm = useBreakpoint('sm')
   return (
@@ -42,13 +44,20 @@ export default function EmptyData({
           sx={{
             fontSize: isSm ? 16 : 20,
             textAlign: 'center',
-            mt: isSm ? 16 : 40
+            mt: isSm ? 16 : 40,
+            color: isLight ? '#fff' : ''
           }}
         >
           {title || 'No Data'}
         </Typography>
         {prompt && (
-          <Typography mt={5} textAlign={'center'}>
+          <Typography
+            mt={5}
+            textAlign={'center'}
+            sx={{
+              color: isLight ? '#fff' : ''
+            }}
+          >
             {prompt}
           </Typography>
         )}
