@@ -28,6 +28,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
 
   useEffect(() => {
     setValues({ type: 'Search Val', item: { value: searchVal } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchVal])
   const chainList = useMemo(
     () =>

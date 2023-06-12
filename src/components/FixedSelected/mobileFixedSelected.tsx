@@ -22,13 +22,16 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
   const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
   const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
   const { tokenList: tokenList } = useTokenList(chainId, debouncedSearchVal, false)
+  console.log('tokenList:', tokenList)
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const [selectButton, setSelectButton] = useState('')
   const [selectMenuItem, setSelectMenuItem] = useState<any>(filterType)
   useEffect(() => {
     setValues({ type: 'Search Val', item: { value: searchVal } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchVal])
+
   const chainList = useMemo(
     () =>
       optionDatas?.chainInfoOpt?.map(item => {
@@ -111,7 +114,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         })
       }
     ],
-    [chainList, tokenList]
+    [chainList]
   )
   const setValues = ({ type, item, isCancel }: { type: string; item: any; isCancel?: boolean }) => {
     const body = { ...filterValues }
