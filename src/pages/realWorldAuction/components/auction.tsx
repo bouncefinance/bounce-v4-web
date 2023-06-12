@@ -331,11 +331,6 @@ const AuctionContent = () => {
         })
       }
       const result = searchResult.slice((current - 1) * pageSize, current * pageSize)
-      setTimeout(() => {
-        document
-          .getElementById('Marketplace')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
-      })
       return {
         list: result,
         total: searchResult.length
@@ -348,6 +343,9 @@ const AuctionContent = () => {
   )
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+    setTimeout(() => {
+      document.getElementById('Marketplace')?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+    }, 0)
   }
   const handleSearch = () => {
     run({ current: 1, pageSize: defaultPageSize })

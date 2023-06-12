@@ -258,21 +258,23 @@ export function Banner({ banner }: { banner: BannerType }) {
             alignItems: 'flex-end'
           }}
         >
-          <Box
-            sx={{
-              width: '92px',
-              height: '34px',
-              lineHeight: '34px',
-              textAlign: 'center',
-              background: '#CFF8D1',
-              borderRadius: '34px',
-              fontFamily: `'Inter'`,
-              fontSize: 16,
-              color: 'var(--ps-green-1)'
-            }}
-          >
-            Ongoing
-          </Box>
+          {Number(banner.startTime) * 1000 >= new Date().getTime() && (
+            <Box
+              sx={{
+                width: '92px',
+                height: '34px',
+                lineHeight: '34px',
+                textAlign: 'center',
+                background: '#CFF8D1',
+                borderRadius: '34px',
+                fontFamily: `'Inter'`,
+                fontSize: 16,
+                color: 'var(--ps-green-1)'
+              }}
+            >
+              Ongoing
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',

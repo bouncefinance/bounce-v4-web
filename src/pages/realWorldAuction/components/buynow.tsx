@@ -82,11 +82,6 @@ const BuynowContent = () => {
         })
       }
       const result = searchResult.slice((current - 1) * pageSize, current * pageSize)
-      setTimeout(() => {
-        document
-          .getElementById('Marketplace')
-          ?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
-      })
       return {
         list: result,
         total: searchResult.length
@@ -99,6 +94,9 @@ const BuynowContent = () => {
   )
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+    setTimeout(() => {
+      document.getElementById('Marketplace')?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+    })
   }
   const handleSearch = () => {
     run({ current: 1, pageSize: defaultPageSize })

@@ -76,23 +76,26 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
           <></>
         )}
       </Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '68px',
-          right: '16px',
-          width: '60px',
-          height: '21px',
-          textAlign: 'center',
-          background: '#CFF8D1',
-          borderRadius: '21px',
-          fontFamily: `'Inter'`,
-          fontSize: 12,
-          color: 'var(--ps-green-1)'
-        }}
-      >
-        Ongoing
-      </Box>
+      {Number(banner.startTime) * 1000 >= new Date().getTime() && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '68px',
+            right: '16px',
+            width: '60px',
+            height: '21px',
+            textAlign: 'center',
+            background: '#CFF8D1',
+            borderRadius: '21px',
+            fontFamily: `'Inter'`,
+            fontSize: 12,
+            color: 'var(--ps-green-1)'
+          }}
+        >
+          Ongoing
+        </Box>
+      )}
+
       <Box
         sx={{
           position: 'absolute',
