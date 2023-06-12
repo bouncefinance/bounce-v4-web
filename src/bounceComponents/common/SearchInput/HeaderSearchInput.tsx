@@ -191,6 +191,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                   const element = document.querySelector('.OInput input') as HTMLInputElement
                   element && element.blur()
                   const _to = getAuctionPoolLink(
+                    0,
                     option.values.category ?? 1,
                     option.values.chainId ?? 1,
                     option.values.poolId ?? 0

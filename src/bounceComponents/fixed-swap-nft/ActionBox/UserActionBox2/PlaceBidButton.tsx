@@ -40,7 +40,7 @@ const PlaceBidButton = ({
       ),
     [bidAmount, poolInfo.currencyAmountTotal1.currency, poolInfo.ratio]
   )
-  const fixedSwapNftContract = useFixedSwapNftContract()
+  const fixedSwapNftContract = useFixedSwapNftContract(poolInfo.contract)
 
   const [approvalState, approveCallback] = useApproveCallback(currencyBid1Amount, fixedSwapNftContract?.address, true)
 

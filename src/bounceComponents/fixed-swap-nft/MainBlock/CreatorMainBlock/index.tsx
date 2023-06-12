@@ -9,12 +9,14 @@ import NotStartedAlert from 'bounceComponents/fixed-swap/Alerts/NotStartedAlert'
 import AuctionLiveAlert from 'bounceComponents/fixed-swap/Alerts/AuctionLiveAlert'
 import ClaimBackAlert from 'bounceComponents/fixed-swap/Alerts/ClaimBackAlert'
 import AllTokenAuctionedAlert from 'bounceComponents/fixed-swap/Alerts/AllTokenAuctionedAlert'
+import useBreakpoint from '../../../../hooks/useBreakpoint'
 
 const CreatorMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
   const { poolInfo } = props
 
   const isAllTokenSwapped = useMemo(() => Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0), [poolInfo])
   const nftGoInfo = useNftGoApi(poolInfo.contract, poolInfo.tokenId)
+  const isMobile = useBreakpoint('lg')
 
   return (
     <Box
@@ -27,7 +29,7 @@ const CreatorMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
         <AllTokenAuctionedAlert />
       )}
 
-      <Box sx={{ display: 'flex', columnGap: 65, marginBottom: 30 }}>
+      <Box sx={{ display: isMobile ? 'block' : 'flex', columnGap: 65, marginBottom: 30 }}>
         <NftCard nft={poolInfo} suspicious={!!nftGoInfo?.data?.suspicious} />
         <CreatorActionBox poolInfo={poolInfo} />
       </Box>

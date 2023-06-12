@@ -1,4 +1,4 @@
-import { PrivatePadList } from '../launchpad'
+import { IPrivatePadProp, PrivatePadList } from '../launchpad'
 import { Box } from '@mui/material'
 import FooterPc from '../../components/Footer/FooterPc'
 import { ProjectHead, Tabs } from './index'
@@ -9,7 +9,7 @@ import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 
 export function ProjectInfo() {
-  const item = PrivatePadList[3]
+  const item = PrivatePadList.find(i => i.keyId === 4) as IPrivatePadProp
   useBladeDaoSharer()
 
   return (
@@ -65,7 +65,7 @@ function UserBlock() {
         poolInfo={poolInfo}
         getPoolInfo={getPoolInfo}
       />
-      <ActionHistory />
+      <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
     </Box>
   )
 }

@@ -136,7 +136,7 @@ function Price({ title, value }: { title: string; value: string }) {
 }
 
 export function BladeDao() {
-  const item = PrivatePadList[0]
+  const item = PrivatePadList.find(i => i.keyId === 2) as IPrivatePadProp
   useBladeDaoSharer()
   return (
     <Box>
@@ -655,7 +655,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
               </Typography>
             </GrayBg>
             {/*<GrayBg>*/}
-            {/*  <Typography color={'#C8F056'}>Playable Auction</Typography>*/}
+            {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
             {/*</GrayBg>*/}
           </Row>
           <Row gap={24} mt={16}>

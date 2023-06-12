@@ -10,9 +10,9 @@ import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { AllocationStatus, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
+import { AllocationStatus, IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
 import { useFixedSwapNftContract } from './useContract'
-import { getEventLog } from './useCreateFixedSwapPool'
+import { getEventLog, makeValuesReleaseData } from './useCreateFixedSwapPool'
 
 const NO_LIMIT_ALLOCATION = '0'
 interface Params {
@@ -29,6 +29,12 @@ interface Params {
   tokenFormDecimal: string | number
   tokenToDecimal: string | number
   tokenId: string
+  releaseType: IReleaseType
+  releaseData: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
+  tokenIds: string[]
 }
 
 export function useCreateFixedSwap1155Pool() {
@@ -42,6 +48,7 @@ export function useCreateFixedSwap1155Pool() {
   return useCallback(async (): Promise<{
     hash: string
     transactionReceipt: Promise<TransactionReceipt>
+    sysId: number
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
     const params: Params = {
@@ -54,15 +61,25 @@ export function useCreateFixedSwap1155Pool() {
           : NO_LIMIT_ALLOCATION,
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
-      delayUnlockingTime: values.shouldDelayUnlocking
-        ? values.delayUnlockingTime?.unix() || 0
-        : values.endTime?.unix() || 0,
+      delayUnlockingTime:
+        IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
+          ? values.releaseDataArr?.[0].startAt?.unix() || 0
+          : IReleaseType.Instant === values.releaseType
+          ? 0
+          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
+          ? values.shouldDelayUnlocking
+            ? values.delayUnlockingTime?.unix() || 0
+            : values.endTime?.unix() || 0
+          : values.endTime?.unix() || 0,
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.nftTokenFrom.contractAddr || '',
       tokenFormDecimal: 0,
       tokenId: values.nftTokenFrom.tokenId || '0',
+      tokenIds: [values.nftTokenFrom.tokenId || '0'],
       tokenToAddress: values.tokenTo.address,
-      tokenToDecimal: values.tokenTo.decimals
+      tokenToDecimal: values.tokenTo.decimals,
+      releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
+      releaseData: makeValuesReleaseData(values)
     }
 
     if (!currencyTo) {
@@ -112,36 +129,48 @@ export function useCreateFixedSwap1155Pool() {
       openAt: params.startTime,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
-      tokenId: params.tokenId
+      tokenId: params.tokenId,
+      releaseType: params.releaseType,
+      releaseData: params.releaseData,
+      tokenIds: params.tokenIds
     }
 
     const {
-      data: { expiredTime, signature }
+      data: { id, expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
 
     const contractCallParams = {
       name: signatureParams.name,
       token0: signatureParams.token0,
       token1: signatureParams.token1,
-      tokenId: signatureParams.tokenId,
+      tokenIds: signatureParams.tokenIds,
       amountTotal0: signatureParams.amountTotal0,
       amountTotal1: signatureParams.amountTotal1,
       openAt: signatureParams.openAt,
       closeAt: signatureParams.closeAt,
       claimAt: signatureParams.claimAt,
       isERC721: false,
-      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
-    const args = [contractCallParams, expiredTime, signature]
+    const args = [
+      id,
+      contractCallParams,
+      params.releaseType,
+      params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
+      false,
+      !!values.enableReverse,
+      expiredTime,
+      signature
+    ]
 
-    const estimatedGas = await fixedSwapNftContract.estimateGas.create(...args).catch((error: Error) => {
-      console.debug('Failed to create fixedSwap', error)
+    const estimatedGas = await fixedSwapNftContract.estimateGas.createV2(...args).catch((error: Error) => {
+      console.debug('Failed to create fixedSwap 1155', error)
       throw error
     })
     return fixedSwapNftContract
-      .create(...args, {
+      .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {
@@ -155,6 +184,7 @@ export function useCreateFixedSwap1155Pool() {
         return {
           hash: response.hash,
           transactionReceipt: response.wait(1),
+          sysId: id,
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapNftContract, logs, 'Created', 'index')
         }
       })

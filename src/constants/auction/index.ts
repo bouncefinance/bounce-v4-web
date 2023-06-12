@@ -46,6 +46,33 @@ export const GOERLI_TOKEN_LIST: Token[] = [
   }
 ]
 
+export const SEPOLIA_TOKEN_LIST: Token[] = [
+  {
+    chainId: ChainId.SEPOLIA,
+    name: 'USDT',
+    address: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
+    symbol: 'USDT',
+    decimals: 6,
+    logoURI: ''
+  },
+  {
+    chainId: ChainId.SEPOLIA,
+    name: 'ZK',
+    address: '0xc390E699b38F14dB884C635bbf843f7B135113ad',
+    symbol: 'ZK',
+    decimals: 18,
+    logoURI: ''
+  },
+  {
+    chainId: ChainId.SEPOLIA,
+    name: 'CZ',
+    address: '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E',
+    symbol: 'CZ',
+    decimals: 18,
+    logoURI: ''
+  }
+]
+
 export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.MAINNET]: 'https://tokens.coingecko.com/uniswap/all.json',
   [ChainId.GÖRLI]: null,

@@ -1,62 +1,64 @@
 import { Currency } from 'constants/token/currency'
 import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
-import { useQueryParams } from 'hooks/useQueryParams'
 import { useMemo } from 'react'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useBackedPoolInfo } from './usePoolInfo'
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapNftContract } from 'hooks/useContract'
-import { FixedSwapNFTPoolProp, PoolType } from 'api/pool/type'
+import { FixedSwapNFTPoolProp, FixedSwapPool, PoolType } from 'api/pool/type'
 import JSBI from 'jsbi'
+import { ChainId } from 'constants/chain'
+import BigNumber from 'bignumber.js'
 
 const useNftPoolInfo = () => {
-  const { poolId } = useQueryParams()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.fixedSwapNft)
 
-  const fixedSwapNftContract = useFixedSwapNftContract()
+  const fixedSwapNftContract = useFixedSwapNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
   const amountSwap0Res = useSingleCallResult(
     fixedSwapNftContract,
     'amountSwap0',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const amountSwap1PRes = useSingleCallResult(
     fixedSwapNftContract,
     'amountSwap1',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const creatorClaimedRes = useSingleCallResult(
     fixedSwapNftContract,
     'creatorClaimed',
-    [poolId],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped0Res = useSingleCallResult(
     fixedSwapNftContract,
     'myAmountSwapped0',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped1Res = useSingleCallResult(
     fixedSwapNftContract,
     'myAmountSwapped1',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myClaimedRes = useSingleCallResult(
     fixedSwapNftContract,
     'myClaimed',
-    [account || undefined, poolId],
+    [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
+
+  const v2FixedSwapNFTData = useV2FixedSwapNFTData(poolInfo?.poolVersion === 2, poolInfo)
 
   const data: FixedSwapNFTPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
@@ -89,7 +91,11 @@ const useNftPoolInfo = () => {
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(
         t1,
         amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
-      ) as CurrencyAmount
+      ) as CurrencyAmount,
+      enableReverses: v2FixedSwapNFTData.enableReverses,
+      currentTotal0: new BigNumber(poolInfo.amountTotal0)
+        .minus(amountSwap0Res?.[0].toString() || poolInfo.swappedAmount0 || '0')
+        .toFixed()
     }
   }, [
     amountSwap0Res,
@@ -98,7 +104,8 @@ const useNftPoolInfo = () => {
     myAmountSwapped0Res,
     myAmountSwapped1Res,
     myClaimedRes,
-    poolInfo
+    poolInfo,
+    v2FixedSwapNFTData.enableReverses
   ])
 
   return {
@@ -109,3 +116,38 @@ const useNftPoolInfo = () => {
 }
 
 export default useNftPoolInfo
+
+function useV2FixedSwapNFTData(
+  isV2: boolean,
+  poolInfo:
+    | (FixedSwapPool & {
+        ethChainId: ChainId
+      })
+    | undefined
+): {
+  enableReverses: boolean
+} {
+  const _fixedSwapNftContract = useFixedSwapNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
+
+  const fixedSwapNftContract = useMemo(() => (isV2 ? _fixedSwapNftContract : null), [_fixedSwapNftContract, isV2])
+  const { account } = useActiveWeb3React()
+
+  const enableReversesRes = useSingleCallResult(
+    account ? fixedSwapNftContract : null,
+    'enableReverses',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  return useMemo(() => {
+    if (!isV2) {
+      return {
+        enableReverses: true
+      }
+    }
+    return {
+      enableReverses: enableReversesRes?.[0]
+    }
+  }, [enableReversesRes, isV2])
+}

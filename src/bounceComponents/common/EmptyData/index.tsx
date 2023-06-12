@@ -1,5 +1,6 @@
 import { Box, Container, SxProps, Theme, Typography } from '@mui/material'
 import DefaultIcon from 'assets/imgs/common/ComingSoon.png'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 export default function EmptyData({
   sx,
@@ -14,6 +15,7 @@ export default function EmptyData({
   bgColor?: string
   height?: number | string
 }) {
+  const isSm = useBreakpoint('sm')
   return (
     <Box sx={{ padding: 40, ...sx }}>
       <Container
@@ -28,7 +30,7 @@ export default function EmptyData({
       >
         <img
           style={{
-            width: height || 300,
+            width: height || isSm ? 220 : 300,
             margin: '0 auto'
           }}
           src={DefaultIcon}
@@ -38,9 +40,9 @@ export default function EmptyData({
         <Typography
           variant="h4"
           sx={{
-            fontSize: 20,
+            fontSize: isSm ? 16 : 20,
             textAlign: 'center',
-            mt: 40
+            mt: isSm ? 16 : 40
           }}
         >
           {title || 'No Data'}

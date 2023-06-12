@@ -35,6 +35,8 @@ import {
 } from 'utils/auction'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useShowLoginModal } from 'state/users/hooks'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { PoolType } from 'api/pool/type'
 
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
@@ -79,7 +81,7 @@ const CreatePoolButton = () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt } = await createRandomSelectionPool()
+      const { getPoolId, transactionReceipt, sysId } = await createRandomSelectionPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -116,11 +118,8 @@ const CreatePoolButton = () => {
       ret
         .then(poolId => {
           const goToPoolInfoPage = () => {
-            navigate(
-              routes.auction.randomSelection
-                .replace(':chainShortName', chainConfigInBackend?.shortName || '')
-                .replace(':poolId', poolId)
-            )
+            const route = getAuctionPoolLink(sysId, PoolType.Lottery, chainConfigInBackend?.id as number, poolId)
+            navigate(route)
           }
 
           hideDialogConfirmation()
@@ -153,7 +152,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.shortName, createRandomSelectionPool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createRandomSelectionPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()

@@ -5,6 +5,7 @@ import ActivitiesTab from 'bounceComponents/account/AuctionAddressTab/Activities
 import { useState } from 'react'
 import styles from './tabStyles'
 import CurrentPoolStatus from 'bounceComponents/account/CurrentPoolStatus'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 enum TabListProp {
   'Auction_Created' = 'Auction Created',
@@ -28,12 +29,13 @@ export enum BackedTokenType {
 
 export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: BackedTokenType }) {
   const [curTab, setCurTab] = useState(TabListProp.Auction_Created)
+  const isSm = useBreakpoint('sm')
 
   return (
     <AccountLayout>
-      <Box padding="0 20px">
+      <Box padding={isSm ? '0 0 80px' : '0 20px'}>
         <Container maxWidth="lg">
-          <Typography padding="40px 20px 0" variant="h3" fontSize={30}>
+          <Typography padding="40px 20px 0" variant="h3" fontSize={isSm ? 22 : 30}>
             {backedTokenType === BackedTokenType.TOKEN ? 'My Token' : 'NFT Auction'}
           </Typography>
 
@@ -41,14 +43,28 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
             <CurrentPoolStatus backedTokenType={backedTokenType} />
             <Box mt={40} mb={30}>
               <Stack direction={'row'} sx={styles.tabsBox}>
-                <Stack direction="row" alignItems="center">
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  sx={{
+                    overflowX: 'scroll',
+                    whiteSpace: 'nowrap',
+                    '&::-webkit-scrollbar': {
+                      display: 'none'
+                    }
+                  }}
+                >
                   {tabsList?.map(item => {
                     return (
                       <Typography
                         variant="h4"
                         onClick={() => setCurTab(item)}
                         key={item}
-                        sx={{ ...styles.menu, ...(curTab === item ? styles.menuActive : ({} as any)) }}
+                        sx={{
+                          ...styles.menu,
+                          ...(curTab === item ? styles.menuActive : ({} as any)),
+                          padding: isSm ? '12px 16px 36px' : '16px 32px 40px'
+                        }}
                       >
                         {item}
                       </Typography>
@@ -58,7 +74,7 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
               </Stack>
 
               <Box
-                padding="40px"
+                padding={isSm ? '16px' : '40px'}
                 sx={{
                   background: '#F6F6F3',
                   borderRadius: '20px',

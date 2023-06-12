@@ -21,8 +21,8 @@ export interface PlaceBidButtonProps {
 }
 
 const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo, action }: PlaceBidButtonProps): JSX.Element => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo)
-  const fixedSwapERC20Contract = useRandomSelectionERC20Contract()
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(poolInfo, poolInfo.category)
+  const fixedSwapERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, bidAmount)
   const [approvalState, approveCallback] = useApproveCallback(currencyBidAmount, fixedSwapERC20Contract?.address, true)
 

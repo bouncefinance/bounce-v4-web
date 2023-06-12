@@ -11,13 +11,23 @@ import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import ShowNFTCard from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/ShowNFTCard'
 import { ChainListMap } from 'constants/chain'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => <Typography variant="h6">{children}</Typography>
 
 const TopInfoBox = (): JSX.Element => {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const isMobile = useBreakpoint('lg')
 
-  const list = [1]
+  const list = useMemo(() => {
+    if (!poolInfo) return []
+    const ids = poolInfo.tokenId.split(',')
+    return ids.map(id => ({
+      name: poolInfo.token0.symbol || `nft #${id}`,
+      tokenId: id,
+      image: poolInfo.token0.largeUrl
+    }))
+  }, [poolInfo])
 
   const isOneNft = useMemo(() => list.length === 1, [list.length])
 
@@ -31,18 +41,18 @@ const TopInfoBox = (): JSX.Element => {
         padding: 16,
         display: isOneNft ? 'grid' : 'block',
         gap: 20,
-        gridTemplateColumns: isOneNft ? '340px 1fr' : 'unset'
+        gridTemplateColumns: isOneNft ? (isMobile ? '1fr' : '340px 1fr') : 'unset'
       }}
     >
       <Box sx={{ overflowX: 'auto', width: isOneNft ? '100%' : '900px' }} padding={isOneNft ? '0' : '0 30px'}>
         <Box display={isOneNft ? 'contents' : 'inline-flex'} gap={10}>
           {list.map(item => (
             <ShowNFTCard
-              key={item}
+              key={item.tokenId}
               hideClose
-              name={'test'}
-              tokenId={'1'}
-              image={''}
+              name={item.name}
+              tokenId={item.tokenId}
+              image={item.image}
               boxH={isOneNft ? 320 : 220}
               imgH={isOneNft ? 248 : 170}
               style={{

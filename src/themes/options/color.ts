@@ -4,7 +4,7 @@ export const ColorOptions = {
     black: '#121212',
     primary: '#fff',
     secondary: '#121212',
-    text: '#121212',
+    text: '#171717',
     success: '#73D491',
     warn: '#EBBC42',
     error: '#EB4242',
@@ -32,7 +32,7 @@ export const ColorOptions = {
     'blue-100': '#2150CC',
     // yellow
     'yellow-1': '#E1F25C',
-    'yellow-2': '#C8F056',
+    'yellow-2': '#B5E529',
     // text-color or bg-color
     'text-1': '#626262',
     'text-2': '#959595',
@@ -74,7 +74,7 @@ export const ColorOptions = {
     'blue-100': '#2150CC',
     // yellow
     'yellow-1': '#E1F25C',
-    'yellow-2': '#C8F056',
+    'yellow-2': '#B5E529',
     // text-color or bg-color
     'text-1': '#626262',
     'text-2': '#959595',

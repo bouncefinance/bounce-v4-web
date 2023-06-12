@@ -17,8 +17,12 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
   return (
     <Box
       component={'a'}
-      target="_blank"
-      href={getAuctionPoolLink(auctionPoolItem.category, auctionPoolItem.chainId, auctionPoolItem.poolId)}
+      href={getAuctionPoolLink(
+        auctionPoolItem.id,
+        auctionPoolItem.category,
+        auctionPoolItem.chainId,
+        auctionPoolItem.poolId
+      )}
     >
       <AuctionCard
         style={{ minWidth: 'unset' }}

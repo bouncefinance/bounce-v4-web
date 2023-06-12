@@ -5,13 +5,13 @@ import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transacti
 import { useActiveWeb3React } from 'hooks'
 import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 
-export function useCreatorClaim(poolId: number | string, name: string) {
+export function useCreatorClaim(poolId: number | string, name: string, contract?: string) {
   const { account } = useActiveWeb3React()
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract)
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 
-  const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId)
+  const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId + '_random')
 
   const run = useCallback(async (): Promise<{
     hash: string
@@ -37,7 +37,7 @@ export function useCreatorClaim(poolId: number | string, name: string) {
         summary: `Creator claim assets for ${name}`,
         userSubmitted: {
           account,
-          action: funcName,
+          action: funcName + '_random',
           key: poolId
         }
       })

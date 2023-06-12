@@ -38,16 +38,65 @@ export function use1155TokenList(
           }
           nftCollection[item.contractAddr].push(item)
         })
-        nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'] = []
-        nftCollection['0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA'].push({
-          balance: '1',
-          contractAddr: '0xf904B6C5aBa72dD44fBc840Be139c100F291d5FA',
-          contractName: 'test',
-          description: 'test',
-          image: '',
-          name: 'test',
-          tokenId: '5010'
-        })
+        if (chainId === 5 && isERC721) {
+          nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
+          nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
+            balance: '1',
+            contractAddr: '0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '3'
+          })
+        }
+        if (chainId === 5 && !isERC721) {
+          nftCollection['0xe382FBd068d373dbe3186176af788a60a9CC13e8'] = []
+          nftCollection['0xe382FBd068d373dbe3186176af788a60a9CC13e8'].push({
+            balance: '1',
+            contractAddr: '0xe382FBd068d373dbe3186176af788a60a9CC13e8',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '1'
+          })
+        }
+        if (chainId === 25) {
+          nftCollection['0x755d8bb9959058DB2E6128E7435BC04Cd8704404'] = []
+          nftCollection['0x755d8bb9959058DB2E6128E7435BC04Cd8704404'].push({
+            balance: '',
+            contractAddr: '0x755d8bb9959058DB2E6128E7435BC04Cd8704404',
+            contractName: 'Bounce x zkSync',
+            description: 'Bounce x zkSync',
+            image: '',
+            name: 'Bounce x zkSync',
+            tokenId: '0'
+          })
+
+          nftCollection['0x97F277dC0097028E0685549e343b01A836d8a78A'] = []
+          nftCollection['0x97F277dC0097028E0685549e343b01A836d8a78A'].push({
+            balance: '',
+            contractAddr: '0x97F277dC0097028E0685549e343b01A836d8a78A',
+            contractName: 'Bounce x zkSync',
+            description: 'Bounce x zkSync',
+            image: '',
+            name: 'Bounce x zkSync',
+            tokenId: '0'
+          })
+
+          nftCollection['0x95C2ebf0ed75Eab534ffB02D42e9f047290Ca647'] = []
+          nftCollection['0x95C2ebf0ed75Eab534ffB02D42e9f047290Ca647'].push({
+            balance: '',
+            contractAddr: '0x95C2ebf0ed75Eab534ffB02D42e9f047290Ca647',
+            contractName: 'Bounce x zkSync',
+            description: 'Bounce x zkSync',
+            image: '',
+            name: 'Bounce x zkSync',
+            tokenId: '0'
+          })
+        }
+
         setList(nftCollection)
       } catch (error) {
         console.error('fetch user nfts error', error)

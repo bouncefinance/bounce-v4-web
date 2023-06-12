@@ -100,7 +100,12 @@ const ActionBlock = ({
     unit: poolInfo.token1.decimals,
     decimalPlaces: poolInfo.token1.decimals
   })
-  const { isWinner } = useIsWinnerForRandomSelectionPool(poolInfo.poolId, account || undefined)
+  const { isWinner } = useIsWinnerForRandomSelectionPool(
+    poolInfo.poolId,
+    account || undefined,
+    poolInfo.contract,
+    poolInfo.ethChainId
+  )
   useEffect(() => {
     setBidAmount(poolInfo.maxAmount1PerWallet)
   }, [poolInfo])
@@ -109,7 +114,7 @@ const ActionBlock = ({
     decimalPlaces: 6
   })
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
-  console.log('betAmound, currencyBidAmount>>>', betAmound, currencyBidAmount)
+
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
 
   const toBid = useCallback(async () => {

@@ -2,11 +2,12 @@ import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { Link } from 'react-router-dom'
-import { routes } from 'constants/routes'
 import { PoolType } from 'api/pool/type'
 import { useMemo } from 'react'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from 'constants/chain'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const StyledStatCard = styled(Box)({
   height: 100,
@@ -26,7 +27,7 @@ const btnStyle = {
   alignItems: 'center',
   fontSize: 12,
   padding: '0 8px',
-  borderRadius: 20
+  borderRadius: 6
 }
 
 export function DashboardPoolCard({ title, children }: { title: string; children?: JSX.Element }) {
@@ -151,24 +152,10 @@ export function DashboardToPoolButton({
   poolId: number
   backedChainId: number
 }) {
-  const optionDatas = useOptionDatas()
+  const isSm = useBreakpoint('sm')
   return (
-    <Link
-      to={
-        category === PoolType.fixedSwapNft
-          ? routes.auction.fixedSwapNft
-              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
-              .replace(':poolId', poolId.toString())
-          : category === PoolType.Lottery
-          ? routes.auction.randomSelection
-              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
-              .replace(':poolId', poolId.toString())
-          : routes.auction.fixedPrice
-              .replace(':chainShortName', getLabelById(backedChainId, 'shortName', optionDatas?.chainInfoOpt || []))
-              .replace(':poolId', poolId.toString())
-      }
-    >
-      <Button color="secondary" variant="contained" sx={btnStyle}>
+    <Link to={getAuctionPoolLink(undefined, category, backedChainId, poolId.toString())}>
+      <Button color="secondary" variant="contained" sx={{ ...btnStyle, borderRadius: isSm ? '6px' : '' }}>
         {text}
       </Button>
     </Link>
@@ -177,6 +164,7 @@ export function DashboardToPoolButton({
 
 export function DashboardShowCategoryName({ category, backedChainId }: { category: PoolType; backedChainId: number }) {
   const optionDatas = useOptionDatas()
+  const isSm = useBreakpoint('sm')
   const ethChainId = useMemo(
     () => getLabelById(backedChainId, 'ethChainId', optionDatas?.chainInfoOpt || []),
     [backedChainId, optionDatas?.chainInfoOpt]
@@ -184,7 +172,7 @@ export function DashboardShowCategoryName({ category, backedChainId }: { categor
 
   return (
     <Box display={'flex'} alignItems="center">
-      <TokenImage src={ethChainId ? ChainListMap?.[ethChainId as ChainId]?.logo : ''} size={12} />
+      <TokenImage src={ethChainId ? ChainListMap?.[ethChainId as ChainId]?.logo : ''} size={isSm ? 16 : 12} />
       <Typography fontSize={12} ml={4} noWrap>
         {category === PoolType.FixedSwap
           ? 'ERC20 Fixed Price'

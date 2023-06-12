@@ -11,7 +11,7 @@ export const H2 = styled(Typography)`
   color: #121212;
 
   @media (max-width: 600px) {
-    font-size: 20px;
+    font-size: 24px;
   }
 `
 export const H3 = styled(Typography)`
@@ -22,7 +22,7 @@ export const H3 = styled(Typography)`
   line-height: 130%;
   display: flex;
   letter-spacing: -0.02em;
-  color: #c8f056;
+  color: #b5e529;
 `
 export const H4 = styled(Typography)`
   font-family: 'Public Sans';
@@ -33,6 +33,10 @@ export const H4 = styled(Typography)`
   letter-spacing: -0.02em;
   font-feature-settings: 'pnum' on, 'lnum' on;
   color: #121212;
+
+  @media (max-width: 600px) {
+    font-size: 20px;
+
 `
 export const H5 = styled(Typography)`
   font-family: 'Public Sans';
@@ -44,7 +48,7 @@ export const H5 = styled(Typography)`
   color: #121212;
 
   @media (max-width: 600px) {
-    font-size: 14px;
+    font-size: 16px;
   }
 `
 export const H6 = styled(Typography)`
@@ -66,18 +70,18 @@ export const H7 = styled(Typography)`
   letter-spacing: -0.02em;
   color: #121212;
   @media (max-width: 600px) {
-    font-size: 11px !important;
+    font-size: 13px !important;
   }
 
   &.mobile {
-    font-size: 12px !important;
+    font-size: 13px !important;
   }
 `
 
 export const H7Gray = styled(H7)`
   color: rgba(18, 18, 18, 0.4);
   @media (max-width: 600px) {
-    font-size: 11px;
+    font-size: 13px;
   }
 `
 
@@ -89,9 +93,6 @@ export const SmallText = styled(Typography)`
   line-height: 140%;
   letter-spacing: -0.02em;
   color: var(--ps-text-3);
-  @media (max-width: 600px) {
-    font-size: 10px !important;
-  }
 `
 export const Body02 = styled(Typography)`
   font-family: 'Inter';

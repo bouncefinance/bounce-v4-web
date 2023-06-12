@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { injected, walletconnect, walletlink } from '../connectors'
+import { OKXWalletConnector, injected, walletconnect, walletlink } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -45,6 +45,25 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Easy-to-use browser extension.',
     href: null,
     color: '#E8831D'
+  },
+  // OKEX: {
+  //   connector: injected,
+  //   name: 'OKX',
+  //   iconName: 'okxIcon.png',
+  //   description: 'Easy-to-use browser extension.',
+  //   href: null,
+  //   color: '#E8831D',
+  //   mobile: true,
+  //   mobileOnly: true
+  // },
+  OKEX: {
+    connector: OKXWalletConnector,
+    name: 'OKX Wallet',
+    iconName: 'okxIcon.png',
+    description: 'Easy-to-use browser extension.',
+    href: '',
+    color: '#E8831D',
+    mobile: true
   },
   WALLET_CONNECT: {
     connector: walletconnect,
@@ -164,7 +183,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.POLYGON]: '0x5b5E07c8c05489CD0D2227AfA816478cD039c624',
   [ChainId.FANTOM]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
   // [ChainId.ZKSYNC_ERA]: '0x88313626Fb4EA033af12308feCd8afB1eBA853cE',
-  [ChainId.ZKSYNC_ERA]: '0xbE5661cA6B60335c2c24536339A2C02f354B2E21',
+  // [ChainId.ZKSYNC_ERA]: '0xbE5661cA6B60335c2c24536339A2C02f354B2E21',
+  [ChainId.ZKSYNC_ERA]: '0x9531c83FBb0EaDEaC52bA83354C97B49eB6E1bEd',
   [ChainId.ZKSYNC_ERA_TESTNET]: '0x46c2C5a22b2a21a54495Ad32EbFC4598889A1836',
   [ChainId.POLYGON_ZK_EVM]: '0x646a7A29D97BACC3E1756dc3f8090B959046f280',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '0x194C02845d77ffCB8580D474Ca99013073C1eAb1',
@@ -195,7 +215,8 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
-  [ChainId.ZKSYNC_ERA]: '',
+  // [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
+  [ChainId.ZKSYNC_ERA]: '0x94df2E1DD564c219bE5CA615684AECA5605e692D',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
@@ -207,7 +228,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.ARBITRUM]: '',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
-  [ChainId.SEPOLIA]: '',
+  [ChainId.SEPOLIA]: '0xcF328e2218b507746507c3D162749bb964D4BE5A',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
@@ -275,3 +296,5 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: ''
 }
+
+export const defaultPoolVersionRoute: 1 | 2 = 2

@@ -357,7 +357,12 @@ const Pools: React.FC = ({}) => {
                               <Box
                                 onClick={() =>
                                   navigate(
-                                    getAuctionPoolLink(fixedSwaptem.category, fixedSwaptem.chainId, fixedSwaptem.poolId)
+                                    getAuctionPoolLink(
+                                      fixedSwaptem.id,
+                                      fixedSwaptem.category,
+                                      fixedSwaptem.chainId,
+                                      fixedSwaptem.poolId
+                                    )
                                   )
                                 }
                               >
@@ -504,7 +509,6 @@ const Pools: React.FC = ({}) => {
                             onChange={handlePageChange}
                             count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
                             variant="outlined"
-                            siblingCount={0}
                           />
                         </Box>
                       )}

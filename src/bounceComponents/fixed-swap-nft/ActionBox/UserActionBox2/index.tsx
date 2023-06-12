@@ -12,7 +12,7 @@ const UserActionBox2 = ({ poolInfo, getPoolInfo }: FixedSwapPoolParams) => {
 
       <InfoList poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
 
-      <ActionBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
+      {poolInfo.contract && <ActionBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />}
     </Box>
   )
 }

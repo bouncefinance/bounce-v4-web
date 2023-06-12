@@ -1,18 +1,10 @@
 import { useRequest } from 'ahooks'
 
-import useChainConfigInBackend from '../web3/useChainConfigInBackend'
 import { getPoolHistory } from 'api/pool'
 import { PoolType } from 'api/pool/type'
-import { useQueryParams } from 'hooks/useQueryParams'
-import { useActiveWeb3React } from 'hooks'
+import getTokenType from 'utils/getTokenType'
 
-const usePoolHistory = () => {
-  const { poolId, chainShortName } = useQueryParams()
-
-  const { account } = useActiveWeb3React()
-
-  const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
-
+const usePoolHistory = (backedChainId: number, poolId: string, category: PoolType, account?: string) => {
   return useRequest(
     async () => {
       if (typeof poolId !== 'string') {
@@ -21,19 +13,19 @@ const usePoolHistory = () => {
 
       const response = await getPoolHistory({
         poolId,
-        category: PoolType.FixedSwap,
-        chainId: chainConfigInBackend?.id || 0,
+        category,
+        chainId: backedChainId || 0,
         address: account || '',
-        tokenType: 1
+        tokenType: getTokenType(category)
       })
 
       return response.data
     },
     {
       // cacheKey: `POOL_HISTORY_${account}`,
-      ready: !!poolId && !!chainConfigInBackend?.id,
+      ready: !!poolId && !!backedChainId,
       pollingInterval: 30000,
-      refreshDeps: [account]
+      refreshDeps: [account, poolId, backedChainId]
     }
   )
 }

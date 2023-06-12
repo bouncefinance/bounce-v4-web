@@ -95,6 +95,14 @@ const BidButtonBlock = ({
     )
   }
 
+  if (!currencySlicedBidAmount) {
+    return (
+      <Button sx={{ mt: 24 }} variant="contained" fullWidth disabled>
+        Place a Bid
+      </Button>
+    )
+  }
+
   if (isBalanceInsufficient) {
     return (
       <>

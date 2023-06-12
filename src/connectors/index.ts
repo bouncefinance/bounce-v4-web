@@ -4,6 +4,7 @@ import { BscConnector } from '@binance-chain/bsc-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { PortisConnector } from '@web3-react/portis-connector'
+import { OKXConnector } from './OKXWalletConnector'
 
 import { FortmaticConnector } from './Fortmatic'
 import { NetworkConnector } from './NetworkConnector'
@@ -33,6 +34,10 @@ export const injected = new InjectedConnector({
 
 // binance only
 export const binance = new BscConnector({ supportedChainIds: [56] })
+
+export const OKXWalletConnector = new OKXConnector({
+  supportedChainIds: SUPPORT_NETWORK_CHAIN_IDS
+})
 
 const walletConnectRpc: { [key in number]: string } = {}
 for (const id of SUPPORT_NETWORK_CHAIN_IDS) {

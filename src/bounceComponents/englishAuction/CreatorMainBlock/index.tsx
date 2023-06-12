@@ -18,12 +18,13 @@ import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/Success
 import ButtonBlock from './ButtonBlock'
 import PriceChartView from '../PriceChartView'
 import BigNumber from 'bignumber.js'
+import isZero from 'utils/isZero'
 
 const TX_FEE_RATIO = 0.025
 
 const CreatorMainBlock = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
-  const isAllTokenSwapped = useMemo(() => !!poolInfo?.currentBidder, [poolInfo])
+  const isAllTokenSwapped = useMemo(() => !!poolInfo?.currentBidder && !isZero(poolInfo.currentBidder), [poolInfo])
 
   const platformFeeText = useMemo(() => {
     if (!poolInfo || !poolInfo.currentBidderAmount1?.greaterThan('0')) return '-'
@@ -99,10 +100,10 @@ const CreatorMainBlock = (): JSX.Element => {
             {/* {!!nftGoInfo?.data?.suspicious && <SuspiciousTips />} */}
           </Box>
 
-          <ButtonBlock />
+          {poolInfo.contract && <ButtonBlock />}
         </Stack>
 
-        <PriceChartView />
+        <PriceChartView poolInfo={poolInfo} />
       </Box>
     </Stack>
   )

@@ -127,6 +127,10 @@ export const useWeb3Login = (path?: string) => {
           })
         )
 
+        if (location.pathname.includes('okxActivity')) {
+          return
+        }
+
         if (data?.ifLogin === false) {
           const _redirect = redirect
             ? redirect

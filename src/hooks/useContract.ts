@@ -155,39 +155,32 @@ export function useERC1155Contract(address: string | undefined, queryChainId?: C
   return useContract(address, ERC1155_ABI, true, queryChainId)
 }
 
-export function useFixedSwapERC20Contract(address: string | undefined, queryChainId?: ChainId) {
-  return useContract(address, FIXED_SWAP_ABI, true, queryChainId)
-}
-export function useNewFixedSwapERC20Contract(queryChainId?: ChainId) {
+export function useFixedSwapERC20Contract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(cur ? FIXED_SWAP_ERC20_ADDRESSES[cur] : undefined, FIXED_SWAP_ABI, true, queryChainId)
+  const curAddress = address === '' ? undefined : address || (cur ? FIXED_SWAP_ERC20_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, FIXED_SWAP_ABI, true, queryChainId)
 }
 
-export function useRandomSelectionERC20Contract(queryChainId?: ChainId) {
+export function useRandomSelectionERC20Contract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(
-    cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined,
-    RANDOM_SELECTION_ABI,
-    true,
-    queryChainId
-  )
+  const curAddress =
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, RANDOM_SELECTION_ABI, true, queryChainId)
 }
 
-export function useFixedSwapNftContract(queryChainId?: ChainId) {
+export function useFixedSwapNftContract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined, FIXED_SWAP_NFT_ABI, true, queryChainId)
+  const curAddress = address === '' ? undefined : address || (cur ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, FIXED_SWAP_NFT_ABI, true, queryChainId)
 }
 
-export function useEnglishAuctionNftContract(queryChainId?: ChainId) {
+export function useEnglishAuctionNftContract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  return useContract(
-    cur ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined,
-    ENGLISH_AUCTION_NFT_ABI,
-    true,
-    queryChainId
-  )
+  const curAddress =
+    address === '' ? undefined : address || (cur ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, ENGLISH_AUCTION_NFT_ABI, true, queryChainId)
 }

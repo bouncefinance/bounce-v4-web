@@ -1,5 +1,6 @@
 import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
+import useBreakpoint from '../../../../../../hooks/useBreakpoint'
 
 export type IBoxLayoutProps = {
   link: string
@@ -9,12 +10,13 @@ export type IBoxLayoutProps = {
 }
 
 const BoxLayout: React.FC<IBoxLayoutProps> = ({ link, title, image, onBind }) => {
+  const isSm = useBreakpoint('sm')
   return (
     <Box
       display={'flex'}
       alignItems="center"
       justifyContent={'space-between'}
-      height={80}
+      height={isSm ? 60 : 80}
       sx={{ borderBottom: '1px solid #D7D6D9' }}
     >
       <Box display={'flex'} alignItems="center">
@@ -29,7 +31,10 @@ const BoxLayout: React.FC<IBoxLayoutProps> = ({ link, title, image, onBind }) =>
         </Typography>
       </Box>
       {!link && (
-        <Button sx={{ width: 102, height: 32, backgroundColor: 'var(--ps-yellow-1)' }} onClick={onBind}>
+        <Button
+          sx={{ width: isSm ? 82 : 102, height: isSm ? 28 : 32, backgroundColor: 'var(--ps-yellow-1)' }}
+          onClick={onBind}
+        >
           Connect
         </Button>
       )}

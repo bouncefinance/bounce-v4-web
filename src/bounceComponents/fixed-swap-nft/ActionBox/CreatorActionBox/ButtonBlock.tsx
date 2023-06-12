@@ -15,13 +15,13 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
 
   const isAllTokenSwapped = useMemo(() => Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0), [poolInfo])
 
-  const { run: claim, submitted } = useCreatorClaimNFT(poolInfo.poolId, poolInfo.name)
+  const { run: claim, submitted } = useCreatorClaimNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = !isAllTokenSwapped
     const token1ToClaimText = `${poolInfo.currencySwappedTotal1.toSignificant()} ${poolInfo.token1.symbol}`
     const token0ToClaimText = hasToken0ToClaim
-      ? ` and ${Number(poolInfo.swappedAmount0) >= Number(poolInfo.amountTotal0)} ${poolInfo.token0.symbol}`
+      ? ` and ${Number(poolInfo.amountTotal0) - Number(poolInfo.swappedAmount0)} ${poolInfo.token0.symbol}`
       : ''
     return `You have successfully claimed ${token1ToClaimText}${token0ToClaimText}`
   }, [

@@ -4,7 +4,6 @@ import PlaceBidButton from '../PlaceBidButton'
 import UpcomingPoolCountdownButton from './UpcomingPoolCountdownButton'
 import WrongNetworkAlert from './WrongNetworkAlert'
 import BidButtonGroup from './BidButtonGroup'
-import GetFundBackAlert from './GetFundBackAlert'
 import GoToCheckButton from './GoToCheckButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsLimitExceeded from 'bounceHooks/auction/useIsRandomSelectionLimitExceeded'
@@ -13,6 +12,7 @@ import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 
 interface BidButtonBlockProps {
   action: UserBidAction
@@ -53,6 +53,10 @@ const BidButtonBlock = ({
     return <UpcomingPoolCountdownButton openAt={poolInfo.openAt} />
   }
 
+  if (!account) {
+    return <ConnectWalletButton />
+  }
+
   if (!isCurrentChainEqualChainOfPool) {
     return (
       <>
@@ -74,7 +78,6 @@ const BidButtonBlock = ({
             Limit Exceeded
           </Button>
         </BidButtonGroup>
-        <GetFundBackAlert />
       </>
     )
   }
@@ -91,7 +94,6 @@ const BidButtonBlock = ({
             {!userBalance ? 'Loading' : 'Insufficient balance'}
           </Button>
         </BidButtonGroup>
-        <GetFundBackAlert />
       </>
     )
   }
@@ -100,7 +102,6 @@ const BidButtonBlock = ({
     return (
       <>
         <GoToCheckButton poolInfo={poolInfo} bidAmount={bidAmount} onClick={handleGoToCheck} />
-        <GetFundBackAlert />
       </>
     )
   }
@@ -117,7 +118,6 @@ const BidButtonBlock = ({
           loading={isBidding}
           poolInfo={poolInfo}
         />
-        <GetFundBackAlert />
       </>
     )
   }
@@ -140,7 +140,6 @@ const BidButtonBlock = ({
             loading={isBidding}
           />
         </BidButtonGroup>
-        <GetFundBackAlert />
       </>
     )
   }

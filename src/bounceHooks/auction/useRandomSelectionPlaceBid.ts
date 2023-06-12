@@ -1,4 +1,4 @@
-import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
+import { FixedSwapPoolProp } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
 import { useRandomSelectionERC20Contract } from 'hooks/useContract'
@@ -7,6 +7,7 @@ import { CurrencyAmount } from 'constants/token'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
+import getTokenType from 'utils/getTokenType'
 
 const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
   const { account } = useActiveWeb3React()
@@ -18,7 +19,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
   const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract()
+  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
 
   const run = useCallback(
     async (
@@ -40,9 +41,10 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
           data: { proof: rawProofStr }
         } = await getUserWhitelistProof({
           address: account,
-          category: PoolType.FixedSwap,
+          category: poolInfo.category,
           chainId: poolInfo.chainId,
-          poolId: String(poolInfo.poolId)
+          poolId: String(poolInfo.poolId),
+          tokenType: getTokenType(poolInfo.category)
         })
 
         const rawProofJson = JSON.parse(rawProofStr)
@@ -82,14 +84,15 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
     },
     [
       account,
-      addTransaction,
       randomSelectionERC20Contract,
-      isToken1Native,
-      poolInfo.chainId,
       poolInfo.enableWhiteList,
       poolInfo.poolId,
+      poolInfo.category,
+      poolInfo.chainId,
+      poolInfo.token1.symbol,
       poolInfo.token0.symbol,
-      poolInfo.token1.symbol
+      isToken1Native,
+      addTransaction
     ]
   )
 
