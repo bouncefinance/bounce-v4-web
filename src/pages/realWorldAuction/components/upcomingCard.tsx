@@ -25,7 +25,7 @@ const AuctionItem = styled(Box)(({ theme }) => ({
     height: '100%',
     padding: '24px',
     boxSizing: 'border-box',
-    opacity: 1,
+    opacity: 0,
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-between',
