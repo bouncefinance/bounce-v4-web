@@ -124,6 +124,9 @@ const AuctionItem = styled(Box)(({ theme }) => ({
     opacity: 1
   },
   [theme.breakpoints.down('sm')]: {
+    '.cardInfo': {
+      opacity: 1
+    },
     '.name, .title': {
       fontSize: '12px !important'
     },

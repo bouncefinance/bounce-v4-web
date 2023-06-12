@@ -9,7 +9,6 @@ import LeftFilter from './leftFilter'
 import { useState } from 'react'
 import IconSVG from 'bounceComponents/common/SearchInput/icon.svg'
 import { useValuesState, ActionType, useValuesDispatch } from 'bounceComponents/real-world-collectibles/ValuesProvider'
-import { BannerType } from './banner'
 export const ComBtn = styled(Box)(() => ({
   height: '38px',
   lineHeight: '38px',
@@ -47,13 +46,13 @@ const Marketplace = ({
   children,
   handleSetOpen,
   handleSearch,
-  poolList
+  poolLength
 }: {
   filterConfig: FilterSearchConfig[]
   children: JSX.Element
   handleSetOpen?: (open: boolean) => void
   handleSearch?: () => void
-  poolList?: BannerType[]
+  poolLength?: number
 }) => {
   //   const [chainFilter, setChainFilter] = useState<number>(0)
   const [openFilter, setOpenFilter] = useState<boolean>(false)
@@ -77,6 +76,7 @@ const Marketplace = ({
   }
   return (
     <Box
+      id={'Marketplace'}
       sx={{
         position: 'relative',
         width: 'calc(100% - 40px)',
@@ -194,7 +194,7 @@ const Marketplace = ({
               marginRight: '9px'
             }}
           >
-            {poolList?.length || 1} items
+            {poolLength} items
           </Typography>
           <img
             style={{

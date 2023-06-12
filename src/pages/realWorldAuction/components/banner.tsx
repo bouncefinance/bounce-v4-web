@@ -10,6 +10,7 @@ export interface BannerType {
   link: string
   startTime: number | string
   endTime: number | string
+  categories?: string
 }
 
 export interface IBanner {
