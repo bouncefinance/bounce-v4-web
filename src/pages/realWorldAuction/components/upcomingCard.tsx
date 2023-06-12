@@ -230,7 +230,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
             >
               {`Welcome To The First Series Of 'Daves', Officially The Worlds Most Exciting Collectible.`}
             </Typography>
-            <Typography
+            {/* <Typography
               sx={{
                 fontFamily: `'Inter'`,
                 fontWeight: 400,
@@ -240,7 +240,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
               }}
             >
               {`NFT issued by 4K Alpha Vault`}
-            </Typography>
+            </Typography> */}
             <img
               src={DescriptIcon}
               style={{

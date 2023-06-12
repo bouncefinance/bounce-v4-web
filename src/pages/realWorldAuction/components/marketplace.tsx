@@ -64,7 +64,9 @@ const Marketplace = ({
       type: ActionType.ClearParams,
       payload: {}
     })
-    handleSearch && handleSearch()
+    setTimeout(() => {
+      handleSearch && handleSearch()
+    })
   }
   const handleSetSearch = (value: string) => {
     valuesDispatch({

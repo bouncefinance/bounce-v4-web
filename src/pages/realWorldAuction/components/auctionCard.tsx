@@ -2,7 +2,7 @@ import { Box, Typography, styled } from '@mui/material'
 import { BannerType } from './banner'
 import { useCountDown } from 'ahooks'
 // import P2Img from 'assets/imgs/realWorld/p2.png'
-import EthIcon from 'assets/imgs/realWorld/eth.png'
+// import EthIcon from 'assets/imgs/realWorld/eth.png'
 import { useNavigate } from 'react-router-dom'
 const CountDownBg = styled(Box)`
   display: flex;
@@ -106,7 +106,7 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
         }}
         gap={'16px'}
       >
-        <Box
+        {/* <Box
           sx={{
             height: '24px',
             display: 'flex',
@@ -136,7 +136,7 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
           >
             NFT issued by 4K Alpha Vault
           </Typography>
-        </Box>
+        </Box> */}
         <Typography
           sx={{
             lineHeight: '22px',

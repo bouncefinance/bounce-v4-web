@@ -28,7 +28,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
           backgroundColor: '#000'
         }}
       >
-        <Typography
+        {/* <Typography
           sx={{
             position: 'absolute',
             width: '100%',
@@ -47,7 +47,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
           }}
         >
           NFT issued by 4K Alpha Vault
-        </Typography>
+        </Typography> */}
       </Box>
       <Box
         sx={{

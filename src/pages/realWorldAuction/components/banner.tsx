@@ -2,7 +2,7 @@ import { Box, styled, Skeleton, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
 import useBreakpoint from '../../../hooks/useBreakpoint'
-import EthIcon from 'assets/imgs/realWorld/eth.png'
+// import EthIcon from 'assets/imgs/realWorld/eth.png'
 export interface BannerType {
   name: string
   time: string
@@ -213,7 +213,7 @@ export function Banner({ banner }: { banner: BannerType }) {
             overflow: 'hidden'
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               height: '24px',
               display: 'flex',
@@ -244,7 +244,7 @@ export function Banner({ banner }: { banner: BannerType }) {
             >
               NFT issued by 4K Alpha Vault
             </Typography>
-          </Box>
+          </Box> */}
           <BannerH3 mb={'24px'}>{banner.name}</BannerH3>
           <BannerH6>
             Real World Collectibles | {'Top bid'} | {'ON VIEW'}
