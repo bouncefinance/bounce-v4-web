@@ -12,6 +12,7 @@ import { useIsSMDown } from 'themes/useTheme'
 import AuctionCard from './auctionCard'
 import UpcomingAuction from './upcomingAuction'
 import { BannerType } from './banner'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 export enum AuctionFilterKey {
   categories = 'categories',
@@ -76,7 +77,6 @@ export function waitFun(ms: number) {
   })
 }
 const defaultPageSize = 10
-
 const AuctionContent = () => {
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
@@ -426,6 +426,8 @@ const AuctionContent = () => {
           <>
             {loading ? (
               <SwiperSkeleton />
+            ) : poolList.total === 0 ? (
+              <EmptyData isLight={true} />
             ) : (
               <Box
                 sx={{
@@ -485,6 +487,8 @@ const AuctionContent = () => {
           <>
             {loading ? (
               <SwiperSkeleton />
+            ) : poolList.total === 0 ? (
+              <EmptyData isLight={true} />
             ) : (
               <Box
                 sx={{

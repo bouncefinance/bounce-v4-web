@@ -13,6 +13,7 @@ import { useIsSMDown } from 'themes/useTheme'
 const defaultPageSize = 12
 import { routes } from 'constants/routes'
 import { BannerType } from './banner'
+import EmptyData from 'bounceComponents/common/EmptyData'
 
 export const filterConfig: FilterSearchConfig[] = [
   {
@@ -348,6 +349,8 @@ const BuynowContent = () => {
                   <PoolCardSkeleton />
                 </Grid>
               </Grid>
+            ) : poolList.total === 0 ? (
+              <EmptyData isLight={true} />
             ) : (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
                 {poolList &&
@@ -361,7 +364,7 @@ const BuynowContent = () => {
                   })}
               </Grid>
             )}
-            {poolList?.total >= 0 && (
+            {poolList?.total >= defaultPageSize && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
                   page={poolsPagination.current}
@@ -407,6 +410,8 @@ const BuynowContent = () => {
                   <PoolCardSkeleton />
                 </Grid>
               </Grid>
+            ) : poolList.total === 0 ? (
+              <EmptyData isLight={true} />
             ) : (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
                 {poolList &&
@@ -420,7 +425,7 @@ const BuynowContent = () => {
                   })}
               </Grid>
             )}
-            {poolList?.total >= 10 && (
+            {poolList?.total >= defaultPageSize && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
                   page={poolsPagination.current}
