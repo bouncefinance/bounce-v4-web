@@ -70,13 +70,6 @@ const AuctionContent = () => {
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
-  useEffect(() => {
-    valuesDispatch({
-      type: ActionType.ClearParams,
-      payload: {}
-    })
-    return () => {}
-  }, [valuesDispatch])
   const {
     pagination: poolsPagination,
     data: poolList,
@@ -322,9 +315,14 @@ const AuctionContent = () => {
     run({ current: 1, pageSize: defaultPageSize })
   }
   useEffect(() => {
+    valuesDispatch({
+      type: ActionType.ClearParams,
+      payload: {}
+    })
     run({ current: 1, pageSize: defaultPageSize })
     return () => {}
-  }, [run])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <Box
       sx={{

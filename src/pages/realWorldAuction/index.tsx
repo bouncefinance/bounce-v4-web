@@ -6,8 +6,8 @@ import Tabs from './components/tabs'
 import { useState } from 'react'
 import Auction from './components/auction'
 import Buynow from './components/buynow'
-import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useIsSMDown } from 'themes/useTheme'
+import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvider'
 
 export enum TabsType {
   'auction' = 0,
