@@ -96,9 +96,8 @@ const AuctionContent = () => {
           time: '--',
           img: P1Img,
           link: routes.fundo.home,
-          startTime: '',
-          endTime: '',
-          categories: 'Sneakers'
+          startTime: 1687622400,
+          endTime: ''
         },
         {
           categories: 'Fashion',
