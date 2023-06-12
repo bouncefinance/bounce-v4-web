@@ -53,6 +53,7 @@ import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
+import FoundoDetail from 'pages/thirdPart/foundoBidDetail'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
@@ -153,12 +154,13 @@ export default function App() {
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
-                    <Route path={routes.thirdPart.foundoDetail} element={<FundoDetail />} />
+                    <Route path={routes.thirdPart.foundoDetail} element={<FoundoDetail />} />
                     <Route
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
                     />
                     <Route path={routes.fundo.home} element={<FundoHome />} />
+                    <Route path={routes.fundo.detail} element={<FundoDetail />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
 
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}

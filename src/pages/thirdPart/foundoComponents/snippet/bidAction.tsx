@@ -1,5 +1,5 @@
 import { Box, Typography, styled } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { PoolType } from 'api/pool/type'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/chart.png'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
@@ -7,8 +7,8 @@ import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
 import DidDialog from './bidDialog'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
-import ReactECharts from 'echarts-for-react'
-import 'echarts/i18n/langFR'
+
+import LineChart from 'components/LineChart'
 export enum BidType {
   'dataView' = 0,
   'chartView' = 1
@@ -64,33 +64,7 @@ function DataView(props: DataViewParam) {
     </Box>
   )
 }
-const ChartView: React.FC = ({}) => {
-  const option = {
-    toolbox: {
-      feature: {
-        saveAsImage: {},
-        dataZoom: {},
-        restore: {}
-      }
-    },
-    tooltip: {},
-    legend: {
-      data: ['Price']
-    },
-    xAxis: {
-      data: ['06:30 01-07', '08:30 01-07', '10:30 01-07', '12:30 01-07', '14:30 01-07', '16:30 01-07']
-    },
-    yAxis: {},
-    series: [
-      {
-        name: 'Price',
-        type: 'line',
-        data: [5, 20, 36, 10, 15, 20]
-      }
-    ]
-  }
-  return <ReactECharts option={option} style={{ height: 450 }} opts={{ locale: 'FR' }} />
-}
+
 const LiveStr = styled(Typography)(() => ({
   display: 'inline-block',
   fontFamily: `'Public Sans'`,
@@ -185,7 +159,7 @@ const BidAction = () => {
         </Typography>
       </Box>
       {viewType === BidType.dataView && <DataView auctionType={PoolType.ENGLISH_AUCTION_NFT} priceFloor={'25000'} />}
-      {viewType === BidType.chartView && <ChartView />}
+      {viewType === BidType.chartView && <LineChart isDark data={[]} token1Name="ETH" />}
       <RowLabel
         style={{
           padding: '34px 0 66px',
