@@ -85,7 +85,7 @@ const Marketplace = ({
         maxWidth: '1296px',
         minHeight: `calc(100vh - ${theme.height.header})`,
         margin: '0 auto',
-        background: '#121212',
+        background: '#20201E',
         borderRadius: '30px',
         padding: '80px 40px 40px'
       }}
