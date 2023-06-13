@@ -30,10 +30,10 @@ const Dialog = ({ title, children, open, onClose, contentStyle, ...restProps }: 
         }
       }}
     >
-      <DialogTitle sx={{ padding: '20px 20px 40px 102px' }}>
+      <DialogTitle sx={{ padding: { md: '20px 20px 40px 102px' } }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           {title && (
-            <Typography variant="h2" sx={{ pr: 30 }}>
+            <Typography variant="h2" sx={{ pr: 30, fontSize: { xs: 18, md: 22 } }}>
               {title}
             </Typography>
           )}
@@ -41,7 +41,7 @@ const Dialog = ({ title, children, open, onClose, contentStyle, ...restProps }: 
           <IconButton
             color="primary"
             aria-label="dialog-close"
-            sx={{ width: 52, height: 52, border: '1px solid rgba(0, 0, 0, 0.27)' }}
+            sx={{ width: { xs: 40, md: 52 }, height: { xs: 40, md: 52 }, border: '1px solid rgba(0, 0, 0, 0.27)' }}
             onClick={() => {
               onClose()
             }}
@@ -51,7 +51,7 @@ const Dialog = ({ title, children, open, onClose, contentStyle, ...restProps }: 
         </Stack>
       </DialogTitle>
 
-      <DialogContent sx={{ padding: '20px 102px 48px', ...contentStyle }}>{children}</DialogContent>
+      <DialogContent sx={{ padding: { md: '20px 102px 48px' }, ...contentStyle }}>{children}</DialogContent>
     </MuiDialog>
   )
 }

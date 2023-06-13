@@ -156,7 +156,7 @@ const Auction1155ParametersForm = (): JSX.Element => {
   }
 
   return (
-    <Box sx={{ mt: 52 }}>
+    <Box sx={{ mt: 52, px: { xs: 16, md: 0 } }}>
       <Typography variant="h2">Auction Parameters</Typography>
       <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Swap Auction</Typography>
       <Formik
@@ -186,7 +186,8 @@ const Auction1155ParametersForm = (): JSX.Element => {
             <Box
               sx={{
                 display: 'flex',
-                flexFlow: 'row nowrap'
+                flexFlow: 'row nowrap',
+                flexDirection: { xs: 'column', md: 'row' }
               }}
             >
               <ShowNFTCard
@@ -199,7 +200,8 @@ const Auction1155ParametersForm = (): JSX.Element => {
               <Box
                 sx={{
                   flex: 1,
-                  marginLeft: 50
+                  marginLeft: { xs: 0, md: 50 },
+                  marginTop: { xs: 20, md: 0 }
                 }}
               >
                 <Stack component={Form} spacing={32} noValidate>

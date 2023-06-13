@@ -313,7 +313,7 @@ const CreationRandomSelectionConfirmation = () => {
           Creation confirmation
         </Typography>
 
-        <Box sx={{ borderRadius: '20px', border: '1px solid #D7D6D9', px: 24, py: 30 }}>
+        <Box sx={{ borderRadius: '20px', border: '1px solid #D7D6D9', px: 24, py: 30, mx: { xs: 16, md: 0 } }}>
           <Typography variant="h3" sx={{ fontSize: 16, mb: 24 }}>
             {values.poolName} Random Selection Pool
           </Typography>
@@ -444,7 +444,16 @@ const CreationRandomSelectionConfirmation = () => {
           </Stack>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mt: 32,
+            width: '100%',
+            px: { xs: 16, md: 0 }
+          }}
+        >
           <CreatePoolButton />
 
           <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>

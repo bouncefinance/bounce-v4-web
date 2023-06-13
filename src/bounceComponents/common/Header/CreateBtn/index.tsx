@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
 
-const CreateBtn: React.FC<{ sx?: SxProps<Theme> }> = ({ sx }) => {
+const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ sx, onDismiss }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
   const { token } = useUserInfo()
@@ -58,6 +58,7 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme> }> = ({ sx }) => {
         onClick={() => {
           navigate(`${routes.auction.createAuctionPool}`)
           setAnchorEl(null)
+          onDismiss && onDismiss()
         }}
       >
         Create an auction

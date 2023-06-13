@@ -31,6 +31,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 interface FormValues {
   tokenFromAddress: string
@@ -53,7 +54,7 @@ const AuctionParametersForm = (): JSX.Element => {
 
   const { currencyFrom } = useAuctionERC20Currency()
   const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
-
+  const isSm = useBreakpoint('sm')
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
       .required('Token is required')
@@ -152,7 +153,7 @@ const AuctionParametersForm = (): JSX.Element => {
   }
 
   return (
-    <Box sx={{ mt: 52 }}>
+    <Box sx={{ mt: 52, px: isSm ? 16 : '0' }}>
       <Typography variant="h2">Auction Parameters</Typography>
       <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
 
