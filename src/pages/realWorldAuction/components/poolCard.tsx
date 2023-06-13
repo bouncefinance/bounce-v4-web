@@ -5,6 +5,14 @@ import { BannerType } from './banner'
 
 const PoolCard = ({ item }: { item: BannerType }) => {
   const navigate = useNavigate()
+  const handleClick = (url: string) => {
+    if (!url) return
+    if (url.indexOf('http://') > -1 || url.indexOf('https://') > -1) {
+      window.open(url, '_blank')
+    } else {
+      navigate(url)
+    }
+  }
   return (
     <Box
       sx={{
@@ -16,7 +24,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
         cursor: 'pointer'
       }}
       onClick={() => {
-        navigate(item.link)
+        handleClick(item.link)
       }}
     >
       <Box

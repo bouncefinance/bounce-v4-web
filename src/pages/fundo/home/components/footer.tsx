@@ -146,7 +146,7 @@ function SlideSection() {
             }
           }
         }}
-        gap={isSm ? '30px' : '100px'}
+        gap={isSm ? '30px' : '64px'}
       >
         {imgList.map((item, index) => {
           return (
@@ -154,8 +154,9 @@ function SlideSection() {
               src={item}
               style={{
                 display: 'block',
-                width: isSm ? '41px' : '93px',
-                height: isSm ? '64px' : '146px',
+                width: isSm ? '41px' : '140px',
+                height: isSm ? '41px' : '140px',
+                objectFit: 'cover',
                 cursor: 'pointer'
               }}
               key={'img' + index}
@@ -490,7 +491,7 @@ export default function Footer() {
                     color: 'rgba(255, 255, 255, 0.8)',
                     textDecoration: 'none'
                   }}
-                  href={'/'}
+                  href={'https://www.bounce.finance/termsOfService'}
                   target={'_blank'}
                 >
                   Terms Of Service
@@ -520,7 +521,7 @@ export default function Footer() {
                   textDecoration: 'none',
                   textAlign: 'center'
                 }}
-                href={'/'}
+                href={'https://www.bounce.finance/privacyPolicy'}
                 target={'_blank'}
               >
                 ©2023 Bounce dao Ltd. All rights reserved.

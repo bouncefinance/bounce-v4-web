@@ -20,6 +20,7 @@ const ArtistiImg = styled(Box)(({ theme }) => ({
     height: 215,
     objectFit: 'contain',
     overflow: 'hidden',
+    borderRadius: '50%',
     border: '2px solid rgba(255, 255, 255, 0.2)',
     animation: `fade1 1s linear 0s infinite`
   },
@@ -171,7 +172,7 @@ export default function ProductCard() {
             color: 'var(--ps-text-5)'
           }}
         >
-          Ref: 356934
+          Ref : LG578319461
         </Typography>
       </Box>
       <ArtistiImg>
@@ -200,7 +201,7 @@ export default function ProductCard() {
           color: '#fff'
         }}
       >
-        Joshua Davis
+        NAHIYA SU
       </Typography>
     </Box>
   )

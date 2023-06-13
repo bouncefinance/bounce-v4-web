@@ -74,7 +74,7 @@ const PcHome: React.FC = () => {
       // 7 partner active rotate animation
       const animate7range = [_AnimateHeight1 + 2800 + winH + 3200, _AnimateHeight1 + 2800 + winH + 4000]
       // 8 partner leave animation
-      const animate8range = [_AnimateHeight1 + 2800 + winH + 4000, _AnimateHeight1 + 2800 + winH + 4800]
+      const animate8range = [_AnimateHeight1 + 2800 + winH + 4300, _AnimateHeight1 + 2800 + winH + 5000]
       // 1. necklack down and scale
       if (animate1Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate1Range[1]) {
         setAnimate1Ratio(BigNumber(event.target.scrollTop / animate1Range[1]).toFixed(2))

@@ -33,7 +33,7 @@ export default function One() {
             marginBottom: '24px'
           }}
         >
-          ANGEL HAND
+          Diamond
         </Typography>
         <Typography
           sx={{
@@ -49,7 +49,7 @@ export default function One() {
             marginBottom: '48px'
           }}
         >
-          DIAMOND NECKLACE
+          HAND Necklace
         </Typography>
         <Box
           sx={{
@@ -70,7 +70,7 @@ export default function One() {
               fontSize: '16px',
               color: 'var(--ps-text-2)'
             }}
-          >{`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful`}</Typography>
+          >{`Embodying the indomitable spirit of the blockchain pioneers, we present the 'Diamond Hand' necklace - a testament to the unwavering faith of those who dared to venture into the uncharted territories of the crypto world.`}</Typography>
           <Typography
             sx={{
               flex: 688,
@@ -79,7 +79,7 @@ export default function One() {
               fontSize: '16px',
               color: 'var(--ps-text-2)'
             }}
-          >{`words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}</Typography>
+          >{`This piece is a homage to the 'Hodl' philosophy, a term deeply embedded in the lexicon of the crypto community, symbolizing their steadfast commitment to hold onto their investments amidst the capricious tides of the market.`}</Typography>
         </Box>
         <FixedIndex />
         <FixedLeft />
