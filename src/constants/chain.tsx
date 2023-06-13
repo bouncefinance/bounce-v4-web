@@ -360,7 +360,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'AVAX',
       symbol: 'AVAX',
       decimals: 18,
-      logo: 'https://snowtrace.io/images/svg/brands/main.svg'
+      logo: 'https://downloads.intercomcdn.com/i/o/314196/9806d86a3c1713aa2b32bdff/585b3e776222d12040469e026babcc11.png'
     },
     rpcUrls: ['https://rpc.ankr.com/avalanche'],
     blockExplorerUrls: ['https://snowtrace.io/']
