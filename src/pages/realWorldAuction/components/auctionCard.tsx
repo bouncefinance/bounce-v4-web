@@ -76,7 +76,7 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
           <></>
         )}
       </Box>
-      {Number(banner.startTime) * 1000 >= new Date().getTime() && (
+      {banner.status === 'Live auction' && (
         <Box
           sx={{
             position: 'absolute',

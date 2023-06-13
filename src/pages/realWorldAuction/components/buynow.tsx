@@ -57,22 +57,35 @@ const BuynowContent = () => {
       let searchResult: BannerType[] = [...marketList]
       if (values.keyword) {
         searchResult = marketList.filter(item => {
-          return item.name.indexOf(values.keyword) > -1
+          return item.name.toLocaleLowerCase().indexOf(values.keyword.toLocaleLowerCase()) > -1
         })
       }
       if (values.status) {
         const nowTime = new Date().getTime()
         if (values.status === 'Upcoming') {
           searchResult = marketList.filter(item => {
-            return Number(item.startTime) * 1000 > nowTime
+            return Number(item.startTime) * 1000 >= nowTime
+          })
+          searchResult.map(item => {
+            item.status = 'Upcoming'
           })
         } else if (values.status === 'Past auction') {
           searchResult = marketList.filter(item => {
-            return Number(item.endTime) * 1000 <= nowTime
+            return item.endTime && Number(item.endTime) * 1000 <= nowTime
+          })
+          searchResult.map(item => {
+            item.status = 'Past auction'
           })
         } else if (values.status === 'Live auction') {
           searchResult = marketList.filter(item => {
-            return Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime
+            if (item.endTime) {
+              return Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime
+            } else {
+              return Number(item.startTime) * 1000 <= nowTime
+            }
+          })
+          searchResult.map(item => {
+            item.status = 'Live auction'
           })
         }
       }

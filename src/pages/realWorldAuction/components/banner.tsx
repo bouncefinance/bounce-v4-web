@@ -11,6 +11,7 @@ export interface BannerType {
   startTime: number | string
   endTime: number | string
   categories?: string
+  status?: string
 }
 
 export interface IBanner {
@@ -258,7 +259,7 @@ export function Banner({ banner }: { banner: BannerType }) {
             alignItems: 'flex-end'
           }}
         >
-          {Number(banner.startTime) * 1000 >= new Date().getTime() && (
+          {banner.status === 'Live auction' && (
             <Box
               sx={{
                 width: '92px',
