@@ -45,7 +45,7 @@ const DialogTips = create((props: DialogProps) => {
       onClose={handleClose}
       sx={{
         '& .MuiDialog-paper': {
-          minWidth: 480,
+          // minWidth: 480,
           borderRadius: 20,
           width: 480
         }

@@ -26,6 +26,7 @@ import { useAuctionConfigList } from 'hooks/useAuctionConfig'
 import { useUserInfo, useShowLoginModal } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const validationSchema = Yup.object({
   // auctionType: Yup.string().required('Auction Type is required')
@@ -47,7 +48,7 @@ const CreateAuctionPoolIntroPage = () => {
   const [curTokenType, setCurTokenType] = useState<TokenType | undefined>(TokenType.ERC20)
   const [curAuctionType, setCurAuctionType] = useState<AuctionType | undefined>(AuctionType.FIXED_PRICE)
   const [enabledTokenType, enabledAuctionType] = useAuctionConfigList(chainId || undefined, curTokenType)
-
+  const isSm = useBreakpoint('sm')
   const handleCancel = () => {
     window.history.go(-1)
   }
@@ -100,8 +101,16 @@ const CreateAuctionPoolIntroPage = () => {
     <section>
       <RoundedContainer maxWidth="md">
         <Stack alignItems="center">
-          <Box sx={{ py: 60, maxWidth: 540 }}>
-            <Typography variant="h1" sx={{ mb: 48 }}>
+          <Box
+            sx={{
+              py: 60,
+              maxWidth: 540,
+              '@media(max-width:600px)': {
+                padding: '60px 16px 16px'
+              }
+            }}
+          >
+            <Typography variant="h1" sx={{ mb: 48, fontSize: isSm ? 28 : 36, whiteSpace: 'nowrap' }}>
               Create Auction Pool
             </Typography>
 

@@ -260,7 +260,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
   return (
     // TODO: move LocalizationProvider to _app.tex
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
-      <Box sx={{ mt: 52 }}>
+      <Box sx={{ mt: 52, px: { xs: 16, md: 0 } }}>
         <Typography variant="h2">Advanced Settings</Typography>
         <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
 
@@ -476,7 +476,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                   <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
                   <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
                 </Box>
-                <Stack direction="row" spacing={10} justifyContent="space-between">
+                <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} spacing={10} justifyContent="space-between">
                   <ButtonBase
                     sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
                     disabled={values.participantStatus !== ParticipantStatus.Whitelist}

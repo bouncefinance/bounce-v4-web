@@ -67,7 +67,10 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
       sx={{
         zIndex: theme => theme.zIndex.appBar,
         overflow: 'hidden',
-        top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
+        top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header }),
+        '& .MuiDrawer-paperAnchorTop': {
+          height: '100%'
+        }
       }}
     >
       <Box
@@ -119,17 +122,20 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
           )}
         </Stack>
         {!currentTab && (
-          <Stack spacing={22} p={'0 16px 22px'} onClick={onDismiss}>
+          <Stack spacing={22} p={'0 16px 22px'}>
             <CreateBtn
               sx={{
                 width: '100%'
               }}
+              onDismiss={onDismiss}
             />
-            <SocialLinkList
-              sx={{
-                justifyContent: 'center'
-              }}
-            />
+            <Box onClick={onDismiss}>
+              <SocialLinkList
+                sx={{
+                  justifyContent: 'center'
+                }}
+              />
+            </Box>
           </Stack>
         )}
       </Box>

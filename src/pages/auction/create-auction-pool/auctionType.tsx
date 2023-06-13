@@ -20,12 +20,13 @@ import Erc1155Pool from './Erc1155Pool'
 import Erc721Pool from './Erc721Pool'
 
 import RandomSelection from './RandomSelection'
+import useBreakpoint from 'hooks/useBreakpoint'
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
 const CreateAuctionPool = () => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
-
+  const isSm = useBreakpoint('sm')
   const { tokenType, auctionType } = useQueryParams()
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const CreateAuctionPool = () => {
     <>
       <RoundedContainer maxWidth="md" sx={{ pt: 22 }}>
         {valuesState.activeStep !== CreationStep.CREATION_CONFIRMATION && (
-          <Box sx={{ px: 22 }}>
+          <Box sx={{ px: isSm ? 16 : 22 }}>
             <Stepper steps={steps} valuesState={valuesState} valuesDispatch={valuesDispatch} />
           </Box>
         )}
