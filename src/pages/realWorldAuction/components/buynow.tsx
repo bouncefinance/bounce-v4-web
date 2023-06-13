@@ -78,10 +78,10 @@ const BuynowContent = () => {
           })
         } else if (values.status === 'Live auction') {
           searchResult = marketList.filter(item => {
-            if (item.endTime) {
+            if (item.startTime && item.endTime) {
               return Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime
             } else {
-              return Number(item.startTime) * 1000 <= nowTime
+              return false
             }
           })
           searchResult.map(item => {
