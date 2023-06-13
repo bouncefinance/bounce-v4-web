@@ -24,19 +24,19 @@ export default function ProductCard({
       img: Icon1
     },
     {
-      text: 'Made In: Italy',
+      text: 'Made In:  Lab-grown',
       img: Icon2
     },
     {
-      text: 'Diamonds (Carats): 8.81',
+      text: 'Diamonds (Carats): 19.82',
       img: Icon3
     },
     {
-      text: 'Dimension: 40.5 cm',
+      text: 'Dimension: 50 cm',
       img: Icon4
     },
     {
-      text: 'Material​: White gold',
+      text: 'Material​: 18k White gold',
       img: Icon5
     }
   ]
@@ -90,7 +90,7 @@ export default function ProductCard({
             color: 'var(--ps-text-5)'
           }}
         >
-          Ref: 356934
+          Ref : LG578319461
         </Typography>
       </Box>
       <Grid container rowSpacing={'8px'}>
@@ -118,7 +118,8 @@ export default function ProductCard({
                   sx={{
                     fontFamily: `'Inter'`,
                     color: 'var(--ps-text-2)',
-                    fontSize: isSm ? '14px' : '16px'
+                    fontSize: isSm ? '14px' : '16px',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   {item.text}
