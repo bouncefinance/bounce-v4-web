@@ -169,8 +169,8 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
         sx={{
           fontWeight: 500,
           width: '100%',
-          maxHeight: '110px',
-          overflow: 'hidden'
+          maxHeight: isSm ? 'unset' : '110px',
+          overflow: isSm ? 'unset' : 'hidden'
         }}
       >
         <Typography

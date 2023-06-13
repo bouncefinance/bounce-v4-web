@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
-import FixedLeft from 'components/Fundo/Banner/FixedLeft'
+// import FixedLeft from 'components/Fundo/Banner/FixedLeft'
 import { useIsSMDown } from 'themes/useTheme'
 
 export default function One() {
@@ -82,7 +82,7 @@ export default function One() {
           >{`This piece is a homage to the 'Hodl' philosophy, a term deeply embedded in the lexicon of the crypto community, symbolizing their steadfast commitment to hold onto their investments amidst the capricious tides of the market.`}</Typography>
         </Box>
         <FixedIndex />
-        <FixedLeft />
+        {/* <FixedLeft /> */}
       </>
     </CenterSection>
   )
