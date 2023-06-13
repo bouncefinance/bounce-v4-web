@@ -29,8 +29,8 @@ export const marketList: BannerType[] = [
     time: '30 MAY 10AM - 12 JUN 10AM EDT',
     img: 'https://www.christies.com/img/SaleImages/NYR-22070-05302023-1.jpg',
     link: 'https://onlineonly.christies.com/s/handbags-online-new-york-edit/lots/3361',
-    startTime: 1685448000,
-    endTime: 1686571200
+    startTime: 1685419200,
+    endTime: 1686542400
   },
   {
     categories: 'Wines',
