@@ -21,9 +21,9 @@ function useEnglishAuctionAccountBidAmount(backedChainId?: number, poolId?: stri
   return rawAmount
 }
 
-export function useEnglishAuctionDataPoolInfo() {
+export function useEnglishAuctionDataPoolInfo(backedId?: number) {
   const { account } = useActiveWeb3React()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT)
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT, backedId)
 
   const englishAuctionNftContract = useEnglishAuctionNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const accountBidRawAmount = useEnglishAuctionAccountBidAmount(poolInfo?.chainId, poolInfo?.poolId)

@@ -22,7 +22,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber } from 'utils/number'
 import { getWinnersList } from 'api/pool/index'
 import { shortenAddress } from 'utils'
-import { FixedSwapPoolProp } from 'api/pool/type'
+import { EnglishAuctionNFTPoolProp } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback, useEffect } from 'react'
 const StyledTableCell = styled(TableCell)(() => ({
@@ -55,7 +55,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   }
 }))
 
-const WinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
+const WinnerList = ({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 

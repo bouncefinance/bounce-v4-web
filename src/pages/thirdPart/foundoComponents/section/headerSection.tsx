@@ -1,10 +1,13 @@
 import { Box, Typography } from '@mui/material'
 import BackIcon from 'assets/imgs/thirdPart/foundoDetail/back.svg'
-import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/logo.png'
 import { useNavigate } from 'react-router-dom'
 import CenterSeciont from '../centerSection'
+import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+import { ChainListMap } from 'constants/chain'
 const Header = () => {
   const navigate = useNavigate()
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+
   return (
     <CenterSeciont
       style={{
@@ -63,7 +66,7 @@ const Header = () => {
             marginRight: '32px'
           }}
         >
-          #000123
+          #{poolInfo?.poolId || ' --'}
         </Typography>
         <Box
           sx={{
@@ -79,7 +82,7 @@ const Header = () => {
           }}
         >
           <img
-            src={LogoIcon}
+            src={poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.logo : undefined}
             style={{
               width: '20px',
               height: '20px',
@@ -96,7 +99,7 @@ const Header = () => {
               color: '#fff'
             }}
           >
-            Ethereum
+            {poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.name : undefined}
           </Typography>
         </Box>
       </Box>

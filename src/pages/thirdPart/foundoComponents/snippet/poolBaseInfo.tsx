@@ -1,5 +1,8 @@
 import { Box, Typography } from '@mui/material'
-const poolBaseInfo = () => {
+import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+const PoolBaseInfo = () => {
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+
   return (
     <Box
       sx={{
@@ -16,7 +19,7 @@ const poolBaseInfo = () => {
           marginBottom: '16px'
         }}
       >
-        ROLEX DAYTONA STEEL 2021 40MM 116500LN - FULL BOXES & PAPERS
+        {poolInfo?.name || '--'}
       </Typography>
       <Typography
         sx={{
@@ -48,4 +51,4 @@ const poolBaseInfo = () => {
     </Box>
   )
 }
-export default poolBaseInfo
+export default PoolBaseInfo

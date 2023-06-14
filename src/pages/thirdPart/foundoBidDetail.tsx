@@ -11,10 +11,10 @@ import Icon4 from 'assets/imgs/thirdPart/foundoDetail/icon4.svg'
 import Icon5 from 'assets/imgs/thirdPart/foundoDetail/icon5.svg'
 import FoundoLogo from 'assets/imgs/thirdPart/foundoDetail/foundoLogo.png'
 import ShareIcon from 'assets/imgs/thirdPart/foundoDetail/share.png'
-import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/chart.png'
 import WinnerList from './foundoComponents/section/winnerSection'
-import useRandomSelectionPoolInfo from 'bounceHooks/auction/useRandomSelectionPoolInfo'
 import { PoolStatus } from 'api/pool/type'
+import EnglishAuctionValuesProvider, { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+import { ChainListMap } from 'constants/chain'
 
 const FoundoBidDetail = () => {
   const theme = useTheme()
@@ -45,7 +45,7 @@ const FoundoBidDetail = () => {
       value: '40.5 cm'
     }
   ]
-  const { data: poolInfo } = useRandomSelectionPoolInfo()
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
 
   return (
     <Box
@@ -164,9 +164,9 @@ const FoundoBidDetail = () => {
                 width: '300px'
               }}
             >
-              CONTRACT ADRESS
+              CONTRACT ADDRESS
             </Typography>
-            <Typography className="value">0xEBf19415d94be89A1d692F82af391685dC1Bff79</Typography>
+            <Typography className="value">{poolInfo?.contract}</Typography>
           </RowLabel>
           <RowLabel
             style={{
@@ -184,7 +184,7 @@ const FoundoBidDetail = () => {
             </Typography>
             <Typography className="value">
               <img
-                src={LogoIcon}
+                src={poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.logo : undefined}
                 style={{
                   width: '20px',
                   height: '20px',
@@ -194,7 +194,7 @@ const FoundoBidDetail = () => {
                 }}
                 alt=""
               />
-              BNB Chain
+              {poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.name : '-'} Chain
               <img
                 src={ShareIcon}
                 style={{
@@ -222,7 +222,7 @@ const FoundoBidDetail = () => {
             >
               TOKEN ID
             </Typography>
-            <Typography className="value">100</Typography>
+            <Typography className="value">{poolInfo?.tokenId}</Typography>
           </RowLabel>
           <RowLabel
             style={{
@@ -255,4 +255,10 @@ const FoundoBidDetail = () => {
     </Box>
   )
 }
-export default FoundoBidDetail
+export default function FoundoBidDetailContent() {
+  return (
+    <EnglishAuctionValuesProvider backedId={629}>
+      <FoundoBidDetail />
+    </EnglishAuctionValuesProvider>
+  )
+}
