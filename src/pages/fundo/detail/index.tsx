@@ -4,18 +4,59 @@ import CenterSection from 'components/Fundo/CenterSection'
 import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
 import LogoIcon from 'components/Fundo/assets/img/detail/logo.png'
 import ShareIcon from 'components/Fundo/assets/img/share.png'
+import BackIcon from 'components/Fundo/assets/img/detail/leftArrow.png'
 import { useIsSMDown } from 'themes/useTheme'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 require('@lottiefiles/lottie-player')
 import BgImg from 'components/Fundo/assets/img/back.png'
-
+import { useNavigate } from 'react-router-dom'
+const BackBtn = () => {
+  const isSm = useIsSMDown()
+  const navigate = useNavigate()
+  return (
+    <Box
+      sx={{
+        position: isSm ? 'relative' : 'absolute',
+        left: isSm ? '-24px' : '72px',
+        top: isSm ? '0' : '20%',
+        display: 'flex',
+        flexFlow: 'row nowrap',
+        justifyContent: 'flex-start',
+        alignSelf: 'flex-start',
+        alignItems: 'center',
+        color: '#fff',
+        fontFamily: `'Public Sans'`,
+        fontWeight: 500,
+        fontSize: '16px',
+        cursor: 'pointer',
+        marginBottom: isSm ? '30px' : '0'
+      }}
+      onClick={() => {
+        navigate(-1)
+      }}
+    >
+      <img
+        src={BackIcon}
+        style={{
+          width: '12px',
+          height: '12px',
+          marginRight: '12px'
+        }}
+        alt=""
+        srcSet=""
+      />
+      Back
+    </Box>
+  )
+}
 const TokenDetail: React.FC = () => {
   const isSm = useIsSMDown()
   const theme = useTheme()
   return (
     <Box
       sx={{
+        position: 'relative',
         width: '100%',
         height: '100%',
         minHeight: `calc(100vh - ${theme.height.header})`,
@@ -34,6 +75,7 @@ const TokenDetail: React.FC = () => {
         backgroundAttachment: 'fixed'
       }}
     >
+      <BackBtn />
       {isSm && (
         <>
           <Box

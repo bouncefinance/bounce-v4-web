@@ -18,6 +18,9 @@ const PcHome: React.FC = () => {
   const theme = useTheme()
   const _AnimateHeight1 = 1000
   const [stopScroll, setStopscroll] = useState(true)
+  // 0. first screen
+  const [animate0Ratio, setAnimate0Ratio] = useState<string>('0')
+  const [animate0Step, setanimate0Step] = useState<AnimateStep>(AnimateStep.leave)
   // 1. necklack
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
   const [animate1Show, setAnimate1Show] = useState<boolean>(true)
@@ -52,6 +55,8 @@ const PcHome: React.FC = () => {
   }, [])
   useEffect(() => {
     const getScrollCount = (event: { target: any }) => {
+      const animate0Range = [0, winH]
+      console.log('animate0Range>>>', animate0Range)
       // 1. necklack enter down and scale
       const animate1Range = [0, _AnimateHeight1 + 800]
       // 2.product info enter up
@@ -75,6 +80,13 @@ const PcHome: React.FC = () => {
       const animate7range = [_AnimateHeight1 + 2800 + winH + 3200, _AnimateHeight1 + 2800 + winH + 4000]
       // 8 partner leave animation
       const animate8range = [_AnimateHeight1 + 2800 + winH + 4300, _AnimateHeight1 + 2800 + winH + 5000]
+      // 0. set first screen to fixed & use animation
+      if (animate0Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate0Range[1]) {
+        setAnimate0Ratio(BigNumber(event.target.scrollTop / animate0Range[1]).toFixed(2))
+        setanimate0Step(AnimateStep.leave)
+      } else {
+        setanimate0Step(AnimateStep.notShow)
+      }
       // 1. necklack down and scale
       if (animate1Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate1Range[1]) {
         setAnimate1Ratio(BigNumber(event.target.scrollTop / animate1Range[1]).toFixed(2))
@@ -194,7 +206,7 @@ const PcHome: React.FC = () => {
         scrollBox.removeEventListener('scroll', getScrollCount)
       }
     }
-  }, [winH])
+  }, [theme.height.header, winH])
   return (
     <Box
       id={'scrollBox'}
@@ -230,9 +242,16 @@ const PcHome: React.FC = () => {
       {animate2_1Step !== AnimateStep.notShow && <TextAniamte step={animate2_1Step} animationRatio={animate2_1Ratio} />}
       {animate2Step !== AnimateStep.notShow && <ProductInfo step={animate2Step} animationRatio={animate2Ratio} />}
       {animate3Step !== AnimateStep.notShow && <ThreeCard step={animate3Step} animationRatio={animate3Ratio} />}
+      {animate0Step !== AnimateStep.notShow && <One animationRatio={animate0Ratio} step={animate0Step} />}
       {animate1Show && <Necklace onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
-      <One />
       {/* scroll empty box */}
+      <Box
+        sx={{
+          position: 'relative',
+          height: `calc(100vh - ${theme.height.header})`,
+          zIndex: 1
+        }}
+      ></Box>
       <Box
         sx={{
           position: 'relative',
