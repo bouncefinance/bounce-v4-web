@@ -1,21 +1,32 @@
 import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
-// import FixedLeft from 'components/Fundo/Banner/FixedLeft'
-import { useIsSMDown } from 'themes/useTheme'
-
-export default function One() {
+import { AnimateStep } from './pcAnimation/threeCard'
+import { useMemo } from 'react'
+export default function One({ animationRatio, step }: { animationRatio: string; step: AnimateStep }) {
   const theme = useTheme()
-  const isSm = useIsSMDown()
+  const transformStr = useMemo(() => {
+    let result = 'translate3D(0, 0, 0)'
+    switch (step) {
+      case AnimateStep.leave:
+        result = `translate3D(-50%, -${Number(animationRatio) * 100}%, 0)`
+        break
+    }
+    return result
+  }, [step, animationRatio])
   return (
     <CenterSection
       style={{
+        position: 'fixed',
+        top: '0',
+        left: '50%',
         height: `calc(100vh - ${theme.height.header})`,
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        width: isSm ? 'calc(100% - 20px)' : 'calc(100% - 75px - 45px)'
+        width: 'calc(100% - 75px - 45px)',
+        transform: transformStr
       }}
     >
       <>
@@ -33,14 +44,15 @@ export default function One() {
             marginBottom: '24px'
           }}
         >
-          Diamond
+          DIAMOND
         </Typography>
         <Typography
           sx={{
             width: '100%',
             fontFamily: `'Public Sans'`,
             fontWeight: 600,
-            fontSize: '110px',
+            fontSize: '130px',
+            letterSpacing: `0.06em`,
             textAlign: 'left',
             whiteSpace: 'nowrap',
             height: '80px',
@@ -49,7 +61,7 @@ export default function One() {
             marginBottom: '48px'
           }}
         >
-          HAND Necklace
+          HAND NECKLACE
         </Typography>
         <Box
           sx={{
