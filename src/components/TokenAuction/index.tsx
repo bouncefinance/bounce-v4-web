@@ -209,7 +209,7 @@ const TokenAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [currentIndex, setCurrentIndex] = useState(0)
   const isSm = useBreakpoint('sm')
-  const isMd = useBreakpoint('md')
+  const isLg = useBreakpoint('lg')
   const { data: nftPoolData, loading: nftLoading } = useRequest(async () => {
     const resp = await getPools({
       offset: 0,
@@ -679,20 +679,21 @@ const TokenAuction: React.FC = () => {
                         ))}
                       </Grid>
                     ))}
-                  {isMd ? (
-                    <Stack
-                      gap={18}
-                      direction={'row'}
+                  {isLg ? (
+                    <Box
                       sx={{
+                        width: '100%',
                         overflowX: 'scroll',
                         '&::-webkit-scrollbar': {
                           display: 'none'
                         }
                       }}
                     >
-                      {optionDatas?.chainInfoOpt &&
-                        nftPoolData?.list.map((nft: any, i: number) => <NftLink nft={nft} key={i} />)}
-                    </Stack>
+                      <Stack gap={18} direction={'row'} sx={{ minWidth: 1256, '&>a': { flex: 1 } }}>
+                        {optionDatas?.chainInfoOpt &&
+                          nftPoolData?.list.map((nft: any, i: number) => <NftLink nft={nft} key={i} />)}
+                      </Stack>
+                    </Box>
                   ) : (
                     <Grid container spacing={18}>
                       {optionDatas?.chainInfoOpt &&
