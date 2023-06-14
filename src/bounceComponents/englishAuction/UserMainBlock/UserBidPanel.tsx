@@ -23,6 +23,7 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import Image from 'components/Image'
 import bidWinner from 'assets/images/bid-winner.png'
 import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
+// import ReportIcon from '@mui/icons-material/Report'
 
 const InputPanel = styled(Box)({
   border: '1px solid #D7D6D9',
@@ -153,7 +154,7 @@ function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || err || 'Something went wrong',
         onAgain: toBid
       })
     }
@@ -238,16 +239,29 @@ function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           <ProgressSlider curSliderPer={curSliderPer} curSliderHandler={v => curSliderHandler(Number(v))} />
 
           {account ? (
-            <LoadingButton
-              disabled={!bidAmount || !minBidVal || bidAmount.lessThan(minBidVal)}
-              loading={placeBidSubmitted.submitted}
-              onClick={toBid}
-              loadingPosition="start"
-              variant="contained"
-              fullWidth
-            >
-              Place a Bid
-            </LoadingButton>
+            <Box>
+              <LoadingButton
+                disabled={
+                  !bidAmount ||
+                  !minBidVal ||
+                  bidAmount.lessThan(minBidVal) ||
+                  !token1Balance ||
+                  token1Balance.lessThan(bidAmount)
+                }
+                loading={placeBidSubmitted.submitted}
+                onClick={toBid}
+                loadingPosition="start"
+                variant="contained"
+                fullWidth
+              >
+                Place a Bid
+              </LoadingButton>
+
+              {/* <Typography mt={5} display={'flex'} alignItems={'center'} variant="body2" sx={{ color: '#FD3333' }}>
+                <ReportIcon />
+                Insufficient balance
+              </Typography> */}
+            </Box>
           ) : (
             <Button variant="contained" onClick={toggleWallet}>
               Connect Wallet
@@ -256,9 +270,14 @@ function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
 
           <PoolInfoItem
             title="You will pay"
-            tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'}) cost of the previous participant`}
+            tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
+              bidPrevGasFee?.currency.symbol
+            }) cost of the previous participant`}
           >
-            {(bidAmount && bidPrevGasFee?.add(bidAmount).toSignificant()) || '-'} {poolInfo.token1.symbol}
+            {bidPrevGasFee && bidAmount && bidPrevGasFee.currency.equals(bidAmount.currency)
+              ? `${bidPrevGasFee.add(bidAmount).toSignificant()} ${poolInfo.token1.symbol}`
+              : `(${bidPrevGasFee?.toSignificant() || '-'} ${bidPrevGasFee?.currency.symbol}) + (
+            ${(bidAmount && bidPrevGasFee?.add(bidAmount).toSignificant()) || '-'} ${poolInfo.token1.symbol})`}
           </PoolInfoItem>
         </Stack>
       )}
