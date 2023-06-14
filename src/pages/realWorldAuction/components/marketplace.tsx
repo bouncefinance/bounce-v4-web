@@ -1,14 +1,14 @@
-import { Box, Typography, Select, MenuItem, styled, useTheme } from '@mui/material'
+// import { Box, Typography, Select, MenuItem, styled, useTheme } from '@mui/material'
+import { Box, Typography, styled, useTheme } from '@mui/material'
 import { FilterSearchConfig } from './auction'
 import ArrowRight from 'assets/imgs/realWorld/arrow_right.svg'
 import ArrowLeft from 'assets/imgs/realWorld/arrow_left.svg'
 import RefreshSvg from 'assets/imgs/realWorld/refresh.svg'
-import RangeSvg from 'assets/imgs/realWorld/range.svg'
+// import RangeSvg from 'assets/imgs/realWorld/range.svg'
 import LeftFilter from './leftFilter'
 import { useState } from 'react'
 import IconSVG from 'bounceComponents/common/SearchInput/icon.svg'
 import { useValuesState, ActionType, useValuesDispatch } from 'bounceComponents/real-world-collectibles/ValuesProvider'
-
 export const ComBtn = styled(Box)(() => ({
   height: '38px',
   lineHeight: '38px',
@@ -45,14 +45,16 @@ const Marketplace = ({
   filterConfig,
   children,
   handleSetOpen,
-  handleSearch
+  handleSearch,
+  poolLength
 }: {
   filterConfig: FilterSearchConfig[]
   children: JSX.Element
   handleSetOpen?: (open: boolean) => void
   handleSearch?: () => void
+  poolLength?: number
 }) => {
-  const [chainFilter, setChainFilter] = useState<number>(0)
+  //   const [chainFilter, setChainFilter] = useState<number>(0)
   const [openFilter, setOpenFilter] = useState<boolean>(false)
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
@@ -62,7 +64,9 @@ const Marketplace = ({
       type: ActionType.ClearParams,
       payload: {}
     })
-    handleSearch && handleSearch()
+    setTimeout(() => {
+      handleSearch && handleSearch()
+    })
   }
   const handleSetSearch = (value: string) => {
     valuesDispatch({
@@ -74,13 +78,14 @@ const Marketplace = ({
   }
   return (
     <Box
+      id={'Marketplace'}
       sx={{
         position: 'relative',
         width: 'calc(100% - 40px)',
         maxWidth: '1296px',
         minHeight: `calc(100vh - ${theme.height.header})`,
         margin: '0 auto',
-        background: '#121212',
+        background: '#20201E',
         borderRadius: '30px',
         padding: '80px 40px 40px'
       }}
@@ -191,7 +196,7 @@ const Marketplace = ({
               marginRight: '9px'
             }}
           >
-            1 items
+            {poolLength} items
           </Typography>
           <img
             style={{
@@ -239,7 +244,7 @@ const Marketplace = ({
               }}
             />
           </ComSearch>
-          <Select
+          {/* <Select
             sx={{
               width: '200px',
               height: '38px',
@@ -264,7 +269,7 @@ const Marketplace = ({
               />
               Recently added
             </MenuItem>
-          </Select>
+          </Select> */}
         </Box>
       </Box>
       {/* list content */}

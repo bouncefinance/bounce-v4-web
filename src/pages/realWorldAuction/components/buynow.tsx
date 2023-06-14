@@ -2,15 +2,17 @@ import { Box, Typography, Grid, Pagination } from '@mui/material'
 import Marketplace from './marketplace'
 import MarketplaceMobile from './marketplaceMobile'
 import { usePagination } from 'ahooks'
-import P2Img from 'assets/imgs/realWorld/p2.png'
 import PoolCardSkeleton from './poolCardSkeleton'
 import { waitFun, AuctionFilterKey, FilterSearchConfig } from './auction'
 import { useState, useEffect } from 'react'
 import PoolCard from './poolCard'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { ActionType, useValuesDispatch } from 'bounceComponents/real-world-collectibles/ValuesProvider'
+import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useIsSMDown } from 'themes/useTheme'
-
+const defaultPageSize = 12
+import { BannerType } from './banner'
+import EmptyData from 'bounceComponents/common/EmptyData'
+import { marketList } from './auction'
 export const filterConfig: FilterSearchConfig[] = [
   {
     // select type return one of values
@@ -19,17 +21,17 @@ export const filterConfig: FilterSearchConfig[] = [
     key: AuctionFilterKey.categories,
     values: ['Watches', 'Sneakers', 'Electronics', 'Fashion', 'Cards', 'Casascius', 'Collectibles'],
     value: ''
-  },
-  {
-    // range type return type、max、min, like ['SOL', 100, 0]
-    type: 'range',
-    key: AuctionFilterKey.range,
-    label: 'Price range',
-    values: ['SOL'],
-    value: '',
-    max: '',
-    min: ''
   }
+  //   {
+  //     // range type return type、max、min, like ['SOL', 100, 0]
+  //     type: 'range',
+  //     key: AuctionFilterKey.range,
+  //     label: 'Price range',
+  //     values: ['SOL'],
+  //     value: '',
+  //     max: '',
+  //     min: ''
+  //   }
 ]
 export interface PoolItemParams {
   bgImg: string
@@ -40,50 +42,89 @@ export interface PoolItemParams {
 }
 const BuynowContent = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
-  useEffect(() => {
-    valuesDispatch({
-      type: ActionType.ClearParams,
-      payload: {}
-    })
-    return () => {}
-  }, [valuesDispatch])
+
   const {
     pagination: poolsPagination,
     data: poolList,
     loading,
     run
   } = usePagination<any, Params>(
-    async () => {
+    async ({ current, pageSize = defaultPageSize }) => {
       await waitFun(500)
-      const result: PoolItemParams = {
-        bgImg: P2Img,
-        title: 'John Ross Key',
-        subTitle: 'A Country Garden | Late 19th Century | Oil o...',
-        price: '23.00 BNB',
-        tips: 'NFT issued by 4K Alpha Vault'
+      let searchResult: BannerType[] = [...marketList]
+      if (values.keyword) {
+        searchResult = marketList.filter(item => {
+          return item.name.toLocaleLowerCase().indexOf(values.keyword.toLocaleLowerCase()) > -1
+        })
       }
+      if (values.status) {
+        const nowTime = new Date().getTime()
+        if (values.status === 'Upcoming') {
+          searchResult = marketList.filter(item => {
+            return Number(item.startTime) * 1000 >= nowTime
+          })
+          searchResult.map(item => {
+            item.status = 'Upcoming'
+          })
+        } else if (values.status === 'Past auction') {
+          searchResult = marketList.filter(item => {
+            return item.endTime && Number(item.endTime) * 1000 <= nowTime
+          })
+          searchResult.map(item => {
+            item.status = 'Past auction'
+          })
+        } else if (values.status === 'Live auction') {
+          searchResult = marketList.filter(item => {
+            if (item.startTime && item.endTime) {
+              return Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime
+            } else {
+              return false
+            }
+          })
+          searchResult.map(item => {
+            item.status = 'Live auction'
+          })
+        }
+      }
+      if (values.categories) {
+        searchResult = marketList.filter(item => {
+          return values.categories === item.categories
+        })
+      }
+      const result = searchResult.slice((current - 1) * pageSize, current * pageSize)
       return {
-        list: [result],
-        total: 1
+        list: result,
+        total: searchResult.length
       }
     },
     {
       manual: true,
-      defaultPageSize: 10
+      defaultPageSize
     }
   )
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+    setTimeout(() => {
+      document.getElementById('Marketplace')?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' })
+    })
   }
   const handleSearch = () => {
-    run({ current: 1, pageSize: 10 })
+    run({ current: 1, pageSize: defaultPageSize })
   }
   useEffect(() => {
-    run({ current: 1, pageSize: 10 })
+    valuesDispatch({
+      type: ActionType.ClearParams,
+      payload: {}
+    })
+    setTimeout(() => {
+      run({ current: 1, pageSize: defaultPageSize })
+    })
     return () => {}
-  }, [run])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <Box
       sx={{
@@ -119,7 +160,12 @@ const BuynowContent = () => {
         </Typography>
       </Box>
       {!isSm && (
-        <Marketplace handleSearch={handleSearch} filterConfig={filterConfig} handleSetOpen={setIsOpen}>
+        <Marketplace
+          poolLength={poolList?.total || 0}
+          handleSearch={handleSearch}
+          filterConfig={filterConfig}
+          handleSetOpen={setIsOpen}
+        >
           <>
             {loading ? (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
@@ -127,11 +173,13 @@ const BuynowContent = () => {
                   <PoolCardSkeleton />
                 </Grid>
               </Grid>
+            ) : poolList?.total === 0 ? (
+              <EmptyData isLight={true} />
             ) : (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
                 {poolList &&
                   poolList?.list &&
-                  poolList.list.map((item: PoolItemParams, index: number) => {
+                  poolList.list.map((item: BannerType, index: number) => {
                     return (
                       <Grid item lg={isOpen ? 4 : 3} xl={isOpen ? 4 : 3} key={index}>
                         <PoolCard item={item} key={index} />
@@ -140,13 +188,37 @@ const BuynowContent = () => {
                   })}
               </Grid>
             )}
-            {poolList?.total >= 0 && (
+            {poolList?.total >= defaultPageSize && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
+                  page={poolsPagination.current}
                   onChange={handlePageChange}
-                  count={Math.ceil(poolList?.total / 10) || 0}
+                  count={Math.ceil(poolList?.total / defaultPageSize) || 0}
                   variant="outlined"
                   siblingCount={0}
+                  sx={{
+                    '.MuiPagination-ul li button': {
+                      color: '#fff',
+                      border: '1px solid var(--ps-text-3)'
+                    },
+                    '.MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
+                      border: 0,
+                      color: '#fff',
+                      fontFamily: `'Inter'`,
+                      fontWight: 400,
+                      fontSize: 16,
+                      background: 'var(--ps-text-2)',
+                      '&.Mui-selected': {
+                        color: 'var(--ps-text-3)',
+                        background: 'var(--ps-yellow-1)'
+                      },
+                      '&:hover': {
+                        backgroundColor: 'var(--ps-text-1)',
+                        color: '#fff'
+                      }
+                    },
+                    alignItems: 'end'
+                  }}
                 />
               </Box>
             )}
@@ -162,11 +234,13 @@ const BuynowContent = () => {
                   <PoolCardSkeleton />
                 </Grid>
               </Grid>
+            ) : poolList?.total === 0 ? (
+              <EmptyData isLight={true} />
             ) : (
               <Grid container spacing={{ xs: 10, xl: 20 }}>
                 {poolList &&
                   poolList?.list &&
-                  poolList.list.map((item: PoolItemParams, index: number) => {
+                  poolList.list.map((item: BannerType, index: number) => {
                     return (
                       <Grid item xs={12} sm={12} md={6} lg={isOpen ? 4 : 3} xl={isOpen ? 4 : 3} key={index}>
                         <PoolCard item={item} key={index} />
@@ -175,13 +249,37 @@ const BuynowContent = () => {
                   })}
               </Grid>
             )}
-            {poolList?.total >= 10 && (
+            {poolList?.total >= defaultPageSize && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination
+                  page={poolsPagination.current}
                   onChange={handlePageChange}
-                  count={Math.ceil(poolList?.total / 10) || 0}
+                  count={Math.ceil(poolList?.total / defaultPageSize) || 0}
                   variant="outlined"
                   siblingCount={0}
+                  sx={{
+                    '.MuiPagination-ul li button': {
+                      color: '#fff',
+                      border: '1px solid var(--ps-text-3)'
+                    },
+                    '.MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
+                      border: 0,
+                      color: '#fff',
+                      fontFamily: `'Inter'`,
+                      fontWight: 400,
+                      fontSize: 16,
+                      background: 'var(--ps-text-2)',
+                      '&.Mui-selected': {
+                        color: 'var(--ps-text-3)',
+                        background: 'var(--ps-yellow-1)'
+                      },
+                      '&:hover': {
+                        backgroundColor: 'var(--ps-text-1)',
+                        color: '#fff'
+                      }
+                    },
+                    alignItems: 'end'
+                  }}
                 />
               </Box>
             )}

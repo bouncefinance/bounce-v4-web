@@ -14,6 +14,7 @@ import { useActiveWeb3React } from 'hooks'
 import { ChainId } from 'constants/chain'
 import { getEtherscanLink } from 'utils'
 import { Token } from 'bounceComponents/fixed-swap/type'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 interface FormValues {
   tokenFromAddress: string
@@ -39,7 +40,7 @@ const TokenInformationForm = ({ title }: { title?: string }): JSX.Element => {
 
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-
+  const isSm = useBreakpoint('sm')
   const showTokenDialog = (chainId: ChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
     show<Token>(TokenDialog, { chainId, enableEth: false })
       .then(res => {
@@ -57,12 +58,11 @@ const TokenInformationForm = ({ title }: { title?: string }): JSX.Element => {
   }
 
   return (
-    <Box sx={{ mt: 52 }}>
+    <Box sx={{ mt: 52, padding: isSm ? '0 16px' : 'auto' }}>
       <Typography variant="h2">Token Information</Typography>
       <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>
         {title ? title : 'Fixed Swap Auction'}
       </Typography>
-
       <Formik
         initialValues={internalInitialValues}
         onSubmit={values => {

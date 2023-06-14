@@ -8,7 +8,7 @@ const AuctionItem = styled(Box)(({ theme }) => ({
   position: 'relative',
   width: '100%',
   maxWidth: '309px',
-  height: '370',
+  height: '370px',
   borderRadius: '24px',
   overflow: 'hidden',
   cursor: `url(${CursorIcon}), pointer`,
@@ -25,13 +25,15 @@ const AuctionItem = styled(Box)(({ theme }) => ({
     height: '100%',
     padding: '24px',
     boxSizing: 'border-box',
-    opacity: 1,
+    opacity: 0,
     display: 'flex',
     flexFlow: 'column nowrap',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     background: `rgba(18, 18, 18, 0.4)`,
     backdropFilter: `blur(5px)`,
+    borderRadius: '24px',
+    overflow: 'hidden',
     '.head': {
       display: 'flex',
       flexFlow: 'row nowrap',
@@ -124,6 +126,9 @@ const AuctionItem = styled(Box)(({ theme }) => ({
     opacity: 1
   },
   [theme.breakpoints.down('sm')]: {
+    '.cardInfo': {
+      opacity: 1
+    },
     '.name, .title': {
       fontSize: '12px !important'
     },
@@ -189,7 +194,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
           maxWidth: '310px'
         }}
       >
-        2023.06.25 00:00
+        {/* 2023.06.25 00:00 */}
       </Typography>
       <Typography
         sx={{
@@ -227,7 +232,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
             >
               {`Welcome To The First Series Of 'Daves', Officially The Worlds Most Exciting Collectible.`}
             </Typography>
-            <Typography
+            {/* <Typography
               sx={{
                 fontFamily: `'Inter'`,
                 fontWeight: 400,
@@ -237,7 +242,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
               }}
             >
               {`NFT issued by 4K Alpha Vault`}
-            </Typography>
+            </Typography> */}
             <img
               src={DescriptIcon}
               style={{
@@ -257,7 +262,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
               mb={'12px'}
             >
               <Box className="status">Coming soon</Box>
-              <Box className="time">Start in 2h 30m</Box>
+              {/* <Box className="time">Start in 2h 30m</Box> */}
             </Box>
             <Box
               sx={{
@@ -267,8 +272,8 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
                 alignItems: 'center'
               }}
             >
-              <Box className="price">10.00 BNB</Box>
-              <Box className="value">$1909.98</Box>
+              {/* <Box className="price">10.00 BNB</Box> */}
+              {/* <Box className="value">$1909.98</Box> */}
             </Box>
           </Box>
         </Box>

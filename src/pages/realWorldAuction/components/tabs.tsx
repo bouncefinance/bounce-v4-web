@@ -31,7 +31,6 @@ const TabsItem = styled(Box)(({ theme }) => ({
     height: '45px'
   }
 }))
-
 const Tabs = ({ index, setIndex }: { index: TabsType; setIndex: (type: TabsType) => void }) => {
   const isSm = useBreakpoint('sm')
   return (

@@ -306,7 +306,7 @@ const CreationConfirmation = () => {
         <CloseSVG />
       </IconButton>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', pb: 48, width: 'fit-content' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', pb: 48, width: 'fit-content', px: { xs: 16, md: 0 } }}>
         <Typography variant="h2" sx={{ textAlign: 'center', mb: 42 }}>
           Creation confirmation
         </Typography>

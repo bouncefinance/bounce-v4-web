@@ -6,8 +6,8 @@ import Tabs from './components/tabs'
 import { useState } from 'react'
 import Auction from './components/auction'
 import Buynow from './components/buynow'
-import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useIsSMDown } from 'themes/useTheme'
+import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvider'
 
 export enum TabsType {
   'auction' = 0,
@@ -26,7 +26,7 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
         }}
       >
         <HeaderTab />
-        <ArrowBanner type={'Token'} />
+        <ArrowBanner type={'RealWorld'} />
         <Tabs setIndex={setIndex} index={index} />
       </Box>
       {index === TabsType.auction && <Auction />}

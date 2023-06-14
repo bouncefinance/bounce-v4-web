@@ -1,10 +1,18 @@
 import { Box, Typography, Button } from '@mui/material'
-import { PoolItemParams } from './buynow'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import { BannerType } from './banner'
 
-const PoolCard = ({ item }: { item: PoolItemParams }) => {
+const PoolCard = ({ item }: { item: BannerType }) => {
   const navigate = useNavigate()
+  const handleClick = (url: string) => {
+    if (!url) return
+    if (url.indexOf('http://') > -1 || url.indexOf('https://') > -1) {
+      window.open(url, '_blank')
+    } else {
+      navigate(url)
+    }
+  }
   return (
     <Box
       sx={{
@@ -16,7 +24,7 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
         cursor: 'pointer'
       }}
       onClick={() => {
-        navigate(routes.fundo.home)
+        handleClick(item.link)
       }}
     >
       <Box
@@ -24,11 +32,11 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
           position: 'relative',
           width: '100%',
           height: '252px',
-          background: `url(${item.bgImg}) no-repeat top center / auto 100%`,
+          background: `url(${item.img}) no-repeat top center / auto 100%`,
           backgroundColor: '#000'
         }}
       >
-        <Typography
+        {/* <Typography
           sx={{
             position: 'absolute',
             width: '100%',
@@ -46,8 +54,8 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
             backdropFilter: `blur(5px)`
           }}
         >
-          {item.tips}
-        </Typography>
+          NFT issued by 4K Alpha Vault
+        </Typography> */}
       </Box>
       <Box
         sx={{
@@ -70,7 +78,7 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
             marginBottom: '4px'
           }}
         >
-          {item.title}
+          {item.name}
         </Typography>
         <Typography
           sx={{
@@ -85,7 +93,7 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
             marginBottom: '8px'
           }}
         >
-          {item.subTitle}
+          Real World Collectibles | {'Top bid'} | {'ON VIEW'}
         </Typography>
         <Box
           sx={{
@@ -108,7 +116,7 @@ const PoolCard = ({ item }: { item: PoolItemParams }) => {
               whiteSpace: 'nowrap'
             }}
           >
-            {item.price}
+            {/* {item.price} */}
           </Typography>
           <Button
             variant="contained"

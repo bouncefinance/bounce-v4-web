@@ -28,6 +28,7 @@ import { isAddress } from 'utils'
 import { ChainId } from 'constants/chain'
 import { useMemo } from 'react'
 import { useQueryParams } from 'hooks/useQueryParams'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 interface MyFormValues {
   poolName: string
@@ -52,7 +53,7 @@ export const AdvancedSettingsForm = ({
   const auctionInChain = useAuctionInChain()
   const { lunchPad } = useQueryParams()
   const isLunchPad = useMemo(() => !!lunchPad, [lunchPad])
-
+  const isSm = useBreakpoint('sm')
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
     startTime: valuesState.startTime,
@@ -143,7 +144,7 @@ export const AdvancedSettingsForm = ({
   return (
     // TODO: move LocalizationProvider to _app.tex
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
-      <Box sx={{ mt: 52 }}>
+      <Box sx={{ mt: 52, px: isSm ? 16 : 0 }}>
         <Typography variant="h2">Advanced Settings</Typography>
         <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
 
@@ -273,7 +274,7 @@ export const AdvancedSettingsForm = ({
                   <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
                   <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
                 </Box>
-                <Stack direction="row" spacing={10} justifyContent="space-between">
+                <Stack direction={isSm ? 'column' : 'row'} spacing={isSm ? 20 : 10} justifyContent="space-between">
                   <ButtonBase
                     sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
                     disabled={values.participantStatus !== ParticipantStatus.Whitelist}

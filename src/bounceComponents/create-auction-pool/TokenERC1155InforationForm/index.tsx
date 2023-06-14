@@ -69,7 +69,7 @@ const TokenInformationForm = (): JSX.Element => {
   }
 
   return (
-    <Box sx={{ mt: 52 }}>
+    <Box sx={{ mt: 52, px: { xs: 16, md: 0 } }}>
       <Box>
         <Typography sx={{ color: 'var(--ps-gray-700)' }}>Fixed Swap Auction</Typography>
         <Typography sx={{ mt: 5, mb: 54 }} variant="h2">
@@ -122,7 +122,7 @@ const TokenInformationForm = (): JSX.Element => {
                     }}
                   ></EmptyCard>
                 )}
-                <Stack direction="row" spacing={10} justifyContent="space-between">
+                <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} spacing={10} justifyContent="space-between">
                   <ButtonBase sx={{ width: 'fit-content', textDecorationLine: 'underline' }} disabled={!values.tokenId}>
                     <a
                       href={getEtherscanLink(auctionInChainId, values.contractAddr, 'token')}
