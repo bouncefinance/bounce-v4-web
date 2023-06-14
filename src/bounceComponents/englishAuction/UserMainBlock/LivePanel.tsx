@@ -259,6 +259,53 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
     return undefined
   }, [approvalState, poolInfo.token1?.symbol, toApprove])
 
+  const bidButton = useMemo(() => {
+    if (!account) {
+      return (
+        <Button variant="contained" onClick={toggleWallet}>
+          Connect Wallet
+        </Button>
+      )
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+    }
+    return (
+      <Box>
+        {bidAmount && approveContent && !isInsufficientBalance?.disabled ? (
+          approveContent
+        ) : (
+          <LoadingButton
+            disabled={
+              !bidAmount || !minBidVal || bidAmount.lessThan(minBidVal) || isInsufficientBalance?.disabled === true
+            }
+            loading={placeBidSubmitted.submitted}
+            onClick={toBid}
+            loadingPosition="start"
+            variant="contained"
+            fullWidth
+          >
+            Place a Bid
+          </LoadingButton>
+        )}
+
+        {isInsufficientBalance?.children}
+      </Box>
+    )
+  }, [
+    account,
+    approveContent,
+    bidAmount,
+    isCurrentChainEqualChainOfPool,
+    isInsufficientBalance?.children,
+    isInsufficientBalance?.disabled,
+    minBidVal,
+    placeBidSubmitted.submitted,
+    poolInfo.ethChainId,
+    toBid,
+    toggleWallet
+  ])
+
   return (
     <Box>
       <Alert color="warning" icon={<></>} sx={{ borderRadius: 10 }}>
@@ -337,37 +384,7 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
           </InputPanel>
           <ProgressSlider curSliderPer={curSliderPer} curSliderHandler={v => curSliderHandler(Number(v))} />
 
-          {account && isCurrentChainEqualChainOfPool ? (
-            <Box>
-              {bidAmount && approveContent && !isInsufficientBalance?.disabled ? (
-                approveContent
-              ) : (
-                <LoadingButton
-                  disabled={
-                    !bidAmount ||
-                    !minBidVal ||
-                    bidAmount.lessThan(minBidVal) ||
-                    isInsufficientBalance?.disabled === true
-                  }
-                  loading={placeBidSubmitted.submitted}
-                  onClick={toBid}
-                  loadingPosition="start"
-                  variant="contained"
-                  fullWidth
-                >
-                  Place a Bid
-                </LoadingButton>
-              )}
-
-              {isInsufficientBalance?.children}
-            </Box>
-          ) : !account ? (
-            <Button variant="contained" onClick={toggleWallet}>
-              Connect Wallet
-            </Button>
-          ) : (
-            <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
-          )}
+          {bidButton}
 
           <PoolInfoItem
             title="You will pay"
