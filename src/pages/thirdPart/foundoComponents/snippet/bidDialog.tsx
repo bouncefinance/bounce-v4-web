@@ -6,6 +6,7 @@ import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/logo.png'
 import ArrowbottomIcon from 'assets/imgs/thirdPart/foundoDetail/Arrowbottom.png'
 import { BidBtn } from './bidAction'
 import { RowLabel } from './bidAction'
+import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 const InputBox = styled(Box)(() => ({
   height: '48px',
   display: 'flex',
@@ -136,6 +137,8 @@ function ProcessLine(props: { ratio: number }) {
 }
 const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
   const [bidNum, setBidNum] = useState('')
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+
   return (
     <Box
       sx={{
@@ -213,7 +216,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                 color: '#fff'
               }}
             >
-              ROLEX DAYTONA STEEL 2021 40MM 116500LN - FULL BOXES & PAPERS
+              {poolInfo?.name || '--'}
             </Typography>
           </Box>
           <Box
@@ -250,7 +253,8 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     fontSize: 14
                   }}
                 >
-                  26000.00
+                  {poolInfo?.currencyAmountMinIncr1?.toSignificant()}{' '}
+                  {poolInfo?.currencyAmountMinIncr1?.currency.symbol}
                 </Typography>
               </RowLabel>
               <RowLabel>
@@ -282,7 +286,8 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
               }}
               mb={'12px'}
             >
-              The bid amount must be greater than the Current Highest Bid(26000 ETH)
+              The bid amount must be greater than the Current Highest Bid({' '}
+              {poolInfo?.currencyAmountMinIncr1?.toSignificant()} {poolInfo?.currencyAmountMinIncr1?.currency.symbol})
             </Typography>
             <InputBox>
               <input

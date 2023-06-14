@@ -1,6 +1,5 @@
 import { Box, Typography, styled } from '@mui/material'
-import { useState, useEffect } from 'react'
-import { PoolType } from 'api/pool/type'
+import { useState, useMemo } from 'react'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/chart.png'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
@@ -8,13 +7,14 @@ import DidDialog from './bidDialog'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 
-import LineChart from 'components/LineChart'
+import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import PriceChartView from 'bounceComponents/englishAuction/PriceChartView'
 export enum BidType {
   'dataView' = 0,
   'chartView' = 1
 }
 interface DataViewParam {
-  auctionType: PoolType
   priceFloor: number | string
 }
 export const RowLabel = styled(Box)(() => ({
@@ -46,7 +46,7 @@ export const BidBtn = styled(Box)(() => ({
   cursor: 'pointer'
 }))
 function DataView(props: DataViewParam) {
-  const { auctionType, priceFloor } = props
+  const { priceFloor } = props
   return (
     <Box
       sx={{
@@ -55,7 +55,7 @@ function DataView(props: DataViewParam) {
     >
       <RowLabel style={{ marginBottom: '16px' }}>
         <Typography className="label">Auction Type</Typography>
-        <Typography className="value">{auctionType}</Typography>
+        <Typography className="value">English Auction</Typography>
       </RowLabel>
       <RowLabel>
         <Typography className="label">Price Floor</Typography>
@@ -72,8 +72,8 @@ const LiveStr = styled(Typography)(() => ({
   fontSize: 28,
   color: 'var(--ps-green-1)'
 }))
-const UpcomingStatus = (props: { OpenAt: string }) => {
-  const { OpenAt } = props
+const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
+  const { OpenAt, text } = props
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: Number(OpenAt) * 1000
   })
@@ -87,7 +87,7 @@ const UpcomingStatus = (props: { OpenAt: string }) => {
     >
       {countdown > 0 ? (
         <>
-          <LiveStr>Live </LiveStr>
+          <LiveStr>{text || 'Live'} </LiveStr>
           <LiveStr>{days}d</LiveStr>
           <LiveStr>:</LiveStr>
           <LiveStr>{hours}h</LiveStr>
@@ -105,13 +105,11 @@ const UpcomingStatus = (props: { OpenAt: string }) => {
 const BidAction = () => {
   const [viewType, setViewType] = useState<BidType>(BidType.dataView)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
-  const OpenAt = '1689485474'
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
 
-  const [poolStatus, setPoolStatus] = useState<PoolStatus>(PoolStatus.Upcoming)
-  useEffect(() => {
-    setPoolStatus(PoolStatus.Upcoming)
-    return () => {}
-  }, [])
+  const OpenAt = useMemo(() => poolInfo?.openAt || 0, [poolInfo?.openAt])
+
+  const poolStatus = useMemo(() => poolInfo?.status, [poolInfo?.status])
   return (
     <Box
       sx={{
@@ -128,7 +126,7 @@ const BidAction = () => {
         }}
       >
         {/* Pool Status */}
-        {poolStatus === PoolStatus.Upcoming && <UpcomingStatus OpenAt={OpenAt} />}
+        {poolStatus === PoolStatus.Upcoming && <UpcomingStatus OpenAt={OpenAt || 0} />}
         {poolStatus === PoolStatus.Closed && (
           <Typography
             sx={{
@@ -141,6 +139,12 @@ const BidAction = () => {
             Close
           </Typography>
         )}
+        {poolStatus === PoolStatus.Live && <UpcomingStatus text="Close At" OpenAt={poolInfo?.closeAt || 0} />}
+
+        {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
+          <Typography color={'#fff'}>Finish</Typography>
+        )}
+
         <Typography
           sx={{
             fontFamily: `'Public Sans'`,
@@ -151,15 +155,21 @@ const BidAction = () => {
             cursor: 'pointer'
           }}
           onClick={() => {
-            const resule = viewType === BidType.chartView ? BidType.dataView : BidType.chartView
-            setViewType(resule)
+            const result = viewType === BidType.chartView ? BidType.dataView : BidType.chartView
+            setViewType(result)
           }}
         >
           {viewType === BidType.chartView ? 'Chart View' : 'Data View'}
         </Typography>
       </Box>
-      {viewType === BidType.dataView && <DataView auctionType={PoolType.ENGLISH_AUCTION_NFT} priceFloor={'25000'} />}
-      {viewType === BidType.chartView && <LineChart isDark data={[]} token1Name="ETH" />}
+      {viewType === BidType.dataView && (
+        <DataView
+          priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${
+            poolInfo?.currencyAmountMin1?.currency.symbol
+          }`}
+        />
+      )}
+      {viewType === BidType.chartView && poolInfo && <PriceChartView isDark showText={false} poolInfo={poolInfo} />}
       <RowLabel
         style={{
           padding: '34px 0 66px',
@@ -172,14 +182,13 @@ const BidAction = () => {
             justifyContent: 'flex-end'
           }}
         >
-          <img
+          <TokenImage
+            size={20}
             style={{
               display: 'inline-block',
-              width: '20px',
-              height: '20px',
               marginRight: '8px'
             }}
-            src={LogoIcon}
+            src={poolInfo?.token1.smallUrl}
             alt=""
             srcSet=""
           />
@@ -190,7 +199,7 @@ const BidAction = () => {
               lineHeight: '20px'
             }}
           >
-            26000 ETH
+            {poolInfo?.currentBidderAmount1?.toSignificant() || '--'} {poolInfo?.currentBidderAmount1?.currency.symbol}
           </Typography>
         </RowLabel>
       </RowLabel>
@@ -232,7 +241,7 @@ const BidAction = () => {
                 fontSize: '13px'
               }}
             >
-              Congraduations! You win the auction
+              Congratulations! You win the auction
             </Typography>
           </Box>
           <RowLabel

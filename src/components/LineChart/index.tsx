@@ -85,13 +85,13 @@ export default function LineChart({
     chart.timeScale().applyOptions({
       tickMarkFormatter: timeFormatter
     })
-    chart.subscribeCrosshairMove((param: any) => {
+    chart.subscribeCrosshairMove(param => {
       if (!param.point) {
         setInfoPoint({ x: 10000, y: 10000 })
         return
       }
-      if (param?.seriesPrices?.values()?.next()?.value) {
-        const { value, time } = param?.seriesPrices?.values()?.next().value
+      if (param.seriesPrices.values().next()?.value) {
+        const { value, time } = param.seriesPrices.values().next().value
         // const { value, time } = param.seriesPrices.values().next().value
         let x = chart.timeScale().timeToCoordinate(time) as Coordinate
         const y = lineSeries.priceToCoordinate(value) as Coordinate

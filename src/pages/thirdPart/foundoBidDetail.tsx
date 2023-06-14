@@ -15,6 +15,7 @@ import WinnerList from './foundoComponents/section/winnerSection'
 import { PoolStatus } from 'api/pool/type'
 import EnglishAuctionValuesProvider, { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { ChainListMap } from 'constants/chain'
+import TokenImage from 'bounceComponents/common/TokenImage'
 
 const FoundoBidDetail = () => {
   const theme = useTheme()
@@ -183,11 +184,10 @@ const FoundoBidDetail = () => {
               NETWORK
             </Typography>
             <Typography className="value">
-              <img
+              <TokenImage
+                size={20}
                 src={poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.logo : undefined}
-                style={{
-                  width: '20px',
-                  height: '20px',
+                sx={{
                   marginRight: '12px',
                   verticalAlign: 'middle',
                   marginTop: '-3px'
@@ -257,7 +257,7 @@ const FoundoBidDetail = () => {
 }
 export default function FoundoBidDetailContent() {
   return (
-    <EnglishAuctionValuesProvider backedId={629}>
+    <EnglishAuctionValuesProvider backedId={550}>
       <FoundoBidDetail />
     </EnglishAuctionValuesProvider>
   )
