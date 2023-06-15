@@ -127,7 +127,7 @@ export const initialValues = {
   tokenFromLogoURI: '',
   tokenFromDecimals: '',
   poolStatus: 0,
-  auctionType: 5,
+  auctionType: 0,
   chain: 2
 }
 export interface InitialValuesPros {
