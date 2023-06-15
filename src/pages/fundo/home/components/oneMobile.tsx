@@ -24,6 +24,7 @@ const OneMobile: React.FC = () => {
         <Typography
           sx={{
             width: '100%',
+            fontFamily: `'Public Sans'`,
             fontStyle: 'italic',
             fontWeight: 100,
             fontSize: '36px',
@@ -38,6 +39,7 @@ const OneMobile: React.FC = () => {
         </Typography>
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             width: '100%',
             fontWeight: 600,
             fontSize: '40px',
@@ -52,6 +54,7 @@ const OneMobile: React.FC = () => {
         </Typography>
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             width: '100%',
             fontWeight: 600,
             fontSize: '40px',

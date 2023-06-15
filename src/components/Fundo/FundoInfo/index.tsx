@@ -87,6 +87,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
       >
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             fontWeight: isSm ? 600 : 500,
             fontSize: isSm ? '13px' : '16px',
             color: 'var(--ps-text-5)'
@@ -96,6 +97,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
         </Typography>
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             fontWeight: isSm ? 600 : 500,
             fontSize: isSm ? '14px' : '16px',
             color: 'var(--ps-text-5)'
@@ -135,6 +137,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
               />
               <Typography
                 sx={{
+                  fontFamily: `'Public Sans'`,
                   fontWeight: 500,
                   fontSize: isSm ? '13px' : '16px',
                   color: 'var(--ps-text-2)'
@@ -145,6 +148,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
             </Box>
             <Typography
               sx={{
+                fontFamily: `'Public Sans'`,
                 fontWeight: 500,
                 fontSize: isSm ? '14px' : '16px',
                 color: 'var(--ps-text-5)'

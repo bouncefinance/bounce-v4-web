@@ -9,3 +9,13 @@
   src: url('./SharpGroteskDBCyrMedium22-Regular.otf') format('truetype');
   font-style: normal;
 }
+@font-face {
+  font-family: 'Thin italic';
+  src: url('../fonts/PublicSans-ThinItalic.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'SemiBold';
+  src: url('../fonts/PublicSans-SemiBold.ttf') format('truetype');
+  font-style: normal;
+}
