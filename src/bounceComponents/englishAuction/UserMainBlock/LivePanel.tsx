@@ -323,7 +323,7 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
             Your Bid Amount
           </Typography>
           <Typography textAlign={'center'} color={'#171717'} variant="h3" fontSize={28}>
-            {poolInfo.currentBidderAmount1?.toSignificant()} ETH
+            {poolInfo.currentBidderAmount1?.toSignificant()} {poolInfo.currentBidderAmount1?.currency.symbol}
           </Typography>
 
           <Button disabled>You are the highest bid</Button>
