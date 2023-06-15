@@ -1,5 +1,16 @@
 import { Box, Typography } from '@mui/material'
-import { ChartOptions, DeepPartial, createChart, LineData, TimeFormatterFn, Coordinate } from 'lightweight-charts'
+import {
+  ChartOptions,
+  DeepPartial,
+  createChart,
+  LineData,
+  TimeFormatterFn,
+  Coordinate,
+  MouseEventParams,
+  UTCTimestamp,
+  SeriesMarker,
+  Time
+} from 'lightweight-charts'
 import { useRef, useEffect, useState, useMemo } from 'react'
 
 const darkStyle = {
@@ -17,6 +28,10 @@ const whiteStyle = {
   lineColor: '#2B51DA',
   tooltipColor: '#fff'
 }
+interface IDataType {
+  value: number
+  time: number
+}
 
 export default function LineChart({
   isDark,
@@ -24,10 +39,7 @@ export default function LineChart({
   token1Name
 }: {
   isDark?: true
-  data: {
-    value: number
-    time: number
-  }[]
+  data: IDataType[]
   token1Name: string
 }) {
   const style = useMemo(() => (isDark ? darkStyle : whiteStyle), [isDark])
@@ -45,7 +57,16 @@ export default function LineChart({
     const minutes = date.getMinutes().toString().padStart(2, '0')
     return `${hours}:${minutes} ${month}-${day}`
   }
-
+  const markersFormatter = (data: IDataType[]) => {
+    const markers = data.map<SeriesMarker<Time>>(item => ({
+      time: item.time as Time,
+      position: 'inBar',
+      color: '#2B51DA',
+      shape: 'circle',
+      size: 0.1
+    }))
+    return markers
+  }
   useEffect(() => {
     const chartOptions: DeepPartial<ChartOptions> = {
       layout: {
@@ -75,7 +96,7 @@ export default function LineChart({
     const chart = createChart(BoxRef.current as HTMLElement, chartOptions)
     const lineSeries = chart.addLineSeries({
       color: style.lineColor,
-      lineWidth: 1,
+      lineWidth: 3,
       priceLineVisible: false,
       lastValueVisible: false
     })
@@ -85,17 +106,18 @@ export default function LineChart({
     chart.timeScale().applyOptions({
       tickMarkFormatter: timeFormatter
     })
-    chart.subscribeCrosshairMove((param: any) => {
+    const markers = markersFormatter(data)
+    lineSeries.setMarkers(markers)
+    chart.subscribeCrosshairMove((param: MouseEventParams) => {
       if (!param.point) {
         setInfoPoint({ x: 10000, y: 10000 })
         return
       }
-      if (param?.seriesPrices?.values()?.next()?.value) {
-        const { value, time } = param?.seriesPrices?.values()?.next().value
-        // const { value, time } = param.seriesPrices.values().next().value
+      if (param) {
+        const time = param.time as UTCTimestamp
+        const value = param?.seriesPrices?.values()?.next().value
         let x = chart.timeScale().timeToCoordinate(time) as Coordinate
         const y = lineSeries.priceToCoordinate(value) as Coordinate
-
         if (x - (BoxRef.current?.offsetLeft as number) <= 100) {
           if (infoBoxRef.current?.clientWidth) {
             x = (x + infoBoxRef.current?.clientWidth) as Coordinate
@@ -128,7 +150,7 @@ export default function LineChart({
           left: infoPoint?.x,
           top: infoPoint?.y,
           zIndex: '3',
-          transform: 'translate(-150%,-60%)',
+          transform: 'translate(-120%,-100%)',
           pointerEvents: 'none'
         }}
         ref={infoBoxRef}
