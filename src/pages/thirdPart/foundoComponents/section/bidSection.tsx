@@ -17,7 +17,7 @@ const BidSection = () => {
     >
       <CenterSeciont
         style={{
-          flexFlow: 'column nowrap',
+          flexFlow: isSm ? 'column nowrap' : 'row nowrap',
           justifyContent: isSm ? 'flex-start' : 'space-between',
           alignItems: 'flex-start'
         }}

@@ -293,7 +293,7 @@ const FoundoBidDetail = () => {
             padding: '70px 0'
           }}
         >
-          {poolInfo?.status === PoolStatus.Closed && <WinnerList poolInfo={poolInfo} />}
+          {poolInfo?.status !== PoolStatus.Closed && <WinnerList poolInfo={poolInfo} />}
         </Box>
       </SlideSection>
     </Box>

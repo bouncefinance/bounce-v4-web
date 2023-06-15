@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import CenterSeciont from '../centerSection'
 import React, { useState } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
@@ -52,7 +52,7 @@ const SlideSection = ({ title, children }: { title: string; children?: React.Rea
           />
         )}
       </Typography>
-      {open && <Box>{children}</Box>}
+      {open && children}
     </CenterSeciont>
   )
 }
