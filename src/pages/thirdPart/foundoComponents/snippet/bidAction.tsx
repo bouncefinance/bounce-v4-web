@@ -6,7 +6,7 @@ import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
 import DidDialog from './bidDialog'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
-
+import { useIsSMDown } from 'themes/useTheme'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import PriceChartView from 'bounceComponents/englishAuction/PriceChartView'
@@ -17,7 +17,7 @@ export enum BidType {
 interface DataViewParam {
   priceFloor: number | string
 }
-export const RowLabel = styled(Box)(() => ({
+export const RowLabel = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexFlow: 'row nowrap',
   justifyContent: 'space-between',
@@ -33,6 +33,14 @@ export const RowLabel = styled(Box)(() => ({
     fontFamily: `'Public Sans'`,
     fontWeight: 500,
     fontSize: 16
+  },
+  [theme.breakpoints.down('md')]: {
+    '.label': {
+      fontSize: 14
+    },
+    '.value': {
+      fontSize: 14
+    }
   }
 }))
 export const BidBtn = styled(Box)(() => ({
@@ -65,12 +73,15 @@ function DataView(props: DataViewParam) {
   )
 }
 
-const LiveStr = styled(Typography)(() => ({
+const LiveStr = styled(Typography)(({ theme }) => ({
   display: 'inline-block',
   fontFamily: `'Public Sans'`,
   fontWeight: 600,
   fontSize: 28,
-  color: 'var(--ps-green-1)'
+  color: 'var(--ps-green-1)',
+  [theme.breakpoints.down('md')]: {
+    fontSize: 20
+  }
 }))
 const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
   const { OpenAt, text } = props
@@ -103,17 +114,16 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
   )
 }
 const BidAction = () => {
+  const isSm = useIsSMDown()
   const [viewType, setViewType] = useState<BidType>(BidType.dataView)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
-
   const OpenAt = useMemo(() => poolInfo?.openAt || 0, [poolInfo?.openAt])
-
   const poolStatus = useMemo(() => poolInfo?.status, [poolInfo?.status])
   return (
     <Box
       sx={{
-        width: '640px'
+        width: isSm ? '100%' : '640px'
       }}
     >
       {/* Pool Status */}
@@ -132,7 +142,7 @@ const BidAction = () => {
             sx={{
               fontFamily: `'Public Sans'`,
               fontWeight: 600,
-              fontSize: 28,
+              fontSize: isSm ? 20 : 28,
               color: '#FD3333'
             }}
           >
@@ -140,16 +150,14 @@ const BidAction = () => {
           </Typography>
         )}
         {poolStatus === PoolStatus.Live && <UpcomingStatus text="Close At" OpenAt={poolInfo?.closeAt || 0} />}
-
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
           <Typography color={'#fff'}>Finish</Typography>
         )}
-
         <Typography
           sx={{
             fontFamily: `'Public Sans'`,
             fontWeight: 600,
-            fontSize: 14,
+            fontSize: isSm ? 13 : 14,
             color: '#fff',
             textDecoration: 'underline',
             cursor: 'pointer'
@@ -172,7 +180,7 @@ const BidAction = () => {
       {viewType === BidType.chartView && poolInfo && <PriceChartView isDark showText={false} poolInfo={poolInfo} />}
       <RowLabel
         style={{
-          padding: '34px 0 66px',
+          padding: isSm ? '24px 0 32px' : '34px 0 66px',
           borderTop: '1px solid rgba(255, 255, 255, 0.2)'
         }}
       >
@@ -230,12 +238,14 @@ const BidAction = () => {
               src={WinTips}
               style={{
                 width: '24px',
-                height: '24px'
+                height: '24px',
+                marginRight: isSm ? '16px' : '0'
               }}
               alt=""
             />
             <Typography
               sx={{
+                width: isSm ? '149px' : 'auto',
                 fontFamily: `'Inter'`,
                 color: 'var(--ps-text-3)',
                 fontSize: '13px'
@@ -266,7 +276,7 @@ const BidAction = () => {
                 color: 'var(--ps-text-3)',
                 height: '20px',
                 lineHeight: '20px',
-                fontSize: '16px'
+                fontSize: isSm ? '14px' : '16px'
               }}
             >
               26000 ETH
@@ -295,7 +305,7 @@ const BidAction = () => {
             fontFamily: `'Public Sans'`,
             fontStyle: 'italic',
             fontWeight: 100,
-            fontSize: 20,
+            fontSize: isSm ? 18 : 20,
             color: 'var(--ps-text-5)'
           }}
         >
