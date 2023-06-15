@@ -336,7 +336,8 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
             Your Bid Amount
           </Typography>
           <Typography textAlign={'center'} color={'#171717'} variant="h3" fontSize={28}>
-            {poolInfo.participant.accountBidAmount?.toSignificant()} ETH
+            {poolInfo.participant.accountBidAmount?.toSignificant()}{' '}
+            {poolInfo.participant.accountBidAmount?.currency.symbol}
           </Typography>
 
           <Button variant="contained" onClick={() => setBidStatus('BID')}>
