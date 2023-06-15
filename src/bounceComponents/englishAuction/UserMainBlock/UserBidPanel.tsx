@@ -17,6 +17,7 @@ import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorC
 import LivePanel from './LivePanel'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { getCurrentTimeStamp } from 'utils'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
 
 export default function UserBidPanel() {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
@@ -127,15 +128,21 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         <Typography textAlign={'center'} fontSize={28} fontWeight={500}>
           {poolInfo.currentBidderAmount1?.toSignificant()} {poolInfo.currentBidderAmount1?.currency.symbol}
         </Typography>
-        <LoadingButton
-          variant="contained"
-          loadingPosition="start"
-          loading={claimSubmitted.submitted}
-          disabled={poolInfo.participant.claimed || poolInfo.claimAt > getCurrentTimeStamp()}
-          onClick={toBidderClaim}
-        >
-          {poolInfo.participant.claimed ? 'Claimed' : 'Claim Token'}
-        </LoadingButton>
+
+        {poolInfo.participant.claimed ? (
+          <SuccessfullyClaimedAlert />
+        ) : (
+          <LoadingButton
+            variant="contained"
+            loadingPosition="start"
+            loading={claimSubmitted.submitted}
+            disabled={poolInfo.participant.claimed || poolInfo.claimAt > getCurrentTimeStamp()}
+            onClick={toBidderClaim}
+          >
+            {poolInfo.participant.claimed ? 'Claimed' : 'Claim Token'}
+          </LoadingButton>
+        )}
+
         <PoolInfoItem title="Claim start time">
           <Typography>{new Date(poolInfo.claimAt * 1000).toLocaleString()}</Typography>
         </PoolInfoItem>

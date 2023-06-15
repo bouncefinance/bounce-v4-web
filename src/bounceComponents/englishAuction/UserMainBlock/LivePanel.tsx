@@ -26,6 +26,7 @@ import Alert from '@mui/material/Alert'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 
 const InputPanel = styled(Box)({
   border: '1px solid #D7D6D9',
@@ -39,6 +40,7 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
   const token1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountMin1?.currency)
   const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
   const toggleWallet = useWalletModalToggle()
+  const { data: isUserInWhitelist } = useIsUserInWhitelist(poolInfo, poolInfo.category)
 
   const [bidVal, setBidVal] = useState('')
   const minBidVal = useMemo(() => poolInfo.currentBidderMinAmount, [poolInfo.currentBidderMinAmount])
@@ -305,6 +307,16 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
     toBid,
     toggleWallet
   ])
+
+  if (!isUserInWhitelist) {
+    return (
+      <Alert severity="error" icon={<></>} sx={{ borderRadius: 10 }}>
+        <Typography variant="body1" color={'#171717'}>
+          You are not whitelisted for this auction.
+        </Typography>
+      </Alert>
+    )
+  }
 
   return (
     <Box>
