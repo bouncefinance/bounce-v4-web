@@ -15,6 +15,9 @@ import Image from 'components/Image'
 import bidWinner from 'assets/images/bid-winner.png'
 import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
 import LivePanel from './LivePanel'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import { getCurrentTimeStamp } from 'utils'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
 
 export default function UserBidPanel() {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
@@ -123,17 +126,26 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           Your Bid Price
         </Typography>
         <Typography textAlign={'center'} fontSize={28} fontWeight={500}>
-          {poolInfo.currentBidderAmount1?.toSignificant()} ETH
+          {poolInfo.currentBidderAmount1?.toSignificant()} {poolInfo.currentBidderAmount1?.currency.symbol}
         </Typography>
-        <LoadingButton
-          variant="contained"
-          loadingPosition="start"
-          loading={claimSubmitted.submitted}
-          disabled={poolInfo.participant.claimed}
-          onClick={toBidderClaim}
-        >
-          {poolInfo.participant.claimed ? 'Claimed' : 'Claim Token'}
-        </LoadingButton>
+
+        {poolInfo.participant.claimed ? (
+          <SuccessfullyClaimedAlert />
+        ) : (
+          <LoadingButton
+            variant="contained"
+            loadingPosition="start"
+            loading={claimSubmitted.submitted}
+            disabled={poolInfo.participant.claimed || poolInfo.claimAt > getCurrentTimeStamp()}
+            onClick={toBidderClaim}
+          >
+            {poolInfo.participant.claimed ? 'Claimed' : 'Claim Token'}
+          </LoadingButton>
+        )}
+
+        <PoolInfoItem title="Claim start time">
+          <Typography>{new Date(poolInfo.claimAt * 1000).toLocaleString()}</Typography>
+        </PoolInfoItem>
       </Stack>
     </Box>
   ) : isOutBid ? (
@@ -148,7 +160,8 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           Your Bid Amount
         </Typography>
         <Typography textAlign={'center'} color={'#171717'} variant="h3" fontSize={28}>
-          {poolInfo.participant.accountBidAmount?.toSignificant()} ETH
+          {poolInfo.participant.accountBidAmount?.toSignificant()}{' '}
+          {poolInfo.participant.accountBidAmount?.currency.symbol}
         </Typography>
       </Stack>
     </Box>

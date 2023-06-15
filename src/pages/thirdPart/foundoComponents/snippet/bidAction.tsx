@@ -1,4 +1,4 @@
-import { Box, Typography, styled } from '@mui/material'
+import { Box, ButtonBase, Stack, Typography, styled } from '@mui/material'
 import { useState, useMemo } from 'react'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/chart.png'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
@@ -16,6 +16,7 @@ export enum BidType {
 }
 interface DataViewParam {
   priceFloor: number | string
+  increase: number | string
 }
 export const RowLabel = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -43,8 +44,9 @@ export const RowLabel = styled(Box)(({ theme }) => ({
     }
   }
 }))
-export const BidBtn = styled(Box)(() => ({
+export const BidBtn = styled(ButtonBase)(() => ({
   display: 'flex',
+  width: '100%',
   flexFlow: 'row nowrap',
   justifyContent: 'center',
   alignItems: 'center',
@@ -54,14 +56,15 @@ export const BidBtn = styled(Box)(() => ({
   cursor: 'pointer'
 }))
 function DataView(props: DataViewParam) {
-  const { priceFloor } = props
+  const { priceFloor, increase } = props
   return (
-    <Box
+    <Stack
+      spacing={16}
       sx={{
         padding: '48px 0 24px'
       }}
     >
-      <RowLabel style={{ marginBottom: '16px' }}>
+      <RowLabel>
         <Typography className="label">Auction Type</Typography>
         <Typography className="value">English Auction</Typography>
       </RowLabel>
@@ -69,7 +72,11 @@ function DataView(props: DataViewParam) {
         <Typography className="label">Price Floor</Typography>
         <Typography className="value">{priceFloor}</Typography>
       </RowLabel>
-    </Box>
+      <RowLabel>
+        <Typography className="label">Every time Minimum Price Increase</Typography>
+        <Typography className="value">{increase}</Typography>
+      </RowLabel>
+    </Stack>
   )
 }
 
@@ -175,6 +182,9 @@ const BidAction = () => {
           priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${
             poolInfo?.currencyAmountMin1?.currency.symbol
           }`}
+          increase={`${poolInfo?.currencyAmountMinIncr1?.toSignificant()} ${
+            poolInfo?.currencyAmountMin1?.currency.symbol
+          }`}
         />
       )}
       {viewType === BidType.chartView && poolInfo && <PriceChartView isDark showText={false} poolInfo={poolInfo} />}
@@ -200,13 +210,7 @@ const BidAction = () => {
             alt=""
             srcSet=""
           />
-          <Typography
-            className="value"
-            style={{
-              height: '20px',
-              lineHeight: '20px'
-            }}
-          >
+          <Typography className="value" style={{ fontSize: 28 }}>
             {poolInfo?.currentBidderAmount1?.toSignificant() || '--'} {poolInfo?.currentBidderAmount1?.currency.symbol}
           </Typography>
         </RowLabel>
@@ -285,6 +289,7 @@ const BidAction = () => {
         </Box>
       )}
       <BidBtn
+        disabled={poolStatus !== PoolStatus.Live}
         onClick={() => {
           const result = !openDialog
           setOpenDialog(result)

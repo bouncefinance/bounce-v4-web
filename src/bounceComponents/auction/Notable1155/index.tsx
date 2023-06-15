@@ -17,6 +17,7 @@ import { HomeNFTSkeletonCard } from '../Notable721'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from 'hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
+import { TokenType as ERCType } from 'bounceComponents/create-auction-pool/types'
 interface Notable1155Props {
   handleViewAll?: () => void
 }
@@ -37,7 +38,7 @@ export const Notable1155 = (props: Notable1155Props) => {
         chainId: chainFilter,
         creatorAddress: '',
         creatorName: '',
-        isERC721: false,
+        isERC721: 1,
         orderBy: 'openTs',
         poolId: '',
         poolName: '',
@@ -67,7 +68,12 @@ export const Notable1155 = (props: Notable1155Props) => {
         >
           <H4>ERC1155</H4>
           <Row gap={8} mt={20}>
-            <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.NFT} />
+            <AuctionTypeSelect
+              curPoolType={auction}
+              setCurPoolType={setAuction}
+              ercType={ERCType.ERC1155}
+              tokenType={BackedTokenType.NFT}
+            />
             <Select
               sx={{
                 width: isSm ? '160px' : '200px',
