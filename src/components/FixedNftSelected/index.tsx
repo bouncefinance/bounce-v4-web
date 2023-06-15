@@ -79,8 +79,16 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         name: 'auctionType',
         list: [
           {
+            label: 'All NFT',
+            value: 0
+          },
+          {
             label: 'Fixed Swap NFT',
             value: 5
+          },
+          {
+            label: 'English Auction NFT',
+            value: 6
           }
         ]
       },
@@ -164,7 +172,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
             handleClick && handleClick()
           }}
           sx={{
-            padding: 16,
+            padding: 18,
             display: 'flex',
             flexFlow: 'row nowrap',
             justifyContent: 'center',
