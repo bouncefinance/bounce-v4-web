@@ -128,7 +128,7 @@ export const initialValues = {
   tokenFromDecimals: '',
   poolStatus: 0,
   auctionType: 0,
-  chain: 2
+  chain: 0
 }
 export interface InitialValuesPros {
   searchText?: string
@@ -166,7 +166,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
       poolStatusFrontend,
       token0Address
     }) => {
-      if (!chainId) {
+      if (!chainId && chainId !== 0) {
         return Promise.reject(new Error('No ChainId'))
       }
 
@@ -226,6 +226,9 @@ const NFTAuctionListDialog = (props: DialogParams) => {
     handleScrollToTop()
   }
   useEffect(() => {
+    console.log('open change')
+    console.log(open)
+
     open && handleSubmit(filterValues)
     !open && setFilterValues(initialValues)
   }, [handleSubmit, open, filterValues])

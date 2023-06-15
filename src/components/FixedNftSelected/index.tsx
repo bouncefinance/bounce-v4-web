@@ -72,7 +72,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
       {
         title: 'Chain',
         name: 'searchType',
-        list: chainList
+        list: chainList ? [{ label: 'All Chain', value: 0 }, ...chainList] : chainList
       },
       {
         title: 'Auction',
