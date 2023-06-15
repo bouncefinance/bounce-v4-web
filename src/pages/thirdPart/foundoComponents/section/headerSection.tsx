@@ -4,16 +4,18 @@ import { useNavigate } from 'react-router-dom'
 import CenterSeciont from '../centerSection'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { ChainListMap } from 'constants/chain'
+import { useIsSMDown } from 'themes/useTheme'
+
 const Header = () => {
   const navigate = useNavigate()
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
-
+  const isSm = useIsSMDown()
   return (
     <CenterSeciont
       style={{
         maxWidth: '100vw',
         justifyContent: 'space-between',
-        height: '104px'
+        height: isSm ? '77px' : '104px'
       }}
     >
       <Box
@@ -41,7 +43,7 @@ const Header = () => {
           sx={{
             fontFamily: `'Public Sans'`,
             fontWeight: 500,
-            fontSize: 16,
+            fontSize: isSm ? 14 : 16,
             color: '#fff'
           }}
         >
@@ -61,9 +63,9 @@ const Header = () => {
           sx={{
             fontFamily: `'Public Sans'`,
             fontWeight: 500,
-            fontSize: 16,
+            fontSize: isSm ? 14 : 16,
             color: '#fff',
-            marginRight: '32px'
+            marginRight: isSm ? '16px' : '32px'
           }}
         >
           #{poolInfo?.poolId || ' --'}
@@ -84,8 +86,8 @@ const Header = () => {
           <img
             src={poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.logo : undefined}
             style={{
-              width: '20px',
-              height: '20px',
+              width: isSm ? '16px' : '20px',
+              height: isSm ? '16px' : '20px',
               marginRight: '6px'
             }}
             alt=""
@@ -95,7 +97,7 @@ const Header = () => {
             sx={{
               fontFamily: `'Public Sans'`,
               fontWeight: 500,
-              fontSize: 16,
+              fontSize: isSm ? '14px' : 16,
               color: '#fff'
             }}
           >
