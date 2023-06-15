@@ -8,6 +8,7 @@ import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog }
 import DialogTips from 'bounceComponents/common/DialogTips'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import { useCreatorClaimAmount1Data } from 'bounceHooks/auction/useCreatorClaimTxFee'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -17,20 +18,25 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
 
   const { run: claim, submitted } = useCreatorClaimNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
+  const claimAmount1Data = useCreatorClaimAmount1Data(poolInfo?.currencySwappedTotal1)
+
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = !isAllTokenSwapped
-    const token1ToClaimText = `${poolInfo.currencySwappedTotal1.toSignificant()} ${poolInfo.token1.symbol}`
+    const token1ToClaimText = `${claimAmount1Data?.receivedAmount?.toSignificant()} ${
+      poolInfo?.token1.symbol
+    } (fees: ${claimAmount1Data?.fee?.toSignificant()} ${poolInfo?.token1.symbol})`
     const token0ToClaimText = hasToken0ToClaim
       ? ` and ${Number(poolInfo.amountTotal0) - Number(poolInfo.swappedAmount0)} ${poolInfo.token0.symbol}`
       : ''
     return `You have successfully claimed ${token1ToClaimText}${token0ToClaimText}`
   }, [
+    claimAmount1Data?.fee,
+    claimAmount1Data?.receivedAmount,
     isAllTokenSwapped,
     poolInfo.amountTotal0,
-    poolInfo.currencySwappedTotal1,
     poolInfo.swappedAmount0,
     poolInfo.token0.symbol,
-    poolInfo.token1.symbol
+    poolInfo?.token1.symbol
   ])
 
   const toClaim = useCallback(
