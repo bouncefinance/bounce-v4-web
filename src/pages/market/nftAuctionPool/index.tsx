@@ -384,13 +384,9 @@ export const NFTCard = (props: NFTPrams) => {
               {chainConfigInBackend?.ethChainId ? ChainListMap[chainConfigInBackend?.ethChainId as ChainId]?.name : '-'}
             </Box>
             <Box
+              display={'flex'}
+              alignItems={'center'}
               sx={{
-                fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-                fontWeight: 400,
-                fontSize: 12,
-                color: '#171717',
-                height: '24px',
-                lineHeight: '24px',
                 marginBottom: '17px',
                 background: '#F5F5F5',
                 padding: '0 8px',
@@ -399,11 +395,23 @@ export const NFTCard = (props: NFTPrams) => {
             >
               <SizeIcon
                 style={{
-                  verticalAlign: 'middle',
                   marginRight: 7
                 }}
               />
-              <span>{amountTotal0}</span>
+              <Typography
+                noWrap
+                sx={{
+                  fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+                  fontWeight: 400,
+                  fontSize: 12,
+                  color: '#171717',
+                  height: '24px',
+                  maxWidth: 20,
+                  lineHeight: '24px'
+                }}
+              >
+                {amountTotal0}
+              </Typography>
             </Box>
           </Box>
         </Box>
