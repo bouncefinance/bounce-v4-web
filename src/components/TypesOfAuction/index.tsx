@@ -54,6 +54,7 @@ const AuctionItem = (props: AuctionItemParams) => {
   const { title, defaultImg, hoverImg, totalValue, link, handleOpenTokenAuction, handleOpenNFTAuction, poolType } =
     props
   const [isHover, setIsHover] = useState(false)
+  const isSm = useBreakpoint('sm')
   return (
     <Box
       sx={{
@@ -131,7 +132,7 @@ const AuctionItem = (props: AuctionItemParams) => {
             flexFlow: 'column nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            padding: '12px 16px',
+            padding: { xs: '12px 8px', md: '12px 16px' },
             transform: isHover ? 'rotateX(0)' : 'rotateX(90deg)',
             transition: 'all 0.6s'
           }}
@@ -143,7 +144,8 @@ const AuctionItem = (props: AuctionItemParams) => {
               fontSize: 13,
               color: 'var(--ps-text-3)',
               lineHeight: '24px',
-              marginBottom: 15
+              marginBottom: { xs: 0, md: 15 },
+              whiteSpace: 'nowrap'
             }}
           >
             <img
@@ -152,7 +154,7 @@ const AuctionItem = (props: AuctionItemParams) => {
                 display: 'inline-block',
                 width: 24,
                 verticalAlign: 'middle',
-                marginRight: 12
+                marginRight: isSm ? 4 : 12
               }}
               alt=""
             />
@@ -358,7 +360,6 @@ const TypesOfAuction: React.FC = () => {
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center',
-              alignItems: 'center',
               borderRadius: 24,
               border: '1px solid var(--ps-yellow-1)',
               margin: ['0 16px', 0],
@@ -452,7 +453,6 @@ const TypesOfAuction: React.FC = () => {
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center',
-              alignItems: 'center',
               borderRadius: 24,
               border: '1px solid var(--ps-yellow-1)',
               margin: ['0 16px', 0],

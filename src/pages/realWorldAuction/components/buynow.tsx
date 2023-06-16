@@ -114,7 +114,7 @@ const BuynowContent = () => {
             textAlign: 'center'
           }}
         >
-          You can buy Now or go to the details page to make an offer. You are buying for a physical backed NFTs and you
+          You can buy now or go to the details page to make an offer. You are buying for a physical backed NFTs and you
           can redeem it post deal done.
         </Typography>
       </Box>

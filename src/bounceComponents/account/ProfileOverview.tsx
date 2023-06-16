@@ -226,7 +226,7 @@ export default function ProfileOverview() {
                   tips={'Only JPEG, PNG, WEBP Files, Size<10M'}
                   limitSize={10}
                 />
-                <StyledAvatarInputIdLabel style={{ top: 75, left: 148 }} htmlFor="avatarInputId">
+                <StyledAvatarInputIdLabel style={{ top: isSm ? 95 : 75, left: 148 }} htmlFor="avatarInputId">
                   Edit
                 </StyledAvatarInputIdLabel>
               </Box>
