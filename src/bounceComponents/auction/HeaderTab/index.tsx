@@ -77,42 +77,53 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
   return (
     <Box
       sx={{
-        marginTop: '32px',
         display: 'flex',
-        flexDirection: 'row',
+        flexFlow: 'row nowrap',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        padding: '6px',
-        gap: '6px',
-        background: '#20201E',
-        backdropFilter: 'blur(4px)',
-        borderRadius: '10px',
-        overflowX: 'scroll',
-        whiteSpace: 'nowrap',
-        maxWidth: 1296,
-        margin: isSm ? ' 8px 14px' : '0 auto',
-        '&::-webkit-scrollbar': {
-          display: 'none'
-        },
-        '@media(max-width:1296px)': {
-          margin: '0 16px'
-        }
+        width: '100%',
+        maxWidth: '1296px',
+        margin: '0 auto'
       }}
     >
-      <Box>
-        {tabs.map((tab: string) => (
-          <StyledTab
-            variant="contained"
-            key={tab}
-            className={tab === currentTab ? 'selected' : ''}
-            onClick={() => {
-              setCurrentTab(tab)
-              onTabChange && onTabChange(tab)
-              linkTo(tab)
-            }}
-          >
-            {tab}
-          </StyledTab>
-        ))}
+      <Box
+        sx={{
+          marginTop: '32px',
+          flexFlow: 'row nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          padding: '6px',
+          background: '#20201E',
+          backdropFilter: 'blur(4px)',
+          borderRadius: '10px',
+          overflowX: 'scroll',
+          whiteSpace: 'nowrap',
+          maxWidth: 1100,
+          margin: isSm ? ' 8px 14px' : '',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          '@media(max-width:1296px)': {
+            margin: '0 16px'
+          }
+        }}
+      >
+        <Box gap={'6px'}>
+          {tabs.map((tab: string) => (
+            <StyledTab
+              variant="contained"
+              key={tab}
+              className={tab === currentTab ? 'selected' : ''}
+              onClick={() => {
+                setCurrentTab(tab)
+                onTabChange && onTabChange(tab)
+                linkTo(tab)
+              }}
+            >
+              {tab}
+            </StyledTab>
+          ))}
+        </Box>
       </Box>
     </Box>
   )

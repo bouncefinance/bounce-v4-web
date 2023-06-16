@@ -46,6 +46,7 @@ export interface BannerType {
   tokenAmount0: string
   types: string
   url: string
+  mobileImg?: string
 }
 
 export interface IPoolFilterParams {

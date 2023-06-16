@@ -160,7 +160,6 @@ export default function App() {
                     <Route path={routes.fundo.home} element={<FundoHome />} />
                     <Route path={routes.fundo.detail} element={<FundoDetail />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
-
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     <Route
                       path={routes.game.bladeDaoIndex}

@@ -96,7 +96,7 @@ function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
-  const { data } = useRequest(async () => {
+  const { data, loading } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
       list: resp.data,
@@ -138,29 +138,29 @@ function ArrowBanner({ type }: { type?: string }) {
           <ArrowBackIcon />
         </ArrowBgLeft>
       )}
-
-      <Swiper
-        onSwiper={setSwiper}
-        spaceBetween={0}
-        slidesPerView={1}
-        loop
-        autoplay={{
-          delay: 3000
-        }}
-        style={{
-          maxWidth: '1296px',
-          width: '100%'
-        }}
-      >
-        {data?.list?.map((item: BannerType, index: number) => (
-          <SwiperSlide key={index}>
-            <Banner key={index} banner={item} />
-          </SwiperSlide>
-        ))}
-        <SwiperSlide style={{ display: data ? 'none' : 'block' }}>
-          <SwiperSkeleton />
-        </SwiperSlide>
-      </Swiper>
+      {!data || loading ? (
+        <SwiperSkeleton />
+      ) : (
+        <Swiper
+          onSwiper={setSwiper}
+          spaceBetween={0}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{
+            delay: 3000
+          }}
+          style={{
+            maxWidth: '1296px',
+            width: '100%'
+          }}
+        >
+          {data?.list?.map((item: BannerType, index: number) => (
+            <SwiperSlide key={index}>
+              <Banner key={index} banner={item} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
       {!isSm && (
         <ArrowBgRight
           sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
@@ -322,7 +322,7 @@ export function Banner({ banner }: { banner: BannerType }) {
       onClick={() => handleClick(banner.url || '')}
     >
       <img
-        src={banner.avatar}
+        src={isSm ? banner.mobileImg : banner.avatar}
         alt=""
         style={{
           position: 'absolute',
@@ -330,7 +330,8 @@ export function Banner({ banner }: { banner: BannerType }) {
           left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: isSm ? '15px' : '30px'
+          borderRadius: isSm ? '15px' : '30px',
+          objectFit: 'cover'
         }}
       />
       {Number(banner.category) !== 0 && <Shadow style={{ position: 'absolute', bottom: 0, left: 0 }} />}

@@ -1,21 +1,32 @@
 import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
-import FixedLeft from 'components/Fundo/Banner/FixedLeft'
-import { useIsSMDown } from 'themes/useTheme'
-
-export default function One() {
+import { AnimateStep } from './pcAnimation/threeCard'
+import { useMemo } from 'react'
+export default function One({ animationRatio, step }: { animationRatio: string; step: AnimateStep }) {
   const theme = useTheme()
-  const isSm = useIsSMDown()
+  const transformStr = useMemo(() => {
+    let result = 'translate3D(0, 0, 0)'
+    switch (step) {
+      case AnimateStep.leave:
+        result = `translate3D(-50%, -${Number(animationRatio) * 100}%, 0)`
+        break
+    }
+    return result
+  }, [step, animationRatio])
   return (
     <CenterSection
       style={{
+        position: 'fixed',
+        top: '0',
+        left: '50%',
         height: `calc(100vh - ${theme.height.header})`,
         display: 'flex',
         flexFlow: 'column nowrap',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        width: isSm ? 'calc(100% - 20px)' : 'calc(100% - 75px - 45px)'
+        width: 'calc(100% - 75px - 45px)',
+        transform: transformStr
       }}
     >
       <>
@@ -33,14 +44,15 @@ export default function One() {
             marginBottom: '24px'
           }}
         >
-          ANGEL HAND
+          DIAMOND
         </Typography>
         <Typography
           sx={{
             width: '100%',
             fontFamily: `'Public Sans'`,
             fontWeight: 600,
-            fontSize: '110px',
+            fontSize: '130px',
+            letterSpacing: `0.06em`,
             textAlign: 'left',
             whiteSpace: 'nowrap',
             height: '80px',
@@ -49,7 +61,7 @@ export default function One() {
             marginBottom: '48px'
           }}
         >
-          DIAMOND NECKLACE
+          HAND NECKLACE
         </Typography>
         <Box
           sx={{
@@ -70,7 +82,7 @@ export default function One() {
               fontSize: '16px',
               color: 'var(--ps-text-2)'
             }}
-          >{`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful`}</Typography>
+          >{`Embodying the indomitable spirit of the blockchain pioneers, we present the 'Diamond Hand' necklace - a testament to the unwavering faith of those who dared to venture into the uncharted territories of the crypto world.`}</Typography>
           <Typography
             sx={{
               flex: 688,
@@ -79,10 +91,10 @@ export default function One() {
               fontSize: '16px',
               color: 'var(--ps-text-2)'
             }}
-          >{`words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}</Typography>
+          >{`This piece is a homage to the 'Hodl' philosophy, a term deeply embedded in the lexicon of the crypto community, symbolizing their steadfast commitment to hold onto their investments amidst the capricious tides of the market.`}</Typography>
         </Box>
         <FixedIndex />
-        <FixedLeft />
+        {/* <FixedLeft /> */}
       </>
     </CenterSection>
   )

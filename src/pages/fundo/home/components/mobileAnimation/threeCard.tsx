@@ -19,7 +19,7 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
         result = `translate3D(0, -${Number(animationRatio) * 50}vh, 0)`
         break
       case AnimateStep.leave:
-        result = `translate3D(0, -${Number(animationRatio) * 300 + 50}vh, 0)`
+        result = `translate3D(0, -${Number(animationRatio) * 370 + 50}vh, 0)`
         break
     }
     return result

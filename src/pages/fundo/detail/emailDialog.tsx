@@ -16,6 +16,9 @@ const InputEl = styled('input')(({ theme }) => ({
   border: 'none',
   color: 'var(--ps-text-2)',
   fontSize: '16px',
+  '&.errorStatu': {
+    color: 'red'
+  },
   '&:focus': {
     border: 'none'
   },
@@ -61,10 +64,11 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
   const isSm = useIsSMDown()
   const { account } = useActiveWeb3React()
   const [email, setEmail] = useState('')
+  const [errorStatu, setErrorStatu] = useState(false)
   const [isRegisterDone, setIsRegisterDone] = useState(false)
   const sendEmail = async () => {
-    if (!email) {
-      toast.warning(`email can't be empty~`)
+    if (!email || errorStatu) {
+      setErrorStatu(true)
       return
     }
     const { code, msg } = await fundoRegisterEmail({
@@ -79,6 +83,7 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
       toast.warning(msg)
     }
   }
+  const emailReg = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
   return (
     <Box
       sx={{
@@ -183,27 +188,45 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
             </Typography>
           </Box>
           {!isRegisterDone && (
-            <Box
-              sx={{
-                height: '56px',
-                borderBottom: '1px solid #626262',
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-              gap={'30px'}
-            >
-              <InputEl
-                type="text"
-                onChange={e => {
-                  const value = e.target.value
-                  setEmail(value)
+            <>
+              <Box
+                sx={{
+                  height: '56px',
+                  borderBottom: errorStatu ? '1px solid red' : '1px solid #626262',
+                  display: 'flex',
+                  flexFlow: 'row nowrap',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
                 }}
-                placeholder="Email adress"
-              />
-              <SendBtn sendEmail={sendEmail} />
-            </Box>
+                gap={'30px'}
+              >
+                <InputEl
+                  className={errorStatu ? 'errorStatu' : ''}
+                  type="text"
+                  onChange={e => {
+                    const value = e.target.value
+                    setErrorStatu(!emailReg.test(value))
+                    setEmail(value)
+                  }}
+                  placeholder="Email adress"
+                />
+                <SendBtn sendEmail={sendEmail} />
+              </Box>
+              {errorStatu && (
+                <Typography
+                  sx={{
+                    width: '100%',
+                    fontFamily: `'Inter'`,
+                    fontWeight: 400,
+                    fontSize: isSm ? '14px' : '16px',
+                    letterSpacing: '-0.02em',
+                    color: 'red'
+                  }}
+                >
+                  incorrect address
+                </Typography>
+              )}
+            </>
           )}
           {isRegisterDone && (
             <Typography

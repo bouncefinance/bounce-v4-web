@@ -3,7 +3,7 @@ import { Box, useTheme } from '@mui/material'
 import One from '../components/one'
 import TextAniamte from '../components/textAnimate'
 import Four from '../components/four'
-import VideoSection from '../components/video'
+// import VideoSection from '../components/video'
 import BgImg from 'components/Fundo/assets/img/back.png'
 import ThreeCard, { AnimateStep } from '../components/pcAnimation/threeCard'
 import NftIssued from '../components/pcAnimation/nftIssued'
@@ -18,6 +18,9 @@ const PcHome: React.FC = () => {
   const theme = useTheme()
   const _AnimateHeight1 = 1000
   const [stopScroll, setStopscroll] = useState(true)
+  // 0. first screen
+  const [animate0Ratio, setAnimate0Ratio] = useState<string>('0')
+  const [animate0Step, setanimate0Step] = useState<AnimateStep>(AnimateStep.leave)
   // 1. necklack
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
   const [animate1Show, setAnimate1Show] = useState<boolean>(true)
@@ -52,6 +55,8 @@ const PcHome: React.FC = () => {
   }, [])
   useEffect(() => {
     const getScrollCount = (event: { target: any }) => {
+      const animate0Range = [0, winH]
+      console.log('animate0Range>>>', animate0Range)
       // 1. necklack enter down and scale
       const animate1Range = [0, _AnimateHeight1 + 800]
       // 2.product info enter up
@@ -62,6 +67,8 @@ const PcHome: React.FC = () => {
       const animate2_2range = [_AnimateHeight1 + 1400, _AnimateHeight1 + 2400]
       // 3 three card enter left & product info leave left
       const animate3range = [_AnimateHeight1 + 2000, _AnimateHeight1 + 2800]
+      // 3.1 three card up leave
+      const animate3_1range = [_AnimateHeight1 + 2800, _AnimateHeight1 + 2800 + winH + winH]
       // 4 NFT ISSUED & BY FOUNDO enter slide
       const animate4range = [_AnimateHeight1 + 2800 + winH + winH / 2, _AnimateHeight1 + 2800 + winH + winH / 2 + 800]
       // 5 NFT ISSUED & BY FOUNDO leave up
@@ -74,7 +81,14 @@ const PcHome: React.FC = () => {
       // 7 partner active rotate animation
       const animate7range = [_AnimateHeight1 + 2800 + winH + 3200, _AnimateHeight1 + 2800 + winH + 4000]
       // 8 partner leave animation
-      const animate8range = [_AnimateHeight1 + 2800 + winH + 4000, _AnimateHeight1 + 2800 + winH + 4800]
+      const animate8range = [_AnimateHeight1 + 2800 + winH + 4300, _AnimateHeight1 + 2800 + winH + 5000]
+      // 0. set first screen to fixed & use animation
+      if (animate0Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate0Range[1]) {
+        setAnimate0Ratio(BigNumber(event.target.scrollTop / animate0Range[1]).toFixed(2))
+        setanimate0Step(AnimateStep.leave)
+      } else {
+        setanimate0Step(AnimateStep.notShow)
+      }
       // 1. necklack down and scale
       if (animate1Range[0] <= event.target.scrollTop && event.target.scrollTop <= animate1Range[1]) {
         setAnimate1Ratio(BigNumber(event.target.scrollTop / animate1Range[1]).toFixed(2))
@@ -87,7 +101,6 @@ const PcHome: React.FC = () => {
         const raiod = BigNumber(event.target.scrollTop - animate2range[0])
           .div(animate2range[1] - animate2range[0])
           .toFixed(2)
-        console.log('raiod>>>', raiod)
         setanimate2Ratio(Number(raiod) >= 1 ? '1.00' : raiod)
         setanimate2Step(AnimateStep.enter)
         setanimate2_1Ratio(
@@ -132,6 +145,13 @@ const PcHome: React.FC = () => {
         setanimate2Step(AnimateStep.leave)
         setanimate3Ratio(animation3Result)
         setanimate3Step(AnimateStep.enter)
+      }
+      if (animate3_1range[0] <= event.target.scrollTop && event.target.scrollTop <= animate3_1range[1]) {
+        const animation3_1Result = BigNumber(event.target.scrollTop - animate3_1range[0])
+          .div(animate3_1range[1] - animate3_1range[0])
+          .toFixed(2)
+        setanimate3Ratio(animation3_1Result)
+        setanimate3Step(AnimateStep.leave)
       }
       event.target.scrollTop <= animate3range[0] && setanimate3Step(AnimateStep.notShow)
       event.target.scrollTop >= animate3range[1] + winH && setanimate3Step(AnimateStep.notShow)
@@ -194,7 +214,7 @@ const PcHome: React.FC = () => {
         scrollBox.removeEventListener('scroll', getScrollCount)
       }
     }
-  }, [winH])
+  }, [theme.height.header, winH])
   return (
     <Box
       id={'scrollBox'}
@@ -230,9 +250,16 @@ const PcHome: React.FC = () => {
       {animate2_1Step !== AnimateStep.notShow && <TextAniamte step={animate2_1Step} animationRatio={animate2_1Ratio} />}
       {animate2Step !== AnimateStep.notShow && <ProductInfo step={animate2Step} animationRatio={animate2Ratio} />}
       {animate3Step !== AnimateStep.notShow && <ThreeCard step={animate3Step} animationRatio={animate3Ratio} />}
+      {animate0Step !== AnimateStep.notShow && <One animationRatio={animate0Ratio} step={animate0Step} />}
       {animate1Show && <Necklace onceAnimation={onceAnimation} animationRatio={animate1Ratio} />}
-      <One />
       {/* scroll empty box */}
+      <Box
+        sx={{
+          position: 'relative',
+          height: `calc(100vh - ${theme.height.header})`,
+          zIndex: 1
+        }}
+      ></Box>
       <Box
         sx={{
           position: 'relative',
@@ -240,7 +267,14 @@ const PcHome: React.FC = () => {
           height: `${_AnimateHeight1 + 2800}px`
         }}
       ></Box>
-      <VideoSection />
+      {/* <VideoSection /> */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100vh'
+        }}
+      ></Box>
       {animate4Step !== AnimateStep.notShow && <NftIssued animationRatio={animate4Ratio} step={animate4Step} />}
       {animate5Step !== AnimateStep.notShow && <Partner animationRatio={animate5Ratio} step={animate5Step} />}
       <Four />

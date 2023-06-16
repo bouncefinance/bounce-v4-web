@@ -16,7 +16,7 @@ export default function Four() {
         position: 'relative',
         width: '100%',
         maxWidth: '1400px',
-        padding: isSm ? '105px 0 92px' : 'calc(100vh + 200px) 0 2400px',
+        padding: isSm ? '105px 0 92px' : 'calc(100vh + 350px) 0 2400px',
         margin: '0 auto'
       }}
     >
@@ -106,7 +106,6 @@ export default function Four() {
             </CenterSection>
           </>
         )}
-
         <Typography
           sx={{
             fontFamily: `'Public Sans'`,
@@ -118,7 +117,7 @@ export default function Four() {
             color: 'var(--ps-text-2)'
           }}
         >
-          {`FOUNDO® is a new luxury brand that uses the latest in blockchain technology, superior materials and world-class craftsmanship to provide customer-centric products and experiences. It has an extensive line of collections ranging from fine jewelry, home goods, bags, accessorized installations, artwork to NFTs - seeking to unite the virtual-reality world with inter-human verse.`}
+          {`FOUNDO is a web3-native jewellery brand that leverages web3 technology and culture, with a focus on digital art, to provide customer centric products and experiences. The FOUNDO team have experience growing another jewellery brand from zero to over $100M within 3 years previously and are now building FOUNDO as a more ambitious, higher-end brand while integrating web3 IP to growth hack the brand-building process.`}
         </Typography>
       </Box>
       {isSm && (

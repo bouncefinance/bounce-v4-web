@@ -24,19 +24,19 @@ export default function ProductCard({
       img: Icon1
     },
     {
-      text: 'Made In: Italy',
+      text: 'Made In:  Lab-grown',
       img: Icon2
     },
     {
-      text: 'Diamonds (Carats): 8.81',
+      text: 'Diamonds (Carats): 19.82',
       img: Icon3
     },
     {
-      text: 'Dimension: 40.5 cm',
+      text: 'Dimension: 50 cm',
       img: Icon4
     },
     {
-      text: 'Material​: White gold',
+      text: 'Material​: 18k White gold',
       img: Icon5
     }
   ]
@@ -46,7 +46,7 @@ export default function ProductCard({
         position: 'relative',
         width: isSm ? '258px' : '458px',
         height: isSm ? '360px' : '640px',
-        background: 'rgba(73, 73, 73, 0.11)',
+        background: 'rgba(73, 73, 73, 0.31)',
         border: '2px solid rgba(255, 255, 255, 0.2)',
         backdropFilter: 'blur(25px)',
         borderRadius: '16px',
@@ -78,8 +78,9 @@ export default function ProductCard({
           src={LineImg}
           alt=""
           style={{
-            flex: 1,
-            height: isSm ? '8px' : '16px'
+            width: '50px',
+            display: 'inline-block',
+            flex: 1
           }}
         />
         <Typography
@@ -87,10 +88,11 @@ export default function ProductCard({
             fontWeight: 500,
             fontSize: isSm ? '14px' : '16px',
             fontFamily: `'Public Sans'`,
-            color: 'var(--ps-text-5)'
+            color: 'var(--ps-text-5)',
+            whiteSpace: 'nowrap'
           }}
         >
-          Ref: 356934
+          Ref : LG578319461
         </Typography>
       </Box>
       <Grid container rowSpacing={'8px'}>
@@ -118,7 +120,8 @@ export default function ProductCard({
                   sx={{
                     fontFamily: `'Inter'`,
                     color: 'var(--ps-text-2)',
-                    fontSize: isSm ? '14px' : '16px'
+                    fontSize: isSm ? '14px' : '16px',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   {item.text}

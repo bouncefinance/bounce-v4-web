@@ -36,7 +36,7 @@ export default function FundoInfo() {
           color: 'var(--ps-text-5)'
         }}
       >
-        Joshua Davis
+        NAHIYA SU
       </Typography>
       <Typography
         sx={{
@@ -48,11 +48,19 @@ export default function FundoInfo() {
           color: 'var(--ps-text-2)'
         }}
       >
-        Joshua Davis is often referred to as a legend in the digital art space. His history in pushing the boundaries of
-        generative, programmatic art is unquestionable. His code symphonies are operatic. The codebase is one of his
-        masterpieces that has yielded a body of artwork that is vital, arresting and gorgeous. The artwork is a glorious
-        fusion of creativity, both human and machine. As a painter, turned programmer, computation became a way to
-        amplify his vision. Animation and interaction presented yet another frontier.
+        {`Nahiya Su, a visionary in the realm of accessory design, is renowned for her unique ability to weave together
+        disparate elements into a harmonious narrative. Her work, much like the artist herself, is a testament to the
+        power of contradiction and the beauty that can emerge from it. `}
+        <br />
+        <br />
+        {`Drawing from a rich tapestry of influences, Su's designs are a blend of the ethereal and the earthly, the
+        futuristic and the traditional. Her Mongolian roots imbue her work with a sense of primal energy, while her
+        fascination with futurism and technology lends a sleek, avant-garde aesthetic to her creations. `}
+        <br />
+        <br />
+        {`Nahiya Su is more than a designer - she is a storyteller. Each piece she creates is a chapter in a larger
+        narrative, a tale of transformation and evolution. Her work is not merely about adorning the body, but about
+        expressing the complexities of the human spirit.`}
       </Typography>
     </Box>
   )

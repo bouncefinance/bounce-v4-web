@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import BackVideo from 'components/Fundo/assets/video/backVideo.mp4'
+// import BackVideo from 'components/Fundo/assets/video/backVideo.mp4'
 export default function VideoSection() {
   return (
     <Box
@@ -10,7 +10,7 @@ export default function VideoSection() {
         zIndex: 2
       }}
     >
-      <video
+      {/* <video
         style={{
           position: 'absolute',
           top: 0,
@@ -28,7 +28,7 @@ export default function VideoSection() {
         loop
         autoPlay
         src={BackVideo}
-      ></video>
+      ></video> */}
     </Box>
   )
 }

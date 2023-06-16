@@ -2,20 +2,62 @@ import React from 'react'
 import { Box, Typography, Grid, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
-import LogoIcon from 'components/Fundo/assets/img/detail/logo.png'
-import ShareIcon from 'components/Fundo/assets/img/share.png'
+// import LogoIcon from 'components/Fundo/assets/img/detail/logo.png'
+// import ShareIcon from 'components/Fundo/assets/img/share.png'
+import BackIcon from 'components/Fundo/assets/img/detail/leftArrow.png'
 import { useIsSMDown } from 'themes/useTheme'
-import ReactCopyToClipboard from 'react-copy-to-clipboard'
-import { toast } from 'react-toastify'
+// import ReactCopyToClipboard from 'react-copy-to-clipboard'
+// import { toast } from 'react-toastify'
 require('@lottiefiles/lottie-player')
 import BgImg from 'components/Fundo/assets/img/back.png'
-
+import { useNavigate } from 'react-router-dom'
+const BackBtn = () => {
+  const isSm = useIsSMDown()
+  const navigate = useNavigate()
+  return (
+    <Box
+      sx={{
+        position: isSm ? 'relative' : 'absolute',
+        left: isSm ? '-24px' : '72px',
+        top: isSm ? '0' : '20%',
+        display: 'flex',
+        flexFlow: 'row nowrap',
+        justifyContent: 'flex-start',
+        alignSelf: 'flex-start',
+        alignItems: 'center',
+        color: '#fff',
+        fontFamily: `'Public Sans'`,
+        fontWeight: 500,
+        fontSize: '16px',
+        cursor: 'pointer',
+        marginBottom: isSm ? '30px' : '0',
+        zIndex: 999
+      }}
+      onClick={() => {
+        navigate(-1)
+      }}
+    >
+      <img
+        src={BackIcon}
+        style={{
+          width: '12px',
+          height: '12px',
+          marginRight: '12px'
+        }}
+        alt=""
+        srcSet=""
+      />
+      Back
+    </Box>
+  )
+}
 const TokenDetail: React.FC = () => {
   const isSm = useIsSMDown()
   const theme = useTheme()
   return (
     <Box
       sx={{
+        position: 'relative',
         width: '100%',
         height: '100%',
         minHeight: `calc(100vh - ${theme.height.header})`,
@@ -34,6 +76,7 @@ const TokenDetail: React.FC = () => {
         backgroundAttachment: 'fixed'
       }}
     >
+      <BackBtn />
       {isSm && (
         <>
           <Box
@@ -75,7 +118,8 @@ const TokenDetail: React.FC = () => {
               }}
               mb={'24px'}
             >
-              0xEBf19415d94be89A1d692F82af391685dC1Bff79
+              {/* 0xEBf19415d94be89A1d692F82af391685dC1Bff79 */}
+              --
             </Typography>
             <Typography
               sx={{
@@ -96,7 +140,7 @@ const TokenDetail: React.FC = () => {
               }}
               mb={'24px'}
             >
-              <img
+              {/* <img
                 src={LogoIcon}
                 style={{
                   position: 'relative',
@@ -126,7 +170,8 @@ const TokenDetail: React.FC = () => {
                   }}
                   alt=""
                 />
-              </ReactCopyToClipboard>
+              </ReactCopyToClipboard> */}
+              --
             </Typography>
             <Typography
               sx={{
@@ -146,7 +191,8 @@ const TokenDetail: React.FC = () => {
               }}
               mb={'24px'}
             >
-              100
+              {/* 100 */}
+              --
             </Typography>
             <Typography
               sx={{
@@ -289,7 +335,8 @@ const TokenDetail: React.FC = () => {
                       color: 'var(--ps-text-5)'
                     }}
                   >
-                    0xEBf19415d94be89A1d692F82af391685dC1Bff79
+                    {/* 0xEBf19415d94be89A1d692F82af391685dC1Bff79 */}
+                    --
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -312,7 +359,7 @@ const TokenDetail: React.FC = () => {
                       color: 'var(--ps-text-5)'
                     }}
                   >
-                    <img
+                    {/* <img
                       src={LogoIcon}
                       style={{
                         position: 'relative',
@@ -345,7 +392,8 @@ const TokenDetail: React.FC = () => {
                         }}
                         alt=""
                       />
-                    </ReactCopyToClipboard>
+                    </ReactCopyToClipboard> */}
+                    --
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -367,7 +415,8 @@ const TokenDetail: React.FC = () => {
                       color: 'var(--ps-text-5)'
                     }}
                   >
-                    100
+                    {/* 100 */}
+                    --
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
@@ -396,7 +445,7 @@ const TokenDetail: React.FC = () => {
               <Box
                 sx={{
                   flex: 1,
-                  maxWidth: '500px'
+                  maxWidth: '380px'
                 }}
               >
                 <lottie-player

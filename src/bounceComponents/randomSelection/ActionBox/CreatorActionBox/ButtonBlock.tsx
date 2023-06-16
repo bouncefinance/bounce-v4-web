@@ -11,6 +11,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import { formatNumber } from 'utils/number'
 import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import { TX_FEE_RATIO } from 'bounceHooks/auction/useCreatorClaimTxFee'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -31,6 +32,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       .toString()
     const canClaimToken1Amount = new BigNumber(Number(poolInfo.curPlayer))
       .times(poolInfo.maxAmount1PerWallet)
+      .multipliedBy(1 - TX_FEE_RATIO)
       .toString()
     const amountTotal0 = formatNumber(canClaimToken0Amount, {
       unit: poolInfo.token0.decimals,

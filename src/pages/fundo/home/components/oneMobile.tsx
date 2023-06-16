@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
 import FixedIndex from 'components/Fundo/Banner/FixedIndex'
-import FixedLeft from 'components/Fundo/Banner/FixedLeft'
+// import FixedLeft from 'components/Fundo/Banner/FixedLeft'
 import { useIsSMDown } from 'themes/useTheme'
 import React from 'react'
 const OneMobile: React.FC = () => {
@@ -24,6 +24,7 @@ const OneMobile: React.FC = () => {
         <Typography
           sx={{
             width: '100%',
+            fontFamily: `'Public Sans'`,
             fontStyle: 'italic',
             fontWeight: 100,
             fontSize: '36px',
@@ -38,6 +39,7 @@ const OneMobile: React.FC = () => {
         </Typography>
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             width: '100%',
             fontWeight: 600,
             fontSize: '40px',
@@ -52,6 +54,7 @@ const OneMobile: React.FC = () => {
         </Typography>
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             width: '100%',
             fontWeight: 600,
             fontSize: '40px',
@@ -100,13 +103,13 @@ const OneMobile: React.FC = () => {
             right: '40px'
           }}
         />
-        <FixedLeft
+        {/* <FixedLeft
           style={{
             width: '90px',
             top: '100px',
             left: '40px'
           }}
-        />
+        /> */}
       </>
     </CenterSection>
   )
