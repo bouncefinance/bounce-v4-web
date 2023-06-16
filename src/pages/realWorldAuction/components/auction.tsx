@@ -10,7 +10,7 @@ import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/
 import { useEffect } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
 import AuctionCard from './auctionCard'
-import UpcomingAuction from './upcomingAuction'
+// import UpcomingAuction from './upcomingAuction'
 import { BannerType } from './banner'
 import EmptyData from 'bounceComponents/common/EmptyData'
 export const marketList: BannerType[] = [
@@ -585,7 +585,7 @@ const AuctionContent = () => {
           </Button>
         </Box>
       </Box>
-      <UpcomingAuction></UpcomingAuction>
+      {/* <UpcomingAuction></UpcomingAuction> */}
       {!isSm && (
         <Marketplace poolLength={poolList?.total || 0} handleSearch={handleSearch} filterConfig={filterConfig}>
           <>
