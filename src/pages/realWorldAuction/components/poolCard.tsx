@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from '@mui/material'
-import { routes } from 'constants/routes'
+// import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { BannerType } from './banner'
 
@@ -127,10 +127,10 @@ const PoolCard = ({ item }: { item: BannerType }) => {
               borderRadius: '6px'
               // background: 'var(--ps-yellow-1)',
             }}
-            onClick={e => {
-              e.stopPropagation()
-              navigate(routes.market.index)
-            }}
+            // onClick={e => {
+            //   e.stopPropagation()
+            //   navigate(routes.market.index)
+            // }}
           >
             Buy Now
           </Button>
