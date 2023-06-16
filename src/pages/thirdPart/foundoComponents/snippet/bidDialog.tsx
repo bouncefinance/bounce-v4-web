@@ -1,16 +1,35 @@
-import { Box, Button, Typography, styled } from '@mui/material'
+import { Alert, Box, Button, Stack, Typography, styled } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import ProductIcon from 'assets/imgs/thirdPart/foundoDetail/productIcon.png'
 import CloseIcon from 'assets/imgs/thirdPart/foundoDetail/x.svg'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/logo.png'
 import ArrowbottomIcon from 'assets/imgs/thirdPart/foundoDetail/Arrowbottom.png'
-import { BidBtn } from './bidAction'
 import { RowLabel } from './bidAction'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
-import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import ProgressSlider from 'bounceComponents/common/ProgressSlider'
 import JSBI from 'jsbi'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { EnglishAuctionNFTPoolProp } from 'api/pool/type'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import { CurrencyAmount } from 'constants/token'
+import { useEnglishAuctionPlaceBidCallback } from 'bounceHooks/auction/useEnglishAuctionCallback'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { Dots } from 'themes'
+import ReportIcon from '@mui/icons-material/Report'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../../constants'
+import { LoadingButton } from '@mui/lab'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+
 const InputBox = styled(Box)(() => ({
   height: '48px',
   display: 'flex',
@@ -387,19 +406,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
             <Box mt={40}>
               <ProgressSlider isDark curSliderPer={curSliderPer} curSliderHandler={curSliderHandler} />
             </Box>
-            <BidBtn>
-              <Typography
-                sx={{
-                  fontFamily: `'Public Sans'`,
-                  fontStyle: 'italic',
-                  fontWeight: 100,
-                  fontSize: 20,
-                  color: '#fff'
-                }}
-              >
-                Place A Bid
-              </Typography>
-            </BidBtn>
+            {poolInfo && <BidButton bidVal={bidNum} poolInfo={poolInfo} />}
           </Box>
         </Box>
         <img
@@ -421,3 +428,275 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
   )
 }
 export default BidDialog
+
+const PlaceBidBtn = styled(LoadingButton)({
+  display: 'flex',
+  width: '100%',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: '1px solid #959595',
+  borderRadius: '100px',
+  height: '56px',
+  fontFamily: `'Public Sans'`,
+  fontStyle: 'italic',
+  fontWeight: 100,
+  fontSize: 20,
+  color: '#fff'
+})
+
+function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; bidVal: string }) {
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(
+    () => chainId === poolInfo?.ethChainId,
+    [chainId, poolInfo?.ethChainId]
+  )
+  const token1Balance = useCurrencyBalance(account || '', poolInfo.currentBidderMinAmount?.currency)
+  const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
+  const toggleWallet = useWalletModalToggle()
+  const { data: isUserInWhitelist } = useIsUserInWhitelist(poolInfo, poolInfo.category)
+  const minBidVal = useMemo(() => poolInfo.currentBidderMinAmount, [poolInfo.currentBidderMinAmount])
+
+  const bidAmount = useMemo(
+    () =>
+      poolInfo.currencyAmountMin1 ? CurrencyAmount.fromAmount(poolInfo.currencyAmountMin1.currency, bidVal) : undefined,
+    [bidVal, poolInfo.currencyAmountMin1]
+  )
+  const { bidCallback, submitted: placeBidSubmitted, bidPrevGasFee } = useEnglishAuctionPlaceBidCallback(poolInfo)
+
+  const toBid = useCallback(async () => {
+    if (!bidAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await bidCallback(bidAmount)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully bid amount ${bidAmount.toSignificant()} ${poolInfo.token1.symbol}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || err || 'Something went wrong',
+        onAgain: toBid
+      })
+    }
+  }, [bidAmount, bidCallback, poolInfo.token1.symbol])
+
+  const isInsufficientBalance = useMemo(() => {
+    if (!Number(bidVal)) return undefined
+    if (!bidAmount || !ethBalance || !token1Balance || !bidPrevGasFee) {
+      return {
+        disabled: true,
+        children: (
+          <NoticeLabel color="#908E96">
+            <>
+              Loading balance
+              <Dots />
+            </>
+          </NoticeLabel>
+        )
+      }
+    }
+    if (poolInfo.currencyAmountMin1?.currency.isNative) {
+      const ca = bidAmount.add(bidPrevGasFee)
+      if (ca.greaterThan(ethBalance)) {
+        return {
+          disabled: true,
+          children: (
+            <NoticeLabel>
+              <>
+                <ReportIcon />
+                Insufficient {ca?.currency.symbol} balance
+              </>
+            </NoticeLabel>
+          )
+        }
+      }
+    } else {
+      const token1Insufficient = bidAmount.greaterThan(token1Balance)
+      const gasInsufficient = bidPrevGasFee.greaterThan(ethBalance)
+
+      if (token1Insufficient || gasInsufficient) {
+        return {
+          disabled: true,
+          children: (
+            <Stack spacing={5}>
+              {token1Insufficient && (
+                <NoticeLabel>
+                  <>
+                    <ReportIcon />
+                    Insufficient {bidAmount?.currency.symbol} balance
+                  </>
+                </NoticeLabel>
+              )}
+              {gasInsufficient && (
+                <NoticeLabel>
+                  <>
+                    <ReportIcon />
+                    Insufficient {bidPrevGasFee?.currency.symbol} balance
+                  </>
+                </NoticeLabel>
+              )}
+            </Stack>
+          )
+        }
+      }
+    }
+    return undefined
+  }, [bidAmount, bidPrevGasFee, bidVal, ethBalance, poolInfo.currencyAmountMin1?.currency.isNative, token1Balance])
+
+  const [approvalState, approveCallback] = useApproveCallback(
+    bidAmount,
+    chainId === poolInfo.ethChainId ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[poolInfo.ethChainId] : undefined,
+    true
+  )
+
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          toBid()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback, toBid])
+
+  const approveContent = useMemo(() => {
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return (
+          <PlaceBidBtn loadingPosition="start" variant="contained" fullWidth loading>
+            Approving {poolInfo.token1?.symbol}
+          </PlaceBidBtn>
+        )
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return (
+          <PlaceBidBtn loadingPosition="start" variant="contained" fullWidth loading>
+            Loading <Dots />
+          </PlaceBidBtn>
+        )
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return (
+          <PlaceBidBtn variant="contained" onClick={toApprove} fullWidth>
+            Approve use of {poolInfo.token1?.symbol}
+          </PlaceBidBtn>
+        )
+      }
+    }
+    return undefined
+  }, [approvalState, poolInfo.token1?.symbol, toApprove])
+
+  const bidButton = useMemo(() => {
+    if (!account) {
+      return (
+        <Button variant="contained" onClick={toggleWallet}>
+          Connect Wallet
+        </Button>
+      )
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+    }
+    return (
+      <Box>
+        {bidAmount && approveContent && !isInsufficientBalance?.disabled ? (
+          approveContent
+        ) : (
+          <PlaceBidBtn
+            disabled={
+              !bidAmount || !minBidVal || bidAmount.lessThan(minBidVal) || isInsufficientBalance?.disabled === true
+            }
+            loading={placeBidSubmitted.submitted}
+            onClick={toBid}
+            loadingPosition="start"
+            variant="contained"
+            fullWidth
+          >
+            Place a Bid
+          </PlaceBidBtn>
+        )}
+
+        {isInsufficientBalance?.children}
+      </Box>
+    )
+  }, [
+    account,
+    approveContent,
+    bidAmount,
+    isCurrentChainEqualChainOfPool,
+    isInsufficientBalance?.children,
+    isInsufficientBalance?.disabled,
+    minBidVal,
+    placeBidSubmitted.submitted,
+    poolInfo.ethChainId,
+    toBid,
+    toggleWallet
+  ])
+
+  if (!isUserInWhitelist) {
+    return (
+      <Alert severity="error" icon={<></>} sx={{ borderRadius: 10 }}>
+        <Typography variant="body1" color={'#171717'}>
+          You are not whitelisted for this auction.
+        </Typography>
+      </Alert>
+    )
+  }
+
+  return bidButton
+}
+
+function NoticeLabel({ color, children }: { children: JSX.Element; color?: string }) {
+  return (
+    <Typography mt={5} display={'flex'} alignItems={'center'} variant="body2" sx={{ color: color || '#FD3333' }}>
+      {children}
+    </Typography>
+  )
+}

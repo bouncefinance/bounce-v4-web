@@ -44,7 +44,7 @@ export const RowLabel = styled(Box)(({ theme }) => ({
     }
   }
 }))
-export const BidBtn = styled(ButtonBase)(() => ({
+const BidBtn = styled(ButtonBase)(() => ({
   display: 'flex',
   width: '100%',
   flexFlow: 'row nowrap',
