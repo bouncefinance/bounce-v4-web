@@ -94,7 +94,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
     >
       {countdown > 0 ? (
         <>
-          <LiveStr>{text || 'Live'} </LiveStr>
+          <LiveStr>{text || 'Open At'} </LiveStr>
           <LiveStr>{days}d</LiveStr>
           <LiveStr>:</LiveStr>
           <LiveStr>{hours}h</LiveStr>
@@ -143,10 +143,10 @@ const BidAction = () => {
               color: '#FD3333'
             }}
           >
-            Close
+            Closed
           </Typography>
         )}
-        {poolStatus === PoolStatus.Live && <UpcomingStatus text="Close At" OpenAt={poolInfo?.closeAt || 0} />}
+        {poolStatus === PoolStatus.Live && <UpcomingStatus text="Live" OpenAt={poolInfo?.closeAt || 0} />}
 
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
           <Typography color={'#fff'}>Finish</Typography>

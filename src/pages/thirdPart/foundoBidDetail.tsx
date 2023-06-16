@@ -16,6 +16,7 @@ import { PoolStatus } from 'api/pool/type'
 import EnglishAuctionValuesProvider, { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { ChainListMap } from 'constants/chain'
 import TokenImage from 'bounceComponents/common/TokenImage'
+import { getEtherscanLink } from 'utils'
 
 const FoundoBidDetail = () => {
   const theme = useTheme()
@@ -167,7 +168,7 @@ const FoundoBidDetail = () => {
             >
               CONTRACT ADDRESS
             </Typography>
-            <Typography className="value">{poolInfo?.contract}</Typography>
+            <Typography className="value">{poolInfo?.token0.address}</Typography>
           </RowLabel>
           <RowLabel
             style={{
@@ -183,7 +184,7 @@ const FoundoBidDetail = () => {
             >
               NETWORK
             </Typography>
-            <Typography className="value">
+            <Typography className="value" display={'flex'} alignItems={'center'}>
               <TokenImage
                 size={20}
                 src={poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.logo : undefined}
@@ -197,9 +198,17 @@ const FoundoBidDetail = () => {
               {poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.name : '-'} Chain
               <img
                 src={ShareIcon}
+                onClick={() =>
+                  poolInfo?.ethChainId &&
+                  window.open(
+                    getEtherscanLink(poolInfo.ethChainId, poolInfo.token0.address || '', 'token') +
+                      `?a=${poolInfo.tokenId}`
+                  )
+                }
                 style={{
                   width: '20px',
                   height: '20px',
+                  cursor: 'pointer',
                   marginLeft: '18px',
                   verticalAlign: 'middle',
                   marginTop: '-3px'
@@ -257,7 +266,7 @@ const FoundoBidDetail = () => {
 }
 export default function FoundoBidDetailContent() {
   return (
-    <EnglishAuctionValuesProvider backedId={640}>
+    <EnglishAuctionValuesProvider backedId={666}>
       <FoundoBidDetail />
     </EnglishAuctionValuesProvider>
   )

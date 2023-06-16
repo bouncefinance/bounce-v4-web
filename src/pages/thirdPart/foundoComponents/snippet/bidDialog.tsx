@@ -1,5 +1,5 @@
-import { Box, Typography, styled } from '@mui/material'
-import { useState } from 'react'
+import { Box, Button, Typography, styled } from '@mui/material'
+import { useCallback, useMemo, useState } from 'react'
 import ProductIcon from 'assets/imgs/thirdPart/foundoDetail/productIcon.png'
 import CloseIcon from 'assets/imgs/thirdPart/foundoDetail/x.svg'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/logo.png'
@@ -7,6 +7,10 @@ import ArrowbottomIcon from 'assets/imgs/thirdPart/foundoDetail/Arrowbottom.png'
 import { BidBtn } from './bidAction'
 import { RowLabel } from './bidAction'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useActiveWeb3React } from 'hooks'
+import ProgressSlider from 'bounceComponents/common/ProgressSlider'
+import JSBI from 'jsbi'
 const InputBox = styled(Box)(() => ({
   height: '48px',
   display: 'flex',
@@ -26,7 +30,7 @@ const InputBox = styled(Box)(() => ({
     border: 'none'
   }
 }))
-function ProcessLine(props: { ratio: number }) {
+export function ProcessLine(props: { ratio: number }) {
   const { ratio } = props
   function RatioItem(props: { ratioStr: number; result?: number }) {
     const { ratioStr, result } = props
@@ -135,9 +139,33 @@ function ProcessLine(props: { ratio: number }) {
     </Box>
   )
 }
+
 const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
   const [bidNum, setBidNum] = useState('')
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { account } = useActiveWeb3React()
+  const token1Balance = useCurrencyBalance(account || '', poolInfo?.currentBidderMinAmount?.currency)
+
+  const [curSliderPer, setCurSliderPer] = useState(0)
+  const minBidVal = useMemo(() => poolInfo?.currentBidderMinAmount, [poolInfo?.currentBidderMinAmount])
+  const bidHandler = useCallback((v: string) => {
+    setBidNum(v)
+    setCurSliderPer(0)
+  }, [])
+
+  const curSliderHandler = useCallback(
+    (val: number) => {
+      setCurSliderPer(val)
+      if (!minBidVal) return
+      setBidNum(
+        minBidVal
+          .multiply(JSBI.BigInt(100 + val))
+          .divide('100')
+          .toSignificant(6, { groupSeparator: '' })
+      )
+    },
+    [minBidVal]
+  )
 
   return (
     <Box
@@ -168,7 +196,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
           left: '50%',
           transform: 'translate3D(-50%, -50%, 0)',
           width: '860px',
-          height: '502px',
+          // height: '502px',
           background: 'rgba(73, 73, 73, 0.1)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           backdropFilter: 'blur(25px)',
@@ -253,8 +281,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     fontSize: 14
                   }}
                 >
-                  {poolInfo?.currencyAmountMinIncr1?.toSignificant()}{' '}
-                  {poolInfo?.currencyAmountMinIncr1?.currency.symbol}
+                  {poolInfo?.currentBidderMinAmount?.toSignificant()} {poolInfo?.token1.symbol}
                 </Typography>
               </RowLabel>
               <RowLabel>
@@ -274,7 +301,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     fontSize: 14
                   }}
                 >
-                  100000
+                  {token1Balance?.toSignificant() || '--'} {poolInfo?.token1.symbol}
                 </Typography>
               </RowLabel>
             </Box>
@@ -287,7 +314,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
               mb={'12px'}
             >
               The bid amount must be greater than the Current Highest Bid({' '}
-              {poolInfo?.currencyAmountMinIncr1?.toSignificant()} {poolInfo?.currencyAmountMinIncr1?.currency.symbol})
+              {poolInfo?.currentBidderMinAmount?.toSignificant()} {poolInfo?.currentBidderMinAmount?.currency.symbol})
             </Typography>
             <InputBox>
               <input
@@ -307,7 +334,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     .replace('$#$', '.')
                   //   e.target.value
                   console.log('result>>>', result)
-                  setBidNum(result)
+                  bidHandler(result)
                 }}
                 onBlurCapture={e => {
                   let value = e.target.value
@@ -317,7 +344,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                       value = value.replace(str, '')
                     }
                   }
-                  setBidNum(value)
+                  bidHandler(value)
                 }}
               />
               <RowLabel
@@ -325,6 +352,15 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                   justifyContent: 'flex-end'
                 }}
               >
+                <Button
+                  onClick={() =>
+                    bidHandler(poolInfo?.currentBidderMinAmount?.toSignificant(64, { groupSeparator: '' }) || '')
+                  }
+                  variant="outlined"
+                  sx={{ height: 30, mr: 6 }}
+                >
+                  Min
+                </Button>
                 <img
                   style={{
                     display: 'inline-block',
@@ -332,7 +368,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     height: '20px',
                     marginRight: '8px'
                   }}
-                  src={LogoIcon}
+                  src={poolInfo?.token1.smallUrl || LogoIcon}
                   alt=""
                   srcSet=""
                 />
@@ -343,11 +379,14 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     lineHeight: '20px'
                   }}
                 >
-                  26000 ETH
+                  {poolInfo?.token1.symbol || ''}
                 </Typography>
               </RowLabel>
             </InputBox>
-            <ProcessLine ratio={60} />
+            {/* <ProcessLine ratio={60} /> */}
+            <Box mt={40}>
+              <ProgressSlider isDark curSliderPer={curSliderPer} curSliderHandler={curSliderHandler} />
+            </Box>
             <BidBtn>
               <Typography
                 sx={{
