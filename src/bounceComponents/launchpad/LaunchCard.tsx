@@ -199,6 +199,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
   return (
     <Common
       img={props.data.img}
+      sx={{ cursor: props.data.upcomingLink || props.data.liveLink ? 'pointer !important' : 'auto !important' }}
       poolTypeName={props.data.poolTypeName}
       startAndEnd={props.data.showStartEnd ? props.data.liveTimeStamp : undefined}
       onClick={() => {

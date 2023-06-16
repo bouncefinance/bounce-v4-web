@@ -14,7 +14,7 @@ import Investors1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors1.s
 import Investors2 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors2.svg'
 import Investors3 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors3.svg'
 import Investors4 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors4.svg'
-import Partners1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners1.svg'
+// import Partners1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners1.svg'
 import Partners2 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners2.svg'
 import Partners3 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners3.svg'
 import Partners4 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners4.svg'
@@ -1147,14 +1147,14 @@ const DigitalAssetsOffering: React.FC = ({}) => {
               mt={80}
               gap={30}
             >
-              <img
+              {/* <img
                 src={Partners1}
                 style={{
                   height: 20
                 }}
                 alt=""
                 srcSet=""
-              />
+              /> */}
               <img
                 src={Partners2}
                 style={{

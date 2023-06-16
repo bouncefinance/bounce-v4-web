@@ -191,8 +191,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    upcomingLink: routes.game.equilibriaIndex,
-    liveLink: routes.game.equilibriaIndex,
+    // upcomingLink: routes.game.equilibriaIndex,
+    // liveLink: routes.game.equilibriaIndex,
     projectInfo: [
       {
         title: 'what is BladeDao?',
@@ -291,8 +291,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    upcomingLink: routes.launchpad.bladeDao,
-    liveLink: routes.launchpad.bladeDao,
+    // upcomingLink: routes.launchpad.bladeDao,
+    // liveLink: routes.launchpad.bladeDao,
     projectInfo: [
       {
         title: 'what is BladeDao?',
@@ -391,8 +391,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    upcomingLink: routes.game.bladeDaoIndex,
-    liveLink: routes.game.bladeDaoIndex,
+    // upcomingLink: routes.game.bladeDaoIndex,
+    // liveLink: routes.game.bladeDaoIndex,
     projectInfo: [
       {
         title: 'what is BladeDao?',
