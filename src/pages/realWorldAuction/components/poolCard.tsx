@@ -1,8 +1,24 @@
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography, Button, styled } from '@mui/material'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { BannerType } from './banner'
-
+const PoolCardBox = styled(Box)(() => ({
+  width: '100%',
+  height: '370px',
+  background: `#FFFFFF`,
+  borderRadius: `24px`,
+  overflow: 'hidden',
+  cursor: 'pointer',
+  '&:hover': {
+    '.bottomBox': {
+      background: 'var(--ps-yellow-1)'
+    },
+    '.btn': {
+      background: '#000',
+      color: 'var(--ps-yellow-1)'
+    }
+  }
+}))
 const PoolCard = ({ item }: { item: BannerType }) => {
   const navigate = useNavigate()
   const handleClick = (url: string) => {
@@ -14,15 +30,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
     }
   }
   return (
-    <Box
-      sx={{
-        width: '100%',
-        height: '370px',
-        background: `#FFFFFF`,
-        borderRadius: `24px`,
-        overflow: 'hidden',
-        cursor: 'pointer'
-      }}
+    <PoolCardBox
       onClick={() => {
         handleClick(item.link)
       }}
@@ -58,6 +66,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
         </Typography> */}
       </Box>
       <Box
+        className={'bottomBox'}
         sx={{
           position: 'relative',
           width: '100%',
@@ -119,6 +128,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
             {/* {item.price} */}
           </Typography>
           <Button
+            className={'btn'}
             variant="contained"
             // href={AuctionList[currentIndex].checkAllLink}
             sx={{
@@ -136,7 +146,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
           </Button>
         </Box>
       </Box>
-    </Box>
+    </PoolCardBox>
   )
 }
 export default PoolCard
