@@ -18,10 +18,16 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
     let result = 'translate3D(0, 0, 0)'
     switch (step) {
       case AnimateStep.enter:
-        result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
+        if (Number(animationRatio) < 0.2) {
+          result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
+        } else if (Number(animationRatio) >= 0.2 && Number(animationRatio) <= 0.5) {
+          result = `translate3D(-${0.2 * 70}%, 0, 0)`
+        } else if (Number(animationRatio) > 0.5) {
+          result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
+        }
         break
       case AnimateStep.leave:
-        result = `translate3D(-100%, -${Number(animationRatio) * 100}vh, 0)`
+        result = `translate3D(-70%, -${Number(animationRatio) * 100}vh, 0)`
         break
     }
     return result

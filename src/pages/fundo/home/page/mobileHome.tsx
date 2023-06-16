@@ -11,7 +11,7 @@ import { BigNumber } from 'bignumber.js'
 import ThreeCard from '../components/mobileAnimation/threeCard'
 import TextAniamte from '../components/textAnimate'
 import LeftBar from 'components/Fundo/LeftBar'
-import { AnimateStep } from '../components/pcAnimation/threeCard'
+import { AnimateStep } from '../components/mobileAnimation/threeCard'
 const MobileHome: React.FC = () => {
   const _AnimateHeight1 = 1000
   const theme = useTheme()

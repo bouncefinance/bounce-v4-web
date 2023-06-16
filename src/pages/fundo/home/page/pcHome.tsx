@@ -3,7 +3,7 @@ import { Box, useTheme } from '@mui/material'
 import One from '../components/one'
 import TextAniamte from '../components/textAnimate'
 import Four from '../components/four'
-import VideoSection from '../components/video'
+// import VideoSection from '../components/video'
 import BgImg from 'components/Fundo/assets/img/back.png'
 import ThreeCard, { AnimateStep } from '../components/pcAnimation/threeCard'
 import NftIssued from '../components/pcAnimation/nftIssued'
@@ -67,6 +67,8 @@ const PcHome: React.FC = () => {
       const animate2_2range = [_AnimateHeight1 + 1400, _AnimateHeight1 + 2400]
       // 3 three card enter left & product info leave left
       const animate3range = [_AnimateHeight1 + 2000, _AnimateHeight1 + 2800]
+      // 3.1 three card up leave
+      const animate3_1range = [_AnimateHeight1 + 2800, _AnimateHeight1 + 2800 + winH + winH]
       // 4 NFT ISSUED & BY FOUNDO enter slide
       const animate4range = [_AnimateHeight1 + 2800 + winH + winH / 2, _AnimateHeight1 + 2800 + winH + winH / 2 + 800]
       // 5 NFT ISSUED & BY FOUNDO leave up
@@ -99,7 +101,6 @@ const PcHome: React.FC = () => {
         const raiod = BigNumber(event.target.scrollTop - animate2range[0])
           .div(animate2range[1] - animate2range[0])
           .toFixed(2)
-        console.log('raiod>>>', raiod)
         setanimate2Ratio(Number(raiod) >= 1 ? '1.00' : raiod)
         setanimate2Step(AnimateStep.enter)
         setanimate2_1Ratio(
@@ -144,6 +145,13 @@ const PcHome: React.FC = () => {
         setanimate2Step(AnimateStep.leave)
         setanimate3Ratio(animation3Result)
         setanimate3Step(AnimateStep.enter)
+      }
+      if (animate3_1range[0] <= event.target.scrollTop && event.target.scrollTop <= animate3_1range[1]) {
+        const animation3_1Result = BigNumber(event.target.scrollTop - animate3_1range[0])
+          .div(animate3_1range[1] - animate3_1range[0])
+          .toFixed(2)
+        setanimate3Ratio(animation3_1Result)
+        setanimate3Step(AnimateStep.leave)
       }
       event.target.scrollTop <= animate3range[0] && setanimate3Step(AnimateStep.notShow)
       event.target.scrollTop >= animate3range[1] + winH && setanimate3Step(AnimateStep.notShow)
@@ -259,7 +267,14 @@ const PcHome: React.FC = () => {
           height: `${_AnimateHeight1 + 2800}px`
         }}
       ></Box>
-      <VideoSection />
+      {/* <VideoSection /> */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100vh'
+        }}
+      ></Box>
       {animate4Step !== AnimateStep.notShow && <NftIssued animationRatio={animate4Ratio} step={animate4Step} />}
       {animate5Step !== AnimateStep.notShow && <Partner animationRatio={animate5Ratio} step={animate5Step} />}
       <Four />
