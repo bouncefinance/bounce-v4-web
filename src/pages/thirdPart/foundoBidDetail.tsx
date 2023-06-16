@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import Header from './foundoComponents/section/headerSection'
 import PcBanner from './foundoComponents/section/pcBannerSection'
 import BidSection from './foundoComponents/section/bidSection'
@@ -17,9 +17,10 @@ import EnglishAuctionValuesProvider, { useEnglishAuctionPoolInfo } from 'pages/a
 import { ChainListMap } from 'constants/chain'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { getEtherscanLink } from 'utils'
+import { useIsSMDown } from 'themes/useTheme'
 
 const FoundoBidDetail = () => {
-  const theme = useTheme()
+  const isSm = useIsSMDown()
   const detailConfig = [
     {
       img: Icon1,
@@ -53,9 +54,6 @@ const FoundoBidDetail = () => {
     <Box
       sx={{
         width: '100%',
-        height: `calc(100vh - ${theme.height.header})`,
-        overflowX: 'hidden',
-        overflowY: 'auto',
         background: '#000'
       }}
     >
@@ -65,7 +63,7 @@ const FoundoBidDetail = () => {
       <SlideSection title={'Product Description'}>
         <Box
           sx={{
-            width: '680px',
+            width: isSm ? '100%' : '680px',
             padding: '24px 0 48px'
           }}
         >
@@ -82,7 +80,7 @@ const FoundoBidDetail = () => {
               className="label"
               style={{
                 color: '#D7D6D9',
-                fontSize: '14px'
+                fontSize: isSm ? '13px' : '14px'
               }}
             >
               Details
@@ -96,8 +94,8 @@ const FoundoBidDetail = () => {
                   <img
                     src={item.img}
                     style={{
-                      width: '20px',
-                      height: '20px',
+                      width: isSm ? '16px' : '20px',
+                      height: isSm ? '16px' : '20px',
                       marginRight: '8px',
                       verticalAlign: 'middle',
                       marginTop: '-5px'
@@ -117,7 +115,7 @@ const FoundoBidDetail = () => {
       <SlideSection title={'About Foundo'}>
         <Box
           sx={{
-            width: '680px',
+            width: isSm ? '100%' : '680px',
             padding: '24px 0 48px'
           }}
         >
@@ -125,7 +123,7 @@ const FoundoBidDetail = () => {
             sx={{
               fontFamily: `'Inter'`,
               fontWeight: 400,
-              fontSize: 16,
+              fontSize: isSm ? 14 : 16,
               color: 'var(--ps-text-2)'
             }}
             mb={'40px'}
@@ -133,14 +131,14 @@ const FoundoBidDetail = () => {
           <Box
             sx={{
               display: 'flex',
-              justifyContent: 'flex-end'
+              justifyContent: isSm ? 'flex-start' : 'flex-end'
             }}
           >
             <img
               src={FoundoLogo}
               style={{
-                width: '120px',
-                height: '120px'
+                width: isSm ? '90px' : '120px',
+                height: isSm ? '90px' : '120px'
               }}
               alt=""
             />
@@ -150,41 +148,63 @@ const FoundoBidDetail = () => {
       <SlideSection title={'Token Detail'}>
         <Box
           sx={{
-            width: '680px',
+            width: isSm ? '100%' : '680px',
             padding: '24px 0 48px'
           }}
         >
           <RowLabel
             style={{
+              flexFlow: isSm ? 'column nowrap' : 'row nowrap',
               justifyContent: 'flex-start',
-              marginBottom: '28px'
+              marginBottom: isSm ? '24px' : '28px'
             }}
           >
             <Typography
               className="label"
               sx={{
-                width: '300px'
+                width: isSm ? '100%' : '300px'
               }}
             >
               CONTRACT ADDRESS
             </Typography>
-            <Typography className="value">{poolInfo?.token0.address}</Typography>
+            <Typography
+              className="value"
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-start',
+                marginTop: isSm ? '8px' : '0'
+              }}
+            >
+              {poolInfo?.token0.address}
+            </Typography>
           </RowLabel>
           <RowLabel
             style={{
+              flexFlow: isSm ? 'column nowrap' : 'row nowrap',
               justifyContent: 'flex-start',
-              marginBottom: '28px'
+              marginBottom: isSm ? '24px' : '28px'
             }}
           >
             <Typography
               className="label"
               sx={{
-                width: '300px'
+                width: isSm ? '100%' : '300px'
               }}
             >
               NETWORK
             </Typography>
-            <Typography className="value" display={'flex'} alignItems={'center'}>
+            <Typography
+              className="value"
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-start',
+                marginTop: isSm ? '8px' : '0'
+              }}
+            >
               <TokenImage
                 size={20}
                 src={poolInfo?.ethChainId ? ChainListMap[poolInfo.ethChainId]?.logo : undefined}
@@ -219,46 +239,70 @@ const FoundoBidDetail = () => {
           </RowLabel>
           <RowLabel
             style={{
+              flexFlow: isSm ? 'column nowrap' : 'row nowrap',
               justifyContent: 'flex-start',
-              marginBottom: '28px'
+              marginBottom: isSm ? '24px' : '28px'
             }}
           >
             <Typography
               className="label"
               sx={{
-                width: '300px'
+                width: isSm ? '100%' : '300px'
               }}
             >
               TOKEN ID
             </Typography>
-            <Typography className="value">{poolInfo?.tokenId}</Typography>
+            <Typography
+              className="value"
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-start',
+                marginTop: isSm ? '8px' : '0'
+              }}
+            >
+              {poolInfo?.tokenId}
+            </Typography>
           </RowLabel>
           <RowLabel
             style={{
+              flexFlow: isSm ? 'column nowrap' : 'row nowrap',
               justifyContent: 'flex-start',
-              marginBottom: '28px'
+              marginBottom: isSm ? '24px' : '28px'
             }}
           >
             <Typography
               className="label"
               sx={{
-                width: '300px'
+                width: isSm ? '100%' : '300px'
               }}
             >
               TOKEN TYPE
             </Typography>
-            <Typography className="value">ERC721</Typography>
+            <Typography
+              className="value"
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-start',
+                marginTop: isSm ? '8px' : '0'
+              }}
+            >
+              ERC721
+            </Typography>
           </RowLabel>
         </Box>
       </SlideSection>
       <SlideSection title={'Auction Detail'}>
         <Box
           sx={{
-            width: '763px',
+            width: isSm ? '100%' : '763px',
             padding: '70px 0'
           }}
         >
-          {poolInfo?.status === PoolStatus.Closed && <WinnerList poolInfo={poolInfo} />}
+          {poolInfo?.status !== PoolStatus.Closed && <WinnerList poolInfo={poolInfo} />}
         </Box>
       </SlideSection>
     </Box>
