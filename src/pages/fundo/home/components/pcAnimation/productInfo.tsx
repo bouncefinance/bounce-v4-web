@@ -12,7 +12,13 @@ export default function ProductInfo({ animationRatio, step }: { animationRatio?:
         result = `translate3D(0, ${(1 - Number(animationRatio)) * 100}vh, 0)`
         break
       case AnimateStep.leave:
-        result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
+        if (Number(animationRatio) < 0.2) {
+          result = `translate3D(-${Number(animationRatio) * 2.5 * 70}%, 0, 0)`
+        } else if (Number(animationRatio) >= 0.2 && Number(animationRatio) <= 0.5) {
+          result = `translate3D(-${0.5 * 70}%, 0, 0)`
+        } else if (Number(animationRatio) > 0.5) {
+          result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
+        }
         break
     }
     return result

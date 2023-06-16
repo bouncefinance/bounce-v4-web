@@ -19,9 +19,9 @@ export default function ThreeCard({ animationRatio, step }: { animationRatio?: s
     switch (step) {
       case AnimateStep.enter:
         if (Number(animationRatio) < 0.2) {
-          result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
+          result = `translate3D(-${Number(animationRatio) * 2.5 * 70}%, 0, 0)`
         } else if (Number(animationRatio) >= 0.2 && Number(animationRatio) <= 0.5) {
-          result = `translate3D(-${0.2 * 70}%, 0, 0)`
+          result = `translate3D(-${0.5 * 70}%, 0, 0)`
         } else if (Number(animationRatio) > 0.5) {
           result = `translate3D(-${Number(animationRatio) * 70}%, 0, 0)`
         }
