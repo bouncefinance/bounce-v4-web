@@ -28,7 +28,7 @@ import ReportIcon from '@mui/icons-material/Report'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../../constants'
 import { LoadingButton } from '@mui/lab'
-import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const InputBox = styled(Box)(() => ({
   height: '48px',
@@ -49,6 +49,32 @@ const InputBox = styled(Box)(() => ({
     border: 'none'
   }
 }))
+
+export const PlaceBidBtn = styled(LoadingButton)({
+  display: 'flex',
+  width: '100%',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: '1px solid #959595',
+  backgroundColor: 'transparent',
+  borderRadius: '100px',
+  height: '56px',
+  fontFamily: `'Public Sans'`,
+  fontStyle: 'italic',
+  fontWeight: 100,
+  fontSize: 20,
+  color: '#fff',
+  '&:hover': {
+    borderColor: '#fff',
+    backgroundColor: 'transparent'
+  },
+  '&:disabled': {
+    backgroundColor: 'transparent',
+    opacity: 0.6
+  }
+})
+
 export function ProcessLine(props: { ratio: number }) {
   const { ratio } = props
   function RatioItem(props: { ratioStr: number; result?: number }) {
@@ -163,7 +189,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
   const [bidNum, setBidNum] = useState('')
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const { account } = useActiveWeb3React()
-  const token1Balance = useCurrencyBalance(account || '', poolInfo?.currentBidderMinAmount?.currency)
+  const token1Balance = useCurrencyBalance(account || undefined, poolInfo?.currentBidderMinAmount?.currency)
 
   const [curSliderPer, setCurSliderPer] = useState(0)
   const minBidVal = useMemo(() => poolInfo?.currentBidderMinAmount, [poolInfo?.currentBidderMinAmount])
@@ -215,7 +241,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
           left: '50%',
           transform: 'translate3D(-50%, -50%, 0)',
           width: '860px',
-          // height: '502px',
+          minHeight: '540px',
           background: 'rgba(73, 73, 73, 0.1)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           backdropFilter: 'blur(25px)',
@@ -406,7 +432,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
             <Box mt={40}>
               <ProgressSlider isDark curSliderPer={curSliderPer} curSliderHandler={curSliderHandler} />
             </Box>
-            {poolInfo && <BidButton bidVal={bidNum} poolInfo={poolInfo} />}
+            {poolInfo && <BidButton bidVal={bidNum} handleClose={handleClose} poolInfo={poolInfo} />}
           </Box>
         </Box>
         <img
@@ -429,32 +455,25 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
 }
 export default BidDialog
 
-const PlaceBidBtn = styled(LoadingButton)({
-  display: 'flex',
-  width: '100%',
-  flexFlow: 'row nowrap',
-  justifyContent: 'center',
-  alignItems: 'center',
-  border: '1px solid #959595',
-  borderRadius: '100px',
-  height: '56px',
-  fontFamily: `'Public Sans'`,
-  fontStyle: 'italic',
-  fontWeight: 100,
-  fontSize: 20,
-  color: '#fff'
-})
-
-function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; bidVal: string }) {
+function BidButton({
+  poolInfo,
+  bidVal,
+  handleClose
+}: {
+  poolInfo: EnglishAuctionNFTPoolProp
+  bidVal: string
+  handleClose: () => void
+}) {
   const { account, chainId } = useActiveWeb3React()
+  const switchNetwork = useSwitchNetwork()
   const isCurrentChainEqualChainOfPool = useMemo(
     () => chainId === poolInfo?.ethChainId,
     [chainId, poolInfo?.ethChainId]
   )
-  const token1Balance = useCurrencyBalance(account || '', poolInfo.currentBidderMinAmount?.currency)
+  const token1Balance = useCurrencyBalance(account || undefined, poolInfo.currentBidderMinAmount?.currency)
   const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
   const toggleWallet = useWalletModalToggle()
-  const { data: isUserInWhitelist } = useIsUserInWhitelist(poolInfo, poolInfo.category)
+  const { data: isUserInWhitelist, loading: whitelistLoading } = useIsUserInWhitelist(poolInfo, poolInfo.category)
   const minBidVal = useMemo(() => poolInfo.currentBidderMinAmount, [poolInfo.currentBidderMinAmount])
 
   const bidAmount = useMemo(
@@ -472,6 +491,7 @@ function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; 
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
+          handleClose()
           rpt()
         })
         transactionReceipt.then(curReceipt => {
@@ -481,6 +501,7 @@ function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; 
       ret
         .then(() => {
           hideDialogConfirmation()
+          handleClose()
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'Close',
@@ -501,7 +522,7 @@ function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; 
         onAgain: toBid
       })
     }
-  }, [bidAmount, bidCallback, poolInfo.token1.symbol])
+  }, [bidAmount, bidCallback, handleClose, poolInfo.token1.symbol])
 
   const isInsufficientBalance = useMemo(() => {
     if (!Number(bidVal)) return undefined
@@ -636,13 +657,13 @@ function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; 
   const bidButton = useMemo(() => {
     if (!account) {
       return (
-        <Button variant="contained" onClick={toggleWallet}>
+        <PlaceBidBtn variant="contained" onClick={toggleWallet}>
           Connect Wallet
-        </Button>
+        </PlaceBidBtn>
       )
     }
     if (!isCurrentChainEqualChainOfPool) {
-      return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+      return <PlaceBidBtn onClick={() => switchNetwork(poolInfo.ethChainId)}>Switch Network</PlaceBidBtn>
     }
     return (
       <Box>
@@ -676,11 +697,12 @@ function BidButton({ poolInfo, bidVal }: { poolInfo: EnglishAuctionNFTPoolProp; 
     minBidVal,
     placeBidSubmitted.submitted,
     poolInfo.ethChainId,
+    switchNetwork,
     toBid,
     toggleWallet
   ])
 
-  if (!isUserInWhitelist) {
+  if (!isUserInWhitelist && !whitelistLoading) {
     return (
       <Alert severity="error" icon={<></>} sx={{ borderRadius: 10 }}>
         <Typography variant="body1" color={'#171717'}>
