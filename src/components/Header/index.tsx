@@ -257,6 +257,7 @@ export default function Header() {
             <Search />
             <Resources />
             <CreateBtn />
+            <NetworkPopperSelect />
             <Web3Status />
 
             {!token && walletWithoutToken}
