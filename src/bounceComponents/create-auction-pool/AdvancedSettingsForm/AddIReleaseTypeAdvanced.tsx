@@ -31,6 +31,7 @@ import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import SwitchFormItem from '../SwitchFormItem'
 import { useQueryParams } from 'hooks/useQueryParams'
+import NumberInput from 'bounceComponents/common/NumberInput'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -259,7 +260,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
   return (
     // TODO: move LocalizationProvider to _app.tex
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
-      <Box sx={{ mt: 52 }}>
+      <Box sx={{ mt: 52, px: { xs: 16, md: 0 } }}>
         <Typography variant="h2">Advanced Settings</Typography>
         <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
 
@@ -475,7 +476,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                   <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
                   <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
                 </Box>
-                <Stack direction="row" spacing={10} justifyContent="space-between">
+                <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} spacing={10} justifyContent="space-between">
                   <ButtonBase
                     sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
                     disabled={values.participantStatus !== ParticipantStatus.Whitelist}
@@ -575,17 +576,21 @@ function SetFragmentReleaseTime({
                 textField={{ sx: { width: '100%' } }}
               />
               <FormItem label="radio">
-                <OutlinedInput
+                <NumberInput
                   value={item.radio}
-                  onChange={e => {
-                    const val = Number(e.target.value.replace(/[^\d]/g, ''))
-                    if (val > 100) {
-                      setItemValue(idx, 'radio', '100')
-                    } else if (val < 1) {
-                      setItemValue(idx, 'radio', '')
-                    } else {
-                      setItemValue(idx, 'radio', Number(val).toFixed())
-                    }
+                  onBlur={() => {
+                    setItemValue(idx, 'radio', Number(item.radio).toFixed(2))
+                  }}
+                  onUserInput={value => {
+                    setItemValue(idx, 'radio', value.toString())
+
+                    // if (val > 100) {
+                    //   setItemValue(idx, 'radio', '100')
+                    // } else if (val < 0.01) {
+                    //   setItemValue(idx, 'radio', '')
+                    // } else {
+                    //   setItemValue(idx, 'radio', val)
+                    // }
                   }}
                   endAdornment={<>%</>}
                 />

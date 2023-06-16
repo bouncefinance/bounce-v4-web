@@ -61,7 +61,9 @@ export default function TokenUnlockingInfo({
                       <Typography key={idx + 'a'}>
                         {item.startAt ? new Date(item.startAt * 1000).toLocaleString() : '-'}
                       </Typography>
-                      <Typography key={idx}>{ca.toFixed(0)} %</Typography>
+                      <Typography width={100} key={idx}>
+                        {ca.toSignificant(4)} %
+                      </Typography>
                     </>
                   )
                 })}

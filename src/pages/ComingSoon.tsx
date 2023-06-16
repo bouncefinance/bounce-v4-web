@@ -1,6 +1,7 @@
 import { Dots } from 'themes/components'
 import { Box, Container, SxProps, Theme, Typography } from '@mui/material'
 import DefaultIcon from 'assets/imgs/common/ComingSoon.png'
+import useBreakpoint from '../hooks/useBreakpoint'
 
 export default function ComingSoon({
   sx,
@@ -11,6 +12,7 @@ export default function ComingSoon({
   prompt?: string
   bgColor?: string
 }) {
+  const isSm = useBreakpoint('sm')
   return (
     <Box
       sx={{
@@ -33,7 +35,7 @@ export default function ComingSoon({
           <img
             style={{
               display: 'block',
-              width: 453,
+              width: isSm ? 226 : 453,
               margin: '0 auto'
             }}
             src={DefaultIcon}

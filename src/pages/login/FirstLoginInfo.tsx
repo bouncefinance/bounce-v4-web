@@ -13,6 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import FirstProfileOverview from 'bounceComponents/account/FirstProfileOverview'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { routes } from 'constants/routes'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const CurStepper = styled(Box)({
   display: 'grid',
@@ -39,6 +40,7 @@ export default function FirstLoginInfo() {
   const [activeStep, setActiveStep] = useState(1)
   const { token } = useUserInfo()
   const navigate = useNavigate()
+  const isMobile = useBreakpoint('md')
 
   useEffect(() => {
     if (!token) {
@@ -48,7 +50,7 @@ export default function FirstLoginInfo() {
 
   return (
     <section>
-      <LoginLayout image={activeStep === 1 ? Complete0Img : Complete1Img}>
+      <LoginLayout image={activeStep === 1 ? Complete0Img : Complete1Img} isSm={isMobile}>
         <Container
           sx={{
             maxWidth: '640px !important',
@@ -81,6 +83,7 @@ export default function FirstLoginInfo() {
 
             {activeStep === 1 ? (
               <CompleteAccount
+                isMobile={isMobile}
                 continueButton={
                   <Button
                     onClick={() => setActiveStep(2)}
@@ -102,12 +105,12 @@ export default function FirstLoginInfo() {
   )
 }
 
-function CompleteAccount({ continueButton }: { continueButton: JSX.Element }) {
+function CompleteAccount({ isMobile, continueButton }: { isMobile: boolean; continueButton: JSX.Element }) {
   const { userInfo, userId } = useUserInfo()
   return (
     <Box>
-      <Stack direction={'row'} alignItems="center" mt={60}>
-        <Typography variant="h1" fontWeight={500} fontSize={36}>
+      <Stack direction={'row'} alignItems="center" mt={isMobile ? 44 : 60}>
+        <Typography variant="h1" fontWeight={500} fontSize={isMobile ? 22 : 36}>
           Complete Account
         </Typography>
       </Stack>
@@ -117,18 +120,18 @@ function CompleteAccount({ continueButton }: { continueButton: JSX.Element }) {
 
       <EditInfo userInfoEmail={userInfo?.email || ''} userId={userId} />
       <LoginOpton twitter={userInfo?.twitterName || ''} />
-      <FirstLoginNextButtonGroup continueButton={continueButton} />
+      <FirstLoginNextButtonGroup continueButton={continueButton} isMobile={isMobile} />
     </Box>
   )
 }
 
 function CompleteProfile() {
   // const { userInfo, userId } = useUserInfo()
-
+  const isMobile = useBreakpoint('md')
   return (
     <Box>
-      <Stack direction={'row'} alignItems="center" mt={60}>
-        <Typography variant="h1" fontWeight={500} fontSize={36}>
+      <Stack direction={'row'} alignItems="center" mt={isMobile ? 44 : 60}>
+        <Typography variant="h1" fontWeight={500} fontSize={isMobile ? 22 : 36}>
           Complete Profile
         </Typography>
       </Stack>
@@ -137,16 +140,22 @@ function CompleteProfile() {
   )
 }
 
-export function FirstLoginNextButtonGroup({ continueButton }: { continueButton: JSX.Element }) {
+export function FirstLoginNextButtonGroup({
+  continueButton,
+  isMobile = false
+}: {
+  continueButton: JSX.Element
+  isMobile?: boolean
+}) {
   const { redirect } = useQueryParams()
   return (
-    <Box mt={40}>
+    <Box sx={{ mt: isMobile ? '48px!important' : 40 }}>
       {continueButton}
       <Link to={redirect || '/'}>
         <Typography
           textAlign={'center'}
           sx={{
-            mt: 6,
+            mt: isMobile ? 32 : 6,
             textDecoration: 'underline'
           }}
         >

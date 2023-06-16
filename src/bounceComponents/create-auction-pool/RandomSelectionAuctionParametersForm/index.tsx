@@ -17,6 +17,7 @@ import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 interface FormValues {
   tokenFromAddress: string
@@ -36,7 +37,7 @@ interface FormValues {
 const RandomSelectionAuctionParametersForm = (): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-
+  const isSm = useBreakpoint('sm')
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
       .required('Token is required')
@@ -125,7 +126,7 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
   }
 
   return (
-    <Box sx={{ mt: 52 }}>
+    <Box sx={{ mt: 52, px: isSm ? 16 : 0 }}>
       <Typography sx={{ color: 'var(--ps-gray-700)' }}>Random Selection</Typography>
       <Typography sx={{ mt: 5, mb: 42 }} variant="h2">
         Auction Parameters

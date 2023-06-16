@@ -17,17 +17,7 @@ import Website from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as VerifyIcon } from 'assets/imgs/user/profile-verify.svg'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getUserPoolCount } from 'api/user'
-
-const IntroBg = styled(Box)`
-  flex-direction: column;
-  display: flex;
-  align-items: center;
-  padding: 40px 24px 64px;
-  width: 264px;
-  height: min-content;
-  background: #ffffff;
-  border-radius: 20px;
-`
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 const ProfileTag = styled(SmallText)`
   display: flex;
@@ -76,6 +66,7 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
     createdCount: number
     participantCount: number
   }>()
+  const isMobile = useBreakpoint('lg')
   useEffect(() => {
     const userPoolCount = async () => {
       if (!personalInfo?.address) {
@@ -108,7 +99,19 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
   }
 
   return (
-    <IntroBg>
+    <Box
+      sx={{
+        flexDirection: 'column',
+        display: 'flex',
+        alignItems: 'center',
+        padding: isMobile ? '22px 17px' : '40px 24px 64px',
+        width: isMobile ? '100%' : '264px',
+        height: 'min-content',
+        background: '#ffffff',
+        borderRadius: '20px',
+        mb: 28
+      }}
+    >
       <Avatar
         sx={{ width: 120, height: 120 }}
         src={personalInfo?.avatar?.fileThumbnailUrl || personalInfo?.avatar?.fileUrl}
@@ -126,11 +129,27 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
           </ProfileTag>
         )}
       </Row>
+      {isMobile && (
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            mt: '24px',
+            justifyContent: 'space-between',
+            '> div:first-child': {
+              mr: '12px'
+            }
+          }}
+        >
+          <AuctionCount title={'Auction Participated'} count={poolCount?.participantCount || 0} />
+          <AuctionCount title={'Auction Created'} count={poolCount?.createdCount || 0} />
+        </Box>
+      )}
       <Box mt={32} sx={{ width: '100%', borderBottom: '1px solid #E8E9E4' }} />
       <H6 mt={24} width={'100%'}>
         About
       </H6>
-      <Typography mt={16} variant={'body2'}>
+      <Typography mt={16} variant={'body2'} width={'100%'}>
         {personalInfo?.description || 'There is nothing for the time being'}
       </Typography>
       <Stack mt={32} mb={38} direction={'row'} spacing={9}>
@@ -138,9 +157,13 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
           <img onClick={() => window.open(icon.link, '_blank')} src={icon.icon} key={idx} />
         ))}
       </Stack>
-      <AuctionCount title={'Auction Participated'} count={poolCount?.participantCount || 0} />
-      <AuctionCount title={'Auction Created'} count={poolCount?.createdCount || 0} />
-    </IntroBg>
+      {!isMobile && (
+        <>
+          <AuctionCount title={'Auction Participated'} count={poolCount?.participantCount || 0} />
+          <AuctionCount title={'Auction Created'} count={poolCount?.createdCount || 0} />
+        </>
+      )}
+    </Box>
   )
 }
 
@@ -150,6 +173,7 @@ const ProfileSummaryLayout: React.FC<{
   id: string | undefined
 }> = props => {
   const { type } = useQueryParams()
+  const isMobile = useBreakpoint('lg')
   const { personalInfo, id } = props
 
   const tabsList: (ITabsListProps & { components: JSX.Element })[] = useMemo(
@@ -212,7 +236,19 @@ const ProfileSummaryLayout: React.FC<{
   return (
     <>
       <Box sx={{ position: 'relative', width: '100%', ...styles.contain }}>
-        <Stack direction="row" spacing={36} alignItems="center" sx={{ padding: '40px 48px 0' }}>
+        <Stack
+          direction="row"
+          spacing={36}
+          alignItems="center"
+          sx={{
+            padding: isMobile ? '12px 16px 0' : '40px 48px 0',
+            whiteSpace: 'nowrap',
+            overflowX: 'scroll',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
+          }}
+        >
           {tabsList?.map(item => {
             return (
               <Typography

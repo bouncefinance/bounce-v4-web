@@ -1,19 +1,23 @@
 import { Box, Container, SxProps, Theme, Typography } from '@mui/material'
 import DefaultIcon from 'assets/imgs/common/ComingSoon.png'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 export default function EmptyData({
   sx,
   title,
   height,
   prompt,
-  bgColor
+  bgColor,
+  isLight
 }: {
   sx?: SxProps<Theme> | undefined
   title?: string
   prompt?: string
   bgColor?: string
   height?: number | string
+  isLight?: boolean
 }) {
+  const isSm = useBreakpoint('sm')
   return (
     <Box sx={{ padding: 40, ...sx }}>
       <Container
@@ -28,7 +32,7 @@ export default function EmptyData({
       >
         <img
           style={{
-            width: height || 300,
+            width: height || isSm ? 220 : 300,
             margin: '0 auto'
           }}
           src={DefaultIcon}
@@ -38,15 +42,22 @@ export default function EmptyData({
         <Typography
           variant="h4"
           sx={{
-            fontSize: 20,
+            fontSize: isSm ? 16 : 20,
             textAlign: 'center',
-            mt: 40
+            mt: isSm ? 16 : 40,
+            color: isLight ? '#fff' : ''
           }}
         >
           {title || 'No Data'}
         </Typography>
         {prompt && (
-          <Typography mt={5} textAlign={'center'}>
+          <Typography
+            mt={5}
+            textAlign={'center'}
+            sx={{
+              color: isLight ? '#fff' : ''
+            }}
+          >
             {prompt}
           </Typography>
         )}

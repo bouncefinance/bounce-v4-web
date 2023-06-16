@@ -59,7 +59,8 @@ const CollectionSelect = (props: CollectionProps) => {
         />
         <Box
           sx={{
-            flex: 1
+            flex: 'none',
+            width: { xs: 'calc(100% - 32px)', md: '100%' }
           }}
         >
           <Typography
@@ -104,7 +105,8 @@ const CollectionSelect = (props: CollectionProps) => {
     <Box
       sx={{
         position: 'relative',
-        width: 600,
+        maxWidth: 600,
+        width: '100%',
         height: 60,
         margin: '0 auto 33px'
       }}

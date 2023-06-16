@@ -10,6 +10,7 @@ import DefaultNftIcon from 'bounceComponents/create-auction-pool/TokenERC1155Inf
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
 import { shortenAddress } from 'utils'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import useBreakpoint from '../../../../hooks/useBreakpoint'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -18,6 +19,7 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
 )
 
 const BottomBox = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }): JSX.Element => {
+  const isMobile = useBreakpoint('lg')
   const formatedMaxAmount1PerWallet =
     poolInfo?.maxAmount1PerWallet &&
     poolInfo.maxAmount1PerWallet !== '0' &&
@@ -26,7 +28,7 @@ const BottomBox = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }): JSX.Elemen
       : 'No'
   return (
     <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
-      <Stack direction={'row'} spacing={36}>
+      <Stack direction={isMobile ? 'column' : 'row'} spacing={36}>
         <Stack flex={1} spacing={10}>
           <Title>Token Information</Title>
           <PoolInfoItem title="Contract address" tip="Token Contract Address.">

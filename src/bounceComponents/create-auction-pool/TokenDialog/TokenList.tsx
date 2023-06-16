@@ -77,9 +77,25 @@ interface TokenListProps {
 
 const TokenList = ({ data, onOk, onCancel }: TokenListProps) => {
   return (
-    <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    <Box
+      sx={{
+        width: '100%',
+        bgcolor: 'background.paper',
+        '&>.size-list': {
+          width: { md: 656 }
+        }
+      }}
+    >
       {/* TODO: Auto width */}
-      <FixedSizeList height={300} width={656} itemSize={50} itemCount={data.length} overscanCount={8} itemData={data}>
+      <FixedSizeList
+        className="size-list"
+        height={300}
+        width={'auto'}
+        itemSize={50}
+        itemCount={data.length}
+        overscanCount={8}
+        itemData={data}
+      >
         {listChildComponentProps => {
           return ItemRender(listChildComponentProps, onOk, onCancel)
         }}

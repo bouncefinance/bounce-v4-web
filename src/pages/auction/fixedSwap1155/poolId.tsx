@@ -10,11 +10,13 @@ import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import useNftPoolInfo from 'bounceHooks/auction/useNftPoolInfo'
 import ActionHistory from 'bounceComponents/fixed-swap-nft/ActionHistory'
+import useBreakpoint from '../../../hooks/useBreakpoint'
 
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useNftPoolInfo()
   const isBlock = useCurrentRegionBlock()
+  const isMobile = useBreakpoint('lg')
 
   if (isBlock) {
     return <NoService />
@@ -33,13 +35,15 @@ const FixedSwapPoolPageContent = () => {
       <Box sx={{ mt: 60 }}>
         <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
 
-        <Box sx={{ mt: 40, display: 'flex', columnGap: 20 }}>
-          <CreatorInfoCard
-            creator={poolInfo.creator}
-            poolInfo={poolInfo}
-            getPoolInfo={getPoolInfo}
-            creatorUserInfo={poolInfo.creatorUserInfo}
-          />
+        <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
+          {!isMobile && (
+            <CreatorInfoCard
+              creator={poolInfo.creator}
+              poolInfo={poolInfo}
+              getPoolInfo={getPoolInfo}
+              creatorUserInfo={poolInfo.creatorUserInfo}
+            />
+          )}
 
           <Stack sx={{ flex: 1 }} spacing={20}>
             {account === poolInfo.creator ? (
@@ -50,6 +54,14 @@ const FixedSwapPoolPageContent = () => {
 
             <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
           </Stack>
+          {isMobile && (
+            <CreatorInfoCard
+              creator={poolInfo.creator}
+              poolInfo={poolInfo}
+              getPoolInfo={getPoolInfo}
+              creatorUserInfo={poolInfo.creatorUserInfo}
+            />
+          )}
         </Box>
       </Box>
     </Container>

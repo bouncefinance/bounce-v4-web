@@ -15,6 +15,7 @@ import { IProfileOverviewValue, SocialEditLinks, sxInputStyle } from './ProfileO
 import { FirstLoginNextButtonGroup } from 'pages/login/FirstLoginInfo'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
+import useBreakpoint from '../../hooks/useBreakpoint'
 
 const DESCRIPTION_LENGTH = 350
 
@@ -45,6 +46,7 @@ export default function FirstProfileOverview() {
   const { userInfo } = useUserInfo()
   const { redirect } = useQueryParams()
   const navigate = useNavigate()
+  const isMobile = useBreakpoint('md')
 
   const { loading, runAsync: runUpdateBasic } = useUpdateBasic()
 
@@ -177,6 +179,7 @@ export default function FirstProfileOverview() {
                   Continue
                 </LoadingButton>
               }
+              isMobile={isMobile}
             />
           </Stack>
         )

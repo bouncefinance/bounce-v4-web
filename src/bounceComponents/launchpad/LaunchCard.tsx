@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Common } from './index'
-import { Avatar, Box, Grid, Stack, styled, Typography } from '@mui/material'
+import { Avatar, Box, Grid, Stack, styled, Typography, useTheme } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
 import PoolStatusBox from '../fixed-swap-nft/ActionBox/NftPoolStatus'
 import { Body02, Body03, H5, H6 } from '../../components/Text'
@@ -8,14 +8,16 @@ import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { IPrivatePadProp } from 'pages/launchpad'
 import { useNavigate } from 'react-router-dom'
 import { PoolStatus } from 'api/pool/type'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 export function CardDesc({ title, content }: { title: string; content: string | React.ReactElement }) {
+  const isSm = useBreakpoint('sm')
   return (
     <Box sx={{ gap: 4 }}>
-      <Typography fontSize={13} lineHeight={'18px'}>
+      <Typography fontSize={isSm ? 12 : 13} lineHeight={'18px'}>
         {title}
       </Typography>
-      <H6>{content}</H6>
+      <H6 fontSize={isSm ? 14 : ''}>{content}</H6>
     </Box>
   )
 }
@@ -123,8 +125,9 @@ export function Progress() {
 }
 
 export function LaunchPadDesc({ data }: { data: IPrivatePadProp }) {
+  const isSm = useBreakpoint('sm')
   return (
-    <Grid mt={24} container spacing={16}>
+    <Grid mt={isSm ? 16 : 24} container spacing={16}>
       {data.moreData.map((d, i) => (
         <Grid key={i} item md={6}>
           <CardDesc title={d.title} content={d.content} />
@@ -135,15 +138,39 @@ export function LaunchPadDesc({ data }: { data: IPrivatePadProp }) {
 }
 
 export function SocialMedia({ data }: { data: IPrivatePadProp }) {
+  const theme = useTheme()
+  const isSm = useBreakpoint('sm')
   return (
     <AlignBottomBG>
-      <Body03>{data.desc}</Body03>
+      <Body03
+        mt={12}
+        fontSize={13}
+        sx={{
+          display: '-webkit-box',
+          '-webkit-line-clamp': '4',
+          textOverflow: 'ellipsis',
+          overflow: 'hidden',
+          '-webkit-box-orient': 'vertical',
+          [theme.breakpoints.down('sm')]: {
+            height: 36,
+            '-webkit-line-clamp': '2'
+          }
+        }}
+      >
+        {data.desc}
+      </Body03>
       <Row
-        mt={24}
+        mt={isSm ? 12 : 24}
         gap={10}
         onClick={e => e.stopPropagation()}
         sx={{
+          '& > a': {
+            width: isSm ? 32 : 40,
+            height: isSm ? 32 : 40
+          },
           '& img, & svg': {
+            width: '100%',
+            height: '100%',
             transition: '0.5s',
             '&:hover': {
               transform: 'scale(1.2)'
@@ -167,7 +194,8 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
     if (cur >= start && cur <= end) return PoolStatus.Live
     return PoolStatus.Closed
   }, [end, start])
-
+  const theme = useTheme()
+  const isSm = useBreakpoint('sm')
   return (
     <Common
       img={props.data.img}
@@ -184,17 +212,33 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
         }
       }}
       child={
-        <Box padding={'24px 40px'} display={'flex'} flexDirection={'column'} height={'100%'}>
-          <CenterRow justifyContent={'space-between'}>
+        <Box padding={isSm ? 16 : '24px 40px'} display={'flex'} flexDirection={'column'} height={'100%'}>
+          <CenterRow
+            justifyContent={'space-between'}
+            sx={{
+              [theme.breakpoints.down('sm')]: {
+                flexDirection: 'column-reverse',
+                alignItems: 'flex-start',
+                gap: 14
+              }
+            }}
+          >
             <Row gap={16}>
-              <Avatar sx={{ width: 60, height: 60 }} src={props.data.avatar} />
+              <Avatar
+                variant={isSm ? 'rounded' : 'circular'}
+                sx={{
+                  width: isSm ? 40 : 60,
+                  height: isSm ? 40 : 60,
+                  '&.MuiAvatar-rounded	': {
+                    borderRadius: 5
+                  }
+                }}
+                src={props.data.avatar}
+              />
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography fontSize={28} lineHeight={'36px'}>
+                <Typography fontSize={isSm ? 20 : 28} lineHeight={'36px'}>
                   {props.data.title}
                 </Typography>
-                {/* <Typography fontSize={14} lineHeight={'21px'}>
-                  {props.data.shortTitle}
-                </Typography> */}
               </Box>
             </Row>
             <PoolStatusBox

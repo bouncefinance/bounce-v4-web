@@ -12,8 +12,8 @@ import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
 import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-import { Mobile } from 'bounceComponents/common/Mobile'
-import { ShowOnMobile } from 'themes/context'
+// import { Mobile } from 'bounceComponents/common/Mobile'
+// import { ShowOnMobile } from 'themes/context'
 import { ToastContainer } from 'react-toastify'
 import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
@@ -51,6 +51,8 @@ import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
+import FundoHome from 'pages/fundo/home'
+import FundoDetail from 'pages/fundo/detail'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
@@ -72,14 +74,15 @@ const GlobalHooks = () => {
 }
 
 const UnSupportedMobileRouter = () => {
-  const { pathname } = useLocation()
+  return null
+  // const { pathname } = useLocation()
 
-  const show = !pathname.includes('okxActivity')
-  return show ? (
-    <ShowOnMobile breakpoint="md">
-      <Mobile />
-    </ShowOnMobile>
-  ) : null
+  // const show = !pathname.includes('okxActivity')
+  // return show ? (
+  //   <ShowOnMobile breakpoint="md">
+  //     <Mobile />
+  //   </ShowOnMobile>
+  // ) : null
 }
 
 export default function App() {
@@ -88,7 +91,6 @@ export default function App() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
-
   return (
     <Suspense fallback={null}>
       <ModalProvider>
@@ -154,7 +156,9 @@ export default function App() {
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
                     />
-
+                    <Route path={routes.fundo.home} element={<FundoHome />} />
+                    <Route path={routes.fundo.detail} element={<FundoDetail />} />
+                    <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     {/* <Route
                       path={routes.game.bladeDaoIndex}

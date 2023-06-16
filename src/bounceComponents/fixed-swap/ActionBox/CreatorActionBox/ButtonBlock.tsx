@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import DialogTips from 'bounceComponents/common/DialogTips'
+import { useCreatorClaimAmount1Data } from 'bounceHooks/auction/useCreatorClaimTxFee'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -22,15 +23,25 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
     poolInfo.currentBounceContractAddress
   )
 
+  const claimAmount1Data = useCreatorClaimAmount1Data(poolInfo?.currencySwappedTotal1)
+
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = poolInfo.currencySurplusTotal0.greaterThan('0')
-    const token1ToClaimText = `${poolInfo.currencySwappedTotal1.toSignificant()} ${poolInfo.token1.symbol}`
+    const token1ToClaimText = `${claimAmount1Data?.receivedAmount?.toSignificant()} ${
+      poolInfo?.token1.symbol
+    } (fees: ${claimAmount1Data?.fee?.toSignificant()} ${poolInfo?.token1.symbol})`
     const token0ToClaimText =
       hasToken0ToClaim && poolInfo.currencySurplusTotal0.toSignificant() && poolInfo.token0.symbol
         ? ` and ${poolInfo.currencySurplusTotal0.toSignificant()} ${poolInfo.token0.symbol}`
         : ''
     return `You have successfully claimed ${token1ToClaimText}${token0ToClaimText}`
-  }, [poolInfo.currencySurplusTotal0, poolInfo.currencySwappedTotal1, poolInfo.token0.symbol, poolInfo.token1.symbol])
+  }, [
+    claimAmount1Data?.fee,
+    claimAmount1Data?.receivedAmount,
+    poolInfo.currencySurplusTotal0,
+    poolInfo.token0.symbol,
+    poolInfo?.token1.symbol
+  ])
 
   const toClaim = useCallback(
     async (isCancel: boolean) => {

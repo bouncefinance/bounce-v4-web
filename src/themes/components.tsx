@@ -407,7 +407,7 @@ export const ComponentOptions = {
       styleOverrides: {
         root: {
           '& .MuiPagination-ul': {
-            alignItems: 'baseline'
+            // alignItems: 'baseline'
           },
           ' .MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
             border: 0,

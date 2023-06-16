@@ -15,6 +15,8 @@ import FixedSelected from 'components/FixedNftSelected'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import useBreakpoint from 'hooks/useBreakpoint'
+import MobileFixedNftSelected from 'components/FixedNftSelected/mobileFixedNftSelected'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -30,23 +32,41 @@ interface DialogParams {
   handleClose: () => void
 }
 const NFTDialog = styled(Dialog)(({ theme }) => ({
-  '&.MuiDialog-root': {
-    top: theme.height.header
-  },
-  '.MuiModal-backdrop': {
-    top: theme.height.header,
-    height: `calc(100% - ${theme.height.header})`
-  },
-  '.MuiPaper-root': {
-    position: 'relative',
-    top: theme.height.header,
-    height: `calc(100%)`
-  },
   '.MuiDialog-paper': {
-    borderRadius: '30px 30px 0 0',
-    backgroundColor: 'var(--ps-text-8)',
-    maxWidth: '100%',
-    width: '100%'
+    borderRadius: '30px 30px 0 0'
+  },
+  [theme.breakpoints.up('sm')]: {
+    '&.MuiDialog-root': {
+      top: theme.height.header
+    },
+    '.MuiModal-backdrop': {
+      top: theme.height.header,
+      height: `calc(100% - ${theme.height.header})`
+    },
+    '.MuiDialog-paperScrollPaper': {
+      position: 'relative',
+      top: theme.height.header,
+      height: `calc(100%)`
+    },
+    '.MuiDialog-paper': {
+      borderRadius: '30px 30px 0 0',
+      backgroundColor: 'var(--ps-text-8)',
+      maxWidth: '100%',
+      width: '100%'
+    }
+  },
+  [theme.breakpoints.down('sm')]: {
+    '.MuiDialog-paper': {
+      position: 'relative',
+      marginLeft: 0,
+      marginRight: 0,
+      marginTop: 44,
+      marginBottom: 0,
+      maxHeight: 'calc(100% - 44px)'
+    },
+    '.MuiDialogContent-root': {
+      padding: '0 16px'
+    }
   }
 }))
 interface TitleProps {
@@ -55,11 +75,12 @@ interface TitleProps {
 }
 const DialogTitle = (props: TitleProps) => {
   const { title, handleClose } = props
+  const isSm = useBreakpoint('sm')
   return (
     <Box
       sx={{
         position: 'relative',
-        height: 140,
+        height: isSm ? 70 : 140,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center'
@@ -70,7 +91,7 @@ const DialogTitle = (props: TitleProps) => {
           textAlign: 'center',
           lineHeight: '28px',
           fontFamily: `'Public Sans'`,
-          fontSize: 28,
+          fontSize: isSm ? 20 : 28,
           fontWeight: 600
         }}
       >
@@ -80,7 +101,7 @@ const DialogTitle = (props: TitleProps) => {
         src={CloseIcon}
         style={{
           position: 'absolute',
-          right: 72,
+          right: isSm ? 0 : 72,
           top: '50%',
           marginTop: -30,
           width: 60,
@@ -174,8 +195,8 @@ const NFTAuctionListDialog = (props: DialogParams) => {
     }
   )
   const handleSubmit = useCallback(
-    (values: InitialValuesPros) =>
-      run({
+    (values: InitialValuesPros) => {
+      return run({
         current: 1,
         pageSize: 16,
         category: values.auctionType,
@@ -187,7 +208,8 @@ const NFTAuctionListDialog = (props: DialogParams) => {
         poolName: values.searchType === 0 ? values.searchText : '',
         poolStatusFrontend: values.poolStatus,
         token0Address: values.tokenFromAddress
-      }),
+      })
+    },
     [run]
   )
 
@@ -211,6 +233,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
     poolsPagination.changeCurrent(p)
     handleScrollToTop()
   }
+  const isSm = useBreakpoint('sm')
   return (
     <NFTDialog
       fullScreen={true}
@@ -227,7 +250,10 @@ const NFTAuctionListDialog = (props: DialogParams) => {
         <Box
           sx={{
             width: '100%',
-            paddingBottom: 100
+            paddingBottom: 100,
+            footer: {
+              width: 'calc(100vw - 32px) !important'
+            }
           }}
         >
           <Box
@@ -254,7 +280,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
             ) : poolsData?.total > 0 ? (
               <Grid container spacing={18}>
                 {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
-                  <Grid item xs={3} sm={3} md={3} lg={3} xl={3} key={index}>
+                  <Grid item xs={12} sm={6} md={3} lg={3} xl={3} key={index}>
                     <Box
                       component={'a'}
                       href={getAuctionPoolLink(
@@ -278,13 +304,24 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                   onChange={handlePageChange}
                   count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
                   variant="outlined"
+                  siblingCount={0}
+                  sx={{
+                    '.MuiPaginationItem-root': {
+                      margin: isSm ? '0 4px' : '0 12px'
+                    },
+                    '.MuiPagination-ul': {
+                      flexWrap: 'nowrap',
+                      alignItems: 'center'
+                    }
+                  }}
                 />
               </Box>
             )}
           </Box>
           <FooterPc />
         </Box>
-        <FixedSelected handleSubmit={filterSubmit} />
+        {!isSm && <FixedSelected handleSubmit={filterSubmit} />}
+        {isSm && <MobileFixedNftSelected handleSubmit={filterSubmit} />}
       </DialogContent>
     </NFTDialog>
   )
