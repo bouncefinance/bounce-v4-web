@@ -136,7 +136,7 @@ export const marketList: BannerType[] = [
     time: '28 JUNE 2023 10:30 AM BST',
     img: 'https://sothebys-com.brightspotcdn.com/dims4/default/cba2bbf/2147483647/strip/true/crop/600x349+0+176/resize/487x283!/format/webp/quality/90/?url=https%3A%2F%2Fsothebys-md.brightspotcdn.com%2F06%2Fec%2Fae92817940018d9abb03e9cc930c%2F231312016-l23007modctpday-webbanners-600x700.jpg',
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/modern-contemporary-day-auction-l23007?s=intro&locale=en',
-    startTime: 16879482000,
+    startTime: 1687948200,
     endTime: 0,
     categories: 'Art'
   },
