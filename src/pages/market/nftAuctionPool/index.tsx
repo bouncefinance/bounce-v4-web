@@ -14,7 +14,7 @@ import {
   Typography
 } from '@mui/material'
 import { Form, Formik, useFormikContext } from 'formik'
-import { PoolStatus } from 'api/pool/type'
+import { PoolStatus, PoolType } from 'api/pool/type'
 import React, { useEffect, useRef, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
@@ -114,10 +114,14 @@ export const NFTCard = (props: NFTPrams) => {
     token0,
     chainId,
     token1,
+    category,
     amountTotal0
   } = props.nft
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
   const navigate = useNavigate()
+
+  const categoryName = category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English'
+
   return (
     <Box
       sx={{
@@ -262,7 +266,7 @@ export const NFTCard = (props: NFTPrams) => {
                 }}
                 mr={4}
               >
-                Fixed Price
+                {categoryName}
               </Box>
               <Box
                 sx={{
@@ -316,7 +320,7 @@ export const NFTCard = (props: NFTPrams) => {
             marginBottom: '17px'
           }}
         >
-          {name} Fixed Price Auction Pool
+          {name} {categoryName} Auction Pool
         </Typography>
         <Box
           sx={{
