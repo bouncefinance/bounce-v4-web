@@ -15,7 +15,7 @@ import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
 import * as Yup from 'yup'
-import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import Radio from '../Radio'
 import ImportWhitelistDialog from '../ImportWhitelistDialog'
@@ -25,7 +25,7 @@ import SwitchFormItem from '../SwitchFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { isAddress } from 'utils'
-import { ChainId } from 'constants/chain'
+// import { ChainId } from 'constants/chain'
 import { useMemo } from 'react'
 import { useQueryParams } from 'hooks/useQueryParams'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -50,7 +50,7 @@ export const AdvancedSettingsForm = ({
 }) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
-  const auctionInChain = useAuctionInChain()
+  // const auctionInChain = useAuctionInChain()
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
   const isSm = useBreakpoint('sm')
@@ -220,7 +220,7 @@ export const AdvancedSettingsForm = ({
                   </Box>
                 )}
 
-                {!hideRefundable && ChainId.ZKSYNC_ERA !== auctionInChain && (
+                {!hideRefundable && (
                   <Box sx={{ mt: 38, mb: 34 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Stack direction="row" alignItems="center" spacing={8} sx={{ mt: 40, mb: 20 }}>
