@@ -51,8 +51,8 @@ export const AdvancedSettingsForm = ({
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const auctionInChain = useAuctionInChain()
-  const { lunchPad } = useQueryParams()
-  const isLunchPad = useMemo(() => !!lunchPad, [lunchPad])
+  const { launchPad } = useQueryParams()
+  const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
   const isSm = useBreakpoint('sm')
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -233,7 +233,7 @@ export const AdvancedSettingsForm = ({
                         </Tooltip>
                       </Stack>
 
-                      {isLunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                      {isLaunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
