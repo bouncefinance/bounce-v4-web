@@ -1,4 +1,4 @@
-import ProjectBg from 'assets/images/project-bg.png'
+// import ProjectBg from 'assets/images/project-bg.png'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { H4, H5, H6 } from '../../components/Text'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -455,11 +455,11 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const prices = [
     {
       title: 'Token Name',
-      value: 'BLADE'
+      value: 'POSE'
     },
     {
       title: 'Blockchain',
-      value: 'zkSync Era'
+      value: 'BNB Chain'
     }
     // {
     //   title: 'Hard Cap Per User',
@@ -501,7 +501,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
       }}
     >
       <img
-        src={ProjectBg}
+        src={'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png'}
         style={{
           position: 'absolute',
           width: '100%',
@@ -518,7 +518,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           position: 'absolute',
           display: 'flex',
           flexDirection: 'column',
-          background: `url(${ProjectBg})`,
+          background: `url(https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png)`,
           top: 0,
           right: '40px',
           bottom: 0,
@@ -580,36 +580,6 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           {!!userId && poolInfo && (
             <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
           )}
-          <LineStyleBtn
-            sx={{
-              width: 'max-content',
-              padding: '0 12px',
-              border: '1px solid #fff',
-              color: '#fff',
-              marginLeft: 6
-            }}
-            onClick={() => nav(routes.game.bladeDaoRank)}
-          >
-            IDO Bonus leaderboard
-          </LineStyleBtn>
-          <ShareBtn
-            style={{
-              border: '1px solid #fff',
-              color: '#fff'
-            }}
-          />
-          <InviteBtn
-            style={{
-              border: '1px solid #fff',
-              color: '#fff',
-              width: 34,
-              padding: 0,
-              marginLeft: 6,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          />
         </Box>
         <AlignBottomBG
           sx={{
@@ -630,10 +600,13 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
             {item.desc}
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16}>
-            {item.detailSocial}
+            {item.social}
             <WhiteButton
               onClick={() => {
-                window.open('https://bladedao.gitbook.io/bladedao/', '_blank')
+                window.open(
+                  'https://drive.google.com/file/d/1EUO7rl5E3MHgdZOgcuz5A65QtIEtHe-Y/view?usp=sharing',
+                  '_blank'
+                )
               }}
             >
               <IconBook />
@@ -646,12 +619,9 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           </Row>
           <Row mt={16} gap={8}>
             <GrayBg>
-              <TokenImage
-                src={item.backendChainId ? ChainListMap?.[item.backendChainId as ChainId]?.logo : ''}
-                size={12}
-              />
+              <TokenImage src={item.chainId ? ChainListMap?.[item.chainId as ChainId]?.logo : ''} size={12} />
               <Typography variant={'h6'} color={'white'}>
-                zkSync Era
+                {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
               </Typography>
             </GrayBg>
             {/*<GrayBg>*/}
@@ -675,13 +645,13 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
 }
 export function Tabs({ item }: { item: IPrivatePadProp }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
-  const tabs = ['Project Information', 'Investment and Partners']
+  const tabs = ['Project Information']
   const [tab, setTab] = useState(tabs[0])
   console.log(setTab)
 
   return (
     <Box mt={120} mb={140}>
-      <Row justifyContent={'center'}>
+      <Row justifyContent={'center'} mb={20}>
         {tabs.map((t, i) => (
           <TabBg key={i} /*onClick={() => setTab(t)}*/ className={tab === t ? 'select' : ''}>
             {t}

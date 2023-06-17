@@ -33,11 +33,11 @@ import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.s
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
-import { routes } from 'constants/routes'
 
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
+import { ChainId } from 'constants/chain'
 
 export const Launchpad: React.FC = () => {
   return (
@@ -87,6 +87,7 @@ export interface IPrivatePadProp {
   // status: PoolStatus
   desc: string
   backendChainId: number
+  chainId?: ChainId
   projectInfo: IProjectInfo[]
   tokenMetrics: IProjectInfo[]
   social: JSX.Element[]
@@ -122,23 +123,37 @@ export const PrivatePadList: IPrivatePadProp[] = [
     keyId: 2,
     liveTimeStamp: {
       start: 1687046400000,
-      end: 1687219200000
+      end: 1687478400000
     },
     poolTypeName: '',
     img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
     avatar: poseiswapAvatar,
     title: 'PoseiSwap',
-    backendChainId: 12,
+    backendChainId: 2,
+    chainId: 56,
     // status: PoolStatus.Upcoming,
     salePrice: '1 GMT = 0.00002514 BNB',
     tokenOffered: '420,000,000.0000 GMT',
     hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
     singleInitialInvestment: '0.1 BNB',
-    upcomingLink: routes.thirdPart.digitalAssetsOffering,
+    // upcomingLink: routes.thirdPart.digitalAssetsOffering,
+    upcomingLink: '/launchpad/poseiswap/auction/690',
+    liveLink: '/launchpad/poseiswap/auction/690',
     projectInfo: [
       {
-        title: '',
-        info: []
+        title: 'What is PoseiSwap?',
+        info: [
+          'PoseiSwap, the first decentralized exchange (DEX) on the Nautilus Chain (Zebec Protocol), provides an efficient and secure platform for cryptocurrency trading. Its key features include quick, cost-effective transactions, and privacy thanks to the scalable L3 Nautilus Chain, addressing high gas fees and network congestion prevalent in other DEXs.'
+        ]
+      },
+      {
+        title: 'Methods of Token Unlocking',
+        info: [
+          'Unlock Node:',
+          '- 45 days cliff, 5.00% unlock',
+          '- 5 month linear vesting. (1.00% monthly)',
+          '- 18 month linear vesting. (5.00% monthly).'
+        ]
       }
     ],
     tokenMetrics: [
@@ -169,8 +184,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$POSE' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Token Price', content: '$0.309933' },
+      { title: 'Token Amount', content: '1,000,000' },
       { title: 'Blockchain', content: 'BNB Chain' }
     ]
   },
