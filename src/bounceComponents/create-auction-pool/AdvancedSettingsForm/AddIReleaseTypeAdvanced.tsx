@@ -63,8 +63,8 @@ const defaultFragmentRelease = {
 export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: boolean }) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
-  const { lunchPad } = useQueryParams()
-  const isLunchPad = useMemo(() => !!lunchPad, [lunchPad])
+  const { launchPad } = useQueryParams()
+  const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
 
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -435,7 +435,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                         </Tooltip>
                       </Stack>
 
-                      {isLunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                      {isLaunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
