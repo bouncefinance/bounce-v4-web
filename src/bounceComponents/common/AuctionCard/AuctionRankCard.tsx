@@ -435,7 +435,7 @@ export const AuctionRankCard: React.FC = () => {
             header={TableHeader}
             rows={
               data
-                ? data.list?.slice(0, 5)?.map((d: any, idx: number) =>
+                ? data.list?.slice(0, Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>
                     AuctionRow({
                       isSm: isSm,
                       ...d,
@@ -451,11 +451,11 @@ export const AuctionRankCard: React.FC = () => {
             header={TableHeader}
             rows={
               data
-                ? data.list?.slice(5)?.map((d: any, idx: number) =>
+                ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>
                     AuctionRow({
                       isSm: isSm,
                       ...d,
-                      index: idx + 6,
+                      index: Math.ceil(data.list.length / 2) + idx + 1,
                       opt: optionDatas,
                       navigate
                     })

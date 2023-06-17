@@ -3,7 +3,7 @@ import { getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
 import { useEnglishAuctionNftContract } from 'hooks/useContract'
 import { useCallback, useMemo } from 'react'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
@@ -24,8 +24,11 @@ export function useEnglishAuctionPlaceBidCallback(poolInfo: EnglishAuctionNFTPoo
   const bidPrevGasFee = useMemo(() => {
     const fee = gasFeeRes?.result?.[0].toString()
     if (!fee || !poolInfo.currencyAmountMin1) return undefined
-    return CurrencyAmount.fromRawAmount(poolInfo.currencyAmountMin1.currency, fee)
-  }, [gasFeeRes?.result, poolInfo.currencyAmountMin1])
+    if (poolInfo.currencyAmountMin1.currency.isNative) {
+      return CurrencyAmount.fromRawAmount(poolInfo.currencyAmountMin1.currency, fee)
+    }
+    return CurrencyAmount.fromRawAmount(Currency.getNativeCurrency(poolInfo.ethChainId), fee)
+  }, [gasFeeRes?.result, poolInfo.currencyAmountMin1, poolInfo.ethChainId])
 
   const bidCallback = useCallback(
     async (
@@ -73,7 +76,7 @@ export function useEnglishAuctionPlaceBidCallback(poolInfo: EnglishAuctionNFTPoo
       })
       return englishAuctionNftContract
         .bid(...args, {
-          gasLimit: calculateGasMargin(estimatedGas),
+          gasLimit: calculateGasMargin(estimatedGas, 20),
           value
         })
         .then((response: TransactionResponse) => {

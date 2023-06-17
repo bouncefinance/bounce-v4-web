@@ -31,7 +31,7 @@ export default function PriceChartView({ poolInfo }: { poolInfo: EnglishAuctionN
   return (
     <Box minHeight={220}>
       <Typography variant="h4">Chart View</Typography>
-      {chatData?.length && <LineChart data={chatData} token1Name={poolInfo.token1.symbol} />}
+      {!!chatData?.length && <LineChart data={chatData} token1Name={poolInfo.token1.symbol} />}
     </Box>
   )
 }
