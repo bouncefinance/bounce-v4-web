@@ -23,7 +23,7 @@ export function ProjectInfo() {
 }
 function UserBlock() {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const isBlock = useCurrentRegionBlock()
+  const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
 
   if (isBlock) {
     return <NoService />

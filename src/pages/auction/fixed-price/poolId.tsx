@@ -15,7 +15,7 @@ import useBreakpoint from '../../../hooks/useBreakpoint'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
-  const isBlock = useCurrentRegionBlock()
+  const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
   const isMobile = useBreakpoint('lg')
 
   if (isBlock) {

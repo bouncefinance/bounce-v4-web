@@ -35,10 +35,15 @@ export function useOpenModal(modal: ApplicationModal): () => void {
   return useCallback(() => dispatch(setOpenModal(modal)), [dispatch, modal])
 }
 
-export function useCurrentRegionBlock() {
+const isBlockAll = false
+const BlockPoolIds: { [key in ChainId]?: string[] } = {
+  [ChainId.BSC]: ['34']
+}
+export function useCurrentRegionBlock(chainId?: ChainId, poolId?: string) {
   const currentRegion = useSelector((state: AppState) => state.application.currentRegion)
-
-  return currentRegion === 'US'
+  return useMemo(() => {
+    return isBlockAll ? currentRegion === 'US' : chainId && poolId && BlockPoolIds?.[chainId]?.includes(poolId)
+  }, [chainId, currentRegion, poolId])
 }
 
 export function useSetCurrentRegion() {

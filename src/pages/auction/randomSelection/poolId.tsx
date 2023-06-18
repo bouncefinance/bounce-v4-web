@@ -16,7 +16,7 @@ import useBreakpoint from '../../../hooks/useBreakpoint'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useRandomSelectionPoolInfo()
-  const isBlock = useCurrentRegionBlock()
+  const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
   const isMobile = useBreakpoint('lg')
   // load winners list if isWinnerSeedDone is true
   const isWinnerSeedDone = useIsWinnerSeedDone(
