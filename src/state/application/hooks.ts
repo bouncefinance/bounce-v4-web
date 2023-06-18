@@ -42,7 +42,9 @@ const BlockPoolIds: { [key in ChainId]?: string[] } = {
 export function useCurrentRegionBlock(chainId?: ChainId, poolId?: string) {
   const currentRegion = useSelector((state: AppState) => state.application.currentRegion)
   return useMemo(() => {
-    return isBlockAll ? currentRegion === 'US' : chainId && poolId && BlockPoolIds?.[chainId]?.includes(poolId)
+    return isBlockAll
+      ? currentRegion === 'US'
+      : currentRegion === 'US' && chainId && poolId && BlockPoolIds?.[chainId]?.includes(poolId)
   }, [chainId, currentRegion, poolId])
 }
 
