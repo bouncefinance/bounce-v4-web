@@ -6,6 +6,8 @@ import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
+import { useCurrentRegionBlock } from 'state/application/hooks'
+import NoService from 'components/NoService'
 
 export function ProjectInfo() {
   const item = PrivatePadList.find(i => i.keyId === 2) as IPrivatePadProp
@@ -21,6 +23,12 @@ export function ProjectInfo() {
 }
 function UserBlock() {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const isBlock = useCurrentRegionBlock()
+
+  if (isBlock) {
+    return <NoService />
+  }
+
   if (!poolInfo) {
     return (
       <Box
