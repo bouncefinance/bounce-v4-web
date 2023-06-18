@@ -8,6 +8,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 export function ProjectInfo() {
   const item = PrivatePadList.find(i => i.keyId === 2) as IPrivatePadProp
@@ -22,6 +23,7 @@ export function ProjectInfo() {
   )
 }
 function UserBlock() {
+  const isSm = useBreakpoint('sm')
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
 
@@ -66,7 +68,7 @@ function UserBlock() {
         style={{
           maxWidth: '1296px',
           margin: '0 auto 40px',
-          padding: '48px 56px'
+          padding: isSm ? 20 : '48px 56px'
         }}
         poolInfo={poolInfo}
         getPoolInfo={getPoolInfo}

@@ -514,18 +514,18 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
         }}
       />
       <Box
-        style={{
+        sx={{
           position: 'absolute',
           display: 'flex',
           flexDirection: 'column',
           background: `url(https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png)`,
           top: 0,
-          right: '40px',
+          right: { xs: 20, sm: '40px' },
           bottom: 0,
           borderRadius: '0 0 20px 20px',
           backgroundSize: 'cover',
           objectFit: 'scale-down',
-          left: '40px'
+          left: { xs: 20, sm: '40px' }
         }}
       >
         <GrayButton
@@ -599,7 +599,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           <Typography mt={14} variant={'body1'} sx={{ color: 'white', maxWidth: '800px', textAlign: 'center' }}>
             {item.desc}
           </Typography>
-          <Row mt={32} alignItems={'center'} gap={16}>
+          <Row mt={32} alignItems={'center'} gap={16} flexWrap={'wrap'} justifyContent={'center'}>
             {item.social}
             <WhiteButton
               onClick={() => {
@@ -651,7 +651,7 @@ export function Tabs({ item }: { item: IPrivatePadProp }) {
 
   return (
     <Box mt={120} mb={140}>
-      <Row justifyContent={'center'} mb={20}>
+      <Row justifyContent={'center'} mb={{ sm: 20, xs: 0 }}>
         {tabs.map((t, i) => (
           <TabBg key={i} /*onClick={() => setTab(t)}*/ className={tab === t ? 'select' : ''}>
             {t}
@@ -661,7 +661,7 @@ export function Tabs({ item }: { item: IPrivatePadProp }) {
       <Box
         sx={{
           background: 'white',
-          padding: '20px 72px',
+          padding: { xs: 20, sm: '20px 72px' },
           minHeight: '486px'
         }}
       >
@@ -713,6 +713,7 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
         maxWidth: '1296px',
         margin: '0 auto',
         display: 'flex',
+        flexWrap: { xs: 'wrap', md: 'unset' },
         justifyContent: 'space-between'
       }}
     >
@@ -727,7 +728,7 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
           </ProjectInfoSubtitle>
         ))}
       </Stack>
-      <ProjectContentBg>
+      <ProjectContentBg sx={{ width: { sm: '100%', md: 912 } }}>
         <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
         {Array.isArray(info[currentIdx].info) &&
           info[currentIdx].info.length > 0 &&
