@@ -207,7 +207,7 @@ const BuynowContent = () => {
                       fontFamily: `'Inter'`,
                       fontWight: 400,
                       fontSize: 16,
-                      background: 'var(--ps-text-2)',
+                      background: 'transparent',
                       '&.Mui-selected': {
                         color: 'var(--ps-text-3)',
                         background: 'var(--ps-yellow-1)'
@@ -268,7 +268,7 @@ const BuynowContent = () => {
                       fontFamily: `'Inter'`,
                       fontWight: 400,
                       fontSize: 16,
-                      background: 'var(--ps-text-2)',
+                      background: 'transparent',
                       '&.Mui-selected': {
                         color: 'var(--ps-text-3)',
                         background: 'var(--ps-yellow-1)'

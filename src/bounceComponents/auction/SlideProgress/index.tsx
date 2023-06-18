@@ -66,7 +66,7 @@ export function SlideProgress(props: ISlideProgress) {
   const totalSlides = swiper?.slides ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
   return (
-    <Box width={'100%'} ml={isSm ? 12 : 0}>
+    <Box width={'100%'} ml={isSm ? 16 : 0}>
       <Swiper
         onSlideChange={s => {
           const endIdx = s?.realIndex ? s.realIndex + Number(s.params.slidesPerView) : Number(swiperStyle.slidesPerView)

@@ -1,4 +1,4 @@
-import { Box, Button, Container, MenuItem, Select, Skeleton, Typography } from '@mui/material'
+import { Box, Container, MenuItem, Select, Skeleton, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
@@ -25,9 +25,6 @@ import { poolTypeText } from 'pages/market/pools'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
 
-interface Notable1155Props {
-  handleViewAll?: () => void
-}
 export const TokenSkeleton = () => {
   const [slidesPerView] = useResizeView()
   const isSm = useBreakpoint('sm')
@@ -183,8 +180,9 @@ const AuctionItem = ({ fixedSwaptem, optionDatas }: { fixedSwaptem: any; optionD
     )
   )
 }
-export const NotableAuction = (props: Notable1155Props) => {
-  const { handleViewAll } = props
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const NotableAuction = ({ handleViewAll }: { handleViewAll?: () => void }) => {
+  // const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const isSm = useBreakpoint('sm')
   const [auction, setAuction] = useState(0)
@@ -301,7 +299,7 @@ export const NotableAuction = (props: Notable1155Props) => {
             justifyContent: 'center'
           }}
         >
-          <Button
+          {/* <Button
             onClick={() => {
               handleViewAll && handleViewAll()
             }}
@@ -313,7 +311,7 @@ export const NotableAuction = (props: Notable1155Props) => {
             }}
           >
             View all auctions
-          </Button>
+          </Button> */}
         </Box>
       </Container>
     </Box>

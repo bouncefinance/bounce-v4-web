@@ -412,7 +412,7 @@ const TokenAuction: React.FC = () => {
           width: '100%',
           height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 865 : 622,
           background: 'var(--ps-text-4)',
-          borderRadius: 30
+          borderRadius: 12
         }}
       >
         <Box
@@ -446,7 +446,8 @@ const TokenAuction: React.FC = () => {
           <Typography
             sx={{
               textAlign: 'left',
-              width: 420,
+              width: '100%',
+              maxWidth: 420,
               fontFamily: `'Public Sans'`,
               fontWeight: 400,
               fontSize: isSm ? 14 : 16,
@@ -645,7 +646,7 @@ const TokenAuction: React.FC = () => {
               borderRadius: 30,
               margin: '0 auto',
               background: '#fff',
-              padding: isSm ? 8 : 24,
+              padding: isSm ? '24px 16px' : 24,
               '@media(min-width:1440px)': {
                 transform: 'translateX(-50%)',
                 left: '50%'

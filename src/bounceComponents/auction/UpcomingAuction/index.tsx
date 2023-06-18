@@ -1,4 +1,4 @@
-import { Box, Button, Container, MenuItem, Select, Typography } from '@mui/material'
+import { Box, Container, MenuItem, Select, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
@@ -121,8 +121,9 @@ const AuctionItem = ({ fixedSwaptem, optionDatas }: { fixedSwaptem: any; optionD
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const UpcomingAuction = (props: Notable1155Props) => {
-  const { handleViewAll } = props
+  // const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
@@ -249,7 +250,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
             justifyContent: 'center'
           }}
         >
-          <Button
+          {/* <Button
             onClick={() => {
               handleViewAll && handleViewAll()
             }}
@@ -261,7 +262,7 @@ export const UpcomingAuction = (props: Notable1155Props) => {
             }}
           >
             View all auctions
-          </Button>
+          </Button> */}
         </Box>
       </Container>
     </Box>

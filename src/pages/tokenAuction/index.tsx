@@ -19,7 +19,7 @@ const TokenAuctionPage: React.FC = ({}) => {
     <>
       <HeaderTab />
       <ArrowBanner type={'Token'} />
-      <TypesOfAuction />
+      <TypesOfAuction handleViewAll={handleOpen} />
       <NotableAuction handleViewAll={handleOpen} />
       <UpcomingAuction handleViewAll={handleOpen} />
       <FooterPc />

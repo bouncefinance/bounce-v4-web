@@ -437,7 +437,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                   siblingCount={0}
                   sx={{
                     '.MuiPaginationItem-root': {
-                      margin: isSm ? '0 4px' : '0 12px'
+                      margin: '0 8px'
                     },
                     '.MuiPagination-ul': {
                       flexWrap: 'nowrap',

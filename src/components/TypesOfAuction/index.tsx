@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import FixedPriceWhite from 'assets/imgs/home/TypeOfAuction/FixedPriced-white.svg'
 import FixedPriceBlack from 'assets/imgs/home/TypeOfAuction/FixedPriced-black.svg'
 import DutchAuctionWhite from 'assets/imgs/home/TypeOfAuction/DutchAuction-white.svg'
@@ -38,7 +38,6 @@ import { PoolType } from 'api/pool/type'
 import PoolListDialog from 'pages/tokenAuction/components/listDialog'
 import NftListDialog from 'pages/nftAuction/components/listDialog'
 import useBreakpoint from '../../hooks/useBreakpoint'
-
 interface AuctionItemParams {
   title: string
   defaultImg: string
@@ -49,7 +48,9 @@ interface AuctionItemParams {
   handleOpenTokenAuction?: () => void
   handleOpenNFTAuction?: () => void
 }
-
+interface Notable1155Props {
+  handleViewAll?: () => void
+}
 const AuctionItem = (props: AuctionItemParams) => {
   const { title, defaultImg, hoverImg, totalValue, link, handleOpenTokenAuction, handleOpenNFTAuction, poolType } =
     props
@@ -215,7 +216,7 @@ const SlideBox = styled(Box)(() => ({
     animation: `${scrollX} 60s linear infinite`
   }
 }))
-const TypesOfAuction: React.FC = () => {
+const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   const isSm = useBreakpoint('sm')
   const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
   const { data: volumnCountData } = useRequest(async () => {
@@ -331,9 +332,47 @@ const TypesOfAuction: React.FC = () => {
           background: `var(--ps-text-4)`,
           borderRadius: 30,
           padding: ['40px 0', '60px 0 0'],
-          marginBottom: 20
+          marginBottom: 20,
+          position: 'relative'
         }}
       >
+        <Button
+          onClick={() => {
+            handleViewAll && handleViewAll()
+          }}
+          variant="contained"
+          // href={AuctionList[currentIndex].checkAllLink}
+          sx={{
+            // background: 'var(--ps-yellow-1)',
+            width: 170,
+            height: 42,
+            padding: '16px 20px',
+            position: 'fixed',
+            '@media(max-width:600px)': {
+              bottom: 51,
+              left: '50%',
+              transform: 'translateX(-50%)'
+            },
+            '@media(min-width:600px)': {
+              bottom: 20,
+              right: 72
+            },
+            zIndex: 9999,
+            whiteSpace: 'nowrap'
+          }}
+          endIcon={
+            <svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M9 8.97105L8.84425 0.655752L0.528946 0.5L0.509197 1.55434L7.07697 1.67736L0 8.75434L0.745665 9.5L7.82263 2.42303L7.94565 8.9908L9 8.97105Z"
+                fill="#20201E"
+              />
+            </svg>
+          }
+        >
+          View all auctions
+        </Button>
         <Typography
           sx={{
             color: 'var(--ps-yellow-1)',

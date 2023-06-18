@@ -132,7 +132,7 @@ export const NFTCard = (props: NFTPrams) => {
         sx={{
           position: 'relative',
           paddingTop: '86%',
-          borderRadius: '24px 24px 0 0',
+          borderRadius: '12px 12px 0 0',
           overflow: 'hidden'
         }}
         mb={16}
