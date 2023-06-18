@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import FixedPriceWhite from 'assets/imgs/home/TypeOfAuction/FixedPriced-white.svg'
 import FixedPriceBlack from 'assets/imgs/home/TypeOfAuction/FixedPriced-black.svg'
 import DutchAuctionWhite from 'assets/imgs/home/TypeOfAuction/DutchAuction-white.svg'
@@ -216,6 +216,7 @@ const SlideBox = styled(Box)(() => ({
     animation: `${scrollX} 60s linear infinite`
   }
 }))
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   const isSm = useBreakpoint('sm')
   const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
@@ -336,7 +337,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
           position: 'relative'
         }}
       >
-        <Button
+        {/* <Button
           onClick={() => {
             handleViewAll && handleViewAll()
           }}
@@ -372,7 +373,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
           }
         >
           View all auctions
-        </Button>
+        </Button> */}
         <Typography
           sx={{
             color: 'var(--ps-yellow-1)',

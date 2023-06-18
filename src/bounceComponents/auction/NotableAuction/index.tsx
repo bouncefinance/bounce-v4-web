@@ -1,4 +1,4 @@
-import { Box, Container, MenuItem, Select, Skeleton, Typography } from '@mui/material'
+import { Box, Button, Container, MenuItem, Select, Skeleton, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { H4 } from '../../../components/Text'
 import { SlideProgress } from '../SlideProgress'
@@ -299,7 +299,7 @@ export const NotableAuction = ({ handleViewAll }: { handleViewAll?: () => void }
             justifyContent: 'center'
           }}
         >
-          {/* <Button
+          <Button
             onClick={() => {
               handleViewAll && handleViewAll()
             }}
@@ -311,7 +311,7 @@ export const NotableAuction = ({ handleViewAll }: { handleViewAll?: () => void }
             }}
           >
             View all auctions
-          </Button> */}
+          </Button>
         </Box>
       </Container>
     </Box>
