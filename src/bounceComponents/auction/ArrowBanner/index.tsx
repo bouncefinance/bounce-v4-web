@@ -96,7 +96,7 @@ function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
-  const { data } = useRequest(async () => {
+  const { data, loading } = useRequest(async () => {
     const resp = await getBanner(type)
     return {
       list: resp.data,
@@ -138,29 +138,29 @@ function ArrowBanner({ type }: { type?: string }) {
           <ArrowBackIcon />
         </ArrowBgLeft>
       )}
-
-      <Swiper
-        onSwiper={setSwiper}
-        spaceBetween={0}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{
-          delay: 3000
-        }}
-        style={{
-          maxWidth: '1296px',
-          width: '100%'
-        }}
-      >
-        {data?.list?.map((item: BannerType, index: number) => (
-          <SwiperSlide key={index}>
-            <Banner key={index} banner={item} />
-          </SwiperSlide>
-        ))}
-        <SwiperSlide style={{ display: data ? 'none' : 'block' }}>
-          <SwiperSkeleton />
-        </SwiperSlide>
-      </Swiper>
+      {!data || loading ? (
+        <SwiperSkeleton />
+      ) : (
+        <Swiper
+          onSwiper={setSwiper}
+          spaceBetween={0}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{
+            delay: 3000
+          }}
+          style={{
+            maxWidth: '1296px',
+            width: '100%'
+          }}
+        >
+          {data?.list?.map((item: BannerType, index: number) => (
+            <SwiperSlide key={index}>
+              <Banner key={index} banner={item} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
       {!isSm && (
         <ArrowBgRight
           sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}

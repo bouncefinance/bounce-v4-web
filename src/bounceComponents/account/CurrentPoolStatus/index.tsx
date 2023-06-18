@@ -123,7 +123,7 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
             <BounceAnime />
           </Box>
         ) : curList.length === 0 ? (
-          <EmptyData title="You haven’t create or participate in any auction yet" prompt="Go and explore auctions." />
+          <EmptyData title="You Haven’t Create Or Participate In Any Auction Yet" prompt="Go and explore auctions." />
         ) : (
           <Box mt={20}>
             <Grid container spacing={{ xs: 10, xl: 18 }}>

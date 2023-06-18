@@ -25,9 +25,6 @@ import { poolTypeText } from 'pages/market/pools'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
 
-interface Notable1155Props {
-  handleViewAll?: () => void
-}
 export const TokenSkeleton = () => {
   const [slidesPerView] = useResizeView()
   const isSm = useBreakpoint('sm')
@@ -183,8 +180,9 @@ const AuctionItem = ({ fixedSwaptem, optionDatas }: { fixedSwaptem: any; optionD
     )
   )
 }
-export const NotableAuction = (props: Notable1155Props) => {
-  const { handleViewAll } = props
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const NotableAuction = ({ handleViewAll }: { handleViewAll?: () => void }) => {
+  // const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const isSm = useBreakpoint('sm')
   const [auction, setAuction] = useState(0)

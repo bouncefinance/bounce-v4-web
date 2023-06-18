@@ -58,7 +58,7 @@ const PrivatePadBg = styled(CenterColumn)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 80px 40px 100px;
+  /* padding: 80px 40px 100px; */
   width: 100%;
   background: #ffffff;
   border-radius: 30px 30px 0 0;
@@ -497,7 +497,7 @@ const PrivatePad: React.FC = () => {
   const [chainFilter, setChainFilter] = useState<number>(0)
 
   return (
-    <PrivatePadBg>
+    <PrivatePadBg sx={{ padding: { xs: '80px 16px 100px', md: '80px 40px 100px' } }}>
       <Container>
         <CenterRow
           mb={54}
