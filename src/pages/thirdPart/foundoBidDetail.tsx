@@ -12,7 +12,6 @@ import Icon5 from 'assets/imgs/thirdPart/foundoDetail/icon5.svg'
 import FoundoLogo from 'assets/imgs/thirdPart/foundoDetail/foundoLogo.png'
 import ShareIcon from 'assets/imgs/thirdPart/foundoDetail/share.png'
 import WinnerList from './foundoComponents/section/winnerSection'
-import { PoolStatus } from 'api/pool/type'
 import EnglishAuctionValuesProvider, { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { ChainListMap } from 'constants/chain'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -53,6 +52,8 @@ const FoundoBidDetail = () => {
   return (
     <Box
       sx={{
+        mt: theme => (isSm ? 0 : `-${theme.height.header}`),
+        pt: theme => (isSm ? 0 : `${theme.height.header}`),
         width: '100%',
         background: '#000'
       }}
@@ -302,7 +303,7 @@ const FoundoBidDetail = () => {
             padding: '70px 0'
           }}
         >
-          {poolInfo?.status !== PoolStatus.Closed && <WinnerList poolInfo={poolInfo} />}
+          {poolInfo && <WinnerList poolInfo={poolInfo} />}
         </Box>
       </SlideSection>
     </Box>

@@ -16,7 +16,7 @@ export default function PriceChartView({
   isDark?: true
   showText?: boolean
 }) {
-  const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category)
+  const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category, '', ['Bid'])
 
   const chatData:
     | {

@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import { WinnerRowData } from '../section/winnerSection'
 import HeadImg from 'assets/imgs/thirdPart/foundoDetail/head.png'
 import { shortenAddress } from 'utils'
 import { RowLabel } from '../snippet/bidAction'
@@ -9,9 +8,10 @@ import { formatNumber } from 'utils/number'
 import { useIsSMDown } from 'themes/useTheme'
 
 import moment from 'moment'
-const TopThreeWinner = ({ list }: { list: WinnerRowData[] }) => {
+import { EnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
+const TopThreeWinner = ({ list, poolInfo }: { list: PoolHistory[]; poolInfo: EnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
-  const ItemEl = ({ data, index, style }: { data: WinnerRowData; index: number; style?: React.CSSProperties }) => {
+  const ItemEl = ({ data, index, style }: { data: PoolHistory; index: number; style?: React.CSSProperties }) => {
     return (
       <Box
         sx={{
@@ -102,15 +102,15 @@ const TopThreeWinner = ({ list }: { list: WinnerRowData[] }) => {
                 height: '20px',
                 marginRight: '8px'
               }}
-              src={data?.token0Symbol || EthIcon}
+              src={poolInfo.token1.smallUrl || EthIcon}
               alt=""
               srcSet=""
             />
             <Typography className="value" style={{ fontSize: 20, lineHeight: '28px' }}>
-              {`${formatNumber(data.token0Amount, {
-                unit: data.token0Decimals,
+              {`${formatNumber(data.token1Amount || '0', {
+                unit: poolInfo.token1.decimals,
                 decimalPlaces: 6
-              })} ${data.token0Symbol}`}
+              })} ${poolInfo.token1.symbol}`}
             </Typography>
           </RowLabel>
           <Typography className="value" style={{ fontSize: 12, lineHeight: '18px', color: 'var(--ps-text-1)' }}>
