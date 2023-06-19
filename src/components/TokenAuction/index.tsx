@@ -214,8 +214,8 @@ const TokenAuction: React.FC = () => {
     const resp = await getPools({
       offset: 0,
       limit: 4,
-      category: 5,
-      chainId: 2,
+      category: 0,
+      chainId: 0,
       creatorAddress: '',
       creatorName: '',
       orderBy: 'openTs',
@@ -240,7 +240,7 @@ const TokenAuction: React.FC = () => {
     const resp = await getPools({
       offset: 0,
       limit: 4,
-      category: 1,
+      category: 0,
       tokenType: 1, // erc20:1, nft:2
       chainId: 0,
       creatorAddress: '',

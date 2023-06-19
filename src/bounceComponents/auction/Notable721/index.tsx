@@ -16,7 +16,7 @@ import EmptyData from 'bounceComponents/common/EmptyData'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from 'hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
-
+import { TokenType as ERCType } from 'bounceComponents/create-auction-pool/types'
 interface Notable721Props {
   handleViewAll?: () => void
 }
@@ -86,14 +86,14 @@ export const Notable721 = (props: Notable721Props) => {
     async () => {
       const resp = await getPools({
         offset: 0,
-        limit: 4,
+        limit: 16,
         category: auction,
         chainId: chainFilter,
         creatorAddress: '',
         creatorName: '',
         orderBy: 'openTs',
         poolId: '',
-        isERC721: true,
+        isERC721: 2,
         poolName: '',
         tokenType: 2, // erc20:1, nft:2
         token0Address: ''
@@ -119,7 +119,12 @@ export const Notable721 = (props: Notable721Props) => {
         >
           <H4>ERC721</H4>
           <Row gap={8} mt={20}>
-            <AuctionTypeSelect curPoolType={auction} setCurPoolType={setAuction} tokenType={BackedTokenType.NFT} />
+            <AuctionTypeSelect
+              curPoolType={auction}
+              setCurPoolType={setAuction}
+              tokenType={BackedTokenType.NFT}
+              ercType={ERCType.ERC721}
+            />
             <Select
               sx={{
                 width: isSm ? '160px' : '200px',

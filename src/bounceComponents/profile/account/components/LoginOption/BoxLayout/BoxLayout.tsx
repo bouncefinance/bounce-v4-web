@@ -29,6 +29,19 @@ const BoxLayout: React.FC<IBoxLayoutProps> = ({ link, title, image, onBind }) =>
         <Typography variant="body1" fontWeight={600} color={'var(--ps-text-3)'} ml={10}>
           {link}
         </Typography>
+        {link && (
+          <Button
+            sx={{
+              width: isSm ? 82 : 102,
+              height: isSm ? 28 : 32,
+              backgroundColor: 'var(--ps-yellow-1)',
+              marginLeft: 20
+            }}
+            onClick={onBind}
+          >
+            Change
+          </Button>
+        )}
       </Box>
       {!link && (
         <Button
