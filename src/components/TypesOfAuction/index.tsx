@@ -240,6 +240,9 @@ const FixBtn = styled(Button)(() => ({
     top: 'unset',
     bottom: '20px',
     transform: 'translate3D(50%, 0, 0)'
+  },
+  '&.notShow': {
+    display: 'none'
   }
 }))
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -351,17 +354,31 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   const handleOpenNft = () => {
     setOpenTokenAuction(true)
   }
+  const fixBtnClassName = useMemo(() => {
+    if (isSm) {
+      return fixBtn ? 'mobileFixBtn' : 'notShow'
+    } else {
+      return fixBtn ? 'pcFixBtn' : ''
+    }
+  }, [fixBtn, isSm])
   const resizeWinH = () => {
     setWinHeight(window.innerHeight)
   }
   useEffect(() => {
     const getScrollCount = () => {
+      const typesOfAuctionTop = document.getElementById('typesOfAuction')?.getBoundingClientRect().top
       const notableTop = document.getElementById('NotableAuction')?.getBoundingClientRect().top
       const footerTop = document.getElementById('footer')?.getBoundingClientRect().top
-      if (notableTop && notableTop >= winH) {
+      if (!isSm && notableTop && notableTop >= winH) {
         setFixBtn(false)
       }
-      if (notableTop && notableTop <= winH) {
+      if (!isSm && notableTop && notableTop <= winH) {
+        setFixBtn(true)
+      }
+      if (isSm && typesOfAuctionTop && typesOfAuctionTop > winH / 2) {
+        setFixBtn(false)
+      }
+      if (isSm && typesOfAuctionTop && typesOfAuctionTop <= winH / 2) {
         setFixBtn(true)
       }
       if (footerTop && footerTop <= winH - 20) {
@@ -374,11 +391,12 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
       window.removeEventListener('scroll', getScrollCount)
       window.removeEventListener('resize', resizeWinH)
     }
-  }, [theme.height.header, winH])
+  }, [isSm, theme.height.header, winH])
   return (
     <>
       {/* Types of Auction On Bounce Finance */}
       <Box
+        id={'typesOfAuction'}
         sx={{
           width: '100%',
           maxWidth: 1440,
@@ -391,7 +409,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
         }}
       >
         <FixBtn
-          className={fixBtn ? 'pcFixBtn' : ''}
+          className={fixBtnClassName}
           onClick={() => {
             handleViewAll && handleViewAll()
           }}
