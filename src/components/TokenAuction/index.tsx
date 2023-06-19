@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Box, Button, Grid, Skeleton, Stack, styled, Typography } from '@mui/material'
 import TokenAuctionImg from 'assets/imgs/common/TokenAuction.png'
 import NFTAuctionImg from 'assets/imgs/common/NFTAuction.png'
@@ -88,17 +88,70 @@ const enum AuctionType {
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
 }
+type Tuple4<TItem> = [TItem, ...TItem[]] & { length: 4 }
 
 interface PaginationParams {
   index: number
   total: number
+  rotateRatioList: Tuple4<number>
   style?: React.CSSProperties
   setCurrent: (index: number) => void
+  setRotateRatioList: (value: Tuple4<number>) => void
 }
 
+const ComBtn = styled(Box)(({ theme }) => ({
+  width: 60,
+  height: 60,
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 8,
+  cursor: 'pointer',
+  background: 'var(--ps-text-3)',
+  '.img': {
+    display: 'block',
+    width: 16,
+    height: 16
+  },
+  '.active': {
+    display: 'none',
+    width: 16,
+    height: 16
+  },
+  '&:hover': {
+    background: 'var(--ps-yellow-1)',
+    '.img': {
+      display: 'none'
+    },
+    '.active': {
+      display: 'block'
+    }
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: 44,
+    height: 44
+  }
+}))
 const PaginationBox = (props: PaginationParams) => {
-  const { index, total, style, setCurrent } = props
+  const { index, total, style, setCurrent, rotateRatioList, setRotateRatioList } = props
   const isSm = useBreakpoint('sm')
+  const toPrev = () => {
+    const result: Tuple4<number> = [...rotateRatioList] as Tuple4<number>
+    const value = index - 1 < 0 ? total - 1 : index - 1
+    result[index] += 180
+    result[value] += 180
+    setRotateRatioList(result)
+    setCurrent && setCurrent(value)
+  }
+  const toNext = () => {
+    const result: Tuple4<number> = [...rotateRatioList] as Tuple4<number>
+    const value = index + 1 >= total - 1 ? 0 : index + 1
+    result[index] -= 180
+    result[value] -= 180
+    setRotateRatioList(result)
+    setCurrent && setCurrent(value)
+  }
   return (
     <Box
       sx={{
@@ -115,99 +168,58 @@ const PaginationBox = (props: PaginationParams) => {
         ...style
       }}
     >
-      <Box
-        sx={{
-          width: isSm ? 44 : 60,
-          height: isSm ? 44 : 60,
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 8,
-          cursor: index === 0 ? 'unset' : 'pointer',
-          background: index === 0 ? 'var(--ps-text-1)' : 'var(--ps-text-3)',
-          '&:hover': {
-            background: 'var(--ps-text-1)'
-          }
-        }}
-        onClick={() => {
-          const value = index - 1 <= 0 ? 0 : index - 1
-          console.log('value>>>', value)
-          setCurrent && setCurrent(value)
-        }}
-      >
-        {index === 0 ? (
-          <img
-            src={leftArrowGrayImg}
-            alt=""
-            style={{
-              width: 16,
-              height: 16
-            }}
-          />
-        ) : (
-          <img
-            src={leftArrowLightImg}
-            alt=""
-            style={{
-              width: 16,
-              height: 16
-            }}
-          />
-        )}
-      </Box>
+      <ComBtn onClick={toPrev}>
+        <img
+          className={'img'}
+          src={leftArrowLightImg}
+          alt=""
+          style={{
+            width: 16,
+            height: 16
+          }}
+        />
+        <img
+          className={'active'}
+          src={leftArrowGrayImg}
+          alt=""
+          style={{
+            width: 16,
+            height: 16
+          }}
+        />
+      </ComBtn>
       {isSm && (
         <Typography sx={{ color: '#E1F25C' }}>
           {index + 1}/{total}
         </Typography>
       )}
-      <Box
-        sx={{
-          width: isSm ? 44 : 60,
-          height: isSm ? 44 : 60,
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 8,
-          cursor: index === total - 1 ? 'unset' : 'pointer',
-          background: index === total - 1 ? 'var(--ps-text-1)' : 'var(--ps-text-3)',
-          '&:hover': {
-            background: 'var(--ps-text-1)'
-          }
-        }}
-        onClick={() => {
-          const value = index >= total - 1 ? total - 1 : index + 1
-          console.log('value>>>', value)
-          setCurrent && setCurrent(value)
-        }}
-      >
-        {index === total - 1 ? (
-          <img
-            src={rightArrayGrayImg}
-            alt=""
-            style={{
-              width: 16,
-              height: 16
-            }}
-          />
-        ) : (
-          <img
-            src={rightArrayLightImg}
-            alt=""
-            style={{
-              width: 16,
-              height: 16
-            }}
-          />
-        )}
-      </Box>
+      <ComBtn onClick={toNext}>
+        <img
+          className={'img'}
+          src={rightArrayLightImg}
+          alt=""
+          style={{
+            width: 16,
+            height: 16
+          }}
+        />
+        <img
+          className={'active'}
+          src={rightArrayGrayImg}
+          alt=""
+          style={{
+            width: 16,
+            height: 16
+          }}
+        />
+      </ComBtn>
     </Box>
   )
 }
 const TokenAuction: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [rotateRatioList, setRotateRatioList] = useState<Tuple4<number>>([0, 180, 180, 180])
   const isSm = useBreakpoint('sm')
   const isLg = useBreakpoint('lg')
   const { data: nftPoolData, loading: nftLoading } = useRequest(async () => {
@@ -229,7 +241,6 @@ const TokenAuction: React.FC = () => {
       total: resp.data.fixedSwapNftList.total
     }
   })
-
   const { data: countData } = useRequest(async () => {
     const resp = await getAuctionTypeCountData()
     return {
@@ -310,9 +321,6 @@ const TokenAuction: React.FC = () => {
   const showData = useMemo(() => {
     return AuctionList[currentIndex]
   }, [AuctionList, currentIndex])
-  useEffect(() => {
-    setCurrentIndex(0)
-  }, [])
   const AuctionImg = styled('img')(({}) => ({
     position: 'absolute',
     top: isSm ? 217 : 100,
@@ -330,7 +338,6 @@ const TokenAuction: React.FC = () => {
       transform: 'translateX(-50%)'
     }
   }))
-
   function NftSkeleton() {
     return (
       <Box>
@@ -338,7 +345,6 @@ const TokenAuction: React.FC = () => {
       </Box>
     )
   }
-
   function NftLink({ nft }: { nft: any }) {
     return (
       <Link to={getAuctionPoolLink(nft.id, nft.category, nft.chainId, nft.poolId)}>
@@ -548,10 +554,7 @@ const TokenAuction: React.FC = () => {
               height: 622,
               top: 622,
               left: '50%',
-              transform:
-                currentIndex === 0
-                  ? 'translateX(-50%) translateY(-100%) rotateZ(0)'
-                  : `translateX(-50%) translateY(-100%) rotateZ(-180deg)`,
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[0]}deg)`,
               transformOrigin: 'bottom center',
               transition: 'all 1s',
               animationTimingFunction: 'ease-in-out'
@@ -567,9 +570,7 @@ const TokenAuction: React.FC = () => {
               height: 622,
               top: 622,
               left: '50%',
-              transform: `translateX(-50%) translateY(-100%) rotateZ(${
-                currentIndex < 1 ? 180 : currentIndex > 1 ? -180 : 0
-              }deg)`,
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[1]}deg)`,
               transformOrigin: 'bottom center',
               transition: 'all 1s',
               animationTimingFunction: 'ease-in-out'
@@ -585,9 +586,7 @@ const TokenAuction: React.FC = () => {
               height: 622,
               top: 622,
               left: '50%',
-              transform: `translateX(-50%) translateY(-100%) rotateZ(${
-                currentIndex < 2 ? 180 : currentIndex > 2 ? -180 : 0
-              }deg)`,
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[2]}deg)`,
               transformOrigin: 'bottom center',
               transition: 'all 1s',
               animationTimingFunction: 'ease-in-out'
@@ -603,9 +602,7 @@ const TokenAuction: React.FC = () => {
               height: 622,
               top: 622,
               left: '50%',
-              transform: `translateX(-50%) translateY(-100%) rotateZ(${
-                currentIndex < 3 ? 180 : currentIndex > 3 ? -180 : 0
-              }deg)`,
+              transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[3]}deg)`,
               transformOrigin: 'bottom center',
               transition: 'all 1s',
               animationTimingFunction: 'ease-in-out'
@@ -614,9 +611,11 @@ const TokenAuction: React.FC = () => {
             <AuctionImg src={AuctionList[3].auctionImg} alt="" />
           </Box>
           <PaginationBox
+            rotateRatioList={rotateRatioList}
             index={currentIndex}
             total={AuctionList.length}
             setCurrent={setCurrentIndex}
+            setRotateRatioList={setRotateRatioList}
             style={
               isSm
                 ? {
@@ -836,7 +835,6 @@ const TokenAuction: React.FC = () => {
                 </>
               )}
             </Box>
-
             <Box
               sx={{
                 width: '100%',
