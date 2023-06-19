@@ -16,7 +16,10 @@ const LocationTimeZone: React.FC<{ value: string; onChange: (val: string) => voi
     <Select
       value={value}
       onChange={e => onChange(e.target.value)}
-      sx={{ maxHeight: 300 }}
+      sx={{
+        maxHeight: 300,
+        '&.Mui-focused': { background: '#F6F6F3 !important' }
+      }}
       renderValue={value => {
         const Flag = Flags[value as ICountryType]
         const label = countries.getName(value, 'en')

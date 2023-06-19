@@ -171,7 +171,7 @@ export default function ProfileOverview() {
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h3" fontSize={isSm ? 22 : 36}>
+              <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
                 My Profile
               </Typography>
               {!isSm && (
@@ -198,15 +198,15 @@ export default function ProfileOverview() {
                 display: 'flex',
                 '& label': {
                   position: 'absolute',
-                  left: 134,
-                  top: 0,
+                  left: { xs: 96, sm: 134 },
+                  top: { xs: '-30px', sm: 0 },
                   fontSize: 14,
                   color: 'var(--ps-gray-900)'
                 },
                 '&>p': {
                   position: 'absolute',
-                  left: 134,
-                  top: 38,
+                  left: { xs: 96, sm: 134 },
+                  top: { xs: 8, sm: 38 },
                   fontSize: 12,
                   color: 'var(--ps-gray-600)'
                 }
@@ -221,12 +221,21 @@ export default function ProfileOverview() {
                   onChange={file => {
                     setFieldValue('avatar', file)
                   }}
-                  sx={{ width: 120, height: 120, display: 'flex', borderRadius: '50%', objectFit: 'cover' }}
+                  sx={{
+                    width: { xs: 72, sm: 120 },
+                    height: { xs: 72, sm: 120 },
+                    display: 'flex',
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }}
                   accept={['image/jpeg', 'image/png', 'image/webp']}
-                  tips={'Only JPEG, PNG, WEBP Files, Size<10M'}
+                  tips={'Please do not exceed a file size of 10MB'}
                   limitSize={10}
                 />
-                <StyledAvatarInputIdLabel style={{ top: isSm ? 95 : 75, left: 148 }} htmlFor="avatarInputId">
+                <StyledAvatarInputIdLabel
+                  style={{ top: isSm ? 46 : 75, left: isSm ? 105 : 148 }}
+                  htmlFor="avatarInputId"
+                >
                   Edit
                 </StyledAvatarInputIdLabel>
               </Box>
@@ -238,7 +247,7 @@ export default function ProfileOverview() {
 
             <Box display={'grid'} gridTemplateColumns={{ sm: '1fr', md: '1fr 1fr' }} gap={55}>
               <Stack spacing={16}>
-                <Typography variant="h5" fontSize={20} pb={15}>
+                <Typography variant="h5" fontSize={20} pb={15} fontFamily="Public Sans">
                   Profile
                 </Typography>
 
@@ -264,7 +273,7 @@ export default function ProfileOverview() {
               </Stack>
 
               <Box>
-                <Typography variant="h5" fontSize={20} mb={30}>
+                <Typography variant="h5" fontSize={20} mb={30} fontFamily="Public Sans">
                   Social links
                 </Typography>
                 <Stack spacing={20}>

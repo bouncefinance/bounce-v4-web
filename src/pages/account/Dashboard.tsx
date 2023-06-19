@@ -47,7 +47,7 @@ export default function Dashboard() {
       <Box padding="0 20px" sx={{ background: isSm ? '#fff' : '' }}>
         <Container maxWidth="lg">
           <Box padding={isSm ? `20px 0` : `40px 0`}>
-            <Typography variant="h3" fontSize={isSm ? 22 : 30}>
+            <Typography variant="h3" fontSize={isSm ? 22 : 30} fontFamily="Public Sans">
               Dashboard
             </Typography>
             {!isSm && (
@@ -187,7 +187,7 @@ export default function Dashboard() {
                     <Skeleton variant="rectangular" width={280} height={46} sx={{ background: 'var(--ps-gray-50)' }} />
                   ) : (
                     <Stack direction={'row'} alignItems="center">
-                      <Typography variant="h1" fontWeight={500}>
+                      <Typography variant="h1" fontWeight={500} fontFamily="Public Sans">
                         {userInfo?.fullName}
                       </Typography>
                       <Typography variant="body1" color="#2663FF" ml={10} sx={{ fontSize: 20 }}>
@@ -277,7 +277,7 @@ export default function Dashboard() {
             }}
           >
             <Box padding={isSm ? '34px 26px' : '50px 60px'}>
-              <Typography variant="h3" fontSize={isSm ? 16 : 24}>
+              <Typography variant="h3" fontSize={isSm ? 16 : 24} fontFamily="Public Sans">
                 Auction Statistics
               </Typography>
               <Box

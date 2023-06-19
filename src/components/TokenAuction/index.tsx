@@ -690,7 +690,7 @@ const TokenAuction: React.FC = () => {
                         }
                       }}
                     >
-                      <Stack gap={18} direction={'row'} sx={{ minWidth: 1256, '&>a': { flex: 1 } }}>
+                      <Stack gap={18} direction={'row'} sx={{ minWidth: 1440, '&>a': { flex: 1 } }}>
                         {optionDatas?.chainInfoOpt &&
                           nftPoolData?.list.map((nft: any, i: number) => <NftLink nft={nft} key={i} />)}
                       </Stack>

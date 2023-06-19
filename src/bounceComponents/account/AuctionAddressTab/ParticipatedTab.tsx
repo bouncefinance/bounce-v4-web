@@ -185,21 +185,25 @@ export default function ParticipatedTab({
       )}
 
       <Box mt={40} display={'flex'} justifyContent="center">
-        <Pagination
-          onChange={handlePageChange}
-          sx={{
-            '.MuiPagination-ul li button': { border: '1px solid' },
-            alignItems: 'end',
-            overflowX: 'scroll',
-            '> ul': {
-              flexWrap: 'nowrap'
-            },
-            '&::-webkit-scrollbar': {
-              display: 'none'
-            }
-          }}
-          count={Math.ceil((auctionPoolData?.total || 0) / (defaultPageSize || 0))}
-        />
+        {auctionPoolData?.total !== 0 || !auctionPoolData?.total ? (
+          <Pagination
+            onChange={handlePageChange}
+            sx={{
+              '.MuiPagination-ul li button': { border: '1px solid' },
+              alignItems: 'end',
+              overflowX: 'scroll',
+              '> ul': {
+                flexWrap: 'nowrap'
+              },
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
+            }}
+            count={Math.ceil((auctionPoolData?.total || 0) / (defaultPageSize || 0))}
+          />
+        ) : (
+          ''
+        )}
       </Box>
       {isSm && type === 'created' && (
         <Box sx={{ textAlign: 'center', mt: 16, mb: 8 }}>

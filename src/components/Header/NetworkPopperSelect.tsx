@@ -46,7 +46,7 @@ export default function NetworkPopperSelect() {
         </Button>
       }
     >
-      <Box width={400}>
+      <Box width={isSm ? '100%' : 400}>
         <OutlinedInput
           sx={{
             height: 44,

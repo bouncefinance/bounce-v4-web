@@ -35,7 +35,7 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
     <AccountLayout>
       <Box padding={isSm ? '0 0 80px' : '0 20px'}>
         <Container maxWidth="lg">
-          <Typography padding="40px 20px 0" variant="h3" fontSize={isSm ? 22 : 30}>
+          <Typography padding="40px 20px 0" variant="h3" fontSize={isSm ? 22 : 30} fontFamily="Public Sans">
             {backedTokenType === BackedTokenType.TOKEN ? 'My Token' : 'NFT Auction'}
           </Typography>
 
@@ -63,7 +63,8 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
                         sx={{
                           ...styles.menu,
                           ...(curTab === item ? styles.menuActive : ({} as any)),
-                          padding: isSm ? '12px 16px 36px' : '16px 32px 40px'
+                          padding: isSm ? '12px 16px 36px' : '16px 32px 40px',
+                          fontFamily: 'Public Sans'
                         }}
                       >
                         {item}

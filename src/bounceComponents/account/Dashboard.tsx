@@ -39,7 +39,7 @@ export function DashboardPoolCard({ title, children }: { title: string; children
         padding: 16
       }}
     >
-      <Typography pb={10} fontWeight={500}>
+      <Typography pb={10} fontWeight={500} fontFamily="Public Sans">
         {title}
       </Typography>
       <Stack

@@ -68,7 +68,8 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
                   sx={{
                     ...styles.menu,
                     ...(curQueryType === item ? styles.menuActive : ({} as any)),
-                    padding: isSm ? '12px 16px 36px' : '16px 32px 40px'
+                    padding: isSm ? '12px 16px 36px' : '16px 32px 40px',
+                    fontFamily: 'Public Sans'
                   }}
                 >
                   {StatusText[item]}
@@ -115,7 +116,7 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
           padding: isSm ? 16 : 40,
           position: 'relative',
           mt: -24,
-          borderRadius: '20px'
+          borderRadius: '16px'
         }}
       >
         {createdLoading || participantDataLoading ? (
