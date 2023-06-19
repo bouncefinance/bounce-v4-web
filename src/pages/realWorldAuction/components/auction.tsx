@@ -7,7 +7,7 @@ import P1Img from 'assets/imgs/realWorld/p1.png'
 import { routes } from 'constants/routes'
 import { Banner, SwiperSkeleton } from './banner'
 import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/real-world-collectibles/ValuesProvider'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
 import AuctionCard from './auctionCard'
 // import UpcomingAuction from './upcomingAuction'
@@ -631,6 +631,8 @@ const AuctionContent = () => {
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
+  const [filterParams, setFilterParams] = useState<FilterSearchConfig[]>(filterConfig)
+
   const {
     pagination: poolsPagination,
     data: poolList,
@@ -639,51 +641,43 @@ const AuctionContent = () => {
   } = usePagination<any, Params>(
     async ({ current, pageSize = defaultPageSize }) => {
       await waitFun(500)
-      let searchResult: BannerType[] = [...marketList]
-      if (values.keyword) {
-        searchResult = marketList.filter(item => {
-          return item.name.toLocaleLowerCase().indexOf(values.keyword.toLocaleLowerCase()) > -1
-        })
-      }
-      if (values.categories) {
-        searchResult = marketList.filter(item => {
-          return item.categories?.includes(values.categories)
-        })
-      }
-      if (values.status) {
-        const nowTime = new Date().getTime()
-        if (values.status === 'Upcoming') {
-          searchResult = marketList.filter(item => {
-            return Number(item.startTime) * 1000 >= nowTime
-          })
-          searchResult.map(item => {
-            item.status = 'Upcoming'
-          })
-        } else if (values.status === 'Past auction') {
-          searchResult = marketList.filter(item => {
-            return item.endTime && Number(item.endTime) * 1000 <= nowTime
-          })
-          searchResult.map(item => {
-            item.status = 'Past auction'
-          })
-        } else if (values.status === 'Live auction') {
-          searchResult = marketList.filter(item => {
-            if (item.startTime && item.endTime) {
-              return Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime
-            } else {
-              return false
-            }
-          })
-          searchResult.map(item => {
-            item.status = 'Live auction'
-          })
+      const searchResult: BannerType[] = []
+      const filterData = JSON.parse(JSON.stringify(filterConfig))
+      const filterCategories = filterData.find((single: FilterSearchConfig) => single.label === 'Categories')
+      marketList.map(item => {
+        let isPass = true
+        if (item?.categories && !filterCategories?.values.includes(item?.categories)) {
+          filterCategories && filterCategories?.values.push(item?.categories)
         }
-      }
-      if (values.categories) {
-        searchResult = marketList.filter(item => {
-          return values.categories === item.categories
-        })
-      }
+        if (values.keyword) {
+          isPass = item.name.toLocaleLowerCase().indexOf(values.keyword.toLocaleLowerCase()) > -1
+        }
+        if (isPass && values.status) {
+          const nowTime = new Date().getTime()
+          if (values.status === 'Upcoming') {
+            isPass = Number(item.startTime) * 1000 >= nowTime
+            isPass && (item.status = 'Upcoming')
+          } else if (values.status === 'Past auction') {
+            isPass = !!(item.endTime && Number(item.endTime) * 1000 <= nowTime)
+            isPass && (item.status = 'Past auction')
+          } else if (values.status === 'Live auction') {
+            if (item.startTime && item.endTime) {
+              isPass = !!(Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime)
+              isPass && (item.status = 'Live auction')
+            } else {
+              isPass = false
+            }
+          }
+        }
+        if (isPass && values.categories) {
+          isPass = values.categories === item.categories
+        }
+        if (isPass) {
+          searchResult.push(item)
+        }
+      })
+      // update new categories from marketList array
+      setFilterParams(filterData)
       const result = searchResult.slice((current - 1) * pageSize, current * pageSize)
       return {
         list: result,
@@ -776,7 +770,7 @@ const AuctionContent = () => {
       </Box>
       {/* <UpcomingAuction></UpcomingAuction> */}
       {!isSm && (
-        <Marketplace poolLength={poolList?.total || 0} handleSearch={handleSearch} filterConfig={filterConfig}>
+        <Marketplace poolLength={poolList?.total || 0} handleSearch={handleSearch} filterConfig={filterParams}>
           <>
             {loading ? (
               <SwiperSkeleton />
@@ -818,7 +812,7 @@ const AuctionContent = () => {
                       fontFamily: `'Inter'`,
                       fontWight: 400,
                       fontSize: 16,
-                      background: 'var(--ps-text-2)',
+                      background: 'transparent',
                       '&.Mui-selected': {
                         color: 'var(--ps-text-3)',
                         background: 'var(--ps-yellow-1)'
