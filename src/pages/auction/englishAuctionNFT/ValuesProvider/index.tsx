@@ -80,9 +80,15 @@ export function useEnglishAuctionPoolInfo() {
   return valuesState
 }
 
-const ValuesProvider = ({ children }: { children: ReactNode }) => {
+const EnglishAuctionValuesProvider = ({
+  children,
+  backedId
+}: {
+  children: ReactNode
+  backedId?: number | undefined
+}) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
-  const { data, run, loading } = useEnglishAuctionDataPoolInfo()
+  const { data, run, loading } = useEnglishAuctionDataPoolInfo(backedId)
 
   useEffect(() => {
     dispatch({
@@ -98,4 +104,4 @@ const ValuesProvider = ({ children }: { children: ReactNode }) => {
   return <ValuesStateContext.Provider value={state}>{children}</ValuesStateContext.Provider>
 }
 
-export default ValuesProvider
+export default EnglishAuctionValuesProvider

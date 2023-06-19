@@ -72,7 +72,8 @@ export const routes = {
   },
   thirdPart: {
     poseiswapAuction: '/launchpad/poseiswap/auction/:sysId',
-    digitalAssetsOffering: '/launchpad/poseiswap-intro'
+    digitalAssetsOffering: '/launchpad/poseiswap-intro',
+    foundoDetail: 'foundo/detail'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

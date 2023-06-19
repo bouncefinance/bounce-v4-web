@@ -5,8 +5,18 @@ import LineChart from 'components/LineChart'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useMemo } from 'react'
 
-export default function PriceChartView({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
-  const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category)
+export default function PriceChartView({
+  poolInfo,
+  isDark,
+  minHeight,
+  showText
+}: {
+  poolInfo: EnglishAuctionNFTPoolProp
+  minHeight?: number
+  isDark?: true
+  showText?: boolean
+}) {
+  const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category, '', ['Bid'])
 
   const chatData:
     | {
@@ -29,9 +39,9 @@ export default function PriceChartView({ poolInfo }: { poolInfo: EnglishAuctionN
   }, [data?.list, poolInfo.currentBidderAmount1?.currency])
 
   return (
-    <Box minHeight={220}>
-      <Typography variant="h4">Chart View</Typography>
-      {!!chatData?.length && <LineChart data={chatData} token1Name={poolInfo.token1.symbol} />}
+    <Box minHeight={minHeight || 220}>
+      {showText && <Typography variant="h4">Chart View</Typography>}
+      {!!chatData?.length && <LineChart data={chatData} isDark={isDark} token1Name={poolInfo.token1.symbol} />}
     </Box>
   )
 }
