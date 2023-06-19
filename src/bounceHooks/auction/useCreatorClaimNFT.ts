@@ -60,8 +60,8 @@ export function useCreatorClaimEnglishAuctionNFT(poolId: number | string, name: 
 
   const creatorClaimedRes = useSingleCallResult(englishAuctionNftContract, 'creatorClaimed', [poolId])
 
-  const creatorClaimed: boolean = useMemo(() => {
-    return creatorClaimedRes.result?.[0] || true
+  const creatorClaimed: boolean | undefined = useMemo(() => {
+    return creatorClaimedRes.result?.[0]
   }, [creatorClaimedRes.result])
 
   const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId + '_EnglishAuction_NFT')
