@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react'
-import { Box, Grid, Typography } from '@mui/material'
+import React, { useState, useMemo, useEffect } from 'react'
+import { Box, Grid, Typography, Button, useTheme } from '@mui/material'
 import FixedPriceWhite from 'assets/imgs/home/TypeOfAuction/FixedPriced-white.svg'
 import FixedPriceBlack from 'assets/imgs/home/TypeOfAuction/FixedPriced-black.svg'
 import DutchAuctionWhite from 'assets/imgs/home/TypeOfAuction/DutchAuction-white.svg'
@@ -216,9 +216,40 @@ const SlideBox = styled(Box)(() => ({
     animation: `${scrollX} 60s linear infinite`
   }
 }))
+const FixBtn = styled(Button)(() => ({
+  width: 170,
+  height: 42,
+  padding: '16px 20px',
+  position: 'absolute',
+  right: '52px',
+  top: '24px',
+  bottom: 'unset',
+  zIndex: 999,
+  whiteSpace: 'nowrap',
+  opacity: 1,
+  transition: 'all 0.6s',
+  '&.pcFixBtn': {
+    position: 'fixed',
+    right: '72px',
+    top: 'unset',
+    bottom: '20px'
+  },
+  '&.mobileFixBtn': {
+    position: 'fixed',
+    right: '50%',
+    top: 'unset',
+    bottom: '20px',
+    transform: 'translate3D(50%, 0, 0)'
+  },
+  '&.notShow': {
+    display: 'none'
+  }
+}))
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   const isSm = useBreakpoint('sm')
+  const theme = useTheme()
+  const [fixBtn, setFixBtn] = useState(false)
   const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
   const { data: volumnCountData } = useRequest(async () => {
     const resp = await getAuctionVolumeCountData()
@@ -312,6 +343,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   }, [volumnCountData])
   const [openTokenAuction, setOpenTokenAuction] = useState(false)
   const [openNFTAuction, setOpenNFTAuction] = useState(false)
+  const [winH, setWinHeight] = useState<number>(window.innerHeight)
   const handleClose = () => {
     setOpenTokenAuction(false)
     setOpenNFTAuction(false)
@@ -322,10 +354,49 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   const handleOpenNft = () => {
     setOpenTokenAuction(true)
   }
+  const fixBtnClassName = useMemo(() => {
+    if (isSm) {
+      return fixBtn ? 'mobileFixBtn' : 'notShow'
+    } else {
+      return fixBtn ? 'pcFixBtn' : ''
+    }
+  }, [fixBtn, isSm])
+  const resizeWinH = () => {
+    setWinHeight(window.innerHeight)
+  }
+  useEffect(() => {
+    const getScrollCount = () => {
+      const typesOfAuctionTop = document.getElementById('typesOfAuction')?.getBoundingClientRect().top
+      const notableTop = document.getElementById('NotableAuction')?.getBoundingClientRect().top
+      const footerTop = document.getElementById('footer')?.getBoundingClientRect().top
+      if (!isSm && notableTop && notableTop >= winH) {
+        setFixBtn(false)
+      }
+      if (!isSm && notableTop && notableTop <= winH) {
+        setFixBtn(true)
+      }
+      if (isSm && typesOfAuctionTop && typesOfAuctionTop > winH / 2) {
+        setFixBtn(false)
+      }
+      if (isSm && typesOfAuctionTop && typesOfAuctionTop <= winH / 2) {
+        setFixBtn(true)
+      }
+      if (footerTop && footerTop <= winH - 20) {
+        setFixBtn(false)
+      }
+    }
+    window.addEventListener('resize', resizeWinH)
+    window.addEventListener('scroll', getScrollCount)
+    return () => {
+      window.removeEventListener('scroll', getScrollCount)
+      window.removeEventListener('resize', resizeWinH)
+    }
+  }, [isSm, theme.height.header, winH])
   return (
     <>
       {/* Types of Auction On Bounce Finance */}
       <Box
+        id={'typesOfAuction'}
         sx={{
           width: '100%',
           maxWidth: 1440,
@@ -337,30 +408,13 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
           position: 'relative'
         }}
       >
-        {/* <Button
+        <FixBtn
+          className={fixBtnClassName}
           onClick={() => {
             handleViewAll && handleViewAll()
           }}
           variant="contained"
           // href={AuctionList[currentIndex].checkAllLink}
-          sx={{
-            // background: 'var(--ps-yellow-1)',
-            width: 170,
-            height: 42,
-            padding: '16px 20px',
-            position: 'fixed',
-            '@media(max-width:600px)': {
-              bottom: 51,
-              left: '50%',
-              transform: 'translateX(-50%)'
-            },
-            '@media(min-width:600px)': {
-              bottom: 20,
-              right: 72
-            },
-            zIndex: 9999,
-            whiteSpace: 'nowrap'
-          }}
           endIcon={
             <svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -373,7 +427,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
           }
         >
           View all auctions
-        </Button> */}
+        </FixBtn>
         <Typography
           sx={{
             color: 'var(--ps-yellow-1)',
