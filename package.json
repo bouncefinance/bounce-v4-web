@@ -122,7 +122,7 @@
     "hellojs": "1.19.5",
     "i18n-iso-countries": "7.5.0",
     "jsbi": "^4.3.0",
-    "lightweight-charts": "^3.7.0",
+    "lightweight-charts": "3.8.0",
     "md5": "2.3.0",
     "moment": "^2.29.4",
     "react-copy-to-clipboard": "^5.1.0",
