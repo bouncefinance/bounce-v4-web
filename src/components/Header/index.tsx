@@ -124,7 +124,8 @@ const transparentRoutes = [
   routes.realAuction.index,
   routes.launchpad.index,
   routes.launchpad.bladeDao,
-  routes.launchpad.bladeDaoInfo
+  routes.launchpad.bladeDaoInfo,
+  routes.thirdPart.poseiswapAuction
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]

@@ -71,6 +71,7 @@ export const routes = {
     myPrivateLaunchpad: '/account/private_launchpad'
   },
   thirdPart: {
+    poseiswapAuction: '/launchpad/poseiswap/auction/:sysId',
     digitalAssetsOffering: '/launchpad/poseiswap-intro'
   },
   game: {

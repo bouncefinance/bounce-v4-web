@@ -121,6 +121,7 @@ const AuctionItem = ({ fixedSwaptem, optionDatas }: { fixedSwaptem: any; optionD
   )
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const UpcomingAuction = (props: Notable1155Props) => {
   const { handleViewAll } = props
   const optionDatas = useOptionDatas()

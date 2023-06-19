@@ -90,7 +90,8 @@ const Search: React.FC = () => {
           width: '100%',
           height: 44,
           overflow: 'hidden',
-          background: whiteLogoRoutes.includes(pathname) ? 'white' : 'rgba(18, 18, 18, 0.06)',
+          // background: whiteLogoRoutes.includes(pathname) ? 'white' : 'rgba(18, 18, 18, 0.06)',
+          background: 'white',
           padding: '0 !important',
           border: 'none',
           '& input': {

@@ -69,17 +69,17 @@ const Tab = styled(Box)`
 
   &.active {
     background: #ffffff;
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 10px 0 0;
   }
 
   &:hover {
     background: var(--ps-yellow-1);
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 10px 0 0;
   }
 
   &.active:hover {
     background: #ffffff;
-    border-radius: 20px 20px 0 0;
+    border-radius: 10px 10px 0 0;
   }
 
   @media (max-width: 600px) {
@@ -373,7 +373,7 @@ export const AuctionRankCard: React.FC = () => {
           onClick={() => setTab(tab)}
           className={tab === currentTab ? 'active' : ''}
         >
-          <H5>{tab}</H5>
+          <H5 sx={{ whiteSpace: 'nowrap' }}>{tab}</H5>
         </Tab>
       ))}
     </Row>

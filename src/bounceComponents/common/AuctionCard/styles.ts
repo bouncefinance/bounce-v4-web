@@ -3,7 +3,7 @@ import { SxProps } from '@mui/material'
 export default {
   card: {
     p: 16,
-    borderRadius: 20,
+    borderRadius: 12,
     bgcolor: 'var(--ps-white)',
     border: '1px solid rgba(0, 0, 0, 0.1)',
     '.MuiCardHeader-root': {
