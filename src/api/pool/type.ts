@@ -256,6 +256,7 @@ export interface GetPoolHistoryParams {
   chainId: number
   poolId: string
   tokenType: 1 | 2
+  event?: ('Swapped' | 'CreatorClaimed' | 'Reversed' | 'Bid' | 'Bet')[]
 }
 
 export interface GetWinnersListParams {

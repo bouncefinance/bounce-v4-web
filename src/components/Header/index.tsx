@@ -124,12 +124,13 @@ const transparentRoutes = [
   routes.realAuction.index,
   routes.launchpad.index,
   routes.launchpad.bladeDao,
+  routes.thirdPart.foundoDetail,
   routes.launchpad.bladeDaoInfo
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
 
-export const whiteLogoRoutes = [routes.launchpad.bladeDao, routes.launchpad.bladeDaoInfo]
+export const whiteLogoRoutes = [routes.launchpad.bladeDao, routes.thirdPart.foundoDetail, routes.launchpad.bladeDaoInfo]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -244,7 +245,7 @@ export default function Header() {
           <Box display="flex" alignItems="center">
             <MainLogo id={'logo'} to={'/'}>
               <Image
-                style={isWhiteLogo ? { mixBlendMode: 'difference' } : {}}
+                style={isWhiteLogo && !isSm ? { mixBlendMode: 'difference' } : {}}
                 src={isSm ? logoIcon : isWhiteLogo ? logoWhite : logo}
                 alt={'logo'}
               />

@@ -71,7 +71,8 @@ export const routes = {
     myPrivateLaunchpad: '/account/private_launchpad'
   },
   thirdPart: {
-    digitalAssetsOffering: '/launchpad/poseiswap-intro'
+    digitalAssetsOffering: '/launchpad/poseiswap-intro',
+    foundoDetail: 'foundo/detail'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
