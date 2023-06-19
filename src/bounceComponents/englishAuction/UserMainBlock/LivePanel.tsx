@@ -383,9 +383,9 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
                   <Button
                     variant="outlined"
                     sx={{ height: 30 }}
-                    onClick={() => setBidVal(token1Balance?.toSignificant(6, { groupSeparator: '' }) || '')}
+                    onClick={() => setBidVal(minBidVal?.toSignificant(6, { groupSeparator: '' }) || '')}
                   >
-                    Max
+                    Min
                   </Button>
                   <TokenImage size={30} src={poolInfo.token1.symbol}></TokenImage>
                   <Typography fontSize={16} fontWeight={500}>
