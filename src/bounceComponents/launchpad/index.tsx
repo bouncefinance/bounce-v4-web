@@ -94,7 +94,7 @@ export function Common({
       if (isEnter) return
       const typesOfAuctionTop = comEl?.current?.getBoundingClientRect().top
       console.log('typesOfAuctionTop>', typesOfAuctionTop)
-      if (typesOfAuctionTop <= winH / 2) {
+      if (typesOfAuctionTop <= winH - 200) {
         setIsEnter(true)
       }
     }
