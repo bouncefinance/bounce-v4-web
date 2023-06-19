@@ -99,7 +99,6 @@ export function useEnglishAuctionDataPoolInfo() {
   const myClaimed = useMemo(() => myClaimedRes?.[0], [myClaimedRes])
 
   const data = useMemo(() => {
-    console.log('aaa', poolInfo?.ethChainId)
     if (!poolInfo || !poolInfo?.ethChainId) return undefined
     const _t1 = poolInfo?.token1
     const t1 = new Currency(poolInfo?.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
