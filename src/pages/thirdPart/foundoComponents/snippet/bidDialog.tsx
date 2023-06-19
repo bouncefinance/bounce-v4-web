@@ -485,15 +485,18 @@ function BidButton({
 
   const toBid = useCallback(async () => {
     if (!bidAmount) return
-    showRequestConfirmDialog()
+    showRequestConfirmDialog({ dark: true })
     try {
       const { transactionReceipt } = await bidCallback(bidAmount)
       const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          handleClose()
-          rpt()
-        })
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            handleClose()
+            rpt()
+          },
+          { dark: true }
+        )
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
         })
@@ -594,7 +597,7 @@ function BidButton({
   )
 
   const toApprove = useCallback(async () => {
-    showRequestApprovalDialog()
+    showRequestApprovalDialog({ dark: true })
     try {
       const { transactionReceipt } = await approveCallback()
       const ret = new Promise((resolve, rpt) => {

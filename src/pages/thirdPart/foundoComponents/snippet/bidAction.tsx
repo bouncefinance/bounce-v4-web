@@ -328,14 +328,17 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
   )
 
   const toBidderClaim = useCallback(async () => {
-    showRequestConfirmDialog()
+    showRequestConfirmDialog({ dark: true })
     try {
       const { transactionReceipt } = await bidderClaim()
       const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            rpt()
+          },
+          { dark: true }
+        )
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
         })
