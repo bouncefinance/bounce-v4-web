@@ -27,6 +27,7 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 
 const InputPanel = styled(Box)({
   border: '1px solid #D7D6D9',
@@ -310,11 +311,17 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
 
   if (!isUserInWhitelist) {
     return (
-      <Alert severity="error" icon={<></>} sx={{ borderRadius: 10 }}>
-        <Typography variant="body1" color={'#171717'}>
-          You are not whitelisted for this auction.
-        </Typography>
-      </Alert>
+      <Box pt={30}>
+        {account ? (
+          <Alert severity="error" icon={<></>} sx={{ borderRadius: 10 }}>
+            <Typography variant="body1" color={'#171717'}>
+              You are not whitelisted for this auction.
+            </Typography>
+          </Alert>
+        ) : (
+          <ConnectWalletButton />
+        )}
+      </Box>
     )
   }
 

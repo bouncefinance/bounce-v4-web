@@ -9,7 +9,9 @@ import {
   MouseEventParams,
   UTCTimestamp,
   SeriesMarker,
-  Time
+  Time,
+  IChartApi,
+  ISeriesApi
 } from 'lightweight-charts'
 import { useRef, useEffect, useState, useMemo } from 'react'
 
@@ -33,6 +35,84 @@ interface IDataType {
   time: number
 }
 
+const timeFormatter: TimeFormatterFn = (time: any) => {
+  const date = new Date(time * 1000)
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  return `${hours}:${minutes} ${month}-${day}`
+}
+const markersFormatter = (data: IDataType[]) => {
+  const markers = data.map<SeriesMarker<Time>>(item => ({
+    time: item.time as Time,
+    position: 'inBar',
+    color: '#2B51DA',
+    shape: 'circle',
+    size: 0.1
+  }))
+  return markers
+}
+
+let chart: IChartApi | null = null
+let lineSeries: ISeriesApi<'Line'> | null = null
+
+const initChart = (
+  dom: HTMLElement,
+  style: {
+    layoutTextColor: string
+    layoutBackground: string
+    borderColor: string
+    lineColor: string
+    tooltipColor: string
+  }
+) => {
+  const chartOptions: DeepPartial<ChartOptions> = {
+    layout: {
+      textColor: style.layoutTextColor,
+      background: { color: style.layoutBackground }
+    },
+    grid: { vertLines: { visible: false }, horzLines: { visible: false } },
+    leftPriceScale: {
+      visible: true,
+      // topColor: style.layoutTextColor,
+      borderColor: style.borderColor,
+      borderVisible: false,
+      autoScale: true
+    },
+    rightPriceScale: { visible: false },
+    crosshair: {
+      horzLine: { visible: false },
+      vertLine: { visible: true, color: style.lineColor, style: 0, labelVisible: false }
+    },
+    timeScale: {
+      borderVisible: false,
+      timeVisible: true,
+      secondsVisible: true,
+      shiftVisibleRangeOnNewBar: true
+    }
+  }
+  chart = createChart(dom, chartOptions)
+  lineSeries = chart.addLineSeries({
+    color: style.lineColor,
+    lineWidth: 3,
+    priceLineVisible: false,
+    lastValueVisible: false
+  })
+  lineSeries.applyOptions({
+    priceFormat: { type: 'volume', precision: 8, minMove: 0.00000001 }
+  })
+  chart.timeScale().applyOptions({
+    tickMarkFormatter: timeFormatter
+  })
+  // const markers = markersFormatter(data)
+  // lineSeries.setMarkers(markers)
+
+  // lineSeries.setData(data as LineData[])
+
+  chart.timeScale().fitContent()
+}
+
 export default function LineChart({
   isDark,
   data,
@@ -43,72 +123,38 @@ export default function LineChart({
   token1Name: string
 }) {
   const style = useMemo(() => (isDark ? darkStyle : whiteStyle), [isDark])
+  const [localData, setLocalData] = useState<IDataType[]>([])
 
   const BoxRef = useRef<HTMLElement>(null)
   const infoBoxRef = useRef<HTMLElement>(null)
   const [infoPoint, setInfoPoint] = useState<{ x: number; y: number }>()
   const [info, setInfo] = useState<{ value: any; time: any }>()
 
-  const timeFormatter: TimeFormatterFn = (time: any) => {
-    const date = new Date(time * 1000)
-    const month = (date.getMonth() + 1).toString().padStart(2, '0')
-    const day = date.getDate().toString().padStart(2, '0')
-    const hours = date.getHours().toString().padStart(2, '0')
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    return `${hours}:${minutes} ${month}-${day}`
-  }
-  const markersFormatter = (data: IDataType[]) => {
-    const markers = data.map<SeriesMarker<Time>>(item => ({
-      time: item.time as Time,
-      position: 'inBar',
-      color: '#2B51DA',
-      shape: 'circle',
-      size: 0.1
-    }))
-    return markers
-  }
   useEffect(() => {
-    const chartOptions: DeepPartial<ChartOptions> = {
-      layout: {
-        textColor: style.layoutTextColor,
-        background: { color: style.layoutBackground }
-      },
-      grid: { vertLines: { visible: false }, horzLines: { visible: false } },
-      leftPriceScale: {
-        visible: true,
-        // topColor: style.layoutTextColor,
-        borderColor: style.borderColor,
-        borderVisible: false,
-        autoScale: true
-      },
-      rightPriceScale: { visible: false },
-      crosshair: {
-        horzLine: { visible: false },
-        vertLine: { visible: true, color: style.lineColor, style: 0, labelVisible: false }
-      },
-      timeScale: {
-        borderVisible: false,
-        timeVisible: true,
-        secondsVisible: true,
-        shiftVisibleRangeOnNewBar: true
-      }
+    if (!chart) {
+      initChart(BoxRef.current as HTMLElement, style)
     }
-    const chart = createChart(BoxRef.current as HTMLElement, chartOptions)
-    const lineSeries = chart.addLineSeries({
-      color: style.lineColor,
-      lineWidth: 3,
-      priceLineVisible: false,
-      lastValueVisible: false
-    })
-    lineSeries.applyOptions({
-      priceFormat: { type: 'volume', precision: 8, minMove: 0.00000001 }
-    })
-    chart.timeScale().applyOptions({
-      tickMarkFormatter: timeFormatter
-    })
-    const markers = markersFormatter(data)
-    lineSeries.setMarkers(markers)
-    chart.subscribeCrosshairMove((param: MouseEventParams) => {
+  }, [data, style])
+
+  useEffect(() => {
+    if (lineSeries && data.length > localData.length) {
+      setLocalData(data)
+      if (localData.length) {
+        for (let index = localData.length; index < data.length; index++) {
+          const element = data[index]
+          lineSeries.update(element as LineData)
+        }
+      } else {
+        lineSeries.setData(data as LineData[])
+      }
+      const markers = markersFormatter(data)
+      lineSeries.setMarkers(markers)
+    }
+  }, [data, localData.length])
+
+  useEffect(() => {
+    const move = (param: MouseEventParams) => {
+      if (!chart || !lineSeries) return
       if (!param.point) {
         setInfoPoint({ x: 10000, y: 10000 })
         return
@@ -126,12 +172,10 @@ export default function LineChart({
         setInfoPoint({ ...infoPoint, x, y })
         setInfo({ ...info, value, time })
       }
-    })
-
-    lineSeries.setData(data as LineData[])
-
-    chart.timeScale().fitContent()
-  }, [data, info, infoPoint, style])
+    }
+    chart?.subscribeCrosshairMove(move)
+    return () => chart?.unsubscribeCrosshairMove(move)
+  }, [info, infoPoint])
 
   return (
     <Box
