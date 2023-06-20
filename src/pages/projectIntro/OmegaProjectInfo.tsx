@@ -1,4 +1,4 @@
-import { IPrivatePadProp, PrivatePadList } from '../launchpad'
+import { IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
 import { Box } from '@mui/material'
 import FooterPc from '../../components/Footer/FooterPc'
 import { ProjectHead, Tabs } from './index'
@@ -11,7 +11,7 @@ import NoService from 'components/NoService'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 export default function ProjectInfo() {
-  const item = PrivatePadList.find(i => i.keyId === 5) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 5) as IPrivatePadProp
 
   return (
     <Box>

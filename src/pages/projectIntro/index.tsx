@@ -2,7 +2,7 @@
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { H4, H5, H6 } from '../../components/Text'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { IPrivatePadProp, IProjectInfo, PrivatePadList } from '../launchpad'
+import { IPrivatePadProp, IProjectInfo, PrivatePadDataList } from '../launchpad/PrivatePadDataList'
 import { Row } from '../../components/Layout'
 import { AlignBottomBG } from '../../bounceComponents/launchpad/LaunchCard'
 import { ReactComponent as IconBook } from 'assets/svg/icon-book.svg'
@@ -136,7 +136,7 @@ function Price({ title, value }: { title: string; value: string }) {
 }
 
 export function BladeDao() {
-  const item = PrivatePadList.find(i => i.keyId === 2) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 2) as IPrivatePadProp
   useBladeDaoSharer()
   return (
     <Box>
@@ -651,7 +651,7 @@ export function Tabs({ item }: { item: IPrivatePadProp }) {
 
   return (
     <Box mt={120} mb={140}>
-      <Row justifyContent={'center'} mb={{ sm: 20, xs: 0 }}>
+      <Row justifyContent={'center'}>
         {tabs.map((t, i) => (
           <TabBg key={i} /*onClick={() => setTab(t)}*/ className={tab === t ? 'select' : ''}>
             {t}

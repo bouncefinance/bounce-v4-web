@@ -36,7 +36,7 @@ export const H4 = styled(Typography)`
 
   @media (max-width: 600px) {
     font-size: 20px;
-
+  }
 `
 export const H5 = styled(Typography)`
   font-family: 'Public Sans';
