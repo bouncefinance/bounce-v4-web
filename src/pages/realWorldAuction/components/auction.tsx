@@ -13,16 +13,7 @@ import AuctionCard from './auctionCard'
 // import UpcomingAuction from './upcomingAuction'
 import { BannerType } from './banner'
 import EmptyData from 'bounceComponents/common/EmptyData'
-export const marketList: BannerType[] = [
-  {
-    categories: 'Collectibles',
-    name: 'The 1st Sabotage Hi Top Studio Pr...',
-    time: '--',
-    img: P1Img,
-    link: routes.fundo.home,
-    startTime: 1687622400,
-    endTime: ''
-  },
+const SothebyList = [
   {
     name: 'Whisky & Whiskey | Rare Finds from Scotland & Kentucky',
     time: '31 MAY-16 JUNE 2023 10:00 AM EDT',
@@ -30,7 +21,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/whisky-whiskey-rare-finds-from-scotland-kentucky?locale=en&lotFilter=AllLots',
     startTime: 1685541600,
     endTime: 1686924000,
-    categories: 'Wines'
+    categories: 'Wines',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Liquid jade:Moutai',
@@ -39,7 +31,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/articles/liquid-jade-moutai-%E9%87%91%E6%A8%BD%E7%94%98%E9%9C%B2-%E8%B4%B5%E5%B7%9E%E8%8C%85%E5%8F%B0%E7%BD%91%E4%B8%8A%E4%B8%93%E5%9C%BA?locale=en',
     startTime: 1685718000,
     endTime: 1687273200,
-    categories: 'Wines'
+    categories: 'Wines',
+    resource: 'Sotheby’s'
   },
   {
     name: 'A Life in Art: The Mallin Collection',
@@ -48,7 +41,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/a-life-in-art-the-mallin-collection-n11283?locale=en&s=intro',
     startTime: 1686751200,
     endTime: 1687356000,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Sotheby’s'
   },
   {
     name: "Collection Hélène Leloup, Le Journal d'une Pionnière, Vol. I",
@@ -57,7 +51,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/collection-helene-leloup-journal-dune-pionniere?locale=en',
     startTime: 1687359600,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Streets of Paris',
@@ -66,7 +61,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/streets-of-paris?locale=en&s=intro',
     startTime: 1686765600,
     endTime: 1687370400,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Une Collection à 360°',
@@ -75,7 +71,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/une-collection-a-360?locale=en',
     startTime: 1687435200,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Vanessa von Zitzewitz, Michael, Intimacy Behind Speed',
@@ -84,7 +81,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/digital-catalogues/vanessa-von-zitzewitz-michael-intimacy-behind-speed?locale=en',
     startTime: 1685005200,
     endTime: 1687543200,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Luxury Private Selling Exhibition',
@@ -93,7 +91,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/digital-catalogues/luxury-private-selling-exhibition?locale=en',
     startTime: 1674453600,
     endTime: 1687602600,
-    categories: 'Jewellery'
+    categories: 'Jewellery',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Design 17/20: Silver and Gold Boxes',
@@ -102,7 +101,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/design-17-20-silver-and-gold-boxes-2?locale=en',
     startTime: 1687348800,
     endTime: 0,
-    categories: 'Jewellery'
+    categories: 'Jewellery',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Fine Jewels & Watches: Cologne',
@@ -111,7 +111,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/fine-jewels-watches-cologne?locale=en',
     startTime: 1686916800,
     endTime: 0,
-    categories: 'Jewellery'
+    categories: 'Jewellery',
+    resource: 'Sotheby’s'
   },
   {
     name: 'The Now Evening Auction',
@@ -120,7 +121,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/the-now-evening-auction-l23237?s=intro&locale=en',
     startTime: 1687881600,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Modern and Contemporary Evening Auction, featuring Face to Face: A Celebration of Portraiture',
@@ -129,16 +131,18 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/modern-and-contemporary-evening-auction-featuring-face-to-face-a-celebration-of-portraiture?s=intro&locale=en',
     startTime: 1687885200,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Modern & Contemporary Day Auction',
     time: '28 JUNE 2023 10:30 AM BST',
     img: 'https://sothebys-com.brightspotcdn.com/dims4/default/cba2bbf/2147483647/strip/true/crop/600x349+0+176/resize/487x283!/format/webp/quality/90/?url=https%3A%2F%2Fsothebys-md.brightspotcdn.com%2F06%2Fec%2Fae92817940018d9abb03e9cc930c%2F231312016-l23007modctpday-webbanners-600x700.jpg',
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/modern-contemporary-day-auction-l23007?s=intro&locale=en',
-    startTime: 1687948200,
+    startTime: 16879482000,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Classic Design: Furniture, Silver and Works of Art',
@@ -147,7 +151,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/classic-design?locale=en',
     startTime: 1687955400,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Modern British Art',
@@ -156,7 +161,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/modern-british-art-l23140?s=intro&locale=en',
     startTime: 1687962600,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'The Dream Team | Part I',
@@ -165,7 +171,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/digital-catalogues/the-dream-team-part-i?locale=en',
     startTime: 1683777600,
     endTime: 1687993200,
-    categories: 'Fashion'
+    categories: 'Fashion',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Sports Memorabilia | Part II',
@@ -174,7 +181,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/sports-memorabilia-part-ii?locale=en&lotFilter=AllLots',
     startTime: 1687269600,
     endTime: 0,
-    categories: 'Fashion'
+    categories: 'Fashion',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Design 17/20: Furniture and Works of Art',
@@ -183,7 +191,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/design-17-20-furniture-and-works-of-art?locale=en',
     startTime: 1687525200,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Prints & Multiples',
@@ -192,7 +201,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/prints-multiples-de2320?s=intro&locale=en',
     startTime: 1687438800,
     endTime: 1688043600,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Sotheby’s'
   },
   {
     name: 'The Immaculate Leroy Cellar | Flawless Provenance',
@@ -201,7 +211,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/the-immaculate-leroy-cellar-flawless-provenance?locale=en&lotFilter=AllLots',
     startTime: 1687230000,
     endTime: 0,
-    categories: 'Wines'
+    categories: 'Wines',
+    resource: 'Sotheby’s'
   },
   {
     name: 'Modern & Contemporary Art',
@@ -210,206 +221,11 @@ export const marketList: BannerType[] = [
     link: 'https://www.sothebys.com/en/buy/auction/2023/modern-contemporary-art?locale=en&lotFilter=AllLots',
     startTime: 1688281200,
     endTime: 0,
-    categories: 'Art'
-  },
-  {
-    categories: 'Fashion',
-    name: 'Handbags Online: The New York Edit',
-    time: '30 MAY 10AM - 12 JUN 10AM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-22070-05302023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/handbags-online-new-york-edit/lots/3361',
-    startTime: 1685419200,
-    endTime: 1686542400
-  },
-  {
-    categories: 'Wines',
-    name: 'Fine and Rare Wines Online: Featuring the Time Capsule Collection of Undisturbed Legends of the Côte d’Or',
-    time: '31 MAY 7AM - 13 JUN 7AM PDT',
-    img: 'https://www.christies.com/img/SaleImages/LAW-22064-05312023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/fine-rare-wines-online-time-capsule-collection-undisturbed-legends/lots/3358',
-    startTime: 1685516400,
-    endTime: 1686639600
-  },
-  {
     categories: 'Art',
-    name: 'Modern British Art Selling Exhibition',
-    time: '3 - 14 JUNE',
-    img: 'https://www.christies.com/img/eventimages/PrivateSalesExhibiti-1-20230602111457.jpg',
-    link: 'https://www.christies.com/private-sales/exhibitions/modern-british-art-selling-exhibition-d3310f3e-a9ff-4e94-aca6-acf1d40c9043/overview',
-    startTime: 1685721600,
-    endTime: 1686672000
-  },
-  {
-    categories: 'Art',
-    name: 'The Ann and Gordon Getty Collection: Temple of Wings',
-    time: '14 JUNE 10:00 AM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-22125-06142023-1.jpg',
-    link: 'https://www.christies.com/en/auction/the-ann-and-gordon-getty-collection-temple-of-wings-30129/',
-    startTime: 1686744000,
-    endTime: 0
-  },
-  {
-    categories: 'Art',
-    name: "Art d'Asie",
-    time: '14 JUNE 10:30 AM CEST ',
-    img: 'https://www.christies.com/img/SaleImages/PAR-22151-06142023-1.jpg',
-    link: 'https://www.christies.com/en/auction/art-d-asie-30188/',
-    startTime: 1686731400,
-    endTime: 0
-  },
-  {
-    categories: 'Art',
-    name: 'The Ann and Gordon Getty Collection: Aesthetic Decoration from Temple of Wings',
-    time: '31 MAY 10AM - 15 JUN 10AM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-21107-05312023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/ann-gordon-getty-collection-aesthetic-decoration-temple-wings/lots/3441',
-    startTime: 1685534400,
-    endTime: 1686830400
-  },
-  {
-    categories: 'Art',
-    name: 'The Ann and Gordon Getty Collection: Early Modern Design from Temple of Wings',
-    time: '31 MAY 10AM - 15 JUN 2PM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-21108-05312023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/ann-gordon-getty-collection-early-modern-design-temple-wings/lots/3432',
-    startTime: 1685534400,
-    endTime: 1686852000
-  },
-  {
-    categories: 'Jewellery',
-    name: 'Jewels Online: The London Edit',
-    time: '2 JUN 11AM - 15 JUN 11AM BST',
-    img: 'https://www.christies.com/img/SaleImages/CKS-21938-06022023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/jewels-online-london-edit/lots/3306',
-    startTime: 1686852000,
-    endTime: 1686823200
-  },
-  {
-    categories: 'Art',
-    name: 'Maîtres Anciens : Peintures - Sculptures',
-    time: '15 JUNE 03:00 PM CEST',
-    img: 'https://www.christies.com/img/SaleImages/PAR-20692-06152023-1.jpg',
-    link: 'https://www.christies.com/en/auction/ma-tres-anciens-peintures-sculptures-29472/',
-    startTime: 1686834000,
-    endTime: 0
-  },
-  {
-    categories: 'Art',
-    name: 'The Bruce M. Lisman Collection of Important American Literature: Part One',
-    time: '15 JUNE 10:00 AM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-22474-06152023-1.jpg',
-    link: 'https://www.christies.com/en/auction/the-bruce-m-lisman-collection-of-important-american-literature-part-one-30193/',
-    startTime: 1686830400,
-    endTime: 0
-  },
-  {
-    categories: 'Art',
-    name: 'Maîtres Anciens : Peintures – Sculptures, Online',
-    time: '1 JUN 10AM - 16 JUN 2PM CEST',
-    img: 'https://www.christies.com/img/SaleImages/PAR-22155-06012023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/maitres-anciens-peintures-sculptures-online/lots/3424',
-    startTime: 1685606400,
-    endTime: 1686916800
-  },
-  {
-    categories: 'Collectibles',
-    name: 'The Bruce M. Lisman Collection of Important American Literature: Part Two',
-    time: '2 JUN 10AM - 16 JUN 12PM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-22475-06022023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/bruce-m-lisman-collection-important-american-literature-part-two/lots/3428',
-    startTime: 1685707200,
-    endTime: 1686844800
-  },
-  {
-    categories: 'Art',
-    name: 'The Magnificent Library of Norman Bobins: Part One, American Color',
-    time: '16 JUNE 10:00 AM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-22547-06162023-1.jpg',
-    link: 'https://www.christies.com/en/auction/the-magnificent-library-of-norman-bobins-part-one-american-color-30220/',
-    startTime: 1686916800,
-    endTime: 0
-  },
-  {
-    categories: 'Art',
-    name: 'Art of Asia',
-    time: '6 JUN 10AM - 20 JUN 2PM CEST',
-    img: 'https://www.christies.com/img/SaleImages/PAR-22045-06062023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/art-asia/lots/3355',
-    startTime: 1686038400,
-    endTime: 1687262400
-  },
-  {
-    categories: 'Wines',
-    name: 'The Two Continents Collection - The Private Cellar of Irwin Kotovsky Online: Part II',
-    time: '8 JUN 10AM - 21 JUN 11AM BST',
-    img: 'https://www.christies.com/img/SaleImages/CKS-21935-06082023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/two-continents-collection-private-cellar-irwin-kotovsky-online-part-ii/lots/3305',
-    startTime: 1686214800,
-    endTime: 1687341600
-  },
-  {
-    categories: 'Collectibles',
-    name: 'Joaillerie Paris',
-    time: '9 JUN 10AM - 21 JUN 2PM CEST',
-    img: 'https://www.christies.com/img/SaleImages/PAR-22153-06092023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/joaillerie-paris/lots/3410',
-    startTime: 1686297600,
-    endTime: 1687348800
-  },
-  {
-    categories: 'Fashion',
-    name: 'The Two Continents Collection - The Private Spirits Collection Of Irwin Kotovsky Online: Part III',
-    time: '8 JUN 12PM - 22 JUN 12PM BST',
-    img: 'https://www.christies.com/img/SaleImages/CKS-22636-06082023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/two-continents-collection-private-spirits-collection-irwin-kotovsky/lots/3454',
-    startTime: 1686222000,
-    endTime: 1687431600
-  },
-  {
-    categories: 'Art',
-    name: "Arts d'Afrique, d'Océanie et des Amériques",
-    time: '22 JUNE 04:00 PM CEST',
-    img: 'https://www.christies.com/img/SaleImages/PAR-22147-06222023-1.jpg',
-    link: 'https://www.christies.com/en/auction/arts-d-afrique-d-oc-anie-et-des-am-riques-30187/',
-    startTime: 1687442400,
-    endTime: 0
-  },
-  {
-    categories: 'Fashion',
-    name: 'Inside the Orange Box: Part III',
-    time: '13 JUNE 02:00 PM - 27 JUNE 02:00 PM CEST',
-    img: 'https://www.christies.com/img/SaleImages/AMS-22528-06132023-1.jpg',
-    link: 'https://www.christies.com/en/auction/inside-the-orange-box-part-iii-22528-ams/',
-    startTime: 1686657600,
-    endTime: 1687867200
-  },
-  {
-    categories: 'Art',
-    name: '20th/21st Century: London Evening Sale',
-    time: '28 JUNE 02:00 PM BST',
-    img: 'https://www.christies.com/img/SaleImages/CKS-21886-06282023-1.jpg',
-    link: 'https://www.christies.com/en/auction/20th-21st-century-london-evening-sale-21886-cks/',
-    startTime: 1687957200,
-    endTime: 0
-  },
-  {
-    categories: 'Art',
-    name: 'The Collection of Donna Summer',
-    time: '15 JUN 10AM - 29 JUN 10AM EDT',
-    img: 'https://www.christies.com/img/SaleImages/NYR-21005-06152023-1.jpg',
-    link: 'https://onlineonly.christies.com/s/collection-donna-summer/lots/3486',
-    startTime: 1686830400,
-    endTime: 1688040000
-  },
-  {
-    categories: 'Art',
-    name: 'Post-War and Contemporary Art Day Sale',
-    time: '29 JUNE 01:00 PM BST',
-    img: 'https://www.christies.com/img/SaleImages/CKS-21887-06292023-1.jpg',
-    link: 'https://www.christies.com/en/auction/post-war-and-contemporary-art-day-sale-21887-cks/',
-    startTime: 1688040000,
-    endTime: 0
-  },
+    resource: 'Sotheby’s'
+  }
+]
+const ChristieList = [
   {
     name: 'Impressionist and Modern Art Day and Works on Paper Sale',
     time: '30 JUNE 01:00 PM BST',
@@ -417,7 +233,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/impressionist-and-modern-art-day-and-works-on-paper-sale-21888-cks/',
     startTime: 1688126400,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'Old Master and British Drawings and Watercolours',
@@ -426,7 +243,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/old-master-and-british-drawings-and-watercolours-21459-cks/',
     startTime: 1688477400,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'First Open: Post-War and Contemporary Art Online',
@@ -435,7 +253,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/first-open-post-war-and-contemporary-art-online-22001-cks/',
     startTime: 1687345200,
     endTime: 1688554800,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'Livres rares et Manuscrits',
@@ -444,7 +263,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/livres-rares-et-manuscrits-22529-par/',
     startTime: 1687428000,
     endTime: 1688554800,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'Antiquities',
@@ -453,7 +273,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/antiquities-29962/',
     startTime: 1688558400,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'The Exceptional Sale',
@@ -462,7 +283,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/the-exceptional-sale-21436-cks/',
     startTime: 1688641200,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'Remastered: Old Masters from the Collection of J.E. Safra',
@@ -471,7 +293,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/remastered-old-masters-from-the-collection-of-j-e-safra-22308-cks/',
     startTime: 1688655600,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'Old Masters Part I',
@@ -480,7 +303,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/old-masters-part-i-20683-cks/',
     startTime: 1688650200,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'Old Masters Part II',
@@ -489,7 +313,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/old-masters-part-ii-20684-cks/',
     startTime: 1688722200,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'Valuable Books and Manuscripts',
@@ -498,7 +323,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/valuable-books-and-manuscripts-21952-cks/',
     startTime: 1689154200,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'The Magnificent Library of Norman Bobins: Part Two, The Colourful World',
@@ -507,7 +333,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/the-magnificent-library-of-norman-bobins-part-two-the-colourful-world-22621-cks/',
     startTime: 1689238800,
     endTime: 0,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'British and European Art',
@@ -516,7 +343,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/british-and-european-art-21954-cks/',
     startTime: 1689253200,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'First Open | Post-War & Contemporary Art',
@@ -525,7 +353,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/first-open-post-war-contemporary-art-21597-nyr/',
     startTime: 1686139200,
     endTime: 1687089600,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'Contemporary Edition',
@@ -534,7 +363,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/contemporary-edition-22047-nyr/',
     startTime: 1686139200,
     endTime: 1687176000,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'Photographs',
@@ -543,7 +373,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/photographs-21968-nyr/',
     startTime: 1695124800,
     endTime: 1696420800,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   },
   {
     name: 'Madonna x Meisel - The SEX Photographs',
@@ -552,7 +383,8 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/madonna-x-meisel-the-sex-photographs-22700-nyr/',
     startTime: 1696615200,
     endTime: 0,
-    categories: 'Art'
+    categories: 'Art',
+    resource: 'Christie’s'
   },
   {
     name: 'Made in Holland',
@@ -561,8 +393,23 @@ export const marketList: BannerType[] = [
     link: 'https://www.christies.com/en/auction/made-in-holland-21640-ams/',
     startTime: 1695729600,
     endTime: 1696939200,
-    categories: 'Collectibles'
+    categories: 'Collectibles',
+    resource: 'Christie’s'
   }
+]
+export const marketList: BannerType[] = [
+  {
+    categories: 'Collectibles',
+    name: 'The 1st Sabotage Hi Top Studio Pr...',
+    time: '--',
+    img: P1Img,
+    link: routes.fundo.home,
+    startTime: 1687622400,
+    endTime: '',
+    resource: 'Bounce Original'
+  },
+  ...ChristieList,
+  ...SothebyList
 ]
 export enum AuctionFilterKey {
   categories = 'categories',
