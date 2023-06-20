@@ -29,8 +29,9 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../../constants'
 import { LoadingButton } from '@mui/lab'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useIsSMDown } from 'themes/useTheme'
 
-const InputBox = styled(Box)(() => ({
+const InputBox = styled(Box)(({ theme }) => ({
   height: '48px',
   display: 'flex',
   flexFlow: 'row nowrap',
@@ -47,6 +48,14 @@ const InputBox = styled(Box)(() => ({
   },
   '.inputEl:focus': {
     border: 'none'
+  },
+  [theme.breakpoints.down('md')]: {
+    maxWidth: '100%',
+    padding: '0 16px',
+    '.inputEl': {
+      maxWidth: '30%',
+      flex: 1
+    }
   }
 }))
 
@@ -186,11 +195,11 @@ export function ProcessLine(props: { ratio: number }) {
 }
 
 const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
+  const isSm = useIsSMDown()
   const [bidNum, setBidNum] = useState('')
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const { account } = useActiveWeb3React()
   const token1Balance = useCurrencyBalance(account || undefined, poolInfo?.currentBidderMinAmount?.currency)
-
   const [curSliderPer, setCurSliderPer] = useState(0)
   const minBidVal = useMemo(() => poolInfo?.currentBidderMinAmount, [poolInfo?.currentBidderMinAmount])
   const bidHandler = useCallback((v: string) => {
@@ -220,7 +229,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        zIndex: 999
+        zIndex: 9999
       }}
     >
       <Box
@@ -237,47 +246,77 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
       <Box
         sx={{
           position: 'absolute',
-          top: '50%',
+          top: isSm ? '40px' : '50%',
+          bottom: '40px',
           left: '50%',
-          transform: 'translate3D(-50%, -50%, 0)',
-          width: '860px',
+          transform: isSm ? 'translate3D(-50%, 0, 0)' : 'translate3D(-50%, -50%, 0)',
+          width: isSm ? 'calc(100% - 46px)' : '840px',
           minHeight: '540px',
+          maxHeight: `calc(100vh - 80px)`,
           background: 'rgba(73, 73, 73, 0.1)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
           backdropFilter: 'blur(25px)',
-          padding: '41px 48px 31px'
+          overflowY: 'auto',
+          display: 'flex',
+          flexFlow: 'column nowrap',
+          justifyContent: 'flex-start'
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: `'Public Sans'`,
-            fontWeight: 600,
-            fontSize: 20,
-            color: '#fff',
-            marginBottom: '31px'
-          }}
-        >
-          Place a bid
-        </Typography>
         <Box
           sx={{
-            display: 'flex',
-            flexFlow: 'row nowrap',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start'
+            position: 'relative',
+            height: '55px',
+            padding: isSm ? '24px 24px 0' : '32px 48px 0'
           }}
-          gap={'40px'}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Public Sans'`,
+              fontWeight: 600,
+              fontSize: 20,
+              color: '#fff',
+              marginBottom: '31px'
+            }}
+          >
+            Place a bid
+          </Typography>
+          <img
+            src={CloseIcon}
+            style={{
+              position: 'absolute',
+              top: '24px',
+              right: '24px',
+              cursor: 'pointer'
+            }}
+            onClick={() => {
+              handleClose && handleClose()
+            }}
+            alt=""
+            srcSet=""
+          />
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: isSm ? '24px' : '32px 48px 31px',
+            display: 'flex',
+            flexFlow: isSm ? 'column nowrap' : 'row nowrap',
+            justifyContent: isSm ? 'flex-start' : 'space-between',
+            alignItems: isSm ? 'center' : 'flex-start'
+          }}
+          gap={isSm ? '24px' : '40px'}
         >
           <Box
             sx={{
-              width: '290px',
-              borderRight: `1px solid rgba(255, 255, 255, 0.2)`
+              width: isSm ? '100%' : '290px',
+              borderRight: isSm ? 'none' : `1px solid rgba(255, 255, 255, 0.2)`
             }}
           >
             <img
               src={ProductIcon}
               style={{
-                width: '251px'
+                width: isSm ? '100%' : '251px'
               }}
               alt=""
             />
@@ -285,8 +324,9 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
               sx={{
                 fontFamily: `'Public Sans'`,
                 fontWeight: 600,
-                fontSize: 14,
-                color: '#fff'
+                fontSize: isSm ? 13 : 14,
+                color: '#fff',
+                margin: isSm ? '16px 0 0' : ''
               }}
             >
               {poolInfo?.name || '--'}
@@ -294,7 +334,8 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
           </Box>
           <Box
             sx={{
-              flex: 1
+              flex: 1,
+              width: isSm ? '100%' : 'unset'
             }}
           >
             <Box
@@ -435,20 +476,6 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
             {poolInfo && <BidButton bidVal={bidNum} handleClose={handleClose} poolInfo={poolInfo} />}
           </Box>
         </Box>
-        <img
-          src={CloseIcon}
-          style={{
-            position: 'absolute',
-            top: '24px',
-            right: '24px',
-            cursor: 'pointer'
-          }}
-          onClick={() => {
-            handleClose && handleClose()
-          }}
-          alt=""
-          srcSet=""
-        />
       </Box>
     </Box>
   )

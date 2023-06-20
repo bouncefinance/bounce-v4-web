@@ -192,7 +192,9 @@ const BidAction = () => {
           borderTop: '1px solid rgba(255, 255, 255, 0.2)'
         }}
       >
-        <Typography className="label">Current Highest Bid</Typography>
+        <Typography className="label" onClick={() => setOpenShippingDialog(!openShippingDialog)}>
+          Current Highest Bid
+        </Typography>
         <RowLabel
           style={{
             justifyContent: 'flex-end'
