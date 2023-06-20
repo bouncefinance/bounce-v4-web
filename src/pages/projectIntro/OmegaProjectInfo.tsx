@@ -10,8 +10,8 @@ import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import useBreakpoint from 'hooks/useBreakpoint'
 
-export function ProjectInfo() {
-  const item = PrivatePadList.find(i => i.keyId === 2) as IPrivatePadProp
+export default function ProjectInfo() {
+  const item = PrivatePadList.find(i => i.keyId === 5) as IPrivatePadProp
 
   return (
     <Box>
@@ -46,9 +46,11 @@ function UserBlock() {
       </Box>
     )
   }
-  if (poolInfo.id !== 690) {
+
+  if (poolInfo.id !== 674) {
     return null
   }
+
   return (
     <Box
       sx={{

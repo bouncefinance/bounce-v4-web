@@ -72,6 +72,7 @@ export const routes = {
   },
   thirdPart: {
     poseiswapAuction: '/launchpad/poseiswap/auction/:sysId',
+    OmegaAuction: '/launchpad/omega/auction/:sysId',
     digitalAssetsOffering: '/launchpad/poseiswap-intro'
   },
   game: {

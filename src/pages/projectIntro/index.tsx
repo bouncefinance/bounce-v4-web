@@ -455,11 +455,11 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const prices = [
     {
       title: 'Token Name',
-      value: 'POSE'
+      value: item.tokenName
     },
     {
       title: 'Blockchain',
-      value: 'BNB Chain'
+      value: ChainListMap[item.chainId]?.name || '--'
     }
     // {
     //   title: 'Hard Cap Per User',
@@ -501,7 +501,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
       }}
     >
       <img
-        src={'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png'}
+        src={item.img}
         style={{
           position: 'absolute',
           width: '100%',
@@ -518,7 +518,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           position: 'absolute',
           display: 'flex',
           flexDirection: 'column',
-          background: `url(https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png)`,
+          background: `url(${item.img})`,
           top: 0,
           right: { xs: 20, sm: '40px' },
           bottom: 0,
@@ -540,6 +540,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           sx={{
             alignSelf: 'end',
             marginRight: 40,
+            mt: 10,
             display: 'flex',
             flexFlow: 'row nowrap'
           }}
@@ -601,17 +602,16 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16} flexWrap={'wrap'} justifyContent={'center'}>
             {item.social}
-            <WhiteButton
-              onClick={() => {
-                window.open(
-                  'https://drive.google.com/file/d/1EUO7rl5E3MHgdZOgcuz5A65QtIEtHe-Y/view?usp=sharing',
-                  '_blank'
-                )
-              }}
-            >
-              <IconBook />
-              <H6>Whitepaper</H6>
-            </WhiteButton>
+            {item.whitePaperLink && (
+              <WhiteButton
+                onClick={() => {
+                  window.open(item.whitePaperLink, '_blank')
+                }}
+              >
+                <IconBook />
+                <H6>Whitepaper</H6>
+              </WhiteButton>
+            )}
             {/*<WhiteButton>*/}
             {/*  <QuestionMark />*/}
             {/*  <H6>FAQ</H6>*/}
@@ -696,7 +696,6 @@ const ProjectContentBg = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 80px 40px 120px;
   gap: 40px;
   width: 912px;
   min-height: 446px;
@@ -728,11 +727,13 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
           </ProjectInfoSubtitle>
         ))}
       </Stack>
-      <ProjectContentBg sx={{ width: { sm: '100%', md: 912 } }}>
+      <ProjectContentBg
+        sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' } }}
+      >
         <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
         {Array.isArray(info[currentIdx].info) &&
           info[currentIdx].info.length > 0 &&
-          info[currentIdx].info.map((item: string, index: number) => (
+          info[currentIdx].info.map((item, index: number) => (
             <Typography key={index} variant={'body1'}>
               {item}
             </Typography>

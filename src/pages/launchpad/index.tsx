@@ -66,7 +66,7 @@ const PrivatePadBg = styled(CenterColumn)`
 
 export interface IProjectInfo {
   title: string
-  info: string[]
+  info: (string | JSX.Element)[]
 }
 
 export interface IPrivatePadProp {
@@ -77,17 +77,14 @@ export interface IPrivatePadProp {
   }
   showStartEnd?: true
   poolTypeName: string
-  salePrice: string
-  tokenOffered: string
-  hardCapPerUser: string
-  singleInitialInvestment: string
   img: string
   avatar: string
   title: string
   // status: PoolStatus
   desc: string
-  backendChainId: number
-  chainId?: ChainId
+  chainId: ChainId
+  whitePaperLink?: string
+  tokenName: string
   projectInfo: IProjectInfo[]
   tokenMetrics: IProjectInfo[]
   social: JSX.Element[]
@@ -125,17 +122,13 @@ export const PrivatePadList: IPrivatePadProp[] = [
       start: 1687046400000,
       end: 1687478400000
     },
-    poolTypeName: '',
+    poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
     avatar: poseiswapAvatar,
     title: 'PoseiSwap',
-    backendChainId: 2,
     chainId: 56,
-    // status: PoolStatus.Upcoming,
-    salePrice: '1 GMT = 0.00002514 BNB',
-    tokenOffered: '420,000,000.0000 GMT',
-    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
-    singleInitialInvestment: '0.1 BNB',
+    tokenName: 'POSE',
+    whitePaperLink: 'https://drive.google.com/file/d/1EUO7rl5E3MHgdZOgcuz5A65QtIEtHe-Y/view?usp=sharing',
     // upcomingLink: routes.thirdPart.digitalAssetsOffering,
     upcomingLink: '/launchpad/poseiswap/auction/690',
     liveLink: '/launchpad/poseiswap/auction/690',
@@ -190,6 +183,63 @@ export const PrivatePadList: IPrivatePadProp[] = [
     ]
   },
   {
+    keyId: 5,
+    liveTimeStamp: {
+      start: 1687348800000,
+      end: 1687521600000
+    },
+    poolTypeName: 'Fixed Swap Auction',
+    img: 'https://images-v3.bounce.finance/e097cd7f48215b693bd71cc09cb469d7-1687233034.png',
+    avatar: 'https://images-v3.bounce.finance/1b4c8022876d83267d6f9144f24f39d5-1686719746.jpeg',
+    title: 'Omega',
+    chainId: 324,
+    tokenName: 'OMG',
+    upcomingLink: '/launchpad/omega/auction/674',
+    liveLink: '/launchpad/omega/auction/674',
+    projectInfo: [
+      {
+        title: 'What is Omega [PRJCT]?',
+        info: [
+          <span key={0}>
+            Omega is building a real-yield multi level system. With OMG and veOMG people can earn double reward USDT and
+            ETH. Our nontradeable veOMG people can earn double reward and participate in our dao decision making. We
+            inplemented NFT boosted staking into our ecosystem so people can boost their earnings. Know more in details
+            here:{' '}
+            <Link color={'inherit'} href="https://omegaprjc.gitbook.io/omega-prjct/" target="_blank">
+              https://omegaprjc.gitbook.io/omega-prjct/
+            </Link>
+          </span>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Omega is building a real-yield multi level system. With OMG and veOMG people can earn double reward USDT and ETH. Our nontradeable veOMG people can earn double reward and participate in our dao decision making. We inplemented NFT boosted staking into our ecosystem so people can boost their earnings.',
+    whitePaperLink: 'https://omegaprjc.gitbook.io/omega-prjct/',
+    social: [
+      <Link key={0} href="https://www.omegaprjct.com/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/OmegaPrjct" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.gg/AXhFE7267S" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      // <Link key={3} href="https://poseiswap.medium.com/" target="_blank">
+      //   <img src={Medium} width={40} />
+      // </Link>,
+      <Link key={4} href="https://t.me/omgprjct " target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$OMG' },
+      { title: 'Token Price', content: '0.000013ETH' },
+      { title: 'Token Amount', content: '4,500,000' },
+      { title: 'Blockchain', content: 'zkSync Era' }
+    ]
+  },
+  {
     keyId: 1,
     liveTimeStamp: {
       start: 1684908000000,
@@ -201,11 +251,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     avatar: EquilibriaAvatar,
     title: 'Equilibria',
     // status: PoolStatus.Upcoming,
-    backendChainId: 42161,
-    salePrice: '1 GMT = 0.00002514 BNB',
-    tokenOffered: '420,000,000.0000 GMT',
-    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
-    singleInitialInvestment: '0.1 BNB',
+    chainId: 42161,
+    tokenName: 'EQB',
     // upcomingLink: routes.game.equilibriaIndex,
     // liveLink: routes.game.equilibriaIndex,
     projectInfo: [
@@ -300,12 +347,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     img: 'https://images-v3.bounce.finance/141976585869e842d9b8e17f21ec7037-1683799247.png',
     avatar: BlodeAvatar,
     title: 'BladeDAO',
-    // status: PoolStatus.Upcoming,
-    backendChainId: 280,
-    salePrice: '1 GMT = 0.00002514 BNB',
-    tokenOffered: '420,000,000.0000 GMT',
-    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
-    singleInitialInvestment: '0.1 BNB',
+    chainId: 324,
+    tokenName: 'BLADE',
     // upcomingLink: routes.launchpad.bladeDao,
     // liveLink: routes.launchpad.bladeDao,
     projectInfo: [
@@ -400,12 +443,8 @@ export const PrivatePadList: IPrivatePadProp[] = [
     img: 'https://images-v3.bounce.finance/141976585869e842d9b8e17f21ec7037-1683799247.png',
     avatar: BlodeAvatar,
     title: 'BladeDAO',
-    // status: PoolStatus.Upcoming,
-    backendChainId: 280,
-    salePrice: '1 GMT = 0.00002514 BNB',
-    tokenOffered: '420,000,000.0000 GMT',
-    hardCapPerUser: '1,500,000 GMT=37.7100 BNB (≈15,000 USD)',
-    singleInitialInvestment: '0.1 BNB',
+    chainId: 324,
+    tokenName: 'BLADE',
     // upcomingLink: routes.game.bladeDaoIndex,
     // liveLink: routes.game.bladeDaoIndex,
     projectInfo: [
