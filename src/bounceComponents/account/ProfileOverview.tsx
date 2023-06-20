@@ -289,7 +289,7 @@ export default function ProfileOverview() {
                 startIcon={<></>}
                 variant="contained"
                 color="secondary"
-                sx={{ width: 81, height: 42, textAlign: 'right', margin: '48px auto 0!important' }}
+                sx={{ width: 81, height: 42, textAlign: 'right', borderRadius: 6, margin: '48px auto 0!important' }}
                 type="submit"
               >
                 Save
@@ -326,8 +326,7 @@ function SocialEditInput({ value, setValue }: { value: string; setValue: (val: s
                   setMode('set')
                 }
               }}
-              mx={20}
-              sx={{ cursor: 'pointer' }}
+              sx={{ cursor: 'pointer', '@media(min-width:400px)': { mx: 20 } }}
             >
               Send
             </Typography>
@@ -348,7 +347,7 @@ function SocialEditInput({ value, setValue }: { value: string; setValue: (val: s
         </IconButton>
       </Box>
       {mode === 'unset' && (
-        <Button sx={{ width: 102, height: 32 }} variant="contained" onClick={() => setMode('input')}>
+        <Button sx={{ width: 102, height: 32, borderRadius: 6 }} variant="contained" onClick={() => setMode('input')}>
           Connect
         </Button>
       )}
