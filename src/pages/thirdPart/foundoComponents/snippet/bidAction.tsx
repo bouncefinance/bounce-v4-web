@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback } from 'react'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
 import DidDialog, { PlaceBidBtn } from './bidDialog'
+import ShippingDialog from './shippingInfoDialog'
 import { useCountDown } from 'ahooks'
 import { EnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
 import { useIsSMDown } from 'themes/useTheme'
@@ -120,6 +121,7 @@ const BidAction = () => {
   const isSm = useIsSMDown()
   const [viewType, setViewType] = useState<BidType>(BidType.dataView)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
+  const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const OpenAt = useMemo(() => poolInfo?.openAt || 0, [poolInfo?.openAt])
   const poolStatus = useMemo(() => poolInfo?.status, [poolInfo?.status])
@@ -153,7 +155,6 @@ const BidAction = () => {
           </Typography>
         )}
         {poolStatus === PoolStatus.Live && <UpcomingStatus text="Live" OpenAt={poolInfo?.closeAt || 0} />}
-
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
           <Typography color={'#fff'}>Finish</Typography>
         )}
@@ -191,7 +192,9 @@ const BidAction = () => {
           borderTop: '1px solid rgba(255, 255, 255, 0.2)'
         }}
       >
-        <Typography className="label">Current Highest Bid</Typography>
+        <Typography className="label" onClick={() => setOpenShippingDialog(!openShippingDialog)}>
+          Current Highest Bid
+        </Typography>
         <RowLabel
           style={{
             justifyContent: 'flex-end'
@@ -218,8 +221,8 @@ const BidAction = () => {
       {poolStatus === PoolStatus.Live && poolInfo && (
         <LiveSection click={() => setOpenDialog(!openDialog)} poolInfo={poolInfo}></LiveSection>
       )}
-
       {openDialog && <DidDialog handleClose={() => setOpenDialog(false)} />}
+      {openShippingDialog && <ShippingDialog handleClose={() => setOpenShippingDialog(false)} />}
     </Box>
   )
 }
