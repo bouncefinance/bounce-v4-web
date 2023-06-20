@@ -146,7 +146,7 @@ const PaginationBox = (props: PaginationParams) => {
   }
   const toNext = () => {
     const result: Tuple4<number> = [...rotateRatioList] as Tuple4<number>
-    const value = index + 1 >= total - 1 ? 0 : index + 1
+    const value = index + 1 > total - 1 ? 0 : index + 1
     result[index] -= 180
     result[value] -= 180
     setRotateRatioList(result)
