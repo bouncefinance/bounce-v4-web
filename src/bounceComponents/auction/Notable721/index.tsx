@@ -6,7 +6,7 @@ import { NFTCard } from '../../../pages/market/nftAuctionPool'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
 import { useRequest } from 'ahooks'
 import { getPools } from '../../../api/market'
-import { FixedSwapPool } from '../../../api/pool/type'
+import { NFTPoolListProp } from '../../../api/pool/type'
 import { SwiperSlide } from 'swiper/react'
 import { Link } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
@@ -99,7 +99,7 @@ export const Notable721 = (props: Notable721Props) => {
         token0Address: ''
       })
       return {
-        list: resp.data.fixedSwapNftList.list,
+        list: resp.data.fixedSwapNftList.list as NFTPoolListProp[],
         total: resp.data.fixedSwapNftList.total
       }
     },
@@ -163,7 +163,7 @@ export const Notable721 = (props: Notable721Props) => {
             }}
           >
             {data
-              ? data.list.map((item: FixedSwapPool, idx: number) => (
+              ? data.list.map((item, idx: number) => (
                   <Box style={{ width: '309px' }} key={idx}>
                     <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
                       <NFTCard nft={item} hiddenStatus={true} />
@@ -181,7 +181,7 @@ export const Notable721 = (props: Notable721Props) => {
             }}
           >
             {data
-              ? data.list.map((item: FixedSwapPool, idx: number) => (
+              ? data.list.map((item, idx: number) => (
                   <SwiperSlide key={idx}>
                     <Box style={{ width: '309px' }}>
                       <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
