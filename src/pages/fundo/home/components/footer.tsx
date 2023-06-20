@@ -314,7 +314,7 @@ export default function Footer() {
                   lineHeight: '24px'
                 }}
               >
-                25000
+                10
                 <img
                   src={BtcIcon}
                   style={{
