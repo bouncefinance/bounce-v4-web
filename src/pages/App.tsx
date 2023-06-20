@@ -60,7 +60,8 @@ import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
 // import { BladeDao } from './projectIntro'
 // import { Game } from './game'
-import { ProjectInfo } from './projectIntro/PoseiProjectInfo'
+import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
+import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -161,7 +162,8 @@ export default function App() {
                     <Route path={routes.fundo.home} element={<FundoHome />} />
                     <Route path={routes.fundo.detail} element={<FundoDetail />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
-                    <Route path={routes.thirdPart.poseiswapAuction} element={<ProjectInfo />} />
+                    <Route path={routes.thirdPart.poseiswapAuction} element={<PoseiProjectInfo />} />
+                    <Route path={routes.thirdPart.OmegaAuction} element={<OmegaProjectInfo />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     {/* <Route
                       path={routes.game.bladeDaoIndex}

@@ -127,7 +127,9 @@ const transparentRoutes = [
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.poseiswapAuction,
   routes.thirdPart.foundoDetail,
-  routes.launchpad.bladeDaoInfo
+  routes.launchpad.bladeDaoInfo,
+  routes.thirdPart.OmegaAuction,
+  routes.thirdPart.poseiswapAuction
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]

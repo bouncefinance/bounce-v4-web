@@ -116,7 +116,7 @@ export function Common({
             height: '100%',
             objectFit: 'cover',
             borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
-            maxHeight: isMd ? 350 : 400,
+            // height: isMd ? 350 : 400,
             overflow: 'hidden'
           }}
         >
@@ -127,7 +127,7 @@ export function Common({
               width: isSm ? '100%' : isMd ? 'calc(100vw - 32px)' : '600px',
               objectFit: 'cover',
               borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
-              maxHeight: isMd ? 350 : 400
+              height: '100%'
             }}
             src={img}
           />
