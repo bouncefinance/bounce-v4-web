@@ -17,12 +17,13 @@ import getBackedTokenType from 'utils/auction/getBackedTokenType'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { getCurrentTimeStamp, getLabelById } from 'utils'
 
-export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap) => {
-  const { poolId, chainShortName, sysId } = useQueryParams()
+export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backedId?: number) => {
+  const { poolId, chainShortName, sysId: _sysId } = useQueryParams()
   const { account } = useActiveWeb3React()
   const { chainInfoOpt } = useOptionDatas()
 
   const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
+  const sysId = useMemo(() => backedId || _sysId, [_sysId, backedId])
 
   return useRequest(
     async (): Promise<FixedSwapPool & { ethChainId: ChainId }> => {
