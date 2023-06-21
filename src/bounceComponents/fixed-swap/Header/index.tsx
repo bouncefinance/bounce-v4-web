@@ -93,7 +93,7 @@ const Header = ({
       {isMobile && (
         <Box sx={{ px: 24 }}>
           <Typography variant="h1" sx={{ fontSize: 30 }}>
-            {poolInfo?.name} {typeName} Pool11
+            {poolInfo?.name} {typeName} Pool
           </Typography>
 
           <Box
