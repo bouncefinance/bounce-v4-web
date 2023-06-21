@@ -66,7 +66,7 @@ import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
-
+import DutchAuction from './dutchAuction'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -130,6 +130,8 @@ export default function App() {
                     <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
                     <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
+                    <Route path={routes.dutchAuction.index} element={<DutchAuction />} />
+
                     <Route path={routes.launchpad.index} element={<Launchpad />} />
                     {/* <Route
                       path={routes.launchpad.bladeDao}
