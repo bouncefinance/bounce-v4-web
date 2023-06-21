@@ -229,7 +229,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
         left: 0,
         width: '100vw',
         height: '100vh',
-        zIndex: 9999
+        zIndex: 1200
       }}
     >
       <Box
@@ -237,7 +237,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
           position: 'relative',
           width: '100%',
           height: '100%',
-          background: 'rgba(0,0,0,0.7)'
+          background: 'rgba(0,0,0,0.8)'
         }}
         onClick={() => {
           handleClose && handleClose()

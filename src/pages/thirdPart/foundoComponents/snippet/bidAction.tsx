@@ -17,6 +17,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { getCurrentTimeStamp } from 'utils'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 export enum BidType {
   'dataView' = 0,
@@ -227,7 +228,10 @@ const BidAction = () => {
 export default BidAction
 
 function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: EnglishAuctionNFTPoolProp }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+  const toggleWallet = useWalletModalToggle()
+  const switchNetwork = useSwitchNetwork()
+
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
     [account, poolInfo.currentBidder]
@@ -239,6 +243,13 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
       poolInfo.currentBidder?.toLowerCase() !== account?.toLowerCase()
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
+
+  if (!account) {
+    return <PlaceBidBtn onClick={toggleWallet}>Connect Wallet</PlaceBidBtn>
+  }
+  if (chainId !== poolInfo.ethChainId) {
+    return <PlaceBidBtn onClick={() => switchNetwork(poolInfo.ethChainId)}>Switch Network</PlaceBidBtn>
+  }
 
   return (
     <>
@@ -309,6 +320,8 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
 
 function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
   const { account, chainId } = useActiveWeb3React()
+  const toggleWallet = useWalletModalToggle()
+  const switchNetwork = useSwitchNetwork()
   const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
 
   const isWinner = useMemo(
@@ -368,7 +381,12 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     }
   }, [bidderClaim, poolInfo.name, poolInfo.token0.symbol])
 
-  const switchNetwork = useSwitchNetwork()
+  if (!account) {
+    return <PlaceBidBtn onClick={toggleWallet}>Connect Wallet</PlaceBidBtn>
+  }
+  if (chainId !== poolInfo.ethChainId) {
+    return <PlaceBidBtn onClick={() => switchNetwork(poolInfo.ethChainId)}>Switch Network</PlaceBidBtn>
+  }
 
   return isWinner ? (
     <Stack>
@@ -386,7 +404,7 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         }
         loadingPosition="start"
         loading={submitted.submitted}
-        disabled={poolInfo.participant.claimed || isClaimed || poolInfo.claimAt > getCurrentTimeStamp()}
+        disabled={poolInfo.claimAt > getCurrentTimeStamp()}
       >
         <img
           src={BidIcon}
@@ -398,7 +416,8 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           alt=""
           srcSet=""
         />
-        Check Logistics Information
+        {/* Check Logistics Information */}
+        {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'}
       </PlaceBidBtn>
       <Typography
         sx={{
@@ -409,7 +428,9 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           fontSize: '13px'
         }}
       >
-        Claim start time: {new Date(poolInfo.claimAt * 1000).toLocaleString()}
+        {poolInfo.participant.claimed || isClaimed
+          ? 'We will contact you in the near future'
+          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
       </Typography>
 
       {openShippingDialog && (
