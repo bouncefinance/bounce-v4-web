@@ -12,6 +12,7 @@ import {
   StyledHistoryTableCell,
   StyledHistoryTableRow
 } from 'bounceComponents/fixed-swap/ActionHistory'
+import { useMemo } from 'react'
 
 const ActionHistory = ({
   backedChainId,
@@ -23,6 +24,10 @@ const ActionHistory = ({
   category: PoolType
 }) => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory(backedChainId, poolId, category)
+  const list = useMemo(() => {
+    if (!data) return undefined
+    return data.list || []
+  }, [data])
 
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
@@ -30,7 +35,7 @@ const ActionHistory = ({
         Auction History
       </Typography>
 
-      {data && data?.list.length > 0 ? (
+      {list && list.length > 0 ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -42,7 +47,7 @@ const ActionHistory = ({
               </StyledHistoryTableRow>
             </TableHead>
             <TableBody>
-              {data.list.map(record => (
+              {list.map(record => (
                 <StyledHistoryTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledHistoryTableCell>{PoolEventTypography[record.event]}</StyledHistoryTableCell>
                   <StyledHistoryTableCell>

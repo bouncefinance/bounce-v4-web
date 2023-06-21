@@ -101,16 +101,17 @@ const ButtonBlock = () => {
     return <SwitchNetworkButton targetChain={poolInfo?.ethChainId} />
   }
 
-  if (poolInfo?.status === PoolStatus.Closed && !poolInfo?.creatorClaimed) {
+  if (poolInfo?.status === PoolStatus.Closed) {
     return (
       <LoadingButton
         variant="contained"
         fullWidth
         loadingPosition="start"
-        loading={submitted.complete || submitted.submitted}
+        loading={submitted.submitted}
+        disabled={creatorClaimed || creatorClaimed === undefined}
         onClick={() => toClaim(false)}
       >
-        <span>{'Claim fund raised'}</span>
+        {creatorClaimed ? 'Claimed' : 'Claim fund raised'}
       </LoadingButton>
     )
   }
@@ -122,8 +123,8 @@ const ButtonBlock = () => {
         fullWidth
         loadingPosition="start"
         sx={{ mt: 24, mb: 12 }}
-        loading={submitted.complete || submitted.submitted}
-        disabled={creatorClaimed}
+        loading={submitted.submitted}
+        disabled={creatorClaimed || creatorClaimed === undefined}
         onClick={() => toClaim(true)}
       >
         {creatorClaimed ? 'Claimed' : 'Cancel & Claim tokens'}

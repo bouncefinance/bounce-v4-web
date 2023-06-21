@@ -6,7 +6,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
-import ActionHistory from 'bounceComponents/fixed-swap-nft/ActionHistory'
+import ActionHistory from 'bounceComponents/englishAuction/ActionHistory'
 import ValuesProvider, { useEnglishAuctionPoolInfo } from './ValuesProvider'
 import CreatorMainBlock from 'bounceComponents/englishAuction/CreatorMainBlock'
 import UserMainBlock from 'bounceComponents/englishAuction/UserMainBlock'
@@ -49,7 +49,7 @@ function EnglishAuctionNFTContent() {
             <Stack sx={{ flex: 1 }} spacing={20}>
               {account === poolInfo.creator ? <CreatorMainBlock /> : <UserMainBlock />}
 
-              <ActionHistory backedChainId={poolInfo.chainId} category={poolInfo.category} poolId={poolInfo.poolId} />
+              {poolInfo && <ActionHistory poolInfo={poolInfo} />}
             </Stack>
             {isMobile && (
               <CreatorInfoCard

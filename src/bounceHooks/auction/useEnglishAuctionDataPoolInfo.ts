@@ -14,16 +14,17 @@ function useEnglishAuctionAccountBidAmount(backedChainId?: number, poolId?: stri
     account && backedChainId ? backedChainId : 0,
     poolId || '',
     PoolType.ENGLISH_AUCTION_NFT,
-    account || undefined
+    account || undefined,
+    ['Bid']
   )
   const rawAmount = useMemo(() => (account ? data?.list?.[0]?.token1Amount : undefined), [account, data?.list])
 
   return rawAmount
 }
 
-export function useEnglishAuctionDataPoolInfo() {
+export function useEnglishAuctionDataPoolInfo(backedId?: number) {
   const { account } = useActiveWeb3React()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT)
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION_NFT, backedId)
 
   const englishAuctionNftContract = useEnglishAuctionNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const accountBidRawAmount = useEnglishAuctionAccountBidAmount(poolInfo?.chainId, poolInfo?.poolId)
@@ -99,7 +100,6 @@ export function useEnglishAuctionDataPoolInfo() {
   const myClaimed = useMemo(() => myClaimedRes?.[0], [myClaimedRes])
 
   const data = useMemo(() => {
-    console.log('aaa', poolInfo?.ethChainId)
     if (!poolInfo || !poolInfo?.ethChainId) return undefined
     const _t1 = poolInfo?.token1
     const t1 = new Currency(poolInfo?.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)

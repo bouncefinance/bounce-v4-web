@@ -72,15 +72,23 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
       {
         title: 'Chain',
         name: 'searchType',
-        list: chainList
+        list: chainList ? [{ label: 'All Chain', value: 0 }, ...chainList] : chainList
       },
       {
         title: 'Auction',
         name: 'auctionType',
         list: [
           {
+            label: 'All NFT',
+            value: 0
+          },
+          {
             label: 'Fixed Swap NFT',
             value: 5
+          },
+          {
+            label: 'English Auction NFT',
+            value: 6
           }
         ]
       },
@@ -164,7 +172,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
             handleClick && handleClick()
           }}
           sx={{
-            padding: 16,
+            padding: 18,
             display: 'flex',
             flexFlow: 'row nowrap',
             justifyContent: 'center',

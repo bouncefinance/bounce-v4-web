@@ -70,7 +70,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     keyId: 2,
     liveTimeStamp: {
       start: 1687046400000,
-      end: 1687478400000
+      // end: 1687478400000
+      end: 0
     },
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
@@ -81,7 +82,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     whitePaperLink: 'https://drive.google.com/file/d/1EUO7rl5E3MHgdZOgcuz5A65QtIEtHe-Y/view?usp=sharing',
     // upcomingLink: routes.thirdPart.digitalAssetsOffering,
     upcomingLink: '/launchpad/poseiswap/auction/690',
-    liveLink: '/launchpad/poseiswap/auction/690',
+    // liveLink: '/launchpad/poseiswap/auction/690',
     projectInfo: [
       {
         title: 'What is PoseiSwap?',

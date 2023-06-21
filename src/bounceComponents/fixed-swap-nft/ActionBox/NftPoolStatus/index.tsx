@@ -99,7 +99,17 @@ export const PoolStatusBox = ({
             justifyContent: 'flex-start'
           }}
         >
-          <Box sx={{ px: 12, py: 4, bgcolor: '#D6DFF6', borderRadius: 20, marginRight: '8px', ...style }}>
+          <Box
+            sx={{
+              display: 'inline-block',
+              px: 12,
+              py: 4,
+              bgcolor: '#D6DFF6',
+              borderRadius: 20,
+              marginRight: '8px',
+              ...style
+            }}
+          >
             <Typography variant="body1" color="#2663FF">
               Closed
             </Typography>
@@ -137,7 +147,17 @@ export const PoolStatusBox = ({
       )
     case PoolStatus.Cancelled:
       return (
-        <Box sx={{ px: 12, py: 4, bgcolor: '#D6DFF6', borderRadius: 20, marginRight: '16px', ...style }}>
+        <Box
+          sx={{
+            display: 'inline-block',
+            px: 12,
+            py: 4,
+            bgcolor: '#D6DFF6',
+            borderRadius: 20,
+            marginRight: '16px',
+            ...style
+          }}
+        >
           <Typography variant="body1" color="#2663FF">
             Closed
           </Typography>

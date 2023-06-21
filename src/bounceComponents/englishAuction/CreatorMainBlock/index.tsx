@@ -103,7 +103,7 @@ const CreatorMainBlock = (): JSX.Element => {
           {poolInfo.contract && <ButtonBlock />}
         </Stack>
 
-        <PriceChartView poolInfo={poolInfo} />
+        <PriceChartView showText poolInfo={poolInfo} />
       </Box>
     </Stack>
   )

@@ -119,7 +119,9 @@ const TokenInformationForm = ({ title }: { title?: string }): JSX.Element => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Typography sx={{ color: 'var(--ps-gray-700)' }}>View on explorer</Typography>
+                  {auctionInChainId && values.tokenFromAddress && (
+                    <Typography sx={{ color: 'var(--ps-gray-700)' }}>View on explorer</Typography>
+                  )}
                 </a>
               </ButtonBase>
 
