@@ -290,7 +290,7 @@ const FooterPc: React.FC = () => {
         className: ''
       },
       {
-        label: 'Token&NFT auction',
+        label: 'Token&NFT Latest Auctions',
         isExternal: true,
         href: 'https://www.bounce.finance/tokenAndnftAuction',
         isDisabled: false,
