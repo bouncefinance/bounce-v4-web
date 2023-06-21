@@ -67,11 +67,11 @@ function DataView(props: DataViewParam) {
       </RowLabel>
       <RowLabel>
         <Typography className="label">Price Floor</Typography>
-        <Typography className="value">{priceFloor}</Typography>
+        <Typography className="value">{priceFloor || '-'}</Typography>
       </RowLabel>
       <RowLabel>
         <Typography className="label">Every time Minimum Price Increase</Typography>
-        <Typography className="value">{increase}</Typography>
+        <Typography className="value">{increase || '-'}</Typography>
       </RowLabel>
     </Stack>
   )

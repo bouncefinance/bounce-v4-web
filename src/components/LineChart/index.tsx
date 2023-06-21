@@ -173,13 +173,20 @@ export default function LineChart({
         setInfo({ ...info, value, time })
       }
     }
-    chart?.subscribeCrosshairMove(move)
+    if (chart) {
+      chart.subscribeCrosshairMove(move)
+    }
     return () => {
       chart?.unsubscribeCrosshairMove(move)
+    }
+  }, [data, info, infoPoint])
+
+  useEffect(() => {
+    return () => {
       chart = null
       lineSeries = null
     }
-  }, [info, infoPoint])
+  }, [])
 
   return (
     <Box
