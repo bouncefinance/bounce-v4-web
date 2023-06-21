@@ -204,6 +204,53 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   }
 }
 
+export interface NFTPoolListProp {
+  id: number
+  chainId: number
+  contract: string
+  createdTxHash: string
+  poolId: string
+  category: PoolType
+  creator: string
+  creatorClaimed: boolean
+  name: string
+  description: string
+  enableWhiteList: boolean
+  token0: TokenFromApi
+  openAt: number
+  closeAt: number
+  claimAt: number
+  posts: null | Post[]
+  tokenType: BackedTokenType
+  maxPlayere: string
+  curPlayer: string
+  totalShare: string
+  status: PoolStatus
+  token1: TokenFromApi
+  amountTotal0: string
+  amountTotal1: string
+  swappedAmount0: string
+  currentTotal0: string
+  currentTotal1: string
+  ratio: string
+  poolPrice: string
+  maxAmount1PerWallet: string
+  participant: {
+    address: string
+    swappedAmount0: string
+    claimed: boolean
+    regreted: boolean
+    tokenId: string
+    is721?: 0 | 1 | 2 // 2 721
+  }
+  creatorUserInfo: CreatorUserInfo
+  likeInfo: LikeInfo
+  tokenId: string
+  is721: 1 | 2 // 2 721; 1 1155
+  ifCollect: boolean
+  highestBid: string
+}
+
 export interface FixedSwapNFTPoolProp extends FixedSwapPool {
   currencyAmountTotal1: CurrencyAmount
   currencySwappedTotal1: CurrencyAmount
@@ -256,6 +303,7 @@ export interface GetPoolHistoryParams {
   chainId: number
   poolId: string
   tokenType: 1 | 2
+  event?: ('Swapped' | 'CreatorClaimed' | 'Reversed' | 'Bid' | 'Bet')[]
 }
 
 export interface GetWinnersListParams {

@@ -36,7 +36,7 @@ const UserMainBlock = (): JSX.Element => {
       </Box>
 
       <Box display={'grid'} gridTemplateColumns={isMobile ? '1fr' : '1fr 1fr'} gap="40px">
-        <Stack spacing={10} pt={12}>
+        <Stack spacing={10}>
           <PoolInfoItem title="Current Highest Bid" tip="The current highest bid for the auction">
             <Stack direction="row" spacing={6} alignItems="center">
               <Typography>{poolInfo.currentBidderAmount1?.toSignificant() || '-'}</Typography>
@@ -57,8 +57,16 @@ const UserMainBlock = (): JSX.Element => {
             </Stack>
           </PoolInfoItem>
 
+          <PoolInfoItem title="Price Increase" tip="Every Time Minimum Price Increase">
+            <Stack direction="row" spacing={6} alignItems="center">
+              <Typography>{poolInfo.currencyAmountMinIncr1?.toSignificant()}</Typography>
+              <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
+              <Typography>{poolInfo.token1.symbol}</Typography>
+            </Stack>
+          </PoolInfoItem>
+
           <Box pt={20}>
-            <PriceChartView poolInfo={poolInfo} />
+            <PriceChartView showText poolInfo={poolInfo} />
           </Box>
         </Stack>
         {poolInfo.contract && <UserBidPanel />}

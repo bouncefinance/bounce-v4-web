@@ -267,16 +267,16 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0x7cC82b4e6A4585A3c2228301Bd3e78CA52650174',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
-  [ChainId.BSC]: '',
+  [ChainId.BSC]: '0xC52DD0614449d82A497Fd6476D67df4D1B897009',
   [ChainId.OKEX]: '',
   [ChainId.BSCTEST]: '',
   [ChainId.KLAYTN]: '',
   [ChainId.GNOSIS]: '',
-  [ChainId.POLYGON]: '',
+  [ChainId.POLYGON]: '0xE11ADD6956077174C008F842b82135b50E377128',
   [ChainId.FANTOM]: '',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
