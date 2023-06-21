@@ -109,6 +109,11 @@ export function useBidderClaimEnglishAuctionNFT(poolId: number | string, name: s
   const addTransaction = useTransactionAdder()
   const funcName = 'bidderClaim'
 
+  const isClaimedRes = useSingleCallResult(englishAuctionNftContract, 'myClaimed', [account || undefined, poolId])
+  const isClaimed: boolean | undefined = useMemo(() => {
+    return isClaimedRes?.result?.[0]
+  }, [isClaimedRes?.result])
+
   const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId + '_EnglishAuction_NFT')
   const run = useCallback(async (): Promise<{
     hash: string
@@ -145,5 +150,5 @@ export function useBidderClaimEnglishAuctionNFT(poolId: number | string, name: s
     })
   }, [account, addTransaction, englishAuctionNftContract, name, poolId])
 
-  return { submitted, run }
+  return { submitted, run, isClaimed }
 }

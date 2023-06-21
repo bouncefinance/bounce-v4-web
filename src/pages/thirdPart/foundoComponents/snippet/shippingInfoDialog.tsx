@@ -34,10 +34,13 @@ interface FormItem {
   mobileGrid: number
   option?: any
 }
-const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
+const BidDialog = ({ handleClose, submitCallback }: { handleClose: () => void; submitCallback?: () => void }) => {
   const isSm = useIsSMDown()
   const { register, handleSubmit } = useForm()
-  const onSubmit = (data: any) => console.log(data)
+  const onSubmit = (data: any) => {
+    console.log(data)
+    submitCallback && submitCallback()
+  }
   const formConfig: FormItem[] = [
     {
       key: 'firstName',

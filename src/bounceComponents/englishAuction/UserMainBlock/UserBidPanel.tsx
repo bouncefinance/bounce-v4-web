@@ -69,11 +69,11 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
 
-  const { run: bidderClaim, submitted: claimSubmitted } = useBidderClaimEnglishAuctionNFT(
-    poolInfo.poolId,
-    poolInfo.name,
-    poolInfo.contract
-  )
+  const {
+    run: bidderClaim,
+    submitted: claimSubmitted,
+    isClaimed
+  } = useBidderClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const toBidderClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -136,10 +136,10 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
             variant="contained"
             loadingPosition="start"
             loading={claimSubmitted.submitted}
-            disabled={poolInfo.participant.claimed || poolInfo.claimAt > getCurrentTimeStamp()}
+            disabled={isClaimed || poolInfo.claimAt > getCurrentTimeStamp()}
             onClick={toBidderClaim}
           >
-            {poolInfo.participant.claimed ? 'Claimed' : 'Claim Token'}
+            {isClaimed ? 'Claimed' : 'Claim Token'}
           </LoadingButton>
         )}
 

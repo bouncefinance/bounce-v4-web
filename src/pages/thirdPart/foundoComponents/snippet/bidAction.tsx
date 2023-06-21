@@ -15,6 +15,7 @@ import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorC
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
+import { getCurrentTimeStamp } from 'utils'
 
 export enum BidType {
   'dataView' = 0,
@@ -121,7 +122,6 @@ const BidAction = () => {
   const isSm = useIsSMDown()
   const [viewType, setViewType] = useState<BidType>(BidType.dataView)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
-  const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const OpenAt = useMemo(() => poolInfo?.openAt || 0, [poolInfo?.openAt])
   const poolStatus = useMemo(() => poolInfo?.status, [poolInfo?.status])
@@ -192,9 +192,7 @@ const BidAction = () => {
           borderTop: '1px solid rgba(255, 255, 255, 0.2)'
         }}
       >
-        <Typography className="label" onClick={() => setOpenShippingDialog(!openShippingDialog)}>
-          Current Highest Bid
-        </Typography>
+        <Typography className="label">Current Highest Bid</Typography>
         <RowLabel
           style={{
             justifyContent: 'flex-end'
@@ -222,7 +220,6 @@ const BidAction = () => {
         <LiveSection click={() => setOpenDialog(!openDialog)} poolInfo={poolInfo}></LiveSection>
       )}
       {openDialog && <DidDialog handleClose={() => setOpenDialog(false)} />}
-      {openShippingDialog && <ShippingDialog handleClose={() => setOpenShippingDialog(false)} />}
     </Box>
   )
 }
@@ -311,6 +308,8 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
 
 function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
   const { account } = useActiveWeb3React()
+  const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
+
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
     [account, poolInfo.currentBidder]
@@ -324,11 +323,11 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
 
-  const { run: bidderClaim, submitted } = useBidderClaimEnglishAuctionNFT(
-    poolInfo.poolId,
-    poolInfo.name,
-    poolInfo.contract
-  )
+  const {
+    run: bidderClaim,
+    submitted,
+    isClaimed
+  } = useBidderClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const toBidderClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -376,7 +375,12 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         rightImg={poolInfo.token1.smallUrl}
         rightText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
       />
-      <PlaceBidBtn onClick={toBidderClaim} loadingPosition="start" loading={submitted.submitted}>
+      <PlaceBidBtn
+        onClick={() => setOpenShippingDialog(!openShippingDialog)}
+        loadingPosition="start"
+        loading={submitted.submitted}
+        disabled={isClaimed || poolInfo.claimAt > getCurrentTimeStamp()}
+      >
         <img
           src={BidIcon}
           style={{
@@ -389,6 +393,24 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         />
         Check Logistics Information
       </PlaceBidBtn>
+      <Typography
+        sx={{
+          mt: 5,
+          textAlign: 'center',
+          fontFamily: `'Inter'`,
+          color: 'var(--ps-text-2)',
+          fontSize: '13px'
+        }}
+      >
+        Claim start time: {new Date(poolInfo.claimAt * 1000).toLocaleString()}
+      </Typography>
+
+      {openShippingDialog && (
+        <ShippingDialog
+          submitCallback={isClaimed ? undefined : toBidderClaim}
+          handleClose={() => setOpenShippingDialog(false)}
+        />
+      )}
     </Stack>
   ) : isOutBid ? (
     <Box>

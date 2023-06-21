@@ -311,7 +311,7 @@ const FoundoBidDetail = () => {
 }
 export default function FoundoBidDetailContent() {
   return (
-    <EnglishAuctionValuesProvider backedId={7447}>
+    <EnglishAuctionValuesProvider backedId={666}>
       <FoundoBidDetail />
     </EnglishAuctionValuesProvider>
   )
