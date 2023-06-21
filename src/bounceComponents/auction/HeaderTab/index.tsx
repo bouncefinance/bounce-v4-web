@@ -35,7 +35,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
     'Private Launchpad',
     'Token Auction',
     'NFT Auction',
-    'Real World Capitalize Collectibles Auction',
+    'Real World Collectibles Auction',
     'Ads Auction'
   ]
   const path =
