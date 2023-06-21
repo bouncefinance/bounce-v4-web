@@ -16,6 +16,7 @@ import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog }
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { getCurrentTimeStamp } from 'utils'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 export enum BidType {
   'dataView' = 0,
@@ -70,7 +71,7 @@ function DataView(props: DataViewParam) {
         <Typography className="value">{priceFloor || '-'}</Typography>
       </RowLabel>
       <RowLabel>
-        <Typography className="label">Every time Minimum Price Increase</Typography>
+        <Typography className="label">Every Time Minimum Price Increase</Typography>
         <Typography className="value">{increase || '-'}</Typography>
       </RowLabel>
     </Stack>
@@ -307,7 +308,7 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
 }
 
 function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
 
   const isWinner = useMemo(
@@ -367,6 +368,8 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     }
   }, [bidderClaim, poolInfo.name, poolInfo.token0.symbol])
 
+  const switchNetwork = useSwitchNetwork()
+
   return isWinner ? (
     <Stack>
       <BidResultAlert
@@ -376,10 +379,14 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         rightText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
       />
       <PlaceBidBtn
-        onClick={() => setOpenShippingDialog(!openShippingDialog)}
+        onClick={() =>
+          chainId !== poolInfo.ethChainId
+            ? switchNetwork(poolInfo.ethChainId)
+            : setOpenShippingDialog(!openShippingDialog)
+        }
         loadingPosition="start"
         loading={submitted.submitted}
-        disabled={isClaimed || poolInfo.claimAt > getCurrentTimeStamp()}
+        disabled={poolInfo.participant.claimed || isClaimed || poolInfo.claimAt > getCurrentTimeStamp()}
       >
         <img
           src={BidIcon}

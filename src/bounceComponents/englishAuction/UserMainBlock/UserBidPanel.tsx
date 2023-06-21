@@ -18,6 +18,8 @@ import LivePanel from './LivePanel'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { getCurrentTimeStamp } from 'utils'
 import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 
 export default function UserBidPanel() {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
@@ -55,7 +57,7 @@ function UpComingPanel({ startTime }: { startTime: number }) {
 }
 
 function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
     [account, poolInfo.currentBidder]
@@ -113,6 +115,22 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     }
   }, [bidderClaim, poolInfo.name, poolInfo.token0.symbol])
 
+  if (!account) {
+    return (
+      <Box alignSelf="flex-end">
+        <ConnectWalletButton />
+      </Box>
+    )
+  }
+
+  if (chainId !== poolInfo.ethChainId) {
+    return (
+      <Box alignSelf="flex-end">
+        <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+      </Box>
+    )
+  }
+
   return isWinner ? (
     <Box>
       <Stack spacing={30}>
@@ -129,7 +147,7 @@ function ClosedPanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           {poolInfo.currentBidderAmount1?.toSignificant()} {poolInfo.currentBidderAmount1?.currency.symbol}
         </Typography>
 
-        {poolInfo.participant.claimed ? (
+        {poolInfo.participant.claimed || isClaimed ? (
           <SuccessfullyClaimedAlert />
         ) : (
           <LoadingButton

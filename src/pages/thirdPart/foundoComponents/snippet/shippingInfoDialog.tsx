@@ -1,14 +1,22 @@
-import { Box, Typography, Grid, styled } from '@mui/material'
+import { Box, Typography, Grid, styled, Input } from '@mui/material'
 import CloseIcon from 'assets/imgs/thirdPart/foundoDetail/x.svg'
-import { useForm } from 'react-hook-form'
 import { useIsSMDown } from 'themes/useTheme'
 import { PlaceBidBtn } from './bidDialog'
-const InputBox = styled(Box)(({ theme }) => ({
+import { Form, Formik } from 'formik'
+import * as Yup from 'yup'
+import FormItem from 'bounceComponents/common/FormItem'
+import { useCallback } from 'react'
+import { poolWinnerInfoCommit } from 'api/fundo'
+import { useSignMessage } from 'hooks/useWeb3Instance'
+import { useActiveWeb3React } from 'hooks'
+
+const InputBox = styled(Input)(({ theme }) => ({
   height: '48px',
   display: 'flex',
   flexFlow: 'row nowrap',
   justifyContent: 'space-between',
   padding: '0 24px',
+  color: '#fff',
   background: 'var(--ps-text-4)',
   borderRadius: '4px',
   '.inputEl': {
@@ -27,6 +35,43 @@ const InputBox = styled(Box)(({ theme }) => ({
     }
   }
 }))
+
+interface FormValues {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  address1: string
+  address2: string
+  address3: string
+  city: string
+  region: string
+  country: string
+  postcode: string
+}
+
+const internalInitialValues: FormValues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  address1: '',
+  address2: '',
+  address3: '',
+  city: '',
+  region: '',
+  country: '',
+  postcode: ''
+}
+
+const validationSchema = Yup.object({
+  firstName: Yup.string().required('First name is required'),
+  lastName: Yup.string().required('Last name is required'),
+  address1: Yup.string().required('Address line1 is required'),
+  phone: Yup.string().required('Phone is required'),
+  email: Yup.string().email().required('email is required')
+})
+
 interface FormItem {
   key: string
   placeholder: string
@@ -36,88 +81,104 @@ interface FormItem {
 }
 const BidDialog = ({ handleClose, submitCallback }: { handleClose: () => void; submitCallback?: () => void }) => {
   const isSm = useIsSMDown()
-  const { register, handleSubmit } = useForm()
-  const onSubmit = (data: any) => {
-    console.log(data)
-    submitCallback && submitCallback()
-  }
+  const signMessage = useSignMessage()
+  const { account } = useActiveWeb3React()
+
+  const onSubmit = useCallback(
+    async (data: FormValues) => {
+      if (!account) return
+      try {
+        const message = 'Submit personal information'
+        const signature = await signMessage(message)
+        await poolWinnerInfoCommit({
+          address: account,
+          addressLine1: data.address1,
+          addressLine2: data.address2,
+          addressLine3: data.address3,
+          city: data.city,
+          country: data.country,
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          PostCode: data.postcode,
+          province: data.region,
+          message,
+          signature
+        })
+        handleClose && handleClose()
+        submitCallback && submitCallback()
+      } catch (error) {}
+    },
+    [account, handleClose, signMessage, submitCallback]
+  )
+
   const formConfig: FormItem[] = [
     {
       key: 'firstName',
       placeholder: 'First Name',
       grid: 12,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'lastName',
       placeholder: 'Last Name',
       grid: 12,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'email',
       placeholder: 'Email',
       grid: 6,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'phone',
       placeholder: 'Phone Number',
       grid: 6,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'address1',
       placeholder: 'Address line 1',
       grid: 12,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'address2',
       placeholder: 'Address line 2 (optional)',
       grid: 12,
-      mobileGrid: 12,
-      option: { required: false }
+      mobileGrid: 12
     },
     {
       key: 'address3',
       placeholder: 'Address line 3 (optional)',
       grid: 12,
-      mobileGrid: 12,
-      option: { required: false }
+      mobileGrid: 12
     },
     {
       key: 'city',
       placeholder: 'Town/City',
       grid: 6,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'region',
       placeholder: 'State/province/region',
       grid: 6,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'country',
       placeholder: 'Country',
       grid: 6,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     },
     {
       key: 'postcode',
       placeholder: 'Postcode/Zip',
       grid: 6,
-      mobileGrid: 12,
-      option: { required: true }
+      mobileGrid: 12
     }
   ]
   return (
@@ -138,9 +199,9 @@ const BidDialog = ({ handleClose, submitCallback }: { handleClose: () => void; s
           height: '100%',
           background: 'rgba(0,0,0,0.7)'
         }}
-        onClick={() => {
-          handleClose && handleClose()
-        }}
+        // onClick={() => {
+        //   handleClose && handleClose()
+        // }}
       ></Box>
       <Box
         sx={{
@@ -201,25 +262,28 @@ const BidDialog = ({ handleClose, submitCallback }: { handleClose: () => void; s
             padding: isSm ? '24px' : '32px 48px 31px'
           }}
         >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={'16px'} mb={isSm ? '40px' : '24px'}>
-              {formConfig.map((item, index) => {
-                return (
-                  <Grid item xs={isSm ? item.mobileGrid : item.grid} key={index}>
-                    <InputBox>
-                      <input
-                        type="text"
-                        {...(register(item.key), item.option)}
-                        className={'inputEl'}
-                        placeholder={item.placeholder}
-                      />
-                    </InputBox>
-                  </Grid>
-                )
-              })}
-            </Grid>
-            <PlaceBidBtn type="submit">Submit</PlaceBidBtn>
-          </form>
+          <Formik initialValues={internalInitialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+            <Form>
+              <Grid container spacing={'16px'} mb={isSm ? '40px' : '24px'}>
+                {formConfig.map((item, index) => {
+                  return (
+                    <Grid item xs={isSm ? item.mobileGrid : item.grid} key={index}>
+                      <FormItem name={item.key}>
+                        <InputBox type="text" placeholder={item.placeholder} />
+                        {/* <input
+                          type="text"
+                          {...(register(item.key), item.option)}
+                          className={'inputEl'}
+                          placeholder={item.placeholder}
+                        /> */}
+                      </FormItem>
+                    </Grid>
+                  )
+                })}
+              </Grid>
+              <PlaceBidBtn type="submit">Submit</PlaceBidBtn>
+            </Form>
+          </Formik>
         </Box>
       </Box>
     </Box>

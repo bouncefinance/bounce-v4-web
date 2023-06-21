@@ -57,7 +57,7 @@ const UserMainBlock = (): JSX.Element => {
             </Stack>
           </PoolInfoItem>
 
-          <PoolInfoItem title="Price Increase" tip="Every time Minimum Price Increase">
+          <PoolInfoItem title="Price Increase" tip="Every Time Minimum Price Increase">
             <Stack direction="row" spacing={6} alignItems="center">
               <Typography>{poolInfo.currencyAmountMinIncr1?.toSignificant()}</Typography>
               <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
