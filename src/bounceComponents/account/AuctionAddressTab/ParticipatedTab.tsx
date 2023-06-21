@@ -185,11 +185,10 @@ export default function ParticipatedTab({
       )}
 
       <Box mt={40} display={'flex'} justifyContent="center">
-        {auctionPoolData?.total !== 0 || !auctionPoolData?.total ? (
+        {auctionPoolData?.total !== 0 || auctionPoolData?.total ? (
           <Pagination
             onChange={handlePageChange}
             sx={{
-              '.MuiPagination-ul li button': { border: '1px solid' },
               alignItems: 'end',
               overflowX: 'scroll',
               '> ul': {

@@ -96,7 +96,7 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
 
             <Pagination
               onChange={(_, p) => handlePageChange(p)}
-              sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
+              sx={{ alignItems: 'end' }}
               count={Math.ceil(curList.length / defaultPageSize)}
               renderItem={item => {
                 if (item.type === 'previous' || item.type === 'next') {

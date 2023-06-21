@@ -194,12 +194,12 @@ const BuynowContent = () => {
                   page={poolsPagination.current}
                   onChange={handlePageChange}
                   count={Math.ceil(poolList?.total / defaultPageSize) || 0}
-                  variant="outlined"
+                  // variant="outlined"
                   siblingCount={0}
                   sx={{
                     '.MuiPagination-ul li button': {
-                      color: '#fff',
-                      border: '1px solid var(--ps-text-3)'
+                      color: '#fff'
+                      // border: '1px solid var(--ps-text-3)'
                     },
                     '.MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
                       border: 0,
@@ -255,12 +255,12 @@ const BuynowContent = () => {
                   page={poolsPagination.current}
                   onChange={handlePageChange}
                   count={Math.ceil(poolList?.total / defaultPageSize) || 0}
-                  variant="outlined"
+                  // variant="outlined"
                   siblingCount={0}
                   sx={{
                     '.MuiPagination-ul li button': {
-                      color: '#fff',
-                      border: '1px solid var(--ps-text-3)'
+                      color: '#fff'
+                      // border: '1px solid var(--ps-text-3)'
                     },
                     '.MuiPagination-ul>li:not(:first-of-type):not(:last-child) .MuiPaginationItem-root': {
                       border: 0,
