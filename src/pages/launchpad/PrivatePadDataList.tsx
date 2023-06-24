@@ -82,7 +82,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     whitePaperLink: 'https://drive.google.com/file/d/1EUO7rl5E3MHgdZOgcuz5A65QtIEtHe-Y/view?usp=sharing',
     // upcomingLink: routes.thirdPart.digitalAssetsOffering,
     upcomingLink: '/launchpad/poseiswap/auction/690',
-    // liveLink: '/launchpad/poseiswap/auction/690',
+    liveLink: '/launchpad/poseiswap/auction/690',
     projectInfo: [
       {
         title: 'What is PoseiSwap?',
