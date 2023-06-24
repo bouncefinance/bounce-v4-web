@@ -2,7 +2,7 @@ import { useRequest } from 'ahooks'
 
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
 import { getPoolInfo } from 'api/pool'
-import { FixedSwapPool, FixedSwapPoolProp, PoolType } from 'api/pool/type'
+import { FixedSwapPool, FixedSwapPoolProp, PoolStatus, PoolType } from 'api/pool/type'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useActiveWeb3React } from 'hooks'
@@ -15,7 +15,7 @@ import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 // import { FIXED_SWAP_ERC20_ADDRESSES, OLD_FIXED_SWAP_ERC20_ADDRESSES } from '../../constants'
 import getBackedTokenType from 'utils/auction/getBackedTokenType'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { getLabelById } from 'utils'
+import { getCurrentTimeStamp, getLabelById } from 'utils'
 
 export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backedId?: number) => {
   const { poolId, chainShortName, sysId: _sysId } = useQueryParams()
@@ -46,6 +46,18 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
 
       const rawPoolInfo = response.data.fixedSwapPool || response.data.fixedSwapNftPool
 
+      const curTimeStamp = getCurrentTimeStamp()
+      const status =
+        rawPoolInfo.status === PoolStatus.Cancelled ||
+        rawPoolInfo.status === PoolStatus.Closed ||
+        rawPoolInfo.status === PoolStatus.Finish
+          ? rawPoolInfo.status
+          : rawPoolInfo.openAt > curTimeStamp
+          ? PoolStatus.Upcoming
+          : rawPoolInfo.closeAt > curTimeStamp
+          ? PoolStatus.Live
+          : PoolStatus.Closed
+
       return {
         ...rawPoolInfo,
         poolVersion: response.data.poolVersion,
@@ -53,6 +65,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
           ...rawPoolInfo.token0,
           symbol: rawPoolInfo.token0.symbol.toUpperCase()
         },
+        status,
         token1: {
           ...rawPoolInfo.token1,
           symbol: rawPoolInfo.token1.symbol.toUpperCase()

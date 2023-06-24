@@ -33,7 +33,7 @@ const MarketplaceMobile = ({
         position: 'relative',
         width: 'calc(100% - 16px)',
         margin: '0 auto',
-        background: '#20201E',
+        background: '#121212',
         borderRadius: '16px',
         padding: '80px 24px 24px'
       }}

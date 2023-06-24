@@ -2,6 +2,8 @@ import { Box, styled, Skeleton, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import LogoIcon from 'assets/imgs/realWorld/logo.svg'
+
 // import EthIcon from 'assets/imgs/realWorld/eth.png'
 export interface BannerType {
   name: string
@@ -12,6 +14,7 @@ export interface BannerType {
   endTime: number | string
   categories?: string
   status?: string
+  resource?: string
 }
 
 export interface IBanner {
@@ -295,6 +298,46 @@ export function Banner({ banner }: { banner: BannerType }) {
             )}
           </Box>
         </Box>
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '40px',
+          left: '40px',
+          padding: '0 12px',
+          height: '32px',
+          lineHeight: '32px',
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          justifyContent: 'center',
+          alignItems: 'center',
+          background: `rgba(18, 18, 18, 0.4)`,
+          backdropFilter: `blur(2px)`,
+          borderRadius: `100px`
+        }}
+      >
+        {banner.resource === 'Bounce Original' && (
+          <img
+            src={LogoIcon}
+            style={{
+              height: '14px',
+              marginRight: '10px'
+            }}
+          />
+        )}
+        <Typography
+          sx={{
+            fontFamily: `'Public Sans'`,
+            fontWeight: 600,
+            lineHeight: '32px',
+            fontSize: 14,
+            textAlign: 'center',
+            letterSpacing: '-0.02em',
+            color: '#FFFFFF'
+          }}
+        >
+          {banner.resource}
+        </Typography>
       </Box>
     </Box>
   )

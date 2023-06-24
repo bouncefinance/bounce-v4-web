@@ -4,6 +4,8 @@ import { useCountDown } from 'ahooks'
 // import P2Img from 'assets/imgs/realWorld/p2.png'
 // import EthIcon from 'assets/imgs/realWorld/eth.png'
 import { useNavigate } from 'react-router-dom'
+import LogoIcon from 'assets/imgs/realWorld/logo.svg'
+
 const CountDownBg = styled(Box)`
   display: flex;
   justify-content: center;
@@ -95,7 +97,6 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
           Ongoing
         </Box>
       )}
-
       <Box
         sx={{
           position: 'absolute',
@@ -140,6 +141,46 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
             NFT issued by 4K Alpha Vault
           </Typography>
         </Box> */}
+        <Box
+          sx={{
+            //   position: 'absolute',
+            //   top: '70px',
+            //   right: '16px',
+            padding: '0 12px',
+            height: '28px',
+            lineHeight: '28px',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: `rgba(18, 18, 18, 0.4)`,
+            backdropFilter: `blur(2px)`,
+            borderRadius: `100px`
+          }}
+        >
+          {banner.resource === 'Bounce Original' && (
+            <img
+              src={LogoIcon}
+              style={{
+                height: '14px',
+                marginRight: '10px'
+              }}
+            />
+          )}
+          <Typography
+            sx={{
+              fontFamily: `'Public Sans'`,
+              fontWeight: 600,
+              lineHeight: '28px',
+              fontSize: 12,
+              textAlign: 'center',
+              letterSpacing: '-0.02em',
+              color: '#FFFFFF'
+            }}
+          >
+            {banner.resource}
+          </Typography>
+        </Box>
         <Typography
           sx={{
             lineHeight: '22px',

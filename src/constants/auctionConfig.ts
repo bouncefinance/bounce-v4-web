@@ -7,8 +7,8 @@ export const AuctionConfig: {
   }
 } = {
   [ChainId.MAINNET]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
-    // [TokenType.ERC721]: [],
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
     // [TokenType.ERC1155]: []
   },
   [ChainId.GÖRLI]: {
@@ -22,6 +22,7 @@ export const AuctionConfig: {
   },
   [ChainId.BSC]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.OKEX]: {
@@ -32,6 +33,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.POLYGON]: {
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.FANTOM]: {

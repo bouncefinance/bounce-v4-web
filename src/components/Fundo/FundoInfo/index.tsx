@@ -38,7 +38,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
   const transformStr = useMemo(() => {
     let result = 'translate3D(0, 0, 0)'
     if (Number(animationRatio) > 0.2 && Number(animationRatio) < 0.5) {
-      result = `translate3D(0 , -${(Number(animationRatio) - 0.2) * 366}px, 0)`
+      result = `translate3D(0 , -${(Number(animationRatio) - 0.2) * 406}px, 0)`
     } else if (Number(animationRatio) >= 0.5) {
       result = `translate3D(0 , -110px, 0)`
     }
@@ -77,114 +77,123 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
       </Typography>
       <Box
         sx={{
-          height: '48px',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: '1px solid #343434'
+          fontWeight: 500,
+          width: '100%',
+          maxHeight: isSm ? 'unset' : '450px',
+          overflow: isSm ? 'unset' : 'hidden'
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontWeight: isSm ? 600 : 500,
-            fontSize: isSm ? '13px' : '16px',
-            color: 'var(--ps-text-5)'
+            transform: transformStr
           }}
         >
-          Details
-        </Typography>
-        <Typography
-          sx={{
-            fontWeight: isSm ? 600 : 500,
-            fontSize: isSm ? '14px' : '16px',
-            color: 'var(--ps-text-5)'
-          }}
-        >
-          Ref: LG578319461
-        </Typography>
-      </Box>
-      {config.map((item, index) => {
-        return (
           <Box
-            key={index}
             sx={{
               height: '48px',
               display: 'flex',
               flexFlow: 'row nowrap',
               justifyContent: 'space-between',
               alignItems: 'center',
-              borderBottom: index !== config.length - 1 ? '1px solid #343434' : ''
+              borderBottom: '1px solid #343434'
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                justifyContent: 'flex-start'
-              }}
-            >
-              <img
-                src={item.img}
-                style={{
-                  width: isSm ? '16px' : '20px',
-                  height: isSm ? '16px' : '20px',
-                  marginRight: '8px'
-                }}
-                alt=""
-              />
-              <Typography
-                sx={{
-                  fontWeight: 500,
-                  fontSize: isSm ? '13px' : '16px',
-                  color: 'var(--ps-text-2)'
-                }}
-              >
-                {item.label}
-              </Typography>
-            </Box>
             <Typography
               sx={{
-                fontWeight: 500,
+                fontFamily: `'Public Sans'`,
+                fontWeight: isSm ? 600 : 500,
+                fontSize: isSm ? '13px' : '16px',
+                color: 'var(--ps-text-5)'
+              }}
+            >
+              Details
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: `'Public Sans'`,
+                fontWeight: isSm ? 600 : 500,
                 fontSize: isSm ? '14px' : '16px',
                 color: 'var(--ps-text-5)'
               }}
             >
-              {item.value}
+              Ref: LG578319461
             </Typography>
           </Box>
-        )
-      })}
-      <Typography
-        sx={{
-          fontWeight: 500,
-          fontSize: isSm ? '13px' : '16px',
-          margin: '10px 0',
-          color: 'var(--ps-text-5)'
-        }}
-      >
-        Description
-      </Typography>
-      <Box
-        sx={{
-          fontWeight: 500,
-          width: '100%',
-          maxHeight: isSm ? 'unset' : '110px',
-          overflow: isSm ? 'unset' : 'hidden'
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: 500,
-            fontSize: isSm ? '14px' : '16px',
-            fontFamily: `'Inter'`,
-            color: 'var(--ps-text-2)',
-            transform: transformStr
-          }}
-        >
-          {/* 0 - 0.4 scroll to bottom */}
-          {`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}
-        </Typography>
+          {config.map((item, index) => {
+            return (
+              <Box
+                key={index}
+                sx={{
+                  height: '48px',
+                  display: 'flex',
+                  flexFlow: 'row nowrap',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderBottom: index !== config.length - 1 ? '1px solid #343434' : ''
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    justifyContent: 'flex-start'
+                  }}
+                >
+                  <img
+                    src={item.img}
+                    style={{
+                      width: isSm ? '16px' : '20px',
+                      height: isSm ? '16px' : '20px',
+                      marginRight: '8px'
+                    }}
+                    alt=""
+                  />
+                  <Typography
+                    sx={{
+                      fontFamily: `'Public Sans'`,
+                      fontWeight: 500,
+                      fontSize: isSm ? '13px' : '16px',
+                      color: 'var(--ps-text-2)'
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
+                </Box>
+                <Typography
+                  sx={{
+                    fontFamily: `'Public Sans'`,
+                    fontWeight: 500,
+                    fontSize: isSm ? '14px' : '16px',
+                    color: 'var(--ps-text-5)'
+                  }}
+                >
+                  {item.value}
+                </Typography>
+              </Box>
+            )
+          })}
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: isSm ? '13px' : '16px',
+              margin: '10px 0',
+              color: 'var(--ps-text-5)'
+            }}
+          >
+            Description
+          </Typography>
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: isSm ? '14px' : '16px',
+              fontFamily: `'Inter'`,
+              color: 'var(--ps-text-2)'
+            }}
+          >
+            {/* 0 - 0.4 scroll to bottom */}
+            {`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}
+          </Typography>
+        </Box>
       </Box>
     </Box>
   )

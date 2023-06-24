@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react'
-import { Box, Grid, Typography } from '@mui/material'
+import React, { useState, useMemo, useEffect } from 'react'
+import { Box, Grid, Typography, Button, useTheme } from '@mui/material'
 import FixedPriceWhite from 'assets/imgs/home/TypeOfAuction/FixedPriced-white.svg'
 import FixedPriceBlack from 'assets/imgs/home/TypeOfAuction/FixedPriced-black.svg'
 import DutchAuctionWhite from 'assets/imgs/home/TypeOfAuction/DutchAuction-white.svg'
@@ -38,7 +38,6 @@ import { PoolType } from 'api/pool/type'
 import PoolListDialog from 'pages/tokenAuction/components/listDialog'
 import NftListDialog from 'pages/nftAuction/components/listDialog'
 import useBreakpoint from '../../hooks/useBreakpoint'
-
 interface AuctionItemParams {
   title: string
   defaultImg: string
@@ -49,11 +48,14 @@ interface AuctionItemParams {
   handleOpenTokenAuction?: () => void
   handleOpenNFTAuction?: () => void
 }
-
+interface Notable1155Props {
+  handleViewAll?: () => void
+}
 const AuctionItem = (props: AuctionItemParams) => {
   const { title, defaultImg, hoverImg, totalValue, link, handleOpenTokenAuction, handleOpenNFTAuction, poolType } =
     props
   const [isHover, setIsHover] = useState(false)
+  const isSm = useBreakpoint('sm')
   return (
     <Box
       sx={{
@@ -131,7 +133,7 @@ const AuctionItem = (props: AuctionItemParams) => {
             flexFlow: 'column nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            padding: '12px 16px',
+            padding: { xs: '12px 8px', md: '12px 16px' },
             transform: isHover ? 'rotateX(0)' : 'rotateX(90deg)',
             transition: 'all 0.6s'
           }}
@@ -143,7 +145,8 @@ const AuctionItem = (props: AuctionItemParams) => {
               fontSize: 13,
               color: 'var(--ps-text-3)',
               lineHeight: '24px',
-              marginBottom: 15
+              marginBottom: { xs: 0, md: 15 },
+              whiteSpace: 'nowrap'
             }}
           >
             <img
@@ -152,7 +155,7 @@ const AuctionItem = (props: AuctionItemParams) => {
                 display: 'inline-block',
                 width: 24,
                 verticalAlign: 'middle',
-                marginRight: 12
+                marginRight: isSm ? 4 : 12
               }}
               alt=""
             />
@@ -213,8 +216,40 @@ const SlideBox = styled(Box)(() => ({
     animation: `${scrollX} 60s linear infinite`
   }
 }))
-const TypesOfAuction: React.FC = () => {
+const FixBtn = styled(Button)(() => ({
+  width: 170,
+  height: 42,
+  padding: '16px 20px',
+  position: 'absolute',
+  right: '52px',
+  top: '24px',
+  bottom: 'unset',
+  zIndex: 999,
+  whiteSpace: 'nowrap',
+  opacity: 1,
+  transition: 'all 0.6s',
+  '&.pcFixBtn': {
+    position: 'fixed',
+    right: '72px',
+    top: 'unset',
+    bottom: '20px'
+  },
+  '&.mobileFixBtn': {
+    position: 'fixed',
+    right: '50%',
+    top: 'unset',
+    bottom: '20px',
+    transform: 'translate3D(50%, 0, 0)'
+  },
+  '&.notShow': {
+    display: 'none'
+  }
+}))
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
   const isSm = useBreakpoint('sm')
+  const theme = useTheme()
+  const [fixBtn, setFixBtn] = useState(false)
   const slideImgList = [Icon1, Icon2, Icon3, Icon4, Icon5, Icon6, Icon7, Icon8]
   const { data: volumnCountData } = useRequest(async () => {
     const resp = await getAuctionVolumeCountData()
@@ -308,6 +343,7 @@ const TypesOfAuction: React.FC = () => {
   }, [volumnCountData])
   const [openTokenAuction, setOpenTokenAuction] = useState(false)
   const [openNFTAuction, setOpenNFTAuction] = useState(false)
+  const [winH, setWinHeight] = useState<number>(window.innerHeight)
   const handleClose = () => {
     setOpenTokenAuction(false)
     setOpenNFTAuction(false)
@@ -318,10 +354,49 @@ const TypesOfAuction: React.FC = () => {
   const handleOpenNft = () => {
     setOpenTokenAuction(true)
   }
+  const fixBtnClassName = useMemo(() => {
+    if (isSm) {
+      return fixBtn ? 'mobileFixBtn' : 'notShow'
+    } else {
+      return fixBtn ? 'pcFixBtn' : ''
+    }
+  }, [fixBtn, isSm])
+  const resizeWinH = () => {
+    setWinHeight(window.innerHeight)
+  }
+  useEffect(() => {
+    const getScrollCount = () => {
+      const typesOfAuctionTop = document.getElementById('typesOfAuction')?.getBoundingClientRect().top
+      const notableTop = document.getElementById('NotableAuction')?.getBoundingClientRect().top
+      const footerTop = document.getElementById('footer')?.getBoundingClientRect().top
+      if (!isSm && notableTop && notableTop >= winH) {
+        setFixBtn(false)
+      }
+      if (!isSm && notableTop && notableTop <= winH) {
+        setFixBtn(true)
+      }
+      if (isSm && typesOfAuctionTop && typesOfAuctionTop > winH / 2) {
+        setFixBtn(false)
+      }
+      if (isSm && typesOfAuctionTop && typesOfAuctionTop <= winH / 2) {
+        setFixBtn(true)
+      }
+      if (footerTop && footerTop <= winH - 20) {
+        setFixBtn(false)
+      }
+    }
+    window.addEventListener('resize', resizeWinH)
+    window.addEventListener('scroll', getScrollCount)
+    return () => {
+      window.removeEventListener('scroll', getScrollCount)
+      window.removeEventListener('resize', resizeWinH)
+    }
+  }, [isSm, theme.height.header, winH])
   return (
     <>
       {/* Types of Auction On Bounce Finance */}
       <Box
+        id={'typesOfAuction'}
         sx={{
           width: '100%',
           maxWidth: 1440,
@@ -329,9 +404,30 @@ const TypesOfAuction: React.FC = () => {
           background: `var(--ps-text-4)`,
           borderRadius: 30,
           padding: ['40px 0', '60px 0 0'],
-          marginBottom: 20
+          marginBottom: 20,
+          position: 'relative'
         }}
       >
+        <FixBtn
+          className={fixBtnClassName}
+          onClick={() => {
+            handleViewAll && handleViewAll()
+          }}
+          variant="contained"
+          // href={AuctionList[currentIndex].checkAllLink}
+          endIcon={
+            <svg width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M9 8.97105L8.84425 0.655752L0.528946 0.5L0.509197 1.55434L7.07697 1.67736L0 8.75434L0.745665 9.5L7.82263 2.42303L7.94565 8.9908L9 8.97105Z"
+                fill="#20201E"
+              />
+            </svg>
+          }
+        >
+          View all auctions
+        </FixBtn>
         <Typography
           sx={{
             color: 'var(--ps-yellow-1)',
@@ -358,7 +454,6 @@ const TypesOfAuction: React.FC = () => {
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center',
-              alignItems: 'center',
               borderRadius: 24,
               border: '1px solid var(--ps-yellow-1)',
               margin: ['0 16px', 0],
@@ -452,7 +547,6 @@ const TypesOfAuction: React.FC = () => {
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center',
-              alignItems: 'center',
               borderRadius: 24,
               border: '1px solid var(--ps-yellow-1)',
               margin: ['0 16px', 0],

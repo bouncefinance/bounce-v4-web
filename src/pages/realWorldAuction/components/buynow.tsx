@@ -19,7 +19,18 @@ export const filterConfig: FilterSearchConfig[] = [
     type: 'select',
     label: 'Categories',
     key: AuctionFilterKey.categories,
-    values: ['Watches', 'Sneakers', 'Electronics', 'Fashion', 'Cards', 'Casascius', 'Collectibles'],
+    values: [
+      'Watches',
+      'Sneakers',
+      'Electronics',
+      'Fashion',
+      'Cards',
+      'Casascius',
+      'Collectibles',
+      'Wines',
+      'Art',
+      'Jewellery'
+    ],
     value: ''
   }
   //   {
@@ -45,7 +56,7 @@ const BuynowContent = () => {
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
-
+  const [filterParams, setFilterParams] = useState<FilterSearchConfig[]>(filterConfig)
   const {
     pagination: poolsPagination,
     data: poolList,
@@ -54,46 +65,43 @@ const BuynowContent = () => {
   } = usePagination<any, Params>(
     async ({ current, pageSize = defaultPageSize }) => {
       await waitFun(500)
-      let searchResult: BannerType[] = [...marketList]
-      if (values.keyword) {
-        searchResult = marketList.filter(item => {
-          return item.name.toLocaleLowerCase().indexOf(values.keyword.toLocaleLowerCase()) > -1
-        })
-      }
-      if (values.status) {
-        const nowTime = new Date().getTime()
-        if (values.status === 'Upcoming') {
-          searchResult = marketList.filter(item => {
-            return Number(item.startTime) * 1000 >= nowTime
-          })
-          searchResult.map(item => {
-            item.status = 'Upcoming'
-          })
-        } else if (values.status === 'Past auction') {
-          searchResult = marketList.filter(item => {
-            return item.endTime && Number(item.endTime) * 1000 <= nowTime
-          })
-          searchResult.map(item => {
-            item.status = 'Past auction'
-          })
-        } else if (values.status === 'Live auction') {
-          searchResult = marketList.filter(item => {
-            if (item.startTime && item.endTime) {
-              return Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime
-            } else {
-              return false
-            }
-          })
-          searchResult.map(item => {
-            item.status = 'Live auction'
-          })
+      const searchResult: BannerType[] = []
+      const filterData = JSON.parse(JSON.stringify(filterConfig))
+      const filterCategories = filterData.find((single: FilterSearchConfig) => single.label === 'Categories')
+      marketList.map(item => {
+        let isPass = true
+        if (item?.categories && !filterCategories?.values.includes(item?.categories)) {
+          filterCategories && filterCategories?.values.push(item?.categories)
         }
-      }
-      if (values.categories) {
-        searchResult = marketList.filter(item => {
-          return values.categories === item.categories
-        })
-      }
+        if (values.keyword) {
+          isPass = item.name.toLocaleLowerCase().indexOf(values.keyword.toLocaleLowerCase()) > -1
+        }
+        if (isPass && values.status) {
+          const nowTime = new Date().getTime()
+          if (values.status === 'Upcoming') {
+            isPass = Number(item.startTime) * 1000 >= nowTime
+            isPass && (item.status = 'Upcoming')
+          } else if (values.status === 'Past auction') {
+            isPass = !!(item.endTime && Number(item.endTime) * 1000 <= nowTime)
+            isPass && (item.status = 'Past auction')
+          } else if (values.status === 'Live auction') {
+            if (item.startTime && item.endTime) {
+              isPass = !!(Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime)
+              isPass && (item.status = 'Live auction')
+            } else {
+              isPass = false
+            }
+          }
+        }
+        if (isPass && values.categories) {
+          isPass = values.categories === item.categories
+        }
+        if (isPass) {
+          searchResult.push(item)
+        }
+      })
+      // update new categories from marketList array
+      setFilterParams(filterData)
       const result = searchResult.slice((current - 1) * pageSize, current * pageSize)
       return {
         list: result,
@@ -155,7 +163,7 @@ const BuynowContent = () => {
             textAlign: 'center'
           }}
         >
-          You can buy Now or go to the details page to make an offer. You are buying for a physical backed NFTs and you
+          You can buy now or go to the details page to make an offer. You are buying for a physical backed NFTs and you
           can redeem it post deal done.
         </Typography>
       </Box>
@@ -163,7 +171,7 @@ const BuynowContent = () => {
         <Marketplace
           poolLength={poolList?.total || 0}
           handleSearch={handleSearch}
-          filterConfig={filterConfig}
+          filterConfig={filterParams}
           handleSetOpen={setIsOpen}
         >
           <>
@@ -207,7 +215,7 @@ const BuynowContent = () => {
                       fontFamily: `'Inter'`,
                       fontWight: 400,
                       fontSize: 16,
-                      background: 'var(--ps-text-2)',
+                      background: 'transparent',
                       '&.Mui-selected': {
                         color: 'var(--ps-text-3)',
                         background: 'var(--ps-yellow-1)'
@@ -268,7 +276,7 @@ const BuynowContent = () => {
                       fontFamily: `'Inter'`,
                       fontWight: 400,
                       fontSize: 16,
-                      background: 'var(--ps-text-2)',
+                      background: 'transparent',
                       '&.Mui-selected': {
                         color: 'var(--ps-text-3)',
                         background: 'var(--ps-yellow-1)'

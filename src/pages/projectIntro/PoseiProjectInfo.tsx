@@ -1,3 +1,4 @@
+import { IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
 import { Box } from '@mui/material'
 import FooterPc from '../../components/Footer/FooterPc'
 import { ProjectHead, Tabs } from './index'
@@ -5,12 +6,12 @@ import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
-import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
-import { IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
+import { useCurrentRegionBlock } from 'state/application/hooks'
+import NoService from 'components/NoService'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 export function ProjectInfo() {
-  const item = PrivatePadDataList.find(i => i.keyId === 4) as IPrivatePadProp
-  useBladeDaoSharer()
+  const item = PrivatePadDataList.find(i => i.keyId === 2) as IPrivatePadProp
 
   return (
     <Box>
@@ -22,7 +23,14 @@ export function ProjectInfo() {
   )
 }
 function UserBlock() {
+  const isSm = useBreakpoint('sm')
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
+
+  if (isBlock) {
+    return <NoService />
+  }
+
   if (!poolInfo) {
     return (
       <Box
@@ -37,6 +45,9 @@ function UserBlock() {
         <BounceAnime />
       </Box>
     )
+  }
+  if (poolInfo.id !== 690) {
+    return null
   }
   return (
     <Box
@@ -60,7 +71,7 @@ function UserBlock() {
         style={{
           maxWidth: '1296px',
           margin: '0 auto 40px',
-          padding: '48px 56px'
+          padding: isSm ? 20 : '48px 56px'
         }}
         poolInfo={poolInfo}
         getPoolInfo={getPoolInfo}

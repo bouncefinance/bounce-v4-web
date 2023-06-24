@@ -5,7 +5,7 @@ import { CenterRow, Row } from '../../components/Layout'
 import PoolStatusBox from '../fixed-swap-nft/ActionBox/NftPoolStatus'
 import { Body02, Body03, H5, H6 } from '../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { IPrivatePadProp } from 'pages/launchpad'
+import { IPrivatePadProp } from 'pages/launchpad/PrivatePadDataList'
 import { useNavigate } from 'react-router-dom'
 import { PoolStatus } from 'api/pool/type'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -199,6 +199,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
   return (
     <Common
       img={props.data.img}
+      sx={{ cursor: props.data.upcomingLink || props.data.liveLink ? 'pointer !important' : 'auto !important' }}
       poolTypeName={props.data.poolTypeName}
       startAndEnd={props.data.showStartEnd ? props.data.liveTimeStamp : undefined}
       onClick={() => {

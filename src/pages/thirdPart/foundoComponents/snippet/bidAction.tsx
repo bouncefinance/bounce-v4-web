@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback } from 'react'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
 import DidDialog, { PlaceBidBtn } from './bidDialog'
+import ShippingDialog from './shippingInfoDialog'
 import { useCountDown } from 'ahooks'
 import { EnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
 import { useIsSMDown } from 'themes/useTheme'
@@ -14,6 +15,9 @@ import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorC
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
+import { getCurrentTimeStamp } from 'utils'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 export enum BidType {
   'dataView' = 0,
@@ -65,11 +69,11 @@ function DataView(props: DataViewParam) {
       </RowLabel>
       <RowLabel>
         <Typography className="label">Price Floor</Typography>
-        <Typography className="value">{priceFloor}</Typography>
+        <Typography className="value">{priceFloor || '-'}</Typography>
       </RowLabel>
       <RowLabel>
-        <Typography className="label">Every time Minimum Price Increase</Typography>
-        <Typography className="value">{increase}</Typography>
+        <Typography className="label">Every Time Minimum Price Increase</Typography>
+        <Typography className="value">{increase || '-'}</Typography>
       </RowLabel>
     </Stack>
   )
@@ -153,7 +157,6 @@ const BidAction = () => {
           </Typography>
         )}
         {poolStatus === PoolStatus.Live && <UpcomingStatus text="Live" OpenAt={poolInfo?.closeAt || 0} />}
-
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
           <Typography color={'#fff'}>Finish</Typography>
         )}
@@ -218,7 +221,6 @@ const BidAction = () => {
       {poolStatus === PoolStatus.Live && poolInfo && (
         <LiveSection click={() => setOpenDialog(!openDialog)} poolInfo={poolInfo}></LiveSection>
       )}
-
       {openDialog && <DidDialog handleClose={() => setOpenDialog(false)} />}
     </Box>
   )
@@ -226,7 +228,10 @@ const BidAction = () => {
 export default BidAction
 
 function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: EnglishAuctionNFTPoolProp }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+  const toggleWallet = useWalletModalToggle()
+  const switchNetwork = useSwitchNetwork()
+
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
     [account, poolInfo.currentBidder]
@@ -238,6 +243,13 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
       poolInfo.currentBidder?.toLowerCase() !== account?.toLowerCase()
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
+
+  if (!account) {
+    return <PlaceBidBtn onClick={toggleWallet}>Connect Wallet</PlaceBidBtn>
+  }
+  if (chainId !== poolInfo.ethChainId) {
+    return <PlaceBidBtn onClick={() => switchNetwork(poolInfo.ethChainId)}>Switch Network</PlaceBidBtn>
+  }
 
   return (
     <>
@@ -307,7 +319,11 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
 }
 
 function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+  const toggleWallet = useWalletModalToggle()
+  const switchNetwork = useSwitchNetwork()
+  const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
+
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
     [account, poolInfo.currentBidder]
@@ -321,11 +337,11 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
 
-  const { run: bidderClaim, submitted } = useBidderClaimEnglishAuctionNFT(
-    poolInfo.poolId,
-    poolInfo.name,
-    poolInfo.contract
-  )
+  const {
+    run: bidderClaim,
+    submitted,
+    isClaimed
+  } = useBidderClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const toBidderClaim = useCallback(async () => {
     showRequestConfirmDialog({ dark: true })
@@ -368,6 +384,13 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
     }
   }, [bidderClaim, poolInfo.name, poolInfo.token0.symbol])
 
+  if (!account) {
+    return <PlaceBidBtn onClick={toggleWallet}>Connect Wallet</PlaceBidBtn>
+  }
+  if (chainId !== poolInfo.ethChainId) {
+    return <PlaceBidBtn onClick={() => switchNetwork(poolInfo.ethChainId)}>Switch Network</PlaceBidBtn>
+  }
+
   return isWinner ? (
     <Stack>
       <BidResultAlert
@@ -376,7 +399,16 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
         rightImg={poolInfo.token1.smallUrl}
         rightText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
       />
-      <PlaceBidBtn onClick={toBidderClaim} loadingPosition="start" loading={submitted.submitted}>
+      <PlaceBidBtn
+        onClick={() =>
+          chainId !== poolInfo.ethChainId
+            ? switchNetwork(poolInfo.ethChainId)
+            : setOpenShippingDialog(!openShippingDialog)
+        }
+        loadingPosition="start"
+        loading={submitted.submitted}
+        disabled={poolInfo.claimAt > getCurrentTimeStamp()}
+      >
         <img
           src={BidIcon}
           style={{
@@ -387,8 +419,29 @@ function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
           alt=""
           srcSet=""
         />
-        Check Logistics Information
+        {/* Check Logistics Information */}
+        {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'}
       </PlaceBidBtn>
+      <Typography
+        sx={{
+          mt: 5,
+          textAlign: 'center',
+          fontFamily: `'Inter'`,
+          color: 'var(--ps-text-2)',
+          fontSize: '13px'
+        }}
+      >
+        {poolInfo.participant.claimed || isClaimed
+          ? 'We will contact you in the near future'
+          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
+      </Typography>
+
+      {openShippingDialog && (
+        <ShippingDialog
+          submitCallback={isClaimed ? undefined : toBidderClaim}
+          handleClose={() => setOpenShippingDialog(false)}
+        />
+      )}
     </Stack>
   ) : isOutBid ? (
     <Box>

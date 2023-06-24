@@ -14,7 +14,7 @@ import Investors1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors1.s
 import Investors2 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors2.svg'
 import Investors3 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors3.svg'
 import Investors4 from 'assets/imgs/thirdPart/digitalAssetsOffering/Investors4.svg'
-import Partners1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners1.svg'
+// import Partners1 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners1.svg'
 import Partners2 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners2.svg'
 import Partners3 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners3.svg'
 import Partners4 from 'assets/imgs/thirdPart/digitalAssetsOffering/Partners4.svg'
@@ -37,6 +37,7 @@ import { LineStyleBtn } from '../projectIntro'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const LabelItem = styled(Typography)(() => ({
   fontFamily: `'Inter'`,
@@ -124,7 +125,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
   const currentLink = window.location.href.split('?')[0]
   const [requestBind, setRequestBind] = useState(0)
   const [bindErr, setBindErr] = useState('')
-
+  const isMd = useBreakpoint('md')
   const { data: checkJoinData } = useRequest(
     async () => {
       const resp = await checkWaiting()
@@ -628,7 +629,8 @@ const DigitalAssetsOffering: React.FC = ({}) => {
           left: 0,
           right: 0,
           bottom: 0,
-          zIndex: 9
+          zIndex: 9,
+          mx: { xs: 16, md: 0 }
         }}
       >
         <Box
@@ -653,7 +655,10 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             background: '#fff',
             borderRadius: 32,
             overflow: 'hidden',
-            padding: '30px 40px 32px'
+            padding: '30px 40px 32px',
+            '@media(max-width:480px)': {
+              width: '100%'
+            }
           }}
         >
           <Typography
@@ -681,7 +686,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
           </Typography>
           <Box
             sx={{
-              width: 400,
+              width: { xs: '100%', md: 400 },
               height: 56,
               lineHeight: '56px',
               background: '#2C4ACC',
@@ -755,14 +760,16 @@ const DigitalAssetsOffering: React.FC = ({}) => {
         {/* auction card */}
         <Box
           sx={{
-            width: 1340,
+            width: '100%',
+            maxWidth: 1340,
             minHeight: 400,
             background: `rgba(0, 0, 0, 0.08)`,
             backdropFilter: `blur(10px)`,
             borderRadius: `0px 32px 32px 32px`,
             display: 'flex',
             flexFlow: 'row nowrap',
-            margin: '0 auto'
+            margin: '0 auto',
+            flexDirection: { xs: 'column', md: 'row' }
           }}
           gap={67}
           mb={40}
@@ -772,44 +779,49 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             <Box
               sx={{
                 position: 'relative',
-                width: 480,
+                width: '100%',
+                maxWidth: 480,
                 height: 380,
                 borderRadius: 32,
                 overflow: 'hidden',
-                background: `url(${ShadowIcon}) no-repeat bottom center`
+                background: `url(${ShadowIcon}) no-repeat bottom center`,
+                px: { xs: 16, md: 0 }
               }}
             >
-              <img
-                src={SlogenImg}
-                style={{
-                  width: '100%'
-                }}
-                alt=""
-                srcSet=""
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: 29,
-                  left: 34,
-                  width: 100,
-                  height: 100,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  background: '#fff',
-                  borderRadius: '50%'
-                }}
-              >
+              <Box sx={{ width: '100%', position: 'relative' }}>
                 <img
-                  src={ProductIcon}
+                  src={SlogenImg}
                   style={{
-                    display: 'block',
-                    width: 78
+                    width: '100%'
                   }}
                   alt=""
                   srcSet=""
                 />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: 34,
+                    transform: 'translateY(-50%)',
+                    width: 100,
+                    height: 100,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: '#fff',
+                    borderRadius: '50%'
+                  }}
+                >
+                  <img
+                    src={ProductIcon}
+                    style={{
+                      display: 'block',
+                      width: 78
+                    }}
+                    alt=""
+                    srcSet=""
+                  />
+                </Box>
               </Box>
               <Box
                 sx={{
@@ -876,7 +888,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                   sx={{
                     fontFamily: `'Inter'`,
                     fontWeight: 500,
-                    width: '300px',
+                    width: isMd ? 'auto' : '300px',
                     fontSize: 14,
                     overflowWrap: 'break-word',
                     color: '#FAFAFA'
@@ -904,13 +916,13 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                   </LineStyleBtn>
                 </ReactCopyToClipboard>
               </Row>
-              <Row gap={10} mt={10} alignItems={'center'}>
+              <Row gap={10} mt={10} sx={{ alignItems: { xs: 'flex-end', md: 'center' } }}>
                 <Input
                   value={referralCode}
                   disabled={bindStatus?.isBind}
                   onChange={e => setReferralCode(e.target.value)}
                   style={{
-                    width: '300px'
+                    width: isMd ? '100%' : 300
                   }}
                 />
                 <LineStyleBtn
@@ -966,7 +978,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             sx={{
               flex: 1,
               position: 'relative',
-              padding: '40px 0'
+              padding: { xs: '40px 16px', md: '40px 0' }
             }}
           >
             <LabelItem
@@ -1014,10 +1026,14 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             <Box
               sx={{
                 display: 'flex',
-                flexFlow: 'row nowrap'
+                flexFlow: 'row nowrap',
+                flexWrap: 'wrap',
+                gap: { xs: 50, md: 80 },
+                '&>div': {
+                  flex: 1
+                }
               }}
               mt={30}
-              gap={80}
             >
               <Box sx={{}}>
                 <LabelItem
@@ -1070,9 +1086,9 @@ const DigitalAssetsOffering: React.FC = ({}) => {
             </LabelItem>
             <Box
               sx={{
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                alignItems: 'center'
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                gridAutoFlow: 'row'
               }}
               mt={30}
               gap={30}
@@ -1085,6 +1101,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 alt=""
                 srcSet=""
               />
+
               <img
                 src={Investors2}
                 style={{
@@ -1093,6 +1110,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 alt=""
                 srcSet=""
               />
+
               <img
                 src={Investors3}
                 style={{
@@ -1101,6 +1119,7 @@ const DigitalAssetsOffering: React.FC = ({}) => {
                 alt=""
                 srcSet=""
               />
+
               <img
                 src={Investors4}
                 style={{
@@ -1122,19 +1141,20 @@ const DigitalAssetsOffering: React.FC = ({}) => {
               sx={{
                 display: 'flex',
                 flexFlow: 'row nowrap',
-                alignItems: 'center'
+                alignItems: 'center',
+                flexWrap: 'wrap'
               }}
               mt={80}
               gap={30}
             >
-              <img
+              {/* <img
                 src={Partners1}
                 style={{
                   height: 20
                 }}
                 alt=""
                 srcSet=""
-              />
+              /> */}
               <img
                 src={Partners2}
                 style={{

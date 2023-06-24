@@ -15,7 +15,7 @@ import useBreakpoint from '../../../hooks/useBreakpoint'
 function EnglishAuctionNFTContent() {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
-  const isBlock = useCurrentRegionBlock()
+  const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
   const isMobile = useBreakpoint('lg')
 
   if (isBlock) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Box, Stack, styled, SxProps } from '@mui/material'
 import useBreakpoint from 'hooks/useBreakpoint'
 
@@ -13,14 +13,51 @@ const CommonBg = styled(Box)(({ theme }) => ({
   height: '400px',
   background: '#e8e9e4',
   borderRadius: '30px',
+  overflow: 'hidden',
+  '.img': {
+    transition: 'all .6s'
+  },
   '&:hover': {
     cursor: 'pointer',
-    background: '#e1f25c'
+    background: '#e1f25c',
+    '.img': {
+      transform: 'scale(1.15)'
+    }
+  },
+  '.left': {
+    transform: 'translate3D(-50%, 0, 0)',
+    transition: 'all 0.6s',
+    opacity: 0
+  },
+  '.right': {
+    transform: 'translate3D(50%, 0, 0)',
+    transition: 'all 0.6s',
+    opacity: 0
+  },
+  '&.active': {
+    '.left': {
+      transform: 'translate3D(0, 0, 0)',
+      opacity: 1
+    },
+    '.right': {
+      transform: 'translate3D(0, 0, 0)',
+      opacity: 1
+    }
   },
   [theme.breakpoints.down('md')]: {
     width: 'calc(100vw - 32px)',
     height: 'auto',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    '.left': {
+      transform: 'translate3D(0, -50%, 0)',
+      transition: 'all 0.6s',
+      opacity: 0
+    },
+    '.right': {
+      transform: 'translate3D(0, 50%, 0)',
+      transition: 'all 0.6s',
+      opacity: 0
+    }
   }
 }))
 
@@ -46,18 +83,55 @@ export function Common({
 }) {
   const isSm = useBreakpoint('sm')
   const isMd = useBreakpoint('md')
+  const comEl = useRef<any>(null)
+  const [winH, setWinHeight] = useState<number>(window.innerHeight)
+  const [isEnter, setIsEnter] = useState(false)
+  const resizeWinH = () => {
+    setWinHeight(window.innerHeight)
+  }
+  useEffect(() => {
+    const getScrollCount = () => {
+      if (isEnter) return
+      const typesOfAuctionTop = comEl?.current?.getBoundingClientRect().top
+      console.log('typesOfAuctionTop>', typesOfAuctionTop)
+      if (typesOfAuctionTop <= winH - 200) {
+        setIsEnter(true)
+      }
+    }
+    window.addEventListener('resize', resizeWinH)
+    window.addEventListener('scroll', getScrollCount)
+    return () => {
+      window.removeEventListener('scroll', getScrollCount)
+      window.removeEventListener('resize', resizeWinH)
+    }
+  }, [isEnter, winH])
   return (
-    <CommonBg sx={sx} onClick={onClick} position={'relative'}>
-      <Box sx={{ position: 'relative' }}>
-        <img
-          style={{
+    <CommonBg className={isEnter ? 'active' : ''} ref={comEl} sx={sx} onClick={onClick} position={'relative'}>
+      {/* img section */}
+      <Box className={'left'} sx={{ position: 'relative' }}>
+        <Box
+          sx={{
+            display: 'block',
             width: isSm ? '100%' : isMd ? 'calc(100vw - 32px)' : '600px',
+            height: '100%',
             objectFit: 'cover',
             borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
-            maxHeight: isMd ? 350 : 400
+            // height: isMd ? 350 : 400,
+            overflow: 'hidden'
           }}
-          src={img}
-        />
+        >
+          <img
+            className={'img'}
+            style={{
+              display: 'block',
+              width: isSm ? '100%' : isMd ? 'calc(100vw - 32px)' : '600px',
+              objectFit: 'cover',
+              borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
+              height: '100%'
+            }}
+            src={img}
+          />
+        </Box>
         <Stack
           spacing={isSm ? 5 : 10}
           direction={isSm ? 'column' : 'row'}
@@ -105,8 +179,10 @@ export function Common({
           )}
         </Stack>
       </Box>
-
-      <Box sx={{ width: '100%', height: '100%' }}>{child}</Box>
+      {/* right content section */}
+      <Box className={'right'} sx={{ width: '100%', height: '100%' }}>
+        {child}
+      </Box>
     </CommonBg>
   )
 }

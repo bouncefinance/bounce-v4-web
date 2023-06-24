@@ -63,8 +63,8 @@ const defaultFragmentRelease = {
 export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: boolean }) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
-  const { lunchPad } = useQueryParams()
-  const isLunchPad = useMemo(() => !!lunchPad, [lunchPad])
+  const { launchPad } = useQueryParams()
+  const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
 
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -422,7 +422,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                   <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
                 </Box>
 
-                {!hideRefundable && Number(values.releaseType) !== IReleaseType.Cliff && (
+                {!hideRefundable && Number(values.releaseType) !== IReleaseType.Instant && (
                   <Box sx={{ mt: 38, mb: 34 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Stack direction="row" alignItems="center" spacing={8}>
@@ -435,7 +435,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                         </Tooltip>
                       </Stack>
 
-                      {isLunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                      {isLaunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -484,7 +484,9 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       showImportWhitelistDialog(values, setValues)
                     }}
                   >
-                    <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    {values.participantStatus === ParticipantStatus.Whitelist && (
+                      <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    )}
                   </ButtonBase>
                   <Box>
                     <Button
@@ -537,7 +539,7 @@ function SetFragmentReleaseTime({
   )
 
   const addOne = useCallback(() => {
-    if (releaseTimes.length <= 24) {
+    if (releaseTimes.length <= 29) {
       setFragmentReleaseTimes([...releaseTimes, { ...defaultFragmentRelease, key: Math.random() }])
     }
   }, [releaseTimes, setFragmentReleaseTimes])

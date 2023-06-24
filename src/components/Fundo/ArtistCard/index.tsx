@@ -158,6 +158,7 @@ export default function ProductCard() {
       >
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             fontWeight: 500,
             fontSize: '16px',
             color: 'var(--ps-text-5)'
@@ -167,6 +168,7 @@ export default function ProductCard() {
         </Typography>
         <Typography
           sx={{
+            fontFamily: `'Public Sans'`,
             fontWeight: 500,
             fontSize: '16px',
             color: 'var(--ps-text-5)'
@@ -183,6 +185,7 @@ export default function ProductCard() {
       </ArtistiImg>
       <Typography
         sx={{
+          fontFamily: `'Public Sans'`,
           fontWeight: 600,
           fontSize: isSm ? '16px' : '20px',
           marginBottom: isSm ? '0px' : '16px',
@@ -194,6 +197,7 @@ export default function ProductCard() {
       </Typography>
       <Typography
         sx={{
+          fontFamily: `'Public Sans'`,
           fontWeight: 700,
           fontSize: isSm ? '24px' : '44px',
           marginBottom: '16px',

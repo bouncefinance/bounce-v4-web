@@ -43,11 +43,11 @@ const timeFormatter: TimeFormatterFn = (time: any) => {
   const minutes = date.getMinutes().toString().padStart(2, '0')
   return `${hours}:${minutes} ${month}-${day}`
 }
-const markersFormatter = (data: IDataType[]) => {
+const markersFormatter = (data: IDataType[], dotColor?: string) => {
   const markers = data.map<SeriesMarker<Time>>(item => ({
     time: item.time as Time,
     position: 'inBar',
-    color: '#2B51DA',
+    color: dotColor || '#2B51DA',
     shape: 'circle',
     size: 0.1
   }))
@@ -147,10 +147,10 @@ export default function LineChart({
       } else {
         lineSeries.setData(data as LineData[])
       }
-      const markers = markersFormatter(data)
+      const markers = markersFormatter(data, style.lineColor)
       lineSeries.setMarkers(markers)
     }
-  }, [data, localData.length])
+  }, [data, localData.length, style.lineColor])
 
   useEffect(() => {
     const move = (param: MouseEventParams) => {
@@ -173,9 +173,20 @@ export default function LineChart({
         setInfo({ ...info, value, time })
       }
     }
-    chart?.subscribeCrosshairMove(move)
-    return () => chart?.unsubscribeCrosshairMove(move)
-  }, [info, infoPoint])
+    if (chart) {
+      chart.subscribeCrosshairMove(move)
+    }
+    return () => {
+      chart?.unsubscribeCrosshairMove(move)
+    }
+  }, [data, info, infoPoint])
+
+  useEffect(() => {
+    return () => {
+      chart = null
+      lineSeries = null
+    }
+  }, [])
 
   return (
     <Box

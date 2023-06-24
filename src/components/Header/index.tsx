@@ -124,8 +124,12 @@ const transparentRoutes = [
   routes.realAuction.index,
   routes.launchpad.index,
   routes.launchpad.bladeDao,
+  routes.launchpad.bladeDaoInfo,
+  routes.thirdPart.poseiswapAuction,
   routes.thirdPart.foundoDetail,
-  routes.launchpad.bladeDaoInfo
+  routes.launchpad.bladeDaoInfo,
+  routes.thirdPart.OmegaAuction,
+  routes.thirdPart.poseiswapAuction
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -258,6 +262,7 @@ export default function Header() {
             <Search />
             <Resources />
             <CreateBtn />
+            <NetworkPopperSelect />
             <Web3Status />
 
             {!token && walletWithoutToken}

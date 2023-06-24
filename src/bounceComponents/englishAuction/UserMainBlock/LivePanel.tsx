@@ -309,6 +309,22 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
     toggleWallet
   ])
 
+  if (!account) {
+    return (
+      <Box alignSelf="flex-end">
+        <ConnectWalletButton />
+      </Box>
+    )
+  }
+
+  if (chainId !== poolInfo.ethChainId) {
+    return (
+      <Box alignSelf="flex-end">
+        <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+      </Box>
+    )
+  }
+
   if (!isUserInWhitelist) {
     return (
       <Box pt={30}>

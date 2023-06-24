@@ -11,11 +11,12 @@ import {
   Pagination,
   Select,
   Stack,
-  Typography
+  Typography,
+  styled
 } from '@mui/material'
 import { Form, Formik, useFormikContext } from 'formik'
-import { PoolStatus } from 'api/pool/type'
-import React, { useEffect, useRef, useState } from 'react'
+import { NFTPoolListProp, PoolStatus, PoolType } from 'api/pool/type'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
@@ -44,6 +45,28 @@ import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { FixedSwapPool } from 'api/pool/type'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { Currency, CurrencyAmount } from 'constants/token'
+
+const StyledChainSpan = styled(Box)({
+  fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+  fontWeight: 400,
+  fontSize: 12,
+  color: '#171717',
+  height: '24px',
+  lineHeight: '24px',
+  marginBottom: '17px',
+  background: '#F5F5F5',
+  padding: '0 8px',
+  borderRadius: 20
+})
+
+const PriceTypography = styled(Typography)({
+  fontFamily: `'Public Sans'`,
+  fontWeight: 500,
+  height: '21px',
+  lineHeight: '21px',
+  marginBottom: '17px'
+})
 
 const initialValues = {
   searchText: '',
@@ -62,6 +85,22 @@ const searchOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Address'
 
 export interface IFormObserverProps {
   handleSubmit: any
+}
+
+function ShowChain({ logo, name, mr }: { logo?: string; name?: string; mr?: number }) {
+  return (
+    <StyledChainSpan mr={mr || 0}>
+      <picture
+        style={{
+          marginRight: '4px',
+          verticalAlign: 'middle'
+        }}
+      >
+        <img src={logo} width={12} height={12} />
+      </picture>
+      {name || '-'}
+    </StyledChainSpan>
+  )
 }
 
 const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
@@ -95,7 +134,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 }
 
 interface NFTPrams {
-  nft: FixedSwapPool
+  nft: FixedSwapPool | NFTPoolListProp
   hiddenStatus?: boolean
 }
 
@@ -114,10 +153,28 @@ export const NFTCard = (props: NFTPrams) => {
     token0,
     chainId,
     token1,
+    category,
+    highestBid,
     amountTotal0
-  } = props.nft
+  } = props.nft as NFTPoolListProp
+
+  const isEnglishAuction721 = useMemo(() => is721 === 2 && category === PoolType.ENGLISH_AUCTION_NFT, [category, is721])
+
+  const highestBidAmount = useMemo(() => {
+    if (isEnglishAuction721) {
+      const currency = new Currency(1, token1.address, token1.decimals)
+      return CurrencyAmount.fromRawAmount(currency, highestBid || '0')
+    }
+    return undefined
+  }, [highestBid, isEnglishAuction721, token1.address, token1.decimals])
+
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
+  const ethChain = useMemo(
+    () => (chainConfigInBackend?.ethChainId ? ChainListMap[chainConfigInBackend?.ethChainId as ChainId] : undefined),
+    [chainConfigInBackend?.ethChainId]
+  )
   const navigate = useNavigate()
+
   return (
     <Box
       sx={{
@@ -132,7 +189,7 @@ export const NFTCard = (props: NFTPrams) => {
         sx={{
           position: 'relative',
           paddingTop: '86%',
-          borderRadius: '24px 24px 0 0',
+          borderRadius: '12px 12px 0 0',
           overflow: 'hidden'
         }}
         mb={16}
@@ -262,7 +319,7 @@ export const NFTCard = (props: NFTPrams) => {
                 }}
                 mr={4}
               >
-                Fixed Price
+                {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English Auction'}
               </Box>
               <Box
                 sx={{
@@ -316,97 +373,82 @@ export const NFTCard = (props: NFTPrams) => {
             marginBottom: '17px'
           }}
         >
-          {name} Fixed Price Auction Pool
+          {name} {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English'} Auction Pool
         </Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            flexFlow: 'row nowrap',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: `'Public Sans'`,
-              fontWeight: 500,
-              fontSize: 20,
-              color:
-                status === PoolStatus.Upcoming
-                  ? 'var(--ps-text-2)'
-                  : status === PoolStatus.Live
-                  ? 'var(--ps-green-1)'
-                  : status === PoolStatus.Closed || status === PoolStatus.Cancelled
-                  ? 'var(--ps-text-7)'
-                  : '#171717',
-              height: '21px',
-              lineHeight: '21px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              marginBottom: '17px',
-              maxWidth: '40%'
-            }}
-            component={'span'}
-          >
-            {`${ratio} ${token1?.name}`}
-          </Typography>
+        {isEnglishAuction721 ? (
+          <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+            <PriceTypography fontSize={16} noWrap maxWidth={'60%'} fontWeight={500}>
+              Highest Bid {highestBidAmount?.toSignificant() || '--'} {token1.symbol}
+            </PriceTypography>
+            <ShowChain logo={ethChain?.logo} name={ethChain?.name} />
+          </Box>
+        ) : (
           <Box
             sx={{
-              flex: 1,
               display: 'flex',
               flexFlow: 'row nowrap',
-              justifyContent: 'flex-end'
+              justifyContent: 'space-between'
             }}
           >
-            <Box
+            <PriceTypography
+              noWrap
               sx={{
-                fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-                fontWeight: 400,
-                fontSize: 12,
-                color: '#171717',
-                height: '24px',
-                lineHeight: '24px',
-                marginBottom: '17px',
-                background: '#F5F5F5',
-                padding: '0 8px',
-                borderRadius: 20,
-                marginRight: '4px'
+                fontSize: 20,
+                color:
+                  status === PoolStatus.Upcoming
+                    ? 'var(--ps-text-2)'
+                    : status === PoolStatus.Live
+                    ? 'var(--ps-green-1)'
+                    : status === PoolStatus.Closed || status === PoolStatus.Cancelled
+                    ? 'var(--ps-text-7)'
+                    : '#171717',
+                maxWidth: '40%'
               }}
             >
-              <picture
-                style={{
-                  marginRight: '4px',
-                  verticalAlign: 'middle'
+              {`${ratio} ${token1?.name}`}
+            </PriceTypography>
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-end'
+              }}
+            >
+              <ShowChain mr={4} logo={ethChain?.logo} name={ethChain?.name} />
+              <Box
+                display={'flex'}
+                alignItems={'center'}
+                sx={{
+                  marginBottom: '17px',
+                  background: '#F5F5F5',
+                  padding: '0 8px',
+                  borderRadius: 20
                 }}
               >
-                <img src={token1.largeUrl} width={12} height={12} />
-              </picture>
-              {chainConfigInBackend?.ethChainId ? ChainListMap[chainConfigInBackend?.ethChainId as ChainId]?.name : '-'}
-            </Box>
-            <Box
-              sx={{
-                fontFamily: 'Sharp Grotesk DB Cyr Book 20',
-                fontWeight: 400,
-                fontSize: 12,
-                color: '#171717',
-                height: '24px',
-                lineHeight: '24px',
-                marginBottom: '17px',
-                background: '#F5F5F5',
-                padding: '0 8px',
-                borderRadius: 20
-              }}
-            >
-              <SizeIcon
-                style={{
-                  verticalAlign: 'middle',
-                  marginRight: 7
-                }}
-              />
-              <span>{amountTotal0}</span>
+                <SizeIcon
+                  style={{
+                    marginRight: 7
+                  }}
+                />
+                <Typography
+                  noWrap
+                  sx={{
+                    fontFamily: 'Sharp Grotesk DB Cyr Book 20',
+                    fontWeight: 400,
+                    fontSize: 12,
+                    color: '#171717',
+                    height: '24px',
+                    maxWidth: 20,
+                    lineHeight: '24px'
+                  }}
+                >
+                  {amountTotal0}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        )}
       </Box>
     </Box>
   )

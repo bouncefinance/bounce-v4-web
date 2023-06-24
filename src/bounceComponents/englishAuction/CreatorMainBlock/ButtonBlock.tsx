@@ -10,6 +10,7 @@ import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import isZero from 'utils/isZero'
+import { useCreatorClaimAmount1Data } from 'bounceHooks/auction/useCreatorClaimTxFee'
 
 const ButtonBlock = () => {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
@@ -27,11 +28,21 @@ const ButtonBlock = () => {
     creatorClaimed
   } = useCreatorClaimEnglishAuctionNFT(poolInfo?.poolId || '', poolInfo?.name || '', poolInfo?.contract)
 
+  const claimAmount1Data = useCreatorClaimAmount1Data(poolInfo?.currentBidderAmount1)
+
   const successDialogContent = useMemo(() => {
-    const token1ToClaimText = `${poolInfo?.currentBidderAmount1?.toSignificant()} ${poolInfo?.token1.symbol}`
+    const token1ToClaimText = `${claimAmount1Data?.receivedAmount?.toSignificant()} ${
+      poolInfo?.token1.symbol
+    } (fees: ${claimAmount1Data?.fee?.toSignificant()} ${poolInfo?.token1.symbol})`
     const token0ToClaimText = `You have successfully claimed ${poolInfo?.token0.symbol}`
     return isAllTokenSwapped ? `You have successfully claimed ${token1ToClaimText}` : token0ToClaimText
-  }, [isAllTokenSwapped, poolInfo?.currentBidderAmount1, poolInfo?.token0.symbol, poolInfo?.token1.symbol])
+  }, [
+    claimAmount1Data?.fee,
+    claimAmount1Data?.receivedAmount,
+    isAllTokenSwapped,
+    poolInfo?.token0.symbol,
+    poolInfo?.token1.symbol
+  ])
 
   const toClaim = useCallback(
     async (isCancel: boolean) => {

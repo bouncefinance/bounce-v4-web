@@ -52,7 +52,8 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         style={{
           width: isSm ? '198px' : '150px',
           height: isSm ? '198px' : '150px',
-          borderRadius: '14px'
+          borderRadius: '14px',
+          marginLeft: isSm ? '-2px' : 0
         }}
         src={props.img ? props.img : EmptyImg}
       />
@@ -164,7 +165,7 @@ export const ActiveUser: React.FC = () => {
           maxWidth: '1440px !important'
         }}
       >
-        <H2 mb={isSm ? 20 : 80} ml={isSm ? 12 : 0}>
+        <H2 mb={isSm ? 20 : 80} ml={isSm ? 16 : 0}>
           Most active {isSm && <br />} <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
         </H2>
       </Container>

@@ -36,7 +36,7 @@ export default function PopperCard({
           open={open}
           anchorEl={anchorEl}
           sx={{
-            top: '20px !important',
+            top: isSm ? 0 : '20px !important',
             // width: 220,
             zIndex: theme => theme.zIndex.modal,
             ...popperSx

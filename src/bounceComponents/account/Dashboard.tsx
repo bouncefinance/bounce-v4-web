@@ -180,6 +180,8 @@ export function DashboardShowCategoryName({ category, backedChainId }: { categor
           ? 'NFT Fixed Price'
           : category === PoolType.Lottery
           ? 'Random Selection'
+          : category === PoolType.ENGLISH_AUCTION_NFT
+          ? 'NFT English Auction'
           : '-'}
       </Typography>
     </Box>
