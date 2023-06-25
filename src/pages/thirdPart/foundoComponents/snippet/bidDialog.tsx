@@ -22,7 +22,7 @@ import {
   showWaitingTxDialog
 } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
-import DialogTips from 'bounceComponents/common/DialogTips'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { Dots } from 'themes'
 import ReportIcon from '@mui/icons-material/Report'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -30,6 +30,7 @@ import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../../constants'
 import { LoadingButton } from '@mui/lab'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useIsSMDown } from 'themes/useTheme'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const InputBox = styled(Box)(({ theme }) => ({
   height: '48px',
@@ -532,7 +533,7 @@ function BidButton({
         .then(() => {
           hideDialogConfirmation()
           handleClose()
-          show(DialogTips, {
+          show(DialogDarkTips, {
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
@@ -543,7 +544,7 @@ function BidButton({
     } catch (error) {
       const err: any = error
       hideDialogConfirmation()
-      show(DialogTips, {
+      show(DialogDarkTips, {
         iconType: 'error',
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
@@ -646,7 +647,7 @@ function BidButton({
       const err: any = error
       console.error(err)
       hideDialogConfirmation()
-      show(DialogTips, {
+      show(DialogDarkTips, {
         iconType: 'error',
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
@@ -700,18 +701,33 @@ function BidButton({
         {bidAmount && approveContent && !isInsufficientBalance?.disabled ? (
           approveContent
         ) : (
-          <PlaceBidBtn
-            disabled={
-              !bidAmount || !minBidVal || bidAmount.lessThan(minBidVal) || isInsufficientBalance?.disabled === true
-            }
-            loading={placeBidSubmitted.submitted}
-            onClick={toBid}
-            loadingPosition="start"
-            variant="contained"
-            fullWidth
-          >
-            Place a Bid
-          </PlaceBidBtn>
+          <Stack>
+            <PlaceBidBtn
+              disabled={
+                !bidAmount || !minBidVal || bidAmount.lessThan(minBidVal) || isInsufficientBalance?.disabled === true
+              }
+              loading={placeBidSubmitted.submitted}
+              onClick={toBid}
+              loadingPosition="start"
+              variant="contained"
+              fullWidth
+            >
+              Place a Bid
+            </PlaceBidBtn>
+            <PoolInfoItem
+              title="You will pay"
+              tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
+                bidPrevGasFee?.currency.symbol
+              }) cost of the previous participant`}
+            >
+              <Typography color={'#fff'} mt={10}>
+                {bidPrevGasFee && bidAmount && bidPrevGasFee.currency.equals(bidAmount.currency)
+                  ? `${bidPrevGasFee.add(bidAmount).toSignificant()} ${poolInfo.token1.symbol}`
+                  : `(${bidPrevGasFee?.toSignificant() || '-'} ${bidPrevGasFee?.currency.symbol}) + (
+            ${bidAmount?.toSignificant() || '-'} ${poolInfo.token1.symbol})`}
+              </Typography>
+            </PoolInfoItem>
+          </Stack>
         )}
 
         {isInsufficientBalance?.children}
@@ -721,12 +737,14 @@ function BidButton({
     account,
     approveContent,
     bidAmount,
+    bidPrevGasFee,
     isCurrentChainEqualChainOfPool,
     isInsufficientBalance?.children,
     isInsufficientBalance?.disabled,
     minBidVal,
     placeBidSubmitted.submitted,
     poolInfo.ethChainId,
+    poolInfo.token1.symbol,
     switchNetwork,
     toBid,
     toggleWallet

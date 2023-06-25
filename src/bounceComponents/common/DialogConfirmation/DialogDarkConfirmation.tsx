@@ -13,7 +13,7 @@ import {
 import { create, NiceModalHocProps, useModal } from '@ebay/nice-modal-react'
 import Lottie from 'react-lottie'
 import bounce_loading from './assets/bounce-loading.json'
-import { ReactComponent as CloseSVG } from './assets/close.svg'
+// import { ReactComponent as CloseSVG } from './assets/close.svg'
 
 const defaultOptions = {
   loop: true,
@@ -38,6 +38,8 @@ const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((pr
     <MuiDialog
       onClose={() => (onClose ? onClose() : modal.hide())}
       sx={{
+        backdropFilter: 'blur(4px)',
+        // backgroundColor: 'rgba(0, 0, 0, 0.1)',
         '& .MuiDialog-paper': {
           backgroundColor: 'rgba(73, 73, 73, 0.3)',
           width: 480,
@@ -54,15 +56,20 @@ const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((pr
         sx={{ position: 'absolute', right: 12, top: 12 }}
         onClick={() => (onClose ? onClose() : modal.hide())}
       >
-        <CloseSVG />
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g opacity="0.5">
+            <path d="M18 6L6 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6 6L18 18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+        </svg>
       </IconButton>
 
       <DialogTitle sx={{ position: 'relative', padding: '50px 0 0px' }}>
         <Stack spacing={4} justifyContent="center" alignItems="center">
-          <Typography variant="h2" sx={{ fontWeight: 500, textAlign: 'center' }}>
+          <Typography variant="h2" sx={{ fontWeight: 500, textAlign: 'center', color: '#fff' }}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ color: 'var(--ps-gray-600)', textAlign: 'center' }}>
+          <Typography variant="body1" sx={{ color: 'var(--ps-text-2)', textAlign: 'center' }}>
             {subTitle}
           </Typography>
         </Stack>
@@ -81,7 +88,18 @@ const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((pr
           >
             <Lottie classwidth={200} height={200} options={defaultOptions} />
           </Box>
-          <Button variant="contained" disabled>
+          <Button
+            variant="contained"
+            disabled
+            sx={{
+              background: 'transparent',
+              border: 'none',
+              '&:disabled': {
+                background: 'transparent',
+                border: 'none'
+              }
+            }}
+          >
             Awaiting...
           </Button>
         </Stack>
