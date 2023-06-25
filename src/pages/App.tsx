@@ -62,6 +62,7 @@ import { Launchpad } from './launchpad'
 // import { Game } from './game'
 import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
 import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
+import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -164,6 +165,7 @@ export default function App() {
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                     <Route path={routes.thirdPart.poseiswapAuction} element={<PoseiProjectInfo />} />
                     <Route path={routes.thirdPart.OmegaAuction} element={<OmegaProjectInfo />} />
+                    <Route path={routes.thirdPart.TypeitAuction} element={<TypeitProjectInfo />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     {/* <Route
                       path={routes.game.bladeDaoIndex}
