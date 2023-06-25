@@ -64,7 +64,7 @@ const FormItem: React.FC<IFormItemProps> = ({
 
   return (
     <Stack error={showError} component={FormControl} {...rest} sx={{ ...sx }}>
-      {label && <InputLabel sx={{ left: startAdornment ? 50 : '' }}>{label}</InputLabel>}
+      {label && <InputLabel sx={{ left: startAdornment ? 50 : '', fontFamily: 'Public Sans' }}>{label}</InputLabel>}
       <Stack direction="row" sx={{ position: 'relative' }}>
         {startAdornment && (
           <Box

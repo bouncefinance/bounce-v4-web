@@ -508,7 +508,7 @@ const Pools: React.FC = ({}) => {
                           <Pagination
                             onChange={handlePageChange}
                             count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
-                            variant="outlined"
+                            // variant="outlined"
                           />
                         </Box>
                       )}
