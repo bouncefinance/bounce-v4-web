@@ -8,6 +8,8 @@ import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.s
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
+import { ReactComponent as InstagramSvg } from 'assets/socialLinksIcon/instagram-dashboard.svg'
+import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
@@ -86,7 +88,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
     avatar: typeltpAvatar,
-    title: 'TypeIT',
+    title: 'TypeIt',
     chainId: 56,
     tokenName: 'TYPE',
     whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
@@ -94,8 +96,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     liveLink: '/launchpad/typeit',
     projectInfo: [
       {
-        title: 'What is TypeIT_?',
-        info: ['The First Ever Web3 Keyboard for Gamefi users and Web2 users.']
+        title: 'What is TypeIt?',
+        info: [
+          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+        ]
       },
       {
         title: 'Investment and Partners',
@@ -135,7 +139,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'The First Ever Web3 Keyboard for Gamefi users and Web2 users.',
+    desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
     social: [
       <Link key={0} href="https://www.typeit.cool/" target="_blank">
         <Web />
@@ -151,6 +155,22 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>,
       <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
         <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/typeit_official/"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link
+        key={6}
+        sx={{ width: '41.5px!important', height: '41.5px!important' }}
+        href=" https://www.linkedin.com/company/typeit-official"
+        target="_blank"
+      >
+        <LinkinSvg width={41.5} height={41.5} />
       </Link>
     ],
     moreData: [
