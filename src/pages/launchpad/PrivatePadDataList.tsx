@@ -97,7 +97,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     projectInfo: [
       {
         title: 'What is TypeIt?',
-        info: ['The First Ever Web3 Keyboard for Gamefi users and Web2 users.']
+        info: [
+          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+        ]
       },
       {
         title: 'Investment and Partners',
@@ -154,11 +156,21 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link key={5} href="https://www.instagram.com/typeit_official/" target="_blank">
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/typeit_official/"
+        target="_blank"
+      >
         <InstagramSvg width={43} height={43} />
       </Link>,
-      <Link key={6} href="https://www.linkedin.com/company/typeit-official" target="_blank">
-        <LinkinSvg width={41} height={41} />
+      <Link
+        key={6}
+        sx={{ width: '41.5px!important', height: '41.5px!important' }}
+        href=" https://www.linkedin.com/company/typeit-official"
+        target="_blank"
+      >
+        <LinkinSvg width={41.5} height={41.5} />
       </Link>
     ],
     moreData: [
