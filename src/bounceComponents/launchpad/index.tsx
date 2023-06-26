@@ -67,13 +67,15 @@ export function Common({
   sx,
   poolTypeName,
   startAndEnd,
-  onClick
+  onClick,
+  keyId
 }: {
   img: string
   child: React.ReactElement
   onClick?: () => void
   sx?: SxProps
   poolTypeName: string
+  keyId?: number
   startAndEnd:
     | {
         start: number
@@ -125,7 +127,7 @@ export function Common({
             style={{
               display: 'block',
               width: isSm ? '100%' : isMd ? 'calc(100vw - 32px)' : '600px',
-              objectFit: 'cover',
+              objectFit: keyId === 6 ? 'initial' : 'cover',
               borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
               height: '100%'
             }}
