@@ -129,12 +129,18 @@ const transparentRoutes = [
   routes.thirdPart.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
+  routes.thirdPart.TypeitAuction,
   routes.thirdPart.poseiswapAuction
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
 
-export const whiteLogoRoutes = [routes.launchpad.bladeDao, routes.thirdPart.foundoDetail, routes.launchpad.bladeDaoInfo]
+export const whiteLogoRoutes = [
+  routes.launchpad.bladeDao,
+  routes.thirdPart.foundoDetail,
+  routes.launchpad.bladeDaoInfo,
+  routes.thirdPart.TypeitAuction
+]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
