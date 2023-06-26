@@ -84,7 +84,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       end: 1691078400000
     },
     poolTypeName: 'Fixed Swap Auction',
-    img: 'https://images-v3.bounce.finance/5f2fa0a255aa6c67ceedfb998791a5f6-1687681171.png',
+    img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
     avatar: typeltpAvatar,
     title: 'TypeIt',
     chainId: 56,

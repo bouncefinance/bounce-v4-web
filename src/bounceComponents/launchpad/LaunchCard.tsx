@@ -187,7 +187,7 @@ export function SocialMedia({ data }: { data: IPrivatePadProp }) {
 export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadProp }> = props => {
   const navigator = useNavigate()
   const { start, end } = props.data.liveTimeStamp
-
+  const { keyId } = props.data
   const status = useMemo(() => {
     const cur = new Date().valueOf()
     if (cur < start) return PoolStatus.Upcoming
@@ -199,6 +199,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
   return (
     <Common
       img={props.data.img}
+      keyId={keyId}
       sx={{ cursor: props.data.upcomingLink || props.data.liveLink ? 'pointer !important' : 'auto !important' }}
       poolTypeName={props.data.poolTypeName}
       startAndEnd={props.data.showStartEnd ? props.data.liveTimeStamp : undefined}
