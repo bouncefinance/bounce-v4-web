@@ -8,10 +8,12 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import PriceChartView from '../PriceChartView'
 import UserBidPanel from './UserBidPanel'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import moment from 'moment'
 
 const UserMainBlock = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
   const isMobile = useBreakpoint('lg')
+  const formattedClaimTime = moment((poolInfo?.claimAt || 0) * 1000).format('MMM D, YYYY hh:mm A')
 
   if (!poolInfo) return <></>
 
@@ -64,6 +66,10 @@ const UserMainBlock = (): JSX.Element => {
               <Typography>{poolInfo.token1.symbol}</Typography>
             </Stack>
           </PoolInfoItem>
+
+          {poolInfo.claimAt > poolInfo.closeAt && (
+            <PoolInfoItem title="Delay Unlocking Date">{formattedClaimTime}</PoolInfoItem>
+          )}
 
           <Box pt={20}>
             <PriceChartView showText poolInfo={poolInfo} />
