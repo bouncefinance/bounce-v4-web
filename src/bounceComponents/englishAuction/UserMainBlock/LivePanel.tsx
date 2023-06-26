@@ -28,6 +28,7 @@ import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import Check from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/Check'
 
 const InputPanel = styled(Box)({
   border: '1px solid #D7D6D9',
@@ -66,7 +67,14 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
     [minBidVal]
   )
 
-  const [bidStatus, setBidStatus] = useState<'BID' | 'OUT' | 'WINNER'>('BID')
+  const [bidStatus, setBidStatus] = useState<'BID' | 'OUT' | 'WINNER' | 'CHECK'>('BID')
+  const [userChecked, setUserChecked] = useState(false)
+
+  useEffect(() => {
+    if (poolInfo.participant.accountBidAmount) {
+      setUserChecked(true)
+    }
+  }, [poolInfo.participant.accountBidAmount])
 
   const isOutBid = useMemo(() => {
     return (
@@ -273,6 +281,13 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
     if (!isCurrentChainEqualChainOfPool) {
       return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
     }
+    if (!userChecked) {
+      return (
+        <Button variant="contained" onClick={() => setBidStatus('CHECK')} disabled={!bidAmount}>
+          Place a Bid
+        </Button>
+      )
+    }
     return (
       <Box>
         {bidAmount && approveContent && !isInsufficientBalance?.disabled ? (
@@ -306,7 +321,8 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
     placeBidSubmitted.submitted,
     poolInfo.ethChainId,
     toBid,
-    toggleWallet
+    toggleWallet,
+    userChecked
   ])
 
   if (!account) {
@@ -381,59 +397,69 @@ export default function LivePanel({ poolInfo }: { poolInfo: EnglishAuctionNFTPoo
         </Stack>
       )}
 
-      {bidStatus === 'BID' && (
-        <Stack spacing={10} mt={30}>
-          <Typography variant="h6">Place Your Bid</Typography>
-          <InputPanel>
-            <Box display={'flex'} padding={'0 10px'} justifyContent={'space-between'}>
-              <FormLabel>Min {minBidVal?.toSignificant()}</FormLabel>
-              <FormLabel>Balance: {token1Balance?.toSignificant()}</FormLabel>
-            </Box>
-            <NumberInput
-              fullWidth
-              placeholder="0"
-              value={bidVal}
-              onUserInput={v => bidHandler(v)}
-              sx={{
-                fontSize: 24,
-                border: 'none',
-                '& fieldset': {
-                  border: 'none'
+      {(bidStatus === 'BID' || bidStatus === 'CHECK') && (
+        <>
+          <Stack spacing={10} mt={30} display={bidStatus === 'CHECK' ? 'none' : 'flex'}>
+            <Typography variant="h6">Place Your Bid</Typography>
+            <InputPanel>
+              <Box display={'flex'} padding={'0 10px'} justifyContent={'space-between'}>
+                <FormLabel>Min {minBidVal?.toSignificant()}</FormLabel>
+                <FormLabel>Balance: {token1Balance?.toSignificant()}</FormLabel>
+              </Box>
+              <NumberInput
+                fullWidth
+                placeholder="0"
+                value={bidVal}
+                onUserInput={v => bidHandler(v)}
+                sx={{
+                  fontSize: 24,
+                  border: 'none',
+                  '& fieldset': {
+                    border: 'none'
+                  }
+                }}
+                endAdornment={
+                  <Stack direction={'row'} alignItems={'center'} spacing={6}>
+                    <Button
+                      variant="outlined"
+                      sx={{ height: 30 }}
+                      onClick={() => setBidVal(minBidVal?.toSignificant(6, { groupSeparator: '' }) || '')}
+                    >
+                      Min
+                    </Button>
+                    <TokenImage size={30} src={poolInfo.token1.symbol}></TokenImage>
+                    <Typography fontSize={16} fontWeight={500}>
+                      {poolInfo.token1.symbol}
+                    </Typography>
+                  </Stack>
                 }
-              }}
-              endAdornment={
-                <Stack direction={'row'} alignItems={'center'} spacing={6}>
-                  <Button
-                    variant="outlined"
-                    sx={{ height: 30 }}
-                    onClick={() => setBidVal(minBidVal?.toSignificant(6, { groupSeparator: '' }) || '')}
-                  >
-                    Min
-                  </Button>
-                  <TokenImage size={30} src={poolInfo.token1.symbol}></TokenImage>
-                  <Typography fontSize={16} fontWeight={500}>
-                    {poolInfo.token1.symbol}
-                  </Typography>
-                </Stack>
-              }
-            />
-          </InputPanel>
-          <ProgressSlider curSliderPer={curSliderPer} curSliderHandler={v => curSliderHandler(Number(v))} />
+              />
+            </InputPanel>
+            <ProgressSlider curSliderPer={curSliderPer} curSliderHandler={v => curSliderHandler(Number(v))} />
 
-          {bidButton}
+            {bidButton}
 
-          <PoolInfoItem
-            title="You will pay"
-            tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
-              bidPrevGasFee?.currency.symbol
-            }) cost of the previous participant`}
-          >
-            {bidPrevGasFee && bidAmount && bidPrevGasFee.currency.equals(bidAmount.currency)
-              ? `${bidPrevGasFee.add(bidAmount).toSignificant()} ${poolInfo.token1.symbol}`
-              : `(${bidPrevGasFee?.toSignificant() || '-'} ${bidPrevGasFee?.currency.symbol}) + (
+            <PoolInfoItem
+              title="You will pay"
+              tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
+                bidPrevGasFee?.currency.symbol
+              }) cost of the previous participant`}
+            >
+              {bidPrevGasFee && bidAmount && bidPrevGasFee.currency.equals(bidAmount.currency)
+                ? `${bidPrevGasFee.add(bidAmount).toSignificant()} ${poolInfo.token1.symbol}`
+                : `(${bidPrevGasFee?.toSignificant() || '-'} ${bidPrevGasFee?.currency.symbol}) + (
             ${bidAmount?.toSignificant() || '-'} ${poolInfo.token1.symbol})`}
-          </PoolInfoItem>
-        </Stack>
+            </PoolInfoItem>
+          </Stack>
+          {bidStatus === 'CHECK' && (
+            <Check
+              onConfirm={() => {
+                setBidStatus('BID')
+                setUserChecked(true)
+              }}
+            />
+          )}
+        </>
       )}
     </Box>
   )

@@ -76,7 +76,18 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   }
 
   return (
-    <Card sx={styles.card} elevation={0} style={{ minWidth: 355, cursor: 'pointer', ...style }}>
+    <Card
+      sx={{
+        ...styles.card,
+        '@media(max-width:380px)': { width: 'calc(100vw - 16px - 50px)', minWidth: '0 !important' }
+      }}
+      elevation={0}
+      style={{
+        minWidth: 355,
+        cursor: 'pointer',
+        ...style
+      }}
+    >
       <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
         <Typography>#{poolId}</Typography>
         <Stack direction="row" spacing={6} height={24} alignItems={'center'}>
@@ -122,7 +133,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
       </Stack>
       <div>{holder}</div>
       {progress && <AuctionProgress status={status} {...progress} />}
-      <Stack spacing={12} sx={{ pt: 20, px: 0, m: 0 }} component="ul">
+      <Stack spacing={12} sx={{ pt: 20, px: 0, m: 0, whiteSpace: 'nowrap' }} component="ul">
         {listItems}
       </Stack>
     </Card>

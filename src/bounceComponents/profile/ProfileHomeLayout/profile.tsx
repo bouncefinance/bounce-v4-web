@@ -67,6 +67,7 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
     participantCount: number
   }>()
   const isMobile = useBreakpoint('lg')
+  const [showAbout, setShowAbout] = useState(false)
   useEffect(() => {
     const userPoolCount = async () => {
       if (!personalInfo?.address) {
@@ -116,10 +117,10 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
         sx={{ width: 120, height: 120 }}
         src={personalInfo?.avatar?.fileThumbnailUrl || personalInfo?.avatar?.fileUrl}
       />
-      <H4 mt={24}>{personalInfo?.fullName}</H4>
-      <H6 mt={4} sx={{ color: '#2B51DA' }}>
-        {`#${personalInfo?.fullNameId}`}
-      </H6>
+      <Stack sx={{ flexDirection: { xs: 'row', sm: 'column' }, gap: { xs: 4, sm: 10 }, alignItems: 'center' }}>
+        <H4 sx={{ fontSize: { xs: 22, sm: 20 } }}>{personalInfo?.fullName}</H4>
+        <H6 sx={{ fontSize: { xs: 16, sm: 14 }, color: '#2B51DA' }}>{`#${personalInfo?.fullNameId}`}</H6>
+      </Stack>
       <Row mt={24} gap={4}>
         <ProfileTag>{personalInfo?.location}</ProfileTag>
         {personalInfo?.isVerify && (
@@ -145,18 +146,34 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
           <AuctionCount title={'Auction Created'} count={poolCount?.createdCount || 0} />
         </Box>
       )}
-      <Box mt={32} sx={{ width: '100%', borderBottom: '1px solid #E8E9E4' }} />
-      <H6 mt={24} width={'100%'}>
-        About
-      </H6>
-      <Typography mt={16} variant={'body2'} width={'100%'}>
-        {personalInfo?.description || 'There is nothing for the time being'}
-      </Typography>
-      <Stack mt={32} mb={38} direction={'row'} spacing={9}>
-        {getSocialList().map((icon, idx) => (
-          <img onClick={() => window.open(icon.link, '_blank')} src={icon.icon} key={idx} />
-        ))}
-      </Stack>
+
+      {(!isMobile || (isMobile && showAbout)) && (
+        <>
+          <Box mt={32} sx={{ width: '100%', borderBottom: '1px solid #E8E9E4' }} />
+          <H6 mt={24} width={'100%'}>
+            About
+          </H6>
+          <Typography mt={16} variant={'body2'} width={'100%'} sx={{ wordBreak: 'break-word' }}>
+            {personalInfo?.description || 'There is nothing for the time being'}
+          </Typography>
+          <Stack mt={32} mb={38} direction={'row'} spacing={9}>
+            {getSocialList().map((icon, idx) => (
+              <img onClick={() => window.open(icon.link, '_blank')} src={icon.icon} key={idx} />
+            ))}
+          </Stack>
+        </>
+      )}
+      {isMobile && (
+        <Typography
+          sx={{ fontSize: 14, fontFamily: 'Inter', borderBottom: '1px solid #121212' }}
+          // onClick={() => setShowAbout(!showAbout)}
+          onClick={() => {
+            setShowAbout(pre => !pre)
+          }}
+        >
+          {!showAbout ? 'view more' : 'view less'}
+        </Typography>
+      )}
       {!isMobile && (
         <>
           <AuctionCount title={'Auction Participated'} count={poolCount?.participantCount || 0} />

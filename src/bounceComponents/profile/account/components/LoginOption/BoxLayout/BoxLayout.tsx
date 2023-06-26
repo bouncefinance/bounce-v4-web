@@ -35,7 +35,8 @@ const BoxLayout: React.FC<IBoxLayoutProps> = ({ link, title, image, onBind }) =>
               width: isSm ? 82 : 102,
               height: isSm ? 28 : 32,
               backgroundColor: 'var(--ps-yellow-1)',
-              marginLeft: 20
+              marginLeft: 20,
+              borderRadius: 6
             }}
             onClick={onBind}
           >
@@ -45,7 +46,12 @@ const BoxLayout: React.FC<IBoxLayoutProps> = ({ link, title, image, onBind }) =>
       </Box>
       {!link && (
         <Button
-          sx={{ width: isSm ? 82 : 102, height: isSm ? 28 : 32, backgroundColor: 'var(--ps-yellow-1)' }}
+          sx={{
+            width: isSm ? 82 : 102,
+            height: isSm ? 28 : 32,
+            backgroundColor: 'var(--ps-yellow-1)',
+            borderRadius: 6
+          }}
           onClick={onBind}
         >
           Connect
