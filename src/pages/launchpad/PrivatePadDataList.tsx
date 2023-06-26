@@ -19,6 +19,17 @@ export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
 }
+export type TPrivatePrices =
+  | 'startingPrice'
+  | 'dipTokenOffered'
+  | 'dgtTokenOffered'
+  | 'hardCapPerUser'
+  | 'Token Name'
+  | 'Blockchain'
+export interface IPrivatePricesInfo {
+  title: TPrivatePrices
+  value: (string | JSX.Element)[] | (string | JSX.Element)
+}
 
 export interface IPrivatePadProp {
   keyId: number
@@ -46,6 +57,7 @@ export interface IPrivatePadProp {
     title: string
     content: string
   }[]
+  privatePrices?: IPrivatePricesInfo[]
 }
 
 const SocialBg = styled(Box)`

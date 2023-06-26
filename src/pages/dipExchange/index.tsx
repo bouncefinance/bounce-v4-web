@@ -1,4 +1,4 @@
-import { Box, Link } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { IPrivatePadProp } from 'pages/launchpad/PrivatePadDataList'
 import { ProjectHead } from '../projectIntro'
 
@@ -75,12 +75,35 @@ const defaultHeadData: IPrivatePadProp = {
     { title: 'Token Price', content: '0.05 USDT' },
     { title: 'Token Amount', content: '2,000,000' },
     { title: 'Blockchain', content: 'BNB Chain' }
+  ],
+  privatePrices: [
+    {
+      title: 'startingPrice',
+      value: [
+        <Typography sx={{ color: '#2B51DA' }} key={1}>
+          It will increase according to the increase in sales volume
+        </Typography>,
+        '1 DIP = 0.002514 USDT'
+      ]
+    },
+    {
+      title: 'dipTokenOffered',
+      value: '420,000.0000 USDT'
+    },
+    {
+      title: 'dgtTokenOffered',
+      value: '420,000.0000 USDT'
+    },
+    {
+      title: 'hardCapPerUser',
+      value: '500,000 USDT=37.7100 USDT (≈15,000 USD)'
+    }
   ]
 }
 const DipExchange = () => {
   return (
     <Box>
-      <Box sx={{ backgroundImage: `url(${HeadBg})`, backgroundSize: 'cover', pb: 50 }}>
+      <Box sx={{ backgroundImage: `url(${HeadBg})`, backgroundSize: 'cover', pb: 50, width: '100%' }}>
         <ProjectHead item={defaultHeadData} />
       </Box>
     </Box>

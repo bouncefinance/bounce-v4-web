@@ -2,7 +2,7 @@
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { H4, H5, H6 } from '../../components/Text'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { IPrivatePadProp, IProjectInfo, PrivatePadDataList } from '../launchpad/PrivatePadDataList'
+import { IPrivatePadProp, IPrivatePricesInfo, IProjectInfo, PrivatePadDataList } from '../launchpad/PrivatePadDataList'
 import { Row } from '../../components/Layout'
 import { AlignBottomBG } from '../../bounceComponents/launchpad/LaunchCard'
 import { ReactComponent as IconBook } from 'assets/svg/icon-book.svg'
@@ -126,7 +126,7 @@ const TabBg = styled(H4)`
     color: #121212;
   }
 `
-function Price({ title, value }: { title: string; value: string }) {
+function Price({ title, value }: { title: string; value: (string | JSX.Element)[] | (string | JSX.Element) }) {
   return (
     <Box gap={8} sx={{ color: 'white' }}>
       <Typography variant={'body2'}>{title}</Typography>
@@ -452,7 +452,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { userId } = useUserInfo()
 
-  const prices = [
+  let prices: IPrivatePricesInfo[] = [
     {
       title: 'Token Name',
       value: item.tokenName
@@ -470,6 +470,8 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     //   value: item.singleInitialInvestment
     // }
   ]
+
+  item.privatePrices && (prices = item.privatePrices)
   const poolStatusText = useMemo(() => {
     let result = 'Upcoming'
     if (!poolInfo) return result
