@@ -80,13 +80,13 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 6,
     liveTimeStamp: {
-      start: 1690646400000,
-      end: 1691078400000
+      start: 1687964400,
+      end: 1687964400
     },
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
     avatar: typeltpAvatar,
-    title: 'TypeIt',
+    title: 'TypeIT',
     chainId: 56,
     tokenName: 'TYPE',
     whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
@@ -94,7 +94,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     liveLink: '/launchpad/typeit',
     projectInfo: [
       {
-        title: 'What is Typeit_?',
+        title: 'What is TypeIT_?',
         info: ['The First Ever Web3 Keyboard for Gamefi users and Web2 users.']
       },
       {
@@ -122,6 +122,16 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </Box>
           </Stack>
         ]
+      },
+      {
+        title: 'Methods of Token Unlocking',
+        info: [
+          'staged release:',
+          '- TGE: 20%',
+          '- 3-month interval: 26.6%',
+          '- 3-month interval: 26.7%',
+          '- 3-month interval: 26.7%'
+        ]
       }
     ],
     tokenMetrics: [],
@@ -145,8 +155,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$TYPE' },
-      { title: 'Token Price', content: '$0.05' },
-      { title: 'Token Amount', content: '20,000,000' },
+      { title: 'Token Price', content: '0.05 USDT' },
+      { title: 'Token Amount', content: '2,000,000' },
       { title: 'Blockchain', content: 'BNB Chain' }
     ]
   },

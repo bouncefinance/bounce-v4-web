@@ -230,7 +230,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
                 sx={{
                   width: isSm ? 40 : 60,
                   height: isSm ? 40 : 60,
-                  '&.MuiAvatar-rounded	': {
+                  '&.MuiAvatar-rounded': {
                     borderRadius: 5
                   }
                 }}
