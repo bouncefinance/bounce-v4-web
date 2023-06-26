@@ -244,8 +244,14 @@ export default function ProfileOverview() {
             <Box style={{ margin: '40px 0' }}>
               <Divider />
             </Box>
-
-            <Box display={'grid'} gridTemplateColumns={{ sm: '1fr', md: '1fr 1fr' }} gap={55}>
+            <Box
+              sx={{
+                '@media(max-width:390px)': { display: 'flex', flexDirection: 'column' },
+                '@media(min-width:390px)': { display: 'grid' }
+              }}
+              gridTemplateColumns={{ sm: '1fr', md: '1fr 1fr' }}
+              gap={55}
+            >
               <Stack spacing={16}>
                 <Typography variant="h5" fontSize={20} pb={15} fontFamily="Public Sans">
                   Profile

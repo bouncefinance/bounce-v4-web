@@ -1,4 +1,4 @@
-import { Box, Button, Grid, MenuItem, Pagination, Select, Stack } from '@mui/material'
+import { Box, Button, Grid, MenuItem, Pagination, Select, Stack, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { usePagination } from 'ahooks'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
@@ -38,7 +38,7 @@ export default function ParticipatedTab({
   const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
   const navigate = useNavigate()
   const isSm = useBreakpoint('sm')
-
+  const theme = useTheme()
   const {
     pagination,
     data: auctionPoolData,
@@ -159,11 +159,28 @@ export default function ParticipatedTab({
       ) : (
         <Box mt={isSm ? 0 : 40}>
           {auctionPoolData && auctionPoolData?.total > 0 && (
-            <Grid container spacing={{ xs: 10, xl: 18 }}>
+            <Grid
+              container
+              spacing={{ xs: 10, xl: 18 }}
+              sx={{
+                [theme.breakpoints.down('sm')]: {
+                  flexWrap: 'nowrap',
+                  overflowX: 'scroll',
+                  '&::-webkit-scrollbar': { display: 'none' }
+                }
+              }}
+            >
               {auctionPoolData?.list?.map((auctionPoolItem, index) => (
                 <Grid item xs={12} sm={6} md={6} lg={4} xl={4} key={index}>
                   {auctionPoolItem.tokenType === BackedTokenType.TOKEN ? (
-                    <AuctionCardFull auctionPoolItem={auctionPoolItem} />
+                    <AuctionCardFull
+                      auctionPoolItem={auctionPoolItem}
+                      sxStyle={{
+                        '&>.MuiCard-root': {
+                          '@media(max-width:380px)': { width: 'calc(100vw - 16px - 50px)', minWidth: '0 !important' }
+                        }
+                      }}
+                    />
                   ) : (
                     <Box
                       component={'a'}
@@ -189,15 +206,11 @@ export default function ParticipatedTab({
           <Pagination
             onChange={handlePageChange}
             sx={{
-              alignItems: 'end',
-              overflowX: 'scroll',
               '> ul': {
                 flexWrap: 'nowrap'
-              },
-              '&::-webkit-scrollbar': {
-                display: 'none'
               }
             }}
+            siblingCount={-2}
             count={Math.ceil((auctionPoolData?.total || 0) / (defaultPageSize || 0))}
           />
         ) : (

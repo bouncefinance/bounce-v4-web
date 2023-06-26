@@ -78,8 +78,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   return (
     <Card
       sx={{
-        ...styles.card,
-        '@media(max-width:380px)': { width: 'calc(100vw - 16px - 50px)', minWidth: '0 !important' }
+        ...styles.card
       }}
       elevation={0}
       style={{

@@ -6,16 +6,23 @@ import { FixedSwapPool, PoolType } from 'api/pool/type'
 import { getLabelById, shortenAddress } from 'utils'
 import { routes } from 'constants/routes'
 import BigNumber from 'bignumber.js'
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography, SxProps } from '@mui/material'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 
-export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: FixedSwapPool }) {
+export default function AuctionCardFull({
+  auctionPoolItem,
+  sxStyle
+}: {
+  auctionPoolItem: FixedSwapPool
+  sxStyle?: SxProps
+}) {
   const optionDatas = useOptionDatas()
   return (
     <Box
+      sx={{ ...sxStyle }}
       component={'a'}
       href={getAuctionPoolLink(
         auctionPoolItem.id,

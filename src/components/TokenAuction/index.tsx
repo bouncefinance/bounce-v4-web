@@ -720,6 +720,9 @@ const TokenAuction: React.FC = () => {
                         overflowX: 'scroll',
                         '&::-webkit-scrollbar': {
                           display: 'none'
+                        },
+                        '&>a>.MuiCard-root': {
+                          '@media(max-width:380px)': { width: 'calc(100vw - 16px - 50px)', minWidth: '0 !important' }
                         }
                       }}
                     >
