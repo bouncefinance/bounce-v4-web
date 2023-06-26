@@ -355,6 +355,8 @@ export interface PoolHistory {
 
   //tx hash
   txHash: string
+
+  avatar: string
 }
 
 export interface GetPoolHistoryResponse {

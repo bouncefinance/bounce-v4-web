@@ -55,7 +55,7 @@ const TopThreeWinner = ({ list, poolInfo }: { list: PoolHistory[]; poolInfo: Eng
             0{index}
           </Typography>
           <img
-            src={HeadImg}
+            src={data.avatar || HeadImg}
             style={{
               display: 'block',
               width: '90px',
