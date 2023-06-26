@@ -80,8 +80,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 6,
     liveTimeStamp: {
-      start: 1687964400,
-      end: 1687964400
+      start: 1687964400000,
+      end: 1687964400000
     },
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
