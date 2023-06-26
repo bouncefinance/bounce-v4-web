@@ -6,6 +6,7 @@ export default {
     justifyContent: 'space-between'
   },
   menu: {
+    WebkitTapHighlightColor: 'transparent',
     borderRadius: '10px',
     cursor: 'pointer',
     color: 'rgba(23, 23, 23, 0.5)',

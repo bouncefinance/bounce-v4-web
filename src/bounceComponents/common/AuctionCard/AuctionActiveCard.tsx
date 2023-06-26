@@ -67,7 +67,8 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
+              wordBreak: 'break-word'
             }}
           >
             {/* to remain space of description  */}
