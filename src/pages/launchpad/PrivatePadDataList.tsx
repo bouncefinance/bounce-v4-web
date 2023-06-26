@@ -91,7 +91,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'TypeIt',
     chainId: 56,
     tokenName: 'TYPE',
-    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
+    whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
     upcomingLink: '/launchpad/typeit',
     liveLink: '/launchpad/typeit',
     projectInfo: [
@@ -141,7 +141,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     tokenMetrics: [],
     desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
     social: [
-      <Link key={0} href="https://www.typeit.cool/" target="_blank">
+      <Link key={0} href="https://www.typeit.net/" target="_blank">
         <Web />
       </Link>,
       <Link key={1} href="https://twitter.com/typeit_" target="_blank">
