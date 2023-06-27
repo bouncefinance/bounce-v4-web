@@ -137,6 +137,7 @@ const DutchCreatePage = () => {
           position: 'relative',
           width: '100%',
           borderRadius: '30px',
+          overflow: 'hidden',
           '& .noise-wrapper': {
             position: 'absolute',
             left: 0,

@@ -200,7 +200,7 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
           }}
         ></Box>
         <Grid container rowGap={'16px'}>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <PoolTextItem title={'Current floor price'}>
               <>
                 <Box
@@ -278,7 +278,7 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
               </>
             </PoolTextItem>
           </Grid>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <PoolTextItem title={'Successful sold amount'} tip={'The amount of token you successfully secured.'}>
               <>
                 <Box
@@ -315,7 +315,7 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
               </>
             </PoolTextItem>
           </Grid>
-          <Grid xs={6}>
+          <Grid item xs={6}>
             <PoolTextItem title={'Estimated funds raised'} tip={'The amount of token you successfully secured.'}>
               <>
                 <Box
