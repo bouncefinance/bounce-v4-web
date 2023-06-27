@@ -182,7 +182,7 @@ export function useCreateDutchAuctionPool() {
     if (params.whitelist.length > 0) {
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
-        category: PoolType.Duch,
+        category: PoolType.DUTCH_AUCTION,
         chainId: chainConfigInBackend.id
       }
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -192,7 +192,7 @@ export function useCreateDutchAuctionPool() {
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
       // amountTotal1: new BigNumber(amountTotal1.raw.toString()).times(params.swapRatio).toFixed(0, BigNumber.ROUND_DOWN),
-      category: PoolType.Duch,
+      category: PoolType.DUTCH_AUCTION,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
