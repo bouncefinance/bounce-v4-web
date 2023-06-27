@@ -42,13 +42,15 @@ interface FormValues {
   tokenToSymbol: string
   tokenToLogoURI?: string
   tokenToDecimals: string | number
-  swapRatio: string
+  startPrice: string
+  reservePrice: string
+  segments: string
   poolSize: string
   allocationStatus: AllocationStatus
   allocationPerWallet: string
 }
 
-const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
+const DutchAuctionParametersForm = (): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
 
@@ -63,14 +65,15 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
         'Please choose a different token',
         (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress
       ),
-    swapRatio: Yup.number()
+    startPrice: Yup.number().typeError('Please input valid number').required('Start price is required'),
+    reservePrice: Yup.number().typeError('Please input valid number').required('Reserve price is required'),
+    segments: Yup.number()
       .positive('Swap ratio must be positive')
       .typeError('Please input valid number')
-      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-        const _value = new BigNumber(value || 0).toFixed()
-        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-      })
-      .required('Swap ratio is required'),
+      .required('Auction price segment is required')
+      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
+        return Number.isInteger(value) && Number(value) >= 1
+      }),
     poolSize: Yup.number()
       .positive('Amount must be positive')
       .typeError('Please input valid number')
@@ -125,7 +128,9 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     tokenToSymbol: valuesState.tokenTo.symbol || '',
     tokenToLogoURI: valuesState.tokenTo.logoURI || '',
     tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
-    swapRatio: valuesState.swapRatio || '',
+    startPrice: valuesState.startPrice || '',
+    reservePrice: valuesState.reservePrice || '',
+    segments: valuesState.segmentAmount || '',
     poolSize: valuesState.poolSize || '',
     allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
     allocationPerWallet: valuesState.allocationPerWallet || ''
@@ -155,9 +160,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   return (
     <Box sx={{ mt: 52, px: isSm ? 16 : '0' }}>
       <Typography variant="h2">Auction Parameters</Typography>
-      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>
-        {title ? title : 'Fixed Price Auction'}
-      </Typography>
+      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>{valuesState.auctionType}</Typography>
 
       <Formik
         initialValues={internalInitialValues}
@@ -173,7 +176,9 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                 symbol: values.tokenToSymbol,
                 decimals: values.tokenToDecimals
               },
-              swapRatio: values.swapRatio,
+              startPrice: values.startPrice,
+              reservePrice: values.reservePrice,
+              segmentAmount: values.segments,
               poolSize: values.poolSize,
               allocationPerWallet: values.allocationPerWallet,
               allocationStatus: values.allocationStatus
@@ -223,9 +228,88 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                   </FormItem>
                 </Stack>
               </Box>
+              {/* Starting price */}
+              <Box>
+                <Stack direction="row" spacing={8}>
+                  <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                    Starting price(price ceiling)
+                  </Typography>
+                  <Tooltip title="The amount of tokens that you want to put in for auction">
+                    <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                  </Tooltip>
+                </Stack>
+
+                <Stack direction="row" alignItems="center" spacing={15}>
+                  <Typography>1 {values.tokenFromSymbol} =</Typography>
+
+                  <FormItem name="startPrice" placeholder="0.00" required sx={{ flex: 1 }}>
+                    <NumberInput
+                      value={values.startPrice}
+                      onUserInput={value => {
+                        setFieldValue('startPrice', value)
+                      }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
+                    />
+                  </FormItem>
+                </Stack>
+              </Box>
+
+              {/* Reserve Price */}
+              <Box>
+                <Stack direction="row" spacing={8}>
+                  <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                    Reserve price(price floor)
+                  </Typography>
+                  <Tooltip title="The amount of tokens that you want to put in for auction">
+                    <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                  </Tooltip>
+                </Stack>
+
+                <Stack direction="row" alignItems="center" spacing={15}>
+                  <Typography>1 {values.tokenFromSymbol} =</Typography>
+
+                  <FormItem name="reservePrice" placeholder="0.00" required sx={{ flex: 1 }}>
+                    <NumberInput
+                      value={values.reservePrice}
+                      onUserInput={value => {
+                        setFieldValue('reservePrice', value)
+                      }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
+                    />
+                  </FormItem>
+                </Stack>
+              </Box>
+
+              {/* Auction Segment */}
+              <Box>
+                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                  Auciton Price Segments
+                </Typography>
+
+                <Stack direction="row" alignItems="center" spacing={15}>
+                  <FormItem name="segments" placeholder="1" required sx={{ flex: 1 }}>
+                    <NumberInput
+                      value={values.segments}
+                      onUserInput={value => {
+                        setFieldValue('segments', value)
+                      }}
+                    />
+                  </FormItem>
+                </Stack>
+              </Box>
 
               {/* Swap Ratio */}
-              <Box>
+              {/* <Box>
                 <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
                   Swap Ratio
                 </Typography>
@@ -248,7 +332,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                     />
                   </FormItem>
                 </Stack>
-              </Box>
+              </Box> */}
 
               {/* Pool Size */}
               <Box>
@@ -355,4 +439,4 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   )
 }
 
-export default AuctionParametersForm
+export default DutchAuctionParametersForm
