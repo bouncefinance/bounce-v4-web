@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // import ProjectBg from 'assets/images/project-bg.png'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { H4, H5, H6 } from '../../components/Text'
@@ -6,12 +7,12 @@ import { IPrivatePadProp, IPrivatePricesInfo, IProjectInfo, PrivatePadDataList }
 import { Row } from '../../components/Layout'
 import { AlignBottomBG } from '../../bounceComponents/launchpad/LaunchCard'
 import { ReactComponent as IconBook } from 'assets/svg/icon-book.svg'
-// import { ReactComponent as QuestionMark } from 'assets/svg/icon-question-mark.svg'
+import { ReactComponent as QuestionMark } from 'assets/svg/icon-question-mark.svg'
 import TokenImage from '../../bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
-import { useNavigate } from 'react-router-dom'
+import { matchPath, useNavigate } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
@@ -19,6 +20,7 @@ import { ReactComponent as InviteSvg } from 'assets/svg/invite.svg'
 import { ReactComponent as InviteBlackSvg } from 'assets/svg/invite-black.svg'
 import { ReactComponent as CopyBlackSvg } from 'assets/svg/copy-black.svg'
 import { ReactComponent as ColseSvg } from 'assets/imgs/common/closeIcon.svg'
+import FantomRoundSvg from 'assets/imgs/chains/fantom-round.svg'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from 'state/application/hooks'
@@ -34,7 +36,7 @@ import { useRequest } from 'ahooks'
 import { getInviteList } from 'api/bladeDao/index'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
-
+import { useLocation } from 'react-router-dom'
 export const GrayButton = styled(Button)`
   display: flex;
   flex-direction: row;
@@ -121,16 +123,42 @@ const TabBg = styled(H4)`
   height: 76px;
   border-radius: 20px 20px 0 0;
   color: #959595;
+  font-size: 20px;
   &.select {
     background: #ffffff;
     color: #121212;
   }
 `
-function Price({ title, value }: { title: string; value: (string | JSX.Element)[] | (string | JSX.Element) }) {
+const HeadPriceTitle = styled(Typography)({
+  fontFamily: 'Inter',
+  fontSize: 14,
+  lineHeight: '140%',
+  textTransform: 'capitalize'
+})
+const HeadPriceContext = styled(Typography)({
+  fontFamily: 'Public Sans',
+  fontSize: 16,
+  lineHeight: '140%',
+  letterSpacing: '-0.32px',
+  fontWeight: 500
+})
+const STEPNTokenTitle = styled(Typography)({
+  width: 220,
+  color: '#626262',
+  leadingTrim: 'both',
+  textEdge: 'cap',
+  fontSize: 16,
+  fontFamily: 'Inter',
+  lineHeight: '150%'
+})
+
+function Price({ title, value }: { title: any; value: (string | JSX.Element)[] | (string | JSX.Element) }) {
   return (
     <Box gap={8} sx={{ color: 'white' }}>
-      <Typography variant={'body2'}>{title}</Typography>
-      <Typography variant={'h4'}>{value}</Typography>
+      <HeadPriceTitle sx={{ color: Array.isArray(title) ? '#959595' : '#D7D6D9' }} variant={'body2'}>
+        {title}
+      </HeadPriceTitle>
+      <HeadPriceContext mt={8}>{value}</HeadPriceContext>
     </Box>
   )
 }
@@ -451,7 +479,15 @@ export function InviteBtn({
 export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { userId } = useUserInfo()
+  const { pathname } = useLocation()
 
+  const darkRoutes = [routes.thirdPart.DipExchange]
+
+  const isDarkRoutes = useMemo(
+    () => darkRoutes.includes(pathname) || darkRoutes.some(route => matchPath(route, pathname)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pathname]
+  )
   let prices: IPrivatePricesInfo[] = [
     {
       title: 'Token Name',
@@ -492,6 +528,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   }, [poolInfo])
   const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
+
   return (
     <Box
       sx={{
@@ -531,6 +568,14 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
         }}
       >
         <GrayButton
+          sx={{
+            background: isDarkRoutes
+              ? 'linear-gradient(180deg, #5086FD 0%, #312C87 99.99%, #312C87 100%)'
+              : 'rgba(255, 255, 255, 0.2)',
+            '&:hover': {
+              background: isDarkRoutes ? '#4f60fc' : 'rgba(255, 255, 255, 0.2)'
+            }
+          }}
           onClick={() => {
             nav(routes.launchpad.index)
           }}
@@ -550,7 +595,10 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
         >
           <Upcoming
             style={{
-              marginRight: 0
+              marginRight: 0,
+              background: isDarkRoutes ? '#D7D6D9' : 'rgba(18, 18, 18, 0.2)',
+              fontFamily: isDarkRoutes ? 'Inter' : '',
+              color: isDarkRoutes ? '#626262' : 'white'
             }}
           >
             {poolStatusText}
@@ -621,23 +669,39 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
                 <H6>Whitepaper</H6>
               </WhiteButton>
             )}
-            {/*<WhiteButton>*/}
-            {/*  <QuestionMark />*/}
-            {/*  <H6>FAQ</H6>*/}
-            {/*</WhiteButton>*/}
+            {item.isFAQ && (
+              <WhiteButton>
+                <QuestionMark />
+                <H6>FAQ</H6>
+              </WhiteButton>
+            )}
           </Row>
           <Row mt={16} gap={8}>
             <GrayBg>
-              <TokenImage src={item.chainId ? ChainListMap?.[item.chainId as ChainId]?.logo : ''} size={12} />
+              <TokenImage
+                src={
+                  item.chainId
+                    ? item.chainId === 250
+                      ? FantomRoundSvg
+                      : ChainListMap?.[item.chainId as ChainId]?.logo
+                    : ''
+                }
+                size={isDarkRoutes ? 24 : 12}
+              />
               <Typography variant={'h6'} color={'white'}>
                 {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
               </Typography>
             </GrayBg>
+            {isDarkRoutes && (
+              <GrayBg>
+                <Typography color={'#4F5FFC'}>{item.poolTypeName}</Typography>
+              </GrayBg>
+            )}
             {/*<GrayBg>*/}
             {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
             {/*</GrayBg>*/}
           </Row>
-          <Row gap={24} mt={16}>
+          <Row gap={24} mt={16} alignItems={'center'}>
             <>
               {pricesComponent.flatMap((element, index) => {
                 if (index !== pricesComponent.length - 1) {
@@ -653,29 +717,52 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
   )
 }
 export function Tabs({ item }: { item: IPrivatePadProp }) {
+  const { pathname } = useLocation()
+  const darkRoutes = [routes.thirdPart.DipExchange]
+
+  const isDarkRoutes = useMemo(
+    () => darkRoutes.includes(pathname) || darkRoutes.some(route => matchPath(route, pathname)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pathname]
+  )
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
-  const tabs = ['Project Information']
+  const tabs = isDarkRoutes ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
   const [tab, setTab] = useState(tabs[0])
   console.log(setTab)
 
   return (
-    <Box mt={120} mb={140}>
-      <Row justifyContent={'center'}>
+    <Box mt={isDarkRoutes ? 0 : 120} mb={140}>
+      <Row justifyContent={isDarkRoutes ? 'start' : 'center'}>
         {tabs.map((t, i) => (
-          <TabBg key={i} /*onClick={() => setTab(t)}*/ className={tab === t ? 'select' : ''}>
+          <TabBg
+            sx={{
+              minWidth: isDarkRoutes ? 'auto' : 230,
+              '&.select': {
+                background: `${isDarkRoutes ? 'transparent' : '#ffffff'}!important`,
+                color: `${isDarkRoutes ? '#ffffff' : '#121212'} !important`
+              },
+              '&:hover': {
+                cursor: 'pointer',
+                color: `${isDarkRoutes ? '#ffffff' : '#121212'} !important`
+              }
+            }}
+            key={i}
+            onClick={() => tabs.length > 1 && setTab(t)}
+            className={tab === t ? 'select' : ''}
+          >
             {t}
           </TabBg>
         ))}
       </Row>
       <Box
         sx={{
-          background: 'white',
-          padding: { xs: 20, sm: '20px 72px' },
+          background: isDarkRoutes ? 'transparent' : 'white',
+          padding: { xs: 20, sm: isDarkRoutes ? '0' : '20px 72px' },
           minHeight: '486px'
         }}
       >
         {tab === tabs[0] && <ProjectInfo item={item} />}
-        {/*{tab === tabs[1] && <STEPNToken item={item} />}*/}
+        {tab === tabs[1] && <STEPNTokenDark />}
         {tab === tabs[2] && <TokenMetrics item={item} />}
       </Box>
     </Box>
@@ -687,7 +774,7 @@ const ProjectInfoSubtitle = styled(H5)`
   width: 360px;
   border-radius: 8px;
   color: #959595;
-
+  font-size: 16px;
   &:hover {
     cursor: pointer;
     border: 1px solid #e1f25c;
@@ -711,47 +798,141 @@ const ProjectContentBg = styled(Box)`
   background: #f6f7f3;
   border-radius: 30px;
 `
-
+const ProjectContentBgDark = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  gap: 40,
+  width: 912,
+  minHeight: 446,
+  background: '#121219',
+  borderRadius: 6,
+  color: 'white'
+})
+const ProjectLineDrak = styled(Box)({
+  width: '100%',
+  height: 2,
+  background: 'rgba(255,255,255,.2)'
+})
 function InfoList({ info }: { info: IProjectInfo[] }) {
   const [currentIdx, setCurrentIdx] = useState(0)
+  const { pathname } = useLocation()
+  const darkRoutes = [routes.thirdPart.DipExchange]
+
+  const isDarkRoutes = useMemo(
+    () => darkRoutes.includes(pathname) || darkRoutes.some(route => matchPath(route, pathname)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [pathname]
+  )
+
   return (
     <Box
       sx={{
         width: '100%',
         maxWidth: '1296px',
-        margin: '0 auto',
+        margin: isDarkRoutes ? '0' : '0 auto',
         display: 'flex',
         flexWrap: { xs: 'wrap', md: 'unset' },
         justifyContent: 'space-between'
       }}
     >
       <Stack spacing={10}>
-        {info.map((i, idx) => (
-          <ProjectInfoSubtitle
-            key={idx}
-            onClick={() => setCurrentIdx(idx)}
-            className={idx === currentIdx ? 'select' : ''}
-          >
-            {i.title}
-          </ProjectInfoSubtitle>
-        ))}
-      </Stack>
-      <ProjectContentBg
-        sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' } }}
-      >
-        <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
-        {Array.isArray(info[currentIdx].info) &&
-          info[currentIdx].info.length > 0 &&
-          info[currentIdx].info.map((item, index: number) => (
-            <Typography key={index} variant={'body1'}>
-              {item}
-            </Typography>
+        {info.length &&
+          info.map((i, idx) => (
+            <ProjectInfoSubtitle
+              sx={{
+                background: isDarkRoutes ? '#121219' : '',
+                '&:hover,&.select': {
+                  border: isDarkRoutes ? '1px solid' : '',
+                  borderImage: isDarkRoutes ? 'linear-gradient(135deg,#4848c4,#000) 1 1' : '',
+                  color: isDarkRoutes ? 'white' : '',
+                  background: isDarkRoutes ? '#121219' : ''
+                }
+              }}
+              key={idx}
+              onClick={() => setCurrentIdx(idx)}
+              className={idx === currentIdx ? 'select' : ''}
+            >
+              {i.title}
+            </ProjectInfoSubtitle>
           ))}
-      </ProjectContentBg>
+      </Stack>
+      {info.length && !isDarkRoutes && (
+        <ProjectContentBg
+          sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' } }}
+        >
+          <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
+          {Array.isArray(info[currentIdx].info) &&
+            info[currentIdx].info.length > 0 &&
+            info[currentIdx].info.map((item, index: number) => (
+              <Typography key={index} variant={'body1'}>
+                {item}
+              </Typography>
+            ))}
+        </ProjectContentBg>
+      )}
+      {info.length && isDarkRoutes && (
+        <ProjectContentBgDark
+          sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '60px 40px 80px' } }}
+        >
+          <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
+          <ProjectLineDrak />
+          {Array.isArray(info[currentIdx].info) &&
+            info[currentIdx].info.length > 0 &&
+            info[currentIdx].info.map((item, index: number) => (
+              <Typography
+                sx={{
+                  color: '#959595',
+                  leadingTrim: 'both',
+                  textEdge: 'cap',
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  lineHeight: '150%'
+                }}
+                key={index}
+                variant={'body1'}
+              >
+                {item}
+              </Typography>
+            ))}
+        </ProjectContentBgDark>
+      )}
     </Box>
   )
 }
 
+const STEPNTokenDark = () => {
+  const tokenList: { [key: string]: string }[] = [
+    { 'Hard Cap': '4200000 USD' },
+    { 'Total Token Supply': '6000000000 GMT' },
+    { 'Initial Circulating Supply': '10% of Total Token Supply' },
+    { 'Public Sale Token Price': '0.01 USD (price in BB will be determined prior to the start of subscription)' },
+    { 'Tokens Offered': '420000000 GMT' },
+    { 'Hard Cap Per User': '15000 USD (price in BNB will be determined prior to the start of subscription)' },
+    { 'Token Sale Vesting Period': 'No lockup' },
+    { 'Token Type': 'SPL' },
+    { 'Token Distribution': 'After the end of token sale' }
+  ]
+  return (
+    <Box>
+      <H4 sx={{ color: 'white', textAlign: 'center' }}>DIP Token Sale and Economics</H4>
+      <Stack flexDirection={'column'} gap={10} mt={30}>
+        {tokenList.map((t, i) => {
+          return (
+            <Stack flexDirection={'row'} gap={10} key={i} sx={{ background: '#121219', p: '10px 20px' }}>
+              {Object.keys(t).map(k => (
+                <>
+                  <STEPNTokenTitle sx={{ width: 220, color: '#626262' }}>{k}</STEPNTokenTitle>
+                  <STEPNTokenTitle sx={{ width: 'calc(100% - 220px  - 10px)', color: '#FFF' }}>{t[k]}</STEPNTokenTitle>
+                </>
+              ))}
+            </Stack>
+          )
+        })}
+      </Stack>
+    </Box>
+  )
+}
 function ProjectInfo({ item }: { item: IPrivatePadProp }) {
   return <InfoList info={item.projectInfo} />
 }

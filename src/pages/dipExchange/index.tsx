@@ -1,47 +1,51 @@
 import { Box, Link, Typography } from '@mui/material'
 import { IPrivatePadProp } from 'pages/launchpad/PrivatePadDataList'
-import { ProjectHead } from '../projectIntro'
+import { ProjectHead, Tabs } from '../projectIntro'
 
 import HeadBg from 'assets/imgs/dipExchange/head-bg.png'
 import HeadInBg from 'assets/imgs/dipExchange/head-in-bg.png'
+import TabBg from 'assets/imgs/dipExchange/tab-bg.png'
 import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
 import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitter.svg'
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
+import FooterPc from 'components/Footer/FooterPc'
 
 const defaultHeadData: IPrivatePadProp = {
-  keyId: 6,
+  keyId: 7,
   liveTimeStamp: {
     start: 1687964400000,
     end: 1687964400000
   },
-  poolTypeName: 'Fixed Swap Auction',
+  poolTypeName: 'ERC20 English Auction',
   img: HeadInBg,
   avatar: '',
   title: 'DIP Exchange',
-  chainId: 56,
+  chainId: 250,
   tokenName: 'TYPE',
   whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
   upcomingLink: '/launchpad/typeit',
   liveLink: '/launchpad/typeit',
   projectInfo: [
     {
-      title: 'What is TypeIT_?',
-      info: ['The First Ever Web3 Keyboard for Gamefi users and Web2 users.']
+      title: 'What is DIP Exchange?',
+      info: [
+        'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.We also designed a single governance token with sustainable DeFi mechanisms with a publisher token model in mind.'
+      ]
     },
     {
-      title: 'Investment and Partners',
+      title: 'What is DIP Exchange tokenomics?',
       info: [
         'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
       ]
     },
     {
-      title: 'Tokenomics',
+      title: 'What is DIP Exchange tokenomics?',
       info: []
     },
     {
-      title: 'Methods of Token Unlocking',
+      title: 'What is DIP Exchange tokenomics?',
       info: [
         'staged release:',
         '- TGE: 20%',
@@ -51,7 +55,34 @@ const defaultHeadData: IPrivatePadProp = {
       ]
     }
   ],
-  tokenMetrics: [],
+  tokenMetrics: [
+    {
+      title: 'What is DIP Exchange?',
+      info: [
+        'BladeDAO is a decentralized on-chain game ecosystem built on zkSync Era by degens, for degens. The first medieval themed idle dungeon game, Legends of Valoria (LOV), featuring PvE and PvP gameplay, is set to release in late June.BladeDAO aims to build/publish a series of crypto games with on-chain elements and applied zero knowledge proofs to explore the new frontier of fun. We aim to use applied ZKP in 1) verifiable randomness; 2) hidden information; 3) scalability to create novel game mechanisms in a user- friendly way.We also designed a single governance token with sustainable DeFi mechanisms with a publisher token model in mind.'
+      ]
+    },
+    {
+      title: 'What is DIP Exchange tokenomics?',
+      info: [
+        'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
+      ]
+    },
+    {
+      title: 'What is DIP Exchange tokenomics?',
+      info: []
+    },
+    {
+      title: 'What is DIP Exchange tokenomics?',
+      info: [
+        'staged release:',
+        '- TGE: 20%',
+        '- 3-month interval: 26.6%',
+        '- 3-month interval: 26.7%',
+        '- 3-month interval: 26.7%'
+      ]
+    }
+  ],
   desc: 'Decentralized Perpetual Exchange.',
   social: [
     <Link key={0} href="https://www.typeit.cool/" target="_blank">
@@ -78,33 +109,38 @@ const defaultHeadData: IPrivatePadProp = {
   ],
   privatePrices: [
     {
-      title: 'startingPrice',
+      title: ['startingPrice'],
       value: [
-        <Typography sx={{ color: '#2B51DA' }} key={1}>
+        <Typography mb={8} sx={{ color: '#2B51DA', fontSize: 12 }} key={1}>
           It will increase according to the increase in sales volume
         </Typography>,
         '1 DIP = 0.002514 USDT'
       ]
     },
     {
-      title: 'dipTokenOffered',
+      title: ['dipTokenOffered'],
       value: '420,000.0000 USDT'
     },
     {
-      title: 'dgtTokenOffered',
+      title: ['dgtTokenOffered'],
       value: '420,000.0000 USDT'
     },
     {
-      title: 'hardCapPerUser',
+      title: ['hardCapPerUser'],
       value: '500,000 USDT=37.7100 USDT (≈15,000 USD)'
     }
-  ]
+  ],
+  isFAQ: true
 }
 const DipExchange = () => {
   return (
     <Box>
       <Box sx={{ backgroundImage: `url(${HeadBg})`, backgroundSize: 'cover', pb: 50, width: '100%' }}>
         <ProjectHead item={defaultHeadData} />
+      </Box>
+      <Box sx={{ backgroundImage: `url(${TabBg})`, backgroundSize: 'cover', pb: 50, px: 72, width: '100%' }}>
+        <Tabs item={defaultHeadData} />
+        <FooterPc />
       </Box>
     </Box>
   )

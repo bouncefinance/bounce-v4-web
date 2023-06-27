@@ -27,7 +27,7 @@ export type TPrivatePrices =
   | 'Token Name'
   | 'Blockchain'
 export interface IPrivatePricesInfo {
-  title: TPrivatePrices
+  title: TPrivatePrices | TPrivatePrices[]
   value: (string | JSX.Element)[] | (string | JSX.Element)
 }
 
@@ -58,6 +58,7 @@ export interface IPrivatePadProp {
     content: string
   }[]
   privatePrices?: IPrivatePricesInfo[]
+  isFAQ?: boolean
 }
 
 const SocialBg = styled(Box)`
