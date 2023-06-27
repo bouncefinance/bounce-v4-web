@@ -39,7 +39,7 @@ export function DashboardPoolCard({ title, children }: { title: string; children
         padding: 16
       }}
     >
-      <Typography pb={10} fontWeight={500}>
+      <Typography pb={10} fontWeight={500} fontFamily="Public Sans">
         {title}
       </Typography>
       <Stack
@@ -180,6 +180,8 @@ export function DashboardShowCategoryName({ category, backedChainId }: { categor
           ? 'NFT Fixed Price'
           : category === PoolType.Lottery
           ? 'Random Selection'
+          : category === PoolType.ENGLISH_AUCTION_NFT
+          ? 'NFT English Auction'
           : '-'}
       </Typography>
     </Box>

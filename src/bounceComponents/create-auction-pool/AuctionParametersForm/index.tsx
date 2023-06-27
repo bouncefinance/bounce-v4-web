@@ -315,19 +315,19 @@ const AuctionParametersForm = (): JSX.Element => {
                     label="Limited"
                   />
                 </Field>
-
-                <FormItem name="allocationPerWallet" required sx={{ flex: 1 }}>
-                  <OutlinedInput
-                    sx={{ mt: 10 }}
-                    disabled={values.allocationStatus === AllocationStatus.NoLimits}
-                    endAdornment={
-                      <>
-                        <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
-                        <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
-                      </>
-                    }
-                  />
-                </FormItem>
+                {values.allocationStatus === AllocationStatus.Limited && (
+                  <FormItem name="allocationPerWallet" required sx={{ flex: 1 }}>
+                    <OutlinedInput
+                      sx={{ mt: 10 }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
+                    />
+                  </FormItem>
+                )}
               </Box>
 
               <Stack direction="row" spacing={10} justifyContent="end">

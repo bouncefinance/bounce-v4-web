@@ -36,6 +36,7 @@ export default function PopperCard({
           open={open}
           anchorEl={anchorEl}
           sx={{
+            width: { xs: '100%', sm: 'auto' },
             top: isSm ? 0 : '20px !important',
             // width: 220,
             zIndex: theme => theme.zIndex.modal,
@@ -47,7 +48,7 @@ export default function PopperCard({
               bgcolor: 'background.paper',
               border: isSm ? 0 : '1px solid rgba(18, 18, 18, 0.06)',
               borderRadius: '8px',
-              padding: '6px',
+              padding: { xs: 12, sm: 6 },
               ...sx
             }}
           >

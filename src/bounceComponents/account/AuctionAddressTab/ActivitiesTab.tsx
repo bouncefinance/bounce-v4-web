@@ -184,7 +184,7 @@ const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }
           <Box mt={40} display={'flex'} justifyContent="center">
             <Pagination
               onChange={handlePageChange}
-              sx={{ '.MuiPagination-ul li button': { border: '1px solid' }, alignItems: 'end' }}
+              sx={{ alignItems: 'end' }}
               count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
             />
           </Box>

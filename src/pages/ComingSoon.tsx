@@ -52,7 +52,11 @@ export default function ComingSoon({
           >
             Coming soon <Dots />
           </Typography>
-          {prompt && <Typography textAlign={'center'}>{prompt}</Typography>}
+          {prompt && (
+            <Typography textAlign={'center'} sx={{ maxWidth: 254 }}>
+              {prompt}
+            </Typography>
+          )}
         </Box>
       </Container>
     </Box>

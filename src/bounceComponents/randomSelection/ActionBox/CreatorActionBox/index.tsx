@@ -3,10 +3,10 @@ import { Box, Typography } from '@mui/material'
 import PoolStatusBox from '../PoolStatus'
 import UpcomingPoolCreatorAlert from '../../Alerts/UpcomingPoolCreatorAlert'
 import LivePoolCreatorAlert from '../../Alerts/LivePoolCreatorAlert'
-import SuccessfullyClaimedAlert from '../../Alerts/SuccessfullyClaimedAlert'
 import FundInfoList from './FundInfoList'
 import ButtonBlock from './ButtonBlock'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
 
 const CreatorActionBox = ({
   poolInfo,

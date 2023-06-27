@@ -6,7 +6,6 @@ import TypeIcon from 'assets/imgs/randomSelection/typeIconGray.png'
 import WarningIcon from 'assets/imgs/randomSelection/warning.png'
 import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import WinIcon from 'assets/imgs/randomSelection/Win.png'
-import SuccessfullyClaimedAlert from '../../../Alerts/SuccessfullyClaimedAlert'
 import ClaimingCountdownButton from '../ClaimingCountdownButton'
 
 import BigNumber from 'bignumber.js'
@@ -18,6 +17,7 @@ import { UserAction } from '../ActionBlock'
 import ClaimButton from '../ClaimButton'
 import { NoJoinedCardMobile } from './NoJoinedCardMobile'
 import useBreakpoint from '../../../../../hooks/useBreakpoint'
+import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
 
 const ClosedCard = ({
   poolInfo,

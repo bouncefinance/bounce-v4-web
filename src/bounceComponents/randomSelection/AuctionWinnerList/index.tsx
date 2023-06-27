@@ -159,7 +159,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
               <Pagination
                 onChange={handlePageChange}
                 count={Math.ceil(winnersData?.total / defaultIdeaPageSize) || 0}
-                variant="outlined"
+                // variant="outlined"
               />
             </Box>
           )}

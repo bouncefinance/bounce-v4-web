@@ -24,7 +24,7 @@ export const StyledAvatarInputIdLabel = styled('label')({
   height: 32,
   cursor: 'pointer',
   backgroundColor: 'var(--ps-yellow-1)',
-  borderRadius: 8,
+  borderRadius: 6,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

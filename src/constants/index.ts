@@ -158,18 +158,6 @@ export const IS_TEST_ENV = !!Number(process.env.REACT_APP_IS_TEST_ENV)
 
 export const NULL_BYTES = '0x0000000000000000000000000000000000000000000000000000000000000000'
 
-export const OLD_FIXED_SWAP_ERC20_ADDRESSES: {
-  [chainId in ChainId]?: {
-    maxId: number
-    address: string
-  }
-} = {
-  [ChainId.ZKSYNC_ERA]: {
-    maxId: 7,
-    address: '0x88313626Fb4EA033af12308feCd8afB1eBA853cE'
-  }
-}
-
 export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x9e2C12D9240BF267fbeBD510d47Ac3AbD4D9d9ee',
   [ChainId.GÖRLI]: process.env.REACT_APP_GOERLI_FIXED_SWAP_ERC20_ADDRESS || '',
@@ -184,7 +172,7 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.FANTOM]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
   // [ChainId.ZKSYNC_ERA]: '0x88313626Fb4EA033af12308feCd8afB1eBA853cE',
   // [ChainId.ZKSYNC_ERA]: '0xbE5661cA6B60335c2c24536339A2C02f354B2E21',
-  [ChainId.ZKSYNC_ERA]: '0x9531c83FBb0EaDEaC52bA83354C97B49eB6E1bEd',
+  [ChainId.ZKSYNC_ERA]: '0x9B8B850d00c24bC2684530388F8A02C1Cf9d023b',
   [ChainId.ZKSYNC_ERA_TESTNET]: '0x46c2C5a22b2a21a54495Ad32EbFC4598889A1836',
   [ChainId.POLYGON_ZK_EVM]: '0x646a7A29D97BACC3E1756dc3f8090B959046f280',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '0x194C02845d77ffCB8580D474Ca99013073C1eAb1',
@@ -216,7 +204,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
   // [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
-  [ChainId.ZKSYNC_ERA]: '0x94df2E1DD564c219bE5CA615684AECA5605e692D',
+  [ChainId.ZKSYNC_ERA]: '0x51552f0b8E57A1b2C749845d9aFb906FA4f5317A',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
@@ -267,16 +255,16 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0x7cC82b4e6A4585A3c2228301Bd3e78CA52650174',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
-  [ChainId.BSC]: '',
+  [ChainId.BSC]: '0xC52DD0614449d82A497Fd6476D67df4D1B897009',
   [ChainId.OKEX]: '',
   [ChainId.BSCTEST]: '',
   [ChainId.KLAYTN]: '',
   [ChainId.GNOSIS]: '',
-  [ChainId.POLYGON]: '',
+  [ChainId.POLYGON]: '0xE11ADD6956077174C008F842b82135b50E377128',
   [ChainId.FANTOM]: '',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',

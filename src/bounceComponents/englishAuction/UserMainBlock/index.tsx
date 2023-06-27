@@ -8,10 +8,12 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import PriceChartView from '../PriceChartView'
 import UserBidPanel from './UserBidPanel'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import moment from 'moment'
 
 const UserMainBlock = (): JSX.Element => {
   const { data: poolInfo, run: getPoolInfo } = useEnglishAuctionPoolInfo()
   const isMobile = useBreakpoint('lg')
+  const formattedClaimTime = moment((poolInfo?.claimAt || 0) * 1000).format('MMM D, YYYY hh:mm A')
 
   if (!poolInfo) return <></>
 
@@ -36,7 +38,7 @@ const UserMainBlock = (): JSX.Element => {
       </Box>
 
       <Box display={'grid'} gridTemplateColumns={isMobile ? '1fr' : '1fr 1fr'} gap="40px">
-        <Stack spacing={10} pt={12}>
+        <Stack spacing={10}>
           <PoolInfoItem title="Current Highest Bid" tip="The current highest bid for the auction">
             <Stack direction="row" spacing={6} alignItems="center">
               <Typography>{poolInfo.currentBidderAmount1?.toSignificant() || '-'}</Typography>
@@ -57,8 +59,20 @@ const UserMainBlock = (): JSX.Element => {
             </Stack>
           </PoolInfoItem>
 
+          <PoolInfoItem title="Price Increase" tip="Every Time Minimum Price Increase">
+            <Stack direction="row" spacing={6} alignItems="center">
+              <Typography>{poolInfo.currencyAmountMinIncr1?.toSignificant()}</Typography>
+              <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
+              <Typography>{poolInfo.token1.symbol}</Typography>
+            </Stack>
+          </PoolInfoItem>
+
+          {poolInfo.claimAt > poolInfo.closeAt && (
+            <PoolInfoItem title="Delay Unlocking Date">{formattedClaimTime}</PoolInfoItem>
+          )}
+
           <Box pt={20}>
-            <PriceChartView poolInfo={poolInfo} />
+            <PriceChartView showText poolInfo={poolInfo} />
           </Box>
         </Stack>
         {poolInfo.contract && <UserBidPanel />}

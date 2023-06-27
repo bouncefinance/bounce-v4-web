@@ -53,6 +53,7 @@ import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
+import FoundoDetail from 'pages/thirdPart/foundoBidDetail'
 
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
@@ -61,6 +62,7 @@ import { Launchpad } from './launchpad'
 // import { Game } from './game'
 import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
 import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
+import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -155,6 +157,7 @@ export default function App() {
                     <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                     <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
+                    <Route path={routes.thirdPart.foundoDetail} element={<FoundoDetail />} />
                     <Route
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
@@ -164,6 +167,7 @@ export default function App() {
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                     <Route path={routes.thirdPart.poseiswapAuction} element={<PoseiProjectInfo />} />
                     <Route path={routes.thirdPart.OmegaAuction} element={<OmegaProjectInfo />} />
+                    <Route path={routes.thirdPart.TypeitAuction} element={<TypeitProjectInfo />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     {/* <Route
                       path={routes.game.bladeDaoIndex}

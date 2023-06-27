@@ -60,16 +60,20 @@ export default function MobileMenu({ isOpen, onDismiss }: { isOpen: boolean; onD
       PaperProps={{
         sx: {
           height: '100%',
-          paddingBottom: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header }),
-          top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
+          paddingBottom: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
+          // top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header })
         }
       }}
       sx={{
         zIndex: theme => theme.zIndex.appBar,
         overflow: 'hidden',
         top: theme => ({ xs: theme.height.mobileHeader, sm: theme.height.header }),
+        '&.MuiDrawer-root': {
+          zIndex: '1300 !important'
+        },
         '& .MuiDrawer-paperAnchorTop': {
-          height: '100%'
+          height: '100%',
+          top: 51
         }
       }}
     >

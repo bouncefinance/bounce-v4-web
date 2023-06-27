@@ -25,6 +25,7 @@ interface Params {
   tokenIds: string[]
   priceFloor: string
   amountMinIncr1: string
+  delayUnlockingTime: number
   releaseType: IReleaseType
   releaseData: {
     startAt: number | string
@@ -63,6 +64,16 @@ export function useCreateEnglishAuctionPool() {
       tokenFromAddress: values.nft721TokenFrom[0].contractAddr || '',
       tokenIds: values.nft721TokenFrom.map(i => i.tokenId?.toString() || ''),
       tokenToAddress: values.tokenTo.address,
+      delayUnlockingTime:
+        IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
+          ? values.releaseDataArr?.[0].startAt?.unix() || 0
+          : IReleaseType.Instant === values.releaseType
+          ? 0
+          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
+          ? values.shouldDelayUnlocking
+            ? values.delayUnlockingTime?.unix() || 0
+            : values.endTime?.unix() || 0
+          : values.endTime?.unix() || 0,
       releaseType: IReleaseType.Cliff,
       releaseData: [
         {
@@ -113,7 +124,7 @@ export function useCreateEnglishAuctionPool() {
       amountTotal1: amountTotal1.raw.toString(),
       category: PoolType.ENGLISH_AUCTION_NFT,
       chainId: chainConfigInBackend.id,
-      claimAt: params.endTime,
+      claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
       creator: account,
       is721: true,
@@ -186,6 +197,8 @@ export function useCreateEnglishAuctionPool() {
     values.participantStatus,
     values.poolName,
     values.priceFloor,
+    values.releaseDataArr,
+    values.releaseType,
     values.shouldDelayUnlocking,
     values.startTime,
     values.tokenTo.address,

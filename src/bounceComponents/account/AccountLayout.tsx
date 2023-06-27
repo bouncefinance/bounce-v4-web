@@ -165,7 +165,9 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
                     lineHeight: '39px',
                     borderBottom: !!(item.route && pathname.includes(item.route))
                       ? '2px solid var(--ps-yellow-1)'
-                      : 'none'
+                      : 'none',
+                    fontFamily: 'Inter',
+                    fontSize: 13
                   }}
                   onClick={() =>
                     item.route
