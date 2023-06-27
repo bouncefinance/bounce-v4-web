@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { isAddress } from '@ethersproject/address'
-import { GOERLI_TOKEN_LIST, SEPOLIA_TOKEN_LIST, TOKEN_LIST_API } from 'constants/auction'
+import { GOERLI_TOKEN_LIST, OMNI_TESTNET_TOKEN_LIST, SEPOLIA_TOKEN_LIST, TOKEN_LIST_API } from 'constants/auction'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 import { useTokenContract } from 'hooks/useContract'
@@ -38,6 +38,9 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
   const baseTokenList = useMemo(() => {
     if (chainId === ChainId.GÖRLI) {
       return (GOERLI_TOKEN_LIST || apiTokenList) ?? []
+    }
+    if (chainId === ChainId.OMNI_TESTNET) {
+      return OMNI_TESTNET_TOKEN_LIST || []
     }
     if (chainId === ChainId.SEPOLIA) {
       return SEPOLIA_TOKEN_LIST || []
