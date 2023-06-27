@@ -139,7 +139,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
         <Pagination
           onChange={handlePageChange}
           sx={{
-            '.MuiPagination-ul li button': { border: '1px solid' },
+            // '.MuiPagination-ul li button': { border: '1px solid' },
             alignItems: 'end',
             overflowX: 'scroll',
             mb: isMobile ? '24px' : '',

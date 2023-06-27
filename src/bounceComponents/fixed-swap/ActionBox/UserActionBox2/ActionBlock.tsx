@@ -22,7 +22,6 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { BigNumber } from 'bignumber.js'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
-import { ChainId } from 'constants/chain'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -351,11 +350,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
           onRegretButtonClick={() => {
             setAction('INPUT_REGRET_AMOUNT')
           }}
-          hideRegret={
-            !poolInfo.enableReverses ||
-            ChainId.ZKSYNC_ERA === poolInfo.ethChainId ||
-            poolInfo.releaseType === IReleaseType.Instant
-          }
+          hideRegret={!poolInfo.enableReverses || poolInfo.releaseType === IReleaseType.Instant}
         />
       )}
 

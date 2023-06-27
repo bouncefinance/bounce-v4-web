@@ -1,4 +1,4 @@
-import { Box, Link, styled } from '@mui/material'
+import { Box, Link, styled, Stack, Typography } from '@mui/material'
 import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
 import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitter.svg'
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
@@ -8,12 +8,15 @@ import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.s
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
-
+import { ReactComponent as InstagramSvg } from 'assets/socialLinksIcon/instagram-dashboard.svg'
+import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
+import typeltpAvatar from './avatar/typelt.jpeg'
 import { ChainId } from 'constants/chain'
-
+import Image from 'components/Image'
+import TypeitSheet from './imgs/typeot-data-sheet.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -65,7 +68,118 @@ const SvgTwitterBlue = styled(SocialBg)`
     opacity: 1;
   }
 `
+const TypeitInfo: { [key: string]: any } = {
+  Investors: '10.00%',
+  Partner: '2.00%',
+  Team: '14.00%',
+  'Airdrop & Events': '1.00%',
+  Liquidity: '5.00%',
+  IEO: '3.00%',
+  Reserve: '15.00%',
+  T2E: '50.00%'
+}
 export const PrivatePadDataList: IPrivatePadProp[] = [
+  {
+    keyId: 6,
+    liveTimeStamp: {
+      start: 1687964400000,
+      end: 1687964400000
+    },
+    poolTypeName: 'Fixed Swap Auction',
+    img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
+    avatar: typeltpAvatar,
+    title: 'TypeIt',
+    chainId: 56,
+    tokenName: 'TYPE',
+    whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
+    upcomingLink: '/launchpad/typeit',
+    liveLink: '/launchpad/typeit',
+    projectInfo: [
+      {
+        title: 'What is TypeIt?',
+        info: [
+          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
+            <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
+              {Object.keys(TypeitInfo).map((t, i) => (
+                <Stack key={i} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo[t]}
+                  </Typography>
+                </Stack>
+              ))}
+            </Box>
+            <Box sx={{ width: '100%', maxWidth: 500 }}>
+              <Image src={TypeitSheet} style={{ width: '100%', objectFit: 'cover' }} />
+            </Box>
+          </Stack>
+        ]
+      },
+      {
+        title: 'Methods of Token Unlocking',
+        info: [
+          'staged release:',
+          '- TGE: 20%',
+          '- 3-month interval: 26.6%',
+          '- 3-month interval: 26.7%',
+          '- 3-month interval: 26.7%'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
+    social: [
+      <Link key={0} href="https://www.typeit.net/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/typeit_" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/typeit" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/typeit" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/typeit_official/"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link
+        key={6}
+        sx={{ width: '41.5px!important', height: '41.5px!important' }}
+        href=" https://www.linkedin.com/company/typeit-official"
+        target="_blank"
+      >
+        <LinkinSvg width={41.5} height={41.5} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$TYPE' },
+      { title: 'Token Price', content: '0.05 USDT' },
+      { title: 'Token Amount', content: '2,000,000' },
+      { title: 'Blockchain', content: 'BNB Chain' }
+    ]
+  },
   {
     keyId: 2,
     liveTimeStamp: {

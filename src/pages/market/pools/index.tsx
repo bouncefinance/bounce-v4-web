@@ -50,7 +50,7 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 export const poolTypeText: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed Price',
   [PoolType.Lottery]: 'Lottery',
-  [PoolType.Duch]: 'Dutch Auction',
+  [PoolType.DUTCH_AUCTION]: 'Dutch Auction',
   [PoolType.SealedBid]: 'Sealed Bid',
   [PoolType.fixedSwapNft]: 'Fixed Swap NFT',
   [PoolType.ENGLISH_AUCTION_NFT]: 'ENGLISH AUCTION NFT',
@@ -508,7 +508,7 @@ const Pools: React.FC = ({}) => {
                           <Pagination
                             onChange={handlePageChange}
                             count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
-                            variant="outlined"
+                            // variant="outlined"
                           />
                         </Box>
                       )}

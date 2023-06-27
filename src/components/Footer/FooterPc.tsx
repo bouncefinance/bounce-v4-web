@@ -348,6 +348,7 @@ const FooterPc: React.FC = () => {
 
   return (
     <footer
+      id={'footer'}
       style={{
         position: 'relative',
         background: 'var(--ps-gray-20)',

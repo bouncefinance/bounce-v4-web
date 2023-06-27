@@ -262,7 +262,9 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Box sx={{ mt: 52, px: { xs: 16, md: 0 } }}>
         <Typography variant="h2">Advanced Settings</Typography>
-        <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
+        <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>
+          {valuesState.auctionType || 'Fixed Price Auction'}
+        </Typography>
 
         <Formik
           initialValues={initialValues}
@@ -484,7 +486,9 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                       showImportWhitelistDialog(values, setValues)
                     }}
                   >
-                    <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    {values.participantStatus === ParticipantStatus.Whitelist && (
+                      <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    )}
                   </ButtonBase>
                   <Box>
                     <Button

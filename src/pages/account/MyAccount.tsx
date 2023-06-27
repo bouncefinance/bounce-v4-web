@@ -23,7 +23,11 @@ export default function MyAccount() {
             maxWidth: '1080px !important'
           }}
         >
-          <Typography variant="h3" fontSize={isSm ? 22 : 36} sx={{ paddingLeft: isSm ? '18px' : 0 }}>
+          <Typography
+            variant="h3"
+            fontSize={isSm ? 22 : 36}
+            sx={{ paddingLeft: isSm ? '18px' : 0, fontFamily: 'Public Sans' }}
+          >
             My Account
           </Typography>
           <Box
@@ -41,7 +45,7 @@ export default function MyAccount() {
               }}
             >
               <Stack direction={'row'} alignItems="center">
-                <Typography variant="h1" fontWeight={500} fontSize={isSm ? 22 : 36}>
+                <Typography variant="h1" fontWeight={500} fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
                   {userInfo?.fullName}
                 </Typography>
                 <Typography variant="body1" fontSize={600} color="#2B51DA" ml={10} sx={{ fontSize: isSm ? 16 : 20 }}>
