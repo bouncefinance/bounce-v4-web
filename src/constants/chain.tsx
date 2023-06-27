@@ -190,7 +190,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.OMNI_TESTNET]: {
     id: ChainId.OMNI_TESTNET,
     hexChainId: numberToHex(ChainId.OMNI_TESTNET),
-    chainName: 'Omni',
+    chainName: 'Omni Testnet',
     nativeCurrency: {
       name: 'OMNI',
       symbol: 'OMNI',
