@@ -49,9 +49,9 @@ export const GOERLI_TOKEN_LIST: Token[] = [
 export const OMNI_TESTNET_TOKEN_LIST: Token[] = [
   {
     chainId: ChainId.OMNI_TESTNET,
-    name: 'OMNI',
+    name: 'ZK',
     address: '0xc390E699b38F14dB884C635bbf843f7B135113ad',
-    symbol: 'OMNI',
+    symbol: 'zk',
     decimals: 18,
     logoURI: ''
   }
