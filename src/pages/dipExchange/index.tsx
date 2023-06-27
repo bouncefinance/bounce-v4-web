@@ -140,7 +140,7 @@ const DipExchange = () => {
       </Box>
       <Box sx={{ backgroundImage: `url(${TabBg})`, backgroundSize: 'cover', pb: 50, px: 72, width: '100%' }}>
         <Tabs item={defaultHeadData} />
-        <FooterPc />
+        <FooterPc isDark={true} />
       </Box>
     </Box>
   )

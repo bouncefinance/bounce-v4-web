@@ -1,14 +1,24 @@
 import { Box, Container, Link as ExternalLink, SxProps, Typography, useTheme } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useMemo, createContext, useContext } from 'react'
 import APIIcon from 'assets/imgs/common/Api.png'
 import GithubIcon from 'assets/imgs/common/Github.png'
 import MediumIcon from 'assets/imgs/common/Medium.png'
 import TelegramIcon from 'assets/imgs/common/Telegram.png'
 import TwitterIcon from 'assets/imgs/common/Twitter.png'
 import FooterLogo from 'assets/imgs/common/LogoBlack.svg'
+import WhiteFooterLogo from 'assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
 import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
+import WhiteArrowSvg from 'assets/imgs/common/whiteFooterArrow.svg'
 import useBreakpoint from '../../hooks/useBreakpoint'
+
+const FooterDarkStyle = {
+  layoutBackground: '#20201E',
+  linkTextColor: '#FFF',
+  textColor: '#D7D6D9'
+}
+
+const FooterThemeContext = createContext(false)
 
 export function SocialLinkList({ sx }: { sx?: SxProps }) {
   const isSm = useBreakpoint('md')
@@ -67,6 +77,7 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
 }
 
 export const FooterSocialLink: React.FC = () => {
+  const isDark = useContext(FooterThemeContext)
   return (
     <Box
       sx={{
@@ -79,7 +90,10 @@ export const FooterSocialLink: React.FC = () => {
       }}
     >
       <ExternalLink href={routes.market.index} role="link" rel="noopener noreferrer" aria-disabled={true}>
-        <img src={FooterLogo} style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }} />
+        <img
+          src={isDark ? WhiteFooterLogo : FooterLogo}
+          style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }}
+        />
       </ExternalLink>
       <SocialLinkList />
       <Box
@@ -90,7 +104,8 @@ export const FooterSocialLink: React.FC = () => {
         }}
       >
         <iframe
-          src="/crypotoWidget.html"
+          // src={isDark ? '/darkCrypotoWidget.html' : '/crypotoWidget.html'}
+          src={'/crypotoWidget.html'}
           width="100%"
           height="230px"
           style={{
@@ -120,6 +135,7 @@ interface FooterLinksProps {
 }
 
 export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
+  const isDark = useContext(FooterThemeContext)
   return (
     <div>
       <Typography
@@ -127,7 +143,8 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
         sx={{
           fontFamily: `'Public Sans'`,
           fontSize: 12,
-          marginBottom: 24
+          marginBottom: 24,
+          color: isDark ? FooterDarkStyle.linkTextColor : ''
         }}
       >
         {title}
@@ -150,7 +167,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
               {item.isDisabled ? (
                 <a
                   style={{
-                    color: '#919191' + '!important',
+                    color: `${isDark ? FooterDarkStyle.linkTextColor : '#919191'}!important`,
                     fontFamily: `'Inter'`
                   }}
                 >
@@ -160,7 +177,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink
                   // className={linkClass}
                   sx={{
-                    color: '#000000',
+                    color: isDark ? FooterDarkStyle.linkTextColor : '#000000',
                     padding: 0,
                     height: 18,
                     fontFamily: `'Inter'`,
@@ -180,7 +197,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink href={item.href}>
                   <a
                     style={{
-                      color: '#000000',
+                      color: isDark ? FooterDarkStyle.linkTextColor : '#000000',
                       padding: 0,
                       height: 18,
                       fontFamily: `'Inter'`
@@ -276,9 +293,11 @@ export const ResourcesLinks = [
     className: ''
   }
 ]
-const FooterPc: React.FC = () => {
+const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
   const isSm = useBreakpoint('sm')
   const theme = useTheme()
+  const LinksIcon = isDark ? WhiteArrowSvg : ArrowSvg
+
   const ProductsLinks = useMemo(
     () => [
       {
@@ -294,7 +313,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/tokenAndnftAuction',
         isDisabled: false,
-        extraIcon: ArrowSvg,
+        extraIcon: LinksIcon,
         className: ''
       },
       {
@@ -302,7 +321,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/realWorldCollectAuction',
         isDisabled: false,
-        extraIcon: ArrowSvg,
+        extraIcon: LinksIcon,
         className: ''
       },
       {
@@ -310,7 +329,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/adsAuction',
         isDisabled: false,
-        extraIcon: ArrowSvg,
+        extraIcon: LinksIcon,
         className: ''
       },
       {
@@ -318,7 +337,7 @@ const FooterPc: React.FC = () => {
         isExternal: true,
         href: 'https://www.bounce.finance/sdkAndPlugins',
         isDisabled: false,
-        extraIcon: ArrowSvg,
+        extraIcon: LinksIcon,
         className: ''
       }
     ],
@@ -351,109 +370,111 @@ const FooterPc: React.FC = () => {
       id={'footer'}
       style={{
         position: 'relative',
-        background: 'var(--ps-gray-20)',
+        background: isDark ? FooterDarkStyle.layoutBackground : 'var(--ps-gray-20)',
         borderRadius: 30,
         width: 'calc(100% - 40px)',
         margin: '0 auto 20px'
       }}
     >
-      <Container
-        disableGutters
-        sx={{
-          width: '100%',
-          maxWidth: '1296px !important',
-          padding: '52px 0',
-          [theme.breakpoints.down('md')]: {
-            padding: '40px 30px'
-          }
-        }}
-      >
-        <Box
+      <FooterThemeContext.Provider value={isDark as boolean}>
+        <Container
+          disableGutters
           sx={{
-            position: 'relative',
-            display: 'flex',
-            flexFlow: isSm ? 'column' : 'row nowrap',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            paddingBottom: 32,
-            marginBottom: 32,
-            '&::after': {
-              position: 'absolute',
-              content: `''`,
-              display: 'block',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              height: '1px',
-              background: isSm ? 'var(--ps-text-5)' : 'var(--ps-text-3)'
+            width: '100%',
+            maxWidth: '1296px !important',
+            padding: '52px 0',
+            [theme.breakpoints.down('md')]: {
+              padding: '40px 30px'
             }
           }}
         >
-          <FooterSocialLink />
-          {isSm && <Box sx={{ border: '1px solid #D7D6D9', width: '100%', mb: '40px' }} />}
+          <Box
+            sx={{
+              position: 'relative',
+              display: 'flex',
+              flexFlow: isSm ? 'column' : 'row nowrap',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              paddingBottom: 32,
+              marginBottom: 32,
+              '&::after': {
+                position: 'absolute',
+                content: `''`,
+                display: 'block',
+                bottom: 0,
+                left: 0,
+                width: '100%',
+                height: '1px',
+                background: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)'
+              }
+            }}
+          >
+            <FooterSocialLink />
+            {isSm && <Box sx={{ border: '1px solid #D7D6D9', width: '100%', mb: '40px' }} />}
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: isSm ? 'column' : 'row nowrap',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-start'
+              }}
+              gap={isSm ? 32 : 120}
+            >
+              <FooterLinks title={'Products'} links={ProductsLinks} />
+              <FooterLinks title={'Solutions'} links={SolutionsLinks} />
+              <FooterLinks title={'Resources'} links={ResourcesLinks} />
+            </Box>
+          </Box>
           <Box
             sx={{
               display: 'flex',
               flexFlow: isSm ? 'column' : 'row nowrap',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-start'
+              justifyContent: 'space-between',
+              alignItems: isSm ? 'left' : 'center'
             }}
-            gap={isSm ? 32 : 120}
           >
-            <FooterLinks title={'Products'} links={ProductsLinks} />
-            <FooterLinks title={'Solutions'} links={SolutionsLinks} />
-            <FooterLinks title={'Resources'} links={ResourcesLinks} />
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexFlow: isSm ? 'column' : 'row nowrap',
-            justifyContent: 'space-between',
-            alignItems: isSm ? 'left' : 'center'
-          }}
-        >
-          <Typography
-            sx={{
-              color: 'var(--ps-text-3)',
-              opacity: '0.6',
-              fontFamily: `'Inter'`,
-              fontSize: 13
-            }}
-          >{`©${new Date().getFullYear()} Bounce dao Ltd. All rights reserved.`}</Typography>
-          <Box>
-            <ExternalLink
-              href={'https://www.bounce.finance/termsOfService'}
-              role="link"
-              rel="noopener noreferrer"
-              target="_blank"
+            <Typography
               sx={{
-                color: 'var(--ps-text-3)',
+                color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
                 opacity: '0.6',
                 fontFamily: `'Inter'`,
-                fontSize: 13,
-                marginRight: 40
+                fontSize: 13
               }}
-            >
-              Terms Of Service
-            </ExternalLink>
-            <ExternalLink
-              href={'https://www.bounce.finance/privacyPolicy'}
-              role="link"
-              rel="noopener noreferrer"
-              target="_blank"
-              sx={{
-                color: 'var(--ps-text-3)',
-                fontFamily: `'Inter'`,
-                fontSize: 13,
-                opacity: '0.6'
-              }}
-            >
-              Privacy Policy
-            </ExternalLink>
+            >{`©${new Date().getFullYear()} Bounce dao Ltd. All rights reserved.`}</Typography>
+            <Box>
+              <ExternalLink
+                href={'https://www.bounce.finance/termsOfService'}
+                role="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                sx={{
+                  color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                  opacity: '0.6',
+                  fontFamily: `'Inter'`,
+                  fontSize: 13,
+                  marginRight: 40
+                }}
+              >
+                Terms Of Service
+              </ExternalLink>
+              <ExternalLink
+                href={'https://www.bounce.finance/privacyPolicy'}
+                role="link"
+                rel="noopener noreferrer"
+                target="_blank"
+                sx={{
+                  color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                  fontFamily: `'Inter'`,
+                  fontSize: 13,
+                  opacity: '0.6'
+                }}
+              >
+                Privacy Policy
+              </ExternalLink>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </FooterThemeContext.Provider>
     </footer>
   )
 }
