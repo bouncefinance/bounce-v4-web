@@ -7,7 +7,7 @@ import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export enum PoolType {
   'FixedSwap' = 1,
-  'Duch' = 2,
+  DUTCH_AUCTION = 2,
   'Lottery' = 3,
   'SealedBid' = 4,
   'fixedSwapNft' = 5,
@@ -17,7 +17,7 @@ export enum PoolType {
 
 export function getTextFromPoolType(type: PoolType) {
   switch (type) {
-    case PoolType.Duch:
+    case PoolType.DUTCH_AUCTION:
       return 'Dutch Auction'
     case PoolType.ENGLISH_AUCTION_NFT:
       return 'English Auction'
@@ -26,7 +26,7 @@ export function getTextFromPoolType(type: PoolType) {
     case PoolType.fixedSwapNft:
       return 'Fixed-Swap NFT'
     case PoolType.Lottery:
-      return 'Lottery'
+      return 'Random'
     case PoolType.SealedBid:
       return 'Sealed Bid'
     case PoolType.PlayableAuction:
@@ -265,6 +265,40 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
     tokenId?: string
   }
   enableReverses?: boolean
+}
+
+export interface DutchAuctionPoolProp extends FixedSwapPool {
+  currencyAmountTotal0: CurrencyAmount
+  currencyAmountTotal1: CurrencyAmount
+  currencySwappedAmount0: CurrencyAmount
+  // currencyMaxAmount1PerWallet: CurrencyAmount
+  // currencySurplusTotal0: CurrencyAmount
+  currencySwappedTotal1: CurrencyAmount
+  highestPrice: CurrencyAmount | undefined
+  lowestPrice: CurrencyAmount | undefined
+  currencyCurrentPrice: CurrencyAmount | undefined
+  currencyLowestBidPrice: CurrencyAmount | undefined
+  nextRoundInSeconds: number | undefined
+  times: number | undefined
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
+    currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
+  }
+  releaseType?: IReleaseType | undefined
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
 }
 
 export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
