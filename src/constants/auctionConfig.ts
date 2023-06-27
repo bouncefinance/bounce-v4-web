@@ -29,6 +29,12 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.BSCTEST]: {},
+  [ChainId.OMNI_TESTNET]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+  },
+  [ChainId.ROLLUX]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+  },
   [ChainId.GNOSIS]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
