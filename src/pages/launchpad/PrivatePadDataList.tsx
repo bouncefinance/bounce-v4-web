@@ -194,6 +194,115 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    keyId: 7,
+    liveTimeStamp: {
+      start: 1687964400000,
+      end: 1688137200000
+    },
+    poolTypeName: 'Whitelist',
+    img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
+    avatar: typeltpAvatar,
+    title: 'TypeIt',
+    chainId: 56,
+    tokenName: 'TYPE',
+    whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
+    upcomingLink: '/launchpad/typeit/whitelist',
+    liveLink: '/launchpad/typeit/whitelist',
+    projectInfo: [
+      {
+        title: 'What is TypeIt?',
+        info: [
+          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
+            <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
+              {Object.keys(TypeitInfo1).map((t, i) => (
+                <Stack key={i} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo1[t]}
+                  </Typography>
+                </Stack>
+              ))}
+              <Typography variant="h2" my={10}>
+                Allocation
+              </Typography>
+              {Object.keys(TypeitInfo2).map((t, i) => (
+                <Stack key={`a${i}`} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo2[t]}
+                  </Typography>
+                </Stack>
+              ))}
+            </Box>
+          </Stack>
+        ]
+      },
+      {
+        title: 'Methods of Token Unlocking',
+        info: [
+          'staged release:',
+          '- TGE: 20%',
+          '- 3-month interval: 26.6%',
+          '- 3-month interval: 26.7%',
+          '- 3-month interval: 26.7%'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
+    social: [
+      <Link key={0} href="https://www.typeit.net/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/typeit_" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/typeit" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/typeit" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/typeit_official/"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link
+        key={6}
+        sx={{ width: '41.5px!important', height: '41.5px!important' }}
+        href=" https://www.linkedin.com/company/typeit-official"
+        target="_blank"
+      >
+        <LinkinSvg width={41.5} height={41.5} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$TYPE' },
+      { title: 'Token Price', content: '0.05 USDT' },
+      { title: 'Token Amount', content: '2,000,000' },
+      { title: 'Blockchain', content: 'BNB Chain' }
+    ]
+  },
+  {
     keyId: 2,
     liveTimeStamp: {
       start: 1687046400000,
