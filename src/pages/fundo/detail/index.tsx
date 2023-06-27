@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography, Grid, useTheme } from '@mui/material'
 import CenterSection from 'components/Fundo/CenterSection'
-import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
+// import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
 // import LogoIcon from 'components/Fundo/assets/img/detail/logo.png'
 // import ShareIcon from 'components/Fundo/assets/img/share.png'
 import BackIcon from 'components/Fundo/assets/img/detail/leftArrow.png'
@@ -226,7 +226,7 @@ const TokenDetail: React.FC = () => {
           >
             <lottie-player
               autoplay={true}
-              src={JSON.stringify(NecklaceJson)}
+              src={JSON.stringify('/lottie/animatinDm4.json')}
               loop={true}
               style={{
                 width: '227px',
@@ -450,7 +450,7 @@ const TokenDetail: React.FC = () => {
               >
                 <lottie-player
                   autoplay={true}
-                  src={JSON.stringify(NecklaceJson)}
+                  src={JSON.stringify('/lottie/animatinDm4.json')}
                   loop={true}
                   style={{
                     width: '380px',
