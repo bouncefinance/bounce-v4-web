@@ -85,6 +85,8 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.GNOSIS]: null,
   [ChainId.POLYGON]: null,
   [ChainId.FANTOM]: null,
+  [ChainId.OMNI_TESTNET]: null,
+  [ChainId.ROLLUX]: null,
   [ChainId.ZKSYNC_ERA]: null,
   [ChainId.ZKSYNC_ERA_TESTNET]: null,
   [ChainId.POLYGON_ZK_EVM]: null,
