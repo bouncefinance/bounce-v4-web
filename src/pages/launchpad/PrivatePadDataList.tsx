@@ -15,8 +15,6 @@ import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 import typeltpAvatar from './avatar/typelt.jpeg'
 import { ChainId } from 'constants/chain'
-import Image from 'components/Image'
-import TypeitSheet from './imgs/typeot-data-sheet.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -68,22 +66,29 @@ const SvgTwitterBlue = styled(SocialBg)`
     opacity: 1;
   }
 `
-const TypeitInfo: { [key: string]: any } = {
-  Investors: '10.00%',
-  Partner: '2.00%',
-  Team: '14.00%',
-  'Airdrop & Events': '1.00%',
-  Liquidity: '5.00%',
-  IEO: '3.00%',
-  Reserve: '15.00%',
-  T2E: '50.00%'
+const TypeitInfo1: { [key: string]: any } = {
+  TYPE: 'Governance Token',
+  'Total amount': '1 billion',
+  Mechanism:
+    'Release 10% monthly reduction in the first year, and subsequent production reductions will be determined by community voting'
+}
+const TypeitInfo2: { [key: string]: any } = {
+  '50%': '500 million, Type to Earn output',
+  '10%': '100 million, investment institution, lockdown for 3 months, and release quarterly for the next 24 months',
+  '2%': '20 million, IEO, TGE fully unlocked',
+  '0.5%': '5 million, IDO, 20% TGE, released quarterly for the next 6 months',
+  '14%': '140 million, team, lockdown for 6 months, linear release after 60 months',
+  '1%': '10 million, air drop and activity, linear release in 60 months',
+  '2.5%': '25 million, partners and consultants, linear release within 24 months',
+  '15%': '150 million, national treasury and reserves, linear release within 60 months',
+  '5%': '50 million, liquidity, linear release within 60 months'
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 6,
     liveTimeStamp: {
       start: 1687964400000,
-      end: 1687964400000
+      end: 1688137200000
     },
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
@@ -112,17 +117,25 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
             <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
-              {Object.keys(TypeitInfo).map((t, i) => (
+              {Object.keys(TypeitInfo1).map((t, i) => (
                 <Stack key={i} flexDirection={'row'} mt={10}>
                   <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
                   <Typography pl={10} sx={{ fontSize: 14 }}>
-                    {TypeitInfo[t]}
+                    {TypeitInfo1[t]}
                   </Typography>
                 </Stack>
               ))}
-            </Box>
-            <Box sx={{ width: '100%', maxWidth: 500 }}>
-              <Image src={TypeitSheet} style={{ width: '100%', objectFit: 'cover' }} />
+              <Typography variant="h2" my={10}>
+                Allocation
+              </Typography>
+              {Object.keys(TypeitInfo2).map((t, i) => (
+                <Stack key={`a${i}`} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo2[t]}
+                  </Typography>
+                </Stack>
+              ))}
             </Box>
           </Stack>
         ]
