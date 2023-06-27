@@ -282,7 +282,9 @@ export const AdvancedSettingsForm = ({
                       showImportWhitelistDialog(values, setValues)
                     }}
                   >
-                    <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    {values.participantStatus === ParticipantStatus.Whitelist && (
+                      <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    )}
                   </ButtonBase>
                   <Box>
                     <Button

@@ -120,7 +120,7 @@ function Web3StatusInner() {
         }}
       >
         {isSm ? (
-          <>
+          <Box role="presentation">
             <Button
               onClick={handleClick}
               sx={{
@@ -140,7 +140,7 @@ function Web3StatusInner() {
               <UserSvg />
             </Button>
             <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
-          </>
+          </Box>
         ) : (
           <Box>
             <Button
@@ -295,7 +295,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
       open={open}
       anchorEl={anchorEl}
       sx={{
-        top: '20px !important',
+        top: { xs: 0, sm: '20px !important' },
         width: 360,
         zIndex: theme.zIndex.modal,
         [theme.breakpoints.down('md')]: {

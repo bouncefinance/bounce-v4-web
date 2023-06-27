@@ -47,7 +47,11 @@ const Auction721ParametersForm = (): JSX.Element => {
     tokenToSymbol: Yup.string().required('Funding currency is required'),
     priceFloor: Yup.string()
       .required('Price floor is required')
-      .test('PRICE_FLOOR_CHECK', 'Price floor is required', value => !!value && new BigNumber(value).gt(0)),
+      .test('PRICE_FLOOR_CHECK', 'Price floor is required', value => !!value && new BigNumber(value).gt(0))
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+      }),
     amountMinIncr1: Yup.string()
       .required('The minimum price increase is required')
       .test(
@@ -55,6 +59,10 @@ const Auction721ParametersForm = (): JSX.Element => {
         'The minimum price increase is required',
         value => !!value && new BigNumber(value).gt(0)
       )
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+      })
   })
 
   const showTokenDialog = (

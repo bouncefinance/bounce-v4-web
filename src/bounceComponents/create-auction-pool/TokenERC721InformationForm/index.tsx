@@ -103,6 +103,7 @@ const TokenInformationForm = (): JSX.Element => {
                         const _list = [...resultNft]
                         _list.splice(idx, 1)
                         setResultNft(_list)
+                        setValues(_list as FormValues[])
                       }}
                       boxH={220}
                       imgH={170}
