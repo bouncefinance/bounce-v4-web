@@ -3,7 +3,7 @@ import { GetPoolCreationSignatureParams, GetWhitelistMerkleTreeRootParams, PoolT
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { NULL_BYTES } from '../constants'
 import { useActiveWeb3React } from 'hooks'
-import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useDutchAuctionContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { Currency, CurrencyAmount } from 'constants/token'
@@ -24,6 +24,9 @@ interface Params {
   whitelist: string[]
   poolSize: string
   swapRatio: string
+  startPrice: string
+  reservePrice: string
+  times: string
   allocationPerWallet: string
   startTime: number
   endTime: number
@@ -109,7 +112,7 @@ export function makeValuesReleaseData(values: AuctionPool) {
 
 export function useCreateDutchAuctionPool() {
   const { account, chainId } = useActiveWeb3React()
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const dutchAuctionContract = useDutchAuctionContract()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
@@ -125,6 +128,9 @@ export function useCreateDutchAuctionPool() {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       poolSize: values.poolSize,
       swapRatio: values.swapRatio,
+      startPrice: values.startPrice || '',
+      reservePrice: values?.reservePrice || '',
+      times: values?.segmentAmount || '',
       allocationPerWallet:
         values.allocationStatus === AllocationStatus.Limited
           ? new BigNumber(values.allocationPerWallet).toString()
@@ -154,10 +160,12 @@ export function useCreateDutchAuctionPool() {
       return Promise.reject('currencyFrom or currencyTo error')
     }
     const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
-    const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
+    // const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
+    const amountMax = CurrencyAmount.fromAmount(currencyFrom, params.startPrice)
+    const amountMin = CurrencyAmount.fromAmount(currencyFrom, params.reservePrice)
 
-    if (!amountTotal0 || !amountTotal1) {
-      return Promise.reject('amountTotal0 or amountTotal1 error')
+    if (!amountTotal0) {
+      return Promise.reject('amountTotal0 error')
     }
     if (!chainConfigInBackend?.id) {
       return Promise.reject(new Error('This chain is not supported for the time being'))
@@ -165,7 +173,7 @@ export function useCreateDutchAuctionPool() {
     if (!account) {
       return Promise.reject('no account')
     }
-    if (!fixedSwapERC20Contract) {
+    if (!dutchAuctionContract) {
       return Promise.reject('no contract')
     }
 
@@ -174,7 +182,7 @@ export function useCreateDutchAuctionPool() {
     if (params.whitelist.length > 0) {
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
-        category: PoolType.FixedSwap,
+        category: PoolType.Duch,
         chainId: chainConfigInBackend.id
       }
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -183,11 +191,8 @@ export function useCreateDutchAuctionPool() {
 
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
-      amountTotal1: new BigNumber(amountTotal1.raw.toString())
-        .times(params.swapRatio)
-        // Prevent exponential notation
-        .toFixed(0, BigNumber.ROUND_DOWN),
-      category: PoolType.FixedSwap,
+      // amountTotal1: new BigNumber(amountTotal1.raw.toString()).times(params.swapRatio).toFixed(0, BigNumber.ROUND_DOWN),
+      category: PoolType.Duch,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
@@ -199,7 +204,10 @@ export function useCreateDutchAuctionPool() {
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress,
       releaseType: params.releaseType,
-      releaseData: params.releaseData
+      releaseData: params.releaseData,
+      amountMax1: amountMax?.raw.toString(),
+      amountMin1: amountMin?.raw.toString(),
+      times: Number(params.times)
     }
 
     const {
@@ -211,11 +219,14 @@ export function useCreateDutchAuctionPool() {
       token0: signatureParams.token0,
       token1: signatureParams.token1,
       amountTotal0: signatureParams.amountTotal0,
-      amountTotal1: signatureParams.amountTotal1,
+      // amountTotal1: signatureParams.amountTotal1,
+      amountMax1: signatureParams.amountMax1,
+      amountMin1: signatureParams.amountMin1,
+      times: signatureParams.times,
       openAt: signatureParams.openAt,
       claimAt: signatureParams.claimAt,
       closeAt: signatureParams.closeAt,
-      maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      // maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
@@ -225,36 +236,34 @@ export function useCreateDutchAuctionPool() {
       params.releaseType,
       params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
       false,
-      !!values.enableReverse,
       expiredTime,
       signature
     ]
-    console.log('🚀 ~ file: useCreateFixedSwapPool.ts:230 ~ returnuseCallback ~ args:', args)
 
-    const estimatedGas = await fixedSwapERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
-      console.debug('Failed to create fixedSwap', error)
+    const estimatedGas = await dutchAuctionContract.estimateGas.createV2(...args).catch((error: Error) => {
+      console.debug('Failed to create dutchAuction', error)
       throw error
     })
-    return fixedSwapERC20Contract
+    return dutchAuctionContract
       .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
       .then((response: TransactionResponse) => {
         addTransaction(response, {
-          summary: 'Create fixedSwap auction',
+          summary: 'Create dutch auction',
           userSubmitted: {
             account,
-            action: 'createERC20FixedSwapAuction'
+            action: 'createDutchAuction'
           }
         })
         return {
           hash: response.hash,
           transactionReceipt: response.wait(1),
           sysId: id,
-          getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
+          getPoolId: (logs: Log[]) => getEventLog(dutchAuctionContract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, dutchAuctionContract, values])
 }
 
 export function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {

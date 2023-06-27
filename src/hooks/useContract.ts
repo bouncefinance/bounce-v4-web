@@ -164,13 +164,6 @@ export function useFixedSwapERC20Contract(address?: string, queryChainId?: Chain
   return useContract(curAddress, FIXED_SWAP_ABI, true, queryChainId)
 }
 
-export function useDutchAuctionContract(address?: string, queryChainId?: ChainId) {
-  const { chainId } = useActiveWeb3React()
-  const cur = queryChainId || chainId
-  const curAddress = address === '' ? undefined : address || (cur ? FIXED_SWAP_ERC20_ADDRESSES[cur] : undefined)
-  return useContract(curAddress, FIXED_SWAP_ABI, true, queryChainId)
-}
-
 export function useRandomSelectionERC20Contract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId

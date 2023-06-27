@@ -52,6 +52,8 @@ export interface GetPoolCreationSignatureParams {
   tokenIds?: string[]
   amountMinIncr1?: string
   amountMin1?: string
+  amountMax1?: string
+  times?: number
   is721?: boolean
   maxPlayer?: number
   totalShare?: string | number

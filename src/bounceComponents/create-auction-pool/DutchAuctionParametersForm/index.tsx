@@ -68,7 +68,6 @@ const DutchAuctionParametersForm = (): JSX.Element => {
     startPrice: Yup.number().typeError('Please input valid number').required('Start price is required'),
     reservePrice: Yup.number().typeError('Please input valid number').required('Reserve price is required'),
     segments: Yup.number()
-      .positive('Swap ratio must be positive')
       .typeError('Please input valid number')
       .required('Auction price segment is required')
       .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
