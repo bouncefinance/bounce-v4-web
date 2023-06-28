@@ -341,6 +341,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
         className: ''
       }
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
   const SolutionsLinks = useMemo(

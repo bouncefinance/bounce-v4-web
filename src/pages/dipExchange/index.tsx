@@ -1,4 +1,4 @@
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Typography, styled } from '@mui/material'
 import { IPrivatePadProp } from 'pages/launchpad/PrivatePadDataList'
 import { ProjectHead, Tabs } from '../projectIntro'
 
@@ -134,15 +134,28 @@ const defaultHeadData: IPrivatePadProp = {
 }
 const DipExchange = () => {
   return (
-    <Box>
-      <Box sx={{ backgroundImage: `url(${HeadBg})`, backgroundSize: 'cover', pb: 50, width: '100%' }}>
-        <ProjectHead item={defaultHeadData} />
-      </Box>
-      <Box sx={{ backgroundImage: `url(${TabBg})`, backgroundSize: 'cover', pb: 50, px: 72, width: '100%' }}>
-        <Tabs item={defaultHeadData} />
+    <Box sx={{ background: 'black' }}>
+      <DipHeadBox>
+        <ProjectHead item={defaultHeadData} isDark={true} />
+      </DipHeadBox>
+      <DipTabBox>
+        <Tabs item={defaultHeadData} isDark={true} />
         <FooterPc isDark={true} />
-      </Box>
+      </DipTabBox>
     </Box>
   )
 }
+const DipHeadBox = styled(Box)({
+  width: '100%',
+  paddingBottom: 50,
+  backgroundImage: `url(${HeadBg})`,
+  backgroundSize: 'cover'
+})
+const DipTabBox = styled(Box)({
+  width: '100%',
+  marginTop: 4,
+  backgroundImage: `url(${TabBg})`,
+  backgroundSize: 'cover',
+  padding: '36px 0 50px'
+})
 export default DipExchange

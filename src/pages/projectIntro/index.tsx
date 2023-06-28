@@ -12,7 +12,7 @@ import TokenImage from '../../bounceComponents/common/TokenImage'
 import { ChainId, ChainListMap } from '../../constants/chain'
 import { useState } from 'react'
 import FooterPc from '../../components/Footer/FooterPc'
-import { matchPath, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { ReactComponent as CopySvg } from 'assets/svg/copy.svg'
@@ -36,7 +36,25 @@ import { useRequest } from 'ahooks'
 import { getInviteList } from 'api/bladeDao/index'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
-import { useLocation } from 'react-router-dom'
+
+const ProjectInfoDarkStyle = {
+  fontFamily: { it: 'Inter' },
+  Head: {
+    ButtonBg: 'linear-gradient(180deg, #5086FD 0%, #312C87 99.99%, #312C87 100%)',
+    ButtonHoverBg: '#4f60fc',
+    UpComBg: '#D7D6D9',
+    UpComColor: '#626262',
+    PoolTypeColor: '#4F5FFC',
+    PriceTitleColor: '#959595'
+  },
+  Tabs: {
+    TabColor: '#ffffff',
+    InfoList: {
+      BoxBg: '#121219',
+      BoxBorderImage: 'linear-gradient(135deg,#4848c4,#000) 1 1'
+    }
+  }
+}
 export const GrayButton = styled(Button)`
   display: flex;
   flex-direction: row;
@@ -152,10 +170,18 @@ const STEPNTokenTitle = styled(Typography)({
   lineHeight: '150%'
 })
 
-function Price({ title, value }: { title: any; value: (string | JSX.Element)[] | (string | JSX.Element) }) {
+function Price({
+  title,
+  value,
+  isDark
+}: {
+  title: any
+  value: (string | JSX.Element)[] | (string | JSX.Element)
+  isDark?: boolean
+}) {
   return (
     <Box gap={8} sx={{ color: 'white' }}>
-      <HeadPriceTitle sx={{ color: Array.isArray(title) ? '#959595' : '#D7D6D9' }} variant={'body2'}>
+      <HeadPriceTitle sx={{ color: isDark ? ProjectInfoDarkStyle.Head.PriceTitleColor : '#D7D6D9' }} variant={'body2'}>
         {title}
       </HeadPriceTitle>
       <HeadPriceContext mt={8}>{value}</HeadPriceContext>
@@ -476,18 +502,11 @@ export function InviteBtn({
     )
   }
 }
-export function ProjectHead({ item }: { item: IPrivatePadProp }) {
+
+export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { userId } = useUserInfo()
-  const { pathname } = useLocation()
 
-  const darkRoutes = [routes.thirdPart.DipExchange]
-
-  const isDarkRoutes = useMemo(
-    () => darkRoutes.includes(pathname) || darkRoutes.some(route => matchPath(route, pathname)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pathname]
-  )
   let prices: IPrivatePricesInfo[] = [
     {
       title: 'Token Name',
@@ -526,7 +545,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     }
     return result
   }, [poolInfo])
-  const pricesComponent = prices.map((p, i) => <Price title={p.title} value={p.value} key={i} />)
+  const pricesComponent = prices.map((p, i) => <Price isDark={isDark} title={p.title} value={p.value} key={i} />)
   const nav = useNavigate()
 
   return (
@@ -569,11 +588,9 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
       >
         <GrayButton
           sx={{
-            background: isDarkRoutes
-              ? 'linear-gradient(180deg, #5086FD 0%, #312C87 99.99%, #312C87 100%)'
-              : 'rgba(255, 255, 255, 0.2)',
+            background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
             '&:hover': {
-              background: isDarkRoutes ? '#4f60fc' : 'rgba(255, 255, 255, 0.2)'
+              background: isDark ? ProjectInfoDarkStyle.Head.ButtonHoverBg : ''
             }
           }}
           onClick={() => {
@@ -596,9 +613,9 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
           <Upcoming
             style={{
               marginRight: 0,
-              background: isDarkRoutes ? '#D7D6D9' : 'rgba(18, 18, 18, 0.2)',
-              fontFamily: isDarkRoutes ? 'Inter' : '',
-              color: isDarkRoutes ? '#626262' : 'white'
+              background: isDark ? ProjectInfoDarkStyle.Head.UpComBg : '',
+              fontFamily: isDark ? ProjectInfoDarkStyle.fontFamily.it : '',
+              color: isDark ? ProjectInfoDarkStyle.Head.UpComColor : ''
             }}
           >
             {poolStatusText}
@@ -686,15 +703,15 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
                       : ChainListMap?.[item.chainId as ChainId]?.logo
                     : ''
                 }
-                size={isDarkRoutes ? 24 : 12}
+                size={isDark ? 24 : 12}
               />
               <Typography variant={'h6'} color={'white'}>
                 {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
               </Typography>
             </GrayBg>
-            {isDarkRoutes && (
+            {isDark && (
               <GrayBg>
-                <Typography color={'#4F5FFC'}>{item.poolTypeName}</Typography>
+                <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
               </GrayBg>
             )}
             {/*<GrayBg>*/}
@@ -716,34 +733,27 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
     </Box>
   )
 }
-export function Tabs({ item }: { item: IPrivatePadProp }) {
-  const { pathname } = useLocation()
-  const darkRoutes = [routes.thirdPart.DipExchange]
 
-  const isDarkRoutes = useMemo(
-    () => darkRoutes.includes(pathname) || darkRoutes.some(route => matchPath(route, pathname)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pathname]
-  )
+export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
-  const tabs = isDarkRoutes ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
+  const tabs = isDark ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
   const [tab, setTab] = useState(tabs[0])
   console.log(setTab)
 
   return (
-    <Box mt={isDarkRoutes ? 0 : 120} mb={140}>
-      <Row justifyContent={isDarkRoutes ? 'start' : 'center'}>
+    <Box mt={isDark ? 0 : 120} mb={140} px={isDark ? 72 : 0}>
+      <Row justifyContent={isDark ? 'start' : 'center'}>
         {tabs.map((t, i) => (
           <TabBg
             sx={{
-              minWidth: isDarkRoutes ? 'auto' : 230,
+              minWidth: isDark ? 'auto' : 230,
               '&.select': {
-                background: `${isDarkRoutes ? 'transparent' : '#ffffff'}!important`,
-                color: `${isDarkRoutes ? '#ffffff' : '#121212'} !important`
+                background: `${isDark ? 'transparent' : '#ffffff'}!important`,
+                color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
               },
               '&:hover': {
                 cursor: 'pointer',
-                color: `${isDarkRoutes ? '#ffffff' : '#121212'} !important`
+                color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
               }
             }}
             key={i}
@@ -754,21 +764,27 @@ export function Tabs({ item }: { item: IPrivatePadProp }) {
           </TabBg>
         ))}
       </Row>
+      {isDark && <DarkLine mb={30} />}
       <Box
         sx={{
-          background: isDarkRoutes ? 'transparent' : 'white',
-          padding: { xs: 20, sm: isDarkRoutes ? '0' : '20px 72px' },
+          background: isDark ? 'transparent' : 'white',
+          padding: { xs: 20, sm: isDark ? '0' : '20px 72px' },
           minHeight: '486px'
         }}
       >
-        {tab === tabs[0] && <ProjectInfo item={item} />}
+        {tab === tabs[0] && <ProjectInfo isDark={isDark} item={item} />}
         {tab === tabs[1] && <STEPNTokenDark />}
-        {tab === tabs[2] && <TokenMetrics item={item} />}
+        {tab === tabs[2] && <TokenMetrics isDark={isDark} item={item} />}
       </Box>
     </Box>
   )
 }
-
+const DarkLine = styled(Box)({
+  width: '100vw',
+  height: 1,
+  background: 'rgba(255, 255, 255, 0.20)',
+  marginLeft: '-72px'
+})
 const ProjectInfoSubtitle = styled(H5)`
   padding: 16px 20px;
   width: 360px;
@@ -814,23 +830,16 @@ const ProjectLineDrak = styled(Box)({
   height: 2,
   background: 'rgba(255,255,255,.2)'
 })
-function InfoList({ info }: { info: IProjectInfo[] }) {
-  const [currentIdx, setCurrentIdx] = useState(0)
-  const { pathname } = useLocation()
-  const darkRoutes = [routes.thirdPart.DipExchange]
 
-  const isDarkRoutes = useMemo(
-    () => darkRoutes.includes(pathname) || darkRoutes.some(route => matchPath(route, pathname)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pathname]
-  )
+function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) {
+  const [currentIdx, setCurrentIdx] = useState(0)
 
   return (
     <Box
       sx={{
         width: '100%',
         maxWidth: '1296px',
-        margin: isDarkRoutes ? '0' : '0 auto',
+        margin: isDark ? '0' : '0 auto',
         display: 'flex',
         flexWrap: { xs: 'wrap', md: 'unset' },
         justifyContent: 'space-between'
@@ -841,12 +850,12 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
           info.map((i, idx) => (
             <ProjectInfoSubtitle
               sx={{
-                background: isDarkRoutes ? '#121219' : '',
+                background: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBg : '',
                 '&:hover,&.select': {
-                  border: isDarkRoutes ? '1px solid' : '',
-                  borderImage: isDarkRoutes ? 'linear-gradient(135deg,#4848c4,#000) 1 1' : '',
-                  color: isDarkRoutes ? 'white' : '',
-                  background: isDarkRoutes ? '#121219' : ''
+                  border: isDark ? '1px solid' : '',
+                  borderImage: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBorderImage : '',
+                  color: isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '',
+                  background: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBg : ''
                 }
               }}
               key={idx}
@@ -857,7 +866,7 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
             </ProjectInfoSubtitle>
           ))}
       </Stack>
-      {info.length && !isDarkRoutes && (
+      {info.length && !isDark && (
         <ProjectContentBg
           sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' } }}
         >
@@ -871,7 +880,7 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
             ))}
         </ProjectContentBg>
       )}
-      {info.length && isDarkRoutes && (
+      {info.length && isDark && (
         <ProjectContentBgDark
           sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '60px 40px 80px' } }}
         >
@@ -933,14 +942,14 @@ const STEPNTokenDark = () => {
     </Box>
   )
 }
-function ProjectInfo({ item }: { item: IPrivatePadProp }) {
-  return <InfoList info={item.projectInfo} />
+function ProjectInfo({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
+  return <InfoList isDark={isDark} info={item.projectInfo} />
 }
 
 // function STEPNToken({ item }: { item: IPrivatePadProp }) {
 //   return <></>
 // }
 
-function TokenMetrics({ item }: { item: IPrivatePadProp }) {
-  return <InfoList info={item.tokenMetrics} />
+function TokenMetrics({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
+  return <InfoList isDark={isDark} info={item.tokenMetrics} />
 }
