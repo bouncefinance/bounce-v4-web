@@ -76,7 +76,6 @@ const TypeitInfo3: { [key: string]: any } = {
       '-Token Name': '$TYPE',
       '-Blockchain Network': 'BNB Chain',
       '-Price': '$0.04 USDT per $TYPE',
-      '-Maximum Allocation Per Wallet': '400 USDT',
       '-Total Token Supply': '200,000 $TYPE',
       '-Token Release Timeline': {
         '6/30/2023 4PM UTC': '20 %',
@@ -156,15 +155,17 @@ const renderObjectTree = (obj: { [key: string]: any | [key: string] }): JSX.Elem
         </Box>
       )
       elements.push(
-        <Box key={key} mt={10}>
-          <Typography sx={{ fontSize: 18 }}>{key} : </Typography> {innerElement}
+        <Box key={key} mt={20}>
+          <Typography sx={{ fontSize: 18, fontWeight: 700 }}>{key} : </Typography> {innerElement}
         </Box>
       )
     } else {
       elements.push(
         <Stack key={key} flexDirection={'row'} mt={10}>
           <Typography sx={{ width: { xs: 140, sm: 240 }, fontSize: 16, flex: 'none' }}>{key}</Typography>:
-          <Typography pl={10}>{value}</Typography>
+          <Typography sx={{ fontSize: 15 }} pl={10}>
+            {value}
+          </Typography>
         </Stack>
       )
     }
