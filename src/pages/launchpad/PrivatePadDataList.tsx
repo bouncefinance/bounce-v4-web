@@ -70,14 +70,14 @@ const SvgTwitterBlue = styled(SocialBg)`
 
 const TypeitInfo3: { [key: string]: any } = {
   'Whitelist Round': {
-    '-Time': '6/28/2023 3PM UTC ~ 6/30/2023 3PM UTC',
-    'Auction Type': 'Fixed-Price',
+    '- Time': '6/28/2023 3PM UTC ~ 6/30/2023 3PM UTC',
+    '- Auction Type': 'Fixed-Price',
     'Auction (First Come First Serve)': {
-      '-Token Name': '$TYPE',
-      '-Blockchain Network': 'BNB Chain',
-      '-Price': '$0.04 USDT per $TYPE',
-      '-Total Token Supply': '200,000 $TYPE',
-      '-Token Release Timeline': {
+      '- Token Name': '$TYPE',
+      '- Blockchain Network': 'BNB Chain',
+      '- Price': '$0.04 USDT per $TYPE',
+      '- Total Token Supply': '200,000 $TYPE',
+      '- Token Release Timeline': {
         '6/30/2023 4PM UTC': '20 %',
         '9/30/2023 4PM UTC': '26.6 %',
         '12/31/2023 4PM UTC': '26.7 %',
@@ -86,8 +86,8 @@ const TypeitInfo3: { [key: string]: any } = {
     }
   },
   'Public Round': {
-    '-Time': '6/28/2023 3PM UTC ~ 6/30/2023 3PM UTC',
-    '-Auction Type': 'Fixed-Price',
+    '- Time': '6/28/2023 3PM UTC ~ 6/30/2023 3PM UTC',
+    '- Auction Type': 'Fixed-Price',
     'Auction(First Come First Serve)': {
       'Token Name': '$TYPE',
       'Blockchain Network': 'BNB Chain',
@@ -105,21 +105,21 @@ const TypeitInfo3: { [key: string]: any } = {
 }
 const TypeitInfo4: { [key: string]: any } = {
   Tokens: {
-    TCOIN: 'This point-like system allows users to earn points, incentivizing their typing activity.',
-    'WORD (mining token)':
+    $TCOIN: 'This point-like system allows users to earn points, incentivizing their typing activity.',
+    '$WORD (mining token)':
       'This token has a total supply of 1 billion, though additional details are yet to be announced.',
-    'TYPE (governance token)': 'This token also has a total supply of 1 billion.'
+    '$TYPE (governance token)': 'This token also has a total supply of 1 billion.'
   },
   'Token Allocation': [
-    '-50% (500 million) for Type to Earn, released over 60 months.',
-    '-10% (100 million) for investment institutions, locked for 3 months, and then released over 25 months.',
-    '-2% (20 million) for IEO, 20% at TGE, 2 month cliff, 4 months linear.',
-    '-14% (140 million) for the team, locked for 6 months, then released linearly over 60 months.',
-    '-1% (10 million) for airdrops and activities, released linearly over 60 months.',
-    '-2.5% (25 million) for partners and advisors, released linearly over 24 months.',
-    '-15% (150 million) for treasury and reserves, released linearly over 60 months.',
-    '-5% (50 million) for liquidity, released linearly over 60 months.',
-    '-0.5% (5 million) for IDO, 20% TGE, released quarterly for the next 9 months.'
+    '- 50% (500 million) for Type to Earn, released over 60 months.',
+    '- 10% (100 million) for investment institutions, locked for 3 months, and then released over 25 months.',
+    '- 2% (20 million) for IEO, 20% at TGE, 2 month cliff, 4 months linear.',
+    '- 14% (140 million) for the team, locked for 6 months, then released linearly over 60 months.',
+    '- 1% (10 million) for airdrops and activities, released linearly over 60 months.',
+    '- 2.5% (25 million) for partners and advisors, released linearly over 24 months.',
+    '- 15% (150 million) for treasury and reserves, released linearly over 60 months.',
+    '- 5% (50 million) for liquidity, released linearly over 60 months.',
+    '- 0.5% (5 million) for IDO, 20% TGE, released quarterly for the next 9 months.'
   ],
   context:
     'With this allocation, it is estimated that approximately 35.37 million tokens will be available for trading after initial circulation. Given the estimated valuation of $50 million USD, the token price after initial circulation is expected to be around $1-2, assuming the entry of additional exchanges or institutions.'
@@ -142,7 +142,6 @@ const TypeitInfo5 = {
 
 const renderObjectTree = (obj: { [key: string]: any | [key: string] }): JSX.Element[] => {
   const elements = []
-
   for (const key in obj) {
     const value = obj[key]
     if (typeof value === 'object') {
@@ -156,13 +155,16 @@ const renderObjectTree = (obj: { [key: string]: any | [key: string] }): JSX.Elem
       )
       elements.push(
         <Box key={key} mt={20}>
-          <Typography sx={{ fontSize: 18, fontWeight: 700 }}>{key} : </Typography> {innerElement}
+          <Typography sx={{ fontSize: 18, fontWeight: Object.keys(TypeitInfo3).includes(key) ? 700 : 400 }}>
+            {key} :{' '}
+          </Typography>{' '}
+          {innerElement}
         </Box>
       )
     } else {
       elements.push(
-        <Stack key={key} flexDirection={'row'} mt={10}>
-          <Typography sx={{ width: { xs: 140, sm: 240 }, fontSize: 16, flex: 'none' }}>{key}</Typography>:
+        <Stack key={key} flexDirection={'row'} mt={5}>
+          <Typography sx={{ width: { xs: 140, sm: 220 }, fontSize: 16, flex: 'none' }}>{key}</Typography>:
           <Typography sx={{ fontSize: 15 }} pl={10}>
             {value}
           </Typography>
@@ -175,7 +177,7 @@ const renderObjectTree = (obj: { [key: string]: any | [key: string] }): JSX.Elem
 }
 const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
   const elArr = obj.map((item: string, index: number) => (
-    <Typography mt={10} key={index}>
+    <Typography sx={{ fontSize: 15 }} mt={10} key={index}>
       {item}
     </Typography>
   ))
@@ -215,24 +217,28 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'TypeIt Tokenomics',
         info: [
-          ...renderObjectTree(TypeitInfo4.Tokens),
+          <Box key={1}>{renderObjectTree(TypeitInfo4.Tokens)}</Box>,
           <Typography key={'h3'} variant="h4">
             Allocation
+            {renderProjectInfo(TypeitInfo4['Token Allocation'] as string[])}
           </Typography>,
-          ...renderProjectInfo(TypeitInfo4['Token Allocation'] as string[]),
           TypeitInfo4.context
         ]
       },
       {
         title: 'What makes TypeIt unique',
         info: [
-          ...renderProjectInfo(TypeitInfo5.arr1),
-          <Box key={'box'}>
-            <Typography>Participating in the TypeIt project involves different stages:</Typography>
-          </Box>,
-          ...renderProjectInfo(TypeitInfo5.arr2),
+          <Box key={'box1'}>{renderProjectInfo(TypeitInfo5.arr1)}</Box>,
           <Box key={'box2'}>
-            <Typography>{TypeitInfo5.context}</Typography>
+            <Typography sx={{ fontSize: 16, fontWeight: 600 }}>
+              Participating in the TypeIt project involves different stages:
+            </Typography>
+          </Box>,
+          <Box key={'box3'}>
+            {renderProjectInfo(TypeitInfo5.arr2)}{' '}
+            <Typography key={4} sx={{ fontSize: 15 }} mt={10}>
+              {TypeitInfo5.context}
+            </Typography>
           </Box>
         ]
       }
@@ -312,24 +318,28 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'TypeIt Tokenomics',
         info: [
-          ...renderObjectTree(TypeitInfo4.Tokens),
+          <Box key={1}>{renderObjectTree(TypeitInfo4.Tokens)}</Box>,
           <Typography key={'h3'} variant="h4">
             Allocation
+            {renderProjectInfo(TypeitInfo4['Token Allocation'] as string[])}
           </Typography>,
-          ...renderProjectInfo(TypeitInfo4['Token Allocation'] as string[]),
           TypeitInfo4.context
         ]
       },
       {
         title: 'What makes TypeIt unique',
         info: [
-          ...renderProjectInfo(TypeitInfo5.arr1),
-          <Box key={'box'}>
-            <Typography>Participating in the TypeIt project involves different stages:</Typography>
-          </Box>,
-          ...renderProjectInfo(TypeitInfo5.arr2),
+          <Box key={'box1'}>{renderProjectInfo(TypeitInfo5.arr1)}</Box>,
           <Box key={'box2'}>
-            <Typography>{TypeitInfo5.context}</Typography>
+            <Typography sx={{ fontSize: 16, fontWeight: 600 }}>
+              Participating in the TypeIt project involves different stages:
+            </Typography>
+          </Box>,
+          <Box key={'box3'}>
+            {renderProjectInfo(TypeitInfo5.arr2)}{' '}
+            <Typography key={4} sx={{ fontSize: 15 }} mt={10}>
+              {TypeitInfo5.context}
+            </Typography>
           </Box>
         ]
       }

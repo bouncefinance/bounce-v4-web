@@ -713,7 +713,8 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
         margin: '0 auto',
         display: 'flex',
         flexWrap: { xs: 'wrap', md: 'unset' },
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        letterSpacing: 0.2
       }}
     >
       <Stack spacing={10}>
@@ -734,7 +735,7 @@ function InfoList({ info }: { info: IProjectInfo[] }) {
         {Array.isArray(info[currentIdx].info) &&
           info[currentIdx].info.length > 0 &&
           info[currentIdx].info.map((item, index: number) => (
-            <Typography key={index} variant={'body1'}>
+            <Typography sx={{ fontSize: 15 }} key={index} variant={'body1'}>
               {item}
             </Typography>
           ))}
