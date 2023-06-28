@@ -36,6 +36,7 @@ import { useRequest } from 'ahooks'
 import { getInviteList } from 'api/bladeDao/index'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const ProjectInfoDarkStyle = {
   fontFamily: { it: 'Inter' },
@@ -506,7 +507,7 @@ export function InviteBtn({
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { userId } = useUserInfo()
-
+  const isSm = useBreakpoint('sm')
   let prices: IPrivatePricesInfo[] = [
     {
       title: 'Token Name',
@@ -573,17 +574,17 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
       />
       <Box
         sx={{
-          position: 'absolute',
+          position: isDark && isSm ? 'relative' : 'absolute',
           display: 'flex',
           flexDirection: 'column',
           background: `url(${item.img})`,
           top: 0,
-          right: { xs: 20, sm: '40px' },
+          right: isDark && isSm ? '' : { xs: 20, sm: '40px' },
           bottom: 0,
           borderRadius: '0 0 20px 20px',
           backgroundSize: 'cover',
           objectFit: 'scale-down',
-          left: { xs: 20, sm: '40px' }
+          left: isDark && isSm ? '' : { xs: 20, sm: '40px' }
         }}
       >
         <GrayButton
@@ -591,7 +592,8 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
             background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
             '&:hover': {
               background: isDark ? ProjectInfoDarkStyle.Head.ButtonHoverBg : ''
-            }
+            },
+            height: { xs: 'auto' }
           }}
           onClick={() => {
             nav(routes.launchpad.index)
@@ -718,11 +720,16 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
             {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
             {/*</GrayBg>*/}
           </Row>
-          <Row gap={24} mt={16} alignItems={'center'}>
+          <Row
+            gap={24}
+            mt={16}
+            alignItems={'center'}
+            sx={{ '@media(max-width:600px)': { flexWrap: 'wrap', padding: '0 20px' } }}
+          >
             <>
               {pricesComponent.flatMap((element, index) => {
                 if (index !== pricesComponent.length - 1) {
-                  return [element, <VerticalDivider key={index} />]
+                  return [element, <VerticalDivider key={index} sx={{ display: isDark && isSm ? 'none' : 'block' }} />]
                 }
                 return [element]
               })}
@@ -741,12 +748,17 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
   console.log(setTab)
 
   return (
-    <Box mt={isDark ? 0 : 120} mb={140} px={isDark ? 72 : 0}>
-      <Row justifyContent={isDark ? 'start' : 'center'}>
+    <Box mt={isDark ? 0 : 120} mb={140} sx={{ padding: isDark ? { xs: 0, sm: 72 } : 0 }}>
+      <Row
+        justifyContent={isDark ? 'start' : 'center'}
+        sx={{ overflowX: 'scroll', '&::-webkit-scrollbar': { display: 'none' } }}
+      >
         {tabs.map((t, i) => (
           <TabBg
             sx={{
               minWidth: isDark ? 'auto' : 230,
+              padding: isDark ? { xs: '24px 12px', sm: 24 } : '',
+              whiteSpace: 'pre',
               '&.select': {
                 background: `${isDark ? 'transparent' : '#ffffff'}!important`,
                 color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
@@ -764,7 +776,7 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
           </TabBg>
         ))}
       </Row>
-      {isDark && <DarkLine mb={30} />}
+      {isDark && <DarkLine mb={30} sx={{ marginLeft: { xs: 0, sm: '-72px' } }} />}
       <Box
         sx={{
           background: isDark ? 'transparent' : 'white',
@@ -782,8 +794,7 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
 const DarkLine = styled(Box)({
   width: '100vw',
   height: 1,
-  background: 'rgba(255, 255, 255, 0.20)',
-  marginLeft: '-72px'
+  background: 'rgba(255, 255, 255, 0.20)'
 })
 const ProjectInfoSubtitle = styled(H5)`
   padding: 16px 20px;
@@ -845,11 +856,15 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
         justifyContent: 'space-between'
       }}
     >
-      <Stack spacing={10}>
+      <Stack
+        spacing={10}
+        sx={{ marginBottom: { xs: '10px', sm: '0' }, width: isDark ? { xs: '100%', sm: '360px' } : '360px' }}
+      >
         {info.length &&
           info.map((i, idx) => (
             <ProjectInfoSubtitle
               sx={{
+                width: isDark ? { xs: 'auto' } : '360px',
                 background: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBg : '',
                 '&:hover,&.select': {
                   border: isDark ? '1px solid' : '',
@@ -868,7 +883,10 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
       </Stack>
       {info.length && !isDark && (
         <ProjectContentBg
-          sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' } }}
+          sx={{
+            width: { sm: '100%', md: 912 },
+            padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' }
+          }}
         >
           <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
           {Array.isArray(info[currentIdx].info) &&
