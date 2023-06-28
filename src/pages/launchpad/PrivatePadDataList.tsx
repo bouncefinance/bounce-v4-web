@@ -15,6 +15,7 @@ import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 import typeltpAvatar from './avatar/typelt.png'
 import { ChainId } from 'constants/chain'
+
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -66,22 +67,118 @@ const SvgTwitterBlue = styled(SocialBg)`
     opacity: 1;
   }
 `
-const TypeitInfo1: { [key: string]: any } = {
-  $TYPE: 'Governance Token',
-  'Total amount': '1 billion',
-  Mechanism:
-    'Release 10% monthly reduction in the first year, and subsequent production reductions will be determined by community voting'
+
+const TypeitInfo3: { [key: string]: any } = {
+  'Whitelist Round': {
+    '-Time': '6/28/2023 3PM UTC ~ 6/30/2023 3PM UTC',
+    'Auction Type': 'Fixed-Price',
+    'Auction (First Come First Serve)': {
+      '-Token Name': '$TYPE',
+      '-Blockchain Network': 'BNB Chain',
+      '-Price': '$0.04 USDT per $TYPE',
+      '-Maximum Allocation Per Wallet': '400 USDT',
+      '-Total Token Supply': '200,000 $TYPE',
+      '-Token Release Timeline': {
+        '6/30/2023 4PM UTC': '20 %',
+        '9/30/2023 4PM UTC': '26.6 %',
+        '12/31/2023 4PM UTC': '26.7 %',
+        '3/31/2024 4PM UTC': '26.7 %'
+      }
+    }
+  },
+  'Public Round': {
+    '-Time': '6/28/2023 3PM UTC ~ 6/30/2023 3PM UTC',
+    '-Auction Type': 'Fixed-Price',
+    'Auction(First Come First Serve)': {
+      'Token Name': '$TYPE',
+      'Blockchain Network': 'BNB Chain',
+      Price: '$0.05 USDT per $TYPE',
+      'Maximum Allocation Per Wallet': 'NO LIMIT',
+      'Total Token Supply': '1,800,000 $TYPE',
+      'Token Release Timeline': {
+        '6/30/2023 4PM UTC': '20 %',
+        '9/30/2023 4PM UTC': '26.6 %',
+        '12/31/2023 4PM UTC': '26.7 %',
+        '3/31/2024 4PM UTC': '26.7 %'
+      }
+    }
+  }
 }
-const TypeitInfo2: { [key: string]: any } = {
-  '50% (500 million)': 'Type to Earn, released over 60 months.',
-  '10% (100 million)': 'investment institutions, locked for 3 months, and then released over 25 months.',
-  '2% (20 million)': 'IEO, 20% at TGE, 2 month cliff, 4 months linear.',
-  '14% (140 million)': 'the team, locked for 6 months, then released linearly over 60 months.',
-  '1% (10 million)': 'airdrops and activities, released linearly over 60 months.',
-  '2.5% (25 million)': 'partners and advisors, released linearly over 24 months.',
-  '15% (150 million)': 'treasury and reserves, released linearly over 60 months.',
-  '5% (50 million)': 'liquidity, released linearly over 60 months.',
-  '0.5% (5 million)': 'IDO, 20% TGE, released quarterly for the next 9 months.'
+const TypeitInfo4: { [key: string]: any } = {
+  Tokens: {
+    TCOIN: 'This point-like system allows users to earn points, incentivizing their typing activity.',
+    'WORD (mining token)':
+      'This token has a total supply of 1 billion, though additional details are yet to be announced.',
+    'TYPE (governance token)': 'This token also has a total supply of 1 billion.'
+  },
+  'Token Allocation': [
+    '-50% (500 million) for Type to Earn, released over 60 months.',
+    '-10% (100 million) for investment institutions, locked for 3 months, and then released over 25 months.',
+    '-2% (20 million) for IEO, 20% at TGE, 2 month cliff, 4 months linear.',
+    '-14% (140 million) for the team, locked for 6 months, then released linearly over 60 months.',
+    '-1% (10 million) for airdrops and activities, released linearly over 60 months.',
+    '-2.5% (25 million) for partners and advisors, released linearly over 24 months.',
+    '-15% (150 million) for treasury and reserves, released linearly over 60 months.',
+    '-5% (50 million) for liquidity, released linearly over 60 months.',
+    '-0.5% (5 million) for IDO, 20% TGE, released quarterly for the next 9 months.'
+  ],
+  context:
+    'With this allocation, it is estimated that approximately 35.37 million tokens will be available for trading after initial circulation. Given the estimated valuation of $50 million USD, the token price after initial circulation is expected to be around $1-2, assuming the entry of additional exchanges or institutions.'
+}
+const TypeitInfo5 = {
+  arr1: [
+    'TypeIt! is transforming the mobile typing experience by seamlessly integrating economic systems and gameplay elements into a traditional keyboard. Users can earn tokens by simply typing with different keyboard skins influencing their earnings.',
+    "A standout feature of TypeIt is its fully encrypted decentralized messaging, ensuring users have complete ownership and control over their data. Security concerns are addressed with the option to disable clipboard access and switch to the system's default keyboard when needed.",
+    "TypeIt stands out with its ability to create a revenue stream for users. By using the app's keyboard in their daily mobile phone usage, users can earn tokens and participate in the project's economic ecosystem.",
+    "Here's how it works: Each keyboard theme is represented as a Non-Fungible Token (NFT), and users earn token rewards by typing with specific skins. NFTs can be upgraded to unlock greater rewards. TCOIN serves as the current output, acting as points within the system."
+  ],
+  arr2: [
+    '1. Infrastructure Stage: Focuses on finalizing technology, establishing partnerships, and setting up systems. Users earn one TCOIN per day based on the number of mystery boxes and their typing activity.',
+    '2. Genesis Mining Stage: Mystery boxes are converted into NFTs with unique qualities and attributes. TCOIN becomes important, serving as a placeholder for governance tokens. Users can upgrade and consume using TCOIN, which can later be used to produce blue boxes and mine governance tokens.',
+    '3. Formal Stage: Both red and blue boxes are activated, providing users with strategic choices. They can hatch blue boxes, sell them, trade WORD on the first line, or mine TYPE on the blue line. Specifics such as NFT attributes, token burning mechanisms, and cooldown times will be revealed during this stage.'
+  ],
+  context:
+    "Each stage of TypeIt represents a distinct phase, offering diverse opportunities for users to engage and potentially earn rewards. Don't miss the future of mobile typing with TypeIt!"
+}
+
+const renderObjectTree = (obj: { [key: string]: any | [key: string] }): JSX.Element[] => {
+  const elements = []
+
+  for (const key in obj) {
+    const value = obj[key]
+    if (typeof value === 'object') {
+      const innerElements = renderObjectTree(value)
+      const innerElement = (
+        <Box key={key}>
+          {innerElements.map((element, index) => (
+            <Box key={index}>{element}</Box>
+          ))}
+        </Box>
+      )
+      elements.push(
+        <Box key={key} mt={10}>
+          <Typography sx={{ fontSize: 18 }}>{key} : </Typography> {innerElement}
+        </Box>
+      )
+    } else {
+      elements.push(
+        <Stack key={key} flexDirection={'row'} mt={10}>
+          <Typography sx={{ width: { xs: 140, sm: 240 }, fontSize: 16, flex: 'none' }}>{key}</Typography>:
+          <Typography pl={10}>{value}</Typography>
+        </Stack>
+      )
+    }
+  }
+
+  return elements
+}
+const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
+  const elArr = obj.map((item: string, index: number) => (
+    <Typography mt={10} key={index}>
+      {item}
+    </Typography>
+  ))
+  return elArr
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   {
@@ -103,7 +200,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is TypeIt?',
         info: [
-          'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+          'TypeIt revolutionizes the mobile typing experience as the first-ever Web3 mobile keyboard built on BNB Chain. With TypeIt, users can passively earn income through day-to-day typing, becoming part of the Web3 development trend. Offering NFT keyboard skins and immersive GameFi and Socialfi scenarios, TypeIt integrates privacy measures by encrypting and locally storing user data, ensuring utmost security.',
+          'As the vital bridge connecting the Web3 and Web2 worlds, TypeIt extends beyond a mere input method, empowering users to actively participate in the digital economy. Founded and supported by experienced leaders from Huobi, MEXC, TritiumDAO, and backed by significant investments from industry giants like MVentures, Gate Labs, BitMart Exchange, and Cipholio Ventures, TypeIt is seeking investment partners to join their IEO round and contribute to scaling the product.'
         ]
       },
       {
@@ -112,42 +210,29 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
         ]
       },
+      { title: 'TypeIt IDO Details', info: renderObjectTree(TypeitInfo3) },
       {
-        title: 'Tokenomics',
+        title: 'TypeIt Tokenomics',
         info: [
-          <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
-            <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
-              {Object.keys(TypeitInfo1).map((t, i) => (
-                <Stack key={i} flexDirection={'row'} mt={10}>
-                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
-                  <Typography pl={10} sx={{ fontSize: 14 }}>
-                    {TypeitInfo1[t]}
-                  </Typography>
-                </Stack>
-              ))}
-              <Typography variant="h2" my={10}>
-                Allocation
-              </Typography>
-              {Object.keys(TypeitInfo2).map((t, i) => (
-                <Stack key={`a${i}`} flexDirection={'row'} mt={10}>
-                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
-                  <Typography pl={10} sx={{ fontSize: 14 }}>
-                    {TypeitInfo2[t]}
-                  </Typography>
-                </Stack>
-              ))}
-            </Box>
-          </Stack>
+          ...renderObjectTree(TypeitInfo4.Tokens),
+          <Typography key={'h3'} variant="h4">
+            Allocation
+          </Typography>,
+          ...renderProjectInfo(TypeitInfo4['Token Allocation'] as string[]),
+          TypeitInfo4.context
         ]
       },
       {
-        title: 'Methods of Token Unlocking',
+        title: 'What makes TypeIt unique',
         info: [
-          'staged release:',
-          '- TGE: 20%',
-          '- 3-month interval: 26.6%',
-          '- 3-month interval: 26.7%',
-          '- 3-month interval: 26.7%'
+          ...renderProjectInfo(TypeitInfo5.arr1),
+          <Box key={'box'}>
+            <Typography>Participating in the TypeIt project involves different stages:</Typography>
+          </Box>,
+          ...renderProjectInfo(TypeitInfo5.arr2),
+          <Box key={'box2'}>
+            <Typography>{TypeitInfo5.context}</Typography>
+          </Box>
         ]
       }
     ],
@@ -212,7 +297,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is TypeIt?',
         info: [
-          'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+          'TypeIt revolutionizes the mobile typing experience as the first-ever Web3 mobile keyboard built on BNB Chain. With TypeIt, users can passively earn income through day-to-day typing, becoming part of the Web3 development trend. Offering NFT keyboard skins and immersive GameFi and Socialfi scenarios, TypeIt integrates privacy measures by encrypting and locally storing user data, ensuring utmost security.',
+          'As the vital bridge connecting the Web3 and Web2 worlds, TypeIt extends beyond a mere input method, empowering users to actively participate in the digital economy. Founded and supported by experienced leaders from Huobi, MEXC, TritiumDAO, and backed by significant investments from industry giants like MVentures, Gate Labs, BitMart Exchange, and Cipholio Ventures, TypeIt is seeking investment partners to join their IEO round and contribute to scaling the product.'
         ]
       },
       {
@@ -221,42 +307,29 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
         ]
       },
+      { title: 'TypeIt IDO Details', info: renderObjectTree(TypeitInfo3) },
       {
-        title: 'Tokenomics',
+        title: 'TypeIt Tokenomics',
         info: [
-          <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
-            <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
-              {Object.keys(TypeitInfo1).map((t, i) => (
-                <Stack key={i} flexDirection={'row'} mt={10}>
-                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
-                  <Typography pl={10} sx={{ fontSize: 14 }}>
-                    {TypeitInfo1[t]}
-                  </Typography>
-                </Stack>
-              ))}
-              <Typography variant="h2" my={10}>
-                Allocation
-              </Typography>
-              {Object.keys(TypeitInfo2).map((t, i) => (
-                <Stack key={`a${i}`} flexDirection={'row'} mt={10}>
-                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
-                  <Typography pl={10} sx={{ fontSize: 14 }}>
-                    {TypeitInfo2[t]}
-                  </Typography>
-                </Stack>
-              ))}
-            </Box>
-          </Stack>
+          ...renderObjectTree(TypeitInfo4.Tokens),
+          <Typography key={'h3'} variant="h4">
+            Allocation
+          </Typography>,
+          ...renderProjectInfo(TypeitInfo4['Token Allocation'] as string[]),
+          TypeitInfo4.context
         ]
       },
       {
-        title: 'Methods of Token Unlocking',
+        title: 'What makes TypeIt unique',
         info: [
-          'staged release:',
-          '- TGE: 20%',
-          '- 3-month interval: 26.6%',
-          '- 3-month interval: 26.7%',
-          '- 3-month interval: 26.7%'
+          ...renderProjectInfo(TypeitInfo5.arr1),
+          <Box key={'box'}>
+            <Typography>Participating in the TypeIt project involves different stages:</Typography>
+          </Box>,
+          ...renderProjectInfo(TypeitInfo5.arr2),
+          <Box key={'box2'}>
+            <Typography>{TypeitInfo5.context}</Typography>
+          </Box>
         ]
       }
     ],
