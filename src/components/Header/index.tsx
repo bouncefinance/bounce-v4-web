@@ -238,7 +238,7 @@ export default function Header() {
         }}
       />
       <WalletIcon />
-      <Typography variant="h5" ml={5}>
+      <Typography variant="h5" ml={5} sx={{ whiteSpace: 'nowrap' }}>
         Connect wallet
       </Typography>
     </Button>
