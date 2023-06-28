@@ -6,9 +6,12 @@ import UserBlock from './components/userBlock'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import ActionHistory from './components/auctionHistory'
-import { DutchAuctionPoolProp } from 'api/pool/type'
-const DutchCreatePage = () => {
+import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+
+const DutchAuctionPoolId = () => {
   const theme = useTheme()
+  const { account } = useActiveWeb3React()
   const myAnimation = keyframes`
   0% {
     transform: translateX(0px,0px); }
@@ -43,99 +46,16 @@ const DutchCreatePage = () => {
     transform: translate(-100px, 100px);
   }
 `
-  const testCurrencyAmount = undefined
-  const testPoolInfo: DutchAuctionPoolProp = {
-    currencyAmountTotal0: testCurrencyAmount,
-    currencyAmountTotal1: testCurrencyAmount,
-    currencySwappedAmount0: testCurrencyAmount,
-    currencySwappedTotal1: testCurrencyAmount,
-    highestPrice: testCurrencyAmount,
-    lowestPrice: testCurrencyAmount,
-    currencyCurrentPrice: testCurrencyAmount,
-    currencyLowestBidPrice: testCurrencyAmount,
-    nextRoundInSeconds: 100000,
-    times: 10,
-    id: 18198,
-    ethChainId: 25,
-    poolPrice: 20,
-    chainId: 25,
-    tokenType: 2,
-    contract: '0x9B8B850d00c24bC2684530388F8A02C1Cf9d023b',
-    createdTxHash: '0x18faae9990031df8ac606f73ad04636af79cb4293b93afa901f6ab7840063aa1',
-    poolId: '25',
-    category: 1,
-    creator: '0x1ED99D7564B93E9a1086F36ea42bad5B7dC4923F',
-    creatorClaimed: false,
-    name: 'zatrefund03',
-    description: '',
-    posts: [],
-    enableWhiteList: false,
-    token0: {
-      address: '0x47EF4A5641992A72CFd57b9406c9D9cefEE8e0C4',
-      decimals: 18,
-      name: 'zkApes token',
-      symbol: 'ZAT',
-      thumbUrl: '',
-      smallUrl: '',
-      largeUrl: '',
-      coingeckoId: '',
-      currentPrice: 0
-    },
-    openAt: 1687973041,
-    closeAt: 1688973041,
-    claimAt: 1689973041,
-    tokenId: '',
-    status: 4,
-    token1: {
-      address: '0x0000000000000000000000000000000000000000',
-      decimals: 18,
-      name: 'Ethereum',
-      symbol: 'eth',
-      thumbUrl: 'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880',
-      smallUrl: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
-      largeUrl: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
-      coingeckoId: 'ethereum',
-      currentPrice: 1881.9
-    },
-    amountTotal0: '10000000000000000000',
-    amountTotal1: '100000000000000',
-    swappedAmount0: '10000000000000000000',
-    currentTotal0: '0',
-    currentTotal1: '100000000000000',
-    ratio: '0.00001',
-    maxAmount1PerWallet: '0',
-    participant: {
-      address: '',
-      swappedAmount0: '',
-      claimed: false,
-      regreted: false,
-      currencySwappedAmount0: undefined,
-      currencySwappedAmount1: undefined,
-      currencyCurReleasableAmount: undefined,
-      currencyCurClaimableAmount: undefined,
-      currencyMyReleased: undefined
-    },
-    creatorUserInfo: {
-      userId: 3018,
-      name: '',
-      avatar: '',
-      publicRole: [],
-      userType: 1,
-      companyName: '',
-      companyAvatar: '',
-      companyIntroduction: '',
-      isVerify: 0
-    },
-    likeInfo: {
-      likeCount: 0,
-      dislikeCount: 0,
-      myLike: 1,
-      myDislike: 1
-    },
-    ifCollect: false
+  const { poolInfo, loading } = useDutchAuctionInfo()
+  console.log('data>>>', poolInfo, loading)
+  const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
+  if (!poolInfo) {
+    return (
+      <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <BounceAnime />
+      </Box>
+    )
   }
-  const { account } = useActiveWeb3React()
-  const isCreator = useMemo(() => testPoolInfo.creator === account, [account, testPoolInfo.creator])
   return (
     <Box
       sx={{
@@ -209,8 +129,8 @@ const DutchCreatePage = () => {
                   minHeight: '100vh'
                 }}
               >
-                {isCreator ? <CreatorBlock poolInfo={testPoolInfo} /> : <UserBlock poolInfo={testPoolInfo} />}
-                <ActionHistory poolInfo={testPoolInfo}></ActionHistory>
+                {isCreator ? <CreatorBlock poolInfo={poolInfo} /> : <UserBlock poolInfo={poolInfo} />}
+                <ActionHistory poolInfo={poolInfo}></ActionHistory>
               </Box>
             </Grid>
           </Grid>
@@ -219,4 +139,4 @@ const DutchCreatePage = () => {
     </Box>
   )
 }
-export default DutchCreatePage
+export default DutchAuctionPoolId

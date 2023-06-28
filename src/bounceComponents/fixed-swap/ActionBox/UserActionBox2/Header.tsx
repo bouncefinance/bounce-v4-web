@@ -10,7 +10,6 @@ const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoo
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
       <Typography variant="h2">{isUserJoinedPool ? 'You Joined' : 'Join The Pool'}</Typography>
-
       {poolInfo && (
         <PoolStatusBox
           status={poolInfo.status}

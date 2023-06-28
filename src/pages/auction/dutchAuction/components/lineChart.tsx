@@ -9,6 +9,7 @@ import { RightText } from './creatorBlock/auctionInfo'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
 import { PoolStatus } from 'api/pool/type'
+import { DutchAuctionPoolProp } from 'api/pool/type'
 
 interface PointerItem {
   time: number | string
@@ -71,7 +72,7 @@ export class ToolTip {
     }
   }
 }
-const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: any }) => {
+const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: DutchAuctionPoolProp }) => {
   const chartContainerRef = useRef<any>()
   const colorObj = useMemo(() => {
     return poolInfo.status === PoolStatus.Upcoming
@@ -170,10 +171,10 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: any 
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [data])
+  }, [colorObj, data, poolInfo.token0.symbol])
   return <Box ref={chartContainerRef}></Box>
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: any }) => {
+const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const startTime = 1687835547
   const endTime = 1687935547
   const startPrice = 20

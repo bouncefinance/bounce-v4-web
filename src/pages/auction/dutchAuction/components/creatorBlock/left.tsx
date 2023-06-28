@@ -2,6 +2,8 @@ import { Box, Tabs, Tab, styled } from '@mui/material'
 import { useState } from 'react'
 import AuctionInfo from './auctionInfo'
 import LineChart from '../lineChart'
+import { DutchAuctionPoolProp } from 'api/pool/type'
+
 const LeftTabs = styled(Tabs)(() => ({
   height: '37px',
   '.MuiButtonBase-root': {
@@ -20,7 +22,7 @@ function a11yProps(index: number) {
     'aria-controls': `simple-tabpanel-${index}`
   }
 }
-const Left = ({ poolInfo }: { poolInfo: any }) => {
+const Left = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [value, setValue] = useState<number>(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)

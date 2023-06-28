@@ -2,7 +2,9 @@ import { Box } from '@mui/material'
 import UserPoolStatusBox from './poolStatus'
 import LeftBox from '../creatorBlock/left'
 import RightBox from './right'
-const UserBlock = ({ poolInfo }: { poolInfo: any }) => {
+import { DutchAuctionPoolProp } from 'api/pool/type'
+
+const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   return (
     <Box
       sx={{

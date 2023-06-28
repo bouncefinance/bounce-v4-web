@@ -508,7 +508,10 @@ const AuctionContent = () => {
             isPass = !!(item.endTime && Number(item.endTime) * 1000 <= nowTime)
             isPass && (item.status = 'Past auction')
           } else if (values.status === 'Live auction') {
-            if (item.startTime && item.endTime) {
+            if (item.startTime && !item.endTime) {
+              isPass = Number(item.startTime) * 1000 <= nowTime
+              isPass && (item.status = 'Live auction')
+            } else if (item.startTime && item.endTime) {
               isPass = !!(Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime)
               isPass && (item.status = 'Live auction')
             } else {
