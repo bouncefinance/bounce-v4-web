@@ -130,6 +130,7 @@ const transparentRoutes = [
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
   routes.thirdPart.TypeitAuction,
+  routes.thirdPart.TypeitAuctionWhitelist,
   routes.thirdPart.poseiswapAuction
 ]
 
@@ -139,7 +140,8 @@ export const whiteLogoRoutes = [
   routes.launchpad.bladeDao,
   routes.thirdPart.foundoDetail,
   routes.launchpad.bladeDaoInfo,
-  routes.thirdPart.TypeitAuction
+  routes.thirdPart.TypeitAuction,
+  routes.thirdPart.TypeitAuctionWhitelist
 ]
 
 export default function Header() {
