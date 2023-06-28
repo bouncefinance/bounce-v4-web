@@ -2,7 +2,9 @@ import { Box } from '@mui/material'
 import CreatorPoolStatusBox from './poolStatus'
 import LeftBox from './left'
 import RightBox from './right'
-const CreatorBlock = ({ poolInfo }: { poolInfo: any }) => {
+import { DutchAuctionPoolProp } from 'api/pool/type'
+
+const CreatorBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   return (
     <Box
       sx={{
@@ -23,7 +25,8 @@ const CreatorBlock = ({ poolInfo }: { poolInfo: any }) => {
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'center',
-          alignItems: 'flex-start'
+          alignItems: 'flex-start',
+          paddingTop: '30px'
         }}
         gap={'30px'}
       >

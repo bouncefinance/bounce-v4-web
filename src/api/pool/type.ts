@@ -270,12 +270,12 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
 }
 
 export interface DutchAuctionPoolProp extends FixedSwapPool {
-  currencyAmountTotal0: CurrencyAmount
-  currencyAmountTotal1: CurrencyAmount
-  currencySwappedAmount0: CurrencyAmount
+  currencyAmountTotal0: CurrencyAmount | undefined
+  currencyAmountTotal1: CurrencyAmount | undefined
+  currencySwappedAmount0: CurrencyAmount | undefined
   // currencyMaxAmount1PerWallet: CurrencyAmount
   // currencySurplusTotal0: CurrencyAmount
-  currencySwappedTotal1: CurrencyAmount
+  currencySwappedTotal1: CurrencyAmount | undefined
   highestPrice: CurrencyAmount | undefined
   lowestPrice: CurrencyAmount | undefined
   currencyCurrentPrice: CurrencyAmount | undefined

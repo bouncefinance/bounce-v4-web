@@ -3,6 +3,13 @@ import { ReactComponent as OpenChartIcon } from 'assets/imgs/dutchAuction/openCh
 import { useMemo, useRef, useEffect } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
+import moment from 'moment'
+import PoolInfoItem from './poolInfoItem'
+import { RightText } from './creatorBlock/auctionInfo'
+import PoolProgress from 'bounceComponents/common/PoolProgress'
+import { formatNumber } from 'utils/number'
+import { PoolStatus } from 'api/pool/type'
+
 interface PointerItem {
   time: number | string
   value: number
@@ -17,13 +24,14 @@ const OpenChartImg = styled(OpenChartIcon)(() => ({
   }
 }))
 interface ToolTipParam {
-  dateStr?: string
+  dateStr?: string | number
   x?: string | number
   y?: string | number
   bgColor?: string
   display?: boolean
+  token0Price?: string
 }
-class ToolTip {
+export class ToolTip {
   el: any
   constructor({ dateStr, x, y, bgColor, display }: ToolTipParam) {
     console.log('实例化...')
@@ -44,47 +52,46 @@ class ToolTip {
       this.update({ dateStr, x, y, bgColor, display })
     }
   }
-  update({ dateStr, x, y, bgColor, display }: ToolTipParam) {
+  update({ dateStr, x, y, bgColor, display, token0Price }: ToolTipParam) {
     if (!this.el) {
       return this.createToolTip({ dateStr, x, y })
     } else {
+      this.el.innerHTML = `
+      <p style="font-family: 'Inter';font-size: 12px;color:#fff;line-height:17px;margin:0;">${dateStr}</p>
+      <p style="font-family: 'Inter';font-size: 12px;color:#E1F25C;line-height:17px;margin:0;white-space:nowrap;">${token0Price}</p>
+      `
       this.el.setAttribute(
         'style',
-        `width: 128px; height: 50px; position: absolute; display: ${
-          display ? 'block' : 'none'
-        }; padding: 8px; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid; border-radius: 2px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
+        `width: 132px; position: absolute; display: ${
+          display ? 'flex' : 'none'
+        }; padding: 8px;flex-flow: column nowrap; justify-content:flex-start;align-items:flex-start; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #E1F25C; border-radius: 8px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
       )
       this.el.style.background = 'rgba(18, 18, 18, 0.6)'
       this.el.style.color = 'black'
-      this.el.style.borderColor = bgColor ? bgColor : '#2962FF'
     }
   }
-  setLeft({ x, y, bgColor, display }: ToolTipParam) {
-    this.el.setAttribute(
-      'style',
-      `width: 128px; height: 50px; position: absolute; display: ${
-        display ? 'block' : 'none'
-      }; padding: 8px; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid; border-radius: 2px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
-    )
-    this.el.style.transform = 'translate3D(-100%, 0, 0)'
-    this.el.style.background = 'rgba(18, 18, 18, 0.6)'
-    this.el.style.color = 'black'
-    this.el.style.borderColor = bgColor ? bgColor : '#2962FF'
-  }
-  setRight({ x, y, bgColor, display }: ToolTipParam) {
-    this.el.setAttribute(
-      'style',
-      `width: 128px; height: 50px; position: absolute; display: ${
-        display ? 'block' : 'none'
-      }; padding: 8px; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid; border-radius: 2px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
-    )
-    this.el.style.background = 'rgba(18, 18, 18, 0.6)'
-    this.el.style.color = 'black'
-    this.el.style.borderColor = bgColor ? bgColor : '#2962FF'
-  }
 }
-const LineChartView = ({ data }: { data: PointerItem[] }) => {
+const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: any }) => {
   const chartContainerRef = useRef<any>()
+  const colorObj = useMemo(() => {
+    return poolInfo.status === PoolStatus.Upcoming
+      ? {
+          lineColor: '#959595',
+          topColor: 'rgba(149, 149, 149, 0.2)',
+          bottomColor: 'rgba(149, 149, 149, 0.2)'
+        }
+      : poolInfo.status === PoolStatus.Live
+      ? {
+          lineColor: '#20994B',
+          topColor: '#20994B',
+          bottomColor: 'rgba(32, 153, 75, 0.2)'
+        }
+      : {
+          lineColor: '#2B51DA',
+          topColor: '#2B51DA',
+          bottomColor: 'rgba(43, 81, 218, 0.2)'
+        }
+  }, [poolInfo])
   useEffect(() => {
     const chart = createChart(chartContainerRef.current, {
       layout: {
@@ -119,9 +126,7 @@ const LineChartView = ({ data }: { data: PointerItem[] }) => {
     chart.timeScale().fitContent()
     // set line
     const newSeries = chart.addAreaSeries({
-      lineColor: '#959595',
-      topColor: 'rgba(149, 149, 149, 0.2)',
-      bottomColor: 'rgba(149, 149, 149, 0.2)'
+      ...colorObj
     })
     newSeries.setData(data as LineData[])
     // set current time data
@@ -139,9 +144,15 @@ const LineChartView = ({ data }: { data: PointerItem[] }) => {
     const TipsTool = new ToolTip({ dateStr: '' })
     chartContainerRef.current.appendChild(TipsTool.el)
     chart.subscribeCrosshairMove((param: MouseEventParams) => {
-      const data = param?.seriesPrices?.values().next().value
+      const currentValue = param?.seriesPrices?.values().next().value
+      let dateStr = ''
+      const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
+      if (resultItem && resultItem?.time) {
+        dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
+      }
+      const token0Price = currentValue + poolInfo.token0.symbol
       const x = Number(param?.point?.x) + 110
-      const y = Number(newSeries.priceToCoordinate(data)) + 200
+      const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
       if (
         param.point === undefined ||
         !param.time ||
@@ -150,19 +161,10 @@ const LineChartView = ({ data }: { data: PointerItem[] }) => {
         param?.point?.y < 0 ||
         param?.point?.y > chartContainerRef.current.clientHeight
       ) {
-        TipsTool.update({ dateStr: data, x, y, display: false })
+        TipsTool.update({ dateStr, x, y, display: false })
         return
       }
-      //   if (x > chartContainerRef.current.clientWidth - 128 && x < chartContainerRef.current.clientWidth) {
-      //     TipsTool.setRight({ x, y })
-      //     return
-      //   }
-      //   if (x > 0 && x < 128) {
-      //     TipsTool.setLeft({ x, y })
-      //     return
-      //   }
-      console.log(`The data point is at position: ${x}, ${y}`)
-      TipsTool.update({ dateStr: data, x, y, display: true })
+      TipsTool.update({ dateStr, x, y, display: true, token0Price })
     })
     return () => {
       window.removeEventListener('resize', handleResize)
@@ -192,7 +194,21 @@ const LineChartSection = ({ poolInfo }: { poolInfo: any }) => {
     })
     return dataPoint
   }, [startTime, endTime, startPrice, endPrice, segments])
-  console.log('lineData>>>', lineData)
+  const swapedPercent = poolInfo?.currencySwappedAmount0
+    ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
+    : undefined
+  const swappedAmount0 = poolInfo.swappedAmount0
+    ? formatNumber(poolInfo.swappedAmount0, {
+        unit: poolInfo.token0.decimals,
+        decimalPlaces: poolInfo.token0.decimals
+      })
+    : undefined
+  const amountTotal0 = poolInfo.amountTotal0
+    ? formatNumber(poolInfo.amountTotal0, {
+        unit: poolInfo.token0.decimals,
+        decimalPlaces: poolInfo.token0.decimals
+      })
+    : undefined
   return (
     <Box
       sx={{
@@ -218,8 +234,22 @@ const LineChartSection = ({ poolInfo }: { poolInfo: any }) => {
         </Typography>
         <OpenChartImg />
       </Stack>
-      <LineChartView data={lineData} />
-      {poolInfo.name}
+      <LineChartView data={lineData} poolInfo={poolInfo} />
+      <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
+        <RightText>0.25 ETH ($0.8035)</RightText>
+      </PoolInfoItem>
+      <PoolInfoItem title={'Reserve price'}>
+        <RightText>0.15 ETH ($0.3035)</RightText>
+      </PoolInfoItem>
+      <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>
+      <PoolInfoItem
+        title={swappedAmount0 + 'Auction'}
+        sx={{
+          marginTop: '4px'
+        }}
+      >
+        <RightText>/ {amountTotal0} Auction</RightText>
+      </PoolInfoItem>
     </Box>
   )
 }

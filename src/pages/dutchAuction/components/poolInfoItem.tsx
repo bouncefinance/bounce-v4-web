@@ -16,7 +16,7 @@ interface PoolInfoItemProps {
 
 const PoolInfoItem = ({ title, tip, children, sx }: PoolInfoItemProps): JSX.Element => {
   return (
-    <Box sx={{ ...sx, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', ...sx }}>
       <Box sx={{ display: 'flex', alignItems: 'center', color: '#908E96' }}>
         <SubTitle>{title}</SubTitle>
         {tip ? (

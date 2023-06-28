@@ -16,9 +16,7 @@ const usePoolHistory = (
       if (typeof poolId !== 'string') {
         return Promise.reject(new Error('Invalid poolId'))
       }
-
       const params = _event ? { event: _event } : {}
-
       const response = await getPoolHistory({
         poolId,
         category,
@@ -27,7 +25,6 @@ const usePoolHistory = (
         tokenType: getTokenType(category),
         ...params
       })
-
       return response.data
     },
     {
