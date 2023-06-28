@@ -13,7 +13,7 @@ import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
-import typeltpAvatar from './avatar/typelt.jpeg'
+import typeltpAvatar from './avatar/typelt.png'
 import { ChainId } from 'constants/chain'
 export interface IProjectInfo {
   title: string
@@ -67,21 +67,21 @@ const SvgTwitterBlue = styled(SocialBg)`
   }
 `
 const TypeitInfo1: { [key: string]: any } = {
-  TYPE: 'Governance Token',
+  $TYPE: 'Governance Token',
   'Total amount': '1 billion',
   Mechanism:
     'Release 10% monthly reduction in the first year, and subsequent production reductions will be determined by community voting'
 }
 const TypeitInfo2: { [key: string]: any } = {
-  '50%': '500 million, Type to Earn output',
-  '10%': '100 million, investment institution, lockdown for 3 months, and release quarterly for the next 24 months',
-  '2%': '20 million, IEO, TGE fully unlocked',
-  '0.5%': '5 million, IDO, 20% TGE, released quarterly for the next 6 months',
-  '14%': '140 million, team, lockdown for 6 months, linear release after 60 months',
-  '1%': '10 million, air drop and activity, linear release in 60 months',
-  '2.5%': '25 million, partners and consultants, linear release within 24 months',
-  '15%': '150 million, national treasury and reserves, linear release within 60 months',
-  '5%': '50 million, liquidity, linear release within 60 months'
+  '50% (500 million)': 'Type to Earn, released over 60 months.',
+  '10% (100 million)': 'investment institutions, locked for 3 months, and then released over 25 months.',
+  '2% (20 million)': 'IEO, 20% at TGE, 2 month cliff, 4 months linear.',
+  '14% (140 million)': 'the team, locked for 6 months, then released linearly over 60 months.',
+  '1% (10 million)': 'airdrops and activities, released linearly over 60 months.',
+  '2.5% (25 million)': 'partners and advisors, released linearly over 24 months.',
+  '15% (150 million)': 'treasury and reserves, released linearly over 60 months.',
+  '5% (50 million)': 'liquidity, released linearly over 60 months.',
+  '0.5% (5 million)': 'IDO, 20% TGE, released quarterly for the next 9 months.'
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   {
@@ -103,7 +103,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is TypeIt?',
         info: [
-          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+          'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
         ]
       },
       {
@@ -152,7 +152,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
+    desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
     social: [
       <Link key={0} href="https://www.typeit.net/" target="_blank">
         <Web />
@@ -212,7 +212,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is TypeIt?',
         info: [
-          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+          'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
         ]
       },
       {
@@ -261,7 +261,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
+    desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
     social: [
       <Link key={0} href="https://www.typeit.net/" target="_blank">
         <Web />
@@ -340,7 +340,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Token Metrics',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
@@ -509,7 +509,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Key Features and Highlights',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
@@ -605,7 +605,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Key Features and Highlights',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
@@ -701,7 +701,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Key Features and Highlights',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
