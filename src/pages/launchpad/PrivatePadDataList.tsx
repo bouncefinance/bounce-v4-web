@@ -97,8 +97,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 56,
     tokenName: 'TYPE',
     whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
-    upcomingLink: '/launchpad/typeit/705',
-    liveLink: '/launchpad/typeit/705',
+    upcomingLink: '/launchpad/typeit/707',
+    liveLink: '/launchpad/typeit/707',
     projectInfo: [
       {
         title: 'What is TypeIt?',
@@ -206,8 +206,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 56,
     tokenName: 'TYPE',
     whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
-    upcomingLink: '/launchpad/typeit/whitelist/706',
-    liveLink: '/launchpad/typeit/whitelist/706',
+    upcomingLink: '/launchpad/typeit/whitelist/708',
+    liveLink: '/launchpad/typeit/whitelist/708',
     projectInfo: [
       {
         title: 'What is TypeIt?',

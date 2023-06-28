@@ -47,7 +47,7 @@ function UserBlock() {
     )
   }
 
-  if (poolInfo.id !== 706) {
+  if (poolInfo.id !== 708) {
     return null
   }
 
