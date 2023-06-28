@@ -13,10 +13,8 @@ import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
-import typeltpAvatar from './avatar/typelt.jpeg'
+import typeltpAvatar from './avatar/typelt.png'
 import { ChainId } from 'constants/chain'
-import Image from 'components/Image'
-import TypeitSheet from './imgs/typeot-data-sheet.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -68,22 +66,29 @@ const SvgTwitterBlue = styled(SocialBg)`
     opacity: 1;
   }
 `
-const TypeitInfo: { [key: string]: any } = {
-  Investors: '10.00%',
-  Partner: '2.00%',
-  Team: '14.00%',
-  'Airdrop & Events': '1.00%',
-  Liquidity: '5.00%',
-  IEO: '3.00%',
-  Reserve: '15.00%',
-  T2E: '50.00%'
+const TypeitInfo1: { [key: string]: any } = {
+  $TYPE: 'Governance Token',
+  'Total amount': '1 billion',
+  Mechanism:
+    'Release 10% monthly reduction in the first year, and subsequent production reductions will be determined by community voting'
+}
+const TypeitInfo2: { [key: string]: any } = {
+  '50% (500 million)': 'Type to Earn, released over 60 months.',
+  '10% (100 million)': 'investment institutions, locked for 3 months, and then released over 25 months.',
+  '2% (20 million)': 'IEO, 20% at TGE, 2 month cliff, 4 months linear.',
+  '14% (140 million)': 'the team, locked for 6 months, then released linearly over 60 months.',
+  '1% (10 million)': 'airdrops and activities, released linearly over 60 months.',
+  '2.5% (25 million)': 'partners and advisors, released linearly over 24 months.',
+  '15% (150 million)': 'treasury and reserves, released linearly over 60 months.',
+  '5% (50 million)': 'liquidity, released linearly over 60 months.',
+  '0.5% (5 million)': 'IDO, 20% TGE, released quarterly for the next 9 months.'
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 6,
     liveTimeStamp: {
       start: 1687964400000,
-      end: 1687964400000
+      end: 1688137200000
     },
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
@@ -92,13 +97,13 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 56,
     tokenName: 'TYPE',
     whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
-    upcomingLink: '/launchpad/typeit',
-    liveLink: '/launchpad/typeit',
+    upcomingLink: '/launchpad/typeit/707',
+    liveLink: '/launchpad/typeit/707',
     projectInfo: [
       {
         title: 'What is TypeIt?',
         info: [
-          'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+          'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
         ]
       },
       {
@@ -112,17 +117,25 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
             <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
-              {Object.keys(TypeitInfo).map((t, i) => (
+              {Object.keys(TypeitInfo1).map((t, i) => (
                 <Stack key={i} flexDirection={'row'} mt={10}>
                   <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
                   <Typography pl={10} sx={{ fontSize: 14 }}>
-                    {TypeitInfo[t]}
+                    {TypeitInfo1[t]}
                   </Typography>
                 </Stack>
               ))}
-            </Box>
-            <Box sx={{ width: '100%', maxWidth: 500 }}>
-              <Image src={TypeitSheet} style={{ width: '100%', objectFit: 'cover' }} />
+              <Typography variant="h2" my={10}>
+                Allocation
+              </Typography>
+              {Object.keys(TypeitInfo2).map((t, i) => (
+                <Stack key={`a${i}`} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo2[t]}
+                  </Typography>
+                </Stack>
+              ))}
             </Box>
           </Stack>
         ]
@@ -139,7 +152,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Typelt is the first project to introduce thetype-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
+    desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
     social: [
       <Link key={0} href="https://www.typeit.net/" target="_blank">
         <Web />
@@ -176,7 +189,116 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     moreData: [
       { title: 'Token Name', content: '$TYPE' },
       { title: 'Token Price', content: '0.05 USDT' },
-      { title: 'Token Amount', content: '2,000,000' },
+      { title: 'Token Amount', content: '1,800,000' },
+      { title: 'Blockchain', content: 'BNB Chain' }
+    ]
+  },
+  {
+    keyId: 7,
+    liveTimeStamp: {
+      start: 1687964400000,
+      end: 1688137200000
+    },
+    poolTypeName: 'Whitelist',
+    img: 'https://images-v3.bounce.finance/6e179a231f6330d284676a0ec1ab3359-1687746437.png',
+    avatar: typeltpAvatar,
+    title: 'TypeIt',
+    chainId: 56,
+    tokenName: 'TYPE',
+    whitePaperLink: 'https://typeit.gitbook.io/web3keyboard/whitepaper/executive-summary',
+    upcomingLink: '/launchpad/typeit/whitelist/708',
+    liveLink: '/launchpad/typeit/whitelist/708',
+    projectInfo: [
+      {
+        title: 'What is TypeIt?',
+        info: [
+          'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.'
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          'We are founded and backed by experienced leaders from Huobi, MEXC, TritiumDAO, and have received investments from MVentures, Gate Labs, BitMart Exchange, Cipholio Ventures, and many more!'
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Stack key={1} sx={{ flexDirection: { xs: 'column', lg: 'row' } }}>
+            <Box sx={{ margin: '0 auto', mr: { xs: 'auto', lg: 30 }, mb: { xs: 20, lg: 0 } }}>
+              {Object.keys(TypeitInfo1).map((t, i) => (
+                <Stack key={i} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo1[t]}
+                  </Typography>
+                </Stack>
+              ))}
+              <Typography variant="h2" my={10}>
+                Allocation
+              </Typography>
+              {Object.keys(TypeitInfo2).map((t, i) => (
+                <Stack key={`a${i}`} flexDirection={'row'} mt={10}>
+                  <Typography sx={{ minWidth: 140, fontSize: 16 }}> {t} </Typography> :
+                  <Typography pl={10} sx={{ fontSize: 14 }}>
+                    {TypeitInfo2[t]}
+                  </Typography>
+                </Stack>
+              ))}
+            </Box>
+          </Stack>
+        ]
+      },
+      {
+        title: 'Methods of Token Unlocking',
+        info: [
+          'staged release:',
+          '- TGE: 20%',
+          '- 3-month interval: 26.6%',
+          '- 3-month interval: 26.7%',
+          '- 3-month interval: 26.7%'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
+    social: [
+      <Link key={0} href="https://www.typeit.net/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/typeit_" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/typeit" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/typeit" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/typeit_official/"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link
+        key={6}
+        sx={{ width: '41.5px!important', height: '41.5px!important' }}
+        href=" https://www.linkedin.com/company/typeit-official"
+        target="_blank"
+      >
+        <LinkinSvg width={41.5} height={41.5} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$TYPE' },
+      { title: 'Token Price', content: '0.04 USDT' },
+      { title: 'Token Amount', content: '200,000' },
       { title: 'Blockchain', content: 'BNB Chain' }
     ]
   },
@@ -184,7 +306,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     keyId: 2,
     liveTimeStamp: {
       start: 1687046400000,
-      end: 1687478400000
+      // end: 1687478400000
+      end: 0
     },
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/46364b6b9429913d86d24cb30e638685-1683799254.png',
@@ -217,7 +340,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Token Metrics',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
@@ -386,7 +509,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Key Features and Highlights',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
@@ -482,7 +605,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Key Features and Highlights',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],
@@ -578,7 +701,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Key Features and Highlights',
         info: [
-          'The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
+          'The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs, institutional and retail.Ondo is based upon three core principles:Leader in Facilitating DEX Liquidity: Ondo is a pioneer in the liquidity-as-a-service space with live partnerships with 10+ DAOs as well as commitments from four stablecoin issuers (FEI, FRAX, UST, and RAI) for $100m+ in new liquidity and related incentives. By matching DAOs (capital demand) with underwriters (capital supply) to provide liquidity for their native token, users can easily trade these tokens in decentralized exchanges.Rapid Organic Growth: Ondo does not currently have any liquidity mining campaigns or any other incentive program to stimulate liquidity on the protocol, making it one of the largest protocols by TVL on Ethereum without incentives.Bridging DeFi and Traditional Finance: Ondo makes DeFi accessible and more valuable by both aggregating DeFi protocols and repackaging their exposures using traditional finance techniques.'
         ]
       }
     ],

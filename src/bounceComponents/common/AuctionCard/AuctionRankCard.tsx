@@ -313,7 +313,7 @@ const SkeletonBox = () => {
   )
 }
 export const AuctionRankCard: React.FC = () => {
-  const Tabs = ['Trending Auction', 'Upcoming Auction', 'Latest Auction']
+  const Tabs = ['Trending Auctions', 'Upcoming Auctions', 'Latest Auctions']
   const isSm = useBreakpoint('sm')
   const [currentTab, setTab] = useState(Tabs[0])
   const optionDatas = useOptionDatas()

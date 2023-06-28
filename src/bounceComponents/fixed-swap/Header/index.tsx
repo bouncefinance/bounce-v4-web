@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography, useTheme } from '@mui/material'
 import Image from 'components/Image'
 import LikeUnlike from 'bounceComponents/common/LikeUnlike'
 import { LIKE_OBJ } from 'api/idea/type'
@@ -28,6 +28,7 @@ const Header = ({
 }): JSX.Element => {
   const { userId } = useUserInfo()
   const isMobile = useBreakpoint('lg')
+  const theme = useTheme()
   if (!poolInfo.ethChainId) return <></>
   return (
     <Box sx={{ display: isMobile ? 'block' : 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -90,12 +91,22 @@ const Header = ({
         </>
       )}
       {isMobile && (
-        <>
+        <Box sx={{ px: 24 }}>
           <Typography variant="h1" sx={{ fontSize: 30 }}>
             {poolInfo?.name} {typeName} Pool
           </Typography>
 
-          <Box display={'flex'} alignItems={'center'}>
+          <Box
+            display={'flex'}
+            alignItems={'center'}
+            sx={{
+              [theme.breakpoints.down('lg')]: {
+                flexWrap: 'wrap',
+                gap: 20,
+                marginTop: 10
+              }
+            }}
+          >
             <LikeUnlike
               likeObj={LIKE_OBJ.pool}
               objId={poolInfo?.id}
@@ -143,7 +154,7 @@ const Header = ({
               </Typography>
             </Box>
           </Box>
-        </>
+        </Box>
       )}
     </Box>
   )

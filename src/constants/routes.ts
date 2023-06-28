@@ -75,7 +75,8 @@ export const routes = {
     digitalAssetsOffering: '/launchpad/poseiswap-intro',
     foundoDetail: 'foundo/detail',
     OmegaAuction: '/launchpad/omega/auction/:sysId',
-    TypeitAuction: '/launchpad/typeit'
+    TypeitAuction: '/launchpad/typeit/:sysId',
+    TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

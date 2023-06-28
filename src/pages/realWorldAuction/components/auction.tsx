@@ -586,8 +586,8 @@ const AuctionContent = () => {
             textAlign: 'center'
           }}
         >
-          The physical auction supports the English auction mode. You are bidding for a physical backed NFTs and you can
-          redeem it post auction
+          The physical auction supports the English auction mode. You are bidding for physically backed NFTs, and you
+          can redeem them post-auction.
         </Typography>
         <Box
           sx={{

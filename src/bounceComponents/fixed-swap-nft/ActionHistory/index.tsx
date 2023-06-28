@@ -26,7 +26,7 @@ const ActionHistory = ({
   const { data, loading: isGettingPoolHistory } = usePoolHistory(backedChainId, poolId, category)
   const list = useMemo(() => {
     if (!data) return undefined
-    return data.list.filter(item => item.event === 'Bid') || []
+    return data.list || []
   }, [data])
 
   return (

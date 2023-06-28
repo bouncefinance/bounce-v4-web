@@ -4,7 +4,7 @@ import { ReactNode, useState } from 'react'
 import Tooltip from 'bounceComponents/common/Tooltip'
 
 const SubTitle = ({ children }: { children: ReactNode }): JSX.Element => (
-  <Typography variant="body2" sx={{ color: '#908E96' }}>
+  <Typography variant="body2" sx={{ color: '#908E96', textTransform: 'capitalize' }}>
     {children}
   </Typography>
 )

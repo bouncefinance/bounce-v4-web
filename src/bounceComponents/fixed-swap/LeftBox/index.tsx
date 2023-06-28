@@ -31,7 +31,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
         <Stack spacing={10}>
           <Title>Token Information</Title>
 
-          <PoolInfoItem title="Contract address" tip="Token Contract Address.">
+          <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               <CertifiedTokenImage
                 address={poolInfo.token0.address}
@@ -46,7 +46,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
             </Stack>
           </PoolInfoItem>
 
-          <PoolInfoItem title="Token symbol">
+          <PoolInfoItem title="Token Symbol">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
               <TokenImage src={poolInfo.token0.largeUrl} alt={poolInfo.token0.symbol} size={20} />
               <Typography>{poolInfo.token0.symbol}</Typography>
@@ -71,7 +71,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
         <Stack spacing={10}>
           <Title>Auction Information</Title>
 
-          <PoolInfoItem title="Auction type">Fixed-Price</PoolInfoItem>
+          <PoolInfoItem title="Auction Type">Fixed-Price</PoolInfoItem>
           <PoolInfoItem title="Participant">{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</PoolInfoItem>
           <PoolInfoItem title="Allocation per Wallet">
             {poolInfo.currencyMaxAmount1PerWallet.greaterThan('0')

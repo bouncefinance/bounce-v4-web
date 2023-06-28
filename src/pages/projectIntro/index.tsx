@@ -593,12 +593,7 @@ export function ProjectHead({ item }: { item: IPrivatePadProp }) {
             background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
           }}
         >
-          {item.keyId === 6 && (
-            <Box style={{ width: 60, height: 60, borderRadius: '50%', overflow: 'hidden' }}>
-              <img src={item.avatar} style={{ width: '100%', height: '100%' }} />
-            </Box>
-          )}
-          {item.keyId !== 6 && <img src={item.avatar} style={{ width: 60, height: 60, borderRadius: 6 }} />}
+          {<img src={item.avatar} style={{ width: 60, height: 60, borderRadius: 6 }} />}
           <Typography mt={16} variant={'h1'} sx={{ color: 'white' }}>
             {item.title}
           </Typography>

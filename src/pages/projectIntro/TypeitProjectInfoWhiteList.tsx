@@ -11,7 +11,7 @@ import NoService from 'components/NoService'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 export default function ProjectInfo() {
-  const item = PrivatePadDataList.find(i => i.keyId === 6) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 7) as IPrivatePadProp
 
   return (
     <Box>
@@ -47,7 +47,7 @@ function UserBlock() {
     )
   }
 
-  if (poolInfo.id !== 707) {
+  if (poolInfo.id !== 708) {
     return null
   }
 

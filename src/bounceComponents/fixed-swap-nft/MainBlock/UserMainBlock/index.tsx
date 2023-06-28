@@ -28,7 +28,7 @@ export const NftCard = (props: NftCardParams) => {
   return (
     <Box
       sx={{
-        width: isMobile ? '100%' : 368,
+        width: isMobile ? 'auto' : 368,
         padding: '24px',
         border: suspicious ? '1px solid #F53030' : '1px solid rgba(23, 23, 23, 0.1)',
         borderRadius: '20px'
@@ -202,7 +202,7 @@ const UserMainBlock = (props: FixedSwapPoolParams): JSX.Element => {
       sx={{ borderRadius: 20, px: 24, py: 20, bgcolor: '#fff', display: 'flex', flexDirection: 'column', rowGap: 12 }}
     >
       <Alert poolInfo={poolInfo} />
-      <Box sx={{ display: 'flex', columnGap: 65, marginBottom: 30 }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, columnGap: 65, marginBottom: 30 }}>
         {/* <UserActionBox /> */}
         <NftCard nft={poolInfo} suspicious={!!nftGoInfo?.data?.suspicious} />
         <UserActionBox2 poolInfo={poolInfo} />
