@@ -198,7 +198,7 @@ export function useCreateDutchAuctionPool() {
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
       creator: account,
-      maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyTo, params.allocationPerWallet)?.raw.toString() || '0',
+      maxAmount0PerWallet: CurrencyAmount.fromAmount(currencyFrom, params.allocationPerWallet)?.raw.toString() || '0',
       merkleroot: merkleroot,
       name: params.poolName,
       openAt: params.startTime,
@@ -206,8 +206,8 @@ export function useCreateDutchAuctionPool() {
       token1: params.tokenToAddress,
       releaseType: params.releaseType,
       releaseData: params.releaseData,
-      amountMax1: JSBI.divide(amountMax?.numerator || JSBI.BigInt('0'), JSBI.BigInt(1e18)).toString(),
-      amountMin1: JSBI.divide(amountMin?.numerator || JSBI.BigInt('0'), JSBI.BigInt(1e18)).toString(),
+      amountMax1: JSBI.divide(amountMax?.numerator || JSBI.BigInt('0'), JSBI.BigInt(currencyFrom.decimals)).toString(),
+      amountMin1: JSBI.divide(amountMin?.numerator || JSBI.BigInt('0'), JSBI.BigInt(currencyFrom.decimals)).toString(),
       times: Number(params.times)
     }
 
@@ -225,9 +225,9 @@ export function useCreateDutchAuctionPool() {
       amountMin1: signatureParams.amountMin1,
       times: signatureParams.times,
       openAt: signatureParams.openAt,
-      claimAt: signatureParams.claimAt,
       closeAt: signatureParams.closeAt,
-      // maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
+      claimAt: signatureParams.claimAt,
+      maxAmount0PerWallet: signatureParams.maxAmount0PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 

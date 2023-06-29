@@ -17,7 +17,7 @@ import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
 import RANDOM_SELECTION_ABI from '../constants/abis/randomSelection.json'
 import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
 import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
-import DUTCH_AUCTION_NFT_ABI from '../constants/abis/dutchAuctionNFT.json'
+import DUTCH_AUCTION_NFT_ABI from '../constants/abis/dutchAuction.json'
 import {
   DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
