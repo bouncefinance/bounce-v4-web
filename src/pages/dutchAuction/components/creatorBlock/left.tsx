@@ -1,6 +1,7 @@
 import { Box, Tabs, Tab, styled } from '@mui/material'
 import { useState } from 'react'
 import AuctionInfo from './auctionInfo'
+import LineChart from '../lineChart'
 const LeftTabs = styled(Tabs)(() => ({
   height: '37px',
   '.MuiButtonBase-root': {
@@ -34,7 +35,7 @@ const Left = ({ poolInfo }: { poolInfo: any }) => {
         <Tab label="Chart" {...a11yProps(0)} />
         <Tab label="Token/ Auction Information" {...a11yProps(1)} />
       </LeftTabs>
-      {poolInfo.name}
+      {value === 0 && <LineChart poolInfo={poolInfo} />}
       {value === 1 && <AuctionInfo poolInfo={poolInfo} />}
     </Box>
   )

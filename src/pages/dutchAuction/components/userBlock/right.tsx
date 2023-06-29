@@ -1,17 +1,15 @@
-import { Box, Typography, Grid, Stack, styled, Button } from '@mui/material'
+import { Box, Typography, Grid, styled, Button } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from 'utils/number'
 import PoolInfoItem from '../poolInfoItem'
-import { RightText } from './auctionInfo'
-import { shortenAddress } from 'utils'
-import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import { RightText } from '../creatorBlock/auctionInfo'
 import { useMemo } from 'react'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-
+import UserBidHistory from './bidHistory'
 const ComBtn = styled(Button)(() => ({
   '&.MuiButtonBase-root': {
     background: 'transparent',
@@ -145,13 +143,60 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
   const toClaim = () => {
     console.log('toClaim>>>')
   }
+  const bidHistory = [
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    },
+    {
+      amount: '2000 AUCTION',
+      price: '0.25 ETH',
+      date: '12 Dec 12:00'
+    }
+  ]
   const btnStr = useMemo(() => {
     if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
-      return 'Cancel & Claim tokens'
+      return 'Place a Bid'
     } else if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
-      return Number(poolInfo.currentTotal0) !== 0 ? 'Claim your unswapped tokens and fund raised' : 'Claim fund raised'
+      return Number(poolInfo.currentTotal0) !== 0 ? 'Place a Bid' : 'Place a Bid'
     } else {
-      return 'Cancel & Claim tokens'
+      return 'Place a Bid'
     }
   }, [poolInfo.currentTotal0, poolInfo.status])
   return (
@@ -187,7 +232,7 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
               color: '#000'
             }}
           >
-            My Pool
+            {poolInfo.participant.swappedAmount0 > 0 ? 'You Joined' : 'Join The Pool'}
           </Typography>
           <StatusBox poolInfo={poolInfo} />
         </Box>
@@ -360,85 +405,29 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
         }}
       >
         <PoolInfoItem
-          title={'Fund receiving wallet'}
-          tip={'Fund receiving wallet'}
+          title={'Current bid price'}
           sx={{
             marginBottom: '9px'
           }}
         >
-          <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-            <RightText>{shortenAddress(poolInfo.creator)}</RightText>
-            <CopyToClipboard text={poolInfo.creator} />
-          </Stack>
+          <RightText
+            style={{
+              color: '#E1F25C'
+            }}
+          >
+            0.25 ETH ($0.8035)
+          </RightText>
         </PoolInfoItem>
-        <PoolInfoItem title={'Platform fee charged'} tip={'Platform fee charged'}>
-          <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-            <RightText>
-              2.5%
-              <span
-                style={{
-                  color: '#959595'
-                }}
-              >
-                {' '}
-                / 0 ETH
-              </span>
-            </RightText>
-          </Stack>
+        <PoolInfoItem title={'Bid Amount'}>
+          <RightText
+            style={{
+              color: '#E1F25C'
+            }}
+          >
+            Balance: 100.00 {poolInfo.token0.symbol}
+          </RightText>
         </PoolInfoItem>
       </Box>
-      {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) && (
-        <Box
-          sx={{
-            width: 'calc(100% - 48px)',
-            margin: '0 auto 12px',
-            padding: '16px',
-            border: '1px solid #626262',
-            borderRadius: '8px'
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: `'Public Sans'`,
-              color: '#fff',
-              fontSize: '14px',
-              fontWeight: 600
-            }}
-            mb={'12px'}
-          >
-            Final Auction Results
-          </Typography>
-          <PoolInfoItem
-            title={'Fund receiving wallet'}
-            sx={{
-              marginBottom: '9px'
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: `'Inter'`,
-                color: '#E1F25C',
-                fontSize: '13px',
-                fontWeight: 400
-              }}
-            >
-              0.25 ETH ($0.8035)
-            </Typography>
-          </PoolInfoItem>
-          <PoolInfoItem title={'Fund receiving wallet'}>
-            <Typography
-              sx={{
-                fontFamily: `'Inter'`,
-                color: '#E1F25C',
-                fontSize: '13px',
-                fontWeight: 400
-              }}
-            >
-              700 ETH
-            </Typography>
-          </PoolInfoItem>
-        </Box>
-      )}
       <Box
         sx={{
           padding: '0 24px '
@@ -483,6 +472,7 @@ const Right = ({ poolInfo }: { poolInfo: any }) => {
           </TipsBox>
         )}
       </Box>
+      {bidHistory.length > 0 && <UserBidHistory list={bidHistory} />}
     </Box>
   )
 }

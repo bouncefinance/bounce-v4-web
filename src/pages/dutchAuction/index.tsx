@@ -3,10 +3,10 @@ import Header from './components/header'
 import PoolInfo from './components/poolInfo'
 import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock'
-
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
-
+import ActionHistory from './components/auctionHistory'
+import { DutchAuctionPoolProp } from 'api/pool/type'
 const DutchCreatePage = () => {
   const theme = useTheme()
   const myAnimation = keyframes`
@@ -43,9 +43,23 @@ const DutchCreatePage = () => {
     transform: translate(-100px, 100px);
   }
 `
-  const testPoolInfo = {
+  const testCurrencyAmount = undefined
+  const testPoolInfo: DutchAuctionPoolProp = {
+    currencyAmountTotal0: testCurrencyAmount,
+    currencyAmountTotal1: testCurrencyAmount,
+    currencySwappedAmount0: testCurrencyAmount,
+    currencySwappedTotal1: testCurrencyAmount,
+    highestPrice: testCurrencyAmount,
+    lowestPrice: testCurrencyAmount,
+    currencyCurrentPrice: testCurrencyAmount,
+    currencyLowestBidPrice: testCurrencyAmount,
+    nextRoundInSeconds: 100000,
+    times: 10,
     id: 18198,
+    ethChainId: 25,
+    poolPrice: 20,
     chainId: 25,
+    tokenType: 2,
     contract: '0x9B8B850d00c24bC2684530388F8A02C1Cf9d023b',
     createdTxHash: '0x18faae9990031df8ac606f73ad04636af79cb4293b93afa901f6ab7840063aa1',
     poolId: '25',
@@ -71,11 +85,6 @@ const DutchCreatePage = () => {
     closeAt: 1688973041,
     claimAt: 1689973041,
     tokenId: '',
-    tokenType: 0,
-    is721: 0,
-    maxPlayere: '',
-    curPlayer: '',
-    totalShare: '',
     status: 4,
     token1: {
       address: '0x0000000000000000000000000000000000000000',
@@ -94,13 +103,17 @@ const DutchCreatePage = () => {
     currentTotal0: '0',
     currentTotal1: '100000000000000',
     ratio: '0.00001',
-    poolPrice: '0.018819',
     maxAmount1PerWallet: '0',
     participant: {
       address: '',
       swappedAmount0: '',
       claimed: false,
-      regreted: false
+      regreted: false,
+      currencySwappedAmount0: undefined,
+      currencySwappedAmount1: undefined,
+      currencyCurReleasableAmount: undefined,
+      currencyCurClaimableAmount: undefined,
+      currencyMyReleased: undefined
     },
     creatorUserInfo: {
       userId: 3018,
@@ -122,7 +135,7 @@ const DutchCreatePage = () => {
     ifCollect: false
   }
   const { account } = useActiveWeb3React()
-  const isCreator = useMemo(() => testPoolInfo.creator !== account, [account, testPoolInfo.creator])
+  const isCreator = useMemo(() => testPoolInfo.creator === account, [account, testPoolInfo.creator])
   return (
     <Box
       sx={{
@@ -137,6 +150,7 @@ const DutchCreatePage = () => {
           position: 'relative',
           width: '100%',
           borderRadius: '30px',
+          overflow: 'hidden',
           '& .noise-wrapper': {
             position: 'absolute',
             left: 0,
@@ -196,6 +210,7 @@ const DutchCreatePage = () => {
                 }}
               >
                 {isCreator ? <CreatorBlock poolInfo={testPoolInfo} /> : <UserBlock poolInfo={testPoolInfo} />}
+                <ActionHistory poolInfo={testPoolInfo}></ActionHistory>
               </Box>
             </Grid>
           </Grid>
