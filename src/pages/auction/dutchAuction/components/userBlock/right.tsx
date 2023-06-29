@@ -3,7 +3,6 @@ import { PoolStatus } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { formatNumber } from 'utils/number'
 import PoolInfoItem from '../poolInfoItem'
 import { RightText } from '../creatorBlock/auctionInfo'
 import { useMemo } from 'react'
@@ -130,18 +129,6 @@ const TipsBox = ({
 )
 const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
-  const ticketPrice = poolInfo.maxAmount1PerWallet
-    ? formatNumber(poolInfo.maxAmount1PerWallet, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: poolInfo.token0.decimals
-      })
-    : undefined
-  const swappedAmount0 = poolInfo.swappedAmount0
-    ? formatNumber(poolInfo.swappedAmount0, {
-        unit: poolInfo.token1.decimals,
-        decimalPlaces: poolInfo.token1.decimals
-      })
-    : undefined
   const toClaim = () => {
     console.log('toClaim>>>')
   }
@@ -234,7 +221,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               color: '#000'
             }}
           >
-            {isUserJoined ? 'You Joined' : 'Join The Pool'}
+            {!isUserJoined ? 'Join The Pool' : 'You Joined'}
           </Typography>
           <StatusBox poolInfo={poolInfo} />
         </Box>
@@ -266,8 +253,8 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token1.largeUrl}
-                    alt={poolInfo.token1.symbol}
+                    src={poolInfo.token0.largeUrl}
+                    alt={poolInfo.token0.symbol}
                     size={16}
                   />
                   <span
@@ -278,7 +265,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    Auction
+                    {poolInfo.token0.name.toUpperCase()}
                   </span>
                 </Box>
                 <Box
@@ -302,13 +289,13 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   >
                     =
                   </span>
-                  &nbsp; {ticketPrice}
+                  &nbsp; {poolInfo.lowestPrice?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token0.largeUrl}
-                    alt={poolInfo.token0.symbol}
+                    src={poolInfo.token1.largeUrl}
+                    alt={poolInfo.token1.symbol}
                     size={16}
                   />
                   <span
@@ -319,7 +306,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {(poolInfo.token0.symbol + '').toUpperCase()}
+                    {(poolInfo.token1.symbol + '').toUpperCase()}
                   </span>
                 </Box>
               </>
@@ -339,44 +326,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     fontSize: '16px'
                   }}
                 >
-                  {swappedAmount0}
-                  <TokenImage
-                    sx={{
-                      margin: '0 4px'
-                    }}
-                    src={poolInfo.token1.largeUrl}
-                    alt={poolInfo.token1.symbol}
-                    size={16}
-                  />
-                  <span
-                    style={{
-                      fontFamily: `'Inter'`,
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      color: '#626262'
-                    }}
-                  >
-                    Auction
-                  </span>
-                </Box>
-              </>
-            </PoolTextItem>
-          </Grid>
-          <Grid item xs={6}>
-            <PoolTextItem title={'Estimated funds raised'} tip={'The amount of token you successfully secured.'}>
-              <>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexFlow: 'row nowrap',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    fontFamily: `'Public Sans'`,
-                    fontWeight: 'bold',
-                    fontSize: '16px'
-                  }}
-                >
-                  200
+                  {poolInfo.currencySwappedAmount0?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -393,7 +343,44 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {(poolInfo.token0.symbol + '').toUpperCase()}
+                    {poolInfo.token0.symbol.toUpperCase()}
+                  </span>
+                </Box>
+              </>
+            </PoolTextItem>
+          </Grid>
+          <Grid item xs={6}>
+            <PoolTextItem title={'Total paid amount'} tip={'Total paid amount'}>
+              <>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    fontFamily: `'Public Sans'`,
+                    fontWeight: 'bold',
+                    fontSize: '16px'
+                  }}
+                >
+                  {poolInfo.currencySwappedTotal1?.toSignificant()}
+                  <TokenImage
+                    sx={{
+                      margin: '0 4px'
+                    }}
+                    src={poolInfo.token1.largeUrl}
+                    alt={poolInfo.token1.symbol}
+                    size={16}
+                  />
+                  <span
+                    style={{
+                      fontFamily: `'Inter'`,
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      color: '#626262'
+                    }}
+                  >
+                    {(poolInfo.token1.symbol + '').toUpperCase()}
                   </span>
                 </Box>
               </>

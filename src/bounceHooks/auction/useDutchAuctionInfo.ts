@@ -32,7 +32,7 @@ export function useDutchAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const currentPrice = useMemo(() => currentPriceRes?.[0].toString(), [currentPriceRes])
-
+  console.log('currentPrice>>>', currentPrice)
   const lowestBidPriceRes = useSingleCallResult(
     dutchAuctionContract,
     'lowestBidPrice',

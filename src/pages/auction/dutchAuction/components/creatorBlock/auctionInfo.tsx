@@ -11,7 +11,7 @@ import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-
+import moment from 'moment'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
     {children}
@@ -105,7 +105,10 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Pool duration">
-                <RightText>01.01.2021 00:00 - 01.01.2021 00:00</RightText>
+                <RightText>
+                  {poolInfo.openAt ? moment(poolInfo.openAt * 1000).format('YYYY-MM-DD HH:mm') : '--'} -{' '}
+                  {poolInfo.closeAt ? moment(poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:mm') : '--'}
+                </RightText>
               </PoolInfoItem>
             </>
           )}
