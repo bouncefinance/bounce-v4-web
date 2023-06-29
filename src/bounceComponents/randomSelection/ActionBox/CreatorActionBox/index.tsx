@@ -20,6 +20,7 @@ const CreatorActionBox = ({
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h2">My Pool</Typography>
         <PoolStatusBox
+          showCreatorClaim={!poolInfo.creatorClaimed}
           status={poolInfo.status}
           openTime={poolInfo.openAt}
           closeTime={poolInfo.closeAt}

@@ -157,6 +157,7 @@ export function Equilibria() {
             )}
             {poolInfo && (
               <PoolStatusBox
+                showParticipantClaim={!!poolInfo.participant.swappedAmount0 && !poolInfo.participant.claimed}
                 status={poolInfo.status}
                 claimAt={poolInfo.claimAt}
                 openTime={poolInfo.openAt}

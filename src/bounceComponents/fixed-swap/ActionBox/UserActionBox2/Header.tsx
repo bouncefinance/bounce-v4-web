@@ -13,6 +13,7 @@ const Header = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoo
 
       {poolInfo && (
         <PoolStatusBox
+          showParticipantClaim={isUserJoinedPool && !poolInfo.participant.claimed}
           status={poolInfo.status}
           claimAt={poolInfo.claimAt}
           openTime={poolInfo.openAt}

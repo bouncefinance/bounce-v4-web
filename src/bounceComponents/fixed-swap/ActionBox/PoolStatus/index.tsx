@@ -3,6 +3,7 @@ import React from 'react'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
+import { useActiveWeb3React } from 'hooks'
 export interface PoolStatusBoxProps {
   status: PoolStatus
   openTime: number
@@ -34,6 +35,7 @@ const PoolStatusBox = ({
   showCreatorClaim,
   showParticipantClaim
 }: PoolStatusBoxProps): JSX.Element => {
+  const { account } = useActiveWeb3React()
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       status === PoolStatus.Upcoming
@@ -104,7 +106,7 @@ const PoolStatusBox = ({
               Closed
             </Typography>
           </Box>
-          {showParticipantClaim && (
+          {showParticipantClaim && account && (
             <StyledSpan style={style}>
               {countdown > 0 && (
                 <>
@@ -125,7 +127,7 @@ const PoolStatusBox = ({
               )}
             </StyledSpan>
           )}
-          {showCreatorClaim && status === PoolStatus.Closed && (
+          {showCreatorClaim && account && status === PoolStatus.Closed && (
             <StyledSpan style={style}>
               <WarningIcon style={{ marginRight: '4px', verticalAlign: 'middle' }} />
               <Typography variant="body1" color="#fff" component="span">

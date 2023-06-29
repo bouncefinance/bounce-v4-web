@@ -216,7 +216,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.ROLLUX]: {
     id: ChainId.ROLLUX,
     hexChainId: numberToHex(ChainId.ROLLUX),
-    chainName: 'Rollux Mainnet',
+    chainName: 'Rollux',
     nativeCurrency: {
       name: 'SYS',
       symbol: 'SYS',

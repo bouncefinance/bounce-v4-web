@@ -16,6 +16,7 @@ const Header = ({
       <Typography variant="h2">{!!isJoined ? 'You Joined' : 'Join The Pool'}</Typography>
       {poolInfo && (
         <PoolStatusBox
+          showParticipantClaim={isJoined && !poolInfo.participant.claimed}
           status={poolInfo.status}
           claimAt={poolInfo.claimAt}
           openTime={poolInfo.openAt}

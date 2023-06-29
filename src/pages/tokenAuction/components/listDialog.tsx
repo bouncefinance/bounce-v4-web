@@ -291,7 +291,7 @@ const NFTAuctionListDialog = (props: DialogParams) => {
                 <Pagination
                   onChange={handlePageChange}
                   count={Math.ceil(poolsData?.total / defaultIdeaPageSize) || 0}
-                  siblingCount={0}
+                  page={poolsPagination.current}
                   sx={{
                     '.MuiPaginationItem-root': {
                       margin: '0 8px'

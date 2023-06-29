@@ -28,6 +28,7 @@ const UserMainBlock = (): JSX.Element => {
 
         {poolInfo && (
           <PoolStatusBox
+            showParticipantClaim={poolInfo?.isWinner && !poolInfo.participant.claimed}
             status={poolInfo.status}
             claimAt={poolInfo.claimAt}
             openTime={poolInfo.openAt}
