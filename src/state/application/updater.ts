@@ -7,11 +7,13 @@ import { useDispatch } from 'react-redux'
 import { SUPPORT_NETWORK_CHAIN_IDS } from 'constants/chain'
 import { getOtherNetworkLibrary } from 'connectors/MultiNetworkConnector'
 import { useSetCurrentConnectedAddress } from './hooks'
+import { useUpdateUserLoginInfoWithWindowVisible } from 'state/users/hooks'
 
 export default function Updater(): null {
   const { library, chainId } = useActiveWeb3React()
   const dispatch = useDispatch()
   useSetCurrentConnectedAddress()
+  useUpdateUserLoginInfoWithWindowVisible()
 
   const windowVisible = useIsWindowVisible()
 
