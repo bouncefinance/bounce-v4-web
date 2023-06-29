@@ -16,7 +16,9 @@ export default function DutchAuction() {
 
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <DutchAuctionParametersForm />}
 
-          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AddIReleaseTypeAdvanced />}
+          {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && (
+            <AddIReleaseTypeAdvanced showInstantRelease={false} />
+          )}
         </Box>
       ) : (
         <CreationDutchAuctionConfirmation />

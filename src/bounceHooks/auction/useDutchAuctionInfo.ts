@@ -22,6 +22,7 @@ export function useDutchAuctionInfo() {
     undefined,
     poolInfo?.ethChainId
   ).result
+
   const amountSwap0Data = useMemo(() => amountSwap0PRes?.[0].toString(), [amountSwap0PRes])
 
   const currentPriceRes = useSingleCallResult(
