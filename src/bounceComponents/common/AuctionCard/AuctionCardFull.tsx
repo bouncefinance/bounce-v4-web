@@ -11,9 +11,17 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import { useActiveWeb3React } from 'hooks'
 
-export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: FixedSwapPool }) {
+export default function AuctionCardFull({
+  auctionPoolItem,
+  style
+}: {
+  auctionPoolItem: FixedSwapPool & { curPlayer?: string; maxPlayere?: string }
+  style?: React.CSSProperties | undefined
+}) {
   const optionDatas = useOptionDatas()
+  const { account } = useActiveWeb3React()
   return (
     <Box
       component={'a'}
@@ -25,8 +33,10 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
       )}
     >
       <AuctionCard
-        style={{ minWidth: 'unset' }}
+        style={style || { minWidth: 'unset' }}
         poolId={auctionPoolItem.poolId}
+        showCreatorClaim={account === auctionPoolItem.creator && !auctionPoolItem.creatorClaimed}
+        showParticipantClaim={!!auctionPoolItem.participant.swappedAmount0 && !auctionPoolItem.participant.claimed}
         title={auctionPoolItem.name}
         status={auctionPoolItem.status}
         claimAt={auctionPoolItem.claimAt}
@@ -53,10 +63,16 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
           />
         }
         progress={{
-          symbol: auctionPoolItem.token0.symbol?.toUpperCase(),
-          decimals: auctionPoolItem.token0.decimals.toString(),
-          sold: auctionPoolItem.swappedAmount0,
-          supply: auctionPoolItem.amountTotal0
+          symbol: auctionPoolItem.category === PoolType.Lottery ? '' : auctionPoolItem.token0.symbol?.toUpperCase(),
+          decimals: auctionPoolItem.category === PoolType.Lottery ? '' : auctionPoolItem.token0.decimals.toString(),
+          sold:
+            auctionPoolItem.category === PoolType.Lottery
+              ? (auctionPoolItem.curPlayer as string)
+              : auctionPoolItem.swappedAmount0,
+          supply:
+            auctionPoolItem.category === PoolType.Lottery
+              ? (auctionPoolItem.maxPlayere as string)
+              : auctionPoolItem.amountTotal0
         }}
         listItems={
           <>
@@ -124,7 +140,7 @@ export default function AuctionCardFull({ auctionPoolItem }: { auctionPoolItem: 
             />
           </>
         }
-        categoryName={PoolType[auctionPoolItem.category as PoolType]}
+        categoryName={PoolType[auctionPoolItem.category]}
         whiteList={auctionPoolItem.enableWhiteList ? 'Whitelist' : 'Public'}
         chainId={auctionPoolItem.chainId}
       />

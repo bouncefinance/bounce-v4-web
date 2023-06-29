@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 
-import PoolStatusBox from '../PoolStatus'
 import { FixedSwapPoolProp } from 'api/pool/type'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 const Header = ({
   poolInfo,
   getPoolInfo,

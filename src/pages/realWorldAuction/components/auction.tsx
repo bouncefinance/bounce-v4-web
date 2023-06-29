@@ -9,7 +9,7 @@ import { Banner, SwiperSkeleton } from './banner'
 import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useEffect, useState } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
-import AuctionCard from './auctionCard'
+import BannerAuctionCard from './auctionCard'
 // import UpcomingAuction from './upcomingAuction'
 import { BannerType } from './banner'
 import EmptyData from 'bounceComponents/common/EmptyData'
@@ -697,7 +697,7 @@ const AuctionContent = () => {
                 {poolList &&
                   poolList?.list &&
                   poolList.list.map((item: BannerType, index: number) => {
-                    return <AuctionCard key={index} banner={item}></AuctionCard>
+                    return <BannerAuctionCard key={index} banner={item}></BannerAuctionCard>
                   })}
               </Box>
             )}
