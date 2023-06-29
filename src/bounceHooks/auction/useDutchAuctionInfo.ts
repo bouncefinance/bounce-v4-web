@@ -43,6 +43,15 @@ export function useDutchAuctionInfo() {
   ).result
   const lowestBidPrice = useMemo(() => lowestBidPriceRes?.[0].toString(), [lowestBidPriceRes])
 
+  const maxAmount0PerWalletRes = useSingleCallResult(
+    dutchAuctionContract,
+    'maxAmount0PerWallet',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const maxAmount0PerWallet = useMemo(() => maxAmount0PerWalletRes?.[0].toString(), [maxAmount0PerWalletRes])
+
   const nextRoundInSecondsRes = useSingleCallResult(
     dutchAuctionContract,
     'nextRoundInSeconds',
@@ -206,6 +215,9 @@ export function useDutchAuctionInfo() {
       times: poolsData.times,
       currencyCurrentPrice: currentPrice ? CurrencyAmount.fromRawAmount(t1, currentPrice) : undefined,
       currencyLowestBidPrice: lowestBidPrice ? CurrencyAmount.fromRawAmount(t1, lowestBidPrice) : undefined,
+      currencyMaxAmount0PerWallet: maxAmount0PerWallet
+        ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
+        : undefined,
       nextRoundInSeconds,
       releaseType,
       releaseData,
@@ -239,6 +251,7 @@ export function useDutchAuctionInfo() {
     curReleasableAmount,
     currentPrice,
     lowestBidPrice,
+    maxAmount0PerWallet,
     myAmountSwapped0Data,
     myAmountSwapped1Data,
     myClaimed,

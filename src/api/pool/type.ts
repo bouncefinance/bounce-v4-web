@@ -281,6 +281,7 @@ export interface DutchAuctionPoolProp extends FixedSwapPool {
   lowestPrice: CurrencyAmount | undefined
   currencyCurrentPrice: CurrencyAmount | undefined
   currencyLowestBidPrice: CurrencyAmount | undefined
+  currencyMaxAmount0PerWallet: CurrencyAmount | undefined
   nextRoundInSeconds: number | undefined
   times: number | undefined
   ethChainId: ChainId

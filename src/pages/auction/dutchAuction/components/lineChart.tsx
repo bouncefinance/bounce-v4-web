@@ -53,7 +53,7 @@ export class ToolTip {
       this.update({ dateStr, x, y, bgColor, display })
     }
   }
-  update({ dateStr, x, y, bgColor, display, token0Price }: ToolTipParam) {
+  update({ dateStr, x, y, display, token0Price }: ToolTipParam) {
     if (!this.el) {
       return this.createToolTip({ dateStr, x, y })
     } else {
