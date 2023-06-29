@@ -9,7 +9,7 @@ import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 
 export function useDutchAuctionInfo() {
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, 18219)
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, 18223)
   const { account } = useActiveWeb3React()
   const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
 
@@ -20,6 +20,7 @@ export function useDutchAuctionInfo() {
     undefined,
     poolInfo?.ethChainId
   ).result
+
   const amountSwap0Data = useMemo(() => amountSwap0PRes?.[0].toString(), [amountSwap0PRes])
 
   const currentPriceRes = useSingleCallResult(

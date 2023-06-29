@@ -60,7 +60,13 @@ const defaultFragmentRelease = {
   radio: ''
 }
 
-export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: boolean }) => {
+export const AddIReleaseTypeAdvanced = ({
+  showInstantRelease = true,
+  hideRefundable
+}: {
+  showInstantRelease?: boolean
+  hideRefundable?: boolean
+}) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
@@ -337,11 +343,13 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                   </Box>
 
                   <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
-                    <FormControlLabel
-                      value={IReleaseType.Instant}
-                      control={<Radio disableRipple />}
-                      label={<span>Instant</span>}
-                    />
+                    {showInstantRelease && (
+                      <FormControlLabel
+                        value={IReleaseType.Instant}
+                        control={<Radio disableRipple />}
+                        label={<span>Instant</span>}
+                      />
+                    )}
                     <FormControlLabel
                       value={IReleaseType.Cliff}
                       control={<Radio disableRipple />}

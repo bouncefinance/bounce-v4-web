@@ -19,6 +19,7 @@ import {
   ParticipantStatus
 } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
+import JSBI from 'jsbi'
 
 interface Params {
   whitelist: string[]
@@ -161,8 +162,8 @@ export function useCreateDutchAuctionPool() {
     }
     const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
     // const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
-    const amountMax = CurrencyAmount.fromAmount(currencyFrom, params.startPrice)
-    const amountMin = CurrencyAmount.fromAmount(currencyFrom, params.reservePrice)
+    const amountMax = CurrencyAmount.fromAmount(currencyFrom, params.startPrice)?.multiply(amountTotal0 || '0')
+    const amountMin = CurrencyAmount.fromAmount(currencyFrom, params.reservePrice)?.multiply(amountTotal0 || '0')
 
     if (!amountTotal0) {
       return Promise.reject('amountTotal0 error')
@@ -205,8 +206,8 @@ export function useCreateDutchAuctionPool() {
       token1: params.tokenToAddress,
       releaseType: params.releaseType,
       releaseData: params.releaseData,
-      amountMax1: amountMax?.raw.toString(),
-      amountMin1: amountMin?.raw.toString(),
+      amountMax1: JSBI.divide(amountMax?.numerator || JSBI.BigInt('0'), JSBI.BigInt(1e18)).toString(),
+      amountMin1: JSBI.divide(amountMin?.numerator || JSBI.BigInt('0'), JSBI.BigInt(1e18)).toString(),
       times: Number(params.times)
     }
 
