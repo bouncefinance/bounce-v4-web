@@ -15,7 +15,7 @@ const StyledButton = styled(Button)({
 const linkList = [
   { label: 'Document', href: 'https://docs.bounce.finance/welcome-to-bounce-docs/welcome' },
   { label: 'Help Center', href: 'https://www.bounce.finance/FAQ' },
-  { label: 'Bounce Token', href: 'https://www.bounce.finance/tools/token' },
+  { label: 'Bounce Token', href: 'https://token.bounce.finance/staking' },
   // { label: 'Token Authentication', href: '' },
   { label: 'SDKs&Plug-Ins', href: 'https://www.bounce.finance/sdkAndPlugins' },
   { label: 'Community', href: 'https://www.bounce.finance/joinCommunity' },
