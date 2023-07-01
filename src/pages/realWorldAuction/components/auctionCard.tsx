@@ -30,7 +30,7 @@ const CountDownBg = styled(Box)`
     font-size: 14px;
   }
 `
-const AuctionCard = ({ banner }: { banner: BannerType }) => {
+const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: Number(banner.startTime) * 1000
   })
@@ -270,4 +270,4 @@ const AuctionCard = ({ banner }: { banner: BannerType }) => {
     </Box>
   )
 }
-export default AuctionCard
+export default BannerAuctionCard

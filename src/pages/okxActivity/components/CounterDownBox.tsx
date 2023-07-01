@@ -4,15 +4,7 @@ import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
 import { PoolStatusBoxProps } from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
-const CounterDownBox = ({
-  status,
-  openTime,
-  closeTime,
-  claimAt,
-  onEnd,
-  style,
-  hiddenStatus = false
-}: PoolStatusBoxProps): JSX.Element => {
+const CounterDownBox = ({ status, openTime, closeTime, claimAt, onEnd, style }: PoolStatusBoxProps): JSX.Element => {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       status === PoolStatus.Upcoming
@@ -89,7 +81,7 @@ const CounterDownBox = ({
               Closed
             </Typography>
           </Box>
-          {!hiddenStatus && (
+          {
             <span
               style={{
                 display: 'inline-block',
@@ -120,7 +112,7 @@ const CounterDownBox = ({
                 </>
               )}
             </span>
-          )}
+          }
         </Box>
       )
     case PoolStatus.Cancelled:

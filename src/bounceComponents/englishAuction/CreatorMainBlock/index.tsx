@@ -45,6 +45,7 @@ const CreatorMainBlock = (): JSX.Element => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pt: 20 }}>
         <Typography variant="h2">My Pool</Typography>
         <PoolStatusBox
+          showCreatorClaim={poolInfo.creatorClaimed === false}
           status={poolInfo.status}
           openTime={poolInfo.openAt}
           closeTime={poolInfo.closeAt}

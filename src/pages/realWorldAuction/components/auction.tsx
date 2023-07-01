@@ -9,7 +9,7 @@ import { Banner, SwiperSkeleton } from './banner'
 import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useEffect, useState } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
-import AuctionCard from './auctionCard'
+import BannerAuctionCard from './auctionCard'
 // import UpcomingAuction from './upcomingAuction'
 import { BannerType } from './banner'
 import EmptyData from 'bounceComponents/common/EmptyData'
@@ -139,7 +139,7 @@ const SothebyList = [
     time: '28 JUNE 2023 10:30 AM BST',
     img: 'https://sothebys-com.brightspotcdn.com/dims4/default/cba2bbf/2147483647/strip/true/crop/600x349+0+176/resize/487x283!/format/webp/quality/90/?url=https%3A%2F%2Fsothebys-md.brightspotcdn.com%2F06%2Fec%2Fae92817940018d9abb03e9cc930c%2F231312016-l23007modctpday-webbanners-600x700.jpg',
     link: 'https://www.sothebys.com/en/auction-catalogue/2023/modern-contemporary-day-auction-l23007?s=intro&locale=en',
-    startTime: 16879482000,
+    startTime: 1687948200,
     endTime: 0,
     categories: 'Art',
     resource: 'Sotheby’s'
@@ -479,7 +479,6 @@ const AuctionContent = () => {
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
   const [filterParams, setFilterParams] = useState<FilterSearchConfig[]>(filterConfig)
-
   const {
     pagination: poolsPagination,
     data: poolList,
@@ -508,7 +507,10 @@ const AuctionContent = () => {
             isPass = !!(item.endTime && Number(item.endTime) * 1000 <= nowTime)
             isPass && (item.status = 'Past auction')
           } else if (values.status === 'Live auction') {
-            if (item.startTime && item.endTime) {
+            if (item.startTime && !item.endTime) {
+              isPass = Number(item.startTime) * 1000 <= nowTime
+              isPass && (item.status = 'Live auction')
+            } else if (item.startTime && item.endTime) {
               isPass = !!(Number(item.startTime) * 1000 <= nowTime && Number(item.endTime) * 1000 > nowTime)
               isPass && (item.status = 'Live auction')
             } else {
@@ -697,7 +699,7 @@ const AuctionContent = () => {
                 {poolList &&
                   poolList?.list &&
                   poolList.list.map((item: BannerType, index: number) => {
-                    return <AuctionCard key={index} banner={item}></AuctionCard>
+                    return <BannerAuctionCard key={index} banner={item}></BannerAuctionCard>
                   })}
               </Box>
             )}

@@ -114,7 +114,7 @@ const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }
   useEffect(() => {
     pagination.changeCurrent(1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, curPoolType, curPoolType, backedTokenType])
+  }, [account, curPoolType, backedTokenType])
 
   const handlePageChange = (_: any, p: number) => {
     pagination.changeCurrent(p)
@@ -184,6 +184,7 @@ const ActivitiesTab = ({ backedTokenType }: { backedTokenType: BackedTokenType }
           <Box mt={40} display={'flex'} justifyContent="center">
             <Pagination
               onChange={handlePageChange}
+              page={pagination.current}
               sx={{ alignItems: 'end' }}
               count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
             />
