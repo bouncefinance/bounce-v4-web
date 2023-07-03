@@ -65,8 +65,26 @@ const DutchAuctionParametersForm = (): JSX.Element => {
         'Please choose a different token',
         (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress
       ),
-    startPrice: Yup.number().typeError('Please input valid number').required('Start price is required'),
-    reservePrice: Yup.number().typeError('Please input valid number').required('Reserve price is required'),
+    startPrice: Yup.number()
+      .typeError('Please input valid number')
+      .required('Start price is required')
+      .test('minValue', "Start price can't be smaller than reserve price", function (value) {
+        const { reservePrice } = this.parent
+        if (value && reservePrice) {
+          return value >= reservePrice
+        }
+        return true
+      }),
+    reservePrice: Yup.number()
+      .typeError('Please input valid number')
+      .required('Reserve price is required')
+      .test('minValue', "reserve price can't be greater than start price", function (value) {
+        const { startPrice } = this.parent
+        if (value && startPrice) {
+          return value <= startPrice
+        }
+        return true
+      }),
     segments: Yup.number()
       .typeError('Please input valid number')
       .required('Auction price segment is required')
@@ -407,8 +425,8 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                     disabled={values.allocationStatus === AllocationStatus.NoLimits}
                     endAdornment={
                       <>
-                        <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
-                        <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
                       </>
                     }
                   />
