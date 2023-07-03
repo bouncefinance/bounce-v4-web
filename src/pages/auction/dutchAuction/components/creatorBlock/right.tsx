@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Stack, styled, Button } from '@mui/material'
+import { Box, Typography, Grid, Stack } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import PoolTextItem from '../poolTextItem'
@@ -7,23 +7,12 @@ import PoolInfoItem from '../poolInfoItem'
 import { RightText } from './auctionInfo'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { useMemo } from 'react'
+import { DutchAuctionPoolProp } from 'api/pool/type'
+import ClaimBlock from './ClaimBlock'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import JSBI from 'jsbi'
 
-const ComBtn = styled(Button)(() => ({
-  '&.MuiButtonBase-root': {
-    background: 'transparent',
-    border: '1px solid #FFFFFF',
-    color: '#FFFFFF'
-  },
-  '&.MuiButtonBase-root:hover': {
-    background: '#E1F25C',
-    border: '1px solid #E1F25C',
-    color: '#121212'
-  }
-}))
 const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -129,18 +118,6 @@ const TipsBox = ({
   </Box>
 )
 const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const toClaim = () => {
-    console.log('toClaim>>>')
-  }
-  const btnStr = useMemo(() => {
-    if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
-      return 'Cancel & Claim tokens'
-    } else if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
-      return Number(poolInfo.currentTotal0) !== 0 ? 'Claim your unswapped tokens and fund raised' : 'Claim fund raised'
-    } else {
-      return 'Cancel & Claim tokens'
-    }
-  }, [poolInfo.currentTotal0, poolInfo.status])
   return (
     <Box
       sx={{
@@ -316,13 +293,18 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     fontSize: '16px'
                   }}
                 >
-                  200
+                  {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
+                    ? JSBI.multiply(
+                        JSBI.BigInt(poolInfo?.currencyLowestBidPrice?.toExact()),
+                        JSBI.BigInt(poolInfo?.currencySwappedAmount0?.toExact())
+                      ).toString()
+                    : '0'}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token0.largeUrl}
-                    alt={poolInfo.token0.symbol}
+                    src={poolInfo.token1.largeUrl}
+                    alt={poolInfo.token1.symbol}
                     size={16}
                   />
                   <span
@@ -333,7 +315,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {(poolInfo.token0.symbol + '').toUpperCase()}
+                    {(poolInfo.token1.symbol + '').toUpperCase()}
                   </span>
                 </Box>
               </>
@@ -431,11 +413,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           padding: '0 24px '
         }}
       >
-        {!poolInfo.participant.claimed && (
-          <ComBtn fullWidth onClick={toClaim} disabled={poolInfo.status === PoolStatus.Live}>
-            {btnStr}
-          </ComBtn>
-        )}
+        <ClaimBlock poolInfo={poolInfo} />
         {poolInfo.status === PoolStatus.Upcoming && (
           <TipsBox
             iconUrl={TipsIcon}
@@ -443,8 +421,8 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               marginTop: '16px'
             }}
           >
-            You can only claim your fund raised after your auction is finished. There is a 2.5% platform feed charged
-            automatically from fund raised.
+            After the start of the auction you can only claim your fund raised after your auction is finished. There is
+            a 2.5% platform feed charged automatically from fund raised.
           </TipsBox>
         )}
         {poolInfo.status === PoolStatus.Live && (
@@ -458,15 +436,14 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             automatically from fund raised.
           </TipsBox>
         )}
-        {poolInfo.participant.claimed && (
+        {poolInfo.status === PoolStatus.Closed && poolInfo.creatorClaimed && (
           <TipsBox
             iconUrl={SuccessIcon}
             style={{
               marginTop: '16px'
             }}
           >
-            You can only claim your fund raised after your auction is finished. There is a 2.5% platform feed charged
-            automatically from fund raised.
+            You have successfully claimed your tokens. See you next time!
           </TipsBox>
         )}
       </Box>

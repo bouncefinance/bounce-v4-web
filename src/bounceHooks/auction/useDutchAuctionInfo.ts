@@ -97,6 +97,7 @@ export function useDutchAuctionInfo() {
     undefined,
     poolInfo?.ethChainId
   ).result
+  console.log('contract poolsRes >>>', poolsRes)
   const poolsData: {
     highestPrice: string | undefined
     lowestPrice: string | undefined
@@ -211,18 +212,18 @@ export function useDutchAuctionInfo() {
       highestPrice: poolsData.highestPrice
         ? CurrencyAmount.fromRawAmount(
             t1,
-            JSBI.multiply(
-              JSBI.divide(JSBI.BigInt(poolsData.highestPrice), JSBI.BigInt(poolInfo.amountTotal0)),
-              JSBI.BigInt(1e18)
+            JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(poolsData.highestPrice), JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))),
+              JSBI.BigInt(poolInfo.amountTotal0)
             )
           )
         : undefined,
       lowestPrice: poolsData.lowestPrice
         ? CurrencyAmount.fromRawAmount(
             t1,
-            JSBI.multiply(
-              JSBI.divide(JSBI.BigInt(poolsData.lowestPrice), JSBI.BigInt(poolInfo.amountTotal0)),
-              JSBI.BigInt(1e18)
+            JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(poolsData.lowestPrice), JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))),
+              JSBI.BigInt(poolInfo.amountTotal0)
             )
           )
         : undefined,

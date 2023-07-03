@@ -175,17 +175,30 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
   return <Box ref={chartContainerRef}></Box>
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const startTime = 1687835547
-  const endTime = 1687935547
-  const startPrice = 20
-  const endPrice = 40
-  const segments = 10
-  const arrayRange = (start: number, stop: number, step: number) =>
-    Array.from({ length: stop + 1 }, (value, index) => start + index * step)
+  const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
+  const segments = times ? Number(times) : 0
+  const startTime = openAt ? Number(openAt * 1000) : 0
+  const endTime = closeAt ? Number(closeAt * 1000) : 0
+  const startPrice = lowestPrice ? Number(lowestPrice.toExact()) : 0
+  const endPrice = highestPrice ? Number(highestPrice.toExact()) : 0
+  const arrayRange = (start: number | string, stop: number, step: number | string) =>
+    Array.from({ length: stop + 1 }, (value, index) => {
+      return BigNumber(start).plus(BigNumber(step).times(index)).toNumber()
+    })
+  const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
+  const timeSegments = new BigNumber(endTime).minus(startTime).div(segments).integerValue().toNumber()
+  console.log(
+    'segments startPrice endPrice startTime endTime>>',
+    segments,
+    startPrice,
+    endPrice,
+    startTime,
+    endTime,
+    priceSegments,
+    timeSegments
+  )
   const lineData = useMemo(() => {
-    const timeSegments = new BigNumber(endTime).minus(startTime).div(segments).integerValue().toNumber()
     const xList = arrayRange(startTime, segments, timeSegments)
-    const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).integerValue().toNumber()
     const yList = arrayRange(startPrice, segments, priceSegments).reverse()
     const dataPoint = new Array(segments + 1).fill(0).map((item, index) => {
       return {
@@ -194,7 +207,8 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       }
     })
     return dataPoint
-  }, [startTime, endTime, startPrice, endPrice, segments])
+  }, [startTime, segments, timeSegments, startPrice, priceSegments])
+  console.log('lineData>>>', lineData)
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined

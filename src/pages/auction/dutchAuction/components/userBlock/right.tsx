@@ -14,6 +14,8 @@ import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPoo
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import Bid from '../bid'
+import JSBI from 'jsbi'
+
 const ComBtn = styled(Button)(() => ({
   '&.MuiButtonBase-root': {
     background: 'transparent',
@@ -369,7 +371,12 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo.currencySwappedTotal1?.toSignificant()}
+                  {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
+                    ? JSBI.multiply(
+                        JSBI.BigInt(poolInfo?.currencyLowestBidPrice?.toExact()),
+                        JSBI.BigInt(poolInfo?.currencySwappedAmount0?.toExact())
+                      ).toString()
+                    : '0'}
                   <TokenImage
                     sx={{
                       margin: '0 4px'

@@ -129,7 +129,7 @@ const CreatePoolButton = () => {
       ret
         .then(poolId => {
           const goToPoolInfoPage = () => {
-            const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
+            const route = getAuctionPoolLink(sysId, PoolType.DUTCH_AUCTION, chainConfigInBackend?.id as number, poolId)
             navigate(route)
           }
 
