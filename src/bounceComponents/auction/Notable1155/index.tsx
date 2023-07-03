@@ -57,7 +57,7 @@ export const Notable1155 = () => {
   )
 
   return (
-    <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
+    <Box id={'NotableAuction'} sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
         <H3 justifyContent={'center'}>Notable Auctions</H3>
         <CenterRow
