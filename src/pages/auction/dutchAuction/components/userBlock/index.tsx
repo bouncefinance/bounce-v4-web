@@ -19,6 +19,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         status={poolInfo.status}
         currentTotal0={poolInfo.currentTotal0}
         hiddenStatus={poolInfo.participant.claimed}
+        poolInfo={poolInfo}
       />
       <Box
         sx={{

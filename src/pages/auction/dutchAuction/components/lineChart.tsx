@@ -237,19 +237,25 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       </Stack>
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
-        <RightText>0.25 ETH ($0.8035)</RightText>
+        <RightText>
+          {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+        </RightText>
       </PoolInfoItem>
       <PoolInfoItem title={'Reserve price'}>
-        <RightText>0.15 ETH ($0.3035)</RightText>
+        <RightText>
+          {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+        </RightText>
       </PoolInfoItem>
       <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>
       <PoolInfoItem
-        title={swappedAmount0 + 'Auction'}
+        title={swappedAmount0 + ' ' + poolInfo.token0.symbol.toUpperCase()}
         sx={{
           marginTop: '4px'
         }}
       >
-        <RightText>/ {amountTotal0} Auction</RightText>
+        <RightText>
+          / {amountTotal0} {poolInfo.token0.symbol.toUpperCase()}
+        </RightText>
       </PoolInfoItem>
     </Box>
   )

@@ -11,6 +11,9 @@ import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import UserBidHistory from './bidHistory'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useActiveWeb3React } from 'hooks'
+import Bid from '../bid'
 const ComBtn = styled(Button)(() => ({
   '&.MuiButtonBase-root': {
     background: 'transparent',
@@ -129,6 +132,9 @@ const TipsBox = ({
 )
 const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
+  const { account } = useActiveWeb3React()
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
+  console.log('currencyCurrentPrice>>>', poolInfo.currencyCurrentPrice?.toSignificant())
   const toClaim = () => {
     console.log('toClaim>>>')
   }
@@ -404,7 +410,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               color: '#E1F25C'
             }}
           >
-            0.25 ETH ($0.8035)
+            {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
           </RightText>
         </PoolInfoItem>
         <PoolInfoItem title={'Bid Amount'}>
@@ -413,10 +419,11 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               color: '#E1F25C'
             }}
           >
-            Balance: 100.00 {poolInfo.token0.symbol}
+            Balance: {userToken1Balance?.toSignificant()} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
       </Box>
+      <Bid poolInfo={poolInfo} />
       <Box
         sx={{
           padding: '0 24px '

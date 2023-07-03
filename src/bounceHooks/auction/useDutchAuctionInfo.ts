@@ -8,7 +8,7 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 import { useQueryParams } from 'hooks/useQueryParams'
-
+import JSBI from 'jsbi'
 export function useDutchAuctionInfo() {
   const { sysId } = useQueryParams()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, Number(sysId))
@@ -33,7 +33,6 @@ export function useDutchAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const currentPrice = useMemo(() => currentPriceRes?.[0].toString(), [currentPriceRes])
-  console.log('currentPrice>>>', currentPrice)
   const lowestBidPriceRes = useSingleCallResult(
     dutchAuctionContract,
     'lowestBidPrice',
@@ -192,17 +191,32 @@ export function useDutchAuctionInfo() {
     const t0 = new Currency(poolInfo.ethChainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
     const _t1 = poolInfo.token1
     const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
-
     return {
       ...poolInfo,
       whitelistData,
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
-      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal1),
+      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, amountSwap0Data || poolInfo.swappedAmount0),
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
-      highestPrice: poolsData.highestPrice ? CurrencyAmount.fromRawAmount(t1, poolsData.highestPrice) : undefined,
-      lowestPrice: poolsData.lowestPrice ? CurrencyAmount.fromRawAmount(t1, poolsData.lowestPrice) : undefined,
+      highestPrice: poolsData.highestPrice
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.multiply(
+              JSBI.divide(JSBI.BigInt(poolsData.highestPrice), JSBI.BigInt(poolInfo.amountTotal0)),
+              JSBI.BigInt(1e18)
+            )
+          )
+        : undefined,
+      lowestPrice: poolsData.lowestPrice
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.multiply(
+              JSBI.divide(JSBI.BigInt(poolsData.lowestPrice), JSBI.BigInt(poolInfo.amountTotal0)),
+              JSBI.BigInt(1e18)
+            )
+          )
+        : undefined,
       times: poolsData.times,
       currencyCurrentPrice: currentPrice ? CurrencyAmount.fromRawAmount(t1, currentPrice) : undefined,
       currencyLowestBidPrice: lowestBidPrice ? CurrencyAmount.fromRawAmount(t1, lowestBidPrice) : undefined,

@@ -90,7 +90,10 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
                 <RightText>{`${poolInfo.currencyAmountTotal0?.toSignificant()}`}</RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Price decreasing rate">
-                <RightText>{poolInfo.currencyCurrentPrice?.toSignificant()}</RightText>
+                <RightText>
+                  {poolInfo.currencyCurrentPrice?.toSignificant() + ' '}
+                  {`${poolInfo.token1.symbol.toUpperCase()}`}
+                </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Starting price (price ceiling)">
                 <RightText>
@@ -109,6 +112,9 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
                   {poolInfo.openAt ? moment(poolInfo.openAt * 1000).format('YYYY-MM-DD HH:mm') : '--'} -{' '}
                   {poolInfo.closeAt ? moment(poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:mm') : '--'}
                 </RightText>
+              </PoolInfoItem>
+              <PoolInfoItem title="Pool times">
+                <RightText>{poolInfo.times}</RightText>
               </PoolInfoItem>
             </>
           )}
