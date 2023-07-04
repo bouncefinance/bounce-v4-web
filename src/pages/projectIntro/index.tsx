@@ -724,7 +724,11 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
             gap={24}
             mt={16}
             alignItems={'center'}
-            sx={{ '@media(max-width:600px)': { flexWrap: 'wrap', padding: '0 20px' } }}
+            sx={{
+              '@media(max-width:600px)': isDark
+                ? { flexWrap: 'nowrap', padding: '0 20px', flexDirection: 'column', alignItems: 'flex-start' }
+                : {}
+            }}
           >
             <>
               {pricesComponent.flatMap((element, index) => {
@@ -748,40 +752,50 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
   console.log(setTab)
 
   return (
-    <Box mt={isDark ? 0 : 120} mb={140} sx={{ padding: isDark ? { xs: 0, sm: 72 } : 0 }}>
+    <Box
+      className={isDark ? ' dark' : ''}
+      mt={isDark ? 0 : 120}
+      mb={140}
+      sx={{ padding: isDark ? { xs: 0, sm: 72 } : 0, '&.dark': { width: '100%', maxWidth: 1296, margin: '0 auto' } }}
+    >
       <Row
         justifyContent={isDark ? 'start' : 'center'}
         sx={{ overflowX: 'scroll', '&::-webkit-scrollbar': { display: 'none' } }}
+        gap={isDark ? 24 : 0}
       >
-        {tabs.map((t, i) => (
-          <TabBg
-            sx={{
-              minWidth: isDark ? 'auto' : 230,
-              padding: isDark ? { xs: '24px 12px', sm: 24 } : '',
-              whiteSpace: 'pre',
-              '&.select': {
-                background: `${isDark ? 'transparent' : '#ffffff'}!important`,
-                color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
-              },
-              '&:hover': {
-                cursor: 'pointer',
-                color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
-              }
-            }}
-            key={i}
-            onClick={() => tabs.length > 1 && setTab(t)}
-            className={tab === t ? 'select' : ''}
-          >
-            {t}
-          </TabBg>
-        ))}
+        {tabs.map((t, i) => {
+          if (t === 'STEPN Token') return null
+          return (
+            <TabBg
+              sx={{
+                minWidth: isDark ? 'auto' : 230,
+                padding: isDark ? { xs: '24px 12px', sm: 24 } : '',
+                whiteSpace: 'pre',
+                '&.select': {
+                  background: `${isDark ? 'transparent' : '#ffffff'}!important`,
+                  color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
+                },
+                '&:hover': {
+                  cursor: 'pointer',
+                  color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
+                }
+              }}
+              key={i}
+              onClick={() => tabs.length > 1 && setTab(t)}
+              className={tab === t ? 'select' : ''}
+            >
+              {t}
+            </TabBg>
+          )
+        })}
       </Row>
-      {isDark && <DarkLine mb={30} sx={{ marginLeft: { xs: 0, sm: '-72px' } }} />}
+      {isDark && <DarkLine mb={30} />}
       <Box
         sx={{
           background: isDark ? 'transparent' : 'white',
           padding: { xs: 20, sm: isDark ? '0' : '20px 72px' },
-          minHeight: '486px'
+          minHeight: '486px',
+          marginTop: isDark ? 30 : 0
         }}
       >
         {tab === tabs[0] && <ProjectInfo isDark={isDark} item={item} />}
@@ -794,7 +808,9 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
 const DarkLine = styled(Box)({
   width: '100vw',
   height: 1,
-  background: 'rgba(255, 255, 255, 0.20)'
+  background: 'rgba(255, 255, 255, 0.20)',
+  position: 'absolute',
+  left: 0
 })
 const ProjectInfoSubtitle = styled(H5)`
   padding: 16px 20px;
@@ -830,7 +846,8 @@ const ProjectContentBgDark = styled(Box)({
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: 40,
-  width: 912,
+  width: '100%',
+  maxWidth: 912,
   minHeight: 446,
   background: '#121219',
   borderRadius: 6,
@@ -853,7 +870,8 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
         margin: isDark ? '0' : '0 auto',
         display: 'flex',
         flexWrap: { xs: 'wrap', md: 'unset' },
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        gap: 24
       }}
     >
       <Stack
