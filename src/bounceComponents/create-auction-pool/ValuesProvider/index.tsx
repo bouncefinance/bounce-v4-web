@@ -103,6 +103,9 @@ const initialValues: AuctionPool = {
     decimals: 18
   },
   swapRatio: '',
+  startPrice: '',
+  endPrice: '',
+  segments: '',
   poolSize: '',
   allocationPerWallet: '',
   allocationStatus: AllocationStatus.NoLimits,

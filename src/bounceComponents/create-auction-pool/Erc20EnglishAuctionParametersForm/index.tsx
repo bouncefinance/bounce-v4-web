@@ -1,13 +1,24 @@
-import { Button, Stack, Box, Typography } from '@mui/material'
-import { Form, Formik } from 'formik'
+import { Button, Stack, OutlinedInput, Box, Typography, FormControlLabel, Alert } from '@mui/material'
+import { Field, Form, Formik } from 'formik'
 import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import BigNumber from 'bignumber.js'
+
 import { show } from '@ebay/nice-modal-react'
+
+import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
-import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
+import {
+  ActionType,
+  useAuctionERC20Currency,
+  useAuctionInChain,
+  useValuesDispatch,
+  useValuesState
+} from '../ValuesProvider'
+import Radio from '../Radio'
+import RadioGroupFormItem from '../RadioGroupFormItem'
+import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
 
 import FormItem from 'bounceComponents/common/FormItem'
@@ -15,6 +26,9 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
+import { CurrencyAmount } from 'constants/token'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -28,15 +42,20 @@ interface FormValues {
   tokenToSymbol: string
   tokenToLogoURI?: string
   tokenToDecimals: string | number
-  swapRatio: string
-  winnerNumber: number | string
-  ticketPrice: number | string
-  maxParticipantAllowed: number | string
+  startPrice: string
+  endPrice: string
+  segments: string
+  poolSize: string
+  allocationStatus: AllocationStatus
+  allocationPerWallet: string
 }
 
 const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
+
+  const { currencyFrom } = useAuctionERC20Currency()
+  const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
   const isSm = useBreakpoint('sm')
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
@@ -46,44 +65,72 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
         'Please choose a different token',
         (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress
       ),
-    swapRatio: Yup.number()
-      .positive('Swap ratio must be positive')
+    endPrice: Yup.number()
       .typeError('Please input valid number')
-      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-        const _value = new BigNumber(value || 0).toFixed()
-        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-      })
-      .required('Swap ratio is required'),
-    ticketPrice: Yup.number()
-      .positive('ticket price must be positive')
-      .typeError('Please input valid number')
-      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-        const _value = new BigNumber(value || 0).toFixed()
-        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-      })
-      .required('Swap ratio is required'),
-    winnerNumber: Yup.number()
-      .integer('Number of Winners must be an integer')
-      .positive('Number of Winners must be positive')
-      .typeError('Please input valid number')
-      .required('Number of winners is required'),
-    maxParticipantAllowed: Yup.number()
-      .max(10000, 'max participant allowed must be less than or equal to 10000')
-      .test(
-        'MORE_THAN_WINNERS',
-        'max participant allowed must be more than or equal to number of winners',
-        (val, ctx) => {
-          const winnerNumber = ctx.parent.winnerNumber
-          if (val && Number(val) < Number(winnerNumber)) {
-            return false
-          }
-          return true
+      .required('Final price is required')
+      .test('minValue', "Final price can't be smaller than start price", function (value) {
+        const { startPrice } = this.parent
+        if (value && startPrice) {
+          return value >= startPrice
         }
-      )
-      .integer('max participant allowed must be an integer')
-      .positive('max participant allowed must be positive')
+        return true
+      }),
+    startPrice: Yup.number()
       .typeError('Please input valid number')
-      .required('max participant allowed is required')
+      .required('Start price is required')
+      .test('minValue', "Start price can't be greater than final price", function (value) {
+        const { endPrice } = this.parent
+        if (value && endPrice) {
+          return value <= endPrice
+        }
+        return true
+      }),
+    segments: Yup.number()
+      .typeError('Please input valid number')
+      .required('Auction price segment is required')
+      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
+        return Number.isInteger(value) && Number(value) >= 1
+      }),
+    poolSize: Yup.number()
+      .positive('Amount must be positive')
+      .typeError('Please input valid number')
+      .required('Amount is required')
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+      })
+      .test(
+        'POOL_SIZE_LESS_THAN_BALANCE',
+        'Pool size cannot be greater than your balance',
+        value =>
+          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
+      ),
+    allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
+    allocationPerWallet: Yup.number()
+      .when('allocationStatus', {
+        is: AllocationStatus.Limited,
+        then: Yup.number()
+          .typeError('Please input valid number')
+          .positive('Allocation per wallet must be positive')
+          .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+            const _value = new BigNumber(value || 0).toFixed()
+            return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+          })
+          .required('Allocation per wallet is required')
+      })
+      .when('allocationStatus', {
+        is: AllocationStatus.Limited,
+        then: Yup.number()
+          .typeError('Please input valid number')
+          .test(
+            'GREATER_THAN_POOL_SIZE',
+            'Allocation per wallet cannot be greater than pool size times swap ratio',
+            (value, context) =>
+              !context.parent.poolSize ||
+              !context.parent.swapRatio ||
+              (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+          )
+      })
   })
 
   const valuesState = useValuesState()
@@ -98,10 +145,12 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
     tokenToSymbol: valuesState.tokenTo.symbol || '',
     tokenToLogoURI: valuesState.tokenTo.logoURI || '',
     tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
-    winnerNumber: valuesState.winnerNumber || '0',
-    ticketPrice: valuesState.ticketPrice || '0',
-    maxParticipantAllowed: valuesState.maxParticipantAllowed || '0',
-    swapRatio: valuesState.swapRatio || ''
+    startPrice: valuesState.startPrice || '',
+    endPrice: valuesState.endPrice || '',
+    segments: valuesState.segments || '',
+    poolSize: valuesState.poolSize || '',
+    allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
+    allocationPerWallet: valuesState.allocationPerWallet || ''
   }
 
   const showTokenDialog = (
@@ -126,18 +175,16 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
   }
 
   return (
-    <Box sx={{ mt: 52, px: isSm ? 16 : 0 }}>
-      <Typography sx={{ color: 'var(--ps-gray-700)' }}>English Auction</Typography>
-      <Typography sx={{ mt: 5, mb: 42 }} variant="h2">
-        Auction Parameters
-      </Typography>
+    <Box sx={{ mt: 52, px: isSm ? 16 : '0' }}>
+      <Typography variant="h2">Auction Parameters</Typography>
+      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>{valuesState.auctionType}</Typography>
 
       <Formik
         initialValues={internalInitialValues}
         onSubmit={values => {
-          console.log('on submit123>>>', values)
+          console.log('on submit')
           valuesDispatch({
-            type: ActionType.CommitRandomSelectionAuctionParameters,
+            type: ActionType.CommitAuctionParameters,
             payload: {
               tokenTo: {
                 chainId: auctionInChainId,
@@ -146,10 +193,12 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
                 symbol: values.tokenToSymbol,
                 decimals: values.tokenToDecimals
               },
-              ticketPrice: values.ticketPrice,
-              winnerNumber: values.winnerNumber,
-              maxParticipantAllowed: values.maxParticipantAllowed,
-              swapRatio: values.swapRatio
+              startPrice: values.startPrice,
+              endPrice: values.endPrice,
+              segmentAmount: values.segments,
+              poolSize: values.poolSize,
+              allocationPerWallet: values.allocationPerWallet,
+              allocationStatus: values.allocationStatus
             }
           })
         }}
@@ -158,11 +207,12 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
         {({ setValues, values, setFieldValue }) => {
           return (
             <Stack component={Form} spacing={32} noValidate>
-              {/* <Alert severity="warning" sx={{ borderRadius: 20 }}>
+              <Alert severity="warning" sx={{ borderRadius: 20 }}>
                 <Typography variant="body1">
                   Bounce protocol does not support inflationary and deflationary tokens.
                 </Typography>
-              </Alert> */}
+              </Alert>
+
               {/* Token to */}
               <Box>
                 <Stack direction="row" spacing={8} sx={{ mb: 20 }}>
@@ -195,91 +245,25 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
                   </FormItem>
                 </Stack>
               </Box>
-              {/* Number Of Winners */}
+              {/* Starting price */}
               <Box>
-                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
-                  Number Of Winners
-                </Typography>
-                <Stack direction="row" alignItems="center" spacing={15}>
-                  <FormItem name="winnerNumber" placeholder="1" required sx={{ flex: 1 }}>
-                    <NumberInput
-                      value={values.winnerNumber + ''}
-                      onUserInput={value => {
-                        setFieldValue('winnerNumber', value)
-                      }}
-                    />
-                  </FormItem>
-                </Stack>
-              </Box>
-              {/* Token Per Ticket */}
-              <Box>
-                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
-                  Token Per Ticket
-                </Typography>
-
-                <Stack direction="row" alignItems="center" spacing={15}>
-                  <Typography>1 Ticket =</Typography>
-
-                  <FormItem name="swapRatio" placeholder="0.00" required sx={{ flex: 1 }}>
-                    <NumberInput
-                      value={values.swapRatio}
-                      onUserInput={value => {
-                        setFieldValue('swapRatio', value)
-                      }}
-                      endAdornment={
-                        <>
-                          <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
-                          <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
-                        </>
-                      }
-                    />
-                  </FormItem>
-                </Stack>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexFlow: 'row nowrap',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    margin: '20px 0'
-                  }}
-                >
-                  <Typography>Total amount of token for auction</Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexFlow: 'row nowrap',
-                      justifyContent: 'flex-end',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Typography sx={{ mr: 8 }}>
-                      {values.winnerNumber && values.swapRatio
-                        ? new BigNumber(values.winnerNumber).times(values.swapRatio).toString()
-                        : '-'}
-                    </Typography>
-                    <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
-                    <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
-                  </Box>
-                </Box>
-              </Box>
-
-              {/* Ticket Price */}
-              <Box>
-                <Stack direction="row" spacing={8} sx={{ mb: 20 }}>
-                  <Typography variant="h3" sx={{ fontSize: 16 }}>
-                    Ticket Price
+                <Stack direction="row" spacing={8}>
+                  <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                    Starting price(price floor)
                   </Typography>
-                  <Tooltip title="Ticket price is not price per unit token">
+                  <Tooltip title="The amount of tokens that you want to put in for auction">
                     <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                   </Tooltip>
                 </Stack>
+
                 <Stack direction="row" alignItems="center" spacing={15}>
-                  <FormItem name="ticketPrice" placeholder="0.00" required sx={{ flex: 1 }}>
+                  <Typography>1 {values.tokenFromSymbol} =</Typography>
+
+                  <FormItem name="startPrice" placeholder="0.00" required sx={{ flex: 1 }}>
                     <NumberInput
-                      value={values.ticketPrice + ''}
+                      value={values.startPrice}
                       onUserInput={value => {
-                        setFieldValue('ticketPrice', value)
+                        setFieldValue('startPrice', value)
                       }}
                       endAdornment={
                         <>
@@ -290,29 +274,163 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
                     />
                   </FormItem>
                 </Stack>
-                <Typography sx={{ margin: '20px 0' }}>Unit price of one token</Typography>
               </Box>
 
-              {/* Max Participant Allowed */}
+              {/* Reserve Price */}
               <Box>
-                <Stack direction="row" spacing={8} sx={{ mb: 20 }}>
-                  <Typography variant="h3" sx={{ fontSize: 16 }}>
-                    Max Participant Allowed (Max 10,000)
+                <Stack direction="row" spacing={8}>
+                  <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                    Final price(price ceiling)
                   </Typography>
-                  <Tooltip title="The maximum nubmer is 10.000 participants and must more than nunber of winners ">
+                  <Tooltip title="The amount of tokens that you want to put in for auction">
                     <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                   </Tooltip>
                 </Stack>
+
                 <Stack direction="row" alignItems="center" spacing={15}>
-                  <FormItem name="maxParticipantAllowed" placeholder="1" required sx={{ flex: 1 }}>
+                  <Typography>1 {values.tokenFromSymbol} =</Typography>
+
+                  <FormItem name="endPrice" placeholder="0.00" required sx={{ flex: 1 }}>
                     <NumberInput
-                      value={values.maxParticipantAllowed + ''}
+                      value={values.endPrice}
                       onUserInput={value => {
-                        setFieldValue('maxParticipantAllowed', value)
+                        setFieldValue('endPrice', value)
+                      }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
+                    />
+                  </FormItem>
+                </Stack>
+              </Box>
+
+              {/* Auction Segment */}
+              <Box>
+                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                  Auciton Price Segments
+                </Typography>
+
+                <Stack direction="row" alignItems="center" spacing={15}>
+                  <FormItem name="segments" placeholder="1" required sx={{ flex: 1 }}>
+                    <NumberInput
+                      value={values.segments}
+                      onUserInput={value => {
+                        setFieldValue('segments', value)
                       }}
                     />
                   </FormItem>
                 </Stack>
+              </Box>
+
+              {/* Swap Ratio */}
+              {/* <Box>
+                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                  Swap Ratio
+                </Typography>
+
+                <Stack direction="row" alignItems="center" spacing={15}>
+                  <Typography>1 {values.tokenFromSymbol} =</Typography>
+
+                  <FormItem name="swapRatio" placeholder="0.00" required sx={{ flex: 1 }}>
+                    <NumberInput
+                      value={values.swapRatio}
+                      onUserInput={value => {
+                        setFieldValue('swapRatio', value)
+                      }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
+                    />
+                  </FormItem>
+                </Stack>
+              </Box> */}
+
+              {/* Pool Size */}
+              <Box>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 8 }}>
+                  <Stack direction="row" spacing={8}>
+                    <Typography variant="h3" sx={{ fontSize: 16 }}>
+                      Amount
+                    </Typography>
+
+                    <Tooltip title="The amount of tokens that you want to put in for auction">
+                      <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                    </Tooltip>
+                  </Stack>
+
+                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toSignificant() || '-'}</Typography>}
+                </Stack>
+
+                <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>
+                  <NumberInput
+                    value={values.poolSize}
+                    onUserInput={value => {
+                      setFieldValue('poolSize', value)
+                    }}
+                    endAdornment={
+                      <>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          sx={{ mr: 20, minWidth: 60 }}
+                          disabled={!balance}
+                          onClick={() => {
+                            setFieldValue('poolSize', balance?.toSignificant(64, { groupSeparator: '' }))
+                          }}
+                        >
+                          Max
+                        </Button>
+                        <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
+                      </>
+                    }
+                  />
+                </FormItem>
+              </Box>
+
+              {/* Allocation per Wallet */}
+              <Box>
+                <Stack direction="row" spacing={8}>
+                  <Typography variant="h3" sx={{ fontSize: 16 }}>
+                    Allocation per Wallet
+                  </Typography>
+
+                  <Tooltip title="You can set a maximum allocation per wallet to prevent monopoly activities during the token swap.">
+                    <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                  </Tooltip>
+                </Stack>
+
+                <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
+                  <FormControlLabel
+                    value={AllocationStatus.NoLimits}
+                    control={<Radio disableRipple />}
+                    label="No Limits"
+                  />
+                  <FormControlLabel
+                    value={AllocationStatus.Limited}
+                    control={<Radio disableRipple />}
+                    label="Limited"
+                  />
+                </Field>
+
+                <FormItem name="allocationPerWallet" required sx={{ flex: 1 }}>
+                  <OutlinedInput
+                    sx={{ mt: 10 }}
+                    disabled={values.allocationStatus === AllocationStatus.NoLimits}
+                    endAdornment={
+                      <>
+                        <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
+                      </>
+                    }
+                  />
+                </FormItem>
               </Box>
 
               <Stack direction="row" spacing={10} justifyContent="end">
@@ -325,6 +443,7 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
                 >
                   Cancel
                 </Button>
+
                 <Button type="submit" variant="contained" sx={{ width: 140 }}>
                   Next
                 </Button>

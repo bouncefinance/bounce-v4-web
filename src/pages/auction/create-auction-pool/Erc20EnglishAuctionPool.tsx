@@ -15,9 +15,7 @@ export default function Erc20EnglishAuctionPool() {
           {valuesState.activeStep === CreationStep.TOKEN_INFORMATION && (
             <TokenInformationForm title="English Auction" />
           )}
-
           {valuesState.activeStep === CreationStep.AUCTION_PARAMETERS && <Erc20EnglishAuctionParametersForm />}
-
           {valuesState.activeStep === CreationStep.ADVANCED_SETTINGS && <AddIReleaseTypeAdvanced />}
         </Box>
       ) : (
