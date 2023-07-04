@@ -431,6 +431,20 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         </PoolInfoItem>
       </Box>
       <Bid poolInfo={poolInfo} />
+      <PoolInfoItem
+        title={'Token you will pay'}
+        sx={{
+          marginBottom: '9px'
+        }}
+      >
+        <RightText
+          style={{
+            color: '#E1F25C'
+          }}
+        >
+          {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+        </RightText>
+      </PoolInfoItem>
       <Box
         sx={{
           padding: '0 24px '

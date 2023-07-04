@@ -287,3 +287,17 @@ export function useDutchAuctionInfo() {
     run: getPoolInfo
   }
 }
+export function useDuctchCurrentPriceAndAmout1(amount0: number) {
+  const { sysId } = useQueryParams()
+  const { data: poolInfo } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, Number(sysId))
+  const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
+
+  const currentPriceRes = useSingleCallResult(
+    dutchAuctionContract,
+    'queryAmount1AndCurrentPrice',
+    [poolInfo?.poolId, amount0],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  console.log('currentPriceRes>>>', currentPriceRes?.toString())
+}
