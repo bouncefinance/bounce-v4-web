@@ -85,8 +85,8 @@ export const routes = {
     equilibriaIndex: '/playable/ghostierunner/equilibria',
     equilibriaDetail: '/playable/ghostierunner/equilibria/:chainShortName/:poolId'
   },
-  fundo: {
-    home: '/fundo/home/index',
-    detail: 'fundo/detail/index'
+  foundo: {
+    home: '/foundo/home/index',
+    detail: 'foundo/detail/index'
   }
 }
