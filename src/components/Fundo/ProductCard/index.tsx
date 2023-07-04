@@ -6,6 +6,7 @@ import Icon3 from 'components/Fundo/assets/img/icon3.png'
 import Icon4 from 'components/Fundo/assets/img/icon4.png'
 import Icon5 from 'components/Fundo/assets/img/icon5.png'
 import Icon6 from 'components/Fundo/assets/img/icon6.png'
+import Icon8 from 'components/Fundo/assets/img/icon8.png'
 import ProdIcon from 'components/Fundo/assets/img/mainImg.png'
 import Logo from 'components/Fundo/assets/img/logo1.png'
 import { useIsSMDown } from 'themes/useTheme'
@@ -32,12 +33,16 @@ export default function ProductCard({
       img: Icon3
     },
     {
-      text: 'Dimension: 50 cm',
-      img: Icon4
+      text: 'Pendant size: 4.1 cm',
+      img: Icon8
     },
     {
       text: 'Material​: 18k White gold',
       img: Icon5
+    },
+    {
+      text: 'Necklace : 50 cm',
+      img: Icon4
     }
   ]
   return (

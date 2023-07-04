@@ -403,7 +403,7 @@ export const marketList: BannerType[] = [
     name: 'The 1st Sabotage Hi Top Studio Pr...',
     time: '--',
     img: P1Img,
-    link: routes.fundo.home,
+    link: routes.foundo.home,
     startTime: 1687622400,
     endTime: '',
     resource: 'Bounce Original'
