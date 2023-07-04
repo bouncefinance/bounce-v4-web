@@ -1,4 +1,4 @@
-import { DutchAuctionPoolProp, PoolType } from 'api/pool/type'
+import { DutchAuctionPoolProp, PoolStatus, PoolType } from 'api/pool/type'
 import { useBackedPoolInfo } from './usePoolInfo'
 import { useDutchAuctionContract } from 'hooks/useContract'
 import { useSingleCallResult, useSingleContractMultipleData } from 'state/multicall/hooks'
@@ -9,6 +9,7 @@ import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 import { useQueryParams } from 'hooks/useQueryParams'
 import JSBI from 'jsbi'
+import BigNumber from 'bignumber.js'
 export interface AmountAndCurrentPriceParam {
   amount1: number | string
   currentPrice: number | string
@@ -317,10 +318,18 @@ export function useDuctchCurrentPriceAndAmout1(
     const _t1 = poolInfo?.token1
     const t1 = new Currency(poolInfo?.ethChainId, _t1?.address, _t1?.decimals, _t1?.symbol, _t1?.name, _t1?.smallUrl)
     const amount1 = CurrencyAmount.fromRawAmount(t1, amount1AndCurrentPriceRes?.[0].toString() || 0).toExact()
+    if (poolInfo.status === PoolStatus.Upcoming) {
+      return {
+        currentPrice: poolInfo?.highestPrice?.toExact() || 0,
+        amount1: BigNumber(poolInfo?.highestPrice?.toExact() || 0)
+          .times(amount0)
+          .toString()
+      }
+    }
     return {
       currentPrice: amount1AndCurrentPriceRes?.[1].toString() || 0,
       amount1: amount1
     }
-  }, [amount1AndCurrentPriceRes])
+  }, [amount1AndCurrentPriceRes, poolInfo, amount0])
   return amount1AndCurrentPrice
 }

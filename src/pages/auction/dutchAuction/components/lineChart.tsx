@@ -171,7 +171,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [colorObj, data, poolInfo.token0.symbol])
+  }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol])
   return <Box ref={chartContainerRef}></Box>
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {

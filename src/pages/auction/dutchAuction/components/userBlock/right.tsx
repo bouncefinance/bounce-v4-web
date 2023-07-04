@@ -397,13 +397,24 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             marginBottom: '9px'
           }}
         >
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
-          </RightText>
+          {poolInfo.status === PoolStatus.Upcoming && (
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.highestPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
+          )}
+          {poolInfo.status !== PoolStatus.Upcoming && (
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
+          )}
         </PoolInfoItem>
         <PoolInfoItem title={'Bid Amount'}>
           <RightText

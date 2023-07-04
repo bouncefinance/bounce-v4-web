@@ -53,11 +53,11 @@ const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) =>
     poolInfo.currencyAmountTotal0,
     poolInfo.currencyMaxAmount0PerWallet,
     poolInfo?.currencySwappedAmount0,
-    poolInfo?.currencyAmountTotal0
+    userToken0Balance
   ])
   const handleMaxButtonClick = useCallback(() => {
     setAmount(maxValue + '')
-  }, [maxValue])
+  }, [maxValue, setAmount])
 
   return (
     <NumInput
