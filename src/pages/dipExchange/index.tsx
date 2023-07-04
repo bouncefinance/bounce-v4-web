@@ -11,7 +11,7 @@ import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.
 import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import FooterPc from 'components/Footer/FooterPc'
-
+import { DipAuctionCard } from './dipAuctionCard'
 const defaultHeadData: IPrivatePadProp = {
   keyId: 7,
   liveTimeStamp: {
@@ -139,6 +139,7 @@ const DipExchange = () => {
         <ProjectHead item={defaultHeadData} isDark={true} />
       </DipHeadBox>
       <DipTabBox>
+        <DipAuctionCard />
         <Tabs item={defaultHeadData} isDark={true} />
         <FooterPc isDark={true} />
       </DipTabBox>
