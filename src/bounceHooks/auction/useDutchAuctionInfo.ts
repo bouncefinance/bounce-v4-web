@@ -297,10 +297,9 @@ export function useDuctchCurrentPriceAndAmout1(
   amount0: number | string,
   poolInfo: DutchAuctionPoolProp
 ): AmountAndCurrentPriceParam {
-  const inputAmount0 = JSBI.multiply(
-    JSBI.BigInt(amount0),
-    JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))
-  ).toString()
+  const inputAmount0 = poolInfo.currencyAmountTotal0
+    ? CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal0?.currency, amount0)?.raw?.toString()
+    : 0
   const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const amount1AndCurrentPriceRes = useSingleCallResult(
     dutchAuctionContract,
@@ -310,7 +309,7 @@ export function useDuctchCurrentPriceAndAmout1(
     poolInfo?.ethChainId
   ).result
   const amount1AndCurrentPrice: AmountAndCurrentPriceParam = useMemo(() => {
-    if (!poolInfo)
+    if (!poolInfo || !amount0)
       return {
         currentPrice: 0,
         amount1: 0
