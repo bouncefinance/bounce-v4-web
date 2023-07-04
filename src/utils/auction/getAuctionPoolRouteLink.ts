@@ -19,6 +19,8 @@ export default function getAuctionPoolLink(
         ? routes.auction.fixedSwapNft
         : category === PoolType.ENGLISH_AUCTION_NFT
         ? routes.auction.englishAuction
+        : category === PoolType.DUTCH_AUCTION
+        ? routes.auction.dutchAuction
         : routes.auction.fixedPrice
     return route
       .replace(':chainShortName', getLabelById(backedChainId, 'shortName', chainInfoOpt))
@@ -31,6 +33,8 @@ export default function getAuctionPoolLink(
       ? routes.auction.v2.fixedSwapNft
       : category === PoolType.ENGLISH_AUCTION_NFT
       ? routes.auction.v2.englishAuction
+      : category === PoolType.DUTCH_AUCTION
+      ? routes.auction.v2.dutchAuction
       : routes.auction.v2.fixedPrice
   return route.replace(':sysId', sysId.toString())
 }

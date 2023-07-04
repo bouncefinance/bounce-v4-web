@@ -49,6 +49,8 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
       ? tabs[5]
       : location.pathname === '/launchpad'
       ? tabs[1]
+      : location.pathname === '/dutchAuction'
+      ? tabs[6]
       : tabs[0]
   const [currentTab, setCurrentTab] = useState(path)
 
@@ -71,6 +73,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         break
       case 'Private Launchpad':
         navigate(routes.launchpad.index)
+        break
+      case 'Dutch Auction':
+        navigate(routes.dutchAuction.index)
         break
     }
   }
@@ -109,9 +114,10 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         }}
       >
         <Box gap={'6px'}>
-          {tabs.map((tab: string) => (
+          {tabs.map((tab: string, index: number) => (
             <StyledTab
               variant="contained"
+              id={`tab${index}`}
               key={tab}
               className={tab === currentTab ? 'selected' : ''}
               onClick={() => {

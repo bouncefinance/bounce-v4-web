@@ -186,6 +186,9 @@ type Payload = {
     allocationStatus: AllocationStatus
     allocationPerWallet: string
     priceFloor?: string
+    startPrice?: string
+    reservePrice?: string
+    segmentAmount?: string
     amountMinIncr1?: string
     activeStep: number
     completed: CompletedSteps
@@ -283,6 +286,9 @@ const reducer = (state: AuctionPool, action: Actions) => {
           ...state.tokenTo,
           ...action.payload.tokenTo
         },
+        segmentAmount: action.payload.segmentAmount,
+        startPrice: action.payload.startPrice,
+        reservePrice: action.payload.reservePrice,
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
         allocationStatus: action.payload.allocationStatus,

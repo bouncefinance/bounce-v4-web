@@ -143,7 +143,6 @@ const BidButtonBlock = ({
       </>
     )
   }
-
   return null
 }
 
