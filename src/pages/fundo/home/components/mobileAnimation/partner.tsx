@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useMemo } from 'react'
 import D5 from 'components/Fundo/assets/img/D5.png'
-import Icon6 from 'components/Fundo/assets/img/icon6.png'
+import Icon9 from 'components/Fundo/assets/img/icon9.png'
 import Icon7 from 'components/Fundo/assets/img/icon7.png'
 import { AnimateStep } from './threeCard'
 import X1 from 'components/Fundo/assets/img/mobile/x.svg'
@@ -86,10 +86,10 @@ export default function Partner({ animationRatio, step }: { animationRatio?: str
       )}
 
       <img
-        src={Icon6}
+        src={Icon9}
         style={{
           display: 'block',
-          width: '114px',
+          width: '67px',
           transform: transformContent.rightTransform
         }}
         alt=""

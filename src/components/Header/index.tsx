@@ -158,7 +158,7 @@ export default function Header() {
   //   }
   // })
   const showBounseHead = useMemo(() => {
-    return location.pathname.indexOf('fundo') === -1
+    return location.pathname.indexOf('foundo') === -1
   }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)

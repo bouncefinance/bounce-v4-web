@@ -74,7 +74,7 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
             color: '#fff'
           }}
         >
-          8.81
+          19.82
         </Typography>
         <Typography
           sx={{

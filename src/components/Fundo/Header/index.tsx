@@ -45,12 +45,12 @@ export default function Header() {
   const menuList = [
     {
       title: 'TOKEN DETAILS',
-      link: routes.fundo.detail,
+      link: routes.foundo.detail,
       external: false
     },
     {
       title: 'AUCTION  DETAILS',
-      link: routes.fundo.detail,
+      link: routes.foundo.detail,
       // link: routes.thirdPart.foundoDetail,
       external: false
     },
