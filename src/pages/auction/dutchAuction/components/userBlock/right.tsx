@@ -132,7 +132,7 @@ const TipsBox = ({
     </Typography>
   </Box>
 )
-const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const { account } = useActiveWeb3React()
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
@@ -479,4 +479,4 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     </Box>
   )
 }
-export default Right
+export default RightBox

@@ -30,39 +30,26 @@ const NumInput = styled(NumberInput)(() => ({
 }))
 const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
-  //   const maxAmount1PerWallet = Number(poolInfo.maxAmount0PerWallet)
-  const maxAmount0PerWallet = poolInfo?.maxAmount1PerWallet || 10 // TODO: new param is maxAmount0PerWallet that take place of maxAmount1PerWallet
+  // banlance
   const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal0?.currency)
+  // MaxAmount0PerWallet from contract, not from http
+  const currencyMaxAmount0PerWallet =
+    Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
+      ? poolInfo.currencyMaxAmount0PerWallet?.toExact()
+      : poolInfo.currencyAmountTotal0?.toExact()
+  // All tradable quantities for token0
+  const swappedAmount0 =
+    poolInfo?.currencySwappedAmount0 &&
+    poolInfo?.currencyAmountTotal0 &&
+    poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)
   const handleMaxButtonClick = useCallback(() => {
-    // const currentPrice = poolInfo.currencyCurrentPrice?.toSignificant() || 0
-    // const maxAmount0PerWallet = formatNumber(BigNumber(20).times(currentPrice).toString(), {
-    //   unit: poolInfo.token0.decimals,
-    //   decimalPlaces: poolInfo.token0.decimals
-    // })
-
-    const swappedAmount0 =
-      poolInfo?.currencySwappedAmount0 &&
-      poolInfo?.currencyAmountTotal0 &&
-      poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)
     const result = Math.min(
-      Number(swappedAmount0?.toSignificant()),
-      Number(userToken0Balance?.toSignificant()),
-      Number(maxAmount0PerWallet)
-    )
-    console.log(
-      'swappedAmount0 userToken0Balance, maxAmount0PerWallet',
-      swappedAmount0,
-      userToken0Balance?.toSignificant(),
-      maxAmount0PerWallet
+      Number(swappedAmount0?.toExact()),
+      Number(userToken0Balance?.toExact()),
+      Number(currencyMaxAmount0PerWallet)
     )
     setAmount(result + '')
-  }, [
-    poolInfo?.currencySwappedAmount0,
-    poolInfo?.currencyAmountTotal0,
-    userToken0Balance,
-    maxAmount0PerWallet,
-    setAmount
-  ])
+  }, [swappedAmount0, userToken0Balance, currencyMaxAmount0PerWallet, setAmount])
 
   return (
     <NumInput
