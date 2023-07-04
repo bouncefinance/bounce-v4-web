@@ -9,6 +9,10 @@ import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 import { useQueryParams } from 'hooks/useQueryParams'
 import JSBI from 'jsbi'
+export interface AmountAndCurrentPriceParam {
+  amount1: number | string
+  currentPrice: number | string
+}
 export function useDutchAuctionInfo() {
   const { sysId } = useQueryParams()
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, Number(sysId))
@@ -33,6 +37,7 @@ export function useDutchAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const currentPrice = useMemo(() => currentPriceRes?.[0].toString(), [currentPriceRes])
+
   const lowestBidPriceRes = useSingleCallResult(
     dutchAuctionContract,
     'lowestBidPrice',
@@ -287,17 +292,35 @@ export function useDutchAuctionInfo() {
     run: getPoolInfo
   }
 }
-export function useDuctchCurrentPriceAndAmout1(amount0: number) {
-  const { sysId } = useQueryParams()
-  const { data: poolInfo } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, Number(sysId))
+export function useDuctchCurrentPriceAndAmout1(
+  amount0: number | string,
+  poolInfo: DutchAuctionPoolProp
+): AmountAndCurrentPriceParam {
+  const inputAmount0 = JSBI.multiply(
+    JSBI.BigInt(amount0),
+    JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))
+  ).toString()
   const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
-
-  const currentPriceRes = useSingleCallResult(
+  const amount1AndCurrentPriceRes = useSingleCallResult(
     dutchAuctionContract,
     'queryAmount1AndCurrentPrice',
-    [poolInfo?.poolId, amount0],
+    [poolInfo?.poolId, inputAmount0],
     undefined,
     poolInfo?.ethChainId
   ).result
-  console.log('currentPriceRes>>>', currentPriceRes?.toString())
+  const amount1AndCurrentPrice: AmountAndCurrentPriceParam = useMemo(() => {
+    if (!poolInfo)
+      return {
+        currentPrice: 0,
+        amount1: 0
+      }
+    const _t1 = poolInfo?.token1
+    const t1 = new Currency(poolInfo?.ethChainId, _t1?.address, _t1?.decimals, _t1?.symbol, _t1?.name, _t1?.smallUrl)
+    const amount1 = CurrencyAmount.fromRawAmount(t1, amount1AndCurrentPriceRes?.[0].toString() || 0).toExact()
+    return {
+      currentPrice: amount1AndCurrentPriceRes?.[1].toString() || 0,
+      amount1: amount1
+    }
+  }, [amount1AndCurrentPriceRes])
+  return amount1AndCurrentPrice
 }

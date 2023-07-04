@@ -151,7 +151,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       if (resultItem && resultItem?.time) {
         dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
       }
-      const token0Price = currentValue + poolInfo.token0.symbol
+      const token0Price = currentValue + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
       const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
       if (
@@ -187,16 +187,6 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     })
   const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
   const timeSegments = new BigNumber(endTime).minus(startTime).div(segments).integerValue().toNumber()
-  console.log(
-    'segments startPrice endPrice startTime endTime>>',
-    segments,
-    startPrice,
-    endPrice,
-    startTime,
-    endTime,
-    priceSegments,
-    timeSegments
-  )
   const lineData = useMemo(() => {
     const xList = arrayRange(startTime, segments, timeSegments)
     const yList = arrayRange(startPrice, segments, priceSegments).reverse()
@@ -208,7 +198,6 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     })
     return dataPoint
   }, [startTime, segments, timeSegments, startPrice, priceSegments])
-  console.log('lineData>>>', lineData)
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
