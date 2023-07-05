@@ -165,7 +165,6 @@ export function useCreateErc20EnglishAuctionPool() {
     // const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
     const amountStart = CurrencyAmount.fromAmount(currencyTo, params.startPrice)
     const amountEnd = CurrencyAmount.fromAmount(currencyTo, params.endPrice)
-    const fragmentAmount = CurrencyAmount.fromAmount(currencyFrom, params.times)
 
     if (!amountTotal0) {
       return Promise.reject('amountTotal0 error')
@@ -209,7 +208,7 @@ export function useCreateErc20EnglishAuctionPool() {
       releaseData: params.releaseData,
       amountMin1: amountStart?.raw.toString(),
       amountMax1: amountEnd?.raw.toString(),
-      fragments: fragmentAmount?.raw.toString()
+      fragments: params.times
     }
 
     const {
@@ -231,8 +230,6 @@ export function useCreateErc20EnglishAuctionPool() {
       maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
-
-    console.log('contractCallParams', contractCallParams)
 
     const args = [
       id,
