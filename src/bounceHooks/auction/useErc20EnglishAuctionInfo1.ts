@@ -8,64 +8,28 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 import { useQueryParams } from 'hooks/useQueryParams'
-import JSBI from 'jsbi'
 
 export function useErc20EnglishAuctionInfo() {
   const { sysId } = useQueryParams()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ERC20_ENGLISH_AUCTION, Number(sysId))
+  const {
+    data: poolInfo,
+    run: getPoolInfo,
+    loading
+  } = useBackedPoolInfo(PoolType.ERC20_ENGLISH_AUCTION, Number(sysId) || 18290)
   const { account } = useActiveWeb3React()
-  const contract = useEnglishAuctionErc20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
+  const englishAuctionErc20Contract = useEnglishAuctionErc20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
 
   const amountSwap0PRes = useSingleCallResult(
-    contract,
+    englishAuctionErc20Contract,
     'amountSwap0',
     [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
-
   const amountSwap0Data = useMemo(() => amountSwap0PRes?.[0].toString(), [amountSwap0PRes])
 
-  const currentPriceRes = useSingleCallResult(
-    contract,
-    'currentPrice',
-    [poolInfo?.poolId],
-    undefined,
-    poolInfo?.ethChainId
-  ).result
-  const currentPrice = useMemo(() => currentPriceRes?.[0].toString(), [currentPriceRes])
-  const lowestBidPriceRes = useSingleCallResult(
-    contract,
-    'lowestBidPrice',
-    [poolInfo?.poolId],
-    undefined,
-    poolInfo?.ethChainId
-  ).result
-  const lowestBidPrice = useMemo(() => lowestBidPriceRes?.[0].toString(), [lowestBidPriceRes])
-
-  const maxAmount0PerWalletRes = useSingleCallResult(
-    contract,
-    'maxAmount0PerWallet',
-    [poolInfo?.poolId],
-    undefined,
-    poolInfo?.ethChainId
-  ).result
-  const maxAmount0PerWallet = useMemo(() => maxAmount0PerWalletRes?.[0].toString(), [maxAmount0PerWalletRes])
-
-  const nextRoundInSecondsRes = useSingleCallResult(
-    contract,
-    'nextRoundInSeconds',
-    [poolInfo?.poolId],
-    undefined,
-    poolInfo?.ethChainId
-  ).result
-  const nextRoundInSeconds = useMemo(
-    () => (nextRoundInSecondsRes?.[0] !== undefined ? Number(nextRoundInSecondsRes?.[0].toString()) : undefined),
-    [nextRoundInSecondsRes]
-  )
-
   const amountSwap1PRes = useSingleCallResult(
-    contract,
+    englishAuctionErc20Contract,
     'amountSwap1',
     [poolInfo?.poolId],
     undefined,
@@ -73,9 +37,27 @@ export function useErc20EnglishAuctionInfo() {
   ).result
   const amountSwap1Data = useMemo(() => amountSwap1PRes?.[0].toString(), [amountSwap1PRes])
 
+  const currentPriceRes = useSingleCallResult(
+    englishAuctionErc20Contract,
+    'currentAmount1',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const currentPrice = useMemo(() => currentPriceRes?.[0].toString(), [currentPriceRes])
+
+  const maxAmount1PerWalletRes = useSingleCallResult(
+    englishAuctionErc20Contract,
+    'maxAmount1PerWallet',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const maxAmount1PerWallet = useMemo(() => maxAmount1PerWalletRes?.[0].toString(), [maxAmount1PerWalletRes])
+
   const myAmountSwapped0Res = useSingleCallResult(
-    contract,
-    'myAmountSwap0',
+    englishAuctionErc20Contract,
+    'myAmountSwapped0',
     [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
@@ -83,31 +65,37 @@ export function useErc20EnglishAuctionInfo() {
   const myAmountSwapped0Data = useMemo(() => myAmountSwapped0Res?.[0].toString(), [myAmountSwapped0Res])
 
   const myAmountSwapped1Res = useSingleCallResult(
-    contract,
-    'myAmountSwap1',
+    englishAuctionErc20Contract,
+    'myAmountSwapped1',
     [account || undefined, poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
   const myAmountSwapped1Data = useMemo(() => myAmountSwapped1Res?.[0].toString(), [myAmountSwapped1Res])
 
-  const poolsRes = useSingleCallResult(contract, 'pools', [poolInfo?.poolId], undefined, poolInfo?.ethChainId).result
+  const poolsRes = useSingleCallResult(
+    englishAuctionErc20Contract,
+    'pools',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
   console.log('contract poolsRes >>>', poolsRes)
   const poolsData: {
-    highestPrice: string | undefined
-    lowestPrice: string | undefined
-    times: number | undefined
+    fragments: number | undefined
+    amountStart1: string | undefined
+    amountEnd1: string | undefined
   } = useMemo(
     () => ({
-      highestPrice: poolsRes?.amountMax1.toString(),
-      lowestPrice: poolsRes?.amountMin1.toString(),
-      times: poolsRes?.times ? Number(poolsRes?.times) : undefined
+      fragments: poolsRes?.fragments.toString() ? Number(poolsRes?.fragments.toString()) : undefined,
+      amountStart1: poolsRes?.amountStart1.toString(),
+      amountEnd1: poolsRes?.amountEnd1.toString()
     }),
     [poolsRes]
   )
 
   const creatorClaimedRes = useSingleCallResult(
-    contract,
+    englishAuctionErc20Contract,
     'creatorClaimed',
     [poolInfo?.poolId],
     undefined,
@@ -116,7 +104,7 @@ export function useErc20EnglishAuctionInfo() {
   const creatorClaimed = useMemo(() => creatorClaimedRes?.[0], [creatorClaimedRes])
 
   const myClaimedRes = useSingleCallResult(
-    contract,
+    englishAuctionErc20Contract,
     'myClaimed',
     [account || undefined, poolInfo?.poolId],
     undefined,
@@ -125,7 +113,7 @@ export function useErc20EnglishAuctionInfo() {
   const myClaimed = useMemo(() => myClaimedRes?.[0], [myClaimedRes])
 
   const myReleasedRes = useSingleCallResult(
-    account ? contract : null,
+    account ? englishAuctionErc20Contract : null,
     'myReleased',
     [account || undefined, poolInfo?.poolId],
     undefined,
@@ -134,7 +122,7 @@ export function useErc20EnglishAuctionInfo() {
   const myReleased = useMemo(() => myReleasedRes?.[0].toString(), [myReleasedRes])
 
   const curReleasableAmountRes = useSingleCallResult(
-    myAmountSwapped0Data ? contract : null,
+    myAmountSwapped0Data ? englishAuctionErc20Contract : null,
     'computeReleasableAmount',
     [poolInfo?.poolId, myAmountSwapped0Data],
     undefined,
@@ -143,7 +131,7 @@ export function useErc20EnglishAuctionInfo() {
   const curReleasableAmount = useMemo(() => curReleasableAmountRes?.[0].toString(), [curReleasableAmountRes])
 
   const releaseTypesRes = useSingleCallResult(
-    contract,
+    englishAuctionErc20Contract,
     'releaseTypes',
     [poolInfo?.poolId],
     undefined,
@@ -155,7 +143,7 @@ export function useErc20EnglishAuctionInfo() {
   )
 
   const getReleaseDataListLengthRes = useSingleCallResult(
-    contract,
+    englishAuctionErc20Contract,
     'getReleaseDataListLength',
     [poolInfo?.poolId],
     undefined,
@@ -169,7 +157,7 @@ export function useErc20EnglishAuctionInfo() {
     ])
   }, [getReleaseDataListLengthRes, poolInfo?.poolId])
   const releaseDataListRes = useSingleContractMultipleData(
-    queryReleaseDataListParams ? contract : null,
+    queryReleaseDataListParams ? englishAuctionErc20Contract : null,
     'releaseDataList',
     queryReleaseDataListParams || [],
     undefined,
@@ -202,33 +190,17 @@ export function useErc20EnglishAuctionInfo() {
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, amountSwap0Data || poolInfo.swappedAmount0),
-      currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
+      currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
-      highestPrice: poolsData.highestPrice
-        ? CurrencyAmount.fromRawAmount(
-            t1,
-            JSBI.divide(
-              JSBI.multiply(JSBI.BigInt(poolsData.highestPrice), JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))),
-              JSBI.BigInt(poolInfo.amountTotal0)
-            )
-          )
-        : undefined,
-      lowestPrice: poolsData.lowestPrice
-        ? CurrencyAmount.fromRawAmount(
-            t1,
-            JSBI.divide(
-              JSBI.multiply(JSBI.BigInt(poolsData.lowestPrice), JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))),
-              JSBI.BigInt(poolInfo.amountTotal0)
-            )
-          )
-        : undefined,
-      times: poolsData.times,
+      fragments: poolsData.fragments,
       currencyCurrentPrice: currentPrice ? CurrencyAmount.fromRawAmount(t1, currentPrice) : undefined,
-      currencyLowestBidPrice: lowestBidPrice ? CurrencyAmount.fromRawAmount(t1, lowestBidPrice) : undefined,
-      currencyMaxAmount0PerWallet: maxAmount0PerWallet
-        ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
+      currencyAmountStartPrice: poolsData.amountStart1
+        ? CurrencyAmount.fromRawAmount(t1, poolsData.amountStart1)
         : undefined,
-      nextRoundInSeconds,
+      currencyAmountEndPrice: poolsData.amountEnd1 ? CurrencyAmount.fromRawAmount(t1, poolsData.amountEnd1) : undefined,
+      currencyMaxAmount1PerWallet: maxAmount1PerWallet
+        ? CurrencyAmount.fromRawAmount(t0, maxAmount1PerWallet)
+        : undefined,
       releaseType,
       releaseData,
       participant: {
@@ -260,17 +232,15 @@ export function useErc20EnglishAuctionInfo() {
     creatorClaimed,
     curReleasableAmount,
     currentPrice,
-    lowestBidPrice,
-    maxAmount0PerWallet,
+    maxAmount1PerWallet,
     myAmountSwapped0Data,
     myAmountSwapped1Data,
     myClaimed,
     myReleased,
-    nextRoundInSeconds,
     poolInfo,
-    poolsData.highestPrice,
-    poolsData.lowestPrice,
-    poolsData.times,
+    poolsData.amountEnd1,
+    poolsData.amountStart1,
+    poolsData.fragments,
     releaseData,
     releaseType,
     whitelistData

@@ -315,16 +315,12 @@ export interface Erc20EnglishAuctionPoolProp extends FixedSwapPool {
   currencyAmountTotal0: CurrencyAmount | undefined
   currencyAmountTotal1: CurrencyAmount | undefined
   currencySwappedAmount0: CurrencyAmount | undefined
-  // currencyMaxAmount1PerWallet: CurrencyAmount
-  // currencySurplusTotal0: CurrencyAmount
-  currencySwappedTotal1: CurrencyAmount | undefined
-  highestPrice: CurrencyAmount | undefined
-  lowestPrice: CurrencyAmount | undefined
+  currencySwappedAmount1: CurrencyAmount | undefined
   currencyCurrentPrice: CurrencyAmount | undefined
-  currencyLowestBidPrice: CurrencyAmount | undefined
-  currencyMaxAmount0PerWallet: CurrencyAmount | undefined
-  nextRoundInSeconds: number | undefined
-  times: number | undefined
+  currencyMaxAmount1PerWallet: CurrencyAmount | undefined
+  currencyAmountStartPrice: CurrencyAmount | undefined
+  currencyAmountEndPrice: CurrencyAmount | undefined
+  fragments: number | undefined
   ethChainId: ChainId
   participant: {
     address?: string
