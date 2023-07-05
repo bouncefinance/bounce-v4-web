@@ -75,11 +75,7 @@ const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) =>
       placeholder="Enter"
       value={amount}
       onUserInput={value => {
-        if (Number(value) >= Number(maxValue)) {
-          setAmount(maxValue + '')
-        } else {
-          setAmount(value)
-        }
+        setAmount(value)
       }}
       endAdornment={
         <>
