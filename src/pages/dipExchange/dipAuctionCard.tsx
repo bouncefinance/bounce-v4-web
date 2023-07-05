@@ -43,7 +43,7 @@ const ProgressTimeTab = ({
     <ProgressBox>
       {list.map((item, index) => (
         <ProgressItem
-          onClick={() => onClick(index)}
+          onClick={() => item.state !== 'unresolved' && onClick(index)}
           key={index}
           icon={
             item.state === 'resolved' ? <DoneIcon sx={{ color: 'black', width: 15, height: 15 }} /> : icon | (index + 1)
@@ -155,9 +155,13 @@ const SoldProgress = ({ currTime, currTab }: { currTime: any; currTab: string })
 const SoldAuctionCard = ({ currTime }: { currTime: any }) => {
   const steps = ['Subscription Period', 'Final Token claim']
   const [activeStep, setActiveStep] = useState(0)
+  const [isStart, setIsStart] = useState(false)
   console.log(setActiveStep)
   const [, formattedRes] = useCountDown({
-    targetDate: `${currTime.time} 23:00:00`
+    targetDate: `${currTime.time} 23:00:00`,
+    onEnd() {
+      setIsStart(true)
+    }
   })
   const currSoldInfo = {
     'Completed Commit': '122,256,345.00 USDT',
@@ -235,23 +239,27 @@ const SoldAuctionCard = ({ currTime }: { currTime: any }) => {
                         <BaseH6 sx={{ color: '#2B51DA' }}>-</BaseH6>
                       </Box>
                     </Stack>
-                    <Button
-                      sx={{
-                        width: 278,
-                        height: 48,
-                        padding: '12px 20px',
-                        background: 'rgb(215,214,217)',
-                        marginTop: 30,
-                        borderRadius: 6,
-                        color: 'white',
-                        '&:hover': {
+                    {!isStart && (
+                      <Button
+                        disabled
+                        sx={{
+                          width: 278,
+                          height: 48,
+                          padding: '12px 20px',
                           background: 'rgb(215,214,217)',
-                          border: '1px solid rgb(215,214,217)'
-                        }
-                      }}
-                    >
-                      Commit
-                    </Button>
+                          marginTop: 30,
+                          borderRadius: 6,
+                          color: 'white',
+                          cursor: 'not-allowed',
+                          '&:hover': {
+                            background: 'rgb(215,214,217)',
+                            border: '1px solid rgb(215,214,217)'
+                          }
+                        }}
+                      >
+                        Commit
+                      </Button>
+                    )}
                   </Box>
                 </SoldFormInfo>
               </StepContent>
@@ -288,42 +296,42 @@ export const DipAuctionCard = () => {
   const timeProps: { list: ITimeList[] } = {
     list: [
       {
-        time: '2023-7-05',
+        time: '2023-7-04',
         title: 'First Round',
-        state: 'resolved'
-      },
-      {
-        time: '2023-6-14',
-        title: 'Second Round',
         state: 'pending'
       },
       {
-        time: '2023-6-14',
+        time: '2023-7-06',
+        title: 'Second Round',
+        state: 'unresolved'
+      },
+      {
+        time: '2023-7-07',
         title: 'Third Round',
         state: 'unresolved'
       },
       {
-        time: '2023-6-14',
+        time: '2023-7-08',
         title: 'Fourth Round',
         state: 'unresolved'
       },
       {
-        time: '2023-6-14',
+        time: '2023-7-09',
         title: 'First Round',
         state: 'unresolved'
       },
       {
-        time: '2023-6-14',
+        time: '2023-7-10',
         title: 'First Round',
         state: 'unresolved'
       },
       {
-        time: '2023-6-14',
+        time: '2023-7-11',
         title: 'First Round',
         state: 'unresolved'
       },
       {
-        time: '2023-6-14',
+        time: '2023-7-12',
         title: 'First Round',
         state: 'unresolved'
       }
