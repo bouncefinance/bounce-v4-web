@@ -234,8 +234,8 @@ export function useDutchAuctionInfo() {
           )
         : undefined,
       times: poolsData.times,
-      currencyCurrentPrice: currentPrice ? CurrencyAmount.fromRawAmount(t1, currentPrice) : undefined,
-      currencyLowestBidPrice: lowestBidPrice ? CurrencyAmount.fromRawAmount(t1, lowestBidPrice) : undefined,
+      currencyCurrentPrice: currentPrice ? CurrencyAmount.ether(currentPrice) : undefined,
+      currencyLowestBidPrice: lowestBidPrice ? CurrencyAmount.ether(lowestBidPrice) : undefined,
       currencyMaxAmount0PerWallet: maxAmount0PerWallet
         ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
         : undefined,
