@@ -1,9 +1,6 @@
 import { Box } from '@mui/material'
-import InputAmount from './userBlock/inputAmount'
-import { DutchAuctionPoolProp } from 'api/pool/type'
-import { useState } from 'react'
-const Bid = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const [amount, setAmount] = useState('')
+import InputAmount, { RegretAmountInputProps } from './userBlock/inputAmount'
+const Bid = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) => {
   return (
     <Box
       sx={{

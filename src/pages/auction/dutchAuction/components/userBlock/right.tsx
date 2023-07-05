@@ -1,13 +1,13 @@
-import { Box, Typography, Grid, styled, Button } from '@mui/material'
+import { Box, Typography, Grid } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import PoolInfoItem from '../poolInfoItem'
 import { RightText } from '../creatorBlock/auctionInfo'
-import { useMemo } from 'react'
-import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
+import { useState } from 'react'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
+import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import UserBidHistory from './bidHistory'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
@@ -15,19 +15,8 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import Bid from '../bid'
 import JSBI from 'jsbi'
-
-const ComBtn = styled(Button)(() => ({
-  '&.MuiButtonBase-root': {
-    background: 'transparent',
-    border: '1px solid #FFFFFF',
-    color: '#FFFFFF'
-  },
-  '&.MuiButtonBase-root:hover': {
-    background: '#E1F25C',
-    border: '1px solid #E1F25C',
-    color: '#121212'
-  }
-}))
+import { useDuctchCurrentPriceAndAmout1, AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
+import BidBlock from './bidBlock'
 const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -100,11 +89,13 @@ const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
 const TipsBox = ({
   style,
   children,
-  iconUrl
+  iconUrl,
+  imgStyle
 }: {
   iconUrl?: string
   style?: React.CSSProperties
   children?: string
+  imgStyle?: React.CSSProperties
 }) => (
   <Box
     sx={{
@@ -119,7 +110,12 @@ const TipsBox = ({
       ...style
     }}
   >
-    <img src={iconUrl} style={{ width: '24px', marginRight: '12px', verticalAlign: 'middle' }} alt="" srcSet="" />
+    <img
+      src={iconUrl}
+      style={{ width: '24px', marginRight: '12px', verticalAlign: 'middle', ...imgStyle }}
+      alt=""
+      srcSet=""
+    />
     <Typography
       variant="body1"
       sx={{
@@ -135,11 +131,9 @@ const TipsBox = ({
 const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const { account } = useActiveWeb3React()
+  const [amount, setAmount] = useState('0')
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
-  console.log('currencyCurrentPrice>>>', poolInfo.currencyCurrentPrice?.toSignificant())
-  const toClaim = () => {
-    console.log('toClaim>>>')
-  }
+  const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDuctchCurrentPriceAndAmout1(amount, poolInfo)
   const bidHistory = [
     {
       amount: '2000 AUCTION',
@@ -187,15 +181,6 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       date: '12 Dec 12:00'
     }
   ]
-  const btnStr = useMemo(() => {
-    if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
-      return 'Place a Bid'
-    } else if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
-      return Number(poolInfo.currentTotal0) !== 0 ? 'Place a Bid' : 'Place a Bid'
-    } else {
-      return 'Place a Bid'
-    }
-  }, [poolInfo.currentTotal0, poolInfo.status])
   return (
     <Box
       sx={{
@@ -403,7 +388,7 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       </Box>
       <Box
         sx={{
-          padding: '30px 24px'
+          padding: '30px 24px 0'
         }}
       >
         <PoolInfoItem
@@ -412,13 +397,24 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             marginBottom: '9px'
           }}
         >
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
-          </RightText>
+          {poolInfo.status === PoolStatus.Upcoming && (
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.highestPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
+          )}
+          {poolInfo.status !== PoolStatus.Upcoming && (
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
+          )}
         </PoolInfoItem>
         <PoolInfoItem title={'Bid Amount'}>
           <RightText
@@ -430,51 +426,49 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </RightText>
         </PoolInfoItem>
       </Box>
-      <Bid poolInfo={poolInfo} />
-      <PoolInfoItem
-        title={'Token you will pay'}
+      <Bid poolInfo={poolInfo} amount={amount} setAmount={setAmount} />
+      <Box
         sx={{
-          marginBottom: '9px'
+          padding: '12px 24px 30px'
         }}
       >
-        <RightText
-          style={{
-            color: '#E1F25C'
+        <PoolInfoItem
+          title={'Token you will pay'}
+          sx={{
+            marginBottom: '9px'
           }}
         >
-          {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
-        </RightText>
-      </PoolInfoItem>
+          <RightText
+            style={{
+              color: '#E1F25C'
+            }}
+          >
+            {currentPriceAndAmount1.amount1 + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          </RightText>
+        </PoolInfoItem>
+      </Box>
       <Box
         sx={{
           padding: '0 24px '
         }}
       >
-        {!poolInfo.participant.claimed && (
-          <ComBtn fullWidth onClick={toClaim} disabled={poolInfo.status !== PoolStatus.Live}>
-            {btnStr}
-          </ComBtn>
-        )}
-        {poolInfo.status === PoolStatus.Upcoming && (
-          <TipsBox
-            iconUrl={TipsIcon}
-            style={{
-              marginTop: '16px'
-            }}
-          >
-            You can only claim your fund raised after your auction is finished. There is a 2.5% platform feed charged
-            automatically from fund raised.
-          </TipsBox>
-        )}
+        <BidBlock poolInfo={poolInfo} />
         {poolInfo.status === PoolStatus.Live && (
           <TipsBox
-            iconUrl={TipsIcon}
+            iconUrl={WarningIcon}
             style={{
-              marginTop: '16px'
+              marginTop: '16px',
+              border: 'none',
+              padding: '0',
+              alignItems: 'flex-start'
+            }}
+            imgStyle={{
+              position: 'relative',
+              top: '2px',
+              width: '16px'
             }}
           >
-            You can only claim your fund raised after your auction is finished. There is a 2.5% platform feed charged
-            automatically from fund raised.
+            The final price is based on the lowest price bid at the end of the auction.
           </TipsBox>
         )}
         {poolInfo.participant.claimed && (
@@ -484,12 +478,11 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               marginTop: '16px'
             }}
           >
-            You can only claim your fund raised after your auction is finished. There is a 2.5% platform feed charged
-            automatically from fund raised.
+            You have successfully claimed your tokens. See you next time!
           </TipsBox>
         )}
       </Box>
-      {bidHistory.length > 0 && <UserBidHistory list={bidHistory} />}
+      {poolInfo.status === PoolStatus.Closed && bidHistory.length > 0 && <UserBidHistory list={bidHistory} />}
     </Box>
   )
 }
