@@ -14,7 +14,7 @@ import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPoo
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import BidInput from '../bid'
-import JSBI from 'jsbi'
+import { BigNumber } from 'bignumber.js'
 import { useDuctchCurrentPriceAndAmout1, AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
 import BidBlock from './bidBlock'
 const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
@@ -357,10 +357,9 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   }}
                 >
                   {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? JSBI.multiply(
-                        JSBI.BigInt(poolInfo?.currencyLowestBidPrice?.toExact()),
-                        JSBI.BigInt(poolInfo?.currencySwappedAmount0?.toExact())
-                      ).toString()
+                    ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+                        .times(poolInfo?.currencySwappedAmount0?.toExact())
+                        .toFixed(6, BigNumber.ROUND_DOWN)
                     : '0'}
                   <TokenImage
                     sx={{

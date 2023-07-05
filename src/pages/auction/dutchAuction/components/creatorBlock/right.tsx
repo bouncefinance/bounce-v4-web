@@ -8,10 +8,10 @@ import { RightText } from './auctionInfo'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import ClaimBlock from './claimBlock'
+import ClaimBlock from './claimBlcok'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-import JSBI from 'jsbi'
+import { BigNumber } from 'bignumber.js'
 
 const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
@@ -294,10 +294,9 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   }}
                 >
                   {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? JSBI.multiply(
-                        JSBI.BigInt(poolInfo?.currencyLowestBidPrice?.toExact()),
-                        JSBI.BigInt(poolInfo?.currencySwappedAmount0?.toExact())
-                      ).toString()
+                    ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+                        .times(poolInfo?.currencySwappedAmount0?.toExact())
+                        .toFixed(6, BigNumber.ROUND_DOWN)
                     : '0'}
                   <TokenImage
                     sx={{
@@ -344,6 +343,21 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
             <RightText>
               2.5%
+              <span
+                style={{
+                  color: '#959595'
+                }}
+              >
+                {' '}
+                / 0 ETH
+              </span>
+            </RightText>
+          </Stack>
+        </PoolInfoItem>
+        <PoolInfoItem title={'Excessive paid amount'}>
+          <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
+            <RightText>
+              {/* {poolInfo.participant?.currencyUnfillAmount1.toSignificant()} */}
               <span
                 style={{
                   color: '#959595'
