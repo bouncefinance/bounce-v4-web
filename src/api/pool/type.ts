@@ -312,8 +312,8 @@ export interface DutchAuctionPoolProp extends FixedSwapPool {
 }
 
 export interface Erc20EnglishAuctionPoolProp extends FixedSwapPool {
-  currencyAmountTotal0: CurrencyAmount | undefined
-  currencyAmountTotal1: CurrencyAmount | undefined
+  currencyAmountTotal0: CurrencyAmount
+  currencyAmountTotal1: CurrencyAmount
   currencySwappedAmount0: CurrencyAmount | undefined
   currencySwappedAmount1: CurrencyAmount | undefined
   currencyCurrentPrice: CurrencyAmount | undefined
