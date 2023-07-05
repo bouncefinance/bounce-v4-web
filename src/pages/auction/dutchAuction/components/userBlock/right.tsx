@@ -15,7 +15,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import BidInput from '../bid'
 import { BigNumber } from 'bignumber.js'
-import { useDuctchCurrentPriceAndAmout1, AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
+import { useDutchCurrentPriceAndAmount1, AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
 import BidBlock from './bidBlock'
 const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
@@ -133,7 +133,7 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { account } = useActiveWeb3React()
   const [amount, setAmount] = useState('0')
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
-  const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDuctchCurrentPriceAndAmout1(amount, poolInfo)
+  const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDutchCurrentPriceAndAmount1(amount, poolInfo)
   const bidHistory = [
     {
       amount: '2000 AUCTION',
@@ -461,7 +461,9 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         }}
       >
         {/* bid section */}
-        {poolInfo.status === PoolStatus.Live && <BidBlock poolInfo={poolInfo} amount={amount} />}
+        {(poolInfo.status === PoolStatus.Live || poolInfo.status === PoolStatus.Upcoming) && (
+          <BidBlock poolInfo={poolInfo} amount={amount} currentPriceAndAmount1={currentPriceAndAmount1} />
+        )}
         {/* live tips */}
         {poolInfo.status === PoolStatus.Live && (
           <TipsBox
@@ -493,50 +495,65 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </TipsBox>
         )}
         {/* Final Auction Results */}
-        <Box
-          sx={{
-            width: '100%',
-            margin: '30px auto 12px',
-            padding: '16px',
-            border: '1px solid #E1F25C',
-            borderRadius: '8px'
-          }}
-        >
-          <Typography
+        {poolInfo.status === PoolStatus.Closed && (
+          <Box
             sx={{
-              fontFamily: `'Public Sans'`,
-              color: '#fff',
-              fontSize: '14px',
-              fontWeight: 600
+              width: '100%',
+              margin: '30px auto 12px',
+              padding: '16px',
+              border: '1px solid #E1F25C',
+              borderRadius: '8px'
             }}
-            mb={'12px'}
           >
-            Final Auction Results
-          </Typography>
-          <PoolInfoItem title={'Final auction price'}>
-            <RightText
-              style={{
-                color: '#E1F25C'
+            <Typography
+              sx={{
+                fontFamily: `'Public Sans'`,
+                color: '#fff',
+                fontSize: '14px',
+                fontWeight: 600
               }}
+              mb={'12px'}
             >
-              {poolInfo.currencyLowestBidPrice?.toExact() || '--'} {poolInfo.token1.symbol}
-            </RightText>
-          </PoolInfoItem>
-          <PoolInfoItem title={'Successful funds raised'}>
-            <RightText
-              style={{
-                color: '#E1F25C'
-              }}
-            >
-              {poolInfo.currencySwappedTotal1?.toExact() || '--'} {poolInfo.token1.symbol}
-            </RightText>
-          </PoolInfoItem>
-        </Box>
+              Final Auction Results
+            </Typography>
+            <PoolInfoItem title={'Final auction price'}>
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {poolInfo.currencyLowestBidPrice?.toExact() || '--'} {poolInfo.token1.symbol}
+              </RightText>
+            </PoolInfoItem>
+            <PoolInfoItem title={'Successful funds raised'}>
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {poolInfo.currencySwappedTotal1?.toExact() || '--'} {poolInfo.token1.symbol}
+              </RightText>
+            </PoolInfoItem>
+            {isUserJoined && (
+              <PoolInfoItem title={'Excessive paid amount'}>
+                <RightText
+                  style={{
+                    color: '#E1F25C'
+                  }}
+                >
+                  {(poolInfo.participant?.currencyUnfilledAmount1?.toExact() || 0) +
+                    ' ' +
+                    poolInfo.token1.symbol.toUpperCase()}
+                </RightText>
+              </PoolInfoItem>
+            )}
+          </Box>
+        )}
       </Box>
       {/* bid history */}
-      {poolInfo.status === PoolStatus.Closed && isUserJoined && bidHistory.length > 0 && (
-        <UserBidHistory list={bidHistory} />
-      )}
+      {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Live) &&
+        isUserJoined &&
+        bidHistory.length > 0 && <UserBidHistory list={bidHistory} />}
     </Box>
   )
 }

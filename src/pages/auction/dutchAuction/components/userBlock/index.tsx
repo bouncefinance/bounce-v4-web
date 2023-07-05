@@ -15,12 +15,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       }}
       mb={'40px'}
     >
-      <UserPoolStatusBox
-        status={poolInfo.status}
-        currentTotal0={poolInfo.currentTotal0}
-        hiddenStatus={poolInfo.participant.claimed}
-        poolInfo={poolInfo}
-      />
+      <UserPoolStatusBox status={poolInfo.status} hiddenStatus={poolInfo.participant.claimed} poolInfo={poolInfo} />
       <Box
         sx={{
           display: 'flex',

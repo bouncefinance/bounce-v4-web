@@ -280,7 +280,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             </PoolTextItem>
           </Grid>
           <Grid item xs={6}>
-            <PoolTextItem title={'Estimated funds raised'} tip={'The amount of token you successfully secured.'}>
+            <PoolTextItem title={'Estimated funds raised'} tip={'Estimate based on lowest price.'}>
               <>
                 <Box
                   sx={{
@@ -339,25 +339,10 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             <CopyToClipboard text={poolInfo.creator} />
           </Stack>
         </PoolInfoItem>
-        <PoolInfoItem title={'Platform fee charged'} tip={'Platform fee charged'}>
+        <PoolInfoItem title={'Platform fee charged'} tip={'The amount of fee paid to platform.'}>
           <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
             <RightText>
               2.5%
-              <span
-                style={{
-                  color: '#959595'
-                }}
-              >
-                {' '}
-                / 0 ETH
-              </span>
-            </RightText>
-          </Stack>
-        </PoolInfoItem>
-        <PoolInfoItem title={'Excessive paid amount'}>
-          <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-            <RightText>
-              {/* {poolInfo.participant?.currencyUnfillAmount1.toSignificant()} */}
               <span
                 style={{
                   color: '#959595'

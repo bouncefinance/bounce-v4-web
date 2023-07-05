@@ -19,7 +19,8 @@ const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
   const dutchERC20Contract = useDutchAuctionContract(poolInfo.contract)
   const run = useCallback(
     async (
-      bidAmount: CurrencyAmount
+      amount0: CurrencyAmount,
+      amount1: CurrencyAmount
     ): Promise<{
       hash: string
       transactionReceipt: Promise<TransactionReceipt>
@@ -49,22 +50,22 @@ const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
           proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
         }
       }
-
-      const args = [poolInfo.poolId, proofArr]
+      const args = [poolInfo.poolId, amount0.raw.toString(), proofArr]
+      console.log('args>>>', args)
       const estimatedGas = await dutchERC20Contract.estimateGas
-        .bet(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
+        .bid(...args, { value: isToken1Native ? amount1.raw.toString() : undefined })
         .catch((error: Error) => {
           console.debug('Failed to swap', error)
           throw error
         })
       return dutchERC20Contract
-        .bet(...args, {
+        .bid(...args, {
           gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? bidAmount.raw.toString() : undefined
+          value: isToken1Native ? amount1.raw.toString() : undefined
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
+            summary: `Use ${amount1.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
             userSubmitted: {
               account,
               action: `dutch_auction_swap`,

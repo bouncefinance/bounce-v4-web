@@ -14,6 +14,8 @@ import { PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BigNumber } from 'bignumber.js'
 import usePlaceBidDutch from 'bounceHooks/auction/usePlaceBidDutch'
+import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
+
 const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
     background: 'transparent',
@@ -27,7 +29,15 @@ const ComBtn = styled(LoadingButton)(() => ({
   }
 }))
 
-const BidBlock = ({ poolInfo, amount }: { poolInfo: DutchAuctionPoolProp; amount: string }) => {
+const BidBlock = ({
+  poolInfo,
+  amount,
+  currentPriceAndAmount1
+}: {
+  poolInfo: DutchAuctionPoolProp
+  amount?: string
+  currentPriceAndAmount1: AmountAndCurrentPriceParam
+}) => {
   const { account, chainId } = useActiveWeb3React()
   const { run: bid, submitted } = usePlaceBidDutch(poolInfo)
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
@@ -74,14 +84,20 @@ const BidBlock = ({ poolInfo, amount }: { poolInfo: DutchAuctionPoolProp; amount
         ? claimAt * 1000
         : undefined
   })
-  const slicedBidAmount = poolInfo?.currencyAmountTotal0
-    ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount)
+  const amount0CurrencyAmount = poolInfo?.currencyAmountTotal0
+    ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount || '0')
+    : 0
+  const amount1CurrencyAmount = poolInfo?.currencyAmountTotal1
+    ? CurrencyAmount.fromAmount(
+        poolInfo?.currencyAmountTotal1?.currency,
+        BigNumber(currentPriceAndAmount1.amount1).toString()
+      )
     : 0
   const toBid = useCallback(async () => {
-    if (!slicedBidAmount) return
+    if (!amount1CurrencyAmount || !amount0CurrencyAmount) return
     showRequestConfirmDialog()
     try {
-      const { transactionReceipt } = await bid(slicedBidAmount)
+      const { transactionReceipt } = await bid(amount0CurrencyAmount, amount1CurrencyAmount)
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -98,7 +114,7 @@ const BidBlock = ({ poolInfo, amount }: { poolInfo: DutchAuctionPoolProp; amount
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully bid ${slicedBidAmount.toSignificant()} ${poolInfo.token1.symbol}`
+            content: `You have successfully bid ${amount1CurrencyAmount.toSignificant()} ${poolInfo.token1.symbol}`
           })
         })
         .catch()
@@ -114,7 +130,7 @@ const BidBlock = ({ poolInfo, amount }: { poolInfo: DutchAuctionPoolProp; amount
         onAgain: toBid
       })
     }
-  }, [bid, poolInfo.token1.symbol, slicedBidAmount])
+  }, [amount1CurrencyAmount, amount0CurrencyAmount, bid, poolInfo.token1.symbol])
   if (!account) {
     return <ConnectWalletButton />
   }
