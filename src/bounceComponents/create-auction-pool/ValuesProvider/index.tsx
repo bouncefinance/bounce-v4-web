@@ -105,7 +105,7 @@ const initialValues: AuctionPool = {
   swapRatio: '',
   startPrice: '',
   endPrice: '',
-  segments: '',
+  segmentAmount: '',
   poolSize: '',
   allocationPerWallet: '',
   allocationStatus: AllocationStatus.NoLimits,
@@ -187,6 +187,7 @@ type Payload = {
     allocationPerWallet: string
     priceFloor?: string
     startPrice?: string
+    endPrice?: string
     reservePrice?: string
     segmentAmount?: string
     amountMinIncr1?: string
@@ -289,6 +290,7 @@ const reducer = (state: AuctionPool, action: Actions) => {
         segmentAmount: action.payload.segmentAmount,
         startPrice: action.payload.startPrice,
         reservePrice: action.payload.reservePrice,
+        endPrice: action.payload.endPrice,
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
         allocationStatus: action.payload.allocationStatus,

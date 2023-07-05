@@ -70,6 +70,7 @@ import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteLis
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
+import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -120,6 +121,8 @@ export default function App() {
                     <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
                     <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
+                    <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
+                    <Route path={routes.auction.v2.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                     <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                     <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                     <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />

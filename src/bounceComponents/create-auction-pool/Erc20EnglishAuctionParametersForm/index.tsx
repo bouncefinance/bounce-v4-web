@@ -3,9 +3,7 @@ import { Field, Form, Formik } from 'formik'
 import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-
 import { show } from '@ebay/nice-modal-react'
-
 import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
@@ -53,7 +51,6 @@ interface FormValues {
 const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-
   const { currencyFrom } = useAuctionERC20Currency()
   const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
   const isSm = useBreakpoint('sm')
@@ -134,6 +131,7 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
   })
 
   const valuesState = useValuesState()
+  console.log('🚀 ~ file: index.tsx:137 ~ Erc20EnglishAuctionParametersForm ~ valuesState:', valuesState)
   const valuesDispatch = useValuesDispatch()
 
   const internalInitialValues: FormValues = {
@@ -147,7 +145,7 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
     tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
     startPrice: valuesState.startPrice || '',
     endPrice: valuesState.endPrice || '',
-    segments: valuesState.segments || '',
+    segments: valuesState.segmentAmount || '',
     poolSize: valuesState.poolSize || '',
     allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
     allocationPerWallet: valuesState.allocationPerWallet || ''

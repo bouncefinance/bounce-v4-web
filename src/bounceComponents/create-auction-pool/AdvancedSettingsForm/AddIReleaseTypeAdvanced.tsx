@@ -68,6 +68,7 @@ export const AddIReleaseTypeAdvanced = ({
   hideRefundable?: boolean
 }) => {
   const valuesState = useValuesState()
+  console.log('🚀 ~ file: AddIReleaseTypeAdvanced.tsx:71 ~ valuesState:', valuesState)
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])

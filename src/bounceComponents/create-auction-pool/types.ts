@@ -74,9 +74,6 @@ export interface AuctionPool {
   tokenFrom: Token
   tokenTo: Token
   swapRatio: string
-  startPrice: string
-  endPrice: string
-  segments: string
   poolSize: string
   allocationPerWallet: string
   allocationStatus: AllocationStatus
@@ -101,4 +98,5 @@ export interface AuctionPool {
   startPrice?: string
   reservePrice?: string
   segmentAmount?: string
+  endPrice?: string
 }
