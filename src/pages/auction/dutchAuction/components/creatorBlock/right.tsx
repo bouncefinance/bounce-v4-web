@@ -8,10 +8,10 @@ import { RightText } from './auctionInfo'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import ClaimBlock from './ClaimBlock'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-import JSBI from 'jsbi'
+import { BigNumber } from 'bignumber.js'
+import ClaimBlock from './claimBlcok'
 
 const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
@@ -280,7 +280,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             </PoolTextItem>
           </Grid>
           <Grid item xs={6}>
-            <PoolTextItem title={'Estimated funds raised'} tip={'The amount of token you successfully secured.'}>
+            <PoolTextItem title={'Estimated funds raised'} tip={'Estimate based on lowest price.'}>
               <>
                 <Box
                   sx={{
@@ -294,10 +294,9 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   }}
                 >
                   {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? JSBI.multiply(
-                        JSBI.BigInt(poolInfo?.currencyLowestBidPrice?.toExact()),
-                        JSBI.BigInt(poolInfo?.currencySwappedAmount0?.toExact())
-                      ).toString()
+                    ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+                        .times(poolInfo?.currencySwappedAmount0?.toExact())
+                        .toFixed(6, BigNumber.ROUND_DOWN)
                     : '0'}
                   <TokenImage
                     sx={{
@@ -340,7 +339,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             <CopyToClipboard text={poolInfo.creator} />
           </Stack>
         </PoolInfoItem>
-        <PoolInfoItem title={'Platform fee charged'} tip={'Platform fee charged'}>
+        <PoolInfoItem title={'Platform fee charged'} tip={'The amount of fee paid to platform.'}>
           <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
             <RightText>
               2.5%

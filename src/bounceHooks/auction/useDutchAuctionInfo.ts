@@ -12,7 +12,6 @@ import JSBI from 'jsbi'
 import BigNumber from 'bignumber.js'
 export interface AmountAndCurrentPriceParam {
   amount1: number | string
-  currentPrice: number | string
 }
 export function useDutchAuctionInfo() {
   const { sysId } = useQueryParams()
@@ -207,6 +206,19 @@ export function useDutchAuctionInfo() {
     const t0 = new Currency(poolInfo.ethChainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
     const _t1 = poolInfo.token1
     const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
+    const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(
+      t0,
+      myAmountSwapped0Data || poolInfo.participant.swappedAmount0 || '0'
+    )
+    const currencySwappedAmount1 = CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Data || '0')
+    const currencyLowestBidPrice = lowestBidPrice ? CurrencyAmount.ether(lowestBidPrice) : undefined
+    const unfilledAmount1 = BigNumber(currencySwappedAmount1.toExact()).minus(
+      BigNumber(currencySwappedAmount0.toExact()).times(currencyLowestBidPrice?.toExact() || '0')
+    )
+    console.log('unfilledAmount1>>>', unfilledAmount1, unfilledAmount1.toString())
+    const currencyUnfilledAmount1 = unfilledAmount1.isGreaterThan(0)
+      ? CurrencyAmount.fromAmount(t1, unfilledAmount1.toString())
+      : CurrencyAmount.fromAmount(t1, 0)
     return {
       ...poolInfo,
       whitelistData,
@@ -234,8 +246,8 @@ export function useDutchAuctionInfo() {
           )
         : undefined,
       times: poolsData.times,
-      currencyCurrentPrice: currentPrice ? CurrencyAmount.fromRawAmount(t1, currentPrice) : undefined,
-      currencyLowestBidPrice: lowestBidPrice ? CurrencyAmount.fromRawAmount(t1, lowestBidPrice) : undefined,
+      currencyCurrentPrice: currentPrice ? CurrencyAmount.ether(currentPrice) : undefined,
+      currencyLowestBidPrice,
       currencyMaxAmount0PerWallet: maxAmount0PerWallet
         ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
         : undefined,
@@ -246,11 +258,8 @@ export function useDutchAuctionInfo() {
         ...poolInfo.participant,
         claimed: myClaimed === undefined ? poolInfo.participant.claimed : myClaimed,
         swappedAmount0: myAmountSwapped0Data || poolInfo.participant.swappedAmount0,
-        currencySwappedAmount0: CurrencyAmount.fromRawAmount(
-          t0,
-          myAmountSwapped0Data || poolInfo.participant.swappedAmount0 || '0'
-        ),
-        currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Data || '0'),
+        currencySwappedAmount0,
+        currencySwappedAmount1,
         currencyCurReleasableAmount:
           releaseType === IReleaseType.Instant
             ? CurrencyAmount.fromRawAmount(t0, myAmountSwapped0Data || '0')
@@ -262,7 +271,8 @@ export function useDutchAuctionInfo() {
               CurrencyAmount.fromRawAmount(t0, myReleased || '0')
             )
           : undefined,
-        currencyMyReleased: myReleased ? CurrencyAmount.fromRawAmount(t0, myReleased) : undefined
+        currencyMyReleased: myReleased ? CurrencyAmount.fromRawAmount(t0, myReleased) : undefined,
+        currencyUnfilledAmount1
       }
     }
   }, [
@@ -293,7 +303,7 @@ export function useDutchAuctionInfo() {
     run: getPoolInfo
   }
 }
-export function useDuctchCurrentPriceAndAmout1(
+export function useDutchCurrentPriceAndAmount1(
   amount0: number | string,
   poolInfo: DutchAuctionPoolProp
 ): AmountAndCurrentPriceParam {
@@ -319,14 +329,12 @@ export function useDuctchCurrentPriceAndAmout1(
     const amount1 = CurrencyAmount.fromRawAmount(t1, amount1AndCurrentPriceRes?.[0].toString() || 0).toExact()
     if (poolInfo.status === PoolStatus.Upcoming) {
       return {
-        currentPrice: poolInfo?.highestPrice?.toExact() || 0,
         amount1: BigNumber(poolInfo?.highestPrice?.toExact() || 0)
           .times(amount0)
           .toString()
       }
     }
     return {
-      currentPrice: amount1AndCurrentPriceRes?.[1].toString() || 0,
       amount1: amount1
     }
   }, [amount1AndCurrentPriceRes, poolInfo, amount0])

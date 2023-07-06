@@ -301,6 +301,7 @@ export interface DutchAuctionPoolProp extends FixedSwapPool {
     currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
     currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
     currencyMyReleased?: CurrencyAmount | undefined //current my Released token
+    currencyUnfilledAmount1?: CurrencyAmount | undefined // current unfill amount1
   }
   releaseType?: IReleaseType | undefined
   releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]

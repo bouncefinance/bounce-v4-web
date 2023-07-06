@@ -1,6 +1,6 @@
 import { Box, styled, Typography } from '@mui/material'
 import { useMemo, useCallback } from 'react'
-import { useCreatorClaim } from 'bounceHooks/auction/useCreatorClaimDutchAuction'
+import { CurrencyAmount } from 'constants/token'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { show } from '@ebay/nice-modal-react'
@@ -11,6 +11,10 @@ import { LoadingButton } from '@mui/lab'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { BigNumber } from 'bignumber.js'
+import usePlaceBidDutch from 'bounceHooks/auction/usePlaceBidDutch'
+import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
 
 const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -24,8 +28,50 @@ const ComBtn = styled(LoadingButton)(() => ({
     color: '#121212'
   }
 }))
-const BidBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+
+const BidBlock = ({
+  poolInfo,
+  amount,
+  currentPriceAndAmount1
+}: {
+  poolInfo: DutchAuctionPoolProp
+  amount?: string
+  currentPriceAndAmount1: AmountAndCurrentPriceParam
+}) => {
   const { account, chainId } = useActiveWeb3React()
+  const { run: bid, submitted } = usePlaceBidDutch(poolInfo)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
+  // max amount of token0 by token1 banlance
+  const userToken0limit = useMemo(() => {
+    const highestPrice = poolInfo.highestPrice?.toExact() || 0
+    const currencyCurrentPrice = poolInfo.currencyCurrentPrice?.toExact() || 0
+    return BigNumber(userToken1Balance?.toExact() || 0)
+      .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
+      .toString()
+  }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
+  const maxValue = useMemo(() => {
+    // MaxAmount0PerWallet from contract, not from http
+    const currencyMaxAmount0PerWallet =
+      Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
+        ? poolInfo.currencyMaxAmount0PerWallet?.toExact()
+        : poolInfo.currencyAmountTotal0?.toExact()
+    // All tradable quantities for token0
+    const swappedAmount0 =
+      poolInfo?.currencySwappedAmount0 &&
+      poolInfo?.currencyAmountTotal0 &&
+      poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)
+    const result = Math.min(
+      Number(swappedAmount0?.toExact()),
+      Number(userToken0limit),
+      Number(currencyMaxAmount0PerWallet)
+    )
+    return result
+  }, [
+    poolInfo.currencyAmountTotal0,
+    poolInfo.currencyMaxAmount0PerWallet,
+    poolInfo?.currencySwappedAmount0,
+    userToken0limit
+  ])
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -38,60 +84,53 @@ const BidBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         ? claimAt * 1000
         : undefined
   })
-  const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name, poolInfo.contract)
-  const successDialogContent = useMemo(() => {
-    const hasToken0ToClaim = poolInfo?.currencyAmountTotal0?.greaterThan('0')
-    const token0ToClaimText = `${poolInfo?.currencyAmountTotal0?.toSignificant()} ${poolInfo?.token0.symbol}`
-    const token1ToClaimText =
-      hasToken0ToClaim && poolInfo?.currencyAmountTotal1?.toSignificant() && poolInfo.token1.symbol
-        ? ` and ${poolInfo?.currencyAmountTotal1?.toSignificant()} ${poolInfo.token1.symbol}`
-        : ''
-    return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
-  }, [poolInfo?.currencyAmountTotal0, poolInfo?.currencyAmountTotal1, poolInfo?.token0.symbol, poolInfo.token1.symbol])
-  const toClaim = useCallback(
-    async (isCancel: boolean) => {
-      showRequestConfirmDialog()
-      try {
-        const { transactionReceipt } = await claim()
-
-        const ret = new Promise((resolve, rpt) => {
-          showWaitingTxDialog(() => {
-            hideDialogConfirmation()
-            rpt()
-          })
-          transactionReceipt.then(curReceipt => {
-            resolve(curReceipt)
+  const amount0CurrencyAmount = poolInfo?.currencyAmountTotal0
+    ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount || '0')
+    : 0
+  const amount1CurrencyAmount = poolInfo?.currencyAmountTotal1
+    ? CurrencyAmount.fromAmount(
+        poolInfo?.currencyAmountTotal1?.currency,
+        BigNumber(currentPriceAndAmount1.amount1).toString()
+      )
+    : 0
+  const toBid = useCallback(async () => {
+    if (!amount1CurrencyAmount || !amount0CurrencyAmount) return
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await bid(amount0CurrencyAmount, amount1CurrencyAmount)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully bid ${amount1CurrencyAmount.toSignificant()} ${poolInfo.token1.symbol}`
           })
         })
-        ret
-          .then(() => {
-            hideDialogConfirmation()
-            show(DialogTips, {
-              iconType: 'success',
-              againBtn: 'Close',
-              title: 'Congratulations!',
-              content: isCancel
-                ? '`You have successfully cancelled the pool and claimed your tokens`'
-                : successDialogContent
-            })
-          })
-          .catch()
-      } catch (error) {
-        const err: any = error
-        console.error(err)
-        hideDialogConfirmation()
-        show(DialogTips, {
-          iconType: 'error',
-          againBtn: 'Try Again',
-          cancelBtn: 'Cancel',
-          title: 'Oops..',
-          content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-          onAgain: () => toClaim(isCancel)
-        })
-      }
-    },
-    [claim, successDialogContent]
-  )
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toBid
+      })
+    }
+  }, [amount1CurrencyAmount, amount0CurrencyAmount, bid, poolInfo.token1.symbol])
   if (!account) {
     return <ConnectWalletButton />
   }
@@ -110,7 +149,8 @@ const BidBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '0 24px',
-          borderRadius: '8px'
+          borderRadius: '8px',
+          cursor: 'pointer'
         }}
       >
         <Typography
@@ -140,9 +180,21 @@ const BidBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         fullWidth
         loadingPosition="start"
         loading={submitted.complete || submitted.submitted}
-        onClick={() => toClaim(false)}
+        onClick={() => toBid()}
       >
-        <span>{'Claim token and extra payment'}</span>
+        <span>{'Place a Bid'}</span>
+      </ComBtn>
+    )
+  }
+  if (poolInfo.status === PoolStatus.Live) {
+    return (
+      <ComBtn
+        fullWidth
+        loading={submitted.complete || submitted.submitted}
+        disabled={!amount || Number(amount) === 0 || Number(amount) > maxValue}
+        onClick={() => toBid()}
+      >
+        <span>{Number(amount) > maxValue ? 'Insufficient Balance' : 'Place a Bid'}</span>
       </ComBtn>
     )
   }

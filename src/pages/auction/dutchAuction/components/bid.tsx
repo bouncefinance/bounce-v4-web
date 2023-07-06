@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import InputAmount, { RegretAmountInputProps } from './userBlock/inputAmount'
-const Bid = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) => {
+const BidInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) => {
   return (
     <Box
       sx={{
@@ -14,4 +14,4 @@ const Bid = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) => {
     </Box>
   )
 }
-export default Bid
+export default BidInput

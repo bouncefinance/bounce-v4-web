@@ -1,7 +1,7 @@
-import { FixedSwapPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp } from 'api/pool/type'
 import { getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
-import { useRandomSelectionERC20Contract } from 'hooks/useContract'
+import { useDutchAuctionContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { CurrencyAmount } from 'constants/token'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
@@ -9,21 +9,18 @@ import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import getTokenType from 'utils/getTokenType'
 
-const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
+const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
-
-  const submitted = useUserHasSubmittedRecords(account || undefined, 'random_selection_swap', poolInfo.poolId)
-
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'dutch_auction_swap', poolInfo.poolId)
   // const isNotInWhitelist = useIsNotInWhitelist()
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
   const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
-
+  const dutchERC20Contract = useDutchAuctionContract(poolInfo.contract)
   const run = useCallback(
     async (
-      bidAmount: CurrencyAmount
+      amount0: CurrencyAmount,
+      amount1: CurrencyAmount
     ): Promise<{
       hash: string
       transactionReceipt: Promise<TransactionReceipt>
@@ -31,7 +28,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
       if (!account) {
         return Promise.reject('no account')
       }
-      if (!randomSelectionERC20Contract) {
+      if (!dutchERC20Contract) {
         return Promise.reject('no contract')
       }
       let proofArr: string[] = []
@@ -53,25 +50,25 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
           proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
         }
       }
-
-      const args = [poolInfo.poolId, proofArr]
-      const estimatedGas = await randomSelectionERC20Contract.estimateGas
-        .bet(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
+      const args = [poolInfo.poolId, amount0.raw.toString(), proofArr]
+      console.log('args>>>', args)
+      const estimatedGas = await dutchERC20Contract.estimateGas
+        .bid(...args, { value: isToken1Native ? amount1.raw.toString() : undefined })
         .catch((error: Error) => {
           console.debug('Failed to swap', error)
           throw error
         })
-      return randomSelectionERC20Contract
-        .bet(...args, {
+      return dutchERC20Contract
+        .bid(...args, {
           gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? bidAmount.raw.toString() : undefined
+          value: isToken1Native ? amount1.raw.toString() : undefined
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
+            summary: `Use ${amount1.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
             userSubmitted: {
               account,
-              action: `random_selection_swap`,
+              action: `dutch_auction_swap`,
               key: poolInfo.poolId
             }
           })
@@ -83,7 +80,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
     },
     [
       account,
-      randomSelectionERC20Contract,
+      dutchERC20Contract,
       poolInfo.enableWhiteList,
       poolInfo.poolId,
       poolInfo.category,
@@ -98,4 +95,4 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
   return { run, submitted }
 }
 
-export default useRandomSelectionPlaceBid
+export default useDutchPlaceBid
