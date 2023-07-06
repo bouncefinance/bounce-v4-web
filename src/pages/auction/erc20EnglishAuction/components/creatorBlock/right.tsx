@@ -1,88 +1,19 @@
 import { Box, Typography, Grid, Stack } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
-import { useCountDown } from 'ahooks'
 import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import PoolInfoItem from '../poolInfoItem'
 import { RightText } from './auctionInfo'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { DutchAuctionPoolProp } from 'api/pool/type'
 import ClaimBlock from './ClaimBlock'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-import JSBI from 'jsbi'
+import BigNumber from 'bignumber.js'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
 
-const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const { status, openAt, closeAt, claimAt } = poolInfo
-  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate:
-      status === PoolStatus.Upcoming
-        ? openAt * 1000
-        : status === PoolStatus.Live
-        ? closeAt * 1000
-        : status === PoolStatus.Closed
-        ? claimAt * 1000
-        : undefined
-  })
-  switch (status) {
-    case PoolStatus.Upcoming:
-      return (
-        <Box
-          sx={{
-            height: '25px',
-            lineHeight: '25px',
-            padding: '0 12px',
-            bgcolor: '#D7D6D9',
-            borderRadius: '100px',
-            backdropFilter: 'blur(2px)',
-            fontFamily: `'Inter'`,
-            color: '#626262'
-          }}
-        >
-          {countdown > 0 ? `Upcoming in ${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Upcoming'}
-        </Box>
-      )
-    case PoolStatus.Live:
-      return (
-        <Box
-          sx={{
-            height: '25px',
-            lineHeight: '25px',
-            padding: '0 12px',
-            bgcolor: '#CFF8D1',
-            borderRadius: '100px',
-            backdropFilter: 'blur(2px)',
-            fontFamily: `'Inter'`,
-            color: '#30A359'
-          }}
-        >
-          {countdown > 0 ? `Live ${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Upcoming'}
-        </Box>
-      )
-    case PoolStatus.Closed:
-    case PoolStatus.Cancelled:
-      return (
-        <Box
-          sx={{
-            height: '25px',
-            lineHeight: '25px',
-            padding: '0 12px',
-            bgcolor: '#D6DFF6',
-            borderRadius: '100px',
-            backdropFilter: 'blur(2px)',
-            fontFamily: `'Inter'`,
-            color: '#2B51DA'
-          }}
-        >
-          Closed
-        </Box>
-      )
-    default:
-      return <></>
-  }
-}
-const TipsBox = ({
+export const TipsBox = ({
   style,
   children,
   iconUrl
@@ -117,7 +48,10 @@ const TipsBox = ({
     </Typography>
   </Box>
 )
-const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const Right = () => {
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  if (!poolInfo) return <></>
+
   return (
     <Box
       sx={{
@@ -153,7 +87,13 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           >
             My Pool
           </Typography>
-          <StatusBox poolInfo={poolInfo} />
+          <PoolStatusBox
+            showCreatorClaim={poolInfo.creatorClaimed === false}
+            status={poolInfo?.status}
+            openTime={poolInfo?.openAt}
+            claimAt={poolInfo?.claimAt}
+            closeTime={poolInfo?.closeAt}
+          />
         </Box>
         <Box
           sx={{
@@ -183,8 +123,8 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token0.largeUrl}
-                    alt={poolInfo.token0.symbol}
+                    src={poolInfo?.token0.largeUrl}
+                    alt={poolInfo?.token0.symbol}
                     size={16}
                   />
                   <span
@@ -195,7 +135,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {poolInfo.token0.name.toUpperCase()}
+                    {poolInfo?.token0.name.toUpperCase()}
                   </span>
                 </Box>
                 <Box
@@ -219,13 +159,13 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   >
                     =
                   </span>
-                  &nbsp; {poolInfo.lowestPrice?.toSignificant()}
+                  &nbsp; {poolInfo?.currencyCurrentPrice?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token1.largeUrl}
-                    alt={poolInfo.token1.symbol}
+                    src={poolInfo?.token1.largeUrl}
+                    alt={poolInfo?.token1.symbol}
                     size={16}
                   />
                   <span
@@ -236,7 +176,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {(poolInfo.token1.symbol + '').toUpperCase()}
+                    {(poolInfo?.token1.symbol + '').toUpperCase()}
                   </span>
                 </Box>
               </>
@@ -256,13 +196,13 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo.currencySwappedAmount0?.toSignificant()}
+                  {poolInfo?.currencySwappedAmount0?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token0.largeUrl}
-                    alt={poolInfo.token0.symbol}
+                    src={poolInfo?.token0.largeUrl}
+                    alt={poolInfo?.token0.symbol}
                     size={16}
                   />
                   <span
@@ -273,7 +213,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {poolInfo.token0.symbol.toUpperCase()}
+                    {poolInfo?.token0.symbol.toUpperCase()}
                   </span>
                 </Box>
               </>
@@ -293,18 +233,17 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? JSBI.multiply(
-                        JSBI.BigInt(poolInfo?.currencyLowestBidPrice?.toExact()),
-                        JSBI.BigInt(poolInfo?.currencySwappedAmount0?.toExact())
-                      ).toString()
+                  {poolInfo?.currencyCurrentPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
+                    ? new BigNumber(poolInfo?.currencyCurrentPrice.toExact())
+                        .times(poolInfo?.currencySwappedAmount0?.toExact())
+                        .toString()
                     : '0'}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
                     }}
-                    src={poolInfo.token1.largeUrl}
-                    alt={poolInfo.token1.symbol}
+                    src={poolInfo?.token1.largeUrl}
+                    alt={poolInfo?.token1.symbol}
                     size={16}
                   />
                   <span
@@ -315,7 +254,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                       color: '#626262'
                     }}
                   >
-                    {(poolInfo.token1.symbol + '').toUpperCase()}
+                    {(poolInfo?.token1.symbol + '').toUpperCase()}
                   </span>
                 </Box>
               </>
@@ -323,11 +262,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Grid>
         </Grid>
       </Box>
-      <Box
-        sx={{
-          padding: '30px 24px'
-        }}
-      >
+      <Box padding="30px 24px">
         <PoolInfoItem
           title={'Fund receiving wallet'}
           tip={'Fund receiving wallet'}
@@ -336,8 +271,8 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           }}
         >
           <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-            <RightText>{shortenAddress(poolInfo.creator)}</RightText>
-            <CopyToClipboard text={poolInfo.creator} />
+            <RightText>{shortenAddress(poolInfo?.creator || '')}</RightText>
+            <CopyToClipboard text={poolInfo?.creator || ''} />
           </Stack>
         </PoolInfoItem>
         <PoolInfoItem title={'Platform fee charged'} tip={'Platform fee charged'}>
@@ -356,7 +291,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Stack>
         </PoolInfoItem>
       </Box>
-      {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) && (
+      {(poolInfo?.status === PoolStatus.Closed || poolInfo?.status === PoolStatus.Cancelled) && (
         <Box
           sx={{
             width: 'calc(100% - 48px)',
@@ -413,8 +348,8 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           padding: '0 24px '
         }}
       >
-        <ClaimBlock poolInfo={poolInfo} />
-        {poolInfo.status === PoolStatus.Upcoming && (
+        <ClaimBlock />
+        {poolInfo?.status === PoolStatus.Upcoming && (
           <TipsBox
             iconUrl={TipsIcon}
             style={{
@@ -425,7 +360,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             a 2.5% platform feed charged automatically from fund raised.
           </TipsBox>
         )}
-        {poolInfo.status === PoolStatus.Live && (
+        {poolInfo?.status === PoolStatus.Live && (
           <TipsBox
             iconUrl={TipsIcon}
             style={{
@@ -436,7 +371,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             automatically from fund raised.
           </TipsBox>
         )}
-        {poolInfo.status === PoolStatus.Closed && poolInfo.creatorClaimed && (
+        {poolInfo?.status === PoolStatus.Closed && poolInfo?.creatorClaimed && (
           <TipsBox
             iconUrl={SuccessIcon}
             style={{

@@ -5,11 +5,12 @@ import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
-import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import ActionHistory from '../dutchAuction/components/auctionHistory'
+import { useErc20EnglishAuctionInfo } from 'bounceHooks/auction/useErc20EnglishAuctionInfo'
+import ActionHistory from './components/auctionHistory'
+import ValuesProvider from './ValuesProvider'
 
-export default function ERC20EnglishAuctionPoolId() {
+function ERC20EnglishAuctionPoolContent() {
   const theme = useTheme()
   const { account } = useActiveWeb3React()
   const myAnimation = keyframes`
@@ -46,7 +47,7 @@ export default function ERC20EnglishAuctionPoolId() {
     transform: translate(-100px, 100px);
   }
 `
-  const { poolInfo, loading } = useDutchAuctionInfo()
+  const { poolInfo, loading } = useErc20EnglishAuctionInfo()
   console.log('data>>>', poolInfo, loading)
   const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   if (!poolInfo) {
@@ -139,3 +140,13 @@ export default function ERC20EnglishAuctionPoolId() {
     </Box>
   )
 }
+
+const ERC20EnglishAuctionPoolId = () => {
+  return (
+    <ValuesProvider>
+      <ERC20EnglishAuctionPoolContent />
+    </ValuesProvider>
+  )
+}
+
+export default ERC20EnglishAuctionPoolId

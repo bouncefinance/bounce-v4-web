@@ -10,8 +10,8 @@ import { useActiveWeb3React } from 'hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
-import { DutchAuctionPoolProp } from 'api/pool/type'
 import moment from 'moment'
+import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
     {children}
@@ -22,7 +22,8 @@ export const RightText = ({ children, style }: { children: ReactNode; style?: Re
     {children}
   </Typography>
 )
-const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element => {
+const LeftBox = (): JSX.Element => {
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const { chainId } = useActiveWeb3React()
   const isMobile = useBreakpoint('lg')
   const [showMore, setShowMore] = useState<boolean>(false)
@@ -39,26 +40,27 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
             <PoolInfoItem title="Contract address" tip="Token Contract Address.">
               <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
                 <CertifiedTokenImage
-                  address={poolInfo.token0.address}
-                  coingeckoId={poolInfo.token0.coingeckoId}
-                  ethChainId={poolInfo.ethChainId}
-                  backedChainId={poolInfo.chainId}
+                  address={poolInfo?.token0.address || ''}
+                  coingeckoId={poolInfo?.token0.coingeckoId || ''}
+                  ethChainId={poolInfo?.ethChainId}
+                  backedChainId={poolInfo?.chainId}
                 />
-                <RightText>{shortenAddress(poolInfo.contract)}</RightText>
-                <CopyToClipboard text={poolInfo.contract} />
+                <RightText>{shortenAddress(poolInfo?.contract || '')}</RightText>
+                <CopyToClipboard text={poolInfo?.contract || ''} />
               </Stack>
             </PoolInfoItem>
             <PoolInfoItem title="Token symbol">
               <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-                <TokenImage src={poolInfo.token0.largeUrl} alt={poolInfo.token0.symbol} size={20} />
-                <RightText>{poolInfo.token0.symbol}</RightText>
+                <TokenImage src={poolInfo?.token0.largeUrl} alt={poolInfo?.token0.symbol} size={20} />
+                <RightText>{poolInfo?.token0.symbol}</RightText>
               </Stack>
             </PoolInfoItem>
-            {chainId === poolInfo.ethChainId && (
+            {chainId === poolInfo?.ethChainId && (
               <Button
                 variant="outlined"
                 onClick={() =>
-                  addTokenToWallet(poolInfo.token0.address, poolInfo.token0.symbol, poolInfo.token0.decimals)
+                  poolInfo &&
+                  addTokenToWallet(poolInfo?.token0.address, poolInfo?.token0.symbol, poolInfo?.token0.decimals)
                 }
                 sx={{
                   width: 140,
@@ -78,43 +80,47 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
             <RightText>Dutch Auction</RightText>
           </PoolInfoItem>
           <PoolInfoItem title="Participant">
-            <RightText>{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</RightText>
+            <RightText>{poolInfo?.enableWhiteList ? 'Whitelist' : 'Public'}</RightText>
           </PoolInfoItem>
           <PoolInfoItem title="Allocation per wallet">
             {/* TODO need to add new param to fit maxAmount1PerWallet for dutchAuction  */}
-            <RightText>{poolInfo.maxAmount1PerWallet}</RightText>
+            <RightText>{poolInfo?.maxAmount1PerWallet}</RightText>
           </PoolInfoItem>
           {showMore && (
             <>
               <PoolInfoItem title="Total available amount">
-                <RightText>{`${poolInfo.currencyAmountTotal0?.toSignificant()}`}</RightText>
+                <RightText>{`${poolInfo?.currencyAmountTotal0?.toSignificant()}`}</RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Price decreasing rate">
                 <RightText>
-                  {poolInfo.currencyCurrentPrice?.toSignificant() + ' '}
-                  {`${poolInfo.token1.symbol.toUpperCase()}`}
+                  {poolInfo?.currencyCurrentPrice?.toSignificant() + ' '}
+                  {`${poolInfo?.token1.symbol.toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Starting price (price ceiling)">
                 <RightText>
-                  1 {`${poolInfo.token0.name}${poolInfo.token0.symbol}`} ={' '}
-                  {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+                  1 {`${poolInfo?.token0.name}${poolInfo?.token0.symbol}`} ={' '}
+                  {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(
+                    poolInfo?.token1.symbol + ''
+                  ).toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Reserve price (price floor)">
                 <RightText>
-                  1 {`${poolInfo.token0.name}${poolInfo.token0.symbol}`} ={' '}
-                  {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+                  1 {`${poolInfo?.token0.name}${poolInfo?.token0.symbol}`} ={' '}
+                  {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(
+                    poolInfo?.token1.symbol + ''
+                  ).toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Pool duration">
                 <RightText>
-                  {poolInfo.openAt ? moment(poolInfo.openAt * 1000).format('YYYY-MM-DD HH:mm') : '--'} -{' '}
-                  {poolInfo.closeAt ? moment(poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:mm') : '--'}
+                  {poolInfo?.openAt ? moment(poolInfo?.openAt * 1000).format('YYYY-MM-DD HH:mm') : '--'} -{' '}
+                  {poolInfo?.closeAt ? moment(poolInfo?.closeAt * 1000).format('YYYY-MM-DD HH:mm') : '--'}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Pool times">
-                <RightText>{poolInfo.times}</RightText>
+                <RightText>{poolInfo?.fragments}</RightText>
               </PoolInfoItem>
             </>
           )}

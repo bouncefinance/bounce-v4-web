@@ -3,14 +3,13 @@ import { Typography, styled } from '@mui/material'
 import TokenImage from 'bounceComponents/common/TokenImage'
 // import { formatNumber } from 'utils/number'
 import NumberInput from 'bounceComponents/common/NumberInput'
-import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
+import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
 // import { BigNumber } from 'bignumber.js'
 interface RegretAmountInputProps {
   amount: string
   setAmount: (value: string) => void
-  poolInfo: DutchAuctionPoolProp
 }
 const NumInput = styled(NumberInput)(() => ({
   background: '#121212',
@@ -28,15 +27,16 @@ const NumInput = styled(NumberInput)(() => ({
     border: '1px solid #121212 !important'
   }
 }))
-const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) => {
+const AmountInput = ({ amount, setAmount }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
   // banlance
-  const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal0?.currency)
+  const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountTotal1?.currency)
   // MaxAmount0PerWallet from contract, not from http
   const currencyMaxAmount0PerWallet =
-    Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
-      ? poolInfo.currencyMaxAmount0PerWallet?.toExact()
-      : poolInfo.currencyAmountTotal0?.toExact()
+    Number(poolInfo?.currencyMaxAmount1PerWallet?.toExact()) > 0
+      ? poolInfo?.currencyMaxAmount1PerWallet?.toExact()
+      : poolInfo?.currencyAmountTotal0?.toExact()
   // All tradable quantities for token0
   const swappedAmount0 =
     poolInfo?.currencySwappedAmount0 &&
@@ -75,8 +75,8 @@ const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) =>
           >
             max
           </Typography>
-          <TokenImage alt={poolInfo.token0.symbol} src={poolInfo.token0.largeUrl} size={24} />
-          <Typography sx={{ ml: 8 }}>{poolInfo.token0.symbol}</Typography>
+          <TokenImage alt={poolInfo?.token1.symbol} src={poolInfo?.token1.largeUrl} size={24} />
+          <Typography sx={{ ml: 8 }}>{poolInfo?.token1.symbol}</Typography>
         </>
       }
     />

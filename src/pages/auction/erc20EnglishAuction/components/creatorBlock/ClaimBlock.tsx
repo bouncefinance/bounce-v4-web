@@ -1,6 +1,5 @@
 import { styled } from '@mui/material'
 import { useMemo, useCallback } from 'react'
-import { useCreatorClaim } from 'bounceHooks/auction/useCreatorClaimDutchAuction'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { show } from '@ebay/nice-modal-react'
@@ -9,8 +8,9 @@ import { useActiveWeb3React } from 'hooks'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { BigNumber } from 'bignumber.js'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp } from 'api/pool/type'
 import { PoolStatus } from 'api/pool/type'
+import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
+import { useErc20EnglishCreatorClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 
 const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -24,14 +24,22 @@ const ComBtn = styled(LoadingButton)(() => ({
     color: '#121212'
   }
 }))
-const ClaimBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const ClaimBlock = () => {
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const { account, chainId } = useActiveWeb3React()
-  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
+  const isCurrentChainEqualChainOfPool = useMemo(
+    () => chainId === poolInfo?.ethChainId,
+    [chainId, poolInfo?.ethChainId]
+  )
   const isAllTokenSwapped = useMemo(() => {
-    return new BigNumber(poolInfo.swappedAmount0).isGreaterThanOrEqualTo(poolInfo.amountTotal0)
+    return new BigNumber(poolInfo?.swappedAmount0 || '').isGreaterThanOrEqualTo(poolInfo?.amountTotal0 || '')
   }, [poolInfo])
 
-  const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name, poolInfo.contract)
+  const { run: claim, submitted } = useErc20EnglishCreatorClaim(
+    poolInfo?.poolId || '',
+    poolInfo?.name || '',
+    poolInfo?.contract
+  )
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = poolInfo?.currencyAmountTotal0?.greaterThan('0')
     const token0ToClaimText = `${poolInfo?.currencyAmountTotal0?.toSignificant()} ${poolInfo?.token0.symbol}`
@@ -40,13 +48,12 @@ const ClaimBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         ? ` and ${poolInfo?.currencyAmountTotal1?.toSignificant()} ${poolInfo.token1.symbol}`
         : ''
     return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
-  }, [poolInfo?.currencyAmountTotal0, poolInfo?.currencyAmountTotal1, poolInfo?.token0.symbol, poolInfo.token1.symbol])
+  }, [poolInfo?.currencyAmountTotal0, poolInfo?.currencyAmountTotal1, poolInfo?.token0.symbol, poolInfo?.token1.symbol])
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog()
       try {
         const { transactionReceipt } = await claim()
-
         const ret = new Promise((resolve, rpt) => {
           showWaitingTxDialog(() => {
             hideDialogConfirmation()
@@ -98,9 +105,9 @@ const ClaimBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     return <ConnectWalletButton />
   }
   if (!isCurrentChainEqualChainOfPool) {
-    return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+    return <SwitchNetworkButton targetChain={poolInfo?.ethChainId || 1} />
   }
-  if (poolInfo.status === PoolStatus.Upcoming) {
+  if (poolInfo?.status === PoolStatus.Upcoming) {
     return (
       <ComBtn
         variant="outlined"
@@ -114,7 +121,7 @@ const ClaimBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       </ComBtn>
     )
   }
-  if (poolInfo.status === PoolStatus.Closed && !poolInfo.creatorClaimed) {
+  if (poolInfo?.status === PoolStatus.Closed && !poolInfo?.creatorClaimed) {
     return (
       <ComBtn
         fullWidth

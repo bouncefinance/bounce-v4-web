@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
@@ -10,7 +10,7 @@ export interface PoolStatusBoxProps {
   style?: React.CSSProperties
   currentTotal0?: string
   hiddenStatus?: boolean
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: Erc20EnglishAuctionPoolProp
 }
 const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
   const { enableWhiteList, whitelistData } = poolInfo

@@ -9,7 +9,7 @@ import { RightText } from './creatorBlock/auctionInfo'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
 import { PoolStatus } from 'api/pool/type'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { useEnglishAuctionPoolInfo } from '../ValuesProvider'
 
 interface PointerItem {
   time: number | string
@@ -72,16 +72,17 @@ export class ToolTip {
     }
   }
 }
-const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: DutchAuctionPoolProp }) => {
+;({ data }: { data: PointerItem[] }) => {
   const chartContainerRef = useRef<any>()
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const colorObj = useMemo(() => {
-    return poolInfo.status === PoolStatus.Upcoming
+    return poolInfo?.status === PoolStatus.Upcoming
       ? {
           lineColor: '#959595',
           topColor: 'rgba(149, 149, 149, 0.2)',
           bottomColor: 'rgba(149, 149, 149, 0.2)'
         }
-      : poolInfo.status === PoolStatus.Live
+      : poolInfo?.status === PoolStatus.Live
       ? {
           lineColor: '#20994B',
           topColor: '#20994B',
@@ -151,7 +152,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       if (resultItem && resultItem?.time) {
         dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
       }
-      const token0Price = currentValue + poolInfo.token0.symbol
+      const token0Price = currentValue + poolInfo?.token0.symbol
       const x = Number(param?.point?.x) + 110
       const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
       if (
@@ -171,16 +172,16 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [colorObj, data, poolInfo.token0.symbol])
+  }, [colorObj, data, poolInfo?.token0.symbol])
   return <Box ref={chartContainerRef}></Box>
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
-  const segments = times ? Number(times) : 0
-  const startTime = openAt ? Number(openAt * 1000) : 0
-  const endTime = closeAt ? Number(closeAt * 1000) : 0
-  const startPrice = lowestPrice ? Number(lowestPrice.toExact()) : 0
-  const endPrice = highestPrice ? Number(highestPrice.toExact()) : 0
+const LineChartSection = () => {
+  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const segments = poolInfo?.fragments ? poolInfo?.fragments : 0
+  const startTime = poolInfo?.openAt ? Number(poolInfo?.openAt * 1000) : 0
+  const endTime = poolInfo?.closeAt ? Number(poolInfo?.closeAt * 1000) : 0
+  const startPrice = poolInfo?.currencyAmountStartPrice ? Number(poolInfo?.currencyAmountStartPrice.toExact()) : 0
+  const endPrice = poolInfo?.currencyAmountEndPrice ? Number(poolInfo?.currencyAmountEndPrice.toExact()) : 0
   const arrayRange = (start: number | string, stop: number, step: number | string) =>
     Array.from({ length: stop + 1 }, (value, index) => {
       return BigNumber(start).plus(BigNumber(step).times(index)).toNumber()
@@ -212,13 +213,13 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
-  const swappedAmount0 = poolInfo.swappedAmount0
+  const swappedAmount0 = poolInfo?.swappedAmount0
     ? formatNumber(poolInfo.swappedAmount0, {
         unit: poolInfo.token0.decimals,
         decimalPlaces: poolInfo.token0.decimals
       })
     : undefined
-  const amountTotal0 = poolInfo.amountTotal0
+  const amountTotal0 = poolInfo?.amountTotal0
     ? formatNumber(poolInfo.amountTotal0, {
         unit: poolInfo.token0.decimals,
         decimalPlaces: poolInfo.token0.decimals
@@ -249,26 +250,26 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         </Typography>
         <OpenChartImg />
       </Stack>
-      <LineChartView data={lineData} poolInfo={poolInfo} />
+      {/* <LineChartView data={lineData} /> */}
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
         <RightText>
-          {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(poolInfo?.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
       <PoolInfoItem title={'Reserve price'}>
         <RightText>
-          {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(poolInfo?.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
-      <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>
+      <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo?.status}></PoolProgress>
       <PoolInfoItem
-        title={swappedAmount0 + ' ' + poolInfo.token0.symbol.toUpperCase()}
+        title={swappedAmount0 + ' ' + poolInfo?.token0.symbol.toUpperCase()}
         sx={{
           marginTop: '4px'
         }}
       >
         <RightText>
-          / {amountTotal0} {poolInfo.token0.symbol.toUpperCase()}
+          / {amountTotal0} {poolInfo?.token0.symbol.toUpperCase()}
         </RightText>
       </PoolInfoItem>
     </Box>

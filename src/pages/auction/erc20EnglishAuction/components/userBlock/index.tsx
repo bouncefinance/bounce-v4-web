@@ -2,9 +2,9 @@ import { Box } from '@mui/material'
 import UserPoolStatusBox from './poolStatus'
 import LeftBox from '../creatorBlock/left'
 import RightBox from './right'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 
-const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   return (
     <Box
       sx={{
@@ -36,14 +36,14 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             flex: 400
           }}
         >
-          <LeftBox poolInfo={poolInfo} />
+          <LeftBox />
         </Box>
         <Box
           sx={{
             flex: 474
           }}
         >
-          <RightBox poolInfo={poolInfo} />
+          <RightBox />
         </Box>
       </Box>
     </Box>
