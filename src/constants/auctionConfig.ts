@@ -20,6 +20,9 @@ export const AuctionConfig: {
   [ChainId.CRONOS]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
+  [ChainId.LINEA_GORLI]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+  },
   [ChainId.BSC]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
