@@ -5,16 +5,8 @@ import { useActiveWeb3React } from 'hooks'
 import { useMemo } from 'react'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import moment from 'moment'
-
 import { CurrencyAmount } from 'constants/token'
-// interface listParam {
-//   amount: string
-//   price: string
-//   date: string
-// }
-// interface BidListParam {
-//   list: listParam[]
-// }
+
 const UserBidHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { account } = useActiveWeb3React()
   const { data, loading: isGettingPoolHistory } = usePoolHistory(
@@ -28,11 +20,9 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     if (!data) return undefined
     return data.list.filter(item => item.event === 'Bid') || []
   }, [data])
-  console.log('list>>>', list)
   if (!list || (Array.isArray(list) && list.length === 0)) {
     return null
   }
-  //   const { list } = props
   return (
     <Box
       sx={{
