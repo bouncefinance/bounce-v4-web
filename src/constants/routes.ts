@@ -76,7 +76,10 @@ export const routes = {
     foundoDetail: 'foundo/detail',
     OmegaAuction: '/launchpad/omega/auction/:sysId',
     TypeitAuction: '/launchpad/typeit/:sysId',
-    TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId'
+    TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
+    OpenfabricAuction: '/launchpad/openfabric',
+    DeelanceAuction: '/launchpad/deelance',
+    LasMetaAuction: '/launchpad/lasmeta'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
