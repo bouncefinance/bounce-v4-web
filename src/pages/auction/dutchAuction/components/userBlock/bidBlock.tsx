@@ -59,7 +59,7 @@ const BidBlock = ({
           .minus(poolInfo.participant.currencySwappedAmount0?.toExact() || '0')
           .toString()
       : poolInfo.currencyAmountTotal0?.toExact()
-  }, [])
+  }, [poolInfo.currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo.participant.currencySwappedAmount0])
   const maxValue = useMemo(() => {
     // All tradable quantities for token0
     const swappedAmount0 =

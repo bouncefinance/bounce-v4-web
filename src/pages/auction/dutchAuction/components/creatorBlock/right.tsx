@@ -82,7 +82,7 @@ const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       return <></>
   }
 }
-const TipsBox = ({
+export const TipsBox = ({
   style,
   children,
   iconUrl

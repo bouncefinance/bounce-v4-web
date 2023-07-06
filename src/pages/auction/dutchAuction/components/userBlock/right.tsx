@@ -1,12 +1,15 @@
 import { Box, Typography } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import Upcoming from './actionStep/upcoming'
 import Live from './actionStep/live'
 import BidConfirm from './actionStep/confirm'
+import ClosedAndNotJoined from './actionStep/closedAndNotJoined'
+import ClosedAndNotClaim from './actionStep/closedAndNotClaim'
+import ClosedAndClaimed from './actionStep/closedAndClaimed'
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -130,6 +133,9 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const [amount, setAmount] = useState('0')
   const [actionStep, setActionStep] = useState<ActionStep>(ActionStep.UpComing)
+  const isUserClaimed = useMemo(() => {
+    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
+  }, [poolInfo.participant.currencyCurClaimableAmount])
   useEffect(() => {
     if (poolInfo.status === PoolStatus.Upcoming) {
       setActionStep(ActionStep.UpComing)
@@ -139,9 +145,9 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       }
     } else if (poolInfo.status === PoolStatus.Closed && !isUserJoined) {
       setActionStep(ActionStep.ClosedAndNotJoined)
-    } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && !poolInfo.participant.claimed) {
+    } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && !isUserClaimed) {
       setActionStep(ActionStep.ClosedAndNotClaim)
-    } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && poolInfo.participant.claimed) {
+    } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && isUserClaimed) {
       setActionStep(ActionStep.ClosedAndClaimed)
     }
     return () => {}
@@ -176,6 +182,11 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       {actionStep === ActionStep.BidConfirm && (
         <BidConfirm poolInfo={poolInfo} onConfirm={handleConfirm} amount={amount} />
       )}
+      {actionStep === ActionStep.ClosedAndNotJoined && <ClosedAndNotJoined poolInfo={poolInfo} />}
+      {actionStep === ActionStep.ClosedAndNotClaim && (
+        <ClosedAndNotClaim poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
+      )}
+      {actionStep === ActionStep.ClosedAndClaimed && <ClosedAndClaimed poolInfo={poolInfo} />}
       {/* Current bid price & Bid Amount */}
       {/* {(poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) && (
         <Box
