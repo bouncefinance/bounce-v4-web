@@ -20,7 +20,6 @@ import { ReactComponent as InviteSvg } from 'assets/svg/invite.svg'
 import { ReactComponent as InviteBlackSvg } from 'assets/svg/invite-black.svg'
 import { ReactComponent as CopyBlackSvg } from 'assets/svg/copy-black.svg'
 import { ReactComponent as ColseSvg } from 'assets/imgs/common/closeIcon.svg'
-import FantomRoundSvg from 'assets/imgs/chains/fantom-round.svg'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import { toast } from 'react-toastify'
 import { useWalletModalToggle } from 'state/application/hooks'
@@ -698,13 +697,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           <Row mt={16} gap={8}>
             <GrayBg>
               <TokenImage
-                src={
-                  item.chainId
-                    ? item.chainId === 250
-                      ? FantomRoundSvg
-                      : ChainListMap?.[item.chainId as ChainId]?.logo
-                    : ''
-                }
+                src={item.chainId ? ChainListMap?.[item.chainId as ChainId]?.logo : ''}
                 size={isDark ? 24 : 12}
               />
               <Typography variant={'h6'} color={'white'}>
