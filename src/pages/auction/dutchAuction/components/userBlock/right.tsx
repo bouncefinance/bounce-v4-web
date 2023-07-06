@@ -134,53 +134,6 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [amount, setAmount] = useState('0')
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
   const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDutchCurrentPriceAndAmount1(amount, poolInfo)
-  const bidHistory = [
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    },
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    }
-  ]
   return (
     <Box
       sx={{
@@ -551,9 +504,9 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         )}
       </Box>
       {/* bid history */}
-      {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Live) &&
-        isUserJoined &&
-        bidHistory.length > 0 && <UserBidHistory list={bidHistory} />}
+      {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Live) && isUserJoined && (
+        <UserBidHistory poolInfo={poolInfo} />
+      )}
     </Box>
   )
 }

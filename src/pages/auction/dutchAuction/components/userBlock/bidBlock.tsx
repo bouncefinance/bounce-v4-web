@@ -6,7 +6,12 @@ import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { useActiveWeb3React } from 'hooks'
-import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
 import { LoadingButton } from '@mui/lab'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
@@ -15,6 +20,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BigNumber } from 'bignumber.js'
 import usePlaceBidDutch from 'bounceHooks/auction/usePlaceBidDutch'
 import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 
 const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -49,12 +55,15 @@ const BidBlock = ({
       .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
       .toString()
   }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
+  // MaxAmount0PerWallet from contract, not from http
+  const currencyMaxAmount0PerWallet = useMemo(() => {
+    return poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
+      ? BigNumber(poolInfo.currencyMaxAmount0PerWallet?.toExact() || '0')
+          .minus(poolInfo.participant.currencySwappedAmount0?.toExact() || '0')
+          .toString()
+      : poolInfo.currencyAmountTotal0?.toExact()
+  }, [])
   const maxValue = useMemo(() => {
-    // MaxAmount0PerWallet from contract, not from http
-    const currencyMaxAmount0PerWallet =
-      Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
-        ? poolInfo.currencyMaxAmount0PerWallet?.toExact()
-        : poolInfo.currencyAmountTotal0?.toExact()
     // All tradable quantities for token0
     const swappedAmount0 =
       poolInfo?.currencySwappedAmount0 &&
@@ -66,12 +75,7 @@ const BidBlock = ({
       Number(currencyMaxAmount0PerWallet)
     )
     return result
-  }, [
-    poolInfo.currencyAmountTotal0,
-    poolInfo.currencyMaxAmount0PerWallet,
-    poolInfo?.currencySwappedAmount0,
-    userToken0limit
-  ])
+  }, [currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo?.currencySwappedAmount0, userToken0limit])
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -93,6 +97,48 @@ const BidBlock = ({
         BigNumber(currentPriceAndAmount1.amount1).toString()
       )
     : 0
+  const [approvalState, approveCallback] = useApproveCallback(
+    amount1CurrencyAmount || undefined,
+    poolInfo.contract,
+    true
+  )
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          //   onClick()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback])
+  console.log('approvalState>>>', approvalState)
+  if (approvalState === ApprovalState.APPROVED) {
+    console.log('is approved')
+  }
   const toBid = useCallback(async () => {
     if (!amount1CurrencyAmount || !amount0CurrencyAmount) return
     showRequestConfirmDialog()
