@@ -206,7 +206,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: '',
+  [ChainId.ROLLUX]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
   // [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
   [ChainId.ZKSYNC_ERA]: '0x51552f0b8E57A1b2C749845d9aFb906FA4f5317A',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',

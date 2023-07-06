@@ -33,7 +33,8 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.ROLLUX]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.GNOSIS]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
