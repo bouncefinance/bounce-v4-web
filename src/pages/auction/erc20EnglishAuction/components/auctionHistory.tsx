@@ -11,10 +11,9 @@ import {
   StyledHistoryTableRow
 } from 'bounceComponents/fixed-swap/ActionHistory'
 import { useMemo } from 'react'
-import { DutchAuctionPoolProp } from 'api/pool/type'
-// import { CurrencyAmount } from 'constants/token'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 
-const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
     poolInfo?.poolId || '',

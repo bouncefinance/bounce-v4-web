@@ -5,9 +5,9 @@ import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
-import ActionHistory from './components/auctionHistory'
 import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import ActionHistory from '../dutchAuction/components/auctionHistory'
 
 export default function ERC20EnglishAuctionPoolId() {
   const theme = useTheme()

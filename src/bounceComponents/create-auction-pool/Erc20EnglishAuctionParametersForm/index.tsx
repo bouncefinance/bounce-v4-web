@@ -85,6 +85,7 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
     segments: Yup.number()
       .typeError('Please input valid number')
       .required('Auction price segment is required')
+      .max(100000, 'The segment maximum is 100,000')
       .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
         return Number.isInteger(value) && Number(value) >= 1
       }),
@@ -131,7 +132,6 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
   })
 
   const valuesState = useValuesState()
-  console.log('🚀 ~ file: index.tsx:137 ~ Erc20EnglishAuctionParametersForm ~ valuesState:', valuesState)
   const valuesDispatch = useValuesDispatch()
 
   const internalInitialValues: FormValues = {

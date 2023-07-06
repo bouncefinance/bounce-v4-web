@@ -131,7 +131,7 @@ const PoolInfo = () => {
         }}
         mb={'12px'}
       >
-        Monica Fixed Price Auction Pool
+        English Auction Pool
       </Typography>
       <Collect collectStatus={collectStatus} setCollectStatus={handleCollectChange} />
       <Box
