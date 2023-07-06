@@ -16,7 +16,7 @@ export function useErc20EnglishCreatorClaim(poolId: number | string, name: strin
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 
-  const submitted = useUserHasSubmittedRecords(account || undefined, funcName, poolId + '_erc20_english')
+  const submitted = useUserHasSubmittedRecords(account || undefined, funcName + '_erc20_english', poolId)
 
   const run = useCallback(async (): Promise<{
     hash: string
