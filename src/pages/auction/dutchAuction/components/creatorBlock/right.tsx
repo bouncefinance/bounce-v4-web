@@ -358,10 +358,10 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) && (
         <Box
           sx={{
-            width: 'calc(100% - 48px)',
-            margin: '0 auto 12px',
+            width: '100%',
+            margin: '30px auto 12px',
             padding: '16px',
-            border: '1px solid #626262',
+            border: '1px solid #E1F25C',
             borderRadius: '8px'
           }}
         >
@@ -376,34 +376,36 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           >
             Final Auction Results
           </Typography>
-          <PoolInfoItem
-            title={'Fund receiving wallet'}
-            sx={{
-              marginBottom: '9px'
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: `'Inter'`,
-                color: '#E1F25C',
-                fontSize: '13px',
-                fontWeight: 400
+          <PoolInfoItem title={'Final auction price'}>
+            <RightText
+              style={{
+                color: '#E1F25C'
               }}
             >
-              0.25 ETH ($0.8035)
-            </Typography>
+              {poolInfo.currencyLowestBidPrice?.toExact() || '--'} {poolInfo.token1.symbol}
+            </RightText>
           </PoolInfoItem>
-          <PoolInfoItem title={'Fund receiving wallet'}>
-            <Typography
-              sx={{
-                fontFamily: `'Inter'`,
-                color: '#E1F25C',
-                fontSize: '13px',
-                fontWeight: 400
+          <PoolInfoItem title={'Successful funds raised'}>
+            <RightText
+              style={{
+                color: '#E1F25C'
               }}
             >
-              700 ETH
-            </Typography>
+              {poolInfo.currencySwappedTotal1?.toExact() || '--'} {poolInfo.token1.symbol}
+            </RightText>
+          </PoolInfoItem>
+          <PoolInfoItem title={'Unswapped tokens'}>
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {BigNumber(poolInfo?.currencyAmountTotal0?.toExact() || '0')
+                .minus(poolInfo?.currencySwappedAmount0?.toExact() || '0')
+                .toString() +
+                ' ' +
+                poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
           </PoolInfoItem>
         </Box>
       )}
@@ -412,7 +414,9 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           padding: '0 24px '
         }}
       >
+        {/* claim block */}
         <ClaimBlock poolInfo={poolInfo} />
+        {/* upcoming tips */}
         {poolInfo.status === PoolStatus.Upcoming && (
           <TipsBox
             iconUrl={TipsIcon}
@@ -424,6 +428,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             a 2.5% platform feed charged automatically from fund raised.
           </TipsBox>
         )}
+        {/* live tips */}
         {poolInfo.status === PoolStatus.Live && (
           <TipsBox
             iconUrl={TipsIcon}
@@ -435,6 +440,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             automatically from fund raised.
           </TipsBox>
         )}
+        {/* success tips */}
         {poolInfo.status === PoolStatus.Closed && poolInfo.creatorClaimed && (
           <TipsBox
             iconUrl={SuccessIcon}
