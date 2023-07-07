@@ -358,7 +358,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) && (
         <Box
           sx={{
-            width: '100%',
+            width: 'calc(100% - 48px)',
             margin: '30px auto 12px',
             padding: '16px',
             border: '1px solid #E1F25C',
