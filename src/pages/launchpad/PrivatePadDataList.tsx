@@ -5,6 +5,8 @@ import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.
 import Medium from 'assets/imgs/common/Medium.png'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import Deelance from 'assets/imgs/auction/deelance.png'
+import LasMeta from 'assets/imgs/auction/LasMeta.png'
+import Openfabric from 'assets/imgs/auction/openfabric.png'
 import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.svg'
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
@@ -16,6 +18,9 @@ import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 import typeltpAvatar from './avatar/typelt.png'
+import LasmetAvatar from './avatar/lasmet-avatar.png'
+import DeelanceAvatar from './avatar/deelance-avatar.jpg'
+import OpenfabricaiAvatar from './avatar/openfabricai-avatar.jpg'
 import { ChainId } from 'constants/chain'
 
 export interface IProjectInfo {
@@ -186,55 +191,63 @@ const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
   return elArr
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // {
-  //   keyId: 10,
-  //   liveTimeStamp: {
-  //     start: 0,
-  //     end: 0
-  //   },
-  //   poolTypeName: 'Fixed Swap Auction',
-  //   img: '',
-  //   avatar: '',
-  //   title: 'LasMeta',
-  //   chainId: 1,
-  //   tokenName: '$TBD',
-  //   whitePaperLink: '',
-  //   upcomingLink: '/launchpad/lasmeta',
-  //   liveLink: '/launchpad/lasmeta',
-  //   projectInfo: [
-  //     {
-  //       title: 'What is LasMeta?',
-  //       info: [
-  //         'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.'
-  //       ]
-  //     }
-  //   ],
-  //   tokenMetrics: [],
-  //   desc: 'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.',
-  //   social: [
-  //     <Link key={0} href="" target="_blank">
-  //       <Web />
-  //     </Link>,
-  //     <Link key={2} href="" target="_blank">
-  //       <DiscordSVG />
-  //     </Link>,
-  //     <Link key={3} href="" target="_blank">
-  //       <img src={Medium} width={40} />
-  //     </Link>,
-  //     <Link key={4} href="" target="_blank">
-  //       <img src={Telegram} width={40} />
-  //     </Link>,
-  //     <Link key={5} sx={{ width: '43px !important', height: '43px !important' }} href="" target="_blank">
-  //       <InstagramSvg width={43} height={43} />
-  //     </Link>
-  //   ],
-  //   moreData: [
-  //     { title: 'Token Name', content: '$TBD' },
-  //     { title: 'Token Price', content: '0.05 USDT' },
-  //     { title: 'Token Amount', content: '1,800,000' },
-  //     { title: 'Blockchain', content: 'Ethereum' }
-  //   ]
-  // },
+  {
+    keyId: 10,
+    liveTimeStamp: {
+      start: 1696780800000,
+      end: 0
+    },
+    poolTypeName: 'Fixed Swap Auction',
+    img: LasMeta,
+    avatar: LasmetAvatar,
+    title: 'LasMeta',
+    chainId: 1,
+    tokenName: '$LASM',
+    whitePaperLink: 'https://lasmeta.io/Whitepaper-en.pdf',
+    upcomingLink: '/launchpad/lasmeta',
+    liveLink: '/launchpad/lasmeta',
+    projectInfo: [
+      {
+        title: 'What is LasMeta?',
+        info: [
+          'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.',
+    social: [
+      <Link key={0} href="https://lasmeta.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.gg/lasmetagdc" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://lasmetaio.medium.com/" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/lasmetaio_announcements" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={5} href="https://twitter.com/Lasmetaio" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link
+        key={6}
+        sx={{ width: '41.5px!important', height: '41.5px!important' }}
+        href="https://www.linkedin.com/company/lasmeta"
+        target="_blank"
+      >
+        <LinkinSvg width={41.5} height={41.5} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$TBD' },
+      { title: 'Token Price', content: '0.045 Token' },
+      { title: 'Token Amount', content: 'LASM' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   {
     keyId: 9,
     liveTimeStamp: {
@@ -243,7 +256,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     },
     poolTypeName: '',
     img: Deelance,
-    avatar: '',
+    avatar: DeelanceAvatar,
     title: 'Deelance',
     chainId: 1,
     tokenName: '$DLANCE',
@@ -300,52 +313,52 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-  // {
-  //   keyId: 8,
-  //   liveTimeStamp: {
-  //     start: 0,
-  //     end: 0
-  //   },
-  //   poolTypeName: 'Fixed Swap Auction',
-  //   img: '',
-  //   avatar: '',
-  //   title: 'Openfabric AI',
-  //   chainId: 1,
-  //   tokenName: '$TBD',
-  //   whitePaperLink: '',
-  //   upcomingLink: '/launchpad/openfabric',
-  //   liveLink: '/launchpad/openfabric',
-  //   projectInfo: [
-  //     {
-  //       title: 'What is Openfabric AI?',
-  //       info: [
-  //         'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.'
-  //       ]
-  //     }
-  //   ],
-  //   tokenMetrics: [],
-  //   desc: 'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.',
-  //   social: [
-  //     <Link key={0} href="https://openfabric.ai/" target="_blank">
-  //       <Web />
-  //     </Link>,
-  //     <Link key={1} href="https://twitter.com/openfabricai" target="_blank">
-  //       <Twitter />
-  //     </Link>,
-  //     <Link key={2} href="https://discord.com/invite/VHS92QWaX3" target="_blank">
-  //       <DiscordSVG />
-  //     </Link>,
-  //     <Link key={4} href="https://discord.com/invite/VHS92QWaX3" target="_blank">
-  //       <img src={Telegram} width={40} />
-  //     </Link>
-  //   ],
-  //   moreData: [
-  //     { title: 'Token Name', content: '$TBD' },
-  //     { title: 'Token Price', content: '0.06 USDT' },
-  //     { title: 'Token Amount', content: 'TBD' },
-  //     { title: 'Blockchain', content: 'Ethereum' }
-  //   ]
-  // },
+  {
+    keyId: 8,
+    liveTimeStamp: {
+      start: 0,
+      end: 0
+    },
+    poolTypeName: 'Fixed Swap Auction',
+    img: Openfabric,
+    avatar: OpenfabricaiAvatar,
+    title: 'Openfabric AI',
+    chainId: 1,
+    tokenName: '$TBD',
+    whitePaperLink: '',
+    upcomingLink: '/launchpad/openfabric',
+    liveLink: '/launchpad/openfabric',
+    projectInfo: [
+      {
+        title: 'What is Openfabric AI?',
+        info: [
+          'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.',
+    social: [
+      <Link key={0} href="https://openfabric.ai/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/openfabricai" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/VHS92QWaX3" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={4} href="https://discord.com/invite/VHS92QWaX3" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$TBD' },
+      { title: 'Token Price', content: '0.06 USDT' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   {
     keyId: 6,
     liveTimeStamp: {
