@@ -73,9 +73,21 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
             title: 'Congratulations!',
             content: `You have successfully bid ${amount1CurrencyAmount.toSignificant()} ${poolInfo.token1.symbol}`
           })
+          setConfirmationState({
+            notice1: false,
+            notice2: false,
+            notice3: false,
+            notice4: false
+          })
           onConfirm && onConfirm()
         })
         .catch(() => {
+          setConfirmationState({
+            notice1: false,
+            notice2: false,
+            notice3: false,
+            notice4: false
+          })
           onConfirm && onConfirm()
         })
     } catch (error) {
@@ -88,6 +100,12 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         title: 'Oops..',
         content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
+      })
+      setConfirmationState({
+        notice1: false,
+        notice2: false,
+        notice3: false,
+        notice4: false
       })
       onConfirm && onConfirm()
     }

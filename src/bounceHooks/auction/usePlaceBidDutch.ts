@@ -1,5 +1,5 @@
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import { getUserWhitelistProof } from 'api/user'
+import { getUserPermitSign, getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
 import { useDutchAuctionContract } from 'hooks/useContract'
 import { useCallback } from 'react'
@@ -32,51 +32,66 @@ const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
         return Promise.reject('no contract')
       }
       let proofArr: string[] = []
-
+      let whiteParamsResult: any[] = []
       if (poolInfo.enableWhiteList) {
-        const {
-          data: { proof: rawProofStr }
-        } = await getUserWhitelistProof({
-          address: account,
-          category: poolInfo.category,
-          chainId: poolInfo.chainId,
-          poolId: String(poolInfo.poolId),
-          tokenType: getTokenType(poolInfo.category)
-        })
-
-        const rawProofJson = JSON.parse(rawProofStr)
-
-        if (Array.isArray(rawProofJson)) {
-          proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
+        if (poolInfo.whitelistData?.isPermit) {
+          const { data } = await getUserPermitSign({
+            address: account,
+            category: poolInfo.category,
+            chainId: poolInfo.chainId,
+            poolId: String(poolInfo.poolId),
+            tokenType: getTokenType(poolInfo.category)
+          })
+          whiteParamsResult = [data.expiredTime, data.signature]
+        } else {
+          const { data } = await getUserWhitelistProof({
+            address: account,
+            category: poolInfo.category,
+            chainId: poolInfo.chainId,
+            poolId: String(poolInfo.poolId),
+            tokenType: getTokenType(poolInfo.category)
+          })
+          const { proof } = data
+          const rawProofJson = JSON.parse(proof)
+          if (Array.isArray(rawProofJson)) {
+            proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
+          }
+          whiteParamsResult = [proofArr]
         }
       }
-      const args = [poolInfo.poolId, amount0.raw.toString(), proofArr]
-      console.log('args>>>', args)
-      const estimatedGas = await dutchERC20Contract.estimateGas
-        .bid(...args, { value: isToken1Native ? amount1.raw.toString() : undefined })
-        .catch((error: Error) => {
-          console.debug('Failed to swap', error)
-          throw error
-        })
-      return dutchERC20Contract
-        .bid(...args, {
-          gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? amount1.raw.toString() : undefined
-        })
-        .then((response: TransactionResponse) => {
-          addTransaction(response, {
-            summary: `Use ${amount1.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
-            userSubmitted: {
-              account,
-              action: `dutch_auction_swap`,
-              key: poolInfo.poolId
-            }
-          })
-          return {
-            hash: response.hash,
-            transactionReceipt: response.wait(1)
+      const args = [poolInfo.poolId, amount0.raw.toString(), ...whiteParamsResult]
+      console.log('args , whiteParamsResult>>>', args, whiteParamsResult)
+      const gasBidFunc =
+        poolInfo.enableWhiteList && poolInfo.whitelistData?.isPermit
+          ? dutchERC20Contract.estimateGas.bid
+          : dutchERC20Contract.estimateGas.bidPermit
+      const estimatedGas = await gasBidFunc(...args, {
+        value: isToken1Native ? amount1.raw.toString() : undefined
+      }).catch((error: Error) => {
+        console.debug('Failed to swap', error)
+        throw error
+      })
+      const bidFunc =
+        poolInfo.enableWhiteList && poolInfo.whitelistData?.isPermit
+          ? dutchERC20Contract.bid
+          : dutchERC20Contract.bidPermit
+      return bidFunc(...args, {
+        gasLimit: calculateGasMargin(estimatedGas),
+        value: isToken1Native ? amount1.raw.toString() : undefined
+      }).then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: `Use ${amount1.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
+          userSubmitted: {
+            account,
+            action: `dutch_auction_swap`,
+            key: poolInfo.poolId
           }
         })
+        return {
+          hash: response.hash,
+          transactionReceipt: response.wait(1)
+        }
+      })
     },
     [
       account,

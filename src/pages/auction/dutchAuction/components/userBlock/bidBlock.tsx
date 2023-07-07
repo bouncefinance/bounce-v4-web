@@ -176,7 +176,13 @@ const BidBlock = ({
     )
   }
   if (poolInfo.status === PoolStatus.Live) {
-    if (approvalState !== ApprovalState.APPROVED) {
+    if (!amount || Number(amount) === 0) {
+      return (
+        <ComBtn fullWidth disabled={true}>
+          <span>{'Place a Bid'}</span>
+        </ComBtn>
+      )
+    } else if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return (
           <ComBtn loadingPosition="start" variant="contained" fullWidth loading>

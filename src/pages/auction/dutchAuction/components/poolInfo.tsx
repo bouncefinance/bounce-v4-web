@@ -1,13 +1,20 @@
-import { Box, Typography, styled } from '@mui/material'
+import { Avatar, Box, Typography, styled } from '@mui/material'
 import ChainIcon from 'assets/imgs/dutchAuction/chainIcon.png'
-import LogoIcon from 'assets/imgs/dutchAuction/logoIcon.png'
 import { ReactComponent as Icon1 } from 'assets/imgs/dutchAuction/icon1.svg'
 import { ReactComponent as Icon2 } from 'assets/imgs/dutchAuction/icon2.svg'
 import { ReactComponent as Icon3 } from 'assets/imgs/dutchAuction/icon3.svg'
 import { ReactComponent as Icon4 } from 'assets/imgs/dutchAuction/icon4.svg'
 import { ReactComponent as Icon5 } from 'assets/imgs/dutchAuction/icon5.svg'
 import Collect from './collect'
-import { ReactNode, useState } from 'react'
+import { useState, useEffect } from 'react'
+import { DutchAuctionPoolProp } from 'api/pool/type'
+import { getCompanyInfo } from 'api/company'
+import { getUserInfo } from 'api/user'
+import { USER_TYPE } from 'api/user/type'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
+
 const ChainType = styled(Box)(() => ({
   height: '32px',
   lineHeight: '32px',
@@ -58,15 +65,17 @@ const LinkItem = styled(Box)(() => ({
     }
   }
 }))
-
-const SocialLink = () => {
-  const links: ReactNode[] = [
-    <Icon1 key={0} />,
-    <Icon2 key={1} />,
-    <Icon3 key={2} />,
-    <Icon4 key={3} />,
-    <Icon5 key={4} />
-  ]
+export interface SocialMediaButtonGroupProps {
+  email?: string
+  shouldShowEmailButton?: boolean
+  twitter?: string
+  instagram?: string
+  website?: string
+  linkedin?: string
+  github?: string
+  style?: React.CSSProperties
+}
+const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMediaButtonGroupProps) => {
   return (
     <Box
       sx={{
@@ -77,17 +86,81 @@ const SocialLink = () => {
       }}
       gap={'6px'}
     >
-      {links.map((item, index) => {
-        return <LinkItem key={index}>{item}</LinkItem>
-      })}
+      {twitter && (
+        <LinkItem
+          onClick={() => {
+            window.open(twitter, '_blank')
+          }}
+        >
+          <Icon1 />
+        </LinkItem>
+      )}
+      {instagram && (
+        <LinkItem
+          onClick={() => {
+            window.open(instagram, '_blank')
+          }}
+        >
+          <Icon2 />
+        </LinkItem>
+      )}
+      {website && (
+        <LinkItem
+          onClick={() => {
+            window.open(website, '_blank')
+          }}
+        >
+          <Icon3 />
+        </LinkItem>
+      )}
+      {linkedin && (
+        <LinkItem
+          onClick={() => {
+            window.open(linkedin, '_blank')
+          }}
+        >
+          <Icon4 />
+        </LinkItem>
+      )}
+      {github && (
+        <LinkItem
+          onClick={() => {
+            window.open(github, '_blank')
+          }}
+        >
+          <Icon5 />
+        </LinkItem>
+      )}
     </Box>
   )
 }
-const PoolInfo = () => {
+const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [collectStatus, setCollectStatus] = useState<CollectStatus>(CollectStatus.inital)
   const handleCollectChange = (status: CollectStatus) => {
     setCollectStatus(status)
   }
+  const [userInfo, setUserInfo] = useState<any>(null)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const getInfo = async () => {
+      const res =
+        poolInfo.creatorUserInfo?.userType === USER_TYPE.USER
+          ? await getUserInfo({ userId: poolInfo.creatorUserInfo?.userId })
+          : await getCompanyInfo({ userId: poolInfo.creatorUserInfo?.userId })
+      setUserInfo(res.data)
+    }
+    if (poolInfo.creatorUserInfo) {
+      getInfo()
+    }
+  }, [poolInfo.creatorUserInfo])
+  const handleUser = () => {
+    if (userInfo?.userType === USER_TYPE.USER) {
+      return navigate(`${routes.profile.summary}?id=${userInfo?.id}`)
+    }
+    return navigate(`${routes.profile.summary}?id=${userInfo?.companyId}`)
+  }
+  console.log('userInfo>>>', userInfo)
   return (
     <Box
       sx={{
@@ -115,11 +188,11 @@ const PoolInfo = () => {
             color: '#E1F25C'
           }}
         >
-          #000123
+          #{poolInfo.id}
         </Typography>
         <ChainType>
           <img className="img" src={ChainIcon} alt="" srcSet="" />
-          <Typography className="text">Ethereum</Typography>
+          <Typography className="text">{poolInfo.token0.name.toUpperCase()}</Typography>
         </ChainType>
       </Box>
       <Typography
@@ -131,7 +204,7 @@ const PoolInfo = () => {
         }}
         mb={'12px'}
       >
-        Monica Fixed Price Auction Pool
+        {poolInfo.name || '--'}
       </Typography>
       <Collect collectStatus={collectStatus} setCollectStatus={handleCollectChange} />
       <Box
@@ -151,14 +224,10 @@ const PoolInfo = () => {
         }}
         mb={'24px'}
       >
-        <img
-          style={{
-            width: '48px',
-            height: '48px',
-            marginRight: '16px'
-          }}
-          src={LogoIcon}
-          alt=""
+        <Avatar
+          sx={{ width: 48, height: 48, cursor: 'pointer', borderRadius: '8px', marginRight: '12px' }}
+          src={userInfo?.avatar?.fileUrl || DefaultAvatarSVG}
+          onClick={handleUser}
         />
         <Typography
           sx={{
@@ -172,7 +241,7 @@ const PoolInfo = () => {
             whiteSpace: 'nowrap'
           }}
         >
-          Dyson Project
+          {userInfo?.fullName || userInfo?.companyName}
         </Typography>
       </Box>
       <Typography
@@ -184,10 +253,15 @@ const PoolInfo = () => {
           marginBottom: '28px'
         }}
       >
-        AWS provides customers with the broadest and deepest cloud platform cloud platform cloud platform the broadest
-        and deepest cloud platform...
+        {userInfo?.description || userInfo?.briefIntro || 'No description yet'}
       </Typography>
-      <SocialLink />
+      <SocialLink
+        twitter={userInfo?.twitter}
+        instagram={userInfo?.instagram}
+        website={userInfo?.website}
+        linkedin={userInfo?.linkedin}
+        github={userInfo?.github}
+      />
     </Box>
   )
 }
