@@ -1,4 +1,4 @@
-import { styled, Box } from '@mui/material'
+import { styled, Box, Typography } from '@mui/material'
 import { useMemo, useCallback } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
@@ -10,6 +10,9 @@ import useUserClaim from 'bounceHooks/auction/useUserClaimDutch'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
+import { useCountDown } from 'ahooks'
+import { TipsBox } from './right'
+import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 
 export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -31,6 +34,10 @@ const ClaimBlock = ({
   poolInfo: DutchAuctionPoolProp
   handleSetActionStep?: (actionStep: ActionStep) => void
 }) => {
+  const { claimAt } = poolInfo
+  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
+    targetDate: claimAt * 1000
+  })
   const { account, chainId } = useActiveWeb3React()
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
@@ -75,11 +82,64 @@ const ClaimBlock = ({
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
     }
   }, [claim, handleSetActionStep])
+  const isNotTimeToClaim = useMemo(() => {
+    return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
+  }, [poolInfo?.claimAt])
   if (!account) {
     return <ConnectWalletButton />
   }
   if (!isCurrentChainEqualChainOfPool) {
     return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+  }
+  if (isNotTimeToClaim) {
+    return (
+      <Box
+        sx={{
+          width: 'calc(100% - 48px)',
+          background: '#D7D6D9',
+          height: '52px',
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '0 24px',
+          borderRadius: '8px',
+          cursor: 'pointer',
+          margin: '0 auto'
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: `'Inter'`,
+            color: '#fff',
+            fontSize: '16px'
+          }}
+        >
+          Claim Token
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: `'Inter'`,
+            color: '#fff',
+            fontSize: '16px'
+          }}
+        >
+          {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'waiting for claim'}
+        </Typography>
+      </Box>
+    )
+  }
+  if (poolInfo.participant.claimed) {
+    return (
+      <TipsBox
+        iconUrl={SuccessIcon}
+        style={{
+          marginTop: '16px'
+        }}
+      >
+        You have successfully claimed your tokens. See you next time!
+      </TipsBox>
+    )
   }
   return (
     <Box
