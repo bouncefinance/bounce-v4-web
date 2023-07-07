@@ -13,6 +13,7 @@ import {
 import { useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 // import { CurrencyAmount } from 'constants/token'
+import { CurrencyAmount } from 'constants/token'
 
 const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory(
@@ -49,7 +50,13 @@ const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 <StyledHistoryTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledHistoryTableCell>{PoolEventTypography[record.event]}</StyledHistoryTableCell>
                   <StyledHistoryTableCell>
-                    -- &nbsp;
+                    {poolInfo.currencyAmountTotal1 && record?.token1Amount
+                      ? CurrencyAmount.fromRawAmount(
+                          poolInfo.currencyAmountTotal1?.currency,
+                          record?.token1Amount
+                        )?.toSignificant()
+                      : '--'}{' '}
+                    &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
                   <StyledHistoryTableCell>
