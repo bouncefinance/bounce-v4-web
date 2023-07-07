@@ -2,13 +2,13 @@ import { Divider, Stack, Typography } from '@mui/material'
 import moment from 'moment'
 import { useCountDown } from 'ahooks'
 
-import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { formatNumber } from 'utils/number'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
 import { FixedSwapPoolProp } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { shortenAddress } from 'utils'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getPoolInfo: () => void }) => {
   const formatedSwappedAmount0 = poolInfo.participant.currencySwappedAmount0?.greaterThan('0')

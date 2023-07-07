@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import { Button, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
-import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { formatNumber } from 'utils/number'
@@ -9,6 +8,7 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useIsLimitExceeded'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 interface BidAmountInputProps {
   bidAmount: string

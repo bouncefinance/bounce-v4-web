@@ -1,7 +1,7 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
-import RegretButton from './RegretButton'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { FixedSwapPoolProp } from 'api/pool/type'
+import RegretButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ConfirmRegret/RegretButton'
 
 export interface ConfirmRegretProps {
   regretAmount: string

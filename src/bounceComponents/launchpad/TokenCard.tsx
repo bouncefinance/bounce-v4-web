@@ -1,11 +1,11 @@
 import { Common } from './index'
 import { Avatar, Box, Grid, styled, Typography } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
-import PoolStatusBox from '../fixed-swap-nft/ActionBox/NftPoolStatus'
 import { H4, H5 } from '../../components/Text'
 import { AlignBottomBG, CardDesc } from './LaunchCard'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { PoolStatus } from '../../api/pool/type'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
 const WhiteTagBg = styled(Box)`
   display: flex;

@@ -2,13 +2,13 @@ import React, { useMemo } from 'react'
 import { Common } from './index'
 import { Avatar, Box, Grid, Stack, styled, Typography, useTheme } from '@mui/material'
 import { CenterRow, Row } from '../../components/Layout'
-import PoolStatusBox from '../fixed-swap-nft/ActionBox/NftPoolStatus'
 import { Body02, Body03, H5, H6 } from '../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { IPrivatePadProp } from 'pages/launchpad/PrivatePadDataList'
 import { useNavigate } from 'react-router-dom'
 import { PoolStatus } from 'api/pool/type'
 import useBreakpoint from 'hooks/useBreakpoint'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
 export function CardDesc({ title, content }: { title: string; content: string | React.ReactElement }) {
   const isSm = useBreakpoint('sm')
@@ -242,13 +242,7 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
                 </Typography>
               </Box>
             </Row>
-            <PoolStatusBox
-              status={status}
-              claimAt={0}
-              hideClaim={true}
-              closeTime={end / 1000}
-              openTime={start / 1000}
-            />
+            <PoolStatusBox status={status} claimAt={0} closeTime={end / 1000} openTime={start / 1000} />
           </CenterRow>
           {props.child}
         </Box>

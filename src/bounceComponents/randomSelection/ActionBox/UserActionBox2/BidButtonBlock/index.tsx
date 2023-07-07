@@ -2,7 +2,6 @@ import { Button } from '@mui/material'
 import { UserBidAction } from '../ActionBlock'
 import PlaceBidButton from '../PlaceBidButton'
 import UpcomingPoolCountdownButton from './UpcomingPoolCountdownButton'
-import WrongNetworkAlert from './WrongNetworkAlert'
 import BidButtonGroup from './BidButtonGroup'
 import GoToCheckButton from './GoToCheckButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
@@ -13,6 +12,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import WrongNetworkAlert from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock/WrongNetworkAlert'
 
 interface BidButtonBlockProps {
   action: UserBidAction
