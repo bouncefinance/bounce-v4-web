@@ -12,11 +12,11 @@ import BigNumber from 'bignumber.js'
 import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
-import { useErc20EnglishSwap } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
+import { useErc20EnglishSwap, useErc20EnglishUserClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { LoadingButton } from '@mui/lab'
-import { getCurrentTimeStamp } from 'utils'
+// import { getCurrentTimeStamp } from 'utils'
 import InputAmount from './inputAmount'
 import { CurrencyAmount } from 'constants/token'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
@@ -24,6 +24,10 @@ import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorAc
 import { fixToDecimals } from 'utils/number'
 import GetFundBackAlert from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock/GetFundBackAlert'
 import { useCountDown } from 'ahooks'
+import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
+import { TipsBox } from '../creatorBlock/right'
+import { getCurrentTimeStamp } from 'utils'
+import JSBI from 'jsbi'
 
 const RightBox = () => {
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
@@ -52,11 +56,13 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
   )
   const { account, chainId } = useActiveWeb3React()
   const { swapCallback: bid, swapPermitCallback, submitted } = useErc20EnglishSwap(poolInfo)
+  const { run: claim, submitted: isUserClaiming } = useErc20EnglishUserClaim(poolInfo)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const slicedBidAmount = useMemo(
     () => (amount ? fixToDecimals(amount, poolInfo.token1.decimals).toString() : ''),
     [amount, poolInfo.token1.decimals]
   )
+  const minBidAmount = useMemo(() => poolInfo.currencyCurrentPrice, [poolInfo.currencyCurrentPrice])
   const currencySlicedBidAmount = useMemo(
     () => CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, slicedBidAmount),
     [poolInfo.currencyAmountTotal1.currency, slicedBidAmount]
@@ -66,6 +72,13 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     if (!userToken1Balance || !currencySlicedBidAmount) return true
     return userToken1Balance.lessThan(currencySlicedBidAmount)
   }, [currencySlicedBidAmount, userToken1Balance])
+
+  const token1AvailableAmount = useMemo(
+    () =>
+      poolInfo.participant.currencySwappedAmount1 &&
+      poolInfo.currencyMaxAmount1PerWallet?.subtract(poolInfo.participant.currencySwappedAmount1),
+    [poolInfo.currencyMaxAmount1PerWallet, poolInfo.participant.currencySwappedAmount1]
+  )
   const toBid = useCallback(async () => {
     if (!amount1CurrencyAmount) return
     showRequestConfirmDialog()
@@ -115,6 +128,46 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     swapPermitCallback
   ])
 
+  const toClaim = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      const { transactionReceipt } = await claim()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully claim ${poolInfo.participant?.currencyCurClaimableAmount?.toSignificant()} ${
+              poolInfo?.token0.symbol
+            }`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: bid
+      })
+    }
+  }, [bid, claim, poolInfo.participant?.currencyCurClaimableAmount, poolInfo?.token0.symbol])
+
   const bidHistory = [
     {
       amount: '2000 AUCTION',
@@ -130,14 +183,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     if (!isCurrentChainEqualChainOfPool) {
       return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
     }
-    if (!currencySlicedBidAmount) {
-      return (
-        <Button sx={{ mt: 24 }} variant="contained" fullWidth disabled>
-          Place a Bid
-        </Button>
-      )
-    }
-    if (isBalanceInsufficient) {
+    if (isBalanceInsufficient && poolInfo.status === PoolStatus.Live) {
       return (
         <>
           <Button variant="contained" fullWidth disabled>
@@ -158,6 +204,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
             flexFlow: 'row nowrap',
             justifyContent: 'space-between',
             alignItems: 'center',
+            marginTop: 20,
             padding: '0 24px',
             borderRadius: '8px',
             cursor: 'pointer'
@@ -170,7 +217,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
               fontSize: '16px'
             }}
           >
-            Claim Token
+            Bid Token
           </Typography>
           <Typography
             sx={{
@@ -191,22 +238,36 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
           variant="contained"
           loadingPosition="start"
           loading={submitted.submitted}
-          disabled={poolInfo.claimAt > getCurrentTimeStamp()}
+          disabled={
+            !amount ||
+            isBalanceInsufficient ||
+            !minBidAmount ||
+            (amount1CurrencyAmount && minBidAmount?.greaterThan(amount1CurrencyAmount)) ||
+            (token1AvailableAmount && amount1CurrencyAmount?.greaterThan(token1AvailableAmount))
+          }
           onClick={toBid}
         >
           Place a Bid
         </LoadingButton>
       )
     }
-    if (poolInfo.status === PoolStatus.Closed && !poolInfo.creatorClaimed) {
+    if (
+      poolInfo.status === PoolStatus.Closed &&
+      poolInfo.participant.swappedAmount0 &&
+      Number(poolInfo.participant.swappedAmount0) > 0 &&
+      !poolInfo.participant.claimed &&
+      poolInfo.participant.currencyCurClaimableAmount?.greaterThan('0')
+    ) {
       return (
         <LoadingButton
           fullWidth
+          variant="contained"
           loadingPosition="start"
-          loading={submitted.complete || submitted.submitted}
-          onClick={toBid}
+          loading={isUserClaiming.complete || isUserClaiming.submitted}
+          disabled={poolInfo.claimAt > getCurrentTimeStamp()}
+          onClick={toClaim}
         >
-          Place a Bid
+          Claim Token
         </LoadingButton>
       )
     }
@@ -269,7 +330,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
         ></Box>
         <Grid container rowGap={'16px'}>
           <Grid item xs={6}>
-            <PoolTextItem title={'Current floor price'}>
+            <PoolTextItem title={'Current price'}>
               <>
                 <Box
                   sx={{
@@ -397,11 +458,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencyCurrentPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? new BigNumber(poolInfo?.currencyCurrentPrice.toExact())
-                        .times(poolInfo?.currencySwappedAmount0?.toExact())
-                        .toString()
-                    : '0'}
+                  {poolInfo?.currencySwappedAmount1?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -426,60 +483,116 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
           </Grid>
         </Grid>
       </Box>
-      <Box padding="30px 24px">
-        <PoolInfoItem
-          title={'Current bid price'}
-          sx={{
-            marginBottom: '9px'
-          }}
-        >
-          <RightText
-            style={{
-              color: '#E1F25C'
+
+      {poolInfo.status === PoolStatus.Live && (
+        <>
+          <Box padding="30px 24px 0">
+            <PoolInfoItem
+              title={'Current bid price'}
+              sx={{
+                marginBottom: '9px'
+              }}
+            >
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {poolInfo?.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo?.token1.symbol.toUpperCase()}
+              </RightText>
+            </PoolInfoItem>
+            <PoolInfoItem title={'Bid Amount'}>
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                Balance: {userToken1Balance?.toSignificant()} {poolInfo?.token1.symbol}
+              </RightText>
+            </PoolInfoItem>
+          </Box>
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexFlow: 'row nowrap',
+              justifyContent: 'center'
             }}
           >
-            {poolInfo?.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo?.token1.symbol.toUpperCase()}
-          </RightText>
-        </PoolInfoItem>
-        <PoolInfoItem title={'Bid Amount'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            Balance: {userToken1Balance?.toSignificant()} {poolInfo?.token1.symbol}
-          </RightText>
-        </PoolInfoItem>
-      </Box>
-      <Box
-        sx={{
-          width: '100%',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'center'
-        }}
-      >
-        <InputAmount amount={amount} setAmount={setAmount} />
-      </Box>
-      <PoolInfoItem
-        title={'You will estimate reveive'}
-        sx={{
-          marginBottom: '9px'
-        }}
-      >
-        <RightText
-          style={{
-            color: '#E1F25C'
-          }}
-        >
-          {amount1CurrencyAmount &&
-            poolInfo?.currencyCurrentPrice &&
-            new BigNumber(amount1CurrencyAmount?.toExact()).times(poolInfo?.currencyCurrentPrice.toExact()) +
-              ' ' +
-              poolInfo?.token0.symbol.toUpperCase()}
-        </RightText>
-      </PoolInfoItem>
+            <InputAmount amount={amount} setAmount={setAmount} />
+          </Box>
+          <Box padding={'10px 24px 0'}>
+            <PoolInfoItem
+              title={'Quantity available to bid'}
+              sx={{
+                marginBottom: '9px'
+              }}
+            >
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {poolInfo.currencyMaxAmount1PerWallet && poolInfo.currencyMaxAmount1PerWallet.equalTo(JSBI.BigInt(0))
+                  ? 'No Limit'
+                  : token1AvailableAmount?.toSignificant() + ' ' + poolInfo?.token1.symbol.toUpperCase()}
+              </RightText>
+            </PoolInfoItem>
+          </Box>
+          <Box padding={'0 24px'}>
+            <PoolInfoItem
+              title={'You will pay'}
+              sx={{
+                marginBottom: '9px'
+              }}
+            >
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {amount1CurrencyAmount &&
+                  new BigNumber(amount1CurrencyAmount?.toExact()).toFixed() +
+                    ' ' +
+                    poolInfo?.token1.symbol.toUpperCase()}
+              </RightText>
+            </PoolInfoItem>
+          </Box>
+          <Box padding={'0 24px'}>
+            <PoolInfoItem
+              title={'You will estimated receive'}
+              sx={{
+                marginBottom: '9px'
+              }}
+            >
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {amount1CurrencyAmount &&
+                  poolInfo?.currencyCurrentPrice &&
+                  new BigNumber(amount1CurrencyAmount?.toExact())
+                    .div(poolInfo?.currencyCurrentPrice.toExact())
+                    .toFixed() +
+                    ' ' +
+                    poolInfo?.token0.symbol.toUpperCase()}
+              </RightText>
+            </PoolInfoItem>
+          </Box>
+        </>
+      )}
       <Box padding="0 24px">{ActionsBtn()}</Box>
+      {poolInfo.status === PoolStatus.Closed && poolInfo.participant.claimed && (
+        <TipsBox
+          iconUrl={SuccessIcon}
+          style={{
+            marginTop: '16px'
+          }}
+        >
+          You have successfully claimed your tokens. See you next time!
+        </TipsBox>
+      )}
       {bidHistory.length > 0 && <UserBidHistory list={bidHistory} />}
     </Box>
   )

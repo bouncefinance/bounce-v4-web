@@ -198,7 +198,7 @@ const LineChartSection = () => {
     priceSegments,
     timeSegments
   )
-  const lineData = useMemo(() => {
+  useMemo(() => {
     const xList = arrayRange(startTime, segments, timeSegments)
     const yList = arrayRange(startPrice, segments, priceSegments).reverse()
     const dataPoint = new Array(segments + 1).fill(0).map((item, index) => {
@@ -209,7 +209,7 @@ const LineChartSection = () => {
     })
     return dataPoint
   }, [startTime, segments, timeSegments, startPrice, priceSegments])
-  console.log('lineData>>>', lineData)
+  console.log('lineData>>>')
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
@@ -253,12 +253,12 @@ const LineChartSection = () => {
       {/* <LineChartView data={lineData} /> */}
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
         <RightText>
-          {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(poolInfo?.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(poolInfo?.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
-      <PoolInfoItem title={'Reserve price'}>
+      <PoolInfoItem title={'Ending price'}>
         <RightText>
-          {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(poolInfo?.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(poolInfo?.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
       <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo?.status}></PoolProgress>

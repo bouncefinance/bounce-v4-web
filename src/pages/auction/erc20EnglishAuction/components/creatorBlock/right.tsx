@@ -105,7 +105,7 @@ const Right = () => {
         ></Box>
         <Grid container rowGap={'16px'}>
           <Grid item xs={6}>
-            <PoolTextItem title={'Current floor price'}>
+            <PoolTextItem title={'Current price'}>
               <>
                 <Box
                   sx={{
@@ -236,7 +236,7 @@ const Right = () => {
                   {poolInfo?.currencyCurrentPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
                     ? new BigNumber(poolInfo?.currencyCurrentPrice.toExact())
                         .times(poolInfo?.currencySwappedAmount0?.toExact())
-                        .toString()
+                        .toFixed()
                     : '0'}
                   <TokenImage
                     sx={{
@@ -278,70 +278,68 @@ const Right = () => {
         <PoolInfoItem title={'Platform fee charged'} tip={'Platform fee charged'}>
           <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
             <RightText>
-              2.5%
-              <span
-                style={{
-                  color: '#959595'
-                }}
-              >
-                {' '}
-                / 0 ETH
-              </span>
+              {poolInfo.currencySwappedAmount1 &&
+                new BigNumber(poolInfo.currencySwappedAmount1.toExact())
+                  .times(new BigNumber(25))
+                  .div(new BigNumber(1000))
+                  .toFixed()}
+              {poolInfo.token1.symbol.toUpperCase()}
             </RightText>
           </Stack>
         </PoolInfoItem>
       </Box>
       {(poolInfo?.status === PoolStatus.Closed || poolInfo?.status === PoolStatus.Cancelled) && (
-        <Box
-          sx={{
-            width: 'calc(100% - 48px)',
-            margin: '0 auto 12px',
-            padding: '16px',
-            border: '1px solid #626262',
-            borderRadius: '8px'
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: `'Public Sans'`,
-              color: '#fff',
-              fontSize: '14px',
-              fontWeight: 600
-            }}
-            mb={'12px'}
-          >
-            Final Auction Results
-          </Typography>
-          <PoolInfoItem
-            title={'Fund receiving wallet'}
-            sx={{
-              marginBottom: '9px'
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: `'Inter'`,
-                color: '#E1F25C',
-                fontSize: '13px',
-                fontWeight: 400
-              }}
-            >
-              0.25 ETH ($0.8035)
-            </Typography>
-          </PoolInfoItem>
-          <PoolInfoItem title={'Fund receiving wallet'}>
-            <Typography
-              sx={{
-                fontFamily: `'Inter'`,
-                color: '#E1F25C',
-                fontSize: '13px',
-                fontWeight: 400
-              }}
-            >
-              700 ETH
-            </Typography>
-          </PoolInfoItem>
-        </Box>
+        // <Box
+        //   sx={{
+        //     width: 'calc(100% - 48px)',
+        //     margin: '0 auto 12px',
+        //     padding: '16px',
+        //     border: '1px solid #626262',
+        //     borderRadius: '8px'
+        //   }}
+        // >
+        //   <Typography
+        //     sx={{
+        //       fontFamily: `'Public Sans'`,
+        //       color: '#fff',
+        //       fontSize: '14px',
+        //       fontWeight: 600
+        //     }}
+        //     mb={'12px'}
+        //   >
+        //     Final Auction Results
+        //   </Typography>
+        //   <PoolInfoItem
+        //     title={'Fund receiving wallet'}
+        //     sx={{
+        //       marginBottom: '9px'
+        //     }}
+        //   >
+        //     <Typography
+        //       sx={{
+        //         fontFamily: `'Inter'`,
+        //         color: '#E1F25C',
+        //         fontSize: '13px',
+        //         fontWeight: 400
+        //       }}
+        //     >
+        //       0.25 ETH ($0.8035)
+        //     </Typography>
+        //   </PoolInfoItem>
+        //   <PoolInfoItem title={'Fund receiving wallet'}>
+        //     <Typography
+        //       sx={{
+        //         fontFamily: `'Inter'`,
+        //         color: '#E1F25C',
+        //         fontSize: '13px',
+        //         fontWeight: 400
+        //       }}
+        //     >
+        //       700 ETH
+        //     </Typography>
+        //   </PoolInfoItem>
+        // </Box>
+        <></>
       )}
       <Box
         sx={{

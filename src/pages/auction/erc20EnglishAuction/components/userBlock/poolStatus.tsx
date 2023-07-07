@@ -4,11 +4,12 @@ import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
+import { CurrencyAmount } from 'constants/token'
 
 export interface PoolStatusBoxProps {
   status: PoolStatus
   style?: React.CSSProperties
-  currentTotal0?: string
+  currentTotal0?: CurrencyAmount
   hiddenStatus?: boolean
   poolInfo: Erc20EnglishAuctionPoolProp
 }
@@ -96,7 +97,7 @@ const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false,
       case PoolStatus.Closed:
       case PoolStatus.Cancelled:
         // all token auctioned
-        if (Number(currentTotal0) === 0) {
+        if (currentTotal0?.equalTo('0')) {
           return (
             <Box
               sx={{

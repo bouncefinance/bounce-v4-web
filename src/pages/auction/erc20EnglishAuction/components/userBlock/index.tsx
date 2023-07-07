@@ -17,7 +17,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
     >
       <UserPoolStatusBox
         status={poolInfo.status}
-        currentTotal0={poolInfo.currentTotal0}
+        currentTotal0={poolInfo.currencyAmountTotal0}
         hiddenStatus={poolInfo.participant.claimed}
         poolInfo={poolInfo}
       />

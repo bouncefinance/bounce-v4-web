@@ -19,6 +19,7 @@ import {
   ParticipantStatus
 } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
+import JSBI from 'jsbi'
 
 interface Params {
   whitelist: string[]
@@ -206,8 +207,20 @@ export function useCreateErc20EnglishAuctionPool() {
       token1: params.tokenToAddress,
       releaseType: params.releaseType,
       releaseData: params.releaseData,
-      amountMin1: amountStart?.raw.toString(),
-      amountMax1: amountEnd?.raw.toString(),
+      amountMin1:
+        amountStart && amountTotal0
+          ? JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(amountStart.raw.toString()), JSBI.BigInt(amountTotal0.raw.toString())),
+              JSBI.BigInt(Number(`1e${currencyFrom.decimals}`))
+            ).toString()
+          : '0',
+      amountMax1:
+        amountEnd && amountTotal0
+          ? JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(amountEnd.raw.toString()), JSBI.BigInt(amountTotal0.raw.toString())),
+              JSBI.BigInt(Number(`1e${currencyFrom.decimals}`))
+            ).toString()
+          : '0',
       fragments: params.times
     }
 

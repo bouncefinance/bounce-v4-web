@@ -8,6 +8,7 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 import { useQueryParams } from 'hooks/useQueryParams'
+import JSBI from 'jsbi'
 
 export function useErc20EnglishAuctionInfo() {
   const { sysId } = useQueryParams()
@@ -193,13 +194,35 @@ export function useErc20EnglishAuctionInfo() {
       currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
       fragments: poolsData.fragments,
-      currencyCurrentPrice: currentPrice ? CurrencyAmount.fromRawAmount(t1, currentPrice) : undefined,
-      currencyAmountStartPrice: poolsData.amountStart1
-        ? CurrencyAmount.fromRawAmount(t1, poolsData.amountStart1)
+      currencyCurrentPrice: currentPrice
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(currentPrice), JSBI.BigInt(Number(`1e${t0.decimals}`))),
+              JSBI.BigInt(poolInfo.amountTotal0)
+            )
+          )
         : undefined,
-      currencyAmountEndPrice: poolsData.amountEnd1 ? CurrencyAmount.fromRawAmount(t1, poolsData.amountEnd1) : undefined,
+      currencyAmountStartPrice: poolsData.amountStart1
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(poolsData.amountStart1), JSBI.BigInt(Number(`1e${t0.decimals}`))),
+              JSBI.BigInt(poolInfo.amountTotal0)
+            )
+          )
+        : undefined,
+      currencyAmountEndPrice: poolsData.amountEnd1
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(poolsData.amountEnd1), JSBI.BigInt(Number(`1e${t0.decimals}`))),
+              JSBI.BigInt(poolInfo.amountTotal0)
+            )
+          )
+        : undefined,
       currencyMaxAmount1PerWallet: maxAmount1PerWallet
-        ? CurrencyAmount.fromRawAmount(t0, maxAmount1PerWallet)
+        ? CurrencyAmount.fromRawAmount(t1, maxAmount1PerWallet)
         : undefined,
       releaseType,
       releaseData,
