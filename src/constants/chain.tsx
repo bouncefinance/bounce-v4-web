@@ -222,7 +222,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'FTM',
       symbol: 'FTM',
       decimals: 18,
-      logo: 'https://ftmscan.com/images/svg/brands/fantom.svg'
+      logo: 'https://ftmscan.com/images/favicon.png'
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']

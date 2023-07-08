@@ -79,7 +79,8 @@ export const routes = {
     TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
     OpenfabricAuction: '/launchpad/openfabric',
     DeelanceAuction: '/launchpad/deelance',
-    LasMetaAuction: '/launchpad/lasmeta'
+    LasMetaAuction: '/launchpad/lasmeta',
+    DipExchange: '/launchpad/dip_exchange'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
