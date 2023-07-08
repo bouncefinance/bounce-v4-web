@@ -87,7 +87,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.LINEA_GORLI]: {
     id: ChainId.LINEA_GORLI,
     hexChainId: numberToHex(ChainId.LINEA_GORLI),
-    chainName: 'Linea TestNet',
+    chainName: 'Linea Testnet',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
