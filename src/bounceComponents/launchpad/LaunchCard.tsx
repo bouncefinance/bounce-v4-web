@@ -242,7 +242,13 @@ export const LaunchCard: React.FC<{ child: ReactJSXElement; data: IPrivatePadPro
                 </Typography>
               </Box>
             </Row>
-            <PoolStatusBox status={status} claimAt={0} closeTime={end / 1000} openTime={start / 1000} />
+            <PoolStatusBox
+              hideUpcomingCountdown={props.data.keyId === 7}
+              status={status}
+              claimAt={0}
+              closeTime={end / 1000}
+              openTime={start / 1000}
+            />
           </CenterRow>
           {props.child}
         </Box>
