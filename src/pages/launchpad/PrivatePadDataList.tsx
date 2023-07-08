@@ -21,6 +21,10 @@ import typeltpAvatar from './avatar/typelt.png'
 import LasmetAvatar from './avatar/lasmet-avatar.png'
 import DeelanceAvatar from './avatar/deelance-avatar.jpg'
 import OpenfabricaiAvatar from './avatar/openfabricai-avatar.jpg'
+import LasMetaTokenomic from './imgs/LasMeta-Tokenomic.png'
+import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
+import DeelanceInvestment from './imgs/deelance-investment.jpg'
+import OpenfabricToken from './imgs/Openfabric-Token.png'
 import { ChainId } from 'constants/chain'
 
 export interface IProjectInfo {
@@ -212,6 +216,49 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.'
         ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <a
+            style={{ textDecoration: 'underline' }}
+            key={1}
+            href="https://drive.google.com/file/d/1FsZpbdcxWAVtoQR8-PR2frE74AFpc8Xr/view"
+          >
+            https://drive.google.com/file/d/1FsZpbdcxWAVtoQR8-PR2frE74AFpc8Xr/view
+          </a>,
+          <img style={{ width: '100%', height: '100%' }} key={1} src={LasMetaTokenomic} />
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <ul key={2}>
+            <li>
+              2 years ago, we received an equity investment worth $600,000. Since then, the only funding we acquired was
+              an ICO round worth $80,000. In the upcoming days, we plan to open another Private round and an ICO round.
+              Additionally, we have started investment discussions with 5-6 venture capital firms and an individual
+              listed on Forbes U30. Over the past 2 years, we faced significant challenges as investors showed little
+              interest in game projects, and this continues to pose a difficulty for us. With investment and grant
+              support, we aim to accelerate our game development.
+            </li>
+            <li style={{ marginTop: 10 }}>
+              Our most well-known partners include Gate.io exchange, GateChain, and GateNFT. Moreover, we have a
+              collaboration with Chainlink, and they have invited us to participate in SmartCon 2023 in Barcelona,
+              provided our demo is ready.
+            </li>
+            <li style={{ marginTop: 10 }}>Our Estonian partner is Ready Player Me Avatar Infrastructure.</li>
+            <li style={{ marginTop: 10 }}>
+              Apart from that, we have reputable partners for on/off-ramp and other infrastructure operations such as
+              BitKeep Wallet, XP Network, Connext Network, XY Finance, Lossless, as well as Gamestarter, Kommunitas,
+              NFTb, TruePNL, Poolz, and several others.
+            </li>
+            <li style={{ marginTop: 10 }}>
+              Additionally, we have over 20 promising metaverse hub partners, and in total, we have more than 60 global
+              partners.
+            </li>
+          </ul>
+        ]
       }
     ],
     tokenMetrics: [],
@@ -242,9 +289,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>
     ],
     moreData: [
-      { title: 'Token Name', content: '$TBD' },
-      { title: 'Token Price', content: '0.045 Token' },
-      { title: 'Token Amount', content: 'LASM' },
+      { title: 'Token Name', content: '$LASM' },
+      { title: 'Token Price', content: '0.045 ' },
+      { title: 'Token Amount', content: 'TBD' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
@@ -279,6 +326,85 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               ownership to recruiters.`}
             </li>
           </ul>
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <a
+            key={1}
+            href="https://docs.google.com/spreadsheets/d/17Wg76MgwYPP7klRu6TvIgsWoi0WJbv-j/edit?usp=sharing&ouid=116090532882611450634&rtpof=true&sd=true"
+          >
+            https://docs.google.com/spreadsheets/d/17Wg76MgwYPP7klRu6TvIgsWoi0WJbv-j/edit?usp=sharing&ouid=116090532882611450634&rtpof=true&sd=true
+          </a>,
+          <img key={2} src={DeelanceTokenomics} style={{ width: '100%', height: '100%' }} />
+        ]
+      },
+      {
+        title: 'Bitgert Ventures to invest $1.12 Million in DeeLance',
+        info: [
+          <strong key={1}>Investment made and employment generated. </strong>,
+          <Box key={2} sx={{ '& a': { color: '#7300FF', textDecoration: 'underline' }, '&>p': { marginTop: 10 } }}>
+            <Typography>
+              <a href="https://bitgert.com/bitgert-ventures/">Bitgert Ventures </a>
+              {`has always been working as a fortune delivering mechanism. While freelancing is not new to
+            us, what’s new is decentralized freelancing. With the help of the state-of-the-art technology (Blockchain),
+            freelancing will also go a definite change. And that’s what our latest investment partner is up to.`}
+            </Typography>
+            <Typography>
+              <a href="https://deelance.com/">DeeLance </a>
+              {` is a freelancing and recruitment platform based on Blockchain Technology. It’s a decentralized platform revolutionizing how freelancers connect with potential employers. `}
+            </Typography>
+            <Typography>
+              {`Employment is a headache for today’s youth, and Bitgert has recognized this, and brought a ground breaking partnership and investment for the community.`}
+            </Typography>
+            <Typography>
+              This potential investment opportunity will not only deliver long term benefits but also change the way how
+              “GIG ECONOMY” works.
+            </Typography>
+          </Box>
+        ]
+      },
+      {
+        title: 'What are your projects key competitive advantages?',
+        info: [
+          <strong key={0}>Investment</strong>,
+          <Box key={1} sx={{ '&>a': { textDecoration: 'underline' } }}>
+            <a href="https://twitter.com/Bitgertventures/status/1662410519842521089?s=20">
+              https://twitter.com/Bitgertventures/status/1662410519842521089?s=20
+            </a>
+            <p>
+              Bitgert Ventures made a strategic investment of 💰$1.12M USD in @deelance_com, the leading freelance
+              platform!
+            </p>
+          </Box>,
+          <strong key={2}>Strategic Partnerships</strong>,
+          <img key={3} src={DeelanceInvestment} />
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline',
+                display: 'block',
+                marginTop: 10
+              }
+            }}
+          >
+            <a href="https://docs.google.com/spreadsheets/d/1miNjoPA2OcILK3VcoV7v77lhgQJOg3ID/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true">
+              https://docs.google.com/spreadsheets/d/1miNjoPA2OcILK3VcoV7v77lhgQJOg3ID/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true
+            </a>
+            <a href="https://twitter.com/Bitgertventures/status/1662410519842521089?s=20">
+              https://twitter.com/Bitgertventures/status/1662410519842521089?s=20
+            </a>
+            <a href="https://docs.google.com/document/d/1bkL4t1tAe07psCNzxP4UsK1lv_eJ8rXZ/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true">
+              https://docs.google.com/document/d/1bkL4t1tAe07psCNzxP4UsK1lv_eJ8rXZ/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true
+            </a>
+          </Box>
         ]
       }
     ],
@@ -316,7 +442,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 8,
     liveTimeStamp: {
-      start: 0,
+      start: 1693324800000,
       end: 0
     },
     poolTypeName: 'Fixed Swap Auction',
@@ -325,7 +451,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'Openfabric AI',
     chainId: 1,
     tokenName: '$TBD',
-    whitePaperLink: '',
+    whitePaperLink: 'https://openfabric.ai/resource/openfabric-whitepaper.pdf',
     upcomingLink: '/launchpad/openfabric',
     liveLink: '/launchpad/openfabric',
     projectInfo: [
@@ -333,6 +459,47 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         title: 'What is Openfabric AI?',
         info: [
           'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.'
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              },
+              '& img': {
+                width: '100%',
+                height: '100%',
+                marginTop: 10
+              }
+            }}
+          >
+            <a href="https://docs.google.com/spreadsheets/d/1XCmm4HOIk9h7_lzdMIN8PJ-MEtCpF9-SQyLo66I8aas/edit#gid=0">
+              https://docs.google.com/spreadsheets/d/1XCmm4HOIk9h7_lzdMIN8PJ-MEtCpF9-SQyLo66I8aas/edit#gid=0
+            </a>
+            <img src={OpenfabricToken} />
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline',
+                display: 'block',
+                marginTop: 10
+              }
+            }}
+          >
+            <a href="https://openfabric.ai/#openfabric-investors">https://openfabric.ai/#openfabric-investors</a>
+            <a href="https://openfabric.ai/#openfabric-partners">https://openfabric.ai/#openfabric-partners</a>
+          </Box>
         ]
       }
     ],
@@ -348,7 +515,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={2} href="https://discord.com/invite/VHS92QWaX3" target="_blank">
         <DiscordSVG />
       </Link>,
-      <Link key={4} href="https://discord.com/invite/VHS92QWaX3" target="_blank">
+      <Link key={4} href="https://t.me/OpenFabricAI" target="_blank">
         <img src={Telegram} width={40} />
       </Link>
     ],
