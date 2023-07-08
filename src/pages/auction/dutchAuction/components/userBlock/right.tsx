@@ -151,7 +151,7 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       setActionStep(ActionStep.ClosedAndClaimed)
     }
     return () => {}
-  }, [poolInfo.status, isUserJoined, poolInfo.participant.claimed])
+  }, [poolInfo.status, isUserJoined, poolInfo.participant.claimed, isUserClaimed, actionStep])
   const handleSetAmount = (amount: string) => {
     setAmount(amount)
   }
