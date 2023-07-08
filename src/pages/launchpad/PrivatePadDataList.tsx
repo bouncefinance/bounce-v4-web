@@ -9,15 +9,16 @@ import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.s
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
-import HeadInBg from 'assets/imgs/dipExchange/head-in-bg.png'
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 import typeltpAvatar from './avatar/typelt.jpeg'
 import DipAvatar from './avatar/dip.jpg'
+
 import { ChainId } from 'constants/chain'
 import Image from 'components/Image'
 import TypeitSheet from './imgs/typeot-data-sheet.png'
+import DipImg from './imgs/dip-img.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -415,7 +416,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       end: 1687964400000
     },
     poolTypeName: 'ERC20 English Auction',
-    img: HeadInBg,
+    img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
     chainId: 250,
