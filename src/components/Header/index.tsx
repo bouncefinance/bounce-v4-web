@@ -131,7 +131,10 @@ const transparentRoutes = [
   routes.thirdPart.OmegaAuction,
   routes.thirdPart.TypeitAuction,
   routes.thirdPart.TypeitAuctionWhitelist,
-  routes.thirdPart.poseiswapAuction
+  routes.thirdPart.poseiswapAuction,
+  routes.thirdPart.OpenfabricAuction,
+  routes.thirdPart.DeelanceAuction,
+  routes.thirdPart.LasMetaAuction
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -141,7 +144,10 @@ export const whiteLogoRoutes = [
   routes.thirdPart.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.TypeitAuction,
-  routes.thirdPart.TypeitAuctionWhitelist
+  routes.thirdPart.TypeitAuctionWhitelist,
+  routes.thirdPart.OpenfabricAuction,
+  routes.thirdPart.DeelanceAuction,
+  routes.thirdPart.LasMetaAuction
 ]
 
 export default function Header() {
