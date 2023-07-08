@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Box, Checkbox, FormControlLabel, FormGroup, Typography, styled } from '@mui/material'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { StatusBox } from '../right'
@@ -32,6 +32,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
     notice3: false,
     notice4: false
   })
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
   const handleChange = (event: React.ChangeEvent<any>) => {
     setConfirmationState({
       ...confirmationState,
@@ -40,7 +41,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
   }
   const { notice1, notice2, notice3, notice4 } = confirmationState
   const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDutchCurrentPriceAndAmount1(amount || 0, poolInfo)
-  const { run: bid, submitted } = usePlaceBidDutch(poolInfo)
+  const { run: bid } = usePlaceBidDutch(poolInfo)
   const amount0CurrencyAmount = poolInfo?.currencyAmountTotal0
     ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount || '0')
     : 0
@@ -50,9 +51,13 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         BigNumber(currentPriceAndAmount1.amount1).toString()
       )
     : 0
+  const bidDisabled = useMemo(() => {
+    return !Object.values(confirmationState).every(item => item === true)
+  }, [confirmationState])
   const toBid = useCallback(async () => {
     if (!amount1CurrencyAmount || !amount0CurrencyAmount) return
     showRequestConfirmDialog()
+    setConfirmLoading(true)
     try {
       const { transactionReceipt } = await bid(amount0CurrencyAmount, amount1CurrencyAmount)
       const ret = new Promise((resolve, rpt) => {
@@ -79,6 +84,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
             notice3: false,
             notice4: false
           })
+          setConfirmLoading(false)
           onConfirm && onConfirm()
         })
         .catch(() => {
@@ -88,6 +94,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
             notice3: false,
             notice4: false
           })
+          setConfirmLoading(false)
           onConfirm && onConfirm()
         })
     } catch (error) {
@@ -107,6 +114,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         notice3: false,
         notice4: false
       })
+      setConfirmLoading(false)
       onConfirm && onConfirm()
     }
   }, [amount1CurrencyAmount, amount0CurrencyAmount, bid, poolInfo.token1.symbol, onConfirm])
@@ -185,9 +193,9 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         </FormGroup>
         <ComBtn
           variant="contained"
+          loading={confirmLoading}
           fullWidth
-          loading={submitted.complete || submitted.submitted}
-          disabled={!Object.values(confirmationState).every(item => item === true)}
+          disabled={bidDisabled}
           sx={{ mt: '80px' }}
           onClick={toBid}
         >
