@@ -8,7 +8,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import { useActiveWeb3React } from 'hooks'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, PoolType } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
@@ -17,6 +17,7 @@ import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionI
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ActionStep } from './right'
 import { Dots } from 'themes'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 
 export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -30,7 +31,18 @@ export const ComBtn = styled(LoadingButton)(() => ({
     color: '#121212'
   }
 }))
-
+export const DisableBtn = styled(Box)(() => ({
+  width: '100%',
+  background: '#D7D6D9',
+  height: '52px',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '0 24px',
+  borderRadius: '8px',
+  cursor: 'pointer'
+}))
 const BidBlock = ({
   poolInfo,
   amount,
@@ -43,6 +55,10 @@ const BidBlock = ({
   handleSetActionStep?: (actionStep: ActionStep) => void
 }) => {
   const { account, chainId } = useActiveWeb3React()
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
+    poolInfo,
+    PoolType.DUTCH_AUCTION
+  )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
   // max amount of token0 by token1 banlance
   const userToken0limit = useMemo(() => {
@@ -140,20 +156,7 @@ const BidBlock = ({
   }
   if (poolInfo.status === PoolStatus.Upcoming) {
     return (
-      <Box
-        sx={{
-          width: '100%',
-          background: '#D7D6D9',
-          height: '52px',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '0 24px',
-          borderRadius: '8px',
-          cursor: 'pointer'
-        }}
-      >
+      <DisableBtn>
         <Typography
           sx={{
             fontFamily: `'Inter'`,
@@ -172,11 +175,16 @@ const BidBlock = ({
         >
           {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Upcoming'}
         </Typography>
-      </Box>
+      </DisableBtn>
     )
   }
   if (poolInfo.status === PoolStatus.Live) {
-    if (!amount || Number(amount) === 0) {
+    if (
+      !amount ||
+      Number(amount) === 0 ||
+      isCheckingWhitelist ||
+      (isUserInWhitelist !== undefined && !isUserInWhitelist)
+    ) {
       return (
         <ComBtn fullWidth disabled={true}>
           <span>{'Place a Bid'}</span>
