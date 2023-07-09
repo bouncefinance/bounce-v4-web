@@ -26,6 +26,7 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             justifyContent: 'center',
             alignItems: 'flex-start'
           }}
+          mt={'30px'}
           gap={'30px'}
         >
           <Box

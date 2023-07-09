@@ -100,6 +100,12 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         borderVisible: true,
         borderColor: '#D7D6D9'
       },
+      localization: {
+        timeFormatter: function (businessDayOrTimestamp: number | string) {
+          // console.log(businessDayOrTimestamp);
+          return moment(businessDayOrTimestamp).format('YYYY-MM-DD HH:mm:ss')
+        }
+      },
       leftPriceScale: {
         visible: true,
         borderVisible: false,
@@ -169,20 +175,16 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
   return <Box ref={chartContainerRef}></Box>
 }
 const lineClaimChart = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const startTime = poolInfo.releaseData?.[0]?.startAt
-    ? moment(poolInfo.releaseData?.[0]?.startAt * 1000).format('YYYY-MM-DD HH:mm')
-    : 0
-  const endTime = poolInfo.releaseData?.[0]?.endAt
-    ? moment(poolInfo.releaseData?.[0]?.endAt * 1000).format('YYYY-MM-DD HH:mm')
-    : 0
+  const startTime = poolInfo.releaseData?.[0]?.startAt ? Number(poolInfo.releaseData?.[0]?.startAt * 1000) : 0
+  const endTime = poolInfo.releaseData?.[0]?.endAt ? Number(poolInfo.releaseData?.[0]?.endAt * 1000) : 0
   const lineData = [
     {
       time: startTime,
-      value: BigNumber(poolInfo.participant.currencySwappedAmount0?.toExact() + '').toNumber()
+      value: 0
     },
     {
       time: endTime,
-      value: 0
+      value: BigNumber(poolInfo.participant.currencySwappedAmount0?.toExact() + '').toNumber()
     }
   ]
   return (

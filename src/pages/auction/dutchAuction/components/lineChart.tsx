@@ -109,6 +109,12 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         vertLines: { color: '#D7D6D9', style: 4 },
         horzLines: { color: '#D7D6D9', style: 4 }
       },
+      localization: {
+        timeFormatter: function (businessDayOrTimestamp: number | string) {
+          // console.log(businessDayOrTimestamp);
+          return moment(businessDayOrTimestamp).format('YYYY-MM-DD HH:mm:ss')
+        }
+      },
       width: chartContainerRef.current.clientWidth,
       height: 250,
       timeScale: {
