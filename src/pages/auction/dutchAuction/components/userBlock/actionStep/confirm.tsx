@@ -41,7 +41,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
   }
   const { notice1, notice2, notice3, notice4 } = confirmationState
   const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDutchCurrentPriceAndAmount1(amount || 0, poolInfo)
-  const { run: bid } = usePlaceBidDutch(poolInfo)
+  const { swapCallback: bid, swapPermitCallback } = usePlaceBidDutch(poolInfo)
   const amount0CurrencyAmount = poolInfo?.currencyAmountTotal0
     ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount || '0')
     : 0
@@ -59,7 +59,8 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
     showRequestConfirmDialog()
     setConfirmLoading(true)
     try {
-      const { transactionReceipt } = await bid(amount0CurrencyAmount, amount1CurrencyAmount)
+      const func = poolInfo.enableWhiteList && poolInfo.whitelistData?.isPermit ? swapPermitCallback : bid
+      const { transactionReceipt } = await func(amount0CurrencyAmount, amount1CurrencyAmount)
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -117,7 +118,16 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
       setConfirmLoading(false)
       onConfirm && onConfirm()
     }
-  }, [amount1CurrencyAmount, amount0CurrencyAmount, bid, poolInfo.token1.symbol, onConfirm])
+  }, [
+    amount1CurrencyAmount,
+    amount0CurrencyAmount,
+    poolInfo.enableWhiteList,
+    poolInfo.whitelistData?.isPermit,
+    poolInfo.token1.symbol,
+    swapPermitCallback,
+    bid,
+    onConfirm
+  ])
   return (
     <Box>
       <Box

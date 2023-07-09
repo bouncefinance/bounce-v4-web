@@ -29,10 +29,14 @@ export const ComBtn = styled(LoadingButton)(() => ({
 
 const ClaimBlock = ({
   poolInfo,
-  handleSetActionStep
+  handleSetActionStep,
+  style,
+  notTimeStyle
 }: {
   poolInfo: DutchAuctionPoolProp
   handleSetActionStep?: (actionStep: ActionStep) => void
+  style?: React.CSSProperties
+  notTimeStyle?: React.CSSProperties
 }) => {
   const { claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -105,7 +109,8 @@ const ClaimBlock = ({
           padding: '0 24px',
           borderRadius: '8px',
           cursor: 'pointer',
-          margin: '0 auto'
+          margin: '0 auto',
+          ...notTimeStyle
         }}
       >
         <Typography
@@ -145,7 +150,8 @@ const ClaimBlock = ({
     <Box
       sx={{
         width: '100%',
-        padding: '0 24px'
+        padding: '0 24px',
+        ...style
       }}
     >
       <ComBtn fullWidth onClick={() => toClaim()} loading={claimBidSubmitted.submitted}>
