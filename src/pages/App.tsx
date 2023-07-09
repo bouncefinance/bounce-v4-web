@@ -66,6 +66,8 @@ import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
 import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteList'
 import OpenfabricProjectInfo from './projectIntro/OpenfabricProjectInfo'
 import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
+import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
+
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
 // import { Equilibria } from './game/equilibria'
@@ -174,6 +176,11 @@ export default function App() {
                     <Route path={routes.thirdPart.TypeitAuctionWhitelist} element={<TypeitProjectInfoWhiteList />} />
                     <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
                     <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
+                    <Route
+                      path={routes.thirdPart.DeelanceAuctionWhitelist}
+                      element={<DeelanceWhitelistProjectInfo />}
+                    />
+
                     <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                     <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}

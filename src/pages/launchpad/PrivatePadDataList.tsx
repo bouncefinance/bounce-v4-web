@@ -27,7 +27,7 @@ import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
-import HeadInBg from 'assets/imgs/dipExchange/head-in-bg.png'
+import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import { ChainId } from 'constants/chain'
 
@@ -594,6 +594,18 @@ const DeelanceProjectInfo: IProjectInfo[] = [
     ]
   },
   {
+    title: 'Pitch Deck',
+    info: [
+      <a
+        key={1}
+        style={{ textDecoration: 'underline' }}
+        href="https://drive.google.com/file/d/1GxDTFbY_c1zC8H0mQREOQ2m4vU4G8YfO/view"
+      >
+        https://drive.google.com/file/d/1GxDTFbY_c1zC8H0mQREOQ2m4vU4G8YfO/view
+      </a>
+    ]
+  },
+  {
     title: 'What are your projects key competitive advantages?',
     info: [
       <Box key={1}>
@@ -667,7 +679,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1689350400000,
       end: 0
     },
-    poolTypeName: '',
+    poolTypeName: 'Fixed Swap Auction',
     img: Deelance,
     avatar: DeelanceAvatar,
     title: 'Deelance',
@@ -703,19 +715,66 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$DLANCE' },
-      { title: 'Token Price', content: '0.029' },
-      { title: 'Token Amount', content: '1,800,000' },
+      { title: 'Token Price', content: '0.029 USDT' },
+      { title: 'Token Amount', content: '3,647,215' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
   {
-    keyId: 7,
+    keyId: 10,
+    liveTimeStamp: {
+      start: 1689350400000,
+      end: 0
+    },
+    poolTypeName: 'Whitelist',
+    img: Deelance,
+    avatar: DeelanceAvatar,
+    title: 'Deelance',
+    chainId: 1,
+    tokenName: '$DLANCE',
+    whitePaperLink: 'https://docs.deelance.com/',
+    upcomingLink: '/launchpad/deelance',
+    liveLink: '/launchpad/deelance',
+    projectInfo: DeelanceProjectInfo,
+    tokenMetrics: [],
+    desc: 'DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential employers in Metaverse.',
+    social: [
+      <Link key={0} href="https://deelance.com/en" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.gg/vhH3Sbt9NQ" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/@deeLance" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/deelance_com" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/deelanceofficial/"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$DLANCE' },
+      { title: 'Token Price', content: '0.026 USDT' },
+      { title: 'Token Amount', content: '3,846,153' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 11,
     liveTimeStamp: {
       start: 1690675200000,
       end: 1690934400000
     },
     poolTypeName: 'ERC20 English Auction',
-    img: HeadInBg,
+    img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
     chainId: 250,

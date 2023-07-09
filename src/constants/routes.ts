@@ -79,6 +79,8 @@ export const routes = {
     TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
     OpenfabricAuction: '/launchpad/openfabric',
     DeelanceAuction: '/launchpad/deelance',
+    DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
+
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange'
   },
