@@ -28,6 +28,7 @@ export enum ChainId {
   FANTOM = 250,
   ZKSYNC_ERA_TESTNET = 280,
   ZKSYNC_ERA = 324,
+  LINEA_GORLI = 59140,
   ROLLUX = 570,
   POLYGON_ZK_EVM = 1101,
   POLYGON_ZK_EVM_TESTNET = 1442,
@@ -82,6 +83,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://mainnet.infura.io/v3'],
     blockExplorerUrls: ['https://etherscan.com']
+  },
+  [ChainId.LINEA_GORLI]: {
+    id: ChainId.LINEA_GORLI,
+    hexChainId: numberToHex(ChainId.LINEA_GORLI),
+    chainName: 'Linea Testnet',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://docs.linea.build/img/favicon.ico'
+    },
+    rpcUrls: ['https://rpc.goerli.linea.build'],
+    blockExplorerUrls: ['https://goerli.lineascan.build/']
   },
   [ChainId.GÖRLI]: {
     id: ChainId.GÖRLI,
@@ -208,7 +222,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'FTM',
       symbol: 'FTM',
       decimals: 18,
-      logo: 'https://ftmscan.com/images/svg/brands/fantom.svg'
+      logo: 'https://ftmscan.com/images/favicon.png'
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']

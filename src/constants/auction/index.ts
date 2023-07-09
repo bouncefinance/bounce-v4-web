@@ -114,5 +114,6 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.AUROEA]: null,
   [ChainId.HARMONY]: null,
   [ChainId.SCROLL_ALPHA]: null,
-  [ChainId.PALM]: null
+  [ChainId.PALM]: null,
+  [ChainId.LINEA_GORLI]: null
 }
