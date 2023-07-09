@@ -21,7 +21,7 @@ interface ToolTipParam {
 export class ToolTip {
   el: any
   constructor({ dateStr, x, y, bgColor, display }: ToolTipParam) {
-    console.log('实例化...')
+    console.log('line chart init...')
     this.createToolTip({ dateStr, x, y, bgColor, display })
   }
   createToolTip({ dateStr, x, y, bgColor, display }: ToolTipParam) {

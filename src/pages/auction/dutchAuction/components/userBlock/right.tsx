@@ -164,7 +164,6 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       setAmount('0')
     }
   }
-  console.log('actionStep>>>', actionStep)
   return (
     <Box
       sx={{

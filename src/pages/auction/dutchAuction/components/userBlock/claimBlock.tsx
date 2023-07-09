@@ -96,10 +96,6 @@ const ClaimBlock = ({
       !poolInfo.participant.claimed
     )
   }, [poolInfo.participant.claimed, poolInfo.participant.currencyCurClaimableAmount])
-  console.log(
-    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact().>>',
-    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
-  )
   if (!account) {
     return <ConnectWalletButton />
   }

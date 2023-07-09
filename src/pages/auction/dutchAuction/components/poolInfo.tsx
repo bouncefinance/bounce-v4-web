@@ -160,7 +160,6 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     }
     return navigate(`${routes.profile.summary}?id=${userInfo?.companyId}`)
   }
-  console.log('userInfo>>>', userInfo)
   return (
     <Box
       sx={{
