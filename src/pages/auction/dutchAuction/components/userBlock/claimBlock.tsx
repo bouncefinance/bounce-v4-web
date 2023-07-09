@@ -13,6 +13,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import { useCountDown } from 'ahooks'
 import { TipsBox } from './right'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
+import BigNumber from 'bignumber.js'
 
 export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -89,6 +90,16 @@ const ClaimBlock = ({
   const isNotTimeToClaim = useMemo(() => {
     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   }, [poolInfo?.claimAt])
+  const isCanClaim = useMemo(() => {
+    return (
+      BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0) ||
+      !poolInfo.participant.claimed
+    )
+  }, [poolInfo.participant.claimed, poolInfo.participant.currencyCurClaimableAmount])
+  console.log(
+    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact().>>',
+    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
+  )
   if (!account) {
     return <ConnectWalletButton />
   }
@@ -134,7 +145,7 @@ const ClaimBlock = ({
       </Box>
     )
   }
-  if (poolInfo.participant.claimed) {
+  if (!isCanClaim) {
     return (
       <TipsBox
         iconUrl={SuccessIcon}

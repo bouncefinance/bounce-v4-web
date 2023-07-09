@@ -40,19 +40,19 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Box>
           <Box
             sx={{
+              flex: 1,
               borderRadius: '20px',
               background: '#20201e',
-              minHeight: isUserJoined ? 404 : 'auto',
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'flex-start',
-              alignItems: 'center'
+              alignItems: 'center',
+              maxWidth: 380
             }}
           >
             <Box
               sx={{
-                maxWidth: 380,
-                flex: 1,
+                width: '100%',
                 background: '#E1F25C',
                 border: '1px solid rgba(18, 18, 18, 0.06)',
                 borderRadius: '20px',
@@ -216,12 +216,13 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             {isUserJoined && (
               <Box
                 sx={{
-                  width: '100%',
-                  flex: 1,
+                  width: 'calc(100% - 48px)',
                   display: 'flex',
                   flexFlow: 'column nowrap',
                   justifyContent: 'center',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  margin: '0 auto',
+                  padding: '30px 0 24px'
                 }}
               >
                 <ClaimBlock
