@@ -25,6 +25,7 @@ import LasMetaTokenomic from './imgs/LasMeta-Tokenomic.png'
 import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
+import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
 import { ChainId } from 'constants/chain'
 
 export interface IProjectInfo {
@@ -194,6 +195,140 @@ const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
   ))
   return elArr
 }
+const DeelanceProjectInfo: IProjectInfo[] = [
+  {
+    title: 'What is Deelance?',
+    info: [
+      <ul key={1}>
+        <li>
+          DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential employers
+          in Metaverse.
+        </li>
+        <li style={{ marginTop: 10 }}>
+          {`What makes DeeLance stand out is The Metaverse, NFT marketplace, recruitment, and seamless freelancing
+          platform creating the ultimate ecosystem for users. At the core of DeeLance's groundbreaking approach is
+          the tokenization of freelance work products into NFTs, allowing for a secure and reliable transfer of work
+          ownership to recruiters.`}
+        </li>
+      </ul>
+    ]
+  },
+  {
+    title: 'Tokenomics',
+    info: [
+      <a
+        key={1}
+        href="https://docs.google.com/spreadsheets/d/17Wg76MgwYPP7klRu6TvIgsWoi0WJbv-j/edit?usp=sharing&ouid=116090532882611450634&rtpof=true&sd=true"
+      >
+        https://docs.google.com/spreadsheets/d/17Wg76MgwYPP7klRu6TvIgsWoi0WJbv-j/edit?usp=sharing&ouid=116090532882611450634&rtpof=true&sd=true
+      </a>,
+      <img key={2} src={DeelanceTokenomics} style={{ width: '100%', height: '100%' }} />
+    ]
+  },
+  {
+    title: 'Token utility and Revenue Model',
+    info: [
+      <Box key={1} sx={{ '& img': { width: '100%', height: '100%' }, '& ol': { margin: '10px 0' } }}>
+        <Box>
+          <Typography sx={{ fontSize: 16, fontWeight: 600, marginBottom: 20 }}>Token Utility</Typography>
+          <Typography>DeeLance products in line:</Typography>
+          <ol>
+            <li>Metaverse</li>
+            <li>Freelancing platform</li>
+            <li>NFT marketplace</li>
+            <li>Job portal</li>
+          </ol>
+          <Typography>
+            With $DLANCE tokens users can buy NFT subscriptions to unlock premium features in app and unlock premium
+            experience in Metaverse, pay Platform fees, buy land and advertisement etc.
+          </Typography>
+          <ol>
+            <li>purchase offices and land in the Metaverse</li>
+            <li>unlock premium features.</li>
+            <li>Hold To Secure Your Whitelist spot.</li>
+            <li>Get To Deal In NFT Marketplace</li>
+            <li>Mint, buy, and sell NFTs with $DLANCE</li>
+            <li>Pay for transaction fees in the NFT marketplace.</li>
+            <li>Get To Unlock Metaverse VIP Experience</li>
+            <li>Purchase premium virtual land and office space in the Metaverse.</li>
+            <li>Lease office space in the Metaverse.</li>
+            <li>Advertise / Display ads in Metaverse. (Billboard advertisement for brand awareness)</li>
+          </ol>
+        </Box>
+        <Box mt={30}>
+          <Typography sx={{ fontSize: 16, fontWeight: 600, marginBottom: 20 }}>Revenue Model</Typography>
+          <img src={DeelanceRevenue} />
+        </Box>
+      </Box>
+    ]
+  },
+  {
+    title: 'What are your projects key competitive advantages?',
+    info: [
+      <Box key={1}>
+        <Typography>
+          DeeLance can differentiate itself from other freelance platforms by offering several key competitive
+          advantages:
+        </Typography>
+        <ol>
+          <li>
+            Comprehensive NFT Integration: DeeLance’s integration of NFTs provides a unique competitive advantage. By
+            leveraging blockchain technology, DeeLance ensures transparent ownership and authenticity of digital assets
+            created by freelancers. This feature enhances intellectual property protection and offers potential
+            monetization opportunities for freelancers in the growing NFT market.
+          </li>
+          <li>
+            Metaverse Integration: DeeLance stands out by integrating with the metaverse, creating a dynamic and
+            immersive environment for freelancers and clients. This integration allows for interactive portfolio
+            showcases, virtual collaboration spaces, and networking opportunities, providing a cutting-edge experience
+            that sets DeeLance apart from traditional freelance platforms.
+          </li>
+          <li>
+            Trust and Security: DeeLance prioritizes trust and security by implementing a robust verification process
+            for freelancers and a secure escrow system for payment transactions. By ensuring that freelancers are
+            qualified professionals and protecting both parties from fraudulent activities, DeeLance builds a reputation
+            as a reliable and secure platform.
+          </li>
+          <li>
+            Global Talent Pool: DeeLance embraces a global perspective by connecting freelancers and clients from around
+            the world. Clients benefit from a diverse pool of talented professionals, enabling access to a wide range of
+            skills, expertise, and cultural perspectives. This global talent pool expands project possibilities and
+            enriches the overall freelance experience.
+          </li>
+        </ol>
+        <Typography>
+          By leveraging these competitive advantages, DeeLance can position itself as an innovative, secure, and
+          forward-thinking platform that meets the evolving needs of freelancers and clients in the digital age.
+        </Typography>
+      </Box>
+    ]
+  },
+  {
+    title: 'Investment and Partners',
+    info: [
+      <Box key={1}>
+        <Typography key={0} sx={{ fontSize: 16, fontWeight: 600 }}>
+          Investment
+        </Typography>
+        <Box mt={15} key={1} sx={{ '&>a': { textDecoration: 'underline' } }}>
+          <a href="https://twitter.com/Bitgertventures/status/1662410519842521089?s=20">
+            https://twitter.com/Bitgertventures/status/1662410519842521089?s=20
+          </a>
+          <Typography mt={10}>
+            Bitgert Ventures made a strategic investment of 💰$1.12M USD in @deelance_com, the leading freelance
+            platform!
+          </Typography>
+        </Box>
+      </Box>,
+      <Box key={2}>
+        <Typography mb={15} key={2} sx={{ fontSize: 16, fontWeight: 600 }}>
+          Strategic Partnerships
+        </Typography>
+        <img key={3} src={DeelanceInvestment} />
+      </Box>
+    ]
+  }
+]
 export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 10,
@@ -310,104 +445,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     whitePaperLink: 'https://docs.deelance.com/',
     upcomingLink: '/launchpad/deelance',
     liveLink: '/launchpad/deelance',
-    projectInfo: [
-      {
-        title: 'What is Deelance?',
-        info: [
-          <ul key={1}>
-            <li>
-              DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential
-              employers in Metaverse.
-            </li>
-            <li style={{ marginTop: 10 }}>
-              {`What makes DeeLance stand out is The Metaverse, NFT marketplace, recruitment, and seamless freelancing
-              platform creating the ultimate ecosystem for users. At the core of DeeLance's groundbreaking approach is
-              the tokenization of freelance work products into NFTs, allowing for a secure and reliable transfer of work
-              ownership to recruiters.`}
-            </li>
-          </ul>
-        ]
-      },
-      {
-        title: 'Tokenomics',
-        info: [
-          <a
-            key={1}
-            href="https://docs.google.com/spreadsheets/d/17Wg76MgwYPP7klRu6TvIgsWoi0WJbv-j/edit?usp=sharing&ouid=116090532882611450634&rtpof=true&sd=true"
-          >
-            https://docs.google.com/spreadsheets/d/17Wg76MgwYPP7klRu6TvIgsWoi0WJbv-j/edit?usp=sharing&ouid=116090532882611450634&rtpof=true&sd=true
-          </a>,
-          <img key={2} src={DeelanceTokenomics} style={{ width: '100%', height: '100%' }} />
-        ]
-      },
-      {
-        title: 'Bitgert Ventures to invest $1.12 Million in DeeLance',
-        info: [
-          <strong key={1}>Investment made and employment generated. </strong>,
-          <Box key={2} sx={{ '& a': { color: '#7300FF', textDecoration: 'underline' }, '&>p': { marginTop: 10 } }}>
-            <Typography>
-              <a href="https://bitgert.com/bitgert-ventures/">Bitgert Ventures </a>
-              {`has always been working as a fortune delivering mechanism. While freelancing is not new to
-            us, what’s new is decentralized freelancing. With the help of the state-of-the-art technology (Blockchain),
-            freelancing will also go a definite change. And that’s what our latest investment partner is up to.`}
-            </Typography>
-            <Typography>
-              <a href="https://deelance.com/">DeeLance </a>
-              {` is a freelancing and recruitment platform based on Blockchain Technology. It’s a decentralized platform revolutionizing how freelancers connect with potential employers. `}
-            </Typography>
-            <Typography>
-              {`Employment is a headache for today’s youth, and Bitgert has recognized this, and brought a ground breaking partnership and investment for the community.`}
-            </Typography>
-            <Typography>
-              This potential investment opportunity will not only deliver long term benefits but also change the way how
-              “GIG ECONOMY” works.
-            </Typography>
-          </Box>
-        ]
-      },
-      {
-        title: 'What are your projects key competitive advantages?',
-        info: [
-          <strong key={0}>Investment</strong>,
-          <Box key={1} sx={{ '&>a': { textDecoration: 'underline' } }}>
-            <a href="https://twitter.com/Bitgertventures/status/1662410519842521089?s=20">
-              https://twitter.com/Bitgertventures/status/1662410519842521089?s=20
-            </a>
-            <p>
-              Bitgert Ventures made a strategic investment of 💰$1.12M USD in @deelance_com, the leading freelance
-              platform!
-            </p>
-          </Box>,
-          <strong key={2}>Strategic Partnerships</strong>,
-          <img key={3} src={DeelanceInvestment} />
-        ]
-      },
-      {
-        title: 'Investment and Partners',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '& a': {
-                textDecoration: 'underline',
-                display: 'block',
-                marginTop: 10
-              }
-            }}
-          >
-            <a href="https://docs.google.com/spreadsheets/d/1miNjoPA2OcILK3VcoV7v77lhgQJOg3ID/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true">
-              https://docs.google.com/spreadsheets/d/1miNjoPA2OcILK3VcoV7v77lhgQJOg3ID/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true
-            </a>
-            <a href="https://twitter.com/Bitgertventures/status/1662410519842521089?s=20">
-              https://twitter.com/Bitgertventures/status/1662410519842521089?s=20
-            </a>
-            <a href="https://docs.google.com/document/d/1bkL4t1tAe07psCNzxP4UsK1lv_eJ8rXZ/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true">
-              https://docs.google.com/document/d/1bkL4t1tAe07psCNzxP4UsK1lv_eJ8rXZ/edit?usp=drivesdk&ouid=103613785568886177153&rtpof=true&sd=true
-            </a>
-          </Box>
-        ]
-      }
-    ],
+    projectInfo: DeelanceProjectInfo,
     tokenMetrics: [],
     desc: 'DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential employers in Metaverse.',
     social: [
