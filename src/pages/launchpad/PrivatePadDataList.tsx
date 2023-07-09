@@ -26,12 +26,9 @@ import LasMetaTokenomic from './imgs/LasMeta-Tokenomic.png'
 import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
-<<<<<<< HEAD
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
-=======
 import HeadInBg from 'assets/imgs/dipExchange/head-in-bg.png'
 import DipAvatar from './avatar/dip.jpg'
->>>>>>> c6241588926b9f3faf51154176343fe1272bbb98
 import { ChainId } from 'constants/chain'
 
 export interface IProjectInfo {
