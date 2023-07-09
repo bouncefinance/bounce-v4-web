@@ -6,11 +6,9 @@ import TypeIcon from 'assets/imgs/randomSelection/typeIconGray.png'
 import WarningIcon from 'assets/imgs/randomSelection/warning.png'
 import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import WinIcon from 'assets/imgs/randomSelection/Win.png'
-import ClaimingCountdownButton from '../ClaimingCountdownButton'
 
 import BigNumber from 'bignumber.js'
 import { formatNumber } from 'utils/number'
-import PoolInfoItem from '../../../PoolInfoItem'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import { UserAction } from '../ActionBlock'
@@ -18,6 +16,8 @@ import ClaimButton from '../ClaimButton'
 import { NoJoinedCardMobile } from './NoJoinedCardMobile'
 import useBreakpoint from '../../../../../hooks/useBreakpoint'
 import SuccessfullyClaimedAlert from 'bounceComponents/fixed-swap/Alerts/SuccessfullyClaimedAlert'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import ClaimingCountdownButton from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/ClaimingCountdownButton'
 
 const ClosedCard = ({
   poolInfo,

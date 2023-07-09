@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { useLinkedIn } from 'react-linkedin-login-oauth2'
 import { addressRegisterOrLogin, login, logout } from 'api/user'
 import { ACCOUNT_TYPE, ILoginParams } from 'api/user/type'
-import { fetchUserInfo, saveLoginInfo, removeUserInfo, ICacheLoginInfo } from 'state/users/reducer'
+import { fetchUserInfo, saveLoginInfo, removeUserInfo, ICacheLoginInfo, getLocalUserToken } from 'state/users/reducer'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
@@ -16,6 +16,7 @@ import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
 import { useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
+import useIsWindowVisible from 'hooks/useIsWindowVisible'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -348,4 +349,25 @@ export function useShowLoginModal() {
   const { account } = useActiveWeb3React()
 
   return !account ? walletModalToggle : signLoginModalToggle
+}
+
+export function useUpdateUserLoginInfoWithWindowVisible() {
+  const windowVisible = useIsWindowVisible()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const localUserToken = getLocalUserToken()
+
+    if (windowVisible) {
+      console.log('🚀 ~ file: hooks.ts:360 ~ useEffect ~ localUserToken:', localUserToken)
+      dispatch({
+        type: 'users/saveLoginInfo',
+        payload: {
+          token: localUserToken?.token,
+          userId: localUserToken?.userId,
+          address: localUserToken?.address
+        }
+      })
+    }
+  }, [dispatch, windowVisible])
 }

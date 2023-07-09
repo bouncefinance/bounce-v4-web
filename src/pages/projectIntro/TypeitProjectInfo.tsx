@@ -47,7 +47,7 @@ export default function ProjectInfo() {
 //     )
 //   }
 
-//   if (poolInfo.id !== 674) {
+//   if (poolInfo.id !== 707) {
 //     return null
 //   }
 

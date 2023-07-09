@@ -7,7 +7,7 @@ import { getCompanyInfo } from 'api/company'
 export interface ICacheLoginInfo {
   token: string
   userId: string | number
-  userType: USER_TYPE | string
+  userType?: USER_TYPE | string
   address: string
 }
 
@@ -21,14 +21,32 @@ export const fetchCompanyInfo: any = createAsyncThunk('users/fetchCompanyInfo', 
   return res.data
 })
 
+const LOCAL_USER_TOKEN_KEY = 'LOCAL_USER_TOKEN_KEY'
+export const getLocalUserToken = (): ICacheLoginInfo => {
+  let _local: any = ''
+  try {
+    _local = JSON.parse(localStorage.getItem(LOCAL_USER_TOKEN_KEY) || '')
+  } catch (error) {}
+  return {
+    token: _local?.token || '',
+    userId: _local?.userId || '',
+    address: _local?.address || ''
+  }
+}
+const saveLocalUserToken = (data: ICacheLoginInfo | null) => {
+  localStorage.setItem('LOCAL_USER_TOKEN_KEY', data ? JSON.stringify(data) : '')
+}
+
+const localUserToken = getLocalUserToken()
+
 const initialState: ICacheLoginInfo & {
   userInfo: any
   companyInfo: any
 } = {
-  token: '',
-  userId: 0,
+  token: localUserToken.token,
+  userId: localUserToken.userId,
   userType: '0',
-  address: '',
+  address: localUserToken.address,
   userInfo: null,
   companyInfo: null
 }
@@ -40,14 +58,21 @@ export const userInfoSlice = createSlice({
     saveLoginInfo: (state, { payload }) => {
       state.token = payload.token
       state.userId = payload.userId
-      state.userType = payload.userType
+      // state.userType = payload.userType
       state.address = payload.address
+
+      saveLocalUserToken({
+        token: payload.token,
+        userId: payload.userId,
+        address: payload.address
+      })
     },
     removeLoginInfo: state => {
       state.token = ''
       state.userId = 0
-      state.userType = ''
+      // state.userType = ''
       state.address = ''
+      saveLocalUserToken(null)
     },
     removeUserInfo: state => {
       state.userInfo = null

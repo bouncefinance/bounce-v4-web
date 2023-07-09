@@ -6,9 +6,9 @@ import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
 
 import BigNumber from 'bignumber.js'
 import { formatNumber } from 'utils/number'
-import PoolInfoItem from '../../../PoolInfoItem'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoined: boolean }) => {
   const singleShare = poolInfo.totalShare

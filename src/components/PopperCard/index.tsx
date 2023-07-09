@@ -9,12 +9,14 @@ export default function PopperCard({
   popperSx,
   sx,
   targetElement,
+  closeHandler,
   children
 }: {
   popperSx?: SxProps<Theme>
   sx?: SxProps<Theme>
   targetElement: JSX.Element
   children: JSX.Element | string | number
+  closeHandler?: () => void
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = !!anchorEl
@@ -22,12 +24,14 @@ export default function PopperCard({
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget)
+    anchorEl && closeHandler && closeHandler()
   }
 
   return (
     <ClickAwayListener
       onClickAway={() => {
         setAnchorEl(null)
+        closeHandler && closeHandler()
       }}
     >
       <Box>

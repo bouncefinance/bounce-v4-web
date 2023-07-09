@@ -9,7 +9,7 @@ import { Banner, SwiperSkeleton } from './banner'
 import { ActionType, useValuesDispatch, useValuesState } from 'bounceComponents/real-world-collectibles/ValuesProvider'
 import { useEffect, useState } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
-import AuctionCard from './auctionCard'
+import BannerAuctionCard from './auctionCard'
 // import UpcomingAuction from './upcomingAuction'
 import { BannerType } from './banner'
 import EmptyData from 'bounceComponents/common/EmptyData'
@@ -479,7 +479,6 @@ const AuctionContent = () => {
   const valuesDispatch = useValuesDispatch()
   const isSm = useIsSMDown()
   const [filterParams, setFilterParams] = useState<FilterSearchConfig[]>(filterConfig)
-
   const {
     pagination: poolsPagination,
     data: poolList,
@@ -589,8 +588,8 @@ const AuctionContent = () => {
             textAlign: 'center'
           }}
         >
-          The physical auction supports the English auction mode. You are bidding for a physical backed NFTs and you can
-          redeem it post auction
+          The physical auction supports the English auction mode. You are bidding for physically backed NFTs, and you
+          can redeem them post-auction.
         </Typography>
         <Box
           sx={{
@@ -700,7 +699,7 @@ const AuctionContent = () => {
                 {poolList &&
                   poolList?.list &&
                   poolList.list.map((item: BannerType, index: number) => {
-                    return <AuctionCard key={index} banner={item}></AuctionCard>
+                    return <BannerAuctionCard key={index} banner={item}></BannerAuctionCard>
                   })}
               </Box>
             )}

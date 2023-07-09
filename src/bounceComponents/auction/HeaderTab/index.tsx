@@ -66,7 +66,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
       case 'NFT Auction':
         navigate(routes.nftAuction.index)
         break
-      case 'Real World collectibles Auction':
+      case 'Real World Collectibles Auction':
         navigate(routes.realAuction.index)
         break
       case 'Ads Auction':

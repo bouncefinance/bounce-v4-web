@@ -46,6 +46,17 @@ export const GOERLI_TOKEN_LIST: Token[] = [
   }
 ]
 
+export const OMNI_TESTNET_TOKEN_LIST: Token[] = [
+  {
+    chainId: ChainId.OMNI_TESTNET,
+    name: 'ZK',
+    address: '0xc390E699b38F14dB884C635bbf843f7B135113ad',
+    symbol: 'zk',
+    decimals: 18,
+    logoURI: ''
+  }
+]
+
 export const SEPOLIA_TOKEN_LIST: Token[] = [
   {
     chainId: ChainId.SEPOLIA,
@@ -85,6 +96,8 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.GNOSIS]: null,
   [ChainId.POLYGON]: null,
   [ChainId.FANTOM]: null,
+  [ChainId.OMNI_TESTNET]: null,
+  [ChainId.ROLLUX]: null,
   [ChainId.ZKSYNC_ERA]: null,
   [ChainId.ZKSYNC_ERA_TESTNET]: null,
   [ChainId.POLYGON_ZK_EVM]: null,
@@ -101,5 +114,6 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.AUROEA]: null,
   [ChainId.HARMONY]: null,
   [ChainId.SCROLL_ALPHA]: null,
-  [ChainId.PALM]: null
+  [ChainId.PALM]: null,
+  [ChainId.LINEA_GORLI]: null
 }

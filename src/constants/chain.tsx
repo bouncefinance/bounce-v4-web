@@ -1,6 +1,8 @@
 import BigNumberjs from 'bignumber.js'
 import EthUrl from 'assets/images/eth_logo.png'
 import BSCUrl from 'assets/svg/binance.svg'
+import ROLLUXUrl from 'assets/svg/rollux_logo.svg'
+import OMNIUrl from 'assets/svg/omni_logo.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 import ZkSyncSrc from '../assets/images/zksync_logo.png'
 import scrollLogo from '../assets/images/scroll_logo.png'
@@ -22,9 +24,12 @@ export enum ChainId {
   // FUSE = 122,
   // HECO = 128,
   POLYGON = 137,
+  OMNI_TESTNET = 165,
   FANTOM = 250,
   ZKSYNC_ERA_TESTNET = 280,
   ZKSYNC_ERA = 324,
+  LINEA_GORLI = 59140,
+  ROLLUX = 570,
   POLYGON_ZK_EVM = 1101,
   POLYGON_ZK_EVM_TESTNET = 1442,
   MOONBEAM = 1284,
@@ -78,6 +83,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://mainnet.infura.io/v3'],
     blockExplorerUrls: ['https://etherscan.com']
+  },
+  [ChainId.LINEA_GORLI]: {
+    id: ChainId.LINEA_GORLI,
+    hexChainId: numberToHex(ChainId.LINEA_GORLI),
+    chainName: 'Linea Testnet',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://docs.linea.build/img/favicon.ico'
+    },
+    rpcUrls: ['https://rpc.goerli.linea.build'],
+    blockExplorerUrls: ['https://goerli.lineascan.build/']
   },
   [ChainId.GÖRLI]: {
     id: ChainId.GÖRLI,
@@ -183,6 +201,19 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://rpc.ankr.com/polygon'],
     blockExplorerUrls: ['https://polygonscan.com/']
   },
+  [ChainId.OMNI_TESTNET]: {
+    id: ChainId.OMNI_TESTNET,
+    hexChainId: numberToHex(ChainId.OMNI_TESTNET),
+    chainName: 'Omni Testnet',
+    nativeCurrency: {
+      name: 'OMNI',
+      symbol: 'OMNI',
+      decimals: 18,
+      logo: OMNIUrl
+    },
+    rpcUrls: ['https://testnet-1.omni.network/'],
+    blockExplorerUrls: ['https://testnet-1.explorer.omni.network/']
+  },
   [ChainId.FANTOM]: {
     id: ChainId.FANTOM,
     hexChainId: numberToHex(ChainId.FANTOM),
@@ -191,10 +222,23 @@ export const SUPPORTED_NETWORKS: {
       name: 'FTM',
       symbol: 'FTM',
       decimals: 18,
-      logo: 'https://ftmscan.com/images/svg/brands/fantom.svg'
+      logo: 'https://ftmscan.com/images/favicon.png'
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']
+  },
+  [ChainId.ROLLUX]: {
+    id: ChainId.ROLLUX,
+    hexChainId: numberToHex(ChainId.ROLLUX),
+    chainName: 'Rollux',
+    nativeCurrency: {
+      name: 'SYS',
+      symbol: 'SYS',
+      decimals: 18,
+      logo: ROLLUXUrl
+    },
+    rpcUrls: ['https://rpc.rollux.com'],
+    blockExplorerUrls: ['https://explorer.rollux.com']
   },
   [ChainId.ZKSYNC_ERA]: {
     id: ChainId.ZKSYNC_ERA,

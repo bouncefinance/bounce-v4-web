@@ -127,7 +127,7 @@ export function Common({
             style={{
               display: 'block',
               width: isSm ? '100%' : isMd ? 'calc(100vw - 32px)' : '600px',
-              objectFit: keyId === 6 ? 'initial' : 'cover',
+              objectFit: keyId === 6 || keyId === 7 ? 'initial' : 'cover',
               borderRadius: isMd ? '30px 30px 0 0' : '30px 0 0 30px',
               height: '100%'
             }}

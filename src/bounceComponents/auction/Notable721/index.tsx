@@ -1,5 +1,5 @@
 import { H4 } from '../../../components/Text'
-import { Box, Button, Container, MenuItem, Select, Skeleton } from '@mui/material'
+import { Box, Container, MenuItem, Select, Skeleton } from '@mui/material'
 import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { NFTCard } from '../../../pages/market/nftAuctionPool'
@@ -17,9 +17,9 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from 'hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
 import { TokenType as ERCType } from 'bounceComponents/create-auction-pool/types'
-interface Notable721Props {
-  handleViewAll?: () => void
-}
+// interface Notable721Props {
+//   handleViewAll?: () => void
+// }
 
 export const HomeNFTSkeletonCard = () => {
   const isSm = useBreakpoint('sm')
@@ -75,8 +75,9 @@ export const HomeNFTSkeletonCard = () => {
   )
 }
 
-export const Notable721 = (props: Notable721Props) => {
-  const { handleViewAll } = props
+// export const Notable721 = (props: Notable721Props) => {
+export const Notable721 = () => {
+  //   const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
@@ -193,7 +194,7 @@ export const Notable721 = (props: Notable721Props) => {
               : []}
           </SlideProgress>
         )}
-        <Box
+        {/* <Box
           sx={{
             width: '100%',
             display: 'flex',
@@ -216,7 +217,7 @@ export const Notable721 = (props: Notable721Props) => {
           >
             View all auctions
           </Button>
-        </Box>
+        </Box> */}
       </Container>
     </Box>
   )

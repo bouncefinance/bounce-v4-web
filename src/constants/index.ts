@@ -166,6 +166,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.BSC]: process.env.REACT_APP_BSC_FIXED_SWAP_ERC20_ADDRESS || '',
   [ChainId.OKEX]: '0x167544766d084a048d109ad0e1d95b19198c5af1',
   [ChainId.BSCTEST]: '',
+  [ChainId.OMNI_TESTNET]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
+  [ChainId.ROLLUX]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.KLAYTN]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.GNOSIS]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.POLYGON]: '0x5b5E07c8c05489CD0D2227AfA816478cD039c624',
@@ -188,7 +190,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.AUROEA]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1'
 }
 
 export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -203,6 +206,8 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
   // [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
   [ChainId.ZKSYNC_ERA]: '0x51552f0b8E57A1b2C749845d9aFb906FA4f5317A',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
@@ -220,7 +225,8 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 // REACT_APP_RANDOM_SELECTION_ADDRESS
 export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -235,6 +241,8 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '0xAd161CDAFD56450BC8624F74163A47aF58BC2C82',
   [ChainId.FANTOM]: '0x87d811661BB10Af6D236b5458Eeb2f4614723FB8',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
@@ -251,7 +259,8 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -265,7 +274,9 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.KLAYTN]: '',
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '0xE11ADD6956077174C008F842b82135b50E377128',
+  [ChainId.OMNI_TESTNET]: '',
   [ChainId.FANTOM]: '',
+  [ChainId.ROLLUX]: '',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
@@ -282,7 +293,8 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -313,7 +325,8 @@ export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: strin
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const defaultPoolVersionRoute: 1 | 2 = 2

@@ -1,7 +1,5 @@
 import { Card, CardHeader, Chip, Stack, Typography } from '@mui/material'
 import React from 'react'
-import { useCountDown } from 'ahooks'
-import moment from 'moment'
 import Image from 'components/Image'
 import { AuctionProgress, IAuctionProgressProps } from './AuctionProgress'
 import styles from './styles'
@@ -21,10 +19,12 @@ export type IAuctionCardProps = {
   claimAt: number
   closeAt: number
   categoryName: string
-  isMe?: boolean
-  creatorClaimed?: boolean
-  participantClaimed?: boolean
-  isCreator?: boolean
+  // isMe?: boolean
+  // creatorClaimed?: boolean
+  // participantClaimed?: boolean
+  // isCreator?: boolean
+  showCreatorClaim?: boolean | undefined
+  showParticipantClaim?: boolean | undefined
   whiteList: string
   chainId: number
   style?: React.CSSProperties | undefined
@@ -38,11 +38,9 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   closeAt,
   holder,
   categoryName,
-  isMe,
   whiteList,
-  creatorClaimed,
-  participantClaimed,
-  isCreator,
+  showCreatorClaim,
+  showParticipantClaim,
   chainId,
   progress,
   listItems,
@@ -50,30 +48,6 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   claimAt
 }) => {
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
-  const [, { days, hours, minutes, seconds }] = useCountDown({ targetDate: claimAt * 1000 })
-
-  const showClaim = () => {
-    if (
-      (isCreator && !creatorClaimed) ||
-      (!isCreator && closeAt === claimAt && !participantClaimed) ||
-      (!isCreator && claimAt > closeAt && claimAt < moment().unix() && !participantClaimed)
-    ) {
-      return (
-        <Typography variant="body1" component="span">
-          Need to claim token
-        </Typography>
-      )
-    }
-    if (!isCreator && closeAt < claimAt && moment().unix() < claimAt) {
-      return (
-        <Typography variant="body1" component="span">
-          Start to claim &nbsp;in {days}d : {hours}h : {minutes}m : {seconds}s
-        </Typography>
-      )
-    }
-
-    return null
-  }
 
   return (
     <Card
@@ -91,18 +65,14 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
       <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
         <Typography>#{poolId}</Typography>
         <Stack direction="row" spacing={6} height={24} alignItems={'center'}>
-          {isMe &&
-          status === 4 &&
-          ((isCreator && !creatorClaimed) ||
-            (!isCreator && closeAt === claimAt && !participantClaimed) ||
-            (!isCreator && claimAt > closeAt && claimAt < moment().unix() && !participantClaimed) ||
-            (!isCreator && closeAt < claimAt && moment().unix() < claimAt)) ? (
-            <Chip
-              label={showClaim()}
-              sx={{ height: 24, fontSize: 12, bgcolor: 'var(--ps-black)', color: 'var(--ps-white)' }}
-            />
-          ) : null}
-          <PoolStatusBox claimAt={claimAt} status={status} closeTime={closeAt} openTime={dateStr} />
+          <PoolStatusBox
+            showCreatorClaim={showCreatorClaim}
+            showParticipantClaim={showParticipantClaim}
+            claimAt={claimAt}
+            status={status}
+            closeTime={closeAt}
+            openTime={dateStr}
+          />
         </Stack>
       </Stack>
       <CardHeader title={title} />

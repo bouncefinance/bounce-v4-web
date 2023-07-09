@@ -1,4 +1,4 @@
-import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
+// import NecklaceJson from 'components/Fundo/assets/lottie/animatinDm4.json'
 import { create } from '@lottiefiles/lottie-interactivity'
 import { useEffect, useRef, useState } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
@@ -57,7 +57,7 @@ const Necklace = ({
       ref={lottieEl}
       id={'lottie-player'}
       autoplay={false}
-      src={JSON.stringify(NecklaceJson)}
+      src={JSON.stringify('/lottie/animatinDm4.json')}
       loop={false}
       style={{
         position: 'fixed',

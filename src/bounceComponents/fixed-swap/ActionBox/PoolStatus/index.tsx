@@ -1,8 +1,9 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, styled } from '@mui/material'
 import React from 'react'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
+import { useActiveWeb3React } from 'hooks'
 export interface PoolStatusBoxProps {
   status: PoolStatus
   openTime: number
@@ -10,8 +11,20 @@ export interface PoolStatusBoxProps {
   claimAt: number
   onEnd?: () => void
   style?: React.CSSProperties
-  hiddenStatus?: boolean
+  showCreatorClaim?: boolean
+  showParticipantClaim?: boolean
+  hideUpcomingCountdown?: boolean
 }
+
+const StyledSpan = styled('span')({
+  display: 'inline-block',
+  padding: '4px 8px',
+  background: '#000000',
+  borderRadius: 20,
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden'
+})
 
 const PoolStatusBox = ({
   status,
@@ -20,8 +33,11 @@ const PoolStatusBox = ({
   claimAt,
   onEnd,
   style,
-  hiddenStatus = false
+  hideUpcomingCountdown,
+  showCreatorClaim,
+  showParticipantClaim
 }: PoolStatusBoxProps): JSX.Element => {
+  const { account } = useActiveWeb3React()
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       status === PoolStatus.Upcoming
@@ -37,17 +53,23 @@ const PoolStatusBox = ({
   switch (status) {
     case PoolStatus.Upcoming:
       return (
-        <Box
-          sx={{
-            display: 'inline-block',
-            px: 12,
-            py: 4,
-            bgcolor: '#E6E6E6',
-            borderRadius: 20,
-            ...style
-          }}
-        >
-          <Typography variant="body1">Upcoming</Typography>
+        <Box style={{ display: 'inline-block', padding: '4px 8px', background: '#E6E6E6', borderRadius: 20, ...style }}>
+          <Typography
+            variant="body1"
+            color="var(--ps-gray-600)"
+            fontSize={12}
+            component="span"
+            style={{
+              marginRight: '5px'
+            }}
+          >
+            Upcoming
+          </Typography>
+          {countdown > 0 && !hideUpcomingCountdown && (
+            <Typography fontSize={12} color="var(--ps-gray-600)" variant="body1" component="span">
+              &nbsp;{days}d : {hours}h : {minutes}m
+            </Typography>
+          )}
         </Box>
       )
 
@@ -86,19 +108,8 @@ const PoolStatusBox = ({
               Closed
             </Typography>
           </Box>
-          {!hiddenStatus && (
-            <span
-              style={{
-                display: 'inline-block',
-                padding: '4px 8px',
-                background: '#000000',
-                borderRadius: 20,
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                ...style
-              }}
-            >
+          {showParticipantClaim && account && (
+            <StyledSpan style={style}>
               {countdown > 0 && (
                 <>
                   <WarningIcon style={{ marginRight: '4px', verticalAlign: 'middle' }} />
@@ -112,11 +123,19 @@ const PoolStatusBox = ({
                 <>
                   <WarningIcon style={{ marginRight: '4px', verticalAlign: 'middle' }} />
                   <Typography variant="body1" color="#fff" component="span">
-                    Need to claim token
+                    Claimable
                   </Typography>
                 </>
               )}
-            </span>
+            </StyledSpan>
+          )}
+          {showCreatorClaim && account && status === PoolStatus.Closed && (
+            <StyledSpan style={style}>
+              <WarningIcon style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+              <Typography variant="body1" color="#fff" component="span">
+                Claimable
+              </Typography>
+            </StyledSpan>
           )}
         </Box>
       )

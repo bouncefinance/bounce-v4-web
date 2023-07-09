@@ -20,14 +20,10 @@ import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 // import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import BigNumber from 'bignumber.js'
 import { ReactComponent as SearchSVG } from 'assets/imgs/companies/search.svg'
-import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
 import FormItem from 'bounceComponents/common/FormItem'
-import TokenImage from 'bounceComponents/common/TokenImage'
 import { PoolType } from 'api/pool/type'
-import { getLabelById, shortenAddress } from 'utils'
+import { getLabelById } from 'utils'
 import NoData from 'bounceComponents/common/NoData'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
 import { getPools } from 'api/market'
@@ -35,14 +31,9 @@ import TotalPaginationBox from 'bounceComponents/market/components/TotalPaginati
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
 // import { UserType } from 'api/market/type'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { routes } from 'constants/routes'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import { useNavigate } from 'react-router-dom'
-import { useActiveWeb3React } from 'hooks'
-import { formatNumber } from 'utils/number'
-import CertifiedTokenImage from 'components/CertifiedTokenImage'
-import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
@@ -108,7 +99,6 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(0)
-  const { account } = useActiveWeb3React()
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) })
       .then(res => {
@@ -194,7 +184,6 @@ const Pools: React.FC = ({}) => {
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
   }
-  const navigate = useNavigate()
 
   return (
     <section>
@@ -354,148 +343,7 @@ const Pools: React.FC = ({}) => {
                         <Grid container spacing={18}>
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={12} sm={6} md={4} lg={4} xl={4} key={index}>
-                              <Box
-                                onClick={() =>
-                                  navigate(
-                                    getAuctionPoolLink(
-                                      fixedSwaptem.id,
-                                      fixedSwaptem.category,
-                                      fixedSwaptem.chainId,
-                                      fixedSwaptem.poolId
-                                    )
-                                  )
-                                }
-                              >
-                                <AuctionCard
-                                  style={{ minWidth: 'unset' }}
-                                  poolId={fixedSwaptem.poolId}
-                                  title={fixedSwaptem.name}
-                                  status={fixedSwaptem.status}
-                                  claimAt={fixedSwaptem.claimAt}
-                                  closeAt={fixedSwaptem.closeAt}
-                                  isCreator={fixedSwaptem.creator === account}
-                                  creatorClaimed={fixedSwaptem.creatorClaimed}
-                                  participantClaimed={fixedSwaptem.participant.claimed}
-                                  dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
-                                  holder={
-                                    <AuctionHolder
-                                      href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                      avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                                      name={fixedSwaptem.creatorUserInfo?.name}
-                                      description={
-                                        fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                          ? fixedSwaptem.creatorUserInfo?.publicRole?.map(
-                                              (item: any, index: number) => {
-                                                return (
-                                                  getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                                  `${
-                                                    index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1
-                                                      ? ', '
-                                                      : ''
-                                                  }`
-                                                )
-                                              }
-                                            )
-                                          : 'Individual account'
-                                      }
-                                      isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                                    />
-                                  }
-                                  progress={{
-                                    symbol:
-                                      fixedSwaptem.category === 3 ? '' : fixedSwaptem.token0.symbol?.toUpperCase(),
-                                    decimals: fixedSwaptem.category === 3 ? '' : fixedSwaptem.token0.decimals,
-                                    sold:
-                                      fixedSwaptem.category === 3
-                                        ? fixedSwaptem.curPlayer
-                                        : fixedSwaptem.swappedAmount0,
-                                    supply:
-                                      fixedSwaptem.category === 3 ? fixedSwaptem.maxPlayere : fixedSwaptem.amountTotal0
-                                  }}
-                                  listItems={
-                                    <>
-                                      <AuctionListItem
-                                        label="Token symbol"
-                                        value={
-                                          <Stack direction="row" alignItems="center" spacing={4}>
-                                            <TokenImage
-                                              src={fixedSwaptem.token0.largeUrl}
-                                              alt={fixedSwaptem.token0.symbol}
-                                              size={20}
-                                            />
-                                            <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
-                                          </Stack>
-                                        }
-                                      />
-                                      <AuctionListItem
-                                        label="Contract address"
-                                        value={
-                                          <Stack direction="row" alignItems="center" spacing={4}>
-                                            <CertifiedTokenImage
-                                              address={fixedSwaptem.token0.address}
-                                              coingeckoId={fixedSwaptem.token0.coingeckoId}
-                                              ethChainId={fixedSwaptem.ethChainId}
-                                              backedChainId={fixedSwaptem.chainId}
-                                            />
-                                            <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
-                                            <CopyToClipboard text={fixedSwaptem.token0.address} />
-                                          </Stack>
-                                        }
-                                      />
-                                      {fixedSwaptem.category !== PoolType.Lottery && (
-                                        <AuctionListItem
-                                          label="Fixed price ratio"
-                                          value={
-                                            <Stack direction="row" spacing={8}>
-                                              <Typography fontSize={12}>1</Typography>
-                                              <Typography fontSize={12}>
-                                                {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
-                                                {new BigNumber(fixedSwaptem.ratio)
-                                                  .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                                  .toFormat()}
-                                              </Typography>
-                                              <Typography fontSize={12}>
-                                                {fixedSwaptem.token1.symbol.toUpperCase()}
-                                              </Typography>
-                                            </Stack>
-                                          }
-                                        />
-                                      )}
-                                      {fixedSwaptem.category === PoolType.Lottery && (
-                                        <AuctionListItem
-                                          label="Ticket Price"
-                                          value={
-                                            <Stack direction="row" spacing={8}>
-                                              <Typography fontSize={12}>
-                                                {formatNumber(fixedSwaptem.maxAmount1PerWallet, {
-                                                  unit: fixedSwaptem.token1.decimals,
-                                                  decimalPlaces: fixedSwaptem.token1.decimals
-                                                })}
-                                              </Typography>
-                                              <Typography fontSize={12}>
-                                                {fixedSwaptem.token1.symbol.toUpperCase()}
-                                              </Typography>
-                                            </Stack>
-                                          }
-                                        />
-                                      )}
-                                      <AuctionListItem
-                                        label="Price,$"
-                                        value={
-                                          <span>
-                                            {new BigNumber(fixedSwaptem.poolPrice)
-                                              .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                              .toFormat()}
-                                          </span>
-                                        }
-                                      />
-                                    </>
-                                  }
-                                  categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
-                                  whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
-                                  chainId={fixedSwaptem.chainId}
-                                />
-                              </Box>
+                              <AuctionCardFull auctionPoolItem={fixedSwaptem} />
                             </Grid>
                           ))}
                         </Grid>

@@ -129,12 +129,28 @@ const transparentRoutes = [
   routes.thirdPart.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
-  routes.thirdPart.poseiswapAuction
+  routes.thirdPart.TypeitAuction,
+  routes.thirdPart.TypeitAuctionWhitelist,
+  routes.thirdPart.poseiswapAuction,
+  routes.thirdPart.OpenfabricAuction,
+  routes.thirdPart.DeelanceAuction,
+  routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.DipExchange
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
 
-export const whiteLogoRoutes = [routes.launchpad.bladeDao, routes.thirdPart.foundoDetail, routes.launchpad.bladeDaoInfo]
+export const whiteLogoRoutes = [
+  routes.launchpad.bladeDao,
+  routes.thirdPart.foundoDetail,
+  routes.launchpad.bladeDaoInfo,
+  routes.thirdPart.TypeitAuction,
+  routes.thirdPart.TypeitAuctionWhitelist,
+  routes.thirdPart.OpenfabricAuction,
+  routes.thirdPart.DeelanceAuction,
+  routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.DipExchange
+]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -230,7 +246,7 @@ export default function Header() {
         }}
       />
       <WalletIcon />
-      <Typography variant="h5" ml={5}>
+      <Typography variant="h5" ml={5} sx={{ whiteSpace: 'nowrap' }}>
         Connect wallet
       </Typography>
     </Button>

@@ -231,7 +231,7 @@ export const ComponentOptions = {
           borderRadius: 8
         },
         textPrimary: {
-          background: 'var(--ps-gray-50)',
+          // background: 'var(--ps-gray-50)',
           color: '#000000',
           '&:hover': {
             background: 'var(--ps-yellow-1)'

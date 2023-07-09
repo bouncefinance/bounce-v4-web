@@ -1,7 +1,7 @@
-import PoolInfoItem from '../../PoolInfoItem'
 import { formatNumber } from 'utils/number'
 import { getUserSwappedAmount1, getUserSwappedUnits1 } from 'utils/auction'
 import { FixedSwapPoolProp } from 'api/pool/type'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const BidAmountLimit = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const formatedMMaxAmount1PerWallet = poolInfo.maxAmount1PerWallet

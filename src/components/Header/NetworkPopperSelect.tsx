@@ -31,6 +31,7 @@ export default function NetworkPopperSelect() {
 
   return (
     <PopperCard
+      closeHandler={() => setSearchVal('')}
       targetElement={
         <Button
           sx={{

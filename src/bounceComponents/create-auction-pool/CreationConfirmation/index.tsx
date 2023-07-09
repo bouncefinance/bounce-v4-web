@@ -37,7 +37,11 @@ import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
 
-const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
+const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[900],
+  opacity: 0.5,
+  textTransform: 'capitalize'
+}))
 
 const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
   <Stack direction="row" justifyContent="space-between" alignItems="center" columnGap={20}>

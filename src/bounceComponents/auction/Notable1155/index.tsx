@@ -1,5 +1,5 @@
 import { H3, H4 } from '../../../components/Text'
-import { Box, Container, MenuItem, Select, Button } from '@mui/material'
+import { Box, Container, MenuItem, Select } from '@mui/material'
 import { useState } from 'react'
 import { SlideProgress } from '../SlideProgress'
 import { NFTCard } from '../../../pages/market/nftAuctionPool'
@@ -18,12 +18,13 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from 'hooks/useBreakpoint'
 import useResizeView from 'utils/useResizeView'
 import { TokenType as ERCType } from 'bounceComponents/create-auction-pool/types'
-interface Notable1155Props {
-  handleViewAll?: () => void
-}
+// interface Notable1155Props {
+//   handleViewAll?: () => void
+// }
 
-export const Notable1155 = (props: Notable1155Props) => {
-  const { handleViewAll } = props
+// export const Notable1155 = (props: Notable1155Props) => {
+export const Notable1155 = () => {
+  //   const { handleViewAll } = props
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
@@ -56,7 +57,7 @@ export const Notable1155 = (props: Notable1155Props) => {
   )
 
   return (
-    <Box sx={{ background: 'white', padding: '80px 0 100px' }}>
+    <Box id={'NotableAuction'} sx={{ background: 'white', padding: '80px 0 100px' }}>
       <Container>
         <H3 justifyContent={'center'}>Notable Auctions</H3>
         <CenterRow
@@ -143,7 +144,7 @@ export const Notable1155 = (props: Notable1155Props) => {
               : []}
           </SlideProgress>
         )}
-        <Box
+        {/* <Box
           sx={{
             width: '100%',
             display: 'flex',
@@ -166,7 +167,7 @@ export const Notable1155 = (props: Notable1155Props) => {
           >
             View all auctions
           </Button>
-        </Box>
+        </Box> */}
       </Container>
     </Box>
   )

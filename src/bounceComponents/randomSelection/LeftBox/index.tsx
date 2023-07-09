@@ -1,7 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ReactNode } from 'react'
 import { BigNumber } from 'bignumber.js'
-import PoolInfoItem from '../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber } from 'utils/number'
@@ -14,6 +13,7 @@ import { addTokenToWallet } from 'utils/addTokenToWallet'
 import { useActiveWeb3React } from 'hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>

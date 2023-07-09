@@ -87,7 +87,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
           }}
         >
           <Box>
-            <SmallText>Auction Created</SmallText>
+            <SmallText>Auctions Created</SmallText>
             <H5>{props.createdCount}</H5>
           </Box>
           <Box>

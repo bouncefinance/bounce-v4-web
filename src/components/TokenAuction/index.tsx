@@ -14,16 +14,9 @@ import { Link } from 'react-router-dom'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { routes } from 'constants/routes'
-import { getLabelById, shortenAddress } from 'utils'
-import AuctionCard, { AuctionHolder, AuctionListItem } from 'bounceComponents/common/AuctionCard'
-import TokenImage from 'bounceComponents/common/TokenImage'
-import BigNumber from 'bignumber.js'
-import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { PoolType } from 'api/pool/type'
-import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
-import { poolTypeText } from 'pages/market/pools'
 import useBreakpoint from '../../hooks/useBreakpoint'
+import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 
 interface InfoBoxParams {
   title: string
@@ -724,111 +717,11 @@ const TokenAuction: React.FC = () => {
                       }}
                     >
                       {data?.list?.map((fixedSwaptem: any, index: number) => (
-                        <Link
+                        <AuctionCardFull
                           key={index}
-                          to={getAuctionPoolLink(
-                            fixedSwaptem.id,
-                            fixedSwaptem.category,
-                            fixedSwaptem.chainId,
-                            fixedSwaptem.poolId
-                          )}
-                        >
-                          <AuctionCard
-                            style={{ minWidth: 'unset' }}
-                            poolId={fixedSwaptem.poolId}
-                            title={fixedSwaptem.name}
-                            status={fixedSwaptem.status}
-                            claimAt={fixedSwaptem.claimAt}
-                            closeAt={fixedSwaptem.closeAt}
-                            dateStr={fixedSwaptem.status == 1 ? fixedSwaptem.openAt : fixedSwaptem.closeAt}
-                            holder={
-                              <AuctionHolder
-                                href={`${routes.profile.summary}?id=${fixedSwaptem.creatorUserInfo?.userId}`}
-                                avatar={fixedSwaptem.creatorUserInfo?.avatar}
-                                name={fixedSwaptem.creatorUserInfo?.name}
-                                description={
-                                  fixedSwaptem.creatorUserInfo?.publicRole?.length > 0
-                                    ? fixedSwaptem.creatorUserInfo?.publicRole?.map((item: any, index: number) => {
-                                        return (
-                                          getLabelById(item, 'role', optionDatas?.publicRoleOpt) +
-                                          `${
-                                            index !== fixedSwaptem.creatorUserInfo?.publicRole?.length - 1 ? ', ' : ''
-                                          }`
-                                        )
-                                      })
-                                    : 'Individual account'
-                                }
-                                isVerify={fixedSwaptem.creatorUserInfo?.isVerify}
-                              />
-                            }
-                            progress={{
-                              symbol: fixedSwaptem.token0.symbol?.toUpperCase(),
-                              decimals: fixedSwaptem.token0.decimals,
-                              sold: fixedSwaptem.swappedAmount0,
-                              supply: fixedSwaptem.amountTotal0
-                            }}
-                            listItems={
-                              <>
-                                <AuctionListItem
-                                  label="Token symbol"
-                                  value={
-                                    <Stack direction="row" alignItems="center" spacing={4}>
-                                      <TokenImage
-                                        src={fixedSwaptem.token0.largeUrl}
-                                        alt={fixedSwaptem.token0.symbol}
-                                        size={20}
-                                      />
-                                      <span>{fixedSwaptem.token0.symbol.toUpperCase()}</span>
-                                    </Stack>
-                                  }
-                                />
-                                <AuctionListItem
-                                  label="Contract address"
-                                  value={
-                                    <Stack direction="row" alignItems="center" spacing={4}>
-                                      <CertifiedTokenImage
-                                        address={fixedSwaptem.token0.address}
-                                        coingeckoId={fixedSwaptem.token0.coingeckoId}
-                                        ethChainId={fixedSwaptem.ethChainId}
-                                        backedChainId={fixedSwaptem.chainId}
-                                      />
-                                      <span>{shortenAddress(fixedSwaptem.token0.address)}</span>
-                                      <CopyToClipboard text={fixedSwaptem.token0.address} />
-                                    </Stack>
-                                  }
-                                />
-                                <AuctionListItem
-                                  label="Fixed price ratio"
-                                  value={
-                                    <Stack direction="row" spacing={8}>
-                                      <Typography fontSize={12}>1</Typography>
-                                      <Typography fontSize={12}>
-                                        {fixedSwaptem.token0.symbol.toUpperCase()} ={' '}
-                                        {new BigNumber(fixedSwaptem.ratio)
-                                          .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                          .toFormat()}
-                                      </Typography>
-                                      <Typography fontSize={12}>{fixedSwaptem.token1.symbol.toUpperCase()}</Typography>
-                                    </Stack>
-                                  }
-                                />
-                                <AuctionListItem
-                                  label="Price,$"
-                                  value={
-                                    <span>
-                                      {new BigNumber(fixedSwaptem.poolPrice)
-                                        .decimalPlaces(6, BigNumber.ROUND_DOWN)
-                                        .toFormat()}
-                                    </span>
-                                  }
-                                />
-                              </>
-                            }
-                            categoryName={poolTypeText[fixedSwaptem.category as PoolType]}
-                            whiteList={fixedSwaptem.enableWhiteList ? 'Whitelist' : 'Public'}
-                            chainId={fixedSwaptem.chainId}
-                          />
-                        </Link>
+                          style={{ minWidth: 330, gap: 20, boxSizing: 'border-box' }}
+                          auctionPoolItem={fixedSwaptem}
+                        />
                       ))}
                     </Stack>
                   )}
