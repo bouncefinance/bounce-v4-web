@@ -161,7 +161,7 @@ const BidBlock = ({
             fontSize: '16px'
           }}
         >
-          Claim Token
+          Place a Bid
         </Typography>
         <Typography
           sx={{
