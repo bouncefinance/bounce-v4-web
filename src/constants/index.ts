@@ -326,7 +326,9 @@ export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: strin
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: ''
 }
 
 export const defaultPoolVersionRoute: 1 | 2 = 2
