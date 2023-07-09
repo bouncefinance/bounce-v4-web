@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { useMemo, useRef, useEffect } from 'react'
+import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
 import moment from 'moment'
@@ -42,6 +42,11 @@ export class ToolTip {
   update({ dateStr, x, y, display, token0Price }: ToolTipParam) {
     if (!this.el) {
       return this.createToolTip({ dateStr, x, y })
+    } else if (!display) {
+      this.el.setAttribute(
+        'style',
+        `width: 132px; position: absolute; display: none; padding: 8px;flex-flow: column nowrap; justify-content:flex-start;align-items:flex-start; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #E1F25C; border-radius: 8px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
+      )
     } else {
       this.el.innerHTML = `
       <p style="font-family: 'Inter';font-size: 12px;color:#fff;line-height:17px;margin:0;">${dateStr}</p>
@@ -60,6 +65,7 @@ export class ToolTip {
 }
 const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: DutchAuctionPoolProp }) => {
   const chartContainerRef = useRef<any>()
+  const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const colorObj = useMemo(() => {
     return poolInfo.status === PoolStatus.Upcoming
       ? {
@@ -80,6 +86,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         }
   }, [poolInfo])
   useEffect(() => {
+    if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: '#121212' },
@@ -128,8 +135,11 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
     ]
     newSeries.setMarkers(markers as SeriesMarker<Time>[])
     window.addEventListener('resize', handleResize)
-    const TipsTool = new ToolTip({ dateStr: '' })
-    chartContainerRef.current.appendChild(TipsTool.el)
+    if (!tooltipInstance) {
+      const TipsTool = new ToolTip({ dateStr: '' })
+      setTooltipInstance(TipsTool)
+      chartContainerRef.current.appendChild(TipsTool?.el)
+    }
     chart.subscribeCrosshairMove((param: MouseEventParams) => {
       const currentValue = param?.seriesPrices?.values().next().value
       let dateStr = ''
@@ -148,16 +158,16 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         param?.point?.y < 0 ||
         param?.point?.y > chartContainerRef.current.clientHeight
       ) {
-        TipsTool.update({ dateStr, x, y, display: false })
+        tooltipInstance.update({ dateStr, x, y, display: false })
         return
       }
-      TipsTool.update({ dateStr, x, y, display: true, token0Price })
+      tooltipInstance.update({ dateStr, x, y, display: true, token0Price })
     })
     return () => {
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol])
+  }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, tooltipInstance])
   return <Box ref={chartContainerRef}></Box>
 }
 const lineClaimChart = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
