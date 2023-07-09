@@ -404,7 +404,7 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 .minus(poolInfo?.currencySwappedAmount0?.toExact() || '0')
                 .toString() +
                 ' ' +
-                poolInfo.token1.symbol.toUpperCase()}
+                poolInfo.token0.symbol.toUpperCase()}
             </RightText>
           </PoolInfoItem>
         </Box>

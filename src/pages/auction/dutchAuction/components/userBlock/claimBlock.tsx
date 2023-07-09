@@ -66,7 +66,7 @@ const ClaimBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed}`
+            content: `You have successfully claimed`
           })
           handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
         })

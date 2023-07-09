@@ -35,11 +35,9 @@ interface ToolTipParam {
 export class ToolTip {
   el: any
   constructor({ dateStr, x, y, bgColor, display }: ToolTipParam) {
-    console.log('line chart init...')
     this.createToolTip({ dateStr, x, y, bgColor, display })
   }
   createToolTip({ dateStr, x, y, bgColor, display }: ToolTipParam) {
-    console.log('create chart')
     if (!this.el) {
       const toolTip = document.createElement('div')
       toolTip.innerHTML = `<p style="font-family: 'Inter';font-size: 12px;color:#fff;">${dateStr}</p>`
@@ -55,7 +53,6 @@ export class ToolTip {
     }
   }
   update({ dateStr, x, y, display, token0Price }: ToolTipParam) {
-    console.log('update chart')
     if (!this.el) {
       return this.createToolTip({ dateStr, x, y })
     } else if (!display) {

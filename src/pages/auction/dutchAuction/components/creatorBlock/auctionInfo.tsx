@@ -105,13 +105,13 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
               </PoolInfoItem>
               <PoolInfoItem title="Starting price (price ceiling)">
                 <RightText>
-                  1 {`${poolInfo.token0.name}${poolInfo.token0.symbol}`} ={' '}
+                  1 {`${poolInfo.token0.symbol.toUpperCase()}`} ={' '}
                   {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Reserve price (price floor)">
                 <RightText>
-                  1 {`${poolInfo.token0.name}${poolInfo.token0.symbol}`} ={' '}
+                  1 {`${poolInfo.token0.symbol.toUpperCase()}`} ={' '}
                   {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>

@@ -5,7 +5,6 @@ import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams 
 import moment from 'moment'
 import { PoolStatus } from 'api/pool/type'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-
 interface PointerItem {
   time: number | string
   value: number
@@ -21,7 +20,6 @@ interface ToolTipParam {
 export class ToolTip {
   el: any
   constructor({ dateStr, x, y, bgColor, display }: ToolTipParam) {
-    console.log('line chart init...')
     this.createToolTip({ dateStr, x, y, bgColor, display })
   }
   createToolTip({ dateStr, x, y, bgColor, display }: ToolTipParam) {
@@ -171,8 +169,12 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
   return <Box ref={chartContainerRef}></Box>
 }
 const lineClaimChart = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const startTime = poolInfo.releaseData?.[0]?.startAt ? Number(poolInfo.releaseData?.[0]?.startAt * 1000) : 0
-  const endTime = poolInfo.releaseData?.[0]?.endAt ? Number(poolInfo.releaseData?.[0]?.endAt * 1000) : 0
+  const startTime = poolInfo.releaseData?.[0]?.startAt
+    ? moment(poolInfo.releaseData?.[0]?.startAt * 1000).format('YYYY-MM-DD HH:mm')
+    : 0
+  const endTime = poolInfo.releaseData?.[0]?.endAt
+    ? moment(poolInfo.releaseData?.[0]?.endAt * 1000).format('YYYY-MM-DD HH:mm')
+    : 0
   const lineData = [
     {
       time: startTime,

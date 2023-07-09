@@ -215,7 +215,6 @@ export function useDutchAuctionInfo() {
     const unfilledAmount1 = BigNumber(currencySwappedAmount1.toExact()).minus(
       BigNumber(currencySwappedAmount0.toExact()).times(currencyLowestBidPrice?.toExact() || '0')
     )
-    console.log('unfilledAmount1>>>', unfilledAmount1, unfilledAmount1.toString())
     const currencyUnfilledAmount1 = unfilledAmount1.isGreaterThan(0)
       ? CurrencyAmount.fromAmount(t1, unfilledAmount1.toString())
       : CurrencyAmount.fromAmount(t1, 0)
