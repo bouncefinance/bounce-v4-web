@@ -1,4 +1,3 @@
-import SwitchNetworkButton from '../../SwitchNetworkButton'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import { useCreatorClaim } from 'bounceHooks/auction/useRandomSelectionCreatorClaim'
 import { useActiveWeb3React } from 'hooks'
@@ -12,6 +11,7 @@ import { formatNumber } from 'utils/number'
 import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import { TX_FEE_RATIO } from 'bounceHooks/auction/useCreatorClaimTxFee'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const { account, chainId } = useActiveWeb3React()

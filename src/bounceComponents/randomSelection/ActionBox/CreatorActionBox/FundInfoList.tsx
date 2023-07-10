@@ -1,13 +1,13 @@
 import { Box, Stack, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 
-import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { FixedSwapPoolProp } from 'api/pool/type'
 // import CurrencyLogo from 'components/essential/CurrencyLogo'
 import { shortenAddress } from 'utils'
 import { formatNumber } from 'utils/number'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 
 const TX_FEE_RATIO = 0.025
 

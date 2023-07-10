@@ -12,6 +12,7 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import { useActiveWeb3React } from 'hooks'
+import { useNavigate } from 'react-router-dom'
 
 export default function AuctionCardFull({
   auctionPoolItem,
@@ -22,15 +23,20 @@ export default function AuctionCardFull({
 }) {
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
+  const navigate = useNavigate()
   return (
     <Box
       component={'a'}
-      href={getAuctionPoolLink(
-        auctionPoolItem.id,
-        auctionPoolItem.category,
-        auctionPoolItem.chainId,
-        auctionPoolItem.poolId
-      )}
+      onClick={() =>
+        navigate(
+          getAuctionPoolLink(
+            auctionPoolItem.id,
+            auctionPoolItem.category,
+            auctionPoolItem.chainId,
+            auctionPoolItem.poolId
+          )
+        )
+      }
     >
       <AuctionCard
         style={style || { minWidth: 'unset' }}

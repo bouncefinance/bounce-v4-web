@@ -34,13 +34,26 @@ const ClaimBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { run: claim, submitted } = useCreatorClaim(poolInfo.poolId, poolInfo.name, poolInfo.contract)
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = poolInfo?.currencyAmountTotal0?.greaterThan('0')
-    const token0ToClaimText = `${poolInfo?.currencyAmountTotal0?.toSignificant()} ${poolInfo?.token0.symbol}`
+    const allUnSwappedAmount0 = poolInfo.currencySwappedAmount0
+      ? poolInfo.currencyAmountTotal0?.subtract(poolInfo.currencySwappedAmount0).toExact()
+      : poolInfo.currencyAmountTotal0?.toExact()
+    const allToken0Value = BigNumber(poolInfo.currencySwappedAmount0?.toExact() || '0')
+      .times(poolInfo.currencyLowestBidPrice?.toExact() || '0')
+      .toString()
+    const token0ToClaimText = `${allUnSwappedAmount0} ${poolInfo?.token0.symbol}`
     const token1ToClaimText =
       hasToken0ToClaim && poolInfo?.currencyAmountTotal1?.toSignificant() && poolInfo.token1.symbol
-        ? ` and ${poolInfo?.currencyAmountTotal1?.toSignificant()} ${poolInfo.token1.symbol}`
+        ? ` and ${allToken0Value} ${poolInfo.token1.symbol}`
         : ''
-    return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
-  }, [poolInfo?.currencyAmountTotal0, poolInfo?.currencyAmountTotal1, poolInfo?.token0.symbol, poolInfo.token1.symbol])
+    return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}(Platform fee charged 2.5%)`
+  }, [
+    poolInfo?.currencyAmountTotal0,
+    poolInfo?.currencyAmountTotal1,
+    poolInfo.currencyLowestBidPrice,
+    poolInfo.currencySwappedAmount0,
+    poolInfo?.token0.symbol,
+    poolInfo.token1.symbol
+  ])
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog()

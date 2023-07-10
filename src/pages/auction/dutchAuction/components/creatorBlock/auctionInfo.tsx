@@ -9,7 +9,7 @@ import { addTokenToWallet } from 'utils/addTokenToWallet'
 import { useActiveWeb3React } from 'hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import useBreakpoint from 'hooks/useBreakpoint'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import moment from 'moment'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
@@ -26,6 +26,14 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
   const { chainId } = useActiveWeb3React()
   const isMobile = useBreakpoint('lg')
   const [showMore, setShowMore] = useState<boolean>(false)
+  const maxAmount0PerWalletText = useMemo(() => {
+    const currencyMaxAmount0PerWallet = poolInfo.currencyMaxAmount0PerWallet?.toSignificant()
+    if (Number(currencyMaxAmount0PerWallet) > 0) {
+      return currencyMaxAmount0PerWallet + ' ' + poolInfo?.token0?.symbol.toUpperCase()
+    } else {
+      return 'No Limit'
+    }
+  }, [poolInfo.currencyMaxAmount0PerWallet, poolInfo.token0.symbol])
   return (
     <>
       <Box
@@ -82,7 +90,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
           </PoolInfoItem>
           <PoolInfoItem title="Allocation per wallet">
             {/* TODO need to add new param to fit maxAmount1PerWallet for dutchAuction  */}
-            <RightText>{poolInfo.maxAmount1PerWallet}</RightText>
+            <RightText>{maxAmount0PerWalletText}</RightText>
           </PoolInfoItem>
           {showMore && (
             <>
@@ -97,13 +105,13 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
               </PoolInfoItem>
               <PoolInfoItem title="Starting price (price ceiling)">
                 <RightText>
-                  1 {`${poolInfo.token0.name}${poolInfo.token0.symbol}`} ={' '}
+                  1 {`${poolInfo.token0.symbol.toUpperCase()}`} ={' '}
                   {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Reserve price (price floor)">
                 <RightText>
-                  1 {`${poolInfo.token0.name}${poolInfo.token0.symbol}`} ={' '}
+                  1 {`${poolInfo.token0.symbol.toUpperCase()}`} ={' '}
                   {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>

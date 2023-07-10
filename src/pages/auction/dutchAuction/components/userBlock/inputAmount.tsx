@@ -44,8 +44,10 @@ const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) =>
   const maxValue = useMemo(() => {
     // MaxAmount0PerWallet from contract, not from http
     const currencyMaxAmount0PerWallet =
-      Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
-        ? poolInfo.currencyMaxAmount0PerWallet?.toExact()
+      poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
+        ? BigNumber(poolInfo.currencyMaxAmount0PerWallet?.toExact() || '0')
+            .minus(poolInfo.participant.currencySwappedAmount0?.toExact() || '0')
+            .toString()
         : poolInfo.currencyAmountTotal0?.toExact()
     // All tradable quantities for token0
     const swappedAmount0 =
@@ -62,7 +64,8 @@ const AmountInput = ({ amount, setAmount, poolInfo }: RegretAmountInputProps) =>
     poolInfo.currencyAmountTotal0,
     poolInfo.currencyMaxAmount0PerWallet,
     poolInfo?.currencySwappedAmount0,
-    userToken0limit
+    userToken0limit,
+    poolInfo.participant.currencySwappedAmount0
   ])
   const handleMaxButtonClick = useCallback(() => {
     setAmount(maxValue + '')

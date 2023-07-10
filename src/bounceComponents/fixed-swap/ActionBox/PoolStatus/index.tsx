@@ -13,6 +13,7 @@ export interface PoolStatusBoxProps {
   style?: React.CSSProperties
   showCreatorClaim?: boolean
   showParticipantClaim?: boolean
+  hideUpcomingCountdown?: boolean
 }
 
 const StyledSpan = styled('span')({
@@ -32,6 +33,7 @@ const PoolStatusBox = ({
   claimAt,
   onEnd,
   style,
+  hideUpcomingCountdown,
   showCreatorClaim,
   showParticipantClaim
 }: PoolStatusBoxProps): JSX.Element => {
@@ -63,7 +65,7 @@ const PoolStatusBox = ({
           >
             Upcoming
           </Typography>
-          {countdown > 0 && (
+          {countdown > 0 && !hideUpcomingCountdown && (
             <Typography fontSize={12} color="var(--ps-gray-600)" variant="body1" component="span">
               &nbsp;{days}d : {hours}h : {minutes}m
             </Typography>

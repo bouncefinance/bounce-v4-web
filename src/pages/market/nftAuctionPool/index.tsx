@@ -35,7 +35,6 @@ import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import NFTDefaultIcon from 'bounceComponents/create-auction-pool/TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
 import { ReactComponent as SizeIcon } from 'assets/imgs/auction/size-icon.svg'
 
-import NftPoolStatus from 'bounceComponents/fixed-swap-nft/ActionBox/NftPoolStatus'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { ChainListMap } from 'constants/chain'
@@ -46,6 +45,8 @@ import { useNavigate } from 'react-router-dom'
 import { FixedSwapPool } from 'api/pool/type'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { Currency, CurrencyAmount } from 'constants/token'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { useActiveWeb3React } from 'hooks'
 
 const StyledChainSpan = styled(Box)({
   fontFamily: 'Sharp Grotesk DB Cyr Book 20',
@@ -140,6 +141,7 @@ interface NFTPrams {
 
 export const NFTCard = (props: NFTPrams) => {
   const optionDatas = useOptionDatas()
+  const { account } = useActiveWeb3React()
   const {
     creatorUserInfo,
     status,
@@ -149,6 +151,9 @@ export const NFTCard = (props: NFTPrams) => {
     is721,
     enableWhiteList,
     name,
+    creator,
+    creatorClaimed,
+    participant,
     ratio,
     token0,
     chainId,
@@ -295,7 +300,14 @@ export const NFTCard = (props: NFTPrams) => {
               right: 12
             }}
           >
-            <NftPoolStatus openTime={openAt} closeTime={closeAt} claimAt={claimAt} status={status} />
+            <PoolStatusBox
+              showCreatorClaim={account === creator && !creatorClaimed}
+              showParticipantClaim={!!Number(participant.swappedAmount0) && !participant.claimed}
+              openTime={openAt}
+              closeTime={closeAt}
+              claimAt={claimAt}
+              status={status}
+            />
             <Box
               sx={{
                 marginTop: '6px',

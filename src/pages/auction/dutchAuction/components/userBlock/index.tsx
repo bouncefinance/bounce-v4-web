@@ -1,10 +1,19 @@
 import { Box } from '@mui/material'
 import UserPoolStatusBox from './poolStatus'
-import LeftBox from '../creatorBlock/left'
-import RightBox from './right'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-
+import OneTime from './oneTime/index'
+import Linear from './linear/index'
+import Fragment from './fragment/index'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { useMemo } from 'react'
 const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isUserClaimed = useMemo(() => {
+    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
+  }, [poolInfo.participant.currencyCurClaimableAmount])
+  console.log(
+    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact()>>>',
+    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
+  )
   return (
     <Box
       sx={{
@@ -15,32 +24,10 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       }}
       mb={'40px'}
     >
-      <UserPoolStatusBox status={poolInfo.status} hiddenStatus={poolInfo.participant.claimed} poolInfo={poolInfo} />
-      <Box
-        sx={{
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          paddingTop: '30px'
-        }}
-        gap={'30px'}
-      >
-        <Box
-          sx={{
-            flex: 400
-          }}
-        >
-          <LeftBox poolInfo={poolInfo} />
-        </Box>
-        <Box
-          sx={{
-            flex: 474
-          }}
-        >
-          <RightBox poolInfo={poolInfo} />
-        </Box>
-      </Box>
+      <UserPoolStatusBox status={poolInfo.status} hiddenStatus={isUserClaimed} poolInfo={poolInfo} />
+      {poolInfo.releaseType === IReleaseType.Cliff && <OneTime poolInfo={poolInfo} />}
+      {poolInfo.releaseType === IReleaseType.Linear && <Linear poolInfo={poolInfo} />}
+      {poolInfo.releaseType === IReleaseType.Fragment && <Fragment poolInfo={poolInfo} />}
     </Box>
   )
 }

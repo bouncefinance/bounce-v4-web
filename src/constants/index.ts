@@ -190,7 +190,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.AUROEA]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1'
 }
 
 export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -224,7 +225,8 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 // REACT_APP_RANDOM_SELECTION_ADDRESS
 export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -257,7 +259,8 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -323,7 +326,8 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -356,7 +360,10 @@ export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: strin
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: ''
 }
 
 export const defaultPoolVersionRoute: 1 | 2 = 2

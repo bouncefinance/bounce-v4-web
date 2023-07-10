@@ -65,6 +65,10 @@ import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo
 import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
 import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
 import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteList'
+import OpenfabricProjectInfo from './projectIntro/OpenfabricProjectInfo'
+import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
+import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
+import DipExchange from './dipExchange'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -173,6 +177,10 @@ export default function App() {
                     <Route path={routes.thirdPart.OmegaAuction} element={<OmegaProjectInfo />} />
                     <Route path={routes.thirdPart.TypeitAuction} element={<TypeitProjectInfo />} />
                     <Route path={routes.thirdPart.TypeitAuctionWhitelist} element={<TypeitProjectInfoWhiteList />} />
+                    <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
+                    <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
+                    <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
+                    <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                     {/* <Route
                       path={routes.game.bladeDaoIndex}

@@ -6,17 +6,20 @@ import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { useActiveWeb3React } from 'hooks'
-import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, PoolType } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BigNumber } from 'bignumber.js'
-import usePlaceBidDutch from 'bounceHooks/auction/usePlaceBidDutch'
 import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { ActionStep } from './right'
+import { Dots } from 'themes'
+import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 
-const ComBtn = styled(LoadingButton)(() => ({
+export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
     background: 'transparent',
     border: '1px solid #FFFFFF',
@@ -28,18 +31,34 @@ const ComBtn = styled(LoadingButton)(() => ({
     color: '#121212'
   }
 }))
-
+export const DisableBtn = styled(Box)(() => ({
+  width: '100%',
+  background: '#D7D6D9',
+  height: '52px',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '0 24px',
+  borderRadius: '8px',
+  cursor: 'pointer'
+}))
 const BidBlock = ({
   poolInfo,
   amount,
-  currentPriceAndAmount1
+  currentPriceAndAmount1,
+  handleSetActionStep
 }: {
   poolInfo: DutchAuctionPoolProp
   amount?: string
   currentPriceAndAmount1: AmountAndCurrentPriceParam
+  handleSetActionStep?: (actionStep: ActionStep) => void
 }) => {
   const { account, chainId } = useActiveWeb3React()
-  const { run: bid, submitted } = usePlaceBidDutch(poolInfo)
+  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
+    poolInfo,
+    PoolType.DUTCH_AUCTION
+  )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
   // max amount of token0 by token1 banlance
   const userToken0limit = useMemo(() => {
@@ -49,12 +68,15 @@ const BidBlock = ({
       .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
       .toString()
   }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
+  // MaxAmount0PerWallet from contract, not from http
+  const currencyMaxAmount0PerWallet = useMemo(() => {
+    return poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
+      ? BigNumber(poolInfo.currencyMaxAmount0PerWallet?.toExact() || '0')
+          .minus(poolInfo.participant.currencySwappedAmount0?.toExact() || '0')
+          .toString()
+      : poolInfo.currencyAmountTotal0?.toExact()
+  }, [poolInfo.currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo.participant.currencySwappedAmount0])
   const maxValue = useMemo(() => {
-    // MaxAmount0PerWallet from contract, not from http
-    const currencyMaxAmount0PerWallet =
-      Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
-        ? poolInfo.currencyMaxAmount0PerWallet?.toExact()
-        : poolInfo.currencyAmountTotal0?.toExact()
     // All tradable quantities for token0
     const swappedAmount0 =
       poolInfo?.currencySwappedAmount0 &&
@@ -66,12 +88,7 @@ const BidBlock = ({
       Number(currencyMaxAmount0PerWallet)
     )
     return result
-  }, [
-    poolInfo.currencyAmountTotal0,
-    poolInfo.currencyMaxAmount0PerWallet,
-    poolInfo?.currencySwappedAmount0,
-    userToken0limit
-  ])
+  }, [currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo?.currencySwappedAmount0, userToken0limit])
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -84,20 +101,21 @@ const BidBlock = ({
         ? claimAt * 1000
         : undefined
   })
-  const amount0CurrencyAmount = poolInfo?.currencyAmountTotal0
-    ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount || '0')
-    : 0
   const amount1CurrencyAmount = poolInfo?.currencyAmountTotal1
     ? CurrencyAmount.fromAmount(
         poolInfo?.currencyAmountTotal1?.currency,
         BigNumber(currentPriceAndAmount1.amount1).toString()
       )
     : 0
-  const toBid = useCallback(async () => {
-    if (!amount1CurrencyAmount || !amount0CurrencyAmount) return
-    showRequestConfirmDialog()
+  const [approvalState, approveCallback] = useApproveCallback(
+    amount1CurrencyAmount || undefined,
+    poolInfo.contract,
+    true
+  )
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
     try {
-      const { transactionReceipt } = await bid(amount0CurrencyAmount, amount1CurrencyAmount)
+      const { transactionReceipt } = await approveCallback()
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -110,16 +128,12 @@ const BidBlock = ({
       ret
         .then(() => {
           hideDialogConfirmation()
-          show(DialogTips, {
-            iconType: 'success',
-            againBtn: 'Close',
-            title: 'Congratulations!',
-            content: `You have successfully bid ${amount1CurrencyAmount.toSignificant()} ${poolInfo.token1.symbol}`
-          })
+          //   onClick()
         })
         .catch()
     } catch (error) {
       const err: any = error
+      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',
@@ -127,10 +141,13 @@ const BidBlock = ({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toBid
+        onAgain: toApprove
       })
     }
-  }, [amount1CurrencyAmount, amount0CurrencyAmount, bid, poolInfo.token1.symbol])
+  }, [approveCallback])
+  const goToBid = () => {
+    handleSetActionStep && handleSetActionStep(ActionStep.BidConfirm)
+  }
   if (!account) {
     return <ConnectWalletButton />
   }
@@ -139,20 +156,7 @@ const BidBlock = ({
   }
   if (poolInfo.status === PoolStatus.Upcoming) {
     return (
-      <Box
-        sx={{
-          width: '100%',
-          background: '#D7D6D9',
-          height: '52px',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '0 24px',
-          borderRadius: '8px',
-          cursor: 'pointer'
-        }}
-      >
+      <DisableBtn>
         <Typography
           sx={{
             fontFamily: `'Inter'`,
@@ -160,7 +164,7 @@ const BidBlock = ({
             fontSize: '16px'
           }}
         >
-          Claim Token
+          Place a Bid
         </Typography>
         <Typography
           sx={{
@@ -171,32 +175,60 @@ const BidBlock = ({
         >
           {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Upcoming'}
         </Typography>
-      </Box>
-    )
-  }
-  if (poolInfo.status === PoolStatus.Closed && !poolInfo.creatorClaimed) {
-    return (
-      <ComBtn
-        fullWidth
-        loadingPosition="start"
-        loading={submitted.complete || submitted.submitted}
-        onClick={() => toBid()}
-      >
-        <span>{'Place a Bid'}</span>
-      </ComBtn>
+      </DisableBtn>
     )
   }
   if (poolInfo.status === PoolStatus.Live) {
-    return (
-      <ComBtn
-        fullWidth
-        loading={submitted.complete || submitted.submitted}
-        disabled={!amount || Number(amount) === 0 || Number(amount) > maxValue}
-        onClick={() => toBid()}
-      >
-        <span>{Number(amount) > maxValue ? 'Insufficient Balance' : 'Place a Bid'}</span>
-      </ComBtn>
-    )
+    if (
+      !amount ||
+      Number(amount) === 0 ||
+      isCheckingWhitelist ||
+      (isUserInWhitelist !== undefined && !isUserInWhitelist)
+    ) {
+      return (
+        <ComBtn fullWidth disabled={true}>
+          <span>{'Place a Bid'}</span>
+        </ComBtn>
+      )
+    } else if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return (
+          <ComBtn loadingPosition="start" variant="contained" fullWidth loading>
+            Approving {poolInfo.token1?.symbol}
+          </ComBtn>
+        )
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return (
+          <ComBtn loadingPosition="start" variant="contained" fullWidth loading>
+            Loading <Dots />
+          </ComBtn>
+        )
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return (
+          <ComBtn variant="contained" onClick={toApprove} fullWidth>
+            Approve use of {poolInfo.token1?.symbol}
+          </ComBtn>
+        )
+      }
+    } else {
+      return (
+        <ComBtn
+          fullWidth
+          disabled={!amount || Number(amount) === 0 || Number(amount) > maxValue}
+          onClick={() => goToBid()}
+        >
+          <span>
+            {Number(amount) > maxValue
+              ? 'Insufficient Balance'
+              : Number(currencyMaxAmount0PerWallet) === 0
+              ? 'Limit exceeded'
+              : 'Place a Bid'}
+          </span>
+        </ComBtn>
+      )
+    }
   }
   return null
 }
