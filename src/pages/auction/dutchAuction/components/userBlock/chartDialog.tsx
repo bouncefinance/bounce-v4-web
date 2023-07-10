@@ -1,11 +1,18 @@
 import { LineChartView } from '../lineChart'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import { TransitionProps } from '@mui/material/transitions'
-import Slide from '@mui/material/Slide'
-import React from 'react'
-import DialogBase from 'bounceComponents/common/DialogBase'
 import { PointerItem } from '../lineChart'
 import { ColorType } from 'lightweight-charts'
+import { Box, Typography, styled, Dialog } from '@mui/material'
+import { ReactComponent as XIcon } from 'assets/imgs/dutchAuction/x.svg'
+const ChartDialogEl = styled(Dialog)(() => ({
+  '.MuiDialog-paper': {
+    width: '60%',
+    minWidth: '860px',
+    borderRadius: '8px',
+    background: '#fff',
+    padding: '48px'
+  }
+}))
 const ChartDialog = ({
   poolInfo,
   open,
@@ -17,30 +24,25 @@ const ChartDialog = ({
   data: PointerItem[]
   onClose?: () => void
 }) => {
-  const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<any, any>
-    },
-    ref: React.Ref<unknown>
-  ) {
-    return <Slide direction="up" ref={ref} {...props} />
-  })
   return (
     <>
-      <DialogBase
+      <ChartDialogEl
         onClose={() => {
           console.log('close')
           onClose && onClose()
         }}
-        title={'Duction Auction Live Chart'}
         open={open}
-        fullWidth
-        TransitionComponent={Transition}
-        titleStyle={{ padding: '48px 24px 30px 48px' }}
-        contentStyle={{
-          padding: '0px 20px 37px 48px'
-        }}
       >
+        <Typography
+          sx={{
+            fontFamily: `'Public Sans'`,
+            fontSize: 28,
+            fontWeight: 600,
+            color: '#121212'
+          }}
+        >
+          Duction Auction Live Chart
+        </Typography>
         <LineChartView
           data={data}
           poolInfo={poolInfo}
@@ -51,7 +53,69 @@ const ChartDialog = ({
             }
           }}
         />
-      </DialogBase>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
+          }}
+          mt={'30px'}
+        >
+          <Typography
+            sx={{
+              color: '#908E96',
+              fontFamily: `'Inter'`,
+              fontSize: '14px',
+              marginRight: '10px'
+            }}
+          >
+            Starting price:
+          </Typography>
+          <Typography
+            sx={{
+              color: '#171717',
+              fontFamily: `'Inter'`,
+              fontSize: '14px',
+              marginRight: '30px',
+              fontWeight: 600
+            }}
+          >
+            {poolInfo.highestPrice?.toExact() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          </Typography>
+          <Typography
+            sx={{
+              color: '#908E96',
+              fontFamily: `'Inter'`,
+              fontSize: '14px',
+              marginRight: '10px'
+            }}
+          >
+            Reserve price:
+          </Typography>
+          <Typography
+            sx={{
+              color: '#171717',
+              fontFamily: `'Inter'`,
+              fontSize: '14px',
+              fontWeight: 600
+            }}
+          >
+            {poolInfo.currencyLowestBidPrice?.toExact() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          </Typography>
+        </Box>
+        <XIcon
+          onClick={() => {
+            onClose && onClose()
+          }}
+          style={{
+            position: 'absolute',
+            top: '24px',
+            right: '24px',
+            cursor: 'pointer'
+          }}
+        />
+      </ChartDialogEl>
     </>
   )
 }
