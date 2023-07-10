@@ -94,9 +94,7 @@ const ClaimBlock = ({
   useEffect(() => {
     setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
     const timer: NodeJS.Timeout = setInterval(() => {
-      if (Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()) {
-        setIsNotTimeToClaim(true)
-      }
+      setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
     }, 5000)
     return () => {
       clearInterval(timer)

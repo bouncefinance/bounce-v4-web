@@ -2,7 +2,16 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as OpenChartIcon } from 'assets/imgs/dutchAuction/openChart.svg'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
+import {
+  createChart,
+  ColorType,
+  LineData,
+  SeriesMarker,
+  Time,
+  MouseEventParams,
+  DeepPartial,
+  ChartOptions
+} from 'lightweight-charts'
 import moment from 'moment'
 import PoolInfoItem from './poolInfoItem'
 import { RightText } from './creatorBlock/auctionInfo'
@@ -10,8 +19,8 @@ import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
 import { PoolStatus } from 'api/pool/type'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-
-interface PointerItem {
+import ChartDialog from './userBlock/chartDialog'
+export interface PointerItem {
   time: number | string
   value: number
 }
@@ -76,7 +85,15 @@ export class ToolTip {
     }
   }
 }
-const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: DutchAuctionPoolProp }) => {
+export const LineChartView = ({
+  data,
+  poolInfo,
+  options
+}: {
+  data: PointerItem[]
+  poolInfo: DutchAuctionPoolProp
+  options?: DeepPartial<ChartOptions>
+}) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const colorObj = useMemo(() => {
@@ -131,7 +148,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         visible: false,
         borderVisible: false,
         autoScale: true
-      }
+      },
+      ...options
     })
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef.current.clientWidth })
@@ -186,11 +204,12 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol])
+  }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, options])
   return <Box ref={chartContainerRef}></Box>
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const segments = times ? Number(times) : 0
   const startTime = openAt ? Number(openAt * 1000) : 0
   const endTime = closeAt ? Number(closeAt * 1000) : 0
@@ -245,7 +264,12 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         >
           Duction Auction Live Chart
         </Typography>
-        <OpenChartImg />
+        <OpenChartImg
+          onClick={() => {
+            console.log('setDialogOpen>>>>', dialogOpen)
+            setDialogOpen(!dialogOpen)
+          }}
+        />
       </Stack>
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
@@ -269,6 +293,16 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           / {amountTotal0} {poolInfo.token0.symbol.toUpperCase()}
         </RightText>
       </PoolInfoItem>
+      {dialogOpen && (
+        <ChartDialog
+          onClose={() => {
+            setDialogOpen(false)
+          }}
+          data={lineData}
+          poolInfo={poolInfo}
+          open={dialogOpen}
+        />
+      )}
     </Box>
   )
 }
