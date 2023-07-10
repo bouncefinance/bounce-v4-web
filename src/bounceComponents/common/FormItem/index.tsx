@@ -52,6 +52,8 @@ const FormItem: React.FC<IFormItemProps> = ({
 
   // No <Formik /> on the upper level
   const { submitCount, getFieldMeta } = formik || { submitCount: 0, getFieldMeta: (v: string) => v }
+  console.log('namenamename')
+  console.log(name)
 
   const meta = (name ? getFieldMeta(name) : { error: '', touched: false }) as FieldMetaProps<any>
   const error = meta.error

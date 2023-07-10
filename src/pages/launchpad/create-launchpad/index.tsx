@@ -1,5 +1,6 @@
-import { Box, Stack, Typography, styled, OutlinedInput } from '@mui/material'
+import { Box, OutlinedInput, Stack, Typography, styled } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
+import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 // import Uploader from 'bounceComponents/common/Uploader'
 import { Formik } from 'formik'
 import { useState } from 'react'
@@ -38,6 +39,15 @@ const validationSchema = yup.object({
     id: yup.number()
   })
 })
+const UploadIntroduce = ({ title }: { title: string }) => {
+  return (
+    <Stack sx={{ flexDirection: 'column', gap: 8 }}>
+      <BaseTitle1 sx={{ fontSize: 16, color: '#171717' }}>{title}</BaseTitle1>
+      <BaseTitle2 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</BaseTitle2>
+    </Stack>
+  )
+}
+
 const BasicCard = () => {
   const initBasicValue = {
     ProjectPicture: {
@@ -71,27 +81,80 @@ const BasicCard = () => {
       fileType: '',
       fileUrl: '',
       id: ''
-    }
+    },
+    ProjectName: ''
   }
   const onSubmit = () => {}
   return (
     <CardBox>
       <Formik validationSchema={validationSchema} initialValues={initBasicValue} onSubmit={onSubmit}>
-        <Stack component={'form'}>
-          <BaseBox>
-            <FormItem>
-              <OutlinedInput placeholder={'Please enter text'} />
+        {({ values, setFieldValue }) => {
+          return (
+            <Stack component={'form'}>
+              {/*
+                 <Stack component={Form} noValidate>
+               */}
+              <BaseBox>
+                <Stack flexDirection={'column'} gap={32}>
+                  <FormItem>
+                    <Title mb={32}>Basic Information</Title>
+                    <UploadLayout>
+                      <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+                        <UploadItem
+                          onChange={file => setFieldValue('ProjectPicture', file)}
+                          inputId={'ProjectPictureImg'}
+                          value={{ fileUrl: values.ProjectPicture.fileUrl }}
+                          accept={['image/jpeg', 'image/png', 'image/webp']}
+                          tips={'Please do not exceed a file size of 10MB'}
+                          limitSize={10}
+                          sx={{
+                            width: 132,
+                            height: 52,
+                            borderRadius: '4px !important',
+                            background: 'rgb(232,233,228)',
+                            '& svg': { width: '100%', height: '100% ' },
+                            '& .add-svg': {
+                              border: 'none'
+                            }
+                          }}
+                        />
+                        <UploadIntroduce title="Project Picture" />
+                      </Stack>
+                      <UploadBtn htmlFor="ProjectPictureImg">Upload</UploadBtn>
+                    </UploadLayout>
+                  </FormItem>
 
-              {/* <Box>
-                <Uploader />
-              </Box> */}
-            </FormItem>
-          </BaseBox>
-        </Stack>
+                  <FormItem>
+                    <UploadLayout>
+                      <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+                        <UploadItem
+                          onChange={file => setFieldValue('ProjectLogo', file)}
+                          inputId={'ProjectLogoImg'}
+                          value={{ fileUrl: values.ProjectLogo.fileUrl }}
+                          accept={['image/jpeg', 'image/png', 'image/webp']}
+                          tips={'Please do not exceed a file size of 10MB'}
+                          limitSize={10}
+                          sx={{
+                            width: 72,
+                            height: 72
+                          }}
+                        />
+                        <UploadIntroduce title="Project Logo" />
+                      </Stack>
+                      <UploadBtn htmlFor="ProjectLogoImg">Upload</UploadBtn>
+                    </UploadLayout>
+                  </FormItem>
+
+                  <FormItem>
+                    <Title mb={16}>Project Name</Title>
+                    <OutlinedInput placeholder="Name of the project, eg. Bounce" />
+                  </FormItem>
+                </Stack>
+              </BaseBox>
+            </Stack>
+          )
+        }}
       </Formik>
-      {/* <BaseBox>
-        <Title>Basic Information</Title>
-      </BaseBox> */}
     </CardBox>
   )
 }
@@ -103,7 +166,7 @@ const CreateLaunchpad = () => {
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   return (
     <ContainerBox>
-      <Title>Create Program</Title>
+      <Title sx={{ textAlign: 'center' }}>Create Program</Title>
       <Stack sx={{ flexDirection: 'row', justifyContent: 'center', mt: 48 }}>
         {tabs.map((t, i) => (
           <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
@@ -137,7 +200,7 @@ const Title = styled(Typography)({
   lineHeight: '130%',
   letterSpacing: '-0.56px',
   textTransform: 'capitalize',
-  textAlign: 'center',
+  textAlign: 'left',
   color: '#20201E'
 })
 const Tab = styled(Box)({
@@ -180,5 +243,39 @@ const CardBox = styled(Box)({
   flexDirection: 'column',
   gap: 24,
   marginTop: 24
+})
+const UploadLayout = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center'
+})
+const BaseTitle1 = styled(Typography)({
+  fontFamily: 'Public Sans',
+
+  fontStyle: 'normal',
+  fontWeight: 600,
+  lineHeight: '140%',
+  letterSpacing: '-0.4px',
+  textTransform: 'capitalize'
+})
+const BaseTitle2 = styled(Typography)({
+  fontFamily: 'Inter',
+
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '140%'
+})
+const UploadBtn = styled('label')({
+  fontSize: 14,
+  background: '#E1F25C',
+  borderRadius: 6,
+  padding: '8px 24px',
+  fontFamily: 'Public Sans',
+  fontStyle: 'normal',
+  fontWeight: 600,
+  lineHeight: '140%',
+  letterSpacing: '-0.4px',
+  textTransform: 'capitalize',
+  cursor: 'pointer'
 })
 export default CreateLaunchpad
