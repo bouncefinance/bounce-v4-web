@@ -11,8 +11,26 @@ import { RightText } from '../../creatorBlock/auctionInfo'
 import ClaimBlock from '../../userBlock/claimBlock'
 import OthersDetail from '../othersDetail'
 import StageLine from '../stageLine'
+import { useMemo } from 'react'
+import BigNumber from 'bignumber.js'
+import moment from 'moment'
 const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
+  const notTimeStage = useMemo(() => {
+    let result = poolInfo.releaseData
+      ? poolInfo.releaseData.map(item => {
+          const nowDate = new BigNumber(new Date().valueOf())
+          const startAtDate = new BigNumber(item.startAt * 1000)
+          const isActive = nowDate.comparedTo(startAtDate) === 1
+          return {
+            startAt: moment(item.startAt * 1000).format('YYYY-MM-DD HH:mm:ss'),
+            active: isActive
+          }
+        })
+      : []
+    result = result.filter(item => !item.active)
+    return result
+  }, [poolInfo.releaseData])
   if (poolInfo.status === PoolStatus.Closed) {
     return (
       <Box
@@ -197,7 +215,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     color: '#fff'
                   }}
                 >
-                  --
+                  {notTimeStage?.[0]?.startAt || 'Is Done'}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title={'remaining stage'}>
@@ -206,7 +224,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     color: '#fff'
                   }}
                 >
-                  --
+                  {notTimeStage.length || 0}
                 </RightText>
               </PoolInfoItem>
             </Box>

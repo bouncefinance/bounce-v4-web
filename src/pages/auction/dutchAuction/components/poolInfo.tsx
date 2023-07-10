@@ -141,7 +141,6 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   }
   const [userInfo, setUserInfo] = useState<any>(null)
   const navigate = useNavigate()
-
   useEffect(() => {
     const getInfo = async () => {
       const res =

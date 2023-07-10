@@ -306,7 +306,6 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
       }
       result = Object.assign(result, seatchValue)
     }
-    console.log('result>>>', result)
     setFilterValues(result)
     handleSubmit(result)
     setDialogOpen(false)
