@@ -41,14 +41,19 @@ const ClaimBlock = () => {
     poolInfo?.contract
   )
   const successDialogContent = useMemo(() => {
-    const hasToken0ToClaim = poolInfo?.currencyAmountTotal0?.greaterThan('0')
-    const token0ToClaimText = `${poolInfo?.currencyAmountTotal0?.toSignificant()} ${poolInfo?.token0.symbol}`
+    const hasToken0ToClaim = poolInfo?.currencySwappedAmount0?.greaterThan('0')
+    const token0ToClaimText = `${poolInfo?.currencySwappedAmount0?.toSignificant()} ${poolInfo?.token0.symbol}`
     const token1ToClaimText =
-      hasToken0ToClaim && poolInfo?.currencyAmountTotal1?.toSignificant() && poolInfo.token1.symbol
-        ? ` and ${poolInfo?.currencyAmountTotal1?.toSignificant()} ${poolInfo.token1.symbol}`
+      hasToken0ToClaim && poolInfo?.currencySwappedAmount1?.toSignificant() && poolInfo?.token1.symbol
+        ? ` and ${poolInfo?.currencySwappedAmount1?.toSignificant()} ${poolInfo.token1.symbol}`
         : ''
     return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
-  }, [poolInfo?.currencyAmountTotal0, poolInfo?.currencyAmountTotal1, poolInfo?.token0.symbol, poolInfo?.token1.symbol])
+  }, [
+    poolInfo?.currencySwappedAmount0,
+    poolInfo?.currencySwappedAmount1,
+    poolInfo?.token0.symbol,
+    poolInfo?.token1.symbol
+  ])
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog()

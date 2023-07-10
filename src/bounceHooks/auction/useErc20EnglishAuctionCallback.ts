@@ -108,7 +108,7 @@ export function useErc20EnglishSwap(poolInfo: Erc20EnglishAuctionPoolProp) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const submitted = useUserHasSubmittedRecords(account || undefined, 'erc20_english_swap', poolInfo.poolId)
-  const isToken1Native = poolInfo.currencyAmountTotal1.currency.isNative
+  const isToken1Native = poolInfo.currencyAmountStartPrice?.currency.isNative
   const englishAuctionErc20Contract = useEnglishAuctionErc20Contract(poolInfo.contract)
 
   const swapCallback = useCallback(

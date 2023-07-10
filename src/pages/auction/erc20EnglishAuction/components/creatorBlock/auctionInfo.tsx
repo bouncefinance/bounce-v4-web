@@ -77,7 +77,7 @@ const LeftBox = (): JSX.Element => {
         <Stack spacing={10}>
           <Title>Auction Information</Title>
           <PoolInfoItem title="Auction type">
-            <RightText>Dutch Auction</RightText>
+            <RightText>Erc20 English Auction</RightText>
           </PoolInfoItem>
           <PoolInfoItem title="Participant">
             <RightText>{poolInfo?.enableWhiteList ? 'Whitelist' : 'Public'}</RightText>
@@ -91,24 +91,24 @@ const LeftBox = (): JSX.Element => {
               <PoolInfoItem title="Total available amount">
                 <RightText>{`${poolInfo?.currencyAmountTotal0?.toSignificant()}`}</RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Price decreasing rate">
+              <PoolInfoItem title="Price Increasing rate">
                 <RightText>
                   {poolInfo?.currencyCurrentPrice?.toSignificant() + ' '}
                   {`${poolInfo?.token1.symbol.toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Starting price (price ceiling)">
+              <PoolInfoItem title="Starting price (price floor)">
                 <RightText>
-                  1 {`${poolInfo?.token0.name}${poolInfo?.token0.symbol}`} ={' '}
-                  {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(
+                  1 {`${poolInfo?.token0.symbol}`} ={' '}
+                  {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(
                     poolInfo?.token1.symbol + ''
                   ).toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Reserve price (price floor)">
+              <PoolInfoItem title="Ending price (price ceiling)">
                 <RightText>
-                  1 {`${poolInfo?.token0.name}${poolInfo?.token0.symbol}`} ={' '}
-                  {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(
+                  1 {`${poolInfo?.token0.symbol}`} ={' '}
+                  {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(
                     poolInfo?.token1.symbol + ''
                   ).toUpperCase()}`}
                 </RightText>

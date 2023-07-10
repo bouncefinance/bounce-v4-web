@@ -289,57 +289,69 @@ const Right = () => {
         </PoolInfoItem>
       </Box>
       {(poolInfo?.status === PoolStatus.Closed || poolInfo?.status === PoolStatus.Cancelled) && (
-        // <Box
-        //   sx={{
-        //     width: 'calc(100% - 48px)',
-        //     margin: '0 auto 12px',
-        //     padding: '16px',
-        //     border: '1px solid #626262',
-        //     borderRadius: '8px'
-        //   }}
-        // >
-        //   <Typography
-        //     sx={{
-        //       fontFamily: `'Public Sans'`,
-        //       color: '#fff',
-        //       fontSize: '14px',
-        //       fontWeight: 600
-        //     }}
-        //     mb={'12px'}
-        //   >
-        //     Final Auction Results
-        //   </Typography>
-        //   <PoolInfoItem
-        //     title={'Fund receiving wallet'}
-        //     sx={{
-        //       marginBottom: '9px'
-        //     }}
-        //   >
-        //     <Typography
-        //       sx={{
-        //         fontFamily: `'Inter'`,
-        //         color: '#E1F25C',
-        //         fontSize: '13px',
-        //         fontWeight: 400
-        //       }}
-        //     >
-        //       0.25 ETH ($0.8035)
-        //     </Typography>
-        //   </PoolInfoItem>
-        //   <PoolInfoItem title={'Fund receiving wallet'}>
-        //     <Typography
-        //       sx={{
-        //         fontFamily: `'Inter'`,
-        //         color: '#E1F25C',
-        //         fontSize: '13px',
-        //         fontWeight: 400
-        //       }}
-        //     >
-        //       700 ETH
-        //     </Typography>
-        //   </PoolInfoItem>
-        // </Box>
-        <></>
+        <Box
+          sx={{
+            width: 'calc(100% - 48px)',
+            margin: '0 auto 12px',
+            padding: '16px',
+            border: '1px solid #626262',
+            borderRadius: '8px'
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Public Sans'`,
+              color: '#fff',
+              fontSize: '14px',
+              fontWeight: 600
+            }}
+            mb={'12px'}
+          >
+            Final Auction Results
+          </Typography>
+          <PoolInfoItem
+            title={'Average Price'}
+            sx={{
+              marginBottom: '9px'
+            }}
+          >
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {(poolInfo.currencySwappedAmount1 &&
+                poolInfo.currencySwappedAmount0 &&
+                new BigNumber(poolInfo.currencySwappedAmount1?.toExact())
+                  .div(new BigNumber(poolInfo.currencySwappedAmount0?.toExact()))
+                  .toFixed()) ||
+                '--'}{' '}
+              {poolInfo.token1.symbol}
+            </RightText>
+          </PoolInfoItem>
+          <PoolInfoItem title={'Successful Funds Raised'}>
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
+            </RightText>
+          </PoolInfoItem>
+          {poolInfo.participant.currencySwappedAmount0?.greaterThan('0') && (
+            <PoolInfoItem title={'Excessive Paid Amount'}>
+              <RightText
+                style={{
+                  color: '#E1F25C'
+                }}
+              >
+                {(poolInfo.participant?.currencySwappedAmount0?.toExact() || 0) +
+                  ' ' +
+                  poolInfo.token1.symbol.toUpperCase()}
+              </RightText>
+            </PoolInfoItem>
+          )}
+        </Box>
       )}
       <Box
         sx={{

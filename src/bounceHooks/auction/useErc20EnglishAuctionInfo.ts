@@ -189,7 +189,6 @@ export function useErc20EnglishAuctionInfo() {
       ...poolInfo,
       whitelistData,
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
-      currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, amountSwap0Data || poolInfo.swappedAmount0),
       currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,

@@ -30,7 +30,7 @@ const UserBidHistory = (props: BidListParam) => {
         }}
         mb={'12px'}
       >
-        Your Bid
+        Your Bid History
       </Typography>
       <Grid container>
         <Grid item xs={4}>

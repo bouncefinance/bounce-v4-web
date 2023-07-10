@@ -31,7 +31,7 @@ const AmountInput = ({ amount, setAmount }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo } = useEnglishAuctionPoolInfo()
   // banlance
-  const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountTotal1?.currency)
+  const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountTotal0?.currency)
   // MaxAmount0PerWallet from contract, not from http
   const currencyMaxAmount0PerWallet =
     Number(poolInfo?.currencyMaxAmount1PerWallet?.toExact()) > 0

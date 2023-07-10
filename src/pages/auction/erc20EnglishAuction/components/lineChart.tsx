@@ -246,7 +246,7 @@ const LineChartSection = () => {
             color: '#fff'
           }}
         >
-          Duction Auction Live Chart
+          ERC20 English Auction Live Chart
         </Typography>
         <OpenChartImg />
       </Stack>
