@@ -1,5 +1,5 @@
 import { styled, Box, Typography } from '@mui/material'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useState, useEffect } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
@@ -45,6 +45,7 @@ const ClaimBlock = ({
   })
   const { account, chainId } = useActiveWeb3React()
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(false)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -87,16 +88,23 @@ const ClaimBlock = ({
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
     }
   }, [claim, handleSetActionStep])
-  const isNotTimeToClaim = useMemo(() => {
-    return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
+  //   const isNotTimeToClaim = useMemo(() => {
+  //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
+  //   }, [poolInfo?.claimAt])
+  useEffect(() => {
+    setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
+    const timer: NodeJS.Timeout = setInterval(() => {
+      if (Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()) {
+        setIsNotTimeToClaim(true)
+      }
+    }, 5000)
+    return () => {
+      clearInterval(timer)
+    }
   }, [poolInfo?.claimAt])
   const isCanClaim = useMemo(() => {
     return BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
   }, [poolInfo?.participant?.currencyCurClaimableAmount])
-  console.log(
-    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact()>>>',
-    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
-  )
   if (!account) {
     return <ConnectWalletButton />
   }

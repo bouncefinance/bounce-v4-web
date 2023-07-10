@@ -50,12 +50,15 @@ const StageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       sx={{
         position: 'relative',
         maxWidth: '100%',
-        height: '103px',
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        overflowX: 'auto'
+        overflowX: 'auto',
+        scrollbarWidth: 'none',
+        '::-webkit-scrollbar': {
+          display: 'none'
+        }
       }}
     >
       {releaseData.map((item, index) => {
