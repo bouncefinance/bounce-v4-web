@@ -119,7 +119,13 @@ const DutchAuctionPoolId = () => {
             <Grid item xs={'auto'}>
               <PoolInfo poolInfo={poolInfo} />
             </Grid>
-            <Grid item xs>
+            <Grid
+              item
+              xs
+              sx={{
+                overflow: 'hidden'
+              }}
+            >
               <Box
                 sx={{
                   background: 'rgba(18, 18, 18, 0.6)',

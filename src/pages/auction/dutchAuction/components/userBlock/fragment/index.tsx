@@ -2,7 +2,6 @@ import { Box, Grid, Typography } from '@mui/material'
 import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
 import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
-// import Stepper from '../stepper'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { StatusBox } from '../../userBlock/right'
@@ -11,12 +10,18 @@ import PoolInfoItem from '../../poolInfoItem'
 import { RightText } from '../../creatorBlock/auctionInfo'
 import ClaimBlock from '../../userBlock/claimBlock'
 import OthersDetail from '../othersDetail'
+import StageLine from '../stageLine'
 const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   if (poolInfo.status === PoolStatus.Closed) {
     return (
-      <>
-        {/* <Stepper poolInfo={poolInfo} /> */}
+      <Box
+        sx={{
+          flex: 1,
+          width: '100%'
+        }}
+      >
+        <StageLine poolInfo={poolInfo} />
         <Box
           sx={{
             width: '100%',
@@ -221,7 +226,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Box>
         </Box>
         <OthersDetail poolInfo={poolInfo} />
-      </>
+      </Box>
     )
   }
   return (

@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import UserPoolStatusBox from './poolStatus'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import OneTime from './oneTime/index'
 import Linear from './linear/index'
 import Fragment from './fragment/index'
@@ -8,8 +8,10 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useMemo } from 'react'
 const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserClaimed = useMemo(() => {
-    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
-  }, [poolInfo.participant.currencyCurClaimableAmount])
+    return (
+      poolInfo.status === PoolStatus.Closed && Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
+    )
+  }, [poolInfo.participant.currencyCurClaimableAmount, poolInfo.status])
   console.log(
     'poolInfo?.participant?.currencyCurClaimableAmount?.toExact()>>>',
     poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
