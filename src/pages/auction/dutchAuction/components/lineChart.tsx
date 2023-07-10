@@ -10,6 +10,7 @@ import {
   Time,
   MouseEventParams,
   DeepPartial,
+  TimeFormatterFn,
   ChartOptions
 } from 'lightweight-charts'
 import moment from 'moment'
@@ -115,6 +116,10 @@ export const LineChartView = ({
           bottomColor: 'rgba(43, 81, 218, 0.2)'
         }
   }, [poolInfo])
+  const timeFormatter: TimeFormatterFn = (time: any) => {
+    const date = new Date(time)
+    return moment(date).format('DD MMMM')
+  }
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -136,7 +141,8 @@ export const LineChartView = ({
       height: 250,
       timeScale: {
         borderVisible: true,
-        borderColor: '#D7D6D9'
+        borderColor: '#D7D6D9',
+        timeVisible: false // 每个时间点显示日期
       },
       leftPriceScale: {
         visible: true,
@@ -154,6 +160,9 @@ export const LineChartView = ({
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef.current.clientWidth })
     }
+    chart.timeScale().applyOptions({
+      tickMarkFormatter: timeFormatter
+    })
     chart.timeScale().fitContent()
     // set line
     const newSeries = chart.addAreaSeries({
@@ -182,7 +191,7 @@ export const LineChartView = ({
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
-        dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
+        dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
       const token0Price = currentValue + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
