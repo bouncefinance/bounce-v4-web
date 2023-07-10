@@ -249,7 +249,8 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           fontWeight: 400,
           fontSize: '14px',
           color: '#626262',
-          marginBottom: '28px'
+          marginBottom: '28px',
+          wordBreak: 'break-all'
         }}
       >
         {userInfo?.description || userInfo?.briefIntro || 'No description yet'}

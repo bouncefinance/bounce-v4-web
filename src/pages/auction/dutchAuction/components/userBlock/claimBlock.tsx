@@ -91,11 +91,12 @@ const ClaimBlock = ({
     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   }, [poolInfo?.claimAt])
   const isCanClaim = useMemo(() => {
-    return (
-      BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0) ||
-      !poolInfo.participant.claimed
-    )
-  }, [poolInfo.participant.claimed, poolInfo.participant.currencyCurClaimableAmount])
+    return BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
+  }, [poolInfo?.participant?.currencyCurClaimableAmount])
+  console.log(
+    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact()>>>',
+    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
+  )
   if (!account) {
     return <ConnectWalletButton />
   }

@@ -216,12 +216,6 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
-  const swappedAmount0 = poolInfo.swappedAmount0
-    ? formatNumber(poolInfo.swappedAmount0, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: poolInfo.token0.decimals
-      })
-    : undefined
   const amountTotal0 = poolInfo.amountTotal0
     ? formatNumber(poolInfo.amountTotal0, {
         unit: poolInfo.token0.decimals,
@@ -266,7 +260,7 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       </PoolInfoItem>
       <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>
       <PoolInfoItem
-        title={swappedAmount0 + ' ' + poolInfo.token0.symbol.toUpperCase()}
+        title={poolInfo.currencySwappedAmount0?.toSignificant() + ' ' + poolInfo.token0.symbol.toUpperCase()}
         sx={{
           marginTop: '4px'
         }}

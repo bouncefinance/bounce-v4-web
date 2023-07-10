@@ -10,6 +10,10 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserClaimed = useMemo(() => {
     return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
   }, [poolInfo.participant.currencyCurClaimableAmount])
+  console.log(
+    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact()>>>',
+    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
+  )
   return (
     <Box
       sx={{
