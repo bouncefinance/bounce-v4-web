@@ -80,9 +80,9 @@ export const routes = {
     OpenfabricAuction: '/launchpad/openfabric',
     DeelanceAuction: '/launchpad/deelance',
     DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
-
     LasMetaAuction: '/launchpad/lasmeta',
-    DipExchange: '/launchpad/dip_exchange'
+    DipExchange: '/launchpad/dip_exchange',
+    CreateLaunchpad: '/launchpad/create'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
