@@ -11,8 +11,6 @@ export interface ILikeUnlikeProps {
   objId: number
   likeAmount: ILikeUnlikeRes
   onSuccess?: (res?: ILikeUnlikeRes) => void
-  likeSx?: any
-  unlikeSx?: any
 }
 const CollectBox = styled(Box)(() => ({
   display: 'flex',
@@ -83,7 +81,7 @@ const CollectBox = styled(Box)(() => ({
     }
   }
 }))
-const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, onSuccess, likeSx, unlikeSx }) => {
+const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, onSuccess }) => {
   const { postLike } = useLike()
 
   const postLikeStatus = async (likeType: LIKE_TYPE): Promise<any> => {
