@@ -293,16 +293,14 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           / {amountTotal0} {poolInfo.token0.symbol.toUpperCase()}
         </RightText>
       </PoolInfoItem>
-      {dialogOpen && (
-        <ChartDialog
-          onClose={() => {
-            setDialogOpen(false)
-          }}
-          data={lineData}
-          poolInfo={poolInfo}
-          open={dialogOpen}
-        />
-      )}
+      <ChartDialog
+        onClose={() => {
+          setDialogOpen(false)
+        }}
+        data={lineData}
+        poolInfo={poolInfo}
+        open={dialogOpen}
+      />
     </Box>
   )
 }

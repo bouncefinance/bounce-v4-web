@@ -161,9 +161,9 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                         fontSize: '16px'
                       }}
                     >
-                      {poolInfo.participant?.currencySwappedAmount0 && poolInfo.participant?.currencyCurClaimableAmount
+                      {poolInfo.participant?.currencySwappedAmount0 && poolInfo.participant?.currencyCurReleasableAmount
                         ? poolInfo.participant?.currencySwappedAmount0
-                            ?.subtract(poolInfo.participant?.currencyCurClaimableAmount)
+                            ?.subtract(poolInfo.participant?.currencyCurReleasableAmount)
                             .toSignificant()
                         : '--'}
                       <TokenImage

@@ -185,9 +185,9 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                         }}
                       >
                         {poolInfo.participant?.currencySwappedAmount0 &&
-                        poolInfo.participant?.currencyCurClaimableAmount
+                        poolInfo.participant?.currencyCurReleasableAmount
                           ? poolInfo.participant?.currencySwappedAmount0
-                              ?.subtract(poolInfo.participant?.currencyCurClaimableAmount)
+                              ?.subtract(poolInfo.participant?.currencyCurReleasableAmount)
                               .toSignificant()
                           : '--'}
                         <TokenImage
