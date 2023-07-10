@@ -1,5 +1,5 @@
 import { Avatar, Box, Typography, styled } from '@mui/material'
-import ChainIcon from 'assets/imgs/dutchAuction/chainIcon.png'
+// import ChainIcon from 'assets/imgs/dutchAuction/chainIcon.png'
 import { ReactComponent as Icon1 } from 'assets/imgs/dutchAuction/icon1.svg'
 import { ReactComponent as Icon2 } from 'assets/imgs/dutchAuction/icon2.svg'
 import { ReactComponent as Icon3 } from 'assets/imgs/dutchAuction/icon3.svg'
@@ -14,6 +14,9 @@ import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { ChainId, ChainListMap } from 'constants/chain'
+import Image from 'components/Image'
 
 const ChainType = styled(Box)(() => ({
   height: '32px',
@@ -26,11 +29,6 @@ const ChainType = styled(Box)(() => ({
   backdropFilter: 'blur(5px)',
   borderRadius: '100px',
   padding: '0 14px',
-  '.img': {
-    width: '20px',
-    height: '20px',
-    marginRight: '10px'
-  },
   '.text': {
     fontFamily: `'Public Sans'`,
     fontWeight: 600,
@@ -136,6 +134,7 @@ const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMed
 }
 const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [collectStatus, setCollectStatus] = useState<CollectStatus>(CollectStatus.inital)
+  const chainConfigInBackend = useChainConfigInBackend('id', poolInfo.chainId)
   const handleCollectChange = (status: CollectStatus) => {
     setCollectStatus(status)
   }
@@ -189,8 +188,24 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           #{poolInfo.id}
         </Typography>
         <ChainType>
-          <img className="img" src={ChainIcon} alt="" srcSet="" />
-          <Typography className="text">{poolInfo.token0.name.toUpperCase()}</Typography>
+          <Image
+            src={
+              chainConfigInBackend?.ethChainId
+                ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.logo || ''
+                : ''
+            }
+            style={{
+              marginRight: '10px'
+            }}
+            width={20}
+            height={20}
+            alt={chainConfigInBackend?.shortName}
+          />
+          <Typography className="text">
+            {chainConfigInBackend?.ethChainId
+              ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.name.toUpperCase() || ''
+              : '-'}
+          </Typography>
         </ChainType>
       </Box>
       <Typography
