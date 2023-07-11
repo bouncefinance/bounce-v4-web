@@ -94,12 +94,11 @@ const ClaimBlock = ({
   //   }, [poolInfo?.claimAt])
   useEffect(() => {
     const initStatus = () => {
-      // isNotTimeToClaim
-      setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
-      // isCanClaim
       if (BigNumber(poolInfo.claimAt * 1000).isGreaterThan(new Date().valueOf())) {
+        setIsNotTimeToClaim(true)
         setIsCanClaim(false)
       } else {
+        setIsNotTimeToClaim(false)
         setIsCanClaim(BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0))
       }
     }
