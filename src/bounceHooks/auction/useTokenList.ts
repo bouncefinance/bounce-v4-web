@@ -87,7 +87,6 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
       refreshDeps: [filterValue],
       debounceWait: 300,
       onSuccess: data => {
-        // console.log('>>>>> single token: ', data)
         setSingleToken(data)
       },
       onError: () => {
@@ -99,10 +98,6 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
   useEffect(() => {
     setSingleToken(undefined)
   }, [filterValue])
-
-  console.log('>>>>> singleToken: ', singleToken)
-
-  console.log('>>> filteredApiTokenList: ', filteredApiTokenList)
 
   const tokenList = useMemo(() => {
     const isFilterValueNotFoundInApiTokenList = filteredApiTokenList.length <= 0

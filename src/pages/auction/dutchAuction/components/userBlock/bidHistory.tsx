@@ -137,7 +137,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                           fontWeight: 400
                         }}
                       >
-                        {item.blockTs ? moment(item.blockTs * 1000).format('yyyy-MM-DD HH:MM') : '--'}
+                        {item.blockTs ? moment(item.blockTs * 1000).format('YYYY-MM-DD HH:mm') : '--'}
                       </Typography>
                     </Grid>
                   </>

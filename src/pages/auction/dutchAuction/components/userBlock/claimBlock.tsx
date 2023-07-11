@@ -1,5 +1,5 @@
 import { styled, Box, Typography } from '@mui/material'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useState, useEffect } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
@@ -47,10 +47,8 @@ const ClaimBlock = ({
     targetDate: claimAt * 1000
   })
   const { account, chainId } = useActiveWeb3React()
-  const { run: claimEnglish, submitted: claimBidEnglishSubmitted } = useErc20EnglishUserClaim(
-    poolInfo as Erc20EnglishAuctionPoolProp
-  )
-  const { run: claimDutch, submitted: claimBidAutchSubmitted } = useUserClaim(poolInfo as DutchAuctionPoolProp)
+  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(false)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -92,17 +90,22 @@ const ClaimBlock = ({
       })
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
     }
-  }, [claimDutch, claimEnglish, handleSetActionStep, isErc20EnglishAuction])
-  const isNotTimeToClaim = useMemo(() => {
-    return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
+  }, [claim, handleSetActionStep])
+  //   const isNotTimeToClaim = useMemo(() => {
+  //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
+  //   }, [poolInfo?.claimAt])
+  useEffect(() => {
+    setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
+    const timer: NodeJS.Timeout = setInterval(() => {
+      setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
+    }, 5000)
+    return () => {
+      clearInterval(timer)
+    }
   }, [poolInfo?.claimAt])
   const isCanClaim = useMemo(() => {
     return BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
   }, [poolInfo?.participant?.currencyCurClaimableAmount])
-  console.log(
-    'poolInfo?.participant?.currencyCurClaimableAmount?.toExact()>>>',
-    poolInfo?.participant?.currencyCurClaimableAmount?.toExact()
-  )
   if (!account) {
     return <ConnectWalletButton />
   }

@@ -1,5 +1,5 @@
 import { Box, styled, Typography } from '@mui/material'
-import { CollectStatus } from './poolInfo'
+import { CollectStatus } from './creatorInfoCard'
 import { ReactComponent as UpIcon } from 'assets/imgs/dutchAuction/up.svg'
 import { ReactComponent as DownIcon } from 'assets/imgs/dutchAuction/down.svg'
 

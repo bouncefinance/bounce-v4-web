@@ -51,7 +51,6 @@ const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
         }
       }
       const args = [poolInfo.poolId, amount0.raw.toString(), proofArr]
-      console.log('args>>>', args)
       const estimatedGas = await dutchERC20Contract.estimateGas
         .bid(...args, { value: isToken1Native ? amount1.raw.toString() : undefined })
         .catch((error: Error) => {
@@ -117,7 +116,6 @@ const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
       })
 
       const args = [poolInfo.poolId, amount0.raw.toString(), data.expiredTime, data.signature]
-      console.log('args>>>', args)
       const estimatedGas = await dutchERC20Contract.estimateGas
         .swapPermit(...args, { value: isToken1Native ? amount1.raw.toString() : undefined })
         .catch((error: Error) => {

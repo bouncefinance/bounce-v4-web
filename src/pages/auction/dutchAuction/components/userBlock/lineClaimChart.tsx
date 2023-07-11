@@ -1,7 +1,15 @@
 import { Box } from '@mui/material'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
+import {
+  createChart,
+  ColorType,
+  TimeFormatterFn,
+  LineData,
+  SeriesMarker,
+  Time,
+  MouseEventParams
+} from 'lightweight-charts'
 import moment from 'moment'
 import { PoolStatus } from 'api/pool/type'
 import { DutchAuctionPoolProp } from 'api/pool/type'
@@ -83,6 +91,10 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
           bottomColor: 'rgba(43, 81, 218, 0.2)'
         }
   }, [poolInfo])
+  const timeFormatter: TimeFormatterFn = (time: any) => {
+    const date = new Date(time)
+    return moment(date).format('DD MMMM')
+  }
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -121,6 +133,9 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef.current.clientWidth })
     }
+    chart.timeScale().applyOptions({
+      tickMarkFormatter: timeFormatter
+    })
     chart.timeScale().fitContent()
     // set line
     const newSeries = chart.addAreaSeries({
@@ -149,7 +164,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
-        dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
+        dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
       const token0Price = currentValue + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110

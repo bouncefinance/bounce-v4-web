@@ -89,7 +89,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
       .typeError('Please input valid number')
       .required('Auction price segment is required')
       .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
-        return Number.isInteger(value) && Number(value) >= 1
+        return Number.isInteger(value) && Number(value) >= 2
       }),
     poolSize: Yup.number()
       .positive('Amount must be positive')

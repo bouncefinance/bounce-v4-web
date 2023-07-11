@@ -1,6 +1,6 @@
 import { Box, Container, useTheme, keyframes, Grid } from '@mui/material'
 import Header from './components/header'
-import PoolInfo from './components/poolInfo'
+import CreatorInfoCard from './components/creatorInfoCard'
 import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock/index'
 import { useMemo } from 'react'
@@ -46,7 +46,7 @@ const DutchAuctionPoolId = () => {
     transform: translate(-100px, 100px);
   }
 `
-  const { poolInfo } = useDutchAuctionInfo()
+  const { poolInfo, run: getPoolInfo } = useDutchAuctionInfo()
   console.log('poolInfo>>>', poolInfo)
   const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   if (!poolInfo) {
@@ -117,9 +117,15 @@ const DutchAuctionPoolId = () => {
           <Header />
           <Grid container spacing={{ xs: 10, xl: 18 }}>
             <Grid item xs={'auto'}>
-              <PoolInfo poolInfo={poolInfo} />
+              <CreatorInfoCard poolInfo={poolInfo} creator={poolInfo.creator} getPoolInfo={getPoolInfo} />
             </Grid>
-            <Grid item xs>
+            <Grid
+              item
+              xs
+              sx={{
+                overflow: 'hidden'
+              }}
+            >
               <Box
                 sx={{
                   background: 'rgba(18, 18, 18, 0.6)',

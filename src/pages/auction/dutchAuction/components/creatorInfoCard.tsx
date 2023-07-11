@@ -1,19 +1,26 @@
 import { Avatar, Box, Typography, styled } from '@mui/material'
-import ChainIcon from 'assets/imgs/dutchAuction/chainIcon.png'
+// import ChainIcon from 'assets/imgs/dutchAuction/chainIcon.png'
 import { ReactComponent as Icon1 } from 'assets/imgs/dutchAuction/icon1.svg'
 import { ReactComponent as Icon2 } from 'assets/imgs/dutchAuction/icon2.svg'
 import { ReactComponent as Icon3 } from 'assets/imgs/dutchAuction/icon3.svg'
 import { ReactComponent as Icon4 } from 'assets/imgs/dutchAuction/icon4.svg'
 import { ReactComponent as Icon5 } from 'assets/imgs/dutchAuction/icon5.svg'
-import Collect from './collect'
 import { useState, useEffect } from 'react'
-import { DutchAuctionPoolProp } from 'api/pool/type'
 import { getCompanyInfo } from 'api/company'
 import { getUserInfo } from 'api/user'
 import { USER_TYPE } from 'api/user/type'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { ChainId, ChainListMap } from 'constants/chain'
+import Image from 'components/Image'
+import { DutchAuctionPoolProp } from 'api/pool/type'
+import AuctionDescription from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionDescription'
+import AuctionFiles from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionFiles'
+import { useActiveWeb3React } from 'hooks'
+import LikeUnlike from './likeUnlike'
+import { LIKE_OBJ } from 'api/idea/type'
 
 const ChainType = styled(Box)(() => ({
   height: '32px',
@@ -26,11 +33,6 @@ const ChainType = styled(Box)(() => ({
   backdropFilter: 'blur(5px)',
   borderRadius: '100px',
   padding: '0 14px',
-  '.img': {
-    width: '20px',
-    height: '20px',
-    marginRight: '10px'
-  },
   '.text': {
     fontFamily: `'Public Sans'`,
     fontWeight: 600,
@@ -134,14 +136,18 @@ export const SocialLink = ({ twitter, instagram, website, linkedin, github }: So
     </Box>
   )
 }
-const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const [collectStatus, setCollectStatus] = useState<CollectStatus>(CollectStatus.inital)
-  const handleCollectChange = (status: CollectStatus) => {
-    setCollectStatus(status)
-  }
+interface ICreatorInfoCardProps {
+  creator: string
+  poolInfo: DutchAuctionPoolProp
+  getPoolInfo: () => void
+}
+const PoolInfo = (props: ICreatorInfoCardProps) => {
+  const { creator, poolInfo, getPoolInfo } = props
+  const chainConfigInBackend = useChainConfigInBackend('id', poolInfo.chainId)
+  const { account } = useActiveWeb3React()
+  const isCurrentUserCreatedThisPool = creator.toLowerCase() === account?.toLowerCase()
   const [userInfo, setUserInfo] = useState<any>(null)
   const navigate = useNavigate()
-
   useEffect(() => {
     const getInfo = async () => {
       const res =
@@ -190,8 +196,24 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           #{poolInfo.id}
         </Typography>
         <ChainType>
-          <img className="img" src={ChainIcon} alt="" srcSet="" />
-          <Typography className="text">{poolInfo.token0.name.toUpperCase()}</Typography>
+          <Image
+            src={
+              chainConfigInBackend?.ethChainId
+                ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.logo || ''
+                : ''
+            }
+            style={{
+              marginRight: '10px'
+            }}
+            width={20}
+            height={20}
+            alt={chainConfigInBackend?.shortName}
+          />
+          <Typography className="text">
+            {chainConfigInBackend?.ethChainId
+              ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.name.toUpperCase() || ''
+              : '-'}
+          </Typography>
         </ChainType>
       </Box>
       <Typography
@@ -205,7 +227,19 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       >
         {poolInfo.name || '--'}
       </Typography>
-      <Collect collectStatus={collectStatus} setCollectStatus={handleCollectChange} />
+      {!isCurrentUserCreatedThisPool && (
+        <LikeUnlike
+          likeObj={LIKE_OBJ.pool}
+          objId={poolInfo?.id}
+          likeAmount={{
+            dislikeCount: poolInfo?.likeInfo?.dislikeCount,
+            likeCount: poolInfo?.likeInfo?.likeCount,
+            myDislike: poolInfo?.likeInfo?.myDislike,
+            myLike: poolInfo?.likeInfo?.myLike
+          }}
+          onSuccess={getPoolInfo}
+        />
+      )}
       <Box
         sx={{
           width: '100%',
@@ -243,24 +277,43 @@ const PoolInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           {userInfo?.fullName || userInfo?.companyName}
         </Typography>
       </Box>
-      <Typography
-        sx={{
-          fontFamily: `'Inter'`,
-          fontWeight: 400,
-          fontSize: '14px',
-          color: '#626262',
-          marginBottom: '28px',
-          wordBreak: 'break-all'
-        }}
-      >
-        {userInfo?.description || userInfo?.briefIntro || 'No description yet'}
-      </Typography>
+      {!isCurrentUserCreatedThisPool && (
+        <Typography
+          sx={{
+            fontFamily: `'Inter'`,
+            fontWeight: 400,
+            fontSize: '14px',
+            color: '#626262',
+            marginBottom: '28px',
+            wordBreak: 'break-all'
+          }}
+        >
+          {poolInfo?.description || 'No description yet'}
+        </Typography>
+      )}
       <SocialLink
         twitter={userInfo?.twitter}
         instagram={userInfo?.instagram}
         website={userInfo?.website}
         linkedin={userInfo?.linkedin}
         github={userInfo?.github}
+      />
+      {isCurrentUserCreatedThisPool && (
+        <>
+          <AuctionDescription
+            isDutchAuction={true}
+            poolInfo={poolInfo}
+            getPoolInfo={getPoolInfo}
+            canEdit={isCurrentUserCreatedThisPool}
+          />
+        </>
+      )}
+      <AuctionFiles
+        poolInfo={poolInfo}
+        getPoolInfo={getPoolInfo}
+        canDownloadFile={!isCurrentUserCreatedThisPool}
+        canDeleteFile={isCurrentUserCreatedThisPool}
+        canAddFile={isCurrentUserCreatedThisPool}
       />
     </Box>
   )

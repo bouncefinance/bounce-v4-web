@@ -298,7 +298,7 @@ export interface DutchAuctionPoolProp extends FixedSwapPool {
     swappedAmount0?: string
     currencySwappedAmount0: CurrencyAmount | undefined // all token0
     currencySwappedAmount1: CurrencyAmount | undefined
-    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable. It means that the amount of all released token0
     currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
     currencyMyReleased?: CurrencyAmount | undefined //current my Released token
     currencyUnfilledAmount1?: CurrencyAmount | undefined // current unfill amount1
