@@ -9,7 +9,7 @@
         },
         {
           "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
+          "value": "ALLOW-FROM https://*.sumsub.com http://*.bounce.finance/"
         },
         {
           "key": "Strict-Transport-Security",

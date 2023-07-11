@@ -39,6 +39,8 @@ export const getAddressActivities = (params: GetAddressActivitiesParams) => {
   return ApiInstance.post<{ list: GetAddressActivitiesRes[]; total: number }>('/user/pools/activities', params)
 }
 
-export const getSumsubAccessToken = (levelName?: 'basic-kyc-leve' | string) => {
-  return ApiInstance.post<{ token: string; userId: number }>('/user/sumsub/accesstoken', { levelName })
+export const getSumsubAccessToken = (levelName?: 'basic-kyc-level' | string) => {
+  return ApiInstance.post<{ token: string; userId: number }>('/user/sumsub/accesstoken', {
+    levelName: levelName || 'basic-kyc-level'
+  })
 }
