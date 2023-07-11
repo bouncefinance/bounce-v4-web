@@ -167,8 +167,8 @@ export default function App() {
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
                     />
-                    <Route path={routes.fundo.home} element={<FundoHome />} />
-                    <Route path={routes.fundo.detail} element={<FundoDetail />} />
+                    <Route path={routes.foundo.home} element={<FundoHome />} />
+                    <Route path={routes.foundo.detail} element={<FundoDetail />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                     <Route path={routes.thirdPart.poseiswapAuction} element={<PoseiProjectInfo />} />
                     <Route path={routes.thirdPart.OmegaAuction} element={<OmegaProjectInfo />} />

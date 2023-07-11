@@ -115,10 +115,11 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
       <SocialMediaButtonGroup
         email={userInfo?.contactEmail}
         shouldShowEmailButton={!!token}
-        twitter={userInfo?.twitter}
+        twitter={userInfo?.twitter || userInfo?.twitterName}
         instagram={userInfo?.instagram}
         website={userInfo?.website}
-        linkedin={userInfo?.linkedin}
+        // linkedin={userInfo?.linkedin}
+        discord={userInfo?.discord}
         github={userInfo?.github}
       />
 

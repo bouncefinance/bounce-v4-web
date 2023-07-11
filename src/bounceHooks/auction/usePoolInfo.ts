@@ -209,7 +209,7 @@ const usePoolInfo = () => {
       ),
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(
         t1,
-        amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
+        amountSwap1PRes?.[0].toString() || (Number(poolInfo.currentTotal1) > 0 ? poolInfo.currentTotal1 : '0')
       ),
       enableReverses: v2FixedSwapData.enableReverses,
       releaseType: v2FixedSwapData.releaseType,

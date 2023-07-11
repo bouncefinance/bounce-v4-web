@@ -166,7 +166,7 @@ export default function Header() {
   //   }
   // })
   const showBounseHead = useMemo(() => {
-    return location.pathname.indexOf('fundo') === -1
+    return location.pathname.indexOf('foundo') === -1
   }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
@@ -278,7 +278,7 @@ export default function Header() {
             <Search />
             <Resources />
             <CreateBtn />
-            <NetworkPopperSelect />
+            {token && <NetworkPopperSelect />}
             <Web3Status />
 
             {!token && walletWithoutToken}
@@ -288,7 +288,7 @@ export default function Header() {
             {/* <Web3Status /> */}
             <ShowOnMobile breakpoint="md">
               <Stack direction={'row'} spacing={10} display={'flex'} alignItems={'center'}>
-                <NetworkPopperSelect />
+                {token && <NetworkPopperSelect />}
                 <Web3Status />
                 {!token && walletWithoutToken}
                 <IconButton
