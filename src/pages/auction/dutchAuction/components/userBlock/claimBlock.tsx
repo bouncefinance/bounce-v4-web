@@ -49,7 +49,7 @@ const ClaimBlock = ({
   })
   const { account, chainId } = useActiveWeb3React()
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
-  const [claimStatus, setClaimStatus] = useState<ClaimStatus>(true)
+  const [claimStatus, setClaimStatus] = useState<ClaimStatus>(ClaimStatus.NotTimeToClaim)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
