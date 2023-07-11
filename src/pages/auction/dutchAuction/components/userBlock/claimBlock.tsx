@@ -27,7 +27,11 @@ export const ComBtn = styled(LoadingButton)(() => ({
     color: '#121212'
   }
 }))
-
+enum ClaimStatus {
+  'NotTimeToClaim' = 0,
+  'NeedClaim' = 1,
+  'Claimed' = 2
+}
 const ClaimBlock = ({
   poolInfo,
   handleSetActionStep,
@@ -45,8 +49,7 @@ const ClaimBlock = ({
   })
   const { account, chainId } = useActiveWeb3React()
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
-  const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(true)
-  const [isCanClaim, setIsCanClaim] = useState<boolean>(false)
+  const [claimStatus, setClaimStatus] = useState<ClaimStatus>(true)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -95,11 +98,11 @@ const ClaimBlock = ({
   useEffect(() => {
     const initStatus = () => {
       if (BigNumber(poolInfo.claimAt * 1000).isGreaterThan(new Date().valueOf())) {
-        setIsNotTimeToClaim(true)
-        setIsCanClaim(false)
+        setClaimStatus(ClaimStatus.NotTimeToClaim)
+      } else if (BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)) {
+        setClaimStatus(ClaimStatus.NeedClaim)
       } else {
-        setIsNotTimeToClaim(false)
-        setIsCanClaim(BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0))
+        setClaimStatus(ClaimStatus.Claimed)
       }
     }
     initStatus()
@@ -116,7 +119,7 @@ const ClaimBlock = ({
   if (!isCurrentChainEqualChainOfPool) {
     return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
   }
-  if (isNotTimeToClaim) {
+  if (claimStatus === ClaimStatus.NotTimeToClaim) {
     return (
       <Box
         sx={{
@@ -155,7 +158,7 @@ const ClaimBlock = ({
       </Box>
     )
   }
-  if (!isCanClaim) {
+  if (claimStatus === ClaimStatus.Claimed) {
     return (
       <TipsBox
         iconUrl={SuccessIcon}
