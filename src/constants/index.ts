@@ -293,7 +293,8 @@ export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: ''
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -361,9 +362,7 @@ export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: strin
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
-  [ChainId.LINEA_GORLI]: '',
-  [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: ''
+  [ChainId.LINEA_GORLI]: ''
 }
 
 export const defaultPoolVersionRoute: 1 | 2 = 2

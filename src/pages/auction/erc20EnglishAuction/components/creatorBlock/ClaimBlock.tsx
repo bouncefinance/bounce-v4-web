@@ -9,7 +9,7 @@ import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog }
 import { BigNumber } from 'bignumber.js'
 import { LoadingButton } from '@mui/lab'
 import { PoolStatus } from 'api/pool/type'
-import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
+import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 import { useErc20EnglishCreatorClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 
 const ComBtn = styled(LoadingButton)(() => ({
@@ -25,7 +25,7 @@ const ComBtn = styled(LoadingButton)(() => ({
   }
 }))
 const ClaimBlock = () => {
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(
     () => chainId === poolInfo?.ethChainId,
@@ -42,13 +42,17 @@ const ClaimBlock = () => {
   )
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = poolInfo?.currencySwappedAmount0?.greaterThan('0')
-    const token0ToClaimText = `${poolInfo?.currencySwappedAmount0?.toSignificant()} ${poolInfo?.token0.symbol}`
+    const token0ToClaimText =
+      poolInfo?.currencySwappedAmount0 &&
+      poolInfo?.currencyAmountTotal0 &&
+      `${poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)} ${poolInfo?.token0.symbol}`
     const token1ToClaimText =
       hasToken0ToClaim && poolInfo?.currencySwappedAmount1?.toSignificant() && poolInfo?.token1.symbol
         ? ` and ${poolInfo?.currencySwappedAmount1?.toSignificant()} ${poolInfo.token1.symbol}`
         : ''
     return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
   }, [
+    poolInfo?.currencyAmountTotal0,
     poolInfo?.currencySwappedAmount0,
     poolInfo?.currencySwappedAmount1,
     poolInfo?.token0.symbol,
@@ -97,15 +101,6 @@ const ClaimBlock = () => {
     },
     [claim, successDialogContent]
   )
-  //   const btnStr = useMemo(() => {
-  //     if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
-  //       return 'Cancel & Claim tokens'
-  //     } else if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
-  //       return Number(poolInfo.currentTotal0) !== 0 ? 'Claim your unswapped tokens and fund raised' : 'Claim fund raised'
-  //     } else {
-  //       return 'Cancel & Claim tokens'
-  //     }
-  //   }, [poolInfo.currentTotal0, poolInfo.status])
   if (!account) {
     return <ConnectWalletButton />
   }

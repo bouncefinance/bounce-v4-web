@@ -1,27 +1,14 @@
-import { Box, Stack, Typography, styled } from '@mui/material'
-import { ReactComponent as OpenChartIcon } from 'assets/imgs/dutchAuction/openChart.svg'
+import { Box } from '@mui/material'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
-import PoolInfoItem from './poolInfoItem'
-import { RightText } from './creatorBlock/auctionInfo'
-import PoolProgress from 'bounceComponents/common/PoolProgress'
-import { formatNumber } from 'utils/number'
+import moment from 'moment'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 
 interface PointerItem {
   time: number | string
   value: number
 }
-
-const OpenChartImg = styled(OpenChartIcon)(() => ({
-  width: '16px',
-  height: '16px',
-  cursor: 'pointer',
-  '&:hover path': {
-    fill: '#2663FF'
-  }
-}))
 interface ToolTipParam {
   dateStr?: string | number
   x?: string | number
@@ -107,16 +94,17 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
         vertLines: { color: '#D7D6D9', style: 4 },
         horzLines: { color: '#D7D6D9', style: 4 }
       },
-      localization: {
-        timeFormatter: function (businessDayOrTimestamp: number | string) {
-          return businessDayOrTimestamp.toString()
-        }
-      },
       width: chartContainerRef.current.clientWidth,
       height: 250,
       timeScale: {
         borderVisible: true,
         borderColor: '#D7D6D9'
+      },
+      localization: {
+        timeFormatter: function (businessDayOrTimestamp: number | string) {
+          // console.log(businessDayOrTimestamp);
+          return moment(businessDayOrTimestamp).format('YYYY-MM-DD HH:mm:ss')
+        }
       },
       leftPriceScale: {
         visible: true,
@@ -161,7 +149,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
-        dateStr = resultItem.time.toString() || '--'
+        dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
       }
       const token0Price = currentValue + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
@@ -174,101 +162,39 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
         param?.point?.y < 0 ||
         param?.point?.y > chartContainerRef.current.clientHeight
       ) {
-        tooltipInstance?.update({ dateStr, x, y, display: false })
+        tooltipInstance.update({ dateStr, x, y, display: false })
         return
       }
-      tooltipInstance?.update({ dateStr, x, y, display: true, token0Price })
+      tooltipInstance.update({ dateStr, x, y, display: true, token0Price })
     })
     return () => {
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol])
+  }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, tooltipInstance])
   return <Box ref={chartContainerRef}></Box>
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
-  const { currencyAmountTotal0, currencyAmountStartPrice, currencyAmountEndPrice, fragments: times } = poolInfo
-  const segments = times ? Number(times) : 0
-  const lowestPrice = useMemo(() => currencyAmountStartPrice, [currencyAmountStartPrice])
-  const highestPrice = useMemo(() => currencyAmountEndPrice, [currencyAmountEndPrice])
-  const startAmount = 0
-  const endAmount = currencyAmountTotal0 ? currencyAmountTotal0.toExact() : 0
-  const startPrice = lowestPrice ? Number(lowestPrice?.toExact()) : 0
-  const endPrice = highestPrice ? Number(highestPrice?.toExact()) : 0
-  const arrayRange = (start: number | string, stop: number, step: number | string) =>
-    Array.from({ length: stop + 1 }, (value, index) => {
-      return BigNumber(start).plus(BigNumber(step).times(index)).toNumber()
-    })
-  const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
-  const timeSegments = new BigNumber(endAmount).minus(startAmount).div(segments).integerValue().toNumber()
-  const lineData = useMemo(() => {
-    const xList = arrayRange(startAmount, segments, timeSegments)
-    const yList = arrayRange(startPrice, segments, priceSegments)
-    const dataPoint = new Array(segments + 1).fill(0).map((item, index) => {
-      return {
-        time: xList[index],
-        value: yList[index]
-      }
-    })
-    return dataPoint
-  }, [segments, timeSegments, startPrice, priceSegments])
-  const swapedPercent = poolInfo?.currencySwappedAmount0
-    ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
-    : undefined
-  const amountTotal0 = poolInfo.amountTotal0
-    ? formatNumber(poolInfo.amountTotal0, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: poolInfo.token0.decimals
-      })
-    : undefined
+const lineClaimChart = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const startTime = poolInfo.releaseData?.[0]?.startAt ? Number(poolInfo.releaseData?.[0]?.startAt * 1000) : 0
+  const endTime = poolInfo.releaseData?.[0]?.endAt ? Number(poolInfo.releaseData?.[0]?.endAt * 1000) : 0
+  const lineData = [
+    {
+      time: startTime,
+      value: 0
+    },
+    {
+      time: endTime,
+      value: BigNumber(poolInfo.participant.currencySwappedAmount0?.toExact() + '').toNumber()
+    }
+  ]
   return (
     <Box
       sx={{
         width: '100%'
       }}
     >
-      <Stack
-        direction={'row'}
-        justifyContent={'space-between'}
-        sx={{
-          padding: '30px 0 20px'
-        }}
-      >
-        <Typography
-          sx={{
-            fontFamily: `'Public Sans'`,
-            fontWeight: 600,
-            fontSize: 14,
-            color: '#fff'
-          }}
-        >
-          ERC20 English Auction Live Chart
-        </Typography>
-        <OpenChartImg />
-      </Stack>
       <LineChartView data={lineData} poolInfo={poolInfo} />
-      <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
-        <RightText>
-          {`${poolInfo.currencyAmountStartPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
-        </RightText>
-      </PoolInfoItem>
-      <PoolInfoItem title={'Ending price'}>
-        <RightText>
-          {`${poolInfo.currencyAmountEndPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
-        </RightText>
-      </PoolInfoItem>
-      <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>
-      <PoolInfoItem
-        title={poolInfo.currencySwappedAmount0?.toSignificant() + ' ' + poolInfo.token0.symbol.toUpperCase()}
-        sx={{
-          marginTop: '4px'
-        }}
-      >
-        <RightText>
-          / {amountTotal0} {poolInfo.token0.symbol.toUpperCase()}
-        </RightText>
-      </PoolInfoItem>
     </Box>
   )
 }
-export default LineChartSection
+export default lineClaimChart

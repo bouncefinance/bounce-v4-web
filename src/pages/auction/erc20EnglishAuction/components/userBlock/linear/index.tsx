@@ -1,20 +1,24 @@
 import { Box, Grid, Typography } from '@mui/material'
 import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
-import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
-// import Stepper from '../stepper'
-import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import { PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { StatusBox } from '../../userBlock/right'
 import PoolTextItem from '../../poolTextItem'
-import OthersDetail from '../othersDetail'
 import moment from 'moment'
+import { useErc20EnglishAuctionPoolInfo } from 'pages/auction/erc20EnglishAuction/ValuesProvider'
+import { useMemo } from 'react'
+import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
+import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
+import OthersDetail from '../othersDetail'
 import LineClaimChart from '../lineClaimChart'
-import ClaimBlock from '../../userBlock/claimBlock'
 
-const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
-  if (poolInfo.status === PoolStatus.Closed) {
+const Linear = () => {
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
+  const isUserJoined = useMemo(
+    () => Number(poolInfo?.participant.swappedAmount0),
+    [poolInfo?.participant.swappedAmount0]
+  )
+  if (poolInfo?.status === PoolStatus.Closed) {
     return (
       <>
         {/* <Stepper poolInfo={poolInfo} /> */}
@@ -227,7 +231,7 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 }}
               >
                 <ClaimBlock
-                  isErc20EnglishAuction={false}
+                  isErc20EnglishAuction={true}
                   style={{
                     padding: '0'
                   }}
@@ -262,14 +266,14 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           flex: 400
         }}
       >
-        <LeftBox poolInfo={poolInfo} />
+        <LeftBox />
       </Box>
       <Box
         sx={{
           flex: 474
         }}
       >
-        <RightBox poolInfo={poolInfo} />
+        <RightBox />
       </Box>
     </Box>
   )

@@ -75,7 +75,7 @@ export interface SocialMediaButtonGroupProps {
   github?: string
   style?: React.CSSProperties
 }
-const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMediaButtonGroupProps) => {
+export const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMediaButtonGroupProps) => {
   return (
     <Box
       sx={{

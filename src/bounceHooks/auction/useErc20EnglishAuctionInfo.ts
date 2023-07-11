@@ -11,12 +11,11 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import JSBI from 'jsbi'
 
 export function useErc20EnglishAuctionInfo() {
-  const { sysId } = useQueryParams()
-  const {
-    data: poolInfo,
-    run: getPoolInfo,
-    loading
-  } = useBackedPoolInfo(PoolType.ERC20_ENGLISH_AUCTION, Number(sysId) || 18290)
+  const { sysId: _sysId } = useQueryParams()
+
+  const sysId = useMemo(() => Number(_sysId) || 18290, [_sysId])
+
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ERC20_ENGLISH_AUCTION, sysId)
   const { account } = useActiveWeb3React()
   const englishAuctionErc20Contract = useEnglishAuctionErc20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
 
@@ -150,13 +149,16 @@ export function useErc20EnglishAuctionInfo() {
     undefined,
     poolInfo?.ethChainId
   ).result
+  const getReleaseDataListLength = useMemo(
+    () => (getReleaseDataListLengthRes?.[0] ? Number(getReleaseDataListLengthRes[0]) : undefined),
+    [getReleaseDataListLengthRes]
+  )
+
   const queryReleaseDataListParams = useMemo(() => {
-    if (getReleaseDataListLengthRes?.[0] === undefined) return undefined
-    return Array.from({ length: Number(getReleaseDataListLengthRes[0]) }, (_, i) => i).map(item => [
-      poolInfo?.poolId,
-      item
-    ])
-  }, [getReleaseDataListLengthRes, poolInfo?.poolId])
+    if (getReleaseDataListLength === undefined) return undefined
+    return Array.from({ length: Number(getReleaseDataListLength) }, (_, i) => i).map(item => [poolInfo?.poolId, item])
+  }, [getReleaseDataListLength, poolInfo?.poolId])
+
   const releaseDataListRes = useSingleContractMultipleData(
     queryReleaseDataListParams ? englishAuctionErc20Contract : null,
     'releaseDataList',
@@ -187,7 +189,11 @@ export function useErc20EnglishAuctionInfo() {
     const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
     return {
       ...poolInfo,
-      whitelistData,
+      whitelistData: {
+        isUserInWhitelist: whitelistData.isUserInWhitelist,
+        isPermit: whitelistData.isPermit,
+        loading: whitelistData.loading
+      },
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, amountSwap0Data || poolInfo.swappedAmount0),
       currencySwappedAmount1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
@@ -265,7 +271,9 @@ export function useErc20EnglishAuctionInfo() {
     poolsData.fragments,
     releaseData,
     releaseType,
-    whitelistData
+    whitelistData.isPermit,
+    whitelistData.isUserInWhitelist,
+    whitelistData.loading
   ])
 
   return {

@@ -1,23 +1,24 @@
 import { Box, Typography, Grid } from '@mui/material'
-import { StatusBox } from '../right'
 import PoolTextItem from '../../poolTextItem'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { RightText } from '../../creatorBlock/auctionInfo'
 import PoolInfoItem from '../../poolInfoItem'
-import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
-import { BigNumber } from 'bignumber.js'
 import UserBidHistory from '../bidHistory'
-import ClaimBlock from '../claimBlock'
-import { ActionStep } from '../right'
+import { useMemo } from 'react'
+import { ActionStep, StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
+import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
 const ClosedAndNotClaimed = ({
   poolInfo,
   handleSetActionStep
 }: {
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: Erc20EnglishAuctionPoolProp
   handleSetActionStep?: (actionStep: ActionStep) => void
 }) => {
-  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
+  const isUserJoined = useMemo(
+    () => Number(poolInfo.participant.swappedAmount0) > 0,
+    [poolInfo.participant.swappedAmount0]
+  )
   return (
     <>
       <Box
@@ -58,7 +59,7 @@ const ClosedAndNotClaimed = ({
         ></Box>
         <Grid container rowGap={'16px'}>
           <Grid item xs={6}>
-            <PoolTextItem title={'Current floor price'}>
+            <PoolTextItem title={'Current price'}>
               <>
                 <Box
                   sx={{
@@ -112,7 +113,7 @@ const ClosedAndNotClaimed = ({
                   >
                     =
                   </span>
-                  &nbsp; {poolInfo.lowestPrice?.toSignificant()}
+                  &nbsp; {poolInfo.currencyCurrentPrice?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -186,11 +187,7 @@ const ClosedAndNotClaimed = ({
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
-                        .times(poolInfo?.currencySwappedAmount0?.toExact())
-                        .toFixed(6, BigNumber.ROUND_DOWN)
-                    : '0'}
+                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount1?.toExact()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -236,37 +233,26 @@ const ClosedAndNotClaimed = ({
         >
           Final Auction Results
         </Typography>
-        <PoolInfoItem title={'Final auction price'}>
+        <PoolInfoItem title={'Average Price'}>
           <RightText
             style={{
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencyLowestBidPrice?.toExact() || '--'} {poolInfo.token1.symbol}
+            {poolInfo.currencyCurrentPrice?.toExact() || '--'} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
-        <PoolInfoItem title={'Successful funds raised'}>
+        <PoolInfoItem title={'Successful Funds Raised'}>
           <RightText
             style={{
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencySwappedTotal1?.toExact() || '--'} {poolInfo.token1.symbol}
-          </RightText>
-        </PoolInfoItem>
-        <PoolInfoItem title={'Excessive paid amount'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {(poolInfo.participant?.currencyUnfilledAmount1?.toExact() || 0) +
-              ' ' +
-              poolInfo.token1.symbol.toUpperCase()}
+            {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
       </Box>
-      <ClaimBlock isErc20EnglishAuction={false} poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
+      <ClaimBlock isErc20EnglishAuction poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
       {/* bid history */}
       <UserBidHistory poolInfo={poolInfo} />
     </>

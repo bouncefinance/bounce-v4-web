@@ -11,7 +11,7 @@ import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import BigNumber from 'bignumber.js'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
-import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
+import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 
 export const TipsBox = ({
   style,
@@ -49,7 +49,7 @@ export const TipsBox = ({
   </Box>
 )
 const Right = () => {
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   if (!poolInfo) return <></>
 
   return (
@@ -135,7 +135,7 @@ const Right = () => {
                       color: '#626262'
                     }}
                   >
-                    {poolInfo?.token0.name.toUpperCase()}
+                    {poolInfo?.token0.symbol.toUpperCase()}
                   </span>
                 </Box>
                 <Box
@@ -220,7 +220,7 @@ const Right = () => {
             </PoolTextItem>
           </Grid>
           <Grid item xs={6}>
-            <PoolTextItem title={'Estimated funds raised'} tip={'The amount of token you successfully secured.'}>
+            <PoolTextItem title={'Successful funds raised'} tip={'The amount of token you successfully secured.'}>
               <>
                 <Box
                   sx={{
@@ -233,11 +233,7 @@ const Right = () => {
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencyCurrentPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? new BigNumber(poolInfo?.currencyCurrentPrice.toExact())
-                        .times(poolInfo?.currencySwappedAmount0?.toExact())
-                        .toFixed()
-                    : '0'}
+                  {poolInfo?.currencySwappedAmount1?.toExact()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'

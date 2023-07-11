@@ -1,13 +1,16 @@
-import { Box, Typography, styled } from '@mui/material'
-import ChainIcon from 'assets/imgs/dutchAuction/chainIcon.png'
-import LogoIcon from 'assets/imgs/dutchAuction/logoIcon.png'
-import { ReactComponent as Icon1 } from 'assets/imgs/dutchAuction/icon1.svg'
-import { ReactComponent as Icon2 } from 'assets/imgs/dutchAuction/icon2.svg'
-import { ReactComponent as Icon3 } from 'assets/imgs/dutchAuction/icon3.svg'
-import { ReactComponent as Icon4 } from 'assets/imgs/dutchAuction/icon4.svg'
-import { ReactComponent as Icon5 } from 'assets/imgs/dutchAuction/icon5.svg'
+import { Avatar, Box, Typography, styled } from '@mui/material'
+import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
 import Collect from './collect'
-import { ReactNode, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useErc20EnglishAuctionPoolInfo } from '../ValuesProvider'
+import { ChainListMap } from 'constants/chain'
+import { USER_TYPE } from 'api/user/type'
+import { getUserInfo } from 'api/user'
+import { getCompanyInfo } from 'api/company'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { SocialLink } from 'pages/auction/dutchAuction/components/poolInfo'
+import { shortenAddress } from 'utils'
 const ChainType = styled(Box)(() => ({
   height: '32px',
   lineHeight: '32px',
@@ -38,56 +41,36 @@ export enum CollectStatus {
   'discontent' = 2,
   'inital' = 3
 }
-const LinkItem = styled(Box)(() => ({
-  width: '40px',
-  height: '40px',
-  background: '#121212',
-  display: 'flex',
-  flexFlow: 'row nowrap',
-  justifyContent: 'center',
-  alignItems: 'center',
-  cursor: 'pointer',
-  borderRadius: '50%',
-  '&:hover': {
-    background: '#E1F25C',
-    'svg path': {
-      stroke: '#121212'
-    },
-    'svg circle': {
-      stroke: '#121212'
-    }
-  }
-}))
 
-const SocialLink = () => {
-  const links: ReactNode[] = [
-    <Icon1 key={0} />,
-    <Icon2 key={1} />,
-    <Icon3 key={2} />,
-    <Icon4 key={3} />,
-    <Icon5 key={4} />
-  ]
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        justifyContent: 'flex-start',
-        alignItems: 'center'
-      }}
-      gap={'6px'}
-    >
-      {links.map((item, index) => {
-        return <LinkItem key={index}>{item}</LinkItem>
-      })}
-    </Box>
-  )
-}
 const PoolInfo = () => {
+  const [userInfo, setUserInfo] = useState<any>(null)
+  const navigate = useNavigate()
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   const [collectStatus, setCollectStatus] = useState<CollectStatus>(CollectStatus.inital)
   const handleCollectChange = (status: CollectStatus) => {
     setCollectStatus(status)
   }
+  useEffect(() => {
+    const getInfo = async () => {
+      const res =
+        poolInfo?.creatorUserInfo?.userType === USER_TYPE.USER
+          ? await getUserInfo({ userId: poolInfo.creatorUserInfo?.userId })
+          : await getCompanyInfo({ userId: poolInfo?.creatorUserInfo?.userId })
+      setUserInfo(res.data)
+    }
+    if (poolInfo?.creatorUserInfo) {
+      getInfo()
+    }
+  }, [poolInfo?.creatorUserInfo])
+
+  const handleUser = () => {
+    if (userInfo?.userType === USER_TYPE.USER) {
+      return navigate(`${routes.profile.summary}?id=${userInfo?.id}`)
+    }
+    return navigate(`${routes.profile.summary}?id=${userInfo?.companyId}`)
+  }
+  if (!poolInfo) return <></>
+
   return (
     <Box
       sx={{
@@ -115,11 +98,11 @@ const PoolInfo = () => {
             color: '#E1F25C'
           }}
         >
-          #000123
+          #{poolInfo?.id}
         </Typography>
         <ChainType>
-          <img className="img" src={ChainIcon} alt="" srcSet="" />
-          <Typography className="text">Ethereum</Typography>
+          <img className="img" src={ChainListMap[poolInfo?.ethChainId || 1]?.logo} alt="" srcSet="" />
+          <Typography className="text">{ChainListMap[poolInfo?.ethChainId || 1]?.name}</Typography>
         </ChainType>
       </Box>
       <Typography
@@ -131,7 +114,7 @@ const PoolInfo = () => {
         }}
         mb={'12px'}
       >
-        English Auction Pool
+        {poolInfo?.name || '--'}
       </Typography>
       <Collect collectStatus={collectStatus} setCollectStatus={handleCollectChange} />
       <Box
@@ -151,14 +134,10 @@ const PoolInfo = () => {
         }}
         mb={'24px'}
       >
-        <img
-          style={{
-            width: '48px',
-            height: '48px',
-            marginRight: '16px'
-          }}
-          src={LogoIcon}
-          alt=""
+        <Avatar
+          sx={{ width: 48, height: 48, cursor: 'pointer', borderRadius: '8px', marginRight: '12px' }}
+          src={userInfo?.avatar?.fileUrl || DefaultAvatarSVG}
+          onClick={handleUser}
         />
         <Typography
           sx={{
@@ -172,7 +151,7 @@ const PoolInfo = () => {
             whiteSpace: 'nowrap'
           }}
         >
-          Dyson Project
+          {userInfo?.fullName || userInfo?.companyName || shortenAddress(poolInfo?.creator || '')}
         </Typography>
       </Box>
       <Typography
@@ -184,10 +163,15 @@ const PoolInfo = () => {
           marginBottom: '28px'
         }}
       >
-        AWS provides customers with the broadest and deepest cloud platform cloud platform cloud platform the broadest
-        and deepest cloud platform...
+        {userInfo?.description || userInfo?.briefIntro || 'No description yet'}
       </Typography>
-      <SocialLink />
+      <SocialLink
+        twitter={userInfo?.twitter}
+        instagram={userInfo?.instagram}
+        website={userInfo?.website}
+        linkedin={userInfo?.linkedin}
+        github={userInfo?.github}
+      />
     </Box>
   )
 }

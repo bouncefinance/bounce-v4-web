@@ -1,49 +1,95 @@
-import { Box, Typography, Grid, Button } from '@mui/material'
+import { Box, Typography, Button } from '@mui/material'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
-import PoolTextItem from '../poolTextItem'
-import TokenImage from 'bounceComponents/common/TokenImage'
-import PoolInfoItem from '../poolInfoItem'
-import { RightText } from '../creatorBlock/auctionInfo'
-import { useCallback, useMemo, useState } from 'react'
-import UserBidHistory from './bidHistory'
+// import PoolTextItem from '../poolTextItem'
+// import TokenImage from 'bounceComponents/common/TokenImage'
+// import PoolInfoItem from '../poolInfoItem'
+// import { RightText } from '../creatorBlock/auctionInfo'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+// import UserBidHistory from './bidHistory'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import BigNumber from 'bignumber.js'
-import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
-import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
+// import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
   showRequestConfirmDialog,
   showWaitingTxDialog
 } from 'utils/auction'
-import { useErc20EnglishSwap, useErc20EnglishUserClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
+import {
+  useErc20EnglishSwap,
+  useErc20EnglishUserClaim,
+  useIsLimitExceeded
+} from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { LoadingButton } from '@mui/lab'
 // import { getCurrentTimeStamp } from 'utils'
-import InputAmount from './inputAmount'
+// import InputAmount from './inputAmount'
 import { CurrencyAmount } from 'constants/token'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import GetFundBackAlert from 'bounceComponents/fixed-swap/ActionBox/UserActionBox2/BidButtonBlock/GetFundBackAlert'
 import { useCountDown } from 'ahooks'
-import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-import { TipsBox } from '../creatorBlock/right'
+// import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
+// import { TipsBox } from '../creatorBlock/right'
 import { getCurrentTimeStamp } from 'utils'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES } from '../../../../../constants'
 import { Dots } from 'themes'
-import useIsLimitExceeded from 'bounceHooks/auction/useIsErc20EnglishLimitExceeded'
+import { ActionStep } from 'pages/auction/dutchAuction/components/userBlock/right'
+import Upcoming from './actionStep/upcoming'
+import Live from './actionStep/live'
+import Confirm from './actionStep/confirm'
+import ClosedAndNotJoined from './actionStep/closedAndNotJoined'
+import ClosedAndClaimed from './actionStep/closedAndClaimed'
+import ClosedAndNotClaim from './actionStep/closedAndNotClaim'
 
 const RightBox = () => {
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   if (poolInfo) return <RightBoxContent poolInfo={poolInfo}></RightBoxContent>
   return null
 }
 
 const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const [amount, setAmount] = useState('')
+  const isUserJoined = useMemo(
+    () => Number(poolInfo?.participant.swappedAmount0),
+    [poolInfo?.participant.swappedAmount0]
+  )
+  const isUserClaimed = useMemo(() => {
+    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
+  }, [poolInfo.participant.currencyCurClaimableAmount])
+  const [actionStep, setActionStep] = useState<ActionStep>(ActionStep.UpComing)
+
+  useEffect(() => {
+    if (poolInfo.status === PoolStatus.Upcoming) {
+      setActionStep(ActionStep.UpComing)
+    } else if (poolInfo.status === PoolStatus.Live) {
+      if (actionStep !== ActionStep.BidConfirm) {
+        setActionStep(ActionStep.BeforeBid)
+      }
+    } else if (poolInfo.status === PoolStatus.Closed && !isUserJoined) {
+      setActionStep(ActionStep.ClosedAndNotJoined)
+    } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && !isUserClaimed) {
+      setActionStep(ActionStep.ClosedAndNotClaim)
+    } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && isUserClaimed) {
+      setActionStep(ActionStep.ClosedAndClaimed)
+    }
+  }, [actionStep, isUserClaimed, isUserJoined, poolInfo.status])
+  const handleSetAmount = (amount: string) => {
+    setAmount(amount)
+  }
+  const handleSetActionStep = (actionStep: ActionStep) => {
+    setActionStep(actionStep)
+  }
+  const handleConfirm = () => {
+    if (poolInfo.status === PoolStatus.Live) {
+      setActionStep(ActionStep.BeforeBid)
+      setAmount('0')
+    }
+  }
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
       poolInfo.status === PoolStatus.Upcoming
@@ -57,10 +103,6 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
   const amount1CurrencyAmount =
     poolInfo.currencyAmountStartPrice?.currency &&
     CurrencyAmount.fromAmount(poolInfo.currencyAmountStartPrice?.currency, amount)
-  const isUserJoined = useMemo(
-    () => Number(poolInfo?.participant.swappedAmount0),
-    [poolInfo?.participant.swappedAmount0]
-  )
   const { account, chainId } = useActiveWeb3React()
   const { swapCallback: bid, swapPermitCallback, submitted } = useErc20EnglishSwap(poolInfo)
   const { run: claim, submitted: isUserClaiming } = useErc20EnglishUserClaim(poolInfo)
@@ -239,14 +281,6 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     return undefined
   }, [approvalState, poolInfo.token1?.symbol, toApprove])
 
-  const bidHistory = [
-    {
-      amount: '2000 AUCTION',
-      price: '0.25 ETH',
-      date: '12 Dec 12:00'
-    }
-  ]
-
   function ActionsBtn() {
     if (!account) {
       return <ConnectWalletButton />
@@ -335,8 +369,6 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     }
     if (
       poolInfo.status === PoolStatus.Closed &&
-      poolInfo.participant.swappedAmount0 &&
-      Number(poolInfo.participant.swappedAmount0) > 0 &&
       !poolInfo.participant.claimed &&
       poolInfo.participant.currencyCurClaimableAmount?.greaterThan('0')
     ) {
@@ -355,6 +387,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     }
     return null
   }
+  console.log(AvgPriceAmount, ActionsBtn)
 
   if (!poolInfo) return <></>
   return (
@@ -366,7 +399,21 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
         padding: '0 0 24px'
       }}
     >
-      <Box
+      {actionStep === ActionStep.UpComing && (
+        <Upcoming poolInfo={poolInfo} amount={amount} setAmount={handleSetAmount} />
+      )}
+      {actionStep === ActionStep.BeforeBid && (
+        <Live poolInfo={poolInfo} amount={amount} setAmount={handleSetAmount} setActionStep={handleSetActionStep} />
+      )}
+      {actionStep === ActionStep.BidConfirm && (
+        <Confirm poolInfo={poolInfo} onConfirm={handleConfirm} amount={amount} />
+      )}
+      {actionStep === ActionStep.ClosedAndNotJoined && <ClosedAndNotJoined poolInfo={poolInfo} />}
+      {actionStep === ActionStep.ClosedAndNotClaim && (
+        <ClosedAndNotClaim poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
+      )}
+      {actionStep === ActionStep.ClosedAndClaimed && <ClosedAndClaimed poolInfo={poolInfo} />}
+      {/* <Box
         sx={{
           background: '#E1F25C',
           border: '1px solid rgba(18, 18, 18, 0.06)',
@@ -693,7 +740,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
           You have successfully claimed your tokens. See you next time!
         </TipsBox>
       )}
-      {poolInfo.participant.currencySwappedAmount0?.greaterThan('0') && <UserBidHistory list={bidHistory} />}
+      {poolInfo.participant.currencySwappedAmount0?.greaterThan('0') && <UserBidHistory poolInfo={poolInfo} />} */}
     </Box>
   )
 }

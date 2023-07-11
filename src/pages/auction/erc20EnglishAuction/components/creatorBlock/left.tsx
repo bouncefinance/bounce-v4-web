@@ -1,6 +1,7 @@
 import { Box, Tabs, Tab, styled } from '@mui/material'
 import { useState } from 'react'
 import AuctionInfo from './auctionInfo'
+import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 import LineChart from '../lineChart'
 
 const LeftTabs = styled(Tabs)(() => ({
@@ -22,10 +23,12 @@ function a11yProps(index: number) {
   }
 }
 const Left = () => {
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   const [value, setValue] = useState<number>(0)
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
+  if (!poolInfo) return <></>
   return (
     <Box
       sx={{
@@ -36,7 +39,7 @@ const Left = () => {
         <Tab label="Chart" {...a11yProps(0)} />
         <Tab label="Token/ Auction Information" {...a11yProps(1)} />
       </LeftTabs>
-      {value === 0 && <LineChart />}
+      {value === 0 && <LineChart poolInfo={poolInfo} />}
       {value === 1 && <AuctionInfo />}
     </Box>
   )

@@ -5,11 +5,12 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
-import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
-// import { BigNumber } from 'bignumber.js'
-interface RegretAmountInputProps {
+import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+export interface RegretAmountInputProps {
   amount: string
   setAmount: (value: string) => void
+  poolInfo: Erc20EnglishAuctionPoolProp
 }
 const NumInput = styled(NumberInput)(() => ({
   background: '#121212',
@@ -29,7 +30,7 @@ const NumInput = styled(NumberInput)(() => ({
 }))
 const AmountInput = ({ amount, setAmount }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   // banlance
   const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountTotal0?.currency)
   // MaxAmount0PerWallet from contract, not from http

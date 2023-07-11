@@ -73,7 +73,7 @@ const initialValues: IContent = {
   data: undefined
 }
 
-export function useEnglishAuctionPoolInfo() {
+export function useErc20EnglishAuctionPoolInfo() {
   const valuesState = useValuesState()
   return valuesState
 }

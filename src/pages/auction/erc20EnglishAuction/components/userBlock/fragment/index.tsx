@@ -2,15 +2,14 @@ import { Box, Grid, Typography } from '@mui/material'
 import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
 import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
-// import Stepper from '../stepper'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { StatusBox } from '../../userBlock/right'
 import PoolTextItem from '../../poolTextItem'
 import PoolInfoItem from '../../poolInfoItem'
 import { RightText } from '../../creatorBlock/auctionInfo'
-import ClaimBlock from '../../userBlock/claimBlock'
-import OthersDetail from '../othersDetail'
+import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
+import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
+import OthersDetail from 'pages/auction/dutchAuction/components/userBlock/othersDetail'
 const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   if (poolInfo.status === PoolStatus.Closed) {
@@ -207,7 +206,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             </Box>
             {isUserJoined && (
               <ClaimBlock
-                isErc20EnglishAuction={false}
+                isErc20EnglishAuction={true}
                 style={{
                   padding: '0'
                 }}
@@ -241,14 +240,14 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           flex: 400
         }}
       >
-        <LeftBox poolInfo={poolInfo} />
+        <LeftBox />
       </Box>
       <Box
         sx={{
           flex: 474
         }}
       >
-        <RightBox poolInfo={poolInfo} />
+        <RightBox />
       </Box>
     </Box>
   )

@@ -11,7 +11,7 @@ import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
 import moment from 'moment'
-import { useEnglishAuctionPoolInfo } from '../../ValuesProvider'
+import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
     {children}
@@ -23,7 +23,7 @@ export const RightText = ({ children, style }: { children: ReactNode; style?: Re
   </Typography>
 )
 const LeftBox = (): JSX.Element => {
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   const { chainId } = useActiveWeb3React()
   const isMobile = useBreakpoint('lg')
   const [showMore, setShowMore] = useState<boolean>(false)

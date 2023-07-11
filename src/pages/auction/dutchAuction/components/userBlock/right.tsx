@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { PoolStatus } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { useState, useEffect, useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
@@ -10,7 +10,7 @@ import BidConfirm from './actionStep/confirm'
 import ClosedAndNotJoined from './actionStep/closedAndNotJoined'
 import ClosedAndNotClaim from './actionStep/closedAndNotClaim'
 import ClosedAndClaimed from './actionStep/closedAndClaimed'
-export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:

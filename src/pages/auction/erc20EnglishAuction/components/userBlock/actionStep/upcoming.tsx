@@ -1,23 +1,32 @@
 import { Box, Typography, Grid } from '@mui/material'
-import { StatusBox } from '../right'
 import PoolTextItem from '../../poolTextItem'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { RightText } from '../../creatorBlock/auctionInfo'
 import PoolInfoItem from '../../poolInfoItem'
-import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
-import { BigNumber } from 'bignumber.js'
-import UserBidHistory from '../bidHistory'
-import ClaimBlock from '../claimBlock'
-import { ActionStep } from '../right'
-const ClosedAndNotClaimed = ({
+import { PoolStatus } from 'api/pool/type'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useActiveWeb3React } from 'hooks'
+import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
+import BidBlock from '../bidBlock'
+import { useMemo } from 'react'
+import BidInput from '../../bid'
+
+const Upcoming = ({
   poolInfo,
-  handleSetActionStep
+  amount,
+  setAmount
 }: {
-  poolInfo: DutchAuctionPoolProp
-  handleSetActionStep?: (actionStep: ActionStep) => void
+  poolInfo: Erc20EnglishAuctionPoolProp
+  amount: number | string
+  setAmount: (value: string) => void
 }) => {
-  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
+  const { account } = useActiveWeb3React()
+  const isUserJoined = useMemo(
+    () => Number(poolInfo?.participant.swappedAmount0),
+    [poolInfo?.participant.swappedAmount0]
+  )
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountEndPrice?.currency)
   return (
     <>
       <Box
@@ -58,7 +67,7 @@ const ClosedAndNotClaimed = ({
         ></Box>
         <Grid container rowGap={'16px'}>
           <Grid item xs={6}>
-            <PoolTextItem title={'Current floor price'}>
+            <PoolTextItem title={'Current price'}>
               <>
                 <Box
                   sx={{
@@ -112,7 +121,7 @@ const ClosedAndNotClaimed = ({
                   >
                     =
                   </span>
-                  &nbsp; {poolInfo.lowestPrice?.toSignificant()}
+                  &nbsp; {poolInfo.currencyCurrentPrice?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -186,11 +195,7 @@ const ClosedAndNotClaimed = ({
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-                    ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
-                        .times(poolInfo?.currencySwappedAmount0?.toExact())
-                        .toFixed(6, BigNumber.ROUND_DOWN)
-                    : '0'}
+                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount1?.toExact()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -215,61 +220,81 @@ const ClosedAndNotClaimed = ({
           </Grid>
         </Grid>
       </Box>
-      {/* Final Auction Results */}
+      {/* Current bid price & Bid Amount */}
       <Box
         sx={{
-          width: 'calc(100% - 48px)',
-          margin: '30px auto 12px',
-          padding: '16px',
-          border: '1px solid #E1F25C',
-          borderRadius: '8px'
+          padding: '30px 24px 0'
         }}
       >
-        <Typography
+        <PoolInfoItem
+          title={'Current bid price'}
           sx={{
-            fontFamily: `'Public Sans'`,
-            color: '#fff',
-            fontSize: '14px',
-            fontWeight: 600
+            marginBottom: '9px'
           }}
-          mb={'12px'}
         >
-          Final Auction Results
-        </Typography>
-        <PoolInfoItem title={'Final auction price'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {poolInfo.currencyLowestBidPrice?.toExact() || '--'} {poolInfo.token1.symbol}
-          </RightText>
+          {poolInfo.status === PoolStatus.Upcoming && (
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
+          )}
+          {poolInfo.status !== PoolStatus.Upcoming && (
+            <RightText
+              style={{
+                color: '#E1F25C'
+              }}
+            >
+              {poolInfo.currencyCurrentPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            </RightText>
+          )}
         </PoolInfoItem>
-        <PoolInfoItem title={'Successful funds raised'}>
+        <PoolInfoItem title={'Bid Amount'}>
           <RightText
             style={{
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencySwappedTotal1?.toExact() || '--'} {poolInfo.token1.symbol}
-          </RightText>
-        </PoolInfoItem>
-        <PoolInfoItem title={'Excessive paid amount'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {(poolInfo.participant?.currencyUnfilledAmount1?.toExact() || 0) +
-              ' ' +
-              poolInfo.token1.symbol.toUpperCase()}
+            Balance: {userToken1Balance?.toSignificant() || '--'} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
       </Box>
-      <ClaimBlock isErc20EnglishAuction={false} poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
-      {/* bid history */}
-      <UserBidHistory poolInfo={poolInfo} />
+      {/* bid input */}
+      <BidInput poolInfo={poolInfo} amount={amount + ''} setAmount={setAmount} />
+      {/* Token you will pay */}
+      <Box
+        sx={{
+          padding: '12px 24px 30px'
+        }}
+      >
+        <PoolInfoItem
+          title={'Token you will pay'}
+          sx={{
+            marginBottom: '9px'
+          }}
+        >
+          <RightText
+            style={{
+              color: '#E1F25C'
+            }}
+          >
+            {poolInfo.currencyCurrentPrice + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          </RightText>
+        </PoolInfoItem>
+      </Box>
+      {/* bid and text tips */}
+      <Box
+        sx={{
+          padding: '0 24px '
+        }}
+      >
+        {/* bid and section */}
+        <BidBlock poolInfo={poolInfo} amount={amount + ''} />
+        {/* success tips */}
+      </Box>
     </>
   )
 }
-export default ClosedAndNotClaimed
+export default Upcoming
