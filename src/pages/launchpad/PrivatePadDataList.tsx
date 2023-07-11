@@ -42,6 +42,7 @@ export interface IPrivatePricesInfo {
 }
 
 export interface IPrivatePadProp {
+  hidden?: true
   keyId: number
   liveTimeStamp: {
     start: number
@@ -821,6 +822,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     isFAQ: true
   },
   {
+    hidden: true,
     keyId: 8,
     liveTimeStamp: {
       start: 1693324800000,
@@ -908,6 +910,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 10,
     liveTimeStamp: {
       start: 1696780800000,
@@ -1277,6 +1280,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 5,
     liveTimeStamp: {
       start: 1687348800000,
