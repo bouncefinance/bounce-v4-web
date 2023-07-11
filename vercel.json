@@ -5,11 +5,11 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel.app/ https://*.sumsub.com https://crypto.com/ https://ipinfo.io http://*.bounce.finance/ http://bounce.finance/ https://www.googletagmanager.com https://www.google-analytics.com; frame-src 'self'; child-src 'self'; frame-ancestors 'self';"
+          "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel.app/ https://*.sumsub.com/ https://crypto.com/ https://ipinfo.io http://*.bounce.finance/ http://bounce.finance/ https://www.googletagmanager.com https://www.google-analytics.com; frame-src 'self'; child-src 'self'; frame-ancestors 'self';"
         },
         {
           "key": "X-Frame-Options",
-          "value": "ALLOW-FROM https://*.sumsub.com http://*.bounce.finance/"
+          "value": "ALLOW-FROM https://*.sumsub.com/ http://*.bounce.finance/"
         },
         {
           "key": "Strict-Transport-Security",

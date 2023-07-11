@@ -41,9 +41,12 @@ export default function KYCVerification() {
 }
 
 function SumsubWeb() {
-  const { data } = useRequest(async () => {
-    return await getSumsubAccessToken()
-  })
+  const { data } = useRequest(
+    async () => {
+      return await getSumsubAccessToken()
+    },
+    { debounceWait: 1000 }
+  )
 
   const accessTokenExpirationHandler = useCallback(async () => {
     const data = await getSumsubAccessToken()
@@ -54,7 +57,7 @@ function SumsubWeb() {
 
   return (
     <SumsubWebSdk
-      accessToken={data?.data.token}
+      accessToken={data.data.token}
       testEnv
       expirationHandler={accessTokenExpirationHandler}
       // config={config}
