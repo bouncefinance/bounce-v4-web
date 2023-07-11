@@ -69,6 +69,7 @@ export interface IPrivatePadProp {
   }[]
   privatePrices?: IPrivatePricesInfo[]
   isFAQ?: boolean
+  poolTypeName2?: string
 }
 
 const DipProjectInfo: IProjectInfo[] = [
@@ -764,6 +765,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       end: 1690934400000
     },
     poolTypeName: 'ERC20 English Auction',
+    poolTypeName2: 'ERC20 Dunch Auction',
     img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
@@ -805,11 +807,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       },
       {
         title: ['dipTokenOffered'],
-        value: '420,000.0000 DIP'
+        value: 'TBD $DIP'
       },
       {
         title: ['dgtTokenOffered'],
-        value: '420,000.0000 DGT'
+        value: 'TBD $DGP'
       },
       {
         title: ['DIP Auction Method'],
