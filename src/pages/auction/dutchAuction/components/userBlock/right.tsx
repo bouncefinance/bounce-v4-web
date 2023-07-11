@@ -130,12 +130,16 @@ export enum ActionStep {
   'ClosedAndClaimed' = 6
 }
 const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const { claimAt } = poolInfo
+  const [countdown] = useCountDown({
+    targetDate: claimAt * 1000
+  })
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const [amount, setAmount] = useState('0')
   const [actionStep, setActionStep] = useState<ActionStep>(ActionStep.UpComing)
   const isUserClaimed = useMemo(() => {
-    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
-  }, [poolInfo.participant.currencyCurClaimableAmount])
+    return countdown === 0 && Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
+  }, [poolInfo.participant.currencyCurClaimableAmount, countdown])
   useEffect(() => {
     if (poolInfo.status === PoolStatus.Upcoming) {
       setActionStep(ActionStep.UpComing)

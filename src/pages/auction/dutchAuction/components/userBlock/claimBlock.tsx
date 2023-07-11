@@ -1,5 +1,5 @@
 import { styled, Box, Typography } from '@mui/material'
-import { useMemo, useCallback, useState, useEffect } from 'react'
+import { useMemo, useCallback } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
@@ -49,7 +49,6 @@ const ClaimBlock = ({
   })
   const { account, chainId } = useActiveWeb3React()
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
-  const [claimStatus, setClaimStatus] = useState<ClaimStatus>(ClaimStatus.NotTimeToClaim)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -95,35 +94,18 @@ const ClaimBlock = ({
   //   const isNotTimeToClaim = useMemo(() => {
   //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   //   }, [poolInfo?.claimAt])
-  useEffect(() => {
-    const initStatus = () => {
-      if (
-        poolInfo.status === PoolStatus.Closed &&
-        BigNumber(poolInfo.claimAt * 1000).isGreaterThan(new Date().valueOf())
-      ) {
-        setClaimStatus(ClaimStatus.NotTimeToClaim)
-      } else if (
-        poolInfo.status === PoolStatus.Closed &&
-        BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
-      ) {
-        setClaimStatus(ClaimStatus.NeedClaim)
-      } else {
-        setClaimStatus(ClaimStatus.Claimed)
-      }
+  const claimStatus = useMemo(() => {
+    if (poolInfo.status === PoolStatus.Closed && countdown > 0) {
+      return ClaimStatus.NotTimeToClaim
+    } else if (
+      poolInfo.status === PoolStatus.Closed &&
+      BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
+    ) {
+      return ClaimStatus.NeedClaim
+    } else {
+      return ClaimStatus.Claimed
     }
-    initStatus()
-    const timer: NodeJS.Timeout = setInterval(() => {
-      initStatus()
-    }, 1000)
-    return () => {
-      clearInterval(timer)
-    }
-  }, [
-    poolInfo.claimAt,
-    poolInfo?.participant.claimed,
-    poolInfo?.participant?.currencyCurClaimableAmount,
-    poolInfo.status
-  ])
+  }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
   if (!account) {
     return <ConnectWalletButton />
   }

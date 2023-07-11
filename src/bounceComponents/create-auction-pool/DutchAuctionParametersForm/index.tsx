@@ -71,7 +71,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
       .test('minValue', "Start price can't be smaller than reserve price", function (value) {
         const { reservePrice } = this.parent
         if (value && reservePrice) {
-          return value >= reservePrice
+          return value > reservePrice
         }
         return true
       }),
@@ -81,14 +81,14 @@ const DutchAuctionParametersForm = (): JSX.Element => {
       .test('minValue', "reserve price can't be greater than start price", function (value) {
         const { startPrice } = this.parent
         if (value && startPrice) {
-          return value <= startPrice
+          return value < startPrice
         }
         return true
       }),
     segments: Yup.number()
       .typeError('Please input valid number')
       .required('Auction price segment is required')
-      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
+      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 2', value => {
         return Number.isInteger(value) && Number(value) >= 2
       }),
     poolSize: Yup.number()
