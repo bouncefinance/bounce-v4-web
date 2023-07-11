@@ -12,6 +12,7 @@ import { useMemo } from 'react'
 import OthersDetail from '../othersDetail'
 import BigNumber from 'bignumber.js'
 import moment from 'moment'
+import StageLine from 'pages/auction/dutchAuction/components/userBlock/stageLine'
 
 const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(
@@ -33,9 +34,15 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
     result = result.filter(item => !item.active)
     return result
   }, [poolInfo.releaseData])
-  if (poolInfo.status === PoolStatus.Closed) {
+  if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
     return (
-      <>
+      <Box
+        sx={{
+          flex: 1,
+          width: '100%'
+        }}
+      >
+        <StageLine poolInfo={poolInfo} />
         <Box
           sx={{
             width: '100%',
@@ -241,7 +248,7 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
           </Box>
         </Box>
         <OthersDetail poolInfo={poolInfo} />
-      </>
+      </Box>
     )
   }
   return (

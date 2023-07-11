@@ -8,6 +8,7 @@ import UserBidHistory from '../bidHistory'
 import { useMemo } from 'react'
 import { ActionStep, StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
+import BigNumber from 'bignumber.js'
 const ClosedAndNotClaimed = ({
   poolInfo,
   handleSetActionStep
@@ -239,7 +240,14 @@ const ClosedAndNotClaimed = ({
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencyCurrentPrice?.toExact() || '--'} {poolInfo.token1.symbol}
+            {poolInfo?.currencySwappedAmount1 &&
+            poolInfo?.currencySwappedAmount0 &&
+            !poolInfo?.currencySwappedAmount1.equalTo('0')
+              ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
+                  .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
+                  .toString()
+              : '0'}{' '}
+            {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
         <PoolInfoItem title={'Successful Funds Raised'}>

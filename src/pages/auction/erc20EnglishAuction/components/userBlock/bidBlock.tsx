@@ -58,7 +58,6 @@ const BidBlock = ({
   )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountStartPrice?.currency)
   const maxValue = useMaxSwapAmount1Limit(poolInfo)
-  console.log('🚀 ~ file: bidBlock.tsx:61 ~ maxValue:', maxValue?.toExact())
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({

@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/material'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { CurrencyAmount } from 'constants/token'
 import { useMemo, useEffect } from 'react'
 import moment from 'moment'
 import BigNumber from 'bignumber.js'
 import { ReactComponent as ActiveIcon } from 'assets/imgs/dutchAuction/active.svg'
 import { ReactComponent as DisActiveIcon } from 'assets/imgs/dutchAuction/disactive.svg'
-const StageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const StageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp }) => {
   const releaseData = useMemo(() => {
     const result = poolInfo.releaseData
       ? poolInfo.releaseData.map(item => {

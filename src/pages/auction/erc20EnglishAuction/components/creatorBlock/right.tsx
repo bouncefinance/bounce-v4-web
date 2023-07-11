@@ -184,7 +184,6 @@ const Right = () => {
               </PoolTextItem>
             </Grid>
           )}
-
           <Grid item xs={6}>
             <PoolTextItem title={'Successful sold amount'} tip={'The amount of token you successfully secured.'}>
               <>
@@ -261,7 +260,7 @@ const Right = () => {
           </Grid>
           {poolInfo.status === PoolStatus.Closed && (
             <Grid item xs={6}>
-              <PoolTextItem title={'Average price'}>
+              <PoolTextItem title={'Average price'} tip={'Average price.'}>
                 <>
                   <Box
                     sx={{
@@ -274,7 +273,13 @@ const Right = () => {
                       fontSize: '16px'
                     }}
                   >
-                    {poolInfo?.currencyCurrentPrice?.toExact()}
+                    {poolInfo?.currencySwappedAmount1 &&
+                    poolInfo?.currencySwappedAmount0 &&
+                    !poolInfo?.currencySwappedAmount1.equalTo('0')
+                      ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
+                          .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
+                          .toString()
+                      : '0'}
                     <TokenImage
                       sx={{
                         margin: '0 4px'
@@ -348,7 +353,7 @@ const Right = () => {
             Final Auction Results
           </Typography>
           <PoolInfoItem
-            title={'Average Price'}
+            title={'Successful Funds Raised'}
             sx={{
               marginBottom: '9px'
             }}
@@ -358,32 +363,21 @@ const Right = () => {
                 color: '#E1F25C'
               }}
             >
-              {poolInfo.currencyCurrentPrice?.toExact()}
-              {poolInfo.token1.symbol}
+              {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
             </RightText>
           </PoolInfoItem>
-          <PoolInfoItem title={'Successful Funds Raised'}>
+          <PoolInfoItem title={'Unswapped tokens'}>
             <RightText
               style={{
                 color: '#E1F25C'
               }}
             >
-              {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
+              {poolInfo.currencySwappedAmount0 &&
+                poolInfo.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0).toExact() +
+                  ' ' +
+                  poolInfo.token0.symbol.toUpperCase()}
             </RightText>
           </PoolInfoItem>
-          {poolInfo.participant.currencySwappedAmount0?.greaterThan('0') && (
-            <PoolInfoItem title={'Excessive Paid Amount'}>
-              <RightText
-                style={{
-                  color: '#E1F25C'
-                }}
-              >
-                {(poolInfo.participant?.currencySwappedAmount0?.toExact() || 0) +
-                  ' ' +
-                  poolInfo.token1.symbol.toUpperCase()}
-              </RightText>
-            </PoolInfoItem>
-          )}
         </Box>
       )}
       <Box

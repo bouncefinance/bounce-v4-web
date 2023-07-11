@@ -6,6 +6,7 @@ import { RightText } from '../../creatorBlock/auctionInfo'
 import PoolInfoItem from '../../poolInfoItem'
 import { useMemo } from 'react'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
+import BigNumber from 'bignumber.js'
 
 const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(
@@ -196,7 +197,14 @@ const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencyCurrentPrice?.toExact() || '--'} {poolInfo.token1.symbol}
+            {poolInfo?.currencySwappedAmount1 &&
+            poolInfo?.currencySwappedAmount0 &&
+            !poolInfo?.currencySwappedAmount1.equalTo('0')
+              ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
+                  .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
+                  .toString()
+              : '0'}{' '}
+            {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
         <PoolInfoItem title={'Successful Funds Raised'}>

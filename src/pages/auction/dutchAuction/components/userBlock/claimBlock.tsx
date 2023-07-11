@@ -55,10 +55,6 @@ const ClaimBlock = ({
   const { run: claimEnglish, submitted: claimBidEnglishSubmitted } = useErc20EnglishUserClaim(
     poolInfo as Erc20EnglishAuctionPoolProp
   )
-<<<<<<< Updated upstream
-=======
-  const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(false)
->>>>>>> Stashed changes
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()

@@ -1,12 +1,16 @@
 import { Box } from '@mui/material'
 import UserPoolStatusBox from './poolStatus'
-import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import OneTime from './oneTime'
 import Linear from './linear'
 import Fragment from './fragment'
+import { useMemo } from 'react'
 
 const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isUserClaimed = useMemo(() => {
+    return poolInfo.status === PoolStatus.Closed && !poolInfo.participant?.currencyCurClaimableAmount?.greaterThan('0')
+  }, [poolInfo.participant.currencyCurClaimableAmount, poolInfo.status])
   return (
     <Box
       sx={{
@@ -17,12 +21,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
       }}
       mb={'40px'}
     >
-      <UserPoolStatusBox
-        status={poolInfo.status}
-        currentTotal0={poolInfo.currencyAmountTotal0}
-        hiddenStatus={poolInfo.participant.claimed}
-        poolInfo={poolInfo}
-      />
+      <UserPoolStatusBox status={poolInfo.status} hiddenStatus={isUserClaimed} poolInfo={poolInfo} />
       {poolInfo.releaseType === IReleaseType.Cliff && <OneTime />}
       {poolInfo.releaseType === IReleaseType.Linear && <Linear />}
       {poolInfo.releaseType === IReleaseType.Fragment && <Fragment poolInfo={poolInfo} />}

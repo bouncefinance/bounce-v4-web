@@ -5,6 +5,8 @@ import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
 import { CurrencyAmount } from 'constants/token'
+import { useActiveWeb3React } from 'hooks'
+import { useMemo } from 'react'
 
 export interface PoolStatusBoxProps {
   status: PoolStatus
@@ -15,6 +17,8 @@ export interface PoolStatusBoxProps {
 }
 const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
   const { enableWhiteList, whitelistData } = poolInfo
+  const { account } = useActiveWeb3React()
+  const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   if (hiddenStatus) {
     return <Box></Box>
   }
@@ -131,7 +135,7 @@ const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false,
               </Typography>
             </Box>
           )
-        } else {
+        } else if (isCreator) {
           return (
             <Box
               sx={{
@@ -162,6 +166,39 @@ const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false,
               >
                 Claim back your unswapped tokens and fund raised.
                 <span style={{ color: '#959595' }}>Unfortunately, your pool is not fully filled and closed.</span>
+              </Typography>
+            </Box>
+          )
+        } else {
+          return (
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'flex-start',
+                alignItems: 'center',
+                width: '100%',
+                borderRadius: 8,
+                border: '1px solid #626262',
+                padding: '16px 24px',
+                ...style
+              }}
+            >
+              <img
+                src={ErrorIcon}
+                style={{ width: '24px', marginRight: '16px', verticalAlign: 'middle' }}
+                alt=""
+                srcSet=""
+              />
+              <Typography
+                variant="body1"
+                sx={{
+                  fontFamily: `'Inter'`,
+                  fontSize: '14px',
+                  color: '#FD3333'
+                }}
+              >
+                Claim back your tokens and fund raised.
               </Typography>
             </Box>
           )

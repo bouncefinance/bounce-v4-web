@@ -45,7 +45,9 @@ const ClaimBlock = () => {
     const token0ToClaimText =
       poolInfo?.currencySwappedAmount0 &&
       poolInfo?.currencyAmountTotal0 &&
-      `${poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)} ${poolInfo?.token0.symbol}`
+      `${poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0).toExact()} ${
+        poolInfo?.token0.symbol
+      }`
     const token1ToClaimText =
       hasToken0ToClaim && poolInfo?.currencySwappedAmount1?.toSignificant() && poolInfo?.token1.symbol
         ? ` and ${poolInfo?.currencySwappedAmount1?.toSignificant()} ${poolInfo.token1.symbol}`
