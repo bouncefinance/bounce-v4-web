@@ -6,6 +6,7 @@ import { useUserInfo } from 'state/users/hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
 import useBreakpoint from '../../hooks/useBreakpoint'
+import KYCVerification from 'bounceComponents/profile/account/components/KYCVerification'
 
 export default function MyAccount() {
   const { userInfo, userId } = useUserInfo()
@@ -58,6 +59,10 @@ export default function MyAccount() {
 
               <EditInfo userInfoEmail={userInfo?.email || ''} handleEmailChange={handleEmailChange} userId={userId} />
               <LoginOpton twitter={userInfo?.twitterName || ''} />
+
+              <Box mt={80}>
+                <KYCVerification />
+              </Box>
             </Container>
           </Box>
         </Container>
