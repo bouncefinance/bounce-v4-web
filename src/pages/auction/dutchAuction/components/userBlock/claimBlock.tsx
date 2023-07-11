@@ -45,7 +45,8 @@ const ClaimBlock = ({
   })
   const { account, chainId } = useActiveWeb3React()
   const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
-  const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(false)
+  const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(true)
+  const [isCanClaim, setIsCanClaim] = useState<boolean>(false)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -92,17 +93,24 @@ const ClaimBlock = ({
   //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   //   }, [poolInfo?.claimAt])
   useEffect(() => {
-    setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
-    const timer: NodeJS.Timeout = setInterval(() => {
+    const initStatus = () => {
+      // isNotTimeToClaim
       setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
-    }, 5000)
+      // isCanClaim
+      if (BigNumber(poolInfo.claimAt * 1000).isGreaterThan(new Date().valueOf())) {
+        setIsCanClaim(false)
+      } else {
+        setIsCanClaim(BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0))
+      }
+    }
+    initStatus()
+    const timer: NodeJS.Timeout = setInterval(() => {
+      initStatus()
+    }, 1000)
     return () => {
       clearInterval(timer)
     }
-  }, [poolInfo?.claimAt])
-  const isCanClaim = useMemo(() => {
-    return BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
-  }, [poolInfo?.participant?.currencyCurClaimableAmount])
+  }, [poolInfo.claimAt, poolInfo.participant.claimed, poolInfo.participant?.currencyCurClaimableAmount])
   if (!account) {
     return <ConnectWalletButton />
   }
