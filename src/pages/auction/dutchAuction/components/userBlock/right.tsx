@@ -143,7 +143,7 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       if (actionStep !== ActionStep.BidConfirm) {
         setActionStep(ActionStep.BeforeBid)
       }
-    } else if (poolInfo.status === PoolStatus.Closed && !isUserJoined) {
+    } else if ((poolInfo.status === PoolStatus.Closed && !isUserJoined) || poolInfo.status === PoolStatus.Cancelled) {
       setActionStep(ActionStep.ClosedAndNotJoined)
     } else if (poolInfo.status === PoolStatus.Closed && isUserJoined && !isUserClaimed) {
       setActionStep(ActionStep.ClosedAndNotClaim)
