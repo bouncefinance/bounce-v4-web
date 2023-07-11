@@ -270,7 +270,7 @@ export default function Header() {
             <Search />
             <Resources />
             <CreateBtn />
-            <NetworkPopperSelect />
+            {token && <NetworkPopperSelect />}
             <Web3Status />
 
             {!token && walletWithoutToken}
@@ -280,7 +280,7 @@ export default function Header() {
             {/* <Web3Status /> */}
             <ShowOnMobile breakpoint="md">
               <Stack direction={'row'} spacing={10} display={'flex'} alignItems={'center'}>
-                <NetworkPopperSelect />
+                {token && <NetworkPopperSelect />}
                 <Web3Status />
                 {!token && walletWithoutToken}
                 <IconButton
