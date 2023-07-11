@@ -173,7 +173,6 @@ const CreateAuctionPoolIntroPage = () => {
                   <Select
                     value={curAuctionType}
                     onChange={e => {
-                      console.log('e.target.value>>>', e.target.value)
                       setCurAuctionType(e.target.value as AuctionType)
                     }}
                   >

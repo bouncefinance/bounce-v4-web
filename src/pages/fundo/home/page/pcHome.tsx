@@ -56,7 +56,6 @@ const PcHome: React.FC = () => {
   useEffect(() => {
     const getScrollCount = (event: { target: any }) => {
       const animate0Range = [0, winH]
-      console.log('animate0Range>>>', animate0Range)
       // 1. necklack enter down and scale
       const animate1Range = [0, _AnimateHeight1 + 800]
       // 2.product info enter up
@@ -203,7 +202,6 @@ const PcHome: React.FC = () => {
         setanimate5Step(AnimateStep.leave)
       }
       event.target.scrollTop >= animate8range[1] && setanimate5Step(AnimateStep.notShow)
-      console.log('event.target.scrollTop>>>', event.target.scrollTop)
     }
     const scrollBox = document.getElementById('scrollBox')
     if (scrollBox) {

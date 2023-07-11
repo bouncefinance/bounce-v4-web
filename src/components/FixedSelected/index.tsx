@@ -9,6 +9,7 @@ import { useDebounce } from 'ahooks'
 import { getLabelById } from 'utils'
 import SearchIcon from '@mui/icons-material/Search'
 import { initialValues, InitialValuesPros } from 'pages/tokenAuction/components/listDialog'
+import { PoolType } from 'api/pool/type'
 const SearchInput = styled(Input)(() => ({
   height: 38,
   lineHeight: '38px',
@@ -81,11 +82,15 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         list: [
           {
             label: 'Fixed Price',
-            value: 1
+            value: PoolType.FixedSwap
           },
           {
             label: 'Random Selection',
-            value: 3
+            value: PoolType.Lottery
+          },
+          {
+            label: 'Dutch Auction',
+            value: PoolType.DUTCH_AUCTION
           }
         ]
       },
@@ -301,7 +306,6 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
       }
       result = Object.assign(result, seatchValue)
     }
-    console.log('result>>>', result)
     setFilterValues(result)
     handleSubmit(result)
     setDialogOpen(false)

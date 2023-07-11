@@ -21,6 +21,7 @@ import Erc721Pool from './Erc721Pool'
 
 import RandomSelection from './RandomSelection'
 import useBreakpoint from 'hooks/useBreakpoint'
+import DutchAuction from './DutchAuction'
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
 const CreateAuctionPool = () => {
@@ -50,6 +51,9 @@ const CreateAuctionPool = () => {
         )}
         {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC20 ? (
           <Erc20Pool />
+        ) : null}
+        {valuesState.auctionType === AuctionType.DUTCH_AUCTION && valuesState.tokenType === TokenType.ERC20 ? (
+          <DutchAuction />
         ) : null}
         {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC1155 ? (
           <Erc1155Pool />

@@ -43,7 +43,6 @@ const MobileHome: React.FC = () => {
   }, [])
   useEffect(() => {
     const getScrollCount = (event: { target: any }) => {
-      console.log('event.target.scrollTop>>>', event.target.scrollTop)
       // 1. necklack down and scale
       const animate1Range = [0, _AnimateHeight1 + winH]
       // 2 three card enter
