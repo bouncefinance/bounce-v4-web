@@ -35,15 +35,9 @@ export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
 }
-export type TPrivatePrices =
-  | 'startingPrice'
-  | 'dipTokenOffered'
-  | 'dgtTokenOffered'
-  | 'hardCapPerUser'
-  | 'Token Name'
-  | 'Blockchain'
+
 export interface IPrivatePricesInfo {
-  title: TPrivatePrices | TPrivatePrices[]
+  title: string | string[]
   value: (string | JSX.Element)[] | (string | JSX.Element)
 }
 
@@ -123,55 +117,51 @@ const DipProjectInfo: IProjectInfo[] = [
   {
     title: 'DIP Rules',
     info: [
-      <ul key={0}>
-        <li>The ceiling price of the auction is preset by the protocol</li>
-        <li>
-          The DIP token price is determined based on the total amount of USDT raised divided by the total number of DIP
-          being auctioned
-        </li>
-        <li>The auction ends when one of the following conditions are met:</li>
-        <li>The auction time ends</li>
-        <li>The token price reaches the ceiling price</li>
-        <li>
-          After the auction is finalized, DIP tokens are distributed to participants proportionally to their
-          contribution to the pool
-        </li>
-        <li>
-          DIP tokens acquired via the auction are vested to participants for 24 hours after the auction has been
-          finalized
-        </li>
-        <li>
-          If the last bidder enters a USDT amount that corresponds to an overall price that is larger than the ceiling
-          price, the unused amount will be refunded
-        </li>
-      </ul>
+      <Stack flexDirection={'column'} gap={10} key={1}>
+        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
+        <Typography>
+          the ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+          and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
+          on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
+          reached.
+        </Typography>
+        <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
+        <ul style={{ marginTop: 10 }}>
+          <li>Bid Asset: $USDT</li>
+          <li>Starting Price (lowest prices): Preset by DIP DAO</li>
+          <li>Highest Price: Preset by DIP DAO</li>
+          <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
+          <li>Auction Close: Within 24 hours or when token sold out.</li>
+          <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
+        </ul>
+      </Stack>
     ]
   },
   {
     title: 'DGT Rules',
     info: [
-      <ul key={0}>
-        <li>The starting price is preset by the protocol for the start of the auction</li>
-        <li>The floor price is preset by the protocol for the end of the auction (the lowest possible price)</li>
-        <li>The clearing price decreases linearly every second throughout the auction (24hr) from the start time</li>
-        <li>With every additional DIP commitment, the live token price increases</li>
-        <li>Token price = amount raised / token supply</li>
-        <li>The auction ends successfully when the current token price reaches the clearing price</li>
-        <li>
-          In case the auction fails to meet the completion criteria, all committed DIP tokens are returned to the
-          participants
-        </li>
-        <li>
-          After the auction is finalized, all participants are distributed DGT tokens proportional to their contribution
-          to the pool at the last reached price
-        </li>
-        <li>DGT tokens acquired via the auction are claimable immediately after the auction is finalized</li>
-        <li>The DIP tokens provided to the auction are burned</li>
-        <li>
-          If the last bidder enters an DIP amount larger than the available amount for the auction to meet the clearing
-          price then the unused amount will be refunded
-        </li>
-      </ul>
+      <Stack flexDirection={'column'} gap={10} key={1}>
+        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DGT ERC20 Dutch Auction</Typography>
+        <Typography>
+          A Dutch Auction, also known as descending price auction, refers to a type of auction in which an auctioneer
+          starts with a very high price, incrementally lowering the price until someone places a bid. The first bid wins
+          the auction, assuming the price is above the reserve price, avoiding any bidding wars.
+        </Typography>
+        <Typography mt={15}>DGT ERC20 Dutch Auction details are as follows:</Typography>
+        <ul style={{ marginTop: 10 }}>
+          <li>Bid Asset: $DIP</li>
+          <li>Starting Price: Preset by DIP DAO in DIP/DGT</li>
+          <li>Floor Price: Preset by DIP DAO in DIP/DGT</li>
+          <li>Clearing Price: Decreases linearly throughout the auction period.</li>
+          <li>Auction Close: Within 24 hours or when token price reach the ceiling price.</li>
+          <li>Distribution: Immediate after the closing of the auction at clearing price, need to claim on Bounce.</li>
+          <li>Burn: If the auction ends successfully, $DIP will be burned by DIP DAO.</li>
+          <li>
+            Refund: If the last bidder's contribution exceed the ceiling price, it is fully refunded. If the last bidder
+            enters an DIP amount larger than the amount sold, the unused DIP will be refunded.
+          </li>
+        </ul>
+      </Stack>
     ]
   }
 ]
@@ -810,13 +800,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     privatePrices: [
       {
-        title: ['startingPrice'],
-        value: [
-          <Typography mb={8} sx={{ color: '#2B51DA', fontSize: 12 }} key={1}>
-            It will increase according to the increase in sales volume
-          </Typography>,
-          '1 DIP = 0.002514 USDT'
-        ]
+        title: ['DIP Auction Method'],
+        value: ['ERC20 English Auction']
       },
       {
         title: ['dipTokenOffered'],
@@ -827,8 +812,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         value: '420,000.0000 DGT'
       },
       {
-        title: ['hardCapPerUser'],
-        value: '500,000 USDT=37.7100 USDT (≈15,000 USD)'
+        title: ['DIP Auction Method'],
+        value: 'ERC20 Dunch Auction'
       }
     ],
     isFAQ: true
