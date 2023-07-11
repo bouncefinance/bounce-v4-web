@@ -11,6 +11,8 @@ import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right
 import BidBlock from '../bidBlock'
 import { useMemo } from 'react'
 import BidInput from '../../bid'
+import { CurrencyAmount } from 'constants/token'
+import BigNumber from 'bignumber.js'
 
 const Upcoming = ({
   poolInfo,
@@ -27,6 +29,9 @@ const Upcoming = ({
     [poolInfo?.participant.swappedAmount0]
   )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountEndPrice?.currency)
+  const amount1CurrencyAmount =
+    poolInfo.currencyAmountStartPrice?.currency &&
+    CurrencyAmount.fromAmount(poolInfo.currencyAmountStartPrice?.currency, amount)
   return (
     <>
       <Box
@@ -280,7 +285,8 @@ const Upcoming = ({
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencyCurrentPrice + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            {amount1CurrencyAmount &&
+              new BigNumber(amount1CurrencyAmount?.toExact()).toFixed() + ' ' + poolInfo.token1.symbol.toUpperCase()}
           </RightText>
         </PoolInfoItem>
       </Box>

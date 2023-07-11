@@ -86,7 +86,7 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
       .typeError('Please input valid number')
       .required('Auction price segment is required')
       .max(100000, 'The segment maximum is 100,000')
-      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 1', value => {
+      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than 1', value => {
         return Number.isInteger(value) && Number(value) > 1
       }),
     poolSize: Yup.number()

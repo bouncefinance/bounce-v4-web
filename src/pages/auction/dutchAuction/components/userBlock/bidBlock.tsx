@@ -220,9 +220,9 @@ const BidBlock = ({
           onClick={() => goToBid()}
         >
           <span>
-            {Number(amount) > maxValue
+            {Number(amount) > Number(userToken0limit) // banlance
               ? 'Insufficient Balance'
-              : Number(currencyMaxAmount0PerWallet) === 0
+              : Number(amount) > Number(currencyMaxAmount0PerWallet) // bidable
               ? 'Limit exceeded'
               : 'Place a Bid'}
           </span>

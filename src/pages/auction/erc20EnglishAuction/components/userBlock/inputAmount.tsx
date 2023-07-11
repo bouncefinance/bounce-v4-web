@@ -1,12 +1,13 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Typography, styled } from '@mui/material'
 import TokenImage from 'bounceComponents/common/TokenImage'
-// import { formatNumber } from 'utils/number'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import BigNumber from 'bignumber.js'
+import { CurrencyAmount } from 'constants/token'
 export interface RegretAmountInputProps {
   amount: string
   setAmount: (value: string) => void
@@ -32,25 +33,49 @@ const AmountInput = ({ amount, setAmount }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   // banlance
-  const userToken0Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountTotal0?.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountEndPrice?.currency)
   // MaxAmount0PerWallet from contract, not from http
-  const currencyMaxAmount0PerWallet =
-    Number(poolInfo?.currencyMaxAmount1PerWallet?.toExact()) > 0
-      ? poolInfo?.currencyMaxAmount1PerWallet?.toExact()
-      : poolInfo?.currencyAmountTotal0?.toExact()
-  // All tradable quantities for token0
-  const swappedAmount0 =
-    poolInfo?.currencySwappedAmount0 &&
-    poolInfo?.currencyAmountTotal0 &&
-    poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)
+  const currencyMaxAmount1PerWallet = poolInfo?.currencyMaxAmount1PerWallet?.greaterThan('0')
+    ? poolInfo?.currencyMaxAmount1PerWallet
+    : poolInfo?.currencySwappedAmount0 &&
+      poolInfo?.currencyAmountTotal0 &&
+      poolInfo?.currencyCurrentPrice &&
+      poolInfo.currencyAmountEndPrice &&
+      CurrencyAmount.fromAmount(
+        poolInfo.currencyAmountEndPrice?.currency,
+        new BigNumber(poolInfo?.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0).toExact())
+          .times(new BigNumber(poolInfo?.currencyCurrentPrice?.toExact()))
+          .toString()
+      )
+
+  const swappedAmount0 = useMemo(
+    () =>
+      poolInfo?.currencySwappedAmount0 &&
+      poolInfo?.currencyAmountTotal0 &&
+      poolInfo?.currencyCurrentPrice &&
+      poolInfo?.currencyAmountEndPrice &&
+      CurrencyAmount.fromAmount(
+        poolInfo.currencyAmountEndPrice?.currency,
+        new BigNumber(poolInfo?.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0).toExact())
+          .times(new BigNumber(poolInfo?.currencyCurrentPrice?.toExact()))
+          .toString()
+      ),
+    [
+      poolInfo?.currencyAmountEndPrice,
+      poolInfo?.currencyAmountTotal0,
+      poolInfo?.currencyCurrentPrice,
+      poolInfo?.currencySwappedAmount0
+    ]
+  )
+
   const handleMaxButtonClick = useCallback(() => {
     const result = Math.min(
       Number(swappedAmount0?.toExact()),
-      Number(userToken0Balance?.toExact()),
-      Number(currencyMaxAmount0PerWallet)
+      Number(userToken1Balance?.toExact()),
+      Number(currencyMaxAmount1PerWallet?.toExact())
     )
     setAmount(result + '')
-  }, [swappedAmount0, userToken0Balance, currencyMaxAmount0PerWallet, setAmount])
+  }, [swappedAmount0, userToken1Balance, currencyMaxAmount1PerWallet, setAmount])
 
   return (
     <NumInput

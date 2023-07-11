@@ -199,7 +199,7 @@ export function useCreateErc20EnglishAuctionPool() {
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
       creator: account,
-      maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyFrom, params.allocationPerWallet)?.raw.toString() || '0',
+      maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyTo, params.allocationPerWallet)?.raw.toString() || '0',
       merkleroot: merkleroot,
       name: params.poolName,
       openAt: params.startTime,

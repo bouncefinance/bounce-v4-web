@@ -9,8 +9,8 @@ import { getUserInfo } from 'api/user'
 import { getCompanyInfo } from 'api/company'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
-import { SocialLink } from 'pages/auction/dutchAuction/components/poolInfo'
 import { shortenAddress } from 'utils'
+import { SocialLink } from 'pages/auction/dutchAuction/components/creatorInfoCard'
 const ChainType = styled(Box)(() => ({
   height: '32px',
   lineHeight: '32px',

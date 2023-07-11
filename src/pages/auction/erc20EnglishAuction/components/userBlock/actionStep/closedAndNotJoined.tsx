@@ -196,7 +196,7 @@ const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencyAmountEndPrice?.toExact() || '--'} {poolInfo.token1.symbol}
+            {poolInfo.currencyCurrentPrice?.toExact() || '--'} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
         <PoolInfoItem title={'Successful Funds Raised'}>

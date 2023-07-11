@@ -8,6 +8,7 @@ import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transacti
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import getTokenType from 'utils/getTokenType'
+import BigNumber from 'bignumber.js'
 
 export function useErc20EnglishCreatorClaim(poolId: number | string, name: string, contract?: string) {
   const { account } = useActiveWeb3React()
@@ -263,9 +264,20 @@ export function useMaxSwapAmount1Limit(poolInfo: Erc20EnglishAuctionPoolProp) {
       ? poolInfo.participant.currencySwappedAmount1
         ? poolInfo.currencyMaxAmount1PerWallet.subtract(poolInfo.participant.currencySwappedAmount1)
         : poolInfo.currencyMaxAmount1PerWallet
-      : poolInfo.currencySwappedAmount0 && poolInfo.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0)
+      : poolInfo.currencySwappedAmount0 &&
+          poolInfo.currencyCurrentPrice &&
+          poolInfo.currencyAmountTotal0 &&
+          poolInfo.currencyAmountEndPrice &&
+          CurrencyAmount.fromAmount(
+            poolInfo.currencyAmountEndPrice?.currency,
+            new BigNumber(poolInfo.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0).toExact())
+              .times(new BigNumber(poolInfo.currencyCurrentPrice.toExact()))
+              .toString()
+          )
   }, [
+    poolInfo.currencyAmountEndPrice,
     poolInfo.currencyAmountTotal0,
+    poolInfo.currencyCurrentPrice,
     poolInfo.currencyMaxAmount1PerWallet,
     poolInfo.currencySwappedAmount0,
     poolInfo.participant.currencySwappedAmount1

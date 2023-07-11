@@ -1,21 +1,41 @@
 import { Box, Grid, Typography } from '@mui/material'
 import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
-import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
-import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import PoolTextItem from '../../poolTextItem'
 import PoolInfoItem from '../../poolInfoItem'
 import { RightText } from '../../creatorBlock/auctionInfo'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
-import OthersDetail from 'pages/auction/dutchAuction/components/userBlock/othersDetail'
-const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
+import { useMemo } from 'react'
+import OthersDetail from '../othersDetail'
+import BigNumber from 'bignumber.js'
+import moment from 'moment'
+
+const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isUserJoined = useMemo(
+    () => Number(poolInfo?.participant.swappedAmount0),
+    [poolInfo?.participant.swappedAmount0]
+  )
+  const notTimeStage = useMemo(() => {
+    let result = poolInfo.releaseData
+      ? poolInfo.releaseData.map(item => {
+          const nowDate = new BigNumber(new Date().valueOf())
+          const startAtDate = new BigNumber(item.startAt * 1000)
+          const isActive = nowDate.comparedTo(startAtDate) === 1
+          return {
+            startAt: moment(item.startAt * 1000).format('YYYY-MM-DD HH:mm:ss'),
+            active: isActive
+          }
+        })
+      : []
+    result = result.filter(item => !item.active)
+    return result
+  }, [poolInfo.releaseData])
   if (poolInfo.status === PoolStatus.Closed) {
     return (
       <>
-        {/* <Stepper poolInfo={poolInfo} /> */}
         <Box
           sx={{
             width: '100%',
@@ -98,14 +118,14 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                           color: '#626262'
                         }}
                       >
-                        {poolInfo.token0.name.toUpperCase()}
+                        {poolInfo.token0.symbol.toUpperCase()}
                       </span>
                     </Box>
                   </>
                 </PoolTextItem>
               </Grid>
               <Grid item xs={6}>
-                <PoolTextItem title={'total stage'}>
+                <PoolTextItem title={'Total stage'}>
                   <>
                     <Box
                       sx={{
@@ -158,7 +178,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                           color: '#626262'
                         }}
                       >
-                        {(poolInfo.token1.symbol + '').toUpperCase()}
+                        {(poolInfo.token0.symbol + '').toUpperCase()}
                       </span>
                     </Box>
                   </>
@@ -191,7 +211,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     color: '#fff'
                   }}
                 >
-                  --
+                  {notTimeStage?.[0]?.startAt || 'Is Done'}
                 </RightText>
               </PoolInfoItem>
               <PoolInfoItem title={'remaining stage'}>
@@ -200,7 +220,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     color: '#fff'
                   }}
                 >
-                  --
+                  {notTimeStage.length || 0}
                 </RightText>
               </PoolInfoItem>
             </Box>

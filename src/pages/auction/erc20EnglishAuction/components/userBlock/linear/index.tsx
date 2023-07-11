@@ -94,7 +94,7 @@ const Linear = () => {
               ></Box>
               <Grid container rowGap={'16px'}>
                 <Grid item xs={6}>
-                  <PoolTextItem title={'release start date'}>
+                  <PoolTextItem title={'Release start date'}>
                     <>
                       <Box
                         sx={{
@@ -115,7 +115,7 @@ const Linear = () => {
                   </PoolTextItem>
                 </Grid>
                 <Grid item xs={6}>
-                  <PoolTextItem title={'release end date'}>
+                  <PoolTextItem title={'Release end date'}>
                     <>
                       <Box
                         sx={{

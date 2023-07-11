@@ -13,7 +13,7 @@ import JSBI from 'jsbi'
 export function useErc20EnglishAuctionInfo() {
   const { sysId: _sysId } = useQueryParams()
 
-  const sysId = useMemo(() => Number(_sysId) || 18290, [_sysId])
+  const sysId = useMemo(() => Number(_sysId) || 0, [_sysId])
 
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ERC20_ENGLISH_AUCTION, sysId)
   const { account } = useActiveWeb3React()
@@ -275,6 +275,8 @@ export function useErc20EnglishAuctionInfo() {
     whitelistData.isUserInWhitelist,
     whitelistData.loading
   ])
+
+  console.log('279', poolInfoRet?.currencyMaxAmount1PerWallet?.toExact())
 
   return {
     poolInfo: poolInfoRet,

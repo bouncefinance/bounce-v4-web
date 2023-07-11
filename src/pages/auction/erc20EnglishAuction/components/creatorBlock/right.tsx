@@ -104,84 +104,87 @@ const Right = () => {
           }}
         ></Box>
         <Grid container rowGap={'16px'}>
-          <Grid item xs={6}>
-            <PoolTextItem title={'Current price'}>
-              <>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexFlow: 'row nowrap',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    fontFamily: `'Public Sans'`,
-                    fontWeight: 'bold',
-                    fontSize: '16px'
-                  }}
-                >
-                  1
-                  <TokenImage
+          {poolInfo.status !== PoolStatus.Closed && (
+            <Grid item xs={6}>
+              <PoolTextItem title={'Current price'}>
+                <>
+                  <Box
                     sx={{
-                      margin: '0 4px'
-                    }}
-                    src={poolInfo?.token0.largeUrl}
-                    alt={poolInfo?.token0.symbol}
-                    size={16}
-                  />
-                  <span
-                    style={{
-                      fontFamily: `'Inter'`,
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      color: '#626262'
+                      display: 'flex',
+                      flexFlow: 'row nowrap',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      fontFamily: `'Public Sans'`,
+                      fontWeight: 'bold',
+                      fontSize: '16px'
                     }}
                   >
-                    {poolInfo?.token0.symbol.toUpperCase()}
-                  </span>
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexFlow: 'row nowrap',
-                    justifyContent: 'flex-start',
-                    alignItems: 'center',
-                    fontFamily: `'Public Sans'`,
-                    fontWeight: 'bold',
-                    fontSize: '16px'
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: `'Inter'`,
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      color: '#626262'
-                    }}
-                  >
-                    =
-                  </span>
-                  &nbsp; {poolInfo?.currencyCurrentPrice?.toSignificant()}
-                  <TokenImage
+                    1
+                    <TokenImage
+                      sx={{
+                        margin: '0 4px'
+                      }}
+                      src={poolInfo?.token0.largeUrl}
+                      alt={poolInfo?.token0.symbol}
+                      size={16}
+                    />
+                    <span
+                      style={{
+                        fontFamily: `'Inter'`,
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        color: '#626262'
+                      }}
+                    >
+                      {poolInfo?.token0.symbol.toUpperCase()}
+                    </span>
+                  </Box>
+                  <Box
                     sx={{
-                      margin: '0 4px'
-                    }}
-                    src={poolInfo?.token1.largeUrl}
-                    alt={poolInfo?.token1.symbol}
-                    size={16}
-                  />
-                  <span
-                    style={{
-                      fontFamily: `'Inter'`,
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      color: '#626262'
+                      display: 'flex',
+                      flexFlow: 'row nowrap',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      fontFamily: `'Public Sans'`,
+                      fontWeight: 'bold',
+                      fontSize: '16px'
                     }}
                   >
-                    {(poolInfo?.token1.symbol + '').toUpperCase()}
-                  </span>
-                </Box>
-              </>
-            </PoolTextItem>
-          </Grid>
+                    <span
+                      style={{
+                        fontFamily: `'Inter'`,
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        color: '#626262'
+                      }}
+                    >
+                      =
+                    </span>
+                    &nbsp; {poolInfo?.currencyCurrentPrice?.toSignificant()}
+                    <TokenImage
+                      sx={{
+                        margin: '0 4px'
+                      }}
+                      src={poolInfo?.token1.largeUrl}
+                      alt={poolInfo?.token1.symbol}
+                      size={16}
+                    />
+                    <span
+                      style={{
+                        fontFamily: `'Inter'`,
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        color: '#626262'
+                      }}
+                    >
+                      {(poolInfo?.token1.symbol + '').toUpperCase()}
+                    </span>
+                  </Box>
+                </>
+              </PoolTextItem>
+            </Grid>
+          )}
+
           <Grid item xs={6}>
             <PoolTextItem title={'Successful sold amount'} tip={'The amount of token you successfully secured.'}>
               <>
@@ -256,6 +259,45 @@ const Right = () => {
               </>
             </PoolTextItem>
           </Grid>
+          {poolInfo.status === PoolStatus.Closed && (
+            <Grid item xs={6}>
+              <PoolTextItem title={'Average price'}>
+                <>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexFlow: 'row nowrap',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      fontFamily: `'Public Sans'`,
+                      fontWeight: 'bold',
+                      fontSize: '16px'
+                    }}
+                  >
+                    {poolInfo?.currencyCurrentPrice?.toExact()}
+                    <TokenImage
+                      sx={{
+                        margin: '0 4px'
+                      }}
+                      src={poolInfo?.token1.largeUrl}
+                      alt={poolInfo?.token1.symbol}
+                      size={16}
+                    />
+                    <span
+                      style={{
+                        fontFamily: `'Inter'`,
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        color: '#626262'
+                      }}
+                    >
+                      {(poolInfo?.token1.symbol + '').toUpperCase()}
+                    </span>
+                  </Box>
+                </>
+              </PoolTextItem>
+            </Grid>
+          )}
         </Grid>
       </Box>
       <Box padding="30px 24px">
@@ -316,12 +358,7 @@ const Right = () => {
                 color: '#E1F25C'
               }}
             >
-              {(poolInfo.currencySwappedAmount1 &&
-                poolInfo.currencySwappedAmount0 &&
-                new BigNumber(poolInfo.currencySwappedAmount1?.toExact())
-                  .div(new BigNumber(poolInfo.currencySwappedAmount0?.toExact()))
-                  .toFixed()) ||
-                '--'}{' '}
+              {poolInfo.currencyCurrentPrice?.toExact()}
               {poolInfo.token1.symbol}
             </RightText>
           </PoolInfoItem>

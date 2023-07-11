@@ -13,6 +13,9 @@ import UserBidHistory from '../bidHistory'
 import { ActionStep, StatusBox, TipsBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import { useMemo } from 'react'
 import BidInput from '../../bid'
+import { CurrencyAmount } from 'constants/token'
+import BigNumber from 'bignumber.js'
+import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 
 const Live = ({
   poolInfo,
@@ -30,6 +33,10 @@ const Live = ({
     () => Number(poolInfo.participant.swappedAmount0) > 0,
     [poolInfo.participant.swappedAmount0]
   )
+  const amount1LimitAmount = useMaxSwapAmount1Limit(poolInfo)
+  const amount1CurrencyAmount =
+    poolInfo.currencyAmountStartPrice?.currency &&
+    CurrencyAmount.fromAmount(poolInfo.currencyAmountStartPrice?.currency, amount)
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountEndPrice?.currency)
   return (
     <>
@@ -101,7 +108,7 @@ const Live = ({
                       color: '#626262'
                     }}
                   >
-                    {poolInfo.token0.name.toUpperCase()}
+                    {poolInfo.token0.symbol.toUpperCase()}
                   </span>
                 </Box>
                 <Box
@@ -125,7 +132,7 @@ const Live = ({
                   >
                     =
                   </span>
-                  &nbsp; {poolInfo.currencyAmountEndPrice?.toSignificant()}
+                  &nbsp; {poolInfo.currencyCurrentPrice?.toSignificant()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -267,14 +274,45 @@ const Live = ({
       </Box>
       {/* bid input */}
       <BidInput poolInfo={poolInfo} amount={amount + ''} setAmount={setAmount} />
+      <Box
+        sx={{
+          padding: '9px 24px 0'
+        }}
+      >
+        <PoolInfoItem title={'Bid Amount Limit'}>
+          <RightText
+            style={{
+              color: '#E1F25C'
+            }}
+          >
+            {amount1LimitAmount && amount1LimitAmount?.toExact() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          </RightText>
+        </PoolInfoItem>
+      </Box>
       {/* Token you will pay */}
       <Box
         sx={{
-          padding: '12px 24px 30px'
+          padding: '9px 24px'
+        }}
+      >
+        <PoolInfoItem title={'Token You Will Pay'}>
+          <RightText
+            style={{
+              color: '#E1F25C'
+            }}
+          >
+            {amount1CurrencyAmount &&
+              new BigNumber(amount1CurrencyAmount?.toExact()).toFixed() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          </RightText>
+        </PoolInfoItem>
+      </Box>
+      <Box
+        sx={{
+          padding: '0 24px 10px'
         }}
       >
         <PoolInfoItem
-          title={'Token you will pay'}
+          title={'Token You Will Receive'}
           sx={{
             marginBottom: '9px'
           }}
@@ -284,7 +322,11 @@ const Live = ({
               color: '#E1F25C'
             }}
           >
-            {poolInfo.currencyCurrentPrice?.toExact() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            {amount1CurrencyAmount &&
+              poolInfo?.currencyCurrentPrice &&
+              new BigNumber(amount1CurrencyAmount?.toExact()).div(poolInfo?.currencyCurrentPrice.toExact()).toFixed() +
+                ' ' +
+                poolInfo.token0.symbol.toUpperCase()}
           </RightText>
         </PoolInfoItem>
       </Box>
@@ -311,7 +353,8 @@ const Live = ({
             width: '16px'
           }}
         >
-          The final price is based on the lowest price bid at the end of the auction.
+          The final transaction price is based on the current price obtained when the transaction is submitted, which
+          may be higher than the price displayed on the page.
         </TipsBox>
       </Box>
       {/* bid history */}

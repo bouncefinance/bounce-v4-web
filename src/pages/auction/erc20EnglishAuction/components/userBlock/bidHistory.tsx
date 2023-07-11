@@ -2,25 +2,21 @@ import { Box, Typography, Grid } from '@mui/material'
 import PoolInfoItem from '../poolInfoItem'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
-import { useMemo } from 'react'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 
 const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const { account } = useActiveWeb3React()
-  const { data, loading: isGettingPoolHistory } = usePoolHistory(
+  const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
     poolInfo?.poolId || '',
     poolInfo?.category,
     account || '',
-    ['Bid']
+    ['Swapped']
   )
-  const list = useMemo(() => {
-    if (!data) return undefined
-    return data.list.filter(item => item.event === 'Bid') || []
-  }, [data])
-  if (!list || (Array.isArray(list) && list.length === 0)) {
+
+  if (!list || (Array.isArray(list.list) && list.list.length === 0)) {
     return null
   }
   return (
@@ -44,7 +40,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
       >
         Your Bid History
       </Typography>
-      {!isGettingPoolHistory && Array.isArray(list) && list.length > 0 && (
+      {!isGettingPoolHistory && Array.isArray(list.list) && list.list.length > 0 && (
         <>
           <Grid container>
             <Grid item xs={4}>
@@ -60,7 +56,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
             </Grid>
             <Grid item xs={4}>
               <PoolInfoItem
-                title={'Price'}
+                title={'Bid Price'}
                 sx={{
                   flexFlow: 'column nowrap',
                   justifyContent: 'flex-start',
@@ -89,7 +85,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
             }}
           >
             <Grid container rowGap={'4px'}>
-              {list.map((item, index) => {
+              {list.list.map((item, index) => {
                 return (
                   <>
                     <Grid item xs={4} key={index + '1'}>
@@ -119,9 +115,9 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                           fontWeight: 400
                         }}
                       >
-                        {poolInfo.currencyAmountTotal0
+                        {poolInfo.currencyAmountEndPrice
                           ? CurrencyAmount.fromRawAmount(
-                              poolInfo.currencyAmountTotal0.currency,
+                              poolInfo.currencyAmountEndPrice.currency,
                               item.token1Amount || '0'
                             )?.toSignificant()
                           : '--'}
@@ -137,7 +133,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                           fontWeight: 400
                         }}
                       >
-                        {item.blockTs ? moment(item.blockTs * 1000).format('yyyy-MM-DD HH:MM') : '--'}
+                        {item.blockTs ? moment(item.blockTs * 1000).format('yyyy-MM-DD HH:mm') : '--'}
                       </Typography>
                     </Grid>
                   </>

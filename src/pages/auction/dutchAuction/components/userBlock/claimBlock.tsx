@@ -1,9 +1,9 @@
 import { styled, Box, Typography } from '@mui/material'
-import { useMemo, useCallback, useState, useEffect } from 'react'
+import { useMemo, useCallback } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp, Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { ActionStep } from './right'
 import { useActiveWeb3React } from 'hooks'
 import useUserClaim from 'bounceHooks/auction/useUserClaimDutch'
@@ -28,7 +28,11 @@ export const ComBtn = styled(LoadingButton)(() => ({
     color: '#121212'
   }
 }))
-
+enum ClaimStatus {
+  'NotTimeToClaim' = 0,
+  'NeedClaim' = 1,
+  'Claimed' = 2
+}
 const ClaimBlock = ({
   isErc20EnglishAuction = false,
   poolInfo,
@@ -47,8 +51,14 @@ const ClaimBlock = ({
     targetDate: claimAt * 1000
   })
   const { account, chainId } = useActiveWeb3React()
-  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const { run: claimDutch, submitted: claimBidDutchSubmitted } = useUserClaim(poolInfo as DutchAuctionPoolProp)
+  const { run: claimEnglish, submitted: claimBidEnglishSubmitted } = useErc20EnglishUserClaim(
+    poolInfo as Erc20EnglishAuctionPoolProp
+  )
+<<<<<<< Updated upstream
+=======
   const [isNotTimeToClaim, setIsNotTimeToClaim] = useState<boolean>(false)
+>>>>>>> Stashed changes
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -90,29 +100,29 @@ const ClaimBlock = ({
       })
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
     }
-  }, [claim, handleSetActionStep])
+  }, [claimDutch, claimEnglish, handleSetActionStep, isErc20EnglishAuction])
   //   const isNotTimeToClaim = useMemo(() => {
   //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   //   }, [poolInfo?.claimAt])
-  useEffect(() => {
-    setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
-    const timer: NodeJS.Timeout = setInterval(() => {
-      setIsNotTimeToClaim(Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf())
-    }, 5000)
-    return () => {
-      clearInterval(timer)
+  const claimStatus = useMemo(() => {
+    if (poolInfo.status === PoolStatus.Closed && countdown > 0) {
+      return ClaimStatus.NotTimeToClaim
+    } else if (
+      poolInfo.status === PoolStatus.Closed &&
+      BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
+    ) {
+      return ClaimStatus.NeedClaim
+    } else {
+      return ClaimStatus.Claimed
     }
-  }, [poolInfo?.claimAt])
-  const isCanClaim = useMemo(() => {
-    return BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
-  }, [poolInfo?.participant?.currencyCurClaimableAmount])
+  }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
   if (!account) {
     return <ConnectWalletButton />
   }
   if (!isCurrentChainEqualChainOfPool) {
     return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
   }
-  if (isNotTimeToClaim) {
+  if (claimStatus === ClaimStatus.NotTimeToClaim) {
     return (
       <Box
         sx={{
@@ -151,7 +161,7 @@ const ClaimBlock = ({
       </Box>
     )
   }
-  if (!isCanClaim) {
+  if (claimStatus === ClaimStatus.Claimed) {
     return (
       <TipsBox
         iconUrl={SuccessIcon}
@@ -174,7 +184,7 @@ const ClaimBlock = ({
       <ComBtn
         fullWidth
         onClick={() => toClaim()}
-        loading={isErc20EnglishAuction ? claimBidEnglishSubmitted.submitted : claimBidAutchSubmitted.submitted}
+        loading={isErc20EnglishAuction ? claimBidEnglishSubmitted.submitted : claimBidDutchSubmitted.submitted}
       >
         <span>
           {Number(poolInfo.participant.currencyCurReleasableAmount?.toExact()) > 0

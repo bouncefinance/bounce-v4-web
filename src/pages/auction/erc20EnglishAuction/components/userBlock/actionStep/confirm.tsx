@@ -29,8 +29,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
   const [confirmationState, setConfirmationState] = useState({
     notice1: false,
     notice2: false,
-    notice3: false,
-    notice4: false
+    notice3: false
   })
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
   const handleChange = (event: React.ChangeEvent<any>) => {
@@ -39,7 +38,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
       [event.target.name]: event.target.checked
     })
   }
-  const { notice1, notice2, notice3, notice4 } = confirmationState
+  const { notice1, notice2, notice3 } = confirmationState
   const { swapCallback: bid, swapPermitCallback } = useErc20EnglishSwap(poolInfo)
   const amount1CurrencyAmount = poolInfo?.currencyAmountEndPrice
     ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '0')
@@ -75,8 +74,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
           setConfirmationState({
             notice1: false,
             notice2: false,
-            notice3: false,
-            notice4: false
+            notice3: false
           })
           setConfirmLoading(false)
           onConfirm && onConfirm()
@@ -85,8 +83,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
           setConfirmationState({
             notice1: false,
             notice2: false,
-            notice3: false,
-            notice4: false
+            notice3: false
           })
           setConfirmLoading(false)
           onConfirm && onConfirm()
@@ -105,8 +102,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
       setConfirmationState({
         notice1: false,
         notice2: false,
-        notice3: false,
-        notice4: false
+        notice3: false
       })
       setConfirmLoading(false)
       onConfirm && onConfirm()
@@ -184,13 +180,6 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
             onChange={handleChange}
             name="notice3"
             label="I checked the price"
-          />
-          <NewFormControlLabel
-            checked={notice4}
-            control={<Checkbox />}
-            onChange={handleChange}
-            name="notice4"
-            label="I understand rules about Dutch Auction"
           />
         </FormGroup>
         <ComBtn

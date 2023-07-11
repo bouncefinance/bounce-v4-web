@@ -1,8 +1,10 @@
 import { Box } from '@mui/material'
 import UserPoolStatusBox from './poolStatus'
-import LeftBox from '../creatorBlock/left'
-import RightBox from './right'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import OneTime from './oneTime'
+import Linear from './linear'
+import Fragment from './fragment'
 
 const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   return (
@@ -21,31 +23,9 @@ const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
         hiddenStatus={poolInfo.participant.claimed}
         poolInfo={poolInfo}
       />
-      <Box
-        sx={{
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          paddingTop: '30px'
-        }}
-        gap={'30px'}
-      >
-        <Box
-          sx={{
-            flex: 400
-          }}
-        >
-          <LeftBox />
-        </Box>
-        <Box
-          sx={{
-            flex: 474
-          }}
-        >
-          <RightBox />
-        </Box>
-      </Box>
+      {poolInfo.releaseType === IReleaseType.Cliff && <OneTime />}
+      {poolInfo.releaseType === IReleaseType.Linear && <Linear />}
+      {poolInfo.releaseType === IReleaseType.Fragment && <Fragment poolInfo={poolInfo} />}
     </Box>
   )
 }

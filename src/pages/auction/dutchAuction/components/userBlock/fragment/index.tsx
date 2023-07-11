@@ -31,7 +31,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     result = result.filter(item => !item.active)
     return result
   }, [poolInfo.releaseData])
-  if (poolInfo.status === PoolStatus.Closed) {
+  if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
     return (
       <Box
         sx={{

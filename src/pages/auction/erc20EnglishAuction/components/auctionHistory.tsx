@@ -10,21 +10,19 @@ import {
   StyledHistoryTableCell,
   StyledHistoryTableRow
 } from 'bounceComponents/fixed-swap/ActionHistory'
-import { useMemo } from 'react'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import { CurrencyAmount } from 'constants/token'
 
 const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
-  const { data, loading: isGettingPoolHistory } = usePoolHistory(
+  const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
     poolInfo?.poolId || '',
     poolInfo?.category,
-    '',
-    ['Bid']
+    ''
   )
-  const list = useMemo(() => {
-    if (!data) return undefined
-    return data.list.filter(item => item.event === 'Bid') || []
-  }, [data])
+  if (!list || (Array.isArray(list.list) && list.list.length === 0)) {
+    return null
+  }
 
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
@@ -32,23 +30,40 @@ const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
         Auction History
       </Typography>
 
-      {list && list.length > 0 ? (
+      {list.list && list.list.length > 0 ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <StyledHistoryTableRow>
                 <StyledHistoryTableCell>Event</StyledHistoryTableCell>
+                <StyledHistoryTableCell>Amount</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Price</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Address</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Date</StyledHistoryTableCell>
               </StyledHistoryTableRow>
             </TableHead>
             <TableBody>
-              {list.map(record => (
+              {list.list.map(record => (
                 <StyledHistoryTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledHistoryTableCell>{PoolEventTypography[record.event]}</StyledHistoryTableCell>
                   <StyledHistoryTableCell>
-                    -- &nbsp;
+                    {poolInfo.currencyAmountTotal0
+                      ? CurrencyAmount.fromRawAmount(
+                          poolInfo.currencyAmountTotal0.currency,
+                          record.token0Amount || '0'
+                        )?.toSignificant()
+                      : '--'}
+                    &nbsp;
+                    {poolInfo.token0.symbol}
+                  </StyledHistoryTableCell>
+                  <StyledHistoryTableCell>
+                    {poolInfo.currencyAmountEndPrice
+                      ? CurrencyAmount.fromRawAmount(
+                          poolInfo.currencyAmountEndPrice.currency,
+                          record.token1Amount || '0'
+                        )?.toSignificant()
+                      : '--'}
+                    &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
                   <StyledHistoryTableCell>
@@ -57,9 +72,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
                       <CopyToClipboard text={record.requestor} />
                     </Box>
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell>
-                    {moment(record.blockTs * 1000).format('Y/M/D hh:mm A')}
-                  </StyledHistoryTableCell>
+                  <StyledHistoryTableCell>{moment(record.blockTs * 1000).format('Y/M/D HH:mm')}</StyledHistoryTableCell>
                 </StyledHistoryTableRow>
               ))}
             </TableBody>

@@ -14,7 +14,7 @@ import ClaimBlock from '../../userBlock/claimBlock'
 
 const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
-  if (poolInfo.status === PoolStatus.Closed) {
+  if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
     return (
       <>
         {/* <Stepper poolInfo={poolInfo} /> */}

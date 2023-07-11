@@ -12,11 +12,11 @@ import { Erc20EnglishAuctionPoolProp, PoolType } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { BigNumber } from 'bignumber.js'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Dots } from 'themes'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 import { ActionStep } from 'pages/auction/dutchAuction/components/userBlock/right'
+import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 
 export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -57,35 +57,8 @@ const BidBlock = ({
     PoolType.ERC20_ENGLISH_AUCTION
   )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountStartPrice?.currency)
-  // max amount of token0 by token1 banlance
-  const userToken0limit = useMemo(() => {
-    const highestPrice = poolInfo.currencyAmountEndPrice?.toExact() || 0
-    const currencyCurrentPrice = poolInfo.currencyCurrentPrice?.toExact() || 0
-    return BigNumber(userToken1Balance?.toExact() || 0)
-      .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
-      .toString()
-  }, [poolInfo.currencyAmountEndPrice, poolInfo.currencyCurrentPrice, poolInfo.status, userToken1Balance])
-  // MaxAmount0PerWallet from contract, not from http
-  const currencyMaxAmount0PerWallet = useMemo(() => {
-    return poolInfo.currencyMaxAmount1PerWallet && Number(poolInfo.currencyMaxAmount1PerWallet?.toExact()) > 0
-      ? BigNumber(poolInfo.currencyMaxAmount1PerWallet?.toExact() || '0')
-          .minus(poolInfo.participant.currencySwappedAmount0?.toExact() || '0')
-          .toString()
-      : poolInfo.currencyAmountTotal0?.toExact()
-  }, [poolInfo.currencyMaxAmount1PerWallet, poolInfo.currencyAmountTotal0, poolInfo.participant.currencySwappedAmount0])
-  const maxValue = useMemo(() => {
-    // All tradable quantities for token0
-    const swappedAmount0 =
-      poolInfo?.currencySwappedAmount0 &&
-      poolInfo?.currencyAmountTotal0 &&
-      poolInfo?.currencyAmountTotal0?.subtract(poolInfo?.currencySwappedAmount0)
-    const result = Math.min(
-      Number(swappedAmount0?.toExact()),
-      Number(userToken0limit),
-      Number(currencyMaxAmount0PerWallet)
-    )
-    return result
-  }, [currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo?.currencySwappedAmount0, userToken0limit])
+  const maxValue = useMaxSwapAmount1Limit(poolInfo)
+  console.log('🚀 ~ file: bidBlock.tsx:61 ~ maxValue:', maxValue?.toExact())
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -100,7 +73,7 @@ const BidBlock = ({
   })
   const amount1CurrencyAmount =
     poolInfo?.currencyAmountEndPrice && poolInfo.currencyCurrentPrice
-      ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, poolInfo.currencyCurrentPrice?.toExact())
+      ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '')
       : 0
   const [approvalState, approveCallback] = useApproveCallback(
     amount1CurrencyAmount || undefined,
@@ -185,6 +158,22 @@ const BidBlock = ({
           <span>{'Place a Bid'}</span>
         </ComBtn>
       )
+    } else if (amount) {
+      return (
+        <ComBtn
+          fullWidth
+          disabled={!amount || Number(amount) === 0 || Number(amount) > Number(maxValue?.toExact())}
+          onClick={goToBid}
+        >
+          <span>
+            {!userToken1Balance
+              ? 'Insufficient Balance'
+              : Number(amount) > Number(maxValue?.toExact())
+              ? 'Limit exceeded'
+              : 'Place a Bid'}
+          </span>
+        </ComBtn>
+      )
     } else if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return (
@@ -207,18 +196,6 @@ const BidBlock = ({
           </ComBtn>
         )
       }
-    } else {
-      return (
-        <ComBtn fullWidth disabled={!amount || Number(amount) === 0 || Number(amount) > maxValue} onClick={goToBid}>
-          <span>
-            {Number(amount) > maxValue
-              ? 'Insufficient Balance'
-              : Number(currencyMaxAmount0PerWallet) === 0
-              ? 'Limit exceeded'
-              : 'Place a Bid'}
-          </span>
-        </ComBtn>
-      )
     }
   }
   return null
