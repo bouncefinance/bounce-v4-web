@@ -3,7 +3,7 @@ import { useMemo, useCallback, useState, useEffect } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { ActionStep } from './right'
 import { useActiveWeb3React } from 'hooks'
 import useUserClaim from 'bounceHooks/auction/useUserClaimDutch'
@@ -97,9 +97,15 @@ const ClaimBlock = ({
   //   }, [poolInfo?.claimAt])
   useEffect(() => {
     const initStatus = () => {
-      if (BigNumber(poolInfo.claimAt * 1000).isGreaterThan(new Date().valueOf())) {
+      if (
+        poolInfo.status === PoolStatus.Closed &&
+        BigNumber(poolInfo.claimAt * 1000).isGreaterThan(new Date().valueOf())
+      ) {
         setClaimStatus(ClaimStatus.NotTimeToClaim)
-      } else if (BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)) {
+      } else if (
+        poolInfo.status === PoolStatus.Closed &&
+        BigNumber(poolInfo?.participant?.currencyCurClaimableAmount?.toExact() || '0').isGreaterThan(0)
+      ) {
         setClaimStatus(ClaimStatus.NeedClaim)
       } else {
         setClaimStatus(ClaimStatus.Claimed)
@@ -112,7 +118,12 @@ const ClaimBlock = ({
     return () => {
       clearInterval(timer)
     }
-  }, [poolInfo.claimAt, poolInfo.participant.claimed, poolInfo.participant?.currencyCurClaimableAmount])
+  }, [
+    poolInfo.claimAt,
+    poolInfo?.participant.claimed,
+    poolInfo?.participant?.currencyCurClaimableAmount,
+    poolInfo.status
+  ])
   if (!account) {
     return <ConnectWalletButton />
   }
