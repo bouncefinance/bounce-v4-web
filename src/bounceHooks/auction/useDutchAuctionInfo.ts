@@ -214,10 +214,13 @@ export function useDutchAuctionInfo() {
     )
     const currencySwappedAmount1 = CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Data || '0')
     const currencyLowestBidPrice =
-      lowestBidPrice & currentPrice
+      lowestBidPrice && currentPrice
         ? CurrencyAmount.fromRawAmount(
             t1,
-            JSBI.divide(JSBI.multiply(lowestBidPrice, JSBI.BigInt(currentPrice)), JSBI.BigInt(Number('1e18')))
+            JSBI.divide(
+              JSBI.multiply(JSBI.BigInt(lowestBidPrice), JSBI.BigInt(currentPrice)),
+              JSBI.BigInt(Number('1e18'))
+            )
           )
         : undefined
     const unfilledAmount1 = BigNumber(currencySwappedAmount1.toExact()).minus(
