@@ -206,12 +206,20 @@ export function useDutchAuctionInfo() {
     const t0 = new Currency(poolInfo.ethChainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
     const _t1 = poolInfo.token1
     const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
+    const onceAmount0 = JSBI.BigInt(Number(`1e${t0.decimals}`))
+
     const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(
       t0,
       myAmountSwapped0Data || poolInfo.participant.swappedAmount0 || '0'
     )
     const currencySwappedAmount1 = CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Data || '0')
-    const currencyLowestBidPrice = lowestBidPrice ? CurrencyAmount.ether(lowestBidPrice) : undefined
+    const currencyLowestBidPrice =
+      lowestBidPrice & currentPrice
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.divide(JSBI.multiply(lowestBidPrice, JSBI.BigInt(currentPrice)), JSBI.BigInt(Number('1e18')))
+          )
+        : undefined
     const unfilledAmount1 = BigNumber(currencySwappedAmount1.toExact()).minus(
       BigNumber(currencySwappedAmount0.toExact()).times(currencyLowestBidPrice?.toExact() || '0')
     )
@@ -245,7 +253,12 @@ export function useDutchAuctionInfo() {
           )
         : undefined,
       times: poolsData.times,
-      currencyCurrentPrice: currentPrice ? CurrencyAmount.ether(currentPrice) : undefined,
+      currencyCurrentPrice: currentPrice
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.divide(JSBI.multiply(onceAmount0, JSBI.BigInt(currentPrice)), JSBI.BigInt(Number('1e18')))
+          )
+        : undefined,
       currencyLowestBidPrice,
       currencyMaxAmount0PerWallet: maxAmount0PerWallet
         ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
