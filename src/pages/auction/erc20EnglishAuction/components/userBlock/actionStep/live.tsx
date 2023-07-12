@@ -16,6 +16,7 @@ import BigNumber from 'bignumber.js'
 import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
+import { formatNumberWithCommas } from 'utils'
 
 const Live = ({
   poolInfo,
@@ -302,7 +303,9 @@ const Live = ({
             }}
           >
             {amount1CurrencyAmount &&
-              new BigNumber(amount1CurrencyAmount?.toExact()).toFixed() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+              formatNumberWithCommas(new BigNumber(amount1CurrencyAmount?.toExact()).toFixed()) +
+                ' ' +
+                poolInfo.token1.symbol.toUpperCase()}
           </RightText>
         </PoolInfoItem>
       </Box>
@@ -324,7 +327,9 @@ const Live = ({
           >
             {amount1CurrencyAmount &&
               poolInfo?.currencyCurrentPrice &&
-              new BigNumber(amount1CurrencyAmount?.toExact()).div(poolInfo?.currencyCurrentPrice.toExact()).toFixed() +
+              formatNumberWithCommas(
+                new BigNumber(amount1CurrencyAmount?.toExact()).div(poolInfo?.currencyCurrentPrice.toExact()).toFixed()
+              ) +
                 ' ' +
                 poolInfo.token0.symbol.toUpperCase()}
           </RightText>

@@ -286,7 +286,9 @@ const Upcoming = ({
             }}
           >
             {amount1CurrencyAmount &&
-              new BigNumber(amount1CurrencyAmount?.toExact()).toFixed() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+              new BigNumber(amount1CurrencyAmount?.toSignificant()).toFixed() +
+                ' ' +
+                poolInfo.token1.symbol.toUpperCase()}
           </RightText>
         </PoolInfoItem>
       </Box>

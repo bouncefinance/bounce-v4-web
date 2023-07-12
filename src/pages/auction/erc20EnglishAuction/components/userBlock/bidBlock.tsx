@@ -71,9 +71,8 @@ const BidBlock = ({
         : undefined
   })
   const amount1CurrencyAmount =
-    poolInfo?.currencyAmountEndPrice && poolInfo.currencyCurrentPrice
-      ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '')
-      : 0
+    poolInfo?.currencyAmountEndPrice &&
+    CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '')
   const [approvalState, approveCallback] = useApproveCallback(
     amount1CurrencyAmount || undefined,
     poolInfo.contract,
@@ -161,11 +160,16 @@ const BidBlock = ({
       return (
         <ComBtn
           fullWidth
-          disabled={!amount || Number(amount) === 0 || Number(amount) > Number(maxValue?.toExact())}
+          disabled={
+            !amount ||
+            Number(amount) === 0 ||
+            Number(amount) > Number(maxValue?.toExact()) ||
+            (amount1CurrencyAmount && userToken1Balance?.lessThan(amount1CurrencyAmount))
+          }
           onClick={goToBid}
         >
           <span>
-            {!userToken1Balance
+            {!userToken1Balance || amount1CurrencyAmount?.greaterThan(userToken1Balance)
               ? 'Insufficient Balance'
               : Number(amount) > Number(maxValue?.toExact())
               ? 'Limit exceeded'

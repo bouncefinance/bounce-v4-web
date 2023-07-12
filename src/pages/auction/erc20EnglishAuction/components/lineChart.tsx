@@ -18,6 +18,7 @@ import { formatNumber } from 'utils/number'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 import ChartDialog from './userBlock/chartDialog'
+import { formatNumberWithCommas } from 'utils'
 
 interface PointerItem {
   time: number | string
@@ -127,13 +128,12 @@ export const LineChartView = ({
       },
       localization: {
         timeFormatter: function (time: number | string) {
-          return time.toString()
+          return formatNumberWithCommas(time.toString())
         }
       },
       width: chartContainerRef.current.clientWidth,
       height: 250,
       timeScale: {
-        visible: false,
         timeVisible: false,
         borderVisible: true,
         borderColor: '#D7D6D9'
@@ -154,6 +154,11 @@ export const LineChartView = ({
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef.current.clientWidth })
     }
+    chart.timeScale().applyOptions({
+      tickMarkFormatter: (time: any) => {
+        return formatNumberWithCommas(time.toString())
+      }
+    })
     chart.timeScale().fitContent()
     // set line
     const newSeries = chart.addAreaSeries({
