@@ -30,7 +30,7 @@ const NumInput = styled(NumberInput)(() => ({
 const AmountInput = ({ poolInfo, amount, setAmount }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
 
-  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountEndPrice?.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountStartPrice?.currency)
 
   const currencyMaxAmount1PerWallet = useMaxSwapAmount1Limit(poolInfo)
 
@@ -43,11 +43,17 @@ const AmountInput = ({ poolInfo, amount, setAmount }: RegretAmountInputProps) =>
   )
 
   const handleMaxButtonClick = useCallback(() => {
-    const result = Math.min(
-      Number(swappedAmount0?.toExact()),
-      Number(userToken1Balance?.toExact()),
-      Number(currencyMaxAmount1PerWallet?.toExact())
-    )
+    let result = ''
+    if (swappedAmount0 && currencyMaxAmount1PerWallet && userToken1Balance) {
+      if (swappedAmount0?.lessThan(userToken1Balance) && swappedAmount0?.lessThan(currencyMaxAmount1PerWallet)) {
+        result = swappedAmount0.toExact()
+      } else if (
+        userToken1Balance?.lessThan(swappedAmount0) &&
+        userToken1Balance?.lessThan(currencyMaxAmount1PerWallet)
+      ) {
+        result = userToken1Balance.toExact()
+      } else result = currencyMaxAmount1PerWallet.toExact()
+    }
     setAmount(result + '')
   }, [swappedAmount0, userToken1Balance, currencyMaxAmount1PerWallet, setAmount])
 

@@ -138,7 +138,7 @@ export function useErc20EnglishAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const releaseType = useMemo(
-    () => (releaseTypesRes?.[0] ? Number(releaseTypesRes?.[0]) : undefined),
+    () => (releaseTypesRes?.[0] !== undefined ? Number(releaseTypesRes?.[0]) : undefined),
     [releaseTypesRes]
   )
 

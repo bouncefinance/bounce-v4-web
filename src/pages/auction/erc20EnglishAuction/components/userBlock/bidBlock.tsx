@@ -73,6 +73,12 @@ const BidBlock = ({
   const amount1CurrencyAmount =
     poolInfo?.currencyAmountEndPrice &&
     CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '')
+  console.log(
+    '🚀 ~ file: bidBlock.tsx:60 ~ userToken1Balance:',
+    amount,
+    userToken1Balance?.toExact(),
+    amount1CurrencyAmount?.toExact()
+  )
   const [approvalState, approveCallback] = useApproveCallback(
     amount1CurrencyAmount || undefined,
     poolInfo.contract,

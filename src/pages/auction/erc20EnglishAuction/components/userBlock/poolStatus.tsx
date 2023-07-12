@@ -14,6 +14,7 @@ export interface PoolStatusBoxProps {
 }
 const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
   const { enableWhiteList, whitelistData } = poolInfo
+  console.log('🚀 ~ file: poolStatus.tsx:17 ~ UserPoolStatusBox ~ enableWhiteList:', enableWhiteList, whitelistData)
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
