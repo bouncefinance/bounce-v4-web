@@ -1,48 +1,13 @@
-import { Box, Button, MenuItem, OutlinedInput, Select, Stack, Typography, styled } from '@mui/material'
+import { Box, Button, MenuItem, OutlinedInput, Select, Stack, SxProps, Typography, styled } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 // import Uploader from 'bounceComponents/common/Uploader'
 import { Formik } from 'formik'
 import { useState } from 'react'
-import yup from './schema/yupConfig'
-
+import * as yup from 'yup'
 import { ChainList } from 'constants/chain'
 import Image from 'components/Image'
-
-// console.log(yup.string().append('hahah'))
-// yup
-//   .object({
-//     fileName: yup.string(),
-//     fileSize: yup.number(),
-//     fileThumbnailUrl: yup.string(),
-//     fileType: yup.string(),
-//     fileUrl: yup.string().required('Please upload your Profile Picture'),
-//     id: yup.number()
-//   })
-//   .hasInput()
-// enum ELink{
-//   'Whitepaper',
-//   'TwitterLink',
-//   'TelegramLink',
-//   'FacebookLink',
-//   'SubredditLink',
-//   'MediumLink',
-//   'DiscordLink',
-//   'YoutubeLink'
-// }
-// type isLink = ()=>void
-const Links = [
-  'TwitterLink',
-  'TelegramLink',
-  'FacebookLink',
-  'SubredditLink',
-  'MediumLink',
-  'DiscordLink',
-  'YoutubeLink'
-]
-const FilterLinks = (link: string) => {
-  return Links.filter(item => item !== link)
-}
+import { useActiveWeb3React } from 'hooks'
 
 const validationSchema = yup.object({
   ProjectPicture: yup.object({
@@ -69,45 +34,55 @@ const validationSchema = yup.object({
     fileUrl: yup.string().required('Please upload your Profile Picture'),
     id: yup.number()
   }),
-  BannerSmallPicture: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number()
-  }),
-  WebsiteURL: yup.string(),
-  Whitepaper: yup.string(),
-  ProjectLink: yup
-    .object()
-    .shape({
-      TwitterLink: yup.string().when(FilterLinks('Whitepaper'), {
-        is: (...options: any[]) => {
-          console.log(options)
 
-          return options.some(item => item)
-        },
-        then: yup.string().required('Please enter one of the three fields')
-      }),
-      TelegramLink: yup.string().when(FilterLinks('TelegramLink'), {
-        is: (...options: any[]) => {
-          console.log(options)
-
-          return options.some(item => item)
-        },
-        then: yup.string().required('Please enter one of the three fields')
-      }),
-      FacebookLink: yup.string(),
-      SubredditLink: yup.string(),
-      MediumLink: yup.string(),
-      DiscordLink: yup.string(),
-      YoutubeLink: yup.string()
-    })
-    .hasInput(),
+  WebsiteURL: yup.string().url().required(),
+  Whitepaper: yup.string().url().required(),
   ProjectName: yup.string().required(),
-
-  ChainId: yup.number().required()
+  ChainId: yup.number().required(),
+  ProjectLink: yup.object().shape({
+    TwitterLink: yup
+      .string()
+      .url('TwitterLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      ),
+    TelegramLink: yup
+      .string()
+      .url('TelegramLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      ),
+    FacebookLink: yup
+      .string()
+      .url('FacebookLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      ),
+    YoutubeLink: yup
+      .string()
+      .url('YoutubeLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      ),
+    SubredditLink: yup
+      .string()
+      .url('SubredditLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      ),
+    MediumLink: yup
+      .string()
+      .url('MediumLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      ),
+    DiscordLink: yup
+      .string()
+      .url('DiscordLink must be a valid URL')
+      .test('notEmpty', 'fill in at least one', (val, context) =>
+        Object.keys(context.parent).some(key => !!context.parent[key])
+      )
+  })
 })
 const UploadIntroduce = ({ title }: { title: string }) => {
   return (
@@ -129,8 +104,23 @@ const TextInput = ({ title, name, placeholder }: { title: string; name: string; 
     </Box>
   )
 }
-
+const ImageBg = ({ sx, url }: { sx?: SxProps; url: string }) => {
+  return (
+    <Box
+      sx={{
+        width: 130,
+        height: 52,
+        borderRadius: 4,
+        overflow: 'hidden',
+        ...sx
+      }}
+    >
+      <Image style={{ width: '100%', height: '100%' }} src={url} />
+    </Box>
+  )
+}
 const BasicCard = () => {
+  const { chainId } = useActiveWeb3React()
   const initBasicValue = {
     ProjectPicture: {
       fileName: '',
@@ -156,14 +146,7 @@ const BasicCard = () => {
       fileUrl: '',
       id: ''
     },
-    BannerSmallPicture: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: ''
-    },
+
     ProjectLink: {
       WebsiteURL: '',
       Whitepaper: '',
@@ -176,7 +159,7 @@ const BasicCard = () => {
       DiscordLink: ''
     },
     ProjectName: '',
-    ChainId: -1
+    ChainId: chainId
   }
   const onSubmit = (values: any) => {
     console.log('submit')
@@ -189,83 +172,110 @@ const BasicCard = () => {
         {({ values, setFieldValue, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
-              {/* <BaseBox>
+              <BaseBox>
                 <Stack flexDirection={'column'} gap={32}>
-                  <FormItem>
+                  <Box>
                     <Title mb={32}>Basic Information</Title>
                     <UploadLayout>
                       <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-                        <UploadItem
-                          onChange={file => setFieldValue('ProjectPicture', file)}
-                          inputId={'ProjectPictureImg'}
-                          value={{ fileUrl: values.ProjectPicture.fileUrl }}
-                          accept={['image/jpeg', 'image/png', 'image/webp']}
-                          tips={'Please do not exceed a file size of 10MB'}
-                          limitSize={10}
-                          sx={{
-                            width: 132,
-                            height: 52,
-                            borderRadius: '4px !important',
-                            background: 'rgb(232,233,228)',
-                            '& svg': { width: '100%', height: '100% ' },
-                            '& .add-svg': {
-                              border: 'none'
-                            }
-                          }}
-                        />
+                        <FormItem
+                          name="ProjectPicture"
+                          fieldType="custom"
+                          style={{ display: values.ProjectPicture.fileUrl ? 'none' : 'block' }}
+                        >
+                          <UploadItem
+                            inputId="ProjectPictureImg"
+                            value={{ fileUrl: values.ProjectPicture.fileUrl }}
+                            onChange={file => {
+                              setFieldValue('ProjectPicture', file)
+                            }}
+                            accept={['image/jpeg', 'image/png', 'image/webp']}
+                            tips={'Please do not exceed a file size of 10MB'}
+                            limitSize={10}
+                            sx={{
+                              width: 132,
+                              height: 52,
+                              borderRadius: '4px !important',
+                              background: 'rgb(232,233,228)',
+                              '& svg': { width: '100%', height: '100% ' },
+                              '& .add-svg': {
+                                border: 'none'
+                              }
+                            }}
+                          />
+                        </FormItem>
+                        {values.ProjectPicture.fileUrl && <ImageBg url={values.ProjectPicture.fileUrl} />}
                         <UploadIntroduce title="Project Picture" />
                       </Stack>
                       <UploadBtn htmlFor="ProjectPictureImg">Upload</UploadBtn>
                     </UploadLayout>
-                  </FormItem>
+                  </Box>
 
-                  <FormItem>
+                  <Box>
                     <UploadLayout>
                       <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-                        <UploadItem
-                          onChange={file => setFieldValue('ProjectLogo', file)}
-                          inputId={'ProjectLogoImg'}
-                          value={{ fileUrl: values.ProjectLogo.fileUrl }}
-                          accept={['image/jpeg', 'image/png', 'image/webp']}
-                          tips={'Please do not exceed a file size of 10MB'}
-                          limitSize={10}
-                          sx={{
-                            width: 72,
-                            height: 72
-                          }}
-                        />
+                        <FormItem
+                          name="ProjectLogo"
+                          fieldType="custom"
+                          style={{ display: values.ProjectLogo.fileUrl ? 'none' : 'block' }}
+                        >
+                          <UploadItem
+                            onChange={file => setFieldValue('ProjectLogo', file)}
+                            inputId={'ProjectLogoImg'}
+                            value={{ fileUrl: values.ProjectLogo.fileUrl }}
+                            accept={['image/jpeg', 'image/png', 'image/webp']}
+                            tips={'Please do not exceed a file size of 10MB'}
+                            limitSize={10}
+                            sx={{
+                              width: 72,
+                              height: 72
+                            }}
+                          />
+                        </FormItem>
+                        {values.ProjectLogo.fileUrl && (
+                          <ImageBg sx={{ width: 72, height: 72, borderRadius: 36 }} url={values.ProjectLogo.fileUrl} />
+                        )}
+
                         <UploadIntroduce title="Project Logo" />
                       </Stack>
                       <UploadBtn htmlFor="ProjectLogoImg">Upload</UploadBtn>
                     </UploadLayout>
-                  </FormItem>
+                  </Box>
 
-                  <FormItem>
+                  <Box>
                     <UploadLayout>
                       <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-                        <UploadItem
-                          onChange={file => setFieldValue('ProjectPicture', file)}
-                          inputId={'ProjectPictureImg'}
-                          value={{ fileUrl: values.ProjectPicture.fileUrl }}
-                          accept={['image/jpeg', 'image/png', 'image/webp']}
-                          tips={'Please do not exceed a file size of 10MB'}
-                          limitSize={10}
-                          sx={{
-                            width: 132,
-                            height: 52,
-                            borderRadius: '4px !important',
-                            background: 'rgb(232,233,228)',
-                            '& svg': { width: '100%', height: '100% ' },
-                            '& .add-svg': {
-                              border: 'none'
-                            }
-                          }}
-                        />
+                        <FormItem
+                          name="BannerBigPicture"
+                          fieldType="custom"
+                          style={{ display: values.BannerBigPicture.fileUrl ? 'none' : 'block' }}
+                        >
+                          <UploadItem
+                            onChange={file => setFieldValue('BannerBigPicture', file)}
+                            inputId={'BannerBigPicture'}
+                            value={{ fileUrl: values.BannerBigPicture.fileUrl }}
+                            accept={['image/jpeg', 'image/png', 'image/webp']}
+                            tips={'Please do not exceed a file size of 10MB'}
+                            limitSize={10}
+                            sx={{
+                              width: 132,
+                              height: 52,
+                              borderRadius: '4px !important',
+                              background: 'rgb(232,233,228)',
+                              '& svg': { width: '100%', height: '100% ' },
+                              '& .add-svg': {
+                                border: 'none'
+                              }
+                            }}
+                          />
+                        </FormItem>
+                        {values.BannerBigPicture.fileUrl && <ImageBg url={values.BannerBigPicture.fileUrl} />}
+
                         <UploadIntroduce title="banner" />
                       </Stack>
-                      <UploadBtn htmlFor="ProjectPictureImg">Upload</UploadBtn>
+                      <UploadBtn htmlFor="BannerBigPicture">Upload</UploadBtn>
                     </UploadLayout>
-                  </FormItem>
+                  </Box>
 
                   <TextInput name="ProjectName" title="Project Name" placeholder="Name of the project, eg. Bounce" />
                   <TextInput name="WebsiteURL" title="Website URL" placeholder="https://bitcoin.org" />
@@ -284,7 +294,7 @@ const BasicCard = () => {
                           const currentChain = ChainList.find(item => item.id === selected)
                           return (
                             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-                              {selected !== -1 ? (
+                              {selected ? (
                                 <>
                                   <Image style={{ width: 25, height: 25 }} src={currentChain?.logo as string} />
                                   <Title sx={{ fontSize: 16 }}>{currentChain?.name}</Title>
@@ -321,7 +331,7 @@ const BasicCard = () => {
                     placeholder="https://bitcoin.org/bitcoin.pdf"
                   />
                 </Stack>
-              </BaseBox> */}
+              </BaseBox>
 
               <BaseBox>
                 <Box mb={50}>
