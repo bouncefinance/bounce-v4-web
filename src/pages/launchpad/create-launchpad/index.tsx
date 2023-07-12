@@ -4,9 +4,46 @@ import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 // import Uploader from 'bounceComponents/common/Uploader'
 import { Formik } from 'formik'
 import { useState } from 'react'
-import * as yup from 'yup'
+import yup from './schema/yupConfig'
+
 import { ChainList } from 'constants/chain'
 import Image from 'components/Image'
+
+// console.log(yup.string().append('hahah'))
+// yup
+//   .object({
+//     fileName: yup.string(),
+//     fileSize: yup.number(),
+//     fileThumbnailUrl: yup.string(),
+//     fileType: yup.string(),
+//     fileUrl: yup.string().required('Please upload your Profile Picture'),
+//     id: yup.number()
+//   })
+//   .hasInput()
+// enum ELink{
+//   'Whitepaper',
+//   'TwitterLink',
+//   'TelegramLink',
+//   'FacebookLink',
+//   'SubredditLink',
+//   'MediumLink',
+//   'DiscordLink',
+//   'YoutubeLink'
+// }
+// type isLink = ()=>void
+const Links = [
+  'TwitterLink',
+  'TelegramLink',
+  'FacebookLink',
+  'SubredditLink',
+  'MediumLink',
+  'DiscordLink',
+  'YoutubeLink'
+]
+const FilterLinks = (link: string) => {
+  return Links.filter(item => item !== link)
+}
+
 const validationSchema = yup.object({
   ProjectPicture: yup.object({
     fileName: yup.string(),
@@ -40,16 +77,36 @@ const validationSchema = yup.object({
     fileUrl: yup.string().required('Please upload your Profile Picture'),
     id: yup.number()
   }),
+  WebsiteURL: yup.string(),
+  Whitepaper: yup.string(),
+  ProjectLink: yup
+    .object()
+    .shape({
+      TwitterLink: yup.string().when(FilterLinks('Whitepaper'), {
+        is: (...options: any[]) => {
+          console.log(options)
+
+          return options.some(item => item)
+        },
+        then: yup.string().required('Please enter one of the three fields')
+      }),
+      TelegramLink: yup.string().when(FilterLinks('TelegramLink'), {
+        is: (...options: any[]) => {
+          console.log(options)
+
+          return options.some(item => item)
+        },
+        then: yup.string().required('Please enter one of the three fields')
+      }),
+      FacebookLink: yup.string(),
+      SubredditLink: yup.string(),
+      MediumLink: yup.string(),
+      DiscordLink: yup.string(),
+      YoutubeLink: yup.string()
+    })
+    .hasInput(),
   ProjectName: yup.string().required(),
-  WebsiteURL: yup.string().required(),
-  Whitepaper: yup.string().required(),
-  TwitterLink: yup.string().required(),
-  TelegramLink: yup.string().required(),
-  FacebookLink: yup.string().required(),
-  SubredditLink: yup.string().required(),
-  MediumLink: yup.string().required(),
-  DiscordLink: yup.string().required(),
-  YoutubeLink: yup.string().required(),
+
   ChainId: yup.number().required()
 })
 const UploadIntroduce = ({ title }: { title: string }) => {
@@ -107,17 +164,19 @@ const BasicCard = () => {
       fileUrl: '',
       id: ''
     },
+    ProjectLink: {
+      WebsiteURL: '',
+      Whitepaper: '',
+      TwitterLink: '',
+      TelegramLink: '',
+      FacebookLink: '',
+      YoutubeLink: '',
+      SubredditLink: '',
+      MediumLink: '',
+      DiscordLink: ''
+    },
     ProjectName: '',
-    ChainId: -1,
-    WebsiteURL: '',
-    Whitepaper: '',
-    TwitterLink: '',
-    TelegramLink: '',
-    FacebookLink: '',
-    YoutubeLink: '',
-    SubredditLink: '',
-    MediumLink: '',
-    DiscordLink: ''
+    ChainId: -1
   }
   const onSubmit = (values: any) => {
     console.log('submit')
@@ -271,33 +330,37 @@ const BasicCard = () => {
                 </Box>
                 <Stack flexDirection={'column'} gap={32}>
                   <TextInput
-                    name="TwitterLink"
+                    name="ProjectLink.TwitterLink"
                     title="Twitter Profile Link"
                     placeholder="eg. https://twitter.com/bounce_finance"
                   />
                   <TextInput
-                    name="TelegramLink"
+                    name="ProjectLink.TelegramLink"
                     title="Telegram Channel Link"
                     placeholder="eg. https://t.me/bounce_finance"
                   />
                   <TextInput
-                    name="FacebookLink"
+                    name="ProjectLink.FacebookLink"
                     title="Facebook Profile Link"
                     placeholder="eg. https://facebook.com/bounce_finance"
                   />
                   <TextInput
-                    name="YoutubeLink"
+                    name="ProjectLink.YoutubeLink"
                     title="Youtube Channel Link"
                     placeholder="eg. https://www.youtube.com/c/bounce_finance"
                   />
                   <TextInput
-                    name="SubredditLink"
+                    name="ProjectLink.SubredditLink"
                     title="Subreddit Link"
                     placeholder="eg. https://www.reddit.com/r/bounce_finance"
                   />
-                  <TextInput name="MediumLink" title="Medium Url" placeholder="eg. https://medium.com/bounce_finance" />
                   <TextInput
-                    name="DiscordLink"
+                    name="ProjectLink.MediumLink"
+                    title="Medium Url"
+                    placeholder="eg. https://medium.com/bounce_finance"
+                  />
+                  <TextInput
+                    name="ProjectLink.DiscordLink"
                     title="Discord Invitation Url"
                     placeholder="eg. https://medium.com/bounce_finance"
                   />
