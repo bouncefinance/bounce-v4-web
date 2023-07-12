@@ -166,7 +166,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       if (resultItem && resultItem?.time) {
         dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
-      const token0Price = currentValue + poolInfo.token1.symbol
+      const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
       const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
       if (
@@ -177,6 +177,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         param?.point?.y < 0 ||
         param?.point?.y > chartContainerRef.current.clientHeight
       ) {
+        console.log('123132')
         tooltipInstance.update({ dateStr, x, y, display: false })
         return
       }

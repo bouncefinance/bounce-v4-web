@@ -4,8 +4,10 @@ import { StatusBox } from '../creatorBlock/right'
 import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { BigNumber } from 'bignumber.js'
+import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 
 const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   return (
     <Box
       sx={{
@@ -31,7 +33,11 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             color: '#000'
           }}
         >
-          My Pool
+          {isUserJoined
+            ? 'You Joined'
+            : poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled
+            ? 'Pool is done'
+            : 'Join The Pool'}
         </Typography>
         <StatusBox poolInfo={poolInfo} />
       </Box>
@@ -99,7 +105,10 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 >
                   =
                 </span>
-                &nbsp; {poolInfo.currencyCurrentPrice?.toSignificant()}
+                &nbsp;{' '}
+                {poolInfo.status === PoolStatus.Upcoming
+                  ? poolInfo.highestPrice?.toSignificant()
+                  : poolInfo.currencyCurrentPrice?.toSignificant()}
                 <TokenImage
                   sx={{
                     margin: '0 4px'
@@ -122,84 +131,86 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             </>
           </PoolTextItem>
         </Grid>
-        <Grid item xs={6}>
-          <PoolTextItem title={'Last traded price'}>
-            <>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexFlow: 'row nowrap',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  fontFamily: `'Public Sans'`,
-                  fontWeight: 'bold',
-                  fontSize: '16px'
-                }}
-              >
-                1
-                <TokenImage
+        {poolInfo.status !== PoolStatus.Upcoming && (
+          <Grid item xs={6}>
+            <PoolTextItem title={'Last traded price'}>
+              <>
+                <Box
                   sx={{
-                    margin: '0 4px'
-                  }}
-                  src={poolInfo.token0.largeUrl}
-                  alt={poolInfo.token0.symbol}
-                  size={16}
-                />
-                <span
-                  style={{
-                    fontFamily: `'Inter'`,
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    color: '#626262'
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    fontFamily: `'Public Sans'`,
+                    fontWeight: 'bold',
+                    fontSize: '16px'
                   }}
                 >
-                  {poolInfo.token0.name.toUpperCase()}
-                </span>
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexFlow: 'row nowrap',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  fontFamily: `'Public Sans'`,
-                  fontWeight: 'bold',
-                  fontSize: '16px'
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: `'Inter'`,
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    color: '#626262'
-                  }}
-                >
-                  =
-                </span>
-                &nbsp; {poolInfo.currencyLowestBidPrice?.toSignificant()}
-                <TokenImage
+                  1
+                  <TokenImage
+                    sx={{
+                      margin: '0 4px'
+                    }}
+                    src={poolInfo.token0.largeUrl}
+                    alt={poolInfo.token0.symbol}
+                    size={16}
+                  />
+                  <span
+                    style={{
+                      fontFamily: `'Inter'`,
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      color: '#626262'
+                    }}
+                  >
+                    {poolInfo.token0.name.toUpperCase()}
+                  </span>
+                </Box>
+                <Box
                   sx={{
-                    margin: '0 4px'
-                  }}
-                  src={poolInfo.token1.largeUrl}
-                  alt={poolInfo.token1.symbol}
-                  size={16}
-                />
-                <span
-                  style={{
-                    fontFamily: `'Inter'`,
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    color: '#626262'
+                    display: 'flex',
+                    flexFlow: 'row nowrap',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    fontFamily: `'Public Sans'`,
+                    fontWeight: 'bold',
+                    fontSize: '16px'
                   }}
                 >
-                  {(poolInfo.token1.symbol + '').toUpperCase()}
-                </span>
-              </Box>
-            </>
-          </PoolTextItem>
-        </Grid>
+                  <span
+                    style={{
+                      fontFamily: `'Inter'`,
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      color: '#626262'
+                    }}
+                  >
+                    =
+                  </span>
+                  &nbsp; {poolInfo.currencyLowestBidPrice?.toSignificant()}
+                  <TokenImage
+                    sx={{
+                      margin: '0 4px'
+                    }}
+                    src={poolInfo.token1.largeUrl}
+                    alt={poolInfo.token1.symbol}
+                    size={16}
+                  />
+                  <span
+                    style={{
+                      fontFamily: `'Inter'`,
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      color: '#626262'
+                    }}
+                  >
+                    {(poolInfo.token1.symbol + '').toUpperCase()}
+                  </span>
+                </Box>
+              </>
+            </PoolTextItem>
+          </Grid>
+        )}
         <Grid item xs={6}>
           <PoolTextItem title={'Successful sold amount'} tip={'The amount of token you successfully secured.'}>
             <>
@@ -238,10 +249,7 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </PoolTextItem>
         </Grid>
         <Grid item xs={6}>
-          <PoolTextItem
-            title={poolInfo.status === PoolStatus.Closed ? 'Successful funds raised' : 'Estimated funds raised'}
-            tip={'Based on last traded price.'}
-          >
+          <PoolTextItem title={'Total paid amount'} tip={'Total paid amount'}>
             <>
               <Box
                 sx={{

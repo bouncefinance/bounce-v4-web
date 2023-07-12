@@ -10,6 +10,7 @@ import BidConfirm from './actionStep/confirm'
 import ClosedAndNotJoined from './actionStep/closedAndNotJoined'
 import ClosedAndNotClaim from './actionStep/closedAndNotClaim'
 import ClosedAndClaimed from './actionStep/closedAndClaimed'
+
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -174,7 +175,8 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         width: '100%',
         background: '#20201E',
         borderRadius: '20px',
-        padding: '0 0 24px'
+        padding: '0 0 24px',
+        minHeight: '453px'
       }}
     >
       {actionStep === ActionStep.UpComing && (

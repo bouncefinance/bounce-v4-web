@@ -9,7 +9,6 @@ import { DutchAuctionPoolProp } from 'api/pool/type'
 import ClaimBlock from './claimBlcok'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
-import { BigNumber } from 'bignumber.js'
 import PoolSaleInfo from './poolSaleInfo'
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
@@ -159,61 +158,6 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Stack>
         </PoolInfoItem>
       </Box>
-      {/* todo delete final auction results */}
-      {(poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) && (
-        <Box
-          sx={{
-            width: 'calc(100% - 48px)',
-            margin: '30px auto 12px',
-            padding: '16px',
-            border: '1px solid #E1F25C',
-            borderRadius: '8px'
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: `'Public Sans'`,
-              color: '#fff',
-              fontSize: '14px',
-              fontWeight: 600
-            }}
-            mb={'12px'}
-          >
-            Final Auction Results
-          </Typography>
-          <PoolInfoItem title={'Final auction price'}>
-            <RightText
-              style={{
-                color: '#E1F25C'
-              }}
-            >
-              {poolInfo.currencyLowestBidPrice?.toExact() || '--'} {poolInfo.token1.symbol}
-            </RightText>
-          </PoolInfoItem>
-          <PoolInfoItem title={'Successful funds raised'}>
-            <RightText
-              style={{
-                color: '#E1F25C'
-              }}
-            >
-              {poolInfo.currencySwappedTotal1?.toExact() || '--'} {poolInfo.token1.symbol}
-            </RightText>
-          </PoolInfoItem>
-          <PoolInfoItem title={'Unswapped tokens'}>
-            <RightText
-              style={{
-                color: '#E1F25C'
-              }}
-            >
-              {BigNumber(poolInfo?.currencyAmountTotal0?.toExact() || '0')
-                .minus(poolInfo?.currencySwappedAmount0?.toExact() || '0')
-                .toString() +
-                ' ' +
-                poolInfo.token0.symbol.toUpperCase()}
-            </RightText>
-          </PoolInfoItem>
-        </Box>
-      )}
       <Box
         sx={{
           padding: '0 24px '
