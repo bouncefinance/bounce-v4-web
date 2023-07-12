@@ -46,7 +46,7 @@ export function useDutchAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const lowestBidPrice = useMemo(() => lowestBidPriceRes?.[0].toString(), [lowestBidPriceRes])
-
+  console.log('lowestBidPrice>>>', lowestBidPrice)
   const maxAmount0PerWalletRes = useSingleCallResult(
     dutchAuctionContract,
     'maxAmount0PerWallet',
@@ -213,16 +213,12 @@ export function useDutchAuctionInfo() {
       myAmountSwapped0Data || poolInfo.participant.swappedAmount0 || '0'
     )
     const currencySwappedAmount1 = CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Data || '0')
-    const currencyLowestBidPrice =
-      lowestBidPrice && currentPrice
-        ? CurrencyAmount.fromRawAmount(
-            t1,
-            JSBI.divide(
-              JSBI.multiply(JSBI.BigInt(lowestBidPrice), JSBI.BigInt(currentPrice)),
-              JSBI.BigInt(Number('1e18'))
-            )
-          )
-        : undefined
+    const currencyLowestBidPrice = lowestBidPrice
+      ? CurrencyAmount.fromRawAmount(
+          t1,
+          JSBI.divide(JSBI.multiply(onceAmount0, JSBI.BigInt(lowestBidPrice)), JSBI.BigInt(Number('1e18')))
+        )
+      : undefined
     const unfilledAmount1 = BigNumber(currencySwappedAmount1.toExact()).minus(
       BigNumber(currencySwappedAmount0.toExact()).times(currencyLowestBidPrice?.toExact() || '0')
     )
