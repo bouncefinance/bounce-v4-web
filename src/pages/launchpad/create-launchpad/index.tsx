@@ -8,7 +8,7 @@ import * as yup from 'yup'
 import { ChainList } from 'constants/chain'
 import Image from 'components/Image'
 import { useActiveWeb3React } from 'hooks'
-
+import MarkdownEditor from './components/markdownEditor'
 const validationSchema = yup.object({
   ProjectPicture: yup.object({
     fileName: yup.string(),
@@ -278,6 +278,23 @@ const BasicCard = () => {
                   </Box>
 
                   <TextInput name="ProjectName" title="Project Name" placeholder="Name of the project, eg. Bounce" />
+                  <Box>
+                    <Title>Describe your project (100-500 words)</Title>
+                    <Title mt={5} sx={{ fontSize: 16, fontWeight: 500, color: '#626262' }}>
+                      Please address the following questions in your description.
+                    </Title>
+                    <Title mt={16} sx={{ fontSize: 16, fontWeight: 500, color: '#959595', lineHeight: '1.7' }}>
+                      1. What is the project about?
+                      <br />
+                      2. What makes your project unique? <br />
+                      3. History of your project.
+                      <br />
+                      4. What’s next for your project?
+                      <br /> 5. What can your token be used for? (Utility, NOT tokenomics)
+                      <br />
+                    </Title>
+                    <MarkdownEditor />
+                  </Box>
                   <TextInput name="WebsiteURL" title="Website URL" placeholder="https://bitcoin.org" />
                   <Box>
                     <Title sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>Blockchain Platform</Title>
