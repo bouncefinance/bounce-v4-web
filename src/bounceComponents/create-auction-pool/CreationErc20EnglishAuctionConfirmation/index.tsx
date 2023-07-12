@@ -411,7 +411,7 @@ const CreationErc20EnglishAuctionConfirmation = () => {
                   <Typography>
                     {values.allocationStatus === AllocationStatus.NoLimits
                       ? 'No'
-                      : `Limit ${Number(values.allocationPerWallet).toLocaleString()} ${values.tokenTo.symbol}`}
+                      : `Limit ${Number(values.allocationPerWallet).toLocaleString()} ${values.tokenFrom.symbol}`}
                   </Typography>
                 </ConfirmationInfoItem>
               </Stack>

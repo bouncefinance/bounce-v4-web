@@ -102,7 +102,7 @@ const Upcoming = ({
                       color: '#626262'
                     }}
                   >
-                    {poolInfo.token0.name.toUpperCase()}
+                    {poolInfo.token0.symbol.toUpperCase()}
                   </span>
                 </Box>
                 <Box

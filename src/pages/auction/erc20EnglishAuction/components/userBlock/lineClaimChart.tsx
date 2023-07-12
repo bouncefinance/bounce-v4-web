@@ -101,8 +101,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
         borderColor: '#D7D6D9'
       },
       localization: {
-        timeFormatter: function (businessDayOrTimestamp: number | string) {
-          return businessDayOrTimestamp.toString()
+        timeFormatter: function (time: number | string) {
+          return moment(time).format('YYYY-MM-DD HH:mm:ss')
         }
       },
       leftPriceScale: {
@@ -176,10 +176,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
   return <Box ref={chartContainerRef}></Box>
 }
 const lineClaimChart = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
-  const startAmount = poolInfo.currencyAmountStartPrice?.toExact()
-    ? Number(poolInfo.currencyAmountStartPrice?.toExact())
-    : 0
-  const endAmount = poolInfo.currencyAmountEndPrice?.toExact() ? Number(poolInfo.currencyAmountEndPrice?.toExact()) : 0
+  const startAmount = poolInfo.releaseData?.[0]?.startAt ? Number(poolInfo.releaseData?.[0]?.startAt * 1000) : 0
+  const endAmount = poolInfo.releaseData?.[0]?.endAt ? Number(poolInfo.releaseData?.[0]?.endAt * 1000) : 0
   const lineData = [
     {
       time: startAmount,

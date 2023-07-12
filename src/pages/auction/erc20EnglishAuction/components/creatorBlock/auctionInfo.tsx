@@ -82,13 +82,14 @@ const LeftBox = (): JSX.Element => {
             <RightText>{poolInfo?.enableWhiteList ? 'Whitelist' : 'Public'}</RightText>
           </PoolInfoItem>
           <PoolInfoItem title="Allocation per wallet">
-            {/* TODO need to add new param to fit maxAmount1PerWallet for dutchAuction  */}
-            <RightText>{poolInfo?.maxAmount1PerWallet}</RightText>
+            <RightText>
+              {poolInfo?.currencyMaxAmount1PerWallet?.toSignificant() + ' ' + poolInfo?.token0.symbol}
+            </RightText>
           </PoolInfoItem>
           {showMore && (
             <>
               <PoolInfoItem title="Total available amount">
-                <RightText>{`${poolInfo?.currencyAmountTotal0?.toSignificant()}`}</RightText>
+                <RightText>{`${poolInfo?.currencyAmountTotal0?.toSignificant()} ${poolInfo?.token0.symbol}`}</RightText>
               </PoolInfoItem>
               <PoolInfoItem title="Price Increasing rate">
                 <RightText>

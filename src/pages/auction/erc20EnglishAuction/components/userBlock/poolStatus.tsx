@@ -47,17 +47,14 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
             <Typography
               variant="body1"
               sx={{
-                width: '500px',
+                width: 'fit-content',
                 fontFamily: `'Inter'`,
                 fontSize: '14px',
                 color: '#fff'
               }}
             >
-              Please pay attention.
-              <span style={{ color: '#959595' }}>
-                Check the auction creator, token contract and price. Bounce auction is a decentralized tool where anyone
-                can launch.
-              </span>
+              The auction has not started yet.
+              <span style={{ color: '#959595' }}> Please wait patiently until your auction starts.</span>
             </Typography>
           </Box>
         )
