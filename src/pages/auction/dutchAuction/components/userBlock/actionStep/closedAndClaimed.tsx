@@ -211,6 +211,7 @@ const ClosedAndClaimed = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         </Grid>
       </Box>
       {/* Final Auction Results */}
+      {/* todo delete final auction results */}
       <Box
         sx={{
           width: 'calc(100% - 48px)',

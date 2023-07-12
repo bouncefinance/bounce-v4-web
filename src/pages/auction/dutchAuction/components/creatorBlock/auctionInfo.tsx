@@ -99,7 +99,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
               </PoolInfoItem>
               <PoolInfoItem title="Price decreasing rate">
                 <RightText>
-                  {poolInfo.currencyCurrentPrice?.toSignificant() + ' '}
+                  {poolInfo.currencyLowestBidPrice?.toSignificant() + ' '}
                   {`${poolInfo.token1.symbol.toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
