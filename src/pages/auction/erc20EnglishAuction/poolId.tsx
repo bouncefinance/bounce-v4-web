@@ -1,6 +1,5 @@
 import { Box, Container, useTheme, keyframes, Grid } from '@mui/material'
 import Header from './components/header'
-import PoolInfo from './components/poolInfo'
 import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock'
 import { useMemo } from 'react'
@@ -9,6 +8,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useErc20EnglishAuctionInfo } from 'bounceHooks/auction/useErc20EnglishAuctionInfo'
 import ActionHistory from './components/auctionHistory'
 import ValuesProvider from './ValuesProvider'
+import CreatorInfoCard from '../dutchAuction/components/creatorInfoCard'
 
 function ERC20EnglishAuctionPoolContent() {
   const theme = useTheme()
@@ -47,7 +47,7 @@ function ERC20EnglishAuctionPoolContent() {
     transform: translate(-100px, 100px);
   }
 `
-  const { poolInfo, loading } = useErc20EnglishAuctionInfo()
+  const { poolInfo, run: getPoolInfo, loading } = useErc20EnglishAuctionInfo()
   console.log('data>>>', poolInfo, loading)
   const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   if (!poolInfo) {
@@ -118,7 +118,7 @@ function ERC20EnglishAuctionPoolContent() {
           <Header />
           <Grid container spacing={{ xs: 10, xl: 18 }}>
             <Grid item xs={'auto'}>
-              <PoolInfo />
+              <CreatorInfoCard poolInfo={poolInfo} creator={poolInfo.creator} getPoolInfo={getPoolInfo} />
             </Grid>
             <Grid item xs>
               <Box

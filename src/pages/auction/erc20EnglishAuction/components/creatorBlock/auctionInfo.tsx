@@ -1,9 +1,7 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ReactNode } from 'react'
-import PoolInfoItem from '../poolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-
 import { shortenAddress } from 'utils'
 import { addTokenToWallet } from 'utils/addTokenToWallet'
 import { useActiveWeb3React } from 'hooks'
@@ -12,6 +10,7 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
 import moment from 'moment'
 import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
     {children}

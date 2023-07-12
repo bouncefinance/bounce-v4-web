@@ -1,10 +1,10 @@
 import { Box, Typography, Grid } from '@mui/material'
-import PoolInfoItem from '../poolInfoItem'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const { account } = useActiveWeb3React()

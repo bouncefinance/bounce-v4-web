@@ -1,8 +1,8 @@
 import { Box } from '@mui/material'
-import CreatorPoolStatusBox from '../../../dutchAuction/components/creatorBlock/poolStatus'
 import LeftBox from './left'
 import RightBox from './right'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import CreatorPoolStatusBox from './poolStatus'
 
 const CreatorBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   return (
@@ -15,11 +15,7 @@ const CreatorBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) =
       }}
       mb={'40px'}
     >
-      <CreatorPoolStatusBox
-        status={poolInfo.status}
-        currentTotal0={poolInfo.currentTotal0}
-        hiddenStatus={poolInfo.participant.claimed}
-      />
+      <CreatorPoolStatusBox poolInfo={poolInfo} status={poolInfo.status} hiddenStatus={poolInfo.participant.claimed} />
       <Box
         sx={{
           display: 'flex',

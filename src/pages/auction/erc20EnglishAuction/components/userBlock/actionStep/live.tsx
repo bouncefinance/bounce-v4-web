@@ -1,9 +1,7 @@
 import { Box, Typography, Grid } from '@mui/material'
-import PoolTextItem from '../../poolTextItem'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { RightText } from '../../creatorBlock/auctionInfo'
-import PoolInfoItem from '../../poolInfoItem'
 import { PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
@@ -16,6 +14,8 @@ import BidInput from '../../bid'
 import { CurrencyAmount } from 'constants/token'
 import BigNumber from 'bignumber.js'
 import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
+import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const Live = ({
   poolInfo,

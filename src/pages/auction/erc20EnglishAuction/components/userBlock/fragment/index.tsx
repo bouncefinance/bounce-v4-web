@@ -3,8 +3,6 @@ import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import PoolTextItem from '../../poolTextItem'
-import PoolInfoItem from '../../poolInfoItem'
 import { RightText } from '../../creatorBlock/auctionInfo'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
@@ -13,6 +11,8 @@ import OthersDetail from '../othersDetail'
 import BigNumber from 'bignumber.js'
 import moment from 'moment'
 import StageLine from 'pages/auction/dutchAuction/components/userBlock/stageLine'
+import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(

@@ -3,11 +3,11 @@ import { ReactComponent as OpenChartIcon } from 'assets/imgs/dutchAuction/openCh
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
-import PoolInfoItem from './poolInfoItem'
 import { RightText } from './creatorBlock/auctionInfo'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 interface PointerItem {
   time: number | string
@@ -200,7 +200,7 @@ const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
       return BigNumber(start).plus(BigNumber(step).times(index)).toNumber()
     })
   const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
-  const timeSegments = new BigNumber(endAmount).minus(startAmount).div(segments).integerValue().toNumber()
+  const timeSegments = new BigNumber(endAmount).minus(startAmount).div(segments).toNumber()
   const lineData = useMemo(() => {
     const xList = arrayRange(startAmount, segments, timeSegments)
     const yList = arrayRange(startPrice, segments, priceSegments)

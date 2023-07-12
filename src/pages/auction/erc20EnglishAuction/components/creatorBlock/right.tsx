@@ -1,8 +1,6 @@
 import { Box, Typography, Grid, Stack } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
-import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import PoolInfoItem from '../poolInfoItem'
 import { RightText } from './auctionInfo'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
@@ -12,6 +10,8 @@ import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import BigNumber from 'bignumber.js'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
+import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 export const TipsBox = ({
   style,

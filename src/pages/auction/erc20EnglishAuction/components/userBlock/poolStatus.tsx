@@ -4,21 +4,20 @@ import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
-import { CurrencyAmount } from 'constants/token'
-import { useActiveWeb3React } from 'hooks'
 import { useMemo } from 'react'
 
 export interface PoolStatusBoxProps {
   status: PoolStatus
   style?: React.CSSProperties
-  currentTotal0?: CurrencyAmount
   hiddenStatus?: boolean
   poolInfo: Erc20EnglishAuctionPoolProp
 }
-const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
+const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
   const { enableWhiteList, whitelistData } = poolInfo
-  const { account } = useActiveWeb3React()
-  const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
+  const isUserJoined = useMemo(
+    () => Number(poolInfo?.participant.swappedAmount0),
+    [poolInfo?.participant.swappedAmount0]
+  )
   if (hiddenStatus) {
     return <Box></Box>
   }
@@ -101,7 +100,7 @@ const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false,
       case PoolStatus.Closed:
       case PoolStatus.Cancelled:
         // all token auctioned
-        if (currentTotal0?.equalTo('0')) {
+        if (isUserJoined) {
           return (
             <Box
               sx={{
@@ -130,78 +129,16 @@ const UserPoolStatusBox = ({ status, currentTotal0, style, hiddenStatus = false,
                   color: '#fff'
                 }}
               >
-                All Tokens Auctioned.
-                <span style={{ color: '#959595' }}>Congratulations! Your auction is complete. Claim fund raised</span>
-              </Typography>
-            </Box>
-          )
-        } else if (isCreator) {
-          return (
-            <Box
-              sx={{
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-                borderRadius: 8,
-                border: '1px solid #626262',
-                padding: '16px 24px',
-                ...style
-              }}
-            >
-              <img
-                src={ErrorIcon}
-                style={{ width: '24px', marginRight: '16px', verticalAlign: 'middle' }}
-                alt=""
-                srcSet=""
-              />
-              <Typography
-                variant="body1"
-                sx={{
-                  fontFamily: `'Inter'`,
-                  fontSize: '14px',
-                  color: '#FD3333'
-                }}
-              >
-                Claim back your unswapped tokens and fund raised.
-                <span style={{ color: '#959595' }}>Unfortunately, your pool is not fully filled and closed.</span>
+                Success!
+                <span style={{ color: '#959595' }}>
+                  You have successfully participated in this auction and bided for your tokens. Please claim your
+                  tokens.
+                </span>
               </Typography>
             </Box>
           )
         } else {
-          return (
-            <Box
-              sx={{
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                width: '100%',
-                borderRadius: 8,
-                border: '1px solid #626262',
-                padding: '16px 24px',
-                ...style
-              }}
-            >
-              <img
-                src={ErrorIcon}
-                style={{ width: '24px', marginRight: '16px', verticalAlign: 'middle' }}
-                alt=""
-                srcSet=""
-              />
-              <Typography
-                variant="body1"
-                sx={{
-                  fontFamily: `'Inter'`,
-                  fontSize: '14px',
-                  color: '#FD3333'
-                }}
-              >
-                Claim back your tokens and fund raised.
-              </Typography>
-            </Box>
-          )
+          return <></>
         }
       default:
         return <></>

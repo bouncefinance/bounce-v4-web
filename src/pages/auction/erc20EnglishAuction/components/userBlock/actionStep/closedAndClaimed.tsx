@@ -1,14 +1,14 @@
 import { Box, Typography, Grid } from '@mui/material'
-import PoolTextItem from '../../poolTextItem'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { RightText } from '../../creatorBlock/auctionInfo'
-import PoolInfoItem from '../../poolInfoItem'
 import UserBidHistory from '../bidHistory'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import { StatusBox, TipsBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
+import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const ClosedAndClaimed = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(

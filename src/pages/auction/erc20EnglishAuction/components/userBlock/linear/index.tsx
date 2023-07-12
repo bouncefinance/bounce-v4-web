@@ -3,7 +3,6 @@ import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
 import { PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import PoolTextItem from '../../poolTextItem'
 import moment from 'moment'
 import { useErc20EnglishAuctionPoolInfo } from 'pages/auction/erc20EnglishAuction/ValuesProvider'
 import { useMemo } from 'react'
@@ -11,6 +10,7 @@ import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
 import OthersDetail from '../othersDetail'
 import LineClaimChart from '../lineClaimChart'
+import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 
 const Linear = () => {
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()

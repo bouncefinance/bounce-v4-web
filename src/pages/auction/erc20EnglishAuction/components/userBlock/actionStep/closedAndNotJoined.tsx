@@ -1,12 +1,12 @@
 import { Box, Typography, Grid } from '@mui/material'
-import PoolTextItem from '../../poolTextItem'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { RightText } from '../../creatorBlock/auctionInfo'
-import PoolInfoItem from '../../poolInfoItem'
 import { useMemo } from 'react'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import BigNumber from 'bignumber.js'
+import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(
