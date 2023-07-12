@@ -10,7 +10,7 @@ import ClaimBlock from './claimBlcok'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import { BigNumber } from 'bignumber.js'
-import PoolSaleInfo from '../poolSaleInfo'
+import PoolSaleInfo from './poolSaleInfo'
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({

@@ -46,7 +46,6 @@ export function useDutchAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const lowestBidPrice = useMemo(() => lowestBidPriceRes?.[0].toString(), [lowestBidPriceRes])
-  console.log('lowestBidPrice>>>', lowestBidPrice)
   const maxAmount0PerWalletRes = useSingleCallResult(
     dutchAuctionContract,
     'maxAmount0PerWallet',

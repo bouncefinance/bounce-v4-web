@@ -1,7 +1,7 @@
 import { Box, Typography, Grid } from '@mui/material'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import { StatusBox } from './creatorBlock/right'
-import PoolTextItem from './poolTextItem'
+import { StatusBox } from '../creatorBlock/right'
+import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { BigNumber } from 'bignumber.js'
 
