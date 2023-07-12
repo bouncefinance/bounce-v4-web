@@ -25,6 +25,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
       {poolInfo.releaseType === IReleaseType.Cliff && <OneTime />}
       {poolInfo.releaseType === IReleaseType.Linear && <Linear />}
       {poolInfo.releaseType === IReleaseType.Fragment && <Fragment poolInfo={poolInfo} />}
+      <>you are</>
     </Box>
   )
 }

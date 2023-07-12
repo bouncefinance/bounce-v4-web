@@ -36,7 +36,7 @@ const LeftBox = (): JSX.Element => {
         <Stack spacing={36} display={isMobile ? 'block' : 'flex'}>
           <Stack spacing={10}>
             <Title>Token Information</Title>
-            <PoolInfoItem title="Contract address" tip="Token Contract Address.">
+            <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
               <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
                 <CertifiedTokenImage
                   address={poolInfo?.token0.address || ''}
@@ -48,7 +48,7 @@ const LeftBox = (): JSX.Element => {
                 <CopyToClipboard text={poolInfo?.contract || ''} />
               </Stack>
             </PoolInfoItem>
-            <PoolInfoItem title="Token symbol">
+            <PoolInfoItem title="Token Symbol">
               <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
                 <TokenImage src={poolInfo?.token0.largeUrl} alt={poolInfo?.token0.symbol} size={20} />
                 <RightText>{poolInfo?.token0.symbol}</RightText>
@@ -75,29 +75,25 @@ const LeftBox = (): JSX.Element => {
       <Box sx={{ borderRadius: 20, bgcolor: '#20201E', px: 24, py: 24, flex: 1, height: 'fit-content' }}>
         <Stack spacing={10}>
           <Title>Auction Information</Title>
-          <PoolInfoItem title="Auction type">
+          <PoolInfoItem title="Auction Type">
             <RightText>Erc20 English Auction</RightText>
           </PoolInfoItem>
           <PoolInfoItem title="Participant">
             <RightText>{poolInfo?.enableWhiteList ? 'Whitelist' : 'Public'}</RightText>
           </PoolInfoItem>
-          <PoolInfoItem title="Allocation per wallet">
+          <PoolInfoItem title="Allocation Per Wallet">
             <RightText>
-              {poolInfo?.currencyMaxAmount1PerWallet?.toSignificant() + ' ' + poolInfo?.token0.symbol}
+              {poolInfo?.currencyMaxAmount1PerWallet
+                ? poolInfo?.currencyMaxAmount1PerWallet?.toSignificant() + ' ' + poolInfo.token1.symbol
+                : 'No Limit'}
             </RightText>
           </PoolInfoItem>
           {showMore && (
             <>
-              <PoolInfoItem title="Total available amount">
-                <RightText>{`${poolInfo?.currencyAmountTotal0?.toSignificant()} ${poolInfo?.token0.symbol}`}</RightText>
+              <PoolInfoItem title="Total Available Amount">
+                <RightText>{`${poolInfo?.currencyAmountTotal0?.toSignificant()}`}</RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Price Increasing rate">
-                <RightText>
-                  {poolInfo?.currencyCurrentPrice?.toSignificant() + ' '}
-                  {`${poolInfo?.token1.symbol.toUpperCase()}`}
-                </RightText>
-              </PoolInfoItem>
-              <PoolInfoItem title="Starting price (price floor)">
+              <PoolInfoItem title="Starting Price (price floor)">
                 <RightText>
                   1 {`${poolInfo?.token0.symbol}`} ={' '}
                   {`${poolInfo?.currencyAmountStartPrice?.toSignificant()} ${(
@@ -105,7 +101,7 @@ const LeftBox = (): JSX.Element => {
                   ).toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Ending price (price ceiling)">
+              <PoolInfoItem title="Ending Price (price ceiling)">
                 <RightText>
                   1 {`${poolInfo?.token0.symbol}`} ={' '}
                   {`${poolInfo?.currencyAmountEndPrice?.toSignificant()} ${(
@@ -113,14 +109,19 @@ const LeftBox = (): JSX.Element => {
                   ).toUpperCase()}`}
                 </RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Pool duration">
+              <PoolInfoItem title="Pool Duration">
                 <RightText>
                   {poolInfo?.openAt ? moment(poolInfo?.openAt * 1000).format('YYYY-MM-DD HH:mm') : '--'} -{' '}
                   {poolInfo?.closeAt ? moment(poolInfo?.closeAt * 1000).format('YYYY-MM-DD HH:mm') : '--'}
                 </RightText>
               </PoolInfoItem>
-              <PoolInfoItem title="Pool times">
+              <PoolInfoItem title="Pool Stage">
                 <RightText>{poolInfo?.fragments}</RightText>
+              </PoolInfoItem>
+              <PoolInfoItem title="Increasing Ratio">
+                <RightText>
+                  {poolInfo?.fragments ? `${((1 / Number(poolInfo.fragments)) * 100).toFixed(2)}%` : 0}
+                </RightText>
               </PoolInfoItem>
             </>
           )}

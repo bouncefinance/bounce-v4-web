@@ -353,18 +353,18 @@ const CreationErc20EnglishAuctionConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Token Contract address">
+                <ConfirmationInfoItem title="Token Contract Address">
                   <Typography>{shortenAddress(values.tokenFrom.address)}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Token symbol">
+                <ConfirmationInfoItem title="Token Symbol">
                   <Stack direction="row" spacing={8} alignItems="center">
                     <TokenImage alt={values.tokenFrom.symbol} src={values.tokenFrom.logoURI} size={20} />
                     <Typography>{values.tokenFrom.symbol}</Typography>
                   </Stack>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Token decimal">
+                <ConfirmationInfoItem title="Token Decimal">
                   <Typography>{values.tokenFrom.decimals}</Typography>
                 </ConfirmationInfoItem>
               </Stack>
@@ -376,7 +376,7 @@ const CreationErc20EnglishAuctionConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Pool type">
+                <ConfirmationInfoItem title="Pool Type">
                   <Typography>{auctionType}</Typography>
                 </ConfirmationInfoItem>
 
@@ -387,19 +387,19 @@ const CreationErc20EnglishAuctionConfirmation = () => {
                   </Stack>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Starting price (price floor)">
+                <ConfirmationInfoItem title="Starting Price (price floor)">
                   <Typography>
                     1 {values.tokenFrom.symbol} = {values.startPrice} {values.tokenTo.symbol}
                   </Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Final price (price ceiling)">
+                <ConfirmationInfoItem title="Final Price (price ceiling)">
                   <Typography>
                     1 {values.tokenFrom.symbol} = {values.endPrice} {values.tokenTo.symbol}
                   </Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Price decreasing times">
+                <ConfirmationInfoItem title="Price Increasing Times">
                   <Typography>{values.segmentAmount}</Typography>
                 </ConfirmationInfoItem>
 
@@ -407,11 +407,11 @@ const CreationErc20EnglishAuctionConfirmation = () => {
                   <Typography>{values.poolSize}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Allocation per Wallet">
+                <ConfirmationInfoItem title="Allocation Per Wallet">
                   <Typography>
                     {values.allocationStatus === AllocationStatus.NoLimits
                       ? 'No'
-                      : `Limit ${Number(values.allocationPerWallet).toLocaleString()} ${values.tokenFrom.symbol}`}
+                      : `Limit ${Number(values.allocationPerWallet).toLocaleString()} ${values.tokenTo.symbol}`}
                   </Typography>
                 </ConfirmationInfoItem>
               </Stack>
@@ -423,7 +423,7 @@ const CreationErc20EnglishAuctionConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Pool duration">
+                <ConfirmationInfoItem title="Pool Duration">
                   <Typography>
                     From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
                   </Typography>

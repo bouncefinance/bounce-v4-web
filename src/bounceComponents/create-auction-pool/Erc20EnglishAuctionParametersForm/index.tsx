@@ -68,9 +68,12 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
       .test('minValue', "Final price can't be smaller than start price", function (value) {
         const { startPrice } = this.parent
         if (value && startPrice) {
-          return value >= startPrice
+          return value > startPrice
         }
         return true
+      })
+      .test('Ditgits_Validation', 'Price must be greater than 0', value => {
+        return Number(value) > 0
       }),
     startPrice: Yup.number()
       .typeError('Please input valid number')
@@ -78,9 +81,12 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
       .test('minValue', "Start price can't be greater than final price", function (value) {
         const { endPrice } = this.parent
         if (value && endPrice) {
-          return value <= endPrice
+          return value < endPrice
         }
         return true
+      })
+      .test('Ditgits_Validation', 'Price must be greater than 0', value => {
+        return Number(value) > 0
       }),
     segments: Yup.number()
       .typeError('Please input valid number')
@@ -423,8 +429,8 @@ const Erc20EnglishAuctionParametersForm = (): JSX.Element => {
                     disabled={values.allocationStatus === AllocationStatus.NoLimits}
                     endAdornment={
                       <>
-                        <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
-                        <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
+                        <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
                       </>
                     }
                   />

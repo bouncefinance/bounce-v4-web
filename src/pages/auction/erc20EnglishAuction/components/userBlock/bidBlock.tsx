@@ -153,7 +153,7 @@ const BidBlock = ({
     ) {
       return (
         <ComBtn fullWidth disabled={true}>
-          <span>{'Place a Bid'}</span>
+          <span>Input Amount</span>
         </ComBtn>
       )
     } else if (amount) {
