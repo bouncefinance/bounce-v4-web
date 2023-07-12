@@ -40,6 +40,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             <TableHead>
               <StyledHistoryTableRow>
                 <StyledHistoryTableCell>Event</StyledHistoryTableCell>
+                <StyledHistoryTableCell>Amount</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Price</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Address</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Date</StyledHistoryTableCell>
@@ -50,6 +51,15 @@ const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 <StyledHistoryTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledHistoryTableCell>{PoolEventTypography[record.event]}</StyledHistoryTableCell>
                   <StyledHistoryTableCell>
+                    {poolInfo.currencyAmountTotal0
+                      ? CurrencyAmount.fromRawAmount(
+                          poolInfo.currencyAmountTotal0.currency,
+                          record.token0Amount || '0'
+                        )?.toSignificant()
+                      : '--'}
+                    {' ' + poolInfo.token0.symbol.toUpperCase()}
+                  </StyledHistoryTableCell>
+                  <StyledHistoryTableCell>
                     {poolInfo.currencyAmountTotal1 && record?.token1Amount
                       ? CurrencyAmount.fromRawAmount(
                           poolInfo.currencyAmountTotal1?.currency,
@@ -59,6 +69,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
+
                   <StyledHistoryTableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography>{shortenAddress(record.requestor)}</Typography>
