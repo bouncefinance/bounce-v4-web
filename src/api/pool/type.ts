@@ -12,7 +12,7 @@ export enum PoolType {
   'SealedBid' = 4,
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6,
-  ERC20_ENGLISH_AUCTION = 8,
+  ENGLISH_AUCTION = 8,
   'PlayableAuction' = 100
 }
 
@@ -32,8 +32,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Sealed Bid'
     case PoolType.PlayableAuction:
       return 'Playable Auction'
-    case PoolType.ERC20_ENGLISH_AUCTION:
-      return 'Erc20 English Auction'
+    case PoolType.ENGLISH_AUCTION:
+      return 'English Auction'
   }
 }
 
