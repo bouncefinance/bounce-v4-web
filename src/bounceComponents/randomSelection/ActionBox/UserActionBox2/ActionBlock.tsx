@@ -186,7 +186,7 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully refunded.`
+            content: 'You have successfully refunded.'
           })
         })
         .catch()

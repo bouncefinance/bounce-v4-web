@@ -26,6 +26,7 @@ import AuctionFixedPricePoolId from 'pages/auction/fixed-price/poolId'
 import RandomSelectionPricePoolId from 'pages/auction/randomSelection/poolId'
 import AuctionFixedSwap1155PoolId from 'pages/auction/fixedSwap1155/poolId'
 import EnglishAuctionNFTPoolId from 'pages/auction/englishAuctionNFT/poolId'
+import DutchAuctionPoolId from './auction/dutchAuction/poolId'
 
 import Login from 'pages/login'
 import FirstLoginInfo from 'pages/login/FirstLoginInfo'
@@ -75,7 +76,6 @@ import DipExchange from './dipExchange'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
-
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -126,6 +126,8 @@ export default function App() {
                     <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
                     <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
+                    <Route path={routes.auction.dutchAuction} element={<DutchAuctionPoolId />} />
+                    <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                     <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                     <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
                     <Route path={routes.auction.v2.englishAuction} element={<EnglishAuctionNFTPoolId />} />
@@ -139,6 +141,7 @@ export default function App() {
                     <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
                     <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                     <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />
+
                     <Route path={routes.launchpad.index} element={<Launchpad />} />
                     {/* <Route
                       path={routes.launchpad.bladeDao}

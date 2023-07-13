@@ -7,7 +7,7 @@ import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export enum PoolType {
   'FixedSwap' = 1,
-  'Duch' = 2,
+  DUTCH_AUCTION = 2,
   'Lottery' = 3,
   'SealedBid' = 4,
   'fixedSwapNft' = 5,
@@ -17,7 +17,7 @@ export enum PoolType {
 
 export function getTextFromPoolType(type: PoolType) {
   switch (type) {
-    case PoolType.Duch:
+    case PoolType.DUTCH_AUCTION:
       return 'Dutch Auction'
     case PoolType.ENGLISH_AUCTION_NFT:
       return 'English Auction'
@@ -26,7 +26,7 @@ export function getTextFromPoolType(type: PoolType) {
     case PoolType.fixedSwapNft:
       return 'Fixed-Swap NFT'
     case PoolType.Lottery:
-      return 'Lottery'
+      return 'Random'
     case PoolType.SealedBid:
       return 'Sealed Bid'
     case PoolType.PlayableAuction:
@@ -43,6 +43,7 @@ export interface GetPoolCreationSignatureParams {
   closeAt: number
   creator: string
   maxAmount1PerWallet?: string
+  maxAmount0PerWallet?: string
   merkleroot: string
   name: string
   openAt: number
@@ -52,6 +53,8 @@ export interface GetPoolCreationSignatureParams {
   tokenIds?: string[]
   amountMinIncr1?: string
   amountMin1?: string
+  amountMax1?: string
+  times?: number
   is721?: boolean
   maxPlayer?: number
   totalShare?: string | number
@@ -265,6 +268,42 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
     tokenId?: string
   }
   enableReverses?: boolean
+}
+
+export interface DutchAuctionPoolProp extends FixedSwapPool {
+  currencyAmountTotal0: CurrencyAmount | undefined
+  currencyAmountTotal1: CurrencyAmount | undefined
+  currencySwappedAmount0: CurrencyAmount | undefined
+  // currencyMaxAmount1PerWallet: CurrencyAmount
+  // currencySurplusTotal0: CurrencyAmount
+  currencySwappedTotal1: CurrencyAmount | undefined
+  highestPrice: CurrencyAmount | undefined
+  lowestPrice: CurrencyAmount | undefined
+  currencyCurrentPrice: CurrencyAmount | undefined
+  currencyLowestBidPrice: CurrencyAmount | undefined
+  currencyMaxAmount0PerWallet: CurrencyAmount | undefined
+  nextRoundInSeconds: number | undefined
+  times: number | undefined
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
+    currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable. It means that the amount of all released token0
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
+    currencyUnfilledAmount1?: CurrencyAmount | undefined // current unfill amount1
+  }
+  releaseType?: IReleaseType | undefined
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
 }
 
 export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {

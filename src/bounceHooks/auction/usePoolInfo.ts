@@ -21,7 +21,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
   const { poolId, chainShortName, sysId: _sysId } = useQueryParams()
   const { account } = useActiveWeb3React()
   const { chainInfoOpt } = useOptionDatas()
-
+  console.log('poolId, chainShortName, sysId >>>', poolId, chainShortName, _sysId)
   const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
   const sysId = useMemo(() => backedId || _sysId, [_sysId, backedId])
 

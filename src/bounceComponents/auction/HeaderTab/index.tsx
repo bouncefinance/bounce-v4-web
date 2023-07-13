@@ -35,7 +35,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
     'Private Launchpad',
     'Token Auction',
     'NFT Auction',
-    'Real World Collectibles Auction',
+    'Real World collectibles Auction',
     'Ads Auction'
   ]
   const path =
@@ -109,9 +109,10 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         }}
       >
         <Box gap={'6px'}>
-          {tabs.map((tab: string) => (
+          {tabs.map((tab: string, index: number) => (
             <StyledTab
               variant="contained"
+              id={`tab${index}`}
               key={tab}
               className={tab === currentTab ? 'selected' : ''}
               onClick={() => {
