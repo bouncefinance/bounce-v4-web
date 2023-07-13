@@ -162,6 +162,20 @@ const BidBlock = ({
         </ComBtn>
       )
     } else if (approvalState !== ApprovalState.APPROVED) {
+      if (!userToken1Balance || amount1CurrencyAmount?.greaterThan(userToken1Balance)) {
+        return (
+          <ComBtn fullWidth disabled={true}>
+            <span>Insufficient Balance</span>
+          </ComBtn>
+        )
+      }
+      if (Number(amount) > Number(maxValue?.toExact())) {
+        return (
+          <ComBtn fullWidth disabled={true}>
+            <span>Limit exceeded</span>
+          </ComBtn>
+        )
+      }
       if (approvalState === ApprovalState.PENDING) {
         return (
           <ComBtn loadingPosition="start" variant="contained" fullWidth loading>
@@ -195,13 +209,7 @@ const BidBlock = ({
           }
           onClick={goToBid}
         >
-          <span>
-            {!userToken1Balance || amount1CurrencyAmount?.greaterThan(userToken1Balance)
-              ? 'Insufficient Balance'
-              : Number(amount) > Number(maxValue?.toExact())
-              ? 'Limit exceeded'
-              : 'Place a Bid'}
-          </span>
+          <span>Place a Bid</span>
         </ComBtn>
       )
     }
