@@ -34,10 +34,16 @@ const validationSchema = yup.object({
     fileUrl: yup.string().required('Please upload your Profile Picture'),
     id: yup.number()
   }),
-
+  ProjectDescribe: yup
+    .string()
+    .required()
+    .min(100, 'Describe your project (100-500 words)')
+    .max(500, 'Describe your project (100-500 words)'),
+  Tokenomics: yup.string(),
   WebsiteURL: yup.string().url().required(),
   Whitepaper: yup.string().url().required(),
   ProjectName: yup.string().required(),
+  ProjectRoadmap: yup.string(),
   ChainId: yup.number().required(),
   ProjectLink: yup.object().shape({
     TwitterLink: yup
@@ -158,6 +164,9 @@ const BasicCard = () => {
       MediumLink: '',
       DiscordLink: ''
     },
+    ProjectDescribe: '',
+    Tokenomics: '',
+    ProjectRoadmap: '',
     ProjectName: '',
     ChainId: chainId
   }
@@ -293,7 +302,13 @@ const BasicCard = () => {
                       <br /> 5. What can your token be used for? (Utility, NOT tokenomics)
                       <br />
                     </Title>
-                    <MarkdownEditor />
+                    <FormItem style={{ marginTop: 20 }} name="ProjectDescribe">
+                      <MarkdownEditor
+                        value={values.ProjectDescribe}
+                        setEditorValue={value => setFieldValue('ProjectDescribe', value)}
+                        placeholder="Project description"
+                      />
+                    </FormItem>
                   </Box>
                   <TextInput name="WebsiteURL" title="Website URL" placeholder="https://bitcoin.org" />
                   <Box>
@@ -347,6 +362,32 @@ const BasicCard = () => {
                     title="Whitepaper/Technical Documentation Link"
                     placeholder="https://bitcoin.org/bitcoin.pdf"
                   />
+                  <Box>
+                    <Stack flexDirection={'row'} gap={5}>
+                      <Title sx={{ fontSize: 18, color: '#20201E' }}>Tokenomics </Title>
+                      <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
+                    </Stack>
+                    <FormItem style={{ marginTop: 15 }} name="Tokenomics">
+                      <MarkdownEditor
+                        value={values.Tokenomics}
+                        setEditorValue={value => setFieldValue('Tokenomics', value)}
+                        placeholder="Hello, nice to meet you ^^... My Name is Eleanor Pena. I work as an Comic Artist, Freelance Illustrator, and concepting Character Design. I can do drawing for personal or business. I started my career as an illustrator in 2018."
+                      />
+                    </FormItem>
+                  </Box>
+                  <Box>
+                    <Stack flexDirection={'row'} gap={5}>
+                      <Title sx={{ fontSize: 18, color: '#20201E' }}>Project Roadmap </Title>
+                      <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
+                    </Stack>
+                    <FormItem style={{ marginTop: 15 }} name="ProjectRoadmap">
+                      <MarkdownEditor
+                        value={values.ProjectRoadmap}
+                        setEditorValue={value => setFieldValue('ProjectRoadmap', value)}
+                        placeholder="Project description."
+                      />
+                    </FormItem>
+                  </Box>
                 </Stack>
               </BaseBox>
 
