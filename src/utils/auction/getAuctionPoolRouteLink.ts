@@ -21,7 +21,7 @@ export default function getAuctionPoolLink(
         ? routes.auction.englishAuction
         : category === PoolType.DUTCH_AUCTION
         ? routes.auction.dutchAuction
-        : category === PoolType.ERC20_ENGLISH_AUCTION
+        : category === PoolType.ENGLISH_AUCTION
         ? routes.auction.erc20EnglishAuction
         : routes.auction.fixedPrice
     return route
@@ -37,7 +37,7 @@ export default function getAuctionPoolLink(
       ? routes.auction.v2.englishAuction
       : category === PoolType.DUTCH_AUCTION
       ? routes.auction.v2.dutchAuction
-      : category === PoolType.ERC20_ENGLISH_AUCTION
+      : category === PoolType.ENGLISH_AUCTION
       ? routes.auction.v2.erc20EnglishAuction
       : routes.auction.v2.fixedPrice
   return route.replace(':sysId', sysId.toString())

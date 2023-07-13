@@ -131,7 +131,7 @@ const CreatePoolButton = () => {
           const goToPoolInfoPage = () => {
             const route = getAuctionPoolLink(
               sysId,
-              PoolType.ERC20_ENGLISH_AUCTION,
+              PoolType.ENGLISH_AUCTION,
               chainConfigInBackend?.id as number,
               poolId
             )

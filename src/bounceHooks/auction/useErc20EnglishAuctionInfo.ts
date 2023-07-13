@@ -15,7 +15,7 @@ export function useErc20EnglishAuctionInfo() {
 
   const sysId = useMemo(() => Number(_sysId) || 0, [_sysId])
 
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ERC20_ENGLISH_AUCTION, sysId)
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION, sysId)
   const { account } = useActiveWeb3React()
   const englishAuctionErc20Contract = useEnglishAuctionErc20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
 

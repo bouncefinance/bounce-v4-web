@@ -54,7 +54,7 @@ const BidBlock = ({
   const { account, chainId } = useActiveWeb3React()
   const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
     poolInfo,
-    PoolType.ERC20_ENGLISH_AUCTION
+    PoolType.ENGLISH_AUCTION
   )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountStartPrice?.currency)
   const maxValue = useMaxSwapAmount1Limit(poolInfo)
@@ -100,7 +100,6 @@ const BidBlock = ({
       ret
         .then(() => {
           hideDialogConfirmation()
-          //   onClick()
         })
         .catch()
     } catch (error) {
@@ -162,27 +161,6 @@ const BidBlock = ({
           <span>Input Amount</span>
         </ComBtn>
       )
-    } else if (amount) {
-      return (
-        <ComBtn
-          fullWidth
-          disabled={
-            !amount ||
-            Number(amount) === 0 ||
-            Number(amount) > Number(maxValue?.toExact()) ||
-            (amount1CurrencyAmount && userToken1Balance?.lessThan(amount1CurrencyAmount))
-          }
-          onClick={goToBid}
-        >
-          <span>
-            {!userToken1Balance || amount1CurrencyAmount?.greaterThan(userToken1Balance)
-              ? 'Insufficient Balance'
-              : Number(amount) > Number(maxValue?.toExact())
-              ? 'Limit exceeded'
-              : 'Place a Bid'}
-          </span>
-        </ComBtn>
-      )
     } else if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return (
@@ -205,6 +183,27 @@ const BidBlock = ({
           </ComBtn>
         )
       }
+    } else {
+      return (
+        <ComBtn
+          fullWidth
+          disabled={
+            !amount ||
+            Number(amount) === 0 ||
+            Number(amount) > Number(maxValue?.toExact()) ||
+            (amount1CurrencyAmount && userToken1Balance?.lessThan(amount1CurrencyAmount))
+          }
+          onClick={goToBid}
+        >
+          <span>
+            {!userToken1Balance || amount1CurrencyAmount?.greaterThan(userToken1Balance)
+              ? 'Insufficient Balance'
+              : Number(amount) > Number(maxValue?.toExact())
+              ? 'Limit exceeded'
+              : 'Place a Bid'}
+          </span>
+        </ComBtn>
+      )
     }
   }
   return null

@@ -185,7 +185,7 @@ export function useCreateErc20EnglishAuctionPool() {
     if (params.whitelist.length > 0) {
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
-        category: PoolType.ERC20_ENGLISH_AUCTION,
+        category: PoolType.ENGLISH_AUCTION,
         chainId: chainConfigInBackend.id
       }
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -194,7 +194,7 @@ export function useCreateErc20EnglishAuctionPool() {
 
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
-      category: PoolType.ERC20_ENGLISH_AUCTION,
+      category: PoolType.ENGLISH_AUCTION,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
