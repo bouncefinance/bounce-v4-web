@@ -126,6 +126,7 @@ export default function App() {
                     <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
                     <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
+                    <Route path={routes.auction.dutchAuction} element={<DutchAuctionPoolId />} />
                     <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                     <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                     <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
