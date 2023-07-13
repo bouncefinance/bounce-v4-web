@@ -77,7 +77,7 @@ const ClaimBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               againBtn: 'Close',
               title: 'Congratulations!',
               content: isCancel
-                ? '`You have successfully cancelled the pool and claimed your tokens`'
+                ? 'You have successfully cancelled the pool and claimed your tokens'
                 : successDialogContent
             })
           })

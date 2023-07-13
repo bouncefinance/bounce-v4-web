@@ -47,7 +47,6 @@ const DutchAuctionPoolId = () => {
   }
 `
   const { poolInfo, run: getPoolInfo } = useDutchAuctionInfo()
-  console.log('poolInfo>>>', poolInfo)
   const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   if (!poolInfo) {
     return (

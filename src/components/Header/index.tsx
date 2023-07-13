@@ -270,20 +270,16 @@ export default function Header() {
                 alt={'logo'}
               />
             </MainLogo>
-
             {!isTransparentRoute && !isSm && <HeaderLink />}
           </Box>
-
           <Stack display={isSm ? 'none' : 'inherit'} direction={'row'} alignItems="center" spacing={8} flex={1}>
             <Search />
             <Resources />
             <CreateBtn />
             {token && <NetworkPopperSelect />}
             <Web3Status />
-
             {!token && walletWithoutToken}
           </Stack>
-
           <Box display={isSm ? 'inherit' : 'none'} alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
             {/* <Web3Status /> */}
             <ShowOnMobile breakpoint="md">

@@ -7,15 +7,13 @@ import { useActiveWeb3React } from 'hooks'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
-import { useQueryParams } from 'hooks/useQueryParams'
 import JSBI from 'jsbi'
 import BigNumber from 'bignumber.js'
 export interface AmountAndCurrentPriceParam {
   amount1: number | string
 }
 export function useDutchAuctionInfo() {
-  const { sysId } = useQueryParams()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, Number(sysId))
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION)
   const { account } = useActiveWeb3React()
   const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
 
@@ -306,7 +304,6 @@ export function useDutchAuctionInfo() {
     releaseType,
     whitelistData
   ])
-
   return {
     poolInfo: poolInfoRet,
     loading,
