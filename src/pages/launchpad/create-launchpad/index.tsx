@@ -1,7 +1,6 @@
 import { Box, Button, MenuItem, OutlinedInput, Select, Stack, SxProps, Typography, styled } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
-// import Uploader from 'bounceComponents/common/Uploader'
 import { Formik } from 'formik'
 import { useState } from 'react'
 import * as yup from 'yup'
@@ -9,6 +8,7 @@ import { ChainList } from 'constants/chain'
 import Image from 'components/Image'
 import { useActiveWeb3React } from 'hooks'
 import MarkdownEditor from './components/markdownEditor'
+// import DropFile from './components/dropFile'
 const validationSchema = yup.object({
   ProjectPicture: yup.object({
     fileName: yup.string(),
@@ -435,6 +435,13 @@ const BasicCard = () => {
                 </Stack>
               </BaseBox>
 
+              {/* <BaseBox>
+                <Stack flexDirection={'row'} gap={5}>
+                  <Title sx={{ fontSize: 18, color: '#20201E' }}>Attachments</Title>
+                  <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
+                </Stack>
+                <DropFile />
+              </BaseBox> */}
               <Box
                 mt={48}
                 sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 54 }}
@@ -477,25 +484,34 @@ const CreateLaunchpad = () => {
   const [tabActive, setTabActive] = useState(0)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   return (
-    <ContainerBox>
-      <Title sx={{ textAlign: 'center' }}>Create Program</Title>
-      <Stack sx={{ flexDirection: 'row', justifyContent: 'center', mt: 48 }}>
-        {tabs.map((t, i) => (
-          <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
-            {Array.isArray(t) ? (
-              <>
-                <TabTitle1>{t[0]}</TabTitle1>
-                <TabTitle2>{t[1]}</TabTitle2>
-              </>
-            ) : (
-              <TabTitle1>{t}</TabTitle1>
-            )}
-          </Tab>
-        ))}
-      </Stack>
-      {tabActive === 0 && <BasicCard />}
-      {tabActive === 1 && <DetailCard />}
-    </ContainerBox>
+    <Box>
+      <ContainerBox>
+        <Title sx={{ textAlign: 'center' }}>Create Program</Title>
+        <Stack sx={{ flexDirection: 'row', justifyContent: 'center', mt: 48 }}>
+          {tabs.map((t, i) => (
+            <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
+              {Array.isArray(t) ? (
+                <>
+                  <TabTitle1>{t[0]}</TabTitle1>
+                  <TabTitle2>{t[1]}</TabTitle2>
+                </>
+              ) : (
+                <TabTitle1>{t}</TabTitle1>
+              )}
+            </Tab>
+          ))}
+        </Stack>
+        {tabActive === 0 && <BasicCard />}
+        {tabActive === 1 && <DetailCard />}
+      </ContainerBox>
+      <FooterBox>
+        <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
+        <Stack flexDirection={'row'} gap={40}>
+          <TabTitle2>Terms Of Service</TabTitle2>
+          <TabTitle2>Privacy Policy</TabTitle2>
+        </Stack>
+      </FooterBox>
+    </Box>
   )
 }
 const ContainerBox = styled(Box)({
@@ -503,6 +519,19 @@ const ContainerBox = styled(Box)({
   maxWidth: 1164,
   margin: '48px auto',
   padding: '0 82px'
+})
+const FooterBox = styled(Box)({
+  width: '100%',
+  maxWidth: '1296px',
+  height: 72,
+  margin: '72px auto 20px',
+  borderTop: '1px solid #D7D6D9',
+  display: 'flex',
+  alignItems: 'end',
+  justifyContent: 'space-between',
+  '& p': {
+    color: 'rgba(18, 18, 18, 0.60)'
+  }
 })
 const Title = styled(Typography)({
   fontFamily: 'Public Sans',

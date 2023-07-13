@@ -126,6 +126,7 @@
     "md5": "2.3.0",
     "moment": "^2.29.4",
     "react-copy-to-clipboard": "^5.1.0",
+    "react-dropzone": "11.7.1",
     "react-easy-crop": "^4.7.4",
     "react-linkedin-login-oauth2": "2.0.1",
     "react-lottie": "^1.2.3",
