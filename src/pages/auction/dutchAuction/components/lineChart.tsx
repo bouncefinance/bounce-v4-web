@@ -283,12 +283,12 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
         <RightText>
-          {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo.highestPrice?.toSignificant(18)} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
       <PoolInfoItem title={'Reserve price'}>
         <RightText>
-          {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo.lowestPrice?.toSignificant(18)} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
       <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>
