@@ -669,8 +669,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 9,
     liveTimeStamp: {
-      start: 1689350400000,
-      end: 0
+      start: 1689436800000,
+      end: 1689609600000
     },
     poolTypeName: 'Fixed Swap Auction',
     img: Deelance,
@@ -716,8 +716,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 10,
     liveTimeStamp: {
-      start: 1689350400000,
-      end: 0
+      start: 1689436800000,
+      end: 1689609600000
     },
     poolTypeName: 'Whitelist',
     img: Deelance,
