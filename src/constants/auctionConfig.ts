@@ -49,6 +49,12 @@ export const AuctionConfig: {
   [ChainId.FANTOM]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
+  [ChainId.FANTOM_TESTNET]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION]
+  },
+  [ChainId.ZETA_CHAIN_TESTNET]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+  },
   [ChainId.ZKSYNC_ERA_TESTNET]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },

@@ -6,6 +6,7 @@ import OMNIUrl from 'assets/svg/omni_logo.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 import ZkSyncSrc from '../assets/images/zksync_logo.png'
 import scrollLogo from '../assets/images/scroll_logo.png'
+import ZetaLogo from '../assets/svg/zeta-chain.svg'
 
 export function numberToHex(number: number) {
   return '0x' + new BigNumberjs(number).toString(16)
@@ -26,6 +27,8 @@ export enum ChainId {
   POLYGON = 137,
   OMNI_TESTNET = 165,
   FANTOM = 250,
+  FANTOM_TESTNET = 4002,
+  ZETA_CHAIN_TESTNET = 7001,
   ZKSYNC_ERA_TESTNET = 280,
   ZKSYNC_ERA = 324,
   LINEA_GORLI = 59140,
@@ -226,6 +229,32 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']
+  },
+  [ChainId.FANTOM_TESTNET]: {
+    id: ChainId.FANTOM_TESTNET,
+    hexChainId: numberToHex(ChainId.FANTOM_TESTNET),
+    chainName: 'Fantom Testnet',
+    nativeCurrency: {
+      name: 'FTM',
+      symbol: 'FTM',
+      decimals: 18,
+      logo: 'https://ftmscan.com/images/favicon.png'
+    },
+    rpcUrls: ['https://fantom-testnet.publicnode.com'],
+    blockExplorerUrls: ['https://testnet.ftmscan.com']
+  },
+  [ChainId.ZETA_CHAIN_TESTNET]: {
+    id: ChainId.ZETA_CHAIN_TESTNET,
+    hexChainId: numberToHex(ChainId.ZETA_CHAIN_TESTNET),
+    chainName: 'ZETA Testnet',
+    nativeCurrency: {
+      name: 'ZETA',
+      symbol: 'ZETA',
+      decimals: 18,
+      logo: ZetaLogo
+    },
+    rpcUrls: ['https://api.athens2.zetachain.com/evm'],
+    blockExplorerUrls: ['https://explorer.zetachain.com']
   },
   [ChainId.ROLLUX]: {
     id: ChainId.ROLLUX,
