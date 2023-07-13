@@ -174,7 +174,8 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         width: '100%',
         background: '#20201E',
         borderRadius: '20px',
-        padding: '0 0 24px'
+        padding: '0 0 24px',
+        minHeight: '453px'
       }}
     >
       {actionStep === ActionStep.UpComing && (

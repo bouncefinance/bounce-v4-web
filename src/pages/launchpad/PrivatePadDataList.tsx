@@ -27,7 +27,7 @@ import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
-import HeadInBg from 'assets/imgs/dipExchange/head-in-bg.png'
+import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import { ChainId } from 'constants/chain'
 
@@ -35,19 +35,14 @@ export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
 }
-export type TPrivatePrices =
-  | 'startingPrice'
-  | 'dipTokenOffered'
-  | 'dgtTokenOffered'
-  | 'hardCapPerUser'
-  | 'Token Name'
-  | 'Blockchain'
+
 export interface IPrivatePricesInfo {
-  title: TPrivatePrices | TPrivatePrices[]
+  title: string | string[]
   value: (string | JSX.Element)[] | (string | JSX.Element)
 }
 
 export interface IPrivatePadProp {
+  hidden?: true
   keyId: number
   liveTimeStamp: {
     start: number
@@ -75,6 +70,7 @@ export interface IPrivatePadProp {
   }[]
   privatePrices?: IPrivatePricesInfo[]
   isFAQ?: boolean
+  poolTypeName2?: string
 }
 
 const DipProjectInfo: IProjectInfo[] = [
@@ -123,55 +119,51 @@ const DipProjectInfo: IProjectInfo[] = [
   {
     title: 'DIP Rules',
     info: [
-      <ul key={0}>
-        <li>The ceiling price of the auction is preset by the protocol</li>
-        <li>
-          The DIP token price is determined based on the total amount of USDT raised divided by the total number of DIP
-          being auctioned
-        </li>
-        <li>The auction ends when one of the following conditions are met:</li>
-        <li>The auction time ends</li>
-        <li>The token price reaches the ceiling price</li>
-        <li>
-          After the auction is finalized, DIP tokens are distributed to participants proportionally to their
-          contribution to the pool
-        </li>
-        <li>
-          DIP tokens acquired via the auction are vested to participants for 24 hours after the auction has been
-          finalized
-        </li>
-        <li>
-          If the last bidder enters a USDT amount that corresponds to an overall price that is larger than the ceiling
-          price, the unused amount will be refunded
-        </li>
-      </ul>
+      <Stack flexDirection={'column'} gap={10} key={1}>
+        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
+        <Typography>
+          the ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+          and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
+          on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
+          reached.
+        </Typography>
+        <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
+        <ul style={{ marginTop: 10 }}>
+          <li>Bid Asset: $USDT</li>
+          <li>Starting Price (lowest prices): Preset by DIP DAO</li>
+          <li>Highest Price: Preset by DIP DAO</li>
+          <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
+          <li>Auction Close: Within 24 hours or when token sold out.</li>
+          <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
+        </ul>
+      </Stack>
     ]
   },
   {
     title: 'DGT Rules',
     info: [
-      <ul key={0}>
-        <li>The starting price is preset by the protocol for the start of the auction</li>
-        <li>The floor price is preset by the protocol for the end of the auction (the lowest possible price)</li>
-        <li>The clearing price decreases linearly every second throughout the auction (24hr) from the start time</li>
-        <li>With every additional DIP commitment, the live token price increases</li>
-        <li>Token price = amount raised / token supply</li>
-        <li>The auction ends successfully when the current token price reaches the clearing price</li>
-        <li>
-          In case the auction fails to meet the completion criteria, all committed DIP tokens are returned to the
-          participants
-        </li>
-        <li>
-          After the auction is finalized, all participants are distributed DGT tokens proportional to their contribution
-          to the pool at the last reached price
-        </li>
-        <li>DGT tokens acquired via the auction are claimable immediately after the auction is finalized</li>
-        <li>The DIP tokens provided to the auction are burned</li>
-        <li>
-          If the last bidder enters an DIP amount larger than the available amount for the auction to meet the clearing
-          price then the unused amount will be refunded
-        </li>
-      </ul>
+      <Stack flexDirection={'column'} gap={10} key={1}>
+        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DGT ERC20 Dutch Auction</Typography>
+        <Typography>
+          A Dutch Auction, also known as descending price auction, refers to a type of auction in which an auctioneer
+          starts with a very high price, incrementally lowering the price until someone places a bid. The first bid wins
+          the auction, assuming the price is above the reserve price, avoiding any bidding wars.
+        </Typography>
+        <Typography mt={15}>DGT ERC20 Dutch Auction details are as follows:</Typography>
+        <ul style={{ marginTop: 10 }}>
+          <li>Bid Asset: $DIP</li>
+          <li>Starting Price: Preset by DIP DAO in DIP/DGT</li>
+          <li>Floor Price: Preset by DIP DAO in DIP/DGT</li>
+          <li>Clearing Price: Decreases linearly throughout the auction period.</li>
+          <li>Auction Close: Within 24 hours or when token price reach the ceiling price.</li>
+          <li>Distribution: Immediate after the closing of the auction at clearing price, need to claim on Bounce.</li>
+          <li>Burn: If the auction ends successfully, $DIP will be burned by DIP DAO.</li>
+          <li>
+            Refund: If the last bidder's contribution exceed the ceiling price, it is fully refunded. If the last bidder
+            enters an DIP amount larger than the amount sold, the unused DIP will be refunded.
+          </li>
+        </ul>
+      </Stack>
     ]
   }
 ]
@@ -594,6 +586,18 @@ const DeelanceProjectInfo: IProjectInfo[] = [
     ]
   },
   {
+    title: 'Pitch Deck',
+    info: [
+      <a
+        key={1}
+        style={{ textDecoration: 'underline' }}
+        href="https://drive.google.com/file/d/1GxDTFbY_c1zC8H0mQREOQ2m4vU4G8YfO/view"
+      >
+        https://drive.google.com/file/d/1GxDTFbY_c1zC8H0mQREOQ2m4vU4G8YfO/view
+      </a>
+    ]
+  },
+  {
     title: 'What are your projects key competitive advantages?',
     info: [
       <Box key={1}>
@@ -667,7 +671,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1689350400000,
       end: 0
     },
-    poolTypeName: '',
+    poolTypeName: 'Fixed Swap Auction',
     img: Deelance,
     avatar: DeelanceAvatar,
     title: 'Deelance',
@@ -703,19 +707,67 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$DLANCE' },
-      { title: 'Token Price', content: '0.029' },
-      { title: 'Token Amount', content: '1,800,000' },
+      { title: 'Token Price', content: '0.029 USDT' },
+      { title: 'Token Amount', content: '3,647,215' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
   {
-    keyId: 7,
+    keyId: 10,
+    liveTimeStamp: {
+      start: 1689350400000,
+      end: 0
+    },
+    poolTypeName: 'Whitelist',
+    img: Deelance,
+    avatar: DeelanceAvatar,
+    title: 'Deelance',
+    chainId: 1,
+    tokenName: '$DLANCE',
+    whitePaperLink: 'https://docs.deelance.com/',
+    upcomingLink: '/launchpad/deelance',
+    liveLink: '/launchpad/deelance',
+    projectInfo: DeelanceProjectInfo,
+    tokenMetrics: [],
+    desc: 'DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential employers in Metaverse.',
+    social: [
+      <Link key={0} href="https://deelance.com/en" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.gg/vhH3Sbt9NQ" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/@deeLance" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/deelance_com" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/deelanceofficial/"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$DLANCE' },
+      { title: 'Token Price', content: '0.026 USDT' },
+      { title: 'Token Amount', content: '3,846,153' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 11,
     liveTimeStamp: {
       start: 1690675200000,
       end: 1690934400000
     },
     poolTypeName: 'ERC20 English Auction',
-    img: HeadInBg,
+    poolTypeName2: 'ERC20 Dunch Auction',
+    img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
     chainId: 250,
@@ -751,30 +803,26 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     privatePrices: [
       {
-        title: ['startingPrice'],
-        value: [
-          <Typography mb={8} sx={{ color: '#2B51DA', fontSize: 12 }} key={1}>
-            It will increase according to the increase in sales volume
-          </Typography>,
-          '1 DIP = 0.002514 USDT'
-        ]
+        title: ['DIP Auction Method'],
+        value: ['ERC20 English Auction']
       },
       {
         title: ['dipTokenOffered'],
-        value: '420,000.0000 DIP'
+        value: 'TBD $DIP'
       },
       {
         title: ['dgtTokenOffered'],
-        value: '420,000.0000 DGT'
+        value: 'TBD $DGP'
       },
       {
-        title: ['hardCapPerUser'],
-        value: '500,000 USDT=37.7100 USDT (≈15,000 USD)'
+        title: ['DIP Auction Method'],
+        value: 'ERC20 Dunch Auction'
       }
     ],
     isFAQ: true
   },
   {
+    hidden: true,
     keyId: 8,
     liveTimeStamp: {
       start: 1693324800000,
@@ -862,6 +910,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 10,
     liveTimeStamp: {
       start: 1696780800000,
@@ -1231,6 +1280,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 5,
     liveTimeStamp: {
       start: 1687348800000,

@@ -247,7 +247,7 @@ export const ResourcesLinks = [
   {
     label: 'Bounce Token',
     isExternal: true,
-    href: 'https://www.bounce.finance/tools/token',
+    href: 'https://token.bounce.finance/staking',
     isDisabled: false,
     extraIcon: '',
     className: ''
@@ -303,7 +303,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
       {
         label: 'Auction Homepage',
         isExternal: true,
-        href: 'https://www.bounce.finance/tokenAndnftAuction',
+        href: 'https://www.bounce.finance/',
         isDisabled: false,
         extraIcon: '',
         className: ''

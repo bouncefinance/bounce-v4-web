@@ -76,7 +76,11 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                     color: '#000'
                   }}
                 >
-                  {!isUserJoined ? 'Join The Pool' : 'You Joined'}
+                  {isUserJoined
+                    ? 'You Joined'
+                    : poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled
+                    ? 'Pool is done'
+                    : 'Join The Pool'}
                 </Typography>
                 <StatusBox poolInfo={poolInfo} />
               </Box>

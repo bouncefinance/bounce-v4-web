@@ -67,6 +67,8 @@ import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
 import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteList'
 import OpenfabricProjectInfo from './projectIntro/OpenfabricProjectInfo'
 import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
+import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
+
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
 // import { Equilibria } from './game/equilibria'
@@ -127,6 +129,7 @@ export default function App() {
                     <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
                     <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                     <Route path={routes.auction.v2.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
+                    <Route path={routes.auction.dutchAuction} element={<DutchAuctionPoolId />} />
                     <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                     <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                     <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
@@ -170,8 +173,8 @@ export default function App() {
                       path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                       element={<DigitalAssetsOffering />}
                     />
-                    <Route path={routes.fundo.home} element={<FundoHome />} />
-                    <Route path={routes.fundo.detail} element={<FundoDetail />} />
+                    <Route path={routes.foundo.home} element={<FundoHome />} />
+                    <Route path={routes.foundo.detail} element={<FundoDetail />} />
                     <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                     <Route path={routes.thirdPart.poseiswapAuction} element={<PoseiProjectInfo />} />
                     <Route path={routes.thirdPart.OmegaAuction} element={<OmegaProjectInfo />} />
@@ -179,6 +182,11 @@ export default function App() {
                     <Route path={routes.thirdPart.TypeitAuctionWhitelist} element={<TypeitProjectInfoWhiteList />} />
                     <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
                     <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
+                    <Route
+                      path={routes.thirdPart.DeelanceAuctionWhitelist}
+                      element={<DeelanceWhitelistProjectInfo />}
+                    />
+
                     <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                     <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                     {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}

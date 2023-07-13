@@ -9,13 +9,14 @@ import { useCallback, useEffect } from 'react'
 import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 import { useWeb3React } from '@web3-react/core'
 import { useActiveWeb3React } from 'hooks'
+import { LoadingButton } from '@mui/lab'
 
 export default function LoginModal() {
   const { connector, deactivate } = useWeb3React()
   const { account } = useActiveWeb3React()
   const walletModalOpen = useModalOpen(ApplicationModal.SIGN_LOGIN)
   const toggleSignLoginModal = useSignLoginModalToggle()
-  const { run: login } = useWeb3Login()
+  const { run: login, loading } = useWeb3Login()
 
   const { token } = useUserInfo()
 
@@ -58,9 +59,15 @@ export default function LoginModal() {
           <Button variant="outlined" onClick={cancel}>
             Cancel
           </Button>
-          <Button variant="contained" color="secondary" onClick={login}>
+          <LoadingButton
+            loading={loading}
+            loadingPosition="start"
+            variant="contained"
+            color="secondary"
+            onClick={login}
+          >
             Accept and sign
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Modal>

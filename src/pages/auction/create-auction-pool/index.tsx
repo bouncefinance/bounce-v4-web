@@ -250,8 +250,7 @@ const CreateAuctionPoolIntroPage = () => {
                     <Button variant="contained" sx={{ width: 140 }} onClick={showLoginModal}>
                       Login
                     </Button>
-                  ) : !userInfo?.email ? (
-                    //  || !userInfo?.twitterName
+                  ) : !userInfo?.email || !userInfo?.twitterName ? (
                     <Button
                       variant="contained"
                       sx={{ width: 300 }}
@@ -259,8 +258,7 @@ const CreateAuctionPoolIntroPage = () => {
                         navigate(routes.account.myAccount)
                       }}
                     >
-                      You need to bind your email
-                      {/* and twitter first */}
+                      You need to bind your email and twitter first
                     </Button>
                   ) : (
                     <Button

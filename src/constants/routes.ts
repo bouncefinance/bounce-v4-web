@@ -85,6 +85,8 @@ export const routes = {
     TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
     OpenfabricAuction: '/launchpad/openfabric',
     DeelanceAuction: '/launchpad/deelance',
+    DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
+
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange'
   },
@@ -95,8 +97,8 @@ export const routes = {
     equilibriaIndex: '/playable/ghostierunner/equilibria',
     equilibriaDetail: '/playable/ghostierunner/equilibria/:chainShortName/:poolId'
   },
-  fundo: {
-    home: '/fundo/home/index',
-    detail: 'fundo/detail/index'
+  foundo: {
+    home: '/foundo/home/index',
+    detail: 'foundo/detail/index'
   }
 }

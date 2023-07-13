@@ -7,7 +7,7 @@ import TabBg from 'assets/imgs/dipExchange/tab-bg.png'
 import FooterPc from 'components/Footer/FooterPc'
 import { PrivatePadDataList } from '../launchpad/PrivatePadDataList'
 
-const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 7) as IPrivatePadProp
+const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
 const DipExchange = () => {
   return (
     <Box sx={{ background: 'black' }}>

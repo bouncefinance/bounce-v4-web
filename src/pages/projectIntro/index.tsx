@@ -702,6 +702,11 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
               </GrayBg>
             )}
+            {item.poolTypeName2 && (
+              <GrayBg>
+                <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName2}</Typography>
+              </GrayBg>
+            )}
             {/*<GrayBg>*/}
             {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
             {/*</GrayBg>*/}

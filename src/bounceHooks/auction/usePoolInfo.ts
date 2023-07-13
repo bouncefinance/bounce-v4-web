@@ -21,7 +21,7 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
   const { poolId, chainShortName, sysId: _sysId } = useQueryParams()
   const { account } = useActiveWeb3React()
   const { chainInfoOpt } = useOptionDatas()
-
+  console.log('poolId, chainShortName, sysId >>>', poolId, chainShortName, _sysId)
   const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
   const sysId = useMemo(() => backedId || _sysId, [_sysId, backedId])
 
@@ -209,7 +209,7 @@ const usePoolInfo = () => {
       ),
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(
         t1,
-        amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
+        amountSwap1PRes?.[0].toString() || (Number(poolInfo.currentTotal1) > 0 ? poolInfo.currentTotal1 : '0')
       ),
       enableReverses: v2FixedSwapData.enableReverses,
       releaseType: v2FixedSwapData.releaseType,

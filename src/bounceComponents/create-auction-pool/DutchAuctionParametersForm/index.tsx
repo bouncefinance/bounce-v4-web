@@ -68,8 +68,11 @@ const DutchAuctionParametersForm = (): JSX.Element => {
     startPrice: Yup.number()
       .typeError('Please input valid number')
       .required('Start price is required')
-      .test('minValue', "Start price can't be smaller than reserve price", function (value) {
+      .test('minValue', "Start price can't be greater than reserve price and cannot be 0", function (value) {
         const { reservePrice } = this.parent
+        if (value === 0) {
+          return false
+        }
         if (value && reservePrice) {
           return value > reservePrice
         }
@@ -78,8 +81,11 @@ const DutchAuctionParametersForm = (): JSX.Element => {
     reservePrice: Yup.number()
       .typeError('Please input valid number')
       .required('Reserve price is required')
-      .test('minValue', "reserve price can't be greater than start price", function (value) {
+      .test('minValue', "reserve price can't be smaller than start price and cannot be 0", function (value) {
         const { startPrice } = this.parent
+        if (value === 0) {
+          return false
+        }
         if (value && startPrice) {
           return value < startPrice
         }
