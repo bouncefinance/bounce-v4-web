@@ -10,6 +10,8 @@ import ClaimBlock from './claimBlcok'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import PoolSaleInfo from './poolSaleInfo'
+import BigNumber from 'bignumber.js'
+
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -151,8 +153,24 @@ const Right = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   color: '#959595'
                 }}
               >
-                {' '}
-                / 0 ETH
+                {' / '}
+                {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
+                  ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+                      .times(poolInfo?.currencySwappedAmount0?.toExact())
+                      .times('0.025')
+                      .toFixed(6, BigNumber.ROUND_DOWN)
+                  : '0'}
+                <span
+                  style={{
+                    fontFamily: `'Inter'`,
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    color: '#626262',
+                    marginLeft: '8px'
+                  }}
+                >
+                  {(poolInfo.token1.symbol + '').toUpperCase()}
+                </span>
               </span>
             </RightText>
           </Stack>
