@@ -9,7 +9,7 @@ import Image from 'components/Image'
 import { useActiveWeb3React } from 'hooks'
 import MarkdownEditor from './components/markdownEditor'
 // import DropFile from './components/dropFile'
-const validationSchema = yup.object({
+const basicValidationSchema = yup.object({
   ProjectPicture: yup.object({
     fileName: yup.string(),
     fileSize: yup.number(),
@@ -88,6 +88,16 @@ const validationSchema = yup.object({
       .test('notEmpty', 'fill in at least one', (val, context) =>
         Object.keys(context.parent).some(key => !!context.parent[key])
       )
+  })
+})
+const detailValidationSchema = yup.object({
+  TokenLogo: yup.object({
+    fileName: yup.string(),
+    fileSize: yup.number(),
+    fileThumbnailUrl: yup.string(),
+    fileType: yup.string(),
+    fileUrl: yup.string().required('Please upload your Token Logo'),
+    id: yup.number()
   })
 })
 const UploadIntroduce = ({ title }: { title: string }) => {
@@ -177,7 +187,12 @@ const BasicCard = () => {
 
   return (
     <CardBox>
-      <Formik onSubmit={onSubmit} enableReinitialize validationSchema={validationSchema} initialValues={initBasicValue}>
+      <Formik
+        onSubmit={onSubmit}
+        enableReinitialize
+        validationSchema={basicValidationSchema}
+        initialValues={initBasicValue}
+      >
         {({ values, setFieldValue, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
@@ -478,10 +493,24 @@ const BasicCard = () => {
   )
 }
 const DetailCard = () => {
-  return <Box>DetailCard</Box>
+  return (
+    <CardBox>
+      <Formik initialValues={detailValidationSchema} onSubmit={() => {}}>
+        {() => {
+          return (
+            <Stack component={'form'} gap={24}>
+              <BaseBox>
+                <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
+              </BaseBox>
+            </Stack>
+          )
+        }}
+      </Formik>
+    </CardBox>
+  )
 }
 const CreateLaunchpad = () => {
-  const [tabActive, setTabActive] = useState(0)
+  const [tabActive, setTabActive] = useState(1)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   return (
     <Box>
