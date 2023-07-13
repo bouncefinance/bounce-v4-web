@@ -129,6 +129,9 @@ export const LineChartView = ({
       localization: {
         timeFormatter: function (time: number | string) {
           return formatNumberWithCommas(time.toString())
+        },
+        priceFormatter: (price: number | string) => {
+          return Number(price).toFixed(6)
         }
       },
       width: chartContainerRef.current.clientWidth,

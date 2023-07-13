@@ -45,11 +45,14 @@ const AmountInput = ({ poolInfo, amount, setAmount }: RegretAmountInputProps) =>
   const handleMaxButtonClick = useCallback(() => {
     let result = ''
     if (swappedAmount0 && currencyMaxAmount1PerWallet && userToken1Balance) {
-      if (swappedAmount0?.lessThan(userToken1Balance) && swappedAmount0?.lessThan(currencyMaxAmount1PerWallet)) {
+      if (
+        !swappedAmount0?.greaterThan(userToken1Balance) &&
+        !swappedAmount0?.greaterThan(currencyMaxAmount1PerWallet)
+      ) {
         result = swappedAmount0.toExact()
       } else if (
-        userToken1Balance?.lessThan(swappedAmount0) &&
-        userToken1Balance?.lessThan(currencyMaxAmount1PerWallet)
+        !userToken1Balance?.greaterThan(swappedAmount0) &&
+        !userToken1Balance?.greaterThan(currencyMaxAmount1PerWallet)
       ) {
         result = userToken1Balance.toExact()
       } else result = currencyMaxAmount1PerWallet.toExact()
