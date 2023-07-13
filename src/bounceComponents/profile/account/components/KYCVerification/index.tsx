@@ -58,7 +58,7 @@ function SumsubWeb() {
   return (
     <SumsubWebSdk
       accessToken={data.data.token}
-      testEnv
+      // testEnv
       expirationHandler={accessTokenExpirationHandler}
       // config={config}
       // options={options}
