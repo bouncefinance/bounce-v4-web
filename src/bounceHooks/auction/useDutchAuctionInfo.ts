@@ -12,8 +12,8 @@ import BigNumber from 'bignumber.js'
 export interface AmountAndCurrentPriceParam {
   amount1: number | string
 }
-export function useDutchAuctionInfo() {
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION)
+export function useDutchAuctionInfo(backedId?: number | undefined) {
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, backedId)
   const { account } = useActiveWeb3React()
   const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
 

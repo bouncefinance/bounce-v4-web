@@ -771,7 +771,7 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
                   color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
                 }
               }}
-              key={i}
+              key={'projectHead' + i}
               onClick={() => tabs.length > 1 && setTab(t)}
               className={tab === t ? 'select' : ''}
             >
@@ -883,7 +883,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
                   background: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBg : ''
                 }
               }}
-              key={idx}
+              key={'info' + idx}
               onClick={() => setCurrentIdx(idx)}
               className={idx === currentIdx ? 'select' : ''}
             >
@@ -902,7 +902,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
           {Array.isArray(info[currentIdx].info) &&
             info[currentIdx].info.length > 0 &&
             info[currentIdx].info.map((item, index: number) => (
-              <Typography key={index} variant={'body1'}>
+              <Typography key={'bg' + index} variant={'body1'}>
                 {item}
               </Typography>
             ))}

@@ -12,7 +12,6 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       poolInfo.status === PoolStatus.Closed && Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
     )
   }, [poolInfo.participant.currencyCurClaimableAmount, poolInfo.status])
-  console.log('currencyCurClaimableAmount)>>>', poolInfo?.participant?.currencyCurClaimableAmount?.toExact())
   return (
     <Box
       sx={{

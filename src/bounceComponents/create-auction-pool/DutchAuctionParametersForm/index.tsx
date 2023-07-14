@@ -387,7 +387,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                           sx={{ mr: 20, minWidth: 60 }}
                           disabled={!balance}
                           onClick={() => {
-                            setFieldValue('poolSize', balance?.toSignificant(64, { groupSeparator: '' }))
+                            setFieldValue('poolSize', balance?.toExact())
                           }}
                         >
                           Max
