@@ -128,7 +128,7 @@ export const LineChartView = ({
       },
       localization: {
         timeFormatter: function (time: number | string) {
-          return formatNumberWithCommas(time.toString())
+          return formatNumberWithCommas(Number(time).toFixed(6))
         },
         priceFormatter: (price: number | string) => {
           return Number(price).toFixed(6)
@@ -159,7 +159,7 @@ export const LineChartView = ({
     }
     chart.timeScale().applyOptions({
       tickMarkFormatter: (time: any) => {
-        return formatNumberWithCommas(time.toString())
+        return formatNumberWithCommas(Number(time).toFixed(6))
       }
     })
     chart.timeScale().fitContent()
@@ -190,9 +190,9 @@ export const LineChartView = ({
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
-        dateStr = resultItem.time.toString() + poolInfo.token0.symbol || '--'
+        dateStr = Number(resultItem.time).toFixed(6).toString() + poolInfo.token0.symbol || '--'
       }
-      const token0Price = currentValue + poolInfo.token1.symbol
+      const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
       const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
       if (
