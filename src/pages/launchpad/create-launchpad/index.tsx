@@ -98,7 +98,11 @@ const detailValidationSchema = yup.object({
     fileType: yup.string(),
     fileUrl: yup.string().required('Please upload your Token Logo'),
     id: yup.number()
-  })
+  }),
+  TokenName: yup.string().required(),
+  ChainId: yup.number().required(),
+  ContractAddress: yup.string().url().required(),
+  ContractDecimalPlaces: yup.string().url().required()
 })
 const UploadIntroduce = ({ title }: { title: string }) => {
   return (
@@ -372,6 +376,7 @@ const BasicCard = () => {
                       </Select>
                     </FormItem>
                   </Box>
+
                   <TextInput
                     name="Whitepaper"
                     title="Whitepaper/Technical Documentation Link"
@@ -493,14 +498,117 @@ const BasicCard = () => {
   )
 }
 const DetailCard = () => {
+  const { chainId } = useActiveWeb3React()
+  const initDetailValue = {
+    TokenLogo: {
+      fileName: '',
+      fileSize: 0,
+      fileThumbnailUrl: '',
+      fileType: '',
+      fileUrl: '',
+      id: ''
+    },
+    TokenName: '',
+    ChainId: chainId,
+    ContractAddress: '',
+    ContractDecimalPlaces: ''
+  }
+  const onSubmit = () => {}
   return (
     <CardBox>
-      <Formik initialValues={detailValidationSchema} onSubmit={() => {}}>
-        {() => {
+      <Formik initialValues={initDetailValue} validationSchema={detailValidationSchema} onSubmit={onSubmit}>
+        {({ values, setFieldValue }) => {
           return (
             <Stack component={'form'} gap={24}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
+                <Stack flexDirection={'column'} gap={32}>
+                  <Box mt={64}>
+                    <UploadLayout>
+                      <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+                        <FormItem
+                          name="TokenLogo"
+                          fieldType="custom"
+                          style={{ display: values.TokenLogo.fileUrl ? 'none' : 'block' }}
+                        >
+                          <UploadItem
+                            onChange={file => setFieldValue('TokenLogo', file)}
+                            inputId={'TokenLogo'}
+                            value={{ fileUrl: values.TokenLogo.fileUrl }}
+                            accept={['image/jpeg', 'image/png', 'image/webp']}
+                            tips={'Please do not exceed a file size of 10MB'}
+                            limitSize={10}
+                            sx={{
+                              width: 132,
+                              height: 52,
+                              borderRadius: '4px !important',
+                              background: 'rgb(232,233,228)',
+                              '& svg': { width: '100%', height: '100% ' },
+                              '& .add-svg': {
+                                border: 'none'
+                              }
+                            }}
+                          />
+                        </FormItem>
+                        {values.TokenLogo.fileUrl && <ImageBg url={values.TokenLogo.fileUrl} />}
+
+                        <UploadIntroduce title="TokenLogo" />
+                      </Stack>
+                      <UploadBtn htmlFor="TokenLogo">Upload</UploadBtn>
+                    </UploadLayout>
+                  </Box>
+                  <TextInput title="TokenName" name="TokenName" placeholder="Name of the project, eg. Bounce" />
+                  <Box>
+                    <Title sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>Blockchain Platform</Title>
+                    <Title sx={{ fontSize: 14, fontWeight: 500, color: '#626262', mt: 5, mb: 16 }}>
+                      What platform is this token issued on?
+                    </Title>
+                    <FormItem>
+                      <Select
+                        value={values.ChainId}
+                        onChange={({ target }) => {
+                          setFieldValue('ChainId', target.value)
+                        }}
+                        renderValue={selected => {
+                          const currentChain = ChainList.find(item => item.id === selected)
+                          return (
+                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                              {selected ? (
+                                <>
+                                  <Image style={{ width: 25, height: 25 }} src={currentChain?.logo as string} />
+                                  <Title sx={{ fontSize: 16 }}>{currentChain?.name}</Title>
+                                </>
+                              ) : (
+                                <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>
+                                  select asset platform
+                                </Title>
+                              )}
+                            </Box>
+                          )
+                        }}
+                      >
+                        {ChainList.map(t => (
+                          <MenuItem
+                            key={t.id}
+                            value={t.id}
+                            sx={{
+                              '&.Mui-selected': {
+                                background: values.ChainId === t.id ? '#E1F25C' : ''
+                              }
+                            }}
+                          >
+                            <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                              <Image style={{ width: 25, height: 25 }} src={t.logo} />
+                              <Title sx={{ fontSize: 16 }}>{t.name}</Title>
+                            </Stack>
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormItem>
+                  </Box>
+                  <TextInput title="Contract Address" name="ContractAddress" placeholder="Explorer Link" />
+                  <TextInput name="ContractDecimalPlaces" placeholder="Explorer Link" title="Contract Decimal Places" />
+                </Stack>
               </BaseBox>
             </Stack>
           )
