@@ -47,7 +47,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION]
   },
   [ChainId.FANTOM]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION]
   },
   [ChainId.FANTOM_TESTNET]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION]
