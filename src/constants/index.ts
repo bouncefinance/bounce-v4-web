@@ -284,7 +284,7 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.FANTOM]: '',
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.ZETA_CHAIN_TESTNET]: '',
-  [ChainId.ROLLUX]: '',
+  [ChainId.ROLLUX]: '0x01E36E11721b259fb3afa13A238c56Bfd6F2Ef67',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',

@@ -253,8 +253,8 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
       logo: ZetaLogo
     },
-    rpcUrls: ['https://api.athens2.zetachain.com/evm'],
-    blockExplorerUrls: ['https://explorer.zetachain.com']
+    rpcUrls: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public'],
+    blockExplorerUrls: ['https://athens3.explorer.zetachain.com/']
   },
   [ChainId.ROLLUX]: {
     id: ChainId.ROLLUX,
