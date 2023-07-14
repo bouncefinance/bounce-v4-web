@@ -120,7 +120,13 @@ function ERC20EnglishAuctionPoolContent() {
             <Grid item xs={'auto'}>
               <CreatorInfoCard poolInfo={poolInfo} creator={poolInfo.creator} getPoolInfo={getPoolInfo} />
             </Grid>
-            <Grid item xs>
+            <Grid
+              item
+              xs
+              sx={{
+                overflow: 'hidden'
+              }}
+            >
               <Box
                 sx={{
                   background: 'rgba(18, 18, 18, 0.6)',
