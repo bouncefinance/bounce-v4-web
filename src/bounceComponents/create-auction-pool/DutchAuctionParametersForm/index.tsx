@@ -3,9 +3,8 @@ import { Field, Form, Formik } from 'formik'
 import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-
+import BigNumber from 'bignumber.js'
 import { show } from '@ebay/nice-modal-react'
-
 import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
@@ -18,7 +17,6 @@ import {
 } from '../ValuesProvider'
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
-import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
 
 import FormItem from 'bounceComponents/common/FormItem'
@@ -26,9 +24,8 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
-import { CurrencyAmount } from 'constants/token'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { ZERO } from 'constants/token/constants'
+// import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -103,7 +100,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
         value =>
-          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
+          !value || (balance ? new BigNumber(value)?.isGreaterThanOrEqualTo(BigNumber(balance.toExact())) : false)
       ),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
@@ -364,7 +361,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                     </Tooltip>
                   </Stack>
 
-                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toSignificant() || '-'}</Typography>}
+                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toExact() || '-'}</Typography>}
                 </Stack>
 
                 <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>
@@ -381,7 +378,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                           sx={{ mr: 20, minWidth: 60 }}
                           disabled={!balance}
                           onClick={() => {
-                            setFieldValue('poolSize', balance?.toSignificant(64, { groupSeparator: '' }))
+                            setFieldValue('poolSize', balance?.toExact())
                           }}
                         >
                           Max
