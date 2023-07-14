@@ -305,7 +305,8 @@ export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.PALM]: '',
   [ChainId.LINEA_GORLI]: '',
   [ChainId.FANTOM_TESTNET]: '',
-  [ChainId.ZETA_CHAIN_TESTNET]: ''
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.LINEA]: ''
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
