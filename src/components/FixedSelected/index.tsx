@@ -91,6 +91,10 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
           {
             label: 'Dutch Auction',
             value: PoolType.DUTCH_AUCTION
+          },
+          {
+            label: 'English Auction',
+            value: PoolType.ENGLISH_AUCTION
           }
         ]
       },
