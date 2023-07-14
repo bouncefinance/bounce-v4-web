@@ -19,7 +19,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
     poolInfo?.poolId || '',
     poolInfo?.category,
     '',
-    ['Bid']
+    ['Swapped']
   )
   if (!list || (Array.isArray(list.list) && list.list.length === 0)) {
     return null
