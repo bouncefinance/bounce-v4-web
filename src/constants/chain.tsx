@@ -32,6 +32,7 @@ export enum ChainId {
   ZKSYNC_ERA_TESTNET = 280,
   ZKSYNC_ERA = 324,
   LINEA_GORLI = 59140,
+  LINEA = 59144,
   ROLLUX = 570,
   POLYGON_ZK_EVM = 1101,
   POLYGON_ZK_EVM_TESTNET = 1442,
@@ -99,6 +100,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://rpc.goerli.linea.build'],
     blockExplorerUrls: ['https://goerli.lineascan.build/']
+  },
+  [ChainId.LINEA]: {
+    id: ChainId.LINEA,
+    hexChainId: numberToHex(ChainId.LINEA),
+    chainName: 'Linea Mainnet',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://docs.linea.build/img/favicon.ico'
+    },
+    rpcUrls: ['https://linea-mainnet.infura.io/v3/'],
+    blockExplorerUrls: ['https://explorer.linea.build/']
   },
   [ChainId.GÖRLI]: {
     id: ChainId.GÖRLI,
@@ -253,8 +267,8 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
       logo: ZetaLogo
     },
-    rpcUrls: ['https://api.athens2.zetachain.com/evm'],
-    blockExplorerUrls: ['https://explorer.zetachain.com']
+    rpcUrls: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public'],
+    blockExplorerUrls: ['https://athens3.explorer.zetachain.com/']
   },
   [ChainId.ROLLUX]: {
     id: ChainId.ROLLUX,
