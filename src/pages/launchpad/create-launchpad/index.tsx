@@ -1,14 +1,36 @@
-import { Box, Button, MenuItem, OutlinedInput, Select, Stack, SxProps, Typography, styled } from '@mui/material'
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Stack,
+  SxProps,
+  Typography,
+  styled
+} from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
-import { Formik } from 'formik'
+import { Field, Formik } from 'formik'
 import { useState } from 'react'
 import * as yup from 'yup'
-import { ChainList } from 'constants/chain'
+import { ChainId, ChainList } from 'constants/chain'
 import Image from 'components/Image'
 import { useActiveWeb3React } from 'hooks'
 import MarkdownEditor from './components/markdownEditor'
-// import DropFile from './components/dropFile'
+import { AllocationStatus, AuctionType } from 'bounceComponents/create-auction-pool/types'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
+import { show } from '@ebay/nice-modal-react'
+import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
+import { Token } from 'bounceComponents/fixed-swap/type'
+import NumberInput from 'bounceComponents/common/NumberInput'
+import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTimePickerFormItem'
+import { LocalizationProvider } from '@mui/x-date-pickers-pro'
+import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
+import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
+import Radio from 'bounceComponents/create-auction-pool/Radio'
 const basicValidationSchema = yup.object({
   ProjectPicture: yup.object({
     fileName: yup.string(),
@@ -102,7 +124,19 @@ const detailValidationSchema = yup.object({
   TokenName: yup.string().required(),
   ChainId: yup.number().required(),
   ContractAddress: yup.string().url().required(),
-  ContractDecimalPlaces: yup.string().url().required()
+  ContractDecimalPlaces: yup.string().url().required(),
+  Token: yup.object({
+    tokenToAddress: yup.string().required(),
+    tokenToSymbol: yup.string().required(),
+    tokenToLogoURI: yup.string().required(),
+    tokenToDecimals: yup.string().required()
+  }),
+  SwapRatio: yup.number().required(),
+  TotalSupply: yup.number().required(),
+  Time: yup.object({
+    startTime: yup.date().required(),
+    endTime: yup.date().required()
+  })
 })
 const UploadIntroduce = ({ title }: { title: string }) => {
   return (
@@ -497,6 +531,23 @@ const BasicCard = () => {
     </CardBox>
   )
 }
+const showTokenDialog = async ({
+  chainId,
+  enableEth = true,
+  setFieldValue
+}: {
+  chainId: ChainId
+  enableEth?: boolean
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+}) => {
+  const res = await show<Token>(TokenDialog, { chainId, enableEth })
+  setFieldValue('Token', {
+    tokenToAddress: res.address,
+    tokenToSymbol: res.symbol,
+    tokenToLogoURI: res.logoURI,
+    tokenToDecimals: res.decimals
+  })
+}
 const DetailCard = () => {
   const { chainId } = useActiveWeb3React()
   const initDetailValue = {
@@ -511,9 +562,24 @@ const DetailCard = () => {
     TokenName: '',
     ChainId: chainId,
     ContractAddress: '',
-    ContractDecimalPlaces: ''
+    ContractDecimalPlaces: '',
+    AuctionType: 'fixed-price',
+    Token: {
+      tokenToAddress: '',
+      tokenToSymbol: '',
+      tokenToLogoURI: '',
+      tokenToDecimals: ''
+    },
+    SwapRatio: '',
+    TotalSupply: '',
+    Time: {
+      startTime: '',
+      endTime: ''
+    },
+    allocationStatus: AllocationStatus.NoLimits
   }
   const onSubmit = () => {}
+
   return (
     <CardBox>
       <Formik initialValues={initDetailValue} validationSchema={detailValidationSchema} onSubmit={onSubmit}>
@@ -566,6 +632,7 @@ const DetailCard = () => {
                     <FormItem>
                       <Select
                         value={values.ChainId}
+                        displayEmpty
                         onChange={({ target }) => {
                           setFieldValue('ChainId', target.value)
                         }}
@@ -591,13 +658,20 @@ const DetailCard = () => {
                           <MenuItem
                             key={t.id}
                             value={t.id}
+                            selected={values.ChainId === t.id ? true : false}
                             sx={{
                               '&.Mui-selected': {
-                                background: values.ChainId === t.id ? '#E1F25C' : ''
+                                background: '#E1F25C'
                               }
                             }}
                           >
-                            <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                            <Stack
+                              sx={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 16
+                              }}
+                            >
                               <Image style={{ width: 25, height: 25 }} src={t.logo} />
                               <Title sx={{ fontSize: 16 }}>{t.name}</Title>
                             </Stack>
@@ -606,8 +680,148 @@ const DetailCard = () => {
                       </Select>
                     </FormItem>
                   </Box>
+
                   <TextInput title="Contract Address" name="ContractAddress" placeholder="Explorer Link" />
                   <TextInput name="ContractDecimalPlaces" placeholder="Explorer Link" title="Contract Decimal Places" />
+                </Stack>
+              </BaseBox>
+              <BaseBox>
+                <Title sx={{ color: '#20201E', marginBottom: 64 }}>launchpad information</Title>
+                <Stack flexDirection={'column'} gap={32}>
+                  <Box>
+                    <Title mb={16} sx={{ color: '#20201E', fontSize: 20 }}>
+                      Auction Type
+                    </Title>
+                    <FormItem>
+                      <Select
+                        value={values.AuctionType}
+                        onChange={e => {
+                          console.log(e.target.value)
+                          setFieldValue('AuctionType', e.target.value)
+                        }}
+                        renderValue={selected => {
+                          return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 400 }}>{selected}</Title>
+                        }}
+                      >
+                        {Object.values(AuctionType).map((value, index) => (
+                          <MenuItem key={index} value={value}>
+                            <Title
+                              sx={{
+                                fontSize: 16,
+                                color: values.AuctionType === value ? '#2B51DA' : '#20201E',
+                                fontWeight: 400
+                              }}
+                            >
+                              {value}
+                            </Title>
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormItem>
+                  </Box>
+                  <Box>
+                    <Title mb={16} sx={{ fontSize: 20 }}>
+                      Funding Currency
+                    </Title>
+                    <FormItem
+                      name="Token.tokenToSymbol"
+                      label="Select Token"
+                      required
+                      sx={{ flex: 1 }}
+                      startAdornment={
+                        <TokenImage alt={values.Token.tokenToSymbol} src={values.Token.tokenToLogoURI} size={32} />
+                      }
+                    >
+                      <FakeOutlinedInput
+                        readOnly
+                        onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
+                      />
+                    </FormItem>
+                  </Box>
+                  <Box>
+                    <Title mb={14} sx={{ fontSize: 20, color: '#20201E' }}>
+                      Swap ratio
+                    </Title>
+                    <Stack
+                      flexDirection={'row'}
+                      sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}
+                    >
+                      <Title sx={{ fontSize: 20, color: '#171717' }}>
+                        1 {!values.TokenName ? 'USDT' : values.TokenName} =
+                      </Title>
+                      {/* 小数点位数大于 精度时还没有报错？ */}
+                      <FormItem placeholder="0.00" required sx={{ flex: 1 }}>
+                        <NumberInput
+                          value={values.SwapRatio}
+                          onUserInput={value => setFieldValue('SwapRatio', value)}
+                          endAdornment={
+                            <>
+                              <TokenImage
+                                alt={values.Token.tokenToSymbol}
+                                src={values.Token.tokenToLogoURI}
+                                size={24}
+                              />
+                              <Typography sx={{ ml: 8 }}>{values.Token.tokenToSymbol}</Typography>
+                            </>
+                          }
+                        />
+                      </FormItem>
+                    </Stack>
+                  </Box>
+                  <TextInput name="TotalSupply" title="Total Supply" placeholder="Enter  amount" />
+                  <Box>
+                    <Title mb={13} sx={{ fontSize: 20, fontWeight: 500, color: '#000' }}>
+                      Time
+                    </Title>
+                    <Stack flexDirection={'row'}>
+                      <Field
+                        component={DateTimePickerFormItem}
+                        name="startTime"
+                        disablePast
+                        maxDateTime={values.Time.endTime}
+                        textField={{ sx: { flex: 1 } }}
+                      />
+                      <Field
+                        component={DateTimePickerFormItem}
+                        name="endTime"
+                        disablePast
+                        minDateTime={values.Time.startTime}
+                        textField={{ sx: { flex: 1 } }}
+                      />
+                    </Stack>
+                  </Box>
+                  <Box>
+                    <Title sx={{ color: '#20201E', fontSize: 20 }}>Allocation per wallet</Title>
+                    <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
+                      <FormControlLabel
+                        value={AllocationStatus.NoLimits}
+                        control={<Radio disableRipple />}
+                        label="No Limits"
+                      />
+                      <FormControlLabel
+                        value={AllocationStatus.Limited}
+                        control={<Radio disableRipple />}
+                        label="Limited"
+                      />
+                    </Field>
+                    {values.allocationStatus === AllocationStatus.Limited && (
+                      <FormItem name="allocationPerWallet" required sx={{ flex: 1 }}>
+                        <OutlinedInput
+                          sx={{ mt: 10 }}
+                          endAdornment={
+                            <>
+                              <TokenImage
+                                alt={values.Token.tokenToSymbol}
+                                src={values.Token.tokenToLogoURI}
+                                size={24}
+                              />
+                              <Typography sx={{ ml: 8 }}>{values.Token.tokenToSymbol}</Typography>
+                            </>
+                          }
+                        />
+                      </FormItem>
+                    )}
+                  </Box>
                 </Stack>
               </BaseBox>
             </Stack>
@@ -621,34 +835,36 @@ const CreateLaunchpad = () => {
   const [tabActive, setTabActive] = useState(1)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   return (
-    <Box>
-      <ContainerBox>
-        <Title sx={{ textAlign: 'center' }}>Create Program</Title>
-        <Stack sx={{ flexDirection: 'row', justifyContent: 'center', mt: 48 }}>
-          {tabs.map((t, i) => (
-            <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
-              {Array.isArray(t) ? (
-                <>
-                  <TabTitle1>{t[0]}</TabTitle1>
-                  <TabTitle2>{t[1]}</TabTitle2>
-                </>
-              ) : (
-                <TabTitle1>{t}</TabTitle1>
-              )}
-            </Tab>
-          ))}
-        </Stack>
-        {tabActive === 0 && <BasicCard />}
-        {tabActive === 1 && <DetailCard />}
-      </ContainerBox>
-      <FooterBox>
-        <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
-        <Stack flexDirection={'row'} gap={40}>
-          <TabTitle2>Terms Of Service</TabTitle2>
-          <TabTitle2>Privacy Policy</TabTitle2>
-        </Stack>
-      </FooterBox>
-    </Box>
+    <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
+      <Box>
+        <ContainerBox>
+          <Title sx={{ textAlign: 'center' }}>Create Program</Title>
+          <Stack sx={{ flexDirection: 'row', justifyContent: 'center', mt: 48 }}>
+            {tabs.map((t, i) => (
+              <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
+                {Array.isArray(t) ? (
+                  <>
+                    <TabTitle1>{t[0]}</TabTitle1>
+                    <TabTitle2>{t[1]}</TabTitle2>
+                  </>
+                ) : (
+                  <TabTitle1>{t}</TabTitle1>
+                )}
+              </Tab>
+            ))}
+          </Stack>
+          {tabActive === 0 && <BasicCard />}
+          {tabActive === 1 && <DetailCard />}
+        </ContainerBox>
+        <FooterBox>
+          <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
+          <Stack flexDirection={'row'} gap={40}>
+            <TabTitle2>Terms Of Service</TabTitle2>
+            <TabTitle2>Privacy Policy</TabTitle2>
+          </Stack>
+        </FooterBox>
+      </Box>
+    </LocalizationProvider>
   )
 }
 const ContainerBox = styled(Box)({
