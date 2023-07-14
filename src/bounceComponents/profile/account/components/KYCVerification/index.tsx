@@ -1,13 +1,9 @@
 import { Box, Button, Typography } from '@mui/material'
-import SumsubWebSdk from '@sumsub/websdk-react'
-import { useRequest } from 'ahooks'
-import { getSumsubAccessToken } from 'api/account'
 import { ReactComponent as KYC_LOCK } from 'assets/svg/account/kyc_lock.svg'
-import { useCallback, useState } from 'react'
+import SumsubWebDialog from 'bounceComponents/account/SumsubWebDialog'
+import { show } from '@ebay/nice-modal-react'
 
 export default function KYCVerification() {
-  const [showSumsub, setShowSumsub] = useState(false)
-
   return (
     <Box>
       <Box
@@ -26,7 +22,7 @@ export default function KYCVerification() {
           <Typography ml={10}>KYC Verification</Typography>
         </Box>
         <Button
-          onClick={() => setShowSumsub(true)}
+          onClick={() => show(SumsubWebDialog)}
           sx={{
             ml: 10,
             height: 40
@@ -35,35 +31,6 @@ export default function KYCVerification() {
           Verify
         </Button>
       </Box>
-      {showSumsub && <SumsubWeb />}
     </Box>
-  )
-}
-
-function SumsubWeb() {
-  const { data } = useRequest(
-    async () => {
-      return await getSumsubAccessToken()
-    },
-    { debounceWait: 1000 }
-  )
-
-  const accessTokenExpirationHandler = useCallback(async () => {
-    const data = await getSumsubAccessToken()
-    return data.data.token
-  }, [])
-
-  if (!data?.data.token) return null
-
-  return (
-    <SumsubWebSdk
-      accessToken={data.data.token}
-      // testEnv
-      expirationHandler={accessTokenExpirationHandler}
-      // config={config}
-      // options={options}
-      onMessage={(msg: any) => console.log('SumsubWeb', msg)}
-      onError={(error: any) => console.error('SumsubWeb', error)}
-    />
   )
 }
