@@ -9,8 +9,8 @@ import { useMemo } from 'react'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
 import OthersDetail from '../othersDetail'
-import LineClaimChart from '../lineClaimChart'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import LineClaimChart from './lineClaimChart'
 
 const Linear = () => {
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()

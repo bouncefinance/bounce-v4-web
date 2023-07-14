@@ -213,7 +213,12 @@ export const LineChartView = ({
       chart.remove()
     }
   }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, options])
-  return <Box ref={chartContainerRef}></Box>
+  return (
+    <>
+      <Box fontSize={12} color={'#626262'} mb={8}>{`Price(${poolInfo.token1.symbol})`}</Box>
+      <Box ref={chartContainerRef}></Box>
+    </>
+  )
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)

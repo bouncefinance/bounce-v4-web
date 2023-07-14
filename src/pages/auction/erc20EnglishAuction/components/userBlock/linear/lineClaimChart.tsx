@@ -1,7 +1,15 @@
 import { Box } from '@mui/material'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { createChart, ColorType, LineData, SeriesMarker, Time, MouseEventParams } from 'lightweight-charts'
+import {
+  createChart,
+  ColorType,
+  LineData,
+  SeriesMarker,
+  Time,
+  MouseEventParams,
+  TimeFormatterFn
+} from 'lightweight-charts'
 import moment from 'moment'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 
@@ -83,6 +91,10 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
           bottomColor: 'rgba(43, 81, 218, 0.2)'
         }
   }, [poolInfo])
+  const timeFormatter: TimeFormatterFn = (time: any) => {
+    const date = new Date(time)
+    return moment(date).format('YYYY MM/DD')
+  }
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -102,7 +114,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
       },
       localization: {
         timeFormatter: function (time: number | string) {
-          return moment(time).format('YYYY-MM-DD HH:mm:ss')
+          return moment(new Date(time)).format('YYYY-MM-DD HH:mm:ss')
         }
       },
       leftPriceScale: {
@@ -122,6 +134,9 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
         width: chartContainerRef.current.clientWidth
       })
     }
+    chart.timeScale().applyOptions({
+      tickMarkFormatter: timeFormatter
+    })
     chart.timeScale().fitContent()
     // set line
     const newSeries = chart.addAreaSeries({
@@ -175,7 +190,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
   }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, tooltipInstance])
   return (
     <>
-      <Box ml={15} fontSize={12} color={'#626262'}>{`Price(${poolInfo.token0.symbol})`}</Box>
+      <Box ml={15} color={'#626262'}>{`Price(${poolInfo.token0.symbol})`}</Box>
       <Box ref={chartContainerRef}></Box>
     </>
   )
