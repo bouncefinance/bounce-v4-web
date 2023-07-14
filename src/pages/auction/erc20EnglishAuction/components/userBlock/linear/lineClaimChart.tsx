@@ -165,7 +165,7 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
-        dateStr = moment(Number(resultItem.time) * 1000).format('DD MMMM') || '--'
+        dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
       const token0Price = currentValue + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
