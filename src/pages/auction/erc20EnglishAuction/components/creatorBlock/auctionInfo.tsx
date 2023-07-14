@@ -26,6 +26,7 @@ const LeftBox = (): JSX.Element => {
   const { chainId } = useActiveWeb3React()
   const isMobile = useBreakpoint('lg')
   const [showMore, setShowMore] = useState<boolean>(false)
+
   return (
     <>
       <Box
@@ -83,8 +84,8 @@ const LeftBox = (): JSX.Element => {
           </PoolInfoItem>
           <PoolInfoItem title="Allocation Per Wallet">
             <RightText>
-              {poolInfo?.currencyMaxAmount1PerWallet
-                ? poolInfo?.currencyMaxAmount1PerWallet?.toSignificant() + ' ' + poolInfo.token1.symbol
+              {!poolInfo?.currencyMaxAmount1PerWallet?.equalTo('0')
+                ? poolInfo?.currencyMaxAmount1PerWallet?.toSignificant() + ' ' + poolInfo?.token1.symbol
                 : 'No Limit'}
             </RightText>
           </PoolInfoItem>

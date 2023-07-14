@@ -73,17 +73,13 @@ const BidBlock = ({
   const amount1CurrencyAmount =
     poolInfo?.currencyAmountEndPrice &&
     CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '')
-  console.log(
-    '🚀 ~ file: bidBlock.tsx:60 ~ userToken1Balance:',
-    amount,
-    userToken1Balance?.toExact(),
-    amount1CurrencyAmount?.toExact()
-  )
+
   const [approvalState, approveCallback] = useApproveCallback(
     amount1CurrencyAmount || undefined,
     poolInfo.contract,
     true
   )
+
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -198,6 +194,20 @@ const BidBlock = ({
         )
       }
     } else {
+      if (!userToken1Balance || amount1CurrencyAmount?.greaterThan(userToken1Balance)) {
+        return (
+          <ComBtn fullWidth disabled={true}>
+            <span>Insufficient Balance</span>
+          </ComBtn>
+        )
+      }
+      if (Number(amount) > Number(maxValue?.toExact())) {
+        return (
+          <ComBtn fullWidth disabled={true}>
+            <span>Limit exceeded</span>
+          </ComBtn>
+        )
+      }
       return (
         <ComBtn
           fullWidth
