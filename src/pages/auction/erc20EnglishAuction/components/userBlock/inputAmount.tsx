@@ -6,6 +6,8 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
+import { CurrencyAmount } from 'constants/token'
+import BigNumber from 'bignumber.js'
 export interface RegretAmountInputProps {
   amount: string
   setAmount: (value: string) => void
@@ -38,11 +40,24 @@ const AmountInput = ({ poolInfo, amount, setAmount }: RegretAmountInputProps) =>
     () =>
       poolInfo?.currencySwappedAmount0 &&
       poolInfo?.currencyAmountTotal0 &&
-      poolInfo?.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0),
-    [poolInfo?.currencyAmountTotal0, poolInfo.currencySwappedAmount0]
+      poolInfo.currencyAmountEndPrice &&
+      poolInfo.currencyCurrentPrice &&
+      CurrencyAmount.fromAmount(
+        poolInfo.currencyAmountEndPrice?.currency,
+        new BigNumber(poolInfo.currencyAmountTotal0.subtract(poolInfo.currencySwappedAmount0).toExact())
+          .times(new BigNumber(poolInfo.currencyCurrentPrice.toExact()))
+          .toString()
+      ),
+    [
+      poolInfo.currencyAmountEndPrice,
+      poolInfo.currencyAmountTotal0,
+      poolInfo.currencyCurrentPrice,
+      poolInfo.currencySwappedAmount0
+    ]
   )
 
   const handleMaxButtonClick = useCallback(() => {
+    console.log('max', swappedAmount0?.toExact(), currencyMaxAmount1PerWallet?.toExact(), userToken1Balance?.toExact())
     let result = ''
     if (swappedAmount0 && currencyMaxAmount1PerWallet && userToken1Balance) {
       if (
