@@ -112,7 +112,6 @@ export function useCurrencyBalances(
   currencies?: (Currency | undefined)[],
   chainId?: ChainId
 ): (CurrencyAmount | undefined)[] {
-  // console.log('currencies>>>>', currencies)
   const tokens = useMemo(
     () => currencies?.map(currency => (currency && !currency?.isNative ? currency : undefined)) ?? [],
     [currencies]
@@ -122,7 +121,6 @@ export function useCurrencyBalances(
   const tokenBalances = useTokenBalancesWithLoadingIndicator(account, tokens, chainId)[0]
 
   const ethBalance = useETHBalance(eths ? account : undefined, chainId)
-  // console.log('ethBalance>>>', ethBalance)
   return useMemo(
     () =>
       currencies?.map(currency => {

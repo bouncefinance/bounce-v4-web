@@ -419,8 +419,6 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     .replace('.', '$#$')
                     .replace(/\./g, '')
                     .replace('$#$', '.')
-                  //   e.target.value
-                  console.log('result>>>', result)
                   bidHandler(result)
                 }}
                 onBlurCapture={e => {

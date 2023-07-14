@@ -48,7 +48,7 @@ interface FormValues {
   allocationPerWallet: string
 }
 
-const AuctionParametersForm = (): JSX.Element => {
+const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
 
@@ -155,7 +155,9 @@ const AuctionParametersForm = (): JSX.Element => {
   return (
     <Box sx={{ mt: 52, px: isSm ? 16 : '0' }}>
       <Typography variant="h2">Auction Parameters</Typography>
-      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
+      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>
+        {title ? title : 'Fixed Price Auction'}
+      </Typography>
 
       <Formik
         initialValues={internalInitialValues}

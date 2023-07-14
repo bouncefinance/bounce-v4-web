@@ -281,7 +281,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
         hoverImg: DutchAuctionBlack,
         totalValue: 0,
         link: 'https://docs.bounce.finance/bounce-auctions/dutch-auction',
-        poolType: PoolType.Duch
+        poolType: PoolType.DUTCH_AUCTION
       },
       {
         title: 'Sealed-Bid Auction',

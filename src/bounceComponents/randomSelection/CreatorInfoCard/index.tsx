@@ -123,7 +123,6 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
       />
 
       <AuctionDescription poolInfo={poolInfo} getPoolInfo={getPoolInfo} canEdit={isCurrentUserCreatedThisPool} />
-
       <AuctionFiles
         poolInfo={poolInfo}
         getPoolInfo={getPoolInfo}
