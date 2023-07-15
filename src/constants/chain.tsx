@@ -260,7 +260,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.ZETA_CHAIN_TESTNET]: {
     id: ChainId.ZETA_CHAIN_TESTNET,
     hexChainId: numberToHex(ChainId.ZETA_CHAIN_TESTNET),
-    chainName: 'ZETA Testnet',
+    chainName: 'ZETA Athens 3',
     nativeCurrency: {
       name: 'ZETA',
       symbol: 'ZETA',

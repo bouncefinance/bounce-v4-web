@@ -169,17 +169,20 @@ export const LineChartView = ({
       ...colorObj
     })
     newSeries.setData(data as LineData[])
-    // set current time data
-    const markers = [
-      {
-        time: new Date().valueOf() / 1000,
-        position: 'inBar',
-        color: '#959595',
-        shape: 'circle',
-        size: 0.7
-      }
-    ]
-    newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    const nowDate = new Date().valueOf()
+    if (nowDate / 1000 <= poolInfo.closeAt && nowDate / 1000 >= poolInfo.openAt) {
+      // set current time data
+      const markers = [
+        {
+          time: nowDate,
+          position: 'inBar',
+          color: '#959595',
+          shape: 'circle',
+          size: 0.7
+        }
+      ]
+      newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    }
     window.addEventListener('resize', handleResize)
     if (!tooltipInstance) {
       const TipsTool = new ToolTip({ dateStr: '' })

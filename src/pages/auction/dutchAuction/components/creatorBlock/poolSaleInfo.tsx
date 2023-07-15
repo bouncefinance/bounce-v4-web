@@ -99,7 +99,10 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 >
                   =
                 </span>
-                &nbsp; {poolInfo.currencyCurrentPrice?.toSignificant()}
+                &nbsp;{' '}
+                {poolInfo.status === PoolStatus.Upcoming
+                  ? poolInfo.highestPrice?.toSignificant()
+                  : poolInfo.currencyCurrentPrice?.toSignificant()}
                 <TokenImage
                   sx={{
                     margin: '0 4px'
