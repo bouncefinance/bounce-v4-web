@@ -6,6 +6,7 @@ import OMNIUrl from 'assets/svg/omni_logo.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 import ZkSyncSrc from '../assets/images/zksync_logo.png'
 import scrollLogo from '../assets/images/scroll_logo.png'
+import ZetaLogo from '../assets/svg/zeta-chain.svg'
 
 export function numberToHex(number: number) {
   return '0x' + new BigNumberjs(number).toString(16)
@@ -26,9 +27,12 @@ export enum ChainId {
   POLYGON = 137,
   OMNI_TESTNET = 165,
   FANTOM = 250,
+  FANTOM_TESTNET = 4002,
+  ZETA_CHAIN_TESTNET = 7001,
   ZKSYNC_ERA_TESTNET = 280,
   ZKSYNC_ERA = 324,
   LINEA_GORLI = 59140,
+  LINEA = 59144,
   ROLLUX = 570,
   POLYGON_ZK_EVM = 1101,
   POLYGON_ZK_EVM_TESTNET = 1442,
@@ -96,6 +100,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://rpc.goerli.linea.build'],
     blockExplorerUrls: ['https://goerli.lineascan.build/']
+  },
+  [ChainId.LINEA]: {
+    id: ChainId.LINEA,
+    hexChainId: numberToHex(ChainId.LINEA),
+    chainName: 'Linea Mainnet',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: 'https://docs.linea.build/img/favicon.ico'
+    },
+    rpcUrls: ['https://linea-mainnet.infura.io/v3/'],
+    blockExplorerUrls: ['https://explorer.linea.build/']
   },
   [ChainId.GÖRLI]: {
     id: ChainId.GÖRLI,
@@ -226,6 +243,32 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']
+  },
+  [ChainId.FANTOM_TESTNET]: {
+    id: ChainId.FANTOM_TESTNET,
+    hexChainId: numberToHex(ChainId.FANTOM_TESTNET),
+    chainName: 'Fantom Testnet',
+    nativeCurrency: {
+      name: 'FTM',
+      symbol: 'FTM',
+      decimals: 18,
+      logo: 'https://ftmscan.com/images/favicon.png'
+    },
+    rpcUrls: ['https://fantom-testnet.publicnode.com'],
+    blockExplorerUrls: ['https://testnet.ftmscan.com']
+  },
+  [ChainId.ZETA_CHAIN_TESTNET]: {
+    id: ChainId.ZETA_CHAIN_TESTNET,
+    hexChainId: numberToHex(ChainId.ZETA_CHAIN_TESTNET),
+    chainName: 'ZETA Athens 3',
+    nativeCurrency: {
+      name: 'ZETA',
+      symbol: 'ZETA',
+      decimals: 18,
+      logo: ZetaLogo
+    },
+    rpcUrls: ['https://zetachain-athens-evm.blockpi.network/v1/rpc/public'],
+    blockExplorerUrls: ['https://athens3.explorer.zetachain.com/']
   },
   [ChainId.ROLLUX]: {
     id: ChainId.ROLLUX,

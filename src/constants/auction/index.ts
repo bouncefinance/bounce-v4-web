@@ -96,6 +96,8 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.GNOSIS]: null,
   [ChainId.POLYGON]: null,
   [ChainId.FANTOM]: null,
+  [ChainId.FANTOM_TESTNET]: null,
+  [ChainId.ZETA_CHAIN_TESTNET]: null,
   [ChainId.OMNI_TESTNET]: null,
   [ChainId.ROLLUX]: null,
   [ChainId.ZKSYNC_ERA]: null,
@@ -115,5 +117,6 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.HARMONY]: null,
   [ChainId.SCROLL_ALPHA]: null,
   [ChainId.PALM]: null,
+  [ChainId.LINEA]: null,
   [ChainId.LINEA_GORLI]: null
 }
