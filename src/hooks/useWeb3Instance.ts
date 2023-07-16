@@ -9,7 +9,7 @@ export function useWeb3Instance() {
 
   useEffect(() => {
     if (library) {
-      const instance = new Web3(Web3.givenProvider || (library.provider as provider))
+      const instance = new Web3(library.provider as provider)
       setWeb3jsInstance(instance)
     }
   }, [account, library])
@@ -19,6 +19,7 @@ export function useWeb3Instance() {
 
 export function useSignMessage() {
   const { account } = useActiveWeb3React()
+  console.log('🚀 ~ file: useWeb3Instance.ts:22 ~ useSignMessage ~ account:', account)
   const web3 = useWeb3Instance()
   return useCallback(
     (message: string) => {
