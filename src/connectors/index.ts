@@ -76,7 +76,7 @@ export const [connector_walletConnectV2, hooks_walletConnectV2] = initializeConn
     actions,
     options: {
       projectId: `${REACT_APP_WALLET_CONNECT_PROJECT_ID}`,
-      chains: [NETWORK_CHAIN_ID],
+      chains: SUPPORT_NETWORK_CHAIN_IDS,
       showQrModal: true
       // projectId: string;
       // chains: number[];
