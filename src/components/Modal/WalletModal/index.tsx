@@ -72,9 +72,9 @@ export function useGetWalletOptions(_?: boolean, activation?: (connector: Abstra
     if (isMobile && option.name === 'OKX Wallet' && (!window.okxwallet || !window.ethereum)) {
       return null
     }
-    if (isMobile && option.name === 'WalletConnectV2' && (window.web3 || window.ethereum)) {
-      return null
-    }
+    // if (isMobile && option.name === 'WalletConnectV2' && (window.web3 || window.ethereum)) {
+    //   return null
+    // }
 
     // overwrite injected when needed
     if (
