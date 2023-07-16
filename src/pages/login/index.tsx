@@ -12,7 +12,6 @@ import { useGetWalletOptions } from 'components/Modal/WalletModal'
 import { useActiveWeb3React } from 'hooks'
 import { useOpenModal } from 'state/application/hooks'
 import { ApplicationModal } from 'state/application/actions'
-import { useWeb3React } from '@web3-react/core'
 import { routes } from 'constants/routes'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
@@ -56,20 +55,19 @@ export function LoginLayout({ image, isSm, children }: { image: string; isSm: bo
 const Login: React.FC = () => {
   const { redirect } = useQueryParams()
   const { token } = useUserInfo()
-  const { error } = useWeb3React()
 
   const navigate = useNavigate()
   const getWalletOptions = useGetWalletOptions()
-  const { account } = useActiveWeb3React()
+  const { account, errorNetwork } = useActiveWeb3React()
   const openSignLoginModal = useOpenModal(ApplicationModal.SIGN_LOGIN)
   const openWalletModal = useOpenModal(ApplicationModal.WALLET)
   const isSm = useBreakpoint('sm')
 
   useEffect(() => {
-    if (error) {
+    if (errorNetwork) {
       openWalletModal()
     }
-  }, [error, openWalletModal])
+  }, [errorNetwork, openWalletModal])
 
   useEffect(() => {
     if (account && !token) {

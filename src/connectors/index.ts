@@ -1,19 +1,19 @@
 import { Web3Provider } from '@ethersproject/providers'
-import { InjectedConnector } from '@web3-react/injected-connector'
-import { BscConnector } from '@binance-chain/bsc-connector'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { WalletLinkConnector } from '@web3-react/walletlink-connector'
-import { PortisConnector } from '@web3-react/portis-connector'
 import { OKXConnector } from './OKXWalletConnector'
-
-import { FortmaticConnector } from './Fortmatic'
+import { BscConnector } from '@binance-chain/bsc-connector'
+import { OKXWallet } from '@okwallet/web3-react-okxwallet'
+import { Network } from '@web3-react/network'
+import { MetaMask } from '@web3-react/metamask'
+import { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2'
+import { initializeConnector } from '@web3-react/core'
+import { MetamaskConnector } from './MetamaskConnector'
 import { NetworkConnector } from './NetworkConnector'
-import { SUPPORT_NETWORK_CHAIN_IDS, NETWORK_CHAIN_ID } from 'constants/chain'
+import { SUPPORT_NETWORK_CHAIN_IDS, NETWORK_CHAIN_ID, ChainId } from 'constants/chain'
 import { getRpcUrl } from './MultiNetworkConnector'
+// import { docCookies } from './cookie'
 
 const NETWORK_URL = process.env.REACT_APP_NETWORK_URL
-const FORMATIC_KEY = process.env.REACT_APP_FORTMATIC_KEY
-const PORTIS_ID = process.env.REACT_APP_PORTIS_ID
+export const REACT_APP_WALLET_CONNECT_PROJECT_ID = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID
 
 if (typeof NETWORK_URL === 'undefined') {
   throw new Error(`REACT_APP_NETWORK_URL must be a defined environment variable`)
@@ -28,14 +28,14 @@ export function getNetworkLibrary(): Web3Provider {
   return (networkLibrary = networkLibrary ?? new Web3Provider(network.provider as any))
 }
 
-export const injected = new InjectedConnector({
+export const injected = new MetamaskConnector({
   supportedChainIds: SUPPORT_NETWORK_CHAIN_IDS
 })
 
 // binance only
 export const binance = new BscConnector({ supportedChainIds: [56] })
 
-export const OKXWalletConnector = new OKXConnector({
+export const okInjected = new OKXConnector({
   supportedChainIds: SUPPORT_NETWORK_CHAIN_IDS
 })
 
@@ -44,31 +44,61 @@ for (const id of SUPPORT_NETWORK_CHAIN_IDS) {
   walletConnectRpc[id] = getRpcUrl(id)
 }
 
-// mainnet only
-export const walletconnect = new WalletConnectConnector({
-  rpc: walletConnectRpc,
-  supportedChainIds: SUPPORT_NETWORK_CHAIN_IDS,
-  bridge: 'https://bridge.lteco.xyz/hello',
-  chainId: NETWORK_CHAIN_ID || undefined,
-  qrcode: true
+// @web3-react/core 8.2.0
+// docCookies.getItem('selectWallet') !== 'Metamask' &&
+//   docCookies.setItem('selectWallet', 'Metamask', 'Fri, 31 Dec 9999 23:59:59 GMT') &&
+//   window.location.reload()
+export const [connector_network, hooks_network] = initializeConnector<Network>(
+  actions => new Network({ actions, urlMap: { [NETWORK_CHAIN_ID]: NETWORK_URL } })
+)
+export const [connector_okxWallet, hooks_okxWallet] = initializeConnector<OKXWallet>(
+  actions =>
+    new OKXWallet({
+      actions,
+      options: {
+        mustBeOKXWallet: true
+      }
+    })
+)
+export const [connector_metaMask, hooks_metaMask] = initializeConnector<MetaMask>(
+  actions =>
+    new MetaMask({
+      actions,
+      options: {
+        mustBeMetaMask: true
+      }
+    })
+)
+
+export const [connector_walletConnectV2, hooks_walletConnectV2] = initializeConnector<WalletConnectV2>(actions => {
+  return new WalletConnectV2({
+    // actions, options, defaultChainId, timeout, onError
+    actions,
+    options: {
+      projectId: `${REACT_APP_WALLET_CONNECT_PROJECT_ID}`,
+      chains: [NETWORK_CHAIN_ID],
+      showQrModal: true
+      // projectId: string;
+      // chains: number[];
+      // optionalChains?: number[];
+      // methods?: string[];
+      // optionalMethods?: string[];
+      // events?: string[];
+      // optionalEvents?: string[];
+      // rpcMap?: EthereumRpcMap;
+      // metadata?: Metadata;
+      // showQrModal: boolean;
+      // qrModalOptions?: QrModalOptions;
+    }
+  })
 })
 
-// mainnet only
-export const fortmatic = new FortmaticConnector({
-  apiKey: FORMATIC_KEY ?? '',
-  chainId: 1
-})
+export const OVERLAY_READY = 'OVERLAY_READY'
 
-// mainnet only
-export const portis = new PortisConnector({
-  dAppId: PORTIS_ID ?? '',
-  networks: [1]
-})
+export type FormaticSupportedChains = Extract<ChainId, ChainId.MAINNET | ChainId.SEPOLIA | ChainId.GÖRLI>
 
-// mainnet only
-export const walletlink = new WalletLinkConnector({
-  url: NETWORK_URL,
-  appName: 'dualinvest',
-  appLogoUrl:
-    'https://mpng.pngfly.com/20181202/bex/kisspng-emoji-domain-unicorn-pin-badges-sticker-unicorn-tumblr-emoji-unicorn-iphoneemoji-5c046729264a77.5671679315437924251569.jpg'
-})
+export const CHAIN_ID_NETWORK_ARGUMENT: { readonly [chainId in FormaticSupportedChains]: string | undefined } = {
+  [ChainId.MAINNET]: 'Ethereum',
+  [ChainId.SEPOLIA]: 'Sepolia',
+  [ChainId.GÖRLI]: 'Goerli'
+}

@@ -1,4 +1,4 @@
-import { useModalOpen, useSignLoginModalToggle } from 'state/application/hooks'
+import { useModalOpen, useSignLoginModalControl } from 'state/application/hooks'
 import Modal from '../Modal'
 import { ApplicationModal } from 'state/application/actions'
 import { Box, Button, Typography } from '@mui/material'
@@ -6,31 +6,29 @@ import logo from 'assets/svg/logo-icon.svg'
 import Image from 'components/Image'
 import { useUserInfo, useWeb3Login } from 'state/users/hooks'
 import { useCallback, useEffect } from 'react'
-import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
-import { useWeb3React } from '@web3-react/core'
+import { setPrevConnectWallet } from 'utils/isInjectedConnectedPrev'
 import { useActiveWeb3React } from 'hooks'
 import { LoadingButton } from '@mui/lab'
 
 export default function LoginModal() {
-  const { connector, deactivate } = useWeb3React()
-  const { account } = useActiveWeb3React()
+  const { connector, account } = useActiveWeb3React()
   const walletModalOpen = useModalOpen(ApplicationModal.SIGN_LOGIN)
-  const toggleSignLoginModal = useSignLoginModalToggle()
+  const { close, open } = useSignLoginModalControl()
   const { run: login, loading } = useWeb3Login()
 
   const { token } = useUserInfo()
 
   const closeModal = useCallback(() => {
     if (token && walletModalOpen) {
-      toggleSignLoginModal()
+      close()
     }
-  }, [toggleSignLoginModal, token, walletModalOpen])
+  }, [close, token, walletModalOpen])
 
   const openModal = useCallback(() => {
     if (!token && !walletModalOpen && account) {
-      toggleSignLoginModal()
+      open()
     }
-  }, [account, toggleSignLoginModal, token, walletModalOpen])
+  }, [account, open, token, walletModalOpen])
 
   useEffect(() => {
     closeModal()
@@ -43,14 +41,14 @@ export default function LoginModal() {
   }, [account])
 
   const cancel = useCallback(() => {
-    setInjectedConnected()
-    deactivate()
-    connector?.deactivate()
-    toggleSignLoginModal()
-  }, [connector, deactivate, toggleSignLoginModal])
+    setPrevConnectWallet(null)
+    connector?.deactivate && connector.deactivate()
+    connector?.resetState()
+    close()
+  }, [close, connector])
 
   return (
-    <Modal customIsOpen={walletModalOpen && !token} customOnDismiss={cancel} maxWidth="480px">
+    <Modal customIsOpen={walletModalOpen && !token && !!account} customOnDismiss={cancel} maxWidth="480px">
       <Box width={'100%'} padding="48px" display="flex" flexDirection="column" alignItems="center" gap={20}>
         <Image width={50} src={logo} />
         <Typography variant="h2">Welcome to Bounce</Typography>
