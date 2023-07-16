@@ -78,7 +78,7 @@ export const [connector_walletConnectV2, hooks_walletConnectV2] = initializeConn
     timeout: 10000,
     options: {
       projectId: `${REACT_APP_WALLET_CONNECT_PROJECT_ID}`,
-      chains: [1, 56],
+      chains: [1],
       showQrModal: true
       // projectId: string;
       // chains: number[];

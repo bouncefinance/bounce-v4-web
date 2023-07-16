@@ -51,7 +51,6 @@ export function useActiveWeb3React(): {
   const library = hooks.useProvider()
 
   let account = hooks.useAccount()
-  console.log('🚀 ~ file: index.ts:54 ~ useActiveWeb3React ~ account:', account, chainId)
   if (chainId && !isSupportNetwork(chainId)) {
     account = undefined
   }

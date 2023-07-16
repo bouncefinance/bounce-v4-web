@@ -66,7 +66,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   },
   WALLET_CONNECT: {
     connector: connector_walletConnectV2,
-    name: 'WalletConnect',
+    name: 'WalletConnectV2',
     iconName: 'walletConnectIcon.svg',
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,

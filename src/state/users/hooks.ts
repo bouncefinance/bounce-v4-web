@@ -359,7 +359,6 @@ export function useUpdateUserLoginInfoWithWindowVisible() {
     const localUserToken = getLocalUserToken()
 
     if (windowVisible) {
-      console.log('🚀 ~ file: hooks.ts:360 ~ useEffect ~ localUserToken:', localUserToken)
       dispatch({
         type: 'users/saveLoginInfo',
         payload: {

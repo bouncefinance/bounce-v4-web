@@ -42,19 +42,13 @@ export function useGetWalletOptions(_?: boolean, activation?: (connector: Abstra
         }
         return true
       })
-
-      console.log('🚀 ~ file: index.tsx:47 ~ useGetWalletOptions ~ connector:', connector)
       connector
         ?.activate()
         .then(() => {
-          console.log('🚀 ~ file: index.tsx:47 ~ useGetWalletOptions ~ connector:', 'success')
           setPrevConnectWallet(name)
           signLoginModalToggle()
-          // HOMIE 链接钱包回调
-          // window.location.reload()
         })
         .catch(error => {
-          console.log('🚀 ~ file: index.tsx:57 ~ useGetWalletOptions ~ error:', error)
           toggleWalletModal()
           setPrevConnectWallet(null)
           // localStorage.removeItem('wc@2:core:0.3//subscription')

@@ -18,8 +18,7 @@ export function useWeb3Instance() {
 }
 
 export function useSignMessage() {
-  const { account, chainId } = useActiveWeb3React()
-  console.log('🚀 ~ file: useWeb3Instance.ts:22 ~ useSignMessage ~ chainId:', account, chainId)
+  const { account } = useActiveWeb3React()
   const web3 = useWeb3Instance()
   return useCallback(
     (message: string) => {
