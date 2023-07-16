@@ -69,9 +69,9 @@ export function useGetWalletOptions(
 
   return Object.keys(SUPPORTED_WALLETS).map(key => {
     const option = SUPPORTED_WALLETS[key]
-    // if (isMobile && option.name === 'MetaMask' && (!window.web3 || !window.ethereum || window.okxwallet)) {
-    //   return null
-    // }
+    if (isMobile && option.name === 'MetaMask' && (!window.web3 || !window.ethereum || window.okxwallet)) {
+      return null
+    }
     if (isMobile && option.name === 'OKX Wallet' && (!window.okxwallet || !window.ethereum)) {
       return null
     }
@@ -124,7 +124,7 @@ export function useGetWalletOptions(
         return null
       }
       // likewise for generic
-      else if (option.name === 'Injected' && isMetamask) {
+      else if (!isMobile && option.name === 'Injected') {
         return null
       }
     }

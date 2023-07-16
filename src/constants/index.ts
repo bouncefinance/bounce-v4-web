@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { injected, connector_walletConnectV2, connector_metaMask, connector_okxWallet } from '../connectors'
+import { connector_walletConnectV2, connector_metaMask, connector_okxWallet } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -30,7 +30,7 @@ export interface WalletInfo {
 
 export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   INJECTED: {
-    connector: injected,
+    connector: connector_metaMask,
     name: 'Injected',
     iconName: 'arrow-right.svg',
     description: 'Injected web3 provider.',
