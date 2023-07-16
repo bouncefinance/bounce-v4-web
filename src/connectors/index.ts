@@ -74,6 +74,8 @@ export const [connector_walletConnectV2, hooks_walletConnectV2] = initializeConn
   return new WalletConnectV2({
     // actions, options, defaultChainId, timeout, onError
     actions,
+    defaultChainId: 1,
+    timeout: 10000,
     options: {
       projectId: `${REACT_APP_WALLET_CONNECT_PROJECT_ID}`,
       chains: SUPPORT_NETWORK_CHAIN_IDS,
