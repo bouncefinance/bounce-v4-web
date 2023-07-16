@@ -28,7 +28,10 @@ const WALLET_VIEWS = {
 }
 
 // get wallets user can switch too, depending on device/browser
-export function useGetWalletOptions(_?: boolean, activation?: (connector: AbstractConnector | undefined) => void) {
+export function useGetWalletOptions(
+  isModal?: boolean,
+  activation?: (connector: AbstractConnector | undefined) => void
+) {
   const toggleWalletModal = useWalletModalToggle()
   const signLoginModalToggle = useSignLoginModalToggle()
 
@@ -49,7 +52,7 @@ export function useGetWalletOptions(_?: boolean, activation?: (connector: Abstra
           signLoginModalToggle()
         })
         .catch(error => {
-          toggleWalletModal()
+          isModal && toggleWalletModal()
           setPrevConnectWallet(null)
           // localStorage.removeItem('wc@2:core:0.3//subscription')
           if (!String(error).includes(`User rejected methods`)) {
@@ -57,7 +60,7 @@ export function useGetWalletOptions(_?: boolean, activation?: (connector: Abstra
           }
         })
     },
-    [signLoginModalToggle, toggleWalletModal]
+    [isModal, signLoginModalToggle, toggleWalletModal]
   )
 
   const tryActivation = activation || defaultActivation
@@ -66,9 +69,9 @@ export function useGetWalletOptions(_?: boolean, activation?: (connector: Abstra
 
   return Object.keys(SUPPORTED_WALLETS).map(key => {
     const option = SUPPORTED_WALLETS[key]
-    if (isMobile && option.name === 'MetaMask' && (!window.web3 || !window.ethereum || window.okxwallet)) {
-      return null
-    }
+    // if (isMobile && option.name === 'MetaMask' && (!window.web3 || !window.ethereum || window.okxwallet)) {
+    //   return null
+    // }
     if (isMobile && option.name === 'OKX Wallet' && (!window.okxwallet || !window.ethereum)) {
       return null
     }
