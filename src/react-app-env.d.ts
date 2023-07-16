@@ -7,7 +7,7 @@ interface Window {
     isMetaMask?: true
     on?: (...args: any[]) => void
     send: (...args: any[]) => void
-    request?: (...args: any[]) => void
+    request?: (...args: any[]) => Promise<any>
     removeListener?: (...args: any[]) => void
   }
   okxwallet?: {
@@ -26,7 +26,22 @@ interface Window {
     _chainId?: number
   }
   // eslint-disable-next-line @typescript-eslint/ban-types
-  web3?: {}
+  web3?: {
+    isMetaMask?: false
+    on?: (...args: any[]) => void
+    send: (...args: any[]) => Promise<any>
+    enable: (...args: any[]) => Promise<any>
+    request?: (...args: any[]) => Promise<any>
+    removeListener?: (...args: any[]) => void
+    autoRefreshOnNetworkChange?: any
+    cachedResults?: any
+    isDapper?: boolean
+    chainId?: number
+    netVersion?: number
+    networkVersion?: number
+    _chainId?: number
+    currentProvider: any
+  }
 }
 
 declare module 'content-hash' {

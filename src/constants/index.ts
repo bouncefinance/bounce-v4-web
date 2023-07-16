@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { OKXWalletConnector, injected, walletconnect, walletlink } from '../connectors'
+import { injected, connector_walletConnectV2, connector_metaMask, connector_okxWallet } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -16,7 +16,7 @@ export const autoConnectInjectedEveryone = false
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export interface WalletInfo {
-  connector?: AbstractConnector
+  connector?: AbstractConnector | any
   name: string
   iconName: string
   description: string
@@ -39,7 +39,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     primary: true
   },
   METAMASK: {
-    connector: injected,
+    connector: connector_metaMask,
     name: 'MetaMask',
     iconName: 'metamask.png',
     description: 'Easy-to-use browser extension.',
@@ -57,17 +57,16 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
   //   mobileOnly: true
   // },
   OKEX: {
-    connector: OKXWalletConnector,
+    connector: connector_okxWallet,
     name: 'OKX Wallet',
     iconName: 'okxIcon.png',
     description: 'Easy-to-use browser extension.',
-    href: '',
-    color: '#E8831D',
-    mobile: true
+    href: null,
+    color: '#E8831D'
   },
   WALLET_CONNECT: {
-    connector: walletconnect,
-    name: 'WalletConnect',
+    connector: connector_walletConnectV2,
+    name: 'WalletConnectV2',
     iconName: 'walletConnectIcon.svg',
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
     href: null,
@@ -75,11 +74,12 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true
   },
   WALLET_LINK: {
-    connector: walletlink,
+    connector: undefined,
     name: 'Coinbase',
     iconName: 'coinbaseWalletIcon.svg',
     description: 'Use Coinbase Wallet app on mobile device',
     href: null,
+    disabled: true,
     color: '#315CF5'
   },
   BINANCE: {

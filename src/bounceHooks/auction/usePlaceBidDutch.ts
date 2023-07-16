@@ -132,7 +132,7 @@ const useDutchPlaceBid = (poolInfo: DutchAuctionPoolProp) => {
             summary: `Use ${amount1.toSignificant()} ${poolInfo.token1.symbol} swap to ${poolInfo.token0.symbol}`,
             userSubmitted: {
               account,
-              action: `fixed_price_swap`,
+              action: `dutch_auction_swap`,
               key: poolInfo.poolId
             }
           })

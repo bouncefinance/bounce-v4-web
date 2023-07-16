@@ -1,11 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { isMobile } from 'react-device-detect'
 import { Typography, Box, Button } from '@mui/material'
 import MetamaskIcon from 'assets/walletIcon/metamask.png'
-import { /*fortmatic,*/ injected, portis } from 'connectors'
+import OkxIcon from 'assets/walletIcon/okxIcon.png'
+import { connector_metaMask, injected, connector_okxWallet } from '../../../connectors'
 // import { OVERLAY_READY } from 'connectors/Fortmatic'
 import { SUPPORTED_WALLETS } from 'constants/index'
 import usePrevious from 'hooks/usePrevious'
@@ -18,7 +17,9 @@ import Option from './Option'
 import PendingView from './PendingView'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ChainId, NETWORK_CHAIN_ID, SUPPORTED_NETWORKS } from '../../../constants/chain'
-import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
+import { useActiveWeb3React } from 'hooks'
+import { URI_AVAILABLE } from '@web3-react/walletconnect-v2'
+import { setPrevConnectWallet } from 'utils/isInjectedConnectedPrev'
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
@@ -27,121 +28,96 @@ const WALLET_VIEWS = {
 }
 
 // get wallets user can switch too, depending on device/browser
-export function useGetWalletOptions(
-  isModal?: boolean,
-  activation?: (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined) => Promise<void>
-) {
-  const { activate, connector } = useWeb3React()
+export function useGetWalletOptions(_?: boolean, activation?: (connector: AbstractConnector | undefined) => void) {
   const toggleWalletModal = useWalletModalToggle()
   const signLoginModalToggle = useSignLoginModalToggle()
 
   const defaultActivation = useCallback(
-    async (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined) => {
-      const conn = typeof connector === 'function' ? await connector() : connector
-
-      // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
-      if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.connector?.connected) {
-        conn.walletConnectProvider = undefined
-      }
-
-      conn &&
-        activate(conn, undefined, true)
-          .then(() => {
-            setInjectedConnected(conn)
-            signLoginModalToggle()
-          })
-          .catch(error => {
-            if (error instanceof UnsupportedChainIdError) {
-              activate(conn) // a little janky...can't use setError because the connector isn't set
-            }
-            setInjectedConnected()
-          })
+    (connector: AbstractConnector | undefined) => {
+      type WalletType = 'MetaMask' | 'OKX Wallet' | 'WalletConnectV2'
+      let name = '' as WalletType
+      Object.keys(SUPPORTED_WALLETS).map(key => {
+        if (connector === SUPPORTED_WALLETS[key].connector) {
+          return (name = SUPPORTED_WALLETS[key].name as WalletType)
+        }
+        return true
+      })
+      connector
+        ?.activate()
+        .then(() => {
+          setPrevConnectWallet(name)
+          signLoginModalToggle()
+        })
+        .catch(error => {
+          toggleWalletModal()
+          setPrevConnectWallet(null)
+          // localStorage.removeItem('wc@2:core:0.3//subscription')
+          if (!String(error).includes(`User rejected methods`)) {
+            localStorage.removeItem('localSaveWalletKey')
+          }
+        })
     },
-    [activate, signLoginModalToggle]
+    [signLoginModalToggle, toggleWalletModal]
   )
+
   const tryActivation = activation || defaultActivation
 
   const isMetamask = window.ethereum && window.ethereum.isMetaMask
+
   return Object.keys(SUPPORTED_WALLETS).map(key => {
     const option = SUPPORTED_WALLETS[key]
-    // check for mobile options
-
-    if (isMobile) {
-      //disable portis on mobile for now
-      if (option.connector === portis) {
-        return null
-      }
-
-      if (!window.web3 && !window.ethereum && option.mobile) {
-        return (
-          <Option
-            onClick={() => {
-              option.connector !== connector && !option.href && tryActivation(option.connector)
-            }}
-            id={`connect-${key}`}
-            key={key}
-            clickable={!option.disabled}
-            active={option.connector && option.connector === connector}
-            link={option.href}
-            header={option.name}
-            icon={require('../../../assets/walletIcon/' + option.iconName)}
-          />
-        )
-      } else if (isMetamask && option.name === 'MetaMask') {
-        return (
-          <Option
-            onClick={() => {
-              option.connector !== connector && !option.href && tryActivation(option.connector)
-            }}
-            id={`connect-${key}`}
-            clickable={!option.disabled}
-            key={key}
-            active={option.connector && option.connector === connector}
-            link={option.href}
-            header={option.name}
-            icon={require('../../../assets/walletIcon/' + option.iconName)}
-          />
-        )
-      } else if (option.name === 'OKX Wallet') {
-        return (
-          <Option
-            onClick={() => {
-              option.connector !== connector && !option.href && tryActivation(option.connector)
-            }}
-            id={`connect-${key}`}
-            clickable={!option.disabled}
-            key={key}
-            active={option.connector && option.connector === connector}
-            link={option.href}
-            header={option.name}
-            icon={require('../../../assets/walletIcon/' + option.iconName)}
-          />
-        )
-      }
+    if (isMobile && option.name === 'MetaMask' && (!window.web3 || !window.ethereum || window.okxwallet)) {
+      return null
+    }
+    if (isMobile && option.name === 'OKX Wallet' && (!window.okxwallet || !window.ethereum)) {
+      return null
+    }
+    if (isMobile && option.name === 'WalletConnectV2' && (window.web3 || window.ethereum)) {
       return null
     }
 
     // overwrite injected when needed
-    if (option.connector === injected) {
+    if (
+      option.connector === connector_metaMask ||
+      option.connector === connector_okxWallet ||
+      option.connector === injected
+    ) {
       // don't show injected if there's no injected provider
-      if (!(window.web3 || window.ethereum)) {
-        if (option.name === 'MetaMask') {
-          return (
-            <Option
-              id={`connect-${key}`}
-              clickable={!option.disabled}
-              key={key}
-              header={'Install Metamask'}
-              link={'https://metamask.io/'}
-              icon={MetamaskIcon}
-            />
-          )
-        } else {
-          return null //dont want to return install twice
-        }
+      if (!window.web3 && option.name === 'MetaMask') {
+        return (
+          <Option
+            clickable={!option.disabled}
+            id={`connect-${key}`}
+            key={key}
+            header={'Install Metamask'}
+            link={'https://metamask.io/'}
+            icon={MetamaskIcon}
+            onClick={() => {
+              toggleWalletModal()
+            }}
+          />
+        )
+      } else if (!window.okxwallet && option.name === 'OKX Wallet') {
+        return (
+          <Option
+            clickable={!option.disabled}
+            id={`connect-${key}`}
+            key={key}
+            header={'Install OKX Wallet'}
+            link={'https://www.okx.com/'}
+            icon={OkxIcon}
+            onClick={() => {
+              toggleWalletModal()
+            }}
+          />
+        )
+      } else if (!window.web3 && !window.okxwallet && option.name === 'Injected') {
+        return null
       }
       // don't return metamask if injected provider isn't metamask
       else if (option.name === 'MetaMask' && !isMetamask) {
+        return null
+      } else if (option.name === 'OKX Wallet' && !isMetamask) {
         return null
       }
       // likewise for generic
@@ -149,27 +125,139 @@ export function useGetWalletOptions(
         return null
       }
     }
-
     // return rest of options
-    return !isMobile && !option.mobileOnly ? (
-      <Option
-        id={`connect-${key}`}
-        clickable={!option.disabled}
-        onClick={() => {
-          option.connector === connector
-            ? isModal
-              ? toggleWalletModal()
-              : null
-            : !option.href && tryActivation(option.connector)
-        }}
-        key={key}
-        active={option.connector === connector}
-        link={option.href}
-        header={option.name}
-        icon={require('../../../assets/walletIcon/' + option.iconName)}
-      />
-    ) : null
+    return (
+      !option.mobileOnly && (
+        <Option
+          clickable={!option.disabled}
+          id={`connect-${key}`}
+          onClick={() => {
+            localStorage.setItem('localSaveWalletKey', option.name)
+            // option.connector === connector
+            //   ? setWalletView(WALLET_VIEWS.ACCOUNT)
+            //   : !option.href && tryActivation(option.connector)
+            // TODO HOMIE 硬处理强制连接
+            !option.href && tryActivation(option.connector)
+          }}
+          key={key}
+          // active={option.connector === connector}
+          active={false}
+          link={option.href}
+          header={option.name}
+          icon={require('../../../assets/walletIcon/' + option.iconName)}
+        />
+      )
+    )
   })
+
+  // return Object.keys(SUPPORTED_WALLETS).map(key => {
+  //   const option = SUPPORTED_WALLETS[key]
+  //   // check for mobile options
+
+  //   if (isMobile) {
+  //     //disable portis on mobile for now
+  //     if (option.connector === portis) {
+  //       return null
+  //     }
+
+  //     if (!window.web3 && !window.ethereum && option.mobile) {
+  //       return (
+  //         <Option
+  //           onClick={() => {
+  //             option.connector !== connector && !option.href && tryActivation(option.connector)
+  //           }}
+  //           id={`connect-${key}`}
+  //           key={key}
+  //           clickable={!option.disabled}
+  //           active={option.connector && option.connector === connector}
+  //           link={option.href}
+  //           header={option.name}
+  //           icon={require('../../../assets/walletIcon/' + option.iconName)}
+  //         />
+  //       )
+  //     } else if (isMetamask && option.name === 'MetaMask') {
+  //       return (
+  //         <Option
+  //           onClick={() => {
+  //             option.connector !== connector && !option.href && tryActivation(option.connector)
+  //           }}
+  //           id={`connect-${key}`}
+  //           clickable={!option.disabled}
+  //           key={key}
+  //           active={option.connector && option.connector === connector}
+  //           link={option.href}
+  //           header={option.name}
+  //           icon={require('../../../assets/walletIcon/' + option.iconName)}
+  //         />
+  //       )
+  //     } else if (option.name === 'OKX Wallet') {
+  //       return (
+  //         <Option
+  //           onClick={() => {
+  //             option.connector !== connector && !option.href && tryActivation(option.connector)
+  //           }}
+  //           id={`connect-${key}`}
+  //           clickable={!option.disabled}
+  //           key={key}
+  //           active={option.connector && option.connector === connector}
+  //           link={option.href}
+  //           header={option.name}
+  //           icon={require('../../../assets/walletIcon/' + option.iconName)}
+  //         />
+  //       )
+  //     }
+  //     return null
+  //   }
+
+  //   // overwrite injected when needed
+  //   if (option.connector === injected) {
+  //     // don't show injected if there's no injected provider
+  //     if (!(window.web3 || window.ethereum)) {
+  //       if (option.name === 'MetaMask') {
+  //         return (
+  //           <Option
+  //             id={`connect-${key}`}
+  //             clickable={!option.disabled}
+  //             key={key}
+  //             header={'Install Metamask'}
+  //             link={'https://metamask.io/'}
+  //             icon={MetamaskIcon}
+  //           />
+  //         )
+  //       } else {
+  //         return null //dont want to return install twice
+  //       }
+  //     }
+  //     // don't return metamask if injected provider isn't metamask
+  //     else if (option.name === 'MetaMask' && !isMetamask) {
+  //       return null
+  //     }
+  //     // likewise for generic
+  //     else if (option.name === 'Injected' && isMetamask) {
+  //       return null
+  //     }
+  //   }
+
+  //   // return rest of options
+  //   return !isMobile && !option.mobileOnly ? (
+  //     <Option
+  //       id={`connect-${key}`}
+  //       clickable={!option.disabled}
+  //       onClick={() => {
+  //         option.connector === connector
+  //           ? isModal
+  //             ? toggleWalletModal()
+  //             : null
+  //           : !option.href && tryActivation(option.connector)
+  //       }}
+  //       key={key}
+  //       active={option.connector === connector}
+  //       link={option.href}
+  //       header={option.name}
+  //       icon={require('../../../assets/walletIcon/' + option.iconName)}
+  //     />
+  //   ) : null
+  // })
 }
 
 export default function WalletModal({
@@ -184,7 +272,10 @@ export default function WalletModal({
   const isUpToMD = useBreakpoint('md')
 
   // important that these are destructed from the account-specific web3-react context
-  const { active, account, connector, activate, error } = useWeb3React()
+  const { connector, hooks, account, chainId, errorNetwork } = useActiveWeb3React()
+  const active = hooks?.useIsActive()
+  const provider = hooks?.useProvider()
+  const walletKey = localStorage.getItem('localSaveWalletKey')
 
   const [walletView, setWalletView] = useState(WALLET_VIEWS.ACCOUNT)
 
@@ -206,10 +297,11 @@ export default function WalletModal({
 
   // always reset to account view
   useEffect(() => {
-    if (walletModalOpen) {
+    if (walletModalOpen && !walletKey) {
       setPendingError(false)
-      setWalletView(WALLET_VIEWS.OPTIONS)
+      setWalletView(WALLET_VIEWS.ACCOUNT)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletModalOpen])
 
   // close modal when a connection is successful
@@ -217,41 +309,52 @@ export default function WalletModal({
   const connectorPrevious = usePrevious(connector)
   const signLoginModalToggle = useSignLoginModalToggle()
   useEffect(() => {
-    if (walletModalOpen && ((active && !activePrevious) || (connector && connector !== connectorPrevious && !error))) {
-      setWalletView(WALLET_VIEWS.OPTIONS)
+    if (
+      walletModalOpen &&
+      ((active && !activePrevious) || (connector && connector !== connectorPrevious && NETWORK_CHAIN_ID === chainId))
+    ) {
+      setWalletView(WALLET_VIEWS.ACCOUNT)
     }
-  }, [setWalletView, active, error, connector, walletModalOpen, activePrevious, connectorPrevious])
+  }, [setWalletView, active, connector, walletModalOpen, activePrevious, connectorPrevious, chainId])
 
   const tryActivation = useCallback(
-    async (connector: (() => Promise<AbstractConnector>) | AbstractConnector | undefined) => {
-      const conn = typeof connector === 'function' ? await connector() : connector
+    (connector: AbstractConnector | undefined) => {
+      type WalletType = 'MetaMask' | 'OKX Wallet' | 'WalletConnectV2'
+      let name = '' as WalletType
+      Object.keys(SUPPORTED_WALLETS).map(key => {
+        if (connector === SUPPORTED_WALLETS[key].connector) {
+          return (name = SUPPORTED_WALLETS[key].name as WalletType)
+        }
+        return true
+      })
 
-      setPendingWallet(conn) // set wallet for pending view
-      setWalletView(WALLET_VIEWS.PENDING)
-
-      // if the connector is walletconnect and the user has already tried to connect, manually reset the connector
-      if (conn instanceof WalletConnectConnector && conn.walletConnectProvider?.connector?.connected) {
-        conn.walletConnectProvider = undefined
-      }
-
-      conn &&
-        activate(conn, undefined, true)
-          .then(() => {
-            setInjectedConnected(conn)
-            signLoginModalToggle()
-          })
-          .catch(error => {
-            if (error instanceof UnsupportedChainIdError) {
-              activate(conn) // a little janky...can't use setError because the connector isn't set
-            } else {
-              setPendingError(true)
-            }
-            setInjectedConnected()
-          })
+      setPendingWallet(connector) // set wallet for pending view
+      connector
+        ?.activate()
+        .then(() => {
+          setPrevConnectWallet(name)
+          // HOMIE 链接钱包回调
+          // window.location.reload()
+          signLoginModalToggle()
+        })
+        .catch(error => {
+          console.error('error:', error)
+          setPrevConnectWallet(null)
+          // localStorage.removeItem('wc@2:core:0.3//subscription')
+          if (!String(error).includes(`User rejected methods`)) {
+            localStorage.removeItem('localSaveWalletKey')
+          }
+        })
     },
-    [activate, signLoginModalToggle]
+    [signLoginModalToggle]
   )
   const getWalletOptions = useGetWalletOptions(true, tryActivation)
+
+  useEffect(() => {
+    ;(pendingWallet as any)?.events?.on(URI_AVAILABLE, () => {
+      toggleWalletModal()
+    })
+  }, [pendingWallet, toggleWalletModal, walletModalOpen])
 
   // close wallet modal if fortmatic modal is active
   // useEffect(() => {
@@ -353,44 +456,46 @@ export default function WalletModal({
   // }
 
   function getModalContent() {
-    if (error) {
+    if (errorNetwork) {
       return (
         <>
           <Typography variant="h3" fontWeight={500}>
-            {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error connecting'}
+            {'Wrong Network'}
           </Typography>
           <Box padding={isUpToMD ? '16px' : '2rem'}>
             <Typography>
-              {error instanceof UnsupportedChainIdError
-                ? `Please connect to the ${
-                    SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]
-                      ? SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]?.chainName
-                      : 'Binance Smart Chain'
-                  }.`
-                : 'Error connecting. Try refreshing the page.'}
+              {`Please connect to the ${
+                SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]
+                  ? SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]?.chainName
+                  : 'Binance Smart Chain'
+              }.`}
             </Typography>
           </Box>
-          {window.ethereum && window.ethereum.isMetaMask && (
-            <Button
-              variant="contained"
-              onClick={() => {
-                const id = Object.values(ChainId).find(val => val === NETWORK_CHAIN_ID)
-                if (!id) {
-                  return
-                }
-                const params = SUPPORTED_NETWORKS[id as ChainId]
-                params?.nativeCurrency.symbol === 'ETH'
-                  ? window.ethereum?.request?.({
-                      method: 'wallet_switchEthereumChain',
-                      params: [{ chainId: params.hexChainId }, account]
-                    })
-                  : window.ethereum?.request?.({ method: 'wallet_addEthereumChain', params: [params, account] })
-              }}
-            >
-              Connect to{' '}
-              {SUPPORTED_NETWORKS[NETWORK_CHAIN_ID] ? SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]?.chainName : 'BSC'}
-            </Button>
-          )}
+          <Button
+            variant="contained"
+            onClick={() => {
+              const id = Object.values(ChainId).find(val => val === NETWORK_CHAIN_ID)
+              if (!id) {
+                return
+              }
+              const params = SUPPORTED_NETWORKS[id as ChainId]
+              provider
+                ?.send('wallet_switchEthereumChain', [{ chainId: params?.hexChainId }, ''])
+                .catch((err: { code: number }) => {
+                  if (err?.code === 4001) return
+                  const obj: any = {}
+                  obj.chainId = params?.hexChainId
+                  obj.chainName = params?.chainName
+                  obj.nativeCurrency = params?.nativeCurrency
+                  obj.rpcUrls = params?.rpcUrls
+                  obj.blockExplorerUrls = params?.blockExplorerUrls
+
+                  provider?.send('wallet_addEthereumChain', [obj, ''])
+                })
+            }}
+          >
+            Connect to {SUPPORTED_NETWORKS[NETWORK_CHAIN_ID] ? SUPPORTED_NETWORKS[NETWORK_CHAIN_ID]?.chainName : 'BSC'}
+          </Button>
         </>
       )
     }

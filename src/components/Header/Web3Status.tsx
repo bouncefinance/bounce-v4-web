@@ -1,7 +1,6 @@
-import { useCallback, useMemo, useState } from 'react'
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { styled, Button, Box, useTheme, Typography, Popper, Stack, Link, MenuItem, Avatar } from '@mui/material'
-import { NetworkContextName } from '../../constants'
+// import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
@@ -16,7 +15,6 @@ import { ChainList } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChevronLeft, ExpandLess, ExpandMore, IosShare } from '@mui/icons-material'
 import Copy from 'components/essential/Copy'
-import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 import { useETHBalance } from 'state/wallet/hooks'
 import { Currency } from 'constants/token'
 import { ClickAwayListener } from '@mui/base'
@@ -35,6 +33,8 @@ import { ReactComponent as TransactionsSvg } from 'assets/svg/account/transactio
 import { ReactComponent as UserSvg } from 'assets/svg/account/user.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import { getPrevConnectWallet, setPrevConnectWallet } from 'utils/isInjectedConnectedPrev'
+import { connector_walletConnectV2 } from 'connectors'
 
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
@@ -91,7 +91,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 }
 
 function Web3StatusInner() {
-  const { account, error } = useWeb3React()
+  const { account, connector, errorNetwork } = useActiveWeb3React()
   const isSm = useBreakpoint('sm')
   const { userInfo } = useUserInfo()
   const { chainId } = useActiveWeb3React()
@@ -110,6 +110,42 @@ function Web3StatusInner() {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget)
+  }
+
+  const { token } = useUserInfo()
+
+  useEffect(() => {
+    // HOMIE 自动激活钱包
+    if (!account && getPrevConnectWallet() === 'WalletConnectV2') {
+      connector_walletConnectV2
+        .connectEagerly()
+        .then(() => {
+          localStorage.removeItem('W3M_RECENT_WALLET_DATA')
+          localStorage.removeItem('WALLETCONNECT_DEEPLINK_CHOICE')
+        })
+        .catch(error => {
+          if (String(error).includes('No active session found. Connect your wallet first')) {
+            // walletconnect 断开后在这里可以监听到固定报错
+            setPrevConnectWallet(null)
+          }
+        })
+    } else {
+      !account &&
+        Boolean(getPrevConnectWallet()) &&
+        connector?.activate()?.catch(error => {
+          // TODO HOMIE 处理连接钱包报错
+          if (error.code === 4001) {
+            // User rejected the request
+            console.error('User rejected the request')
+            setPrevConnectWallet(null)
+          }
+          // 有一个弹出未安装的问题，库的BUG
+        })
+    }
+  }, [account, connector])
+
+  if (!token) {
+    return null
   }
 
   if (account && chainId) {
@@ -197,7 +233,7 @@ function Web3StatusInner() {
         )}
       </ClickAwayListener>
     )
-  } else if (error) {
+  } else if (errorNetwork) {
     return (
       <ActionButton
         sx={{
@@ -207,7 +243,7 @@ function Web3StatusInner() {
         }}
         onClick={toggleWalletModal}
       >
-        {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error'}
+        {'Wrong Network'}
       </ActionButton>
     )
   } else {
@@ -227,9 +263,9 @@ function Web3StatusInner() {
 }
 
 export default function Web3Status() {
-  const { active, account } = useWeb3React()
-  const { token } = useUserInfo()
-  const contextNetwork = useWeb3React(NetworkContextName)
+  // const { active, account } = useWeb3React()
+  const { account } = useActiveWeb3React()
+  // const contextNetwork = useWeb3React(NetworkContextName)
 
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -243,13 +279,13 @@ export default function Web3Status() {
   const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
   const confirmed = sortedRecentTransactions.filter(tx => tx.receipt).map(tx => tx.hash)
 
-  if (!contextNetwork.active && !active) {
-    return null
-  }
+  // if (!contextNetwork.active && !active) {
+  //   return null
+  // }
 
   return (
     <>
-      {token && <Web3StatusInner />}
+      <Web3StatusInner />
       <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
     </>
   )
@@ -265,8 +301,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
   const open = !!anchorEl
   const theme = useTheme()
   const { userInfo } = useUserInfo()
-  const { deactivate, connector } = useWeb3React()
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId, connector } = useActiveWeb3React()
   const { ENSName } = useENSName(account || undefined)
   const myETH = useETHBalance(account || undefined)
   const [curView, setCurView] = useState(WalletView.MAIN)
@@ -350,9 +385,8 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                     <DisconnectSvg
                       onClick={() => {
                         logout()
-                        setInjectedConnected()
-                        deactivate()
-                        connector?.deactivate()
+                        setPrevConnectWallet(null)
+                        connector?.deactivate && connector?.deactivate()
                         close()
                       }}
                     />

@@ -60,6 +60,10 @@ export const SUPPORT_NETWORK_CHAIN_IDS: ChainId[] = process.env.REACT_APP_CHAIN_
   ? process.env.REACT_APP_CHAIN_IDS.split(',').map(v => Number(v) as ChainId)
   : [ChainId.BSC]
 
+export function isSupportNetwork(chainId: ChainId | undefined) {
+  return !!(chainId && SUPPORT_NETWORK_CHAIN_IDS.includes(chainId))
+}
+
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]: {
     id: ChainId
@@ -260,7 +264,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.ZETA_CHAIN_TESTNET]: {
     id: ChainId.ZETA_CHAIN_TESTNET,
     hexChainId: numberToHex(ChainId.ZETA_CHAIN_TESTNET),
-    chainName: 'ZETA Testnet',
+    chainName: 'ZETA Athens 3',
     nativeCurrency: {
       name: 'ZETA',
       symbol: 'ZETA',

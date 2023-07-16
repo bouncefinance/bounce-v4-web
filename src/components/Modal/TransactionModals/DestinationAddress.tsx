@@ -1,12 +1,12 @@
 import { Box, useTheme, styled, Typography } from '@mui/material'
-import { AbstractConnector } from '@web3-react/abstract-connector'
+// import { AbstractConnector } from '@web3-react/abstract-connector'
 import Image from 'components/Image'
-import CoinbaseWalletIcon from 'assets/walletIcon/coinbaseWalletIcon.svg'
-import FortmaticIcon from 'assets/walletIcon/fortmaticIcon.png'
-import PortisIcon from 'assets/walletIcon/portisIcon.png'
+// import CoinbaseWalletIcon from 'assets/walletIcon/coinbaseWalletIcon.svg'
+// import FortmaticIcon from 'assets/walletIcon/fortmaticIcon.png'
+// import PortisIcon from 'assets/walletIcon/portisIcon.png'
 import WalletConnectIcon from 'assets/walletIcon/walletConnectIcon.svg'
 import Matamask from 'assets/walletIcon/metamask.png'
-import { fortmatic, injected, portis, walletconnect, walletlink } from 'connectors'
+import { injected, hooks_walletConnectV2 } from 'connectors'
 import { useActiveWeb3React } from 'hooks'
 import { shortenAddress } from 'utils'
 
@@ -18,20 +18,14 @@ const Dot = styled('span')({
   borderRadius: '50%'
 })
 
-function StatusIcon(connector: AbstractConnector | undefined) {
+function StatusIcon(connector: any | undefined) {
   const style = { height: 16, width: 16, objectFit: 'contain' as const }
   if (connector === injected) {
     const { ethereum } = window
     const isMetaMask = !!(ethereum && ethereum.isMetaMask)
     return isMetaMask ? <Image style={style} src={Matamask} /> : <Dot />
-  } else if (connector === walletconnect) {
+  } else if (connector === hooks_walletConnectV2) {
     return <Image style={style} src={WalletConnectIcon} />
-  } else if (connector === walletlink) {
-    return <Image style={style} src={CoinbaseWalletIcon} />
-  } else if (connector === fortmatic) {
-    return <Image style={style} src={FortmaticIcon} />
-  } else if (connector === portis) {
-    return <Image style={style} src={PortisIcon} />
   }
   return null
 }

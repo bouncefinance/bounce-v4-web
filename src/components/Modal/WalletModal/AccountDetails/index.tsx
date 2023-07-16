@@ -7,10 +7,9 @@ import { clearAllTransactions } from 'state/transactions/actions'
 import { shortenAddress } from 'utils/'
 import Copy from 'components/essential/Copy'
 import Transaction from './Transaction'
-import { SUPPORTED_WALLETS } from 'constants/index'
-import { injected, walletlink } from 'connectors/'
+// import { SUPPORTED_WALLETS } from 'constants/index'
+// import { injected } from 'connectors/'
 import { OutlinedCard } from 'components/Card'
-import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 
 const Dot = styled('span')({
   width: 24,
@@ -45,19 +44,14 @@ export default function AccountDetails({
   ENSName,
   openOptions
 }: AccountDetailsProps) {
-  const { chainId, account, connector, deactivate } = useActiveWeb3React()
+  const { chainId, account, connector } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme()
 
   function formatConnectorName() {
     const { ethereum } = window
     const isMetaMask = !!(ethereum && ethereum.isMetaMask)
-    const name = Object.keys(SUPPORTED_WALLETS)
-      .filter(
-        k =>
-          SUPPORTED_WALLETS[k].connector === connector && (connector !== injected || isMetaMask === (k === 'METAMASK'))
-      )
-      .map(k => SUPPORTED_WALLETS[k].name)[0]
+    const name = isMetaMask ? 'Metamask' : 'wallet'
     return (
       <Typography fontSize="0.825rem" fontWeight={500}>
         Connected with {name}
@@ -80,19 +74,15 @@ export default function AccountDetails({
           color={theme.palette.text.secondary}
         >
           {formatConnectorName()}
-          {connector !== walletlink && (
-            <Button
-              color="secondary"
-              sx={{ ml: '8px', width: 120, height: 30 }}
-              onClick={() => {
-                setInjectedConnected()
-                deactivate()
-                connector?.deactivate()
-              }}
-            >
-              Disconnect
-            </Button>
-          )}
+          <Button
+            color="secondary"
+            sx={{ ml: '8px', width: 120, height: 30 }}
+            onClick={() => {
+              connector?.deactivate && connector?.deactivate()
+            }}
+          >
+            Disconnect
+          </Button>
         </Box>
 
         <Box

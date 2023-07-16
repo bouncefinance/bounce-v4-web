@@ -1,5 +1,4 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { AbstractConnectorArguments } from '@web3-react/types'
 import warning from 'tiny-warning'
 
 function parseSendReturn(sendReturn: any) {
@@ -23,7 +22,7 @@ export class UserRejectedRequestError extends Error {
 }
 
 export class OKXConnector extends AbstractConnector {
-  constructor(kwargs: AbstractConnectorArguments | undefined) {
+  constructor(kwargs: { supportedChainIds?: number[] }) {
     super(kwargs)
 
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this)
