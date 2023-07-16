@@ -8,18 +8,21 @@ import {
   Stack,
   SxProps,
   Typography,
-  styled
+  styled,
+  Switch,
+  FormLabel,
+  FormHelperText
 } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import { Field, Formik } from 'formik'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import * as yup from 'yup'
 import { ChainId, ChainList } from 'constants/chain'
 import Image from 'components/Image'
 import { useActiveWeb3React } from 'hooks'
 import MarkdownEditor from './components/markdownEditor'
-import { AllocationStatus, AuctionType } from 'bounceComponents/create-auction-pool/types'
+import { AllocationStatus, AuctionType, IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
 import { show } from '@ebay/nice-modal-react'
@@ -31,6 +34,54 @@ import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
 import Radio from 'bounceComponents/create-auction-pool/Radio'
+import Tooltip from 'bounceComponents/common/Tooltip'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
+import moment, { Moment } from 'moment'
+import ControlPointIcon from '@mui/icons-material/ControlPoint'
+import { BigNumber } from 'bignumber.js'
+interface IFragmentReleaseTimes {
+  startAt: Moment | null
+  radio: string
+  key?: number
+}
+interface ITokenProps {
+  tokenToAddress: string
+  tokenToSymbol: string
+  tokenToLogoURI: string
+  tokenToDecimals: string
+}
+interface ITokenLogo {
+  fileName: string
+  fileSize: number
+  fileThumbnailUrl: string
+  fileType: string
+  fileUrl: string
+  id: number
+}
+interface IDetailInitValue {
+  fragmentReleaseTimes: IFragmentReleaseTimes[]
+  TokenLogo: ITokenLogo
+  TokenName: string
+  ChainId: ChainId
+  ContractAddress: string
+  ContractDecimalPlaces: string
+  AuctionType: AuctionType
+  Token: ITokenProps
+  SwapRatio: string
+  TotalSupply: string
+
+  startTime: Moment | null
+  endTime: Moment | null
+
+  allocationStatus: AllocationStatus
+  allocationPerWallet: string
+  releaseType: IReleaseType
+  delayUnlockingTime: moment.Moment | null
+  linearUnlockingStartTime: moment.Moment | null
+  linearUnlockingEndTime: moment.Moment | null
+  fragmentReleaseSize?: string
+  isRefundable: boolean
+}
 const basicValidationSchema = yup.object({
   ProjectPicture: yup.object({
     fileName: yup.string(),
@@ -123,56 +174,193 @@ const detailValidationSchema = yup.object({
   }),
   TokenName: yup.string().required(),
   ChainId: yup.number().required(),
-  ContractAddress: yup.string().url().required(),
-  ContractDecimalPlaces: yup.string().url().required(),
+  ContractAddress: yup.string().required(),
+  ContractDecimalPlaces: yup.string().required(),
   Token: yup.object({
     tokenToAddress: yup.string().required(),
-    tokenToSymbol: yup.string().required(),
+    tokenToSymbol: yup.string().required('Funding Currency is a required field'),
     tokenToLogoURI: yup.string().required(),
     tokenToDecimals: yup.string().required()
   }),
-  SwapRatio: yup.number().required(),
-  TotalSupply: yup.number().required(),
-  Time: yup.object({
-    startTime: yup.date().required(),
-    endTime: yup.date().required()
-  })
+  SwapRatio: yup
+    .number()
+    .positive('Swap ratio must be positive')
+    .typeError('Please input valid number')
+    .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+      const _value = new BigNumber(value || 0).toFixed()
+      return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+    })
+    .required('Swap ratio is required'),
+  TotalSupply: yup.number().positive('Total Supply must be positive').required('Total Supply is required'),
+  startTime: yup
+    .date()
+    // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value: any, context: any) => {
+      return !context.parent.endTime.valueOf() || (value?.valueOf() || 0) < context.parent.endTime.valueOf()
+    }),
+  endTime: yup
+    .date()
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value: any, context: any) => {
+      return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
+    }),
+  allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
+  allocationPerWallet: yup
+    .number()
+    .when('allocationStatus', {
+      is: AllocationStatus.Limited,
+      then: yup
+        .number()
+        .typeError('Please input valid number')
+        .positive('Allocation per wallet must be positive')
+        .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+          const _value = new BigNumber(value || 0).toFixed()
+          return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+        })
+        .required('Allocation per wallet is required')
+    })
+    .when('allocationStatus', {
+      is: AllocationStatus.Limited,
+      then: yup
+        .number()
+        .typeError('Please input valid number')
+        .test(
+          'GREATER_THAN_POOL_SIZE',
+          'Allocation per wallet cannot be greater than pool size times swap ratio',
+          (value, context) =>
+            !context.parent.poolSize ||
+            !context.parent.swapRatio ||
+            (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+        )
+    }),
+  delayUnlockingTime: yup
+    .date()
+    .nullable(true)
+    .when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Cliff,
+      then: yup
+        .date()
+        .typeError('Please select a valid time')
+        .required('Please select a valid time')
+        .test({
+          name: 'check-delayUnlockingTime',
+          test: (input, context) => {
+            if (moment(input) < moment()) {
+              return context.createError({ message: 'Please select a time earlier than current time' })
+            }
+            if (
+              !(
+                !context.parent.endTime?.valueOf() ||
+                !context.parent.startTime?.valueOf() ||
+                ((input?.valueOf() || 0) >= context.parent.startTime?.valueOf() &&
+                  (input?.valueOf() || 0) >= context.parent.endTime?.valueOf())
+              )
+            ) {
+              return context.createError({ message: 'Please select a time later than start time and end time' })
+            }
+            return true
+          }
+        })
+    }),
+  linearUnlockingStartTime: yup
+    .date()
+    .nullable(true)
+    .when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Linear,
+      then: yup
+        .date()
+        .typeError('Please select a valid time')
+        .required('Please select a valid time')
+        .test({
+          name: 'check-linearUnlockingStartTime',
+          test: (input, context) => {
+            if (moment(input) < moment()) {
+              return context.createError({ message: 'Please select a time earlier than current time' })
+            }
+            if (
+              !(
+                !context.parent.endTime.valueOf() ||
+                !context.parent.startTime.valueOf() ||
+                ((input?.valueOf() || 0) >= context.parent.startTime.valueOf() &&
+                  (input?.valueOf() || 0) >= context.parent.endTime.valueOf())
+              )
+            ) {
+              return context.createError({ message: 'Please select a time later than start time and end time' })
+            }
+            return true
+          }
+        })
+    }),
+  linearUnlockingEndTime: yup
+    .date()
+    .nullable(true)
+    .when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Linear,
+      then: yup
+        .date()
+        .typeError('Please select a valid time')
+        .required('Please select a valid time')
+        .test({
+          name: 'check-linearUnlockingEndTime',
+          test: (input, context) => {
+            if (moment(input) < moment()) {
+              return context.createError({ message: 'Please select a time earlier than current time' })
+            }
+            if (
+              !(
+                !context.parent.linearUnlockingStartTime.valueOf() ||
+                (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime.valueOf()
+              )
+            ) {
+              return context.createError({ message: 'Please select a time later than linear unlocking end time' })
+            }
+            return true
+          }
+        })
+    }),
+  fragmentReleaseTimes: yup.array().when('releaseType', {
+    is: (val: any) => Number(val) === IReleaseType.Fragment,
+    then: yup.array().of(
+      yup.object().shape({
+        startAt: yup
+          .date()
+          .typeError('Please select a valid time')
+          .required('Please select a valid time')
+          .test({
+            name: 'check-fragmentReleaseTimes',
+            test: (input, context) => {
+              if (moment(input) < moment()) {
+                return context.createError({ message: 'Please select a time earlier than current time' })
+              }
+              return true
+            }
+          }),
+        radio: yup.string().required('Must enter the release ratio')
+      })
+    )
+  }),
+  fragmentReleaseSize: yup.string().when('releaseType', {
+    is: (val: any) => Number(val) === IReleaseType.Fragment,
+    then: yup.string().test('TEST_FRAGMENT_TOTAL', 'Release ratio must add up to 100%', (_, context) => {
+      const endTime = context.parent.endTime?.valueOf() || 0
+      for (const item of context.parent.fragmentReleaseTimes) {
+        if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
+          return context.createError({ message: 'Please select a time earlier than end time' })
+        }
+      }
+      return (
+        context.parent.fragmentReleaseTimes
+          .map((item: { radio: string }) => item.radio)
+          .reduce((a: any, b: any) => (Number(a) || 0) + (Number(b) || 0), [0]) === 100
+      )
+    })
+  }),
+  isRefundable: yup.boolean()
 })
-const UploadIntroduce = ({ title }: { title: string }) => {
-  return (
-    <Stack sx={{ flexDirection: 'column', gap: 8 }}>
-      <BaseTitle1 sx={{ fontSize: 16, color: '#171717' }}>{title}</BaseTitle1>
-      <BaseTitle2 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</BaseTitle2>
-    </Stack>
-  )
-}
-const TextInput = ({ title, name, placeholder }: { title: string; name: string; placeholder: string }) => {
-  return (
-    <Box>
-      <Title sx={{ fontSize: 20 }} mb={16}>
-        {title}
-      </Title>
-      <FormItem name={name}>
-        <OutlinedInput placeholder={placeholder} />
-      </FormItem>
-    </Box>
-  )
-}
-const ImageBg = ({ sx, url }: { sx?: SxProps; url: string }) => {
-  return (
-    <Box
-      sx={{
-        width: 130,
-        height: 52,
-        borderRadius: 4,
-        overflow: 'hidden',
-        ...sx
-      }}
-    >
-      <Image style={{ width: '100%', height: '100%' }} src={url} />
-    </Box>
-  )
-}
+
 const BasicCard = () => {
   const { chainId } = useActiveWeb3React()
   const initBasicValue = {
@@ -496,34 +684,7 @@ const BasicCard = () => {
                 </Stack>
                 <DropFile />
               </BaseBox> */}
-              <Box
-                mt={48}
-                sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 54 }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    padding: '16px 40px',
-                    boxSizing: 'border-box',
-                    background: '#121212',
-                    '&:hover': { background: '#121212', border: 'none' }
-                  }}
-                >
-                  <Title sx={{ fontSize: 16, fontWeight: 500, color: '#fff' }}>Preview</Title>
-                </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    padding: '16px 40px',
-                    boxSizing: 'border-box',
-                    background: '#E1F25C',
-                    '&:hover': { background: '#E1F25C', border: 'none' }
-                  }}
-                >
-                  <Title sx={{ fontSize: 16, fontWeight: 500, color: '#20201E' }}>Submit</Title>
-                </Button>
-              </Box>
+              <SubmitComp />
             </Stack>
           )
         }}
@@ -531,39 +692,23 @@ const BasicCard = () => {
     </CardBox>
   )
 }
-const showTokenDialog = async ({
-  chainId,
-  enableEth = true,
-  setFieldValue
-}: {
-  chainId: ChainId
-  enableEth?: boolean
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
-}) => {
-  const res = await show<Token>(TokenDialog, { chainId, enableEth })
-  setFieldValue('Token', {
-    tokenToAddress: res.address,
-    tokenToSymbol: res.symbol,
-    tokenToLogoURI: res.logoURI,
-    tokenToDecimals: res.decimals
-  })
-}
+// 校验通过了没执行提交函数？
 const DetailCard = () => {
   const { chainId } = useActiveWeb3React()
-  const initDetailValue = {
+  const initDetailValue: IDetailInitValue = {
     TokenLogo: {
       fileName: '',
       fileSize: 0,
       fileThumbnailUrl: '',
       fileType: '',
       fileUrl: '',
-      id: ''
+      id: 0
     },
     TokenName: '',
-    ChainId: chainId,
+    ChainId: chainId as ChainId,
     ContractAddress: '',
     ContractDecimalPlaces: '',
-    AuctionType: 'fixed-price',
+    AuctionType: AuctionType.FIXED_PRICE,
     Token: {
       tokenToAddress: '',
       tokenToSymbol: '',
@@ -572,20 +717,34 @@ const DetailCard = () => {
     },
     SwapRatio: '',
     TotalSupply: '',
-    Time: {
-      startTime: '',
-      endTime: ''
-    },
-    allocationStatus: AllocationStatus.NoLimits
+    startTime: null,
+    endTime: null,
+    allocationStatus: AllocationStatus.NoLimits,
+    allocationPerWallet: '',
+    releaseType: IReleaseType.Cliff,
+    delayUnlockingTime: null,
+    linearUnlockingStartTime: null,
+    linearUnlockingEndTime: null,
+    fragmentReleaseTimes: [],
+    fragmentReleaseSize: '',
+    isRefundable: true
   }
-  const onSubmit = () => {}
+  const onSubmit = (value: IDetailInitValue) => {
+    console.log('submitsubmitsubmitsubmitsubmit')
+    console.log(value)
+  }
 
   return (
     <CardBox>
-      <Formik initialValues={initDetailValue} validationSchema={detailValidationSchema} onSubmit={onSubmit}>
-        {({ values, setFieldValue }) => {
+      <Formik
+        enableReinitialize
+        initialValues={initDetailValue}
+        validationSchema={detailValidationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ values, setFieldValue, errors, handleSubmit }) => {
           return (
-            <Stack component={'form'} gap={24}>
+            <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
                 <Stack flexDirection={'column'} gap={32}>
@@ -629,7 +788,7 @@ const DetailCard = () => {
                     <Title sx={{ fontSize: 14, fontWeight: 500, color: '#626262', mt: 5, mb: 16 }}>
                       What platform is this token issued on?
                     </Title>
-                    <FormItem>
+                    <FormItem name="ChainId">
                       <Select
                         value={values.ChainId}
                         displayEmpty
@@ -685,6 +844,7 @@ const DetailCard = () => {
                   <TextInput name="ContractDecimalPlaces" placeholder="Explorer Link" title="Contract Decimal Places" />
                 </Stack>
               </BaseBox>
+
               <BaseBox>
                 <Title sx={{ color: '#20201E', marginBottom: 64 }}>launchpad information</Title>
                 <Stack flexDirection={'column'} gap={32}>
@@ -692,7 +852,7 @@ const DetailCard = () => {
                     <Title mb={16} sx={{ color: '#20201E', fontSize: 20 }}>
                       Auction Type
                     </Title>
-                    <FormItem>
+                    <FormItem name="AuctionType">
                       <Select
                         value={values.AuctionType}
                         onChange={e => {
@@ -750,7 +910,7 @@ const DetailCard = () => {
                         1 {!values.TokenName ? 'USDT' : values.TokenName} =
                       </Title>
                       {/* 小数点位数大于 精度时还没有报错？ */}
-                      <FormItem placeholder="0.00" required sx={{ flex: 1 }}>
+                      <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
                         <NumberInput
                           value={values.SwapRatio}
                           onUserInput={value => setFieldValue('SwapRatio', value)}
@@ -778,14 +938,14 @@ const DetailCard = () => {
                         component={DateTimePickerFormItem}
                         name="startTime"
                         disablePast
-                        maxDateTime={values.Time.endTime}
+                        maxDateTime={values.endTime}
                         textField={{ sx: { flex: 1 } }}
                       />
                       <Field
                         component={DateTimePickerFormItem}
                         name="endTime"
                         disablePast
-                        minDateTime={values.Time.startTime}
+                        minDateTime={values.startTime}
                         textField={{ sx: { flex: 1 } }}
                       />
                     </Stack>
@@ -805,7 +965,7 @@ const DetailCard = () => {
                       />
                     </Field>
                     {values.allocationStatus === AllocationStatus.Limited && (
-                      <FormItem name="allocationPerWallet" required sx={{ flex: 1 }}>
+                      <FormItem name="allocationPerWallet" sx={{ flex: 1 }}>
                         <OutlinedInput
                           sx={{ mt: 10 }}
                           endAdornment={
@@ -822,8 +982,121 @@ const DetailCard = () => {
                       </FormItem>
                     )}
                   </Box>
+                  <Box>
+                    <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay unlocking token</Title>
+                      <FormControlLabel
+                        checked={values.releaseType === 0}
+                        onChange={() => setFieldValue('releaseType', values.releaseType ? 0 : 1)}
+                        control={<GraySwitch defaultChecked />}
+                        label=""
+                      />
+                    </Stack>
+                    {values.releaseType > 0 && (
+                      <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
+                        <FormControlLabel
+                          value={IReleaseType.Cliff}
+                          control={<Radio disableRipple />}
+                          label={
+                            <Tooltip title="Set a date so traders can only claim tokens by that time.">
+                              <span>Delay</span>
+                            </Tooltip>
+                          }
+                        />
+                        <FormControlLabel
+                          value={IReleaseType.Linear}
+                          control={<Radio disableRipple />}
+                          label={
+                            <Tooltip title="Set a start and end time to unlock tokens in a linear release method.">
+                              <span>Linear</span>
+                            </Tooltip>
+                          }
+                        />
+                        <FormControlLabel
+                          value={IReleaseType.Fragment}
+                          control={<Radio disableRipple />}
+                          label={
+                            <Tooltip title="Set multiple time intervals and proportions for batch token releases">
+                              <span>Staged</span>
+                            </Tooltip>
+                          }
+                        />
+                      </Field>
+                    )}
+                    {Number(values.releaseType) === IReleaseType.Cliff ? (
+                      <Stack spacing={6}>
+                        <LabelTitle>Unlocking Start Time</LabelTitle>
+                        <Field
+                          component={DateTimePickerFormItem}
+                          disablePast
+                          name="delayUnlockingTime"
+                          minDateTime={values.endTime}
+                          textField={{ sx: { width: '100%' } }}
+                        />
+                      </Stack>
+                    ) : Number(values.releaseType) === IReleaseType.Linear ? (
+                      <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
+                        <Stack spacing={6}>
+                          <LabelTitle>Start Time</LabelTitle>
+                          <Field
+                            component={DateTimePickerFormItem}
+                            disablePast
+                            name="linearUnlockingStartTime"
+                            minDateTime={values.endTime}
+                            textField={{ sx: { width: '100%' } }}
+                          />
+                        </Stack>
+
+                        <Stack spacing={6}>
+                          <LabelTitle>End Time</LabelTitle>
+                          <Field
+                            component={DateTimePickerFormItem}
+                            disablePast
+                            name="linearUnlockingEndTime"
+                            minDateTime={values.linearUnlockingStartTime}
+                            textField={{ sx: { width: '100%' } }}
+                          />
+                        </Stack>
+                      </Box>
+                    ) : Number(values.releaseType) === IReleaseType.Fragment ? (
+                      <SetFragmentReleaseTime
+                        minDateTime={values.endTime}
+                        errors={errors.fragmentReleaseTimes}
+                        releaseTimes={values.fragmentReleaseTimes}
+                        setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) =>
+                          setFieldValue('fragmentReleaseTimes', val)
+                        }
+                      />
+                    ) : (
+                      <LabelTitle>
+                        No unlocking method is set; tokens can be claimed after the specified end.
+                      </LabelTitle>
+                    )}
+                    <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
+                  </Box>
+                  <Box>
+                    <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Title sx={{ fontSize: 20, color: '#20201E' }}>Refundable</Title>
+                      <FormControlLabel
+                        checked={values.isRefundable}
+                        onChange={() => setFieldValue('isRefundable', !values.isRefundable)}
+                        control={<GraySwitch defaultChecked />}
+                        label=""
+                      />
+                    </Stack>
+                    {values.isRefundable && values?.endTime && (
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="body1">Auction will be refundable before the end time</Typography>
+                        <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
+                          Before {values.endTime.format('MMM D, YYYY hh:mm A')}
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
                 </Stack>
               </BaseBox>
+
+              <SubmitComp />
             </Stack>
           )
         }}
@@ -972,4 +1245,225 @@ const UploadBtn = styled('label')({
   textTransform: 'capitalize',
   cursor: 'pointer'
 })
+const GraySwitch = styled(Switch)({
+  width: 42,
+  height: 26,
+  padding: 0,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    margin: 2,
+    transitionDuration: '300ms',
+    '&.Mui-checked': {
+      transform: 'translateX(16px)',
+      color: '#fff',
+      '& + .MuiSwitch-track': {
+        backgroundColor: '#2ECA45',
+        opacity: 1,
+        border: 0
+      }
+    }
+  },
+  '& .MuiSwitch-thumb': {
+    boxSizing: 'border-box',
+    width: 22,
+    height: 22
+  },
+  '& .MuiSwitch-track': {
+    borderRadius: 26 / 2,
+    backgroundColor: 'rgb(149,149,149)',
+    opacity: 1
+  }
+})
+
+const SubmitComp = () => (
+  <Box mt={48} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 54 }}>
+    <Button
+      variant="contained"
+      sx={{
+        padding: '16px 40px',
+        boxSizing: 'border-box',
+        background: '#121212',
+        '&:hover': { background: '#121212', border: 'none' }
+      }}
+    >
+      <Title sx={{ fontSize: 16, fontWeight: 500, color: '#fff' }}>Preview</Title>
+    </Button>
+    <Button
+      type="submit"
+      variant="contained"
+      sx={{
+        padding: '16px 40px',
+        boxSizing: 'border-box',
+        background: '#E1F25C',
+        '&:hover': { background: '#E1F25C', border: 'none' }
+      }}
+    >
+      <Title sx={{ fontSize: 16, fontWeight: 500, color: '#20201E' }}>Submit</Title>
+    </Button>
+  </Box>
+)
+
+const UploadIntroduce = ({ title }: { title: string }) => {
+  return (
+    <Stack sx={{ flexDirection: 'column', gap: 8 }}>
+      <BaseTitle1 sx={{ fontSize: 16, color: '#171717' }}>{title}</BaseTitle1>
+      <BaseTitle2 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</BaseTitle2>
+    </Stack>
+  )
+}
+const TextInput = ({ title, name, placeholder }: { title: string; name: string; placeholder: string }) => {
+  return (
+    <Box>
+      <Title sx={{ fontSize: 20 }} mb={16}>
+        {title}
+      </Title>
+      <FormItem name={name}>
+        <OutlinedInput placeholder={placeholder} />
+      </FormItem>
+    </Box>
+  )
+}
+const ImageBg = ({ sx, url }: { sx?: SxProps; url: string }) => {
+  return (
+    <Box
+      sx={{
+        width: 130,
+        height: 52,
+        borderRadius: 4,
+        overflow: 'hidden',
+        ...sx
+      }}
+    >
+      <Image style={{ width: '100%', height: '100%' }} src={url} />
+    </Box>
+  )
+}
+const showTokenDialog = async ({
+  chainId,
+  enableEth = true,
+  setFieldValue
+}: {
+  chainId: ChainId
+  enableEth?: boolean
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+}) => {
+  const res = await show<Token>(TokenDialog, { chainId, enableEth })
+  setFieldValue('Token', {
+    tokenToAddress: res.address,
+    tokenToSymbol: res.symbol,
+    tokenToLogoURI: res.logoURI,
+    tokenToDecimals: res.decimals
+  })
+}
+function LabelTitle({ children }: { children: any }) {
+  return <FormLabel sx={{ fontWeight: 600, color: '#222223', mt: 10 }}>{children}</FormLabel>
+}
+
+const defaultFragmentRelease = {
+  startAt: null,
+  radio: ''
+}
+function SetFragmentReleaseTime({
+  releaseTimes,
+  minDateTime,
+  errors,
+  setFragmentReleaseTimes
+}: {
+  setFragmentReleaseTimes: (val: IFragmentReleaseTimes[]) => void
+  minDateTime: Moment | null
+  releaseTimes: IFragmentReleaseTimes[]
+  errors?: any
+}) {
+  const setItemValue = useCallback(
+    (idx: number, _key: keyof IFragmentReleaseTimes, val: any) => {
+      const ret = [...releaseTimes]
+      ret[idx] = {
+        ...ret[idx],
+        [_key]: val
+      }
+      setFragmentReleaseTimes(ret)
+    },
+    [releaseTimes, setFragmentReleaseTimes]
+  )
+
+  const addOne = useCallback(() => {
+    if (releaseTimes.length <= 29) {
+      setFragmentReleaseTimes([...releaseTimes, { ...defaultFragmentRelease, key: Math.random() }])
+    }
+  }, [releaseTimes, setFragmentReleaseTimes])
+
+  const removeOne = useCallback(
+    (idx: number) => {
+      if (idx < releaseTimes.length) {
+        const ret = [...releaseTimes]
+        ret.splice(idx, 1)
+        setFragmentReleaseTimes(ret)
+      }
+    },
+    [releaseTimes, setFragmentReleaseTimes]
+  )
+
+  return (
+    <Stack spacing={5}>
+      <Box display="grid" gap={10} gridTemplateColumns="60fr 30fr 20px">
+        <LabelTitle>Release start time</LabelTitle>
+        <LabelTitle>Release ratio</LabelTitle>
+        <ControlPointIcon onClick={addOne} sx={{ cursor: 'pointer' }} />
+      </Box>
+      {releaseTimes.map((item, idx) => (
+        <Box key={item.key || idx}>
+          <Box>
+            <Box display="grid" gap={10} gridTemplateColumns="60fr 30fr 20px">
+              <Field
+                component={DateTimePickerFormItem}
+                disablePast
+                name={`startAt[${item.key || idx}]`}
+                value={item.startAt}
+                onChange={(e: any) => {
+                  setItemValue(idx, 'startAt', e)
+                }}
+                minDateTime={minDateTime}
+                textField={{ sx: { width: '100%' } }}
+              />
+              <FormItem label="radio">
+                <NumberInput
+                  value={item.radio}
+                  onBlur={() => {
+                    setItemValue(idx, 'radio', Number(item.radio).toFixed(2))
+                  }}
+                  onUserInput={value => {
+                    setItemValue(idx, 'radio', value.toString())
+
+                    // if (val > 100) {
+                    //   setItemValue(idx, 'radio', '100')
+                    // } else if (val < 0.01) {
+                    //   setItemValue(idx, 'radio', '')
+                    // } else {
+                    //   setItemValue(idx, 'radio', val)
+                    // }
+                  }}
+                  endAdornment={<>%</>}
+                />
+              </FormItem>
+
+              <RemoveCircleOutlineIcon
+                sx={{ opacity: idx > 0 ? 1 : 0.5, cursor: 'pointer', alignSelf: 'center' }}
+                onClick={() => idx > 0 && removeOne(idx)}
+              />
+            </Box>
+            <Box display="grid" gap={10} gridTemplateColumns="60fr 30fr 20px">
+              <FormHelperText error={!!errors?.length}>
+                {typeof errors !== 'string' && errors?.[idx]?.startAt}
+              </FormHelperText>
+              <FormHelperText error={!!errors?.length}>
+                {typeof errors !== 'string' && errors?.[idx]?.radio}
+              </FormHelperText>
+              <div />
+            </Box>
+          </Box>
+        </Box>
+      ))}
+    </Stack>
+  )
+}
 export default CreateLaunchpad
