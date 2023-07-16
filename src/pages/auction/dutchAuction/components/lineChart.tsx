@@ -216,7 +216,16 @@ export const LineChartView = ({
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, options])
+  }, [
+    tooltipInstance,
+    colorObj,
+    data,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol,
+    options,
+    poolInfo.closeAt,
+    poolInfo.openAt
+  ])
   return <Box ref={chartContainerRef}></Box>
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
