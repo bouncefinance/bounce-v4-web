@@ -338,7 +338,7 @@ export default function WalletModal({
           signLoginModalToggle()
         })
         .catch(error => {
-          toggleWalletModal()
+          console.error('error:', error)
           setPrevConnectWallet(null)
           // localStorage.removeItem('wc@2:core:0.3//subscription')
           if (!String(error).includes(`User rejected methods`)) {
@@ -346,7 +346,7 @@ export default function WalletModal({
           }
         })
     },
-    [signLoginModalToggle, toggleWalletModal]
+    [signLoginModalToggle]
   )
   const getWalletOptions = useGetWalletOptions(true, tryActivation)
 

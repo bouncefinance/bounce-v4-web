@@ -70,6 +70,11 @@ export const [connector_metaMask, hooks_metaMask] = initializeConnector<MetaMask
     })
 )
 
+// [1, 5, 10, 56, 66, 97, 137, 250, 4002, 280, 324, 1284, 1285, 42161, 42220, 43114, 1313161554]
+const walletConnectV2_sys_Support_chains = [1]
+const curChains = SUPPORT_NETWORK_CHAIN_IDS.filter(i => i !== 1 && walletConnectV2_sys_Support_chains.includes(i))
+curChains.unshift(1)
+
 export const [connector_walletConnectV2, hooks_walletConnectV2] = initializeConnector<WalletConnectV2>(actions => {
   return new WalletConnectV2({
     // actions, options, defaultChainId, timeout, onError
@@ -78,7 +83,7 @@ export const [connector_walletConnectV2, hooks_walletConnectV2] = initializeConn
     timeout: 10000,
     options: {
       projectId: `${REACT_APP_WALLET_CONNECT_PROJECT_ID}`,
-      chains: [1],
+      chains: curChains,
       showQrModal: true
       // projectId: string;
       // chains: number[];
