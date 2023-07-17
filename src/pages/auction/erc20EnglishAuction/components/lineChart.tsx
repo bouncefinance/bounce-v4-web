@@ -55,7 +55,7 @@ export class ToolTip {
       toolTip.innerHTML = `<p style="font-family: 'Inter';font-size: 12px;color:#fff;">${dateStr}</p>`
       toolTip.setAttribute(
         'style',
-        `width: 128px; height: 50px; position: absolute; display: none; padding: 8px; box-sizing: border-box; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #E1F25C; border-radius: 8px;`
+        `width: 128px; height: 50px; position: absolute; display: none; padding: 8px; box-sizing: border-box; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #E1F25C;font-weight:600; border-radius: 8px;`
       )
       toolTip.style.background = 'rgba(18, 18, 18, 0.6)'
       this.el = toolTip
@@ -70,18 +70,18 @@ export class ToolTip {
     } else if (!display) {
       this.el.setAttribute(
         'style',
-        `width: 132px; position: absolute; display: none; padding: 8px;flex-flow: column nowrap; justify-content:flex-start;align-items:flex-start; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #E1F25C; border-radius: 8px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
+        `width: 132px; position: absolute; display: none; padding: 8px;flex-flow: column nowrap; justify-content:flex-start;align-items:flex-start; box-sizing: border-box; font-size: 12px;font-weight: 600; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #20994B; border-radius: 8px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
       )
     } else {
       this.el.innerHTML = `
       <p style="font-family: 'Inter';font-size: 12px;color:#fff;line-height:17px;margin:0;">${dateStr}</p>
-      <p style="font-family: 'Inter';font-size: 12px;color:#E1F25C;line-height:17px;margin:0;white-space:nowrap;">${token0Price}</p>
+      <p style="font-family: 'Inter';font-size: 12px;color:#20994B;font-weight:600;line-height:17px;margin:0;white-space:nowrap;">${token0Price}</p>
       `
       this.el.setAttribute(
         'style',
         `width: 132px; position: absolute; display: ${
           display ? 'flex' : 'none'
-        }; padding: 8px;flex-flow: column nowrap; justify-content:flex-start;align-items:flex-start; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #E1F25C; border-radius: 8px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
+        }; padding: 8px;flex-flow: column nowrap; justify-content:flex-start;align-items:flex-start; box-sizing: border-box; font-size: 12px; text-align: left; z-index: 1000; top: ${y}px; left: ${x}px; pointer-events: none; border: 1px solid #20994B; border-radius: 8px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;`
       )
       this.el.style.background = 'rgba(18, 18, 18, 0.6)'
       this.el.style.color = 'black'
@@ -244,15 +244,15 @@ export const LineChartView = ({
       const currentValue = param?.seriesPrices?.values().next().value
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
-      if (resultItem && resultItem?.time) {
+      if (resultItem) {
         dateStr = Number(resultItem.time).toFixed(6) + poolInfo.token0.symbol || '--'
       }
       const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
-      const y = Number(lineSeries.priceToCoordinate(currentValue)) + 160
+      const y = Number(lineSeries.priceToCoordinate(currentValue)) + 200
       if (
         param.point === undefined ||
-        !param.time ||
+        Number(param.time) < 0 ||
         param?.point?.x < 0 ||
         param?.point?.x > chartContainerRef.current.clientWidth ||
         param?.point?.y < 0 ||
