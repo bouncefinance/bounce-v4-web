@@ -129,7 +129,7 @@ const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp
           }}
           onClick={() => setOpen(true)}
         >
-          Cliam
+          Bid
         </ComBtn>
       )}
       {Number(maxValue) === 0 && (
