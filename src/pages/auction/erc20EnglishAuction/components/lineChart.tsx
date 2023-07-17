@@ -10,7 +10,9 @@ import {
   Time,
   MouseEventParams,
   ChartOptions,
-  DeepPartial
+  DeepPartial,
+  LineStyle,
+  LineType
 } from 'lightweight-charts'
 import { RightText } from './creatorBlock/auctionInfo'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
@@ -96,6 +98,7 @@ export const LineChartView = ({
 }) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
+
   const colorObj = useMemo(() => {
     return poolInfo.status === PoolStatus.Upcoming
       ? {
@@ -131,7 +134,7 @@ export const LineChartView = ({
           return formatNumberWithCommas(Math.round(Number(Number(time).toFixed(6))))
         },
         priceFormatter: (price: number | string) => {
-          return Number(Number(price).toFixed(6))
+          return Number(price).toFixed(6)
         }
       },
       width: chartContainerRef.current.clientWidth,
@@ -164,21 +167,56 @@ export const LineChartView = ({
     })
     chart.timeScale().fitContent()
     // set line
-    const newSeries = chart.addAreaSeries({
-      ...colorObj
+    // const newSeries = chart.addAreaSeries({
+    //   ...colorObj
+    // })
+    const lineSeries = chart.addLineSeries({
+      lineWidth: 2,
+      lineType: LineType.WithSteps,
+      priceLineColor: colorObj.lineColor,
+      color: colorObj.lineColor
     })
-    newSeries.setData(data as LineData[])
+    const createStepLine = () => {
+      for (let i = 0; i < data.length - 1; i++) {
+        const curData = data[i]
+        const nextData = data[i + 1]
+        const priceLine = lineSeries.createPriceLine({
+          price: Number(curData.value),
+          color: 'green',
+          lineWidth: 1,
+          lineStyle: LineStyle.Dotted,
+          lineVisible: false,
+          axisLabelVisible: false,
+          title: ''
+        })
+        lineSeries.createPriceLine({
+          price: Number(nextData.value),
+          color: 'green',
+          lineWidth: 1,
+          lineVisible: false,
+          axisLabelVisible: false,
+          title: '',
+          lineStyle: LineStyle.Dashed
+        })
+        priceLine.applyOptions({
+          lineStyle: 0
+        })
+      }
+    }
+    createStepLine()
+    lineSeries.setData(data as LineData[])
+    // newSeries.setData(data as LineData[])
     // set current time data
     const markers = [
       {
-        time: new Date().valueOf() / 1000,
+        time: Number(poolInfo.currencySwappedAmount0?.toExact()),
         position: 'inBar',
         color: '#959595',
         shape: 'circle',
         size: 0.7
       }
     ]
-    newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    lineSeries.setMarkers(markers as SeriesMarker<Time>[])
     window.addEventListener('resize', handleResize)
     if (!tooltipInstance) {
       const TipsTool = new ToolTip({ dateStr: '' })
@@ -194,7 +232,7 @@ export const LineChartView = ({
       }
       const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
-      const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
+      const y = Number(lineSeries.priceToCoordinate(currentValue)) + 160
       if (
         param.point === undefined ||
         !param.time ||
@@ -212,7 +250,18 @@ export const LineChartView = ({
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, options])
+  }, [
+    tooltipInstance,
+    colorObj,
+    data,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol,
+    options,
+    poolInfo.currencyCurrentPrice,
+    poolInfo.currencySwappedAmount0,
+    poolInfo.closeAt,
+    poolInfo.openAt
+  ])
   return (
     <>
       <Box fontSize={12} color={'#626262'} mb={8}>{`Price(${poolInfo.token1.symbol})`}</Box>

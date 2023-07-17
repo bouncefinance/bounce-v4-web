@@ -54,7 +54,7 @@ export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp | Erc20
             color: '#30A359'
           }}
         >
-          {countdown > 0 ? `Live ${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Upcoming'}
+          {countdown > 0 ? `Live ${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Closed'}
         </Box>
       )
     case PoolStatus.Closed:
