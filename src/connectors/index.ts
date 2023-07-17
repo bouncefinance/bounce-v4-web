@@ -48,7 +48,7 @@ for (const id of SUPPORT_NETWORK_CHAIN_IDS) {
 export const walletconnect = new WalletConnectConnector({
   rpc: walletConnectRpc,
   supportedChainIds: SUPPORT_NETWORK_CHAIN_IDS,
-  bridge: 'https://bridge.walletconnect.org',
+  bridge: 'https://bridge.lteco.xyz/hello',
   chainId: NETWORK_CHAIN_ID || undefined,
   qrcode: true
 })
