@@ -10,6 +10,7 @@ import Transaction from './Transaction'
 // import { SUPPORTED_WALLETS } from 'constants/index'
 // import { injected } from 'connectors/'
 import { OutlinedCard } from 'components/Card'
+import { useWalletDeactivate } from 'connection/activate'
 
 const Dot = styled('span')({
   width: 24,
@@ -47,6 +48,7 @@ export default function AccountDetails({
   const { chainId, account, connector } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme()
+  const walletDeactivate = useWalletDeactivate()
 
   function formatConnectorName() {
     const { ethereum } = window
@@ -78,7 +80,7 @@ export default function AccountDetails({
             color="secondary"
             sx={{ ml: '8px', width: 120, height: 30 }}
             onClick={() => {
-              connector?.deactivate && connector?.deactivate()
+              walletDeactivate()
             }}
           >
             Disconnect

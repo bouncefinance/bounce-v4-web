@@ -1,9 +1,11 @@
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import React from 'react'
 import { Box, useTheme, Button } from '@mui/material'
 import { ReactComponent as CrossCircle } from 'assets/componentsIcon/statusIcon/error_icon.svg'
 import { OutlinedCard } from 'components/Card'
 import Spinner from 'components/Spinner'
+import { Connection } from 'connection/types'
+import { ChainId } from 'constants/chain'
+import { useSignLoginModalControl } from 'state/application/hooks'
 
 export default function PendingView({
   connector,
@@ -13,12 +15,13 @@ export default function PendingView({
   children
 }: {
   children: React.ReactNode
-  connector?: AbstractConnector
+  connector?: Connection
   error?: boolean
   setPendingError: (error: boolean) => void
-  tryActivation: (connector: AbstractConnector) => void
+  tryActivation: (connection: Connection, onSuccess: () => void, chainId?: ChainId | undefined) => Promise<void>
 }) {
   const theme = useTheme()
+  const { open } = useSignLoginModalControl()
 
   return (
     <Box display="grid" gap="32px" width="100%" justifyItems="center">
@@ -34,6 +37,7 @@ export default function PendingView({
               <Spinner />
               Waiting to connect...
             </Box>
+            {children}
           </OutlinedCard>
         </>
       )}
@@ -45,7 +49,7 @@ export default function PendingView({
             <Button
               onClick={() => {
                 setPendingError(false)
-                connector && tryActivation(connector)
+                connector && tryActivation(connector, () => open())
               }}
             >
               Try Again

@@ -1,7 +1,11 @@
 import React from 'react'
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import { ExternalLink } from 'themes/components'
 import LogoText from 'components/LogoText'
+import { Connection } from 'connection/types'
+import { ActivationStatus, useActivationState } from 'connection/activate'
+import { LoadingButton } from '@mui/lab'
+import { useSignLoginModalControl, useWalletModalToggle } from 'state/application/hooks'
 
 // const GreenCircle = styled('div')(({ theme }) => ({
 //   display: 'flex',
@@ -19,25 +23,41 @@ import LogoText from 'components/LogoText'
 
 export default function Option({
   link = null,
-  clickable = true,
-  onClick = null,
   header,
   icon,
+  connection,
+  isModal,
   active = false,
   id
 }: {
   link?: string | null
-  clickable?: boolean
-  onClick?: (() => void) | null
   header: React.ReactNode
-  icon: string
   active?: boolean
+  icon: string
+  connection?: Connection
+  isModal?: boolean
   id: string
 }) {
+  const { activationState, tryActivation } = useActivationState()
+  const walletModalToggle = useWalletModalToggle()
+  const { open } = useSignLoginModalControl()
+
+  const activate = () =>
+    active &&
+    connection &&
+    tryActivation(connection, () => open()).catch(err => {
+      isModal && walletModalToggle()
+      console.error('error message:', err)
+    })
+
+  const isSomeOptionPending = activationState.status === ActivationStatus.PENDING
+  const isCurrentOptionPending = isSomeOptionPending && activationState.connection.type === connection?.type
+
   const content = (
     <>
-      <Button
+      <LoadingButton
         variant="outlined"
+        loadingPosition="start"
         key={id}
         fullWidth
         sx={{
@@ -49,13 +69,14 @@ export default function Option({
             border: '1px solid rgba(18, 18, 18, 0.2)'
           }
         }}
-        onClick={!active ? onClick || undefined : undefined}
-        disabled={!clickable}
+        loading={isCurrentOptionPending}
+        onClick={activate}
+        disabled={!active}
       >
         <Box width={140}>
           <LogoText fontSize={14} logo={icon} text={header} />
         </Box>
-      </Button>
+      </LoadingButton>
     </>
   )
   if (link) {

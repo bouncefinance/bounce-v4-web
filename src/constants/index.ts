@@ -1,6 +1,5 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { connector_walletConnectV2, connector_metaMask, connector_okxWallet } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -28,117 +27,117 @@ export interface WalletInfo {
   disabled?: true
 }
 
-export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
-  INJECTED: {
-    connector: connector_metaMask,
-    name: 'Injected',
-    iconName: 'arrow-right.svg',
-    description: 'Injected web3 provider.',
-    href: null,
-    color: '#010101',
-    primary: true
-  },
-  METAMASK: {
-    connector: connector_metaMask,
-    name: 'MetaMask',
-    iconName: 'metamask.png',
-    description: 'Easy-to-use browser extension.',
-    href: null,
-    color: '#E8831D'
-  },
-  // OKEX: {
-  //   connector: injected,
-  //   name: 'OKX',
-  //   iconName: 'okxIcon.png',
-  //   description: 'Easy-to-use browser extension.',
-  //   href: null,
-  //   color: '#E8831D',
-  //   mobile: true,
-  //   mobileOnly: true
-  // },
-  OKEX: {
-    connector: connector_okxWallet,
-    name: 'OKX Wallet',
-    iconName: 'okxIcon.png',
-    description: 'Easy-to-use browser extension.',
-    href: null,
-    color: '#E8831D'
-  },
-  WALLET_CONNECT: {
-    connector: connector_walletConnectV2,
-    name: 'WalletConnectV2',
-    iconName: 'walletConnectIcon.svg',
-    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
-    href: null,
-    color: '#4196FC',
-    mobile: true
-  },
-  WALLET_LINK: {
-    connector: undefined,
-    name: 'Coinbase',
-    iconName: 'coinbaseWalletIcon.svg',
-    description: 'Use Coinbase Wallet app on mobile device',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  },
-  BINANCE: {
-    connector: undefined,
-    name: 'Binance Wallet',
-    iconName: 'BinanceWalletIcon.svg',
-    description: '',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  },
-  TRUST_WALLET: {
-    connector: undefined,
-    name: 'Trust wallet',
-    iconName: 'trustWalletIcon.svg',
-    description: '',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  },
-  MATH_WALLET: {
-    connector: undefined,
-    name: 'Math wallet',
-    iconName: 'mathWalletIcon.svg',
-    description: '',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  }
-  // COINBASE_LINK: {
-  //   name: 'Open in Coinbase Wallet',
-  //   iconName: 'coinbaseWalletIcon.svg',
-  //   description: 'Open in Coinbase Wallet app.',
-  //   href: 'https://go.cb-w.com/mtUDhEZPy1',
-  //   color: '#315CF5',
-  //   mobile: true,
-  //   mobileOnly: true
-  // },
-  // FORTMATIC: {
-  //   connector: fortmatic,
-  //   name: 'Fortmatic',
-  //   iconName: 'fortmaticIcon.png',
-  //   description: 'Login using Fortmatic hosted wallet',
-  //   href: null,
-  //   color: '#6748FF',
-  //   mobile: true
-  // },
-  // Portis: {
-  //   connector: portis,
-  //   name: 'Portis',
-  //   iconName: 'portisIcon.png',
-  //   description: 'Login using Portis hosted wallet',
-  //   href: null,
-  //   color: '#4A6C9B',
-  //   mobile: true
-  // }
-}
+// export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
+//   INJECTED: {
+//     connector: connector_metaMask,
+//     name: 'Injected',
+//     iconName: 'arrow-right.svg',
+//     description: 'Injected web3 provider.',
+//     href: null,
+//     color: '#010101',
+//     primary: true
+//   },
+//   METAMASK: {
+//     connector: connector_metaMask,
+//     name: 'MetaMask',
+//     iconName: 'metamask.png',
+//     description: 'Easy-to-use browser extension.',
+//     href: null,
+//     color: '#E8831D'
+//   },
+//   // OKEX: {
+//   //   connector: injected,
+//   //   name: 'OKX',
+//   //   iconName: 'okxIcon.png',
+//   //   description: 'Easy-to-use browser extension.',
+//   //   href: null,
+//   //   color: '#E8831D',
+//   //   mobile: true,
+//   //   mobileOnly: true
+//   // },
+//   OKEX: {
+//     connector: connector_okxWallet,
+//     name: 'OKX Wallet',
+//     iconName: 'okxIcon.png',
+//     description: 'Easy-to-use browser extension.',
+//     href: null,
+//     color: '#E8831D'
+//   },
+//   WALLET_CONNECT: {
+//     connector: connector_walletConnectV2,
+//     name: 'WalletConnectV2',
+//     iconName: 'walletConnectIcon.svg',
+//     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+//     href: null,
+//     color: '#4196FC',
+//     mobile: true
+//   },
+//   WALLET_LINK: {
+//     connector: undefined,
+//     name: 'Coinbase',
+//     iconName: 'coinbaseWalletIcon.svg',
+//     description: 'Use Coinbase Wallet app on mobile device',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   },
+//   BINANCE: {
+//     connector: undefined,
+//     name: 'Binance Wallet',
+//     iconName: 'BinanceWalletIcon.svg',
+//     description: '',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   },
+//   TRUST_WALLET: {
+//     connector: undefined,
+//     name: 'Trust wallet',
+//     iconName: 'trustWalletIcon.svg',
+//     description: '',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   },
+//   MATH_WALLET: {
+//     connector: undefined,
+//     name: 'Math wallet',
+//     iconName: 'mathWalletIcon.svg',
+//     description: '',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   }
+//   // COINBASE_LINK: {
+//   //   name: 'Open in Coinbase Wallet',
+//   //   iconName: 'coinbaseWalletIcon.svg',
+//   //   description: 'Open in Coinbase Wallet app.',
+//   //   href: 'https://go.cb-w.com/mtUDhEZPy1',
+//   //   color: '#315CF5',
+//   //   mobile: true,
+//   //   mobileOnly: true
+//   // },
+//   // FORTMATIC: {
+//   //   connector: fortmatic,
+//   //   name: 'Fortmatic',
+//   //   iconName: 'fortmaticIcon.png',
+//   //   description: 'Login using Fortmatic hosted wallet',
+//   //   href: null,
+//   //   color: '#6748FF',
+//   //   mobile: true
+//   // },
+//   // Portis: {
+//   //   connector: portis,
+//   //   name: 'Portis',
+//   //   iconName: 'portisIcon.png',
+//   //   description: 'Login using Portis hosted wallet',
+//   //   href: null,
+//   //   color: '#4A6C9B',
+//   //   mobile: true
+//   // }
+// }
 
-export const NetworkContextName = 'NETWORK'
+// export const NetworkContextName = 'NETWORK'
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 50
