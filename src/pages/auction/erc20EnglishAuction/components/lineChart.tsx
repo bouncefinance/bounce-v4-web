@@ -21,6 +21,7 @@ import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 import ChartDialog from './userBlock/chartDialog'
 import { formatNumberWithCommas } from 'utils'
+import { CurrencyAmount } from 'constants/token'
 
 interface PointerItem {
   time: number | string
@@ -98,6 +99,15 @@ export const LineChartView = ({
 }) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
+  const segmentLeftAmount = useMemo(
+    () =>
+      poolInfo?.fragments &&
+      CurrencyAmount.fromRawAmount(
+        poolInfo.currencyAmountTotal0.currency,
+        BigNumber(poolInfo.amountTotal0).div(poolInfo?.fragments).toString()
+      ).toExact(),
+    [poolInfo.amountTotal0, poolInfo.currencyAmountTotal0.currency, poolInfo?.fragments]
+  )
 
   const colorObj = useMemo(() => {
     return poolInfo.status === PoolStatus.Upcoming
@@ -211,7 +221,11 @@ export const LineChartView = ({
       // set current time data
       const markers = [
         {
-          time: Number(poolInfo.currencySwappedAmount0?.toExact()),
+          time:
+            Number(segmentLeftAmount) !== 0
+              ? Math.floor(Number(poolInfo.currencySwappedAmount0?.toExact()) / Number(segmentLeftAmount)) *
+                Number(segmentLeftAmount)
+              : 0,
           position: 'inBar',
           color: '#959595',
           shape: 'circle',
@@ -263,7 +277,9 @@ export const LineChartView = ({
     poolInfo.currencyCurrentPrice,
     poolInfo.currencySwappedAmount0,
     poolInfo.closeAt,
-    poolInfo.openAt
+    poolInfo.openAt,
+    poolInfo.fragments,
+    segmentLeftAmount
   ])
   return (
     <>
@@ -299,7 +315,6 @@ const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
     })
     return dataPoint
   }, [segments, timeSegments, startPrice, priceSegments])
-  console.log('lineData', lineData)
 
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
