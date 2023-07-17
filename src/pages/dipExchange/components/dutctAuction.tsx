@@ -2,16 +2,19 @@ import { Box, Typography } from '@mui/material'
 import { PoolsData } from './stageLine'
 import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { useMemo } from 'react'
+import TimeStageLine from './timeStageLine'
+import LineChart from '../../auction/dutchAuction/components/lineChart'
+import PoolStep from './poolStep'
 const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
   const { list } = poolsData
   const currentData = useMemo(() => {
-    return list[index]
+    return list[index]?.dgt
   }, [index, list])
-  const { poolInfo } = useDutchAuctionInfo(currentData?.dgt?.id ? Number(currentData?.dgt?.id) : undefined)
-  if (!poolInfo || !currentData?.dgt?.id) {
+  const { poolInfo } = useDutchAuctionInfo(currentData?.id ? Number(currentData?.id) : undefined)
+  if (!poolInfo || !currentData) {
     return <Box>1</Box>
   }
-  console.log('currentData>>', currentData)
+  console.log('currentData>>', currentData, poolInfo)
   return (
     <Box
       sx={{
@@ -31,7 +34,32 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
       >
         Subscription Timeline
       </Typography>
-      {poolInfo.name}
+      <TimeStageLine poolInfo={poolInfo} />
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+          paddingTop: '30px'
+        }}
+        gap={'40px'}
+      >
+        <Box
+          sx={{
+            flex: 370
+          }}
+        >
+          <LineChart poolInfo={poolInfo} />
+        </Box>
+        <Box
+          sx={{
+            flex: 790
+          }}
+        >
+          <PoolStep poolInfo={poolInfo} />
+        </Box>
+      </Box>
     </Box>
   )
 }

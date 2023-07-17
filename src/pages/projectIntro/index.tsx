@@ -332,7 +332,7 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
           >
             {inviteData.map((item, index) => {
               return (
-                <Box className={'row'} key={index}>
+                <Box className={'row'} key={'inviteData' + index}>
                   <Typography
                     component={'span'}
                     sx={{
@@ -545,7 +545,9 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
     }
     return result
   }, [poolInfo])
-  const pricesComponent = prices.map((p, i) => <Price isDark={isDark} title={p.title} value={p.value} key={i} />)
+  const pricesComponent = prices.map((p, i) => (
+    <Price isDark={isDark} title={p.title} value={p.value} key={'Price' + i} />
+  ))
   const nav = useNavigate()
 
   return (
@@ -926,7 +928,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
                   fontFamily: 'Inter',
                   lineHeight: '150%'
                 }}
-                key={index}
+                key={'Typography' + index}
                 variant={'body1'}
               >
                 {item}
@@ -956,7 +958,7 @@ const STEPNTokenDark = () => {
       <Stack flexDirection={'column'} gap={10} mt={30}>
         {tokenList.map((t, i) => {
           return (
-            <Stack flexDirection={'row'} gap={10} key={i} sx={{ background: '#121219', p: '10px 20px' }}>
+            <Stack flexDirection={'row'} gap={10} key={'Stack' + i} sx={{ background: '#121219', p: '10px 20px' }}>
               {Object.keys(t).map(k => (
                 <>
                   <STEPNTokenTitle sx={{ width: 220, color: '#626262' }}>{k}</STEPNTokenTitle>

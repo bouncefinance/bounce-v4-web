@@ -44,7 +44,7 @@ const ProgressTimeTab = ({
       {list.map((item, index) => (
         <ProgressItem
           onClick={() => onClick(index)}
-          key={index}
+          key={'ProgressBox' + index}
           icon={
             item.state === 'resolved' ? <DoneIcon sx={{ color: 'black', width: 15, height: 15 }} /> : icon | (index + 1)
           }
@@ -131,7 +131,7 @@ const SoldProgress = ({ currTime, currTab }: { currTime: any; currTab: string })
     <Stack my={30} flexDirection={'row'} sx={{ padding: '16px 28px', background: '#1D1D29', borderRadius: 6 }}>
       {soldList.map((t, i) => (
         <ProgressItem
-          key={i}
+          key={'ProgressItem' + i}
           background={t.state === 'resolved' ? ThemeStyle.Dark.blueColor : ThemeStyle.Dark.baseColor}
           icon={<DoneIcon sx={{ color: 'black', width: 15, height: 15 }} />}
           sxStyle={{ flexDirection: 'column-reverse' }}
@@ -171,7 +171,7 @@ const SoldAuctionCard = ({ currTime }: { currTime: any }) => {
       <Box sx={{ width: '100%' }}>
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map((t, i) => (
-            <Step key={i}>
+            <Step key={'Step' + i}>
               <StepLabel optional={<BaseH6 sx={{ color: '#959595' }}>{currTime.time}</BaseH6>}>
                 <BaseH6 sx={{ color: '#D7D6D9', fontFamily: 'Public Sans', letterSpacing: '-0.28px' }}>{t}</BaseH6>
               </StepLabel>
@@ -269,7 +269,7 @@ const RoundTabCard = ({ currTimeInfo }: { currTimeInfo: any }) => {
     <Box px={72} mt={40}>
       <Stack flexDirection={'row'}>
         {tabs.map((t, i) => (
-          <Tab key={i} onClick={() => setCurrTab(t)} className={currTab === t ? 'active' : ''}>
+          <Tab key={'Tab' + i} onClick={() => setCurrTab(t)} className={currTab === t ? 'active' : ''}>
             <TabTitle>{t}</TabTitle>
             <BaseH6>{`${currTimeInfo.time} 23:00:00 To ${currTimeInfo.time} 22:59:59`}</BaseH6>
           </Tab>

@@ -27,20 +27,23 @@ const DipExchange = () => {
         timaSteamp: item.timaSteamp + oneDay * index,
         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
         dip: {
-          startAt: 1689327758196,
-          closeAt: 1689338758196,
-          id: 18484,
-          active: false
+          startAt: 1689521217979,
+          closeAt: 1689921217979,
+          id: 18517,
+          active: true
         },
         dgt: {
-          startAt: 1689339758196,
-          closeAt: 1689349758196,
-          id: 18485,
-          active: false
+          startAt: 1689521217979,
+          closeAt: 1689921217979,
+          id: 18520, // live
+          //   id: 18517, // claimable
+          //   id: 18516, // claimed
+          //   id: 18514, // no join
+          active: true
         }
       }
     })
-  // last date hiht light
+  // last date higt light
   const lastActiveIndex = useMemo(() => {
     let lastIndex = 0
     poolsData.map((item, index) => {
@@ -55,7 +58,7 @@ const DipExchange = () => {
     setDataIndex(index)
   }
   const [poolType, setPoolType] = useState<PoolIndexType>(PoolIndexType.DIP)
-  const handleSetPoolTyp = (type: PoolIndexType) => {
+  const handleSetPoolType = (type: PoolIndexType) => {
     setPoolType(type)
   }
   return (
@@ -71,7 +74,7 @@ const DipExchange = () => {
             poolsData={{ list: poolsData }}
             index={dataIndex}
             poolType={poolType}
-            setPoolType={handleSetPoolTyp}
+            setPoolType={handleSetPoolType}
           ></PoolTabs>
           {poolType === PoolIndexType.DGT && <DutchAuction poolsData={{ list: poolsData }} index={dataIndex} />}
         </DipCenter>
