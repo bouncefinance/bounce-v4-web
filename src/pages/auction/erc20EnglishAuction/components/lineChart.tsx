@@ -131,7 +131,7 @@ export const LineChartView = ({
       },
       localization: {
         timeFormatter: function (time: number | string) {
-          return formatNumberWithCommas(Math.round(Number(Number(time).toFixed(6))))
+          return formatNumberWithCommas(Number(time).toFixed(6))
         },
         priceFormatter: (price: number | string) => {
           return Number(price).toFixed(6)
@@ -172,7 +172,7 @@ export const LineChartView = ({
     // })
     const lineSeries = chart.addLineSeries({
       lineWidth: 2,
-      lineType: LineType.WithSteps,
+      lineType: LineType.Simple,
       priceLineColor: colorObj.lineColor,
       color: colorObj.lineColor
     })
@@ -206,17 +206,20 @@ export const LineChartView = ({
     createStepLine()
     lineSeries.setData(data as LineData[])
     // newSeries.setData(data as LineData[])
-    // set current time data
-    const markers = [
-      {
-        time: Number(poolInfo.currencySwappedAmount0?.toExact()),
-        position: 'inBar',
-        color: '#959595',
-        shape: 'circle',
-        size: 0.7
-      }
-    ]
-    lineSeries.setMarkers(markers as SeriesMarker<Time>[])
+    const nowDate = new Date().valueOf()
+    if (nowDate / 1000 <= poolInfo.closeAt && nowDate / 1000 >= poolInfo.openAt) {
+      // set current time data
+      const markers = [
+        {
+          time: Number(poolInfo.currencySwappedAmount0?.toExact()),
+          position: 'inBar',
+          color: '#959595',
+          shape: 'circle',
+          size: 0.7
+        }
+      ]
+      lineSeries.setMarkers(markers as SeriesMarker<Time>[])
+    }
     window.addEventListener('resize', handleResize)
     if (!tooltipInstance) {
       const TipsTool = new ToolTip({ dateStr: '' })
@@ -228,7 +231,7 @@ export const LineChartView = ({
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
-        dateStr = Math.round(Number(Number(resultItem.time).toFixed(6))) + poolInfo.token0.symbol || '--'
+        dateStr = Number(resultItem.time).toFixed(6) + poolInfo.token0.symbol || '--'
       }
       const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
@@ -295,7 +298,9 @@ const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
       }
     })
     return dataPoint
-  }, [startAmount, segments, timeSegments, startPrice, priceSegments])
+  }, [segments, timeSegments, startPrice, priceSegments])
+  console.log('lineData', lineData)
+
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined

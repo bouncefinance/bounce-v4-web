@@ -41,6 +41,12 @@ const ClaimBlock = () => {
     poolInfo?.contract
   )
   const successDialogContent = useMemo(() => {
+    const fee =
+      poolInfo?.currencySwappedAmount1 &&
+      new BigNumber(poolInfo?.currencySwappedAmount1.toExact())
+        .times(new BigNumber(25))
+        .div(new BigNumber(1000))
+        .toFixed()
     const hasToken0ToClaim = poolInfo?.currencySwappedAmount0?.greaterThan('0')
     const token0ToClaimText =
       poolInfo?.currencySwappedAmount0 &&
@@ -52,7 +58,7 @@ const ClaimBlock = () => {
       hasToken0ToClaim && poolInfo?.currencySwappedAmount1?.toSignificant() && poolInfo?.token1.symbol
         ? ` and ${poolInfo?.currencySwappedAmount1?.toSignificant()} ${poolInfo.token1.symbol}`
         : ''
-    return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}`
+    return `You have successfully claimed ${token0ToClaimText}${token1ToClaimText}, platform fee charged is ${fee} ${poolInfo?.token1.symbol}`
   }, [
     poolInfo?.currencyAmountTotal0,
     poolInfo?.currencySwappedAmount0,

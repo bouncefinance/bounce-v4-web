@@ -91,7 +91,7 @@ const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }:
     case PoolStatus.Closed:
     case PoolStatus.Cancelled:
       // all token auctioned
-      if (poolInfo.currencyAmountTotal0.equalTo('0') && !poolInfo.creatorClaimed) {
+      if (poolInfo?.currencySwappedAmount0 && poolInfo.currencyAmountTotal0.equalTo(poolInfo?.currencySwappedAmount0)) {
         return (
           <Box
             sx={{
@@ -126,8 +126,6 @@ const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }:
             </Typography>
           </Box>
         )
-      } else if (poolInfo.creatorClaimed) {
-        return <></>
       } else {
         return (
           <Box
