@@ -185,10 +185,10 @@ const ChartDialog = ({
               setConfirmationState({
                 notice1: false
               })
+              onClose && onClose()
             }}
           />
         )}
-
         <XIcon
           onClick={() => {
             onClose && onClose()
