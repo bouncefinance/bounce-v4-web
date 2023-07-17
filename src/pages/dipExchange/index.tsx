@@ -29,13 +29,13 @@ const DipExchange = () => {
         dip: {
           startAt: 1689521217979,
           closeAt: 1689921217979,
-          id: 18517,
+          id: 18523,
           active: true
         },
         dgt: {
           startAt: 1689521217979,
           closeAt: 1689921217979,
-          id: 18520, // live
+          id: 18523, // live
           //   id: 18517, // claimable
           //   id: 18516, // claimed
           //   id: 18514, // no join
