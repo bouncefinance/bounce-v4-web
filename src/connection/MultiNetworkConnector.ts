@@ -37,7 +37,7 @@ const _RPC_PROVIDERS: any = {}
 const _RPC_URLS_MAPS: any = {}
 SUPPORT_NETWORK_CHAIN_IDS.map(c => {
   _RPC_PROVIDERS[c] = new AppJsonRpcProvider(c)
-  _RPC_URLS_MAPS[c] = SUPPORTED_NETWORKS[c].rpcUrls[0]
+  _RPC_URLS_MAPS[c] = getRpcUrl(c)
 })
 export const RPC_PROVIDERS = _RPC_PROVIDERS as { [key in ChainId]: StaticJsonRpcProvider }
 export const RPC_URLS_MAPS = _RPC_URLS_MAPS as { [key in ChainId]: string }

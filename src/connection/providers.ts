@@ -6,6 +6,7 @@ import { isPlain } from '@reduxjs/toolkit'
 import ms from 'ms.macro'
 
 import { ChainId, SUPPORTED_NETWORKS } from 'constants/chain'
+import { getRpcUrl } from './MultiNetworkConnector'
 
 export class AppJsonRpcProvider extends StaticJsonRpcProvider {
   private _blockCache = new Map<string, Promise<any>>()
@@ -20,10 +21,7 @@ export class AppJsonRpcProvider extends StaticJsonRpcProvider {
 
   constructor(chainId: ChainId) {
     // Including networkish allows ethers to skip the initial detectNetwork call.
-    super(
-      SUPPORTED_NETWORKS[chainId].rpcUrls[0],
-      /* networkish= */ { chainId, name: SUPPORTED_NETWORKS[chainId]?.chainName }
-    )
+    super(getRpcUrl(chainId), /* networkish= */ { chainId, name: SUPPORTED_NETWORKS[chainId]?.chainName })
 
     // NB: Third-party providers (eg MetaMask) will have their own polling intervals,
     // which should be left as-is to allow operations (eg transaction confirmation) to resolve faster.
