@@ -7,7 +7,7 @@ import TipSvg from 'assets/imgs/dipExchange/$.svg'
 import { ReactComponent as ErrorSvg } from 'assets/imgs/dipExchange/error.svg'
 
 import BigNumber from 'bignumber.js'
-import ClaimBlock from './claimBlock'
+import ClaimBlock from './dutchAuction/claimBlock'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 
 interface LabelItemParam {
@@ -172,12 +172,7 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           }}
           iconUrl={TipSvg}
           label={'Your final received'}
-          value={
-            poolInfo?.participant.currencySwappedAmount0?.toExact() +
-            ' ' +
-            poolInfo.token0.symbol.toUpperCase() +
-            ` DGT`
-          }
+          value={poolInfo?.participant.currencySwappedAmount0?.toExact() + ' ' + poolInfo.token0.symbol.toUpperCase()}
         />
         <ClaimBlock poolInfo={poolInfo} />
       </Box>

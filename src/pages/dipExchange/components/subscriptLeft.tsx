@@ -37,7 +37,6 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   .toFixed(6, BigNumber.ROUND_DOWN)
               : '0'}
             {` ${poolInfo.token1.symbol.toUpperCase()}`}
-            DIP
           </DescCom>
         </Grid>
         <Grid item xs={6}>

@@ -4,11 +4,12 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 // import { formatNumber } from 'utils/number'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-
+import { DisplayTokenType } from './bidInput'
 export interface RegretAmountInputProps {
   amount: string
   setAmount: (value: string) => void
   poolInfo: DutchAuctionPoolProp
+  tokenType?: DisplayTokenType
   maxValue: number | string
 }
 const NumInput = styled(NumberInput)(() => ({
@@ -27,7 +28,7 @@ const NumInput = styled(NumberInput)(() => ({
     border: '1px solid #F6F6F3 !important'
   }
 }))
-const AmountInput = ({ amount, setAmount, poolInfo, maxValue }: RegretAmountInputProps) => {
+const AmountInput = ({ amount, setAmount, poolInfo, maxValue, tokenType }: RegretAmountInputProps) => {
   const handleMaxButtonClick = useCallback(() => {
     setAmount(maxValue + '')
   }, [maxValue, setAmount])
@@ -55,8 +56,16 @@ const AmountInput = ({ amount, setAmount, poolInfo, maxValue }: RegretAmountInpu
           >
             max
           </Typography>
-          <TokenImage alt={poolInfo.token0.symbol} src={poolInfo.token0.largeUrl} size={24} />
-          <Typography sx={{ ml: 8 }}>{poolInfo.token0.symbol}</Typography>
+          <TokenImage
+            alt={tokenType === DisplayTokenType.token0 ? poolInfo.token0.symbol : poolInfo.token1.symbol}
+            src={tokenType === DisplayTokenType.token0 ? poolInfo.token0.largeUrl : poolInfo.token1.largeUrl}
+            size={24}
+          />
+          <Typography sx={{ ml: 8 }}>
+            {tokenType === DisplayTokenType.token0
+              ? poolInfo.token0.symbol.toUpperCase()
+              : poolInfo.token1.symbol.toUpperCase()}
+          </Typography>
         </>
       }
     />

@@ -1,6 +1,10 @@
 import { Box } from '@mui/material'
 import InputAmount, { RegretAmountInputProps } from './inputAmount'
-const BidInput = ({ amount, setAmount, poolInfo, maxValue }: RegretAmountInputProps) => {
+export enum DisplayTokenType {
+  'token0' = 0,
+  'token1' = 1
+}
+const BidInput = ({ amount, setAmount, poolInfo, maxValue, tokenType }: RegretAmountInputProps) => {
   return (
     <Box
       sx={{
@@ -10,7 +14,13 @@ const BidInput = ({ amount, setAmount, poolInfo, maxValue }: RegretAmountInputPr
         justifyContent: 'center'
       }}
     >
-      <InputAmount maxValue={maxValue} poolInfo={poolInfo} amount={amount} setAmount={setAmount} />
+      <InputAmount
+        maxValue={maxValue}
+        poolInfo={poolInfo}
+        amount={amount}
+        setAmount={setAmount}
+        tokenType={tokenType}
+      />
     </Box>
   )
 }

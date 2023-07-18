@@ -66,7 +66,6 @@ export default function Updater(): null {
                   }
                 })
               )
-
               addPopup(
                 {
                   txn: {

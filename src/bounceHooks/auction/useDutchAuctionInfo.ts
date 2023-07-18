@@ -347,3 +347,43 @@ export function useDutchCurrentPriceAndAmount1(
   }, [amount1AndCurrentPriceRes, poolInfo, amount0])
   return amount1AndCurrentPrice
 }
+export function useDutchPoolClaimable(backedId?: number | undefined) {
+  const { account } = useActiveWeb3React()
+  const { data: poolInfo } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, backedId)
+  const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
+  const myAmountSwapped0Res = useSingleCallResult(
+    dutchAuctionContract,
+    'myAmountSwap0',
+    [account || undefined, poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const myAmountSwapped0Data = useMemo(() => myAmountSwapped0Res?.[0].toString(), [myAmountSwapped0Res])
+  const curReleasableAmountRes = useSingleCallResult(
+    myAmountSwapped0Data ? dutchAuctionContract : null,
+    'computeReleasableAmount',
+    [poolInfo?.poolId, myAmountSwapped0Data],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const curReleasableAmount = useMemo(() => curReleasableAmountRes?.[0].toString(), [curReleasableAmountRes])
+  const myReleasedRes = useSingleCallResult(
+    account ? dutchAuctionContract : null,
+    'myReleased',
+    [account || undefined, poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const myReleased = useMemo(() => myReleasedRes?.[0].toString(), [myReleasedRes])
+  const currencyCurClaimableAmount = useMemo(() => {
+    if (!poolInfo) return undefined
+    const _t0 = poolInfo?.token0
+    const t0 = new Currency(poolInfo?.ethChainId, _t0?.address, _t0?.decimals, _t0?.symbol, _t0?.name, _t0?.smallUrl)
+    return curReleasableAmount
+      ? CurrencyAmount.fromRawAmount(t0, curReleasableAmount).subtract(
+          CurrencyAmount.fromRawAmount(t0, myReleased || '0')
+        )
+      : undefined
+  }, [curReleasableAmount, myReleased, poolInfo])
+  return currencyCurClaimableAmount
+}

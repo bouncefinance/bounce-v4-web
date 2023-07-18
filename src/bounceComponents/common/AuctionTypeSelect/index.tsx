@@ -21,6 +21,7 @@ export default function AuctionTypeSelect({
       return [
         { label: 'Fixed Price', value: PoolType.FixedSwap },
         { label: 'Random Selection', value: PoolType.Lottery },
+        { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
         { label: 'ERC20 English', value: PoolType.ENGLISH_AUCTION }
       ]
     } else if (tokenType === BackedTokenType.NFT) {

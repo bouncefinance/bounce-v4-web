@@ -10,9 +10,9 @@ import StageLine from './components/stageLine'
 import { useState, useMemo } from 'react'
 import PoolTabs from './components/poolTabs'
 import { PoolIndexType } from './components/poolTabs'
-import DutchAuction from './components/dutctAuction'
+import DutchAuction from './components/dutchAuction/dutctAuction'
 const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
-
+import moment from 'moment'
 const DipExchange = () => {
   const nowDate = new Date().valueOf()
   const oneDay = 60 * 60 * 24 * 1000
@@ -29,20 +29,24 @@ const DipExchange = () => {
         dip: {
           startAt: 1689521217979,
           closeAt: 1689921217979,
-          id: 18522,
-          active: true
+          id: 18522
         },
         dgt: {
           startAt: 1689521217979,
           closeAt: 1689921217979,
-          id: 18522, // live
+          id: 18552 // live
           //   id: 18517, // claimable
           //   id: 18516, // claimed
           //   id: 18514, // no join
-          active: true
         }
       }
     })
+  //   const timeLine = [
+  //     {
+  //       timesteamp: 1689523200000
+  //     }
+  //   ]
+  console.log('date >>>>', moment('2023-07-17').valueOf())
   // last date higt light
   const lastActiveIndex = useMemo(() => {
     let lastIndex = 0

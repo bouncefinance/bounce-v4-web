@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material'
-import { PoolsData } from './stageLine'
+import { PoolsData } from '../stageLine'
 import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { useMemo } from 'react'
 import TimeStageLine from './timeStageLine'
-import LineChart from '../../auction/dutchAuction/components/lineChart'
-import PoolStep from './poolStep'
-const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
+import LineChart from '../../../auction/dutchAuction/components/lineChart'
+import PoolStep from '../poolStep'
+const Erc20english = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
   const { list } = poolsData
   const currentData = useMemo(() => {
     return list[index]?.dgt
@@ -63,4 +63,4 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
     </Box>
   )
 }
-export default DutchAuction
+export default Erc20english

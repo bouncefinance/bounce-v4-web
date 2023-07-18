@@ -4,7 +4,7 @@ import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorAc
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
 import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
-import { ActionStep } from '../../auction/dutchAuction/components/userBlock/right'
+import { ActionStep } from '../../../auction/dutchAuction/components/userBlock/right'
 import { useActiveWeb3React } from 'hooks'
 import useUserClaim from 'bounceHooks/auction/useUserClaimDutch'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'

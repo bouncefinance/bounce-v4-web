@@ -47,8 +47,8 @@ function ERC20EnglishAuctionPoolContent() {
     transform: translate(-100px, 100px);
   }
 `
-  const { poolInfo, run: getPoolInfo, loading } = useErc20EnglishAuctionInfo()
-  console.log('data>>>', poolInfo, loading)
+  const { poolInfo, run: getPoolInfo } = useErc20EnglishAuctionInfo()
+  console.log('data>>>', poolInfo)
   const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   if (!poolInfo) {
     return (
