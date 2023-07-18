@@ -31,9 +31,7 @@ const NumInput = styled(NumberInput)(() => ({
 }))
 const AmountInput = ({ poolInfo, amount, setAmount }: RegretAmountInputProps) => {
   const { account } = useActiveWeb3React()
-
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo?.currencyAmountStartPrice?.currency)
-
   const currencyMaxAmount1PerWallet = useMaxSwapAmount1Limit(poolInfo)
 
   const swappedAmount0 = useMemo(
@@ -57,7 +55,6 @@ const AmountInput = ({ poolInfo, amount, setAmount }: RegretAmountInputProps) =>
   )
 
   const handleMaxButtonClick = useCallback(() => {
-    console.log('max', swappedAmount0?.toExact(), currencyMaxAmount1PerWallet?.toExact(), userToken1Balance?.toExact())
     let result = ''
     if (swappedAmount0 && currencyMaxAmount1PerWallet && userToken1Balance) {
       if (

@@ -1,5 +1,4 @@
 import { Box, Container, useTheme, keyframes, Grid } from '@mui/material'
-import Header from './components/header'
 import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock'
 import { useMemo } from 'react'
@@ -9,6 +8,7 @@ import { useErc20EnglishAuctionInfo } from 'bounceHooks/auction/useErc20EnglishA
 import ActionHistory from './components/auctionHistory'
 import ValuesProvider from './ValuesProvider'
 import CreatorInfoCard from '../dutchAuction/components/creatorInfoCard'
+import Header from '../dutchAuction/components/header'
 
 function ERC20EnglishAuctionPoolContent() {
   const theme = useTheme()

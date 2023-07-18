@@ -3,8 +3,8 @@ import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useState } from 'react'
 import Line from '../lineChart'
 import AuctionInfo from '../creatorBlock/auctionInfo'
-
 import { ReactComponent as ArrowIcon } from 'assets/imgs/dutchAuction/yellowArrowIcon.svg'
+
 const OthersDetail = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const [isSlide, setIsSlide] = useState(true)
   return (
