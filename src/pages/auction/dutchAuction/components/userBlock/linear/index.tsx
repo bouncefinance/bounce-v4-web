@@ -231,6 +231,7 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 }}
               >
                 <ClaimBlock
+                  isErc20EnglishAuction={false}
                   style={{
                     padding: '0'
                   }}

@@ -95,7 +95,7 @@ const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false, isDutchAuc
             </Typography>
           </Box>
         ) : (
-          <Typography variant="body1" sx={{ color: '#878A8E' }}>
+          <Typography variant="body1" sx={{ color: '#878A8E', wordBreak: 'break-word' }}>
             {inputValue}
           </Typography>
         )}

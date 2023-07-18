@@ -28,7 +28,7 @@ import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { CurrencyAmount } from 'constants/token'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { ZERO } from 'constants/token/constants'
+// import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -109,7 +109,12 @@ const DutchAuctionParametersForm = (): JSX.Element => {
         'POOL_SIZE_LESS_THAN_BALANCE',
         'Pool size cannot be greater than your balance',
         value =>
-          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
+          !value ||
+          (balance
+            ? new BigNumber(balance.toExact()).isGreaterThanOrEqualTo(
+                CurrencyAmount.fromAmount(balance.currency, value)?.toExact() || '0'
+              )
+            : false)
       ),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
@@ -370,7 +375,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                     </Tooltip>
                   </Stack>
 
-                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toSignificant() || '-'}</Typography>}
+                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toExact() || '-'}</Typography>}
                 </Stack>
 
                 <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>

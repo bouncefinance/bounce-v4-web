@@ -60,7 +60,10 @@ export function sortReleaseData(releaseData: IReleaseData[]): IReleaseData[] {
 export function getFragmentRawArr(releaseData: IReleaseData[]) {
   if (!releaseData.length) return []
   const arr = releaseData.map(item => {
-    const _ca = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), Number(item.ratio) / 100)
+    const _ca = CurrencyAmount.fromAmount(
+      Currency.getNativeCurrency(),
+      new BigNumber(item.ratio || 0).dividedBy(100).toString()
+    )
     if (!_ca) throw new Error('releaseData error')
     return _ca
   })
