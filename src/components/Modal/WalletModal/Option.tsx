@@ -73,7 +73,7 @@ export default function Option({
         onClick={activate}
         disabled={!active}
       >
-        <Box width={140}>
+        <Box width={166}>
           <LogoText fontSize={14} logo={icon} text={header} />
         </Box>
       </LoadingButton>

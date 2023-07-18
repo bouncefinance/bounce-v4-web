@@ -12,7 +12,6 @@ import { useWalletDeactivate } from 'connection/activate'
 
 export default function LoginModal() {
   const { account } = useActiveWeb3React()
-  console.log('🚀 ~ file: LoginModal.tsx:15 ~ LoginModal ~ account:', account)
   const walletModalOpen = useModalOpen(ApplicationModal.SIGN_LOGIN)
   const walletDeactivate = useWalletDeactivate()
 

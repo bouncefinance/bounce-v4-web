@@ -3,10 +3,12 @@ import { ConnectionType } from 'connection/types'
 import { useMemo } from 'react'
 // import { useAppSelector } from 'state/hooks'
 
-const SELECTABLE_WALLETS = [
-  ConnectionType.UNISWAP_WALLET_V2,
+const SELECTABLE_ENABLE_WALLETS: ConnectionType[] = [
   ConnectionType.INJECTED,
   ConnectionType.WALLET_CONNECT_V2,
+  ConnectionType.UNISWAP_WALLET_V2,
+  ConnectionType.OKX_WALLET,
+  ConnectionType.GNOSIS_SAFE,
   ConnectionType.COINBASE_WALLET
 ]
 
@@ -23,7 +25,7 @@ export default function useOrderedConnections() {
     // if (selectedWallet) {
     //   orderedConnectionTypes.push(selectedWallet)
     // }
-    orderedConnectionTypes.push(...SELECTABLE_WALLETS)
+    orderedConnectionTypes.push(...SELECTABLE_ENABLE_WALLETS)
 
     // Add network connection last as it should be the fallback.
     orderedConnectionTypes.push(ConnectionType.NETWORK)

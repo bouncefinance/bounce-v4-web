@@ -8,13 +8,15 @@ import GNOSIS_ICON from 'assets/walletIcon/gnosis.png'
 import COINBASE_ICON from 'assets/walletIcon/coinbaseWalletIcon.svg'
 import UNIWALLET_ICON from 'assets/walletIcon/uniswap-wallet-icon.png'
 import WALLET_CONNECT_ICON from 'assets/walletIcon/walletConnectIcon.svg'
+import OkxIcon_ICON from 'assets/walletIcon/okxIcon.png'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
 
 import { Connection, ConnectionType } from './types'
-import { getInjection, getIsCoinbaseWallet, getIsInjected, getIsMetaMaskWallet } from './utils'
+import { getInjection, getIsCoinbaseWallet, getIsInjected, getIsMetaMaskWallet, getIsOkxWallet } from './utils'
 import { UniwalletConnect as UniwalletWCV2Connect, WalletConnectV2 } from './WalletConnectV2'
 import { ChainId } from 'constants/chain'
-import { RPC_PROVIDERS, getRpcUrl } from 'connectors/MultiNetworkConnector'
+import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
+import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`)
@@ -100,7 +102,7 @@ export const uniwalletWCV2ConnectConnection: Connection = {
   type: ConnectionType.UNISWAP_WALLET_V2,
   getIcon: () => UNIWALLET_ICON,
   shouldDisplay: () => Boolean(!getIsInjectedMobileBrowser() && !isNonIOSPhone),
-  isNew: true
+  active: false
 }
 
 const [web3CoinbaseWallet, web3CoinbaseWalletHooks] = initializeConnector<CoinbaseWallet>(
@@ -133,12 +135,40 @@ const coinbaseWalletConnection: Connection = {
   }
 }
 
+export const [okxWallet, okxWalletHooks] = initializeConnector<OKXWallet>(
+  actions =>
+    new OKXWallet({
+      actions,
+      options: {
+        mustBeOKXWallet: true
+      },
+      onError
+    })
+)
+
+const OKXWalletConnection: Connection = {
+  getName: () => 'OKX Wallet',
+  connector: okxWallet,
+  hooks: okxWalletHooks,
+  type: ConnectionType.OKX_WALLET,
+  getIcon: () => OkxIcon_ICON,
+  shouldDisplay: () => true,
+  overrideActivate: () => {
+    if (!getIsOkxWallet()) {
+      window.open('https://www.okx.com/download')
+      return true
+    }
+    return false
+  }
+}
+
 export function getConnections() {
   return [
-    uniwalletWCV2ConnectConnection,
     injectedConnection,
     walletConnectV2Connection,
+    OKXWalletConnection,
     coinbaseWalletConnection,
+    uniwalletWCV2ConnectConnection,
     gnosisSafeConnection,
     networkConnection
   ]
@@ -165,6 +195,8 @@ export function getConnection(c: Connector | ConnectionType) {
         return networkConnection
       case ConnectionType.GNOSIS_SAFE:
         return gnosisSafeConnection
+      case ConnectionType.OKX_WALLET:
+        return OKXWalletConnection
     }
   }
 }

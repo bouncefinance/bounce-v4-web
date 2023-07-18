@@ -1,4 +1,4 @@
-import { Connection } from 'connection/types'
+import { Connection, ConnectionType } from 'connection/types'
 import { atom } from 'jotai'
 import { useAtomValue, useUpdateAtom } from 'jotai/utils'
 import { useCallback } from 'react'
@@ -47,6 +47,10 @@ function useTryActivation() {
 
         // Clears pending connection state
         setActivationState(IDLE_ACTIVATION_STATE)
+
+        if (connection.type === ConnectionType.WALLET_CONNECT_V2) {
+          window.location.reload()
+        }
 
         onSuccess()
       } catch (error) {

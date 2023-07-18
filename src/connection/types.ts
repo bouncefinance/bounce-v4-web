@@ -3,11 +3,12 @@ import { Connector } from '@web3-react/types'
 import { ChainId } from 'constants/chain'
 
 export enum ConnectionType {
-  UNISWAP_WALLET_V2 = 'UNISWAP_WALLET_V2',
   INJECTED = 'INJECTED',
   COINBASE_WALLET = 'COINBASE_WALLET',
   WALLET_CONNECT_V2 = 'WALLET_CONNECT_V2',
+  UNISWAP_WALLET_V2 = 'UNISWAP_WALLET_V2',
   NETWORK = 'NETWORK',
+  OKX_WALLET = 'OKX_WALLET',
   GNOSIS_SAFE = 'GNOSIS_SAFE'
 }
 
@@ -19,5 +20,5 @@ export interface Connection {
   getIcon?(isDarkMode: boolean): string
   shouldDisplay(): boolean
   overrideActivate?: (chainId?: ChainId) => boolean
-  isNew?: boolean
+  active?: false
 }

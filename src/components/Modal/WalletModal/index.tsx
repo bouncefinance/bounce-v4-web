@@ -46,7 +46,7 @@ export function useGetWalletOptions(isModal?: boolean) {
         key={connection.getName()}
         connection={connection}
         icon={(connection.getIcon && connection.getIcon(false)) || ''}
-        active={connection.shouldDisplay()}
+        active={connection.shouldDisplay() && connection.active !== false}
       />
     ))
 }
@@ -152,7 +152,13 @@ export default function WalletModal({
             setPendingError={() => {}}
             tryActivation={tryActivation}
           >
-            <Button variant="outlined" color="primary" onClick={cancelActivation} style={{ whiteSpace: 'nowrap' }}>
+            <Button
+              variant="outlined"
+              fullWidth
+              color="primary"
+              onClick={cancelActivation}
+              style={{ whiteSpace: 'nowrap', marginTop: 10 }}
+            >
               Cancel
             </Button>
           </PendingView>

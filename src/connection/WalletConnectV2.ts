@@ -22,10 +22,13 @@ export class WalletConnectV2 extends WalletConnect {
       actions,
       options: {
         projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID as string,
-        chains: [1],
-        // optionalChains: SUPPORT_NETWORK_CHAIN_IDS,
+        chains: [defaultChainId || 1],
+        optionalChains: [1, 56],
         showQrModal: qrcode,
-        // rpcMap: RPC_URLS_WITHOUT_FALLBACKS,
+        rpcMap: {
+          1: 'https://rpc.ankr.com/eth/128bdedab70a53096c6b5132d94384254aee84b8491502b928ab6c08652a7b78',
+          56: 'https://bsc-dataseed.binance.org'
+        },
         // as of 6/16/2023 there are no docs for `optionalMethods`
         // this set of optional methods fixes a bug we encountered where permit2 signatures were never received from the connected wallet
         // source: https://uniswapteam.slack.com/archives/C03R5G8T8BH/p1686858618164089?thread_ts=1686778867.145689&cid=C03R5G8T8BH
