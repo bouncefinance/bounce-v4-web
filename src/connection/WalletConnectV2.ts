@@ -43,8 +43,8 @@ export class WalletConnectV2 extends WalletConnect {
           termsOfServiceUrl: undefined,
           themeMode: darkmode ? 'dark' : 'light',
           themeVariables: {
-            '--w3m-font-family': '"Inter custom", sans-serif',
-            '--w3m-z-index': '999999'
+            '--wcm-font-family': '"Inter custom", sans-serif',
+            '--wcm-z-index': '999999'
           },
           walletImages: undefined
         }
