@@ -54,7 +54,6 @@ function useTryActivation() {
 
         onSuccess()
       } catch (error) {
-        alert(error?.toString())
         // Gracefully handles errors from the user rejecting a connection attempt
         if (didUserReject(connection, error)) {
           setActivationState(IDLE_ACTIVATION_STATE)

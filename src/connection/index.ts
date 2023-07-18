@@ -19,7 +19,6 @@ import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 
 function onError(error: Error) {
-  alert(error.toString())
   console.debug(`web3-react error: ${error}`)
 }
 
@@ -36,7 +35,9 @@ export const networkConnection: Connection = {
 
 const getIsCoinbaseWalletBrowser = () => isMobile && getIsCoinbaseWallet()
 const getIsMetaMaskBrowser = () => isMobile && getIsMetaMaskWallet()
-const getIsInjectedMobileBrowser = () => getIsCoinbaseWalletBrowser() || getIsMetaMaskBrowser()
+const getIsOkxWalletBrowser = () => isMobile && getIsOkxWallet()
+const getIsInjectedMobileBrowser = () =>
+  getIsCoinbaseWalletBrowser() || getIsMetaMaskBrowser() || getIsOkxWalletBrowser()
 
 const getShouldAdvertiseMetaMask = () =>
   !getIsMetaMaskWallet() && !isMobile && (!getIsInjected() || getIsCoinbaseWallet())
