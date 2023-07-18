@@ -19,6 +19,7 @@ import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 
 function onError(error: Error) {
+  alert(error.toString())
   console.debug(`web3-react error: ${error}`)
 }
 
