@@ -6,6 +6,7 @@ import OMNIUrl from 'assets/svg/omni_logo.svg'
 import ZkevmSrc from '../assets/images/zkevm_logo.png'
 import ZkSyncSrc from '../assets/images/zksync_logo.png'
 import scrollLogo from '../assets/images/scroll_logo.png'
+import FantomLogo from '../assets/images/Fantom_round.png'
 import ZetaLogo from '../assets/svg/zeta-chain.svg'
 
 export function numberToHex(number: number) {
@@ -243,7 +244,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'FTM',
       symbol: 'FTM',
       decimals: 18,
-      logo: 'https://ftmscan.com/images/favicon.png'
+      logo: FantomLogo
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']

@@ -20,6 +20,7 @@ export class WalletConnectV2 extends WalletConnect {
     const darkmode = Boolean(window.matchMedia('(prefers-color-scheme: dark)'))
     super({
       actions,
+      timeout: 10000,
       options: {
         projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID as string,
         chains: [defaultChainId || 1],
