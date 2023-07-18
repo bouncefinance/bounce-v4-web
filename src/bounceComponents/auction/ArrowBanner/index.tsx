@@ -92,7 +92,7 @@ export const SwiperSkeleton = () => {
   )
 }
 
-function ArrowBanner({ type }: { type?: string }) {
+function ArrowBanner({ type, delay }: { type?: string; delay?: number }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
@@ -147,7 +147,7 @@ function ArrowBanner({ type }: { type?: string }) {
           slidesPerView={1}
           loop={true}
           autoplay={{
-            delay: 3000
+            delay: delay ? delay : 3000
           }}
           style={{
             maxWidth: '1296px',
