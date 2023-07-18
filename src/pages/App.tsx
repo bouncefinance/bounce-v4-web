@@ -76,6 +76,8 @@ import DipExchange from './dipExchange'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
+import UniwalletModal from 'components/Modal/UniwalletModal'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -109,6 +111,7 @@ export default function App() {
             <ContentWrapper>
               <GlobalHooks />
               <LoginModal />
+              <UniwalletModal />
               <Header />
               <ToastContainer />
               <Questions />
