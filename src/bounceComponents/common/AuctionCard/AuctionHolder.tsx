@@ -36,7 +36,13 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
       <Avatar src={avatar || DefaultAvatarSVG} sx={{ width: 52, height: 52 }} />
       <Stack spacing={4}>
         <Stack direction={'row'} alignItems="center" spacing={8}>
-          <Typography variant="h6">{name}</Typography>
+          <Typography
+            variant="h6"
+            sx={{ width: 'fit-content', maxWidth: 200, textOverflow: 'ellipsis', overflow: 'hidden' }}
+            noWrap
+          >
+            {name}
+          </Typography>
           <VerifiedIcon isVerify={isVerify} />
         </Stack>
 

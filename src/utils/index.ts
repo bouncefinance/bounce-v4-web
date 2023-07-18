@@ -277,3 +277,12 @@ export const getfilesize = (size: number): string => {
   if (size < Math.pow(num, 5)) return (size / Math.pow(num, 4)).toFixed(0) + 'TB' //T
   return size + 'B'
 }
+
+export const formatNumberWithCommas = (number: number | string) => {
+  const strNum = String(number)
+  const parts = strNum.split('.')
+  const intPart = parts[0]
+  const decimalsPart = parts[1] || ''
+  const commas = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return decimalsPart.length > 0 ? `${commas}.${decimalsPart}` : commas
+}

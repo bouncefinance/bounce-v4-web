@@ -272,6 +272,43 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.LINEA_GORLI]: ''
 }
 
+export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0x50047539704792618D752D54cbB6A4D2c07cCc8B',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.LINEA]: ''
+}
+
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x7cC82b4e6A4585A3c2228301Bd3e78CA52650174',
   [ChainId.GÖRLI]: '',

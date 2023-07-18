@@ -30,6 +30,7 @@ import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
 import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import { ChainId } from 'constants/chain'
+import { routes } from 'constants/routes'
 
 export interface IProjectInfo {
   title: string
@@ -668,8 +669,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 9,
     liveTimeStamp: {
-      start: 1689350400000,
-      end: 0
+      start: 1689436800000,
+      end: 1689609600000
     },
     poolTypeName: 'Fixed Swap Auction',
     img: Deelance,
@@ -715,8 +716,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 10,
     liveTimeStamp: {
-      start: 1689350400000,
-      end: 0
+      start: 1689436800000,
+      end: 1689609600000
     },
     poolTypeName: 'Whitelist',
     img: Deelance,
@@ -725,8 +726,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: '$DLANCE',
     whitePaperLink: 'https://docs.deelance.com/',
-    upcomingLink: '/launchpad/deelance',
-    liveLink: '/launchpad/deelance',
+    upcomingLink: routes.thirdPart.DeelanceAuctionWhitelist,
+    liveLink: routes.thirdPart.DeelanceAuctionWhitelist,
     projectInfo: DeelanceProjectInfo,
     tokenMetrics: [],
     desc: 'DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential employers in Metaverse.',

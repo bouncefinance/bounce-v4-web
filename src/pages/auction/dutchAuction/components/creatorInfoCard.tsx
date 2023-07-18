@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { ChainId, ChainListMap } from 'constants/chain'
 import Image from 'components/Image'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import AuctionDescription from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionDescription'
 import AuctionFiles from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionFiles'
 import { useActiveWeb3React } from 'hooks'
@@ -77,7 +77,7 @@ export interface SocialMediaButtonGroupProps {
   github?: string
   style?: React.CSSProperties
 }
-const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMediaButtonGroupProps) => {
+export const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMediaButtonGroupProps) => {
   return (
     <Box
       sx={{
@@ -138,7 +138,7 @@ const SocialLink = ({ twitter, instagram, website, linkedin, github }: SocialMed
 }
 interface ICreatorInfoCardProps {
   creator: string
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp
   getPoolInfo: () => void
 }
 const PoolInfo = (props: ICreatorInfoCardProps) => {

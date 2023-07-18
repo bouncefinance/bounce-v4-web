@@ -6,11 +6,11 @@ import { RightText } from './auctionInfo'
 import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import ClaimBlock from './claimBlcok'
 import TipsIcon from 'assets/imgs/dutchAuction/tips2.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import PoolSaleInfo from './poolSaleInfo'
 import BigNumber from 'bignumber.js'
+import ClaimBlock from './claimBlcok'
 
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo

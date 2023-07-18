@@ -52,7 +52,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION]
   },
   [ChainId.FANTOM]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION]
   },
   [ChainId.FANTOM_TESTNET]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION]
@@ -101,7 +101,12 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION]
   },
   [ChainId.SEPOLIA]: {
-    [TokenType.ERC20]: [AuctionType.DUTCH_AUCTION, AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION],
+    [TokenType.ERC20]: [
+      AuctionType.FIXED_PRICE,
+      AuctionType.ENGLISH_AUCTION,
+      AuctionType.RANDOM_SELECTION,
+      AuctionType.DUTCH_AUCTION
+    ],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },

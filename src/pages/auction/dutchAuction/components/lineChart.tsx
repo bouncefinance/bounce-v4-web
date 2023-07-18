@@ -18,7 +18,7 @@ import PoolInfoItem from './poolInfoItem'
 import { RightText } from './creatorBlock/auctionInfo'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
-import { PoolStatus } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import ChartDialog from './userBlock/chartDialog'
 export interface PointerItem {
@@ -92,7 +92,7 @@ export const LineChartView = ({
   options
 }: {
   data: PointerItem[]
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp
   options?: DeepPartial<ChartOptions>
 }) => {
   const chartContainerRef = useRef<any>()
