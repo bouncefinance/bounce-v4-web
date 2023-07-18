@@ -6,8 +6,8 @@ import { AppJsonRpcProvider } from 'connection/providers'
 export function getRpcUrl(chainId: ChainId) {
   switch (chainId) {
     case ChainId.MAINNET:
-      // return `https://rpc.ankr.com/eth`
-      return `https://mainnet.infura.io/v3/` + process.env.REACT_APP_INFURA_KEY
+      return `https://rpc.ankr.com/eth/128bdedab70a53096c6b5132d94384254aee84b8491502b928ab6c08652a7b78`
+    // return `https://mainnet.infura.io/v3/` + process.env.REACT_APP_INFURA_KEY
     case ChainId.SEPOLIA:
       return 'https://sepolia.infura.io/v3/' + process.env.REACT_APP_INFURA_KEY
     case ChainId.GÖRLI:
