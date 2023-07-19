@@ -222,6 +222,21 @@ export function useDutchAuctionInfo() {
     const currencyUnfilledAmount1 = unfilledAmount1.isGreaterThan(0)
       ? CurrencyAmount.fromAmount(t1, unfilledAmount1.toString())
       : CurrencyAmount.fromAmount(t1, 0)
+    const highestPrice = poolsData.highestPrice
+      ? CurrencyAmount.fromRawAmount(
+          t1,
+          JSBI.divide(
+            JSBI.multiply(JSBI.BigInt(poolsData.highestPrice), JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))),
+            JSBI.BigInt(poolInfo.amountTotal0)
+          )
+        )
+      : undefined
+    const currencyCurrentPrice = currentPrice
+      ? CurrencyAmount.fromRawAmount(
+          t1,
+          JSBI.divide(JSBI.multiply(onceAmount0, JSBI.BigInt(currentPrice)), JSBI.BigInt(Number('1e18')))
+        )
+      : undefined
     return {
       ...poolInfo,
       whitelistData,
@@ -230,15 +245,7 @@ export function useDutchAuctionInfo() {
       currencySwappedAmount0: CurrencyAmount.fromRawAmount(t0, amountSwap0Data || poolInfo.swappedAmount0),
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(t1, amountSwap1Data || poolInfo.currentTotal1),
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
-      highestPrice: poolsData.highestPrice
-        ? CurrencyAmount.fromRawAmount(
-            t1,
-            JSBI.divide(
-              JSBI.multiply(JSBI.BigInt(poolsData.highestPrice), JSBI.BigInt(Number(`1e${poolInfo.token0.decimals}`))),
-              JSBI.BigInt(poolInfo.amountTotal0)
-            )
-          )
-        : undefined,
+      highestPrice,
       lowestPrice: poolsData.lowestPrice
         ? CurrencyAmount.fromRawAmount(
             t1,
@@ -249,12 +256,10 @@ export function useDutchAuctionInfo() {
           )
         : undefined,
       times: poolsData.times,
-      currencyCurrentPrice: currentPrice
-        ? CurrencyAmount.fromRawAmount(
-            t1,
-            JSBI.divide(JSBI.multiply(onceAmount0, JSBI.BigInt(currentPrice)), JSBI.BigInt(Number('1e18')))
-          )
-        : undefined,
+      currencyCurrentPrice:
+        currencyCurrentPrice && highestPrice && currencyCurrentPrice?.toExact() >= highestPrice?.toExact()
+          ? highestPrice
+          : currencyCurrentPrice,
       currencyLowestBidPrice,
       currencyMaxAmount0PerWallet: maxAmount0PerWallet
         ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
