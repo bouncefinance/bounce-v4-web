@@ -49,6 +49,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         BigNumber(currentPriceAndAmount1.amount1).toString()
       )
     : 0
+  console.log('amount1CurrencyAmount>>>', amount1CurrencyAmount)
   const bidDisabled = useMemo(() => {
     return !Object.values(confirmationState).every(item => item === true)
   }, [confirmationState])
