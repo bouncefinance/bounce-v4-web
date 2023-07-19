@@ -1,8 +1,17 @@
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Container, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
-import ComingSoon from 'pages/ComingSoon'
-
+import { useState } from 'react'
+import tabStyles from './tabStyles'
+enum ETabList {
+  All = 'All',
+  Upcoming = 'Upcoming',
+  Live = 'Live',
+  Close = 'Close'
+}
+const tabList = [ETabList.All, ETabList.Close, ETabList.Live, ETabList.Upcoming]
 export default function AccountPrivateLaunchpad() {
+  const [curTab, setCurTab] = useState(ETabList.All)
+
   return (
     <AccountLayout>
       <Box padding="40px 20px">
@@ -15,13 +24,22 @@ export default function AccountPrivateLaunchpad() {
           <Typography variant="h3" fontSize={30}>
             Private Launchpad
           </Typography>
-          <ComingSoon
-            bgColor="var(--ps-white)"
-            prompt="This feature will be available soon. Please stay tuned."
-            sx={{
-              padding: '0'
-            }}
-          />
+          <Stack sx={{ flexDirection: 'row', justifyContent: 'flex-start' }} mt={28}>
+            {tabList.map((item, index) => (
+              <Typography
+                onClick={() => setCurTab(item)}
+                sx={{
+                  ...tabStyles.menu,
+                  ...(item === curTab ? tabStyles.menuActive : ({} as any)),
+                  padding: '16px 32px 12px 32px',
+                  fontFamily: 'Public Sans'
+                }}
+                key={index}
+              >
+                {item}
+              </Typography>
+            ))}
+          </Stack>
         </Container>
       </Box>
     </AccountLayout>
