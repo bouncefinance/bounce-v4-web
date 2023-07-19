@@ -80,6 +80,8 @@ const BidBlock = ({
     true
   )
 
+  console.log('poolInfo', poolInfo.currencyAmountTotal0.toExact(), poolInfo.currencySwappedAmount0?.toExact())
+
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -172,6 +174,16 @@ const BidBlock = ({
           </ComBtn>
         )
       }
+      if (
+        poolInfo?.currencySwappedAmount0 &&
+        poolInfo?.currencyAmountTotal0.equalTo(poolInfo?.currencySwappedAmount0)
+      ) {
+        return (
+          <ComBtn fullWidth disabled={true}>
+            <span>Sold Out</span>
+          </ComBtn>
+        )
+      }
       if (approvalState === ApprovalState.PENDING) {
         return (
           <ComBtn loadingPosition="start" variant="contained" fullWidth loading>
@@ -205,6 +217,16 @@ const BidBlock = ({
         return (
           <ComBtn fullWidth disabled={true}>
             <span>Limit exceeded</span>
+          </ComBtn>
+        )
+      }
+      if (
+        poolInfo?.currencySwappedAmount0 &&
+        poolInfo?.currencyAmountTotal0.equalTo(poolInfo?.currencySwappedAmount0)
+      ) {
+        return (
+          <ComBtn fullWidth disabled={true}>
+            <span>Sold Out</span>
           </ComBtn>
         )
       }
