@@ -26,7 +26,7 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
         }}
       >
         <HeaderTab />
-        <ArrowBanner type={'RealWorld'} delay={1500} />
+        <ArrowBanner type={'RealWorld'} />
         <Tabs setIndex={setIndex} index={index} />
       </Box>
       {index === TabsType.auction && <Auction />}
