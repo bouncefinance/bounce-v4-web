@@ -4,8 +4,16 @@ import { StatusBox } from '../creatorBlock/right'
 import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { BigNumber } from 'bignumber.js'
-
+import { useMemo } from 'react'
 const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const currentPrice = useMemo(() => {
+    const currencyCurrentPrice = new BigNumber(poolInfo.currencyCurrentPrice?.toExact() || '0')
+    const highestPrice = new BigNumber(poolInfo.highestPrice?.toExact() || '0')
+    if (currencyCurrentPrice.isGreaterThan(highestPrice)) {
+      return poolInfo.highestPrice?.toSignificant()
+    }
+    return poolInfo?.currencyCurrentPrice?.toSignificant() || '0'
+  }, [poolInfo.currencyCurrentPrice, poolInfo.highestPrice])
   return (
     <Box
       sx={{
@@ -99,10 +107,7 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 >
                   =
                 </span>
-                &nbsp;{' '}
-                {poolInfo.status === PoolStatus.Upcoming
-                  ? poolInfo.highestPrice?.toSignificant()
-                  : poolInfo.currencyCurrentPrice?.toSignificant()}
+                &nbsp; {currentPrice}
                 <TokenImage
                   sx={{
                     margin: '0 4px'
