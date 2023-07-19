@@ -66,6 +66,7 @@ const Live = ({
               color: '#E1F25C'
             }}
           >
+            {amount + poolInfo.token0.symbol.toUpperCase()} ={' '}
             {currentPriceAndAmount1.amount1 + ' ' + poolInfo.token1.symbol.toUpperCase()}
           </RightText>
         </PoolInfoItem>
