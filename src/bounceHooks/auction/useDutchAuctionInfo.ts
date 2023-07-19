@@ -334,11 +334,17 @@ export function useDutchCurrentPriceAndAmount1(
     const _t1 = poolInfo?.token1
     const t1 = new Currency(poolInfo?.ethChainId, _t1?.address, _t1?.decimals, _t1?.symbol, _t1?.name, _t1?.smallUrl)
     const amount1 = CurrencyAmount.fromRawAmount(t1, amount1AndCurrentPriceRes?.[0].toString() || 0).toExact()
+    const maxAmount1 = new BigNumber(poolInfo.highestPrice?.toExact() || '0').times(amount0)
     if (poolInfo.status === PoolStatus.Upcoming) {
       return {
         amount1: BigNumber(poolInfo?.highestPrice?.toExact() || 0)
           .times(amount0)
           .toString()
+      }
+    }
+    if (new BigNumber(amount1).isGreaterThan(maxAmount1)) {
+      return {
+        amount1: maxAmount1.toString()
       }
     }
     return {
