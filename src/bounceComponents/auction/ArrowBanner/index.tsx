@@ -5,7 +5,7 @@ import { Box, styled, Skeleton, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
@@ -92,7 +92,7 @@ export const SwiperSkeleton = () => {
   )
 }
 
-function ArrowBanner({ type, delay }: { type?: string; delay?: number }) {
+function ArrowBanner({ type }: { type?: string }) {
   const [swiper, setSwiper] = useState<SwiperCore>()
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
@@ -109,6 +109,14 @@ function ArrowBanner({ type, delay }: { type?: string; delay?: number }) {
   const LeaveSwiper = () => {
     setShowSwiperIcon(false)
   }
+  const delay = useMemo(() => {
+    if (data?.list.length >= 7) {
+      return 1500
+    } else if (data?.list.length >= 4) {
+      return 2000
+    }
+    return 3000
+  }, [data?.list.length])
   return (
     <Box
       position={'relative'}
