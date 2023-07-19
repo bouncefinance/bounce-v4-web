@@ -136,7 +136,6 @@ export default function Dashboard() {
                         isVerify={userInfo.isVerify}
                         width={42}
                         height={42}
-                        showVerify
                         sx={{ position: 'absolute', right: 0, bottom: 0 }}
                       />
                     )}
@@ -253,7 +252,6 @@ export default function Dashboard() {
                       isVerify={userInfo.isVerify}
                       width={24}
                       height={24}
-                      showVerify
                       sx={{ position: 'absolute', left: 50, bottom: 0 }}
                     />
                   )}
