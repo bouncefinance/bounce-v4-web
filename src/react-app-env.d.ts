@@ -9,6 +9,11 @@ interface Window {
     send: (...args: any[]) => void
     request?: (...args: any[]) => Promise<any>
     removeListener?: (...args: any[]) => void
+    isBraveWallet?: true
+    isRabby?: true
+    isTrust?: true
+    isLedgerConnect?: true
+    isCoinbaseWallet?: true
   }
   okxwallet?: {
     isMetaMask?: false

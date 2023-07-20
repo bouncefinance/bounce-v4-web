@@ -6,13 +6,15 @@ import logo from 'assets/svg/logo-icon.svg'
 import Image from 'components/Image'
 import { useUserInfo, useWeb3Login } from 'state/users/hooks'
 import { useCallback, useEffect } from 'react'
-import { setPrevConnectWallet } from 'utils/isInjectedConnectedPrev'
 import { useActiveWeb3React } from 'hooks'
 import { LoadingButton } from '@mui/lab'
+import { useWalletDeactivate } from 'connection/activate'
 
 export default function LoginModal() {
-  const { connector, account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const walletModalOpen = useModalOpen(ApplicationModal.SIGN_LOGIN)
+  const walletDeactivate = useWalletDeactivate()
+
   const { close, open } = useSignLoginModalControl()
   const { run: login, loading } = useWeb3Login()
 
@@ -41,14 +43,14 @@ export default function LoginModal() {
   }, [account])
 
   const cancel = useCallback(() => {
-    setPrevConnectWallet(null)
-    connector?.deactivate && connector.deactivate()
-    connector?.resetState()
+    walletDeactivate()
     close()
-  }, [close, connector])
+  }, [close, walletDeactivate])
+
+  if (!account) return null
 
   return (
-    <Modal customIsOpen={walletModalOpen && !token && !!account} customOnDismiss={cancel} maxWidth="480px">
+    <Modal customIsOpen={walletModalOpen && !token} customOnDismiss={cancel} maxWidth="480px">
       <Box width={'100%'} padding="48px" display="flex" flexDirection="column" alignItems="center" gap={20}>
         <Image width={50} src={logo} />
         <Typography variant="h2">Welcome to Bounce</Typography>

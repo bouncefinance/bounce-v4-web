@@ -18,16 +18,15 @@ export function useWeb3Instance() {
 }
 
 export function useSignMessage() {
-  const { account } = useActiveWeb3React()
-  console.log('🚀 ~ file: useWeb3Instance.ts:22 ~ useSignMessage ~ account:', account)
-  const web3 = useWeb3Instance()
+  const { library } = useActiveWeb3React()
+
   return useCallback(
     (message: string) => {
-      if (!account || !web3) {
-        throw new Error('account not find')
+      if (!library) {
+        throw new Error('library not found')
       }
-      return web3?.eth.personal.sign(message, account, '')
+      return library.getSigner().signMessage(message)
     },
-    [account, web3]
+    [library]
   )
 }

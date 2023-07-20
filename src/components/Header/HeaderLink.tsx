@@ -28,7 +28,7 @@ const homeList = [
   { label: 'Private Launchpad', href: routes.launchpad.index },
   { label: 'Token Auction', href: routes.tokenAuction.index },
   { label: 'NFT Auction', href: routes.nftAuction.index },
-  { label: 'Real World collectibles Auction', href: routes.realAuction.index },
+  { label: 'Real World Collectibles Auction', href: routes.realAuction.index },
   { label: 'Ads Auction', href: routes.adsAuction.index }
 ]
 

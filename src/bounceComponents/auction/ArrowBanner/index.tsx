@@ -103,6 +103,7 @@ function ArrowBanner({ type }: { type?: string }) {
       total: resp.data
     }
   })
+
   const EnterSwiper = () => {
     setShowSwiperIcon(true)
   }
@@ -155,7 +156,7 @@ function ArrowBanner({ type }: { type?: string }) {
           slidesPerView={1}
           loop={true}
           autoplay={{
-            delay: delay ? delay : 3000
+            delay: delay
           }}
           style={{
             maxWidth: '1296px',
