@@ -271,7 +271,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                       )}
                     </Typography>
                   </div>
-                  <VerifiedIcon isVerify={option?.values?.value?.isVerify} />
+                  <VerifiedIcon ifKyc={option?.values?.value?.ifKyc} />
                 </Stack>
               </MenuItem>
             </>

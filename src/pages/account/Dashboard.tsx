@@ -131,9 +131,9 @@ export default function Dashboard() {
                     ) : (
                       <AccountAvatar src={userInfo?.avatar?.fileThumbnailUrl || userInfo?.avatar?.fileUrl} />
                     )}
-                    {userInfo?.isVerify && (
+                    {userInfo?.ifKyc && (
                       <VerifiedIcon
-                        isVerify={userInfo.isVerify}
+                        ifKyc={userInfo.ifKyc}
                         width={42}
                         height={42}
                         sx={{ position: 'absolute', right: 0, bottom: 0 }}
@@ -247,9 +247,9 @@ export default function Dashboard() {
                   ) : (
                     <AccountAvatar src={userInfo?.avatar?.fileThumbnailUrl || userInfo?.avatar?.fileUrl} />
                   )}
-                  {userInfo?.isVerify && (
+                  {userInfo?.ifKyc && (
                     <VerifiedIcon
-                      isVerify={userInfo.isVerify}
+                      ifKyc={userInfo.ifKyc}
                       width={24}
                       height={24}
                       sx={{ position: 'absolute', left: 50, bottom: 0 }}

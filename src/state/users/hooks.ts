@@ -254,7 +254,8 @@ interface IUserInfoData {
   desiredMarket: any[]
   careJobs: any[]
   resumes: any[]
-  isVerify: number
+  // isVerify: number
+  ifKyc: number
 }
 
 export function useUserInfo(): ICacheLoginInfo & {

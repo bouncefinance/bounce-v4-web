@@ -7,7 +7,6 @@ import { VerifyStatus } from 'api/profile/type'
 
 export default function KYCVerification() {
   const { userInfo } = useUserInfo()
-  console.log(userInfo)
 
   return (
     <Box>
@@ -26,7 +25,7 @@ export default function KYCVerification() {
           <KYC_LOCK />
           <Typography ml={10}>KYC Verification</Typography>
         </Box>
-        {userInfo?.isVerify === VerifyStatus.NoVerify ? (
+        {userInfo?.ifKyc === VerifyStatus.NoVerify ? (
           <Button
             onClick={() => show(SumsubWebDialog)}
             sx={{

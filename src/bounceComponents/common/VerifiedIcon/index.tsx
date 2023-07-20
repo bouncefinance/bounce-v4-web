@@ -7,16 +7,16 @@ import VerifiedSVG from 'assets/imgs/profile/verify.svg'
 // import NoVerifySVG from 'assets/imgs/profile/no-verify.svg'
 
 export interface IVerifiedIconProps {
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
   width?: number
   height?: number
   sx?: SxProps
 }
 
-const VerifiedIcon: React.FC<IVerifiedIconProps> = ({ isVerify, width = 20, height = 20, sx }) => {
+const VerifiedIcon: React.FC<IVerifiedIconProps> = ({ ifKyc, width = 20, height = 20, sx }) => {
   return (
     <Box sx={sx}>
-      {isVerify === VerifyStatus.Verified && (
+      {ifKyc === VerifyStatus.Verified && (
         <Tooltip title="Verified account">
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Image alt="" src={VerifiedSVG} width={width} height={height} />

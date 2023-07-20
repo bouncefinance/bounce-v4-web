@@ -62,6 +62,7 @@ const TokenAuction: React.FC<IActivitieProps> = ({ userInfo, tokenType }) => {
       refreshDeps: [userInfo.id, curChain, curPoolType, tokenType]
     }
   )
+  console.log('auction page', auctionPoolData?.list[0].creatorUserInfo)
 
   const handlePageChange = useCallback((_: any, p: number) => pagination.changeCurrent(p), [pagination])
 
