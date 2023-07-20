@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
+import BigNumber from 'bignumber.js'
 
 const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const { account } = useActiveWeb3React()
@@ -90,6 +91,20 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
           >
             <Grid container rowGap={'4px'}>
               {list.map((item, index) => {
+                const amount = poolInfo.currencyAmountTotal0
+                  ? CurrencyAmount.fromRawAmount(
+                      poolInfo.currencyAmountTotal0.currency,
+                      item.token0Amount || '0'
+                    )?.toSignificant()
+                  : '--'
+                const amoutToken1: string = poolInfo.currencySwappedAmount1
+                  ? CurrencyAmount.fromRawAmount(
+                      poolInfo.currencySwappedAmount1.currency,
+                      item.token1Amount || '0'
+                    )?.toExact()
+                  : '0'
+                const price: string = new BigNumber(amoutToken1).div(amount).toString() || '--'
+                const date = item.blockTs ? moment(item.blockTs * 1000).format('YYYY-MM-DD HH:mm') : '--'
                 return (
                   <>
                     <Grid item xs={4} key={index + '1'}>
@@ -101,12 +116,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                           fontWeight: 400
                         }}
                       >
-                        {poolInfo.currencyAmountTotal0
-                          ? CurrencyAmount.fromRawAmount(
-                              poolInfo.currencyAmountTotal0.currency,
-                              item.token0Amount || '0'
-                            )?.toSignificant()
-                          : '--'}
+                        {amount}
                         {' ' + poolInfo.token0.symbol.toUpperCase()}
                       </Typography>
                     </Grid>
@@ -119,12 +129,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                           fontWeight: 400
                         }}
                       >
-                        {poolInfo.currencySwappedAmount1
-                          ? CurrencyAmount.fromRawAmount(
-                              poolInfo.currencySwappedAmount1.currency,
-                              item.token1Amount || '0'
-                            )?.toSignificant()
-                          : '--'}
+                        {price}
                         {' ' + poolInfo.token1.symbol.toUpperCase()}
                       </Typography>
                     </Grid>
@@ -137,7 +142,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                           fontWeight: 400
                         }}
                       >
-                        {item.blockTs ? moment(item.blockTs * 1000).format('YYYY-MM-DD HH:mm') : '--'}
+                        {date}
                       </Typography>
                     </Grid>
                   </>

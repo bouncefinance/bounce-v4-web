@@ -27,14 +27,14 @@ const DipExchange = () => {
         timaSteamp: item.timaSteamp + oneDay * index,
         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
         dip: {
-          startAt: 1689840900000,
-          closeAt: 1689855300000,
-          id: 18607
+          startAt: 1689854400000,
+          closeAt: 1689865200000,
+          id: 18615
         },
         dgt: {
-          startAt: 1689841200000,
-          closeAt: 1689866400000,
-          id: 18610
+          startAt: 1689854340000,
+          closeAt: 1689868740000,
+          id: 18614
         }
       }
     })

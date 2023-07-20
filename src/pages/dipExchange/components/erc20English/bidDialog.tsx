@@ -3,7 +3,7 @@ import { Typography, styled, Dialog, Stack, Checkbox, FormControlLabel, FormGrou
 import { ReactComponent as XIcon } from 'assets/imgs/dutchAuction/x.svg'
 import { ReactComponent as TipSvg } from 'assets/imgs/dipExchange/tips.svg'
 import { useMemo, useState } from 'react'
-import BidInput from './bidInput'
+import BidInput, { DisplayTokenType } from './bidInput'
 import BidBlock from './bidBlock'
 import { DisableBtn } from './bidBlock'
 import { useCurrencyBalance } from 'state/wallet/hooks'
@@ -153,7 +153,13 @@ const ChartDialog = ({
             Available: {userToken1Balance?.toSignificant() || '--'} {poolInfo.token1.symbol}
           </Typography>
         </Stack>
-        <BidInput maxValue={maxValue} poolInfo={poolInfo} amount={amount + ''} setAmount={setAmount} />
+        <BidInput
+          tokenType={DisplayTokenType.token1}
+          maxValue={maxValue}
+          poolInfo={poolInfo}
+          amount={amount + ''}
+          setAmount={setAmount}
+        />
         <FormGroup>
           <NewFormControlLabel
             checked={confirmationState.notice1}

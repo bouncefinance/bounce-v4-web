@@ -42,7 +42,7 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
         <Grid item xs={6}>
           <TitleCom>Successful sold amount</TitleCom>
           <DescCom>
-            {poolInfo.currencySwappedAmount0?.toSignificant() + ` ${poolInfo.token0.symbol.toUpperCase()}`} DGT
+            {poolInfo.currencySwappedAmount0?.toSignificant() + ` ${poolInfo.token0.symbol.toUpperCase()}`}
           </DescCom>
         </Grid>
         {/* <Grid item xs={6}>

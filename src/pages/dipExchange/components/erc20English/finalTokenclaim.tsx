@@ -124,10 +124,16 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
         />
         <LabelItem
           iconUrl={TipSvg}
-          label={'Final price'}
-          value={
-            poolInfo.currencyAmountStartPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase() + ` per DGT`
-          }
+          label={'Average price'}
+          value={`${
+            poolInfo?.currencySwappedAmount1 &&
+            poolInfo?.currencySwappedAmount0 &&
+            !poolInfo?.currencySwappedAmount1.equalTo('0')
+              ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
+                  .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
+                  .toString()
+              : '--'
+          } ${poolInfo.token1.symbol}`}
         />
       </Box>
       <Box
@@ -138,32 +144,21 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
       >
         <LabelItem
           iconUrl={successSvg}
-          label={'Deducted DIP'}
-          value={
-            (poolInfo?.currencyAmountStartPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
-              ? BigNumber(poolInfo?.currencyAmountStartPrice?.toExact())
-                  .times(poolInfo?.participant.currencySwappedAmount1?.toExact())
-                  .times('0.025')
-                  .toFixed(6, BigNumber.ROUND_DOWN)
-              : '0') +
-            ' ' +
-            poolInfo.token1.symbol.toUpperCase() +
-            ` DIP`
-          }
+          label={'Your average price'}
+          value={`${
+            poolInfo?.participant.currencySwappedAmount1 &&
+            poolInfo?.participant.currencySwappedAmount0 &&
+            !poolInfo?.participant.currencySwappedAmount1.equalTo('0')
+              ? new BigNumber(new BigNumber(poolInfo?.participant.currencySwappedAmount1.toExact()))
+                  .div(new BigNumber(poolInfo?.participant.currencySwappedAmount0.toExact()))
+                  .toString()
+              : '--'
+          } ${poolInfo.token1.symbol}`}
         />
         <LabelItem
           iconUrl={successSvg}
-          label={'Remaining DIP'}
-          value={
-            (poolInfo?.currencyAmountStartPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
-              ? BigNumber(poolInfo?.currencyAmountStartPrice?.toExact())
-                  .times(poolInfo?.participant.currencySwappedAmount1?.toExact())
-                  .toFixed(6, BigNumber.ROUND_DOWN)
-              : '0') +
-            ' ' +
-            poolInfo.token1.symbol.toUpperCase() +
-            ` DIP`
-          }
+          label={'Total committed ' + poolInfo.token1.symbol.toUpperCase()}
+          value={poolInfo.participant.currencySwappedAmount1?.toExact() + ' ' + poolInfo.token1.symbol.toUpperCase()}
         />
         <LabelItem
           style={{

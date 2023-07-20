@@ -98,7 +98,6 @@ const BidBlock = ({
       ret
         .then(() => {
           hideDialogConfirmation()
-          //   onClick()
         })
         .catch()
     } catch (error) {
@@ -252,6 +251,8 @@ const BidBlock = ({
           <span>
             {Number(amount) > Number(userToken0limit) // banlance
               ? 'Insufficient Balance'
+              : Number(amount) > Number(maxValue) // bidable
+              ? 'Limit exceeded'
               : 'Bid'}
           </span>
         </ComBtn>

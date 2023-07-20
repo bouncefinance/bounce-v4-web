@@ -102,12 +102,12 @@ const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp
               fontWeight: 600
             }}
           >
-            {poolInfo.currencySwappedAmount0?.toSignificant()}
+            {poolInfo.participant.currencySwappedAmount0?.toSignificant()}
             {` ${poolInfo.token0.symbol.toUpperCase()}`}
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <TitleCom>Your committed USDT</TitleCom>
+          <TitleCom>Your committed</TitleCom>
           <Typography
             sx={{
               color: '#2B51DA',
@@ -116,7 +116,7 @@ const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp
               fontWeight: 600
             }}
           >
-            {poolInfo.currencySwappedAmount0?.toSignificant() + ` ${poolInfo.token0.symbol.toUpperCase()}`} DGT
+            {poolInfo.participant.currencySwappedAmount1?.toSignificant() + ` ${poolInfo.token1.symbol.toUpperCase()}`}
           </Typography>
         </Grid>
       </Grid>
