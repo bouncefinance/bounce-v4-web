@@ -76,7 +76,6 @@ const BidBlock = ({
       .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
       .toString()
   }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
-  console.log('userToken1Balance>>>', userToken1Balance)
   // MaxAmount0PerWallet from contract, not from http
   const currencyMaxAmount0PerWallet = useMemo(() => {
     return poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
@@ -98,7 +97,6 @@ const BidBlock = ({
     )
     return result
   }, [currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo?.currencySwappedAmount0, userToken0limit])
-  //   console.log('maxValue userToken1Balance>>>', maxValue, userToken1Balance?.toExact())
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({

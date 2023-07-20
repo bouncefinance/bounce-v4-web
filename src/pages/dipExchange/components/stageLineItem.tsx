@@ -1,13 +1,13 @@
 import { Box, Typography } from '@mui/material'
 import moment from 'moment'
-import { useMemo } from 'react'
+// import { useMemo } from 'react'
 import { ActiveItem } from './stageLine'
-import { useDutchPoolClaimable } from 'bounceHooks/auction/useDutchAuctionInfo'
+// import { useDutchPoolClaimable } from 'bounceHooks/auction/useDutchAuctionInfo'
 interface DictionaryObj {
   [key: string]: string
 }
 const StageLineItem = ({ index, item, activeIndex }: { activeIndex: number; index: number; item: ActiveItem }) => {
-  const { dip, dgt } = item
+  //   const { dip, dgt } = item
   const dicList: DictionaryObj = {
     '0': 'Frist',
     '1': 'Second',
@@ -20,11 +20,11 @@ const StageLineItem = ({ index, item, activeIndex }: { activeIndex: number; inde
     '8': 'Ninth',
     '9': 'Tenth'
   }
-  const isClaimableDIP = useDutchPoolClaimable(Number(dip.id) || undefined)
-  const isClaimableDGT = useDutchPoolClaimable(Number(dgt.id) || undefined)
-  const isClaimAble = useMemo(() => {
-    return (isClaimableDIP && isClaimableDIP.greaterThan('0')) || (isClaimableDGT && isClaimableDGT.greaterThan('0'))
-  }, [isClaimableDGT, isClaimableDIP])
+  //   const isClaimableDIP = useDutchPoolClaimable(Number(dip.id) || undefined)
+  //   const isClaimableDGT = useDutchPoolClaimable(Number(dgt.id) || undefined)
+  //   const isClaimAble = useMemo(() => {
+  //     return (isClaimableDIP && isClaimableDIP.greaterThan('0')) || (isClaimableDGT && isClaimableDGT.greaterThan('0'))
+  //   }, [isClaimableDGT, isClaimableDIP])
   const active = item.timaSteamp <= new Date().valueOf()
   return (
     <Box
@@ -99,7 +99,7 @@ const StageLineItem = ({ index, item, activeIndex }: { activeIndex: number; inde
       >
         {dicList[index + '']} Round
       </Typography>
-      {active && isClaimAble && (
+      {/* {active && isClaimAble && (
         <Typography
           sx={{
             fontFamily: `'Inter'`,
@@ -111,7 +111,7 @@ const StageLineItem = ({ index, item, activeIndex }: { activeIndex: number; inde
         >
           *Pending claim
         </Typography>
-      )}
+      )} */}
     </Box>
   )
 }

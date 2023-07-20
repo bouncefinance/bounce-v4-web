@@ -14,7 +14,7 @@ const Erc20english = ({ index, poolsData }: { index: number; poolsData: PoolsDat
     return list[index]?.dip
   }, [index, list])
   const { poolInfo } = useErc20EnglishAuctionInfo(currentData?.id ? Number(currentData?.id) : undefined)
-  if (!poolInfo || !currentData) {
+  if (!poolInfo || !currentData || !currentData?.id) {
     return <BounceAnime></BounceAnime>
   }
   console.log('erc20englishAuction>>', poolInfo)

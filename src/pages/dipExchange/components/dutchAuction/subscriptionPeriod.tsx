@@ -28,7 +28,6 @@ const SubscriptionPeriod = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) =>
         : undefined
   })
   const { account } = useActiveWeb3React()
-  console.log('account>>', account, poolInfo.currencySwappedTotal1?.currency)
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencySwappedTotal1?.currency)
   // max amount of token0 by token1 banlance
   const userToken0limit = useMemo(() => {
@@ -38,7 +37,6 @@ const SubscriptionPeriod = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) =>
       .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
       .toString()
   }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
-  console.log('userToken1Balance>>>', userToken1Balance)
   // MaxAmount0PerWallet from contract, not from http
   const currencyMaxAmount0PerWallet = useMemo(() => {
     return poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0

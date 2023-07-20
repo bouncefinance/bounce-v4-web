@@ -12,7 +12,7 @@ import PoolTabs from './components/poolTabs'
 import { PoolIndexType } from './components/poolTabs'
 import DutchAuction from './components/dutchAuction/dutctAuction'
 const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
-// import Erc20English from './components/erc20English/erc20english'
+import Erc20English from './components/erc20English/erc20english'
 const DipExchange = () => {
   const nowDate = new Date().valueOf()
   const oneDay = 60 * 60 * 24 * 1000
@@ -71,7 +71,7 @@ const DipExchange = () => {
             poolType={poolType}
             setPoolType={handleSetPoolType}
           ></PoolTabs>
-          {/* {poolType === PoolIndexType.DIP && <Erc20English poolsData={{ list: poolsData }} index={dataIndex} />} */}
+          {poolType === PoolIndexType.DIP && <Erc20English poolsData={{ list: poolsData }} index={dataIndex} />}
           {poolType === PoolIndexType.DGT && <DutchAuction poolsData={{ list: poolsData }} index={dataIndex} />}
         </DipCenter>
         <Tabs item={defaultHeadData} isDark={true} />

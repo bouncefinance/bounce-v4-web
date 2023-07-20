@@ -99,7 +99,6 @@ export function useDutchAuctionInfo(backedId?: number | undefined) {
     undefined,
     poolInfo?.ethChainId
   ).result
-  console.log('contract poolsRes >>>', poolsRes)
   const poolsData: {
     highestPrice: string | undefined
     lowestPrice: string | undefined
