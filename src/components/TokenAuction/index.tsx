@@ -10,7 +10,7 @@ import rightArrayLightImg from 'assets/imgs/common/rightArrayLight.svg'
 import rightArrayGrayImg from 'assets/imgs/common/rightArrayGray.svg'
 import { useRequest } from 'ahooks'
 import { getAuctionTypeCountData, getPools } from 'api/market'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { NFTCard } from 'pages/market/nftAuctionPool'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { routes } from 'constants/routes'
@@ -210,6 +210,7 @@ const PaginationBox = (props: PaginationParams) => {
   )
 }
 const TokenAuction: React.FC = () => {
+  const navigate = useNavigate()
   const optionDatas = useOptionDatas()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [rotateRatioList, setRotateRatioList] = useState<Tuple4<number>>([0, 180, 180, 180])
@@ -740,7 +741,7 @@ const TokenAuction: React.FC = () => {
               }}
             >
               <Button
-                href={AuctionList[currentIndex].checkAllLink}
+                onClick={() => navigate(AuctionList[currentIndex].checkAllLink)}
                 variant="contained"
                 sx={{
                   // background: 'var(--ps-yellow-1)',
