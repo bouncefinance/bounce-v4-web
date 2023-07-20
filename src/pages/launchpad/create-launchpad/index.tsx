@@ -8,7 +8,7 @@ import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 // 需要优化，tab切换时的卡顿,以及tab切换的时候，表单的值不见了
 const CreateLaunchpad = () => {
-  const [tabActive, setTabActive] = useState(1)
+  const [tabActive, setTabActive] = useState(0)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
