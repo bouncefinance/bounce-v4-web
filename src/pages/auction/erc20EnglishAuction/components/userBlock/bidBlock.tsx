@@ -80,8 +80,6 @@ const BidBlock = ({
     true
   )
 
-  console.log('poolInfo', poolInfo.currencyAmountTotal0.toExact(), poolInfo.currencySwappedAmount0?.toExact())
-
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
     try {

@@ -1,7 +1,8 @@
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useErc20EnglishAuctionInfo } from 'bounceHooks/auction/useErc20EnglishAuctionInfo'
+import usePrevious from 'hooks/usePrevious'
 import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
-
+import { isEqual } from 'lodash'
 interface IContent {
   loading: boolean
   run: () => void
@@ -81,8 +82,10 @@ export function useErc20EnglishAuctionPoolInfo() {
 const EnglishAuctionValuesProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialValues)
   const { poolInfo: data, run, loading } = useErc20EnglishAuctionInfo()
+  const prevData = usePrevious(data)
 
   useEffect(() => {
+    if (isEqual(prevData, data)) return
     dispatch({
       type: ActionType.SET_POOL,
       payload: {
@@ -91,7 +94,7 @@ const EnglishAuctionValuesProvider = ({ children }: { children: ReactNode }) => 
         loading
       }
     })
-  }, [data, loading, run])
+  }, [data, loading, prevData, run])
 
   return <ValuesStateContext.Provider value={state}>{children}</ValuesStateContext.Provider>
 }

@@ -87,8 +87,8 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
             <Grid container rowGap={'4px'}>
               {list.list.map((item, index) => {
                 return (
-                  <>
-                    <Grid item xs={4} key={index + '1'}>
+                  <Grid container key={item.poolId + index}>
+                    <Grid item xs={4}>
                       <Typography
                         sx={{
                           fontFamily: `'Inter'`,
@@ -106,7 +106,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                         {' ' + poolInfo.token0.symbol.toUpperCase()}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4} key={index + '2'}>
+                    <Grid item xs={4}>
                       <Typography
                         sx={{
                           fontFamily: `'Inter'`,
@@ -124,7 +124,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                         {' ' + poolInfo.token1.symbol.toUpperCase()}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4} key={index + '3'}>
+                    <Grid item xs={4}>
                       <Typography
                         sx={{
                           fontFamily: `'Inter'`,
@@ -136,7 +136,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                         {item.blockTs ? moment(item.blockTs * 1000).format('yyyy-MM-DD HH:mm') : '--'}
                       </Typography>
                     </Grid>
-                  </>
+                  </Grid>
                 )
               })}
             </Grid>
