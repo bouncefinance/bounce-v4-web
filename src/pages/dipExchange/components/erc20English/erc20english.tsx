@@ -1,20 +1,23 @@
 import { Box, Typography } from '@mui/material'
 import { PoolsData } from '../stageLine'
-import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
+import { useErc20EnglishAuctionInfo } from 'bounceHooks/auction/useErc20EnglishAuctionInfo'
+
 import { useMemo } from 'react'
 import TimeStageLine from './timeStageLine'
-import LineChart from '../../../auction/dutchAuction/components/lineChart'
-import PoolStep from '../poolStep'
+import LineChart from '../../../auction/erc20EnglishAuction/components/lineChart'
+import PoolStep from './poolStep'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+
 const Erc20english = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
   const { list } = poolsData
   const currentData = useMemo(() => {
-    return list[index]?.dgt
+    return list[index]?.dip
   }, [index, list])
-  const { poolInfo } = useDutchAuctionInfo(currentData?.id ? Number(currentData?.id) : undefined)
+  const { poolInfo } = useErc20EnglishAuctionInfo(currentData?.id ? Number(currentData?.id) : undefined)
   if (!poolInfo || !currentData) {
-    return <Box>1</Box>
+    return <BounceAnime></BounceAnime>
   }
-  console.log('currentData>>', currentData, poolInfo)
+  console.log('erc20englishAuction>>', poolInfo)
   return (
     <Box
       sx={{

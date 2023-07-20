@@ -1,12 +1,11 @@
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { Typography, styled, Dialog, Stack, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
 import { ReactComponent as XIcon } from 'assets/imgs/dutchAuction/x.svg'
 import { ReactComponent as TipSvg } from 'assets/imgs/dipExchange/tips.svg'
 import { useMemo, useState } from 'react'
 import BidInput from './bidInput'
-import BidBlock from './dutchAuction/bidBlock'
-import { useDutchCurrentPriceAndAmount1, AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
-import { DisableBtn } from './dutchAuction/bidBlock'
+import BidBlock from './bidBlock'
+import { DisableBtn } from './bidBlock'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 
@@ -38,7 +37,7 @@ const ChartDialog = ({
   onClose,
   maxValue
 }: {
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: Erc20EnglishAuctionPoolProp
   open: boolean
   onClose?: () => void
   maxValue: string | number
@@ -47,15 +46,14 @@ const ChartDialog = ({
   const [confirmationState, setConfirmationState] = useState({
     notice1: false
   })
-  const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDutchCurrentPriceAndAmount1(amount, poolInfo)
   const maxAmount0PerWalletText = useMemo(() => {
-    const currencyMaxAmount0PerWallet = poolInfo.currencyMaxAmount0PerWallet?.toSignificant()
+    const currencyMaxAmount0PerWallet = poolInfo.currencyMaxAmount1PerWallet?.toSignificant()
     if (Number(currencyMaxAmount0PerWallet) > 0) {
       return currencyMaxAmount0PerWallet + ' ' + poolInfo?.token0?.symbol.toUpperCase()
     } else {
       return 'No Limit'
     }
-  }, [poolInfo.currencyMaxAmount0PerWallet, poolInfo.token0.symbol])
+  }, [poolInfo.currencyMaxAmount1PerWallet, poolInfo.token0.symbol])
   const handleChange = (event: React.ChangeEvent<any>) => {
     setConfirmationState({
       ...confirmationState,
@@ -64,13 +62,12 @@ const ChartDialog = ({
   }
   const { account } = useActiveWeb3React()
 
-  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencySwappedAmount1?.currency)
 
   return (
     <>
       <ChartDialogEl
         onClose={() => {
-          console.log('close')
           onClose && onClose()
         }}
         open={open}
@@ -180,7 +177,6 @@ const ChartDialog = ({
             maxValue={maxValue}
             poolInfo={poolInfo}
             amount={amount + ''}
-            currentPriceAndAmount1={currentPriceAndAmount1}
             onConfirm={() => {
               setConfirmationState({
                 notice1: false

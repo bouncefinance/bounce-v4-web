@@ -3,10 +3,10 @@ import { useMemo, useCallback } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { ActionStep } from '../../../auction/dutchAuction/components/userBlock/right'
 import { useActiveWeb3React } from 'hooks'
-import useUserClaim from 'bounceHooks/auction/useUserClaimDutch'
+import { useErc20EnglishUserClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
@@ -82,7 +82,7 @@ const ClaimBlock = ({
   poolInfo,
   handleSetActionStep
 }: {
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: Erc20EnglishAuctionPoolProp
   handleSetActionStep?: (actionStep: ActionStep) => void
 }) => {
   const { claimAt } = poolInfo
@@ -90,7 +90,7 @@ const ClaimBlock = ({
     targetDate: claimAt * 1000
   })
   const { account, chainId } = useActiveWeb3React()
-  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const { run: claim, submitted: claimBidSubmitted } = useErc20EnglishUserClaim(poolInfo)
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()

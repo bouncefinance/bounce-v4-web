@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab'
 import { DutchAuctionPoolProp, PoolType } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
-import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import { BigNumber } from 'bignumber.js'
 import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -59,7 +59,15 @@ const BidBlock = ({
     poolInfo,
     PoolType.DUTCH_AUCTION
   )
-  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencySwappedTotal1?.currency)
+  const testBalance = useETHBalance(account || undefined)
+  console.log(
+    'account testBalance>>',
+    account,
+    testBalance,
+    poolInfo.currencySwappedTotal1?.currency,
+    userToken1Balance
+  )
   // max amount of token0 by token1 banlance
   const userToken0limit = useMemo(() => {
     const highestPrice = poolInfo.highestPrice?.toExact() || 0
@@ -68,6 +76,7 @@ const BidBlock = ({
       .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
       .toString()
   }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
+  console.log('userToken1Balance>>>', userToken1Balance)
   // MaxAmount0PerWallet from contract, not from http
   const currencyMaxAmount0PerWallet = useMemo(() => {
     return poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
@@ -89,6 +98,7 @@ const BidBlock = ({
     )
     return result
   }, [currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo?.currencySwappedAmount0, userToken0limit])
+  //   console.log('maxValue userToken1Balance>>>', maxValue, userToken1Balance?.toExact())
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({

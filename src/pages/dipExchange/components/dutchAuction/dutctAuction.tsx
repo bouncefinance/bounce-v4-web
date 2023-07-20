@@ -4,7 +4,9 @@ import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { useMemo } from 'react'
 import TimeStageLine from './timeStageLine'
 import LineChart from '../../../auction/dutchAuction/components/lineChart'
-import PoolStep from '../poolStep'
+import PoolStep from './poolStep'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+
 const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
   const { list } = poolsData
   const currentData = useMemo(() => {
@@ -12,9 +14,9 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
   }, [index, list])
   const { poolInfo } = useDutchAuctionInfo(currentData?.id ? Number(currentData?.id) : undefined)
   if (!poolInfo || !currentData) {
-    return <Box>1</Box>
+    return <BounceAnime></BounceAnime>
   }
-  console.log('currentData>>', currentData, poolInfo)
+  console.log('currentData poolInfo>>', currentData, poolInfo)
   return (
     <Box
       sx={{

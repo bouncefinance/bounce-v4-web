@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { useEffect } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 import { FreeMode } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/free-mode'
@@ -12,6 +12,8 @@ import { ReactComponent as DisActiveIcon } from 'assets/imgs/dutchAuction/disact
 import { ReactComponent as CheckedIcon } from 'assets/imgs/dipExchange/checked.svg'
 
 const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const newSwiper = useSwiper()
+  const [swiper, setSwiper] = useState(newSwiper)
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
   const segments = times ? Number(times) : 0
   const startTime = openAt ? Number(openAt * 1000) : 0
@@ -84,6 +86,12 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         centeredSlidesBounds={true}
         slidesPerView={slidesPerview}
         initialSlide={activeIndex}
+        onSwiper={e => {
+          setSwiper(e)
+          setTimeout(() => {
+            swiper?.slideTo(activeIndex)
+          }, 2000)
+        }}
         onSlideChange={() => console.log('slide change')}
       >
         {releaseData.map((item, index) => {

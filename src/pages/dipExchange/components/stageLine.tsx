@@ -82,7 +82,6 @@ const StageLine = ({
               key={'stageLineItem' + index}
               onClick={e => {
                 e.stopPropagation()
-                console.log('index>>>', index, item)
                 if (item.timaSteamp <= new Date().valueOf()) {
                   swiperInstance.slideTo(index)
                   setIndex && setIndex(index)

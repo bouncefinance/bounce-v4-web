@@ -1,5 +1,5 @@
 import { Box, Typography, Grid } from '@mui/material'
-import PoolInfoItem from '../../auction/dutchAuction/components/poolInfoItem'
+import PoolInfoItem from '../../../auction/dutchAuction/components/poolInfoItem'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import { useMemo } from 'react'

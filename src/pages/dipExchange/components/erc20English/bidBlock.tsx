@@ -6,17 +6,16 @@ import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { useActiveWeb3React } from 'hooks'
-import { DutchAuctionPoolProp, PoolType } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolType } from 'api/pool/type'
 import { useCountDown } from 'ahooks'
 import { PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { BigNumber } from 'bignumber.js'
-import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionInfo'
+import { useErc20EnglishSwap } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Dots } from 'themes'
 import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
 import { ComBtn } from './claimBlock'
-import usePlaceBidDutch from 'bounceHooks/auction/usePlaceBidDutch'
 
 import {
   hideDialogConfirmation,
@@ -40,13 +39,11 @@ export const DisableBtn = styled(Box)(() => ({
 const BidBlock = ({
   poolInfo,
   amount,
-  currentPriceAndAmount1,
   maxValue,
   onConfirm
 }: {
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: Erc20EnglishAuctionPoolProp
   amount?: string
-  currentPriceAndAmount1: AmountAndCurrentPriceParam
   maxValue: number | string
   onConfirm?: () => void
 }) => {
@@ -55,23 +52,15 @@ const BidBlock = ({
     poolInfo,
     PoolType.DUTCH_AUCTION
   )
-  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
+  const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencySwappedAmount1?.currency)
   // max amount of token0 by token1 banlance
   const userToken0limit = useMemo(() => {
-    const highestPrice = poolInfo.highestPrice?.toExact() || 0
+    const highestPrice = poolInfo.currencyAmountEndPrice?.toExact() || 0
     const currencyCurrentPrice = poolInfo.currencyCurrentPrice?.toExact() || 0
     return BigNumber(userToken1Balance?.toExact() || 0)
       .div(poolInfo.status === PoolStatus.Upcoming ? highestPrice : currencyCurrentPrice)
       .toString()
-  }, [userToken1Balance, poolInfo.currencyCurrentPrice, poolInfo.status, poolInfo.highestPrice])
-  // MaxAmount0PerWallet from contract, not from http
-  const currencyMaxAmount0PerWallet = useMemo(() => {
-    return poolInfo.currencyMaxAmount0PerWallet && Number(poolInfo.currencyMaxAmount0PerWallet?.toExact()) > 0
-      ? BigNumber(poolInfo.currencyMaxAmount0PerWallet?.toExact() || '0')
-          .minus(poolInfo.participant.currencySwappedAmount0?.toExact() || '0')
-          .toString()
-      : poolInfo.currencyAmountTotal0?.toExact()
-  }, [poolInfo.currencyMaxAmount0PerWallet, poolInfo.currencyAmountTotal0, poolInfo.participant.currencySwappedAmount0])
+  }, [poolInfo.currencyAmountEndPrice, poolInfo.currencyCurrentPrice, poolInfo.status, userToken1Balance])
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -84,12 +73,10 @@ const BidBlock = ({
         ? claimAt * 1000
         : undefined
   })
-  const amount1CurrencyAmount = poolInfo?.currencyAmountTotal1
-    ? CurrencyAmount.fromAmount(
-        poolInfo?.currencyAmountTotal1?.currency,
-        BigNumber(currentPriceAndAmount1.amount1).toString()
-      )
-    : 0
+  const amount1CurrencyAmount =
+    poolInfo?.currencyAmountEndPrice &&
+    CurrencyAmount.fromAmount(poolInfo?.currencyAmountEndPrice?.currency, amount || '')
+
   const [approvalState, approveCallback] = useApproveCallback(
     amount1CurrencyAmount || undefined,
     poolInfo.contract,
@@ -132,7 +119,7 @@ const BidBlock = ({
     ? CurrencyAmount.fromAmount(poolInfo?.currencyAmountTotal0?.currency, amount || '0')
     : 0
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
-  const { swapCallback: bid, swapPermitCallback } = usePlaceBidDutch(poolInfo)
+  const { swapCallback: bid, swapPermitCallback } = useErc20EnglishSwap(poolInfo)
 
   const toBid = useCallback(async () => {
     if (!amount1CurrencyAmount || !amount0CurrencyAmount) return
@@ -140,7 +127,7 @@ const BidBlock = ({
     setConfirmLoading(true)
     try {
       const func = poolInfo.enableWhiteList && poolInfo.whitelistData?.isPermit ? swapPermitCallback : bid
-      const { transactionReceipt } = await func(amount0CurrencyAmount, amount1CurrencyAmount)
+      const { transactionReceipt } = await func(amount1CurrencyAmount)
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -265,8 +252,6 @@ const BidBlock = ({
           <span>
             {Number(amount) > Number(userToken0limit) // banlance
               ? 'Insufficient Balance'
-              : Number(amount) > Number(currencyMaxAmount0PerWallet) // bidable
-              ? 'Limit exceeded'
               : 'Bid'}
           </span>
         </ComBtn>

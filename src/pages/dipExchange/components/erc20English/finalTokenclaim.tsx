@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 // import PersonSvg from 'assets/imgs/dipExchange/person.svg'
 import successSvg from 'assets/imgs/dipExchange/success.png'
@@ -7,8 +7,8 @@ import TipSvg from 'assets/imgs/dipExchange/$.svg'
 import { ReactComponent as ErrorSvg } from 'assets/imgs/dipExchange/error.svg'
 
 import BigNumber from 'bignumber.js'
-import ClaimBlock from './dutchAuction/claimBlock'
-import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import ClaimBlock from './claimBlock'
+import { useIsUserJoinedErc20EnglishPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 
 interface LabelItemParam {
   label: string
@@ -63,9 +63,8 @@ const LabelItem = ({ label, value, iconUrl, labelStyle, valueStyle, style }: Lab
     </Box>
   )
 }
-const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  console.log('poolInfo>>', poolInfo)
-  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
+const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isUserJoined = useIsUserJoinedErc20EnglishPool(poolInfo)
   if (!isUserJoined) {
     return (
       <Box
@@ -121,13 +120,13 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         <LabelItem
           iconUrl={poolInfo?.token1.largeUrl || poolInfo?.token1.smallUrl || poolInfo?.token1.thumbUrl}
           label={'Total  Committed'}
-          value={poolInfo.currencySwappedTotal1?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+          value={poolInfo.currencySwappedAmount1?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase()}
         />
         <LabelItem
           iconUrl={TipSvg}
           label={'Final price'}
           value={
-            poolInfo.currencyLowestBidPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase() + ` per DGT`
+            poolInfo.currencyAmountStartPrice?.toSignificant() + ' ' + poolInfo.token1.symbol.toUpperCase() + ` per DGT`
           }
         />
       </Box>
@@ -141,8 +140,8 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           iconUrl={successSvg}
           label={'Deducted DIP'}
           value={
-            (poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
-              ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+            (poolInfo?.currencyAmountStartPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
+              ? BigNumber(poolInfo?.currencyAmountStartPrice?.toExact())
                   .times(poolInfo?.participant.currencySwappedAmount1?.toExact())
                   .times('0.025')
                   .toFixed(6, BigNumber.ROUND_DOWN)
@@ -156,8 +155,8 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           iconUrl={successSvg}
           label={'Remaining DIP'}
           value={
-            (poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
-              ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+            (poolInfo?.currencyAmountStartPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
+              ? BigNumber(poolInfo?.currencyAmountStartPrice?.toExact())
                   .times(poolInfo?.participant.currencySwappedAmount1?.toExact())
                   .toFixed(6, BigNumber.ROUND_DOWN)
               : '0') +

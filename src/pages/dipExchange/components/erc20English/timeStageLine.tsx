@@ -1,21 +1,20 @@
 import { Box, Typography } from '@mui/material'
 import { useEffect } from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 import { FreeMode } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/free-mode'
-import moment from 'moment'
 import { useState, useMemo } from 'react'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import BigNumber from 'bignumber.js'
 import { ReactComponent as DisActiveIcon } from 'assets/imgs/dutchAuction/disactive.svg'
 import { ReactComponent as CheckedIcon } from 'assets/imgs/dipExchange/checked.svg'
 
-const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
-  const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
+const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const newSwiper = useSwiper()
+  const [swiper, setSwiper] = useState(newSwiper)
+  const { currencyAmountStartPrice: lowestPrice, currencyAmountEndPrice: highestPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
-  const startTime = openAt ? Number(openAt * 1000) : 0
-  const endTime = closeAt ? Number(closeAt * 1000) : 0
   const startPrice = lowestPrice ? Number(lowestPrice.toExact()) : 0
   const endPrice = highestPrice ? Number(highestPrice.toExact()) : 0
   const arrayRange = (start: number | string, stop: number, step: number | string) =>
@@ -23,22 +22,19 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       return BigNumber(start).plus(BigNumber(step).times(index)).toNumber()
     })
   const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
-  const timeSegments = new BigNumber(endTime).minus(startTime).div(segments).integerValue().toNumber()
+  const currentPrice = poolInfo.currencyCurrentPrice?.toExact()
   const releaseData = useMemo(() => {
-    const xList = arrayRange(startTime, segments, timeSegments)
-    const yList = arrayRange(startPrice, segments, priceSegments).reverse()
+    const yList = arrayRange(startPrice, segments, priceSegments)
     const dataPoint = new Array(segments + 1).fill(0).map((item, index) => {
-      const nowDate = new BigNumber(new Date().valueOf())
-      const isActive = nowDate.comparedTo(xList[index]) === 1
+      const isActive = Number(currentPrice) >= yList[index]
       return {
-        startAt: moment(xList[index]).format('YYYY-MM-DD HH:mm:ss'),
-        timaSteamp: xList[index],
+        startAt: new BigNumber(100).div(segments).times(index).toString(),
         value: yList[index] + poolInfo.token1.symbol.toUpperCase(),
         active: isActive
       }
     })
     return dataPoint
-  }, [startTime, segments, timeSegments, startPrice, priceSegments, poolInfo.token1.symbol])
+  }, [startPrice, segments, priceSegments, currentPrice, poolInfo.token1.symbol])
   const [slidesPerview, setSlidesPerView] = useState(window.innerWidth / 162)
   const activeIndex = useMemo(() => {
     let lastActiveIndex = 0
@@ -85,6 +81,12 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         slidesPerView={slidesPerview}
         initialSlide={activeIndex}
         onSlideChange={() => console.log('slide change')}
+        onSwiper={e => {
+          setSwiper(e)
+          setTimeout(() => {
+            swiper?.slideTo(activeIndex)
+          }, 2000)
+        }}
       >
         {releaseData.map((item, index) => {
           return (
@@ -119,7 +121,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   }}
                   mb={'8px'}
                 >
-                  {item.startAt}
+                  {item.startAt}%
                 </Typography>
                 <Typography
                   sx={{

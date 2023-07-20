@@ -10,11 +10,9 @@ import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
 import { useQueryParams } from 'hooks/useQueryParams'
 import JSBI from 'jsbi'
 
-export function useErc20EnglishAuctionInfo() {
+export function useErc20EnglishAuctionInfo(backedId?: number | undefined) {
   const { sysId: _sysId } = useQueryParams()
-
-  const sysId = useMemo(() => Number(_sysId) || 0, [_sysId])
-
+  const sysId = useMemo(() => (backedId ? Number(backedId) : Number(_sysId) || 0), [_sysId, backedId])
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION, sysId)
   const { account } = useActiveWeb3React()
   const englishAuctionErc20Contract = useEnglishAuctionErc20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)

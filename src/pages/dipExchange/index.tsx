@@ -12,7 +12,7 @@ import PoolTabs from './components/poolTabs'
 import { PoolIndexType } from './components/poolTabs'
 import DutchAuction from './components/dutchAuction/dutctAuction'
 const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
-import moment from 'moment'
+// import Erc20English from './components/erc20English/erc20english'
 const DipExchange = () => {
   const nowDate = new Date().valueOf()
   const oneDay = 60 * 60 * 24 * 1000
@@ -27,26 +27,17 @@ const DipExchange = () => {
         timaSteamp: item.timaSteamp + oneDay * index,
         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
         dip: {
-          startAt: 1689521217979,
-          closeAt: 1689921217979,
-          id: 18522
+          startAt: 1689820800000,
+          closeAt: 1689853200000,
+          id: 18579
         },
         dgt: {
-          startAt: 1689521217979,
-          closeAt: 1689921217979,
-          id: 18552 // live
-          //   id: 18517, // claimable
-          //   id: 18516, // claimed
-          //   id: 18514, // no join
+          startAt: 1689820200000,
+          closeAt: 1689852600000,
+          id: 18578
         }
       }
     })
-  //   const timeLine = [
-  //     {
-  //       timesteamp: 1689523200000
-  //     }
-  //   ]
-  console.log('date >>>>', moment('2023-07-17').valueOf())
   // last date higt light
   const lastActiveIndex = useMemo(() => {
     let lastIndex = 0
@@ -80,6 +71,7 @@ const DipExchange = () => {
             poolType={poolType}
             setPoolType={handleSetPoolType}
           ></PoolTabs>
+          {/* {poolType === PoolIndexType.DIP && <Erc20English poolsData={{ list: poolsData }} index={dataIndex} />} */}
           {poolType === PoolIndexType.DGT && <DutchAuction poolsData={{ list: poolsData }} index={dataIndex} />}
         </DipCenter>
         <Tabs item={defaultHeadData} isDark={true} />

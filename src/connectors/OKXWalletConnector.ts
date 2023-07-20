@@ -25,7 +25,6 @@ export class UserRejectedRequestError extends Error {
 export class OKXConnector extends AbstractConnector {
   constructor(kwargs: AbstractConnectorArguments | undefined) {
     super(kwargs)
-
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this)
     this.handleChainChanged = this.handleChainChanged.bind(this)
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this)

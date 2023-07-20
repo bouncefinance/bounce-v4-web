@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, styled } from '@mui/material'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { BigNumber } from 'bignumber.js'
 
 const TitleCom = styled(Typography)(() => ({
@@ -16,7 +16,7 @@ const DescCom = styled(Typography)(() => ({
   fontWeight: 400,
   marginBottom: '8px'
 }))
-const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const SubscriptLeft = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   return (
     <Box
       sx={{
@@ -31,8 +31,8 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         <Grid item xs={6}>
           <TitleCom>Completed Commit</TitleCom>
           <DescCom>
-            {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
-              ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+            {poolInfo?.currencyAmountStartPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
+              ? BigNumber(poolInfo?.currencyAmountStartPrice?.toExact())
                   .times(poolInfo?.currencySwappedAmount0?.toExact())
                   .toFixed(6, BigNumber.ROUND_DOWN)
               : '0'}
@@ -45,10 +45,10 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             {poolInfo.currencySwappedAmount0?.toSignificant() + ` ${poolInfo.token0.symbol.toUpperCase()}`} DGT
           </DescCom>
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <TitleCom>Total participants</TitleCom>
           <DescCom>--</DescCom>
-        </Grid>
+        </Grid> */}
         <Grid item xs={6}>
           <TitleCom>Current price</TitleCom>
           <DescCom>
