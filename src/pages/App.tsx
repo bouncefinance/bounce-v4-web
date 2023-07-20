@@ -76,6 +76,7 @@ import DipExchange from './dipExchange'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
+import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -97,7 +98,6 @@ const UnSupportedMobileRouter = () => {
 
 export default function App() {
   const { pathname } = useLocation()
-
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])

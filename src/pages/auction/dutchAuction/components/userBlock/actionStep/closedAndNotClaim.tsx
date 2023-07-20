@@ -15,7 +15,7 @@ const ClosedAndNotClaimed = ({
     <>
       <PoolSaleInfo poolInfo={poolInfo} />
       <UserFinalAuctionResult poolInfo={poolInfo} />
-      <ClaimBlock poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
+      <ClaimBlock isErc20EnglishAuction={false} poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
       {/* bid history */}
       <UserBidHistory poolInfo={poolInfo} />
     </>

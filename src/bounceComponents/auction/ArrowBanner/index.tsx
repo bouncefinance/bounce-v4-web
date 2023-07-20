@@ -5,7 +5,7 @@ import { Box, styled, Skeleton, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
@@ -109,6 +109,14 @@ function ArrowBanner({ type }: { type?: string }) {
   const LeaveSwiper = () => {
     setShowSwiperIcon(false)
   }
+  const delay = useMemo(() => {
+    if (data?.list.length >= 7) {
+      return 1500
+    } else if (data?.list.length >= 4) {
+      return 2000
+    }
+    return 3000
+  }, [data?.list.length])
   return (
     <Box
       position={'relative'}
@@ -147,7 +155,7 @@ function ArrowBanner({ type }: { type?: string }) {
           slidesPerView={1}
           loop={true}
           autoplay={{
-            delay: 3000
+            delay: delay ? delay : 3000
           }}
           style={{
             maxWidth: '1296px',

@@ -89,7 +89,7 @@ export default function Partner({ animationRatio, step }: { animationRatio?: str
         src={Icon9}
         style={{
           display: 'block',
-          width: '114px',
+          width: '200px',
           transform: transformContent.rightTransform
         }}
         alt=""

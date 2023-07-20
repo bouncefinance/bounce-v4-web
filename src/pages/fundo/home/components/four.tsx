@@ -167,7 +167,7 @@ export default function Four() {
               src={P1}
               style={{
                 display: 'block',
-                width: '67px'
+                width: '90px'
               }}
               alt=""
             />

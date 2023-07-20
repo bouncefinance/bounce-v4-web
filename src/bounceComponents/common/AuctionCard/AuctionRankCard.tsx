@@ -106,6 +106,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
   const status =
     props.openAt > nowTimestamp ? StatusE.upcoming : props.closeAt < nowTimestamp ? StatusE.close : StatusE.live
   const url = getAuctionPoolLink(props.id, props.category, props.chainId, props.poolId)
+
   const isSm = props.isSm
 
   return isSm

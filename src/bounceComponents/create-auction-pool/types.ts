@@ -98,4 +98,5 @@ export interface AuctionPool {
   startPrice?: string
   reservePrice?: string
   segmentAmount?: string
+  endPrice?: string
 }
