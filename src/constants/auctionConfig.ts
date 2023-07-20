@@ -7,7 +7,12 @@ export const AuctionConfig: {
   }
 } = {
   [ChainId.MAINNET]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION],
+    [TokenType.ERC20]: [
+      AuctionType.FIXED_PRICE,
+      AuctionType.RANDOM_SELECTION,
+      AuctionType.DUTCH_AUCTION,
+      AuctionType.ENGLISH_AUCTION
+    ],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
     // [TokenType.ERC1155]: []
   },
@@ -15,7 +20,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.OPTIMISM]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION, AuctionType.ENGLISH_AUCTION]
   },
   [ChainId.CRONOS]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
@@ -29,7 +34,12 @@ export const AuctionConfig: {
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.BSC]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION],
+    [TokenType.ERC20]: [
+      AuctionType.FIXED_PRICE,
+      AuctionType.RANDOM_SELECTION,
+      AuctionType.DUTCH_AUCTION,
+      AuctionType.ENGLISH_AUCTION
+    ],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
@@ -48,11 +58,21 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.POLYGON]: {
-    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION]
+    [TokenType.ERC20]: [
+      AuctionType.FIXED_PRICE,
+      AuctionType.RANDOM_SELECTION,
+      AuctionType.DUTCH_AUCTION,
+      AuctionType.ENGLISH_AUCTION
+    ],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
   },
   [ChainId.FANTOM]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.RANDOM_SELECTION, AuctionType.DUTCH_AUCTION]
+    [TokenType.ERC20]: [
+      AuctionType.FIXED_PRICE,
+      AuctionType.RANDOM_SELECTION,
+      AuctionType.DUTCH_AUCTION,
+      AuctionType.ENGLISH_AUCTION
+    ]
   },
   [ChainId.FANTOM_TESTNET]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION]
@@ -64,7 +84,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.ZKSYNC_ERA]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.ENGLISH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.POLYGON_ZK_EVM]: {
@@ -92,7 +112,7 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.ARBITRUM]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION]
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.DUTCH_AUCTION, AuctionType.ENGLISH_AUCTION]
   },
   [ChainId.CELO]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]

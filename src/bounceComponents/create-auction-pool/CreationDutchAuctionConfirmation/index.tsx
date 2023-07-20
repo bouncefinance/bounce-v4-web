@@ -24,7 +24,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { DUTCH_AUCTION_CONTRACT_ADDRESSES } from '../../../constants'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
@@ -84,7 +84,7 @@ const CreatePoolButton = () => {
   )
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
-    chainId === auctionInChainId ? DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined,
+    chainId === auctionInChainId ? DUTCH_AUCTION_CONTRACT_ADDRESSES[auctionInChainId] : undefined,
     true
   )
 

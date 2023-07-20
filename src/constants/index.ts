@@ -272,20 +272,20 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
 }
 
 export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0x0B0A73Dae5c6b5c3B5C2BAC0d9FFef65E07d3fD8',
   [ChainId.GÖRLI]: '',
-  [ChainId.OPTIMISM]: '',
+  [ChainId.OPTIMISM]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
   [ChainId.CRONOS]: '',
-  [ChainId.BSC]: '',
+  [ChainId.BSC]: '0x27BeA5bDe5F03B62b51C81BA857D4a7E7176D89E',
   [ChainId.OKEX]: '',
   [ChainId.BSCTEST]: '',
   [ChainId.KLAYTN]: '',
   [ChainId.GNOSIS]: '',
-  [ChainId.POLYGON]: '',
+  [ChainId.POLYGON]: '0x738de648E84b5d990DAA7e6598546f7a4eAC1BB4',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM]: '0xD4D0c9fCd48FBD22452cB6528bE4541249139c0B',
   [ChainId.ROLLUX]: '',
-  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA]: '0x4e512aeDBaf09A5929C62e25d8aB931b2C4E7b50',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
   [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
@@ -294,7 +294,7 @@ export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.DOGECHAIN]: '',
   [ChainId.KAVA]: '',
   [ChainId.FUSION]: '',
-  [ChainId.ARBITRUM]: '',
+  [ChainId.ARBITRUM]: '0xE8e4017952935F550dad7e6D42362715A17C0846',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.SEPOLIA]: '0x50047539704792618D752D54cbB6A4D2c07cCc8B',
@@ -345,7 +345,7 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.LINEA_GORLI]: ''
 }
 
-export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+export const DUTCH_AUCTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xDDC380852a409592630Aa832C45D031051140B11',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '0xFCEc495B3FbB41fC8034E4d2Fd85289F549922b1',
