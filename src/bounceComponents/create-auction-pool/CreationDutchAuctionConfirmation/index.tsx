@@ -66,7 +66,6 @@ export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
 const CreatePoolButton = () => {
   const { redirect } = useQueryParams()
   const navigate = useNavigate()
-
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const auctionInChainId = useAuctionInChain()

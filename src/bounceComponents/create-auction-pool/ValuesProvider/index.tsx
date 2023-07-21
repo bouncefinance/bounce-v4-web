@@ -14,7 +14,8 @@ import {
   TokenType,
   AuctionType,
   IReleaseType,
-  IReleaseData
+  IReleaseData,
+  PriceSegmentType
 } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
@@ -108,6 +109,7 @@ const initialValues: AuctionPool = {
   segmentAmount: '',
   poolSize: '',
   allocationPerWallet: '',
+  priceSegmentType: PriceSegmentType.BySecond,
   allocationStatus: AllocationStatus.NoLimits,
   poolName: '',
   startTime: null,
@@ -183,6 +185,7 @@ type Payload = {
     tokenTo: Token
     swapRatio: string
     poolSize: string
+    priceSegmentType: PriceSegmentType
     allocationStatus: AllocationStatus
     allocationPerWallet: string
     priceFloor?: string
@@ -293,6 +296,7 @@ const reducer = (state: AuctionPool, action: Actions) => {
         endPrice: action.payload.endPrice,
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
+        priceSegmentType: action.payload.priceSegmentType,
         allocationStatus: action.payload.allocationStatus,
         priceFloor: action.payload.priceFloor,
         amountMinIncr1: action.payload.amountMinIncr1,
