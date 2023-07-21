@@ -6,7 +6,6 @@ import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
-// import Web3ReactManager from '../components/essential/Web3ReactManager'
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
@@ -76,8 +75,7 @@ import DipExchange from './dipExchange'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
-import UniwalletModal from 'components/Modal/UniwalletModal'
-
+import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -110,7 +108,6 @@ export default function App() {
             <ContentWrapper>
               <GlobalHooks />
               <LoginModal />
-              <UniwalletModal />
               <Header />
               <ToastContainer />
               <Questions />
@@ -128,7 +125,9 @@ export default function App() {
                   <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
                   <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                   <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
+                  <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                   <Route path={routes.auction.dutchAuction} element={<DutchAuctionPoolId />} />
+                  <Route path={routes.auction.v2.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                   <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                   <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                   <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
