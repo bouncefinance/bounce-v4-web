@@ -767,7 +767,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       end: 1690934400000
     },
     poolTypeName: 'ERC20 English Auction',
-    poolTypeName2: 'ERC20 Dunch Auction',
+    poolTypeName2: 'ERC20 Dutch Auction',
     img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
@@ -817,7 +817,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       },
       {
         title: ['DIP Auction Method'],
-        value: 'ERC20 Dunch Auction'
+        value: 'ERC20 Dutch Auction'
       }
     ],
     isFAQ: true
