@@ -1,14 +1,11 @@
 import { Box, Typography, Grid } from '@mui/material'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { RightText } from '../../creatorBlock/auctionInfo'
 import UserBidHistory from '../bidHistory'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import { StatusBox, TipsBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
-import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const ClosedAndClaimed = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(
@@ -170,7 +167,7 @@ const ClosedAndClaimed = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
             </PoolTextItem>
           </Grid>
           <Grid item xs={6}>
-            <PoolTextItem title={'Total paid amount'} tip={'Total paid amount'}>
+            <PoolTextItem title={'Successful paid amount'} tip={'Successful paid amount'}>
               <>
                 <Box
                   sx={{
@@ -183,7 +180,7 @@ const ClosedAndClaimed = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount0?.toExact()}
+                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount1?.toExact()}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -209,7 +206,7 @@ const ClosedAndClaimed = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
         </Grid>
       </Box>
       {/* Final Auction Results */}
-      <Box
+      {/* <Box
         sx={{
           width: 'calc(100% - 48px)',
           margin: '30px auto 12px',
@@ -254,7 +251,7 @@ const ClosedAndClaimed = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
             {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
-      </Box>
+      </Box> */}
       <Box
         sx={{
           padding: '0 24px'

@@ -1,12 +1,9 @@
 import { Box, Typography, Grid } from '@mui/material'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { RightText } from '../../creatorBlock/auctionInfo'
 import { useMemo } from 'react'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
-import BigNumber from 'bignumber.js'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
-import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 
 const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(
@@ -171,7 +168,7 @@ const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
         </Grid>
       </Box>
       {/* Final Auction Results */}
-      <Box
+      {/* <Box
         sx={{
           width: 'calc(100% - 48px)',
           margin: '30px auto 12px',
@@ -191,22 +188,6 @@ const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
         >
           Final Auction Results
         </Typography>
-        <PoolInfoItem title={'Average Price'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {poolInfo?.currencySwappedAmount1 &&
-            poolInfo?.currencySwappedAmount0 &&
-            !poolInfo?.currencySwappedAmount1.equalTo('0')
-              ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
-                  .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
-                  .toString()
-              : '0'}{' '}
-            {poolInfo.token1.symbol}
-          </RightText>
-        </PoolInfoItem>
         <PoolInfoItem title={'Successful Funds Raised'}>
           <RightText
             style={{
@@ -216,7 +197,8 @@ const Upcoming = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
             {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
           </RightText>
         </PoolInfoItem>
-      </Box>
+      </Box> */}
+      <Box sx={{ margin: '30px auto 12px' }}></Box>
     </>
   )
 }
