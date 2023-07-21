@@ -54,7 +54,7 @@ const PoolTabs = ({
           }
         }}
         onClick={() => {
-          if (new Date().valueOf() >= currenData.dip.startAt && new Date().valueOf() <= currenData.dip.closeAt) {
+          if (new Date().valueOf() >= currenData.dip.startAt) {
             setPoolType(PoolIndexType.DIP)
           }
         }}
@@ -101,7 +101,7 @@ const PoolTabs = ({
           }
         }}
         onClick={() => {
-          if (new Date().valueOf() >= currenData.dgt.startAt && new Date().valueOf() <= currenData.dgt.closeAt) {
+          if (new Date().valueOf() >= currenData.dgt.startAt) {
             setPoolType(PoolIndexType.DGT)
           }
         }}
