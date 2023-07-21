@@ -3,6 +3,7 @@ import Image from 'components/Image'
 import FormItem from 'bounceComponents/common/FormItem'
 import { IFile } from 'bounceComponents/common/Uploader'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
+import { ReactComponent as AddCircleIcon } from 'assets/imgs/icon/add_circle_outline.svg'
 export const CardBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
@@ -202,3 +203,57 @@ export const FormUploadLayout = ({
     </UploadLayout>
   )
 }
+const UpTokenLabelBox = ({ htmlFor }: { htmlFor: string }) => {
+  return (
+    <Box sx={{ width: 'max-content', height: 'max-content', cursor: 'pointer' }} component={'label'} htmlFor={htmlFor}>
+      <Stack
+        sx={{
+          width: 'max-content',
+          height: 'max-content',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+          padding: '16px 72px',
+          border: '1px solid #D7D6D9',
+          borderRadius: 8
+        }}
+      >
+        <Title sx={{ fontSize: 14, color: '#000', fontWeight: 600 }}>Add file</Title>
+        <AddCircleIcon />
+      </Stack>
+    </Box>
+  )
+}
+export const FormUploadToken = ({
+  fileUrl,
+  setFieldValue,
+  formItemName,
+  labelId
+}: {
+  fileUrl: string
+  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  formItemName: string
+  labelId: string
+}) => {
+  return (
+    <FormItem name={formItemName} fieldType="custom" style={{ display: fileUrl ? 'none' : 'block' }}>
+      <UploadItem
+        inputId={labelId}
+        value={{ fileUrl: fileUrl }}
+        onChange={(file: IFile) => {
+          setFieldValue(formItemName, file)
+        }}
+        accept={['image/jpeg', 'image/png', 'image/webp']}
+        tips={'Please do not exceed a file size of 10MB'}
+        limitSize={10}
+        sx={{ display: 'none' }}
+      />
+      <UpTokenLabelBox htmlFor={labelId} />
+    </FormItem>
+  )
+}
+/*
+1.页面布局 2.点击上传： loading => 展示图片 => 再次点击重新上传 
+2. 还要加一个loading ， 展示图片
+*/

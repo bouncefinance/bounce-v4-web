@@ -1,5 +1,15 @@
 import { Box, MenuItem, Select, Stack } from '@mui/material'
-import { CardBox, BaseBox, Title, TextInput, SubmitComp, FormUploadLayout } from './BaseComponent'
+import {
+  CardBox,
+  BaseBox,
+  Title,
+  TextInput,
+  SubmitComp,
+  FormUploadLayout,
+  FormUploadToken,
+  BaseTitle1,
+  BaseTitle2
+} from './BaseComponent'
 import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
 import * as yup from 'yup'
@@ -153,7 +163,24 @@ const BasicForm = () => {
               <BaseBox>
                 <Stack flexDirection={'column'} gap={32}>
                   <Box>
-                    <Title mb={32}>Basic Information</Title>
+                    <Title mb={40}>Basic Information</Title>
+                    <TextInput name="ProjectName" title="Project Name" placeholder="Name of the project, eg. Bounce" />
+                  </Box>
+                  <Box>
+                    <BaseTitle1 sx={{ fontSize: 20, color: '#121212' }}>Project Logo</BaseTitle1>
+                    <BaseTitle2
+                      sx={{ fontSize: 12, color: '#626262' }}
+                      mt={8}
+                      mb={16}
+                    >{`(JPEG, PNG, WEBP Files, Size<10M)`}</BaseTitle2>
+                    <FormUploadToken
+                      formItemName="ProjectLogo"
+                      fileUrl={values.ProjectLogo.fileUrl}
+                      setFieldValue={setFieldValue}
+                      labelId="ProjectLogoImg"
+                    />
+                  </Box>
+                  <Box>
                     <FormUploadLayout
                       formItemName="ProjectPicture"
                       fileUrl={values.ProjectPicture.fileUrl}
@@ -187,7 +214,6 @@ const BasicForm = () => {
                     />
                   </Box>
 
-                  <TextInput name="ProjectName" title="Project Name" placeholder="Name of the project, eg. Bounce" />
                   <Box>
                     <Title>Describe your project (100-500 words)</Title>
                     <Title mt={5} sx={{ fontSize: 16, fontWeight: 500, color: '#626262' }}>
