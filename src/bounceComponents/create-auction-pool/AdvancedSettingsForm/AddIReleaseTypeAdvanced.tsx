@@ -32,7 +32,6 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import SwitchFormItem from '../SwitchFormItem'
 import { useQueryParams } from 'hooks/useQueryParams'
 import NumberInput from 'bounceComponents/common/NumberInput'
-import { ConfirmationSubtitle } from '../Creation1155Confirmation'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -75,10 +74,11 @@ export const AddIReleaseTypeAdvanced = ({
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
   const resetEndTime = useCallback((startTime: Moment, endTime: Moment, stage: string) => {
     const duration = endTime.valueOf() - startTime.valueOf()
-    const val = duration % (Number(stage) * 1000)
+    const segment = Number(stage) * 1000
+    const val = duration % segment
     let _integer = endTime.valueOf() - val
     if (val > 50000) {
-      _integer = _integer + Number(stage) * 1000
+      _integer = _integer + segment
     }
     return moment(_integer)
   }, [])
@@ -340,7 +340,6 @@ export const AddIReleaseTypeAdvanced = ({
                     minDateTime={values.startTime}
                     textField={{ sx: { flex: 1 } }}
                     onChange={(res: Moment) => {
-                      console.log('res end time', res)
                       let endTime = null
                       if (
                         valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
@@ -356,10 +355,15 @@ export const AddIReleaseTypeAdvanced = ({
                 </Stack>
                 {valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
                   valuesState.priceSegmentType === PriceSegmentType.Staged && (
-                    <ConfirmationSubtitle sx={{ mt: 12 }}>
-                      *After setting up staged mode, to avoid errors, our main action is to overlap and complete the
-                      correct ending time.
-                    </ConfirmationSubtitle>
+                    <Typography sx={{ mt: 12, color: '#212121' }}>
+                      <span style={{ opacity: 0.5 }}>
+                        *After setting up staged mode, there is a difference between the block time and the current
+                        actual time, ending time after correction is{' '}
+                      </span>
+                      <span style={{ fontWeight: 700, color: '#171717' }}>
+                        {values?.endTime?.format('MMM D, YYYY HH:mm:ss')}
+                      </span>
+                    </Typography>
                   )}
                 <Box sx={{ mt: 38 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 20 }}>
