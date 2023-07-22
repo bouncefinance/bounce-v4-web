@@ -1,6 +1,6 @@
 import { Button, Stack, OutlinedInput, Box, Typography, FormControlLabel, Alert } from '@mui/material'
 import { Field, Form, Formik } from 'formik'
-import { SetStateAction, useMemo } from 'react'
+import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
@@ -119,7 +119,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
           'Ditgits_Validation',
           'The decreasing time must be an integer greater than 0 and smaller than 100',
           value => {
-            return Number.isInteger(value) && Number(value) >= 1 && Number(value) < 100
+            return Number.isInteger(value) && Number(value) >= 1 && Number(value) <= 100
           }
         )
     }),
@@ -153,18 +153,6 @@ const DutchAuctionParametersForm = (): JSX.Element => {
 
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
-
-  const times = useMemo(() => {
-    let duration = null
-    if (valuesState.priceSegmentType === PriceSegmentType.BySecond) {
-      duration = Math.floor(Number(valuesState.endTime) - Number(valuesState.startTime) * 1000)
-    }
-    if (valuesState.priceSegmentType === PriceSegmentType.ByMinute) {
-      duration = Math.floor(Number(valuesState.endTime) - (Number(valuesState.startTime) * 1000) / 60)
-    }
-    return duration
-  }, [valuesState.endTime, valuesState.priceSegmentType, valuesState.startTime])
-  console.log('endTime', valuesState, times)
 
   const internalInitialValues: FormValues = {
     tokenFromAddress: valuesState.tokenFrom.address || '',
@@ -226,7 +214,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
               },
               startPrice: values.startPrice,
               reservePrice: values.reservePrice,
-              segmentAmount: values.priceSegmentType === PriceSegmentType.Staged ? values.segments : times,
+              segmentAmount: values.segments,
               poolSize: values.poolSize,
               allocationPerWallet: values.allocationPerWallet,
               priceSegmentType: values.priceSegmentType,

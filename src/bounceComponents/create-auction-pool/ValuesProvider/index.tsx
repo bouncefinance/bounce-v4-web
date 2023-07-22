@@ -212,6 +212,7 @@ type Payload = {
     endTime: Moment
     delayUnlockingTime: Moment
     whitelist: string[]
+    segmentAmount?: string
     enableReverse: boolean
     participantStatus: ParticipantStatus
     shouldDelayUnlocking: boolean

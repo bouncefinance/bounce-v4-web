@@ -85,7 +85,7 @@ const CreatePoolButton = () => {
         if (redirect && typeof redirect === 'string') {
           navigate(redirect)
         } else {
-          navigate(routes.market.pools)
+          navigate(routes.market.index)
         }
       }
 
