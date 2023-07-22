@@ -54,9 +54,7 @@ const PoolTabs = ({
           }
         }}
         onClick={() => {
-          if (new Date().valueOf() >= currenData.dip.startAt) {
-            setPoolType(PoolIndexType.DIP)
-          }
+          setPoolType(PoolIndexType.DIP)
         }}
       >
         <Typography
@@ -101,9 +99,7 @@ const PoolTabs = ({
           }
         }}
         onClick={() => {
-          if (new Date().valueOf() >= currenData.dgt.startAt) {
-            setPoolType(PoolIndexType.DGT)
-          }
+          setPoolType(PoolIndexType.DGT)
         }}
       >
         <Typography

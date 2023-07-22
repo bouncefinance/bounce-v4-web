@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, styled } from '@mui/material'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { ReactComponent as TipSvg } from 'assets/imgs/dipExchange/tips.svg'
 import { useMemo, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
@@ -7,7 +7,8 @@ import { ComBtn, TipsBox } from './claimBlock'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import BidDialog from './bidDialog'
-
+import { DisableBtn } from './bidBlock'
+import { useCountDown } from 'ahooks'
 const TitleCom = styled(Typography)(() => ({
   color: '#626262',
   fontFamily: `'Inter'`,
@@ -25,7 +26,17 @@ const DescCom = styled(Typography)(() => ({
 const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp; maxValue: number | string }) => {
   const { account, chainId } = useActiveWeb3React()
   const [open, setOpen] = useState<boolean>(false)
-
+  const { status, openAt, closeAt, claimAt } = poolInfo
+  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
+    targetDate:
+      status === PoolStatus.Upcoming
+        ? openAt * 1000
+        : status === PoolStatus.Live
+        ? closeAt * 1000
+        : status === PoolStatus.Closed
+        ? claimAt * 1000
+        : undefined
+  })
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   if (!account) {
     return (
@@ -120,7 +131,34 @@ const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp
           </Typography>
         </Grid>
       </Grid>
-      {Number(maxValue) > 0 && (
+      {poolInfo.status === PoolStatus.Upcoming && (
+        <DisableBtn
+          sx={{
+            width: '100%',
+            marginTop: '30px'
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              color: '#fff',
+              fontSize: '16px'
+            }}
+          >
+            Place a Bid
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: `'Inter'`,
+              color: '#fff',
+              fontSize: '16px'
+            }}
+          >
+            {countdown > 0 ? `${days}d : ${hours}h : ${minutes}m : ${seconds}s` : 'Upcoming'}
+          </Typography>
+        </DisableBtn>
+      )}
+      {poolInfo.status !== PoolStatus.Upcoming && Number(maxValue) > 0 && (
         <ComBtn
           sx={{
             width: '100%',
