@@ -63,7 +63,7 @@ export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
   }
 }
 
-const CreatePoolButton = ({ times }: { times: string | undefined }) => {
+const CreatePoolButton = ({ times }: { times: string }) => {
   const { redirect } = useQueryParams()
   const navigate = useNavigate()
   const { account, chainId } = useActiveWeb3React()
@@ -91,7 +91,7 @@ const CreatePoolButton = ({ times }: { times: string | undefined }) => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createDutchAuctionPool(times ?? '')
+      const { getPoolId, transactionReceipt, sysId } = await createDutchAuctionPool(times)
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -301,15 +301,18 @@ const CreationDutchAuctionConfirmation = () => {
 
   const times = useMemo(() => {
     let duration = ''
-    if (!values.endTime || !values.startTime) return
-    if (values.priceSegmentType === PriceSegmentType.BySecond) {
-      duration = Math.floor((Number(values.endTime?.valueOf()) - Number(values.startTime?.valueOf())) / 1000).toFixed()
-    }
-    if (values.priceSegmentType === PriceSegmentType.ByMinute) {
-      duration = Math.floor((values.endTime?.valueOf() - values.startTime?.valueOf()) / 60000).toFixed()
-    }
-    if (values.priceSegmentType === PriceSegmentType.Staged) {
-      duration = values.segmentAmount ? values.segmentAmount : '0'
+    if (values.endTime && values.startTime) {
+      if (values.priceSegmentType === PriceSegmentType.BySecond) {
+        duration = Math.floor(
+          (Number(values.endTime?.valueOf()) - Number(values.startTime?.valueOf())) / 1000
+        ).toFixed()
+      }
+      if (values.priceSegmentType === PriceSegmentType.ByMinute) {
+        duration = Math.floor((values.endTime?.valueOf() - values.startTime?.valueOf()) / 60000).toFixed()
+      }
+      if (values.priceSegmentType === PriceSegmentType.Staged) {
+        duration = values.segmentAmount ? values.segmentAmount : '0'
+      }
     }
     return duration
   }, [values.endTime, values.priceSegmentType, values.segmentAmount, values.startTime])

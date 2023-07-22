@@ -354,6 +354,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                       <NumberInput
                         placeholder="Input a total stage; Upper limit 100"
                         value={values.segments}
+                        disabled={!!valuesState.endTime}
                         onUserInput={value => {
                           setFieldValue('segments', value)
                         }}

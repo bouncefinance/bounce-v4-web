@@ -76,13 +76,11 @@ export const AddIReleaseTypeAdvanced = ({
   const resetEndTime = useCallback((startTime: Moment, endTime: Moment, stage: string) => {
     const duration = endTime.valueOf() - startTime.valueOf()
     const val = duration % (Number(stage) * 1000)
-    let integer = 0
-    if (50000 <= val) {
-      integer = endTime.valueOf() - val
-    } else {
-      integer = endTime.valueOf() + 100000 - val
+    let _integer = endTime.valueOf() - val
+    if (val > 50000) {
+      _integer = _integer + Number(stage) * 1000
     }
-    return moment(integer)
+    return moment(_integer)
   }, [])
 
   const initialValues: MyFormValues = {
@@ -359,8 +357,8 @@ export const AddIReleaseTypeAdvanced = ({
                 {valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
                   valuesState.priceSegmentType === PriceSegmentType.Staged && (
                     <ConfirmationSubtitle sx={{ mt: 12 }}>
-                      *After setting up staged mode, the number of steps and the incident distance, our main action is
-                      to overlap and complete the correct ending time.
+                      *After setting up staged mode, to avoid errors, our main action is to overlap and complete the
+                      correct ending time.
                     </ConfirmationSubtitle>
                   )}
                 <Box sx={{ mt: 38 }}>
