@@ -2,6 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { PoolsData } from './stageLine'
 import { useMemo } from 'react'
 import moment from 'moment'
+import { useIsMDDown } from 'themes/useTheme'
 export enum PoolIndexType {
   'DIP' = 0,
   'DGT' = 1,
@@ -18,6 +19,7 @@ const PoolTabs = ({
   poolType: number
   setPoolType: (type: PoolIndexType) => void
 }) => {
+  const isMd = useIsMDDown()
   const { list } = poolsData
   const currenData = useMemo(() => {
     return list[index]
@@ -41,16 +43,17 @@ const PoolTabs = ({
             : ''
         }
         sx={{
-          width: '360px',
+          minWidth: isMd ? '300px' : '360px',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           cursor: 'pointer',
-          padding: '15px 28px',
+          padding: isMd ? '15px 16px' : '15px 28px',
           background: poolType === PoolIndexType.DIP ? '#121219' : '',
           '&.active:hover': {
-            background: '#121219'
+            background: '#121219',
+            border: '8px 8px 0 0 '
           }
         }}
         onClick={() => {
@@ -61,7 +64,7 @@ const PoolTabs = ({
           sx={{
             color: poolType === PoolIndexType.DIP ? '#4F5FFC' : '#626262',
             fontFamily: `'Public Sans'`,
-            fontSize: 20,
+            fontSize: isMd ? 16 : 20,
             fontWeight: 600
           }}
           mb={'4px'}
@@ -72,7 +75,7 @@ const PoolTabs = ({
           sx={{
             color: '#959595',
             fontFamily: `'Inter'`,
-            fontSize: 13
+            fontSize: isMd ? 12 : 13
           }}
         >
           {moment(currenData.dip.startAt).format('YYYY-MM-DD HH:mm:ss')} To{' '}
@@ -86,16 +89,17 @@ const PoolTabs = ({
             : ''
         }
         sx={{
-          width: '360px',
+          minWidth: isMd ? '300px' : '360px',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
           cursor: 'pointer',
-          padding: '15px 28px',
+          padding: isMd ? '15px 16px' : '15px 28px',
           background: poolType === PoolIndexType.DGT ? '#121219' : '',
           '&.active:hover': {
-            background: '#121219'
+            background: '#121219',
+            border: '8px 8px 0 0 '
           }
         }}
         onClick={() => {
@@ -106,7 +110,7 @@ const PoolTabs = ({
           sx={{
             color: poolType === PoolIndexType.DGT ? '#4F5FFC' : '#626262',
             fontFamily: `'Public Sans'`,
-            fontSize: 20,
+            fontSize: isMd ? 16 : 20,
             fontWeight: 600
           }}
           mb={'4px'}
@@ -117,7 +121,7 @@ const PoolTabs = ({
           sx={{
             color: '#959595',
             fontFamily: `'Inter'`,
-            fontSize: 13
+            fontSize: isMd ? 12 : 13
           }}
         >
           {moment(currenData.dgt.startAt).format('YYYY-MM-DD HH:mm:ss')} To{' '}

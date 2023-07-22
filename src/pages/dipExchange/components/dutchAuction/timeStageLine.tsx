@@ -10,8 +10,11 @@ import { DutchAuctionPoolProp } from 'api/pool/type'
 import BigNumber from 'bignumber.js'
 import { ReactComponent as DisActiveIcon } from 'assets/imgs/dutchAuction/disactive.svg'
 import { ReactComponent as CheckedIcon } from 'assets/imgs/dipExchange/checked.svg'
+import { CurrencyAmount } from 'constants/token'
+import { useIsMDDown } from 'themes/useTheme'
 
 const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const newSwiper = useSwiper()
   const [swiper, setSwiper] = useState(newSwiper)
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
@@ -27,21 +30,35 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
   const timeSegments = new BigNumber(endTime).minus(startTime).div(segments).integerValue().toNumber()
   const releaseData = useMemo(() => {
+    if (!poolInfo.currencyAmountTotal1?.currency) {
+      return []
+    }
     const xList = arrayRange(startTime, segments, timeSegments)
     const yList = arrayRange(startPrice, segments, priceSegments).reverse()
     const dataPoint = new Array(segments + 1).fill(0).map((item, index) => {
       const nowDate = new BigNumber(new Date().valueOf())
       const isActive = nowDate.comparedTo(xList[index]) === 1
+      const currentValue = poolInfo.currencyAmountTotal1?.currency
+        ? CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1?.currency, yList[index])?.toSignificant(6)
+        : '0'
       return {
         startAt: moment(xList[index]).format('YYYY-MM-DD HH:mm:ss'),
         timaSteamp: xList[index],
-        value: yList[index] + poolInfo.token1.symbol.toUpperCase(),
+        value: currentValue + poolInfo.token1.symbol.toUpperCase(),
         active: isActive
       }
     })
     return dataPoint
-  }, [startTime, segments, timeSegments, startPrice, priceSegments, poolInfo.token1.symbol])
-  const [slidesPerview, setSlidesPerView] = useState(window.innerWidth / 162)
+  }, [
+    startTime,
+    segments,
+    timeSegments,
+    startPrice,
+    priceSegments,
+    poolInfo.currencyAmountTotal1?.currency,
+    poolInfo.token1.symbol
+  ])
+  const [slidesPerview, setSlidesPerView] = useState(window.innerWidth / (isMd ? 200 : 381))
   const activeIndex = useMemo(() => {
     let lastActiveIndex = 0
     releaseData.map((item, index) => {
@@ -54,7 +71,8 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   useEffect(() => {
     const setPerview = () => {
       const winW = window.innerWidth
-      const result = parseInt(winW / 381 + '') >= 3 ? 3 : winW / 381
+      const maxWidth = isMd ? 200 : 381
+      const result = parseInt(winW / maxWidth + '') >= 3 ? 3 : winW / maxWidth
       setSlidesPerView(result)
     }
     setPerview()
@@ -62,7 +80,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     return () => {
       window.removeEventListener('resize', setPerview)
     }
-  }, [])
+  }, [isMd])
   if (!releaseData || (Array.isArray(releaseData) && releaseData.length === 0)) {
     return <Box></Box>
   }
@@ -76,14 +94,14 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         padding: '16px 28px',
         borderRadius: '6px'
       }}
-      mb={'30px'}
+      mb={isMd ? '0' : '30px'}
     >
       <Swiper
         modules={[FreeMode]}
         freeMode={true}
         loop={false}
-        centeredSlides={true}
-        centeredSlidesBounds={true}
+        centeredSlides={isMd ? false : true}
+        centeredSlidesBounds={isMd ? false : true}
         slidesPerView={slidesPerview}
         initialSlide={activeIndex}
         onSwiper={e => {
@@ -101,7 +119,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 key={'stageLineBox' + index}
                 sx={{
                   width: '100%',
-                  minWidth: '381px',
+                  minWidth: isMd ? '100px' : '381px',
                   display: 'flex',
                   flexFlow: 'column nowrap',
                   justifyContent: 'flex-start',

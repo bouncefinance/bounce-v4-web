@@ -7,15 +7,22 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import SubscriptLeft from './subscriptLeft'
 import SubscriptRight from './subscriptRight'
-const SpanCom = styled('span')(() => ({
+import { useIsMDDown } from 'themes/useTheme'
+
+const SpanCom = styled('span')(({ theme }) => ({
+  display: 'inline-block',
   color: '#4F5FFC',
   fontFamily: `'Public Sans'`,
   fontSize: 20,
   fontWeight: 600,
-  margin: '0 10px 0 16px'
+  margin: '0 10px 0 16px',
+  [theme.breakpoints.down('md')]: {
+    fontSize: 13,
+    margin: '0 8px 0 8px'
+  }
 }))
-
 const SubscriptionPeriod = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { status, openAt: openTime, closeAt: closeTime, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate:
@@ -71,7 +78,7 @@ const SubscriptionPeriod = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) =>
           sx={{
             color: '#959595',
             fontFamily: `'Inter'`,
-            fontSize: 14
+            fontSize: isMd ? 13 : 14
           }}
           component="span"
           mb={'20px'}
@@ -87,7 +94,7 @@ const SubscriptionPeriod = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) =>
           sx={{
             color: '#959595',
             fontFamily: `'Inter'`,
-            fontSize: 14
+            fontSize: isMd ? 13 : 14
           }}
           component="span"
           mb={'20px'}
@@ -107,7 +114,7 @@ const SubscriptionPeriod = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) =>
           background: '#1D1D29',
           padding: '16px 24px 16px 16px',
           display: 'flex',
-          flexFlow: 'row nowrap',
+          flexFlow: isMd ? 'column nowrap' : 'row nowrap',
           justifyContent: 'flex-start',
           alignItems: 'flex-start'
         }}

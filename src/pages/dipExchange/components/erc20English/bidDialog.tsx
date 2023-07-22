@@ -8,7 +8,6 @@ import BidBlock from './bidBlock'
 import { DisableBtn } from './bidBlock'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
-
 const NewFormControlLabel = styled(FormControlLabel)(() => ({
   justifyContent: 'flex-start',
   alignItems: 'flex-start',
@@ -23,12 +22,15 @@ const NewFormControlLabel = styled(FormControlLabel)(() => ({
   width: '100%',
   margin: '33px 0 48px'
 }))
-const ChartDialogEl = styled(Dialog)(() => ({
+const ChartDialogEl = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
     width: '480px',
     borderRadius: '8px',
     background: '#fff',
-    padding: '72px'
+    padding: '72px',
+    [theme.breakpoints.down('md')]: {
+      padding: '16px'
+    }
   }
 }))
 const ChartDialog = ({

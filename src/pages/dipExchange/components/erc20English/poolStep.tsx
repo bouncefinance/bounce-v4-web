@@ -9,6 +9,7 @@ import moment from 'moment'
 import FinalTokenclaim from './finalTokenclaim'
 import SubscriptionPeriod from './subscriptionPeriod'
 import BidHistory from './bidHistory'
+import { useIsMDDown } from 'themes/useTheme'
 const StepCom = styled(Stepper)(() => ({
   '.MuiStepLabel-root': {
     padding: 0
@@ -46,6 +47,7 @@ const StepCom = styled(Stepper)(() => ({
 }))
 const PoolStep = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const [activeStep, setActiveStep] = useState<number>(0)
+  const isMd = useIsMDDown()
   useEffect(() => {
     if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
       setActiveStep(0)
@@ -75,7 +77,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                 sx={{
                   color: '#D7D6D9',
                   fontFamily: `'Public Sans'`,
-                  fontSize: 14,
+                  fontSize: isMd ? 13 : 14,
                   fontWeight: 600
                 }}
                 mb={'4px'}
@@ -88,7 +90,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                 sx={{
                   color: '#959595',
                   fontFamily: `'Inter'`,
-                  fontSize: 13
+                  fontSize: isMd ? 12 : 13
                 }}
                 mb={'20px'}
               >

@@ -9,6 +9,7 @@ import { ReactComponent as ErrorSvg } from 'assets/imgs/dipExchange/error.svg'
 import BigNumber from 'bignumber.js'
 import ClaimBlock from './claimBlock'
 import { useIsUserJoinedErc20EnglishPool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import { useIsMDDown } from 'themes/useTheme'
 
 interface LabelItemParam {
   label: string
@@ -64,6 +65,7 @@ const LabelItem = ({ label, value, iconUrl, labelStyle, valueStyle, style }: Lab
   )
 }
 const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const isUserJoined = useIsUserJoinedErc20EnglishPool(poolInfo)
   if (!isUserJoined) {
     return (
@@ -102,7 +104,7 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
         background: '#1D1D29',
         padding: '16px 24px 16px 16px',
         display: 'flex',
-        flexFlow: 'row nowrap',
+        flexFlow: isMd ? 'column nowrap' : 'row nowrap',
         justifyContent: 'flex-start',
         alignItems: 'flex-start'
       }}
@@ -110,7 +112,8 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
     >
       <Box
         sx={{
-          flex: 350,
+          width: isMd ? '100%' : 'unset',
+          flex: isMd ? 'unset' : 350,
           borderRadius: '6px',
           background: '#121219',
           padding: '16px',
@@ -138,7 +141,8 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
       </Box>
       <Box
         sx={{
-          flex: 317,
+          width: isMd ? '100%' : 'unset',
+          flex: isMd ? 'unset' : 317,
           padding: '16px 0'
         }}
       >

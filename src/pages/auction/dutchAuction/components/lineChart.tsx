@@ -229,7 +229,13 @@ export const LineChartView = ({
   ])
   return <Box ref={chartContainerRef}></Box>
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const LineChartSection = ({
+  poolInfo,
+  hideDialogBtn = false
+}: {
+  poolInfo: DutchAuctionPoolProp
+  hideDialogBtn?: boolean
+}) => {
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const segments = times ? Number(times) : 0
@@ -286,12 +292,14 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         >
           Duction Auction Live Chart
         </Typography>
-        <OpenChartImg
-          onClick={() => {
-            console.log('setDialogOpen>>>>', dialogOpen)
-            setDialogOpen(!dialogOpen)
-          }}
-        />
+        {!hideDialogBtn && (
+          <OpenChartImg
+            onClick={() => {
+              console.log('setDialogOpen>>>>', dialogOpen)
+              setDialogOpen(!dialogOpen)
+            }}
+          />
+        )}
       </Stack>
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>

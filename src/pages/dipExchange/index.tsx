@@ -26,15 +26,17 @@ const DipExchange = () => {
       return {
         timaSteamp: item.timaSteamp + oneDay * index,
         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
+        // english auction
         dip: {
           startAt: 1690012800000,
           closeAt: 1690099200000,
           id: 18657
         },
+        // dutch aution
         dgt: {
           startAt: 1690016400000,
           closeAt: 1690102800000,
-          id: 18658
+          id: 18614
         }
       }
     })
@@ -64,13 +66,30 @@ const DipExchange = () => {
       <DipTabBox>
         <DipCenter>
           {/* activities time line */}
-          <StageLine poolsData={{ list: poolsData }} activeIndex={dataIndex} setIndex={setShowDataIndex} />
-          <PoolTabs
-            poolsData={{ list: poolsData }}
-            index={dataIndex}
-            poolType={poolType}
-            setPoolType={handleSetPoolType}
-          ></PoolTabs>
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: '100vw',
+              overflowX: 'auto',
+              paddingLeft: '16px'
+            }}
+          >
+            <StageLine poolsData={{ list: poolsData }} activeIndex={dataIndex} setIndex={setShowDataIndex} />
+          </Box>
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: '100vw',
+              overflowX: 'auto'
+            }}
+          >
+            <PoolTabs
+              poolsData={{ list: poolsData }}
+              index={dataIndex}
+              poolType={poolType}
+              setPoolType={handleSetPoolType}
+            ></PoolTabs>
+          </Box>
           {poolType === PoolIndexType.DIP && <Erc20English poolsData={{ list: poolsData }} index={dataIndex} />}
           {poolType === PoolIndexType.DGT && <DutchAuction poolsData={{ list: poolsData }} index={dataIndex} />}
         </DipCenter>
@@ -85,12 +104,15 @@ const DipCenter = styled(Box)(() => ({
   maxWidth: '1296px',
   margin: '0 auto'
 }))
-const DipHeadBox = styled(Box)({
+const DipHeadBox = styled(Box)(({ theme }) => ({
   width: '100%',
   paddingBottom: 50,
   backgroundImage: `url(${HeadBg})`,
-  backgroundSize: 'cover'
-})
+  backgroundSize: 'cover',
+  [theme.breakpoints.down('md')]: {
+    paddingBottom: 0
+  }
+}))
 const DipTabBox = styled(Box)({
   width: '100%',
   backgroundImage: `url(${TabBg})`,

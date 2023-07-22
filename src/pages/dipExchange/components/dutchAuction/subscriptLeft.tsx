@@ -1,6 +1,7 @@
 import { Box, Grid, Typography, styled } from '@mui/material'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { BigNumber } from 'bignumber.js'
+import { useIsMDDown } from 'themes/useTheme'
 
 const TitleCom = styled(Typography)(() => ({
   color: '#626262',
@@ -17,6 +18,8 @@ const DescCom = styled(Typography)(() => ({
   marginBottom: '8px'
 }))
 const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
+
   return (
     <Box
       sx={{
@@ -24,11 +27,11 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         borderRadius: '6px',
         background: '#121219',
         padding: '16px',
-        minHeight: '230px'
+        minHeight: isMd ? 'unset' : '230px'
       }}
     >
       <Grid container rowGap={'20px'}>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={12} lg={6}>
           <TitleCom>Completed Commit</TitleCom>
           <DescCom>
             {poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.currencySwappedAmount0?.toExact()
@@ -39,7 +42,7 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             {` ${poolInfo.token1.symbol.toUpperCase()}`}
           </DescCom>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={12} lg={6}>
           <TitleCom>Successful sold amount</TitleCom>
           <DescCom>
             {poolInfo.currencySwappedAmount0?.toSignificant() + ` ${poolInfo.token0.symbol.toUpperCase()}`}
@@ -49,7 +52,7 @@ const SubscriptLeft = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           <TitleCom>Total participants</TitleCom>
           <DescCom>--</DescCom>
         </Grid> */}
-        <Grid item xs={6}>
+        <Grid item xs={12} md={12} lg={6}>
           <TitleCom>Current price</TitleCom>
           <DescCom>
             {'1 ' +

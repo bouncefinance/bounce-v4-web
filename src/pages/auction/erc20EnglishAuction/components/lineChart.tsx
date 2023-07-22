@@ -288,7 +288,13 @@ export const LineChartView = ({
     </>
   )
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+const LineChartSection = ({
+  poolInfo,
+  hideDialogBtn = false
+}: {
+  poolInfo: Erc20EnglishAuctionPoolProp
+  hideDialogBtn?: boolean
+}) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const { currencyAmountTotal0, currencyAmountStartPrice, currencyAmountEndPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
@@ -348,11 +354,13 @@ const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
         >
           ERC20 English Auction Live Chart
         </Typography>
-        <OpenChartImg
-          onClick={() => {
-            setDialogOpen(!dialogOpen)
-          }}
-        />
+        {!hideDialogBtn && (
+          <OpenChartImg
+            onClick={() => {
+              setDialogOpen(!dialogOpen)
+            }}
+          />
+        )}
       </Stack>
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>

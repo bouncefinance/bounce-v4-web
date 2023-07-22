@@ -55,7 +55,7 @@ const StageLine = ({
       sx={{
         position: 'relative',
         width: '100%',
-        height: '72px',
+        minHeight: '72px',
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'flex-start',
