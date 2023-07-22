@@ -20,7 +20,7 @@ const TotalPaginationBox: React.FC<ITotalPaginationBoxProps> = ({ total, childre
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const navigate = useNavigate()
-  // const { run: web3Login } = useWeb3Login(`${routes.auction.createAuctionPool}?redirect=${routes.market.pools}`)
+  // const { run: web3Login } = useWeb3Login(`${routes.auction.createAuctionPool}?redirect=${routes.market.index}`)
 
   const handleCreateBtnClick = useCallback(() => {
     if (!account || !token) {
@@ -28,7 +28,7 @@ const TotalPaginationBox: React.FC<ITotalPaginationBoxProps> = ({ total, childre
       showLoginModal()
       return
     }
-    navigate(`${routes.auction.createAuctionPool}?redirect=${routes.market.pools}`)
+    navigate(`${routes.auction.createAuctionPool}?redirect=${routes.market.index}`)
   }, [account, navigate, showLoginModal, token])
 
   return (

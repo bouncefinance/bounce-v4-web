@@ -20,7 +20,7 @@ import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import Radio from '../Radio'
 import ImportWhitelistDialog from '../ImportWhitelistDialog'
-import { IReleaseData, IReleaseType, ParticipantStatus } from '../types'
+import { AuctionType, IReleaseData, IReleaseType, ParticipantStatus, PriceSegmentType } from '../types'
 import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
@@ -32,6 +32,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import SwitchFormItem from '../SwitchFormItem'
 import { useQueryParams } from 'hooks/useQueryParams'
 import NumberInput from 'bounceComponents/common/NumberInput'
+import { ConfirmationSubtitle } from '../Creation1155Confirmation'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -51,6 +52,7 @@ interface MyFormValues {
   enableReverse: boolean
   releaseDataArr: IReleaseData[]
   whitelist: string[]
+  segmentAmount: string | undefined
   participantStatus: ParticipantStatus
   fragmentReleaseSize?: string
 }
@@ -68,10 +70,20 @@ export const AddIReleaseTypeAdvanced = ({
   hideRefundable?: boolean
 }) => {
   const valuesState = useValuesState()
-  console.log('🚀 ~ file: AddIReleaseTypeAdvanced.tsx:71 ~ valuesState:', valuesState)
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
+  const resetEndTime = useCallback((startTime: Moment, endTime: Moment, stage: string) => {
+    const duration = endTime.valueOf() - startTime.valueOf()
+    const val = duration % (Number(stage) * 1000)
+    let integer = 0
+    if (50000 <= val) {
+      integer = endTime.valueOf() - val
+    } else {
+      integer = endTime.valueOf() + 100000 - val
+    }
+    return moment(integer)
+  }, [])
 
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -89,6 +101,7 @@ export const AddIReleaseTypeAdvanced = ({
       : [defaultFragmentRelease],
     releaseDataArr: valuesState.releaseDataArr,
     whitelist: valuesState.whitelist,
+    segmentAmount: valuesState.segmentAmount,
     enableReverse: !!valuesState.enableReverse,
     participantStatus: valuesState.participantStatus
   }
@@ -321,15 +334,35 @@ export const AddIReleaseTypeAdvanced = ({
                     maxDateTime={values.endTime}
                     textField={{ sx: { flex: 1 } }}
                   />
+
                   <Field
                     component={DateTimePickerFormItem}
                     name="endTime"
                     disablePast
                     minDateTime={values.startTime}
                     textField={{ sx: { flex: 1 } }}
+                    onChange={(res: Moment) => {
+                      console.log('res end time', res)
+                      let endTime = null
+                      if (
+                        valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
+                        valuesState.priceSegmentType === PriceSegmentType.Staged &&
+                        values.startTime &&
+                        valuesState.segmentAmount
+                      ) {
+                        endTime = resetEndTime(values.startTime, res, valuesState.segmentAmount)
+                      } else endTime = res
+                      setFieldValue('endTime', endTime)
+                    }}
                   />
                 </Stack>
-
+                {valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
+                  valuesState.priceSegmentType === PriceSegmentType.Staged && (
+                    <ConfirmationSubtitle sx={{ mt: 12 }}>
+                      *After setting up staged mode, the number of steps and the incident distance, our main action is
+                      to overlap and complete the correct ending time.
+                    </ConfirmationSubtitle>
+                  )}
                 <Box sx={{ mt: 38 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 20 }}>
                     <Stack direction="row" alignItems="center" spacing={8}>

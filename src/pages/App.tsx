@@ -31,7 +31,7 @@ import Login from 'pages/login'
 import FirstLoginInfo from 'pages/login/FirstLoginInfo'
 
 import Market from 'pages/market'
-import MarketPools from 'pages/market/pools'
+// import MarketPools from 'pages/market/pools'
 import MarketNFTPools from 'pages/market/nftAuctionPool'
 import NFTAuction from 'pages/nftAuction'
 import RealWorldAuction from 'pages/realWorldAuction'
@@ -138,7 +138,7 @@ export default function App() {
                   <Route path={routes.loginBase} element={<FirstLoginInfo />} />
 
                   <Route path={routes.market.index} element={<Market />} />
-                  <Route path={routes.market.pools} element={<MarketPools />} />
+                  {/* <Route path={routes.market.pools} element={<MarketPools />} /> */}
                   <Route path={routes.market.nftPools} element={<MarketNFTPools />} />
                   <Route path={routes.nftAuction.index} element={<NFTAuction />} />
                   <Route path={routes.tokenAuction.index} element={<TokenAuctionPage />} />

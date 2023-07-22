@@ -3,7 +3,7 @@ import Image from 'components/Image'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { AllocationStatus, CreationStep, IReleaseType, ParticipantStatus } from '../types'
+import { AllocationStatus, CreationStep, IReleaseType, ParticipantStatus, PriceSegmentType } from '../types'
 import {
   ActionType,
   useAuctionERC20Currency,
@@ -63,10 +63,9 @@ export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
   }
 }
 
-const CreatePoolButton = () => {
+const CreatePoolButton = ({ times }: { times: string | undefined }) => {
   const { redirect } = useQueryParams()
   const navigate = useNavigate()
-
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const auctionInChainId = useAuctionInChain()
@@ -92,14 +91,14 @@ const CreatePoolButton = () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createDutchAuctionPool()
+      const { getPoolId, transactionReceipt, sysId } = await createDutchAuctionPool(times ?? '')
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
         if (redirect && typeof redirect === 'string') {
           navigate(redirect)
         } else {
-          navigate(routes.market.pools)
+          navigate(routes.market.index)
         }
       }
 
@@ -163,7 +162,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createDutchAuctionPool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createDutchAuctionPool, navigate, redirect, times])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -300,6 +299,21 @@ const CreationDutchAuctionConfirmation = () => {
   const { auctionType } = useQueryParams()
   const auctionInChainId = useAuctionInChain()
 
+  const times = useMemo(() => {
+    let duration = ''
+    if (!values.endTime || !values.startTime) return
+    if (values.priceSegmentType === PriceSegmentType.BySecond) {
+      duration = Math.floor((Number(values.endTime?.valueOf()) - Number(values.startTime?.valueOf())) / 1000).toFixed()
+    }
+    if (values.priceSegmentType === PriceSegmentType.ByMinute) {
+      duration = Math.floor((values.endTime?.valueOf() - values.startTime?.valueOf()) / 60000).toFixed()
+    }
+    if (values.priceSegmentType === PriceSegmentType.Staged) {
+      duration = values.segmentAmount ? values.segmentAmount : '0'
+    }
+    return duration
+  }, [values.endTime, values.priceSegmentType, values.segmentAmount, values.startTime])
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
       <IconButton
@@ -395,7 +409,7 @@ const CreationDutchAuctionConfirmation = () => {
                 </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Price decreasing times">
-                  <Typography>{values.segmentAmount}</Typography>
+                  <Typography>{times}</Typography>
                 </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Amount">
@@ -442,7 +456,7 @@ const CreationDutchAuctionConfirmation = () => {
         </Box>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
-          <CreatePoolButton />
+          <CreatePoolButton times={times} />
 
           <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>
         </Box>
