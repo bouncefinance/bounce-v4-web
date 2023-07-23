@@ -14,7 +14,7 @@ import { useIsMDDown } from 'themes/useTheme'
 const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isMd = useIsMDDown()
   const [swiper, setSwiper] = useState<any>(null)
-  console.log('swiper>>', swiper)
+  console.log('swiper>>>', swiper)
   const { currencyAmountStartPrice: lowestPrice, currencyAmountEndPrice: highestPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
   const startPrice = lowestPrice ? Number(lowestPrice.toExact()) : 0
@@ -87,11 +87,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
         slidesPerView={slidesPerview}
         initialSlide={activeIndex}
         onSlideChange={() => console.log('slide change')}
-        onSwiper={e => {
-          if (swiper === null) {
-            setSwiper(e)
-          }
-        }}
+        onSwiper={setSwiper}
       >
         {releaseData.map((item, index) => {
           return (
