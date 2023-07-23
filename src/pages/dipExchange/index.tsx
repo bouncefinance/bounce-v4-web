@@ -36,7 +36,7 @@ const DipExchange = () => {
         dgt: {
           startAt: 1690016400000,
           closeAt: 1690102800000,
-          id: 18579
+          id: 18658
         }
       }
     })
