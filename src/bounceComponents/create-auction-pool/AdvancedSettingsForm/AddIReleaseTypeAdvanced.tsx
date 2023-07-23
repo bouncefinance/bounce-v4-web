@@ -72,7 +72,8 @@ export const AddIReleaseTypeAdvanced = ({
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
-  const resetEndTime = useCallback((startTime: Moment, endTime: Moment, stage: string) => {
+  const resetEndTime = useCallback((startTime: Moment | null, endTime: Moment | null, stage: string | undefined) => {
+    if (!startTime || !endTime || !stage) return moment(0)
     const duration = endTime.valueOf() - startTime.valueOf()
     const segment = Number(stage) * 1000
     const val = duration % segment
@@ -331,6 +332,16 @@ export const AddIReleaseTypeAdvanced = ({
                     disablePast
                     maxDateTime={values.endTime}
                     textField={{ sx: { flex: 1 } }}
+                    onChange={(startTime: Moment) => {
+                      setFieldValue('startTime', startTime)
+                      if (
+                        valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
+                        valuesState.priceSegmentType === PriceSegmentType.Staged
+                      ) {
+                        const endTime = resetEndTime(startTime, valuesState.endTime, valuesState.segmentAmount)
+                        setFieldValue('endTime', endTime)
+                      }
+                    }}
                   />
 
                   <Field
@@ -361,7 +372,7 @@ export const AddIReleaseTypeAdvanced = ({
                         actual time, ending time after correction is{' '}
                       </span>
                       <span style={{ fontWeight: 700, color: '#171717' }}>
-                        {values?.endTime?.format('MMM D, YYYY HH:mm:ss')}
+                        {values?.endTime?.format('MMM D, YYYY HH:mm:ss') || ''}
                       </span>
                     </Typography>
                   )}
