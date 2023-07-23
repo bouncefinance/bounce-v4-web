@@ -73,7 +73,7 @@ export const AddIReleaseTypeAdvanced = ({
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
   const resetEndTime = useCallback((startTime: Moment | null, endTime: Moment | null, stage: string | undefined) => {
-    if (!startTime || !endTime || !stage) return moment(0)
+    if (!startTime || !endTime || !stage) return moment(null)
     const duration = endTime.valueOf() - startTime.valueOf()
     const segment = Number(stage) * 1000
     const val = duration % segment
@@ -336,9 +336,12 @@ export const AddIReleaseTypeAdvanced = ({
                       setFieldValue('startTime', startTime)
                       if (
                         valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
-                        valuesState.priceSegmentType === PriceSegmentType.Staged
+                        valuesState.priceSegmentType === PriceSegmentType.Staged &&
+                        values.startTime &&
+                        moment.isMoment(startTime) &&
+                        values.endTime
                       ) {
-                        const endTime = resetEndTime(startTime, valuesState.endTime, valuesState.segmentAmount)
+                        const endTime = resetEndTime(startTime, values.endTime, valuesState.segmentAmount)
                         setFieldValue('endTime', endTime)
                       }
                     }}
