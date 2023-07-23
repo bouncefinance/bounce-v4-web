@@ -1,20 +1,20 @@
 import { Box, Typography } from '@mui/material'
 import { useEffect } from 'react'
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
-import { FreeMode } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { FreeMode, Virtual } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/free-mode'
+import 'swiper/css/virtual'
 import { useState, useMemo } from 'react'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import BigNumber from 'bignumber.js'
 import { ReactComponent as DisActiveIcon } from 'assets/imgs/dutchAuction/disactive.svg'
 import { ReactComponent as CheckedIcon } from 'assets/imgs/dipExchange/checked.svg'
-import { CurrencyAmount } from 'constants/token'
 import { useIsMDDown } from 'themes/useTheme'
 const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isMd = useIsMDDown()
-  const newSwiper = useSwiper()
-  const [swiper, setSwiper] = useState(newSwiper)
+  const [swiper, setSwiper] = useState<any>(null)
+  console.log('swiper>>', swiper)
   const { currencyAmountStartPrice: lowestPrice, currencyAmountEndPrice: highestPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
   const startPrice = lowestPrice ? Number(lowestPrice.toExact()) : 0
@@ -26,30 +26,18 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
   const priceSegments = new BigNumber(endPrice).minus(startPrice).div(segments).toNumber()
   const currentPrice = poolInfo.currencyCurrentPrice?.toExact()
   const releaseData = useMemo(() => {
-    if (!poolInfo.currencySwappedAmount1?.currency) {
-      return []
-    }
     const yList = arrayRange(startPrice, segments, priceSegments)
     const dataPoint = new Array(segments + 1).fill(0).map((item, index) => {
       const isActive = Number(currentPrice) >= yList[index]
-      const currentValue = poolInfo.currencySwappedAmount1?.currency
-        ? CurrencyAmount.fromAmount(poolInfo.currencySwappedAmount1?.currency, yList[index])?.toSignificant(6)
-        : '0'
+      const showValue = yList[index] ? yList[index].toFixed(6) : '--'
       return {
         startAt: new BigNumber(140).div(segments).times(index).toString(),
-        value: currentValue + poolInfo.token1.symbol.toUpperCase(),
+        value: showValue + poolInfo.token1.symbol.toUpperCase(),
         active: isActive
       }
     })
     return dataPoint
-  }, [
-    startPrice,
-    segments,
-    priceSegments,
-    currentPrice,
-    poolInfo.currencySwappedAmount1?.currency,
-    poolInfo.token1.symbol
-  ])
+  }, [startPrice, segments, priceSegments, currentPrice, poolInfo.token1.symbol])
   const [slidesPerview, setSlidesPerView] = useState(window.innerWidth / (isMd ? 140 : 381))
   const activeIndex = useMemo(() => {
     let lastActiveIndex = 0
@@ -80,7 +68,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
     <Box
       sx={{
         position: 'relative',
-        width: '140%',
+        width: '100%',
         height: '136px',
         background: '#1D1D29',
         padding: '16px 28px',
@@ -89,7 +77,9 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
       mb={isMd ? '0' : '30px'}
     >
       <Swiper
-        modules={[FreeMode]}
+        key={'erc20swiper'}
+        modules={[FreeMode, Virtual]}
+        virtual={true}
         freeMode={true}
         loop={false}
         centeredSlides={isMd ? false : true}
@@ -98,19 +88,18 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
         initialSlide={activeIndex}
         onSlideChange={() => console.log('slide change')}
         onSwiper={e => {
-          setSwiper(e)
-          setTimeout(() => {
-            swiper?.slideTo(activeIndex)
-          }, 2000)
+          if (swiper === null) {
+            setSwiper(e)
+          }
         }}
       >
         {releaseData.map((item, index) => {
           return (
-            <SwiperSlide key={'stageLineItem' + index}>
+            <SwiperSlide key={'stageLineItem' + index} virtualIndex={index}>
               <Box
                 key={'stageLineBox' + index}
                 sx={{
-                  width: '140%',
+                  width: '100%',
                   minWidth: isMd ? '100px' : '381px',
                   display: 'flex',
                   flexFlow: 'column nowrap',
@@ -152,7 +141,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
                 </Typography>
                 <Box
                   sx={{
-                    width: '140%',
+                    width: '100%',
                     display: 'flex',
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',

@@ -30,7 +30,6 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
           return Promise.reject(new Error('Invalid poolId'))
         }
       }
-      console.log('sysId useBackedPoolInfo>>> ', sysId)
       const args = sysId
         ? { id: Number(sysId), tokenType: getBackedTokenType(category), address: account || '' }
         : {

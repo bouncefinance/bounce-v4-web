@@ -107,7 +107,7 @@ const Erc20english = ({ index, poolsData }: { index: number; poolsData: PoolsDat
       >
         Subscription Timeline
       </Typography>
-      {!loading && <TimeStageLine poolInfo={poolInfo} />}
+      <TimeStageLine poolInfo={poolInfo} />
       <Box
         sx={{
           display: 'flex',

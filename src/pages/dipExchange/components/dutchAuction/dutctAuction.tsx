@@ -11,7 +11,6 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
   const { list } = poolsData
   const isMd = useIsMDDown()
   const currentData = list[index]?.dgt
-  console.log(123)
   const { poolInfo, loading } = useDutchAuctionInfo(currentData?.id ? Number(currentData?.id) : undefined)
   if (!poolInfo || !currentData) {
     return <BounceAnime></BounceAnime>
@@ -104,7 +103,7 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
       >
         Subscription Timeline
       </Typography>
-      {!loading && <TimeStageLine poolInfo={poolInfo} />}
+      <TimeStageLine poolInfo={poolInfo} />
       <Box
         sx={{
           display: 'flex',
