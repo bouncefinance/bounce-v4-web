@@ -341,7 +341,7 @@ export const AddIReleaseTypeAdvanced = ({
                         moment.isMoment(startTime) &&
                         values.endTime
                       ) {
-                        const endTime = resetEndTime(startTime, values.endTime, valuesState.segmentAmount)
+                        const endTime = resetEndTime(startTime, valuesState.endTime, valuesState.segmentAmount)
                         setFieldValue('endTime', endTime)
                       }
                     }}
