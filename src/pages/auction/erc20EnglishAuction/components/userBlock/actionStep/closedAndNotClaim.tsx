@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 import { ActionStep, StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
+import { formatNumberWithCommas } from 'utils'
 const ClosedAndNotClaimed = ({
   poolInfo,
   handleSetActionStep
@@ -185,7 +186,8 @@ const ClosedAndNotClaimed = ({
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount1?.toExact()}
+                  {poolInfo?.currencySwappedAmount1 &&
+                    formatNumberWithCommas(poolInfo?.currencySwappedAmount1?.toExact())}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
