@@ -6,7 +6,7 @@ import LineChart from '../../../auction/dutchAuction/components/lineChart'
 import PoolStep from './poolStep'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useIsMDDown } from 'themes/useTheme'
-
+import FixedBottomBtn from './fixedBottomBtn'
 const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
   const { list } = poolsData
   const isMd = useIsMDDown()
@@ -81,6 +81,7 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
             </Box>
           </Box>
         </Box>
+        <FixedBottomBtn poolInfo={poolInfo} />
       </>
     )
   }

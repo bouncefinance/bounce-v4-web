@@ -78,7 +78,8 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          padding: '0 16px'
         }}
         gap={'20px'}
       >
@@ -88,7 +89,8 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             color: '#D7D6D9',
             fontFamily: `'Public Sans'`,
             fontSize: '16px',
-            fontWeight: 500
+            fontWeight: 500,
+            textAlign: isMd ? 'center' : 'left'
           }}
         >
           you have not been involved in any purchases of {poolInfo.token0.symbol.toUpperCase()}

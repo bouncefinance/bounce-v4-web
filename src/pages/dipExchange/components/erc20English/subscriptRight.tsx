@@ -140,6 +140,7 @@ const SubscriptRight = ({
       </Grid>
       {poolInfo.status === PoolStatus.Upcoming && (
         <DisableBtn
+          id={'bidBtn'}
           sx={{
             width: '100%',
             marginTop: '30px'
@@ -167,6 +168,7 @@ const SubscriptRight = ({
       )}
       {poolInfo.status !== PoolStatus.Upcoming && Number(maxValue) > 0 && (
         <ComBtn
+          id={'bidBtn'}
           sx={{
             width: '100%',
             marginTop: '30px'

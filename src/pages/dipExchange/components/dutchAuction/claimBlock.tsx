@@ -73,7 +73,7 @@ export const ComBtn = styled(LoadingButton)(() => ({
     color: '#FFF'
   }
 }))
-enum ClaimStatus {
+export enum ClaimStatus {
   'NotTimeToClaim' = 0,
   'NeedClaim' = 1,
   'Claimed' = 2

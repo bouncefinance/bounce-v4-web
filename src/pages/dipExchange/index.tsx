@@ -34,9 +34,9 @@ const DipExchange = () => {
         },
         // dutch aution
         dgt: {
-          startAt: 1690162800000,
-          closeAt: 1690184400000,
-          id: 18664
+          startAt: 1690191900000,
+          closeAt: 1690202700000,
+          id: 18668
         }
       }
     })

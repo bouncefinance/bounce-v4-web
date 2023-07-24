@@ -8,6 +8,7 @@ import LineChart from '../../../auction/erc20EnglishAuction/components/lineChart
 import PoolStep from './poolStep'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useIsMDDown } from 'themes/useTheme'
+import FixedBottomBtn from './fixedBottomBtn'
 const Erc20english = ({ index, poolsData }: { index: number; poolsData: PoolsData }) => {
   const { list } = poolsData
   const isMd = useIsMDDown()
@@ -85,6 +86,7 @@ const Erc20english = ({ index, poolsData }: { index: number; poolsData: PoolsDat
             </Box>
           </Box>
         </Box>
+        <FixedBottomBtn poolInfo={poolInfo} />
       </>
     )
   }
