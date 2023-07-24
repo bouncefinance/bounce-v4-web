@@ -57,6 +57,14 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     return lastActiveIndex
   }, [releaseData])
   useEffect(() => {
+    if (swiper && swiper.slideTo) {
+      setTimeout(() => {
+        swiper.slideTo(activeIndex)
+      }, 500)
+    }
+    return () => {}
+  }, [activeIndex, swiper])
+  useEffect(() => {
     const setPerview = () => {
       const winW = window.innerWidth
       const maxWidth = isMd ? 200 : 381

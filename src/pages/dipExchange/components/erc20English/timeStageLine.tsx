@@ -49,6 +49,14 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
     return lastActiveIndex
   }, [releaseData])
   useEffect(() => {
+    if (swiper && swiper.slideTo) {
+      setTimeout(() => {
+        swiper.slideTo(activeIndex)
+      }, 500)
+    }
+    return () => {}
+  }, [activeIndex, swiper])
+  useEffect(() => {
     const setPerview = () => {
       const winW = window.innerWidth
       const maxWidth = isMd ? 140 : 381
