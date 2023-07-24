@@ -88,7 +88,7 @@ const CreatePoolButton = () => {
         if (redirect && typeof redirect === 'string') {
           navigate(redirect)
         } else {
-          navigate(routes.market.pools)
+          navigate(routes.market.index)
         }
       }
 
@@ -128,7 +128,7 @@ const CreatePoolButton = () => {
             againBtn: 'To the pool',
             cancelBtn: 'Not now',
             title: 'Congratulations!',
-            content: `You have successfully created the auction.`,
+            content: 'You have successfully created the auction.',
             onAgain: goToPoolInfoPage,
             onCancel: handleCloseDialog,
             onClose: handleCloseDialog

@@ -13,6 +13,7 @@ export interface RegretAmountInputProps {
   amount: string
   setAmount: (value: string) => void
   poolInfo: DutchAuctionPoolProp
+  isEnglishAuction?: boolean
 }
 const NumInput = styled(NumberInput)(() => ({
   background: '#121212',

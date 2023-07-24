@@ -12,6 +12,7 @@ export enum PoolType {
   'SealedBid' = 4,
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6,
+  ENGLISH_AUCTION = 8,
   'PlayableAuction' = 100
 }
 
@@ -31,6 +32,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Sealed Bid'
     case PoolType.PlayableAuction:
       return 'Playable Auction'
+    case PoolType.ENGLISH_AUCTION:
+      return 'English Auction'
   }
 }
 
@@ -54,7 +57,10 @@ export interface GetPoolCreationSignatureParams {
   amountMinIncr1?: string
   amountMin1?: string
   amountMax1?: string
+  amountStart1?: string
+  amountEnd1?: string
   times?: number
+  fragments?: string
   is721?: boolean
   maxPlayer?: number
   totalShare?: string | number
@@ -296,6 +302,36 @@ export interface DutchAuctionPoolProp extends FixedSwapPool {
     currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
     currencyMyReleased?: CurrencyAmount | undefined //current my Released token
     currencyUnfilledAmount1?: CurrencyAmount | undefined // current unfill amount1
+  }
+  releaseType?: IReleaseType | undefined
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
+
+export interface Erc20EnglishAuctionPoolProp extends FixedSwapPool {
+  currencyAmountTotal0: CurrencyAmount
+  currencySwappedAmount0: CurrencyAmount | undefined
+  currencySwappedAmount1: CurrencyAmount | undefined
+  currencyCurrentPrice: CurrencyAmount | undefined
+  currencyMaxAmount1PerWallet: CurrencyAmount | undefined
+  currencyAmountStartPrice: CurrencyAmount | undefined
+  currencyAmountEndPrice: CurrencyAmount | undefined
+  fragments: number | undefined
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
+    currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
   }
   releaseType?: IReleaseType | undefined
   releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]

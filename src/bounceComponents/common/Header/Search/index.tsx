@@ -119,7 +119,6 @@ const Search: React.FC = () => {
           // if (newVal?.value?.userType === USER_TYPE.USER) {
           //   return navigate(`/profile/summary?id=${newVal?.value?.userId}`)
           // }
-
           // return navigate(`/company/summary?id=${newVal?.value?.userId}`)
           return navigate(`${routes.profile.summary}?id=${newVal?.values.value?.userId}`)
         }}

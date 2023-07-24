@@ -78,7 +78,11 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                   color: '#000'
                 }}
               >
-                {!isUserJoined ? 'Join The Pool' : 'You Joined'}
+                {isUserJoined
+                  ? 'You Joined'
+                  : poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled
+                  ? 'Pool is done'
+                  : 'Join The Pool'}
               </Typography>
               <StatusBox poolInfo={poolInfo} />
             </Box>
@@ -182,7 +186,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                           color: '#626262'
                         }}
                       >
-                        {(poolInfo.token1.symbol + '').toUpperCase()}
+                        {(poolInfo.token0.symbol + '').toUpperCase()}
                       </span>
                     </Box>
                   </>
@@ -230,6 +234,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             </Box>
             {isUserJoined && (
               <ClaimBlock
+                isErc20EnglishAuction={false}
                 style={{
                   padding: '0'
                 }}

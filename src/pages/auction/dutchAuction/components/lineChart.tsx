@@ -18,7 +18,7 @@ import PoolInfoItem from './poolInfoItem'
 import { RightText } from './creatorBlock/auctionInfo'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
-import { PoolStatus } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import ChartDialog from './userBlock/chartDialog'
 export interface PointerItem {
@@ -92,7 +92,7 @@ export const LineChartView = ({
   options
 }: {
   data: PointerItem[]
-  poolInfo: DutchAuctionPoolProp
+  poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp
   options?: DeepPartial<ChartOptions>
 }) => {
   const chartContainerRef = useRef<any>()
@@ -169,17 +169,20 @@ export const LineChartView = ({
       ...colorObj
     })
     newSeries.setData(data as LineData[])
-    // set current time data
-    const markers = [
-      {
-        time: new Date().valueOf() / 1000,
-        position: 'inBar',
-        color: '#959595',
-        shape: 'circle',
-        size: 0.7
-      }
-    ]
-    newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    const nowDate = new Date().valueOf()
+    if (nowDate / 1000 <= poolInfo.closeAt && nowDate / 1000 >= poolInfo.openAt) {
+      // set current time data
+      const markers = [
+        {
+          time: nowDate,
+          position: 'inBar',
+          color: '#959595',
+          shape: 'circle',
+          size: 0.7
+        }
+      ]
+      newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    }
     window.addEventListener('resize', handleResize)
     if (!tooltipInstance) {
       const TipsTool = new ToolTip({ dateStr: '' })
@@ -193,7 +196,7 @@ export const LineChartView = ({
       if (resultItem && resultItem?.time) {
         dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
-      const token0Price = currentValue + poolInfo.token1.symbol
+      const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + 110
       const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
       if (
@@ -213,7 +216,16 @@ export const LineChartView = ({
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [tooltipInstance, colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, options])
+  }, [
+    tooltipInstance,
+    colorObj,
+    data,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol,
+    options,
+    poolInfo.closeAt,
+    poolInfo.openAt
+  ])
   return <Box ref={chartContainerRef}></Box>
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
@@ -283,12 +295,12 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
         <RightText>
-          {`${poolInfo.highestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo.highestPrice?.toSignificant(18)} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
       <PoolInfoItem title={'Reserve price'}>
         <RightText>
-          {`${poolInfo.lowestPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
+          {`${poolInfo.lowestPrice?.toSignificant(18)} ${(poolInfo.token1.symbol + '').toUpperCase()}`}
         </RightText>
       </PoolInfoItem>
       <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status}></PoolProgress>

@@ -1,8 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Box, Checkbox, FormControlLabel, FormGroup, Typography, styled } from '@mui/material'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-import { StatusBox } from '../right'
-import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import { ComBtn } from '../bidBlock'
 import { CurrencyAmount } from 'constants/token'
 import { BigNumber } from 'bignumber.js'
@@ -11,6 +9,7 @@ import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog }
 import usePlaceBidDutch from 'bounceHooks/auction/usePlaceBidDutch'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
+import PoolSaleInfo from '../poolSaleInfo'
 
 const NewFormControlLabel = styled(FormControlLabel)(() => ({
   fontFamily: `'Inter'`,
@@ -25,7 +24,6 @@ interface CheckProps {
 }
 
 const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
-  const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const [confirmationState, setConfirmationState] = useState({
     notice1: false,
     notice2: false,
@@ -51,6 +49,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         BigNumber(currentPriceAndAmount1.amount1).toString()
       )
     : 0
+  console.log('amount1CurrencyAmount>>>', currentPriceAndAmount1.amount1)
   const bidDisabled = useMemo(() => {
     return !Object.values(confirmationState).every(item => item === true)
   }, [confirmationState])
@@ -130,30 +129,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
   ])
   return (
     <Box>
-      <Box
-        sx={{
-          background: '#E1F25C',
-          border: '1px solid rgba(18, 18, 18, 0.06)',
-          borderRadius: '20px',
-          padding: '24px',
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
-        <Typography
-          sx={{
-            fontFamily: `'Public Sans'`,
-            fontWeight: 600,
-            fontSize: 20,
-            color: '#000'
-          }}
-        >
-          {!isUserJoined ? 'Join The Pool' : 'You Joined'}
-        </Typography>
-        <StatusBox poolInfo={poolInfo} />
-      </Box>
+      <PoolSaleInfo poolInfo={poolInfo} />
       <Box
         sx={{
           padding: '0 24px '

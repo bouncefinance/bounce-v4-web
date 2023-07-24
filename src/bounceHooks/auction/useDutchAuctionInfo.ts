@@ -7,15 +7,13 @@ import { useActiveWeb3React } from 'hooks'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useIsUserInAllWhitelist } from './useIsUserInWhitelist'
-import { useQueryParams } from 'hooks/useQueryParams'
 import JSBI from 'jsbi'
 import BigNumber from 'bignumber.js'
 export interface AmountAndCurrentPriceParam {
   amount1: number | string
 }
 export function useDutchAuctionInfo() {
-  const { sysId } = useQueryParams()
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION, Number(sysId))
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.DUTCH_AUCTION)
   const { account } = useActiveWeb3React()
   const dutchAuctionContract = useDutchAuctionContract(poolInfo?.contract || '', poolInfo?.ethChainId)
 
@@ -46,7 +44,6 @@ export function useDutchAuctionInfo() {
     poolInfo?.ethChainId
   ).result
   const lowestBidPrice = useMemo(() => lowestBidPriceRes?.[0].toString(), [lowestBidPriceRes])
-
   const maxAmount0PerWalletRes = useSingleCallResult(
     dutchAuctionContract,
     'maxAmount0PerWallet',
@@ -206,12 +203,19 @@ export function useDutchAuctionInfo() {
     const t0 = new Currency(poolInfo.ethChainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
     const _t1 = poolInfo.token1
     const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
+    const onceAmount0 = JSBI.BigInt(Number(`1e${t0.decimals}`))
+
     const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(
       t0,
       myAmountSwapped0Data || poolInfo.participant.swappedAmount0 || '0'
     )
     const currencySwappedAmount1 = CurrencyAmount.fromRawAmount(t1, myAmountSwapped1Data || '0')
-    const currencyLowestBidPrice = lowestBidPrice ? CurrencyAmount.ether(lowestBidPrice) : undefined
+    const currencyLowestBidPrice = lowestBidPrice
+      ? CurrencyAmount.fromRawAmount(
+          t1,
+          JSBI.divide(JSBI.multiply(onceAmount0, JSBI.BigInt(lowestBidPrice)), JSBI.BigInt(Number('1e18')))
+        )
+      : undefined
     const unfilledAmount1 = BigNumber(currencySwappedAmount1.toExact()).minus(
       BigNumber(currencySwappedAmount0.toExact()).times(currencyLowestBidPrice?.toExact() || '0')
     )
@@ -245,7 +249,12 @@ export function useDutchAuctionInfo() {
           )
         : undefined,
       times: poolsData.times,
-      currencyCurrentPrice: currentPrice ? CurrencyAmount.ether(currentPrice) : undefined,
+      currencyCurrentPrice: currentPrice
+        ? CurrencyAmount.fromRawAmount(
+            t1,
+            JSBI.divide(JSBI.multiply(onceAmount0, JSBI.BigInt(currentPrice)), JSBI.BigInt(Number('1e18')))
+          )
+        : undefined,
       currencyLowestBidPrice,
       currencyMaxAmount0PerWallet: maxAmount0PerWallet
         ? CurrencyAmount.fromRawAmount(t0, maxAmount0PerWallet)
@@ -295,7 +304,6 @@ export function useDutchAuctionInfo() {
     releaseType,
     whitelistData
   ])
-
   return {
     poolInfo: poolInfoRet,
     loading,
@@ -326,11 +334,17 @@ export function useDutchCurrentPriceAndAmount1(
     const _t1 = poolInfo?.token1
     const t1 = new Currency(poolInfo?.ethChainId, _t1?.address, _t1?.decimals, _t1?.symbol, _t1?.name, _t1?.smallUrl)
     const amount1 = CurrencyAmount.fromRawAmount(t1, amount1AndCurrentPriceRes?.[0].toString() || 0).toExact()
+    const maxAmount1 = new BigNumber(poolInfo.highestPrice?.toExact() || '0').times(amount0)
     if (poolInfo.status === PoolStatus.Upcoming) {
       return {
         amount1: BigNumber(poolInfo?.highestPrice?.toExact() || 0)
           .times(amount0)
           .toString()
+      }
+    }
+    if (new BigNumber(amount1).isGreaterThan(maxAmount1)) {
+      return {
+        amount1: maxAmount1.toString()
       }
     }
     return {

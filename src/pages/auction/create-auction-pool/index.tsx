@@ -39,7 +39,7 @@ const initialValues = {
 const CreateAuctionPoolIntroPage = () => {
   const navigate = useNavigate()
   const { redirect } = useQueryParams()
-  const { account, active, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const { userId, userInfo } = useUserInfo()
   const showLoginModal = useShowLoginModal()
@@ -118,7 +118,7 @@ const CreateAuctionPoolIntroPage = () => {
               <Stack component={Form} spacing={20}>
                 <Typography variant="h3">Select Creation Type</Typography>
 
-                <FormItem error={!active}>
+                <FormItem error={!account}>
                   <Select<ChainId>
                     value={chainId}
                     displayEmpty
@@ -250,8 +250,7 @@ const CreateAuctionPoolIntroPage = () => {
                     <Button variant="contained" sx={{ width: 140 }} onClick={showLoginModal}>
                       Login
                     </Button>
-                  ) : !userInfo?.email ? (
-                    //  || !userInfo?.twitterName
+                  ) : !userInfo?.email || !userInfo?.twitterName ? (
                     <Button
                       variant="contained"
                       sx={{ width: 300 }}
@@ -259,8 +258,7 @@ const CreateAuctionPoolIntroPage = () => {
                         navigate(routes.account.myAccount)
                       }}
                     >
-                      You need to bind your email
-                      {/* and twitter first */}
+                      You need to bind your email and twitter first
                     </Button>
                   ) : (
                     <Button

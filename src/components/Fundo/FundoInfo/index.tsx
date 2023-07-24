@@ -4,6 +4,7 @@ import Icon2 from 'components/Fundo/assets/img/icon2.png'
 import Icon3 from 'components/Fundo/assets/img/icon3.png'
 import Icon4 from 'components/Fundo/assets/img/icon4.png'
 import Icon5 from 'components/Fundo/assets/img/icon5.png'
+import Icon8 from 'components/Fundo/assets/img/icon8.png'
 import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
 export default function FundoInfo({ animationRatio }: { animationRatio?: string }) {
@@ -30,7 +31,12 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
       img: Icon2
     },
     {
-      label: 'Dimension​',
+      label: 'Pendant size',
+      value: '4.1 cm',
+      img: Icon8
+    },
+    {
+      label: 'Necklace length',
       value: '50 cm',
       img: Icon4
     }
@@ -38,9 +44,9 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
   const transformStr = useMemo(() => {
     let result = 'translate3D(0, 0, 0)'
     if (Number(animationRatio) > 0.2 && Number(animationRatio) < 0.5) {
-      result = `translate3D(0 , -${(Number(animationRatio) - 0.2) * 406}px, 0)`
+      result = `translate3D(0 , -${(Number(animationRatio) - 0.2) * 480}px, 0)`
     } else if (Number(animationRatio) >= 0.5) {
-      result = `translate3D(0 , -110px, 0)`
+      result = `translate3D(0 , -164px, 0)`
     }
     return result
   }, [animationRatio])

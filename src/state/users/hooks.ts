@@ -14,7 +14,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
-import { useSignLoginModalToggle, useWalletModalToggle } from 'state/application/hooks'
+import { useSignLoginModalControl, useWalletModalToggle } from 'state/application/hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
 
@@ -345,10 +345,10 @@ export function useRefreshUserInfoCallback() {
 
 export function useShowLoginModal() {
   const walletModalToggle = useWalletModalToggle()
-  const signLoginModalToggle = useSignLoginModalToggle()
+  const { open } = useSignLoginModalControl()
   const { account } = useActiveWeb3React()
 
-  return !account ? walletModalToggle : signLoginModalToggle
+  return !account ? walletModalToggle : open
 }
 
 export function useUpdateUserLoginInfoWithWindowVisible() {
@@ -359,7 +359,6 @@ export function useUpdateUserLoginInfoWithWindowVisible() {
     const localUserToken = getLocalUserToken()
 
     if (windowVisible) {
-      console.log('🚀 ~ file: hooks.ts:360 ~ useEffect ~ localUserToken:', localUserToken)
       dispatch({
         type: 'users/saveLoginInfo',
         payload: {

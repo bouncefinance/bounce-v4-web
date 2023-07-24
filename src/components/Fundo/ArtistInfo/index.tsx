@@ -3,7 +3,6 @@ import { useIsSMDown } from 'themes/useTheme'
 
 export default function FundoInfo() {
   const isSm = useIsSMDown()
-  1
   return (
     <Box
       sx={{

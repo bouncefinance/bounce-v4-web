@@ -1,6 +1,5 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
-import { OKXWalletConnector, injected, walletconnect, walletlink } from '../connectors'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
 
@@ -16,7 +15,7 @@ export const autoConnectInjectedEveryone = false
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export interface WalletInfo {
-  connector?: AbstractConnector
+  connector?: AbstractConnector | any
   name: string
   iconName: string
   description: string
@@ -28,117 +27,117 @@ export interface WalletInfo {
   disabled?: true
 }
 
-export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
-  INJECTED: {
-    connector: injected,
-    name: 'Injected',
-    iconName: 'arrow-right.svg',
-    description: 'Injected web3 provider.',
-    href: null,
-    color: '#010101',
-    primary: true
-  },
-  METAMASK: {
-    connector: injected,
-    name: 'MetaMask',
-    iconName: 'metamask.png',
-    description: 'Easy-to-use browser extension.',
-    href: null,
-    color: '#E8831D'
-  },
-  // OKEX: {
-  //   connector: injected,
-  //   name: 'OKX',
-  //   iconName: 'okxIcon.png',
-  //   description: 'Easy-to-use browser extension.',
-  //   href: null,
-  //   color: '#E8831D',
-  //   mobile: true,
-  //   mobileOnly: true
-  // },
-  OKEX: {
-    connector: OKXWalletConnector,
-    name: 'OKX Wallet',
-    iconName: 'okxIcon.png',
-    description: 'Easy-to-use browser extension.',
-    href: '',
-    color: '#E8831D',
-    mobile: true
-  },
-  WALLET_CONNECT: {
-    connector: walletconnect,
-    name: 'WalletConnect',
-    iconName: 'walletConnectIcon.svg',
-    description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
-    href: null,
-    color: '#4196FC',
-    mobile: true
-  },
-  WALLET_LINK: {
-    connector: walletlink,
-    name: 'Coinbase',
-    iconName: 'coinbaseWalletIcon.svg',
-    description: 'Use Coinbase Wallet app on mobile device',
-    href: null,
-    color: '#315CF5'
-  },
-  BINANCE: {
-    connector: undefined,
-    name: 'Binance Wallet',
-    iconName: 'BinanceWalletIcon.svg',
-    description: '',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  },
-  TRUST_WALLET: {
-    connector: undefined,
-    name: 'Trust wallet',
-    iconName: 'trustWalletIcon.svg',
-    description: '',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  },
-  MATH_WALLET: {
-    connector: undefined,
-    name: 'Math wallet',
-    iconName: 'mathWalletIcon.svg',
-    description: '',
-    href: null,
-    disabled: true,
-    color: '#315CF5'
-  }
-  // COINBASE_LINK: {
-  //   name: 'Open in Coinbase Wallet',
-  //   iconName: 'coinbaseWalletIcon.svg',
-  //   description: 'Open in Coinbase Wallet app.',
-  //   href: 'https://go.cb-w.com/mtUDhEZPy1',
-  //   color: '#315CF5',
-  //   mobile: true,
-  //   mobileOnly: true
-  // },
-  // FORTMATIC: {
-  //   connector: fortmatic,
-  //   name: 'Fortmatic',
-  //   iconName: 'fortmaticIcon.png',
-  //   description: 'Login using Fortmatic hosted wallet',
-  //   href: null,
-  //   color: '#6748FF',
-  //   mobile: true
-  // },
-  // Portis: {
-  //   connector: portis,
-  //   name: 'Portis',
-  //   iconName: 'portisIcon.png',
-  //   description: 'Login using Portis hosted wallet',
-  //   href: null,
-  //   color: '#4A6C9B',
-  //   mobile: true
-  // }
-}
+// export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
+//   INJECTED: {
+//     connector: connector_metaMask,
+//     name: 'Injected',
+//     iconName: 'arrow-right.svg',
+//     description: 'Injected web3 provider.',
+//     href: null,
+//     color: '#010101',
+//     primary: true
+//   },
+//   METAMASK: {
+//     connector: connector_metaMask,
+//     name: 'MetaMask',
+//     iconName: 'metamask.png',
+//     description: 'Easy-to-use browser extension.',
+//     href: null,
+//     color: '#E8831D'
+//   },
+//   // OKEX: {
+//   //   connector: injected,
+//   //   name: 'OKX',
+//   //   iconName: 'okxIcon.png',
+//   //   description: 'Easy-to-use browser extension.',
+//   //   href: null,
+//   //   color: '#E8831D',
+//   //   mobile: true,
+//   //   mobileOnly: true
+//   // },
+//   OKEX: {
+//     connector: connector_okxWallet,
+//     name: 'OKX Wallet',
+//     iconName: 'okxIcon.png',
+//     description: 'Easy-to-use browser extension.',
+//     href: null,
+//     color: '#E8831D'
+//   },
+//   WALLET_CONNECT: {
+//     connector: connector_walletConnectV2,
+//     name: 'WalletConnectV2',
+//     iconName: 'walletConnectIcon.svg',
+//     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+//     href: null,
+//     color: '#4196FC',
+//     mobile: true
+//   },
+//   WALLET_LINK: {
+//     connector: undefined,
+//     name: 'Coinbase',
+//     iconName: 'coinbaseWalletIcon.svg',
+//     description: 'Use Coinbase Wallet app on mobile device',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   },
+//   BINANCE: {
+//     connector: undefined,
+//     name: 'Binance Wallet',
+//     iconName: 'BinanceWalletIcon.svg',
+//     description: '',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   },
+//   TRUST_WALLET: {
+//     connector: undefined,
+//     name: 'Trust wallet',
+//     iconName: 'trustWalletIcon.svg',
+//     description: '',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   },
+//   MATH_WALLET: {
+//     connector: undefined,
+//     name: 'Math wallet',
+//     iconName: 'mathWalletIcon.svg',
+//     description: '',
+//     href: null,
+//     disabled: true,
+//     color: '#315CF5'
+//   }
+//   // COINBASE_LINK: {
+//   //   name: 'Open in Coinbase Wallet',
+//   //   iconName: 'coinbaseWalletIcon.svg',
+//   //   description: 'Open in Coinbase Wallet app.',
+//   //   href: 'https://go.cb-w.com/mtUDhEZPy1',
+//   //   color: '#315CF5',
+//   //   mobile: true,
+//   //   mobileOnly: true
+//   // },
+//   // FORTMATIC: {
+//   //   connector: fortmatic,
+//   //   name: 'Fortmatic',
+//   //   iconName: 'fortmaticIcon.png',
+//   //   description: 'Login using Fortmatic hosted wallet',
+//   //   href: null,
+//   //   color: '#6748FF',
+//   //   mobile: true
+//   // },
+//   // Portis: {
+//   //   connector: portis,
+//   //   name: 'Portis',
+//   //   iconName: 'portisIcon.png',
+//   //   description: 'Login using Portis hosted wallet',
+//   //   href: null,
+//   //   color: '#4A6C9B',
+//   //   mobile: true
+//   // }
+// }
 
-export const NetworkContextName = 'NETWORK'
+// export const NetworkContextName = 'NETWORK'
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 50
@@ -172,6 +171,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.GNOSIS]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.POLYGON]: '0x5b5E07c8c05489CD0D2227AfA816478cD039c624',
   [ChainId.FANTOM]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
+  [ChainId.FANTOM_TESTNET]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
+  [ChainId.ZETA_CHAIN_TESTNET]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
   // [ChainId.ZKSYNC_ERA]: '0x88313626Fb4EA033af12308feCd8afB1eBA853cE',
   // [ChainId.ZKSYNC_ERA]: '0xbE5661cA6B60335c2c24536339A2C02f354B2E21',
   [ChainId.ZKSYNC_ERA]: '0x9B8B850d00c24bC2684530388F8A02C1Cf9d023b',
@@ -191,6 +192,7 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
   [ChainId.PALM]: '',
+  [ChainId.LINEA]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
   [ChainId.LINEA_GORLI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1'
 }
 
@@ -206,8 +208,10 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '',
   [ChainId.FANTOM]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: '',
+  [ChainId.ROLLUX]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
   // [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
   [ChainId.ZKSYNC_ERA]: '0x51552f0b8E57A1b2C749845d9aFb906FA4f5317A',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
@@ -226,6 +230,7 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
+  [ChainId.LINEA]: '0xFCEc495B3FbB41fC8034E4d2Fd85289F549922b1',
   [ChainId.LINEA_GORLI]: ''
 }
 // REACT_APP_RANDOM_SELECTION_ADDRESS
@@ -241,6 +246,8 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.GNOSIS]: '',
   [ChainId.POLYGON]: '0xAd161CDAFD56450BC8624F74163A47aF58BC2C82',
   [ChainId.FANTOM]: '0x87d811661BB10Af6D236b5458Eeb2f4614723FB8',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
   [ChainId.OMNI_TESTNET]: '',
   [ChainId.ROLLUX]: '',
   [ChainId.ZKSYNC_ERA]: '',
@@ -260,7 +267,45 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
   [ChainId.LINEA_GORLI]: ''
+}
+
+export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0x0B0A73Dae5c6b5c3B5C2BAC0d9FFef65E07d3fD8',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '0x27BeA5bDe5F03B62b51C81BA857D4a7E7176D89E',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '0x738de648E84b5d990DAA7e6598546f7a4eAC1BB4',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.FANTOM]: '0xD4D0c9fCd48FBD22452cB6528bE4541249139c0B',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '0x4e512aeDBaf09A5929C62e25d8aB931b2C4E7b50',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '0xE8e4017952935F550dad7e6D42362715A17C0846',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0x50047539704792618D752D54cbB6A4D2c07cCc8B',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.LINEA]: ''
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -276,7 +321,9 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.POLYGON]: '0xE11ADD6956077174C008F842b82135b50E377128',
   [ChainId.OMNI_TESTNET]: '',
   [ChainId.FANTOM]: '',
-  [ChainId.ROLLUX]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.ROLLUX]: '0x01E36E11721b259fb3afa13A238c56Bfd6F2Ef67',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
@@ -294,21 +341,24 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
+  [ChainId.LINEA]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
   [ChainId.LINEA_GORLI]: ''
 }
 
-export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+export const DUTCH_AUCTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xDDC380852a409592630Aa832C45D031051140B11',
   [ChainId.GÖRLI]: '',
-  [ChainId.OPTIMISM]: '',
+  [ChainId.OPTIMISM]: '0xFCEc495B3FbB41fC8034E4d2Fd85289F549922b1',
   [ChainId.CRONOS]: '',
-  [ChainId.BSC]: '',
+  [ChainId.BSC]: '0xEC29EEba5E5e356443261a80697Ee6afBc67eAb2',
   [ChainId.OKEX]: '',
   [ChainId.BSCTEST]: '',
   [ChainId.KLAYTN]: '',
   [ChainId.GNOSIS]: '',
-  [ChainId.POLYGON]: '',
-  [ChainId.FANTOM]: '',
+  [ChainId.POLYGON]: '0x42bC810b573239736D04ba2a2cEb69B186ae762C',
+  [ChainId.FANTOM]: '0x4B105D426aE2dD0F5bBAF58e4f4aD7464A55a376',
+  [ChainId.FANTOM_TESTNET]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
   [ChainId.ZKSYNC_ERA]: '',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
@@ -318,7 +368,7 @@ export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: strin
   [ChainId.DOGECHAIN]: '',
   [ChainId.KAVA]: '',
   [ChainId.FUSION]: '',
-  [ChainId.ARBITRUM]: '',
+  [ChainId.ARBITRUM]: '0x167544766d084a048d109ad0e1d95b19198c5af1',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.SEPOLIA]: '0x69bFf5E9F1230F4B93cA1C7db31Ff63B9318aAf8',
@@ -327,6 +377,7 @@ export const DUTCH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: strin
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA_GORLI]: '',
+  [ChainId.LINEA]: '0x194C02845d77ffCB8580D474Ca99013073C1eAb1',
   [ChainId.OMNI_TESTNET]: '',
   [ChainId.ROLLUX]: ''
 }

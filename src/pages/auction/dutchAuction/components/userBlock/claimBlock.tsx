@@ -3,7 +3,7 @@ import { useMemo, useCallback } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { LoadingButton } from '@mui/lab'
-import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp, DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { ActionStep } from './right'
 import { useActiveWeb3React } from 'hooks'
 import useUserClaim from 'bounceHooks/auction/useUserClaimDutch'
@@ -14,6 +14,7 @@ import { useCountDown } from 'ahooks'
 import { TipsBox } from './right'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import BigNumber from 'bignumber.js'
+import { useErc20EnglishUserClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 
 export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -33,12 +34,14 @@ enum ClaimStatus {
   'Claimed' = 2
 }
 const ClaimBlock = ({
+  isErc20EnglishAuction = false,
   poolInfo,
   handleSetActionStep,
   style,
   notTimeStyle
 }: {
-  poolInfo: DutchAuctionPoolProp
+  isErc20EnglishAuction: boolean
+  poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp
   handleSetActionStep?: (actionStep: ActionStep) => void
   style?: React.CSSProperties
   notTimeStyle?: React.CSSProperties
@@ -48,12 +51,15 @@ const ClaimBlock = ({
     targetDate: claimAt * 1000
   })
   const { account, chainId } = useActiveWeb3React()
-  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const { run: claimDutch, submitted: claimBidDutchSubmitted } = useUserClaim(poolInfo as DutchAuctionPoolProp)
+  const { run: claimEnglish, submitted: claimBidEnglishSubmitted } = useErc20EnglishUserClaim(
+    poolInfo as Erc20EnglishAuctionPoolProp
+  )
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
     try {
-      const { transactionReceipt } = await claim()
+      const { transactionReceipt } = isErc20EnglishAuction ? await claimEnglish() : await claimDutch()
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -70,7 +76,7 @@ const ClaimBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed`
+            content: 'You have successfully claimed'
           })
           handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
         })
@@ -90,7 +96,7 @@ const ClaimBlock = ({
       })
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
     }
-  }, [claim, handleSetActionStep])
+  }, [claimDutch, claimEnglish, handleSetActionStep, isErc20EnglishAuction])
   //   const isNotTimeToClaim = useMemo(() => {
   //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   //   }, [poolInfo?.claimAt])
@@ -171,7 +177,11 @@ const ClaimBlock = ({
         ...style
       }}
     >
-      <ComBtn fullWidth onClick={() => toClaim()} loading={claimBidSubmitted.submitted}>
+      <ComBtn
+        fullWidth
+        onClick={() => toClaim()}
+        loading={isErc20EnglishAuction ? claimBidEnglishSubmitted.submitted : claimBidDutchSubmitted.submitted}
+      >
         <span>
           {Number(poolInfo.participant.currencyCurReleasableAmount?.toExact()) > 0
             ? 'Claim token and extra payment'

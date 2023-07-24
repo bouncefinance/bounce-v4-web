@@ -81,7 +81,7 @@ const ChartDialog = ({
               fontWeight: 600
             }}
           >
-            {poolInfo.highestPrice?.toExact() + ' ' + poolInfo.token1.symbol.toUpperCase()}
+            {poolInfo.highestPrice?.toSignificant(18) + ' ' + poolInfo.token1.symbol.toUpperCase()}
           </Typography>
           <Typography
             sx={{
