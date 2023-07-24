@@ -16,7 +16,8 @@ import {
   AuctionPool,
   IReleaseData,
   IReleaseType,
-  ParticipantStatus
+  ParticipantStatus,
+  PriceSegmentType
 } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
 import JSBI from 'jsbi'
@@ -119,158 +120,167 @@ export function useCreateDutchAuctionPool() {
   const addTransaction = useTransactionAdder()
   const values = useValuesState()
 
-  return useCallback(async (): Promise<{
-    hash: string
-    sysId: number
-    transactionReceipt: Promise<TransactionReceipt>
-    getPoolId: (logs: Log[]) => string | undefined
-  }> => {
-    const params: Params = {
-      whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-      poolSize: values.poolSize,
-      swapRatio: values.swapRatio,
-      startPrice: values.startPrice || '',
-      reservePrice: values?.reservePrice || '',
-      times: values?.segmentAmount || '',
-      allocationPerWallet:
-        values.allocationStatus === AllocationStatus.Limited
-          ? new BigNumber(values.allocationPerWallet).toString()
-          : NO_LIMIT_ALLOCATION,
-      startTime: values.startTime?.unix() || 0,
-      endTime: values.endTime?.unix() || 0,
-      delayUnlockingTime:
-        IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
-          ? values.releaseDataArr?.[0].startAt?.unix() || 0
-          : IReleaseType.Instant === values.releaseType
-          ? 0
-          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
-          ? values.shouldDelayUnlocking
-            ? values.delayUnlockingTime?.unix() || 0
-            : values.endTime?.unix() || 0
-          : values.endTime?.unix() || 0,
-      poolName: values.poolName.slice(0, 50),
-      tokenFromAddress: values.tokenFrom.address,
-      tokenFormDecimal: values.tokenFrom.decimals,
-      tokenToAddress: values.tokenTo.address,
-      tokenToDecimal: values.tokenTo.decimals,
-      releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
-      releaseData: makeValuesReleaseData(values)
-    }
-
-    if (!currencyFrom || !currencyTo) {
-      return Promise.reject('currencyFrom or currencyTo error')
-    }
-    const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
-    // const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
-    const amountMax = CurrencyAmount.fromAmount(currencyTo, params.startPrice)?.multiply(amountTotal0 || '0')
-    const amountMin = CurrencyAmount.fromAmount(currencyTo, params.reservePrice)?.multiply(amountTotal0 || '0')
-
-    if (!amountTotal0) {
-      return Promise.reject('amountTotal0 error')
-    }
-    if (!chainConfigInBackend?.id) {
-      return Promise.reject(new Error('This chain is not supported for the time being'))
-    }
-    if (!account) {
-      return Promise.reject('no account')
-    }
-    if (!dutchAuctionContract) {
-      return Promise.reject('no contract')
-    }
-
-    let merkleroot = ''
-
-    if (params.whitelist.length > 0) {
-      const whitelistParams: GetWhitelistMerkleTreeRootParams = {
-        addresses: params.whitelist,
-        category: PoolType.DUTCH_AUCTION,
-        chainId: chainConfigInBackend.id
+  return useCallback(
+    async (
+      times: string
+    ): Promise<{
+      hash: string
+      sysId: number
+      transactionReceipt: Promise<TransactionReceipt>
+      getPoolId: (logs: Log[]) => string | undefined
+    }> => {
+      const params: Params = {
+        whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
+        poolSize: values.poolSize,
+        swapRatio: values.swapRatio,
+        startPrice: values.startPrice || '',
+        reservePrice: values?.reservePrice || '',
+        times:
+          values.priceSegmentType === PriceSegmentType.Staged && values.segmentAmount
+            ? values.segmentAmount
+            : times || '',
+        allocationPerWallet:
+          values.allocationStatus === AllocationStatus.Limited
+            ? new BigNumber(values.allocationPerWallet).toString()
+            : NO_LIMIT_ALLOCATION,
+        startTime: values.startTime?.unix() || 0,
+        endTime: values.endTime?.unix() || 0,
+        delayUnlockingTime:
+          IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
+            ? values.releaseDataArr?.[0].startAt?.unix() || 0
+            : IReleaseType.Instant === values.releaseType
+            ? 0
+            : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
+            ? values.shouldDelayUnlocking
+              ? values.delayUnlockingTime?.unix() || 0
+              : values.endTime?.unix() || 0
+            : values.endTime?.unix() || 0,
+        poolName: values.poolName.slice(0, 50),
+        tokenFromAddress: values.tokenFrom.address,
+        tokenFormDecimal: values.tokenFrom.decimals,
+        tokenToAddress: values.tokenTo.address,
+        tokenToDecimal: values.tokenTo.decimals,
+        releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
+        releaseData: makeValuesReleaseData(values)
       }
-      const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
-      merkleroot = data.merkleroot
-    }
 
-    const signatureParams: GetPoolCreationSignatureParams = {
-      amountTotal0: amountTotal0.raw.toString(),
-      // amountTotal1: new BigNumber(amountTotal1.raw.toString()).times(params.swapRatio).toFixed(0, BigNumber.ROUND_DOWN),
-      category: PoolType.DUTCH_AUCTION,
-      chainId: chainConfigInBackend.id,
-      claimAt: params.delayUnlockingTime,
-      closeAt: params.endTime,
-      creator: account,
-      maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyFrom, params.allocationPerWallet)?.raw.toString() || '0',
-      merkleroot: merkleroot,
-      name: params.poolName,
-      openAt: params.startTime,
-      token0: params.tokenFromAddress,
-      token1: params.tokenToAddress,
-      releaseType: params.releaseType,
-      releaseData: params.releaseData,
-      amountMax1: JSBI.divide(
-        amountMax?.numerator || JSBI.BigInt('0'),
-        JSBI.BigInt(Number(`1e${currencyFrom.decimals}`))
-      ).toString(),
-      amountMin1: JSBI.divide(
-        amountMin?.numerator || JSBI.BigInt('0'),
-        JSBI.BigInt(Number(`1e${currencyFrom.decimals}`))
-      ).toString(),
-      times: Number(params.times)
-    }
+      if (!currencyFrom || !currencyTo) {
+        return Promise.reject('currencyFrom or currencyTo error')
+      }
+      const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
+      // const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
+      const amountMax = CurrencyAmount.fromAmount(currencyTo, params.startPrice)?.multiply(amountTotal0 || '0')
+      const amountMin = CurrencyAmount.fromAmount(currencyTo, params.reservePrice)?.multiply(amountTotal0 || '0')
 
-    const {
-      data: { id, expiredTime, signature }
-    } = await getPoolCreationSignature(signatureParams)
+      if (!amountTotal0) {
+        return Promise.reject('amountTotal0 error')
+      }
+      if (!chainConfigInBackend?.id) {
+        return Promise.reject(new Error('This chain is not supported for the time being'))
+      }
+      if (!account) {
+        return Promise.reject('no account')
+      }
+      if (!dutchAuctionContract) {
+        return Promise.reject('no contract')
+      }
 
-    const contractCallParams = {
-      name: signatureParams.name,
-      token0: signatureParams.token0,
-      token1: signatureParams.token1,
-      amountTotal0: signatureParams.amountTotal0,
-      // amountTotal1: signatureParams.amountTotal1,
-      amountMax1: signatureParams.amountMax1,
-      amountMin1: signatureParams.amountMin1,
-      times: signatureParams.times,
-      openAt: signatureParams.openAt,
-      closeAt: signatureParams.closeAt,
-      claimAt: signatureParams.claimAt,
-      maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
-      whitelistRoot: merkleroot || NULL_BYTES
-    }
+      let merkleroot = ''
 
-    const args = [
-      id,
-      contractCallParams,
-      params.releaseType,
-      params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
-      false,
-      expiredTime,
-      signature
-    ]
+      if (params.whitelist.length > 0) {
+        const whitelistParams: GetWhitelistMerkleTreeRootParams = {
+          addresses: params.whitelist,
+          category: PoolType.DUTCH_AUCTION,
+          chainId: chainConfigInBackend.id
+        }
+        const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
+        merkleroot = data.merkleroot
+      }
 
-    const estimatedGas = await dutchAuctionContract.estimateGas.createV2(...args).catch((error: Error) => {
-      console.debug('Failed to create dutchAuction', error)
-      throw error
-    })
-    return dutchAuctionContract
-      .createV2(...args, {
-        gasLimit: calculateGasMargin(estimatedGas)
+      const signatureParams: GetPoolCreationSignatureParams = {
+        amountTotal0: amountTotal0.raw.toString(),
+        // amountTotal1: new BigNumber(amountTotal1.raw.toString()).times(params.swapRatio).toFixed(0, BigNumber.ROUND_DOWN),
+        category: PoolType.DUTCH_AUCTION,
+        chainId: chainConfigInBackend.id,
+        claimAt: params.delayUnlockingTime,
+        closeAt: params.endTime,
+        creator: account,
+        maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyFrom, params.allocationPerWallet)?.raw.toString() || '0',
+        merkleroot: merkleroot,
+        name: params.poolName,
+        openAt: params.startTime,
+        token0: params.tokenFromAddress,
+        token1: params.tokenToAddress,
+        releaseType: params.releaseType,
+        releaseData: params.releaseData,
+        amountMax1: JSBI.divide(
+          amountMax?.numerator || JSBI.BigInt('0'),
+          JSBI.BigInt(Number(`1e${currencyFrom.decimals}`))
+        ).toString(),
+        amountMin1: JSBI.divide(
+          amountMin?.numerator || JSBI.BigInt('0'),
+          JSBI.BigInt(Number(`1e${currencyFrom.decimals}`))
+        ).toString(),
+        times: Number(params.times)
+      }
+
+      const {
+        data: { id, expiredTime, signature }
+      } = await getPoolCreationSignature(signatureParams)
+
+      const contractCallParams = {
+        name: signatureParams.name,
+        token0: signatureParams.token0,
+        token1: signatureParams.token1,
+        amountTotal0: signatureParams.amountTotal0,
+        // amountTotal1: signatureParams.amountTotal1,
+        amountMax1: signatureParams.amountMax1,
+        amountMin1: signatureParams.amountMin1,
+        times: signatureParams.times,
+        openAt: signatureParams.openAt,
+        closeAt: signatureParams.closeAt,
+        claimAt: signatureParams.claimAt,
+        maxAmount0PerWallet: signatureParams.maxAmount1PerWallet,
+        whitelistRoot: merkleroot || NULL_BYTES
+      }
+
+      const args = [
+        id,
+        contractCallParams,
+        params.releaseType,
+        params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
+        false,
+        expiredTime,
+        signature
+      ]
+      console.log('args', args)
+
+      const estimatedGas = await dutchAuctionContract.estimateGas.createV2(...args).catch((error: Error) => {
+        console.debug('Failed to create dutchAuction', error)
+        throw error
       })
-      .then((response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: 'Create dutch auction',
-          userSubmitted: {
-            account,
-            action: 'createDutchAuction'
+      return dutchAuctionContract
+        .createV2(...args, {
+          gasLimit: calculateGasMargin(estimatedGas)
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: 'Create dutch auction',
+            userSubmitted: {
+              account,
+              action: 'createDutchAuction'
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionReceipt: response.wait(1),
+            sysId: id,
+            getPoolId: (logs: Log[]) => getEventLog(dutchAuctionContract, logs, 'Created', 'index')
           }
         })
-        return {
-          hash: response.hash,
-          transactionReceipt: response.wait(1),
-          sysId: id,
-          getPoolId: (logs: Log[]) => getEventLog(dutchAuctionContract, logs, 'Created', 'index')
-        }
-      })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, dutchAuctionContract, values])
+    },
+    [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, dutchAuctionContract, values]
+  )
 }
 
 export function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {

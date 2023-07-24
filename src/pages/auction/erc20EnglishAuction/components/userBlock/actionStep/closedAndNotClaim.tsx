@@ -1,14 +1,12 @@
 import { Box, Typography, Grid } from '@mui/material'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { RightText } from '../../creatorBlock/auctionInfo'
 import UserBidHistory from '../bidHistory'
 import { useMemo } from 'react'
 import { ActionStep, StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
 import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlock'
-import BigNumber from 'bignumber.js'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
-import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
+import { formatNumberWithCommas } from 'utils'
 const ClosedAndNotClaimed = ({
   poolInfo,
   handleSetActionStep
@@ -188,7 +186,8 @@ const ClosedAndNotClaimed = ({
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount1?.toExact()}
+                  {poolInfo?.currencySwappedAmount1 &&
+                    formatNumberWithCommas(poolInfo?.currencySwappedAmount1?.toExact())}
                   <TokenImage
                     sx={{
                       margin: '0 4px'
@@ -213,53 +212,7 @@ const ClosedAndNotClaimed = ({
           </Grid>
         </Grid>
       </Box>
-      {/* Final Auction Results */}
-      <Box
-        sx={{
-          width: 'calc(100% - 48px)',
-          margin: '30px auto 12px',
-          padding: '16px',
-          border: '1px solid #E1F25C',
-          borderRadius: '8px'
-        }}
-      >
-        <Typography
-          sx={{
-            fontFamily: `'Public Sans'`,
-            color: '#fff',
-            fontSize: '14px',
-            fontWeight: 600
-          }}
-          mb={'12px'}
-        >
-          Final Auction Results
-        </Typography>
-        <PoolInfoItem title={'Average Price'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {poolInfo?.currencySwappedAmount1 &&
-            poolInfo?.currencySwappedAmount0 &&
-            !poolInfo?.currencySwappedAmount1.equalTo('0')
-              ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
-                  .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
-                  .toString()
-              : '0'}{' '}
-            {poolInfo.token1.symbol}
-          </RightText>
-        </PoolInfoItem>
-        <PoolInfoItem title={'Successful Funds Raised'}>
-          <RightText
-            style={{
-              color: '#E1F25C'
-            }}
-          >
-            {poolInfo.currencySwappedAmount1?.toExact() || '--'} {poolInfo.token1.symbol}
-          </RightText>
-        </PoolInfoItem>
-      </Box>
+      <Box sx={{ margin: '30px auto 12px' }}></Box>
       <ClaimBlock isErc20EnglishAuction poolInfo={poolInfo} handleSetActionStep={handleSetActionStep} />
       {/* bid history */}
       <UserBidHistory poolInfo={poolInfo} />

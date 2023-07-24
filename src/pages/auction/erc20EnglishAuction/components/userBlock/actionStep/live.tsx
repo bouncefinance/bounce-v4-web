@@ -207,7 +207,8 @@ const Live = ({
                     fontSize: '16px'
                   }}
                 >
-                  {poolInfo?.currencySwappedAmount1 && poolInfo?.currencySwappedAmount1?.toExact()}
+                  {poolInfo?.currencySwappedAmount1 &&
+                    formatNumberWithCommas(poolInfo?.currencySwappedAmount1?.toExact())}
                   <TokenImage
                     sx={{
                       margin: '0 4px'

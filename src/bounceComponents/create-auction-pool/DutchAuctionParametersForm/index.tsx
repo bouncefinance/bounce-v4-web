@@ -3,10 +3,8 @@ import { Field, Form, Formik } from 'formik'
 import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-
 import { show } from '@ebay/nice-modal-react'
-
-import { AllocationStatus } from '../types'
+import { AllocationStatus, PriceSegmentType } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
 import {
@@ -46,6 +44,7 @@ interface FormValues {
   reservePrice: string
   segments: string
   poolSize: string
+  priceSegmentType: PriceSegmentType
   allocationStatus: AllocationStatus
   allocationPerWallet: string
 }
@@ -53,7 +52,6 @@ interface FormValues {
 const DutchAuctionParametersForm = (): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-
   const { currencyFrom } = useAuctionERC20Currency()
   const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
   const isSm = useBreakpoint('sm')
@@ -91,12 +89,6 @@ const DutchAuctionParametersForm = (): JSX.Element => {
         }
         return true
       }),
-    segments: Yup.number()
-      .typeError('Please input valid number')
-      .required('Auction price segment is required')
-      .test('Ditgits_Validation', 'The decreasing time must be an integer greater than or equal to 2', value => {
-        return Number.isInteger(value) && Number(value) >= 2
-      }),
     poolSize: Yup.number()
       .positive('Amount must be positive')
       .typeError('Please input valid number')
@@ -116,6 +108,21 @@ const DutchAuctionParametersForm = (): JSX.Element => {
               )
             : false)
       ),
+    priceSegmentType: Yup.string().oneOf(Object.values(PriceSegmentType)),
+    segments: Yup.number().when('priceSegmentType', {
+      is: PriceSegmentType.Staged,
+      then: Yup.number()
+        .typeError('Please input valid number')
+        .positive('Segments must be positive')
+        .required('Segment is required')
+        .test(
+          'Ditgits_Validation',
+          'The decreasing time must be an integer greater than 0 and smaller than 100',
+          value => {
+            return Number.isInteger(value) && Number(value) >= 1 && Number(value) <= 100
+          }
+        )
+    }),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
     allocationPerWallet: Yup.number()
       .when('allocationStatus', {
@@ -160,6 +167,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
     reservePrice: valuesState.reservePrice || '',
     segments: valuesState.segmentAmount || '',
     poolSize: valuesState.poolSize || '',
+    priceSegmentType: valuesState.priceSegmentType || PriceSegmentType.BySecond,
     allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
     allocationPerWallet: valuesState.allocationPerWallet || ''
   }
@@ -209,6 +217,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
               segmentAmount: values.segments,
               poolSize: values.poolSize,
               allocationPerWallet: values.allocationPerWallet,
+              priceSegmentType: values.priceSegmentType,
               allocationStatus: values.allocationStatus
             }
           })
@@ -300,7 +309,6 @@ const DutchAuctionParametersForm = (): JSX.Element => {
 
                 <Stack direction="row" alignItems="center" spacing={15}>
                   <Typography>1 {values.tokenFromSymbol} =</Typography>
-
                   <FormItem name="reservePrice" placeholder="0.00" required sx={{ flex: 1 }}>
                     <NumberInput
                       value={values.reservePrice}
@@ -317,50 +325,44 @@ const DutchAuctionParametersForm = (): JSX.Element => {
                   </FormItem>
                 </Stack>
               </Box>
-
               {/* Auction Segment */}
               <Box>
-                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
-                  Auciton Price Segments
-                </Typography>
-
-                <Stack direction="row" alignItems="center" spacing={15}>
-                  <FormItem name="segments" placeholder="1" required sx={{ flex: 1 }}>
-                    <NumberInput
-                      value={values.segments}
-                      onUserInput={value => {
-                        setFieldValue('segments', value)
-                      }}
-                    />
-                  </FormItem>
+                <Stack direction="row" spacing={8}>
+                  <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
+                    Price Decreasing Settings
+                  </Typography>
+                  <Tooltip title="Price decreasing settings">
+                    <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                  </Tooltip>
                 </Stack>
+                <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="priceSegmentType">
+                  <FormControlLabel
+                    value={PriceSegmentType.BySecond}
+                    control={<Radio disableRipple />}
+                    label="By Second"
+                  />
+                  <FormControlLabel
+                    value={PriceSegmentType.ByMinute}
+                    control={<Radio disableRipple />}
+                    label="By Minute"
+                  />
+                  <FormControlLabel value={PriceSegmentType.Staged} control={<Radio disableRipple />} label="Staged" />
+                </Field>
+                {values.priceSegmentType === PriceSegmentType.Staged && (
+                  <Stack direction="row" alignItems="center" spacing={15}>
+                    <FormItem name="segments" placeholder="1" required sx={{ flex: 1 }}>
+                      <NumberInput
+                        placeholder="Input a total stage; Upper limit 100"
+                        value={values.segments}
+                        disabled={!!valuesState.endTime}
+                        onUserInput={value => {
+                          setFieldValue('segments', value)
+                        }}
+                      />
+                    </FormItem>
+                  </Stack>
+                )}
               </Box>
-
-              {/* Swap Ratio */}
-              {/* <Box>
-                <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
-                  Swap Ratio
-                </Typography>
-
-                <Stack direction="row" alignItems="center" spacing={15}>
-                  <Typography>1 {values.tokenFromSymbol} =</Typography>
-
-                  <FormItem name="swapRatio" placeholder="0.00" required sx={{ flex: 1 }}>
-                    <NumberInput
-                      value={values.swapRatio}
-                      onUserInput={value => {
-                        setFieldValue('swapRatio', value)
-                      }}
-                      endAdornment={
-                        <>
-                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
-                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
-                        </>
-                      }
-                    />
-                  </FormItem>
-                </Stack>
-              </Box> */}
 
               {/* Pool Size */}
               <Box>

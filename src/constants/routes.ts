@@ -22,7 +22,7 @@ export const routes = {
   loginBase: '/login_base',
   market: {
     index: '/market',
-    pools: '/market/pools',
+    // pools: '/market/pools',
     nftPools: '/market/nft-pools'
   },
   nftAuction: {

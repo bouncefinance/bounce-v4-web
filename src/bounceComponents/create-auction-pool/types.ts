@@ -53,6 +53,11 @@ export enum AllocationStatus {
   'NoLimits' = 'NO_LIMITS',
   'Limited' = 'LIMITED'
 }
+export enum PriceSegmentType {
+  'BySecond' = 'BY_SECOND',
+  'ByMinute' = 'BY_MINUTE',
+  'Staged' = 'STAGED'
+}
 export enum TokenType {
   ERC20 = 'ERC20',
   ERC1155 = 'ERC1155',
@@ -76,6 +81,7 @@ export interface AuctionPool {
   swapRatio: string
   poolSize: string
   allocationPerWallet: string
+  priceSegmentType: PriceSegmentType
   allocationStatus: AllocationStatus
   poolName: string
   startTime: Moment | null
