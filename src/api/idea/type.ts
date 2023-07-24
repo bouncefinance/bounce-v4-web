@@ -91,6 +91,6 @@ export interface IIdeasListData {
   summary: string
   title: string
   userType: USER_TYPE
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
   companyState?: number
 }

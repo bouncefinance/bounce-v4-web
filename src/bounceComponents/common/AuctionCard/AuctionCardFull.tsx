@@ -24,6 +24,8 @@ export default function AuctionCardFull({
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
   const navigate = useNavigate()
+  console.log(auctionPoolItem.creatorUserInfo)
+
   return (
     <Box
       component={'a'}
@@ -65,7 +67,7 @@ export default function AuctionCardFull({
                     .join(' ') || ''
                 : 'Individual account'
             }
-            isVerify={auctionPoolItem.creatorUserInfo?.isVerify || VerifyStatus.NoVerify}
+            ifKyc={auctionPoolItem.creatorUserInfo?.ifKyc || VerifyStatus.NoVerify}
           />
         }
         progress={{

@@ -124,7 +124,7 @@ export interface IProfileUserInfo {
   userType: number
   website: string
   years: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 export interface IUserBindAddressListData {
   address: string
@@ -200,7 +200,7 @@ export interface IRepliesItem {
   createdAt: number
   name: string
   userId: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface ICommentsItem {
@@ -214,7 +214,7 @@ export interface ICommentsItem {
   topicId: number
   topicType: TopicType
   userId: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface IAddCommentParams {

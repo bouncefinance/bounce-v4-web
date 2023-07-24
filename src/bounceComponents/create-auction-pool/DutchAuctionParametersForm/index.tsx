@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
 import { AllocationStatus, PriceSegmentType } from '../types'
+import BigNumber from 'bignumber.js'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
 import {
@@ -16,7 +17,6 @@ import {
 } from '../ValuesProvider'
 import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
-import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
 
 import FormItem from 'bounceComponents/common/FormItem'
@@ -24,12 +24,12 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
-import { CurrencyAmount } from 'constants/token'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 // import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { CurrencyAmount } from 'constants/token'
 
 interface FormValues {
   tokenFromAddress: string
