@@ -99,13 +99,15 @@ export const LineChartView = ({
 }) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
-  const segmentLeftAmount = useMemo(() => {
-    poolInfo?.fragments &&
+  const segmentLeftAmount = useMemo(
+    () =>
+      poolInfo?.fragments &&
       CurrencyAmount.fromRawAmount(
         poolInfo.currencyAmountTotal0.currency,
         new BigNumber(poolInfo.amountTotal0).div(poolInfo?.fragments).toFixed(0, BigNumber.ROUND_DOWN)
-      ).toExact()
-  }, [poolInfo.amountTotal0, poolInfo.currencyAmountTotal0.currency, poolInfo?.fragments])
+      ).toExact(),
+    [poolInfo.amountTotal0, poolInfo.currencyAmountTotal0.currency, poolInfo?.fragments]
+  )
 
   const colorObj = useMemo(() => {
     return poolInfo.status === PoolStatus.Upcoming
