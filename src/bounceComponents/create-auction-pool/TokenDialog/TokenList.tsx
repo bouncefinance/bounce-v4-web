@@ -11,9 +11,10 @@ import DangerousTokenDialog from '../DangerousTokenDialog'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { Token } from 'bounceComponents/fixed-swap/type'
+import BigNumber from 'bignumber.js'
 
 function ItemRender(
-  listChildComponentProps: ListChildComponentProps<Token[] | any[]>,
+  listChildComponentProps: ListChildComponentProps<(Token & { balance?: number })[]>,
   onOk: (tokne: Token) => void,
   onCancel: () => void
 ) {
@@ -64,7 +65,7 @@ function ItemRender(
             </Typography>
           }
         />
-        <Box>{data?.[index]?.balance}</Box>
+        <Box>{BigNumber(data?.[index]?.balance?.toFixed(4) || 0).toNumber()}</Box>
       </ListItemButton>
     </ListItem>
   )
