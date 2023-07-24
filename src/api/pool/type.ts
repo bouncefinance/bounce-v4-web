@@ -120,7 +120,7 @@ export interface CreatorUserInfo {
   publicRole?: string[]
   userId: number
   userType: number
-  isVerify?: VerifyStatus
+  ifKyc?: VerifyStatus
 }
 
 export interface LikeInfo {

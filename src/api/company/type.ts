@@ -75,7 +75,7 @@ export interface ICompanyTeamListItems {
   userAvatar: string
   userId: number
   userName: string
-  isVerify?: VerifyStatus
+  ifKyc?: VerifyStatus
 }
 
 export interface IGetCompanyInvestorsParams extends IPaginationParams {
@@ -89,7 +89,7 @@ export interface ICompanyInvestorsListItems {
   thirdpartId: number
   userId: number
   userInfo: IAvatarLinkType
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface ICompanyInvestmentsListItems {
@@ -99,7 +99,7 @@ export interface ICompanyInvestmentsListItems {
   investmentDate: number
   investmentType: number
   amount: string
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface IGetCompanyTokensParams {
@@ -148,7 +148,7 @@ export interface ICompanyOverviewInfo extends ILikeUnlikeRes {
   twitter: string
   userType: number
   website: string
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 export interface IGetCompanyMembersListParams extends IPaginationParams {
   companyId: number
@@ -170,7 +170,7 @@ export interface ICompanyMembersListData {
   userId: number
   userName: string
   bio?: string
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface ICompanyInvestorsListData {

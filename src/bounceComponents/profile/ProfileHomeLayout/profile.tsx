@@ -18,6 +18,7 @@ import { ReactComponent as VerifyIcon } from 'assets/imgs/user/profile-verify.sv
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getUserPoolCount } from 'api/user'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import { VerifyStatus } from 'api/profile/type'
 
 const ProfileTag = styled(SmallText)`
   display: flex;
@@ -123,8 +124,8 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
       </Stack>
       <Row mt={24} gap={4}>
         <ProfileTag>{personalInfo?.location}</ProfileTag>
-        {personalInfo?.isVerify && (
-          <ProfileTag display={'none !important'}>
+        {personalInfo?.ifKyc === VerifyStatus.Verified && (
+          <ProfileTag>
             KYC Verified
             <VerifyIcon />
           </ProfileTag>

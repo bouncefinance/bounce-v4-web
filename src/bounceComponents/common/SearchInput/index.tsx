@@ -125,7 +125,7 @@ const SearchInput: React.FC<ISearchProps> = ({
                 </picture>
               )}
               <div>{renderOption ? renderOption(option) : option.label}</div>
-              <VerifiedIcon isVerify={option?.value?.isVerify} />
+              <VerifiedIcon ifKyc={option?.value?.ifKyc} />
             </Stack>
           </MenuItem>
         )
