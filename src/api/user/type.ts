@@ -302,6 +302,10 @@ export interface GetUserNFTsParams {
   limit?: number
   offset?: number
 }
+
+export interface GetUserTokenListParams {
+  chainId: number
+}
 export interface UserUpdateServiceParams {
   category: number
   deliverTime: string

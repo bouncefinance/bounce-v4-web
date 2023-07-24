@@ -8,7 +8,7 @@ import {
 import { ChainId } from 'constants/chain'
 
 export interface Token {
-  chainId: ChainId
+  chainId: ChainId | number | undefined
   address: string
   decimals: number
   symbol?: string

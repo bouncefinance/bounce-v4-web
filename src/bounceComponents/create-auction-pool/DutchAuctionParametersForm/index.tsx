@@ -5,8 +5,6 @@ import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import BigNumber from 'bignumber.js'
 import { show } from '@ebay/nice-modal-react'
-import { AllocationStatus } from '../types'
-import { show } from '@ebay/nice-modal-react'
 import { AllocationStatus, PriceSegmentType } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
@@ -31,6 +29,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { CurrencyAmount } from 'constants/token'
 
 interface FormValues {
   tokenFromAddress: string

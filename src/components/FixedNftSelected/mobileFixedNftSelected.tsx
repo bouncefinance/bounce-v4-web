@@ -4,6 +4,7 @@ import { useDebounce } from 'ahooks'
 import { ReactComponent as BottomArrowIcon } from 'assets/imgs/common/bottomArrow.svg'
 import { ReactComponent as SearchSvg } from 'assets/imgs/common/search.svg'
 import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useActiveWeb3React } from 'hooks'
 import { initialValues, InitialValuesPros } from 'pages/nftAuction/components/listDialog'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -19,9 +20,10 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
   const [currOpen, setCurrOpen] = useState<IDrawerOpen>({ open: false, title: '' })
   const [chain] = useState<number>(3)
   const [searchVal, setSearchVal] = useState('')
+  const { account } = useActiveWeb3React()
   const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
   const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, debouncedSearchVal, false)
+  const { tokenList: tokenList } = useTokenList(chainId, account, debouncedSearchVal)
   const [filterValues, setFilterValues] = useState(initialValues)
   const [selectButton, setSelectButton] = useState('')
   const [selectMenuItem, setSelectMenuItem] = useState<any>(filterType)

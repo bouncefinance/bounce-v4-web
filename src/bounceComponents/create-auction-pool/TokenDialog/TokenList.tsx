@@ -13,7 +13,7 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { Token } from 'bounceComponents/fixed-swap/type'
 
 function ItemRender(
-  listChildComponentProps: ListChildComponentProps<Token[]>,
+  listChildComponentProps: ListChildComponentProps<Token[] | any[]>,
   onOk: (tokne: Token) => void,
   onCancel: () => void
 ) {
@@ -64,6 +64,7 @@ function ItemRender(
             </Typography>
           }
         />
+        <Box>{data?.[index]?.balance}</Box>
       </ListItemButton>
     </ListItem>
   )

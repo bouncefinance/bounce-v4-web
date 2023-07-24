@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { isAddress } from '@ethersproject/address'
-import { GOERLI_TOKEN_LIST, OMNI_TESTNET_TOKEN_LIST, SEPOLIA_TOKEN_LIST, TOKEN_LIST_API } from 'constants/auction'
+import { GOERLI_TOKEN_LIST, OMNI_TESTNET_TOKEN_LIST, SEPOLIA_TOKEN_LIST } from 'constants/auction'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 import { useTokenContract } from 'hooks/useContract'
 import { Currency } from 'constants/token'
 import localDefaultAllList from 'assets/tokenList/default.json'
+import { getUserTokenList } from 'api/user'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -18,22 +19,31 @@ const filterToken = (list: Token[], filterValue: string) => {
   )
 }
 
-const getGetApiTokenList = async (chainId: ChainId) => {
-  if (!TOKEN_LIST_API?.[chainId]) return []
-
-  const response = await fetch(TOKEN_LIST_API?.[chainId] || '')
-  const jsonResponse: { tokens: any[] } = await response?.json()
-  return jsonResponse.tokens.map(item => ({ ...item, chainId })) as Token[]
+const getGetApiTokenList = async (chainId: number | undefined, account: string | undefined) => {
+  if (!chainId || !account) return []
+  const params = {
+    chainId: chainId
+  }
+  const response = await getUserTokenList(params)
+  const jsonResponse = await response?.data?.[account.toLocaleLowerCase()]
+  return jsonResponse.map((item: any) => ({ ...item.token, chainId })) as Token[]
 }
 
-const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false) => {
-  const isChainHasTokenApi = typeof TOKEN_LIST_API[chainId] === 'string'
-
-  const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(() => getGetApiTokenList(chainId), {
-    cacheKey: `API_TOKEN_LIST_${chainId}`,
-    ready: !!chainId && isChainHasTokenApi,
-    refreshDeps: [chainId]
-  })
+const useTokenList = (
+  chainId: number | undefined,
+  account: string | undefined,
+  filterValue?: string,
+  enableEth = false
+) => {
+  // const isChainHasTokenApi = typeof TOKEN_LIST_API[chainId] === 'string'
+  const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(
+    () => getGetApiTokenList(chainId, account),
+    {
+      cacheKey: `API_TOKEN_LIST_${chainId}`,
+      ready: !!chainId,
+      refreshDeps: [chainId]
+    }
+  )
 
   const baseTokenList = useMemo(() => {
     if (chainId === ChainId.GÖRLI) {
@@ -43,7 +53,7 @@ const useTokenList = (chainId: ChainId, filterValue?: string, enableEth = false)
       return OMNI_TESTNET_TOKEN_LIST || []
     }
     if (chainId === ChainId.SEPOLIA) {
-      return SEPOLIA_TOKEN_LIST || []
+      return (SEPOLIA_TOKEN_LIST || apiTokenList) ?? []
     } else {
       const localDefaultList = localDefaultAllList.token.filter(i => i.chainId === chainId)
       return [...localDefaultList, ...(apiTokenList || [])]

@@ -3,9 +3,7 @@ import { Field, Form, Formik } from 'formik'
 import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-
 import { show } from '@ebay/nice-modal-react'
-
 import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
@@ -20,7 +18,6 @@ import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
-
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -51,7 +48,6 @@ interface FormValues {
 const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-
   const { currencyFrom } = useAuctionERC20Currency()
   const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
   const isSm = useBreakpoint('sm')
