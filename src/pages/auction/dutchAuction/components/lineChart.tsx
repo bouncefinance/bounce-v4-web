@@ -143,7 +143,7 @@ export const LineChartView = ({
       x: 90,
       y: 230
     }
-  }, [])
+  }, [viewType])
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
