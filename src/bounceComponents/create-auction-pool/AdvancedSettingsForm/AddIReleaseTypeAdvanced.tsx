@@ -225,7 +225,7 @@ export const AddIReleaseTypeAdvanced = ({
         const endTime = context.parent.endTime?.valueOf() || 0
         for (const item of context.parent.fragmentReleaseTimes) {
           if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
-            return context.createError({ message: 'Please select a time earlier than end time' })
+            return context.createError({ message: 'Please select a time later than end time' })
           }
         }
         return (
