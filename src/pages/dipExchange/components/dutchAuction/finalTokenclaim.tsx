@@ -91,7 +91,7 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             fontWeight: 500
           }}
         >
-          You did not stake any {poolInfo.token1.symbol.toUpperCase()} for this session.
+          you have not been involved in any purchases of {poolInfo.token0.symbol.toUpperCase()}
         </Typography>
       </Box>
     )
