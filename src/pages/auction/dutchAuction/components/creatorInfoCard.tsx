@@ -21,8 +21,9 @@ import AuctionFiles from 'bounceComponents/fixed-swap/CreatorInfoCard/AuctionFil
 import { useActiveWeb3React } from 'hooks'
 import LikeUnlike from './likeUnlike'
 import { LIKE_OBJ } from 'api/idea/type'
+import { useIsMDDown } from 'themes/useTheme'
 
-const ChainType = styled(Box)(() => ({
+const ChainType = styled(Box)(({ theme }) => ({
   height: '32px',
   lineHeight: '32px',
   display: 'flex',
@@ -40,6 +41,11 @@ const ChainType = styled(Box)(() => ({
     textAlign: 'center',
     letterSpacing: '-0.02em',
     color: '#FFFFFF'
+  },
+  [theme.breakpoints.down('md')]: {
+    '.text': {
+      fontSize: '12px'
+    }
   }
 }))
 export enum CollectStatus {
@@ -142,6 +148,7 @@ interface ICreatorInfoCardProps {
   getPoolInfo: () => void
 }
 const PoolInfo = (props: ICreatorInfoCardProps) => {
+  const isMd = useIsMDDown()
   const { creator, poolInfo, getPoolInfo } = props
   const chainConfigInBackend = useChainConfigInBackend('id', poolInfo.chainId)
   const { account } = useActiveWeb3React()
@@ -169,11 +176,11 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
   return (
     <Box
       sx={{
-        width: '280px',
-        background: 'rgba(18, 18, 18, 0.6)',
+        width: isMd ? '100%' : '280px',
+        background: isMd ? '#20201E' : 'rgba(18, 18, 18, 0.6)',
         backdropFilter: 'blur(5px)',
         borderRadius: '20px',
-        padding: '20px 24px'
+        padding: isMd ? '0 16px 60px' : '20px 24px'
       }}
     >
       <Box
@@ -189,7 +196,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
           sx={{
             fontFamily: `'Public Sans'`,
             fontWeight: 600,
-            fontSize: '14px',
+            fontSize: isMd ? 13 : '14px',
             color: '#E1F25C'
           }}
         >
@@ -205,8 +212,8 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
             style={{
               marginRight: '10px'
             }}
-            width={20}
-            height={20}
+            width={isMd ? 12 : 20}
+            height={isMd ? 12 : 20}
             alt={chainConfigInBackend?.shortName}
           />
           <Typography className="text">
@@ -220,7 +227,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
         sx={{
           fontFamily: `'Public Sans'`,
           fontWeight: 600,
-          fontSize: '20px',
+          fontSize: isMd ? 16 : '20px',
           color: '#fff'
         }}
         mb={'12px'}
@@ -245,7 +252,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
           width: '100%',
           height: '0',
           borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-          margin: '30px 0'
+          margin: isMd ? '24px 0' : '30px 0'
         }}
       ></Box>
       <Box
@@ -267,7 +274,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
             flex: 1,
             fontFamily: `'Public Sans'`,
             fontWeight: 600,
-            fontSize: '20px',
+            fontSize: isMd ? 16 : '20px',
             color: '#E1F25C',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -282,7 +289,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
           sx={{
             fontFamily: `'Inter'`,
             fontWeight: 400,
-            fontSize: '14px',
+            fontSize: isMd ? 12 : '14px',
             color: '#626262',
             marginBottom: '28px',
             wordBreak: 'break-all'

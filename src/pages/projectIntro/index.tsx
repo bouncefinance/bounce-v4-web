@@ -97,7 +97,7 @@ const Upcoming = styled(H6)`
   backdrop-filter: blur(2px);
   border-radius: 100px;
 `
-export const LineStyleBtn = styled(Box)({
+export const LineStyleBtn = styled(Box)(({ theme }) => ({
   color: 'white',
   width: 107,
   height: 32,
@@ -115,8 +115,13 @@ export const LineStyleBtn = styled(Box)({
     background: 'var(--ps-gray-900)',
     border: '1px solid var(--ps-gray-900)',
     color: '#fff'
+  },
+  [theme.breakpoints.down('md')]: {
+    width: 88,
+    height: 29,
+    fontSize: 13
   }
-})
+}))
 const GrayBg = styled(Box)`
   display: flex;
   flex-direction: row;
