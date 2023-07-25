@@ -31,7 +31,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
       const isActive = Number(currentPrice) >= yList[index]
       const showValue = yList[index] ? yList[index].toFixed(6) : '--'
       return {
-        startAt: new BigNumber(140).div(segments).times(index).toString(),
+        startAt: new BigNumber(100).div(segments).times(index).toString(),
         value: showValue + poolInfo.token1.symbol.toUpperCase(),
         active: isActive
       }
