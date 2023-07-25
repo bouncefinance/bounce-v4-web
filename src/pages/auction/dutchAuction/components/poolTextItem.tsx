@@ -18,12 +18,12 @@ const PoolInfoItem = ({ title, tip, children, sx }: PoolInfoItemProps): JSX.Elem
   return (
     <Box
       sx={{
-        ...sx,
         display: 'flex',
         justifyContent: 'flex-start',
         flexFlow: 'column nowrap',
         alignItems: 'flex-start',
-        marginBottom: '8px'
+        marginBottom: '8px',
+        ...sx
       }}
     >
       <Box

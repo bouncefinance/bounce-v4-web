@@ -31,7 +31,6 @@ const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
       <Typography variant="h2" sx={{ ml: 12 }}>
         Auction History
       </Typography>
-
       {list.list && list.list.length > 0 ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

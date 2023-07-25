@@ -12,8 +12,9 @@ import StageLine from 'pages/auction/dutchAuction/components/userBlock/stageLine
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 import NormalContent from '../oneTime'
-
+import { useIsMDDown } from 'themes/useTheme'
 const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
@@ -41,23 +42,29 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
           width: '100%'
         }}
       >
-        <StageLine poolInfo={poolInfo} />
+        <StageLine
+          style={{
+            margin: isMd ? '40px 0' : '30px 0'
+          }}
+          poolInfo={poolInfo}
+        />
         <Box
           sx={{
             width: '100%',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start',
             borderRadius: '20px',
-            background: '#20201e'
+            background: '#20201e',
+            paddingBottom: isMd ? '24px' : '0'
           }}
-          mt={'30px'}
-          gap={'30px'}
+          gap={isMd ? '0' : '30px'}
         >
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               background: '#E1F25C',
               border: '1px solid rgba(18, 18, 18, 0.06)',
               borderRadius: '20px',
@@ -131,7 +138,12 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                 </PoolTextItem>
               </Grid>
               <Grid item xs={6}>
-                <PoolTextItem title={'Total stage'}>
+                <PoolTextItem
+                  title={'Total stage'}
+                  sx={{
+                    alignItems: isMd ? 'flex-end' : 'flex-start'
+                  }}
+                >
                   <>
                     <Box
                       sx={{
@@ -194,16 +206,19 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
           </Box>
           <Box
             sx={{
-              flex: 1,
-              height: '100%',
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
+              height: isMd ? 'auto' : '100%',
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'space-between',
               alignItems: 'flex-start',
-              minHeight: '226px',
-              paddingRight: '24px',
-              paddingBottom: '24px'
+              minHeight: isMd ? 'unset' : '226px',
+              paddingRight: isMd ? '0' : '24px',
+              paddingBottom: isMd ? '0' : '24px',
+              padding: isMd ? '0 16px' : ''
             }}
+            gap={isMd ? '20px' : ''}
           >
             <Box
               sx={{
