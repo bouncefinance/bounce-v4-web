@@ -20,7 +20,12 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
 }) => {
   return (
     <Stack spacing={10} sx={{ pt: 20 }}>
-      <Stack direction="row" component={Typography} variant="body1">
+      <Stack
+        direction="row"
+        component={Typography}
+        variant="body1"
+        sx={{ fontFamily: 'Inter', '&>span': { fontFamily: 'Inter' } }}
+      >
         <Typography component="span" color={status === 2 ? 'var(--ps-green)' : status === 1 ? '' : 'var(--ps-blue)'}>
           {formatNumber(sold, {
             unit: decimals,

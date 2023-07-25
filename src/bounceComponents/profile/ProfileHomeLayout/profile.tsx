@@ -41,7 +41,7 @@ const AuctionCountBg = styled(Box)`
   padding: 10px;
   gap: 10px;
   width: 100%;
-  height: 74px;
+  height: 84px;
   border: 1px solid #e8e9e4;
   border-radius: 8px;
 `
@@ -82,21 +82,18 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
 
   function getSocialList() {
     const list = []
-    if (personalInfo?.twitter) {
+    if (personalInfo) {
       list.push({ icon: Twitter, link: personalInfo.twitter })
-    }
-    if (personalInfo?.instagram) {
+
       list.push({ icon: Insta, link: personalInfo?.instagram })
-    }
-    if (personalInfo?.website) {
+
       list.push({ icon: Website, link: personalInfo?.website })
-    }
-    if (personalInfo?.linkedin) {
+
       list.push({ icon: Linkin, link: personalInfo?.linkedin })
-    }
-    if (personalInfo?.github) {
+
       list.push({ icon: GithubIcon, link: personalInfo?.github })
     }
+
     return list
   }
 
@@ -157,9 +154,27 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
           <Typography mt={16} variant={'body2'} width={'100%'} sx={{ wordBreak: 'break-word' }}>
             {personalInfo?.description || 'There is nothing for the time being'}
           </Typography>
-          <Stack mt={32} mb={38} direction={'row'} spacing={9}>
+          <Stack
+            sx={{
+              '& .has-link': {
+                cursor: 'pointer'
+              },
+              '& .no-link': {
+                cursor: 'not-allowed'
+              }
+            }}
+            mt={32}
+            mb={38}
+            direction={'row'}
+            spacing={9}
+          >
             {getSocialList().map((icon, idx) => (
-              <img onClick={() => window.open(icon.link, '_blank')} src={icon.icon} key={idx} />
+              <img
+                className={icon.link ? 'has-link' : 'no-link'}
+                onClick={() => icon.link && window.open(icon.link, '_blank')}
+                src={icon.icon}
+                key={idx}
+              />
             ))}
           </Stack>
         </>

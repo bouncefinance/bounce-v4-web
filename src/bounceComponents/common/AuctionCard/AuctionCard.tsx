@@ -1,4 +1,4 @@
-import { Card, CardHeader, Chip, Stack, Typography } from '@mui/material'
+import { Card, CardHeader, Chip, Stack } from '@mui/material'
 import React from 'react'
 import Image from 'components/Image'
 import { AuctionProgress, IAuctionProgressProps } from './AuctionProgress'
@@ -7,7 +7,7 @@ import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { PoolStatus } from 'api/pool/type'
 import { ChainId, ChainListMap } from 'constants/chain'
-
+import { Body04 } from 'components/Text'
 export type IAuctionCardProps = {
   poolId: string
   status: PoolStatus
@@ -63,8 +63,14 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
       }}
     >
       <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
-        <Typography>#{poolId}</Typography>
-        <Stack direction="row" spacing={6} height={24} alignItems={'center'}>
+        <Body04>#{poolId}</Body04>
+        <Stack
+          direction="row"
+          spacing={6}
+          height={24}
+          alignItems={'center'}
+          sx={{ '& > div > span': { fontFamily: 'Inter', fontSize: 12 } }}
+        >
           <PoolStatusBox
             showCreatorClaim={showCreatorClaim}
             showParticipantClaim={showParticipantClaim}

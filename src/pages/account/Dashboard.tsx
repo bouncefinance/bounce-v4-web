@@ -242,7 +242,7 @@ export default function Dashboard() {
             )}
             {isSm && (
               <Box pt={26}>
-                <Box sx={{ position: 'relative', width: '120px', left: 'calc(50% - 60px)' }}>
+                <Box sx={{ position: 'relative', width: 'max-content', left: '50%', transform: 'translateX(-50%)' }}>
                   {!userInfo?.avatar ? (
                     <Skeleton variant="circular" width={72} height={72} sx={{ background: 'var(--ps-gray-50)' }} />
                   ) : (
