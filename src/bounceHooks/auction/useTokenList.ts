@@ -5,9 +5,9 @@ import { GOERLI_TOKEN_LIST, OMNI_TESTNET_TOKEN_LIST, SEPOLIA_TOKEN_LIST } from '
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
 import { useTokenContract } from 'hooks/useContract'
-import { Currency } from 'constants/token'
 import localDefaultAllList from 'assets/tokenList/default.json'
 import { getUserSearchTokenList, getUserTokenList } from 'api/user'
+import { ZERO_ADDRESS } from '../../constants'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -110,23 +110,10 @@ const useTokenList = (chainId: number | undefined, action: 1 | 2, filterValue?: 
       return [singleToken]
     } else {
       return enableEth
-        ? (() => {
-            const nativeToken = Currency.getNativeCurrency(chainId)
-            return [
-              {
-                chainId,
-                address: nativeToken.address,
-                decimals: nativeToken.decimals,
-                symbol: nativeToken.symbol,
-                logoURI: nativeToken.logo,
-                name: nativeToken.name
-              },
-              ...filteredApiTokenList
-            ]
-          })()
-        : filteredApiTokenList
+        ? (() => filteredApiTokenList)()
+        : filteredApiTokenList.filter(item => item.address !== ZERO_ADDRESS)
     }
-  }, [chainId, enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
+  }, [enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
 
   return {
     tokenList,

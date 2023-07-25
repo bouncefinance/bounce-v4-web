@@ -35,7 +35,7 @@ const Loading = () => {
   )
 }
 
-const TokenDialog = create(({ chainId, action }: TokenDialogProps) => {
+const TokenDialog = create(({ enableEth, chainId, action }: TokenDialogProps) => {
   const modal = useModal()
   const chainConfig = useChainConfigInBackend('ethChainId', chainId)
 
@@ -56,7 +56,7 @@ const TokenDialog = create(({ chainId, action }: TokenDialogProps) => {
     tokenList: tokenList,
     isGettingTokenList,
     isGettingSingleToken
-  } = useTokenList(chainConfig?.id, action, debouncedFilterInputValue)
+  } = useTokenList(chainConfig?.id, action, debouncedFilterInputValue, enableEth)
 
   console.log('>>>>> tokenList: ', tokenList)
 

@@ -1,13 +1,11 @@
 import { Button, Stack, Box, Typography, ButtonBase } from '@mui/material'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
-
 import { show } from '@ebay/nice-modal-react'
 import TokenDialog from '../TokenDialog'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import FormItem from 'bounceComponents/common/FormItem'
-
 // import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { useActiveWeb3React } from 'hooks'
@@ -42,13 +40,13 @@ const TokenInformationForm = ({ title }: { title?: string }): JSX.Element => {
   const auctionInChainId = useAuctionInChain()
   const isSm = useBreakpoint('sm')
   const showTokenDialog = (chainId: ChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
-    show<Token>(TokenDialog, { chainId, action: 1, enableEth: false })
+    show<Token & { smallUrl?: string }>(TokenDialog, { chainId, action: 1 })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
           tokenFromAddress: res.address,
           tokenFromSymbol: res.symbol,
-          tokenFromLogoURI: res.logoURI,
+          tokenFromLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenFromDecimals: res.decimals
         })
       })

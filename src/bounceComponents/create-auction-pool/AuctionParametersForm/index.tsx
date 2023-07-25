@@ -132,14 +132,14 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     values: FormValues,
     setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
   ) => {
-    show<Token>(TokenDialog, { enableEth: true, chainId, action: 2 })
+    show<Token & { smallUrl?: string }>(TokenDialog, { enableEth: true, chainId, action: 2 })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
           ...values,
           tokenToAddress: res.address,
           tokenToSymbol: res.symbol || '',
-          tokenToLogoURI: res.logoURI,
+          tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenToDecimals: res.decimals
         })
       })
