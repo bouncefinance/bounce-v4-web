@@ -236,7 +236,9 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
           }}
           sx={{ border: selectButton === data.title ? '1px solid #E1F25C' : '' }}
         >
-          <Typography>{data.title}</Typography>
+          <Typography>
+            {data.title} {data.title === 'Search' ? ' Type' : ''}
+          </Typography>
           <BottomArrowIcon />
         </FilterButton>
         {data.list?.length > 0 && (
