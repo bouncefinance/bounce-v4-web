@@ -32,8 +32,8 @@ const LeftBox = (): JSX.Element => {
         sx={{
           borderRadius: 20,
           bgcolor: '#20201E',
-          px: isMobile ? 0 : 24,
-          py: isMobile ? 0 : 24,
+          px: isMobile ? 16 : 24,
+          py: isMobile ? 16 : 24,
           flex: 1,
           height: 'fit-content'
         }}
@@ -83,8 +83,8 @@ const LeftBox = (): JSX.Element => {
         sx={{
           borderRadius: 20,
           bgcolor: '#20201E',
-          px: isMobile ? 0 : 24,
-          py: isMobile ? 0 : 24,
+          px: isMobile ? 16 : 24,
+          py: isMobile ? 16 : 24,
           flex: 1,
           height: 'fit-content'
         }}
