@@ -147,6 +147,7 @@ export function useGetListBySearchValue(chainId: ChainId, value: string) {
     },
     {
       ready: !!chainId,
+      refreshDeps: [chainId],
       debounceWait: 100
     }
   )
