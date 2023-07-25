@@ -109,7 +109,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.LINEA]: {
     id: ChainId.LINEA,
     hexChainId: numberToHex(ChainId.LINEA),
-    chainName: 'Linea Mainnet',
+    chainName: 'Linea',
     nativeCurrency: {
       name: 'ETH',
       symbol: 'ETH',
@@ -174,7 +174,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.OKEX]: {
     id: ChainId.OKEX,
     hexChainId: numberToHex(ChainId.OKEX),
-    chainName: 'OKEXChain',
+    chainName: 'OKEX Chain',
     nativeCurrency: {
       name: 'OKEX Coin',
       symbol: 'OKT',
