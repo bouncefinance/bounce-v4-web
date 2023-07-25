@@ -7,7 +7,7 @@ import { ChainId } from 'constants/chain'
 import { useTokenContract } from 'hooks/useContract'
 import { Currency } from 'constants/token'
 import localDefaultAllList from 'assets/tokenList/default.json'
-import { getUserTokenList } from 'api/user'
+import { getUserSearchTokenList, getUserTokenList } from 'api/user'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -19,31 +19,24 @@ const filterToken = (list: Token[], filterValue: string) => {
   )
 }
 
-const getGetApiTokenList = async (chainId: number | undefined, account: string | undefined) => {
-  if (!chainId || !account) return []
+const getGetApiTokenList = async (chainId: number | undefined, action: 1 | 2) => {
+  if (!chainId) return []
   const params = {
-    chainId: chainId
+    chainId: chainId,
+    action: action
   }
   const response = await getUserTokenList(params)
-  const jsonResponse = await response?.data?.[account.toLocaleLowerCase()]
-  return jsonResponse.map((item: any) => ({ ...item.token, chainId })) as Token[]
+  const jsonResponse = await response?.data
+  return jsonResponse.map((item: any) => ({ ...item, chainId })) as Token[]
 }
 
-const useTokenList = (
-  chainId: number | undefined,
-  account: string | undefined,
-  filterValue?: string,
-  enableEth = false
-) => {
+const useTokenList = (chainId: number | undefined, action: 1 | 2, filterValue?: string, enableEth = false) => {
   // const isChainHasTokenApi = typeof TOKEN_LIST_API[chainId] === 'string'
-  const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(
-    () => getGetApiTokenList(chainId, account),
-    {
-      cacheKey: `API_TOKEN_LIST_${chainId}`,
-      ready: !!chainId,
-      refreshDeps: [chainId]
-    }
-  )
+  const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(() => getGetApiTokenList(chainId, action), {
+    cacheKey: `API_TOKEN_LIST_${chainId}`,
+    ready: !!chainId,
+    refreshDeps: [chainId]
+  })
 
   const baseTokenList = useMemo(() => {
     if (chainId === ChainId.GÖRLI) {
@@ -140,6 +133,23 @@ const useTokenList = (
     isGettingTokenList: chainId === ChainId.GÖRLI ? false : isGettingApiTokenList,
     isGettingSingleToken
   }
+}
+
+export function useGetListBySearchValue(chainId: ChainId, value: string) {
+  return useRequest(
+    async () => {
+      const response = await getUserSearchTokenList({
+        chainId,
+        limit: 100,
+        value
+      })
+      return response.data.list
+    },
+    {
+      ready: !!chainId,
+      debounceWait: 100
+    }
+  )
 }
 
 export default useTokenList

@@ -177,7 +177,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
     values: FormValues,
     setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
   ) => {
-    show<Token>(TokenDialog, { enableEth: true, chainId })
+    show<Token>(TokenDialog, { enableEth: true, chainId, action: 2 })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({

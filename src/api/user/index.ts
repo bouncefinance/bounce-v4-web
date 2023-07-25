@@ -30,7 +30,8 @@ import {
   IAddressRegisterLoginParams,
   IChangeEmailParams,
   GetUserPermitSignResponse,
-  GetUserTokenListParams
+  GetUserTokenListParams,
+  SearchTokenListParams
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -169,4 +170,11 @@ export const getUserNFTsInfo = (params: GetUserNFTsParams) => {
  */
 export const getUserTokenList = (params: GetUserTokenListParams) => {
   return ApiInstance.post('/user/tokens/erc20', params)
+}
+
+/**
+ * Get erc20 search token list
+ */
+export const getUserSearchTokenList = (params: SearchTokenListParams) => {
+  return ApiInstance.post('/com/search/token', params)
 }

@@ -3,8 +3,8 @@ import { Button, Drawer, Box, IconButton, Stack, Typography, InputBase } from '@
 import { useDebounce } from 'ahooks'
 import { ReactComponent as BottomArrowIcon } from 'assets/imgs/common/bottomArrow.svg'
 import { ReactComponent as SearchSvg } from 'assets/imgs/common/search.svg'
-import useTokenList from 'bounceHooks/auction/useTokenList'
-import { useActiveWeb3React } from 'hooks'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
+import { ChainId } from 'constants/chain'
 import { InitialValuesPros, initialValues } from 'pages/tokenAuction/components/listDialog'
 import { useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -17,14 +17,13 @@ const searchTypeOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Addr
 const filterType = { Chain: '', Auction: '', Status: '', Token: '', 'Sort By': '', Clear: '' }
 const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialValuesPros) => void }) => {
   const optionDatas = useOptionDatas()
-  const { account } = useActiveWeb3React()
   const [currOpen, setCurrOpen] = useState<IDrawerOpen>({ open: false, title: '' })
   const [chain] = useState<number>(0)
   const [searchVal, setSearchVal] = useState('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
-  const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, account, debouncedSearchVal)
-  console.log('tokenList:', tokenList)
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
+  const debouncedFilterInputValue = useDebounce(searchVal, { wait: 400 })
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
+  console.log('🚀 ~ file: mobileFixedSelected.tsx:25 ~ MobileFixedSelected ~ tokenList:', tokenList)
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const [selectButton, setSelectButton] = useState('')

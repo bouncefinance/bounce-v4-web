@@ -4,13 +4,14 @@ import UpArrowIcon from 'assets/imgs/common/upArrow.svg'
 import BottomArrowIcon from 'assets/imgs/common/bottomArrow.svg'
 import SearchSvg from 'assets/imgs/common/search.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
 import { useDebounce } from 'ahooks'
-import { getLabelById } from 'utils'
 import SearchIcon from '@mui/icons-material/Search'
 import { initialValues, InitialValuesPros } from 'pages/tokenAuction/components/listDialog'
 import { PoolType } from 'api/pool/type'
-import { useActiveWeb3React } from 'hooks'
+import { getLabelById } from 'utils'
+import { ChainId } from 'constants/chain'
+
 const SearchInput = styled(Input)(() => ({
   height: 38,
   lineHeight: '38px',
@@ -55,11 +56,11 @@ const searchTypeOptions = ['Pool Name', 'Pool ID', 'Creator Name', 'Creator Addr
 export default function FixedSelected({ handleSubmit }: { handleSubmit: (values: InitialValuesPros) => void }) {
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(0)
-  const { account } = useActiveWeb3React()
   const [filterInputValue, setFilterInputValue] = useState<string>('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
+  console.log('🚀 ~ file: index.tsx:60 ~ FixedSelected ~ chainId:', chainId)
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, account, debouncedFilterInputValue)
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
   const chainList = useMemo(
     () =>

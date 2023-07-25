@@ -9,7 +9,6 @@ import useTokenList from 'bounceHooks/auction/useTokenList'
 import { ChainId } from 'constants/chain'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import { useActiveWeb3React } from 'hooks'
 
 export interface BasicToken {
   address: string
@@ -22,6 +21,7 @@ export interface TokenDialogProps {
   enableEth?: boolean
   onClose?: () => void
   chainId: ChainId
+  action: 1 | 2
 }
 
 const Loading = () => {
@@ -35,9 +35,8 @@ const Loading = () => {
   )
 }
 
-const TokenDialog = create(({ chainId }: TokenDialogProps) => {
+const TokenDialog = create(({ chainId, action }: TokenDialogProps) => {
   const modal = useModal()
-  const { account } = useActiveWeb3React()
   const chainConfig = useChainConfigInBackend('ethChainId', chainId)
 
   const handleResolve = (token: Token) => {
@@ -57,7 +56,7 @@ const TokenDialog = create(({ chainId }: TokenDialogProps) => {
     tokenList: tokenList,
     isGettingTokenList,
     isGettingSingleToken
-  } = useTokenList(chainConfig?.id, account, debouncedFilterInputValue)
+  } = useTokenList(chainConfig?.id, action, debouncedFilterInputValue)
 
   console.log('>>>>> tokenList: ', tokenList)
 

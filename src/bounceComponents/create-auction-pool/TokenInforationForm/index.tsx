@@ -42,7 +42,7 @@ const TokenInformationForm = ({ title }: { title?: string }): JSX.Element => {
   const auctionInChainId = useAuctionInChain()
   const isSm = useBreakpoint('sm')
   const showTokenDialog = (chainId: ChainId, setValues: (values: any, shouldValidate?: boolean) => void) => {
-    show<Token>(TokenDialog, { chainId, enableEth: false })
+    show<Token>(TokenDialog, { chainId, action: 1, enableEth: false })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
