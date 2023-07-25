@@ -6,6 +6,8 @@ import UserBlock from '../components/userBlock'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
+import ActionHistory from '../components/auctionHistory'
+
 const EnglishAuctionMobile = ({
   poolInfo,
   getPoolInfo
@@ -30,7 +32,7 @@ const EnglishAuctionMobile = ({
       >
         {isCreator ? <CreatorBlock poolInfo={poolInfo} /> : <UserBlock poolInfo={poolInfo} />}
       </Box>
-      {poolInfo.name}
+      <ActionHistory poolInfo={poolInfo} />
     </Box>
   )
 }

@@ -1,6 +1,4 @@
 import { Box, Grid, Typography } from '@mui/material'
-import LeftBox from '../../creatorBlock/left'
-import RightBox from '../right'
 import { PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import moment from 'moment'
@@ -11,8 +9,10 @@ import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlo
 import OthersDetail from '../othersDetail'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import LineClaimChart from './lineClaimChart'
-
+import NormalContent from '../oneTime'
+import { useIsMDDown } from 'themes/useTheme'
 const Linear = () => {
+  const isMd = useIsMDDown()
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
@@ -26,7 +26,7 @@ const Linear = () => {
           sx={{
             width: '100%',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start'
           }}
@@ -35,7 +35,8 @@ const Linear = () => {
         >
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               height: '100%',
               minHeight: '226px',
               paddingRight: '24px'
@@ -45,7 +46,8 @@ const Linear = () => {
           </Box>
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               borderRadius: '20px',
               background: '#20201e',
               display: 'flex',
@@ -250,32 +252,6 @@ const Linear = () => {
       </>
     )
   }
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingTop: '30px'
-      }}
-      gap={'30px'}
-    >
-      <Box
-        sx={{
-          flex: 400
-        }}
-      >
-        <LeftBox />
-      </Box>
-      <Box
-        sx={{
-          flex: 474
-        }}
-      >
-        <RightBox />
-      </Box>
-    </Box>
-  )
+  return <NormalContent />
 }
 export default Linear

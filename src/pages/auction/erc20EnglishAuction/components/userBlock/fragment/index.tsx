@@ -1,6 +1,4 @@
 import { Box, Grid, Typography } from '@mui/material'
-import LeftBox from '../../creatorBlock/left'
-import RightBox from '../right'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { RightText } from '../../creatorBlock/auctionInfo'
@@ -13,6 +11,7 @@ import moment from 'moment'
 import StageLine from 'pages/auction/dutchAuction/components/userBlock/stageLine'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
+import NormalContent from '../oneTime'
 
 const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useMemo(
@@ -251,32 +250,6 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
       </Box>
     )
   }
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingTop: '30px'
-      }}
-      gap={'30px'}
-    >
-      <Box
-        sx={{
-          flex: 400
-        }}
-      >
-        <LeftBox />
-      </Box>
-      <Box
-        sx={{
-          flex: 474
-        }}
-      >
-        <RightBox />
-      </Box>
-    </Box>
-  )
+  return <NormalContent />
 }
 export default Fragment

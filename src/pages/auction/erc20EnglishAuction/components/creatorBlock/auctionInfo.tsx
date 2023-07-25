@@ -26,15 +26,21 @@ const LeftBox = (): JSX.Element => {
   const { chainId } = useActiveWeb3React()
   const isMobile = useBreakpoint('lg')
   const [showMore, setShowMore] = useState<boolean>(false)
-
   return (
     <>
       <Box
-        sx={{ borderRadius: 20, bgcolor: '#20201E', px: 24, py: 24, flex: 1, height: 'fit-content' }}
+        sx={{
+          borderRadius: 20,
+          bgcolor: '#20201E',
+          px: isMobile ? 0 : 24,
+          py: isMobile ? 0 : 24,
+          flex: 1,
+          height: 'fit-content'
+        }}
         mb={12}
         mt={30}
       >
-        <Stack spacing={36} display={isMobile ? 'block' : 'flex'}>
+        <Stack spacing={isMobile ? 0 : 36} display={isMobile ? 'block' : 'flex'}>
           <Stack spacing={10}>
             <Title>Token Information</Title>
             <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
@@ -73,7 +79,16 @@ const LeftBox = (): JSX.Element => {
           </Stack>
         </Stack>
       </Box>
-      <Box sx={{ borderRadius: 20, bgcolor: '#20201E', px: 24, py: 24, flex: 1, height: 'fit-content' }}>
+      <Box
+        sx={{
+          borderRadius: 20,
+          bgcolor: '#20201E',
+          px: isMobile ? 0 : 24,
+          py: isMobile ? 0 : 24,
+          flex: 1,
+          height: 'fit-content'
+        }}
+      >
         <Stack spacing={10}>
           <Title>Auction Information</Title>
           <PoolInfoItem title="Auction Type">

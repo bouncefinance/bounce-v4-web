@@ -4,8 +4,9 @@ import { useState } from 'react'
 import Line from '../lineChart'
 import AuctionInfo from '../creatorBlock/auctionInfo'
 import { ReactComponent as ArrowIcon } from 'assets/imgs/dutchAuction/yellowArrowIcon.svg'
-
+import { useIsMDDown } from 'themes/useTheme'
 const OthersDetail = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const [isSlide, setIsSlide] = useState(true)
   return (
     <Box
@@ -56,24 +57,26 @@ const OthersDetail = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) =
             width: '100%',
             background: '#20201E',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            padding: '0 24px 24px',
+            padding: isMd ? '0 16px 16px' : '0 24px 24px',
             overflow: 'hidden'
           }}
           gap={'30px'}
         >
           <Box
             sx={{
-              flex: 1
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1
             }}
           >
             <Line poolInfo={poolInfo} />
           </Box>
           <Box
             sx={{
-              flex: 1
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1
             }}
           >
             <AuctionInfo />
