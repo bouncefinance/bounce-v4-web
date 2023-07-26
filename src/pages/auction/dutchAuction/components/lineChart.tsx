@@ -220,8 +220,10 @@ export const LineChartView = ({
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
         dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
+      } else {
+        dateStr = '--'
       }
-      const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
+      const token0Price = currentValue ? Number(currentValue).toFixed(6) : '--' + poolInfo.token1.symbol
       const x = Number(param?.point?.x) + offsetXy.x
       const y = Number(newSeries.priceToCoordinate(currentValue)) + offsetXy.y
       if (
