@@ -36,8 +36,7 @@ import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
-import GreenWarn from 'assets/imgs/auction/green-warn.png'
-
+import AuctionNotification from '../AuctionNotification'
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
   opacity: 0.5,
@@ -435,37 +434,7 @@ const CreationConfirmation = () => {
             </Box>
           </Stack>
         </Box>
-
-        <Stack
-          mt={32}
-          sx={{
-            padding: 16,
-            background: '#F9FCDE',
-            borderRadius: 8,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 16
-          }}
-        >
-          <Image src={GreenWarn} style={{ width: 27, height: 24 }} />
-          <Typography
-            sx={{
-              maxWidth: 500,
-              color: '#908E96',
-              leadingTrim: 'both',
-              textEdge: 'cap',
-              fontFamily: 'Inter',
-              fontSize: '14px',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: '150%'
-            }}
-          >
-            <span style={{ color: '#171717' }}>Please pay attention.</span> You can cancel your pool before it goes
-            live. But you can’t cancel your pool when it is live and your tokens will be locked in the pool during the
-            auction, so please choose all parameters wisely.
-          </Typography>
-        </Stack>
+        <AuctionNotification />
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
           <CreatePoolButton />
 

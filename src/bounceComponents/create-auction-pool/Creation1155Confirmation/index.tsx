@@ -35,7 +35,7 @@ import { ApprovalState } from 'hooks/useApproveCallback'
 import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
-
+import AuctionNotification from '../AuctionNotification'
 export const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
   opacity: 0.5
@@ -430,7 +430,7 @@ const CreationConfirmation = () => {
             </Box>
           </Stack>
         </Box>
-
+        <AuctionNotification />
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
           {account ? (
             <CreatePoolButton />
