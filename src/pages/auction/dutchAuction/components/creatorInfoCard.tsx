@@ -311,16 +311,16 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
             isDutchAuction={true}
             poolInfo={poolInfo}
             getPoolInfo={getPoolInfo}
-            canEdit={isCurrentUserCreatedThisPool}
+            canEdit={isCurrentUserCreatedThisPool && !isMd}
           />
         </>
       )}
       <AuctionFiles
         poolInfo={poolInfo}
         getPoolInfo={getPoolInfo}
-        canDownloadFile={!isCurrentUserCreatedThisPool}
-        canDeleteFile={isCurrentUserCreatedThisPool}
-        canAddFile={isCurrentUserCreatedThisPool}
+        canDownloadFile={!isCurrentUserCreatedThisPool || isMd}
+        canDeleteFile={isCurrentUserCreatedThisPool && !isMd}
+        canAddFile={isCurrentUserCreatedThisPool && !isMd}
       />
     </Box>
   )
