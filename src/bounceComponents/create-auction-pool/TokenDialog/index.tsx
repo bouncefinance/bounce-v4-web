@@ -3,12 +3,12 @@ import { useModal, create, muiDialogV5 } from '@ebay/nice-modal-react'
 import { useDebounce } from 'ahooks'
 import { Box, CircularProgress, OutlinedInput, Stack, Typography } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-
 import VirtualizedList from './TokenList'
 import Dialog from 'bounceComponents/common/DialogBase'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import { ChainId } from 'constants/chain'
 import { Token } from 'bounceComponents/fixed-swap/type'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 export interface BasicToken {
   address: string
@@ -21,6 +21,7 @@ export interface TokenDialogProps {
   enableEth?: boolean
   onClose?: () => void
   chainId: ChainId
+  action: 1 | 2
 }
 
 const Loading = () => {
@@ -34,8 +35,9 @@ const Loading = () => {
   )
 }
 
-const TokenDialog = create(({ enableEth, chainId }: TokenDialogProps) => {
+const TokenDialog = create(({ enableEth, chainId, action }: TokenDialogProps) => {
   const modal = useModal()
+  const chainConfig = useChainConfigInBackend('ethChainId', chainId)
 
   const handleResolve = (token: Token) => {
     modal.resolve(token)
@@ -54,7 +56,7 @@ const TokenDialog = create(({ enableEth, chainId }: TokenDialogProps) => {
     tokenList: tokenList,
     isGettingTokenList,
     isGettingSingleToken
-  } = useTokenList(chainId, debouncedFilterInputValue, enableEth)
+  } = useTokenList(chainConfig?.id, action, debouncedFilterInputValue, enableEth)
 
   console.log('>>>>> tokenList: ', tokenList)
 

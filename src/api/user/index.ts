@@ -29,7 +29,9 @@ import {
   GetUserNFTsParams,
   IAddressRegisterLoginParams,
   IChangeEmailParams,
-  GetUserPermitSignResponse
+  GetUserPermitSignResponse,
+  GetUserTokenListParams,
+  SearchTokenListParams
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -161,4 +163,18 @@ export const updateUserBanner = async (params: IUserUpdateBannerParams) => {
  */
 export const getUserNFTsInfo = (params: GetUserNFTsParams) => {
   return ApiInstance.post('/user/nfts', params)
+}
+
+/**
+ * Get erc20 token list
+ */
+export const getUserTokenList = (params: GetUserTokenListParams) => {
+  return ApiInstance.post('/user/tokens/erc20', params)
+}
+
+/**
+ * Get erc20 search token list
+ */
+export const getUserSearchTokenList = (params: SearchTokenListParams) => {
+  return ApiInstance.post('/com/search/token', params)
 }
