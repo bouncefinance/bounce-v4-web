@@ -55,7 +55,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
               size="small"
               variant="outlined"
               sx={{ mr: 20, minWidth: 60 }}
-              onClick={() => poolInfo.status !== PoolStatus.Upcoming && handleMaxButtonClick}
+              onClick={() => poolInfo.status !== PoolStatus.Upcoming && handleMaxButtonClick()}
             >
               Max
             </Button>

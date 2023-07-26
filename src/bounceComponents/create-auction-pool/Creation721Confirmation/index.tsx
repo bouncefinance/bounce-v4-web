@@ -32,7 +32,7 @@ import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confi
 import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
-
+import AuctionNotification from '../AuctionNotification'
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
 const CreatePoolButton = () => {
@@ -374,7 +374,7 @@ const CreationConfirmation = () => {
             </Box>
           </Stack>
         </Box>
-
+        <AuctionNotification />
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
           {account ? (
             <CreatePoolButton />
