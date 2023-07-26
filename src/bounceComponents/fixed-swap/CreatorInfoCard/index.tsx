@@ -92,7 +92,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
         >
           {userInfo?.fullName || userInfo?.companyName}
         </Typography>
-        <VerifiedIcon isVerify={userInfo?.isVerify} />
+        <VerifiedIcon ifKyc={userInfo?.ifKyc} />
       </Stack>
       <Tooltip title={userInfo?.description || userInfo?.briefIntro || 'No description yet'}>
         <Typography

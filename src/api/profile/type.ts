@@ -43,7 +43,7 @@ export interface experienceItems {
   startTime: number
   companyId?: number
   thirdpartId?: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 export interface IUpdatePersonalParams {
   careJobs: number[]
@@ -80,7 +80,7 @@ export interface IInvestmentItems {
   investAmount: number | string
   investDate: number
   investType: number | string
-  isVerify?: VerifyStatus
+  ifKyc?: VerifyStatus
   thirdpartId?: number
   companyId?: number
 }

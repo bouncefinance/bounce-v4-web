@@ -3037,6 +3037,10 @@
     "@stablelib/keyagreement" "^1.0.1"
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
+"@sumsub/websdk-react@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@sumsub/websdk-react/-/websdk-react-2.0.1.tgz#5884b76da87267c837da39554257edebe9ef729a"
+  integrity sha512-PLbbGqTHvpGRjotytmNUl3AJOH6OVVo73UZtqmgBtX0OAT2REzwWjNDLjby3i3tFMCB8fxEgPW318NrgjCSBFA==
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
