@@ -66,16 +66,7 @@ const DipExchange = () => {
       <DipTabBox>
         <DipCenter>
           {/* activities time line */}
-          <Box
-            sx={{
-              width: '100%',
-              maxWidth: '100vw',
-              overflowX: 'auto',
-              paddingLeft: '16px'
-            }}
-          >
-            <StageLine poolsData={{ list: poolsData }} activeIndex={dataIndex} setIndex={setShowDataIndex} />
-          </Box>
+          <StageLine poolsData={{ list: poolsData }} activeIndex={dataIndex} setIndex={setShowDataIndex} />
           <Box
             sx={{
               width: '100%',

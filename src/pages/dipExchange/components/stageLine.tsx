@@ -33,12 +33,12 @@ const StageLine = ({
 }) => {
   const swiper = useSwiper()
   const [swiperInstance, setSwiperInstance] = useState(swiper)
-  const [slidesPerview, setSlidesPerView] = useState(window.innerWidth / 162)
+  const winW = window.innerWidth > 1440 ? 1440 : window.innerWidth
+  const [slidesPerview, setSlidesPerView] = useState(winW / 162)
   const { list } = poolsData
-
   useEffect(() => {
+    const winW = window.innerWidth > 1440 ? 1440 : window.innerWidth
     const setPerview = () => {
-      const winW = window.innerWidth
       setSlidesPerView(winW / 162)
     }
     setPerview()

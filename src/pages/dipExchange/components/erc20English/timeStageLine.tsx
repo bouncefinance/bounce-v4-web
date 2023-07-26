@@ -37,7 +37,8 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
     })
     return dataPoint
   }, [startPrice, segments, priceSegments, currentPrice, poolInfo.token1.symbol])
-  const [slidesPerview, setSlidesPerView] = useState(window.innerWidth / (isMd ? 140 : 381))
+  const winW = window.innerWidth > 1440 ? 1440 : window.innerWidth
+  const [slidesPerview, setSlidesPerView] = useState(winW / (isMd ? 140 : 381))
   const activeIndex = useMemo(() => {
     let lastActiveIndex = 0
     releaseData.map((item, index) => {
@@ -57,7 +58,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
   }, [activeIndex, swiper])
   useEffect(() => {
     const setPerview = () => {
-      const winW = window.innerWidth
+      const winW = window.innerWidth > 1440 ? 1440 : window.innerWidth
       const maxWidth = isMd ? 140 : 381
       const result = parseInt(winW / maxWidth + '') >= 3 ? 3 : winW / maxWidth
       setSlidesPerView(result)
