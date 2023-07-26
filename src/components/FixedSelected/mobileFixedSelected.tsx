@@ -23,7 +23,6 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
   const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
   const debouncedFilterInputValue = useDebounce(searchVal, { wait: 400 })
   const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
-  console.log('🚀 ~ file: mobileFixedSelected.tsx:25 ~ MobileFixedSelected ~ tokenList:', tokenList)
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const [selectButton, setSelectButton] = useState('')
@@ -89,7 +88,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
       {
         title: 'Token',
         name: 'tokenFromSymbol',
-        list: []
+        list: tokenList || []
       },
       {
         title: 'Sort By',
@@ -115,7 +114,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         })
       }
     ],
-    [chainList]
+    [chainList, tokenList]
   )
   const setValues = ({ type, item, isCancel }: { type: string; item: any; isCancel?: boolean }) => {
     const body = { ...filterValues }
@@ -130,7 +129,11 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         body.poolStatus = isCancel ? initialValues['poolStatus'] : item.value
         break
       case 'Token':
-        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.address
+        body.tokenFromAddress = isCancel
+          ? initialValues['tokenFromAddress']
+          : item.contract
+          ? item.contract
+          : item.address
         body.tokenFromSymbol = isCancel ? initialValues['tokenFromSymbol'] : item.symbol
         body.tokenFromLogoURI = isCancel ? initialValues['tokenFromLogoURI'] : item.logoURI
         body.tokenFromDecimals = isCancel ? initialValues['tokenFromDecimals'] : item.decimals

@@ -284,7 +284,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         result.chain = Number(item.value)
         break
       case 'Token':
-        result.tokenFromAddress = item.address
+        result.tokenFromAddress = item.contract
         result.tokenFromSymbol = item.symbol
         result.tokenFromLogoURI = item.logoURI
         result.tokenFromDecimals = item.decimals

@@ -58,7 +58,6 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
   const [chain, setChain] = useState<number>(0)
   const [filterInputValue, setFilterInputValue] = useState<string>('')
   const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
-  console.log('🚀 ~ file: index.tsx:60 ~ FixedSelected ~ chainId:', chainId)
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
   const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
@@ -291,7 +290,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         result.chain = Number(item.value)
         break
       case 'Token':
-        result.tokenFromAddress = item.address
+        result.tokenFromAddress = item.contract
         result.tokenFromSymbol = item.symbol
         result.tokenFromLogoURI = item.logoURI
         result.tokenFromDecimals = item.decimals

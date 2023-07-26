@@ -109,9 +109,7 @@ const useTokenList = (chainId: number | undefined, action: 1 | 2, filterValue?: 
     if (isAddress(filterValue || '') && isFilterValueNotFoundInApiTokenList && isSingleTokenValid) {
       return [singleToken]
     } else {
-      return enableEth
-        ? (() => filteredApiTokenList)()
-        : filteredApiTokenList.filter(item => item.address !== ZERO_ADDRESS)
+      return enableEth ? filteredApiTokenList : filteredApiTokenList.filter(item => item.address !== ZERO_ADDRESS)
     }
   }, [enableEth, filterValue, filteredApiTokenList, isGettingSingleToken, singleToken])
 
@@ -134,7 +132,7 @@ export function useGetListBySearchValue(chainId: ChainId, value: string) {
     },
     {
       ready: !!chainId,
-      refreshDeps: [chainId],
+      refreshDeps: [chainId, value],
       debounceWait: 100
     }
   )

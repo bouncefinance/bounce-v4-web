@@ -128,7 +128,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         body.poolStatus = isCancel ? initialValues['poolStatus'] : item.value
         break
       case 'Token':
-        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.address
+        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.contract
         body.tokenFromSymbol = isCancel ? initialValues['tokenFromSymbol'] : item.symbol
         body.tokenFromLogoURI = isCancel ? initialValues['tokenFromLogoURI'] : item.logoURI
         body.tokenFromDecimals = isCancel ? initialValues['tokenFromDecimals'] : item.decimals

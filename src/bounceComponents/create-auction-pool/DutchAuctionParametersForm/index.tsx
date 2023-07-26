@@ -183,7 +183,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
         setValues({
           ...values,
           tokenToAddress: res.address,
-          tokenToSymbol: res.symbol || '',
+          tokenToSymbol: res.symbol?.toLocaleUpperCase() || '',
           tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenToDecimals: res.decimals
         })

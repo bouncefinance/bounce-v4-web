@@ -61,7 +61,7 @@ function ItemRender(
           sx={{ my: 0 }}
           primary={
             <Typography component="span" variant="h4" color="text.primary" sx={{ lineHeight: 1 }}>
-              {data?.[index]?.symbol}
+              {data?.[index]?.symbol?.toLocaleUpperCase()}
             </Typography>
           }
           secondary={
