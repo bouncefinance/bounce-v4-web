@@ -19,7 +19,7 @@ import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getUserPoolCount } from 'api/user'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import { VerifyStatus } from 'api/profile/type'
-
+import countries from 'i18n-iso-countries'
 const ProfileTag = styled(SmallText)`
   display: flex;
   flex-direction: row;
@@ -120,7 +120,7 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
         <H6 sx={{ fontSize: { xs: 16, sm: 14 }, color: '#2B51DA' }}>{`#${personalInfo?.fullNameId}`}</H6>
       </Stack>
       <Row mt={24} gap={4}>
-        <ProfileTag>{personalInfo?.location}</ProfileTag>
+        <ProfileTag>{countries.getName(personalInfo?.location as string, 'en')}</ProfileTag>
         {personalInfo?.ifKyc === VerifyStatus.Verified && (
           <ProfileTag>
             KYC Verified
