@@ -11,8 +11,9 @@ import OthersDetail from '../othersDetail'
 import moment from 'moment'
 import LineClaimChart from '../lineClaimChart'
 import ClaimBlock from '../../userBlock/claimBlock'
-
+import { useIsMDDown } from 'themes/useTheme'
 const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
     return (
@@ -22,7 +23,7 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           sx={{
             width: '100%',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start'
           }}
@@ -31,7 +32,8 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         >
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               height: '100%',
               minHeight: '226px',
               paddingRight: '24px'
@@ -41,7 +43,8 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Box>
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               borderRadius: '20px',
               background: '#20201e',
               display: 'flex',

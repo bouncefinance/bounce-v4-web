@@ -2,6 +2,7 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as OpenChartIcon } from 'assets/imgs/dutchAuction/openChart.svg'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
+import { useIsMDDown } from 'themes/useTheme'
 import {
   createChart,
   ColorType,
@@ -229,6 +230,7 @@ export const LineChartView = ({
   return <Box ref={chartContainerRef}></Box>
 }
 const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const segments = times ? Number(times) : 0
@@ -285,12 +287,13 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         >
           Duction Auction Live Chart
         </Typography>
-        <OpenChartImg
-          onClick={() => {
-            console.log('setDialogOpen>>>>', dialogOpen)
-            setDialogOpen(!dialogOpen)
-          }}
-        />
+        {!isMd && (
+          <OpenChartImg
+            onClick={() => {
+              setDialogOpen(!dialogOpen)
+            }}
+          />
+        )}
       </Stack>
       <LineChartView data={lineData} poolInfo={poolInfo} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>

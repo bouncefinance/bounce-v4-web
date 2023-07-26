@@ -2,13 +2,14 @@ import { Box } from '@mui/material'
 import LeftBox from '../../creatorBlock/left'
 import RightBox from '../right'
 import { DutchAuctionPoolProp } from 'api/pool/type'
-
+import { useIsMDDown } from 'themes/useTheme'
 const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   return (
     <Box
       sx={{
         display: 'flex',
-        flexFlow: 'row nowrap',
+        flexFlow: isMd ? 'column nowrap' : 'row nowrap',
         justifyContent: 'center',
         alignItems: 'flex-start',
         paddingTop: '30px'
@@ -17,14 +18,16 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     >
       <Box
         sx={{
-          flex: 400
+          width: isMd ? '100%' : 'unset',
+          flex: isMd ? 'unset' : 400
         }}
       >
         <LeftBox poolInfo={poolInfo} />
       </Box>
       <Box
         sx={{
-          flex: 474
+          width: isMd ? '100%' : 'unset',
+          flex: isMd ? 'unset' : 474
         }}
       >
         <RightBox poolInfo={poolInfo} />
