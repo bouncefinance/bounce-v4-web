@@ -184,7 +184,7 @@ const DutchAuctionParametersForm = (): JSX.Element => {
           ...values,
           tokenToAddress: res.address,
           tokenToSymbol: res.symbol || '',
-          tokenToLogoURI: res.logoURI,
+          tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenToDecimals: res.decimals
         })
       })

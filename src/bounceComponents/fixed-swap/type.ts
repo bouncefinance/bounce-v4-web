@@ -13,6 +13,8 @@ export interface Token {
   decimals: number
   symbol?: string
   logoURI?: string
+  smallUrl?: string
+  balance?: number
   name?: string
   dangerous?: boolean
 }
