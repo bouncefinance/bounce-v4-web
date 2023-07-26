@@ -13,7 +13,6 @@ import JSBI from 'jsbi'
 export function useErc20EnglishAuctionInfo(backedId?: number | undefined) {
   const { sysId: _sysId } = useQueryParams()
   const sysId = useMemo(() => (backedId ? Number(backedId) : Number(_sysId) || 0), [_sysId, backedId])
-  console.log('sysId1111>>', sysId)
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.ENGLISH_AUCTION, sysId)
   const { account } = useActiveWeb3React()
   const englishAuctionErc20Contract = useEnglishAuctionErc20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)

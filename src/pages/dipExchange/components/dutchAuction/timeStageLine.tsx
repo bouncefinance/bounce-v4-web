@@ -17,7 +17,6 @@ import { useIsMDDown } from 'themes/useTheme'
 const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const isMd = useIsMDDown()
   const [swiper, setSwiper] = useState<SwiperCore | null>(null)
-  console.log('swiper>>>', swiper)
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
   const segments = times ? (Number(times) > 100 ? 100 : Number(times)) : 1
   const startTime = openAt ? Number(openAt * 1000) : 0

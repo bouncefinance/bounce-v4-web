@@ -110,7 +110,7 @@ export const LineChartView = ({
       poolInfo?.fragments &&
       CurrencyAmount.fromRawAmount(
         poolInfo.currencyAmountTotal0.currency,
-        BigNumber(poolInfo.amountTotal0).div(poolInfo?.fragments).toString()
+        BigNumber(poolInfo.amountTotal0).div(poolInfo?.fragments).integerValue(BigNumber.ROUND_CEIL).toString()
       ).toExact(),
     [poolInfo.amountTotal0, poolInfo.currencyAmountTotal0.currency, poolInfo?.fragments]
   )
