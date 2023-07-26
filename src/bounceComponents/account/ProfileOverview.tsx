@@ -317,7 +317,12 @@ function SocialEditInput({ value, setValue }: { value: string; setValue: (val: s
                 width: 160,
                 height: 34,
                 background: '#F6F7F3',
-                borderRadius: '100px'
+                borderRadius: '100px',
+                '&.Mui-focused': {
+                  '.MuiOutlinedInput-notchedOutline': {
+                    border: 'none'
+                  }
+                }
               }}
             />
             <Typography

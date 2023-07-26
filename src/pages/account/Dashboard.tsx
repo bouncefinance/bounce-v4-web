@@ -25,6 +25,7 @@ import { useActiveWeb3React } from 'hooks'
 import Copy from 'components/essential/Copy'
 import Divider from 'components/Divider'
 import useBreakpoint from '../../hooks/useBreakpoint'
+import countries from 'i18n-iso-countries'
 // import { ReactComponent as InstagramSvg } from 'assets/socialLinksIcon/instagram-dashboard.svg'
 const btnStyle = {
   height: 26,
@@ -168,7 +169,7 @@ export default function Dashboard() {
                             width: 84,
                             height: '100%'
                           }}
-                          label={userInfo.location}
+                          label={countries.getName(userInfo.location, 'en')}
                         />
                       </Box>
                     )}
@@ -242,7 +243,7 @@ export default function Dashboard() {
             )}
             {isSm && (
               <Box pt={26}>
-                <Box sx={{ position: 'relative', width: '120px', left: 'calc(50% - 60px)' }}>
+                <Box sx={{ position: 'relative', width: 'max-content', left: '50%', transform: 'translateX(-50%)' }}>
                   {!userInfo?.avatar ? (
                     <Skeleton variant="circular" width={72} height={72} sx={{ background: 'var(--ps-gray-50)' }} />
                   ) : (

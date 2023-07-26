@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
-import SwiperCore, { Autoplay, Pagination } from 'swiper'
+import SwiperCore, { Autoplay, EffectCreative, Pagination } from 'swiper'
 import 'swiper/swiper-bundle.css'
 import { Box, styled, Skeleton, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -151,10 +151,21 @@ function ArrowBanner({ type }: { type?: string }) {
         <SwiperSkeleton />
       ) : (
         <Swiper
+          speed={1200}
           onSwiper={setSwiper}
           spaceBetween={0}
           slidesPerView={1}
           loop={true}
+          effect={'creative'}
+          creativeEffect={{
+            prev: {
+              translate: [0, 0, -1]
+            },
+            next: {
+              translate: ['100%', 0, 0]
+            }
+          }}
+          modules={[EffectCreative]}
           autoplay={{
             delay: delay
           }}

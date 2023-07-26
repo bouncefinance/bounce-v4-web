@@ -2,7 +2,7 @@ import { Alert, Typography } from '@mui/material'
 
 const PayAttentionAlert = () => {
   return (
-    <Alert severity="warning" sx={{ borderRadius: 20 }}>
+    <Alert severity="warning" sx={{ '&.MuiAlert-root': { background: '#F9FCDE' }, borderRadius: 20 }}>
       <Typography variant="body1" component="span">
         Please pay attention.&nbsp;
       </Typography>
