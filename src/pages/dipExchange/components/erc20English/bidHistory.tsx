@@ -15,7 +15,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
     poolInfo?.poolId || '',
     poolInfo?.category,
     account || '',
-    ['Bid']
+    ['Swapped']
   )
   const list = useMemo(() => {
     if (!data) return undefined
