@@ -316,8 +316,6 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
     console.log('action')
     console.log(action)
   }, [action])
-  console.log('poolInfo')
-  console.log(poolInfo)
   return (
     <Box sx={{ mt: 32 }}>
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
