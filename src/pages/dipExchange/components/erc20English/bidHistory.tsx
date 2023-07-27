@@ -19,7 +19,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
   )
   const list = useMemo(() => {
     if (!data) return undefined
-    return data.list.filter(item => item.event === 'Bid') || []
+    return data.list.filter(item => item.event === 'Swapped') || []
   }, [data])
   if (!list || (Array.isArray(list) && list.length === 0)) {
     return null
