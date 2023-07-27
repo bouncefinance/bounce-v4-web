@@ -122,7 +122,6 @@ const btnStyle = {
 const SocialDisSvg = ({ userInfo }: { userInfo: any }) => {
   return (
     <>
-      {' '}
       <IconButton
         href={userInfo?.twitter as string}
         target="_blank"
