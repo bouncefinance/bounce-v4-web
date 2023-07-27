@@ -189,7 +189,7 @@ export default function Dashboard() {
       <Box padding="0 20px" sx={{ background: isSm ? '#fff' : '' }}>
         <Container maxWidth="lg">
           <Box padding={isSm ? `20px 0` : `40px 0`}>
-            <Typography variant="h3" fontSize={isSm ? 22 : 30} fontFamily="Public Sans">
+            <Typography variant="h3" fontSize={isSm ? 22 : 30} fontFamily="Public Sans" fontWeight={600}>
               Dashboard
             </Typography>
             {!isSm && (
