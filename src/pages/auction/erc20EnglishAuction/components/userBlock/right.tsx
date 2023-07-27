@@ -12,6 +12,7 @@ import ClosedAndNotClaim from './actionStep/closedAndNotClaim'
 import { useActiveWeb3React } from 'hooks'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import { PoolSaleInfo } from './poolSaleInfo'
 const RightBox = () => {
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   if (poolInfo) return <RightBoxContent poolInfo={poolInfo}></RightBoxContent>
@@ -73,6 +74,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
           flexFlow: 'column nowrap'
         }}
       >
+        <PoolSaleInfo poolInfo={poolInfo} />
         <Box
           sx={{
             flex: 1,
@@ -81,7 +83,6 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
             justifyContent: 'center'
           }}
         >
-          {/* TODO pool sale info */}
           <ConnectWalletButton />
         </Box>
       </Box>
@@ -100,6 +101,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
           flexFlow: 'column nowrap'
         }}
       >
+        <PoolSaleInfo poolInfo={poolInfo} />
         <Box
           sx={{
             flex: 1,
@@ -108,7 +110,6 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
             justifyContent: 'center'
           }}
         >
-          {/* TODO pool sale info */}
           <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
         </Box>
       </Box>
