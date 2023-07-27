@@ -1,12 +1,12 @@
 import { Alert, Typography } from '@mui/material'
-import ErrorIcon from '@mui/icons-material/Error'
+import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/err.svg'
 
 const NotEligibleAlert = () => {
   return (
     <Alert
       severity="error"
       sx={{ borderRadius: 20, '&.MuiAlert-root': { background: '#F9E3DA' } }}
-      icon={<ErrorIcon sx={{ color: '#FF0000' }} />}
+      icon={<ErrorIcon />}
     >
       <Typography variant="body1" component="span">
         You are not eligible.&nbsp;
