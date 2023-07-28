@@ -14,6 +14,8 @@ interface NftCardProps {
 const NFTCard = (props: NftCardProps) => {
   const { balance, name, contractName, tokenId, image } = props.nft
   const { handleClick, isSelect, style } = props
+  console.log('image', image)
+
   return (
     <Box
       sx={{
@@ -40,6 +42,7 @@ const NFTCard = (props: NftCardProps) => {
         }}
         width={170}
         height={170}
+        altSrc={EmptyCollectionIcon}
         src={image || EmptyCollectionIcon}
         alt={'nft'}
       />

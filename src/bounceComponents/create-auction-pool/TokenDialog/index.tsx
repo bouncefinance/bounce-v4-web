@@ -8,7 +8,7 @@ import Dialog from 'bounceComponents/common/DialogBase'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import { ChainId } from 'constants/chain'
 import { Token } from 'bounceComponents/fixed-swap/type'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+// import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 export interface BasicToken {
   address: string
@@ -37,7 +37,7 @@ const Loading = () => {
 
 const TokenDialog = create(({ enableEth, chainId, action }: TokenDialogProps) => {
   const modal = useModal()
-  const chainConfig = useChainConfigInBackend('ethChainId', chainId)
+  // const chainConfig = useChainConfigInBackend('ethChainId', chainId)
 
   const handleResolve = (token: Token) => {
     modal.resolve(token)
@@ -56,7 +56,7 @@ const TokenDialog = create(({ enableEth, chainId, action }: TokenDialogProps) =>
     tokenList: tokenList,
     isGettingTokenList,
     isGettingSingleToken
-  } = useTokenList(chainConfig?.id, action, debouncedFilterInputValue, enableEth)
+  } = useTokenList(chainId, action, debouncedFilterInputValue, enableEth)
 
   console.log('>>>>> tokenList: ', tokenList)
 
