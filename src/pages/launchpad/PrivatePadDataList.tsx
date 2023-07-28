@@ -123,7 +123,7 @@ const DipProjectInfo: IProjectInfo[] = [
       <Stack flexDirection={'column'} gap={10} key={1}>
         <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
         <Typography>
-          the ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+          The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
           and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
           on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
           reached.
@@ -808,11 +808,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         value: ['ERC20 English Auction']
       },
       {
-        title: ['dipTokenOffered'],
+        title: ['Dip Token Offered'],
         value: 'TBD $DIP'
       },
       {
-        title: ['dgtTokenOffered'],
+        title: ['Dgt Token Offered'],
         value: 'TBD $DGP'
       },
       {

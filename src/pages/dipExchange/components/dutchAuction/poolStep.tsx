@@ -61,7 +61,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       description: moment(poolInfo.openAt * 1000).format('YYYY-MM-DD HH:mm:ss')
     },
     {
-      label: 'Final Token claim',
+      label: 'Final Token Claim',
       description: moment(poolInfo.claimAt * 1000).format('YYYY-MM-DD HH:mm:ss')
     }
   ]
