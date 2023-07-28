@@ -159,6 +159,9 @@ export const LineChartView = ({
         timeFormatter: function (businessDayOrTimestamp: number | string) {
           // console.log(businessDayOrTimestamp);
           return moment(businessDayOrTimestamp).format('YYYY-MM-DD HH:mm:ss')
+        },
+        priceFormatter: (price: number | string) => {
+          return Number(price).toFixed(6)
         }
       },
       width: chartContainerRef.current.clientWidth,
