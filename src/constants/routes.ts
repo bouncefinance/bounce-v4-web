@@ -88,7 +88,8 @@ export const routes = {
     DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
 
     LasMetaAuction: '/launchpad/lasmeta',
-    DipExchange: '/launchpad/dip_exchange'
+    DipExchange: '/launchpad/dip_exchange',
+    MetaBloxAuction: '/launchpad/metablox'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

@@ -4,7 +4,7 @@ import { Typography, Box, Button } from '@mui/material'
 // import usePrevious from 'hooks/usePrevious'
 import { ApplicationModal } from 'state/application/actions'
 import { useModalOpen, useWalletModalToggle } from 'state/application/hooks'
-import AccountDetails from 'components/Modal/WalletModal/AccountDetails'
+// import AccountDetails from 'components/Modal/WalletModal/AccountDetails'
 
 import Modal from '../index'
 import Option from './Option'
@@ -51,11 +51,10 @@ export function useGetWalletOptions(isModal?: boolean) {
     ))
 }
 
-export default function WalletModal({
-  pendingTransactions,
-  confirmedTransactions,
-  ENSName
-}: {
+export default function WalletModal({}: // pendingTransactions,
+// confirmedTransactions,
+// ENSName
+{
   pendingTransactions: string[] // hashes of pending
   confirmedTransactions: string[] // hashes of confirmed
   ENSName?: string
@@ -127,15 +126,17 @@ export default function WalletModal({
       )
     }
     if (account) {
-      return (
-        <AccountDetails
-          toggleWalletModal={toggleWalletModal}
-          pendingTransactions={pendingTransactions}
-          confirmedTransactions={confirmedTransactions}
-          ENSName={ENSName}
-          openOptions={() => {}}
-        />
-      )
+      if (walletModalOpen) toggleWalletModal()
+      return null
+      // return (
+      //   <AccountDetails
+      //     toggleWalletModal={toggleWalletModal}
+      //     pendingTransactions={pendingTransactions}
+      //     confirmedTransactions={confirmedTransactions}
+      //     ENSName={ENSName}
+      //     openOptions={() => {}}
+      //   />
+      // )
     }
     return (
       <>
