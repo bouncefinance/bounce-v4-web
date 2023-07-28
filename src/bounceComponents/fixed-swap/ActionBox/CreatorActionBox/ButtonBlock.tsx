@@ -92,7 +92,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
     return <ConnectWalletButton />
   }
 
-  if (!isCurrentChainEqualChainOfPool) {
+  if (!poolInfo.creatorClaimed && !isCurrentChainEqualChainOfPool) {
     return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
   }
 

@@ -36,7 +36,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
 import { useCreateErc20EnglishAuctionPool } from 'hooks/useCreateErc20EnglishAuctionPool'
-
+import AuctionNotification from '../AuctionNotification'
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
 const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
@@ -445,7 +445,7 @@ const CreationErc20EnglishAuctionConfirmation = () => {
             </Box>
           </Stack>
         </Box>
-
+        <AuctionNotification />
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
           <CreatePoolButton />
 

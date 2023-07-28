@@ -58,11 +58,26 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         src={props.img ? props.img : EmptyImg}
       />
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-        <Box mb={16}>
-          <H5>{props.name}</H5>
+        <Box mb={16} sx={{ wordBreak: 'break-all' }}>
+          <H5
+            sx={{
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {props.name}
+          </H5>
           <SmallText
             sx={{
-              color: '#1B1B1B66'
+              color: '#1B1B1B66',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}
           >
             {/* to remain space of description  */}
@@ -186,7 +201,7 @@ export const ActiveUser: React.FC = () => {
                   userId={data.creatorUserInfo.userId}
                   img={data.creatorUserInfo.avatar}
                   name={data.creatorUserInfo.name}
-                  desc={data.creatorUserInfo.companyIntroduction}
+                  desc={data.creatorUserInfo.description}
                   createdCount={data.totalCreated}
                   participated={data.totalPart}
                 />

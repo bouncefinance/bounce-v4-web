@@ -111,3 +111,12 @@ export const Body03 = styled(Typography)`
   line-height: 140%;
   color: #121212;
 `
+export const Body04 = styled(Typography)({
+  leadingTrim: 'both',
+  textEdge: 'cap',
+  fontFamily: 'Inter',
+  fontSize: '16px',
+  fontStyle: 'normal',
+  fontWeight: 400,
+  lineHeight: '150%'
+})

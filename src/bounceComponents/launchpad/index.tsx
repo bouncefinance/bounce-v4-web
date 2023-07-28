@@ -140,9 +140,9 @@ export function Common({
           sx={{
             position: 'absolute',
             '@media(max-width:600px)': {
-              left: 0,
-              padding: '0 16px',
-              top: 5
+              // padding: '0 16px',
+              left: 24,
+              top: 24
             },
             '@media(min-width:600px)': {
               left: 24,

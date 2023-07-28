@@ -74,6 +74,7 @@ const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getP
       {isJoined && countdown > 0 ? (
         <>
           <Divider sx={{ mt: 10, borderColor: '#E6E6E6' }} />
+
           <PoolInfoItem title="Claim token" sx={{ mt: 10 }}>
             <Typography>
               in {days}d : {hours}h : {minutes}m : {seconds}s

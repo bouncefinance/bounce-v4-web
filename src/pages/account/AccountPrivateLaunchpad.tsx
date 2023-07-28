@@ -1,8 +1,9 @@
 import { Box, Container, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import ComingSoon from 'pages/ComingSoon'
-
+import useBreakpoint from 'hooks/useBreakpoint'
 export default function AccountPrivateLaunchpad() {
+  const isSm = useBreakpoint('sm')
   return (
     <AccountLayout>
       <Box padding="40px 20px">
@@ -12,7 +13,7 @@ export default function AccountPrivateLaunchpad() {
             position: 'relative'
           }}
         >
-          <Typography variant="h3" fontSize={30}>
+          <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily={'Public Sans'} fontWeight={600}>
             Private Launchpad
           </Typography>
           <ComingSoon

@@ -3,7 +3,8 @@ import { Button, Drawer, Box, IconButton, Stack, Typography, InputBase } from '@
 import { useDebounce } from 'ahooks'
 import { ReactComponent as BottomArrowIcon } from 'assets/imgs/common/bottomArrow.svg'
 import { ReactComponent as SearchSvg } from 'assets/imgs/common/search.svg'
-import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
+import { ChainId } from 'constants/chain'
 import { InitialValuesPros, initialValues } from 'pages/tokenAuction/components/listDialog'
 import { useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -19,10 +20,9 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
   const [currOpen, setCurrOpen] = useState<IDrawerOpen>({ open: false, title: '' })
   const [chain] = useState<number>(0)
   const [searchVal, setSearchVal] = useState('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
-  const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, debouncedSearchVal, false)
-  console.log('tokenList:', tokenList)
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
+  const debouncedFilterInputValue = useDebounce(searchVal, { wait: 400 })
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const [selectButton, setSelectButton] = useState('')
@@ -88,7 +88,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
       {
         title: 'Token',
         name: 'tokenFromSymbol',
-        list: []
+        list: tokenList || []
       },
       {
         title: 'Sort By',
@@ -114,7 +114,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         })
       }
     ],
-    [chainList]
+    [chainList, tokenList]
   )
   const setValues = ({ type, item, isCancel }: { type: string; item: any; isCancel?: boolean }) => {
     const body = { ...filterValues }
@@ -129,7 +129,11 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         body.poolStatus = isCancel ? initialValues['poolStatus'] : item.value
         break
       case 'Token':
-        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.address
+        body.tokenFromAddress = isCancel
+          ? initialValues['tokenFromAddress']
+          : item.contract
+          ? item.contract
+          : item.address
         body.tokenFromSymbol = isCancel ? initialValues['tokenFromSymbol'] : item.symbol
         body.tokenFromLogoURI = isCancel ? initialValues['tokenFromLogoURI'] : item.logoURI
         body.tokenFromDecimals = isCancel ? initialValues['tokenFromDecimals'] : item.decimals
@@ -236,7 +240,9 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
           }}
           sx={{ border: selectButton === data.title ? '1px solid #E1F25C' : '' }}
         >
-          <Typography>{data.title}</Typography>
+          <Typography>
+            {data.title} {data.title === 'Search' ? ' Type' : ''}
+          </Typography>
           <BottomArrowIcon />
         </FilterButton>
         {data.list?.length > 0 && (

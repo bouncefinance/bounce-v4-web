@@ -20,8 +20,17 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
 }) => {
   return (
     <Stack spacing={10} sx={{ pt: 20 }}>
-      <Stack direction="row" component={Typography} variant="body1">
-        <Typography component="span" color={status === 2 ? 'var(--ps-green)' : status === 1 ? '' : 'var(--ps-blue)'}>
+      <Stack
+        direction="row"
+        component={Typography}
+        variant="body1"
+        sx={{ fontFamily: 'Inter', '&>span': { fontFamily: 'Inter' } }}
+      >
+        <Typography
+          className="progress-left"
+          component="span"
+          color={status === 2 ? '#20994B' : status === 1 ? '' : 'var(--ps-blue)'}
+        >
           {formatNumber(sold, {
             unit: decimals,
             decimalPlaces: 6
@@ -36,7 +45,10 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
         &nbsp;
         {symbol}
       </Stack>
-      <Box sx={{ color: status === 2 ? 'common.success' : status === 1 ? 'var(--ps-gray-200)' : 'common.blue' }}>
+      <Box
+        className="progress"
+        sx={{ color: status === 2 ? '#E1F25C' : status === 1 ? 'var(--ps-gray-200)' : 'common.blue' }}
+      >
         <LinearProgress
           color="inherit"
           variant="determinate"
@@ -45,7 +57,8 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
             height: 6,
             borderRadius: 4,
             '::before': {
-              opacity: status === 1 ? 1 : 0.3
+              opacity: 1,
+              color: 'rgba(18, 18, 18, 0.06)'
             }
           }}
         />

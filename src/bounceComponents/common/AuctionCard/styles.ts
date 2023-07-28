@@ -1,6 +1,28 @@
 import { SxProps } from '@mui/material'
 
 export default {
+  2: {
+    '& .pool-id': {
+      color: '#20994B'
+    },
+    '& .progress-left': {
+      color: '#20994B'
+    },
+    '& .progress': {
+      color: '#E1F25C'
+    }
+  },
+  4: {
+    '& .pool-id': {
+      color: '#2B51DA'
+    },
+    '& .progress-left': {
+      color: '#2B51DA'
+    },
+    '& .progress': {
+      color: '#2B51DA'
+    }
+  },
   card: {
     p: 16,
     borderRadius: 12,
