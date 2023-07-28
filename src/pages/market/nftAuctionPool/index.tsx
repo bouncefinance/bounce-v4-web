@@ -410,6 +410,7 @@ export const NFTCard = (props: NFTPrams) => {
               noWrap
               sx={{
                 fontSize: 20,
+                fontWeight: 600,
                 color:
                   status === PoolStatus.Upcoming
                     ? 'var(--ps-text-2)'

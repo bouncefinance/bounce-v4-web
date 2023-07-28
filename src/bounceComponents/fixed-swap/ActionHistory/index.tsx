@@ -18,7 +18,7 @@ import { PoolEvent, PoolType } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { shortenAddress } from 'utils'
-
+import { Body03 } from 'components/Text'
 export const StyledHistoryTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     color: '#908E96',
@@ -49,13 +49,76 @@ export const StyledHistoryTableRow = styled(TableRow)(() => ({
   }
 }))
 
-const SaleTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Sale</Typography>
-const CreatorClaimedTypography = (
-  <Typography sx={theme => ({ color: theme.palette.success.main })}>CreatorClaimed</Typography>
+const SaleTypography = (
+  <Body03
+    sx={{
+      width: 'max-content',
+      color: '#20994B',
+      background: '#CFF8D1',
+      padding: '4px 8px',
+      borderRadius: 100,
+      textAlign: 'center'
+    }}
+  >
+    Sale
+  </Body03>
 )
-const BidTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Bid</Typography>
-const BetTypography = <Typography sx={theme => ({ color: theme.palette.success.main })}>Bet</Typography>
-const RegretTypography = <Typography sx={theme => ({ color: theme.palette.error.main })}>Regret</Typography>
+const CreatorClaimedTypography = (
+  <Body03
+    sx={{
+      width: 'max-content',
+      color: '#20994B',
+      background: '#CFF8D1',
+      padding: '4px 8px',
+      borderRadius: 100,
+      textAlign: 'center'
+    }}
+  >
+    CreatorClaimed
+  </Body03>
+)
+const BidTypography = (
+  <Body03
+    sx={{
+      width: 'max-content',
+      color: '#2B51DA',
+      background: '#D6DFF6',
+      padding: '4px 8px',
+      borderRadius: 100,
+      textAlign: 'center'
+    }}
+  >
+    Bid
+  </Body03>
+)
+const BetTypography = (
+  <Body03
+    sx={{
+      width: 'max-content',
+      color: '#20994B',
+      background: '#CFF8D1',
+      padding: '4px 8px',
+      borderRadius: 100,
+      textAlign: 'center'
+    }}
+  >
+    Bet
+  </Body03>
+)
+const RegretTypography = (
+  <Body03
+    sx={{
+      width: 'max-content',
+      color: '#A45E3F',
+      background: '#F9E3DA',
+      padding: '4px 8px',
+      borderRadius: 100,
+      textAlign: 'center'
+    }}
+  >
+    Regret
+  </Body03>
+)
 
 export const PoolEventTypography: Record<PoolEvent, JSX.Element> = {
   Swapped: SaleTypography,
@@ -79,7 +142,6 @@ const ActionHistory = ({
   category: PoolType
 }) => {
   const { data, loading: isGettingPoolHistory } = usePoolHistory(backedChainId, poolId, category)
-
   return (
     <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
       {!noTitle && (

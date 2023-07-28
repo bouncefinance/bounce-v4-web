@@ -68,8 +68,8 @@ const BidButtonBlock = ({
       </Button>
     )
   }
-
-  if (!isCurrentChainEqualChainOfPool) {
+  // not test
+  if (!isCurrentChainEqualChainOfPool && (!!bidAmount || poolInfo.status !== PoolStatus.Closed)) {
     return (
       <>
         <SwitchNetworkButton targetChain={poolInfo.ethChainId || 1} />

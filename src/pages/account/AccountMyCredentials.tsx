@@ -1,8 +1,10 @@
 import { Box, Container, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
+import useBreakpoint from 'hooks/useBreakpoint'
 import ComingSoon from 'pages/ComingSoon'
 
 export default function AccountMyCredentials() {
+  const isSm = useBreakpoint('sm')
   return (
     <AccountLayout>
       <Box padding="40px 20px">
@@ -12,7 +14,7 @@ export default function AccountMyCredentials() {
             position: 'relative'
           }}
         >
-          <Typography variant="h3" fontSize={30}>
+          <Typography variant="h3" fontSize={isSm ? 22 : 36} fontWeight={600} fontFamily={'Public Sans'}>
             My Credentials
           </Typography>
           <ComingSoon

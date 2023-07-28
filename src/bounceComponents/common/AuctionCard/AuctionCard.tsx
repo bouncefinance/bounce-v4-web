@@ -48,11 +48,11 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   claimAt
 }) => {
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
-
+  const sxStyles = { ...styles[status], ...styles.card }
   return (
     <Card
       sx={{
-        ...styles.card,
+        ...sxStyles,
         '@media(max-width:380px)': { width: 'calc(100vw - 16px - 50px)', minWidth: '0 !important' }
       }}
       elevation={0}
@@ -63,7 +63,7 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
       }}
     >
       <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
-        <Body04>#{poolId}</Body04>
+        <Body04 className="pool-id">#{poolId}</Body04>
         <Stack
           direction="row"
           spacing={6}
