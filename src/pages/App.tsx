@@ -76,6 +76,7 @@ import DipExchange from './dipExchange'
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
+import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -115,6 +116,7 @@ export default function App() {
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
+                <PerformKYCVerification />
                 {/* <WarningModal /> */}
                 {/* <Web3ReactManager> */}
                 <Routes>
