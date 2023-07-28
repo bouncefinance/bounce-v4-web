@@ -1,10 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { FreeMode, Virtual } from 'swiper'
+import { FreeMode } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/free-mode'
-import 'swiper/css/virtual'
 import { useState, useMemo } from 'react'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import BigNumber from 'bignumber.js'
@@ -86,8 +85,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
     >
       <Swiper
         key={'erc20swiper'}
-        modules={[FreeMode, Virtual]}
-        virtual={true}
+        modules={[FreeMode]}
         freeMode={true}
         loop={false}
         centeredSlides={isMd ? false : true}
@@ -99,7 +97,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
       >
         {releaseData.map((item, index) => {
           return (
-            <SwiperSlide key={'stageLineItem' + index} virtualIndex={index}>
+            <SwiperSlide key={'stageLineItem' + index}>
               <Box
                 key={'stageLineBox' + index}
                 sx={{

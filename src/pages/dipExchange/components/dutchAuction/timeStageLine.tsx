@@ -2,10 +2,9 @@ import { Box, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import SwiperCore from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { FreeMode, Virtual } from 'swiper'
+import { FreeMode } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/free-mode'
-import 'swiper/css/virtual'
 import moment from 'moment'
 import { useState, useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
@@ -91,10 +90,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     >
       <Swiper
         key={'virtual'}
-        modules={[FreeMode, Virtual]}
-        virtual={{
-          enabled: true
-        }}
+        modules={[FreeMode]}
         centeredSlides={isMd ? false : true}
         centeredSlidesBounds={isMd ? false : true}
         freeMode={true}
@@ -106,7 +102,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       >
         {releaseData.map((item, index) => {
           return (
-            <SwiperSlide key={'stageLineItem' + index} virtualIndex={index * 100}>
+            <SwiperSlide key={'stageLineItem' + index}>
               <Box
                 key={'stageLineBox' + index}
                 sx={{
