@@ -61,7 +61,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             </Grid>
             <Grid item xs={4}>
               <PoolInfoItem
-                title={'Price'}
+                title={'UnitPrice'}
                 sx={{
                   flexFlow: 'column nowrap',
                   justifyContent: 'flex-start',

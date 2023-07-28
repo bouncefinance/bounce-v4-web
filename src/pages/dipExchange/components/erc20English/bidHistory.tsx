@@ -6,7 +6,6 @@ import { useMemo } from 'react'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
-import BigNumber from 'bignumber.js'
 
 const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const { account } = useActiveWeb3React()
@@ -97,13 +96,12 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                       item.token0Amount || '0'
                     )?.toSignificant()
                   : '--'
-                const amoutToken1: string = poolInfo.currencySwappedAmount1
+                const price: string = poolInfo.currencyAmountEndPrice
                   ? CurrencyAmount.fromRawAmount(
-                      poolInfo.currencySwappedAmount1.currency,
+                      poolInfo.currencyAmountEndPrice.currency,
                       item.token1Amount || '0'
-                    )?.toExact()
-                  : '0'
-                const price: string = new BigNumber(amoutToken1).div(amount).toString() || '--'
+                    )?.toSignificant()
+                  : '--'
                 const date = item.blockTs ? moment(item.blockTs * 1000).format('YYYY-MM-DD HH:mm') : '--'
                 return (
                   <>
