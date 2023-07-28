@@ -76,6 +76,7 @@ import DipExchange from './dipExchange'
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
+import ApplyToBeSeller from './realWorldAuction/applyToBeSeller'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -152,6 +153,7 @@ export default function App() {
                     <Route path={routes.launchpad.bladeDaoInfo} element={<ProjectInfo />} /> */}
 
                   <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
+                  <Route path={routes.realAuction.applySeller} element={<ApplyToBeSeller />} />
                   <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                   <Route path={routes.profile.summary} element={<ProfileHome />} />
