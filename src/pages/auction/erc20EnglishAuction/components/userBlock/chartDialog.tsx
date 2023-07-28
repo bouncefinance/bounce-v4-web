@@ -3,7 +3,7 @@ import { ColorType } from 'lightweight-charts'
 import { Box, Typography, styled, Dialog } from '@mui/material'
 import { ReactComponent as XIcon } from 'assets/imgs/dutchAuction/x.svg'
 import { PointerItem } from 'pages/auction/dutchAuction/components/lineChart'
-import { LineChartView } from '../lineChart'
+import { LineChartView, ViewTypeParam } from '../lineChart'
 const ChartDialogEl = styled(Dialog)(() => ({
   '.MuiDialog-paper': {
     width: '60%',
@@ -52,6 +52,7 @@ const ChartDialog = ({
               textColor: '#959595'
             }
           }}
+          viewType={ViewTypeParam.dialog}
         />
         <Box
           sx={{

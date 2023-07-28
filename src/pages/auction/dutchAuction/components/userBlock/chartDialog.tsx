@@ -1,4 +1,4 @@
-import { LineChartView } from '../lineChart'
+import { LineChartView, ViewTypeParam } from '../lineChart'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import { PointerItem } from '../lineChart'
 import { ColorType } from 'lightweight-charts'
@@ -52,6 +52,7 @@ const ChartDialog = ({
               textColor: '#959595'
             }
           }}
+          viewType={ViewTypeParam.dialog}
         />
         <Box
           sx={{

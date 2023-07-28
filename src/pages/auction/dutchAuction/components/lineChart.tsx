@@ -25,7 +25,11 @@ export interface PointerItem {
   time: number | string
   value: number
 }
-
+export enum ViewTypeParam {
+  'default' = 0,
+  'dialog' = 1,
+  'dip' = 2
+}
 const OpenChartImg = styled(OpenChartIcon)(() => ({
   width: '16px',
   height: '16px',
@@ -86,14 +90,17 @@ export class ToolTip {
     }
   }
 }
+
 export const LineChartView = ({
   data,
   poolInfo,
-  options
+  options,
+  viewType = ViewTypeParam.default
 }: {
   data: PointerItem[]
   poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp
   options?: DeepPartial<ChartOptions>
+  viewType?: ViewTypeParam
 }) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
@@ -120,6 +127,23 @@ export const LineChartView = ({
     const date = new Date(time)
     return moment(date).format('DD MMMM')
   }
+  const offsetXy = useMemo(() => {
+    if (ViewTypeParam.default === viewType) {
+      return {
+        x: 95,
+        y: 220
+      }
+    } else if (ViewTypeParam.dialog === viewType) {
+      return {
+        x: 95,
+        y: 30
+      }
+    }
+    return {
+      x: 90,
+      y: 230
+    }
+  }, [viewType])
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -135,6 +159,9 @@ export const LineChartView = ({
         timeFormatter: function (businessDayOrTimestamp: number | string) {
           // console.log(businessDayOrTimestamp);
           return moment(businessDayOrTimestamp).format('YYYY-MM-DD HH:mm:ss')
+        },
+        priceFormatter: (price: number | string) => {
+          return Number(price).toFixed(6)
         }
       },
       width: chartContainerRef.current.clientWidth,
@@ -169,6 +196,7 @@ export const LineChartView = ({
       ...colorObj
     })
     newSeries.setData(data as LineData[])
+    // set current time data
     const nowDate = new Date().valueOf()
     if (nowDate / 1000 <= poolInfo.closeAt && nowDate / 1000 >= poolInfo.openAt) {
       // set current time data
@@ -195,10 +223,12 @@ export const LineChartView = ({
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem && resultItem?.time) {
         dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
+      } else {
+        dateStr = '--'
       }
-      const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
-      const x = Number(param?.point?.x) + 110
-      const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
+      const token0Price = currentValue ? Number(currentValue).toFixed(6) : '--' + poolInfo.token1.symbol
+      const x = Number(param?.point?.x) + offsetXy.x
+      const y = Number(newSeries.priceToCoordinate(currentValue)) + offsetXy.y
       if (
         param.point === undefined ||
         !param.time ||
@@ -224,11 +254,19 @@ export const LineChartView = ({
     poolInfo.token1.symbol,
     options,
     poolInfo.closeAt,
-    poolInfo.openAt
+    poolInfo.openAt,
+    offsetXy,
+    viewType
   ])
   return <Box ref={chartContainerRef}></Box>
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const LineChartSection = ({
+  poolInfo,
+  hideDialogBtn = false
+}: {
+  poolInfo: DutchAuctionPoolProp
+  hideDialogBtn?: boolean
+}) => {
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const segments = times ? Number(times) : 0
@@ -285,14 +323,16 @@ const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         >
           Duction Auction Live Chart
         </Typography>
-        <OpenChartImg
-          onClick={() => {
-            console.log('setDialogOpen>>>>', dialogOpen)
-            setDialogOpen(!dialogOpen)
-          }}
-        />
+        {!hideDialogBtn && (
+          <OpenChartImg
+            onClick={() => {
+              console.log('setDialogOpen>>>>', dialogOpen)
+              setDialogOpen(!dialogOpen)
+            }}
+          />
+        )}
       </Stack>
-      <LineChartView data={lineData} poolInfo={poolInfo} />
+      <LineChartView data={lineData} poolInfo={poolInfo} viewType={ViewTypeParam.default} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
         <RightText>
           {`${poolInfo.highestPrice?.toSignificant(18)} ${(poolInfo.token1.symbol + '').toUpperCase()}`}

@@ -123,7 +123,6 @@ export function useCurrencyBalances(
   const eths = useMemo(() => currencies?.find(currency => currency && currency.isNative), [currencies])
 
   const tokenBalances = useTokenBalancesWithLoadingIndicator(account, tokens, chainId)[0]
-
   const ethBalance = useETHBalance(eths ? account : undefined, chainId)
   return useMemo(
     () =>

@@ -27,7 +27,11 @@ interface PointerItem {
   time: number | string
   value: number
 }
-
+export enum ViewTypeParam {
+  'default' = 0,
+  'dialog' = 1,
+  'dip' = 2
+}
 const OpenChartImg = styled(OpenChartIcon)(() => ({
   width: '16px',
   height: '16px',
@@ -91,11 +95,13 @@ export class ToolTip {
 export const LineChartView = ({
   data,
   poolInfo,
-  options
+  options,
+  viewType = ViewTypeParam.default
 }: {
   data: PointerItem[]
   poolInfo: Erc20EnglishAuctionPoolProp
   options?: DeepPartial<ChartOptions>
+  viewType?: ViewTypeParam
 }) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
@@ -104,7 +110,7 @@ export const LineChartView = ({
       poolInfo?.fragments &&
       CurrencyAmount.fromRawAmount(
         poolInfo.currencyAmountTotal0.currency,
-        new BigNumber(poolInfo.amountTotal0).div(poolInfo?.fragments).toFixed(0, BigNumber.ROUND_DOWN)
+        BigNumber(poolInfo.amountTotal0).div(poolInfo?.fragments).integerValue(BigNumber.ROUND_DOWN).toString()
       ).toExact(),
     [poolInfo.amountTotal0, poolInfo.currencyAmountTotal0.currency, poolInfo?.fragments]
   )
@@ -128,6 +134,23 @@ export const LineChartView = ({
           bottomColor: 'rgba(43, 81, 218, 0.2)'
         }
   }, [poolInfo])
+  const offsetXy = useMemo(() => {
+    if (ViewTypeParam.default === viewType) {
+      return {
+        x: 120,
+        y: 240
+      }
+    } else if (ViewTypeParam.dialog === viewType) {
+      return {
+        x: 120,
+        y: 50
+      }
+    }
+    return {
+      x: 90,
+      y: 230
+    }
+  }, [viewType])
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -245,11 +268,13 @@ export const LineChartView = ({
       let dateStr = ''
       const resultItem = data.find((item: PointerItem) => Number(item.value) === Number(currentValue))
       if (resultItem) {
-        dateStr = Number(resultItem.time).toFixed(6) + poolInfo.token0.symbol || '--'
+        dateStr = Number(resultItem.time).toFixed(6) + poolInfo.token0.symbol
+      } else {
+        dateStr = '--'
       }
-      const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
-      const x = Number(param?.point?.x) + 110
-      const y = Number(lineSeries.priceToCoordinate(currentValue)) + 200
+      const token0Price = currentValue ? Number(currentValue).toFixed(6) : '--' + poolInfo.token1.symbol
+      const x = Number(param?.point?.x) + offsetXy.x
+      const y = Number(lineSeries.priceToCoordinate(currentValue)) + offsetXy.y
       if (
         param.point === undefined ||
         Number(param.time) < 0 ||
@@ -279,7 +304,9 @@ export const LineChartView = ({
     poolInfo.closeAt,
     poolInfo.openAt,
     poolInfo.fragments,
-    segmentLeftAmount
+    segmentLeftAmount,
+    offsetXy.x,
+    offsetXy.y
   ])
   return (
     <>
@@ -288,7 +315,13 @@ export const LineChartView = ({
     </>
   )
 }
-const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+const LineChartSection = ({
+  poolInfo,
+  hideDialogBtn = false
+}: {
+  poolInfo: Erc20EnglishAuctionPoolProp
+  hideDialogBtn?: boolean
+}) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const { currencyAmountTotal0, currencyAmountStartPrice, currencyAmountEndPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
@@ -348,13 +381,15 @@ const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
         >
           ERC20 English Auction Live Chart
         </Typography>
-        <OpenChartImg
-          onClick={() => {
-            setDialogOpen(!dialogOpen)
-          }}
-        />
+        {!hideDialogBtn && (
+          <OpenChartImg
+            onClick={() => {
+              setDialogOpen(!dialogOpen)
+            }}
+          />
+        )}
       </Stack>
-      <LineChartView data={lineData} poolInfo={poolInfo} />
+      <LineChartView data={lineData} poolInfo={poolInfo} viewType={ViewTypeParam.default} />
       <PoolInfoItem title={'Starting price'} sx={{ marginBottom: '10px', marginTop: '10px' }}>
         <RightText>
           {`${poolInfo.currencyAmountStartPrice?.toSignificant()} ${(poolInfo.token1.symbol + '').toUpperCase()}`}

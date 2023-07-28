@@ -36,7 +36,7 @@ import { getInviteList } from 'api/bladeDao/index'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import useBreakpoint from 'hooks/useBreakpoint'
-
+import { useIsMDDown } from 'themes/useTheme'
 const ProjectInfoDarkStyle = {
   fontFamily: { it: 'Inter' },
   Head: {
@@ -332,7 +332,7 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
           >
             {inviteData.map((item, index) => {
               return (
-                <Box className={'row'} key={index}>
+                <Box className={'row'} key={'inviteData' + index}>
                   <Typography
                     component={'span'}
                     sx={{
@@ -506,6 +506,7 @@ export function InviteBtn({
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
   const { userId } = useUserInfo()
+  const isMD = useIsMDDown()
   const isSm = useBreakpoint('sm')
   let prices: IPrivatePricesInfo[] = [
     {
@@ -545,7 +546,9 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
     }
     return result
   }, [poolInfo])
-  const pricesComponent = prices.map((p, i) => <Price isDark={isDark} title={p.title} value={p.value} key={i} />)
+  const pricesComponent = prices.map((p, i) => (
+    <Price isDark={isDark} title={p.title} value={p.value} key={'Price' + i} />
+  ))
   const nav = useNavigate()
 
   return (
@@ -554,7 +557,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '600px',
+        minHeight: isMD ? 'unset' : '600px',
         marginTop: '-76px'
       }}
     >
@@ -586,70 +589,166 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           left: isDark && isSm ? '' : { xs: 20, sm: '40px' }
         }}
       >
-        <GrayButton
-          sx={{
-            background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
-            '&:hover': {
-              background: isDark ? ProjectInfoDarkStyle.Head.ButtonHoverBg : ''
-            },
-            height: { xs: 'auto' }
-          }}
-          onClick={() => {
-            nav(routes.launchpad.index)
-          }}
-        >
-          <ArrowBackIcon />
-          <Typography variant={'h5'}>Launchpad homepage</Typography>
-        </GrayButton>
-        <Box
-          sx={{
-            alignSelf: 'end',
-            marginRight: 40,
-            mt: 10,
-            display: 'flex',
-            flexFlow: 'row nowrap'
-          }}
-          gap={8}
-        >
-          <Upcoming
-            style={{
-              marginRight: 0,
-              background: isDark ? ProjectInfoDarkStyle.Head.UpComBg : '',
-              fontFamily: isDark ? ProjectInfoDarkStyle.fontFamily.it : '',
-              color: isDark ? ProjectInfoDarkStyle.Head.UpComColor : ''
+        {!isMD && (
+          <>
+            <GrayButton
+              sx={{
+                background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
+                '&:hover': {
+                  background: isDark ? ProjectInfoDarkStyle.Head.ButtonHoverBg : ''
+                },
+                height: { xs: 'auto' }
+              }}
+              onClick={() => {
+                nav(routes.launchpad.index)
+              }}
+            >
+              <ArrowBackIcon />
+              <Typography variant={'h5'}>Launchpad homepage</Typography>
+            </GrayButton>
+            <Box
+              sx={{
+                alignSelf: 'end',
+                marginRight: 40,
+                mt: 10,
+                display: 'flex',
+                flexFlow: 'row nowrap'
+              }}
+              gap={8}
+            >
+              <Upcoming
+                style={{
+                  marginRight: 0,
+                  background: isDark ? ProjectInfoDarkStyle.Head.UpComBg : '',
+                  fontFamily: isDark ? ProjectInfoDarkStyle.fontFamily.it : '',
+                  color: isDark ? ProjectInfoDarkStyle.Head.UpComColor : ''
+                }}
+              >
+                {poolStatusText}
+              </Upcoming>
+              {poolInfo && (
+                <LikeUnlike
+                  likeObj={LIKE_OBJ.pool}
+                  objId={poolInfo?.id}
+                  likeAmount={{
+                    dislikeCount: poolInfo?.likeInfo?.dislikeCount,
+                    likeCount: poolInfo?.likeInfo?.likeCount,
+                    myDislike: poolInfo?.likeInfo?.myDislike,
+                    myLike: poolInfo?.likeInfo?.myLike
+                  }}
+                  onSuccess={getPoolInfo}
+                  likeSx={{
+                    '&:hover': {
+                      color: '#259C4A',
+                      background: '#FFFFFF'
+                    }
+                  }}
+                  unlikeSx={{
+                    '&:hover': {
+                      color: '#CA2020',
+                      background: '#FFFFFF'
+                    }
+                  }}
+                />
+              )}
+              {!!userId && poolInfo && (
+                <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+              )}
+            </Box>
+          </>
+        )}
+        {isMD && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexFlow: 'column nowrap',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start'
             }}
           >
-            {poolStatusText}
-          </Upcoming>
-          {poolInfo && (
-            <LikeUnlike
-              likeObj={LIKE_OBJ.pool}
-              objId={poolInfo?.id}
-              likeAmount={{
-                dislikeCount: poolInfo?.likeInfo?.dislikeCount,
-                likeCount: poolInfo?.likeInfo?.likeCount,
-                myDislike: poolInfo?.likeInfo?.myDislike,
-                myLike: poolInfo?.likeInfo?.myLike
-              }}
-              onSuccess={getPoolInfo}
-              likeSx={{
+            <GrayButton
+              sx={{
+                background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
                 '&:hover': {
-                  color: '#259C4A',
-                  background: '#FFFFFF'
-                }
+                  background: isDark ? ProjectInfoDarkStyle.Head.ButtonHoverBg : ''
+                },
+                padding: '16px',
+                marginLeft: '16px',
+                width: '200px',
+                height: '37px'
               }}
-              unlikeSx={{
-                '&:hover': {
-                  color: '#CA2020',
-                  background: '#FFFFFF'
-                }
+              onClick={() => {
+                nav(routes.launchpad.index)
               }}
-            />
-          )}
-          {!!userId && poolInfo && (
-            <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
-          )}
-        </Box>
+            >
+              <ArrowBackIcon
+                style={{
+                  width: '16px'
+                }}
+              />
+              <Typography
+                variant={'h5'}
+                sx={{
+                  flex: 1,
+                  fontSize: 14,
+                  fontFamily: `'Public Sans'`,
+                  wordBreak: 'break-all',
+                  letterSpacing: '-0.28px'
+                }}
+              >
+                Launchpad homepage
+              </Typography>
+            </GrayButton>
+            <Box
+              sx={{
+                marginLeft: 16,
+                mt: 10,
+                display: 'flex',
+                flexFlow: 'row nowrap'
+              }}
+              gap={8}
+            >
+              <Upcoming
+                style={{
+                  fontFamily: `'Inter'`,
+                  marginRight: 0,
+                  background: isDark ? ProjectInfoDarkStyle.Head.UpComBg : '',
+                  color: isDark ? ProjectInfoDarkStyle.Head.UpComColor : ''
+                }}
+              >
+                {poolStatusText}
+              </Upcoming>
+              {poolInfo && (
+                <LikeUnlike
+                  likeObj={LIKE_OBJ.pool}
+                  objId={poolInfo?.id}
+                  likeAmount={{
+                    dislikeCount: poolInfo?.likeInfo?.dislikeCount,
+                    likeCount: poolInfo?.likeInfo?.likeCount,
+                    myDislike: poolInfo?.likeInfo?.myDislike,
+                    myLike: poolInfo?.likeInfo?.myLike
+                  }}
+                  onSuccess={getPoolInfo}
+                  likeSx={{
+                    '&:hover': {
+                      color: '#259C4A',
+                      background: '#FFFFFF'
+                    }
+                  }}
+                  unlikeSx={{
+                    '&:hover': {
+                      color: '#CA2020',
+                      background: '#FFFFFF'
+                    }
+                  }}
+                />
+              )}
+              {!!userId && poolInfo && (
+                <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
+              )}
+            </Box>
+          </Box>
+        )}
         <AlignBottomBG
           sx={{
             display: 'flex',
@@ -687,49 +786,133 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
               </WhiteButton>
             )}
           </Row>
-          <Row mt={16} gap={8}>
-            <GrayBg>
-              <TokenImage
-                src={item.chainId ? ChainListMap?.[item.chainId as ChainId]?.logo : ''}
-                size={isDark ? 24 : 12}
-              />
-              <Typography variant={'h6'} color={'white'}>
-                {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
-              </Typography>
-            </GrayBg>
-            {isDark && (
+          {!isMD && (
+            <Row mt={16} gap={8}>
               <GrayBg>
-                <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
+                <TokenImage
+                  src={item.chainId ? ChainListMap?.[item.chainId as ChainId]?.logo : ''}
+                  size={isDark ? 24 : 12}
+                />
+                <Typography variant={'h6'} color={'white'}>
+                  {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
+                </Typography>
               </GrayBg>
-            )}
-            {item.poolTypeName2 && (
+              {isDark && (
+                <GrayBg
+                  sx={{
+                    background: '#20201E',
+                    borderRadius: '100px'
+                  }}
+                >
+                  <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
+                </GrayBg>
+              )}
+              {item.poolTypeName2 && (
+                <GrayBg
+                  sx={{
+                    background: '#20201E',
+                    borderRadius: '100px'
+                  }}
+                >
+                  <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName2}</Typography>
+                </GrayBg>
+              )}
+              {/*<GrayBg>*/}
+              {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
+              {/*</GrayBg>*/}
+            </Row>
+          )}
+          {isMD && (
+            <Box
+              sx={{
+                display: 'flex',
+                flexFlow: 'row wrap',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              mt={16}
+              gap={8}
+            >
               <GrayBg>
-                <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName2}</Typography>
+                <TokenImage
+                  src={item.chainId ? ChainListMap?.[item.chainId as ChainId]?.logo : ''}
+                  size={isDark ? 24 : 12}
+                />
+                <Typography variant={'h6'} color={'white'}>
+                  {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
+                </Typography>
               </GrayBg>
-            )}
-            {/*<GrayBg>*/}
-            {/*  <Typography color={'#B5E529'}>Playable Auction</Typography>*/}
-            {/*</GrayBg>*/}
-          </Row>
-          <Row
-            gap={24}
-            mt={16}
-            alignItems={'center'}
-            sx={{
-              '@media(max-width:600px)': isDark
-                ? { flexWrap: 'nowrap', padding: '0 20px', flexDirection: 'column', alignItems: 'flex-start' }
-                : {}
-            }}
-          >
-            <>
-              {pricesComponent.flatMap((element, index) => {
-                if (index !== pricesComponent.length - 1) {
-                  return [element, <VerticalDivider key={index} sx={{ display: isDark && isSm ? 'none' : 'block' }} />]
-                }
-                return [element]
-              })}
-            </>
-          </Row>
+              {isDark && (
+                <GrayBg
+                  sx={{
+                    background: '#20201E',
+                    borderRadius: '100px'
+                  }}
+                >
+                  <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
+                </GrayBg>
+              )}
+              {/* {item.poolTypeName2 && (
+                <GrayBg
+                  sx={{
+                    background: '#20201E',
+                    borderRadius: '100px'
+                  }}
+                >
+                  <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName2}</Typography>
+                </GrayBg>
+              )} */}
+            </Box>
+          )}
+          {!isMD && (
+            <Row
+              gap={24}
+              mt={16}
+              alignItems={'center'}
+              sx={{
+                '@media(max-width:600px)': isDark
+                  ? { flexWrap: 'nowrap', padding: '0 20px', flexDirection: 'column', alignItems: 'flex-start' }
+                  : {}
+              }}
+            >
+              <>
+                {pricesComponent.flatMap((element, index) => {
+                  if (index !== pricesComponent.length - 1) {
+                    return [
+                      element,
+                      <VerticalDivider key={index} sx={{ display: isDark && isSm ? 'none' : 'block' }} />
+                    ]
+                  }
+                  return [element]
+                })}
+              </>
+            </Row>
+          )}
+          {isMD && (
+            <Row
+              gap={24}
+              mt={51}
+              alignItems={'flex-start'}
+              sx={{
+                width: '100%',
+                '@media(max-width:600px)': isDark
+                  ? { flexWrap: 'nowrap', padding: '0 20px', flexDirection: 'column', alignItems: 'flex-start' }
+                  : {}
+              }}
+            >
+              <>
+                {pricesComponent.flatMap((element, index) => {
+                  if (index !== pricesComponent.length - 1) {
+                    return [
+                      element,
+                      <VerticalDivider key={index} sx={{ display: isDark && isSm ? 'none' : 'block' }} />
+                    ]
+                  }
+                  return [element]
+                })}
+              </>
+            </Row>
+          )}
         </AlignBottomBG>
       </Box>
     </Box>
@@ -771,7 +954,7 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
                   color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
                 }
               }}
-              key={i}
+              key={'projectHead' + i}
               onClick={() => tabs.length > 1 && setTab(t)}
               className={tab === t ? 'select' : ''}
             >
@@ -883,7 +1066,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
                   background: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBg : ''
                 }
               }}
-              key={idx}
+              key={'info' + idx}
               onClick={() => setCurrentIdx(idx)}
               className={idx === currentIdx ? 'select' : ''}
             >
@@ -902,7 +1085,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
           {Array.isArray(info[currentIdx].info) &&
             info[currentIdx].info.length > 0 &&
             info[currentIdx].info.map((item, index: number) => (
-              <Typography key={index} variant={'body1'}>
+              <Typography key={'bg' + index} variant={'body1'}>
                 {item}
               </Typography>
             ))}
@@ -926,7 +1109,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
                   fontFamily: 'Inter',
                   lineHeight: '150%'
                 }}
-                key={index}
+                key={'Typography' + index}
                 variant={'body1'}
               >
                 {item}
@@ -956,7 +1139,7 @@ const STEPNTokenDark = () => {
       <Stack flexDirection={'column'} gap={10} mt={30}>
         {tokenList.map((t, i) => {
           return (
-            <Stack flexDirection={'row'} gap={10} key={i} sx={{ background: '#121219', p: '10px 20px' }}>
+            <Stack flexDirection={'row'} gap={10} key={'Stack' + i} sx={{ background: '#121219', p: '10px 20px' }}>
               {Object.keys(t).map(k => (
                 <>
                   <STEPNTokenTitle sx={{ width: 220, color: '#626262' }}>{k}</STEPNTokenTitle>

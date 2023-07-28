@@ -143,16 +143,20 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
     })
     newSeries.setData(data as LineData[])
     // set current time data
-    const markers = [
-      {
-        time: new Date().valueOf() / 1000,
-        position: 'inBar',
-        color: '#959595',
-        shape: 'circle',
-        size: 0.7
-      }
-    ]
-    newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    const nowDate = new Date().valueOf()
+    if (nowDate / 1000 <= poolInfo.closeAt && nowDate / 1000 >= poolInfo.openAt) {
+      // set current time data
+      const markers = [
+        {
+          time: nowDate,
+          position: 'inBar',
+          color: '#959595',
+          shape: 'circle',
+          size: 0.7
+        }
+      ]
+      newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    }
     window.addEventListener('resize', handleResize)
     if (!tooltipInstance) {
       const TipsTool = new ToolTip({ dateStr: '' })
@@ -187,7 +191,15 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, tooltipInstance])
+  }, [
+    colorObj,
+    data,
+    poolInfo.closeAt,
+    poolInfo.openAt,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol,
+    tooltipInstance
+  ])
   return <Box ref={chartContainerRef}></Box>
 }
 const lineClaimChart = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
