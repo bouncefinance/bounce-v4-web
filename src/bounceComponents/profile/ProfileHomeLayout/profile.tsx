@@ -116,7 +116,19 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
         src={personalInfo?.avatar?.fileThumbnailUrl || personalInfo?.avatar?.fileUrl}
       />
       <Stack sx={{ flexDirection: { xs: 'row', sm: 'column' }, gap: { xs: 4, sm: 10 }, alignItems: 'center' }}>
-        <H4 sx={{ fontSize: { xs: 22, sm: 20 } }}>{personalInfo?.fullName}</H4>
+        <H4
+          sx={{
+            fontSize: { xs: 22, sm: 20 },
+            wordBreak: 'break-all',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: 'vertical',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          {personalInfo?.fullName}
+        </H4>
         <H6 sx={{ fontSize: { xs: 16, sm: 14 }, color: '#2B51DA' }}>{`#${personalInfo?.fullNameId}`}</H6>
       </Stack>
       <Row mt={24} gap={4}>

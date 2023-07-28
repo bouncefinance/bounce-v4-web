@@ -171,7 +171,7 @@ export default function ProfileOverview() {
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
+              <Typography variant="h3" fontWeight={600} fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
                 My Profile
               </Typography>
               {!isSm && (

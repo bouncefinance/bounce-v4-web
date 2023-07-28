@@ -1,8 +1,18 @@
 import { Alert, Typography } from '@mui/material'
-
+import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/gree-err.svg'
 const PayAttentionAlert = () => {
   return (
-    <Alert severity="warning" sx={{ '&.MuiAlert-root': { background: '#F9FCDE' }, borderRadius: 20 }}>
+    <Alert
+      icon={<ErrorIcon />}
+      sx={{
+        '&.MuiAlert-root': {
+          background: '#F9FCDE',
+          alignItems: 'center',
+          color: 'black',
+          border: '1px dashed rgb(41,152,235)'
+        }
+      }}
+    >
       <Typography variant="body1" component="span">
         Please pay attention.&nbsp;
       </Typography>
