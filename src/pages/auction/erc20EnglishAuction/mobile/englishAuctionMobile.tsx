@@ -3,12 +3,18 @@ import Header from '../../dutchAuction/components/header'
 import CreatorInfoCard from '../../dutchAuction/components/creatorInfoCard'
 import CreatorBlock from '../components/creatorBlock/indexMobile'
 import UserBlock from '../components/userBlock'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import ActionHistory from '../components/auctionHistory'
 
-const DutchAuctionMobile = ({ poolInfo, getPoolInfo }: { poolInfo: DutchAuctionPoolProp; getPoolInfo: () => void }) => {
+const EnglishAuctionMobile = ({
+  poolInfo,
+  getPoolInfo
+}: {
+  poolInfo: Erc20EnglishAuctionPoolProp
+  getPoolInfo: () => void
+}) => {
   const { account } = useActiveWeb3React()
   const isCreator = useMemo(() => poolInfo?.creator === account, [account, poolInfo?.creator])
   return (
@@ -30,4 +36,4 @@ const DutchAuctionMobile = ({ poolInfo, getPoolInfo }: { poolInfo: DutchAuctionP
     </Box>
   )
 }
-export default DutchAuctionMobile
+export default EnglishAuctionMobile

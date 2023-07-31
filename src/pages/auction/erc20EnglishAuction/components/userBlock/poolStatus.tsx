@@ -5,7 +5,7 @@ import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
 import { useMemo } from 'react'
-
+import { useIsMDDown } from 'themes/useTheme'
 export interface PoolStatusBoxProps {
   status: PoolStatus
   style?: React.CSSProperties
@@ -13,6 +13,7 @@ export interface PoolStatusBoxProps {
   poolInfo: Erc20EnglishAuctionPoolProp
 }
 const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
+  const isMd = useIsMDDown()
   const { enableWhiteList, whitelistData } = poolInfo
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
@@ -34,7 +35,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
               width: '100%',
               borderRadius: 8,
               border: '1px solid #626262',
-              padding: '16px 24px',
+              padding: isMd ? '16px' : '16px 24px',
               ...style
             }}
           >
@@ -69,7 +70,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
               alignItems: 'center',
               width: '100%',
               borderRadius: 8,
-              padding: '16px 24px',
+              padding: isMd ? '16px' : '16px 24px',
               border: '1px solid #626262',
               ...style
             }}
@@ -108,7 +109,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
                 width: '100%',
                 borderRadius: 8,
                 border: '1px solid #626262',
-                padding: '16px 24px',
+                padding: isMd ? '16px' : '16px 24px',
                 ...style
               }}
             >
@@ -151,7 +152,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
           width: '100%',
           borderRadius: 8,
           border: '1px solid #626262',
-          padding: '16px 24px',
+          padding: isMd ? '16px' : '16px 24px',
           ...style
         }}
       >

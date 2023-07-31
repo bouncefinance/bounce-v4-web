@@ -7,8 +7,9 @@ import Instant from './instant'
 import Linear from './linear'
 import Fragment from './fragment'
 import { useMemo } from 'react'
-
+import { useIsMDDown } from 'themes/useTheme'
 const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const isUserClaimed = useMemo(() => {
     return poolInfo.status === PoolStatus.Closed && !poolInfo.participant?.currencyCurClaimableAmount?.greaterThan('0')
   }, [poolInfo.participant.currencyCurClaimableAmount, poolInfo.status])
@@ -18,7 +19,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
         width: '100%',
         background: '#121212',
         borderRadius: '24px',
-        padding: '30px'
+        padding: isMd ? '60px 16px' : '30px'
       }}
       mb={'40px'}
     >

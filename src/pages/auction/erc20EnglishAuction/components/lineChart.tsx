@@ -22,7 +22,7 @@ import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 import ChartDialog from './userBlock/chartDialog'
 import { formatNumberWithCommas } from 'utils'
 import { CurrencyAmount } from 'constants/token'
-
+import { useIsMDDown } from 'themes/useTheme'
 interface PointerItem {
   time: number | string
   value: number
@@ -316,13 +316,8 @@ export const LineChartView = ({
     </>
   )
 }
-const LineChartSection = ({
-  poolInfo,
-  hideDialogBtn = false
-}: {
-  poolInfo: Erc20EnglishAuctionPoolProp
-  hideDialogBtn?: boolean
-}) => {
+const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const { currencyAmountTotal0, currencyAmountStartPrice, currencyAmountEndPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
@@ -382,7 +377,7 @@ const LineChartSection = ({
         >
           ERC20 English Auction Live Chart
         </Typography>
-        {!hideDialogBtn && (
+        {!isMd && (
           <OpenChartImg
             onClick={() => {
               setDialogOpen(!dialogOpen)

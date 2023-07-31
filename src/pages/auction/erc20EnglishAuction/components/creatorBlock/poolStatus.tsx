@@ -4,7 +4,7 @@ import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
-
+import { useIsMDDown } from 'themes/useTheme'
 export interface PoolStatusBoxProps {
   status: PoolStatus
   style?: React.CSSProperties
@@ -12,6 +12,7 @@ export interface PoolStatusBoxProps {
   poolInfo: Erc20EnglishAuctionPoolProp
 }
 const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
+  const isMd = useIsMDDown()
   if (hiddenStatus) {
     return <Box></Box>
   }
@@ -27,7 +28,7 @@ const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }:
             width: '100%',
             borderRadius: 8,
             border: '1px solid #626262',
-            padding: '16px 24px',
+            padding: isMd ? '12px' : '16px 24px',
             ...style
           }}
           mb={'24px'}
@@ -63,7 +64,7 @@ const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }:
             width: '100%',
             borderRadius: 8,
             border: '1px solid #626262',
-            padding: '16px 24px',
+            padding: isMd ? '12px' : '16px 24px',
             ...style
           }}
           mb={'24px'}
@@ -102,7 +103,7 @@ const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }:
               width: '100%',
               borderRadius: 8,
               border: '1px solid #626262',
-              padding: '16px 24px',
+              padding: isMd ? '12px' : '16px 24px',
               ...style
             }}
             mb={'24px'}
@@ -137,7 +138,7 @@ const CreatorPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }:
               width: '100%',
               borderRadius: 8,
               border: '1px solid #626262',
-              padding: '16px 24px',
+              padding: isMd ? '12px' : '16px 24px',
               ...style
             }}
             mb={'24px'}

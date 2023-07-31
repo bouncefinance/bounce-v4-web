@@ -4,6 +4,7 @@ import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
+import { useIsMDDown } from 'themes/useTheme'
 
 export interface PoolStatusBoxProps {
   status: PoolStatus
@@ -12,6 +13,7 @@ export interface PoolStatusBoxProps {
   poolInfo: DutchAuctionPoolProp
 }
 const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
+  const isMd = useIsMDDown()
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const { enableWhiteList, whitelistData } = poolInfo
   if (hiddenStatus) {
@@ -31,7 +33,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
               width: '100%',
               borderRadius: 8,
               border: '1px solid #626262',
-              padding: '16px 24px',
+              padding: isMd ? '16px' : '16px 24px',
               ...style
             }}
           >
@@ -72,7 +74,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
                 width: '100%',
                 borderRadius: 8,
                 border: '1px solid #626262',
-                padding: '16px 24px',
+                padding: isMd ? '16px' : '16px 24px',
                 ...style
               }}
             >
@@ -115,7 +117,7 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
           width: '100%',
           borderRadius: 8,
           border: '1px solid #626262',
-          padding: '16px 24px',
+          padding: isMd ? '16px' : '16px 24px',
           ...style
         }}
       >

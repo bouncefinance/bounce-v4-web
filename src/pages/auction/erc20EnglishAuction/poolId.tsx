@@ -9,10 +9,13 @@ import ActionHistory from './components/auctionHistory'
 import ValuesProvider from './ValuesProvider'
 import CreatorInfoCard from '../dutchAuction/components/creatorInfoCard'
 import Header from '../dutchAuction/components/header'
+import { useIsMDDown } from 'themes/useTheme'
+import EnglishAuctionMobile from './mobile/englishAuctionMobile'
 import TimeStageLine from './components/timeStageLine'
 
 function ERC20EnglishAuctionPoolContent() {
   const theme = useTheme()
+  const isMd = useIsMDDown()
   const { account } = useActiveWeb3React()
   const myAnimation = keyframes`
   0% {
@@ -57,6 +60,9 @@ function ERC20EnglishAuctionPoolContent() {
         <BounceAnime />
       </Box>
     )
+  }
+  if (isMd) {
+    return <EnglishAuctionMobile poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
   }
   return (
     <Box

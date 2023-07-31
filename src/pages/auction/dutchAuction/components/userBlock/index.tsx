@@ -6,7 +6,9 @@ import Linear from './linear/index'
 import Fragment from './fragment/index'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useMemo } from 'react'
+import { useIsMDDown } from 'themes/useTheme'
 const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const isUserClaimed = useMemo(() => {
     return (
       poolInfo.status === PoolStatus.Closed && Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
@@ -18,7 +20,7 @@ const UserBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         width: '100%',
         background: '#121212',
         borderRadius: '24px',
-        padding: '30px'
+        padding: isMd ? '60px 16px' : '30px'
       }}
       mb={'40px'}
     >
