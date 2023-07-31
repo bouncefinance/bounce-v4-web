@@ -9,17 +9,19 @@ import ComingSoon from 'pages/ComingSoon'
 import TokenAuction from './TokenAuction'
 import { H4, H6, H7, SmallText } from '../../../components/Text'
 import { Row } from '../../../components/Layout'
-import GithubIcon from 'assets/socialLinksIcon/github.svg'
-import Insta from 'assets/socialLinksIcon/instagram.svg'
-import Linkin from 'assets/socialLinksIcon/linkin.svg'
-import Twitter from 'assets/socialLinksIcon/twitter-circle.svg'
-import Website from 'assets/socialLinksIcon/website.svg'
+// import GithubIcon from 'assets/socialLinksIcon/github.svg'
+// import Insta from 'assets/socialLinksIcon/instagram.svg'
+// import Linkin from 'assets/socialLinksIcon/linkin.svg'
+// import Twitter from 'assets/socialLinksIcon/twitter-circle.svg'
+// import Website from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as VerifyIcon } from 'assets/imgs/user/profile-verify.svg'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getUserPoolCount } from 'api/user'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import { VerifyStatus } from 'api/profile/type'
 import countries from 'i18n-iso-countries'
+import SocialMediaButtonGroup from 'bounceComponents/fixed-swap/CreatorInfoCard/SocialMediaButtonGroup'
+
 const ProfileTag = styled(SmallText)`
   display: flex;
   flex-direction: row;
@@ -79,23 +81,6 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
     }
     userPoolCount()
   }, [personalInfo?.address])
-
-  function getSocialList() {
-    const list = []
-    if (personalInfo) {
-      list.push({ icon: Twitter, link: personalInfo.twitter })
-
-      list.push({ icon: Insta, link: personalInfo?.instagram })
-
-      list.push({ icon: Website, link: personalInfo?.website })
-
-      list.push({ icon: Linkin, link: personalInfo?.linkedin })
-
-      list.push({ icon: GithubIcon, link: personalInfo?.github })
-    }
-
-    return list
-  }
 
   return (
     <Box
@@ -180,14 +165,15 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
             direction={'row'}
             spacing={9}
           >
-            {getSocialList().map((icon, idx) => (
-              <img
-                className={icon.link ? 'has-link' : 'no-link'}
-                onClick={() => icon.link && window.open(icon.link, '_blank')}
-                src={icon.icon}
-                key={idx}
-              />
-            ))}
+            <SocialMediaButtonGroup
+              showAll
+              twitter={personalInfo?.twitter || personalInfo?.twitterName}
+              instagram={personalInfo?.instagram}
+              website={personalInfo?.website}
+              // linkedin={personalInfo?.linkedin}
+              discord={personalInfo?.discord}
+              github={personalInfo?.github}
+            />
           </Stack>
         </>
       )}

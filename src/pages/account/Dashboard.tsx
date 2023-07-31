@@ -1,4 +1,4 @@
-import { Box, Button, Chip, Container, IconButton, Skeleton, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, Container, Skeleton, Stack, Typography } from '@mui/material'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 import AccountAvatar from 'bounceComponents/account/AccountAvatar'
@@ -27,16 +27,17 @@ import Divider from 'components/Divider'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import countries from 'i18n-iso-countries'
 // import { ReactComponent as InstagramSvg } from 'assets/socialLinksIcon/instagram-dashboard.svg'
-import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/twitter.svg'
-import { ReactComponent as TwitterDisSVG } from 'assets/imgs/auction/twitter-dis.svg'
-import { ReactComponent as InstagramSVG } from 'assets/imgs/auction/instagram.svg'
-import { ReactComponent as InstagramDisSVG } from 'assets/imgs/auction/instagram-dis.svg'
+// import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/twitter.svg'
+// import { ReactComponent as TwitterDisSVG } from 'assets/imgs/auction/twitter-dis.svg'
+// import { ReactComponent as InstagramSVG } from 'assets/imgs/auction/instagram.svg'
+// import { ReactComponent as InstagramDisSVG } from 'assets/imgs/auction/instagram-dis.svg'
 
-import { ReactComponent as DiscordSVG } from 'assets/imgs/auction/discord.svg'
-import { ReactComponent as DiscordDisSVG } from 'assets/imgs/auction/discord-dis.svg'
+// import { ReactComponent as DiscordSVG } from 'assets/imgs/auction/discord.svg'
+// import { ReactComponent as DiscordDisSVG } from 'assets/imgs/auction/discord-dis.svg'
 
-import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
-import { ReactComponent as EmailDisSVG } from 'assets/imgs/auction/email-dis.svg'
+// import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
+// import { ReactComponent as EmailDisSVG } from 'assets/imgs/auction/email-dis.svg'
+import SocialMediaButtonGroup from 'bounceComponents/fixed-swap/CreatorInfoCard/SocialMediaButtonGroup'
 
 const btnStyle = {
   height: 26,
@@ -119,64 +120,64 @@ const btnStyle = {
 //     {socialSvg[4]}
 //   </Link>
 // ]
-const SocialDisSvg = ({ userInfo }: { userInfo: any }) => {
-  return (
-    <>
-      <IconButton
-        href={userInfo?.twitter as string}
-        target="_blank"
-        disabled={!!!userInfo?.twitter}
-        sx={{
-          border: '1px solid rgba(0, 0, 0, 0.27)',
-          width: 38,
-          height: 38,
-          p: 5
-        }}
-      >
-        {userInfo?.twitter ? <TwitterSVG /> : <TwitterDisSVG />}
-      </IconButton>
-      <IconButton
-        href={userInfo?.discord as string}
-        target="_blank"
-        disabled={!!!userInfo?.discord}
-        sx={{
-          border: '1px solid rgba(0, 0, 0, 0.27)',
-          width: 38,
-          height: 38,
-          p: 5
-        }}
-      >
-        {userInfo?.discord ? <DiscordSVG /> : <DiscordDisSVG />}
-      </IconButton>
-      <IconButton
-        href={userInfo?.instagram as string}
-        target="_blank"
-        disabled={!!!userInfo?.instagram}
-        sx={{
-          border: '1px solid rgba(0, 0, 0, 0.27)',
-          width: 38,
-          height: 38,
-          p: 5
-        }}
-      >
-        {userInfo?.instagram ? <InstagramSVG /> : <InstagramDisSVG />}
-      </IconButton>
-      <IconButton
-        href={userInfo?.contactEmail as string}
-        target="_blank"
-        disabled={!!!userInfo?.contactEmail}
-        sx={{
-          border: '1px solid rgba(0, 0, 0, 0.27)',
-          width: 38,
-          height: 38,
-          p: 5
-        }}
-      >
-        {userInfo?.contactEmail ? <EmailSVG /> : <EmailDisSVG />}
-      </IconButton>
-    </>
-  )
-}
+// const SocialDisSvg = ({ userInfo }: { userInfo: any }) => {
+//   return (
+//     <>
+//       <IconButton
+//         href={userInfo?.twitter as string}
+//         target="_blank"
+//         disabled={!!!userInfo?.twitter}
+//         sx={{
+//           border: '1px solid rgba(0, 0, 0, 0.27)',
+//           width: 38,
+//           height: 38,
+//           p: 5
+//         }}
+//       >
+//         {userInfo?.twitter ? <TwitterSVG /> : <TwitterDisSVG />}
+//       </IconButton>
+//       <IconButton
+//         href={userInfo?.discord as string}
+//         target="_blank"
+//         disabled={!!!userInfo?.discord}
+//         sx={{
+//           border: '1px solid rgba(0, 0, 0, 0.27)',
+//           width: 38,
+//           height: 38,
+//           p: 5
+//         }}
+//       >
+//         {userInfo?.discord ? <DiscordSVG /> : <DiscordDisSVG />}
+//       </IconButton>
+//       <IconButton
+//         href={userInfo?.instagram as string}
+//         target="_blank"
+//         disabled={!!!userInfo?.instagram}
+//         sx={{
+//           border: '1px solid rgba(0, 0, 0, 0.27)',
+//           width: 38,
+//           height: 38,
+//           p: 5
+//         }}
+//       >
+//         {userInfo?.instagram ? <InstagramSVG /> : <InstagramDisSVG />}
+//       </IconButton>
+//       <IconButton
+//         href={userInfo?.contactEmail as string}
+//         target="_blank"
+//         disabled={!!!userInfo?.contactEmail}
+//         sx={{
+//           border: '1px solid rgba(0, 0, 0, 0.27)',
+//           width: 38,
+//           height: 38,
+//           p: 5
+//         }}
+//       >
+//         {userInfo?.contactEmail ? <EmailSVG /> : <EmailDisSVG />}
+//       </IconButton>
+//     </>
+//   )
+// }
 export default function Dashboard() {
   const { userInfo } = useUserInfo()
   const { account } = useActiveWeb3React()
@@ -248,7 +249,17 @@ export default function Dashboard() {
                       {social}
                     </Stack> */}
                     <Stack direction={'row'} alignItems="center" justifyContent="start" spacing={12}>
-                      <SocialDisSvg userInfo={userInfo} />
+                      <SocialMediaButtonGroup
+                        showAll
+                        email={userInfo?.contactEmail}
+                        shouldShowEmailButton
+                        twitter={userInfo?.twitter || userInfo?.twitterName}
+                        instagram={userInfo?.instagram}
+                        website={userInfo?.website}
+                        // linkedin={userInfo?.linkedin}
+                        discord={userInfo?.discord}
+                        github={userInfo?.github}
+                      />
                     </Stack>
                   </Stack>
                 </Box>
@@ -347,7 +358,17 @@ export default function Dashboard() {
                 </Stack> */}
 
                 <Stack direction={'row'} mt={10} alignItems="center" justifyContent="center" spacing={12}>
-                  <SocialDisSvg userInfo={userInfo} />
+                  <SocialMediaButtonGroup
+                    showAll
+                    email={userInfo?.contactEmail}
+                    shouldShowEmailButton
+                    twitter={userInfo?.twitter || userInfo?.twitterName}
+                    instagram={userInfo?.instagram}
+                    website={userInfo?.website}
+                    // linkedin={userInfo?.linkedin}
+                    discord={userInfo?.discord}
+                    github={userInfo?.github}
+                  />
                 </Stack>
 
                 <Box display={'flex'} justifyContent={'center'} mt={20}>
