@@ -16,7 +16,7 @@ import { CreatorUserInfo } from 'api/pool/type'
 // import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
-import { useUserInfo } from 'state/users/hooks'
+// import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import DefaultAvatarSVG from 'assets/imgs/profile/yellow_avatar.svg'
@@ -32,7 +32,7 @@ interface ICreatorInfoCardProps {
 }
 
 const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInfo, creator, creatorUserInfo }) => {
-  const { token } = useUserInfo()
+  // const { token } = useUserInfo()
   const navigate = useNavigate()
   const { account } = useActiveWeb3React()
   const isMobile = useBreakpoint('lg')
@@ -114,7 +114,7 @@ const CreatorInfoCard: React.FC<ICreatorInfoCardProps> = ({ poolInfo, getPoolInf
 
       <SocialMediaButtonGroup
         email={userInfo?.contactEmail}
-        shouldShowEmailButton={!!token}
+        // shouldShowEmailButton={!!token}
         twitter={userInfo?.twitter || userInfo?.twitterName}
         instagram={userInfo?.instagram}
         website={userInfo?.website}

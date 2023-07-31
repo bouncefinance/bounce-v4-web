@@ -120,6 +120,7 @@ export interface IProfileUserInfo {
   skills: string
   timezone: string
   twitter: string
+  twitterName?: string
   university: IAvatarLinkType
   userType: number
   website: string
