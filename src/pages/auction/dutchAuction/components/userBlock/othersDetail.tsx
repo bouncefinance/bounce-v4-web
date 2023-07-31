@@ -3,10 +3,12 @@ import { DutchAuctionPoolProp } from 'api/pool/type'
 import { useState } from 'react'
 import Line from '../lineChart'
 import AuctionInfo from '../creatorBlock/auctionInfo'
+import { useIsMDDown } from 'themes/useTheme'
 
 import { ReactComponent as ArrowIcon } from 'assets/imgs/dutchAuction/yellowArrowIcon.svg'
 const OthersDetail = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [isSlide, setIsSlide] = useState(true)
+  const isMd = useIsMDDown()
   return (
     <Box
       sx={{
@@ -56,24 +58,26 @@ const OthersDetail = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             width: '100%',
             background: '#20201E',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start',
-            padding: '0 24px 24px',
+            padding: isMd ? '0 16px 16px' : '0 24px 24px',
             overflow: 'hidden'
           }}
           gap={'30px'}
         >
           <Box
             sx={{
-              flex: 1
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1
             }}
           >
             <Line poolInfo={poolInfo} />
           </Box>
           <Box
             sx={{
-              flex: 1
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1
             }}
           >
             <AuctionInfo poolInfo={poolInfo} />
