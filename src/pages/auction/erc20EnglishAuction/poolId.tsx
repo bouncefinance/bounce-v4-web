@@ -1,4 +1,4 @@
-import { Box, Container, useTheme, keyframes, Grid } from '@mui/material'
+import { Box, Container, useTheme, keyframes, Grid, Typography } from '@mui/material'
 import CreatorBlock from './components/creatorBlock'
 import UserBlock from './components/userBlock'
 import { useMemo } from 'react'
@@ -9,6 +9,7 @@ import ActionHistory from './components/auctionHistory'
 import ValuesProvider from './ValuesProvider'
 import CreatorInfoCard from '../dutchAuction/components/creatorInfoCard'
 import Header from '../dutchAuction/components/header'
+import TimeStageLine from './components/timeStageLine'
 
 function ERC20EnglishAuctionPoolContent() {
   const theme = useTheme()
@@ -137,6 +138,28 @@ function ERC20EnglishAuctionPoolContent() {
                 }}
               >
                 {isCreator ? <CreatorBlock poolInfo={poolInfo} /> : <UserBlock poolInfo={poolInfo} />}
+                <Box
+                  sx={{
+                    marginBottom: 40,
+                    width: '100%',
+                    padding: '56px 48px',
+                    borderRadius: '24px',
+                    background: '#121212'
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: '#D7D6D9',
+                      fontFamily: `'Public Sans'`,
+                      fontSize: 20,
+                      fontWeight: 600
+                    }}
+                    mb={'33px'}
+                  >
+                    Subscription Timeline
+                  </Typography>
+                  <TimeStageLine poolInfo={poolInfo} />
+                </Box>
                 <ActionHistory poolInfo={poolInfo}></ActionHistory>
               </Box>
             </Grid>

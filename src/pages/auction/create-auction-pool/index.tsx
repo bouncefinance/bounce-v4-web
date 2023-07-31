@@ -27,6 +27,7 @@ import { useUserInfo, useShowLoginModal } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { IS_TEST_ENV } from '../../../constants'
 
 const validationSchema = Yup.object({
   // auctionType: Yup.string().required('Auction Type is required')
@@ -237,7 +238,7 @@ const CreateAuctionPoolIntroPage = () => {
 
                 <Stack direction="row" spacing={10} justifyContent="end">
                   {/* && userInfo?.twitterName */}
-                  {account && userId && userInfo?.email ? (
+                  {account && userId && userInfo?.email && (userInfo?.twitterName || IS_TEST_ENV) ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -250,7 +251,7 @@ const CreateAuctionPoolIntroPage = () => {
                     <Button variant="contained" sx={{ width: 140 }} onClick={showLoginModal}>
                       Login
                     </Button>
-                  ) : !userInfo?.email || !userInfo?.twitterName ? (
+                  ) : !userInfo?.email || (!userInfo?.twitterName && !IS_TEST_ENV) ? (
                     <Button
                       variant="contained"
                       sx={{ width: 300 }}

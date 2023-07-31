@@ -38,6 +38,28 @@ export function use1155TokenList(
           }
           nftCollection[item.contractAddr].push(item)
         })
+        if (chainId === 1 && isERC721) {
+          nftCollection['0xed5af388653567af2f388e6224dc7c4b3241c544'] = []
+          nftCollection['0xed5af388653567af2f388e6224dc7c4b3241c544'].push({
+            balance: '1',
+            contractAddr: '0xed5af388653567af2f388e6224dc7c4b3241c544',
+            contractName: 'azuki',
+            description: 'azuki',
+            image: '',
+            name: 'azuki',
+            tokenId: '362'
+          })
+
+          nftCollection['0xed5af388653567af2f388e6224dc7c4b3241c544'].push({
+            balance: '1',
+            contractAddr: '0xed5af388653567af2f388e6224dc7c4b3241c544',
+            contractName: 'azuki',
+            description: 'azuki',
+            image: '',
+            name: 'azuki',
+            tokenId: '6412'
+          })
+        }
         if (chainId === 5 && isERC721) {
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({

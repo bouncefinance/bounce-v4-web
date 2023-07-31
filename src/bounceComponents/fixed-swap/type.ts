@@ -8,11 +8,13 @@ import {
 import { ChainId } from 'constants/chain'
 
 export interface Token {
-  chainId: ChainId
+  chainId: ChainId | number | undefined
   address: string
   decimals: number
   symbol?: string
   logoURI?: string
+  smallUrl?: string
+  balance?: number
   name?: string
   dangerous?: boolean
 }

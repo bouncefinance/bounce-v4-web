@@ -6,14 +6,16 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window'
 import { ListItemAvatar, Typography } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
 import Image from 'components/Image'
-
 import DangerousTokenDialog from '../DangerousTokenDialog'
 import ErrorSVG from 'assets/imgs/icon/error_filled.svg'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { Token } from 'bounceComponents/fixed-swap/type'
+import BigNumber from 'bignumber.js'
 
 function ItemRender(
-  listChildComponentProps: ListChildComponentProps<Token[]>,
+  listChildComponentProps: ListChildComponentProps<
+    (Token & { balance?: number; smallUrl?: string; largeUrl?: string })[]
+  >,
   onOk: (tokne: Token) => void,
   onCancel: () => void
 ) {
@@ -49,13 +51,17 @@ function ItemRender(
         }}
       >
         <ListItemAvatar>
-          <TokenImage alt={data?.[index]?.name} src={data?.[index].logoURI} size={32} />
+          <TokenImage
+            alt={data?.[index]?.name}
+            src={decodeURIComponent(data?.[index].smallUrl || '') || decodeURIComponent(data?.[index].largeUrl || '')}
+            size={32}
+          />
         </ListItemAvatar>
         <ListItemText
           sx={{ my: 0 }}
           primary={
             <Typography component="span" variant="h4" color="text.primary" sx={{ lineHeight: 1 }}>
-              {data?.[index]?.symbol}
+              {data?.[index]?.symbol?.toLocaleUpperCase()}
             </Typography>
           }
           secondary={
@@ -64,6 +70,7 @@ function ItemRender(
             </Typography>
           }
         />
+        <Box>{data?.[index]?.balance !== 0 && BigNumber(data?.[index]?.balance?.toFixed(4) || 0).toNumber()}</Box>
       </ListItemButton>
     </ListItem>
   )

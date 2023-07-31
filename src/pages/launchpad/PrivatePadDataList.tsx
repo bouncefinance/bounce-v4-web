@@ -27,6 +27,8 @@ import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
+import MetaBlox from './imgs/metablox.png'
+import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
 import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import { ChainId } from 'constants/chain'
@@ -666,6 +668,129 @@ const DeelanceProjectInfo: IProjectInfo[] = [
   }
 ]
 export const PrivatePadDataList: IPrivatePadProp[] = [
+  // current privatePad max keyId is 12
+  {
+    keyId: 12,
+    liveTimeStamp: {
+      start: 1690848000000,
+      end: 0
+    },
+    poolTypeName: 'Fixed Swap Auction',
+    img: MetaBlox,
+    avatar: MetaBloxAvatar,
+    title: 'MetaBlox',
+    chainId: 1,
+    tokenName: '$MTBX',
+    whitePaperLink: 'https://drive.google.com/file/d/1TqN0LbGkcOomz3hT-T38InSnJZV8GRrR/view',
+    upcomingLink: '/launchpad/metablox',
+    liveLink: '/launchpad/metablox',
+    projectInfo: [
+      {
+        title: 'What is MetaBlox?',
+        info: [
+          'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+          `MetaBlox offers access to 3,000,000 WiFi mining locations on Day 1, and aims to expand this network to 6,000,000 mining locations by 2025. As of Apr 2023, 2,500 miners was active. Metablox@ONE dapp is already the top 3 gas burners in Harmony One.
+          MetaBlox is the only web3 project that was officially listed into WiFi Standard by the WBA(Wireless Broadband Alliance), together with Cisco, Google etc. By incentivizing WiFi and Cellular with web3, MetaBlox is leading the industry transformation, making global WiFi roaming a reality.`
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box key={1}>
+            <Typography sx={{ fontSize: 18, fontWidth: 700 }}>Seed Round:</Typography>
+            <Typography mt={10}>
+              MetaBlox has raised $3 million in funding from various prominent investors and institutions. These include
+              Synergies, Collab+Currency, SNZ, Harmony ONE, Future Life, NFT Tech, Airswift, and Slope.
+            </Typography>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+    social: [
+      <Link key={0} href="http://metablox.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/metablox" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={4} href="https://t.me/ChatonMetaBloxCommunity" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/metablox" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$MTBX' },
+      { title: 'Token Price', content: '0.03' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 11,
+    liveTimeStamp: {
+      start: 1690675200000,
+      end: 1690934400000
+    },
+    poolTypeName: 'ERC20 English Auction',
+    poolTypeName2: 'ERC20 Dutch Auction',
+    img: DipImg,
+    avatar: DipAvatar,
+    title: 'DIP Exchange',
+    chainId: 250,
+    tokenName: '$DIP',
+    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
+    upcomingLink: '/launchpad/dip_exchange',
+    liveLink: '/launchpad/dip_exchange',
+    projectInfo: DipProjectInfo,
+    tokenMetrics: DipTokenMetrics,
+    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
+    social: [
+      <Link key={0} href="https://dip.exchange" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$DIP $DGT' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Fantom' }
+    ],
+    privatePrices: [
+      {
+        title: ['DIP Auction Method'],
+        value: ['ERC20 English Auction']
+      },
+      {
+        title: ['dipTokenOffered'],
+        value: 'TBD $DIP'
+      },
+      {
+        title: ['dgtTokenOffered'],
+        value: 'TBD $DGP'
+      },
+      {
+        title: ['DIP Auction Method'],
+        value: 'ERC20 Dunch Auction'
+      }
+    ],
+    isFAQ: true
+  },
   {
     keyId: 9,
     liveTimeStamp: {
@@ -759,68 +884,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Amount', content: '3,846,153' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
-  },
-  {
-    keyId: 11,
-    liveTimeStamp: {
-      start: 1690675200000,
-      end: 1690934400000
-    },
-    poolTypeName: 'ERC20 English Auction',
-    poolTypeName2: 'ERC20 Dunch Auction',
-    img: DipImg,
-    avatar: DipAvatar,
-    title: 'DIP Exchange',
-    chainId: 250,
-    tokenName: '$DIP',
-    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
-    upcomingLink: '/launchpad/dip_exchange',
-    liveLink: '/launchpad/dip_exchange',
-    projectInfo: DipProjectInfo,
-    tokenMetrics: DipTokenMetrics,
-    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
-    social: [
-      <Link key={0} href="https://dip.exchange" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>,
-      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$DIP $DGT' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Fantom' }
-    ],
-    privatePrices: [
-      {
-        title: ['DIP Auction Method'],
-        value: ['ERC20 English Auction']
-      },
-      {
-        title: ['dipTokenOffered'],
-        value: 'TBD $DIP'
-      },
-      {
-        title: ['dgtTokenOffered'],
-        value: 'TBD $DGP'
-      },
-      {
-        title: ['DIP Auction Method'],
-        value: 'ERC20 Dunch Auction'
-      }
-    ],
-    isFAQ: true
   },
   {
     hidden: true,

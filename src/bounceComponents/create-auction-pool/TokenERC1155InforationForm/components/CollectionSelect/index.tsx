@@ -54,6 +54,7 @@ const CollectionSelect = (props: CollectionProps) => {
           }}
           width={32}
           height={32}
+          altSrc={TestIcon}
           src={item.image || TestIcon}
           alt={'nft'}
         />

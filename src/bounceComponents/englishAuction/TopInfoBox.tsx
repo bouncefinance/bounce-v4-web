@@ -52,7 +52,11 @@ const TopInfoBox = (): JSX.Element => {
               hideClose
               name={item.name}
               tokenId={item.tokenId}
-              image={item.image}
+              image={
+                poolInfo.id === 18350
+                  ? 'https://i.seadn.io/gcs/files/95723e537f2fd57edf003439978aa832.png?auto=format&dpr=1&w=1000'
+                  : item.image
+              }
               boxH={isOneNft ? 320 : 220}
               imgH={isOneNft ? 248 : 170}
               style={{

@@ -70,6 +70,7 @@ import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjec
 
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
+import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -186,6 +187,7 @@ export default function App() {
 
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
+                  <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

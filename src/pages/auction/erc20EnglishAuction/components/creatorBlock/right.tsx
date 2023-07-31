@@ -278,6 +278,7 @@ const Right = () => {
                     !poolInfo?.currencySwappedAmount1.equalTo('0')
                       ? new BigNumber(new BigNumber(poolInfo?.currencySwappedAmount1.toExact()))
                           .div(new BigNumber(poolInfo?.currencySwappedAmount0.toExact()))
+                          .toFixed()
                           .toString()
                       : '0'}
                     <TokenImage
