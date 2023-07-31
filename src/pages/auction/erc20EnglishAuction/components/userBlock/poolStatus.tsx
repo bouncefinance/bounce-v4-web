@@ -5,7 +5,7 @@ import TipsIcon from 'assets/imgs/dutchAuction/tips.png'
 import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
 import { useMemo } from 'react'
-
+import { useActiveWeb3React } from 'hooks'
 export interface PoolStatusBoxProps {
   status: PoolStatus
   style?: React.CSSProperties
@@ -14,11 +14,13 @@ export interface PoolStatusBoxProps {
 }
 const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: PoolStatusBoxProps) => {
   const { enableWhiteList, whitelistData } = poolInfo
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
   )
-  if (hiddenStatus) {
+  if (hiddenStatus || !account || !isCurrentChainEqualChainOfPool) {
     return <Box></Box>
   }
   if ((enableWhiteList && whitelistData?.isUserInWhitelist) || !enableWhiteList) {

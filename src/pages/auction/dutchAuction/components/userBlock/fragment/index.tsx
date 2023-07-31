@@ -1,6 +1,4 @@
 import { Box, Grid, Typography } from '@mui/material'
-import LeftBox from '../../creatorBlock/left'
-import RightBox from '../right'
 import { DutchAuctionPoolProp, PoolStatus } from 'api/pool/type'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -11,10 +9,16 @@ import { RightText } from '../../creatorBlock/auctionInfo'
 import ClaimBlock from '../../userBlock/claimBlock'
 import OthersDetail from '../othersDetail'
 import StageLine from '../stageLine'
-import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import moment from 'moment'
+import OneTime from '../oneTime'
+import { useActiveWeb3React } from 'hooks'
+import { useMemo } from 'react'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const notTimeStage = useMemo(() => {
     let result = poolInfo.releaseData
@@ -31,6 +35,32 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     result = result.filter(item => !item.active)
     return result
   }, [poolInfo.releaseData])
+  const NormalContent = () => {
+    if (!account) {
+      return <ConnectWalletButton />
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+    }
+    return (
+      <>
+        {isUserJoined && (
+          <ClaimBlock
+            isErc20EnglishAuction={false}
+            style={{
+              padding: '0'
+            }}
+            notTimeStyle={{
+              width: '100%',
+              padding: '0 24px',
+              margin: 0
+            }}
+            poolInfo={poolInfo}
+          />
+        )}
+      </>
+    )
+  }
   if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
     return (
       <Box
@@ -232,52 +262,13 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 </RightText>
               </PoolInfoItem>
             </Box>
-            {isUserJoined && (
-              <ClaimBlock
-                isErc20EnglishAuction={false}
-                style={{
-                  padding: '0'
-                }}
-                notTimeStyle={{
-                  width: '100%',
-                  padding: '0 24px',
-                  margin: 0
-                }}
-                poolInfo={poolInfo}
-              />
-            )}
+            <NormalContent />
           </Box>
         </Box>
         <OthersDetail poolInfo={poolInfo} />
       </Box>
     )
   }
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexFlow: 'row nowrap',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingTop: '30px'
-      }}
-      gap={'30px'}
-    >
-      <Box
-        sx={{
-          flex: 400
-        }}
-      >
-        <LeftBox poolInfo={poolInfo} />
-      </Box>
-      <Box
-        sx={{
-          flex: 474
-        }}
-      >
-        <RightBox poolInfo={poolInfo} />
-      </Box>
-    </Box>
-  )
+  return <OneTime poolInfo={poolInfo} />
 }
 export default Fragment
