@@ -13,7 +13,10 @@ import WarningIcon from 'assets/imgs/dutchAuction/warning.png'
 import UserBidHistory from '../bidHistory'
 import { ActionStep } from '../right'
 import PoolSaleInfo from '../poolSaleInfo'
-const Live = ({
+import { useMemo } from 'react'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+const NormalContent = ({
   poolInfo,
   amount,
   setAmount,
@@ -24,13 +27,67 @@ const Live = ({
   setAmount: (value: string) => void
   setActionStep: (actionStep: ActionStep) => void
 }) => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1?.currency)
   const currentPriceAndAmount1: AmountAndCurrentPriceParam = useDutchCurrentPriceAndAmount1(amount, poolInfo)
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
+  if (!account) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          background: '#20201E',
+          borderRadius: '20px',
+          padding: '0 0 24px',
+          minHeight: '453px',
+          display: 'flex',
+          flexFlow: 'column nowrap'
+        }}
+      >
+        <PoolSaleInfo poolInfo={poolInfo} />
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center'
+          }}
+        >
+          <ConnectWalletButton />
+        </Box>
+      </Box>
+    )
+  }
+  if (!isCurrentChainEqualChainOfPool) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          background: '#20201E',
+          borderRadius: '20px',
+          padding: '0 0 24px',
+          minHeight: '453px',
+          display: 'flex',
+          flexFlow: 'column nowrap'
+        }}
+      >
+        <PoolSaleInfo poolInfo={poolInfo} />
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center'
+          }}
+        >
+          <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+        </Box>
+      </Box>
+    )
+  }
   return (
     <>
-      <PoolSaleInfo poolInfo={poolInfo} />
       {/* Current bid price & Bid Amount */}
       <Box
         sx={{
@@ -103,6 +160,24 @@ const Live = ({
       </Box>
       {/* bid history */}
       {isUserJoined && <UserBidHistory poolInfo={poolInfo} />}
+    </>
+  )
+}
+const Live = ({
+  poolInfo,
+  amount,
+  setAmount,
+  setActionStep
+}: {
+  poolInfo: DutchAuctionPoolProp
+  amount: number | string
+  setAmount: (value: string) => void
+  setActionStep: (actionStep: ActionStep) => void
+}) => {
+  return (
+    <>
+      <PoolSaleInfo poolInfo={poolInfo} />
+      <NormalContent poolInfo={poolInfo} amount={amount} setAmount={setAmount} setActionStep={setActionStep} />
     </>
   )
 }
