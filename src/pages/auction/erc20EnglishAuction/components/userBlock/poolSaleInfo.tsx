@@ -4,13 +4,13 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import { useMemo } from 'react'
 import { StatusBox } from 'pages/auction/dutchAuction/components/userBlock/right'
-
+import { useIsMDDown } from 'themes/useTheme'
 export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) {
+  const isMd = useIsMDDown()
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
   )
-
   return (
     <Box
       sx={{
@@ -23,9 +23,9 @@ export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolPr
       <Box
         sx={{
           display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center'
+          flexFlow: isMd ? 'column nowrap' : 'row nowrap',
+          justifyContent: isMd ? 'flex-start' : 'space-between',
+          alignItems: isMd ? 'flex-start' : 'center'
         }}
       >
         <Typography
