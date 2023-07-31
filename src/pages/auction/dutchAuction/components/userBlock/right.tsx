@@ -10,6 +10,11 @@ import BidConfirm from './actionStep/confirm'
 import ClosedAndNotJoined from './actionStep/closedAndNotJoined'
 import ClosedAndNotClaim from './actionStep/closedAndNotClaim'
 import ClosedAndClaimed from './actionStep/closedAndClaimed'
+import { useActiveWeb3React } from 'hooks'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import PoolSaleInfo from './poolSaleInfo'
+
 export const StatusBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp | Erc20EnglishAuctionPoolProp }) => {
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -134,6 +139,8 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [countdown] = useCountDown({
     targetDate: claimAt * 1000
   })
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const [amount, setAmount] = useState('0')
   const [actionStep, setActionStep] = useState<ActionStep>(ActionStep.UpComing)
@@ -167,6 +174,60 @@ const RightBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       setActionStep(ActionStep.BeforeBid)
       setAmount('0')
     }
+  }
+  if (!account) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          background: '#20201E',
+          borderRadius: '20px',
+          padding: '0 0 24px',
+          minHeight: '453px',
+          display: 'flex',
+          flexFlow: 'column nowrap'
+        }}
+      >
+        <PoolSaleInfo poolInfo={poolInfo} />
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center'
+          }}
+        >
+          <ConnectWalletButton />
+        </Box>
+      </Box>
+    )
+  }
+  if (!isCurrentChainEqualChainOfPool) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          background: '#20201E',
+          borderRadius: '20px',
+          padding: '0 0 24px',
+          minHeight: '453px',
+          display: 'flex',
+          flexFlow: 'column nowrap'
+        }}
+      >
+        <PoolSaleInfo poolInfo={poolInfo} />
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center'
+          }}
+        >
+          <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+        </Box>
+      </Box>
+    )
   }
   return (
     <Box

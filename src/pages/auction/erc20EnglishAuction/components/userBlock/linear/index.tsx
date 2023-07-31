@@ -9,15 +9,64 @@ import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlo
 import OthersDetail from '../othersDetail'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import LineClaimChart from './lineClaimChart'
-import NormalContent from '../oneTime'
 import { useIsMDDown } from 'themes/useTheme'
+import OneTime from '../oneTime'
+import { useActiveWeb3React } from 'hooks'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 const Linear = () => {
   const isMd = useIsMDDown()
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(
+    () => chainId === poolInfo?.ethChainId,
+    [chainId, poolInfo?.ethChainId]
+  )
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
   )
+  const NormalContent = () => {
+    if (!account) {
+      return <ConnectWalletButton />
+    }
+    if (!isCurrentChainEqualChainOfPool && poolInfo) {
+      return <SwitchNetworkButton targetChain={poolInfo?.ethChainId} />
+    }
+    if (!poolInfo) {
+      return <></>
+    }
+    return (
+      <>
+        {isUserJoined && (
+          <Box
+            sx={{
+              width: 'calc(100% - 48px)',
+              display: 'flex',
+              flexFlow: 'column nowrap',
+              justifyContent: 'center',
+              alignItems: 'center',
+              margin: '0 auto',
+              padding: '30px 0 24px'
+            }}
+          >
+            <ClaimBlock
+              isErc20EnglishAuction={true}
+              style={{
+                padding: '0'
+              }}
+              notTimeStyle={{
+                width: '100%',
+                padding: '0 24px',
+                margin: 0
+              }}
+              poolInfo={poolInfo}
+            />
+          </Box>
+        )}
+      </>
+    )
+  }
   if (poolInfo?.status === PoolStatus.Closed || poolInfo?.status === PoolStatus.Cancelled) {
     return (
       <>
@@ -220,38 +269,13 @@ const Linear = () => {
                 </Grid>
               </Grid>
             </Box>
-            {isUserJoined && (
-              <Box
-                sx={{
-                  width: 'calc(100% - 48px)',
-                  display: 'flex',
-                  flexFlow: 'column nowrap',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  margin: '0 auto',
-                  padding: '30px 0 24px'
-                }}
-              >
-                <ClaimBlock
-                  isErc20EnglishAuction={true}
-                  style={{
-                    padding: '0'
-                  }}
-                  notTimeStyle={{
-                    width: '100%',
-                    padding: '0 24px',
-                    margin: 0
-                  }}
-                  poolInfo={poolInfo}
-                />
-              </Box>
-            )}
+            <NormalContent />
           </Box>
         </Box>
         <OthersDetail poolInfo={poolInfo} />
       </>
     )
   }
-  return <NormalContent />
+  return <OneTime />
 }
 export default Linear

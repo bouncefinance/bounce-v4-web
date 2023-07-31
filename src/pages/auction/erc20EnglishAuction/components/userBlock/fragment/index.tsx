@@ -11,10 +11,15 @@ import moment from 'moment'
 import StageLine from 'pages/auction/dutchAuction/components/userBlock/stageLine'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
-import NormalContent from '../oneTime'
 import { useIsMDDown } from 'themes/useTheme'
+import OneTime from '../oneTime'
+import { useActiveWeb3React } from 'hooks'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isMd = useIsMDDown()
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
@@ -34,6 +39,32 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
     result = result.filter(item => !item.active)
     return result
   }, [poolInfo.releaseData])
+  const NormalContent = () => {
+    if (!account) {
+      return <ConnectWalletButton />
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+    }
+    return (
+      <>
+        {isUserJoined && (
+          <ClaimBlock
+            isErc20EnglishAuction={true}
+            style={{
+              padding: '0'
+            }}
+            notTimeStyle={{
+              width: '100%',
+              padding: '0 24px',
+              margin: 0
+            }}
+            poolInfo={poolInfo}
+          />
+        )}
+      </>
+    )
+  }
   if (poolInfo.status === PoolStatus.Closed || poolInfo.status === PoolStatus.Cancelled) {
     return (
       <Box
@@ -245,26 +276,13 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                 </RightText>
               </PoolInfoItem>
             </Box>
-            {isUserJoined && (
-              <ClaimBlock
-                isErc20EnglishAuction={true}
-                style={{
-                  padding: '0'
-                }}
-                notTimeStyle={{
-                  width: '100%',
-                  padding: '0 24px',
-                  margin: 0
-                }}
-                poolInfo={poolInfo}
-              />
-            )}
+            <NormalContent />
           </Box>
         </Box>
         <OthersDetail poolInfo={poolInfo} />
       </Box>
     )
   }
-  return <NormalContent />
+  return <OneTime />
 }
 export default Fragment

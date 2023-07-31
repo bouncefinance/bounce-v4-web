@@ -5,7 +5,8 @@ import SuccessIcon from 'assets/imgs/dutchAuction/success.png'
 import ErrorIcon from 'assets/imgs/dutchAuction/error.png'
 import { useIsUserJoinedDutchPool } from 'bounceHooks/auction/useIsUserJoinedPool'
 import { useIsMDDown } from 'themes/useTheme'
-
+import { useActiveWeb3React } from 'hooks'
+import { useMemo } from 'react'
 export interface PoolStatusBoxProps {
   status: PoolStatus
   style?: React.CSSProperties
@@ -16,7 +17,9 @@ const UserPoolStatusBox = ({ status, style, hiddenStatus = false, poolInfo }: Po
   const isMd = useIsMDDown()
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
   const { enableWhiteList, whitelistData } = poolInfo
-  if (hiddenStatus) {
+  const { account, chainId } = useActiveWeb3React()
+  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
+  if (hiddenStatus || !account || !isCurrentChainEqualChainOfPool) {
     return <Box></Box>
   }
   if ((enableWhiteList && whitelistData?.isUserInWhitelist) || !enableWhiteList) {
