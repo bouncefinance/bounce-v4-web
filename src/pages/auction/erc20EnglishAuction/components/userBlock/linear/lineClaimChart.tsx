@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
+import { ViewTypeParam } from '../../lineChart'
 import {
   createChart,
   ColorType,
@@ -8,6 +9,8 @@ import {
   SeriesMarker,
   Time,
   MouseEventParams,
+  DeepPartial,
+  ChartOptions,
   TimeFormatterFn
 } from 'lightweight-charts'
 import moment from 'moment'
@@ -69,7 +72,17 @@ export class ToolTip {
     }
   }
 }
-const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc20EnglishAuctionPoolProp }) => {
+const LineChartView = ({
+  data,
+  poolInfo,
+  options,
+  viewType = ViewTypeParam.default
+}: {
+  data: PointerItem[]
+  poolInfo: Erc20EnglishAuctionPoolProp
+  options?: DeepPartial<ChartOptions>
+  viewType?: ViewTypeParam
+}) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const colorObj = useMemo(() => {
@@ -95,6 +108,28 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
     const date = new Date(time)
     return moment(date).format('YYYY MM/DD')
   }
+  const offsetXy = useMemo(() => {
+    if (ViewTypeParam.default === viewType) {
+      return {
+        x: 120,
+        y: 240
+      }
+    } else if (ViewTypeParam.dialog === viewType) {
+      return {
+        x: 120,
+        y: 50
+      }
+    } else if (ViewTypeParam.linear === viewType) {
+      return {
+        x: 100,
+        y: 40
+      }
+    }
+    return {
+      x: 90,
+      y: 230
+    }
+  }, [viewType])
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -127,7 +162,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
         visible: false,
         borderVisible: false,
         autoScale: true
-      }
+      },
+      ...options
     })
     const handleResize = () => {
       chart.applyOptions({
@@ -144,16 +180,19 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
     })
     newSeries.setData(data as LineData[])
     // set current time data
-    const markers = [
-      {
-        time: new Date().valueOf() / 1000,
-        position: 'inBar',
-        color: '#959595',
-        shape: 'circle',
-        size: 0.7
-      }
-    ]
-    newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    const nowDate = new Date().valueOf()
+    if (nowDate / 1000 <= poolInfo.closeAt && nowDate / 1000 >= poolInfo.openAt) {
+      const markers = [
+        {
+          time: new Date().valueOf() / 1000,
+          position: 'inBar',
+          color: '#959595',
+          shape: 'circle',
+          size: 0.7
+        }
+      ]
+      newSeries.setMarkers(markers as SeriesMarker<Time>[])
+    }
     window.addEventListener('resize', handleResize)
     if (!tooltipInstance) {
       const TipsTool = new ToolTip({ dateStr: '' })
@@ -168,8 +207,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
         dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
       const token0Price = currentValue + poolInfo.token1.symbol
-      const x = Number(param?.point?.x) + 110
-      const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
+      const x = Number(param?.point?.x) + offsetXy.x
+      const y = Number(newSeries.priceToCoordinate(currentValue)) + offsetXy.y
       if (
         param.point === undefined ||
         !param.time ||
@@ -187,7 +226,18 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Erc2
       window.removeEventListener('resize', handleResize)
       chart.remove()
     }
-  }, [colorObj, data, poolInfo.token0.symbol, poolInfo.token1.symbol, tooltipInstance])
+  }, [
+    colorObj,
+    data,
+    offsetXy.x,
+    offsetXy.y,
+    options,
+    poolInfo.closeAt,
+    poolInfo.openAt,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol,
+    tooltipInstance
+  ])
   return (
     <>
       <Box ml={15} color={'#626262'}>{`Price(${poolInfo.token0.symbol})`}</Box>
@@ -214,7 +264,7 @@ const lineClaimChart = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
         width: '100%'
       }}
     >
-      <LineChartView data={lineData} poolInfo={poolInfo} />
+      <LineChartView data={lineData} poolInfo={poolInfo} viewType={ViewTypeParam.linear} />
     </Box>
   )
 }

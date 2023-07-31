@@ -28,7 +28,8 @@ export interface PointerItem {
 export enum ViewTypeParam {
   'default' = 0,
   'dialog' = 1,
-  'dip' = 2
+  'dip' = 2,
+  'linear' = 3
 }
 const OpenChartImg = styled(OpenChartIcon)(() => ({
   width: '16px',
@@ -130,13 +131,18 @@ export const LineChartView = ({
   const offsetXy = useMemo(() => {
     if (ViewTypeParam.default === viewType) {
       return {
-        x: 95,
-        y: 220
+        x: 120,
+        y: 140
       }
     } else if (ViewTypeParam.dialog === viewType) {
       return {
-        x: 95,
+        x: 120,
         y: 30
+      }
+    } else if (ViewTypeParam.linear === viewType) {
+      return {
+        x: 100,
+        y: 40
       }
     }
     return {

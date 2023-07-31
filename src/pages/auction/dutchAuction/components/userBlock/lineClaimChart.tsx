@@ -4,15 +4,18 @@ import { BigNumber } from 'bignumber.js'
 import {
   createChart,
   ColorType,
-  TimeFormatterFn,
   LineData,
   SeriesMarker,
   Time,
-  MouseEventParams
+  MouseEventParams,
+  DeepPartial,
+  ChartOptions,
+  TimeFormatterFn
 } from 'lightweight-charts'
 import moment from 'moment'
 import { PoolStatus } from 'api/pool/type'
 import { DutchAuctionPoolProp } from 'api/pool/type'
+import { ViewTypeParam } from '../lineChart'
 interface PointerItem {
   time: number | string
   value: number
@@ -69,7 +72,17 @@ export class ToolTip {
     }
   }
 }
-const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: DutchAuctionPoolProp }) => {
+const LineChartView = ({
+  data,
+  poolInfo,
+  options,
+  viewType = ViewTypeParam.default
+}: {
+  data: PointerItem[]
+  poolInfo: DutchAuctionPoolProp
+  options?: DeepPartial<ChartOptions>
+  viewType?: ViewTypeParam
+}) => {
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const colorObj = useMemo(() => {
@@ -95,6 +108,28 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
     const date = new Date(time)
     return moment(date).format('DD MMMM')
   }
+  const offsetXy = useMemo(() => {
+    if (ViewTypeParam.default === viewType) {
+      return {
+        x: 120,
+        y: 240
+      }
+    } else if (ViewTypeParam.dialog === viewType) {
+      return {
+        x: 120,
+        y: 50
+      }
+    } else if (ViewTypeParam.linear === viewType) {
+      return {
+        x: 105,
+        y: 20
+      }
+    }
+    return {
+      x: 90,
+      y: 230
+    }
+  }, [viewType])
   useEffect(() => {
     if (!chartContainerRef.current) return
     const chart = createChart(chartContainerRef.current, {
@@ -128,7 +163,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         visible: false,
         borderVisible: false,
         autoScale: true
-      }
+      },
+      ...options
     })
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef.current.clientWidth })
@@ -171,8 +207,8 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
         dateStr = moment(Number(resultItem.time)).format('DD MMMM') || '--'
       }
       const token0Price = Number(currentValue).toFixed(6) + poolInfo.token1.symbol
-      const x = Number(param?.point?.x) + 110
-      const y = Number(newSeries.priceToCoordinate(currentValue)) + 200
+      const x = Number(param?.point?.x) + offsetXy.x
+      const y = Number(newSeries.priceToCoordinate(currentValue)) + offsetXy.y
       if (
         param.point === undefined ||
         !param.time ||
@@ -194,6 +230,9 @@ const LineChartView = ({ data, poolInfo }: { data: PointerItem[]; poolInfo: Dutc
   }, [
     colorObj,
     data,
+    offsetXy.x,
+    offsetXy.y,
+    options,
     poolInfo.closeAt,
     poolInfo.openAt,
     poolInfo.token0.symbol,
@@ -221,7 +260,7 @@ const lineClaimChart = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         width: '100%'
       }}
     >
-      <LineChartView data={lineData} poolInfo={poolInfo} />
+      <LineChartView data={lineData} poolInfo={poolInfo} viewType={ViewTypeParam.linear} />
     </Box>
   )
 }

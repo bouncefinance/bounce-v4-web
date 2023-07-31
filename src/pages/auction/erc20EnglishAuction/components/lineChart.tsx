@@ -30,7 +30,8 @@ interface PointerItem {
 export enum ViewTypeParam {
   'default' = 0,
   'dialog' = 1,
-  'dip' = 2
+  'dip' = 2,
+  'linear' = 3
 }
 const OpenChartImg = styled(OpenChartIcon)(() => ({
   width: '16px',

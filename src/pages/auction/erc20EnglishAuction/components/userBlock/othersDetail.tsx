@@ -66,14 +66,14 @@ const OthersDetail = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) =
         >
           <Box
             sx={{
-              flex: 1
+              width: 420
             }}
           >
             <Line poolInfo={poolInfo} />
           </Box>
           <Box
             sx={{
-              flex: 1
+              flex: 474
             }}
           >
             <AuctionInfo />

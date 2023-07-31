@@ -18,7 +18,7 @@ const Linear = () => {
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
   )
-  if (poolInfo?.status === PoolStatus.Closed) {
+  if (poolInfo?.status === PoolStatus.Closed || poolInfo?.status === PoolStatus.Cancelled) {
     return (
       <>
         {/* <Stepper poolInfo={poolInfo} /> */}
