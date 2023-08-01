@@ -13,6 +13,7 @@ export enum PoolType {
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6,
   ENGLISH_AUCTION = 8,
+  MUTANT_ENGLISH_AUCTION_NFT = 9,
   'PlayableAuction' = 100
 }
 
@@ -34,6 +35,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Playable Auction'
     case PoolType.ENGLISH_AUCTION:
       return 'English Auction'
+    case PoolType.MUTANT_ENGLISH_AUCTION_NFT:
+      return 'Mutant English'
   }
 }
 
@@ -361,6 +364,25 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   isWinner: boolean
   // !TOTD
   isUserJoinedPool: boolean
+}
+
+export interface MutantEnglishAuctionNFTPoolProp
+  extends Omit<EnglishAuctionNFTPoolProp, 'currencyAmountMinIncr1' | 'currentBidderMinAmount'> {
+  amountMinIncrRatio1: CurrencyAmount | undefined
+  currentBidderAmount: CurrencyAmount | undefined
+  extraAmount1: CurrencyAmount | undefined
+  closeIncrInterval: number | undefined
+  claimDelay: number | undefined
+  distributeRatios: {
+    prevBidderRatio: CurrencyAmount | undefined
+    lastBidderRatio: CurrencyAmount | undefined
+    creatorRatio: CurrencyAmount | undefined
+  }
+  distributeRewards: {
+    prevBidderRewards: CurrencyAmount | undefined
+    lastBidderRewards: CurrencyAmount | undefined
+    creatorRewards: CurrencyAmount | undefined
+  }
 }
 
 export interface GetPoolInfoResponse {

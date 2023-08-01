@@ -46,6 +46,7 @@ export const poolTypeText: Record<PoolType, string> = {
   [PoolType.fixedSwapNft]: 'Fixed Swap NFT',
   [PoolType.ENGLISH_AUCTION_NFT]: 'ENGLISH AUCTION NFT',
   [PoolType.PlayableAuction]: 'Playable Auction',
+  [PoolType.MUTANT_ENGLISH_AUCTION_NFT]: 'Mutant ENGLISH AUCTION',
   [PoolType.ENGLISH_AUCTION]: 'Erc20 English Auction'
 }
 const initialValues = {
