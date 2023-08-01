@@ -1,36 +1,70 @@
-import { Box, SxProps, Theme } from '@mui/material'
+import { Box, SxProps, Theme, styled, Typography } from '@mui/material'
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import FooterPc from 'components/Footer/FooterPc'
-import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
-import Tabs from './components/tabs'
-import { useState } from 'react'
-import Auction from './components/auction'
-import Buynow from './components/buynow'
+import ArrowBanner from './components/shop/banner'
 import { useIsSMDown } from 'themes/useTheme'
 import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvider'
-
+import ShopLogoList from './components/shop/shopLogoList'
+import { useEffect } from 'react'
+import ShopList from './components/shop/shopList'
 export enum TabsType {
   'auction' = 0,
   'buynow' = 1
 }
+const ComTitle = styled(Box)(({ theme }) => ({
+  width: '100%',
+  height: '106px',
+  borderTop: '1px solid #000',
+  borderBottom: '1px solid #000',
+  '.title': {
+    width: '100%',
+    maxWidth: '1296px',
+    margin: '0 auto',
+    fontFamily: `'Instrument Serif'`,
+    fontSize: 64
+  },
+  [theme.breakpoints.down('md')]: {
+    height: '55px',
+    '.title': {
+      width: '100%',
+      padding: '0 16px',
+      fontSize: 32
+    }
+  }
+}))
+
 export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefined }) {
-  const [index, setIndex] = useState(TabsType.auction)
   const isSm = useIsSMDown()
+  useEffect(() => {
+    document.getElementsByTagName('body')[0].setAttribute('style', 'background:#fff;')
+    return () => {
+      document.getElementsByTagName('body')[0].removeAttribute('style')
+    }
+  }, [])
   return (
     <ValuesProvider>
       <Box
         sx={{
           padding: isSm ? '0' : '0 60px 0',
-          background: '#f6f6f3',
+          background: '#fff',
           ...sx
         }}
       >
         <HeaderTab />
-        <ArrowBanner type={'RealWorld'} />
-        <Tabs setIndex={setIndex} index={index} />
+        <ArrowBanner />
       </Box>
-      {index === TabsType.auction && <Auction />}
-      {index === TabsType.buynow && <Buynow />}
+      <ComTitle
+        sx={{
+          marginTop: isSm ? '55px' : '100px'
+        }}
+      >
+        <Typography className="title">FEATURED SHOPS</Typography>
+      </ComTitle>
+      <ShopLogoList />
+      <ComTitle>
+        <Typography className="title">UPCOMING DROPS</Typography>
+      </ComTitle>
+      <ShopList />
       <FooterPc />
     </ValuesProvider>
   )
