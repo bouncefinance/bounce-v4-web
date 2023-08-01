@@ -82,12 +82,12 @@ export const ApplyToBeSeller = () => {
   const navigate = useNavigate()
   useEffect(() => {
     if (data) {
-      toast.success('Successfully edited')
+      toast.success('Successfully applied')
       navigate(routes.realAuction.index)
       return
     }
     if (error) {
-      toast.error('Error edited')
+      toast.error('Error applied')
       return
     }
   }, [data, error, navigate])
