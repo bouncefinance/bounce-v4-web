@@ -1,3 +1,4 @@
+import { IBodySeller } from 'pages/realWorldAuction/applyToBeSeller'
 import {
   IRegisterParams,
   ILoginParams,
@@ -177,4 +178,7 @@ export const getUserTokenList = (params: GetUserTokenListParams) => {
  */
 export const getUserSearchTokenList = (params: SearchTokenListParams) => {
   return ApiInstance.post('/com/search/token', params)
+}
+export const applySeller = (params: IBodySeller) => {
+  return ApiInstance.post('/user/seller_apply', params)
 }
