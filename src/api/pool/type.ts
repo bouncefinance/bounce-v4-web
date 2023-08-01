@@ -383,6 +383,11 @@ export interface MutantEnglishAuctionNFTPoolProp
     lastBidderRewards: CurrencyAmount | undefined
     creatorRewards: CurrencyAmount | undefined
   }
+  whitelistData: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
 }
 
 export interface GetPoolInfoResponse {
