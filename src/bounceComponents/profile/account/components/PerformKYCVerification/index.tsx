@@ -7,6 +7,8 @@ import { useMemo } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 import { VerifyStatus } from 'api/profile/type'
 import { routes } from 'constants/routes'
+import { IS_TEST_ENV } from '../../../../../constants'
+
 const homeShowList = [
   routes.market.index,
   routes.launchpad.index,
@@ -26,7 +28,7 @@ const PerformKYCVerification = () => {
   const isLg = useBreakpoint('lg')
   return (
     <>
-      {isVerify && (isHomeShow || isAccountShow) && (
+      {isVerify && (isHomeShow || isAccountShow) && !IS_TEST_ENV && (
         <Box
           onClick={() => show(SumsubWebDialog)}
           mb={isSm ? 8 : 0}
