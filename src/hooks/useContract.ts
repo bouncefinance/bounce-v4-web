@@ -25,7 +25,8 @@ import {
   ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES,
   FIXED_SWAP_ERC20_ADDRESSES,
   FIXED_SWAP_NFT_CONTRACT_ADDRESSES,
-  RANDOM_SELECTION_CONTRACT_ADDRESSES
+  RANDOM_SELECTION_CONTRACT_ADDRESSES,
+  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -186,6 +187,14 @@ export function useEnglishAuctionNftContract(address?: string, queryChainId?: Ch
   const cur = queryChainId || chainId
   const curAddress =
     address === '' ? undefined : address || (cur ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, ENGLISH_AUCTION_NFT_ABI, true, queryChainId)
+}
+
+export function useMutantEnglishAuctionNftContract(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress =
+    address === '' ? undefined : address || (cur ? MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, ENGLISH_AUCTION_NFT_ABI, true, queryChainId)
 }
 

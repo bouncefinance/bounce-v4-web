@@ -1,7 +1,7 @@
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import { Currency } from './token'
 import JSBI from 'jsbi'
 import { ChainId } from './chain'
+import { ConnectionType } from 'connection/types'
 
 // used to ensure the user doesn't send so much ETH so they end up with <.01
 export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)) // .01 ETH
@@ -14,130 +14,15 @@ export const autoConnectInjectedEveryone = false
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-export interface WalletInfo {
-  connector?: AbstractConnector | any
-  name: string
-  iconName: string
-  description: string
-  href: string | null
-  color: string
-  primary?: true
-  mobile?: true
-  mobileOnly?: true
-  disabled?: true
-}
-
-// export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
-//   INJECTED: {
-//     connector: connector_metaMask,
-//     name: 'Injected',
-//     iconName: 'arrow-right.svg',
-//     description: 'Injected web3 provider.',
-//     href: null,
-//     color: '#010101',
-//     primary: true
-//   },
-//   METAMASK: {
-//     connector: connector_metaMask,
-//     name: 'MetaMask',
-//     iconName: 'metamask.png',
-//     description: 'Easy-to-use browser extension.',
-//     href: null,
-//     color: '#E8831D'
-//   },
-//   // OKEX: {
-//   //   connector: injected,
-//   //   name: 'OKX',
-//   //   iconName: 'okxIcon.png',
-//   //   description: 'Easy-to-use browser extension.',
-//   //   href: null,
-//   //   color: '#E8831D',
-//   //   mobile: true,
-//   //   mobileOnly: true
-//   // },
-//   OKEX: {
-//     connector: connector_okxWallet,
-//     name: 'OKX Wallet',
-//     iconName: 'okxIcon.png',
-//     description: 'Easy-to-use browser extension.',
-//     href: null,
-//     color: '#E8831D'
-//   },
-//   WALLET_CONNECT: {
-//     connector: connector_walletConnectV2,
-//     name: 'WalletConnectV2',
-//     iconName: 'walletConnectIcon.svg',
-//     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
-//     href: null,
-//     color: '#4196FC',
-//     mobile: true
-//   },
-//   WALLET_LINK: {
-//     connector: undefined,
-//     name: 'Coinbase',
-//     iconName: 'coinbaseWalletIcon.svg',
-//     description: 'Use Coinbase Wallet app on mobile device',
-//     href: null,
-//     disabled: true,
-//     color: '#315CF5'
-//   },
-//   BINANCE: {
-//     connector: undefined,
-//     name: 'Binance Wallet',
-//     iconName: 'BinanceWalletIcon.svg',
-//     description: '',
-//     href: null,
-//     disabled: true,
-//     color: '#315CF5'
-//   },
-//   TRUST_WALLET: {
-//     connector: undefined,
-//     name: 'Trust wallet',
-//     iconName: 'trustWalletIcon.svg',
-//     description: '',
-//     href: null,
-//     disabled: true,
-//     color: '#315CF5'
-//   },
-//   MATH_WALLET: {
-//     connector: undefined,
-//     name: 'Math wallet',
-//     iconName: 'mathWalletIcon.svg',
-//     description: '',
-//     href: null,
-//     disabled: true,
-//     color: '#315CF5'
-//   }
-//   // COINBASE_LINK: {
-//   //   name: 'Open in Coinbase Wallet',
-//   //   iconName: 'coinbaseWalletIcon.svg',
-//   //   description: 'Open in Coinbase Wallet app.',
-//   //   href: 'https://go.cb-w.com/mtUDhEZPy1',
-//   //   color: '#315CF5',
-//   //   mobile: true,
-//   //   mobileOnly: true
-//   // },
-//   // FORTMATIC: {
-//   //   connector: fortmatic,
-//   //   name: 'Fortmatic',
-//   //   iconName: 'fortmaticIcon.png',
-//   //   description: 'Login using Fortmatic hosted wallet',
-//   //   href: null,
-//   //   color: '#6748FF',
-//   //   mobile: true
-//   // },
-//   // Portis: {
-//   //   connector: portis,
-//   //   name: 'Portis',
-//   //   iconName: 'portisIcon.png',
-//   //   description: 'Login using Portis hosted wallet',
-//   //   href: null,
-//   //   color: '#4A6C9B',
-//   //   mobile: true
-//   // }
-// }
-
-// export const NetworkContextName = 'NETWORK'
+export const SELECTABLE_ENABLE_WALLETS: ConnectionType[] = [
+  ConnectionType.INJECTED,
+  ConnectionType.WALLET_CONNECT_V2,
+  ConnectionType.UNISWAP_WALLET_V2,
+  ConnectionType.OKX_WALLET,
+  ConnectionType.GNOSIS_SAFE,
+  ConnectionType.BINANCE_WALLET,
+  ConnectionType.COINBASE_WALLET
+]
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 50
@@ -342,6 +227,43 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
+  [ChainId.LINEA_GORLI]: ''
+}
+
+export const MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: Record<ChainId, string> = {
+  [ChainId.MAINNET]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
   [ChainId.LINEA_GORLI]: ''
 }
 

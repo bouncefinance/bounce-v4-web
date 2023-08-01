@@ -3037,6 +3037,7 @@
     "@stablelib/keyagreement" "^1.0.1"
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
+
 "@sumsub/websdk-react@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@sumsub/websdk-react/-/websdk-react-2.0.1.tgz#5884b76da87267c837da39554257edebe9ef729a"
@@ -13991,6 +13992,13 @@ web3-providers-ws@1.7.4:
     eventemitter3 "4.0.4"
     web3-core-helpers "1.7.4"
     websocket "^1.0.32"
+
+web3-react-binance-wallet@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/web3-react-binance-wallet/-/web3-react-binance-wallet-1.0.1.tgz#521c29088eb14001a21c56db033782f0a7b6f0c8"
+  integrity sha512-9oXarvnNH4fat3I6tNjXhVYIAnJvenZ3cT5P+0qDeTQbaqNgcwpgyjwz3cLw44Hc0NLACVcNvO2nvGfAVwBYSw==
+  dependencies:
+    "@web3-react/types" "^8.2.0"
 
 web3-shh@1.7.4:
   version "1.7.4"
