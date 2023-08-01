@@ -52,6 +52,7 @@ export interface IPrivatePadProp {
     end: number
   }
   showStartEnd?: true
+  hideUpcomingCountdown?: true
   poolTypeName: string
   img: string
   avatar: string
@@ -672,9 +673,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 12,
     liveTimeStamp: {
-      start: 1690848000000,
-      end: 0
+      start: 16908668000000,
+      end: 16908668000000
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
     img: MetaBlox,
     avatar: MetaBloxAvatar,
@@ -732,9 +734,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 11,
     liveTimeStamp: {
-      start: 1690675200000,
-      end: 1690934400000
+      start: 1690672533200000,
+      end: 1690932433400000
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'ERC20 English Auction',
     poolTypeName2: 'ERC20 Dutch Auction',
     img: DipImg,
@@ -844,6 +847,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1689436800000,
       end: 1689609600000
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Whitelist',
     img: Deelance,
     avatar: DeelanceAvatar,
@@ -884,68 +888,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Amount', content: '3,846,153' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
-  },
-  {
-    keyId: 11,
-    liveTimeStamp: {
-      start: 1690675200000,
-      end: 1690934400000
-    },
-    poolTypeName: 'ERC20 English Auction',
-    poolTypeName2: 'ERC20 Dutch Auction',
-    img: DipImg,
-    avatar: DipAvatar,
-    title: 'DIP Exchange',
-    chainId: 250,
-    tokenName: '$DIP',
-    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
-    upcomingLink: '/launchpad/dip_exchange',
-    liveLink: '/launchpad/dip_exchange',
-    projectInfo: DipProjectInfo,
-    tokenMetrics: DipTokenMetrics,
-    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
-    social: [
-      <Link key={0} href="https://dip.exchange" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>,
-      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$DIP $DGT' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Fantom' }
-    ],
-    privatePrices: [
-      {
-        title: ['DIP Auction Method'],
-        value: ['ERC20 English Auction']
-      },
-      {
-        title: ['Dip Token Offered'],
-        value: 'TBD $DIP'
-      },
-      {
-        title: ['Dgt Token Offered'],
-        value: 'TBD $DGP'
-      },
-      {
-        title: ['DIP Auction Method'],
-        value: 'ERC20 Dutch Auction'
-      }
-    ],
-    isFAQ: true
   },
   {
     hidden: true,
