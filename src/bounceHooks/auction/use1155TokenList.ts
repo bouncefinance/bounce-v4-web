@@ -133,6 +133,33 @@ export function use1155TokenList(
 
         setList(nftCollection)
       } catch (error) {
+        setIsLoading(false)
+        const nftCollection: Response1155Token = {}
+        if (chainId === 5 && isERC721) {
+          nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
+          nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
+            balance: '1',
+            contractAddr: '0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '5'
+          })
+
+          const _tempIds = Object.keys(new Array(201).fill(''))
+          _tempIds.shift()
+          nftCollection['0x63053B36ba17d81401115a5E33E7c265F81Ee44f'] = _tempIds.map(i => ({
+            balance: '1',
+            contractAddr: '0x63053B36ba17d81401115a5E33E7c265F81Ee44f',
+            contractName: 'english-test',
+            description: 'english-test',
+            image: '',
+            name: 'english-test',
+            tokenId: i
+          }))
+        }
+        setList(nftCollection)
         console.error('fetch user nfts error', error)
       }
     }

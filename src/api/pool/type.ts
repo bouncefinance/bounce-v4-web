@@ -13,6 +13,7 @@ export enum PoolType {
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6,
   ENGLISH_AUCTION = 8,
+  MUTANT_ENGLISH = 9,
   'PlayableAuction' = 100
 }
 
@@ -34,6 +35,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Playable Auction'
     case PoolType.ENGLISH_AUCTION:
       return 'English Auction'
+    case PoolType.MUTANT_ENGLISH:
+      return 'Mutant English'
   }
 }
 

@@ -3,7 +3,7 @@ import Image from 'components/Image'
 import { useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { CreationStep, ParticipantStatus } from '../types'
+import { AuctionType, CreationStep, ParticipantStatus } from '../types'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -347,9 +347,15 @@ const CreationConfirmation = () => {
                   <Typography>{values.priceFloor}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="The minimum price increase">
-                  <Typography>{values.amountMinIncr1}</Typography>
-                </ConfirmationInfoItem>
+                {values.auctionType === AuctionType.MUTANT_ENGLISH ? (
+                  <ConfirmationInfoItem title="The minimum increase ratio">
+                    <Typography>{values.amountMinIncr1}%</Typography>
+                  </ConfirmationInfoItem>
+                ) : (
+                  <ConfirmationInfoItem title="The minimum price increase">
+                    <Typography>{values.amountMinIncr1}</Typography>
+                  </ConfirmationInfoItem>
+                )}
               </Stack>
             </Box>
 
@@ -359,11 +365,33 @@ const CreationConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Pool duration">
-                  <Typography>
-                    From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
-                  </Typography>
-                </ConfirmationInfoItem>
+                {values.auctionType === AuctionType.MUTANT_ENGLISH ? (
+                  <ConfirmationInfoItem title="Pool start time">
+                    <Typography>From {values.startTime?.format('MM.DD.Y HH:mm')}</Typography>
+                  </ConfirmationInfoItem>
+                ) : (
+                  <ConfirmationInfoItem title="Pool duration">
+                    <Typography>
+                      From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
+                    </Typography>
+                  </ConfirmationInfoItem>
+                )}
+
+                {values.auctionType === AuctionType.MUTANT_ENGLISH && (
+                  <ConfirmationInfoItem title="Delay close time">
+                    <Typography>
+                      {values.closeHour || '-'} Hour {values.closeMinute || '-'} Minute
+                    </Typography>
+                  </ConfirmationInfoItem>
+                )}
+
+                {values.auctionType === AuctionType.MUTANT_ENGLISH && (
+                  <ConfirmationInfoItem title="Delay claim time">
+                    <Typography>
+                      {values.delayUnlockingHour || '-'} Hour {values.delayUnlockingMinute || '-'} Minute
+                    </Typography>
+                  </ConfirmationInfoItem>
+                )}
 
                 <ConfirmationInfoItem title="Participant">
                   <Typography>
