@@ -223,6 +223,7 @@ export const LineChartView = ({
   }, [
     colorObj,
     data,
+    isMd,
     offsetXy.x,
     offsetXy.y,
     options,
