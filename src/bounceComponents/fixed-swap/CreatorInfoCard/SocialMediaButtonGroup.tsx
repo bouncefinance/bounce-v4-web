@@ -21,6 +21,7 @@ export interface SocialMediaButtonGroupProps {
   github?: string
   discord?: string
   style?: React.CSSProperties
+  showAll?: true
 }
 
 const SocialMediaButtonGroup = ({
@@ -32,8 +33,44 @@ const SocialMediaButtonGroup = ({
   linkedin,
   discord,
   style,
+  showAll,
   github
 }: SocialMediaButtonGroupProps) => {
+  if (showAll) {
+    return (
+      <Stack spacing={8} direction="row" sx={{ mt: 20, ...style }}>
+        {shouldShowEmailButton && (
+          <SocialMediaButton disabled={!email} href={`mailto:${email}`}>
+            <EmailSVG />
+          </SocialMediaButton>
+        )}
+
+        <SocialMediaButton
+          disabled={!twitter}
+          href={twitter ? (isSocialUrl('twitter', twitter) ? twitter : `https://twitter.com/${twitter}`) : ''}
+        >
+          <TwitterSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!instagram} href={instagram || ''}>
+          <InstagramSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!website} href={website || ''}>
+          <WebsiteSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!discord} href={discord || ''}>
+          <DiscordSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!github} href={github || ''}>
+          <GithubSVG />
+        </SocialMediaButton>
+      </Stack>
+    )
+  }
+
   return (
     <Stack spacing={8} direction="row" sx={{ mt: 20, ...style }}>
       {email && shouldShowEmailButton ? (

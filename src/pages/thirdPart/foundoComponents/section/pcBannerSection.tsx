@@ -1,8 +1,11 @@
 import { Box, styled } from '@mui/material'
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
 import { FreeMode, Autoplay } from 'swiper'
-import P1Img from 'assets/imgs/thirdPart/foundoDetail/p1.png'
-import P2Img from 'assets/imgs/thirdPart/foundoDetail/p2.png'
+import P1Img from 'assets/imgs/thirdPart/foundoDetail/p3.png'
+import P2Img from 'assets/imgs/thirdPart/foundoDetail/p4.png'
+import P3Img from 'assets/imgs/thirdPart/foundoDetail/p5.png'
+import P4Img from 'assets/imgs/thirdPart/foundoDetail/p6.png'
+import P5Img from 'assets/imgs/thirdPart/foundoDetail/p7.png'
 import 'swiper/css'
 import 'swiper/css/free-mode'
 import 'swiper/css/autoplay'
@@ -25,7 +28,7 @@ const PcBanenr = () => {
   const [slidesPerview, setSlidesPerView] = useState(isSm ? 1 : 2.5)
   const swiper = useSwiper()
   const [swiperInstance, setSwiperInstance] = useState(swiper)
-  const banenrList = [P1Img, P2Img, P1Img, P2Img, P1Img, P2Img]
+  const bannerList = [P1Img, P2Img, P3Img, P4Img, P5Img]
   useEffect(() => {
     const setPerview = () => {
       if (isSm) return
@@ -48,7 +51,10 @@ const PcBanenr = () => {
       <Box
         sx={{
           width: '100%',
-          height: isSm ? '360px' : '600px'
+          height: isSm ? '360px' : '600px',
+          '& .swiper .swiper-wrapper .swiper-slide img:hover': {
+            filter: 'grayscale(0%) !important'
+          }
         }}
       >
         <Swiper
@@ -62,7 +68,7 @@ const PcBanenr = () => {
             setSwiperInstance(swiper)
           }}
         >
-          {banenrList.map((item, index) => {
+          {bannerList.map((item, index) => {
             return (
               <SwiperSlide key={index}>
                 <img
@@ -71,6 +77,7 @@ const PcBanenr = () => {
                   style={{
                     height: isSm ? '360px' : '600px',
                     width: isSm ? '100%' : '600px',
+                    filter: isSm ? 'none' : 'grayscale(100%)',
                     objectFit: 'cover'
                   }}
                   alt=""
@@ -125,13 +132,13 @@ const PcBanenr = () => {
             height: '80px',
             width: '100%',
             display: 'flex',
-            flexFlow: 'row nowarap',
+            flexFlow: 'row nowrap',
             overflowX: 'auto',
             justifyContent: 'flex-end',
             alignItems: 'center'
           }}
         >
-          {banenrList.map((item, index) => {
+          {bannerList.map((item, index) => {
             return (
               <BannerSmallItem
                 onClick={() => {
