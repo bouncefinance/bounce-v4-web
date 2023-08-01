@@ -19,7 +19,6 @@ const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
     .toFormat(6)
   const isClaimingDelayed = poolInfo.claimAt > poolInfo.closeAt
   const formattedClaimTime = moment(poolInfo.claimAt * 1000).format('MMM D, YYYY hh:mm A')
-
   return (
     <Stack spacing={10} sx={{ mt: 16, mb: 24 }}>
       <PoolInfoItem title="Successful sold amount" tip="The amount of tokens sold to participants.">

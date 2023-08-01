@@ -37,7 +37,7 @@ const PoolInfoItem = ({ title, tip, children, sx }: PoolInfoItemProps): JSX.Elem
       >
         <SubTitle>{title}</SubTitle>
         {tip ? (
-          <Tooltip title={tip}>
+          <Tooltip title={tip} enterTouchDelay={100}>
             <HelpOutlineIcon sx={{ width: 20, height: 20, ml: 4, cursor: 'pointer' }} />
           </Tooltip>
         ) : null}
