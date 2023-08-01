@@ -2,7 +2,10 @@ import { Box } from '@mui/material'
 import BackIcon from 'assets/imgs/dutchAuction/back.svg'
 import { ShareBtn } from 'pages/projectIntro'
 import { useNavigate } from 'react-router-dom'
+import { useIsMDDown } from 'themes/useTheme'
+
 const Header = () => {
+  const isMd = useIsMDDown()
   const navigate = useNavigate()
   const goBack = () => {
     navigate(-1)
@@ -13,9 +16,10 @@ const Header = () => {
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: isMd ? '30px 16px 20px' : ''
       }}
-      mb={30}
+      mb={isMd ? 0 : 30}
     >
       <Box
         sx={{

@@ -1,5 +1,4 @@
 import { Box, Grid, Typography } from '@mui/material'
-
 import { PoolStatus } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import moment from 'moment'
@@ -10,11 +9,13 @@ import ClaimBlock from 'pages/auction/dutchAuction/components/userBlock/claimBlo
 import OthersDetail from '../othersDetail'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import LineClaimChart from './lineClaimChart'
+import { useIsMDDown } from 'themes/useTheme'
 import OneTime from '../oneTime'
 import { useActiveWeb3React } from 'hooks'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 const Linear = () => {
+  const isMd = useIsMDDown()
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(
@@ -74,7 +75,7 @@ const Linear = () => {
           sx={{
             width: '100%',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start'
           }}
@@ -83,7 +84,8 @@ const Linear = () => {
         >
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               height: '100%',
               minHeight: '226px',
               paddingRight: '24px'
@@ -93,7 +95,8 @@ const Linear = () => {
           </Box>
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               borderRadius: '20px',
               background: '#20201e',
               display: 'flex',

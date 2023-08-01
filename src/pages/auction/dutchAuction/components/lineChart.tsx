@@ -2,6 +2,7 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as OpenChartIcon } from 'assets/imgs/dutchAuction/openChart.svg'
 import { useMemo, useRef, useEffect, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
+import { useIsMDDown } from 'themes/useTheme'
 import {
   createChart,
   ColorType,
@@ -103,6 +104,7 @@ export const LineChartView = ({
   options?: DeepPartial<ChartOptions>
   viewType?: ViewTypeParam
 }) => {
+  const isMd = useIsMDDown()
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const colorObj = useMemo(() => {
@@ -218,7 +220,7 @@ export const LineChartView = ({
       newSeries.setMarkers(markers as SeriesMarker<Time>[])
     }
     window.addEventListener('resize', handleResize)
-    if (!tooltipInstance) {
+    if (!tooltipInstance && !isMd) {
       const TipsTool = new ToolTip({ dateStr: '' })
       setTooltipInstance(TipsTool)
       chartContainerRef.current.appendChild(TipsTool?.el)
@@ -262,17 +264,13 @@ export const LineChartView = ({
     poolInfo.closeAt,
     poolInfo.openAt,
     offsetXy,
-    viewType
+    viewType,
+    isMd
   ])
   return <Box ref={chartContainerRef}></Box>
 }
-const LineChartSection = ({
-  poolInfo,
-  hideDialogBtn = false
-}: {
-  poolInfo: DutchAuctionPoolProp
-  hideDialogBtn?: boolean
-}) => {
+const LineChartSection = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { openAt, closeAt, highestPrice, lowestPrice, times } = poolInfo
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const segments = times ? Number(times) : 0
@@ -329,10 +327,9 @@ const LineChartSection = ({
         >
           Duction Auction Live Chart
         </Typography>
-        {!hideDialogBtn && (
+        {!isMd && (
           <OpenChartImg
             onClick={() => {
-              console.log('setDialogOpen>>>>', dialogOpen)
               setDialogOpen(!dialogOpen)
             }}
           />

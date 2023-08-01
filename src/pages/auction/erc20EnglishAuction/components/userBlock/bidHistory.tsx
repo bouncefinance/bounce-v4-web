@@ -5,8 +5,9 @@ import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
-
+import { useIsMDDown } from 'themes/useTheme'
 const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { account } = useActiveWeb3React()
   const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
@@ -93,7 +94,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                         sx={{
                           fontFamily: `'Inter'`,
                           color: '#E1F25C',
-                          fontSize: '13px',
+                          fontSize: isMd ? 12 : '13px',
                           fontWeight: 400
                         }}
                       >
@@ -111,7 +112,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                         sx={{
                           fontFamily: `'Inter'`,
                           color: '#E1F25C',
-                          fontSize: '13px',
+                          fontSize: isMd ? 12 : '13px',
                           fontWeight: 400
                         }}
                       >
@@ -129,7 +130,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
                         sx={{
                           fontFamily: `'Inter'`,
                           color: '#E1F25C',
-                          fontSize: '13px',
+                          fontSize: isMd ? 12 : '13px',
                           fontWeight: 400
                         }}
                       >

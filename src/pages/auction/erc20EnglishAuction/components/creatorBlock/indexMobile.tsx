@@ -1,10 +1,10 @@
 import { Box } from '@mui/material'
-import CreatorPoolStatusBox from './poolStatus'
 import LeftBox from './left'
 import RightBox from './right'
-import { DutchAuctionPoolProp } from 'api/pool/type'
+import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
+import CreatorPoolStatusBox from './poolStatus'
 import { useIsMDDown } from 'themes/useTheme'
-const CreatorBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+const CreatorBlock = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isMd = useIsMDDown()
   return (
     <Box
@@ -16,17 +16,13 @@ const CreatorBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       }}
       mb={'40px'}
     >
-      <CreatorPoolStatusBox
-        status={poolInfo.status}
-        currentTotal0={poolInfo.currentTotal0}
-        hiddenStatus={poolInfo.participant.claimed}
-      />
+      <CreatorPoolStatusBox poolInfo={poolInfo} status={poolInfo.status} hiddenStatus={poolInfo.participant.claimed} />
       <Box
         sx={{
           width: '100%'
         }}
       >
-        <LeftBox poolInfo={poolInfo} />
+        <LeftBox />
       </Box>
       <Box
         sx={{
@@ -34,7 +30,7 @@ const CreatorBlock = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           marginTop: '40px'
         }}
       >
-        <RightBox poolInfo={poolInfo} />
+        <RightBox />
       </Box>
     </Box>
   )

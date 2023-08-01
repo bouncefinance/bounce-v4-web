@@ -9,12 +9,14 @@ import OthersDetail from '../othersDetail'
 import moment from 'moment'
 import LineClaimChart from '../lineClaimChart'
 import ClaimBlock from '../../userBlock/claimBlock'
+import { useIsMDDown } from 'themes/useTheme'
 import OneTime from '../oneTime'
 import { useActiveWeb3React } from 'hooks'
 import { useMemo } from 'react'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserJoined = useIsUserJoinedDutchPool(poolInfo)
@@ -64,7 +66,7 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           sx={{
             width: '100%',
             display: 'flex',
-            flexFlow: 'row nowrap',
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
             justifyContent: 'center',
             alignItems: 'flex-start'
           }}
@@ -73,7 +75,8 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
         >
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               height: '100%',
               minHeight: '226px',
               paddingRight: '24px'
@@ -83,7 +86,8 @@ const Linear = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           </Box>
           <Box
             sx={{
-              flex: 1,
+              width: isMd ? '100%' : 'unset',
+              flex: isMd ? 'unset' : 1,
               borderRadius: '20px',
               background: '#20201e',
               display: 'flex',

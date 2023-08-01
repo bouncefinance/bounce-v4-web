@@ -5,7 +5,9 @@ import PoolTextItem from '../poolTextItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
+import { useIsMDDown } from 'themes/useTheme'
 const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const currentPrice = useMemo(() => {
     const currencyCurrentPrice = new BigNumber(poolInfo.currencyCurrentPrice?.toExact() || '0')
     const highestPrice = new BigNumber(poolInfo.highestPrice?.toExact() || '0')
@@ -26,9 +28,9 @@ const PoolSaleInfo = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       <Box
         sx={{
           display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center'
+          flexFlow: isMd ? 'column nowrap' : 'row nowrap',
+          justifyContent: isMd ? 'flex-start' : 'space-between',
+          alignItems: isMd ? 'flex-start' : 'center'
         }}
       >
         <Typography

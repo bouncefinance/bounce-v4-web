@@ -1,10 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { FreeMode, Virtual } from 'swiper'
+import { FreeMode } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/free-mode'
-import 'swiper/css/virtual'
 import { useState, useMemo } from 'react'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import BigNumber from 'bignumber.js'
@@ -14,7 +13,6 @@ import { useIsMDDown } from 'themes/useTheme'
 const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isMd = useIsMDDown()
   const [swiper, setSwiper] = useState<any>(null)
-  console.log('swiper>>>', swiper)
   const { currencyAmountStartPrice: lowestPrice, currencyAmountEndPrice: highestPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
   const startPrice = lowestPrice ? Number(lowestPrice.toExact()) : 0
@@ -86,8 +84,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
     >
       <Swiper
         key={'erc20swiper'}
-        modules={[FreeMode, Virtual]}
-        virtual={true}
+        modules={[FreeMode]}
         freeMode={true}
         loop={false}
         centeredSlides={isMd ? false : true}
@@ -99,7 +96,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
       >
         {releaseData.map((item, index) => {
           return (
-            <SwiperSlide key={'stageLineItem' + index} virtualIndex={index}>
+            <SwiperSlide key={'stageLineItem' + index}>
               <Box
                 key={'stageLineBox' + index}
                 sx={{

@@ -12,7 +12,7 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
-
+import { useIsMDDown } from 'themes/useTheme'
 export const TipsBox = ({
   style,
   children,
@@ -50,6 +50,7 @@ export const TipsBox = ({
 )
 const Right = () => {
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
+  const isMd = useIsMDDown()
   if (!poolInfo) return <></>
 
   return (
@@ -72,16 +73,16 @@ const Right = () => {
         <Box
           sx={{
             display: 'flex',
-            flexFlow: 'row nowrap',
-            justifyContent: 'space-between',
-            alignItems: 'center'
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
+            justifyContent: isMd ? 'flex-start' : 'space-between',
+            alignItems: isMd ? 'flex-start' : 'center'
           }}
         >
           <Typography
             sx={{
               fontFamily: `'Public Sans'`,
               fontWeight: 600,
-              fontSize: 20,
+              fontSize: isMd ? 16 : 20,
               color: '#000'
             }}
           >

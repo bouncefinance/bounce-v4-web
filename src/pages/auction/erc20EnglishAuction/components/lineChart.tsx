@@ -22,7 +22,7 @@ import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 import ChartDialog from './userBlock/chartDialog'
 import { formatNumberWithCommas } from 'utils'
 import { CurrencyAmount } from 'constants/token'
-
+import { useIsMDDown } from 'themes/useTheme'
 interface PointerItem {
   time: number | string
   value: number
@@ -104,6 +104,7 @@ export const LineChartView = ({
   options?: DeepPartial<ChartOptions>
   viewType?: ViewTypeParam
 }) => {
+  const isMd = useIsMDDown()
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const segmentLeftAmount = useMemo(
@@ -259,7 +260,7 @@ export const LineChartView = ({
       lineSeries.setMarkers(markers as SeriesMarker<Time>[])
     }
     window.addEventListener('resize', handleResize)
-    if (!tooltipInstance) {
+    if (!tooltipInstance && !isMd) {
       const TipsTool = new ToolTip({ dateStr: '' })
       setTooltipInstance(TipsTool)
       chartContainerRef.current.appendChild(TipsTool?.el)
@@ -307,7 +308,8 @@ export const LineChartView = ({
     poolInfo.fragments,
     segmentLeftAmount,
     offsetXy.x,
-    offsetXy.y
+    offsetXy.y,
+    isMd
   ])
   return (
     <>
@@ -316,13 +318,8 @@ export const LineChartView = ({
     </>
   )
 }
-const LineChartSection = ({
-  poolInfo,
-  hideDialogBtn = false
-}: {
-  poolInfo: Erc20EnglishAuctionPoolProp
-  hideDialogBtn?: boolean
-}) => {
+const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const { currencyAmountTotal0, currencyAmountStartPrice, currencyAmountEndPrice, fragments: times } = poolInfo
   const segments = times ? Number(times) : 0
@@ -382,7 +379,7 @@ const LineChartSection = ({
         >
           ERC20 English Auction Live Chart
         </Typography>
-        {!hideDialogBtn && (
+        {!isMd && (
           <OpenChartImg
             onClick={() => {
               setDialogOpen(!dialogOpen)

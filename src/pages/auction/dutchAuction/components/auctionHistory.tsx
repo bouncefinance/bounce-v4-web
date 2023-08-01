@@ -14,8 +14,9 @@ import { useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 // import { CurrencyAmount } from 'constants/token'
 import { CurrencyAmount } from 'constants/token'
-
+import { useIsMDDown } from 'themes/useTheme'
 const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { data, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
     poolInfo?.poolId || '',
@@ -29,7 +30,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   }, [data])
 
   return (
-    <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
+    <Box sx={{ borderRadius: isMd ? 0 : 20, px: 12, py: 20, bgcolor: '#fff' }}>
       <Typography variant="h2" sx={{ ml: 12 }}>
         Auction History
       </Typography>

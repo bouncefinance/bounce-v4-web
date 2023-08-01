@@ -12,8 +12,9 @@ import {
 } from 'bounceComponents/fixed-swap/ActionHistory'
 import { Erc20EnglishAuctionPoolProp } from 'api/pool/type'
 import { CurrencyAmount } from 'constants/token'
-
+import { useIsMDDown } from 'themes/useTheme'
 const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
+  const isMd = useIsMDDown()
   const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
     poolInfo?.poolId || '',
@@ -26,11 +27,10 @@ const ActionHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) 
   }
 
   return (
-    <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
+    <Box sx={{ borderRadius: isMd ? 0 : 20, px: 12, py: 20, bgcolor: '#fff' }}>
       <Typography variant="h2" sx={{ ml: 12 }}>
         Auction History
       </Typography>
-
       {list.list && list.list.length > 0 ? (
         <TableContainer sx={{ mt: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">

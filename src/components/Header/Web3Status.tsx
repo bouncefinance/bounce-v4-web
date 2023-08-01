@@ -30,7 +30,7 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import { useLogout, useUserInfo } from 'state/users/hooks'
 import { ReactComponent as DisconnectSvg } from 'assets/svg/account/disconnect.svg'
 import { ReactComponent as TransactionsSvg } from 'assets/svg/account/transactions.svg'
-import { ReactComponent as UserSvg } from 'assets/svg/account/user.svg'
+// import { ReactComponent as UserSvg } from 'assets/svg/account/user.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { useWalletDeactivate } from 'connection/activate'
@@ -142,7 +142,8 @@ function Web3StatusInner() {
                 fontSize: 18
               }}
             >
-              <UserSvg />
+              {/* <UserSvg /> */}
+              <Avatar sx={{ width: 24, height: 24 }} src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg} />
             </Button>
             <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
           </Box>

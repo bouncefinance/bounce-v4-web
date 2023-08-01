@@ -14,6 +14,7 @@ import {
 } from 'lightweight-charts'
 import moment from 'moment'
 import { Erc20EnglishAuctionPoolProp, PoolStatus } from 'api/pool/type'
+import { useIsMDDown } from 'themes/useTheme'
 
 interface PointerItem {
   time: number | string
@@ -82,6 +83,7 @@ export const LineChartView = ({
   options?: DeepPartial<ChartOptions>
   viewType?: ViewTypeParam
 }) => {
+  const isMd = useIsMDDown()
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const colorObj = useMemo(() => {
@@ -186,7 +188,7 @@ export const LineChartView = ({
       newSeries.setMarkers(markers as SeriesMarker<Time>[])
     }
     window.addEventListener('resize', handleResize)
-    if (!tooltipInstance) {
+    if (!tooltipInstance && !isMd) {
       const TipsTool = new ToolTip({ dateStr: '' })
       setTooltipInstance(TipsTool)
       chartContainerRef.current.appendChild(TipsTool?.el)

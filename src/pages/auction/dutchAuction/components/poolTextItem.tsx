@@ -18,12 +18,12 @@ const PoolInfoItem = ({ title, tip, children, sx }: PoolInfoItemProps): JSX.Elem
   return (
     <Box
       sx={{
-        ...sx,
         display: 'flex',
         justifyContent: 'flex-start',
         flexFlow: 'column nowrap',
         alignItems: 'flex-start',
-        marginBottom: '8px'
+        marginBottom: '8px',
+        ...sx
       }}
     >
       <Box
@@ -37,7 +37,7 @@ const PoolInfoItem = ({ title, tip, children, sx }: PoolInfoItemProps): JSX.Elem
       >
         <SubTitle>{title}</SubTitle>
         {tip ? (
-          <Tooltip title={tip}>
+          <Tooltip title={tip} enterTouchDelay={10}>
             <HelpOutlineIcon sx={{ width: 20, height: 20, ml: 4, cursor: 'pointer' }} />
           </Tooltip>
         ) : null}

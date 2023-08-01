@@ -70,7 +70,7 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
                 width: '100%'
               }}
             >
-              <LineChart poolInfo={poolInfo} hideDialogBtn={true} />
+              <LineChart poolInfo={poolInfo} />
             </Box>
             <Box
               sx={{

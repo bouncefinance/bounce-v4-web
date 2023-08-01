@@ -8,9 +8,11 @@ import { useActiveWeb3React } from 'hooks'
 import ActionHistory from './components/auctionHistory'
 import { useDutchAuctionInfo } from 'bounceHooks/auction/useDutchAuctionInfo'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-
+import DutchAuctionMobile from './mobile/dutchAuctionMobile'
+import { useIsMDDown } from 'themes/useTheme'
 const DutchAuctionPoolId = () => {
   const theme = useTheme()
+  const isMd = useIsMDDown()
   const { account } = useActiveWeb3React()
   const myAnimation = keyframes`
   0% {
@@ -55,6 +57,9 @@ const DutchAuctionPoolId = () => {
         <BounceAnime />
       </Box>
     )
+  }
+  if (isMd) {
+    return <DutchAuctionMobile poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
   }
   return (
     <Box
