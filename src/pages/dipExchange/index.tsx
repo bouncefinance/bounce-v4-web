@@ -30,33 +30,33 @@ interface poolsDataItem {
   }
 }
 const DipExchange = () => {
-  //   const nowDate = new Date().valueOf()
-  //   const oneDay = 60 * 60 * 24 * 1000
+  const nowDate = new Date().valueOf()
+  const oneDay = 60 * 60 * 24 * 1000
   // all activities line data
-  const poolsData: poolsDataItem[] = useMemo(() => [], [])
-  //   const poolsData = Array(10)
-  //     .fill({
-  //       timaSteamp: nowDate - oneDay * 2,
-  //       active: false
-  //     })
-  //     .map((item, index) => {
-  //       return {
-  //         timaSteamp: item.timaSteamp + oneDay * index,
-  //         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
-  //         // english auction
-  //         dip: {
-  //           startAt: 1690525800000,
-  //           closeAt: 1690533000000,
-  //           id: 18722
-  //         },
-  //         // dutch aution
-  //         dgt: {
-  //           startAt: 1690525800000,
-  //           closeAt: 1690533000000,
-  //           id: 18721
-  //         }
-  //       }
-  //     })
+  //   const poolsData: poolsDataItem[] = useMemo(() => [], [])
+  const poolsData: poolsDataItem[] = Array(10)
+    .fill({
+      timaSteamp: nowDate - oneDay * 2,
+      active: false
+    })
+    .map((item, index) => {
+      return {
+        timaSteamp: item.timaSteamp + oneDay * index,
+        active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
+        // english auction
+        dip: {
+          startAt: 1690905600000,
+          closeAt: 1690992000000,
+          id: 20259
+        },
+        // dutch aution
+        dgt: {
+          startAt: 1691078400000,
+          closeAt: 1691164800000,
+          id: 20260
+        }
+      }
+    })
   // last date higt light
   const lastActiveIndex = useMemo(() => {
     let lastIndex = 0
