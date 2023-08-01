@@ -60,6 +60,14 @@ export const OMNI_TESTNET_TOKEN_LIST: Token[] = [
 export const SEPOLIA_TOKEN_LIST: Token[] = [
   {
     chainId: ChainId.SEPOLIA,
+    name: 'ETH',
+    address: '0x0000000000000000000000000000000000000000',
+    symbol: 'ETH',
+    decimals: 18,
+    logoURI: ''
+  },
+  {
+    chainId: ChainId.SEPOLIA,
     name: 'USDT',
     address: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
     symbol: 'USDT',
