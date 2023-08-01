@@ -5,70 +5,92 @@ import { IFile } from 'bounceComponents/common/Uploader'
 import Image from 'components/Image'
 import * as yup from 'yup'
 import { Formik } from 'formik'
-import React from 'react'
+import React, { useEffect } from 'react'
 import MarkdownEditor from './markdownEditor'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChainList } from 'constants/chain'
-interface ImageProps {
-  fileName: string
-  fileSize: number
-  fileThumbnailUrl: string
-  fileType: string
-  fileUrl: string
-  id: number
-}
+import { Body02 } from 'components/Text'
+import { ReactComponent as AddCircleIcon } from 'assets/imgs/icon/add_circle_outline.svg'
+import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { useRequest } from 'ahooks'
+import { applySeller } from 'api/user'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 enum ThemeColor {
   BLACK = 'black',
-  WHITE = 'white'
+  YELLOW = 'yellow',
+  BLUE = 'blue',
+  PURPLE = 'purple',
+  ORANGE = 'orange',
+  RED = 'red'
 }
 interface ISeller {
-  banner: ImageProps
-  logo: ImageProps
+  banner: IFile
+  projectLogo: IFile
   themeColor: ThemeColor
   projectName: string
-  ProjectDescribe: string
-  websiteURL: string
+  description: string
+  website: string
   chainId: ChainId
   whitepaperLink: string
   relationship: string
 }
-
+export interface IBodySeller extends Omit<ISeller, 'banner' | 'projectLogo'> {
+  banner: string
+  projectLogo: string
+}
 const sellerValidationSchema = yup.object({
   banner: yup.object({
     fileName: yup.string(),
     fileSize: yup.number(),
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Token Logo'),
+    fileUrl: yup.string().required('Please upload your Project Banner'),
     id: yup.number()
   }),
-  logo: yup.object({
+  projectLogo: yup.object({
     fileName: yup.string(),
     fileSize: yup.number(),
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
+    fileUrl: yup.string().required('Please upload your Project Logo'),
     id: yup.number()
   }),
   themeColor: yup.mixed().oneOf(Object.values(ThemeColor)).required(),
   projectName: yup.string().required('Project Name is a required field'),
-  ProjectDescribe: yup
+  description: yup
     .string()
-    .required()
+    .required('Describe Your Project is a required field')
     .min(100, 'Describe your project (100-500 words)')
     .max(500, 'Describe your project (100-500 words)'),
-  websiteURL: yup.string().url().required(),
+  website: yup.string().url('Website URL must be a valid URL').required('Website URL is a required field'),
   chainId: yup.number().required(),
-  whitepaperLink: yup.string().url().required(),
-  relationship: yup.string().required()
+  whitepaperLink: yup
+    .string()
+    .url('Whitepaper/Technical Documentation Link must be a valid URL')
+    .required('Whitepaper/Technical Documentation Link is a required field'),
+  relationship: yup.string().required('Relationship is a required field')
 })
 
-const onSubmit = () => {
-  console.log('submit')
-}
-const ApplyToBeSeller = () => {
+export const ApplyToBeSeller = () => {
   const { chainId } = useActiveWeb3React()
+  const optionDatas = useOptionDatas()
+  const { run, data, error } = useRequest((body: IBodySeller) => applySeller(body), { manual: true })
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (data) {
+      toast.success('Successfully edited')
+      navigate(routes.realAuction.index)
+      return
+    }
+    if (error) {
+      toast.error('Error edited')
+      return
+    }
+  }, [data, error, navigate])
   const sellerValue: ISeller = {
     banner: {
       fileName: '',
@@ -78,7 +100,7 @@ const ApplyToBeSeller = () => {
       fileUrl: '',
       id: 0
     },
-    logo: {
+    projectLogo: {
       fileName: '',
       fileSize: 0,
       fileThumbnailUrl: '',
@@ -88,11 +110,21 @@ const ApplyToBeSeller = () => {
     },
     themeColor: ThemeColor.BLACK,
     projectName: '',
-    ProjectDescribe: '',
-    websiteURL: '',
-    chainId: chainId as ChainId,
+    description: '',
+    website: '',
+    chainId: chainId || ChainId.MAINNET,
     whitepaperLink: '',
     relationship: ''
+  }
+
+  const onSubmit = (value: ISeller) => {
+    const chainInfoOptId = optionDatas?.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === value.chainId)
+    run({
+      ...value,
+      chainId: chainInfoOptId?.id as ChainId,
+      banner: value.banner.fileUrl,
+      projectLogo: value.projectLogo.fileUrl
+    })
   }
   return (
     <ContainerBox>
@@ -107,24 +139,47 @@ const ApplyToBeSeller = () => {
             <Title sx={{ textAlign: 'center' }}>Apply To Be A Seller</Title>
             <FormCard mt={64}>
               <Title>Poject Information</Title>
-              <FormUploadLayout
-                formItemName="banner"
-                fileUrl={values.banner.fileUrl}
-                setFieldValue={setFieldValue}
-                uploadTitle1="Project Banner"
-                uploadTitle2="For Shop Display"
-                labelId="banner img"
+              <FormLayout
+                title1="Project Name"
+                childForm={
+                  <FormItem name={'projectName'}>
+                    <OutlinedInput placeholder={'Name of the project, eg. Bounce'} />
+                  </FormItem>
+                }
               />
-              <FormUploadLayout
-                formItemName="ProjectLogo"
-                fileUrl={values.logo.fileUrl}
-                setFieldValue={setFieldValue}
-                uploadTitle1="Project Logo"
-                labelId="ProjectLogoImg"
-                imgSx={{
-                  width: 72,
-                  height: 72
-                }}
+
+              <FormLayout
+                title1="Project Logo"
+                childTitle={
+                  <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
+                }
+                childForm={
+                  <FormUploadAdd
+                    formItemName="projectLogo"
+                    labelId="logoId"
+                    fileUrl={values.projectLogo.fileUrl}
+                    setFieldValue={setFieldValue}
+                    labelChild={<AddFile />}
+                  />
+                }
+              />
+              <FormLayout
+                title1="Project Banner"
+                childTitle={
+                  <Body02
+                    sx={{ fontSize: 12, color: '#626262' }}
+                  >{`For Shop Display (JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
+                }
+                childForm={
+                  <FormUploadAdd
+                    formItemName="banner"
+                    labelId="bannerid"
+                    fileUrl={values.banner.fileUrl}
+                    setFieldValue={setFieldValue}
+                    labelChild={<BigAddIcon />}
+                    labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                  />
+                }
               />
               <FormLayout
                 title1="Theme Color"
@@ -133,28 +188,33 @@ const ApplyToBeSeller = () => {
                     <Select
                       value={values.themeColor}
                       onChange={({ target }) => {
-                        console.log(target)
                         setFieldValue('themeColor', target.value)
-                        console.log(values.themeColor)
                       }}
                       renderValue={selected => (
-                        <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{selected}</Title>
+                        <Stack sx={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                          <Box sx={{ width: 32, height: 32, background: selected, borderRadius: '50%' }}></Box>
+                          <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{selected}</Title>
+                        </Stack>
                       )}
                     >
                       {Object.values(ThemeColor).map((val, id) => (
-                        <MenuItem key={id} value={val}>
-                          <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{val}</Title>
+                        <MenuItem
+                          key={id}
+                          value={val}
+                          sx={{
+                            '&.MuiMenuItem-root': {
+                              background: val === values.themeColor ? '#E1F25C' : '',
+                              marginTop: 10
+                            }
+                          }}
+                        >
+                          <Stack sx={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                            <Box sx={{ width: 32, height: 32, background: val, borderRadius: '50%' }}></Box>
+                            <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{val}</Title>
+                          </Stack>
                         </MenuItem>
                       ))}
                     </Select>
-                  </FormItem>
-                }
-              />
-              <FormLayout
-                title1="Project Name"
-                childForm={
-                  <FormItem name={'projectName'}>
-                    <OutlinedInput placeholder={'Name of the project, eg. Bounce'} />
                   </FormItem>
                 }
               />
@@ -174,10 +234,10 @@ const ApplyToBeSeller = () => {
                   </Title>
                 }
                 childForm={
-                  <FormItem style={{ marginTop: 20 }} name="ProjectDescribe">
+                  <FormItem style={{ marginTop: 20 }} name="description">
                     <MarkdownEditor
-                      value={values.ProjectDescribe}
-                      setEditorValue={value => setFieldValue('ProjectDescribe', value)}
+                      value={values.description}
+                      setEditorValue={value => setFieldValue('description', value)}
                       placeholder="Project description"
                     />
                   </FormItem>
@@ -186,7 +246,7 @@ const ApplyToBeSeller = () => {
               <FormLayout
                 title1="Website URL"
                 childForm={
-                  <FormItem name={'websiteURL'}>
+                  <FormItem name={'website'}>
                     <OutlinedInput placeholder={'https://bitcoin.org'} />
                   </FormItem>
                 }
@@ -199,7 +259,7 @@ const ApplyToBeSeller = () => {
                     <Select
                       value={values.chainId}
                       onChange={({ target }) => {
-                        setFieldValue('ChainId', target.value)
+                        setFieldValue('chainId', target.value)
                       }}
                       renderValue={selected => {
                         const currentChain = ChainList.find(item => item.id === selected)
@@ -240,7 +300,7 @@ const ApplyToBeSeller = () => {
               <FormLayout
                 title1="Whitepaper/Technical Documentation Link"
                 childForm={
-                  <FormItem name={'websiteURL'}>
+                  <FormItem name={'whitepaperLink'}>
                     <OutlinedInput placeholder={'https://bitcoin.org/bitcoin.pdf'} />
                   </FormItem>
                 }
@@ -257,13 +317,23 @@ const ApplyToBeSeller = () => {
               />
             </FormCard>
             <SubmitComp />
+            <Title sx={{ marginTop: 15, color: '#959595', fontSize: 14, textAlign: 'center' }}>
+              Bounce Office Will Reach Out To You For Next Step.
+            </Title>
           </Box>
         )}
       </Formik>
+      <FooterBox>
+        <Body02 sx={{ fontSize: 13, color: '#959595' }}>©2023 Bounce dao Ltd. All rights reserved.</Body02>
+        <Stack flexDirection={'row'} gap={40}>
+          <Body02 sx={{ fontSize: 13, color: '#959595' }}>Terms Of Service</Body02>
+          <Body02 sx={{ fontSize: 13, color: '#959595' }}>Privacy Policy</Body02>
+        </Stack>
+      </FooterBox>
     </ContainerBox>
   )
 }
-export default ApplyToBeSeller
+
 const FormLayout = ({
   title1,
   title2,
@@ -286,121 +356,91 @@ const FormLayout = ({
     </Stack>
   )
 }
-const FormUploadLayout = ({
+
+const FormUploadAdd = ({
   fileUrl,
   setFieldValue,
   formItemName,
-  uploadTitle1,
-  uploadTitle2,
   labelId,
-  imgSx
+  labelChild,
+  labelSx
 }: {
   fileUrl: string
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
   formItemName: string
-  uploadTitle1: string
-  uploadTitle2?: string
   labelId: string
-  imgSx?: SxProps
+  labelChild: React.ReactElement
+  labelSx?: SxProps
 }) => {
-  imgSx = imgSx || {
-    width: 132,
-    height: 52,
-    borderRadius: '4px !important',
-    background: 'rgb(232,233,228)',
-    '& svg': { width: '100%', height: '100% ' },
-    '& .add-svg': {
-      border: 'none'
-    }
-  }
-
   return (
-    <UploadLayout>
-      <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-        <FormItem name={formItemName} fieldType="custom" style={{ display: fileUrl ? 'none' : 'block' }}>
-          <UploadItem
-            inputId={labelId}
-            value={{ fileUrl: fileUrl }}
-            onChange={(file: IFile) => {
-              setFieldValue(formItemName, file)
-            }}
-            accept={['image/jpeg', 'image/png', 'image/webp']}
-            tips={'Please do not exceed a file size of 10MB'}
-            limitSize={10}
-            sx={imgSx}
-          />
-        </FormItem>
-        {fileUrl && <ImageBg url={fileUrl} />}
-        <UploadIntroduce title1={uploadTitle1} title2={uploadTitle2} />
-      </Stack>
-      <UploadBtn htmlFor={labelId}>Upload</UploadBtn>
-    </UploadLayout>
+    <FormItem name={formItemName} fieldType="custom">
+      <UploadItem
+        inputId={labelId}
+        value={{ fileUrl: fileUrl }}
+        onChange={(file: IFile) => {
+          setFieldValue(formItemName, file)
+        }}
+        accept={['image/jpeg', 'image/png', 'image/webp']}
+        tips={'Please do not exceed a file size of 10MB'}
+        limitSize={10}
+        sx={{ display: 'none' }}
+      />
+      <UpLabelBox htmlFor={labelId} fileUrl={fileUrl} child={labelChild} labelSx={labelSx} />
+    </FormItem>
   )
 }
-const UploadLayout = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center'
-})
-const ImageBg = ({ sx, url }: { sx?: SxProps; url: string }) => {
+const AddFile = () => {
   return (
-    <Box
-      sx={{
-        width: 130,
-        height: 52,
-        borderRadius: 4,
-        overflow: 'hidden',
-        ...sx
-      }}
-    >
-      <Image style={{ width: '100%', height: '100%' }} src={url} />
+    <>
+      <Title sx={{ fontSize: 14, color: '#000', fontWeight: 600 }}>Add file</Title>
+      <AddCircleIcon />
+    </>
+  )
+}
+const UpLabelBox = ({
+  htmlFor,
+  fileUrl,
+  child,
+  labelSx
+}: {
+  htmlFor: string
+  fileUrl: string
+  child: React.ReactElement
+  labelSx?: SxProps
+}) => {
+  return (
+    <Box sx={{ display: 'block', cursor: 'pointer' }} component={'label'} htmlFor={htmlFor}>
+      <Stack
+        sx={{
+          width: 227,
+          height: 52,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+          border: '1px solid #D7D6D9',
+          borderRadius: 8,
+          ...labelSx
+        }}
+      >
+        {!fileUrl && child}
+        {
+          fileUrl && <Image src={fileUrl} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          // <Box sx={{ width: '100%', height: '100%', background: `url(${fileUrl}) no-repeat` }}></Box>
+        }
+      </Stack>
     </Box>
   )
 }
-const UploadIntroduce = ({ title1, title2 }: { title1: string; title2?: string }) => {
-  return (
-    <Stack sx={{ flexDirection: 'column', gap: 8 }}>
-      <Box>
-        <BaseTitle1 sx={{ fontSize: 16, color: '#171717' }}>{title1}</BaseTitle1>
-        <BaseTitle1 sx={{ fontSize: 12, color: '#394959' }}>{title2}</BaseTitle1>
-      </Box>
-      <BaseTitle2 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</BaseTitle2>
-    </Stack>
-  )
-}
-const UploadBtn = styled('label')({
-  fontSize: 14,
-  background: '#E1F25C',
-  borderRadius: 6,
-  padding: '8px 24px',
-  fontFamily: 'Public Sans',
-  fontStyle: 'normal',
-  fontWeight: 600,
-  lineHeight: '140%',
-  letterSpacing: '-0.4px',
-  textTransform: 'capitalize',
-  cursor: 'pointer'
-})
-const BaseTitle1 = styled(Typography)({
-  fontFamily: 'Public Sans',
-  fontStyle: 'normal',
-  fontWeight: 600,
-  lineHeight: '140%',
-  letterSpacing: '-0.4px',
-  textTransform: 'capitalize'
-})
-const BaseTitle2 = styled(Typography)({
-  fontFamily: 'Inter',
 
-  fontStyle: 'normal',
-  fontWeight: 400,
-  lineHeight: '140%'
-})
 const ContainerBox = styled(Box)({
   width: '100%',
   maxWidth: 1164,
   margin: '48px auto',
-  padding: '0 82px'
+  padding: '0 82px',
+  '@media(max-width:600px)': {
+    padding: '0'
+  }
 })
 const Title = styled(Typography)({
   fontFamily: 'Public Sans',
@@ -419,7 +459,10 @@ const FormCard = styled(Stack)({
   borderRadius: 24,
   background: '#FFF',
   flexDirection: 'column',
-  gap: 50
+  gap: 50,
+  '@media(max-width:600px)': {
+    padding: '32px 16px'
+  }
 })
 const SubmitComp = () => (
   <Box mt={48} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 54 }}>
@@ -429,11 +472,31 @@ const SubmitComp = () => (
       sx={{
         padding: '16px 40px',
         boxSizing: 'border-box',
-        background: '#E1F25C',
-        '&:hover': { background: '#E1F25C', border: 'none' }
+        background: '#121212',
+        '&:hover': { background: '#E1F25C', border: 'none', '&>p': { color: 'black' } }
       }}
     >
-      <Title sx={{ fontSize: 16, fontWeight: 500, color: '#20201E' }}>Submit</Title>
+      <Title sx={{ fontSize: 16, fontWeight: 500, color: 'white' }}>Submit</Title>
     </Button>
   </Box>
 )
+const FooterBox = styled(Box)({
+  width: '100%',
+  maxWidth: '1296px',
+  height: 72,
+  margin: '72px auto 20px',
+  borderTop: '1px solid #D7D6D9',
+  display: 'flex',
+  alignItems: 'end',
+  justifyContent: 'space-between',
+  '& p': {
+    color: 'rgba(18, 18, 18, 0.60)'
+  },
+  '@media(max-width:600px)': {
+    flexDirection: 'column-reverse',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
+    margin: '24px auto 32px'
+  }
+})

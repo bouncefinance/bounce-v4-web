@@ -76,7 +76,7 @@ import DipExchange from './dipExchange'
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
-import ApplyToBeSeller from './realWorldAuction/applyToBeSeller'
+import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
