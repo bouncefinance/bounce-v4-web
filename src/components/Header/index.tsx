@@ -135,6 +135,7 @@ const transparentRoutes = [
   routes.thirdPart.OpenfabricAuction,
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange
 ]
 
@@ -149,6 +150,7 @@ export const whiteLogoRoutes = [
   routes.thirdPart.OpenfabricAuction,
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange
 ]
 

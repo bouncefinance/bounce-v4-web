@@ -17,7 +17,7 @@ const VerifiedIcon: React.FC<IVerifiedIconProps> = ({ ifKyc, width = 20, height 
   return (
     <Box sx={sx}>
       {ifKyc === VerifyStatus.Verified && (
-        <Tooltip title="Verified account">
+        <Tooltip title="Bounce Verification">
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Image alt="" src={VerifiedSVG} width={width} height={height} />
           </Box>

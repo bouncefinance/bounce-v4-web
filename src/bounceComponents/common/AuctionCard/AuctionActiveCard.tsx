@@ -9,8 +9,9 @@ import { getActiveUsers } from '../../../api/market'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useBreakpoint from '../../../hooks/useBreakpoint'
-import { ReactComponent as VerifySvg } from 'assets/imgs/profile/verify.svg'
+// import { ReactComponent as VerifySvg } from 'assets/imgs/profile/verify.svg'
 import { VerifyStatus } from 'api/profile/type'
+import VerifiedIcon from '../VerifiedIcon'
 
 interface IAuctionActiveCard {
   userId: number
@@ -30,7 +31,6 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
   const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
   const theme = useTheme()
-  const verified = props.ifKyc === VerifyStatus.Verified
   return (
     <Box
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
@@ -64,8 +64,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
         <Box mb={16} sx={{ wordBreak: 'break-all' }}>
           <Stack flexDirection={'row'} alignItems={'center'} gap={8}>
-            {verified && <VerifySvg style={{ width: 24, height: 24 }} />}
-
+            <VerifiedIcon ifKyc={props.ifKyc} />
             <H5
               sx={{
                 width: 'calc(100% - 24px - 8px)',

@@ -6,14 +6,27 @@ import { show } from '@ebay/nice-modal-react'
 import { useMemo } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 import { VerifyStatus } from 'api/profile/type'
+import { routes } from 'constants/routes'
+const homeShowList = [
+  routes.market.index,
+  routes.launchpad.index,
+  routes.tokenAuction.index,
+  routes.nftAuction.index,
+  routes.realAuction.index,
+  routes.adsAuction.index
+]
+const accountShowList = Object.values(routes.account)
 const PerformKYCVerification = () => {
   const isSm = useBreakpoint('sm')
   const { userInfo } = useUserInfo()
-
-  const showBox = useMemo(() => userInfo && userInfo.ifKyc === VerifyStatus.NoVerify, [userInfo])
+  const isVerify = useMemo(() => userInfo && userInfo.ifKyc === VerifyStatus.NoVerify, [userInfo])
+  const { pathname } = window.location
+  const isHomeShow = useMemo(() => homeShowList.includes(pathname), [pathname])
+  const isAccountShow = useMemo(() => accountShowList.includes(pathname), [pathname])
+  const isLg = useBreakpoint('lg')
   return (
     <>
-      {showBox && (
+      {isVerify && (isHomeShow || isAccountShow) && (
         <Box
           onClick={() => show(SumsubWebDialog)}
           mb={isSm ? 8 : 0}
@@ -21,6 +34,7 @@ const PerformKYCVerification = () => {
             background: '#F9FCDE',
             padding: '16px 0',
             cursor: 'pointer',
+            marginLeft: isAccountShow && !isLg ? 240 : 'auto',
             '@media(max-width:1296px)': {
               marginBottom: 24,
               '&>div': {
