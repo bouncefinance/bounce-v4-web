@@ -104,6 +104,7 @@ export const LineChartView = ({
   options?: DeepPartial<ChartOptions>
   viewType?: ViewTypeParam
 }) => {
+  const isMd = useIsMDDown()
   const chartContainerRef = useRef<any>()
   const [tooltipInstance, setTooltipInstance] = useState<any>(null)
   const segmentLeftAmount = useMemo(
@@ -259,7 +260,7 @@ export const LineChartView = ({
       lineSeries.setMarkers(markers as SeriesMarker<Time>[])
     }
     window.addEventListener('resize', handleResize)
-    if (!tooltipInstance) {
+    if (!tooltipInstance && !isMd) {
       const TipsTool = new ToolTip({ dateStr: '' })
       setTooltipInstance(TipsTool)
       chartContainerRef.current.appendChild(TipsTool?.el)
@@ -307,7 +308,8 @@ export const LineChartView = ({
     poolInfo.fragments,
     segmentLeftAmount,
     offsetXy.x,
-    offsetXy.y
+    offsetXy.y,
+    isMd
   ])
   return (
     <>

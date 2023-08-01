@@ -73,9 +73,9 @@ const Right = () => {
         <Box
           sx={{
             display: 'flex',
-            flexFlow: 'row nowrap',
-            justifyContent: 'space-between',
-            alignItems: 'center'
+            flexFlow: isMd ? 'column nowrap' : 'row nowrap',
+            justifyContent: isMd ? 'flex-start' : 'space-between',
+            alignItems: isMd ? 'flex-start' : 'center'
           }}
         >
           <Typography
