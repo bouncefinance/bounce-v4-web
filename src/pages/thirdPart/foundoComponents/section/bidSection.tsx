@@ -10,7 +10,7 @@ const BidSection = () => {
     <Box
       style={{
         width: '100%',
-        padding: isSm ? '48px 0' : '120px 0',
+        padding: isSm ? '48px 0' : '0',
         borderTop: `1px solid rgba(255, 255, 255, 0.4)`,
         borderBottom: `1px solid rgba(255, 255, 255, 0.4)`
       }}

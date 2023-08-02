@@ -2,22 +2,34 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { useState, useMemo, useCallback } from 'react'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
-import DidDialog, { PlaceBidBtn } from './bidDialog'
+import { PlaceBidBtn } from './bidDialog'
 import ShippingDialog from './shippingInfoDialog'
 import { useCountDown } from 'ahooks'
-import { EnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
+import { MutantEnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
 import { useIsSMDown } from 'themes/useTheme'
-import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import PriceChartView from 'bounceComponents/englishAuction/PriceChartView'
 import { useActiveWeb3React } from 'hooks'
 import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
-import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { getCurrentTimeStamp } from 'utils'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
+import { useMutantEnglishAuctionPool, useMutantEnglishBidCallback } from 'hooks/useMutantEnglishAuctionPool'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../../constants'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import ReportIcon from '@mui/icons-material/Report'
+import { Dots } from 'themes'
+import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
+import BigNumber from 'bignumber.js'
 
 export enum BidType {
   'dataView' = 0,
@@ -25,7 +37,7 @@ export enum BidType {
 }
 interface DataViewParam {
   priceFloor: number | string
-  increase: number | string
+  increase: string
 }
 export const RowLabel = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -54,6 +66,19 @@ export const RowLabel = styled(Box)(({ theme }) => ({
   }
 }))
 
+const CounterText = styled(Typography)(({ theme }) => ({
+  fontFamily: 'Public Sans',
+  fontStyle: 'italic',
+  fontWeight: 100,
+  color: 'var(--ps-text-5)',
+  [theme.breakpoints.down('xs')]: {
+    fontSize: 18
+  },
+  [theme.breakpoints.down('md')]: {
+    fontSize: 20
+  }
+}))
+
 function DataView(props: DataViewParam) {
   const { priceFloor, increase } = props
   return (
@@ -65,15 +90,15 @@ function DataView(props: DataViewParam) {
     >
       <RowLabel>
         <Typography className="label">Auction Type</Typography>
-        <Typography className="value">English Auction</Typography>
+        <Typography className="value">Mutant English Auction</Typography>
       </RowLabel>
       <RowLabel>
-        <Typography className="label">Price Floor</Typography>
+        <Typography className="label">Starting Price(Floor Price)</Typography>
         <Typography className="value">{priceFloor || '-'}</Typography>
       </RowLabel>
       <RowLabel>
-        <Typography className="label">Every Time Minimum Price Increase</Typography>
-        <Typography className="value">{increase || '-'}</Typography>
+        <Typography className="label">Bid Price Increase Rate</Typography>
+        <Typography className="value">{BigNumber(increase).times(100).toString() + '%' || '-'}</Typography>
       </RowLabel>
     </Stack>
   )
@@ -122,15 +147,18 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
 
 const BidAction = () => {
   const isSm = useIsSMDown()
-  const [viewType, setViewType] = useState<BidType>(BidType.dataView)
-  const [openDialog, setOpenDialog] = useState<boolean>(false)
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(20340)
   const OpenAt = useMemo(() => poolInfo?.openAt || 0, [poolInfo?.openAt])
   const poolStatus = useMemo(() => poolInfo?.status, [poolInfo?.status])
+  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
+    targetDate: Number(OpenAt) * 1000
+  })
   return (
     <Box
       sx={{
-        width: isSm ? '100%' : '640px'
+        width: isSm ? '100%' : '640px',
+        margin: 'auto',
+        padding: '120px 0 120px 63px'
       }}
     >
       {/* Pool Status */}
@@ -160,77 +188,261 @@ const BidAction = () => {
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
           <Typography color={'#fff'}>Finish</Typography>
         )}
-        <Typography
-          sx={{
-            fontFamily: `'Public Sans'`,
-            fontWeight: 600,
-            fontSize: isSm ? 13 : 14,
-            color: '#fff',
-            textDecoration: 'underline',
-            cursor: 'pointer'
-          }}
-          onClick={() => {
-            const result = viewType === BidType.chartView ? BidType.dataView : BidType.chartView
-            setViewType(result)
-          }}
-        >
-          {viewType === BidType.chartView ? 'Chart View' : 'Data View'}
-        </Typography>
       </Box>
-      {viewType === BidType.dataView && (
-        <DataView
-          priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${
-            poolInfo?.currencyAmountMin1?.currency.symbol
-          }`}
-          increase={`${poolInfo?.currencyAmountMinIncr1?.toSignificant()} ${
-            poolInfo?.currencyAmountMin1?.currency.symbol
-          }`}
-        />
-      )}
-      {viewType === BidType.chartView && poolInfo && <PriceChartView isDark showText={false} poolInfo={poolInfo} />}
-      <RowLabel
-        style={{
-          padding: '24px 0 32px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.2)'
-        }}
-      >
-        <Typography className="label">Current Highest Bid</Typography>
-        <RowLabel
-          style={{
-            justifyContent: 'flex-end'
-          }}
-        >
-          <TokenImage
-            size={20}
+      <DataView
+        priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${poolInfo?.currencyAmountMin1?.currency.symbol}`}
+        increase={`${poolInfo?.amountMinIncrRatio1?.toSignificant()}`}
+      />
+      {poolStatus === PoolStatus.Upcoming && (
+        <PlaceBidBtn disabled={true} loadingPosition="start" variant="contained" fullWidth>
+          <img
+            src={BidIcon}
             style={{
-              display: 'inline-block',
-              marginRight: '8px'
+              width: '16px',
+              height: '16px',
+              marginRight: '10px'
             }}
-            src={poolInfo?.token1.smallUrl}
             alt=""
             srcSet=""
           />
-          <Typography className="value" style={{ fontSize: 28 }}>
-            {poolInfo?.currentBidderAmount1?.toSignificant() || '--'} {poolInfo?.currentBidderAmount1?.currency.symbol}
-          </Typography>
+          <CounterText>
+            Place A Bid in
+            {countdown > 0 ? (
+              <>
+                <span> {days}d</span>
+                <span> : </span>
+                <span>{hours}h</span>
+                <span> : </span>
+                <span>{minutes}m </span>
+                <span> : </span>
+                <span>{seconds}s </span>
+              </>
+            ) : (
+              <></>
+            )}
+          </CounterText>
+        </PlaceBidBtn>
+      )}
+      {poolStatus === PoolStatus.Live && (
+        <RowLabel
+          style={{
+            padding: '24px 0 32px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
+          }}
+        >
+          <Typography className="label">Current Highest Bid</Typography>
+          <RowLabel
+            style={{
+              justifyContent: 'flex-end'
+            }}
+          >
+            <TokenImage
+              size={20}
+              style={{
+                display: 'inline-block',
+                marginRight: '8px'
+              }}
+              src={poolInfo?.token1.smallUrl}
+              alt=""
+              srcSet=""
+            />
+            <Typography className="value" style={{ fontSize: 28 }}>
+              {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
+              {poolInfo?.currentBidderAmount1?.currency.symbol}
+            </Typography>
+          </RowLabel>
         </RowLabel>
-      </RowLabel>
+      )}
       {/* closed and win tips */}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
-
-      {poolStatus === PoolStatus.Live && poolInfo && (
-        <LiveSection click={() => setOpenDialog(!openDialog)} poolInfo={poolInfo}></LiveSection>
-      )}
-      {openDialog && <DidDialog handleClose={() => setOpenDialog(false)} />}
+      {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
     </Box>
   )
 }
 export default BidAction
 
-function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: EnglishAuctionNFTPoolProp }) {
+function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
+  console.log('poolInfo', poolInfo)
+  const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
+  const token1Balance = useCurrencyBalance(account || undefined, poolInfo?.currentBidderAmount?.currency)
+  const { bidCallback, submitted: placeBidSubmitted, bidPrevGasFee } = useMutantEnglishBidCallback(poolInfo)
+
+  const isInsufficientBalance = useMemo(() => {
+    if (!poolInfo) return undefined
+    if (!poolInfo.currentBidderAmount || !ethBalance || !token1Balance || !bidPrevGasFee) {
+      return {
+        disabled: true,
+        children: (
+          <NoticeLabel color="#908E96">
+            <>
+              Loading balance
+              <Dots />
+            </>
+          </NoticeLabel>
+        )
+      }
+    }
+    if (poolInfo.currencyAmountMin1?.currency.isNative) {
+      const ca = poolInfo.currentBidderAmount.add(bidPrevGasFee)
+      if (ca.greaterThan(ethBalance)) {
+        return {
+          disabled: true,
+          children: (
+            <NoticeLabel>
+              <>
+                <ReportIcon />
+                Insufficient {ca?.currency.symbol} balance
+              </>
+            </NoticeLabel>
+          )
+        }
+      }
+    } else {
+      const token1Insufficient = poolInfo.currentBidderAmount.greaterThan(token1Balance)
+      const gasInsufficient = bidPrevGasFee.greaterThan(ethBalance)
+
+      if (token1Insufficient || gasInsufficient) {
+        return {
+          disabled: true,
+          children: (
+            <Stack spacing={5}>
+              {token1Insufficient && (
+                <NoticeLabel>
+                  <>
+                    <ReportIcon />
+                    Insufficient {poolInfo.currentBidderAmount?.currency.symbol} balance
+                  </>
+                </NoticeLabel>
+              )}
+              {gasInsufficient && (
+                <NoticeLabel>
+                  <>
+                    <ReportIcon />
+                    Insufficient {bidPrevGasFee?.currency.symbol} balance
+                  </>
+                </NoticeLabel>
+              )}
+            </Stack>
+          )
+        }
+      }
+    }
+    return undefined
+  }, [bidPrevGasFee, ethBalance, poolInfo, token1Balance])
+
+  const [approvalState, approveCallback] = useApproveCallback(
+    poolInfo.currentBidderAmount,
+    chainId === poolInfo.ethChainId ? MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[poolInfo.ethChainId] : undefined,
+    true
+  )
+
+  const toBid = useCallback(async () => {
+    if (!poolInfo.currentBidderAmount) return
+    showRequestConfirmDialog({ dark: true })
+    try {
+      const { transactionResult } = await bidCallback(poolInfo.currentBidderAmount)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            rpt()
+          },
+          { dark: true }
+        )
+        transactionResult.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogDarkTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully bid amount ${poolInfo.currentBidderAmount?.toSignificant()} ${
+              poolInfo.token1.symbol
+            }`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogDarkTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || err || 'Something went wrong',
+        onAgain: toBid
+      })
+    }
+  }, [bidCallback, poolInfo.currentBidderAmount, poolInfo.token1.symbol])
+
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog({ dark: true })
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          toBid()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogDarkTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback, toBid])
+
+  const approveContent = useMemo(() => {
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return (
+          <PlaceBidBtn loadingPosition="start" variant="contained" fullWidth loading>
+            Approving {poolInfo.token1?.symbol}
+          </PlaceBidBtn>
+        )
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return (
+          <PlaceBidBtn loadingPosition="start" variant="contained" fullWidth loading>
+            Loading <Dots />
+          </PlaceBidBtn>
+        )
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return (
+          <PlaceBidBtn variant="contained" onClick={toApprove} fullWidth>
+            Approve use of {poolInfo.token1?.symbol}
+          </PlaceBidBtn>
+        )
+      }
+    }
+    return undefined
+  }, [approvalState, poolInfo.token1?.symbol, toApprove])
 
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
@@ -291,34 +503,65 @@ function LiveSection({ click, poolInfo }: { click: () => void; poolInfo: English
           </Typography>
         </Box>
       ) : null}
-      <PlaceBidBtn onClick={click}>
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
-        <Typography
-          sx={{
-            fontFamily: `'Public Sans'`,
-            fontStyle: 'italic',
-            fontWeight: 100,
-            fontSize: { xs: 18, md: 20 },
-            color: 'var(--ps-text-5)'
-          }}
-        >
-          Place A Bid
-        </Typography>
-      </PlaceBidBtn>
+      <Box>
+        {approveContent && !isInsufficientBalance?.disabled ? (
+          approveContent
+        ) : (
+          <Stack>
+            <PlaceBidBtn
+              disabled={isInsufficientBalance?.disabled === true}
+              loading={placeBidSubmitted.submitted}
+              onClick={toBid}
+              loadingPosition="start"
+              variant="contained"
+              fullWidth
+            >
+              <img
+                src={BidIcon}
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  marginRight: '10px'
+                }}
+                alt=""
+                srcSet=""
+              />
+              <Typography
+                sx={{
+                  fontFamily: `'Public Sans'`,
+                  fontStyle: 'italic',
+                  fontWeight: 100,
+                  fontSize: { xs: 18, md: 20 },
+                  color: 'var(--ps-text-5)'
+                }}
+              >
+                Place A Bid
+              </Typography>
+            </PlaceBidBtn>
+            <PoolInfoItem
+              title="You will pay"
+              tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
+                bidPrevGasFee?.currency.symbol
+              }) cost of the previous participant`}
+            >
+              <Typography color={'#fff'} mt={10}>
+                {bidPrevGasFee &&
+                poolInfo.currentBidderAmount &&
+                bidPrevGasFee.currency.equals(poolInfo.currentBidderAmount.currency)
+                  ? `${bidPrevGasFee.add(poolInfo.currentBidderAmount).toSignificant()} ${poolInfo.token1.symbol}`
+                  : `(${bidPrevGasFee?.toSignificant() || '-'} ${bidPrevGasFee?.currency.symbol}) + (
+            ${poolInfo.currentBidderAmount?.toSignificant() || '-'} ${poolInfo.token1.symbol})`}
+              </Typography>
+            </PoolInfoItem>
+          </Stack>
+        )}
+        {isInsufficientBalance?.children}
+      </Box>
     </>
   )
 }
 
-function ClosedSection({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) {
+function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
@@ -538,5 +781,13 @@ function BidResultAlert({
         </Typography>
       </RowLabel>
     </Box>
+  )
+}
+
+function NoticeLabel({ color, children }: { children: JSX.Element; color?: string }) {
+  return (
+    <Typography mt={5} display={'flex'} alignItems={'center'} variant="body2" sx={{ color: color || '#FD3333' }}>
+      {children}
+    </Typography>
   )
 }

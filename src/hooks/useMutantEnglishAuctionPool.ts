@@ -277,6 +277,8 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     [poolsRes]
   )
 
+  console.log('poolsData', poolsData)
+
   const creatorClaimedRes = useSingleCallResult(
     mutantEnglishContract,
     'creatorClaimed',
@@ -330,16 +332,16 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     poolInfo?.ethChainId
   ).result
   const distributeRatios = useMemo(() => {
-    if (!distributeRatiosRes) return undefined
+    if (!distributeRatiosRes?.prevBidderRatio || !distributeRatiosRes?.lastBidderRatio) return undefined
     const one = CurrencyAmount.ether(Number(`1e18`).toString())
     return {
       prevBidderRatio: CurrencyAmount.ether(distributeRatiosRes.prevBidderRatio),
       lastBidderRatio: CurrencyAmount.ether(distributeRatiosRes.lastBidderRatio),
       creatorRatio: one
         .subtract(CurrencyAmount.ether(distributeRatiosRes.prevBidderRatio))
-        .subtract(CurrencyAmount.ether(distributeRatiosRes.creatorRatio))
+        .subtract(CurrencyAmount.ether(distributeRatiosRes.lastBidderRatio))
     }
-  }, [distributeRatiosRes])
+  }, [distributeRatiosRes?.lastBidderRatio, distributeRatiosRes?.prevBidderRatio])
 
   const gasFeeRes = useSingleCallResult(
     mutantEnglishContract,
@@ -740,9 +742,10 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
   )
 
   const bidCallback = useCallback(
-    () => (poolInfo.whitelistData.isPermit ? _bidPermitCallback : _bidCallback),
+    (bidAmount: CurrencyAmount) =>
+      poolInfo.whitelistData.isPermit ? _bidPermitCallback(bidAmount) : _bidCallback(bidAmount),
     [_bidCallback, _bidPermitCallback, poolInfo.whitelistData.isPermit]
   )
 
-  return { bidCallback, submitted }
+  return { bidCallback, submitted, bidPrevGasFee }
 }

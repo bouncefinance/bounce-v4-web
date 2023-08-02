@@ -126,7 +126,7 @@ const transparentRoutes = [
   routes.launchpad.bladeDao,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.poseiswapAuction,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
   routes.thirdPart.TypeitAuction,
@@ -143,7 +143,7 @@ const transparentRoutes = [
 
 export const whiteLogoRoutes = [
   routes.launchpad.bladeDao,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.TypeitAuction,
   routes.thirdPart.TypeitAuctionWhitelist,

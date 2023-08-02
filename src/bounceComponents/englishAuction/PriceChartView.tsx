@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { EnglishAuctionNFTPoolProp } from 'api/pool/type'
+import { EnglishAuctionNFTPoolProp, MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import LineChart from 'components/LineChart'
 import { Currency, CurrencyAmount } from 'constants/token'
@@ -11,7 +11,7 @@ export default function PriceChartView({
   minHeight,
   showText
 }: {
-  poolInfo: EnglishAuctionNFTPoolProp
+  poolInfo: EnglishAuctionNFTPoolProp | MutantEnglishAuctionNFTPoolProp
   minHeight?: number
   isDark?: true
   showText?: boolean

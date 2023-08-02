@@ -171,7 +171,7 @@ export default function App() {
                   <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                   <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
-                  <Route path={routes.thirdPart.foundoDetail} element={<FoundoDetail />} />
+                  <Route path={routes.foundo.foundoDetail} element={<FoundoDetail />} />
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}

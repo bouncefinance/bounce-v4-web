@@ -81,14 +81,12 @@ export const routes = {
   thirdPart: {
     poseiswapAuction: '/launchpad/poseiswap/auction/:sysId',
     digitalAssetsOffering: '/launchpad/poseiswap-intro',
-    foundoDetail: 'foundo/detail',
     OmegaAuction: '/launchpad/omega/auction/:sysId',
     TypeitAuction: '/launchpad/typeit/:sysId',
     TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
     OpenfabricAuction: '/launchpad/openfabric',
     DeelanceAuction: '/launchpad/deelance',
     DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
-
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange',
     MetaBloxAuction: '/launchpad/metablox'
@@ -102,6 +100,7 @@ export const routes = {
   },
   foundo: {
     home: '/foundo/home/index',
-    detail: 'foundo/detail/index'
+    detail: 'foundo/detail/index',
+    foundoDetail: 'foundo/detail'
   }
 }
