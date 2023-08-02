@@ -9,8 +9,11 @@ import { ReactComponent as Logo2Svg } from 'assets/imgs/realworldShop/logo2.svg'
 import Logo3 from 'assets/imgs/realworldShop/logo3.png'
 import TypeWriterEffect from 'react-typewriter-effect'
 import ShakeImgs from './shakeImgs'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 const ShopList = () => {
   const isMd = useIsMDDown()
+  const navigate = useNavigate()
   useEffect(() => {
     document.getElementById('body')?.setAttribute('style', 'overflow-x:visible;')
     document.getElementById('app')?.setAttribute('style', 'overflow-x:visible;')
@@ -19,6 +22,9 @@ const ShopList = () => {
       document.getElementById('app')?.removeAttribute('style')
     }
   }, [])
+  const linkTo = (route: string) => {
+    navigate(route)
+  }
   return (
     <>
       <Box
@@ -55,8 +61,10 @@ const ShopList = () => {
                     fontFamily: `'Instrument Serif'`,
                     fontSize: isMd ? 40 : 90,
                     lineHeight: isMd ? '40px' : '90px',
-                    fontWeight: 400
+                    fontWeight: 400,
+                    cursor: 'pointer'
                   }}
+                  onClick={() => linkTo(routes.realAuction.bounceShop)}
                   mb={isMd ? 10 : 30}
                 >
                   BOUNCE
@@ -68,8 +76,10 @@ const ShopList = () => {
                     display: 'flex',
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    cursor: 'pointer'
                   }}
+                  onClick={() => linkTo(routes.realAuction.bounceShop)}
                   gap={isMd ? '4px' : '12px'}
                 >
                   <Box
@@ -155,6 +165,7 @@ const ShopList = () => {
                 width: '100%',
                 objectFit: 'cover'
               }}
+              handleClick={() => linkTo(routes.realAuction.bounceShop)}
             />
           </Grid>
         </Grid>
@@ -209,8 +220,10 @@ const ShopList = () => {
                     fontFamily: `'Instrument Serif'`,
                     fontSize: isMd ? 40 : 90,
                     lineHeight: isMd ? '40px' : '90px',
-                    fontWeight: 400
+                    fontWeight: 400,
+                    cursor: 'pointer'
                   }}
+                  onClick={() => linkTo(routes.realAuction.foundoShop)}
                   mb={isMd ? 10 : 30}
                 >
                   FOUNDO
@@ -222,8 +235,10 @@ const ShopList = () => {
                     display: 'flex',
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    cursor: 'pointer'
                   }}
+                  onClick={() => linkTo(routes.realAuction.foundoShop)}
                   gap={isMd ? '4px' : '12px'}
                 >
                   <Box
@@ -290,6 +305,7 @@ const ShopList = () => {
                 width: '100%',
                 objectFit: 'cover'
               }}
+              handleClick={() => linkTo(routes.realAuction.foundoShop)}
             />
           </Grid>
         </Grid>

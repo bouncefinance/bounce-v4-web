@@ -1,5 +1,13 @@
 import { useState, useMemo } from 'react'
-const ShakeImgs = ({ style, list }: { style?: React.CSSProperties; list: string[] }) => {
+const ShakeImgs = ({
+  style,
+  list,
+  handleClick
+}: {
+  style?: React.CSSProperties
+  list: string[]
+  handleClick?: () => void
+}) => {
   const [index, setIndex] = useState<number>(0)
   const update = (index: number) => (index + 1 > list.length - 1 ? 0 : index + 1)
   const [time, setTime] = useState<any>(null)
@@ -32,6 +40,9 @@ const ShakeImgs = ({ style, list }: { style?: React.CSSProperties; list: string[
         display: 'block',
         cursor: 'pointer',
         ...style
+      }}
+      onClick={() => {
+        handleClick && handleClick()
       }}
       alt=""
       srcSet=""

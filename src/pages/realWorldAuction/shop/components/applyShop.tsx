@@ -50,7 +50,7 @@ const ApplyShop = () => {
       </Typography>
       <Button
         variant="contained"
-        href={routes.nftAuction.index}
+        href={routes.realAuction.applySeller}
         target={'_blank'}
         sx={{
           position: 'relative',

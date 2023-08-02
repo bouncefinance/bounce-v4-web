@@ -1,13 +1,13 @@
 import { Box, SxProps, Theme, styled, Typography } from '@mui/material'
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import FooterPc from 'components/Footer/FooterPc'
-import ArrowBanner from './components/shop/banner'
+import ArrowBanner from './shop/components/banner'
 import { useIsSMDown } from 'themes/useTheme'
 import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvider'
-import ShopLogoList from './components/shop/shopLogoList'
+import ShopLogoList from './shop/components/shopLogoList'
 import { useEffect } from 'react'
-import ShopList from './components/shop/shopList'
-import ApplyShop from './components/shop/applyShop'
+import ShopList from './shop/components/shopList'
+import ApplyShop from './shop/components/applyShop'
 export enum TabsType {
   'auction' = 0,
   'buynow' = 1

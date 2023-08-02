@@ -11,6 +11,7 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import Banner1 from 'assets/imgs/realworldShop/banner1.png'
 import Banner1Mobile from 'assets/imgs/realworldShop/banner1mobile.png'
 import Banner2 from 'assets/imgs/realworldShop/banner2.png'
+import { routes } from 'constants/routes'
 
 import { ReactComponent as LongArrowSvg } from 'assets/imgs/realworldShop/longArrow.svg'
 SwiperCore.use([Autoplay, Pagination])
@@ -106,14 +107,14 @@ function ArrowBanner() {
       title: 'BOUNCE',
       imgPc: Banner1,
       imgMobile: Banner1Mobile,
-      url: 'https://app.bounce.finance',
+      url: routes.realAuction.bounceShop,
       mainColor: '#B5E529'
     },
     {
       title: 'FOUNDO',
       imgPc: Banner2,
       imgMobile: Banner2,
-      url: 'https://app.bounce.finance',
+      url: routes.realAuction.foundoShop,
       mainColor: '#000'
     }
   ]
