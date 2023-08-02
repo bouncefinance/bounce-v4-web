@@ -1,127 +1,123 @@
-import { Box, styled, Typography, SxProps, Stack, OutlinedInput, Button, Switch, FormLabel } from '@mui/material'
+import { Box, styled, Typography, SxProps, Stack, Button, Switch, FormLabel } from '@mui/material'
 import Image from 'components/Image'
 import FormItem from 'bounceComponents/common/FormItem'
 import { IFile } from 'bounceComponents/common/Uploader'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import { ReactComponent as AddCircleIcon } from 'assets/imgs/icon/add_circle_outline.svg'
+import { Body02 } from 'components/Text'
+
 export const CardBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
-  gap: 24,
-  marginTop: 24
+  gap: 24
 })
 export const BaseBox = styled(Box)({
   width: '100%',
   padding: 64,
-  borderRadius: 24,
-  background: '#FFF'
+  borderRadius: '0px 24px 24px 24px',
+  background: '#FFF',
+  '@media(max-width:600px)': {
+    borderRadius: '0px 16px 16px 16px',
+    padding: '32px 16px'
+  }
 })
 export const Title = styled(Typography)({
   fontFamily: 'Public Sans',
-  fontSize: '28px',
+  fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 600,
   lineHeight: '130%',
   letterSpacing: '-0.56px',
   textTransform: 'capitalize',
   textAlign: 'left',
-  color: '#20201E'
+  color: '#20201E',
+  '@media(max-width:600px)': {
+    fontSize: 16
+  }
 })
-export const UploadLayout = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center'
+export const HeadTitle = styled(Title)({
+  fontSize: 28,
+  textAlign: 'center',
+  '@media(max-width:600px)': {
+    fontSize: 20
+  }
 })
-export const ImageBg = ({ sx, url }: { sx?: SxProps; url: string }) => {
-  return (
-    <Box
-      sx={{
-        width: 130,
-        height: 52,
-        borderRadius: 4,
-        overflow: 'hidden',
-        ...sx
-      }}
-    >
-      <Image style={{ width: '100%', height: '100%' }} src={url} />
-    </Box>
-  )
-}
-export const UploadIntroduce = ({ title }: { title: string }) => {
-  return (
-    <Stack sx={{ flexDirection: 'column', gap: 8 }}>
-      <BaseTitle1 sx={{ fontSize: 16, color: '#171717' }}>{title}</BaseTitle1>
-      <BaseTitle2 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</BaseTitle2>
-    </Stack>
-  )
-}
-export const BaseTitle1 = styled(Typography)({
-  fontFamily: 'Public Sans',
 
-  fontStyle: 'normal',
-  fontWeight: 600,
-  lineHeight: '140%',
-  letterSpacing: '-0.4px',
-  textTransform: 'capitalize'
-})
-export const BaseTitle2 = styled(Typography)({
-  fontFamily: 'Inter',
-
-  fontStyle: 'normal',
-  fontWeight: 400,
-  lineHeight: '140%'
-})
-export const UploadBtn = styled('label')({
-  fontSize: 14,
-  background: '#E1F25C',
-  borderRadius: 6,
-  padding: '8px 24px',
-  fontFamily: 'Public Sans',
-  fontStyle: 'normal',
-  fontWeight: 600,
-  lineHeight: '140%',
-  letterSpacing: '-0.4px',
-  textTransform: 'capitalize',
-  cursor: 'pointer'
-})
-export const TextInput = ({ title, name, placeholder }: { title: string; name: string; placeholder: string }) => {
-  return (
-    <Box>
-      <Title sx={{ fontSize: 20 }} mb={16}>
-        {title}
-      </Title>
-      <FormItem name={name}>
-        <OutlinedInput placeholder={placeholder} />
-      </FormItem>
-    </Box>
-  )
-}
 export const SubmitComp = () => (
-  <Box mt={48} sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 54 }}>
-    <Button
-      variant="contained"
+  <Stack
+    sx={{
+      flexDirection: 'column',
+      gap: 15,
+      '@media(max-width:600px)': {
+        gap: 24
+      }
+    }}
+  >
+    <Box
+      mt={48}
       sx={{
-        padding: '16px 40px',
-        boxSizing: 'border-box',
-        background: '#121212',
-        '&:hover': { background: '#121212', border: 'none' }
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 12,
+        '@media(max-width)': {
+          gap: 16
+        }
       }}
     >
-      <Title sx={{ fontSize: 16, fontWeight: 500, color: '#fff' }}>Preview</Title>
-    </Button>
-    <Button
-      type="submit"
-      variant="contained"
+      <Button
+        variant="contained"
+        sx={{
+          padding: '20px 40px',
+
+          background: '#FFF',
+          border: '1px solid  #121212',
+          '&:hover': { background: '#FFF' },
+          '@media(max-width:600px)': {
+            width: 92,
+            height: 10,
+            padding: '16px 24px',
+            boxSizing: 'content-box'
+          }
+        }}
+      >
+        <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
+      </Button>
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          padding: '20px 40px',
+          boxSizing: 'border-box',
+          background: '#121212',
+          '&:hover': { background: '#121212', border: 'none' },
+          '@media(max-width:600px)': {
+            width: 92,
+            height: 10,
+            padding: '16px 24px',
+            boxSizing: 'content-box'
+          }
+        }}
+      >
+        <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
+      </Button>
+    </Box>
+    <Typography
       sx={{
-        padding: '16px 40px',
-        boxSizing: 'border-box',
-        background: '#E1F25C',
-        '&:hover': { background: '#E1F25C', border: 'none' }
+        fontFamily: 'Public Sans',
+        fontSize: 14,
+        fontWidth: 600,
+        color: '#959595',
+        textAlign: 'center',
+        '@media(max-width:600px)': {
+          fontSize: 13
+        }
       }}
     >
-      <Title sx={{ fontSize: 16, fontWeight: 500, color: '#20201E' }}>Submit</Title>
-    </Button>
-  </Box>
+      After submitting, it will be successfully published after being reviewed by Bounce
+    </Typography>
+  </Stack>
 )
 export const GraySwitch = styled(Switch)({
   width: 42,
@@ -155,89 +151,47 @@ export const GraySwitch = styled(Switch)({
 export function LabelTitle({ children }: { children: any }) {
   return <FormLabel sx={{ fontWeight: 600, color: '#222223', mt: 10 }}>{children}</FormLabel>
 }
-export const FormUploadLayout = ({
+export const FormLayout = ({
+  title1,
+  title2,
+  childTitle,
+  childForm,
+  sxStyle
+}: {
+  title1: string
+  title2?: string
+  childTitle?: React.ReactElement
+  childForm: React.ReactElement
+  sxStyle?: SxProps
+}) => {
+  return (
+    <Stack sx={{ flexDirection: 'column', gap: 16, ...sxStyle }}>
+      <Stack sx={{ flexDirection: 'column', gap: 8 }}>
+        <Title sx={{ color: '#20201E', fontSize: 20 }}>{title1}</Title>
+        {title2 && <Title sx={{ color: '#626262', fontWeight: 500, fontSize: 16 }}>{title2}</Title>}
+        {childTitle && childTitle}
+      </Stack>
+      {childForm}
+    </Stack>
+  )
+}
+export const FormUploadAdd = ({
   fileUrl,
   setFieldValue,
   formItemName,
-  uploadTitle,
   labelId,
-  imgSx
-}: {
-  fileUrl: string
-  setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
-  formItemName: string
-  uploadTitle: string
-  labelId: string
-  imgSx?: SxProps
-}) => {
-  imgSx = imgSx || {
-    width: 132,
-    height: 52,
-    borderRadius: '4px !important',
-    background: 'rgb(232,233,228)',
-    '& svg': { width: '100%', height: '100% ' },
-    '& .add-svg': {
-      border: 'none'
-    }
-  }
-  return (
-    <UploadLayout>
-      <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-        <FormItem name={formItemName} fieldType="custom" style={{ display: fileUrl ? 'none' : 'block' }}>
-          <UploadItem
-            inputId={labelId}
-            value={{ fileUrl: fileUrl }}
-            onChange={(file: IFile) => {
-              setFieldValue(formItemName, file)
-            }}
-            accept={['image/jpeg', 'image/png', 'image/webp']}
-            tips={'Please do not exceed a file size of 10MB'}
-            limitSize={10}
-            sx={imgSx}
-          />
-        </FormItem>
-        {fileUrl && <ImageBg url={fileUrl} />}
-        <UploadIntroduce title={uploadTitle} />
-      </Stack>
-      <UploadBtn htmlFor={labelId}>Upload</UploadBtn>
-    </UploadLayout>
-  )
-}
-const UpTokenLabelBox = ({ htmlFor }: { htmlFor: string }) => {
-  return (
-    <Box sx={{ width: 'max-content', height: 'max-content', cursor: 'pointer' }} component={'label'} htmlFor={htmlFor}>
-      <Stack
-        sx={{
-          width: 'max-content',
-          height: 'max-content',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 8,
-          padding: '16px 72px',
-          border: '1px solid #D7D6D9',
-          borderRadius: 8
-        }}
-      >
-        <Title sx={{ fontSize: 14, color: '#000', fontWeight: 600 }}>Add file</Title>
-        <AddCircleIcon />
-      </Stack>
-    </Box>
-  )
-}
-export const FormUploadToken = ({
-  fileUrl,
-  setFieldValue,
-  formItemName,
-  labelId
+  labelChild,
+  labelSx
 }: {
   fileUrl: string
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
   formItemName: string
   labelId: string
+  labelChild: React.ReactElement
+  labelSx?: SxProps
 }) => {
   return (
-    <FormItem name={formItemName} fieldType="custom" style={{ display: fileUrl ? 'none' : 'block' }}>
+    <FormItem name={formItemName} fieldType="custom">
       <UploadItem
         inputId={labelId}
         value={{ fileUrl: fileUrl }}
@@ -249,11 +203,50 @@ export const FormUploadToken = ({
         limitSize={10}
         sx={{ display: 'none' }}
       />
-      <UpTokenLabelBox htmlFor={labelId} />
+      <UpLabelBox htmlFor={labelId} fileUrl={fileUrl} child={labelChild} labelSx={labelSx} />
     </FormItem>
   )
 }
-/*
-1.页面布局 2.点击上传： loading => 展示图片 => 再次点击重新上传 
-2. 还要加一个loading ， 展示图片
-*/
+export const UpLabelBox = ({
+  htmlFor,
+  fileUrl,
+  child,
+  labelSx
+}: {
+  htmlFor: string
+  fileUrl: string
+  child: React.ReactElement
+  labelSx?: SxProps
+}) => {
+  return (
+    <Box sx={{ display: 'block', cursor: 'pointer' }} component={'label'} htmlFor={htmlFor}>
+      <Stack
+        sx={{
+          width: 227,
+          height: 52,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 8,
+          border: '1px solid #D7D6D9',
+          borderRadius: 8,
+          ...labelSx
+        }}
+      >
+        {!fileUrl && child}
+        {
+          fileUrl && <Image src={fileUrl} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          // <Box sx={{ width: '100%', height: '100%', background: `url(${fileUrl}) no-repeat` }}></Box>
+        }
+      </Stack>
+    </Box>
+  )
+}
+export const AddFile = () => {
+  return (
+    <>
+      <Title sx={{ fontSize: 14, color: '#000', fontWeight: 600 }}>Add file</Title>
+      <AddCircleIcon />
+    </>
+  )
+}

@@ -3,25 +3,27 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useState } from 'react'
-import { Title } from './form/BaseComponent'
+import { HeadTitle } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
-// 需要优化，tab切换时的卡顿,以及tab切换的时候，表单的值不见了
+import useBreakpoint from 'hooks/useBreakpoint'
+
 const CreateLaunchpad = () => {
   const [tabActive, setTabActive] = useState(0)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
+  const isSm = useBreakpoint('sm')
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Box>
         <ContainerBox>
-          <Title sx={{ textAlign: 'center' }}>Create Program</Title>
-          <Stack sx={{ flexDirection: 'row', justifyContent: 'center', mt: 48 }}>
+          <HeadTitle>Create Program</HeadTitle>
+          <Stack sx={{ flexDirection: 'row', mt: isSm ? 32 : 48 }}>
             {tabs.map((t, i) => (
               <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
                 {Array.isArray(t) ? (
                   <>
                     <TabTitle1>{t[0]}</TabTitle1>
-                    <TabTitle2>{t[1]}</TabTitle2>
+                    {!isSm && <TabTitle2>{t[1]}</TabTitle2>}
                   </>
                 ) : (
                   <TabTitle1>{t}</TabTitle1>
@@ -47,41 +49,58 @@ const ContainerBox = styled(Box)({
   width: '100%',
   maxWidth: 1164,
   margin: '48px auto',
-  padding: '0 82px'
+  padding: '0 82px',
+  '@media(max-width:600px)': {
+    padding: '0',
+    margin: '40px auto'
+  }
 })
 const FooterBox = styled(Box)({
   width: '100%',
   maxWidth: '1296px',
-  height: 72,
-  margin: '72px auto 20px',
+  paddingTop: 32,
+  margin: '41px auto 20px',
   borderTop: '1px solid #D7D6D9',
   display: 'flex',
   alignItems: 'end',
   justifyContent: 'space-between',
   '& p': {
     color: 'rgba(18, 18, 18, 0.60)'
+  },
+  '@media(max-width:600px)': {
+    flexDirection: 'column-reverse',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 24,
+    marginTop: 36
   }
 })
 
-const Tab = styled(Box)({
-  width: 360,
+const Tab = styled(Stack)({
+  width: 'max-content',
   padding: '15px 28px',
   borderRadius: '8px 8px 0px 0px',
   cursor: 'pointer',
   '&.active': {
-    background: '#E1F25C',
+    background: '#FFF',
     cursor: 'inherit'
+  },
+  '@media(max-width:600px)': {
+    padding: '12px 16px'
   }
 })
 const TabTitle1 = styled(Typography)({
   fontFamily: 'Public Sans',
-  fontSize: '20px',
+  fontSize: '16px',
   fontStyle: 'normal',
-  fontWeight: 600,
+  fontWeight: 500,
   lineHeight: '140%',
   letterSpacing: '-0.4px',
   textTransform: 'capitalize',
-  color: '#121212'
+  color: '#121212',
+  '@media(max-width:600px)': {
+    fontSize: 14
+  }
 })
 const TabTitle2 = styled(Typography)({
   fontFamily: 'Inter',

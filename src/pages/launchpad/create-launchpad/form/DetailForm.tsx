@@ -12,11 +12,12 @@ import {
   CardBox,
   BaseBox,
   Title,
-  TextInput,
   SubmitComp,
   GraySwitch,
   LabelTitle,
-  FormUploadLayout
+  FormLayout,
+  FormUploadAdd,
+  AddFile
 } from './BaseComponent'
 import { Field, Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
@@ -41,6 +42,8 @@ import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTim
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import BigNumber from 'bignumber.js'
+import { Body02 } from 'components/Text'
+import useBreakpoint from 'hooks/useBreakpoint'
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -445,7 +448,7 @@ const DetailForm = () => {
     console.log('submitsubmitsubmitsubmitsubmit')
     console.log(value)
   }
-
+  const isSm = useBreakpoint('sm')
   return (
     <CardBox>
       <Formik
@@ -459,163 +462,198 @@ const DetailForm = () => {
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
-                <Stack flexDirection={'column'} gap={32}>
-                  <Box mt={64}>
-                    <FormUploadLayout
-                      fileUrl={values.TokenLogo.fileUrl}
-                      formItemName="TokenLogo"
-                      labelId="TokenLogo"
-                      uploadTitle="TokenLogo"
-                      setFieldValue={setFieldValue}
-                    />
-                  </Box>
-                  <TextInput title="TokenName" name="TokenName" placeholder="Name of the project, eg. Bounce" />
-                  <Box>
-                    <Title sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>Blockchain Platform</Title>
-                    <Title sx={{ fontSize: 14, fontWeight: 500, color: '#626262', mt: 5, mb: 16 }}>
-                      What platform is this token issued on?
-                    </Title>
-                    <FormItem name="ChainId">
-                      <Select
-                        value={values.ChainId}
-                        displayEmpty
-                        onChange={({ target }) => {
-                          setFieldValue('ChainId', target.value)
-                        }}
-                        renderValue={selected => {
-                          const currentChain = ChainList.find(item => item.id === selected)
-                          return (
-                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-                              {selected ? (
-                                <>
-                                  <Image style={{ width: 25, height: 25 }} src={currentChain?.logo as string} />
-                                  <Title sx={{ fontSize: 16 }}>{currentChain?.name}</Title>
-                                </>
-                              ) : (
-                                <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>
-                                  select asset platform
-                                </Title>
-                              )}
-                            </Box>
-                          )
-                        }}
-                      >
-                        {ChainList.map(t => (
-                          <MenuItem
-                            key={t.id}
-                            value={t.id}
-                            selected={values.ChainId === t.id ? true : false}
-                            sx={{
-                              '&.Mui-selected': {
-                                background: '#E1F25C'
-                              }
-                            }}
-                          >
-                            <Stack
+                <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
+                  <FormLayout
+                    sxStyle={{ marginTop: isSm ? 24 : 40 }}
+                    title1="Token Logo"
+                    childTitle={
+                      <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
+                    }
+                    childForm={
+                      <FormUploadAdd
+                        fileUrl={values.TokenLogo.fileUrl}
+                        formItemName="TokenLogo"
+                        labelId="TokenLogo"
+                        setFieldValue={setFieldValue}
+                        labelChild={<AddFile />}
+                      />
+                    }
+                  />
+                  <FormLayout
+                    title1="TokenName"
+                    childForm={
+                      <FormItem name={'TokenName'}>
+                        <OutlinedInput placeholder="Name of the project, eg. Bounce" />
+                      </FormItem>
+                    }
+                  />
+                  <FormLayout
+                    title1="Blockchain Platform"
+                    title2="What platform is this token issued on?"
+                    childForm={
+                      <FormItem name="ChainId">
+                        <Select
+                          value={values.ChainId}
+                          displayEmpty
+                          onChange={({ target }) => {
+                            setFieldValue('ChainId', target.value)
+                          }}
+                          renderValue={selected => {
+                            const currentChain = ChainList.find(item => item.id === selected)
+                            return (
+                              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                                {selected ? (
+                                  <>
+                                    <Image style={{ width: 25, height: 25 }} src={currentChain?.logo as string} />
+                                    <Title sx={{ fontSize: 16 }}>{currentChain?.name}</Title>
+                                  </>
+                                ) : (
+                                  <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>
+                                    select asset platform
+                                  </Title>
+                                )}
+                              </Box>
+                            )
+                          }}
+                        >
+                          {ChainList.map(t => (
+                            <MenuItem
+                              key={t.id}
+                              value={t.id}
+                              selected={values.ChainId === t.id ? true : false}
                               sx={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                gap: 16
+                                '&.Mui-selected': {
+                                  background: '#E1F25C'
+                                }
                               }}
                             >
-                              <Image style={{ width: 25, height: 25 }} src={t.logo} />
-                              <Title sx={{ fontSize: 16 }}>{t.name}</Title>
-                            </Stack>
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormItem>
-                  </Box>
-
-                  <TextInput title="Contract Address" name="ContractAddress" placeholder="Explorer Link" />
-                  <TextInput name="ContractDecimalPlaces" placeholder="Explorer Link" title="Contract Decimal Places" />
+                              <Stack
+                                sx={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  gap: 16
+                                }}
+                              >
+                                <Image style={{ width: 25, height: 25 }} src={t.logo} />
+                                <Title sx={{ fontSize: 16 }}>{t.name}</Title>
+                              </Stack>
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormItem>
+                    }
+                  />
+                  <FormLayout
+                    title1="Contract Address"
+                    childForm={
+                      <FormItem name="ContractAddress">
+                        <OutlinedInput placeholder="Explorer Link" />
+                      </FormItem>
+                    }
+                  />
+                  <FormLayout
+                    title1="Contract Decimal Places"
+                    childForm={
+                      <FormItem name="ContractDecimalPlaces">
+                        <OutlinedInput placeholder="Explorer Link" />
+                      </FormItem>
+                    }
+                  />
                 </Stack>
               </BaseBox>
 
               <BaseBox>
                 <Title sx={{ color: '#20201E', marginBottom: 64 }}>launchpad information</Title>
-                <Stack flexDirection={'column'} gap={32}>
-                  <Box>
-                    <Title mb={16} sx={{ color: '#20201E', fontSize: 20 }}>
-                      Auction Type
-                    </Title>
-                    <FormItem name="AuctionType">
-                      <Select
-                        value={values.AuctionType}
-                        onChange={e => {
-                          console.log(e.target.value)
-                          setFieldValue('AuctionType', e.target.value)
-                        }}
-                        renderValue={selected => {
-                          return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 400 }}>{selected}</Title>
-                        }}
+                <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
+                  <FormLayout
+                    title1="Auction Type"
+                    childForm={
+                      <FormItem name="AuctionType">
+                        <Select
+                          value={values.AuctionType}
+                          onChange={e => {
+                            console.log(e.target.value)
+                            setFieldValue('AuctionType', e.target.value)
+                          }}
+                          renderValue={selected => {
+                            return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 400 }}>{selected}</Title>
+                          }}
+                        >
+                          {Object.values(AuctionType).map((value, index) => (
+                            <MenuItem key={index} value={value}>
+                              <Title
+                                sx={{
+                                  fontSize: 16,
+                                  color: values.AuctionType === value ? '#2B51DA' : '#20201E',
+                                  fontWeight: 400
+                                }}
+                              >
+                                {value}
+                              </Title>
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormItem>
+                    }
+                  />
+                  <FormLayout
+                    title1="Funding Currency"
+                    childForm={
+                      <FormItem
+                        name="Token.tokenToSymbol"
+                        label="Select Token"
+                        required
+                        sx={{ flex: 1 }}
+                        startAdornment={
+                          <TokenImage alt={values.Token.tokenToSymbol} src={values.Token.tokenToLogoURI} size={32} />
+                        }
                       >
-                        {Object.values(AuctionType).map((value, index) => (
-                          <MenuItem key={index} value={value}>
-                            <Title
-                              sx={{
-                                fontSize: 16,
-                                color: values.AuctionType === value ? '#2B51DA' : '#20201E',
-                                fontWeight: 400
-                              }}
-                            >
-                              {value}
-                            </Title>
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormItem>
-                  </Box>
-                  <Box>
-                    <Title mb={16} sx={{ fontSize: 20 }}>
-                      Funding Currency
-                    </Title>
-                    <FormItem
-                      name="Token.tokenToSymbol"
-                      label="Select Token"
-                      required
-                      sx={{ flex: 1 }}
-                      startAdornment={
-                        <TokenImage alt={values.Token.tokenToSymbol} src={values.Token.tokenToLogoURI} size={32} />
-                      }
-                    >
-                      <FakeOutlinedInput
-                        readOnly
-                        onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
-                      />
-                    </FormItem>
-                  </Box>
-                  <Box>
-                    <Title mb={14} sx={{ fontSize: 20, color: '#20201E' }}>
-                      Swap ratio
-                    </Title>
-                    <Stack
-                      flexDirection={'row'}
-                      sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}
-                    >
-                      <Title sx={{ fontSize: 20, color: '#171717' }}>
-                        1 {!values.TokenName ? 'USDT' : values.TokenName} =
-                      </Title>
-                      {/* 小数点位数大于 精度时还没有报错？ */}
-                      <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
-                        <NumberInput
-                          value={values.SwapRatio}
-                          onUserInput={value => setFieldValue('SwapRatio', value)}
-                          endAdornment={
-                            <>
-                              <TokenImage
-                                alt={values.Token.tokenToSymbol}
-                                src={values.Token.tokenToLogoURI}
-                                size={24}
-                              />
-                              <Typography sx={{ ml: 8 }}>{values.Token.tokenToSymbol}</Typography>
-                            </>
-                          }
+                        <FakeOutlinedInput
+                          readOnly
+                          onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
                         />
                       </FormItem>
-                    </Stack>
-                  </Box>
-                  <TextInput name="TotalSupply" title="Total Supply" placeholder="Enter  amount" />
+                    }
+                  />
+                  <FormLayout
+                    title1="Swap ratio"
+                    childForm={
+                      <Stack
+                        flexDirection={'row'}
+                        sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}
+                      >
+                        <Title sx={{ fontSize: 20, color: '#171717' }}>
+                          1 {!values.TokenName ? 'USDT' : values.TokenName} =
+                        </Title>
+                        {/* 小数点位数大于 精度时还没有报错？ */}
+                        <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
+                          <NumberInput
+                            value={values.SwapRatio}
+                            onUserInput={value => setFieldValue('SwapRatio', value)}
+                            endAdornment={
+                              <>
+                                <TokenImage
+                                  alt={values.Token.tokenToSymbol}
+                                  src={values.Token.tokenToLogoURI}
+                                  size={24}
+                                />
+                                <Typography sx={{ ml: 8 }}>{values.Token.tokenToSymbol}</Typography>
+                              </>
+                            }
+                          />
+                        </FormItem>
+                      </Stack>
+                    }
+                  />
+                  <FormLayout
+                    title1="Total Supply"
+                    childForm={
+                      <FormItem name="TotalSupply">
+                        <OutlinedInput placeholder="Enter  amount" />
+                      </FormItem>
+                    }
+                  />
+
                   <Box>
                     <Title mb={13} sx={{ fontSize: 20, fontWeight: 500, color: '#000' }}>
                       Time
