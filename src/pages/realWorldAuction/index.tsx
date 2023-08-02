@@ -7,6 +7,7 @@ import ValuesProvider from 'bounceComponents/real-world-collectibles/ValuesProvi
 import ShopLogoList from './components/shop/shopLogoList'
 import { useEffect } from 'react'
 import ShopList from './components/shop/shopList'
+import ApplyShop from './components/shop/applyShop'
 export enum TabsType {
   'auction' = 0,
   'buynow' = 1
@@ -65,7 +66,15 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
         <Typography className="title">UPCOMING DROPS</Typography>
       </ComTitle>
       <ShopList />
-      <FooterPc />
+      <ApplyShop />
+      <Box
+        sx={{
+          width: '100%',
+          background: '#F6F6F3'
+        }}
+      >
+        <FooterPc />
+      </Box>
     </ValuesProvider>
   )
 }

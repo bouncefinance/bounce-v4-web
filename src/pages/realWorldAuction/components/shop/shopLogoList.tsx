@@ -115,7 +115,16 @@ const ShopLogoList = () => {
         </LogoItem>
         <LogoItem
           sx={{
-            minWidth: isMd ? '259px' : '617px'
+            minWidth: isMd ? '259px' : '617px',
+            '&:hover': {
+              background: '#fff',
+              '.pordutct': {
+                opacity: 0
+              },
+              '.title': {
+                color: '#20201E'
+              }
+            }
           }}
         >
           <Typography className="title">Coming soon...</Typography>

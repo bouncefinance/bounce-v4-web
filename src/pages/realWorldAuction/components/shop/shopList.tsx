@@ -8,6 +8,7 @@ import { ReactComponent as LogoSvg } from 'assets/imgs/realworldShop/logo1.svg'
 import { ReactComponent as Logo2Svg } from 'assets/imgs/realworldShop/logo2.svg'
 import Logo3 from 'assets/imgs/realworldShop/logo3.png'
 import TypeWriterEffect from 'react-typewriter-effect'
+import ShakeImgs from './shakeImgs'
 const ShopList = () => {
   const isMd = useIsMDDown()
   useEffect(() => {
@@ -26,12 +27,12 @@ const ShopList = () => {
         }}
       >
         <Grid container rowGap={0} columnGap={0}>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6} lg={6}>
             <Box
               sx={{
                 width: '100%',
-                height: '100%',
-                padding: '100px 72px 60px',
+                height: isMd ? 'auto' : '100%',
+                padding: isMd ? '30px 16px' : '100px 72px 60px',
                 boxSizing: 'border-box',
                 display: 'flex',
                 flexFlow: 'column nowrap',
@@ -41,27 +42,29 @@ const ShopList = () => {
             >
               <Box
                 sx={{
-                  flex: 1
+                  flex: 1,
+                  width: '100%',
+                  minHeight: isMd ? '109px' : ''
                 }}
               >
                 <Typography
                   sx={{
-                    position: 'sticky',
-                    top: 76,
+                    position: isMd ? 'relative' : 'sticky',
+                    top: isMd ? 0 : 76,
                     color: '#B5E529',
                     fontFamily: `'Instrument Serif'`,
-                    fontSize: '90px',
-                    lineHeight: '90px',
+                    fontSize: isMd ? 40 : 90,
+                    lineHeight: isMd ? '40px' : '90px',
                     fontWeight: 400
                   }}
-                  mb={30}
+                  mb={isMd ? 10 : 30}
                 >
                   BOUNCE
                 </Typography>
                 <Box
                   sx={{
-                    position: 'sticky',
-                    top: 166,
+                    position: isMd ? 'relative' : 'sticky',
+                    top: isMd ? 0 : 166,
                     display: 'flex',
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
@@ -97,18 +100,19 @@ const ShopList = () => {
               <Box
                 sx={{
                   width: '100%',
-                  height: '24px',
+                  height: isMd ? 'auto' : '24px',
                   display: 'flex',
-                  flexFlow: 'row nowrap',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
+                  flexFlow: isMd ? 'column nowrap' : 'row nowrap',
+                  justifyContent: isMd ? 'flex-end' : 'space-between',
+                  alignItems: isMd ? 'flex-end' : 'center'
                 }}
+                gap={isMd ? 12 : 0}
               >
                 <Typography
                   sx={{
                     color: '#626262',
                     fontFamily: `'Inter'`,
-                    fontSize: 13
+                    fontSize: isMd ? 12 : 13
                   }}
                 >
                   Real World Collectibles | English auction
@@ -144,19 +148,16 @@ const ShopList = () => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <img
+          <Grid item xs={12} md={6} lg={6}>
+            <ShakeImgs
+              list={[P1, P2]}
               style={{
                 width: '100%',
-                display: 'block',
                 objectFit: 'cover'
               }}
-              src={P1}
-              alt=""
             />
           </Grid>
         </Grid>
-        <Box className={'scrollable-div'} sx={{}}></Box>
         <TypeWriterEffect
           startDelay={100}
           cursorColor="black"
@@ -166,9 +167,11 @@ const ShopList = () => {
           textStyle={{
             fontFamily: `'Public Sans'`,
             position: 'absolute',
-            top: '50%',
+            fontSize: isMd ? 22 : 36,
+            color: isMd ? '#fff' : '#121212',
+            bottom: isMd ? '20px' : '50%',
             left: '50%',
-            transform: 'translate3d(-50%, -50%, 0)'
+            transform: 'translate3d(-50%, 50%, 0)'
           }}
         />
       </Box>
@@ -178,12 +181,12 @@ const ShopList = () => {
         }}
       >
         <Grid container rowGap={0} columnGap={0}>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6} lg={6}>
             <Box
               sx={{
                 width: '100%',
-                height: '100%',
-                padding: '100px 72px 60px',
+                height: isMd ? 'auto' : '100%',
+                padding: isMd ? '30px 16px' : '100px 72px 60px',
                 boxSizing: 'border-box',
                 display: 'flex',
                 flexFlow: 'column nowrap',
@@ -193,27 +196,29 @@ const ShopList = () => {
             >
               <Box
                 sx={{
-                  flex: 1
+                  flex: 1,
+                  width: '100%',
+                  minHeight: isMd ? '109px' : ''
                 }}
               >
                 <Typography
                   sx={{
-                    position: 'sticky',
-                    top: 76,
+                    position: isMd ? 'relative' : 'sticky',
+                    top: isMd ? 0 : 76,
                     color: '#20201E',
                     fontFamily: `'Instrument Serif'`,
-                    fontSize: '90px',
-                    lineHeight: '90px',
+                    fontSize: isMd ? 40 : 90,
+                    lineHeight: isMd ? '40px' : '90px',
                     fontWeight: 400
                   }}
-                  mb={30}
+                  mb={isMd ? 10 : 30}
                 >
                   FOUNDO
                 </Typography>
                 <Box
                   sx={{
-                    position: 'sticky',
-                    top: 166,
+                    position: isMd ? 'relative' : 'sticky',
+                    top: isMd ? 0 : 166,
                     display: 'flex',
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
@@ -278,15 +283,13 @@ const ShopList = () => {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={6}>
-            <img
+          <Grid item xs={12} md={6} lg={6}>
+            <ShakeImgs
+              list={[P2, P1]}
               style={{
                 width: '100%',
-                display: 'block',
                 objectFit: 'cover'
               }}
-              src={P2}
-              alt=""
             />
           </Grid>
         </Grid>
@@ -299,9 +302,11 @@ const ShopList = () => {
           textStyle={{
             fontFamily: `'Public Sans'`,
             position: 'absolute',
-            top: '50%',
+            fontSize: isMd ? 22 : 36,
+            color: isMd ? '#fff' : '#121212',
+            bottom: isMd ? '20px' : '50%',
             left: '50%',
-            transform: 'translate3d(-50%, -50%, 0)'
+            transform: 'translate3d(-50%, 50%, 0)'
           }}
         />
       </Box>
