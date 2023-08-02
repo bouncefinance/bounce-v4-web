@@ -62,13 +62,17 @@ export function useCreateMutantEnglishAuctionPool() {
     hash: string
     transactionResult: Promise<{ sysId: number }>
   }> => {
+    const endTime = (Number(values?.closeHour) || 0) * 3600 + (Number(values?.closeMinute) || 0) * 60
+    const claimDelay = values.shouldDelayUnlocking
+      ? (Number(values?.closeHour) || 0) * 3600 + (Number(values?.closeMinute) || 0) * 60
+      : 0
     const params: Params = {
       amountTotal0: values.nft721TokenFrom.length,
       priceFloor: values.priceFloor || '',
       amountMinIncr1: values.amountMinIncr1 || '',
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       startTime: values.startTime?.unix() || 0,
-      endTime: values.endTime?.unix() || 0,
+      endTime: endTime,
       poolName: values.poolName.slice(0, 50),
       tokenFromAddress: values.nft721TokenFrom[0].contractAddr || '',
       tokenIds: values.nft721TokenFrom.map(i => i.tokenId?.toString() || ''),
@@ -120,7 +124,7 @@ export function useCreateMutantEnglishAuctionPool() {
     if (params.whitelist.length > 0) {
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
-        category: PoolType.ENGLISH_AUCTION_NFT,
+        category: PoolType.MUTANT_ENGLISH_AUCTION_NFT,
         chainId: chainConfigInBackend.id
       }
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -131,7 +135,7 @@ export function useCreateMutantEnglishAuctionPool() {
       amountMin1: amountTotal1.raw.toString(),
       amountTotal0: params.amountTotal0.toString(),
       amountTotal1: amountTotal1.raw.toString(),
-      category: PoolType.ENGLISH_AUCTION_NFT,
+      category: PoolType.MUTANT_ENGLISH_AUCTION_NFT,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
@@ -151,6 +155,13 @@ export function useCreateMutantEnglishAuctionPool() {
     const {
       data: { id, expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
+    const distributeRatio: any = []
+    const distributes = [
+      {
+        target: account,
+        ratio: 1e18
+      }
+    ]
 
     const contractCallParams = {
       name: signatureParams.name,
@@ -159,15 +170,16 @@ export function useCreateMutantEnglishAuctionPool() {
       tokenIds: signatureParams.tokenIds,
       amountTotal0: signatureParams.amountTotal0,
       amountMin1: signatureParams.amountMin1,
-      amountMinIncr1: signatureParams.amountMinIncr1,
+      amountMinIncrRatio1: signatureParams.amountMinIncr1,
       openAt: signatureParams.openAt,
-      closeAt: signatureParams.closeAt,
-      claimAt: signatureParams.claimAt,
+      closeIncrInterval: params.endTime,
+      claimDelay: claimDelay,
       isERC721: signatureParams.is721,
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
-    const args = [id, contractCallParams, params.releaseType, params.releaseData, false, expiredTime, signature]
+    const args = [id, contractCallParams, distributeRatio, distributes, false, expiredTime, signature]
+    console.log('args', args)
 
     const estimatedGas = await mutantEnglishContract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create english auction', error)
@@ -204,6 +216,8 @@ export function useCreateMutantEnglishAuctionPool() {
     mutantEnglishContract,
     ownerIds.length,
     values.amountMinIncr1,
+    values?.closeHour,
+    values?.closeMinute,
     values.delayUnlockingTime,
     values.endTime,
     values.nft721TokenFrom,

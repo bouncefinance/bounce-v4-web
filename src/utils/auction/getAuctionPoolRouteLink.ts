@@ -8,7 +8,7 @@ export default function getAuctionPoolLink(
   sysId: number | string | undefined,
   category: PoolType,
   backedChainId: number,
-  poolId: string | number
+  poolId?: string | number
 ) {
   const chainInfoOpt = store.getState().configOptions.optionDatas.chainInfoOpt || []
   if (defaultPoolVersionRoute === 1 || !sysId) {

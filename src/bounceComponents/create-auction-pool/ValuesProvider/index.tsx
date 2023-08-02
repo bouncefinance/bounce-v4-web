@@ -220,10 +220,13 @@ type Payload = {
     shouldDelayUnlocking: boolean
     releaseType: IReleaseType
     releaseDataArr: IReleaseData[]
-    closeHour: string
-    closeMinute: string
-    delayUnlockingHour: string
-    delayUnlockingMinute: string
+    closeHour?: string
+    closeMinute?: string
+    delayUnlockingHour?: string
+    delayUnlockingMinute?: string
+    creatorRatio?: string
+    prevBidderRatio?: string
+    lastBidderRatio?: string
   }
   [ActionType.HandleStep]: {
     activeStep: number
@@ -343,7 +346,10 @@ const reducer = (state: AuctionPool, action: Actions) => {
         closeHour: action.payload.closeHour,
         closeMinute: action.payload.closeMinute,
         delayUnlockingHour: action.payload.delayUnlockingHour,
-        delayUnlockingMinute: action.payload.delayUnlockingMinute
+        delayUnlockingMinute: action.payload.delayUnlockingMinute,
+        creatorRatio: action.payload.creatorRatio,
+        prevBidderRatio: action.payload.prevBidderRatio,
+        lastBidderRatio: action.payload.lastBidderRatio
       }
 
     case ActionType.HandleStep:

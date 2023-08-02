@@ -13,7 +13,6 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { useActiveWeb3React } from 'hooks'
 import { ChainListMap } from 'constants/chain'
 import { shortenAddress } from 'utils'
-import { useCreateEnglishAuctionPool } from 'hooks/useCreateEnglishAuctionPool'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
@@ -24,6 +23,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
+import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
@@ -31,7 +31,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
 import AuctionNotification from '../AuctionNotification'
-import { MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { useCreateMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
 const CreatePoolButton = () => {
@@ -39,23 +39,22 @@ const CreatePoolButton = () => {
   const navigate = useNavigate()
   const { account, chainId } = useActiveWeb3React()
   const values = useValuesState()
-  const createEnglishAuctionPool = useCreateEnglishAuctionPool()
+  const createMutantEnglishAuctionPool = useCreateMutantEnglishAuctionPool()
   const auctionInChainId = useAuctionInChain()
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
-
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
   const [approvalState, approveCallback] = useNFTApproveAllCallback(
     values.nft721TokenFrom[0].contractAddr,
-    chainId === auctionInChainId ? MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
+    chainId === auctionInChainId ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
   )
 
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createEnglishAuctionPool()
+      const { transactionResult } = await createMutantEnglishAuctionPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -72,10 +71,9 @@ const CreatePoolButton = () => {
           rpt()
           handleCloseDialog()
         })
-        transactionReceipt.then(curReceipt => {
-          const poolId = getPoolId(curReceipt.logs)
-          if (poolId) {
-            resolve(poolId)
+        transactionResult.then(sysId => {
+          if (sysId) {
+            resolve(sysId.toString())
             setButtonCommitted('success')
           } else {
             hideDialogConfirmation()
@@ -90,13 +88,12 @@ const CreatePoolButton = () => {
         })
       })
       ret
-        .then(poolId => {
+        .then(sysId => {
           const goToPoolInfoPage = () => {
             const route = getAuctionPoolLink(
               sysId,
-              PoolType.ENGLISH_AUCTION_NFT,
-              chainConfigInBackend?.id as number,
-              poolId
+              PoolType.MUTANT_ENGLISH_AUCTION_NFT,
+              chainConfigInBackend?.id as number
             )
             navigate(route)
           }
@@ -128,7 +125,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createEnglishAuctionPool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createMutantEnglishAuctionPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -247,7 +244,7 @@ const CreatePoolButton = () => {
   )
 }
 
-const CreationConfirmation = () => {
+const CreationMutantEnglish721Confirmation = () => {
   const { account } = useActiveWeb3React()
   const auctionChainId = useAuctionInChain()
   const showLoginModal = useShowLoginModal()
@@ -362,11 +359,33 @@ const CreationConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Pool duration">
-                  <Typography>
-                    From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
-                  </Typography>
-                </ConfirmationInfoItem>
+                {values.auctionType === AuctionType.MUTANT_ENGLISH ? (
+                  <ConfirmationInfoItem title="Pool start time">
+                    <Typography>From {values.startTime?.format('MM.DD.Y HH:mm')}</Typography>
+                  </ConfirmationInfoItem>
+                ) : (
+                  <ConfirmationInfoItem title="Pool duration">
+                    <Typography>
+                      From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
+                    </Typography>
+                  </ConfirmationInfoItem>
+                )}
+
+                {values.auctionType === AuctionType.MUTANT_ENGLISH && (
+                  <ConfirmationInfoItem title="Delay close time">
+                    <Typography>
+                      {values.closeHour || '-'} Hour {values.closeMinute || '-'} Minute
+                    </Typography>
+                  </ConfirmationInfoItem>
+                )}
+
+                {values.auctionType === AuctionType.MUTANT_ENGLISH && (
+                  <ConfirmationInfoItem title="Delay claim time">
+                    <Typography>
+                      {values.delayUnlockingHour || '-'} Hour {values.delayUnlockingMinute || '-'} Minute
+                    </Typography>
+                  </ConfirmationInfoItem>
+                )}
 
                 <ConfirmationInfoItem title="Participant">
                   <Typography>
@@ -394,4 +413,4 @@ const CreationConfirmation = () => {
   )
 }
 
-export default CreationConfirmation
+export default CreationMutantEnglish721Confirmation

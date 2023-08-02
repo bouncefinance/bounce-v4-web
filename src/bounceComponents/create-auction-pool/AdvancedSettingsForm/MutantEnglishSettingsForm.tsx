@@ -39,6 +39,9 @@ interface MyFormValues {
   delayUnlockingHour: string | undefined
   delayUnlockingMinute: string | undefined
   shouldDelayUnlocking: boolean
+  creatorRatio: string
+  prevBidderRatio: string
+  lastBidderRatio: string
   enableReverse: boolean
   whitelist: string[]
   participantStatus: ParticipantStatus
@@ -65,6 +68,9 @@ export const MutantEnglishSettingsForm = ({
     delayUnlockingHour: valuesState.delayUnlockingHour,
     delayUnlockingMinute: valuesState.delayUnlockingMinute,
     shouldDelayUnlocking: valuesState.shouldDelayUnlocking,
+    creatorRatio: valuesState.creatorRatio || '',
+    prevBidderRatio: valuesState.prevBidderRatio || '',
+    lastBidderRatio: valuesState.lastBidderRatio || '',
     enableReverse: !!valuesState.enableReverse,
     whitelist: valuesState.whitelist,
     participantStatus: valuesState.participantStatus
@@ -89,6 +95,7 @@ export const MutantEnglishSettingsForm = ({
       }),
     delayUnlockingHour: Yup.string().nullable(true).matches(/^\d+$/, 'Invalid time'),
     delayUnlockingMinute: Yup.string().nullable(true).matches(/^\d+$/, 'Invalid time'),
+    creatorRatio: Yup.string(),
     whitelist: Yup.array()
       .of(Yup.string())
       .test(
@@ -150,6 +157,9 @@ export const MutantEnglishSettingsForm = ({
                 shouldDelayUnlocking: formValues.shouldDelayUnlocking,
                 delayUnlockingHour: formValues.delayUnlockingHour,
                 delayUnlockingMinute: formValues.delayUnlockingMinute,
+                creatorRatio: formValues.creatorRatio,
+                prevBidderRatio: formValues.prevBidderRatio,
+                lastBidderRatio: formValues.lastBidderRatio,
                 enableReverse: formValues.enableReverse,
                 whitelist: formValues.whitelist,
                 participantStatus: formValues.participantStatus
@@ -266,7 +276,67 @@ export const MutantEnglishSettingsForm = ({
                     </Stack>
                   </Box>
                 )}
-
+                <Stack sx={{ mt: 24, width: '100%' }} spacing={20}>
+                  <Stack width={'100%'} direction={'row'} alignItems={'center'} spacing={8}>
+                    <Stack direction="row" alignItems="center" spacing={8}>
+                      <Typography variant="h3" sx={{ fontSize: 16, width: 317 }}>
+                        Creator distribution ratio =
+                      </Typography>
+                    </Stack>
+                    <FormItem name="creatorRatio" required placeholder="0" sx={{ flex: 1, mt: 24 }}>
+                      <NumberInput
+                        placeholder="0"
+                        value={values.creatorRatio}
+                        onUserInput={value => {
+                          setFieldValue('creatorRatio', value)
+                        }}
+                        endAdornment={
+                          <>
+                            <Typography sx={{ mr: 8 }}>%</Typography>
+                          </>
+                        }
+                      />
+                    </FormItem>
+                  </Stack>
+                  <Stack width={'100%'} direction={'row'} alignItems={'center'} spacing={8}>
+                    <Typography variant="h3" sx={{ fontSize: 16, width: 317 }}>
+                      Previous bidder distribution ratio =
+                    </Typography>
+                    <FormItem name="prevBidderRatio" required placeholder="0" sx={{ flex: 1, mt: 24 }}>
+                      <NumberInput
+                        placeholder="0"
+                        value={values.prevBidderRatio}
+                        onUserInput={value => {
+                          setFieldValue('prevBidderRatio', value)
+                        }}
+                        endAdornment={
+                          <>
+                            <Typography sx={{ mr: 8 }}>%</Typography>
+                          </>
+                        }
+                      />
+                    </FormItem>
+                  </Stack>
+                  <Stack width={'100%'} direction={'row'} alignItems={'center'} spacing={8}>
+                    <Typography variant="h3" sx={{ fontSize: 16, width: 317 }}>
+                      Last bidder distribution ratio =
+                    </Typography>
+                    <FormItem name="lastBidderRatio" required placeholder="0" sx={{ flex: 1 }}>
+                      <NumberInput
+                        placeholder="0"
+                        value={values.lastBidderRatio}
+                        onUserInput={value => {
+                          setFieldValue('lastBidderRatio', value)
+                        }}
+                        endAdornment={
+                          <>
+                            <Typography sx={{ mr: 8 }}>%</Typography>
+                          </>
+                        }
+                      />
+                    </FormItem>
+                  </Stack>
+                </Stack>
                 {!hideRefundable && (
                   <Box sx={{ mt: 38, mb: 34 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

@@ -112,4 +112,7 @@ export interface AuctionPool {
   claimMinute?: string
   delayUnlockingHour?: string
   delayUnlockingMinute?: string
+  creatorRatio?: string
+  prevBidderRatio?: string
+  lastBidderRatio?: string
 }
