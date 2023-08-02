@@ -15,7 +15,6 @@ import { calculateGasMargin } from 'utils'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
-import { useMutantEnglishAuctionNftContract } from './useContract'
 import { getEventLog } from './useCreateFixedSwapPool'
 import { useERC721MultiOwner } from 'hooks/useNFTTokenBalance'
 import { Currency } from 'constants/token/currency'
@@ -24,6 +23,11 @@ import { useSingleCallResult } from 'state/multicall/hooks'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import { useBackedPoolInfo } from 'bounceHooks/auction/usePoolInfo'
 import JSBI from 'jsbi'
+import { getUserPermitSign, getUserWhitelistProof } from 'api/user'
+import { useMutantEnglishAuctionNftContract } from 'hooks/useContract'
+import { useUserHasSubmittedRecords } from 'state/transactions/hooks'
+import getTokenType from 'utils/getTokenType'
+import { useIsUserInAllWhitelist } from 'bounceHooks/auction/useIsUserInWhitelist'
 
 interface Params {
   amountTotal0: number
@@ -254,6 +258,13 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
   const mutantEnglishContract = useMutantEnglishAuctionNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const accountBidRawAmount = useMutantEnglishAccountBids(poolInfo?.chainId, poolInfo?.poolId)
 
+  const whitelistData = useIsUserInAllWhitelist(
+    poolInfo?.chainId,
+    poolInfo?.poolId,
+    poolInfo?.enableWhiteList || false,
+    poolInfo?.category
+  )
+
   const poolsRes = useSingleCallResult(
     mutantEnglishContract,
     'pools',
@@ -402,6 +413,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
         creatorRatio: distributeRatios?.creatorRatio
       },
       distributeRewards,
+      whitelistData,
       participant: {
         ...poolInfo.participant,
         claimed: myClaimed,
@@ -429,12 +441,13 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     poolsData.claimAt,
     poolsData.amountMin1,
     poolsData.amountMinIncrRatio1,
+    extraAmount1,
     distributeRatios?.prevBidderRatio,
     distributeRatios?.lastBidderRatio,
     distributeRatios?.creatorRatio,
+    whitelistData,
     myClaimed,
     accountBidRawAmount,
-    extraAmount1,
     creatorClaimed,
     currentBidder,
     currentBidderAmount1,
@@ -451,4 +464,294 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     }),
     [data, getPoolInfo, loading]
   )
+}
+
+export function useMutantEnglishCreatorClaim(poolId: number | string, name: string, contract?: string) {
+  const { account } = useActiveWeb3React()
+
+  const mutantEnglishContract = useMutantEnglishAuctionNftContract(contract)
+  const addTransaction = useTransactionAdder()
+  const funcName = 'creatorClaim'
+
+  const submitted = useUserHasSubmittedRecords(account || undefined, funcName + '_mutant_english_nft', poolId)
+
+  const run = useCallback(async (): Promise<{
+    hash: string
+    transactionResult: Promise<string>
+  }> => {
+    if (!account) {
+      return Promise.reject('no account')
+    }
+    if (!mutantEnglishContract) {
+      return Promise.reject('no contract')
+    }
+
+    const args = [poolId]
+
+    const estimatedGas = await mutantEnglishContract.estimateGas[funcName](...args).catch((error: Error) => {
+      console.debug('Failed to claim for creator', error)
+      throw error
+    })
+    return mutantEnglishContract[funcName](...args, {
+      gasLimit: calculateGasMargin(estimatedGas)
+    }).then((response: TransactionResponse) => {
+      addTransaction(response, {
+        summary: `Creator claim assets for ${name}`,
+        userSubmitted: {
+          account,
+          action: funcName + '_mutant_english_nft',
+          key: poolId
+        }
+      })
+      return {
+        hash: response.hash,
+        transactionResult: response.wait(1).then(receipt => {
+          const index = getEventLog(mutantEnglishContract, receipt.logs, 'CreatorClaimed', 'index')
+          if (!index) {
+            Promise.reject('The transaction seems to have failed')
+          }
+          return index
+        })
+      }
+    })
+  }, [account, addTransaction, mutantEnglishContract, name, poolId])
+
+  return { submitted, run }
+}
+
+export function useMutantEnglishBidderClaim(poolInfo: MutantEnglishAuctionNFTPoolProp) {
+  const { account } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
+
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'mutant_english_bidder_claim', poolInfo.poolId)
+
+  const mutantEnglishContract = useMutantEnglishAuctionNftContract(poolInfo.contract)
+
+  const run = useCallback(async (): Promise<{
+    hash: string
+    transactionResult: Promise<string>
+  }> => {
+    if (!account) {
+      return Promise.reject('no account')
+    }
+    if (!mutantEnglishContract) {
+      return Promise.reject('no contract')
+    }
+
+    const args = [poolInfo.poolId]
+
+    const estimatedGas = await mutantEnglishContract.estimateGas.bidderClaim(...args).catch((error: Error) => {
+      console.debug('Failed to claim', error)
+      throw error
+    })
+    return mutantEnglishContract
+      .bidderClaim(...args, {
+        gasLimit: calculateGasMargin(estimatedGas)
+      })
+      .then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: `Claim token ${poolInfo.token1.symbol}`,
+          userSubmitted: {
+            account,
+            action: `mutant_english_bidder_claim`,
+            key: poolInfo.poolId
+          }
+        })
+        return {
+          hash: response.hash,
+          transactionResult: response.wait(1).then(receipt => {
+            const index = getEventLog(mutantEnglishContract, receipt.logs, 'BidderClaimed', 'index')
+            if (!index) {
+              Promise.reject('The transaction seems to have failed')
+            }
+            return index
+          })
+        }
+      })
+  }, [account, mutantEnglishContract, poolInfo.poolId, poolInfo.token1.symbol, addTransaction])
+
+  return { run, submitted }
+}
+
+export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoolProp) {
+  const { account } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
+
+  const submitted = useUserHasSubmittedRecords(account || undefined, 'mutant_english_bid', poolInfo.poolId)
+
+  const isToken1Native = poolInfo.currencyAmountMin1?.currency.isNative
+  const mutantEnglishContract = useMutantEnglishAuctionNftContract(poolInfo.contract)
+
+  const gasFeeRes = useSingleCallResult(mutantEnglishContract, 'gasFee', [poolInfo.poolId])
+
+  const bidPrevGasFee = useMemo(() => {
+    const fee = gasFeeRes?.result?.[0].toString()
+    if (!fee || !poolInfo.currencyAmountMin1) return undefined
+    if (poolInfo.currencyAmountMin1.currency.isNative) {
+      return CurrencyAmount.fromRawAmount(poolInfo.currencyAmountMin1.currency, fee)
+    }
+    return CurrencyAmount.fromRawAmount(Currency.getNativeCurrency(poolInfo.ethChainId), fee)
+  }, [gasFeeRes?.result, poolInfo.currencyAmountMin1, poolInfo.ethChainId])
+
+  const _bidCallback = useCallback(
+    async (
+      bidAmount: CurrencyAmount
+    ): Promise<{
+      hash: string
+      transactionResult: Promise<string>
+    }> => {
+      if (!account) {
+        return Promise.reject('no account')
+      }
+      if (!mutantEnglishContract) {
+        return Promise.reject('no contract')
+      }
+      if (!bidPrevGasFee) {
+        return Promise.reject('Pls waiting gas calc fee')
+      }
+      let proofArr: string[] = []
+
+      if (poolInfo.enableWhiteList) {
+        const {
+          data: { proof: rawProofStr }
+        } = await getUserWhitelistProof({
+          address: account,
+          category: poolInfo.category,
+          chainId: poolInfo.chainId,
+          poolId: String(poolInfo.poolId),
+          tokenType: getTokenType(poolInfo.category)
+        })
+
+        const rawProofJson = JSON.parse(rawProofStr)
+
+        if (Array.isArray(rawProofJson)) {
+          proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
+        }
+      }
+
+      const args = [poolInfo.poolId, bidAmount.raw.toString(), proofArr]
+
+      const value = isToken1Native ? bidAmount.add(bidPrevGasFee).raw.toString() : bidPrevGasFee.raw.toString()
+
+      const estimatedGas = await mutantEnglishContract.estimateGas.bid(...args, { value }).catch((error: Error) => {
+        console.debug('Failed to bid', error)
+        throw error
+      })
+      return mutantEnglishContract
+        .bid(...args, {
+          gasLimit: calculateGasMargin(estimatedGas, 20),
+          value
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: `Bid amount ${bidAmount.toSignificant()} ${poolInfo.token1.symbol}`,
+            userSubmitted: {
+              account,
+              action: `mutant_english_bid`,
+              key: poolInfo.poolId
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionResult: response.wait(1).then(receipt => {
+              const index = getEventLog(mutantEnglishContract, receipt.logs, 'Bid', 'index')
+              if (!index) {
+                Promise.reject('The transaction seems to have failed')
+              }
+              return index
+            })
+          }
+        })
+    },
+    [
+      account,
+      addTransaction,
+      bidPrevGasFee,
+      mutantEnglishContract,
+      isToken1Native,
+      poolInfo.category,
+      poolInfo.chainId,
+      poolInfo.enableWhiteList,
+      poolInfo.poolId,
+      poolInfo.token1.symbol
+    ]
+  )
+
+  const _bidPermitCallback = useCallback(
+    async (
+      bidAmount1: CurrencyAmount
+    ): Promise<{
+      hash: string
+      transactionResult: Promise<string>
+    }> => {
+      if (!account) {
+        return Promise.reject('no account')
+      }
+      if (!mutantEnglishContract) {
+        return Promise.reject('no contract')
+      }
+      if (!poolInfo.enableWhiteList) {
+        return Promise.reject('no enable whiteList')
+      }
+      const { data } = await getUserPermitSign({
+        address: account,
+        category: poolInfo.category,
+        chainId: poolInfo.chainId,
+        poolId: String(poolInfo.poolId),
+        tokenType: getTokenType(poolInfo.category)
+      })
+
+      const args = [poolInfo.poolId, bidAmount1.raw.toString(), data.expiredTime, data.signature]
+
+      const estimatedGas = await mutantEnglishContract.estimateGas
+        .bidPermit(...args, { value: isToken1Native ? bidAmount1.raw.toString() : undefined })
+        .catch((error: Error) => {
+          console.debug('Failed to bid', error)
+          throw error
+        })
+      return mutantEnglishContract
+        .bidPermit(...args, {
+          gasLimit: calculateGasMargin(estimatedGas),
+          value: isToken1Native ? bidAmount1.raw.toString() : undefined
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: `Bid amount ${bidAmount1.toSignificant()} ${poolInfo.token1.symbol}`,
+            userSubmitted: {
+              account,
+              action: `mutant_english_bid`,
+              key: poolInfo.poolId
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionResult: response.wait(1).then(receipt => {
+              const index = getEventLog(mutantEnglishContract, receipt.logs, 'Bid', 'index')
+              if (!index) {
+                Promise.reject('The transaction seems to have failed')
+              }
+              return index
+            })
+          }
+        })
+    },
+    [
+      account,
+      addTransaction,
+      mutantEnglishContract,
+      isToken1Native,
+      poolInfo.category,
+      poolInfo.chainId,
+      poolInfo.enableWhiteList,
+      poolInfo.poolId,
+      poolInfo.token1.symbol
+    ]
+  )
+
+  const bidCallback = useCallback(
+    () => (poolInfo.whitelistData.isPermit ? _bidPermitCallback : _bidCallback),
+    [_bidCallback, _bidPermitCallback, poolInfo.whitelistData.isPermit]
+  )
+
+  return { bidCallback, submitted }
 }
