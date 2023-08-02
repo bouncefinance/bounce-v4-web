@@ -1,16 +1,8 @@
 import { getConnection } from 'connection'
 import { ConnectionType } from 'connection/types'
+import { SELECTABLE_ENABLE_WALLETS } from '../constants'
 import { useMemo } from 'react'
 // import { useAppSelector } from 'state/hooks'
-
-const SELECTABLE_ENABLE_WALLETS: ConnectionType[] = [
-  ConnectionType.INJECTED,
-  ConnectionType.WALLET_CONNECT_V2,
-  ConnectionType.UNISWAP_WALLET_V2,
-  ConnectionType.OKX_WALLET,
-  ConnectionType.GNOSIS_SAFE,
-  ConnectionType.COINBASE_WALLET
-]
 
 export default function useOrderedConnections() {
   // const selectedWallet = useAppSelector(state => state.userWallet.selectedWallet)
