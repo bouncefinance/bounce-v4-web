@@ -28,6 +28,7 @@ interface FormValues {
 
 const MutantEnglish721ParametersForm = (): JSX.Element => {
   const valuesState = useValuesState()
+  console.log('🚀 ~ file: index.tsx:31 ~ MutantEnglish721ParametersForm ~ valuesState:', valuesState)
   const valuesDispatch = useValuesDispatch()
   const auctionChainId = useAuctionInChain()
   const { account } = useActiveWeb3React()

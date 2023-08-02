@@ -28,6 +28,7 @@ import { useMutantEnglishAuctionNftContract } from 'hooks/useContract'
 import { useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import getTokenType from 'utils/getTokenType'
 import { useIsUserInAllWhitelist } from 'bounceHooks/auction/useIsUserInWhitelist'
+import BigNumber from 'bignumber.js'
 
 interface Params {
   amountTotal0: number
@@ -68,8 +69,9 @@ export function useCreateMutantEnglishAuctionPool() {
   }> => {
     const endTime = (Number(values?.closeHour) || 0) * 3600 + (Number(values?.closeMinute) || 0) * 60
     const claimDelay = values.shouldDelayUnlocking
-      ? (Number(values?.closeHour) || 0) * 3600 + (Number(values?.closeMinute) || 0) * 60
+      ? (Number(values?.delayUnlockingHour) || 0) * 3600 + (Number(values?.delayUnlockingMinute) || 0) * 60
       : 0
+
     const params: Params = {
       amountTotal0: values.nft721TokenFrom.length,
       priceFloor: values.priceFloor || '',
@@ -103,13 +105,20 @@ export function useCreateMutantEnglishAuctionPool() {
     if (!currencyTo) {
       return Promise.reject('currencyTo error')
     }
+
     const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.priceFloor)
-    const amountEach = CurrencyAmount.fromAmount(currencyTo, params.amountMinIncr1)
+    const amountEach = params.amountMinIncr1 ? BigNumber(BigNumber(params.amountMinIncr1).div(100)).times(1e18) : 0
+    const creatorRatioAmount = values.creatorRatio ? BigNumber(BigNumber(values.creatorRatio).div(100)).times(1e18) : 0
+    const prevBidderRatioAmount = values.prevBidderRatio
+      ? BigNumber(BigNumber(values.prevBidderRatio).div(100)).times(1e18)
+      : 0
+    const lastBidderRatioAmount = values.lastBidderRatio
+      ? BigNumber(BigNumber(values.lastBidderRatio).div(100)).times(1e18)
+      : 0
 
     if (ownerIds.length !== values.nft721TokenFrom.length) {
       return Promise.reject('NFT owner error')
     }
-
     if (!amountTotal1 || !amountEach) {
       return Promise.reject('amountTotal1 or amountEach error')
     }
@@ -153,17 +162,21 @@ export function useCreateMutantEnglishAuctionPool() {
       token1: params.tokenToAddress,
       tokenId: '',
       tokenIds: params.tokenIds,
-      amountMinIncr1: amountEach.raw.toString()
+      amountMinIncr1: amountEach.toString()
     }
 
     const {
       data: { id, expiredTime, signature }
     } = await getPoolCreationSignature(signatureParams)
-    const distributeRatio: any = []
+    const distributeRatio = {
+      prevBidderRatio: prevBidderRatioAmount.toString(),
+      lastBidderRatio: lastBidderRatioAmount.toString()
+    }
+
     const distributes = [
       {
         target: account,
-        ratio: 1e18
+        ratio: creatorRatioAmount.toString()
       }
     ]
 
@@ -212,29 +225,7 @@ export function useCreateMutantEnglishAuctionPool() {
           })
         }
       })
-  }, [
-    account,
-    addTransaction,
-    chainConfigInBackend?.id,
-    currencyTo,
-    mutantEnglishContract,
-    ownerIds.length,
-    values.amountMinIncr1,
-    values?.closeHour,
-    values?.closeMinute,
-    values.delayUnlockingTime,
-    values.endTime,
-    values.nft721TokenFrom,
-    values.participantStatus,
-    values.poolName,
-    values.priceFloor,
-    values.releaseDataArr,
-    values.releaseType,
-    values.shouldDelayUnlocking,
-    values.startTime,
-    values.tokenTo.address,
-    values.whitelist
-  ])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyTo, mutantEnglishContract, ownerIds.length, values])
 }
 
 function useMutantEnglishAccountBids(backedChainId?: number, poolId?: string) {

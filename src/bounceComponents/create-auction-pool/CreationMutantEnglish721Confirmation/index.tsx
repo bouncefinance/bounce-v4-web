@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
-import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
@@ -46,9 +46,11 @@ const CreatePoolButton = () => {
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
   const [approvalState, approveCallback] = useNFTApproveAllCallback(
-    values.nft721TokenFrom[0].contractAddr,
-    chainId === auctionInChainId ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
+    values.nft721TokenFrom?.[0].contractAddr,
+    chainId === auctionInChainId ? MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
   )
+
+  console.log('state', values.nft721TokenFrom[0].contractAddr, values.nft721TokenFrom?.[0].contractAddr)
 
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
@@ -359,33 +361,33 @@ const CreationMutantEnglish721Confirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                {values.auctionType === AuctionType.MUTANT_ENGLISH ? (
-                  <ConfirmationInfoItem title="Pool start time">
-                    <Typography>From {values.startTime?.format('MM.DD.Y HH:mm')}</Typography>
-                  </ConfirmationInfoItem>
-                ) : (
-                  <ConfirmationInfoItem title="Pool duration">
-                    <Typography>
-                      From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
-                    </Typography>
-                  </ConfirmationInfoItem>
-                )}
+                <ConfirmationInfoItem title="Creator distribution ratio">
+                  <Typography>{values.creatorRatio}%</Typography>
+                </ConfirmationInfoItem>
 
-                {values.auctionType === AuctionType.MUTANT_ENGLISH && (
-                  <ConfirmationInfoItem title="Delay close time">
-                    <Typography>
-                      {values.closeHour || '-'} Hour {values.closeMinute || '-'} Minute
-                    </Typography>
-                  </ConfirmationInfoItem>
-                )}
+                <ConfirmationInfoItem title="Prev bidder distribution ratio">
+                  <Typography>{values.prevBidderRatio}%</Typography>
+                </ConfirmationInfoItem>
 
-                {values.auctionType === AuctionType.MUTANT_ENGLISH && (
-                  <ConfirmationInfoItem title="Delay claim time">
-                    <Typography>
-                      {values.delayUnlockingHour || '-'} Hour {values.delayUnlockingMinute || '-'} Minute
-                    </Typography>
-                  </ConfirmationInfoItem>
-                )}
+                <ConfirmationInfoItem title="Last bidder distribution ratio">
+                  <Typography>{values.lastBidderRatio}%</Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Pool start time">
+                  <Typography>From {values.startTime?.format('MM.DD.Y HH:mm')}</Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Delay close time">
+                  <Typography>
+                    {values.closeHour || '-'} Hour {values.closeMinute || '-'} Minute
+                  </Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Delay claim time">
+                  <Typography>
+                    {values.delayUnlockingHour || '-'} Hour {values.delayUnlockingMinute || '-'} Minute
+                  </Typography>
+                </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Participant">
                   <Typography>

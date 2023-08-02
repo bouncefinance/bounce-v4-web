@@ -116,6 +116,8 @@ const initialValues: AuctionPool = {
   endTime: null,
   closeHour: '',
   closeMinute: '',
+  claimHour: '',
+  claimMinute: '',
   shouldDelayUnlocking: false,
   delayUnlockingTime: null,
   releaseType: IReleaseType.Cliff,
@@ -222,6 +224,8 @@ type Payload = {
     releaseDataArr: IReleaseData[]
     closeHour?: string
     closeMinute?: string
+    claimHour?: string
+    claimMinute?: string
     delayUnlockingHour?: string
     delayUnlockingMinute?: string
     creatorRatio?: string
@@ -345,6 +349,8 @@ const reducer = (state: AuctionPool, action: Actions) => {
         shouldDelayUnlocking: action.payload.shouldDelayUnlocking,
         closeHour: action.payload.closeHour,
         closeMinute: action.payload.closeMinute,
+        claimHour: action.payload.claimHour,
+        claimMinute: action.payload.claimMinute,
         delayUnlockingHour: action.payload.delayUnlockingHour,
         delayUnlockingMinute: action.payload.delayUnlockingMinute,
         creatorRatio: action.payload.creatorRatio,

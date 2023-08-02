@@ -31,7 +31,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
 import AuctionNotification from '../AuctionNotification'
-import { MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
 const CreatePoolButton = () => {
@@ -48,7 +48,7 @@ const CreatePoolButton = () => {
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
   const [approvalState, approveCallback] = useNFTApproveAllCallback(
     values.nft721TokenFrom[0].contractAddr,
-    chainId === auctionInChainId ? MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
+    chainId === auctionInChainId ? ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
   )
 
   const toCreate = useCallback(async () => {

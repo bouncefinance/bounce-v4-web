@@ -30,6 +30,7 @@ import { useMemo } from 'react'
 import { useQueryParams } from 'hooks/useQueryParams'
 import useBreakpoint from 'hooks/useBreakpoint'
 import NumberInput from 'bounceComponents/common/NumberInput'
+import BigNumber from 'bignumber.js'
 
 interface MyFormValues {
   poolName: string
@@ -95,7 +96,36 @@ export const MutantEnglishSettingsForm = ({
       }),
     delayUnlockingHour: Yup.string().nullable(true).matches(/^\d+$/, 'Invalid time'),
     delayUnlockingMinute: Yup.string().nullable(true).matches(/^\d+$/, 'Invalid time'),
-    creatorRatio: Yup.string(),
+    creatorRatio: Yup.mixed()
+      .required('Creator ratio required')
+      .test('DIGITS_LESS_THAN_2', 'Should be no more than 2 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 2
+      })
+      .test('is-less-than-or-equal-100', 'The three input values must be equal to 100', (value, { parent }) => {
+        const { prevBidderRatio, lastBidderRatio } = parent
+        return Number(value) + Number(prevBidderRatio) + Number(lastBidderRatio) === 100
+      }),
+    prevBidderRatio: Yup.mixed()
+      .required('Previous bidder ratio required')
+      .test('DIGITS_LESS_THAN_2', 'Should be no more than 2 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 2
+      })
+      .test('is-less-than-or-equal-100', 'The three input values must be equal to 100', (value, { parent }) => {
+        const { creatorRatio, lastBidderRatio } = parent
+        return Number(value) + Number(creatorRatio) + Number(lastBidderRatio) === 100
+      }),
+    lastBidderRatio: Yup.mixed()
+      .required('Last bidder ratio required')
+      .test('DIGITS_LESS_THAN_2', 'Should be no more than 2 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 2
+      })
+      .test('is-less-than-or-equal-100', 'The three input values must be equal to 100', (value, { parent }) => {
+        const { creatorRatio, prevBidderRatio } = parent
+        return Number(value) + Number(creatorRatio) + Number(prevBidderRatio) === 100
+      }),
     whitelist: Yup.array()
       .of(Yup.string())
       .test(
