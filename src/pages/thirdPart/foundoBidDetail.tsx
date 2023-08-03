@@ -107,8 +107,9 @@ const FoundoBidDetail = () => {
       value: '40.5 cm'
     }
   ]
-  const { data: poolInfo } = useMutantEnglishAuctionPool()
-
+  const { data: poolInfo } = useMutantEnglishAuctionPool(20346)
+  console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
+  if (!poolInfo) return <></>
   return (
     <Box
       sx={{
@@ -120,7 +121,7 @@ const FoundoBidDetail = () => {
     >
       <Header />
       <PcBanner />
-      <BidSection />
+      <BidSection poolInfo={poolInfo} />
       <NewTabs value={tabIndex} onChange={handleChange}>
         {tabList.map((item: any) => (
           <Tab label={item.label} key={item.label}></Tab>
@@ -269,6 +270,7 @@ const FoundoBidDetail = () => {
                   width: '100%',
                   display: 'flex',
                   flexFlow: 'row nowrap',
+                  alignItems: 'center',
                   justifyContent: 'flex-start',
                   marginTop: isSm ? '8px' : '0'
                 }}

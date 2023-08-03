@@ -335,6 +335,21 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
       {/* reward content */}
       {poolStatus === PoolStatus.Live && poolInfo && <RewardPanel poolInfo={poolInfo} />}
       {/* closed and win tips */}
+      {poolStatus === PoolStatus.Closed && poolInfo && (
+        <RowLabel
+          style={{
+            padding: '40px 0 48px',
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
+          }}
+        >
+          <Typography className="value" style={{ fontSize: 16 }}>
+            Final Bid Price
+          </Typography>
+          <Typography className="value" style={{ fontSize: 28 }}>
+            {poolInfo?.currentBidderAmount?.toSignificant() || '--'} {poolInfo?.currentBidderAmount?.currency.symbol}
+          </Typography>
+        </RowLabel>
+      )}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
       {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
     </Box>
@@ -552,7 +567,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
           winnerImg={undefined}
           leftText="You are the highest bidder!"
           tokenImg={poolInfo.token1.smallUrl || ''}
-          tokenText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
+          tokenText={`${poolInfo.extraAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
         />
       ) : isOutBid ? (
         <Box
@@ -580,7 +595,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               TokenLogo={poolInfo.token1.smallUrl || ''}
               symbol={poolInfo.token1.symbol}
               Amount={poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || ''}
-            ></RewardBox>
+            />
             <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
             <RewardBox
               icon={Icon1}
@@ -588,7 +603,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               TokenLogo={bidPrevGasFee?.currency.logo || ''}
               symbol={bidPrevGasFee?.currency.symbol || ''}
               Amount={bidPrevGasFee?.toSignificant() || ''}
-            ></RewardBox>
+            />
           </Stack>
           <Typography
             ml={12}
@@ -722,6 +737,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
   const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
+  const { bidPrevGasFee } = useMutantEnglishBidCallback(poolInfo)
 
   const isWinner = useMemo(
     () => account && poolInfo.currentBidder?.toString() === account?.toString(),
@@ -797,7 +813,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         winnerImg={WinTips}
         leftText="Congratulations! You win the auction and get rewarded"
         tokenImg={poolInfo.token1.smallUrl || ''}
-        tokenText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
+        tokenText={`${poolInfo.distributeRewards.lastBidderRewards?.toSignificant()} ${poolInfo.token1.symbol}`}
       />
       <PlaceBidBtn
         onClick={() =>
@@ -844,12 +860,36 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       )}
     </Stack>
   ) : isOutBid ? (
-    <Box>
+    <Box sx={{ backgroundColor: '#20201e' }} padding={32}>
       <Typography sx={{ fontSize: 16, fontFamily: 'Inter', color: '#fff' }}>
-        {`You didn't succeed in the auction and your money is returned to your wallet with gas compensation.(Your Bid Amount: ${
+        {`You didn't succeed in the auction and your tokens are returned to your wallet with gas compensation.(Your Bid Amount: ${
           poolInfo.participant.accountBidAmount?.toSignificant() || '-'
         } ${poolInfo.token1.symbol})`}
       </Typography>
+      <Stack
+        width={'100%'}
+        direction={'row'}
+        justifyContent={'space-between'}
+        alignItems={'center'}
+        mt={48}
+        gridTemplateColumns={'1fr 1px 1fr'}
+      >
+        <RewardBox
+          icon={Icon0}
+          text="This round of bidding rewards"
+          TokenLogo={poolInfo.token1.smallUrl || ''}
+          symbol={poolInfo.token1.symbol}
+          Amount={poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || ''}
+        />
+        <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
+        <RewardBox
+          icon={Icon1}
+          text="Return bid amount and gas fee"
+          TokenLogo={bidPrevGasFee?.currency.logo || ''}
+          symbol={bidPrevGasFee?.currency.symbol || ''}
+          Amount={bidPrevGasFee?.toSignificant() || ''}
+        />
+      </Stack>
     </Box>
   ) : null
 }
@@ -927,15 +967,15 @@ function BidResultAlert({
           <img
             style={{
               display: 'inline-block',
-              width: '20px',
-              height: '20px',
-              marginRight: '8px'
+              width: '64px',
+              height: '64px'
             }}
             src={winnerImg}
             alt=""
             srcSet=""
           />
         )}
+        <WhiteText>{leftText}</WhiteText>
         {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
       </Box>
       {!isClose && (

@@ -5,7 +5,7 @@ import { useIsSMDown } from 'themes/useTheme'
 
 const PoolBaseInfo = () => {
   const isSm = useIsSMDown()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(20339)
+  const { data: poolInfo } = useMutantEnglishAuctionPool(20342)
   console.log('🚀 ~ file: poolBaseInfo.tsx:8 ~ PoolBaseInfo ~ poolInfo:', poolInfo)
   return (
     <Box

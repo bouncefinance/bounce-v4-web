@@ -17,6 +17,7 @@ export default function PriceChartView({
   showText?: boolean
 }) {
   const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category, '', ['Bid'])
+  console.log('🚀 ~ file: PriceChartView.tsx:20 ~ data:', data)
 
   const chatData:
     | {

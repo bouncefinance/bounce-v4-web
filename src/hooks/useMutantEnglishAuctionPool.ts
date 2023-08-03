@@ -288,6 +288,15 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
   ).result
   const creatorClaimed = useMemo(() => creatorClaimedRes?.[0], [creatorClaimedRes])
 
+  const firstBidderAmountRes = useSingleCallResult(
+    mutantEnglishContract,
+    'firstBidderAmount1',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const firstBidderAmount = useMemo(() => firstBidderAmountRes?.[0], [firstBidderAmountRes])
+
   const currentBidderRes = useSingleCallResult(
     mutantEnglishContract,
     'currentBidder',
@@ -415,6 +424,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
       extraAmount1: _extraAmount1,
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
       currentBidder: currentBidder,
+      firstBidderAmount: firstBidderAmount ? CurrencyAmount.fromRawAmount(t1, firstBidderAmount) : undefined,
       currentBidderAmount1: currentBidderAmount1 ? CurrencyAmount.fromRawAmount(t1, currentBidderAmount1) : undefined,
       currentBidderAmount: currentBidderAmount ? CurrencyAmount.fromRawAmount(t1, currentBidderAmount) : undefined,
       gasFee: gasFee
@@ -443,6 +453,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     accountBidRawAmount,
     creatorClaimed,
     currentBidder,
+    firstBidderAmount,
     currentBidderAmount1,
     currentBidderAmount,
     gasFee,

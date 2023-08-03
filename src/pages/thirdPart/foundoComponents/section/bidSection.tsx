@@ -5,14 +5,11 @@ import UserBidAction from '../snippet/userBidAuction'
 import CreatorBidAction from '../snippet/creatorBidAuction'
 import { useIsSMDown } from 'themes/useTheme'
 import { useActiveWeb3React } from 'hooks'
-import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
+import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 
-const BidSection = () => {
+const BidSection = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
   const { account } = useActiveWeb3React()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(20342)
-  console.log('🚀 ~ file: bidSection.tsx:14 ~ BidSection ~ poolInfo:', poolInfo)
-  if (!poolInfo) return <></>
   return (
     <Box
       style={{

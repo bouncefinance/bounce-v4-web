@@ -370,6 +370,7 @@ export interface MutantEnglishAuctionNFTPoolProp
   extends Omit<EnglishAuctionNFTPoolProp, 'currencyAmountMinIncr1' | 'currentBidderMinAmount'> {
   amountMinIncrRatio1: CurrencyAmount | undefined
   currentBidderAmount: CurrencyAmount | undefined
+  firstBidderAmount: CurrencyAmount | undefined
   extraAmount1: CurrencyAmount | undefined
   closeIncrInterval: number | undefined
   claimDelay: number | undefined
