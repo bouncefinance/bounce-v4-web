@@ -177,6 +177,8 @@ const ShopList = () => {
           typeSpeed={100}
           cursorColor={'transparent'}
           textStyle={{
+            width: '100%',
+            textAlign: 'center',
             fontFamily: `'Public Sans'`,
             position: 'absolute',
             fontSize: isMd ? 22 : 36,
@@ -317,6 +319,8 @@ const ShopList = () => {
           hideCursorAfterText={true}
           typeSpeed={100}
           textStyle={{
+            width: '100%',
+            textAlign: 'center',
             fontFamily: `'Public Sans'`,
             position: 'absolute',
             fontSize: isMd ? 22 : 36,

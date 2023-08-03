@@ -134,7 +134,7 @@ function ArrowBanner() {
       alignItems={'center'}
       sx={{
         maxWidth: '100%',
-        width: '100%',
+        width: isSm ? 'calc(100% - 32px)' : '100%',
         minHeight: isSm ? 125 : 460,
         margin: '16px auto 0',
         '@media(max-width:1296px)': {
@@ -340,7 +340,6 @@ export function Banner({ banner }: { banner: BannerType }) {
       <Button
         variant="contained"
         href={banner.url}
-        target={'_blank'}
         sx={{
           position: 'absolute',
           bottom: isSm ? '40px' : '80px',
