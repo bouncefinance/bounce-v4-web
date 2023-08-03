@@ -11,7 +11,6 @@ const PoolBaseInfo = () => {
     <Box
       sx={{
         width: isSm ? '100%' : '458px',
-        borderRight: '1px solid rgba(255, 255, 255, 0.20)',
         padding: '120px 63px 120px 0',
         marginBottom: isSm ? '43px' : '0'
       }}

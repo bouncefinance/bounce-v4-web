@@ -2,6 +2,8 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { useState, useMemo, useCallback } from 'react'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
+import Icon0 from 'assets/imgs/auction/icon0.png'
+import Icon1 from 'assets/imgs/auction/icon1.png'
 import { PlaceBidBtn } from './bidDialog'
 import ShippingDialog from './shippingInfoDialog'
 import { useCountDown } from 'ahooks'
@@ -21,7 +23,7 @@ import { show } from '@ebay/nice-modal-react'
 import { getCurrentTimeStamp } from 'utils'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
-import { useMutantEnglishAuctionPool, useMutantEnglishBidCallback } from 'hooks/useMutantEnglishAuctionPool'
+import { useMutantEnglishBidCallback } from 'hooks/useMutantEnglishAuctionPool'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../../constants'
 import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
@@ -30,6 +32,7 @@ import { Dots } from 'themes'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import BigNumber from 'bignumber.js'
+import RewardPanel from './rewardPanel'
 
 export enum BidType {
   'dataView' = 0,
@@ -39,6 +42,17 @@ interface DataViewParam {
   priceFloor: number | string
   increase: string
 }
+const WhiteText = styled(Typography)(({ theme }) => ({
+  width: 'auto',
+  fontFamily: `'Inter'`,
+  color: '#fff',
+  fontSize: '16px',
+  margin: '20px auto',
+  [theme.breakpoints.down('sm')]: {
+    width: 145
+  }
+}))
+
 export const RowLabel = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexFlow: 'row nowrap',
@@ -79,7 +93,7 @@ const CounterText = styled(Typography)(({ theme }) => ({
   }
 }))
 
-function DataView(props: DataViewParam) {
+export function DataView(props: DataViewParam) {
   const { priceFloor, increase } = props
   return (
     <Stack
@@ -88,6 +102,10 @@ function DataView(props: DataViewParam) {
         padding: '48px 0 24px'
       }}
     >
+      <Typography fontSize={28} color={'#fff'}>
+        {' '}
+        About This Auction
+      </Typography>
       <RowLabel>
         <Typography className="label">Auction Type</Typography>
         <Typography className="value">Mutant English Auction</Typography>
@@ -114,8 +132,8 @@ const LiveStr = styled(Typography)(({ theme }) => ({
     fontSize: 20
   }
 }))
-const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
-  const { OpenAt, text } = props
+const UpcomingStatus = (props: { OpenAt: string | number; text?: string; style?: React.CSSProperties }) => {
+  const { OpenAt, text, style } = props
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: Number(OpenAt) * 1000
   })
@@ -123,7 +141,8 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
     <Box
       sx={{
         position: 'relative',
-        display: 'flex'
+        display: 'flex',
+        ...style
       }}
       gap={'8px'}
     >
@@ -145,9 +164,57 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
   )
 }
 
-const BidAction = () => {
+function RewardBox({
+  icon,
+  text,
+  TokenLogo,
+  symbol,
+  Amount
+}: {
+  icon: string
+  text: string
+  TokenLogo: string
+  symbol: string
+  Amount: string
+}) {
+  return (
+    <Stack direction={'row'} alignItems={'center'} spacing={16}>
+      <img
+        src={icon}
+        style={{
+          width: '48px',
+          height: '48px',
+          marginRight: '10px'
+        }}
+        alt=""
+        srcSet=""
+      />
+      <Box>
+        <Typography fontSize={14} lineHeight={'150%'} color={'#D7D6D9'}>
+          {text}
+        </Typography>
+        <Stack direction={'row'} alignItems={'center'}>
+          <TokenImage
+            size={20}
+            style={{
+              display: 'inline-block',
+              marginRight: '8px'
+            }}
+            src={TokenLogo}
+            alt=""
+            srcSet=""
+          />
+          <Typography style={{ fontSize: 16, color: '#E1F25C' }}>
+            {Amount || '--'} {symbol}
+          </Typography>
+        </Stack>
+      </Box>
+    </Stack>
+  )
+}
+
+const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(20340)
   const OpenAt = useMemo(() => poolInfo?.openAt || 0, [poolInfo?.openAt])
   const poolStatus = useMemo(() => poolInfo?.status, [poolInfo?.status])
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -158,10 +225,10 @@ const BidAction = () => {
       sx={{
         width: isSm ? '100%' : '640px',
         margin: 'auto',
+        borderLeft: '1px solid rgba(255, 255, 255, 0.20)',
         padding: '120px 0 120px 63px'
       }}
     >
-      {/* Pool Status */}
       <Box
         sx={{
           display: 'flex',
@@ -184,7 +251,6 @@ const BidAction = () => {
             Closed
           </Typography>
         )}
-        {poolStatus === PoolStatus.Live && <UpcomingStatus text="Live" OpenAt={poolInfo?.closeAt || 0} />}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
           <Typography color={'#fff'}>Finish</Typography>
         )}
@@ -224,35 +290,50 @@ const BidAction = () => {
         </PlaceBidBtn>
       )}
       {poolStatus === PoolStatus.Live && (
-        <RowLabel
-          style={{
-            padding: '24px 0 32px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.2)'
-          }}
-        >
-          <Typography className="label">Current Highest Bid</Typography>
+        <>
           <RowLabel
             style={{
-              justifyContent: 'flex-end'
+              padding: '24px 0 20px',
+              borderTop: '1px solid rgba(255, 255, 255, 0.2)'
             }}
           >
-            <TokenImage
-              size={20}
+            <Typography className="label">Current Highest Bid</Typography>
+            <RowLabel
               style={{
-                display: 'inline-block',
-                marginRight: '8px'
+                justifyContent: 'flex-end'
               }}
-              src={poolInfo?.token1.smallUrl}
-              alt=""
-              srcSet=""
-            />
-            <Typography className="value" style={{ fontSize: 28 }}>
-              {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
-              {poolInfo?.currentBidderAmount1?.currency.symbol}
-            </Typography>
+            >
+              <TokenImage
+                size={20}
+                style={{
+                  display: 'inline-block',
+                  marginRight: '8px'
+                }}
+                src={poolInfo?.token1.smallUrl}
+                alt=""
+                srcSet=""
+              />
+              <Typography className="value" style={{ fontSize: 28 }}>
+                {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
+                {poolInfo?.currentBidderAmount1?.currency.symbol}
+              </Typography>
+            </RowLabel>
           </RowLabel>
-        </RowLabel>
+          <Typography fontSize={12} fontFamily={'Inter'} color={'#959595'}>
+            (The previous bidder receive after the next bidder place a bid.)
+          </Typography>
+        </>
       )}
+      {poolStatus === PoolStatus.Live && (
+        <UpcomingStatus text="Time Left" OpenAt={poolInfo?.closeAt || 0} style={{ marginTop: 80 }} />
+      )}
+      {poolStatus === PoolStatus.Live && (
+        <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
+          The auction is successful if there is no player with a higher bid after the countdown ends
+        </Typography>
+      )}
+      {/* reward content */}
+      {poolStatus === PoolStatus.Live && poolInfo && <RewardPanel poolInfo={poolInfo} />}
       {/* closed and win tips */}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
       {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
@@ -261,11 +342,11 @@ const BidAction = () => {
 }
 export default BidAction
 
-function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
+export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
+  console.log('🚀 ~ file: userBidAuction.tsx:284 ~ LiveSection ~ poolInfo:', poolInfo)
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
-  console.log('poolInfo', poolInfo)
   const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
   const token1Balance = useCurrencyBalance(account || undefined, poolInfo?.currentBidderAmount?.currency)
   const { bidCallback, submitted: placeBidSubmitted, bidPrevGasFee } = useMutantEnglishBidCallback(poolInfo)
@@ -467,46 +548,121 @@ function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }
     <>
       {isWinner ? (
         <BidResultAlert
-          leftImg=""
+          isClose={false}
+          winnerImg={undefined}
           leftText="You are the highest bidder!"
-          rightImg={poolInfo.token1.smallUrl}
-          rightText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
+          tokenImg={poolInfo.token1.smallUrl || ''}
+          tokenText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
         />
       ) : isOutBid ? (
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            padding: '12px 16px',
-            background: 'rgba(255, 255, 255, 0.2)',
-            mb: 32
+            flexDirection: 'column',
+            padding: '32px',
+            background: '#20201E',
+            borderRadius: '8px',
+            mb: 32,
+            mt: 48
           }}
         >
-          <svg width="24" height="22" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M10.9885 0.797839C11.4387 -0.000319883 12.5613 -0.000321895 13.0115 0.797837L23.841 19.9984C24.2921 20.7982 23.7298 21.7992 22.8295 21.7992H1.17054C0.270181 21.7992 -0.292074 20.7982 0.159036 19.9984L10.9885 0.797839Z"
-              fill="white"
-            />
-            <path d="M10.6758 16.2705V18.9262H13.3134V16.2705H10.6758Z" fill="black" />
-            <path d="M13.3158 6.60938V14.7698H10.6758V6.60938H13.3158Z" fill="black" />
-          </svg>
+          <Stack
+            width={'100%'}
+            direction={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+            gridTemplateColumns={'1fr 1px 1fr'}
+          >
+            <RewardBox
+              icon={Icon0}
+              text="This round of bidding rewards"
+              TokenLogo={poolInfo.token1.smallUrl || ''}
+              symbol={poolInfo.token1.symbol}
+              Amount={poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || ''}
+            ></RewardBox>
+            <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
+            <RewardBox
+              icon={Icon1}
+              text="Return bid amount and gas fee"
+              TokenLogo={bidPrevGasFee?.currency.logo || ''}
+              symbol={bidPrevGasFee?.currency.symbol || ''}
+              Amount={bidPrevGasFee?.toSignificant() || ''}
+            ></RewardBox>
+          </Stack>
           <Typography
             ml={12}
+            mt={48}
             sx={{
               fontFamily: 'Inter',
-              fontSize: 13,
+              fontSize: 16,
+              lineHeight: '150%',
               color: '#D7D6D9'
             }}
           >
             Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
             Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
           </Typography>
+          <Box sx={{ marginBottom: '-48px' }}>
+            {approveContent && !isInsufficientBalance?.disabled ? (
+              approveContent
+            ) : (
+              <Stack>
+                <PlaceBidBtn
+                  disabled={isInsufficientBalance?.disabled === true}
+                  loading={placeBidSubmitted.submitted}
+                  onClick={toBid}
+                  loadingPosition="start"
+                  variant="contained"
+                  fullWidth
+                >
+                  <img
+                    src={BidIcon}
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                      marginRight: '10px'
+                    }}
+                    alt=""
+                    srcSet=""
+                  />
+                  <Typography
+                    sx={{
+                      fontFamily: `'Public Sans'`,
+                      fontStyle: 'italic',
+                      fontWeight: 100,
+                      fontSize: { xs: 18, md: 20 },
+                      color: 'var(--ps-text-5)'
+                    }}
+                  >
+                    Place Another Bid
+                  </Typography>
+                </PlaceBidBtn>
+                <PoolInfoItem
+                  title="You will pay"
+                  tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
+                    bidPrevGasFee?.currency.symbol
+                  }) cost of the previous participant`}
+                >
+                  <Typography color={'#fff'} mt={10}>
+                    {bidPrevGasFee &&
+                    poolInfo.currentBidderAmount &&
+                    bidPrevGasFee.currency.equals(poolInfo.currentBidderAmount.currency)
+                      ? `${bidPrevGasFee.add(poolInfo.currentBidderAmount).toSignificant()} ${poolInfo.token1.symbol}`
+                      : `(${bidPrevGasFee?.toSignificant() || '-'} ${bidPrevGasFee?.currency.symbol}) + (
+            ${poolInfo.currentBidderAmount?.toSignificant() || '-'} ${poolInfo.token1.symbol})`}
+                  </Typography>
+                </PoolInfoItem>
+              </Stack>
+            )}
+            {isInsufficientBalance?.children}
+          </Box>
         </Box>
       ) : null}
       <Box>
-        {approveContent && !isInsufficientBalance?.disabled ? (
+        {!poolInfo.participant.accountBidAmount && approveContent && !isInsufficientBalance?.disabled ? (
           approveContent
-        ) : (
+        ) : !poolInfo.participant.accountBidAmount ? (
           <Stack>
             <PlaceBidBtn
               disabled={isInsufficientBalance?.disabled === true}
@@ -554,7 +710,7 @@ function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }
               </Typography>
             </PoolInfoItem>
           </Stack>
-        )}
+        ) : null}
         {isInsufficientBalance?.children}
       </Box>
     </>
@@ -637,10 +793,11 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   return isWinner ? (
     <Stack>
       <BidResultAlert
-        leftImg={WinTips}
-        leftText="Congratulations! You win the auction"
-        rightImg={poolInfo.token1.smallUrl}
-        rightText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
+        isClose={true}
+        winnerImg={WinTips}
+        leftText="Congratulations! You win the auction and get rewarded"
+        tokenImg={poolInfo.token1.smallUrl || ''}
+        tokenText={`${poolInfo.currentBidderAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
       />
       <PlaceBidBtn
         onClick={() =>
@@ -698,15 +855,17 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
 }
 
 function BidResultAlert({
-  leftImg,
-  rightImg,
+  isClose,
+  winnerImg,
+  tokenImg,
   leftText,
-  rightText
+  tokenText
 }: {
-  leftImg: string | undefined
-  rightImg: string | undefined
+  isClose: boolean
+  winnerImg: string | undefined
+  tokenImg: string | undefined
   leftText: string
-  rightText: string
+  tokenText: string
 }) {
   const isSm = useIsSMDown()
 
@@ -714,49 +873,77 @@ function BidResultAlert({
     <Box
       sx={{
         width: '100%',
-        height: '60px',
+        minHeight: '60px',
+        height: 'auto',
         display: 'flex',
-        flexFlow: 'row nowrap',
-        justifyContent: 'space-between',
+        flexFlow: 'column nowrap',
+        justifyContent: 'center',
         alignItems: 'center',
-        background: '#E1F25C',
-        padding: '0 16px'
+        background: '#20201e',
+        padding: '40px 16px 32px'
       }}
-      mb={'32px'}
+      mt={48}
+      mb={32}
     >
       <Box
         sx={{
           display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'space-between',
+          flexFlow: 'column nowrap',
+          justifyContent: 'center',
           alignItems: 'center'
         }}
       >
-        <img
-          src={leftImg || WinTips}
-          style={{
-            width: '24px',
-            height: '24px',
-            marginRight: isSm ? '16px' : '0'
-          }}
-          alt=""
-        />
-        <Typography
-          sx={{
-            width: isSm ? '149px' : 'auto',
-            fontFamily: `'Inter'`,
-            color: 'var(--ps-text-3)',
-            fontSize: '13px'
-          }}
-        >
-          {leftText}
-        </Typography>
+        {!isClose && (
+          <>
+            <WhiteText>{leftText}</WhiteText>
+            <svg xmlns="http://www.w3.org/2000/svg" width="65" height="65" viewBox="0 0 65 65" fill="none">
+              <g clipPath="url(#clip0_907_94573)">
+                <path
+                  d="M60.2865 29.9489L60.123 32.8076L60.0501 34.2547C60.0145 34.7258 59.8865 35.1951 59.7976 35.6662L59.291 38.5071C59.019 39.4298 58.7114 40.3347 58.4038 41.2573C57.083 44.8573 55.2198 48.42 52.6332 51.3871C50.0533 54.402 47.0566 57.0335 43.7336 59.2022C40.3505 61.3729 36.859 63.0547 32.843 64.2849L32.1585 64.5L31.3994 64.2476C28.6865 63.3604 26.4252 62.2938 24.1087 60.9907C21.8474 59.7071 19.659 58.26 17.6874 56.5036L16.203 55.2022L14.8092 53.7907C13.8687 52.868 13.0545 51.8191 12.2225 50.788C10.6161 48.6763 9.24507 46.3955 8.13362 43.9862C7.0474 41.5809 6.16207 39.0653 5.63762 36.4964C5.5114 35.8458 5.31229 35.2129 5.2394 34.5604L5.00474 32.6244C4.87851 31.3213 4.66162 30.0733 4.73274 28.5729C4.84118 25.6964 5.72829 22.9284 7.06696 20.5587C8.41123 18.2373 10.1215 16.1481 12.1318 14.372L18.283 8.94444L15.3158 16.3649C14.3025 18.916 13.8136 21.9364 14.9727 23.8351C15.5327 24.7756 16.5461 25.2822 17.7941 25.3C19.0972 25.3 20.4163 24.9391 21.1221 24.0698C21.8456 23.22 21.9007 21.8813 21.4474 20.596C20.8678 19.2573 20.3256 17.4493 20.3985 15.8031C20.3985 14.1213 20.8874 12.4378 21.7372 10.9729C22.6047 9.508 23.8527 8.31333 25.2643 7.428L27.0918 6.28844L26.5852 8.404C26.0607 10.5747 26.4412 12.8538 27.8883 14.2476C29.3176 15.6413 31.579 16.1284 33.4047 15.6591C35.2323 15.1702 36.4625 13.6876 36.5336 12.0591C36.6776 10.3773 35.7923 8.47689 34.6527 6.72222L30.603 0.5L37.5132 3.39422C39.4492 4.19067 41.3656 5.09378 43.1754 6.36133C44.9656 7.62711 46.7381 9.22 47.9505 11.3178C49.2163 13.38 49.7407 15.9116 49.6874 18.1373C49.6874 18.6973 49.6518 19.2413 49.6145 19.7836C49.5416 20.3258 49.5238 20.7613 49.3976 21.4476C49.1807 22.66 48.8554 23.5631 48.5834 24.4858C48.0234 26.2582 47.6607 28.0858 48.059 29.044C48.2936 29.9489 50.3558 30.6547 51.8758 30.4556C53.5043 30.292 55.0225 29.1524 56.091 27.652C57.1576 26.132 57.7194 24.2333 58.0092 22.3524L58.2438 20.8698L58.7683 22.2262C59.7443 24.6849 60.3043 27.3089 60.2865 29.9489Z"
+                  fill="#F4900C"
+                />
+                <path
+                  d="M59.4268 29.8326C59.4251 27.2317 59.5477 25.8824 58.5255 23.5749C57.8268 30.3731 52.7868 32.7197 48.2286 31.0949C43.9584 29.5713 46.8366 23.6317 47.0482 20.7962C47.4073 15.9909 47.0304 10.4922 36.5255 5.91797C40.89 12.8566 37.0304 17.166 32.9824 17.4291C28.4917 17.7206 24.378 14.222 25.8962 8.54552C20.9806 11.5553 20.8366 16.622 22.3531 19.8984C23.9353 23.3135 22.2891 26.1526 18.4313 26.4673C14.1184 26.8211 11.7237 22.6309 13.9317 15.9553C10.1077 19.6957 7.39663 24.5544 7.80018 29.8309C9.64196 53.8895 32.218 60.814 32.218 60.814C32.218 60.814 59.4517 54.1349 59.4268 29.8326Z"
+                  fill="#FFCC4D"
+                />
+                <path
+                  d="M55.4971 35.1534C55.4971 31.7429 54.1424 28.4721 51.731 26.0603C49.3196 23.6486 46.0489 22.2934 42.6384 22.293C40.5939 22.2929 38.579 22.7812 36.7614 23.7172C34.9437 24.6532 33.376 26.0099 32.1887 27.6743C31.0015 26.0102 29.434 24.6536 27.6167 23.7176C25.7994 22.7816 23.7849 22.2932 21.7407 22.293C18.3299 22.293 15.0588 23.6479 12.647 26.0597C10.2352 28.4715 8.88022 31.7426 8.88022 35.1534C8.88022 36.1596 9.00822 37.1339 9.22689 38.0743C11.0118 49.1676 23.3478 60.8725 32.1869 64.0868C41.026 60.8725 53.362 49.1694 55.1451 38.0761C55.3764 37.119 55.4946 36.1381 55.4971 35.1534Z"
+                  fill="#DD2E44"
+                />
+                <path
+                  d="M43.7196 56.6026C43.7196 56.6026 46.2547 51.6799 46.0644 46.567C45.9969 44.7466 45.4831 42.9777 44.756 41.3084C43.0529 37.4044 39.7675 27.6088 46.7951 22.3555C46.7951 22.3555 45.4529 24.6115 46.644 28.7217C47.1151 30.3484 47.9969 31.8168 49.044 33.1484C51.4618 36.2275 56.5444 44.7057 48.1835 52.6115L43.7196 56.6026ZM30.1035 63.2301C30.1035 63.2301 27.2929 60.5368 25.7996 56.7377C25.268 55.3848 25.0778 53.9288 25.0778 52.4746C25.076 49.0772 24.3507 40.8675 17.5364 39.271C17.5364 39.271 19.2378 40.4924 19.6787 43.8772C19.8529 45.2159 19.6769 46.5724 19.3373 47.879C18.5533 50.903 17.6093 58.3839 26.2458 61.495L30.1035 63.2301Z"
+                  fill="#FFCC4D"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_907_94573">
+                  <rect width="64" height="64" fill="white" transform="translate(0.5 0.5)" />
+                </clipPath>
+              </defs>
+            </svg>
+          </>
+        )}
+        {winnerImg && (
+          <img
+            style={{
+              display: 'inline-block',
+              width: '20px',
+              height: '20px',
+              marginRight: '8px'
+            }}
+            src={winnerImg}
+            alt=""
+            srcSet=""
+          />
+        )}
+        {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
       </Box>
-      <RowLabel
-        style={{
-          justifyContent: 'flex-end'
-        }}
-      >
+      {!isClose && (
+        <Typography color={'#D7D6D9'} fontSize={14} mb={25}>
+          Current Final Winner Prize Pool
+        </Typography>
+      )}
+      <RowLabel>
         <img
           style={{
             display: 'inline-block',
@@ -764,27 +951,27 @@ function BidResultAlert({
             height: '20px',
             marginRight: '8px'
           }}
-          src={rightImg}
+          src={tokenImg}
           alt=""
           srcSet=""
         />
         <Typography
           className="value"
           style={{
-            color: 'var(--ps-text-3)',
-            height: '20px',
-            lineHeight: '20px',
-            fontSize: isSm ? '14px' : '16px'
+            color: '#fff',
+            fontWeight: 600,
+            lineHeight: '130%',
+            fontSize: isSm ? '24px' : '36px'
           }}
         >
-          {rightText}
+          {tokenText}
         </Typography>
       </RowLabel>
     </Box>
   )
 }
 
-function NoticeLabel({ color, children }: { children: JSX.Element; color?: string }) {
+export function NoticeLabel({ color, children }: { children: JSX.Element; color?: string }) {
   return (
     <Typography mt={5} display={'flex'} alignItems={'center'} variant="body2" sx={{ color: color || '#FD3333' }}>
       {children}

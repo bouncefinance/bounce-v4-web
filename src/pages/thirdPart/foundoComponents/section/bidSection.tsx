@@ -1,11 +1,18 @@
 import { Box } from '@mui/material'
 import CenterSeciont from '../centerSection'
 import PoolBaseInfo from '../snippet/poolBaseInfo'
-import BidAction from '../snippet/bidAction'
+import UserBidAction from '../snippet/userBidAuction'
+import CreatorBidAction from '../snippet/creatorBidAuction'
 import { useIsSMDown } from 'themes/useTheme'
+import { useActiveWeb3React } from 'hooks'
+import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 
 const BidSection = () => {
   const isSm = useIsSMDown()
+  const { account } = useActiveWeb3React()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(20342)
+  console.log('🚀 ~ file: bidSection.tsx:14 ~ BidSection ~ poolInfo:', poolInfo)
+  if (!poolInfo) return <></>
   return (
     <Box
       style={{
@@ -23,7 +30,11 @@ const BidSection = () => {
         }}
       >
         <PoolBaseInfo />
-        <BidAction />
+        {poolInfo?.creator.toLocaleLowerCase() === account?.toLocaleLowerCase() ? (
+          <CreatorBidAction poolInfo={poolInfo} />
+        ) : (
+          <UserBidAction poolInfo={poolInfo} />
+        )}
       </CenterSeciont>
     </Box>
   )

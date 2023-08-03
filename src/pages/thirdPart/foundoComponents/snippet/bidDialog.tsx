@@ -4,7 +4,7 @@ import ProductIcon from 'assets/imgs/thirdPart/foundoDetail/productIcon.png'
 import CloseIcon from 'assets/imgs/thirdPart/foundoDetail/x.svg'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/logo.png'
 import ArrowbottomIcon from 'assets/imgs/thirdPart/foundoDetail/Arrowbottom.png'
-import { RowLabel } from './bidAction'
+import { RowLabel } from './userBidAuction'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
@@ -65,6 +65,7 @@ export const PlaceBidBtn = styled(LoadingButton)({
   width: '100%',
   flexFlow: 'row nowrap',
   justifyContent: 'center',
+  margin: '48px auto',
   alignItems: 'center',
   border: '1px solid #959595',
   backgroundColor: 'transparent',

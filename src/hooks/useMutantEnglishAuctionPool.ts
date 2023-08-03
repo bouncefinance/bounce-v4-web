@@ -743,8 +743,10 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
 
   const bidCallback = useCallback(
     (bidAmount: CurrencyAmount) =>
-      poolInfo.whitelistData.isPermit ? _bidPermitCallback(bidAmount) : _bidCallback(bidAmount),
-    [_bidCallback, _bidPermitCallback, poolInfo.whitelistData.isPermit]
+      poolInfo.enableWhiteList && poolInfo.whitelistData.isPermit
+        ? _bidPermitCallback(bidAmount)
+        : _bidCallback(bidAmount),
+    [_bidCallback, _bidPermitCallback, poolInfo.enableWhiteList, poolInfo.whitelistData.isPermit]
   )
 
   return { bidCallback, submitted, bidPrevGasFee }
