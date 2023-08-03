@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from '@mui/material'
 import P1 from 'assets/imgs/realworldShop/p1.png'
+import P12 from 'assets/imgs/realworldShop/p1_2.png'
 import P2 from 'assets/imgs/realworldShop/p2.png'
 import EthIcon2 from 'assets/imgs/realworldShop/ethIcon.png'
 import { useIsMDDown } from 'themes/useTheme'
@@ -160,7 +161,7 @@ const ShopList = () => {
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <ShakeImgs
-              list={[P1, P2]}
+              list={[P1, P12]}
               style={{
                 width: '100%',
                 objectFit: 'cover'
@@ -171,10 +172,10 @@ const ShopList = () => {
         </Grid>
         <TypeWriterEffect
           startDelay={100}
-          cursorColor="black"
-          text="Product Name1"
+          text="Diamond Hand Necklace"
           hideCursorAfterText={true}
           typeSpeed={100}
+          cursorColor={'transparent'}
           textStyle={{
             fontFamily: `'Public Sans'`,
             position: 'absolute',
@@ -300,7 +301,7 @@ const ShopList = () => {
           </Grid>
           <Grid item xs={12} md={6} lg={6}>
             <ShakeImgs
-              list={[P2, P1]}
+              list={[P2]}
               style={{
                 width: '100%',
                 objectFit: 'cover'
@@ -311,8 +312,8 @@ const ShopList = () => {
         </Grid>
         <TypeWriterEffect
           startDelay={100}
-          cursorColor="black"
-          text="Product Name2"
+          cursorColor={'transparent'}
+          text="Foundo Necklace"
           hideCursorAfterText={true}
           typeSpeed={100}
           textStyle={{

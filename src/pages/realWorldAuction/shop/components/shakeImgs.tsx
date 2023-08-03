@@ -15,6 +15,7 @@ const ShakeImgs = ({
     return list[index]
   }, [index, list])
   const starShakeImg = () => {
+    if (list.length <= 1) return
     if (time !== null) {
       clearInterval(time)
       setTime(null)

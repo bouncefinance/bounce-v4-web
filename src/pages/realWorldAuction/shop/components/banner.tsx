@@ -100,6 +100,7 @@ export const SwiperSkeleton = () => {
 
 function ArrowBanner() {
   const [swiper, setSwiper] = useState<SwiperCore>()
+  console.log('swiper>>>', swiper)
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
   const bannerList = [
@@ -132,13 +133,18 @@ function ArrowBanner() {
       justifyContent={'center'}
       alignItems={'center'}
       sx={{
-        maxWidth: '1296px',
+        maxWidth: '100%',
         width: '100%',
         minHeight: isSm ? 125 : 460,
         margin: '16px auto 0',
         '@media(max-width:1296px)': {
-          padding: '0 16px',
           margin: '16px auto'
+        },
+        '.title': {
+          opacity: 0
+        },
+        '.swiper-slide-active .title': {
+          opacity: 1
         }
       }}
       onMouseEnter={EnterSwiper}
@@ -174,7 +180,6 @@ function ArrowBanner() {
           delay: 2000
         }}
         style={{
-          maxWidth: '1296px',
           width: '100%'
         }}
       >
@@ -258,7 +263,6 @@ export function Banner({ banner }: { banner: BannerType }) {
         width: '100%',
         cursor: 'pointer',
         position: 'relative',
-        background: '#fff',
         padding: isSm ? '18.5px 0 0' : '57px 0 0'
       }}
       onClick={() => handleClick(banner.url || '')}
@@ -302,6 +306,7 @@ export function Banner({ banner }: { banner: BannerType }) {
         }}
       ></Box>
       <Typography
+        className="title"
         sx={{
           position: 'absolute',
           fontFamily: `'Instrument Serif'`,
@@ -327,6 +332,7 @@ export function Banner({ banner }: { banner: BannerType }) {
           height: isSm ? '37px' : '42px',
           lineHeight: isSm ? '37px' : '42px',
           borderRadius: isSm ? '37px' : '42px',
+          border: '1px solid #121212',
           '&:hover': {
             '.title': {
               color: '#fff'

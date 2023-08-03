@@ -51,12 +51,12 @@ const ApplyShop = () => {
       <Button
         variant="contained"
         href={routes.realAuction.applySeller}
-        target={'_blank'}
         sx={{
           position: 'relative',
           height: isMd ? '37px' : '42px',
           lineHeight: isMd ? '37px' : '42px',
           borderRadius: isMd ? '37px' : '42px',
+          border: '1px solid #121212',
           '&:hover': {
             '.title': {
               color: '#fff'

@@ -17,10 +17,14 @@ const ComTitle = styled(Box)(({ theme }) => ({
   height: '106px',
   borderTop: '1px solid #000',
   borderBottom: '1px solid #000',
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  alignItems: 'center',
   '.title': {
     width: '100%',
-    maxWidth: '1296px',
     margin: '0 auto',
+    paddingLeft: '72px',
     fontFamily: `'Instrument Serif'`,
     fontSize: 64
   },
@@ -46,12 +50,16 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
     <ValuesProvider>
       <Box
         sx={{
-          padding: isSm ? '0' : '0 60px 0',
+          padding: isSm ? '0' : '0 72px 0',
           background: '#fff',
           ...sx
         }}
       >
-        <HeaderTab />
+        <HeaderTab
+          style={{
+            maxWidth: '100%'
+          }}
+        />
         <ArrowBanner />
       </Box>
       <ComTitle
