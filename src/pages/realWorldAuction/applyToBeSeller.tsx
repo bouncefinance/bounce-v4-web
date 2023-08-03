@@ -19,6 +19,7 @@ import { applySeller } from 'api/user'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import { useShowLoginModal } from 'state/users/hooks'
 enum ThemeColor {
   BLACK = 'black',
   YELLOW = 'yellow',
@@ -76,7 +77,8 @@ const sellerValidationSchema = yup.object({
 })
 
 export const ApplyToBeSeller = () => {
-  const { chainId } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
+  const { chainId, account } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
   const { run, data, error } = useRequest((body: IBodySeller) => applySeller(body), { manual: true })
   const navigate = useNavigate()
@@ -91,6 +93,11 @@ export const ApplyToBeSeller = () => {
       return
     }
   }, [data, error, navigate])
+
+  useEffect(() => {
+    !account && showLoginModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
   const sellerValue: ISeller = {
     banner: {
       fileName: '',
@@ -197,23 +204,25 @@ export const ApplyToBeSeller = () => {
                         </Stack>
                       )}
                     >
-                      {Object.values(ThemeColor).map((val, id) => (
-                        <MenuItem
-                          key={id}
-                          value={val}
-                          sx={{
-                            '&.MuiMenuItem-root': {
-                              background: val === values.themeColor ? '#E1F25C' : '',
-                              marginTop: 10
-                            }
-                          }}
-                        >
-                          <Stack sx={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-                            <Box sx={{ width: 32, height: 32, background: val, borderRadius: '50%' }}></Box>
-                            <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{val}</Title>
-                          </Stack>
-                        </MenuItem>
-                      ))}
+                      <Box sx={{ maxHeight: 300, overflow: 'scroll' }}>
+                        {Object.values(ThemeColor).map((val, id) => (
+                          <MenuItem
+                            key={id}
+                            value={val}
+                            sx={{
+                              '&.MuiMenuItem-root': {
+                                background: val === values.themeColor ? '#E1F25C' : '',
+                                marginTop: 10
+                              }
+                            }}
+                          >
+                            <Stack sx={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                              <Box sx={{ width: 32, height: 32, background: val, borderRadius: '50%' }}></Box>
+                              <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{val}</Title>
+                            </Stack>
+                          </MenuItem>
+                        ))}
+                      </Box>
                     </Select>
                   </FormItem>
                 }
