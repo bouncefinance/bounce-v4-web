@@ -57,7 +57,7 @@ const UploadItem: React.FC<IUploadItemProps> = ({ inputId, value, accept, limitS
       )
     }
     return (
-      <Box sx={styles.addItem}>
+      <Box className="add-svg" sx={styles.addItem}>
         <AddSVG />
       </Box>
     )

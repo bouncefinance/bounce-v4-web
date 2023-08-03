@@ -103,7 +103,7 @@ const Uploader: React.FC<IUploaderProps> = ({
     // }
     if (limitSize && file.size > limitSize * 1024 * 1024) {
       const msg = tips ? tips : `Upload file over the limit: (${limitSize}MB)`
-      toast.error(msg)
+      !errors.some(err => err.msg === msg) && toast.error(msg)
       errors.push({
         msg: msg,
         error: 'LimitError'
@@ -134,6 +134,7 @@ const Uploader: React.FC<IUploaderProps> = ({
         msg: `NetworkError`,
         error: 'NetworkError'
       })
+      toast.error('NetworkError Please connect the wallet')
       console.error('Uploader error:', err)
       return onError?.(errors, file)
     }

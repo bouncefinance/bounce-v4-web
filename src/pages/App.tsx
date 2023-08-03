@@ -78,6 +78,9 @@ import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
 import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
+import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
+import BounceShop from './realWorldAuction/shop/bounce'
+import FoundoShop from './realWorldAuction/shop/foundo'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -155,6 +158,9 @@ export default function App() {
                     <Route path={routes.launchpad.bladeDaoInfo} element={<ProjectInfo />} /> */}
 
                   <Route path={routes.realAuction.index} element={<RealWorldAuction />} />
+                  <Route path={routes.realAuction.applySeller} element={<ApplyToBeSeller />} />
+                  <Route path={routes.realAuction.bounceShop} element={<BounceShop />} />
+                  <Route path={routes.realAuction.foundoShop} element={<FoundoShop />} />
                   <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                   <Route path={routes.profile.summary} element={<ProfileHome />} />
