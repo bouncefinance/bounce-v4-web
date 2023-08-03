@@ -134,6 +134,7 @@ const Uploader: React.FC<IUploaderProps> = ({
         msg: `NetworkError`,
         error: 'NetworkError'
       })
+      toast.error('NetworkError Please connect the wallet')
       console.error('Uploader error:', err)
       return onError?.(errors, file)
     }
