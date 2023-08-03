@@ -9,6 +9,7 @@ import { InitialValuesPros, initialValues } from 'pages/tokenAuction/components/
 import { useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { getLabelById } from 'utils'
+import { PoolType } from 'api/pool/type'
 export interface IDrawerOpen {
   open: boolean
   title: 'search' | 'filter' | ''
@@ -55,11 +56,19 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         list: [
           {
             label: 'Fixed Price',
-            value: 1
+            value: PoolType.FixedSwap
           },
           {
             label: 'Random Selection',
-            value: 3
+            value: PoolType.Lottery
+          },
+          {
+            label: 'Dutch Auction',
+            value: PoolType.DUTCH_AUCTION
+          },
+          {
+            label: 'English Auction',
+            value: PoolType.ENGLISH_AUCTION
           }
         ]
       },
@@ -103,7 +112,6 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
           }
         ]
       },
-
       {
         title: 'Search',
         list: searchTypeOptions.map((item, index) => {
@@ -112,6 +120,10 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
             value: index
           }
         })
+      },
+      {
+        title: 'Clear',
+        list: []
       }
     ],
     [chainList, tokenList]
@@ -249,7 +261,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
           <Stack
             sx={{
               display: selectButton === data.title ? 'block' : 'none',
-              maxHeight: 123,
+              maxHeight: 158,
               marginTop: 8,
               padding: '20px 22px',
               overflowY: 'scroll',
@@ -300,7 +312,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         <DrawerTitle title="Filter" />
         <Stack gap={16} mt={36}>
           {selecteOption
-            .filter(item => item.title !== 'Search')
+            .filter(item => item.title !== 'Search' && item.title !== 'Clear')
             .map((type, tid) => (
               <SelectItem data={type} key={tid} />
             ))}
@@ -337,7 +349,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         />
         <Stack gap={16} mt={36}>
           {selecteOption
-            .filter(item => item.title === 'Search' || item.title === 'Clear')
+            .filter(item => item.title === 'Search')
             .map((type, tid) => (
               <SelectItem data={type} key={tid} />
             ))}

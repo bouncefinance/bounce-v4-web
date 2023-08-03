@@ -10,6 +10,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { initialValues, InitialValuesPros } from 'pages/nftAuction/components/listDialog'
 import { getLabelById } from 'utils'
 import { ChainId } from 'constants/chain'
+import { PoolType } from 'api/pool/type'
 
 const SearchInput = styled(Input)(() => ({
   height: 38,
@@ -86,11 +87,11 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
           },
           {
             label: 'Fixed Swap NFT',
-            value: 5
+            value: PoolType.fixedSwapNft
           },
           {
             label: 'English Auction NFT',
-            value: 6
+            value: PoolType.ENGLISH_AUCTION_NFT
           }
         ]
       },
