@@ -176,9 +176,10 @@ function ArrowBanner() {
           }
         }}
         modules={[EffectCreative]}
-        autoplay={{
-          delay: 2000
-        }}
+        // autoplay={{
+        //   delay: 2000
+        // }}
+        autoplay={false}
         style={{
           width: '100%'
         }}
@@ -258,27 +259,43 @@ export function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: isSm ? 'auto' : '657px',
         // width: { sm: '328px', lg: '100%' },
         width: '100%',
         cursor: 'pointer',
         position: 'relative',
-        padding: isSm ? '18.5px 0 0' : '57px 0 0'
-      }}
-      onClick={() => handleClick(banner.url || '')}
-    >
-      <img
-        src={isSm ? banner.imgMobile : banner.imgPc}
-        alt=""
-        style={{
+        padding: isSm ? '18.5px 0 0' : '57px 0 0',
+        '.bannerImg': {
           position: 'relative',
           margin: '0 auto',
           width: isSm ? '300px' : 'calc(100% - 56px)',
-          height: isSm ? '400px' : 'calc(100% - 57px)',
+          height: isSm ? '400px' : '800px',
           borderRadius: isSm ? '100%' : '100%',
           objectFit: 'cover'
-        }}
-      />
+        },
+        '@media(min-width:1440px)': {
+          '.bannerImg': {
+            height: isSm ? '400px' : 'calc(100% - 57px)'
+          }
+        },
+        '@media(min-width:1920px)': {
+          '.bannerImg': {
+            height: isSm ? '400px' : '800px'
+          }
+        },
+        '@media(min-width:2560px)': {
+          '.bannerImg': {
+            height: isSm ? '400px' : '1065px'
+          }
+        },
+        '@media(min-width:3840px)': {
+          '.bannerImg': {
+            height: isSm ? '400px' : '1596px'
+          }
+        }
+      }}
+      onClick={() => handleClick(banner.url || '')}
+    >
+      <img className="bannerImg" src={isSm ? banner.imgMobile : banner.imgPc} alt="" />
       <Box
         sx={{
           position: 'absolute',
