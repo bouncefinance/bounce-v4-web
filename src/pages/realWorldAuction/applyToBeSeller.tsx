@@ -203,26 +203,34 @@ export const ApplyToBeSeller = () => {
                           <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{selected}</Title>
                         </Stack>
                       )}
+                      MenuProps={{
+                        MenuListProps: {
+                          sx: {
+                            '&.MuiMenu-list': {
+                              maxHeight: 300,
+                              overflow: 'scroll'
+                            }
+                          }
+                        }
+                      }}
                     >
-                      <Box sx={{ maxHeight: 300, overflow: 'scroll' }}>
-                        {Object.values(ThemeColor).map((val, id) => (
-                          <MenuItem
-                            key={id}
-                            value={val}
-                            sx={{
-                              '&.MuiMenuItem-root': {
-                                background: val === values.themeColor ? '#E1F25C' : '',
-                                marginTop: 10
-                              }
-                            }}
-                          >
-                            <Stack sx={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-                              <Box sx={{ width: 32, height: 32, background: val, borderRadius: '50%' }}></Box>
-                              <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{val}</Title>
-                            </Stack>
-                          </MenuItem>
-                        ))}
-                      </Box>
+                      {Object.values(ThemeColor).map((val, id) => (
+                        <MenuItem
+                          key={id}
+                          value={val}
+                          sx={{
+                            '&.MuiMenuItem-root': {
+                              background: val === values.themeColor ? '#E1F25C' : '',
+                              marginTop: 10
+                            }
+                          }}
+                        >
+                          <Stack sx={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                            <Box sx={{ width: 32, height: 32, background: val, borderRadius: '50%' }}></Box>
+                            <Title sx={{ fontSize: 16, fontWeight: 500, color: '#959595' }}>{val}</Title>
+                          </Stack>
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormItem>
                 }
