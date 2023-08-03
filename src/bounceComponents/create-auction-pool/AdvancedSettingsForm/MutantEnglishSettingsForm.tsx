@@ -31,6 +31,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import useBreakpoint from 'hooks/useBreakpoint'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import BigNumber from 'bignumber.js'
+import MutantEnglishAuctionEstimateDialog from 'bounceComponents/auction/MutantEnglishAuctionEstimate'
 
 interface MyFormValues {
   poolName: string
@@ -46,6 +47,7 @@ interface MyFormValues {
   enableReverse: boolean
   whitelist: string[]
   participantStatus: ParticipantStatus
+  distributionRatioCheck: number
 }
 
 export const MutantEnglishSettingsForm = ({
@@ -74,6 +76,7 @@ export const MutantEnglishSettingsForm = ({
     lastBidderRatio: valuesState.lastBidderRatio || '',
     enableReverse: !!valuesState.enableReverse,
     whitelist: valuesState.whitelist,
+    distributionRatioCheck: 0,
     participantStatus: valuesState.participantStatus
   }
 
@@ -87,6 +90,9 @@ export const MutantEnglishSettingsForm = ({
       .matches(/^\d+$/, 'Invalid time')
       .test('LATER_THAN_START_TIME_AND_END_TIME', 'Please enter close time', (value, context) => {
         return context.parent.closeMinute || value
+      })
+      .test('MUST_SET_CLOSE_DELAY', 'Please set delay closing time', (value, context) => {
+        return !!(Number(value) || Number(context.parent.closeMinute))
       }),
     closeMinute: Yup.string()
       .nullable(true)
@@ -101,31 +107,27 @@ export const MutantEnglishSettingsForm = ({
       .test('DIGITS_LESS_THAN_2', 'Should be no more than 2 digits after point', value => {
         const _value = new BigNumber(value || 0).toFixed()
         return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 2
-      })
-      .test('is-less-than-or-equal-100', 'The three input values must be equal to 100', (value, { parent }) => {
-        const { prevBidderRatio, lastBidderRatio } = parent
-        return Number(value) + Number(prevBidderRatio) + Number(lastBidderRatio) === 100
       }),
     prevBidderRatio: Yup.mixed()
       .required('Previous bidder ratio required')
       .test('DIGITS_LESS_THAN_2', 'Should be no more than 2 digits after point', value => {
         const _value = new BigNumber(value || 0).toFixed()
         return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 2
-      })
-      .test('is-less-than-or-equal-100', 'The three input values must be equal to 100', (value, { parent }) => {
-        const { creatorRatio, lastBidderRatio } = parent
-        return Number(value) + Number(creatorRatio) + Number(lastBidderRatio) === 100
       }),
     lastBidderRatio: Yup.mixed()
       .required('Last bidder ratio required')
       .test('DIGITS_LESS_THAN_2', 'Should be no more than 2 digits after point', value => {
         const _value = new BigNumber(value || 0).toFixed()
         return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 2
-      })
-      .test('is-less-than-or-equal-100', 'The three input values must be equal to 100', (value, { parent }) => {
-        const { creatorRatio, prevBidderRatio } = parent
-        return Number(value) + Number(creatorRatio) + Number(prevBidderRatio) === 100
       }),
+    distributionRatioCheck: Yup.number().test(
+      'is-less-than-or-equal-100',
+      'The three input values must be equal to 100',
+      (_, { parent }) => {
+        const { creatorRatio, prevBidderRatio, lastBidderRatio } = parent
+        return Number(prevBidderRatio) + Number(creatorRatio) + Number(lastBidderRatio) === 100
+      }
+    ),
     whitelist: Yup.array()
       .of(Yup.string())
       .test(
@@ -221,9 +223,16 @@ export const MutantEnglishSettingsForm = ({
                 {/* delay close time */}
 
                 <Box mt={38}>
-                  <Typography variant="h3" sx={{ fontSize: 16, mb: 10 }}>
-                    Delay Closing Time
-                  </Typography>
+                  <Stack direction="row" alignItems="center" spacing={8}>
+                    <Typography variant="h3" sx={{ fontSize: 16 }}>
+                      Delay Closing Time
+                    </Typography>
+
+                    <Tooltip title="The end of the extension after each auction will end after the time exceeds this time">
+                      <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                    </Tooltip>
+                  </Stack>
+
                   <Stack direction="row" sx={{ mt: 24, width: '100%' }} spacing={20}>
                     <FormItem name="closeHour" placeholder="0" sx={{ flex: 1 }}>
                       <NumberInput
@@ -264,7 +273,7 @@ export const MutantEnglishSettingsForm = ({
                           Delay Unlocking Token
                         </Typography>
 
-                        <Tooltip title="Set a date so traders can only claim tokens by that time.">
+                        <Tooltip title="How long is claim delay after being closed">
                           <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                         </Tooltip>
                       </Stack>
@@ -366,6 +375,35 @@ export const MutantEnglishSettingsForm = ({
                       />
                     </FormItem>
                   </Stack>
+
+                  <Box>
+                    <FormHelperText error={!!errors.distributionRatioCheck}>
+                      {errors.distributionRatioCheck}
+                    </FormHelperText>
+                    {valuesState.priceFloor &&
+                      valuesState.amountMinIncr1 &&
+                      values.creatorRatio &&
+                      values.lastBidderRatio &&
+                      values.prevBidderRatio && (
+                        <Typography
+                          onClick={() =>
+                            show(MutantEnglishAuctionEstimateDialog, {
+                              startPrice: valuesState.priceFloor,
+                              incrRate: new BigNumber(valuesState.amountMinIncr1 || 0).div(100).toString(),
+                              creatorShareRatio: new BigNumber(values.creatorRatio || 0).div(100).toString(),
+                              prevParticipantShareRatio: new BigNumber(values.prevBidderRatio || 0).div(100).toString(),
+                              winnerShareRatio: new BigNumber(values.lastBidderRatio || 0).div(100).toString()
+                            })
+                          }
+                          sx={{
+                            cursor: 'pointer',
+                            textDecoration: 'underline'
+                          }}
+                        >
+                          Check the auction estimated distribution ratio
+                        </Typography>
+                      )}
+                  </Box>
                 </Stack>
                 {!hideRefundable && (
                   <Box sx={{ mt: 38, mb: 34 }}>

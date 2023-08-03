@@ -379,13 +379,13 @@ const CreationMutantEnglish721Confirmation = () => {
 
                 <ConfirmationInfoItem title="Delay close time">
                   <Typography>
-                    {values.closeHour || '-'} Hour {values.closeMinute || '-'} Minute
+                    {values.closeHour || '0'} Hour {values.closeMinute || '0'} Minute
                   </Typography>
                 </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Delay claim time">
                   <Typography>
-                    {values.delayUnlockingHour || '-'} Hour {values.delayUnlockingMinute || '-'} Minute
+                    {values.delayUnlockingHour || '0'} Hour {values.delayUnlockingMinute || '0'} Minute
                   </Typography>
                 </ConfirmationInfoItem>
 
