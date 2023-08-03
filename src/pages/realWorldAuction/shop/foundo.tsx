@@ -12,7 +12,7 @@ import P2 from 'assets/imgs/realworldShop/foundo/p2.png'
 import P3 from 'assets/imgs/realworldShop/foundo/p3.png'
 import P4 from 'assets/imgs/realworldShop/foundo/p4.png'
 import { useIsMDDown } from 'themes/useTheme'
-import KeepTouch from './components/keepTouch'
+import KeepTouch from './components/foundoKeepTouch'
 import FooterPc from 'components/Footer/FooterPc'
 
 const FoundoShop = () => {

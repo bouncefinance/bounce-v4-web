@@ -23,19 +23,19 @@ const KeepTouch = () => {
   const socialLink = [
     {
       logo: <MediumIcon />,
-      link: 'https://app.bounce.finance/'
+      link: 'https://bouncefinance.medium.com/'
     },
     {
       logo: <TwitterIcon />,
-      link: 'https://app.bounce.finance/'
+      link: 'https://twitter.com/bounce_finance?s=21'
     },
     {
       logo: <TgIcon />,
-      link: 'https://app.bounce.finance/'
+      link: 'https://t.me/bounce_finance'
     },
     {
       logo: <GithubIcon />,
-      link: 'https://app.bounce.finance/'
+      link: 'https://github.com/bouncefinance'
     }
   ]
   return (

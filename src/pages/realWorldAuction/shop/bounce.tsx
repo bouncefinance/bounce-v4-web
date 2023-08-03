@@ -11,7 +11,7 @@ import P1 from 'assets/imgs/realworldShop/bounce/p1.png'
 import P2 from 'assets/imgs/realworldShop/bounce/p2.png'
 import { useIsMDDown } from 'themes/useTheme'
 import ProductSwiper from './components/productSwiper'
-import KeepTouch from './components/keepTouch'
+import KeepTouch from './components/bounceKeepTouch'
 import FooterPc from 'components/Footer/FooterPc'
 
 const BounceShop = () => {
