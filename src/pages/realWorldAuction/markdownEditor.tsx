@@ -17,8 +17,7 @@ const MarkdownEditor = ({
   const mdEditor = useRef<Editor>(null)
 
   const handleEditorChange = ({ text }: { text: any }) => {
-    const newValue = text.replace(/\d/g, '')
-    setEditorValue(newValue)
+    setEditorValue(text)
   }
   return (
     <div className="App">
