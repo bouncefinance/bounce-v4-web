@@ -548,7 +548,7 @@ function BidButton({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || err || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
       })
     }
@@ -651,7 +651,7 @@ function BidButton({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toApprove
       })
     }

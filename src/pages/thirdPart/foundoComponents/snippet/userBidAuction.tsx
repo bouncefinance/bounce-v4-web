@@ -328,7 +328,6 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
 export default BidAction
 
 export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
-  console.log('🚀 ~ file: userBidAuction.tsx:284 ~ LiveSection ~ poolInfo:', poolInfo)
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
@@ -443,7 +442,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || err || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
       })
     }
@@ -454,10 +453,13 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
     try {
       const { transactionReceipt } = await approveCallback()
       const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            rpt()
+          },
+          { dark: true }
+        )
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
         })
@@ -470,14 +472,13 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
         .catch()
     } catch (error) {
       const err: any = error
-      console.error(err)
       hideDialogConfirmation()
       show(DialogDarkTips, {
         iconType: 'error',
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toApprove
       })
     }
@@ -763,7 +764,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBidderClaim
       })
     }

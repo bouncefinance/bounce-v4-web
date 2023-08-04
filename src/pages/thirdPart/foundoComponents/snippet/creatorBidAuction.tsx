@@ -140,7 +140,7 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toCreatorClaim
       })
     }
@@ -345,7 +345,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toCreatorClaim
       })
     }
