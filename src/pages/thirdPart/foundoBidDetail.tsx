@@ -157,7 +157,7 @@ const FoundoBidDetail = () => {
               >
                 Details
               </Typography>
-              <Typography className="value">Ref.: 356934</Typography>
+              <Typography className="value">Ref: LG578319461</Typography>
             </RowLabel>
             {detailConfig.map((item, index) => {
               return (

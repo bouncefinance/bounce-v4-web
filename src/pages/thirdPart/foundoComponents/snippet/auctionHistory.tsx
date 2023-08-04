@@ -1,4 +1,4 @@
-import { Box, Stack, Table, TableBody, TableContainer, TableHead, Typography } from '@mui/material'
+import { Box, Stack, Table, TableBody, TableContainer, TableHead, Typography, styled } from '@mui/material'
 import moment from 'moment'
 import NoData from 'bounceComponents/common/NoData'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
@@ -8,6 +8,29 @@ import { StyledHistoryTableCell, StyledHistoryTableRow } from 'bounceComponents/
 import { MutantEnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
 import DefaultAvatar from 'assets/imgs/realWorld/defaultHeadIgm.png'
 import { CurrencyAmount } from 'constants/token'
+
+const StatsBoard = styled(Stack)({
+  width: 320,
+  marginTop: 80,
+  padding: '24px 0',
+  textAlign: 'center',
+  justifyContent: 'center',
+  borderRadius: '8px',
+  backgroundColor: '#20201e',
+  '& p': {
+    fontSize: 20,
+    color: '#959595'
+  },
+  '& p:first-child': {
+    borderBottom: '1px solid rgba(255, 255, 255, 0.20)',
+    paddingBottom: 24
+  },
+  '& p:last-child': {
+    color: '#D7D6D9',
+    paddingTop: 24,
+    fontSize: 36
+  }
+})
 
 const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
@@ -22,11 +45,26 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
     return null
   }
 
+  const totalReward = list.list.reduce((acc, item) => acc + Number(item.prevBidderReward), 0)
+
   return (
     <Stack direction={'row'} sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#171717', margin: '120px auto' }}>
-      <Typography variant="h2" width={320} sx={{ ml: 12, color: '#fff', mt: 20 }}>
-        Auction History
-      </Typography>
+      <Stack>
+        <Typography variant="h2" width={320} sx={{ ml: 12, color: '#fff', mt: 20 }}>
+          Auction History
+        </Typography>
+        <StatsBoard>
+          <Typography>Total Bid Times</Typography>
+          <Typography>{list.total}</Typography>
+        </StatsBoard>
+        <StatsBoard>
+          <Typography>Total Bid Reward</Typography>
+          <Typography>
+            {totalReward}
+            {poolInfo.token1.symbol}
+          </Typography>
+        </StatsBoard>
+      </Stack>
 
       {list.list && list.list.length > 0 ? (
         <TableContainer sx={{ mt: 20 }}>
