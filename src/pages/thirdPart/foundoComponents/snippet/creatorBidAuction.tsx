@@ -1,8 +1,7 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import { useState, useMemo, useCallback } from 'react'
+import { useMemo, useCallback } from 'react'
 import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import { PlaceBidBtn } from './bidDialog'
-import ShippingDialog from './shippingInfoDialog'
 import { useCountDown } from 'ahooks'
 import { MutantEnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
 import { useIsSMDown } from 'themes/useTheme'
@@ -10,13 +9,13 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { useActiveWeb3React } from 'hooks'
 import { useCreatorClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
-import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { getCurrentTimeStamp } from 'utils'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { DataView } from './userBidAuction'
 import RewardPanel from './rewardPanel'
+import DialogTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 
 export const RowLabel = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -186,8 +185,6 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
         priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${poolInfo?.currencyAmountMin1?.currency.symbol}`}
         increase={`${poolInfo?.amountMinIncrRatio1?.toSignificant()}`}
       />
-      {poolStatus === PoolStatus.Live && <UpcomingStatus text="Time Left" OpenAt={poolInfo?.closeAt || 0} />}
-
       {poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn onClick={toCreatorClaim} loadingPosition="start" variant="contained" fullWidth>
           <img
@@ -203,6 +200,7 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           <CounterText>Cancel & Claim</CounterText>
         </PlaceBidBtn>
       )}
+      {poolStatus === PoolStatus.Live && <UpcomingStatus text="Time Left" OpenAt={poolInfo?.closeAt || 0} />}
       {poolStatus === PoolStatus.Live && (
         <>
           <RowLabel
@@ -240,9 +238,9 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
       )}
       {/* reward content */}
       {poolStatus === PoolStatus.Live && poolInfo && <RewardPanel poolInfo={poolInfo} />}
+      {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
       {/* closed and win tips */}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
-      {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
       <RowLabel sx={{ marginTop: 48 }}>
         <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
           Platform Fee Charged
@@ -298,12 +296,8 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
-  const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
 
-  const isSuccess = useMemo(
-    () => account && poolInfo.currentBidder?.toString() === account?.toString(),
-    [account, poolInfo.currentBidder]
-  )
+  const isSuccess = useMemo(() => account && poolInfo.firstBidderAmount, [account, poolInfo.firstBidderAmount])
 
   const {
     run: creatorClaim,
@@ -312,6 +306,11 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   } = useCreatorClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const toCreatorClaim = useCallback(async () => {
+    const contentText = isSuccess
+      ? `You have successfully claim ${poolInfo.distributeRewards.creatorRewards?.toSignificant()} ${
+          poolInfo.token1.symbol
+        } rewards`
+      : `You have successfully claim ${poolInfo.token0.symbol || 'NFT'} for ${poolInfo.name}`
     showRequestConfirmDialog({ dark: true })
     try {
       const { transactionReceipt } = await creatorClaim()
@@ -333,8 +332,8 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'Close',
-            title: 'Congratulations!',
-            content: `You have successfully claim ${poolInfo.token0.symbol || 'NFT'} for ${poolInfo.name}`
+            title: isSuccess ? 'Congratulations!' : 'Unfortunately!',
+            content: contentText
           })
         })
         .catch()
@@ -350,7 +349,14 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         onAgain: toCreatorClaim
       })
     }
-  }, [creatorClaim, poolInfo.name, poolInfo.token0.symbol])
+  }, [
+    creatorClaim,
+    isSuccess,
+    poolInfo.distributeRewards.creatorRewards,
+    poolInfo.name,
+    poolInfo.token0.symbol,
+    poolInfo.token1.symbol
+  ])
 
   if (!account) {
     return <PlaceBidBtn onClick={toggleWallet}>Connect Wallet</PlaceBidBtn>
@@ -362,14 +368,10 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   return isSuccess ? (
     <Stack>
       <PlaceBidBtn
-        onClick={() =>
-          chainId !== poolInfo.ethChainId
-            ? switchNetwork(poolInfo.ethChainId)
-            : setOpenShippingDialog(!openShippingDialog)
-        }
+        onClick={toCreatorClaim}
         loadingPosition="start"
         loading={submitted.submitted}
-        disabled={poolInfo.claimAt > getCurrentTimeStamp()}
+        disabled={poolInfo.claimAt > getCurrentTimeStamp() || creatorClaimed}
       >
         <img
           src={BidIcon}
@@ -382,7 +384,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           srcSet=""
         />
         {/* Check Logistics Information */}
-        {poolInfo.participant.claimed || creatorClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'}
+        {creatorClaimed ? 'Claimed' : 'Claim Reward'}
       </PlaceBidBtn>
       <Typography
         sx={{
@@ -393,25 +395,35 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           fontSize: '13px'
         }}
       >
-        {poolInfo.participant.claimed || creatorClaimed
+        {creatorClaimed
           ? 'We will contact you in the near future'
           : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
       </Typography>
-
-      {openShippingDialog && (
-        <ShippingDialog
-          submitCallback={creatorClaimed ? undefined : toCreatorClaim}
-          handleClose={() => setOpenShippingDialog(false)}
-        />
-      )}
     </Stack>
   ) : (
     <Box>
       <Typography sx={{ fontSize: 16, fontFamily: 'Inter', color: '#fff' }}>
-        {`You didn't succeed in the auction and your money is returned to your wallet with gas compensation.(Your Bid Amount: ${
-          poolInfo.participant.accountBidAmount?.toSignificant() || '-'
-        } ${poolInfo.token1.symbol})`}
+        {`Your auction pool is closed but there is no bidder for your NFT, see you next time!`}
       </Typography>
+      <PlaceBidBtn
+        onClick={toCreatorClaim}
+        loadingPosition="start"
+        loading={submitted.submitted}
+        disabled={poolInfo.claimAt > getCurrentTimeStamp() || creatorClaimed}
+      >
+        <img
+          src={BidIcon}
+          style={{
+            width: '16px',
+            height: '16px',
+            marginRight: '10px'
+          }}
+          alt=""
+          srcSet=""
+        />
+        {/* Check Logistics Information */}
+        {creatorClaimed ? 'Claimed' : 'Claim Your NFT'}
+      </PlaceBidBtn>
     </Box>
   )
 }

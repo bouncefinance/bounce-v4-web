@@ -17,7 +17,6 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
     '',
     ['Bid']
   )
-  console.log('list', list)
 
   if (!list || (Array.isArray(list.list) && list.list.length === 0)) {
     return null

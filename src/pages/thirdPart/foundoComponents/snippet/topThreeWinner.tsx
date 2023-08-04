@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import HeadImg from 'assets/imgs/thirdPart/foundoDetail/head.png'
 import { shortenAddress } from 'utils'
-import { RowLabel } from './userBidAuction'
+import { RowLabel } from './creatorBidAuction'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import EthIcon from 'assets/imgs/thirdPart/foundoDetail/chart.png'
 import { formatNumber } from 'utils/number'

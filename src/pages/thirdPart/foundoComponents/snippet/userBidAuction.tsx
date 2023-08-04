@@ -33,11 +33,8 @@ import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import BigNumber from 'bignumber.js'
 import RewardPanel from './rewardPanel'
+import { RowLabel } from './creatorBidAuction'
 
-export enum BidType {
-  'dataView' = 0,
-  'chartView' = 1
-}
 interface DataViewParam {
   priceFloor: number | string
   increase: string
@@ -50,33 +47,6 @@ const WhiteText = styled(Typography)(({ theme }) => ({
   margin: '20px auto',
   [theme.breakpoints.down('sm')]: {
     width: 145
-  }
-}))
-
-export const RowLabel = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexFlow: 'row nowrap',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  '.label': {
-    color: 'var(--ps-text-2)',
-    fontFamily: `'Public Sans'`,
-    fontWeight: 500,
-    fontSize: 16
-  },
-  '.value': {
-    color: 'var(--ps-text-5)',
-    fontFamily: `'Public Sans'`,
-    fontWeight: 500,
-    fontSize: 16
-  },
-  [theme.breakpoints.down('md')]: {
-    '.label': {
-      fontSize: 14
-    },
-    '.value': {
-      fontSize: 14
-    }
   }
 }))
 

@@ -269,9 +269,11 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
       amountMin1: poolsRes?.amountMin1.toString(),
       closeAt: poolsRes?.closeAt ? Number(poolsRes?.closeAt) : undefined,
       closeIncrInterval: poolsRes?.closeIncrInterval ? Number(poolsRes?.closeIncrInterval) : undefined,
-      claimDelay: poolsRes?.claimDelay ? Number(poolsRes?.claimDelay) : undefined,
+      claimDelay: poolsRes?.claimDelay !== undefined ? Number(poolsRes?.claimDelay) : undefined,
       claimAt:
-        poolsRes?.claimDelay && poolsRes?.closeAt ? Number(poolsRes.closeAt) + Number(poolsRes.claimDelay) : undefined,
+        poolsRes?.claimDelay !== undefined && poolsRes?.closeAt !== undefined
+          ? Number(poolsRes.closeAt) + Number(poolsRes.claimDelay)
+          : undefined,
       amountMinIncrRatio1: poolsRes?.amountMinIncrRatio1.toString()
     }),
     [poolsRes]
