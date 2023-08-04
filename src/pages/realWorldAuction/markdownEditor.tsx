@@ -2,6 +2,7 @@ import Editor from 'react-markdown-editor-lite'
 import ReactMarkdown from 'react-markdown'
 import 'react-markdown-editor-lite/lib/index.css'
 import { useRef } from 'react'
+import { uploader } from 'api/upload'
 
 const MarkdownEditor = ({
   value,
@@ -19,6 +20,19 @@ const MarkdownEditor = ({
   const handleEditorChange = ({ text }: { text: any }) => {
     setEditorValue(text)
   }
+  const handleImageUpload = (file: File) => {
+    return new Promise((resolve, reject) => {
+      uploader({
+        file: file
+      }).then(res => {
+        if (res) {
+          resolve(res.data.path)
+        } else {
+          reject('')
+        }
+      })
+    })
+  }
   return (
     <div className="App">
       <Editor
@@ -31,6 +45,7 @@ const MarkdownEditor = ({
         }}
         imageAccept=".jpeg,.png,.webp"
         onChange={handleEditorChange}
+        onImageUpload={handleImageUpload}
         placeholder={placeholder}
         shortcuts={true}
         renderHTML={text => {
