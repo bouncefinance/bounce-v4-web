@@ -126,7 +126,7 @@ export default function App() {
 
                   <Route path={routes.auction.fixedPrice} element={<AuctionFixedPricePoolId />} />
                   <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
-                  <Route path={routes.auction.mutantEnglishAuction} element={<AuctionFixedSwap1155PoolId />} />
+                  {/* <Route path={routes.auction.mutantEnglishAuction} element={<AuctionFixedSwap1155PoolId />} /> */}
                   <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                   <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
                   <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
@@ -135,7 +135,7 @@ export default function App() {
                   <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                   <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                   <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
-                  <Route path={routes.auction.v2.mutantEnglishAuction} element={<AuctionFixedSwap1155PoolId />} />
+                  {/* <Route path={routes.auction.v2.mutantEnglishAuction} element={<AuctionFixedSwap1155PoolId />} /> */}
                   <Route path={routes.auction.v2.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                   <Route path={routes.auction.v2.randomSelection} element={<RandomSelectionPricePoolId />} />
 
@@ -171,7 +171,7 @@ export default function App() {
                   <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                   <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
-                  <Route path={routes.foundo.foundoDetail} element={<FoundoDetail />} />
+                  <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}

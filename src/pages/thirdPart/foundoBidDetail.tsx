@@ -11,7 +11,6 @@ import Icon5 from 'assets/imgs/thirdPart/foundoDetail/icon5.svg'
 import FoundoLogo from 'assets/imgs/thirdPart/foundoDetail/foundoLogo.png'
 import ShareIcon from 'assets/imgs/thirdPart/foundoDetail/share.png'
 // import WinnerList from './foundoComponents/section/winnerSection'
-import EnglishAuctionValuesProvider from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { ChainListMap } from 'constants/chain'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { getEtherscanLink } from 'utils'
@@ -20,6 +19,7 @@ import { useCallback, useState } from 'react'
 import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 import ActionHistory from './foundoComponents/snippet/auctionHistory'
+import { useParams } from 'react-router-dom'
 
 const NewTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
@@ -108,7 +108,9 @@ const FoundoBidDetail = () => {
       value: '40.5 cm'
     }
   ]
-  const { data: poolInfo } = useMutantEnglishAuctionPool(20346)
+
+  const { '*': sysId } = useParams()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(sysId && isFinite(Number(sysId)) ? Number(sysId) : 20346)
   console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
   if (!poolInfo) return <></>
   return (
@@ -120,7 +122,7 @@ const FoundoBidDetail = () => {
         background: '#000'
       }}
     >
-      <Header />
+      <Header poolInfo={poolInfo} />
       <PcBanner />
       <BidSection poolInfo={poolInfo} />
       <NewTabs value={tabIndex} onChange={handleChange}>
@@ -381,9 +383,5 @@ const FoundoBidDetail = () => {
   )
 }
 export default function FoundoBidDetailContent() {
-  return (
-    <EnglishAuctionValuesProvider backedId={7484}>
-      <FoundoBidDetail />
-    </EnglishAuctionValuesProvider>
-  )
+  return <FoundoBidDetail />
 }
