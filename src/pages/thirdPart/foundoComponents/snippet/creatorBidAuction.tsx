@@ -232,7 +232,12 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
             </RowLabel>
           </RowLabel>
           <Typography fontSize={12} fontFamily={'Inter'}>
-            (The previous bidder receive after the next bidder place a bid.)
+            (The current bidder receive{' '}
+            <span style={{ color: '#fff' }}>
+              {poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || '-'}{' '}
+              {poolInfo.currentBidderAmount?.currency.symbol}
+            </span>{' '}
+            after the next bidder place a bid.)
           </Typography>
         </>
       )}

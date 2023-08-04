@@ -6,7 +6,7 @@ import {
   PoolType
 } from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import { NULL_BYTES } from '../constants'
+import { NULL_BYTES, TX_FEE_DENOMINATOR } from '../constants'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
@@ -763,4 +763,57 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
   )
 
   return { bidCallback, submitted, bidPrevGasFee }
+}
+
+const txFeeRatio = 0.006
+const txFeeRatioE18 = txFeeRatio * 1e18
+
+export function useNextAuctionRewards(poolInfo: MutantEnglishAuctionNFTPoolProp | undefined) {
+  return useMemo(() => {
+    if (
+      !poolInfo?.currentBidderAmount ||
+      !poolInfo?.currentBidderAmount1 ||
+      !poolInfo?.distributeRatios.prevBidderRatio ||
+      !poolInfo?.distributeRatios.lastBidderRatio ||
+      !poolInfo?.distributeRewards.lastBidderRewards
+    )
+      return
+
+    const exceedAmount = poolInfo.currentBidderAmount.subtract(poolInfo.currentBidderAmount1)
+
+    const fee = JSBI.divide(
+      JSBI.multiply(JSBI.BigInt(exceedAmount.raw.toString()), JSBI.BigInt(txFeeRatioE18.toString())),
+      JSBI.BigInt(TX_FEE_DENOMINATOR)
+    )
+    const distributionAmount = exceedAmount.subtract(
+      CurrencyAmount.fromRawAmount(poolInfo.currentBidderAmount1.currency, fee)
+    )
+
+    const nextWinnerOnce = JSBI.divide(
+      JSBI.multiply(
+        JSBI.BigInt(exceedAmount.raw.toString()),
+        JSBI.BigInt(poolInfo.distributeRatios.lastBidderRatio.raw.toString())
+      ),
+      JSBI.BigInt(TX_FEE_DENOMINATOR)
+    )
+    const nextWinnerDistributionAmount = CurrencyAmount.fromRawAmount(
+      poolInfo.currentBidderAmount1.currency,
+      nextWinnerOnce
+    )
+
+    return {
+      prev: distributionAmount
+        .multiply(poolInfo.distributeRatios.prevBidderRatio)
+        .toSignificant(6, { groupSeparator: ',' }),
+      winnerTotal: poolInfo.distributeRewards.lastBidderRewards
+        .add(nextWinnerDistributionAmount)
+        .toSignificant(6, { groupSeparator: ',' })
+    }
+  }, [
+    poolInfo?.currentBidderAmount,
+    poolInfo?.currentBidderAmount1,
+    poolInfo?.distributeRatios.lastBidderRatio,
+    poolInfo?.distributeRatios.prevBidderRatio,
+    poolInfo?.distributeRewards.lastBidderRewards
+  ])
 }

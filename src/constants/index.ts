@@ -10,6 +10,8 @@ export const BAST_TOKEN: { [chainId in ChainId]?: Currency } = {
   [ChainId.MAINNET]: new Currency(ChainId.MAINNET, '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D', 18, 'USDT', 'USDT')
 }
 
+export const TX_FEE_DENOMINATOR = `${Number(1e18)}`
+
 export const autoConnectInjectedEveryone = false
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'

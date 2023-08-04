@@ -69,7 +69,7 @@ export function DataView(props: DataViewParam) {
     <Stack
       spacing={16}
       sx={{
-        padding: '48px 0 24px'
+        padding: '0 0 24px'
       }}
     >
       <Typography fontSize={28} color={'#fff'}>
@@ -290,7 +290,12 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
             </RowLabel>
           </RowLabel>
           <Typography fontSize={12} fontFamily={'Inter'} color={'#959595'}>
-            (The previous bidder receive after the next bidder place a bid.)
+            (The current bidder receive{' '}
+            <span style={{ color: '#fff' }}>
+              {poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || '-'}{' '}
+              {poolInfo.currentBidderAmount?.currency.symbol}
+            </span>{' '}
+            after the next bidder place a bid.)
           </Typography>
         </>
       )}

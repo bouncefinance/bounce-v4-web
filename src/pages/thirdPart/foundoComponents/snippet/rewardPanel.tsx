@@ -3,8 +3,7 @@ import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
+import { useNextAuctionRewards } from 'hooks/useMutantEnglishAuctionPool'
 
 const Container = styled(Box)({
   backgroundColor: '#20201e',
@@ -28,14 +27,8 @@ const RowLabel = styled(Box)({
 })
 
 export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
-  const nextRoundAmount = useMemo(() => {
-    if (!poolInfo.currentBidderAmount || !poolInfo.currentBidderAmount1 || !poolInfo.distributeRatios.prevBidderRatio)
-      return
-    const amount = poolInfo.currentBidderAmount?.subtract(poolInfo.currentBidderAmount1)
-    return BigNumber(amount.toSignificant())
-      .times(BigNumber(poolInfo.distributeRatios.prevBidderRatio?.toSignificant()))
-      .toFixed(6)
-  }, [poolInfo.currentBidderAmount, poolInfo.currentBidderAmount1, poolInfo.distributeRatios.prevBidderRatio])
+  const nextAuctionRewards = useNextAuctionRewards(poolInfo)
+
   return (
     <Container>
       <RowLabel>
@@ -63,14 +56,14 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
           <Stack direction={'row'} spacing={8}>
             <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={20} />
             <Typography color={'#D7D6D9'}>
-              {nextRoundAmount} {poolInfo.token1.symbol}
+              {nextAuctionRewards?.prev || '--'} {poolInfo.token1.symbol}
             </Typography>
           </Stack>
         </Stack>
         <Stack direction={'row'} justifyContent={'space-between'} mt={24}>
           <Stack direction={'row'} spacing={8}>
             <Typography color={'#959595'} fontSize={16}>
-              Final Bidder Prize
+              Next Final Bidder Prize
             </Typography>
             <Tooltip title="Please do not select deflationary or inflationary token.">
               <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
@@ -79,7 +72,7 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
           <Stack direction={'row'} spacing={8}>
             <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={20} />
             <Typography color={'#D7D6D9'}>
-              {poolInfo.extraAmount1?.toSignificant() || '--'} {poolInfo.token1.symbol}
+              {nextAuctionRewards?.winnerTotal || '--'} {poolInfo.token1.symbol}
             </Typography>
           </Stack>
         </Stack>
