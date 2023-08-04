@@ -460,6 +460,8 @@ export interface PoolHistory {
   txHash: string
 
   avatar: string
+  // previous round bid reward
+  prevBidderReward: string
 }
 
 export interface GetPoolHistoryResponse {

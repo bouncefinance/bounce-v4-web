@@ -19,6 +19,7 @@ import { useIsSMDown } from 'themes/useTheme'
 import { useCallback, useState } from 'react'
 import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
+import ActionHistory from './foundoComponents/snippet/auctionHistory'
 
 const NewTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
@@ -128,7 +129,7 @@ const FoundoBidDetail = () => {
         ))}
       </NewTabs>
       <CenterSeciont>
-        {tabIndex === 0 && <></>}
+        {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />}
         {tabIndex === 1 && (
           <Box
             sx={{
