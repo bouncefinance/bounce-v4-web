@@ -1,12 +1,10 @@
 import { Box, Typography } from '@mui/material'
+import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import PriceChartView from 'bounceComponents/englishAuction/PriceChartView'
-import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 import { useIsSMDown } from 'themes/useTheme'
 
-const PoolBaseInfo = () => {
+const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(20342)
-  console.log('🚀 ~ file: poolBaseInfo.tsx:8 ~ PoolBaseInfo ~ poolInfo:', poolInfo)
   return (
     <Box
       sx={{

@@ -26,7 +26,7 @@ const BidSection = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp })
           alignItems: 'flex-start'
         }}
       >
-        <PoolBaseInfo />
+        <PoolBaseInfo poolInfo={poolInfo} />
         {poolInfo?.creator.toLocaleLowerCase() === account?.toLocaleLowerCase() ? (
           <CreatorBidAction poolInfo={poolInfo} />
         ) : (

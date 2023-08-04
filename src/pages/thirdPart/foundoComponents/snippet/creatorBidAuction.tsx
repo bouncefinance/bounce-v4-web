@@ -187,11 +187,7 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
         increase={`${poolInfo?.amountMinIncrRatio1?.toSignificant()}`}
       />
       {poolStatus === PoolStatus.Live && <UpcomingStatus text="Time Left" OpenAt={poolInfo?.closeAt || 0} />}
-      {poolStatus === PoolStatus.Live && (
-        <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
-          The auction is successful if there is no player with a higher bid after the countdown ends
-        </Typography>
-      )}
+
       {poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn onClick={toCreatorClaim} loadingPosition="start" variant="contained" fullWidth>
           <img
@@ -247,6 +243,14 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
       {/* closed and win tips */}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
       {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
+      <RowLabel sx={{ marginTop: 48 }}>
+        <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
+          Platform Fee Charged
+        </Typography>
+        <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
+          0.6%
+        </Typography>
+      </RowLabel>
     </Box>
   )
 }
