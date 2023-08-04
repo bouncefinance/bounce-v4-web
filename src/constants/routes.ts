@@ -40,7 +40,10 @@ export const routes = {
     bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId'
   },
   realAuction: {
-    index: '/real-auction'
+    index: '/real-auction',
+    applySeller: '/real-auction/apply-seller',
+    bounceShop: '/real-auction/bounce',
+    foundoShop: '/real-auction/foundo'
   },
   adsAuction: {
     index: '/ads-auction'

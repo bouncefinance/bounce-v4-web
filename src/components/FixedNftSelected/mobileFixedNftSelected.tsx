@@ -9,6 +9,8 @@ import { initialValues, InitialValuesPros } from 'pages/nftAuction/components/li
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { getLabelById } from 'utils'
+import { PoolType } from 'api/pool/type'
+
 export interface IDrawerOpen {
   open: boolean
   title: 'search' | 'filter' | ''
@@ -53,12 +55,16 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         name: 'auctionType',
         list: [
           {
-            label: 'Fixed Price',
-            value: 1
+            label: 'All NFT',
+            value: 0
           },
           {
-            label: 'Random Selection',
-            value: 3
+            label: 'Fixed Swap NFT',
+            value: PoolType.fixedSwapNft
+          },
+          {
+            label: 'English Auction NFT',
+            value: PoolType.ENGLISH_AUCTION_NFT
           }
         ]
       },
