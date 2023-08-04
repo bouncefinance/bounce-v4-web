@@ -28,15 +28,13 @@ const RowLabel = styled(Box)({
 })
 
 export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
-  const AUCTION_FEE = 0.006
   const nextRoundAmount = useMemo(() => {
     if (!poolInfo.currentBidderAmount || !poolInfo.currentBidderAmount1 || !poolInfo.distributeRatios.prevBidderRatio)
       return
     const amount = poolInfo.currentBidderAmount?.subtract(poolInfo.currentBidderAmount1)
     return BigNumber(amount.toSignificant())
-      .times(BigNumber(AUCTION_FEE))
       .times(BigNumber(poolInfo.distributeRatios.prevBidderRatio?.toSignificant()))
-      .toFixed()
+      .toFixed(6)
   }, [poolInfo.currentBidderAmount, poolInfo.currentBidderAmount1, poolInfo.distributeRatios.prevBidderRatio])
   return (
     <Container>

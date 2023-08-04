@@ -136,6 +136,7 @@ const FoundoBidDetail = () => {
           <Box
             sx={{
               width: isSm ? '100%' : '680px',
+              minHeight: 500,
               padding: '24px 0 48px'
             }}
           >
@@ -183,11 +184,12 @@ const FoundoBidDetail = () => {
             })}
           </Box>
         )}
-        {tabIndex === 2 && <Box></Box>}
+        {tabIndex === 2 && <Box minHeight={500}></Box>}
         {tabIndex === 3 && (
           <Box
             sx={{
               width: isSm ? '100%' : '680px',
+              minHeight: 500,
               padding: '24px 0 48px'
             }}
           >
@@ -221,6 +223,7 @@ const FoundoBidDetail = () => {
           <Box
             sx={{
               width: isSm ? '100%' : '680px',
+              minHeight: 500,
               padding: '24px 0 48px'
             }}
           >

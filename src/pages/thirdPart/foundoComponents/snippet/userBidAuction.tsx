@@ -945,7 +945,6 @@ function BidResultAlert({
             srcSet=""
           />
         )}
-        <WhiteText>{leftText}</WhiteText>
         {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
       </Box>
       {!isClose && (
