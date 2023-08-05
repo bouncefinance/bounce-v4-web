@@ -94,10 +94,14 @@ const BounceShop = () => {
                 textAlign: 'center'
               }}
             >
-              FOUNDO is a web3-native jewellery brand that leverages web3 technology and culture, with a focus on
-              digital art, to provide customer centric products and experiences. The FOUNDO team have experience growing
-              another jewellery brand from zero to over $100M within 3 years previously and are now building FOUNDO as a
-              more ambitious, higher-end brand while integrating web3 IP to growth hack the brand-building process.
+              Bounce Finance is a decentralized platform dedicated to meeting the evolving needs of the Web3 space.
+              Established in 2020, Bounce Finance is proudly known for outstanding user experience and seamless
+              integration of blockchain technology in trading both digital and tangible assets. We provide a
+              decentralized auction protocol that empowers users to create and participate in diverse types of auctions
+              on multiple blockchain networks. With a focus on Auction as a Service, Bounce Finance offers a wide range
+              of products, including Token & NFT Auctions, Real-World Collectible Auctions, Ad Space Auction, and SDKs &
+              Plug-Ins. Bounce Finance also provides Private Launchpad services, an on-chain solution designed to
+              streamline IDOs for new projects.
             </Typography>
           </Box>
           <img
