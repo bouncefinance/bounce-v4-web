@@ -65,7 +65,7 @@ const FoundoShop = () => {
               textAlign: 'center'
             }}
           >
-            About BOUNCE
+            About FOUNDO
           </Typography>
           <Typography
             sx={{

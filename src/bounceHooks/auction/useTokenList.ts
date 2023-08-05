@@ -8,6 +8,7 @@ import { useTokenContract } from 'hooks/useContract'
 import localDefaultAllList from 'assets/tokenList/default.json'
 import { getUserSearchTokenList, getUserTokenList } from 'api/user'
 import { ZERO_ADDRESS } from '../../constants'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 const filterToken = (list: Token[], filterValue: string) => {
   return list.filter(
@@ -32,11 +33,16 @@ const getGetApiTokenList = async (chainId: number | undefined, action: 1 | 2) =>
 
 const useTokenList = (chainId: number | undefined, action: 1 | 2, filterValue?: string, enableEth = false) => {
   // const isChainHasTokenApi = typeof TOKEN_LIST_API[chainId] === 'string'
-  const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(() => getGetApiTokenList(chainId, action), {
-    cacheKey: `API_TOKEN_LIST_${chainId}`,
-    ready: !!chainId,
-    refreshDeps: [chainId]
-  })
+  const options = useOptionDatas()
+  const backedChainId = options.chainInfoOpt?.find(i => i.ethChainId === chainId)?.id
+  const { data: apiTokenList, loading: isGettingApiTokenList } = useRequest(
+    () => getGetApiTokenList(backedChainId, action),
+    {
+      cacheKey: `API_TOKEN_LIST_${chainId}`,
+      ready: !!chainId,
+      refreshDeps: [chainId]
+    }
+  )
 
   const baseTokenList = useMemo(() => {
     if (chainId === ChainId.GÖRLI) {

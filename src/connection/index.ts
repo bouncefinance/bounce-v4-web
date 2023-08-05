@@ -9,6 +9,7 @@ import COINBASE_ICON from 'assets/walletIcon/coinbaseWalletIcon.svg'
 import UNIWALLET_ICON from 'assets/walletIcon/uniswap-wallet-icon.png'
 import WALLET_CONNECT_ICON from 'assets/walletIcon/walletConnectIcon.svg'
 import OkxIcon_ICON from 'assets/walletIcon/okxIcon.png'
+import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
 
 import { Connection, ConnectionType } from './types'
@@ -17,6 +18,7 @@ import { UniwalletConnect as UniwalletWCV2Connect, WalletConnectV2 } from './Wal
 import { ChainId } from 'constants/chain'
 import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
+import { BinanceWallet } from 'web3-react-binance-wallet'
 
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`)
@@ -163,12 +165,33 @@ const OKXWalletConnection: Connection = {
   }
 }
 
+export const [binanceWallet, BinanceWalletHooks] = initializeConnector<BinanceWallet>(
+  actions =>
+    new BinanceWallet({
+      actions,
+      options: {
+        mustBeBinanceWallet: true
+      },
+      onError
+    })
+)
+
+const binanceWalletConnection: Connection = {
+  getName: () => 'Binance Wallet',
+  connector: binanceWallet,
+  hooks: BinanceWalletHooks,
+  type: ConnectionType.BINANCE_WALLET,
+  getIcon: () => BinanceWallet_ICON,
+  shouldDisplay: () => true
+}
+
 export function getConnections() {
   return [
     injectedConnection,
     walletConnectV2Connection,
     OKXWalletConnection,
     coinbaseWalletConnection,
+    binanceWalletConnection,
     uniwalletWCV2ConnectConnection,
     gnosisSafeConnection,
     networkConnection
@@ -196,6 +219,8 @@ export function getConnection(c: Connector | ConnectionType) {
         return networkConnection
       case ConnectionType.GNOSIS_SAFE:
         return gnosisSafeConnection
+      case ConnectionType.BINANCE_WALLET:
+        return binanceWalletConnection
       case ConnectionType.OKX_WALLET:
         return OKXWalletConnection
     }

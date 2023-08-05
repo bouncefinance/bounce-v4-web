@@ -4,8 +4,8 @@ import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
-
 BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
+import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
@@ -112,6 +112,7 @@ export default function App() {
           <AppWrapper id="app">
             <ContentWrapper>
               <GlobalHooks />
+              <GoogleAnalyticsReporter />
               <LoginModal />
               <Header />
               <ToastContainer />

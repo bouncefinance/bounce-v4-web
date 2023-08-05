@@ -102,18 +102,18 @@ function ProductSwiper() {
       title: 'DIMOND HAND NECKLACE',
       imgPc: ProductImg,
       imgMobile: ProductMobileImg,
-      url: 'https://diamondhand.bounce.finance',
+      url: 'https://diamondhand.bounce.finance/',
       amount: 1,
       status: 'unlist'
-    },
-    {
-      title: 'DIMOND HAND NECKLACE',
-      imgPc: ProductImg,
-      imgMobile: ProductMobileImg,
-      url: 'https://diamondhand.bounce.finance',
-      amount: 2,
-      status: 'unlist'
     }
+    // {
+    //   title: 'DIMOND HAND NECKLACE',
+    //   imgPc: ProductImg,
+    //   imgMobile: ProductMobileImg,
+    //   url: '',
+    //   amount: 2,
+    //   status: 'unlist'
+    // }
   ]
   return (
     <Box
@@ -160,7 +160,7 @@ function ProductSwiper() {
     </Box>
   )
 }
-export function Banner({ product, index }: { product: ProductType; index: number }) {
+function Banner({ product, index }: { product: ProductType; index: number }) {
   const isMd = useBreakpoint('md')
   const navigate = useNavigate()
   const handleClick = (url: string) => {
