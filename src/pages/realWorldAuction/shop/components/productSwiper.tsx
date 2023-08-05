@@ -102,7 +102,7 @@ function ProductSwiper() {
       title: 'DIMOND HAND NECKLACE',
       imgPc: ProductImg,
       imgMobile: ProductMobileImg,
-      url: '',
+      url: 'https://diamondhand.bounce.finance',
       amount: 1,
       status: 'unlist'
     },
@@ -110,7 +110,7 @@ function ProductSwiper() {
       title: 'DIMOND HAND NECKLACE',
       imgPc: ProductImg,
       imgMobile: ProductMobileImg,
-      url: '',
+      url: 'https://diamondhand.bounce.finance',
       amount: 2,
       status: 'unlist'
     }
