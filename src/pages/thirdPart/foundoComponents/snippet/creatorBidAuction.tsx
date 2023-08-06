@@ -16,6 +16,7 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import { DataView } from './userBidAuction'
 import RewardPanel from './rewardPanel'
 import DialogTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import { ZERO_ADDRESS } from '../../../../constants'
 
 export const RowLabel = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -231,21 +232,40 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
               </Typography>
             </RowLabel>
           </RowLabel>
-          <Typography fontSize={12} fontFamily={'Inter'}>
-            (The current bidder receive{' '}
-            <span style={{ color: '#fff' }}>
-              {poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || '-'}{' '}
-              {poolInfo.currentBidderAmount?.currency.symbol}
-            </span>{' '}
-            after the next bidder place a bid.)
-          </Typography>
+          {poolInfo.currentBidderAmount1?.greaterThan('0') && (
+            <Typography fontSize={12} fontFamily={'Inter'} color={'#959595'}>
+              (The current bidder receive{' '}
+              <span style={{ color: '#fff' }}>
+                {poolInfo.distributeRewards.prevBidderRewardsEstimate?.toSignificant() || '-'}{' '}
+                {poolInfo.currentBidderAmount?.currency.symbol}
+              </span>{' '}
+              after the next bidder place a bid.)
+            </Typography>
+          )}
         </>
       )}
       {/* reward content */}
       {poolStatus === PoolStatus.Live && poolInfo && <RewardPanel poolInfo={poolInfo} />}
       {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
+
+      <RowLabel sx={{ marginTop: 48 }}>
+        <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
+          Estimate claim
+        </Typography>
+        <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#fff'}>
+          {poolInfo.currentBidder &&
+          poolInfo.currentBidder !== ZERO_ADDRESS &&
+          poolInfo.firstBidderAmount &&
+          poolInfo.distributeRewards.lastBidderRewards
+            ? (poolInfo.firstBidderAmount?.add(poolInfo.distributeRewards.lastBidderRewards).toSignificant() || '--') +
+              ` ${poolInfo.currencyAmountMin1?.currency.symbol}`
+            : '--'}
+        </Typography>
+      </RowLabel>
+
       {/* closed and win tips */}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
+
       <RowLabel sx={{ marginTop: 48 }}>
         <Typography fontSize={14} fontWeight={600} fontFamily={'Public Sans'} color={'#959595'}>
           Platform Fee Charged
@@ -400,9 +420,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           fontSize: '13px'
         }}
       >
-        {creatorClaimed
-          ? 'We will contact you in the near future'
-          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
+        {`Estimate claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
       </Typography>
     </Stack>
   ) : (

@@ -56,7 +56,7 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
           <Stack direction={'row'} spacing={8}>
             <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={20} />
             <Typography color={'#D7D6D9'}>
-              {nextAuctionRewards?.prev || '--'} {poolInfo.token1.symbol}
+              {nextAuctionRewards?.prevEstimate || '--'} {poolInfo.token1.symbol}
             </Typography>
           </Stack>
         </Stack>

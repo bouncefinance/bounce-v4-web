@@ -289,14 +289,16 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
               </Typography>
             </RowLabel>
           </RowLabel>
-          <Typography fontSize={12} fontFamily={'Inter'} color={'#959595'}>
-            (The current bidder receive{' '}
-            <span style={{ color: '#fff' }}>
-              {poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || '-'}{' '}
-              {poolInfo.currentBidderAmount?.currency.symbol}
-            </span>{' '}
-            after the next bidder place a bid.)
-          </Typography>
+          {poolInfo.currentBidderAmount1?.greaterThan('0') && (
+            <Typography fontSize={12} fontFamily={'Inter'} color={'#959595'}>
+              (The current bidder receive{' '}
+              <span style={{ color: '#fff' }}>
+                {poolInfo.distributeRewards.prevBidderRewardsEstimate?.toSignificant() || '-'}{' '}
+                {poolInfo.currentBidderAmount?.currency.symbol}
+              </span>{' '}
+              after the next bidder place a bid.)
+            </Typography>
+          )}
         </>
       )}
       {poolStatus === PoolStatus.Live && (
@@ -543,7 +545,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
           winnerImg={undefined}
           leftText="You are the highest bidder!"
           tokenImg={poolInfo.token1.smallUrl || ''}
-          tokenText={`${poolInfo.extraAmount1?.toSignificant()} ${poolInfo.token1.symbol}`}
+          tokenText={`${poolInfo.distributeRewards.lastBidderRewards?.toSignificant()} ${poolInfo.token1.symbol}`}
         />
       ) : isOutBid ? (
         <Box
@@ -570,7 +572,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               text="This round of bidding rewards"
               TokenLogo={poolInfo.token1.smallUrl || ''}
               symbol={poolInfo.token1.symbol}
-              Amount={poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || ''}
+              Amount={poolInfo.participant.prevBidderRewardAmount?.toSignificant() || '--'}
             />
             <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
             <RewardBox
@@ -578,7 +580,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               text="Return bid amount and gas fee"
               TokenLogo={bidPrevGasFee?.currency.logo || ''}
               symbol={bidPrevGasFee?.currency.symbol || ''}
-              Amount={bidPrevGasFee?.toSignificant() || ''}
+              Amount={poolInfo.participant.prevBidderGasfeeAmount?.toSignificant() || '--'}
             />
           </Stack>
           <Typography
@@ -855,7 +857,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           text="This round of bidding rewards"
           TokenLogo={poolInfo.token1.smallUrl || ''}
           symbol={poolInfo.token1.symbol}
-          Amount={poolInfo.distributeRewards.prevBidderRewards?.toSignificant() || ''}
+          Amount={poolInfo.participant.prevBidderRewardAmount?.toSignificant() || '--'}
         />
         <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
         <RewardBox
@@ -863,7 +865,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           text="Return bid amount and gas fee"
           TokenLogo={bidPrevGasFee?.currency.logo || ''}
           symbol={bidPrevGasFee?.currency.symbol || ''}
-          Amount={bidPrevGasFee?.toSignificant() || ''}
+          Amount={poolInfo.participant.prevBidderGasfeeAmount?.toSignificant() || '--'}
         />
       </Stack>
     </Box>

@@ -372,6 +372,7 @@ export interface MutantEnglishAuctionNFTPoolProp
   currentBidderAmount: CurrencyAmount | undefined
   firstBidderAmount: CurrencyAmount | undefined
   extraAmount1: CurrencyAmount | undefined
+  nextDistributionAmount1: CurrencyAmount | undefined
   closeIncrInterval: number | undefined
   claimDelay: number | undefined
   distributeRatios: {
@@ -380,7 +381,7 @@ export interface MutantEnglishAuctionNFTPoolProp
     creatorRatio: CurrencyAmount | undefined
   }
   distributeRewards: {
-    prevBidderRewards: CurrencyAmount | undefined
+    prevBidderRewardsEstimate: CurrencyAmount | undefined
     lastBidderRewards: CurrencyAmount | undefined
     creatorRewards: CurrencyAmount | undefined
   }
@@ -388,6 +389,15 @@ export interface MutantEnglishAuctionNFTPoolProp
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined
     loading: boolean
+  }
+  participant: {
+    address?: string
+    claimed?: boolean
+    is721?: 1 | 2
+    tokenId?: string
+    accountBidAmount: CurrencyAmount | undefined
+    prevBidderGasfeeAmount: CurrencyAmount | undefined
+    prevBidderRewardAmount: CurrencyAmount | undefined
   }
 }
 
@@ -462,6 +472,7 @@ export interface PoolHistory {
   avatar: string
   // previous round bid reward
   prevBidderReward: string
+  prevBidderGasfee: string
 }
 
 export interface GetPoolHistoryResponse {

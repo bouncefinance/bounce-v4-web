@@ -237,9 +237,21 @@ function useMutantEnglishAccountBids(backedChainId?: number, poolId?: string) {
     account || undefined,
     ['Bid']
   )
-  const rawAmount = useMemo(() => (account ? data?.list?.[0]?.token1Amount : undefined), [account, data?.list])
+  const bidTokenAmount1 = useMemo(() => (account ? data?.list?.[0]?.token1Amount : undefined), [account, data?.list])
+  const prevBidderGasfee = useMemo(
+    () => (account ? data?.list?.[0]?.prevBidderGasfee : undefined),
+    [account, data?.list]
+  )
+  const prevBidderReward = useMemo(
+    () => (account ? data?.list?.[0]?.prevBidderReward : undefined),
+    [account, data?.list]
+  )
 
-  return rawAmount
+  return {
+    prevBidderGasfee,
+    prevBidderReward,
+    bidTokenAmount1
+  }
 }
 
 export function useMutantEnglishAuctionPool(backedId?: number) {
@@ -247,7 +259,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.MUTANT_ENGLISH_AUCTION_NFT, backedId)
 
   const mutantEnglishContract = useMutantEnglishAuctionNftContract(poolInfo?.contract || '', poolInfo?.ethChainId)
-  const accountBidRawAmount = useMutantEnglishAccountBids(poolInfo?.chainId, poolInfo?.poolId)
+  const accountBidInfo = useMutantEnglishAccountBids(poolInfo?.chainId, poolInfo?.poolId)
 
   const whitelistData = useIsUserInAllWhitelist(
     poolInfo?.chainId,
@@ -278,8 +290,6 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     }),
     [poolsRes]
   )
-
-  console.log('poolsData', poolsData)
 
   const creatorClaimedRes = useSingleCallResult(
     mutantEnglishContract,
@@ -391,21 +401,34 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
 
     const _extraAmount1 = extraAmount1 ? CurrencyAmount.fromRawAmount(t1, extraAmount1) : undefined
 
-    const calcDistributeRewards = (ratio: CurrencyAmount | undefined) => {
+    const calcDistributeRewards = (extraAmount1: string | undefined, ratio: CurrencyAmount | undefined) => {
       if (!extraAmount1 || !ratio) return undefined
       return CurrencyAmount.fromRawAmount(
         t1,
         JSBI.divide(
           JSBI.multiply(JSBI.BigInt(extraAmount1), JSBI.BigInt(ratio.raw.toString())),
-          JSBI.BigInt(Number(`1e18`).toString())
+          JSBI.BigInt(TX_FEE_DENOMINATOR)
         )
       )
     }
 
+    const nextDistributionAmount = (() => {
+      if (!currentBidderAmount || !currentBidderAmount1) return
+      const nextExceedAmount = JSBI.subtract(JSBI.BigInt(currentBidderAmount), JSBI.BigInt(currentBidderAmount1))
+      const nextFee = JSBI.divide(
+        JSBI.multiply(JSBI.BigInt(currentBidderAmount1), JSBI.BigInt(txFeeRatioE18.toString())),
+        JSBI.BigInt(TX_FEE_DENOMINATOR)
+      )
+      return CurrencyAmount.fromRawAmount(t1, JSBI.subtract(nextExceedAmount, nextFee))
+    })()
+
     const distributeRewards = {
-      prevBidderRewards: calcDistributeRewards(distributeRatios?.prevBidderRatio),
-      lastBidderRewards: calcDistributeRewards(distributeRatios?.lastBidderRatio),
-      creatorRewards: calcDistributeRewards(distributeRatios?.prevBidderRatio)
+      prevBidderRewardsEstimate: calcDistributeRewards(
+        nextDistributionAmount?.raw.toString(),
+        distributeRatios?.prevBidderRatio
+      ),
+      lastBidderRewards: calcDistributeRewards(extraAmount1, distributeRatios?.lastBidderRatio),
+      creatorRewards: calcDistributeRewards(extraAmount1, distributeRatios?.prevBidderRatio)
     }
 
     const result: MutantEnglishAuctionNFTPoolProp = {
@@ -421,9 +444,18 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
       participant: {
         ...poolInfo.participant,
         claimed: myClaimed,
-        accountBidAmount: accountBidRawAmount ? CurrencyAmount.fromRawAmount(t1, accountBidRawAmount) : undefined
+        accountBidAmount: accountBidInfo?.bidTokenAmount1
+          ? CurrencyAmount.fromRawAmount(t1, accountBidInfo.bidTokenAmount1)
+          : undefined,
+        prevBidderGasfeeAmount: accountBidInfo?.prevBidderGasfee
+          ? CurrencyAmount.ether(accountBidInfo.prevBidderGasfee)
+          : undefined,
+        prevBidderRewardAmount: accountBidInfo?.prevBidderReward
+          ? CurrencyAmount.fromRawAmount(t1, accountBidInfo.prevBidderReward)
+          : undefined
       },
       extraAmount1: _extraAmount1,
+      nextDistributionAmount1: nextDistributionAmount,
       creatorClaimed: creatorClaimed || poolInfo.creatorClaimed,
       currentBidder: currentBidder,
       firstBidderAmount: firstBidderAmount ? CurrencyAmount.fromRawAmount(t1, firstBidderAmount) : undefined,
@@ -452,7 +484,9 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
     distributeRatios?.creatorRatio,
     whitelistData,
     myClaimed,
-    accountBidRawAmount,
+    accountBidInfo.bidTokenAmount1,
+    accountBidInfo.prevBidderGasfee,
+    accountBidInfo.prevBidderReward,
     creatorClaimed,
     currentBidder,
     firstBidderAmount,
@@ -771,38 +805,50 @@ const txFeeRatioE18 = txFeeRatio * 1e18
 export function useNextAuctionRewards(poolInfo: MutantEnglishAuctionNFTPoolProp | undefined) {
   return useMemo(() => {
     if (
+      !poolInfo?.nextDistributionAmount1 ||
       !poolInfo?.currentBidderAmount ||
-      !poolInfo?.currentBidderAmount1 ||
+      !poolInfo?.amountMinIncrRatio1 ||
       !poolInfo?.distributeRatios.prevBidderRatio ||
       !poolInfo?.distributeRatios.lastBidderRatio ||
       !poolInfo?.distributeRewards.lastBidderRewards
     )
       return
 
-    const exceedAmount = poolInfo.currentBidderAmount.subtract(poolInfo.currentBidderAmount1)
-
-    const fee = JSBI.divide(
-      JSBI.multiply(JSBI.BigInt(exceedAmount.raw.toString()), JSBI.BigInt(txFeeRatioE18.toString())),
-      JSBI.BigInt(TX_FEE_DENOMINATOR)
-    )
-    const distributionAmount = exceedAmount.subtract(
-      CurrencyAmount.fromRawAmount(poolInfo.currentBidderAmount1.currency, fee)
-    )
+    const nextDistributionAmount1 = poolInfo.nextDistributionAmount1
 
     const nextWinnerOnce = JSBI.divide(
       JSBI.multiply(
-        JSBI.BigInt(exceedAmount.raw.toString()),
+        JSBI.BigInt(nextDistributionAmount1.raw.toString()),
         JSBI.BigInt(poolInfo.distributeRatios.lastBidderRatio.raw.toString())
       ),
       JSBI.BigInt(TX_FEE_DENOMINATOR)
     )
     const nextWinnerDistributionAmount = CurrencyAmount.fromRawAmount(
-      poolInfo.currentBidderAmount1.currency,
+      poolInfo.currentBidderAmount.currency,
       nextWinnerOnce
     )
 
+    const next2BidExceedAmount1 = JSBI.divide(
+      JSBI.multiply(
+        JSBI.BigInt(poolInfo.currentBidderAmount.raw.toString()),
+        JSBI.BigInt(poolInfo.amountMinIncrRatio1.raw.toString())
+      ),
+      JSBI.BigInt(TX_FEE_DENOMINATOR)
+    )
+
+    const next2BidBidAmount1 = JSBI.add(next2BidExceedAmount1, JSBI.BigInt(poolInfo.currentBidderAmount.raw.toString()))
+
+    const next2Fee = JSBI.divide(
+      JSBI.multiply(next2BidBidAmount1, JSBI.BigInt(txFeeRatioE18.toString())),
+      JSBI.BigInt(TX_FEE_DENOMINATOR)
+    )
+    const next2DistributionAmount = CurrencyAmount.fromRawAmount(
+      poolInfo.currentBidderAmount.currency,
+      JSBI.subtract(next2BidExceedAmount1, next2Fee)
+    )
+
     return {
-      prev: distributionAmount
+      prevEstimate: next2DistributionAmount
         .multiply(poolInfo.distributeRatios.prevBidderRatio)
         .toSignificant(6, { groupSeparator: ',' }),
       winnerTotal: poolInfo.distributeRewards.lastBidderRewards
@@ -810,10 +856,11 @@ export function useNextAuctionRewards(poolInfo: MutantEnglishAuctionNFTPoolProp 
         .toSignificant(6, { groupSeparator: ',' })
     }
   }, [
+    poolInfo?.amountMinIncrRatio1,
     poolInfo?.currentBidderAmount,
-    poolInfo?.currentBidderAmount1,
     poolInfo?.distributeRatios.lastBidderRatio,
     poolInfo?.distributeRatios.prevBidderRatio,
-    poolInfo?.distributeRewards.lastBidderRewards
+    poolInfo?.distributeRewards.lastBidderRewards,
+    poolInfo?.nextDistributionAmount1
   ])
 }
