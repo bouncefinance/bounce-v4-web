@@ -265,7 +265,7 @@ export default function Header() {
       <StyledAppBar
         isTransparent={isTransparentRoute}
         sx={{
-          display: showBounseHead ? 'block' : 'none',
+          display: showBounseHead ? 'flex' : 'none',
           ...headerBg
         }}
       >
