@@ -65,7 +65,7 @@ export function useCreateMutantEnglishAuctionPool() {
 
   return useCallback(async (): Promise<{
     hash: string
-    transactionResult: Promise<{ sysId: number }>
+    transactionResult: Promise<number>
   }> => {
     const endTime = (Number(values?.closeHour) || 0) * 3600 + (Number(values?.closeMinute) || 0) * 60
     const claimDelay = values.shouldDelayUnlocking
@@ -221,7 +221,7 @@ export function useCreateMutantEnglishAuctionPool() {
             if (!poolId) {
               Promise.reject('The transaction seems to have failed')
             }
-            return { sysId: id }
+            return id
           })
         }
       })
