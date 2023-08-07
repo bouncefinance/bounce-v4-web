@@ -563,6 +563,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
     <>
       {isWinner ? (
         <BidResultAlert
+          isWinner={false}
           isClose={false}
           winnerImg={undefined}
           leftText="You are the highest bidder!"
@@ -810,6 +811,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   return isWinner ? (
     <Stack>
       <BidResultAlert
+        isWinner={true}
         isClose={true}
         winnerImg={WinTips}
         leftText="Congratulations! You win the auction and get rewarded"
@@ -896,12 +898,14 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
 }
 
 function BidResultAlert({
+  isWinner = false,
   isClose,
   winnerImg,
   tokenImg,
   leftText,
   tokenText
 }: {
+  isWinner: boolean
   isClose: boolean
   winnerImg: string | undefined
   tokenImg: string | undefined
@@ -977,6 +981,7 @@ function BidResultAlert({
           />
         )}
         {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
+        {isWinner && <WhiteText>{leftText}</WhiteText>}
       </Box>
       {!isClose && (
         <Typography color={'#D7D6D9'} fontSize={14} mb={25}>
