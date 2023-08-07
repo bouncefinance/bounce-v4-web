@@ -7,17 +7,19 @@ import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 
 export enum PoolType {
   'FixedSwap' = 1,
-  'Duch' = 2,
+  DUTCH_AUCTION = 2,
   'Lottery' = 3,
   'SealedBid' = 4,
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6,
+  ENGLISH_AUCTION = 8,
+  MUTANT_ENGLISH_AUCTION_NFT = 9,
   'PlayableAuction' = 100
 }
 
 export function getTextFromPoolType(type: PoolType) {
   switch (type) {
-    case PoolType.Duch:
+    case PoolType.DUTCH_AUCTION:
       return 'Dutch Auction'
     case PoolType.ENGLISH_AUCTION_NFT:
       return 'English Auction'
@@ -26,11 +28,15 @@ export function getTextFromPoolType(type: PoolType) {
     case PoolType.fixedSwapNft:
       return 'Fixed-Swap NFT'
     case PoolType.Lottery:
-      return 'Lottery'
+      return 'Random'
     case PoolType.SealedBid:
       return 'Sealed Bid'
     case PoolType.PlayableAuction:
       return 'Playable Auction'
+    case PoolType.ENGLISH_AUCTION:
+      return 'English Auction'
+    case PoolType.MUTANT_ENGLISH_AUCTION_NFT:
+      return 'Mutant English'
   }
 }
 
@@ -43,6 +49,7 @@ export interface GetPoolCreationSignatureParams {
   closeAt: number
   creator: string
   maxAmount1PerWallet?: string
+  maxAmount0PerWallet?: string
   merkleroot: string
   name: string
   openAt: number
@@ -52,6 +59,11 @@ export interface GetPoolCreationSignatureParams {
   tokenIds?: string[]
   amountMinIncr1?: string
   amountMin1?: string
+  amountMax1?: string
+  amountStart1?: string
+  amountEnd1?: string
+  times?: number
+  fragments?: string
   is721?: boolean
   maxPlayer?: number
   totalShare?: string | number
@@ -117,7 +129,7 @@ export interface CreatorUserInfo {
   publicRole?: string[]
   userId: number
   userType: number
-  isVerify?: VerifyStatus
+  ifKyc?: VerifyStatus
 }
 
 export interface LikeInfo {
@@ -267,6 +279,72 @@ export interface FixedSwapNFTPoolProp extends FixedSwapPool {
   enableReverses?: boolean
 }
 
+export interface DutchAuctionPoolProp extends FixedSwapPool {
+  currencyAmountTotal0: CurrencyAmount | undefined
+  currencyAmountTotal1: CurrencyAmount | undefined
+  currencySwappedAmount0: CurrencyAmount | undefined
+  // currencyMaxAmount1PerWallet: CurrencyAmount
+  // currencySurplusTotal0: CurrencyAmount
+  currencySwappedTotal1: CurrencyAmount | undefined
+  highestPrice: CurrencyAmount | undefined
+  lowestPrice: CurrencyAmount | undefined
+  currencyCurrentPrice: CurrencyAmount | undefined
+  currencyLowestBidPrice: CurrencyAmount | undefined
+  currencyMaxAmount0PerWallet: CurrencyAmount | undefined
+  nextRoundInSeconds: number | undefined
+  times: number | undefined
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
+    currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable. It means that the amount of all released token0
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
+    currencyUnfilledAmount1?: CurrencyAmount | undefined // current unfill amount1
+  }
+  releaseType?: IReleaseType | undefined
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
+
+export interface Erc20EnglishAuctionPoolProp extends FixedSwapPool {
+  currencyAmountTotal0: CurrencyAmount
+  currencySwappedAmount0: CurrencyAmount | undefined
+  currencySwappedAmount1: CurrencyAmount | undefined
+  currencyCurrentPrice: CurrencyAmount | undefined
+  currencyMaxAmount1PerWallet: CurrencyAmount | undefined
+  currencyAmountStartPrice: CurrencyAmount | undefined
+  currencyAmountEndPrice: CurrencyAmount | undefined
+  fragments: number | undefined
+  ethChainId: ChainId
+  participant: {
+    address?: string
+    claimed?: boolean
+    regreted?: boolean
+    swappedAmount0?: string
+    currencySwappedAmount0: CurrencyAmount | undefined // all token0
+    currencySwappedAmount1: CurrencyAmount | undefined
+    currencyCurReleasableAmount?: CurrencyAmount | undefined // current releasable
+    currencyCurClaimableAmount?: CurrencyAmount | undefined // current claimable
+    currencyMyReleased?: CurrencyAmount | undefined //current my Released token
+  }
+  releaseType?: IReleaseType | undefined
+  releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
+
 export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   currencyAmountMin1: CurrencyAmount | undefined
   currencyAmountMinIncr1: CurrencyAmount | undefined
@@ -286,6 +364,41 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   isWinner: boolean
   // !TOTD
   isUserJoinedPool: boolean
+}
+
+export interface MutantEnglishAuctionNFTPoolProp
+  extends Omit<EnglishAuctionNFTPoolProp, 'currencyAmountMinIncr1' | 'currentBidderMinAmount'> {
+  amountMinIncrRatio1: CurrencyAmount | undefined
+  currentBidderAmount: CurrencyAmount | undefined
+  firstBidderAmount: CurrencyAmount | undefined
+  extraAmount1: CurrencyAmount | undefined
+  nextDistributionAmount1: CurrencyAmount | undefined
+  closeIncrInterval: number | undefined
+  claimDelay: number | undefined
+  distributeRatios: {
+    prevBidderRatio: CurrencyAmount | undefined
+    lastBidderRatio: CurrencyAmount | undefined
+    creatorRatio: CurrencyAmount | undefined
+  }
+  distributeRewards: {
+    prevBidderRewardsEstimate: CurrencyAmount | undefined
+    lastBidderRewards: CurrencyAmount | undefined
+    creatorRewards: CurrencyAmount | undefined
+  }
+  whitelistData: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+  participant: {
+    address?: string
+    claimed?: boolean
+    is721?: 1 | 2
+    tokenId?: string
+    accountBidAmount: CurrencyAmount | undefined
+    prevBidderGasfeeAmount: CurrencyAmount | undefined
+    prevBidderRewardAmount: CurrencyAmount | undefined
+  }
 }
 
 export interface GetPoolInfoResponse {
@@ -357,6 +470,9 @@ export interface PoolHistory {
   txHash: string
 
   avatar: string
+  // previous round bid reward
+  prevBidderReward: string
+  prevBidderGasfee: string
 }
 
 export interface GetPoolHistoryResponse {

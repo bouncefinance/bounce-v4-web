@@ -228,13 +228,16 @@ const FixBtn = styled(Button)(() => ({
   whiteSpace: 'nowrap',
   opacity: 1,
   transition: 'all 0.6s',
+  display: 'none',
   '&.pcFixBtn': {
+    display: 'flex',
     position: 'fixed',
     right: '72px',
     top: 'unset',
     bottom: '20px'
   },
   '&.mobileFixBtn': {
+    display: 'flex',
     position: 'fixed',
     right: '50%',
     top: 'unset',
@@ -281,7 +284,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
         hoverImg: DutchAuctionBlack,
         totalValue: 0,
         link: 'https://docs.bounce.finance/bounce-auctions/dutch-auction',
-        poolType: PoolType.Duch
+        poolType: PoolType.DUTCH_AUCTION
       },
       {
         title: 'Sealed-Bid Auction',

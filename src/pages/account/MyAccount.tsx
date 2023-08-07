@@ -6,6 +6,7 @@ import { useUserInfo } from 'state/users/hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
 import useBreakpoint from '../../hooks/useBreakpoint'
+import KYCVerification from 'bounceComponents/profile/account/components/KYCVerification'
 
 export default function MyAccount() {
   const { userInfo, userId } = useUserInfo()
@@ -26,7 +27,7 @@ export default function MyAccount() {
           <Typography
             variant="h3"
             fontSize={isSm ? 22 : 36}
-            sx={{ paddingLeft: isSm ? '18px' : 0, fontFamily: 'Public Sans' }}
+            sx={{ paddingLeft: isSm ? '18px' : 0, fontFamily: 'Public Sans', fontWeight: 600 }}
           >
             My Account
           </Typography>
@@ -45,7 +46,7 @@ export default function MyAccount() {
               }}
             >
               <Stack direction={'row'} alignItems="center">
-                <Typography variant="h1" fontWeight={500} fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
+                <Typography variant="h1" fontWeight={600} fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
                   {userInfo?.fullName}
                 </Typography>
                 <Typography variant="body1" fontSize={600} color="#2B51DA" ml={10} sx={{ fontSize: isSm ? 16 : 20 }}>
@@ -58,6 +59,10 @@ export default function MyAccount() {
 
               <EditInfo userInfoEmail={userInfo?.email || ''} handleEmailChange={handleEmailChange} userId={userId} />
               <LoginOpton twitter={userInfo?.twitterName || ''} />
+
+              <Box mt={80}>
+                <KYCVerification />
+              </Box>
             </Container>
           </Box>
         </Container>

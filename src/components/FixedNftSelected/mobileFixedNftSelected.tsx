@@ -3,11 +3,14 @@ import { Button, Drawer, Box, IconButton, Stack, Typography, InputBase } from '@
 import { useDebounce } from 'ahooks'
 import { ReactComponent as BottomArrowIcon } from 'assets/imgs/common/bottomArrow.svg'
 import { ReactComponent as SearchSvg } from 'assets/imgs/common/search.svg'
-import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
+import { ChainId } from 'constants/chain'
 import { initialValues, InitialValuesPros } from 'pages/nftAuction/components/listDialog'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { getLabelById } from 'utils'
+import { PoolType } from 'api/pool/type'
+
 export interface IDrawerOpen {
   open: boolean
   title: 'search' | 'filter' | ''
@@ -19,9 +22,9 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
   const [currOpen, setCurrOpen] = useState<IDrawerOpen>({ open: false, title: '' })
   const [chain] = useState<number>(3)
   const [searchVal, setSearchVal] = useState('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
-  const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, debouncedSearchVal, false)
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
+  const debouncedFilterInputValue = useDebounce(searchVal, { wait: 400 })
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState(initialValues)
   const [selectButton, setSelectButton] = useState('')
   const [selectMenuItem, setSelectMenuItem] = useState<any>(filterType)
@@ -52,12 +55,16 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         name: 'auctionType',
         list: [
           {
-            label: 'Fixed Price',
-            value: 1
+            label: 'All NFT',
+            value: 0
           },
           {
-            label: 'Random Selection',
-            value: 3
+            label: 'Fixed Swap NFT',
+            value: PoolType.fixedSwapNft
+          },
+          {
+            label: 'English Auction NFT',
+            value: PoolType.ENGLISH_AUCTION_NFT
           }
         ]
       },
@@ -127,7 +134,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         body.poolStatus = isCancel ? initialValues['poolStatus'] : item.value
         break
       case 'Token':
-        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.address
+        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.contract
         body.tokenFromSymbol = isCancel ? initialValues['tokenFromSymbol'] : item.symbol
         body.tokenFromLogoURI = isCancel ? initialValues['tokenFromLogoURI'] : item.logoURI
         body.tokenFromDecimals = isCancel ? initialValues['tokenFromDecimals'] : item.decimals

@@ -6,8 +6,10 @@ import { ReactComponent as TwitterSVG } from 'assets/imgs/auction/twitter.svg'
 import { ReactComponent as InstagramSVG } from 'assets/imgs/auction/instagram.svg'
 import { ReactComponent as WebsiteSVG } from 'assets/imgs/auction/website.svg'
 import { ReactComponent as LinkedinSVG } from 'assets/imgs/auction/linkedin.svg'
+import { ReactComponent as DiscordSVG } from 'assets/imgs/auction/discord.svg'
 import { ReactComponent as GithubSVG } from 'assets/imgs/auction/github.svg'
 import { ReactComponent as EmailSVG } from 'assets/imgs/auction/email.svg'
+import { isSocialUrl } from 'utils'
 
 export interface SocialMediaButtonGroupProps {
   email?: string
@@ -17,7 +19,9 @@ export interface SocialMediaButtonGroupProps {
   website?: string
   linkedin?: string
   github?: string
+  discord?: string
   style?: React.CSSProperties
+  showAll?: true
 }
 
 const SocialMediaButtonGroup = ({
@@ -27,9 +31,46 @@ const SocialMediaButtonGroup = ({
   instagram,
   website,
   linkedin,
+  discord,
   style,
+  showAll,
   github
 }: SocialMediaButtonGroupProps) => {
+  if (showAll) {
+    return (
+      <Stack spacing={8} direction="row" sx={{ mt: 20, ...style }}>
+        {shouldShowEmailButton && (
+          <SocialMediaButton disabled={!email} href={`mailto:${email}`}>
+            <EmailSVG />
+          </SocialMediaButton>
+        )}
+
+        <SocialMediaButton
+          disabled={!twitter}
+          href={twitter ? (isSocialUrl('twitter', twitter) ? twitter : `https://twitter.com/${twitter}`) : ''}
+        >
+          <TwitterSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!instagram} href={instagram || ''}>
+          <InstagramSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!website} href={website || ''}>
+          <WebsiteSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!discord} href={discord || ''}>
+          <DiscordSVG />
+        </SocialMediaButton>
+
+        <SocialMediaButton disabled={!github} href={github || ''}>
+          <GithubSVG />
+        </SocialMediaButton>
+      </Stack>
+    )
+  }
+
   return (
     <Stack spacing={8} direction="row" sx={{ mt: 20, ...style }}>
       {email && shouldShowEmailButton ? (
@@ -39,7 +80,7 @@ const SocialMediaButtonGroup = ({
       ) : null}
 
       {twitter && (
-        <SocialMediaButton href={twitter}>
+        <SocialMediaButton href={isSocialUrl('twitter', twitter) ? twitter : `https://twitter.com/${twitter}`}>
           <TwitterSVG />
         </SocialMediaButton>
       )}
@@ -56,6 +97,11 @@ const SocialMediaButtonGroup = ({
       {linkedin && (
         <SocialMediaButton href={linkedin}>
           <LinkedinSVG />
+        </SocialMediaButton>
+      )}
+      {discord && (
+        <SocialMediaButton href={discord}>
+          <DiscordSVG />
         </SocialMediaButton>
       )}
       {github && (

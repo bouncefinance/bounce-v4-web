@@ -1,6 +1,7 @@
 import { AuctionType } from 'bounceComponents/create-auction-pool/types'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
+import EthUrl from 'assets/images/eth_logo.png'
 
 export const AUCTION_TYPES: string[] = Object.values(AuctionType)
 
@@ -60,6 +61,15 @@ export const OMNI_TESTNET_TOKEN_LIST: Token[] = [
 export const SEPOLIA_TOKEN_LIST: Token[] = [
   {
     chainId: ChainId.SEPOLIA,
+    name: 'ETH',
+    address: '0x0000000000000000000000000000000000000000',
+    symbol: 'ETH',
+    decimals: 18,
+    logoURI: '',
+    smallUrl: EthUrl
+  },
+  {
+    chainId: ChainId.SEPOLIA,
     name: 'USDT',
     address: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
     symbol: 'USDT',
@@ -96,6 +106,8 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.GNOSIS]: null,
   [ChainId.POLYGON]: null,
   [ChainId.FANTOM]: null,
+  [ChainId.FANTOM_TESTNET]: null,
+  [ChainId.ZETA_CHAIN_TESTNET]: null,
   [ChainId.OMNI_TESTNET]: null,
   [ChainId.ROLLUX]: null,
   [ChainId.ZKSYNC_ERA]: null,
@@ -115,5 +127,6 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.HARMONY]: null,
   [ChainId.SCROLL_ALPHA]: null,
   [ChainId.PALM]: null,
+  [ChainId.LINEA]: null,
   [ChainId.LINEA_GORLI]: null
 }

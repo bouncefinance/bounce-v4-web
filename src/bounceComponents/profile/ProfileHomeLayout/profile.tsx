@@ -9,15 +9,18 @@ import ComingSoon from 'pages/ComingSoon'
 import TokenAuction from './TokenAuction'
 import { H4, H6, H7, SmallText } from '../../../components/Text'
 import { Row } from '../../../components/Layout'
-import GithubIcon from 'assets/socialLinksIcon/github.svg'
-import Insta from 'assets/socialLinksIcon/instagram.svg'
-import Linkin from 'assets/socialLinksIcon/linkin.svg'
-import Twitter from 'assets/socialLinksIcon/twitter-circle.svg'
-import Website from 'assets/socialLinksIcon/website.svg'
+// import GithubIcon from 'assets/socialLinksIcon/github.svg'
+// import Insta from 'assets/socialLinksIcon/instagram.svg'
+// import Linkin from 'assets/socialLinksIcon/linkin.svg'
+// import Twitter from 'assets/socialLinksIcon/twitter-circle.svg'
+// import Website from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as VerifyIcon } from 'assets/imgs/user/profile-verify.svg'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
 import { getUserPoolCount } from 'api/user'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import { VerifyStatus } from 'api/profile/type'
+import countries from 'i18n-iso-countries'
+import SocialMediaButtonGroup from 'bounceComponents/fixed-swap/CreatorInfoCard/SocialMediaButtonGroup'
 
 const ProfileTag = styled(SmallText)`
   display: flex;
@@ -40,7 +43,7 @@ const AuctionCountBg = styled(Box)`
   padding: 10px;
   gap: 10px;
   width: 100%;
-  height: 74px;
+  height: 84px;
   border: 1px solid #e8e9e4;
   border-radius: 8px;
 `
@@ -79,26 +82,6 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
     userPoolCount()
   }, [personalInfo?.address])
 
-  function getSocialList() {
-    const list = []
-    if (personalInfo?.twitter) {
-      list.push({ icon: Twitter, link: personalInfo.twitter })
-    }
-    if (personalInfo?.instagram) {
-      list.push({ icon: Insta, link: personalInfo?.instagram })
-    }
-    if (personalInfo?.website) {
-      list.push({ icon: Website, link: personalInfo?.website })
-    }
-    if (personalInfo?.linkedin) {
-      list.push({ icon: Linkin, link: personalInfo?.linkedin })
-    }
-    if (personalInfo?.github) {
-      list.push({ icon: GithubIcon, link: personalInfo?.github })
-    }
-    return list
-  }
-
   return (
     <Box
       sx={{
@@ -118,13 +101,25 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
         src={personalInfo?.avatar?.fileThumbnailUrl || personalInfo?.avatar?.fileUrl}
       />
       <Stack sx={{ flexDirection: { xs: 'row', sm: 'column' }, gap: { xs: 4, sm: 10 }, alignItems: 'center' }}>
-        <H4 sx={{ fontSize: { xs: 22, sm: 20 } }}>{personalInfo?.fullName}</H4>
+        <H4
+          sx={{
+            fontSize: { xs: 22, sm: 20 },
+            wordBreak: 'break-all',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitLineClamp: 1,
+            WebkitBoxOrient: 'vertical',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          {personalInfo?.fullName}
+        </H4>
         <H6 sx={{ fontSize: { xs: 16, sm: 14 }, color: '#2B51DA' }}>{`#${personalInfo?.fullNameId}`}</H6>
       </Stack>
       <Row mt={24} gap={4}>
-        <ProfileTag>{personalInfo?.location}</ProfileTag>
-        {personalInfo?.isVerify && (
-          <ProfileTag display={'none !important'}>
+        <ProfileTag>{countries.getName(personalInfo?.location as string, 'en')}</ProfileTag>
+        {personalInfo?.ifKyc === VerifyStatus.Verified && (
+          <ProfileTag>
             KYC Verified
             <VerifyIcon />
           </ProfileTag>
@@ -156,10 +151,29 @@ export function ProfileIntroduce({ personalInfo }: { personalInfo: IProfileUserI
           <Typography mt={16} variant={'body2'} width={'100%'} sx={{ wordBreak: 'break-word' }}>
             {personalInfo?.description || 'There is nothing for the time being'}
           </Typography>
-          <Stack mt={32} mb={38} direction={'row'} spacing={9}>
-            {getSocialList().map((icon, idx) => (
-              <img onClick={() => window.open(icon.link, '_blank')} src={icon.icon} key={idx} />
-            ))}
+          <Stack
+            sx={{
+              '& .has-link': {
+                cursor: 'pointer'
+              },
+              '& .no-link': {
+                cursor: 'not-allowed'
+              }
+            }}
+            mt={32}
+            mb={38}
+            direction={'row'}
+            spacing={9}
+          >
+            <SocialMediaButtonGroup
+              showAll
+              twitter={personalInfo?.twitter || personalInfo?.twitterName}
+              instagram={personalInfo?.instagram}
+              website={personalInfo?.website}
+              // linkedin={personalInfo?.linkedin}
+              discord={personalInfo?.discord}
+              github={personalInfo?.github}
+            />
           </Stack>
         </>
       )}

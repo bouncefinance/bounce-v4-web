@@ -48,7 +48,6 @@ function EnglishAuctionNFTContent() {
 
             <Stack sx={{ flex: 1 }} spacing={20}>
               {account === poolInfo.creator ? <CreatorMainBlock /> : <UserMainBlock />}
-
               {poolInfo && <ActionHistory poolInfo={poolInfo} />}
             </Stack>
             {isMobile && (

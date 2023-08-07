@@ -23,6 +23,7 @@ import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
 import FundoHead from 'components/Fundo/Header'
+
 interface TabContent {
   title: string
   route?: string
@@ -126,7 +127,7 @@ const transparentRoutes = [
   routes.launchpad.bladeDao,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.poseiswapAuction,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
   routes.thirdPart.TypeitAuction,
@@ -135,6 +136,7 @@ const transparentRoutes = [
   routes.thirdPart.OpenfabricAuction,
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange
 ]
 
@@ -142,13 +144,14 @@ const transparentRoutes = [
 
 export const whiteLogoRoutes = [
   routes.launchpad.bladeDao,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.TypeitAuction,
   routes.thirdPart.TypeitAuctionWhitelist,
   routes.thirdPart.OpenfabricAuction,
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange
 ]
 
@@ -166,7 +169,7 @@ export default function Header() {
   //   }
   // })
   const showBounseHead = useMemo(() => {
-    return location.pathname.indexOf('fundo') === -1
+    return location.pathname.indexOf('foundo') === -1
   }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
@@ -260,56 +263,56 @@ export default function Header() {
     >
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
-      {showBounseHead && (
-        <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
-          <Box display="flex" alignItems="center">
-            <MainLogo id={'logo'} to={'/'}>
-              <Image
-                style={isWhiteLogo && !isSm ? { mixBlendMode: 'difference' } : {}}
-                src={isSm ? logoIcon : isWhiteLogo ? logoWhite : logo}
-                alt={'logo'}
-              />
-            </MainLogo>
-
-            {!isTransparentRoute && !isSm && <HeaderLink />}
-          </Box>
-
-          <Stack display={isSm ? 'none' : 'inherit'} direction={'row'} alignItems="center" spacing={8} flex={1}>
-            <Search />
-            <Resources />
-            <CreateBtn />
-            <NetworkPopperSelect />
-            <Web3Status />
-
-            {!token && walletWithoutToken}
-          </Stack>
-
-          <Box display={isSm ? 'inherit' : 'none'} alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
-            {/* <Web3Status /> */}
-            <ShowOnMobile breakpoint="md">
-              <Stack direction={'row'} spacing={10} display={'flex'} alignItems={'center'}>
-                <NetworkPopperSelect />
-                <Web3Status />
-                {!token && walletWithoutToken}
-                <IconButton
-                  sx={{
-                    height: { xs: 24, sm: 32 },
-                    width: { xs: 24, sm: 32 },
-                    mb: { xs: 0, sm: 15 },
-                    mt: { xs: 0, sm: 8 },
-                    padding: '4px'
-                  }}
-                  onClick={() => {
-                    setMobileMenuOpen(open => !open)
-                  }}
-                >
-                  <MenuIcon sx={{ color: 'black' }} />
-                </IconButton>
-              </Stack>
-            </ShowOnMobile>
-          </Box>
-        </StyledAppBar>
-      )}
+      <StyledAppBar
+        isTransparent={isTransparentRoute}
+        sx={{
+          display: showBounseHead ? 'flex' : 'none',
+          ...headerBg
+        }}
+      >
+        <Box display="flex" alignItems="center">
+          <MainLogo id={'logo'} to={'/'}>
+            <Image
+              style={isWhiteLogo && !isSm ? { mixBlendMode: 'difference' } : {}}
+              src={isSm ? logoIcon : isWhiteLogo ? logoWhite : logo}
+              alt={'logo'}
+            />
+          </MainLogo>
+          {!isTransparentRoute && !isSm && <HeaderLink />}
+        </Box>
+        <Stack display={isSm ? 'none' : 'inherit'} direction={'row'} alignItems="center" spacing={8} flex={1}>
+          <Search />
+          <Resources />
+          <CreateBtn />
+          {token && <NetworkPopperSelect />}
+          <Web3Status />
+          {!token && walletWithoutToken}
+        </Stack>
+        <Box display={isSm ? 'inherit' : 'none'} alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
+          {/* <Web3Status /> */}
+          <ShowOnMobile breakpoint="md">
+            <Stack direction={'row'} spacing={10} display={'flex'} alignItems={'center'}>
+              {token && <NetworkPopperSelect />}
+              <Web3Status />
+              {!token && walletWithoutToken}
+              <IconButton
+                sx={{
+                  height: { xs: 24, sm: 32 },
+                  width: { xs: 24, sm: 32 },
+                  mb: { xs: 0, sm: 15 },
+                  mt: { xs: 0, sm: 8 },
+                  padding: '4px'
+                }}
+                onClick={() => {
+                  setMobileMenuOpen(open => !open)
+                }}
+              >
+                <MenuIcon sx={{ color: 'black' }} />
+              </IconButton>
+            </Stack>
+          </ShowOnMobile>
+        </Box>
+      </StyledAppBar>
       {!showBounseHead && <FundoHead />}
     </Box>
   )

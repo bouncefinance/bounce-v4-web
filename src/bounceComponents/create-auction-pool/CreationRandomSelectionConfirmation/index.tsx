@@ -37,7 +37,7 @@ import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
-
+import AuctionNotification from '../AuctionNotification'
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({ color: theme.palette.grey[900], opacity: 0.5 }))
 
 const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
@@ -88,7 +88,7 @@ const CreatePoolButton = () => {
         if (redirect && typeof redirect === 'string') {
           navigate(redirect)
         } else {
-          navigate(routes.market.pools)
+          navigate(routes.market.index)
         }
       }
 
@@ -128,7 +128,7 @@ const CreatePoolButton = () => {
             againBtn: 'To the pool',
             cancelBtn: 'Not now',
             title: 'Congratulations!',
-            content: `You have successfully created the auction.`,
+            content: 'You have successfully created the auction.',
             onAgain: goToPoolInfoPage,
             onCancel: handleCloseDialog,
             onClose: handleCloseDialog
@@ -443,7 +443,7 @@ const CreationRandomSelectionConfirmation = () => {
             </Box>
           </Stack>
         </Box>
-
+        <AuctionNotification />
         <Box
           sx={{
             display: 'flex',

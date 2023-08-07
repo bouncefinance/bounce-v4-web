@@ -1,4 +1,4 @@
-import { FixedSwapNFTPoolProp, FixedSwapPoolProp } from 'api/pool/type'
+import { DutchAuctionPoolProp, FixedSwapNFTPoolProp, FixedSwapPoolProp } from 'api/pool/type'
 import { ChainId } from 'constants/chain'
 
 export interface Token {
@@ -11,4 +11,4 @@ export interface Token {
   dangerous?: boolean
 }
 
-export type PoolInfoProp = FixedSwapPoolProp | FixedSwapNFTPoolProp
+export type PoolInfoProp = FixedSwapPoolProp | FixedSwapNFTPoolProp | DutchAuctionPoolProp

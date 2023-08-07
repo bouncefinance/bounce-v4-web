@@ -1,4 +1,4 @@
-import { Box, Container, Skeleton, styled, useTheme } from '@mui/material'
+import { Box, Container, Skeleton, Stack, styled, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
@@ -9,6 +9,9 @@ import { getActiveUsers } from '../../../api/market'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+// import { ReactComponent as VerifySvg } from 'assets/imgs/profile/verify.svg'
+import { VerifyStatus } from 'api/profile/type'
+import VerifiedIcon from '../VerifiedIcon'
 
 interface IAuctionActiveCard {
   userId: number
@@ -17,6 +20,7 @@ interface IAuctionActiveCard {
   desc: string
   createdCount: string
   participated: string
+  ifKyc: VerifyStatus
 }
 
 const YellowSpan = styled('span')`
@@ -58,11 +62,31 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         src={props.img ? props.img : EmptyImg}
       />
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-        <Box mb={16}>
-          <H5>{props.name}</H5>
+        <Box mb={16} sx={{ wordBreak: 'break-all' }}>
+          <Stack flexDirection={'row'} alignItems={'center'} gap={8}>
+            <VerifiedIcon ifKyc={props.ifKyc} />
+            <H5
+              sx={{
+                width: 'calc(100% - 24px - 8px)',
+                overflow: 'hidden',
+                display: '-webkit-box',
+                WebkitLineClamp: 1,
+                WebkitBoxOrient: 'vertical',
+                textOverflow: 'ellipsis'
+              }}
+            >
+              {props.name}
+            </H5>
+          </Stack>
+
           <SmallText
             sx={{
-              color: '#1B1B1B66'
+              color: '#1B1B1B66',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
             }}
           >
             {/* to remain space of description  */}
@@ -140,6 +164,9 @@ export const ActiveUser: React.FC = () => {
       total: resp.data.total
     }
   })
+  console.log('data')
+  console.log(data)
+
   const slideCardWidth = isSm ? 230 : 442
   const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / slideCardWidth)
   useEffect(() => {
@@ -186,9 +213,10 @@ export const ActiveUser: React.FC = () => {
                   userId={data.creatorUserInfo.userId}
                   img={data.creatorUserInfo.avatar}
                   name={data.creatorUserInfo.name}
-                  desc={data.creatorUserInfo.companyIntroduction}
+                  desc={data.creatorUserInfo.description}
                   createdCount={data.totalCreated}
                   participated={data.totalPart}
+                  ifKyc={data.creatorUserInfo.ifKyc}
                 />
               </SwiperSlide>
             ))

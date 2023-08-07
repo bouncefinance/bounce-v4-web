@@ -2,16 +2,21 @@ export const routes = {
   auction: {
     createAuctionPool: '/auction/create-auction-pool',
     createAuctionPoolType: '/auction/create-auction-pool/:auctionType/:chainIdOrName/:tokenType',
-
     fixedSwapNft: '/auction/fixed-swap-1155/:chainShortName/:poolId',
     fixedPrice: '/auction/fixed-price/:chainShortName/:poolId',
     englishAuction: '/auction/english-auction/:chainShortName/:poolId',
     randomSelection: '/auction/random-selection/:chainShortName/:poolId',
+    dutchAuction: '/auction/dutch-auction/:chainShortName/:poolId',
+    erc20EnglishAuction: '/auction/erc20-english-auction/:chainShortName/:poolId',
+    // mutantEnglishAuction: '/auction/mutant-english-auction/:chainShortName/:poolId',
     v2: {
       fixedSwapNft: '/auction/fixed-swap-1155/:sysId',
       fixedPrice: '/auction/fixed-price/:sysId',
       englishAuction: '/auction/english-auction/:sysId',
-      randomSelection: '/auction/random-selection/:sysId'
+      randomSelection: '/auction/random-selection/:sysId',
+      dutchAuction: '/auction/dutch-auction/:sysId',
+      erc20EnglishAuction: '/auction/erc20-english-auction/:sysId'
+      // mutantEnglishAuction: '/auction/mutant-english-auction/:sysId'
     }
   },
   okxActivity: '/okxActivity/:chainShortName/:poolId',
@@ -19,7 +24,7 @@ export const routes = {
   loginBase: '/login_base',
   market: {
     index: '/market',
-    pools: '/market/pools',
+    // pools: '/market/pools',
     nftPools: '/market/nft-pools'
   },
   nftAuction: {
@@ -28,13 +33,19 @@ export const routes = {
   tokenAuction: {
     index: '/TokenAuction'
   },
+  dutchAuction: {
+    index: '/DutchAuction'
+  },
   launchpad: {
     index: '/launchpad',
     bladeDao: '/launchpad/bladedao',
     bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId'
   },
   realAuction: {
-    index: '/real-auction'
+    index: '/real-auction',
+    applySeller: '/real-auction/apply-seller',
+    bounceShop: '/real-auction/bounce',
+    foundoShop: '/real-auction/foundo'
   },
   adsAuction: {
     index: '/ads-auction'
@@ -73,7 +84,6 @@ export const routes = {
   thirdPart: {
     poseiswapAuction: '/launchpad/poseiswap/auction/:sysId',
     digitalAssetsOffering: '/launchpad/poseiswap-intro',
-    foundoDetail: 'foundo/detail',
     OmegaAuction: '/launchpad/omega/auction/:sysId',
     TypeitAuction: '/launchpad/typeit/:sysId',
     TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
@@ -82,7 +92,8 @@ export const routes = {
     DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange',
-    CreateLaunchpad: '/launchpad/create'
+    CreateLaunchpad: '/launchpad/create',
+    MetaBloxAuction: '/launchpad/metablox'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
@@ -91,8 +102,9 @@ export const routes = {
     equilibriaIndex: '/playable/ghostierunner/equilibria',
     equilibriaDetail: '/playable/ghostierunner/equilibria/:chainShortName/:poolId'
   },
-  fundo: {
-    home: '/fundo/home/index',
-    detail: 'fundo/detail/index'
+  foundo: {
+    home: '/foundo/home/index',
+    detail: '/foundo/detail/index',
+    foundoDetail: '/foundo/detail'
   }
 }

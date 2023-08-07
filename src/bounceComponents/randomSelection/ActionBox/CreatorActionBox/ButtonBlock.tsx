@@ -78,7 +78,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
               againBtn: 'Close',
               title: 'Congratulations!',
               content: isCancel
-                ? `You have successfully cancelled the pool and claimed your tokens`
+                ? 'You have successfully cancelled the pool and claimed your tokens'
                 : successDialogContent
             })
           })
@@ -92,7 +92,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
           againBtn: 'Try Again',
           cancelBtn: 'Cancel',
           title: 'Oops..',
-          content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+          content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
           onAgain: () => toClaim(isCancel)
         })
       }

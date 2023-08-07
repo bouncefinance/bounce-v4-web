@@ -142,8 +142,8 @@ export interface InitialValuesPros {
   auctionType?: number
   chain?: number
 }
-const defaultIdeaPageSize = 16
 const NFTAuctionListDialog = (props: DialogParams) => {
+  const defaultIdeaPageSize = 16
   const { open, handleClose } = props
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
   const {
@@ -285,7 +285,6 @@ const NFTAuctionListDialog = (props: DialogParams) => {
             ) : (
               <EmptyData />
             )}
-
             {poolsData?.total >= defaultIdeaPageSize && (
               <Box mt={58} display={'flex'} justifyContent={'center'}>
                 <Pagination

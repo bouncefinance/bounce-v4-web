@@ -22,38 +22,37 @@ import typeltpAvatar from './avatar/typelt.png'
 import LasmetAvatar from './avatar/lasmet-avatar.png'
 import DeelanceAvatar from './avatar/deelance-avatar.jpg'
 import OpenfabricaiAvatar from './avatar/openfabricai-avatar.jpg'
-import LasMetaTokenomic from './imgs/LasMeta-Tokenomic.png'
+import LasMetaTokenomic from './imgs/LasMeta-Tokenomic.jpg'
 import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
+import MetaBlox from './imgs/metablox.png'
+import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
 import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import { ChainId } from 'constants/chain'
+import { routes } from 'constants/routes'
 
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
 }
-export type TPrivatePrices =
-  | 'startingPrice'
-  | 'dipTokenOffered'
-  | 'dgtTokenOffered'
-  | 'hardCapPerUser'
-  | 'Token Name'
-  | 'Blockchain'
+
 export interface IPrivatePricesInfo {
-  title: TPrivatePrices | TPrivatePrices[]
+  title: string | string[]
   value: (string | JSX.Element)[] | (string | JSX.Element)
 }
 
 export interface IPrivatePadProp {
+  hidden?: true
   keyId: number
   liveTimeStamp: {
     start: number
     end: number
   }
   showStartEnd?: true
+  hideUpcomingCountdown?: true
   poolTypeName: string
   img: string
   avatar: string
@@ -75,6 +74,7 @@ export interface IPrivatePadProp {
   }[]
   privatePrices?: IPrivatePricesInfo[]
   isFAQ?: boolean
+  poolTypeName2?: string
 }
 
 const DipProjectInfo: IProjectInfo[] = [
@@ -123,55 +123,51 @@ const DipProjectInfo: IProjectInfo[] = [
   {
     title: 'DIP Rules',
     info: [
-      <ul key={0}>
-        <li>The ceiling price of the auction is preset by the protocol</li>
-        <li>
-          The DIP token price is determined based on the total amount of USDT raised divided by the total number of DIP
-          being auctioned
-        </li>
-        <li>The auction ends when one of the following conditions are met:</li>
-        <li>The auction time ends</li>
-        <li>The token price reaches the ceiling price</li>
-        <li>
-          After the auction is finalized, DIP tokens are distributed to participants proportionally to their
-          contribution to the pool
-        </li>
-        <li>
-          DIP tokens acquired via the auction are vested to participants for 24 hours after the auction has been
-          finalized
-        </li>
-        <li>
-          If the last bidder enters a USDT amount that corresponds to an overall price that is larger than the ceiling
-          price, the unused amount will be refunded
-        </li>
-      </ul>
+      <Stack flexDirection={'column'} gap={10} key={1}>
+        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
+        <Typography>
+          The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+          and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
+          on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
+          reached.
+        </Typography>
+        <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
+        <ul style={{ marginTop: 10 }}>
+          <li>Bid Asset: $USDT</li>
+          <li>Starting Price (lowest prices): Preset by DIP DAO</li>
+          <li>Highest Price: Preset by DIP DAO</li>
+          <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
+          <li>Auction Close: Within 24 hours or when token sold out.</li>
+          <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
+        </ul>
+      </Stack>
     ]
   },
   {
     title: 'DGT Rules',
     info: [
-      <ul key={0}>
-        <li>The starting price is preset by the protocol for the start of the auction</li>
-        <li>The floor price is preset by the protocol for the end of the auction (the lowest possible price)</li>
-        <li>The clearing price decreases linearly every second throughout the auction (24hr) from the start time</li>
-        <li>With every additional DIP commitment, the live token price increases</li>
-        <li>Token price = amount raised / token supply</li>
-        <li>The auction ends successfully when the current token price reaches the clearing price</li>
-        <li>
-          In case the auction fails to meet the completion criteria, all committed DIP tokens are returned to the
-          participants
-        </li>
-        <li>
-          After the auction is finalized, all participants are distributed DGT tokens proportional to their contribution
-          to the pool at the last reached price
-        </li>
-        <li>DGT tokens acquired via the auction are claimable immediately after the auction is finalized</li>
-        <li>The DIP tokens provided to the auction are burned</li>
-        <li>
-          If the last bidder enters an DIP amount larger than the available amount for the auction to meet the clearing
-          price then the unused amount will be refunded
-        </li>
-      </ul>
+      <Stack flexDirection={'column'} gap={10} key={1}>
+        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DGT ERC20 Dutch Auction</Typography>
+        <Typography>
+          A Dutch Auction, also known as descending price auction, refers to a type of auction in which an auctioneer
+          starts with a very high price, incrementally lowering the price until someone places a bid. The first bid wins
+          the auction, assuming the price is above the reserve price, avoiding any bidding wars.
+        </Typography>
+        <Typography mt={15}>DGT ERC20 Dutch Auction details are as follows:</Typography>
+        <ul style={{ marginTop: 10 }}>
+          <li>Bid Asset: $DIP</li>
+          <li>Starting Price: Preset by DIP DAO in DIP/DGT</li>
+          <li>Floor Price: Preset by DIP DAO in DIP/DGT</li>
+          <li>Clearing Price: Decreases linearly throughout the auction period.</li>
+          <li>Auction Close: Within 24 hours or when token price reach the ceiling price.</li>
+          <li>Distribution: Immediate after the closing of the auction at clearing price, need to claim on Bounce.</li>
+          <li>Burn: If the auction ends successfully, $DIP will be burned by DIP DAO.</li>
+          <li>
+            Refund: If the last bidder's contribution exceed the ceiling price, it is fully refunded. If the last bidder
+            enters an DIP amount larger than the amount sold, the unused DIP will be refunded.
+          </li>
+        </ul>
+      </Stack>
     ]
   }
 ]
@@ -673,11 +669,136 @@ const DeelanceProjectInfo: IProjectInfo[] = [
   }
 ]
 export const PrivatePadDataList: IPrivatePadProp[] = [
+  // current privatePad max keyId is 12
+  {
+    keyId: 12,
+    liveTimeStamp: {
+      start: 16908668000000,
+      end: 16908668000000
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    img: MetaBlox,
+    avatar: MetaBloxAvatar,
+    title: 'MetaBlox',
+    chainId: 1,
+    tokenName: '$MTBX',
+    whitePaperLink: 'https://drive.google.com/file/d/1TqN0LbGkcOomz3hT-T38InSnJZV8GRrR/view',
+    upcomingLink: '/launchpad/metablox',
+    liveLink: '/launchpad/metablox',
+    projectInfo: [
+      {
+        title: 'What is MetaBlox?',
+        info: [
+          'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+          `MetaBlox offers access to 3,000,000 WiFi mining locations on Day 1, and aims to expand this network to 6,000,000 mining locations by 2025. As of Apr 2023, 2,500 miners was active. Metablox@ONE dapp is already the top 3 gas burners in Harmony One.
+          MetaBlox is the only web3 project that was officially listed into WiFi Standard by the WBA(Wireless Broadband Alliance), together with Cisco, Google etc. By incentivizing WiFi and Cellular with web3, MetaBlox is leading the industry transformation, making global WiFi roaming a reality.`
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box key={1}>
+            <Typography sx={{ fontSize: 18, fontWidth: 700 }}>Seed Round:</Typography>
+            <Typography mt={10}>
+              MetaBlox has raised $3 million in funding from various prominent investors and institutions. These include
+              Synergies, Collab+Currency, SNZ, Harmony ONE, Future Life, NFT Tech, Airswift, and Slope.
+            </Typography>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+    social: [
+      <Link key={0} href="http://metablox.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/metablox" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={4} href="https://t.me/ChatonMetaBloxCommunity" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/metablox" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$MTBX' },
+      { title: 'Token Price', content: '0.03' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 11,
+    liveTimeStamp: {
+      start: 1690672533200000,
+      end: 1690932433400000
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'ERC20 English Auction',
+    poolTypeName2: 'ERC20 Dutch Auction',
+    img: DipImg,
+    avatar: DipAvatar,
+    title: 'DIP Exchange',
+    chainId: 250,
+    tokenName: '$DIP',
+    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
+    upcomingLink: '/launchpad/dip_exchange',
+    liveLink: '/launchpad/dip_exchange',
+    projectInfo: DipProjectInfo,
+    tokenMetrics: DipTokenMetrics,
+    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
+    social: [
+      <Link key={0} href="https://dip.exchange" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$DIP $DGT' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Fantom' }
+    ],
+    privatePrices: [
+      {
+        title: ['DIP Auction Method'],
+        value: ['ERC20 English Auction']
+      },
+      {
+        title: ['dipTokenOffered'],
+        value: 'TBD $DIP'
+      },
+      {
+        title: ['dgtTokenOffered'],
+        value: 'TBD $DGP'
+      },
+      {
+        title: ['DIP Auction Method'],
+        value: 'ERC20 Dunch Auction'
+      }
+    ],
+    isFAQ: true
+  },
   {
     keyId: 9,
     liveTimeStamp: {
-      start: 1689350400000,
-      end: 0
+      start: 1689436800000,
+      end: 1689609600000
     },
     poolTypeName: 'Fixed Swap Auction',
     img: Deelance,
@@ -723,9 +844,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 10,
     liveTimeStamp: {
-      start: 1689350400000,
-      end: 0
+      start: 1689436800000,
+      end: 1689609600000
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Whitelist',
     img: Deelance,
     avatar: DeelanceAvatar,
@@ -733,8 +855,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: '$DLANCE',
     whitePaperLink: 'https://docs.deelance.com/',
-    upcomingLink: '/launchpad/deelance',
-    liveLink: '/launchpad/deelance',
+    upcomingLink: routes.thirdPart.DeelanceAuctionWhitelist,
+    liveLink: routes.thirdPart.DeelanceAuctionWhitelist,
     projectInfo: DeelanceProjectInfo,
     tokenMetrics: [],
     desc: 'DeeLance is the first decentralized platform revolutionizing how freelancers connect with potential employers in Metaverse.',
@@ -768,72 +890,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
-    keyId: 11,
-    liveTimeStamp: {
-      start: 1690675200000,
-      end: 1690934400000
-    },
-    poolTypeName: 'ERC20 English Auction',
-    img: DipImg,
-    avatar: DipAvatar,
-    title: 'DIP Exchange',
-    chainId: 250,
-    tokenName: '$DIP',
-    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
-    upcomingLink: '/launchpad/dip_exchange',
-    liveLink: '/launchpad/dip_exchange',
-    projectInfo: DipProjectInfo,
-    tokenMetrics: DipTokenMetrics,
-    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
-    social: [
-      <Link key={0} href="https://dip.exchange" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>,
-      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$DIP $DGT' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Fantom' }
-    ],
-    privatePrices: [
-      {
-        title: ['startingPrice'],
-        value: [
-          <Typography mb={8} sx={{ color: '#2B51DA', fontSize: 12 }} key={1}>
-            It will increase according to the increase in sales volume
-          </Typography>,
-          '1 DIP = 0.002514 USDT'
-        ]
-      },
-      {
-        title: ['dipTokenOffered'],
-        value: '420,000.0000 DIP'
-      },
-      {
-        title: ['dgtTokenOffered'],
-        value: '420,000.0000 DGT'
-      },
-      {
-        title: ['hardCapPerUser'],
-        value: '500,000 USDT=37.7100 USDT (≈15,000 USD)'
-      }
-    ],
-    isFAQ: true
-  },
-  {
+    hidden: true,
     keyId: 8,
     liveTimeStamp: {
       start: 1693324800000,
@@ -921,6 +978,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 10,
     liveTimeStamp: {
       start: 1696780800000,
@@ -1290,6 +1348,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 5,
     liveTimeStamp: {
       start: 1687348800000,

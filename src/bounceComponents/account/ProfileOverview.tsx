@@ -171,7 +171,7 @@ export default function ProfileOverview() {
                 alignItems: 'center'
               }}
             >
-              <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
+              <Typography variant="h3" fontWeight={600} fontSize={isSm ? 22 : 36} fontFamily="Public Sans">
                 My Profile
               </Typography>
               {!isSm && (
@@ -317,7 +317,12 @@ function SocialEditInput({ value, setValue }: { value: string; setValue: (val: s
                 width: 160,
                 height: 34,
                 background: '#F6F7F3',
-                borderRadius: '100px'
+                borderRadius: '100px',
+                '&.Mui-focused': {
+                  '.MuiOutlinedInput-notchedOutline': {
+                    border: 'none'
+                  }
+                }
               }}
             />
             <Typography

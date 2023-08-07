@@ -1,11 +1,11 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
-import SwiperCore, { Autoplay, Pagination } from 'swiper'
+import SwiperCore, { Autoplay, EffectCreative, Pagination } from 'swiper'
 import 'swiper/swiper-bundle.css'
 import { Box, styled, Skeleton, Typography } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
 import { BannerType } from '../../../api/market/type'
@@ -103,12 +103,21 @@ function ArrowBanner({ type }: { type?: string }) {
       total: resp.data
     }
   })
+
   const EnterSwiper = () => {
     setShowSwiperIcon(true)
   }
   const LeaveSwiper = () => {
     setShowSwiperIcon(false)
   }
+  const delay = useMemo(() => {
+    if (data?.list.length >= 7) {
+      return 1500
+    } else if (data?.list.length >= 4) {
+      return 2000
+    }
+    return 3000
+  }, [data?.list.length])
   return (
     <Box
       position={'relative'}
@@ -142,12 +151,23 @@ function ArrowBanner({ type }: { type?: string }) {
         <SwiperSkeleton />
       ) : (
         <Swiper
+          speed={1200}
           onSwiper={setSwiper}
           spaceBetween={0}
           slidesPerView={1}
           loop={true}
+          effect={'creative'}
+          creativeEffect={{
+            prev: {
+              translate: [0, 0, -1]
+            },
+            next: {
+              translate: ['100%', 0, 0]
+            }
+          }}
+          modules={[EffectCreative]}
           autoplay={{
-            delay: 3000
+            delay: delay
           }}
           style={{
             maxWidth: '1296px',

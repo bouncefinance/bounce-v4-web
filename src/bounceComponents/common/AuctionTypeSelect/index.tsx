@@ -20,7 +20,9 @@ export default function AuctionTypeSelect({
     if (tokenType === BackedTokenType.TOKEN) {
       return [
         { label: 'Fixed Price', value: PoolType.FixedSwap },
-        { label: 'Random Selection', value: PoolType.Lottery }
+        { label: 'Random Selection', value: PoolType.Lottery },
+        { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
+        { label: 'ERC20 English', value: PoolType.ENGLISH_AUCTION }
       ]
     } else if (tokenType === BackedTokenType.NFT) {
       if (ercType === ERCType.ERC1155) {
@@ -37,6 +39,7 @@ export default function AuctionTypeSelect({
     return [
       { label: 'Fixed Price', value: PoolType.FixedSwap },
       { label: 'Random Selection', value: PoolType.Lottery },
+      { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
       { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
     ]
     // eslint-disable-next-line react-hooks/exhaustive-deps

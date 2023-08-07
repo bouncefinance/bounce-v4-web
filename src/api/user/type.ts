@@ -120,11 +120,12 @@ export interface IProfileUserInfo {
   skills: string
   timezone: string
   twitter: string
+  twitterName?: string
   university: IAvatarLinkType
   userType: number
   website: string
   years: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 export interface IUserBindAddressListData {
   address: string
@@ -200,7 +201,7 @@ export interface IRepliesItem {
   createdAt: number
   name: string
   userId: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface ICommentsItem {
@@ -214,7 +215,7 @@ export interface ICommentsItem {
   topicId: number
   topicType: TopicType
   userId: number
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
 export interface IAddCommentParams {
@@ -301,6 +302,18 @@ export interface GetUserNFTsParams {
   isERC721?: boolean
   limit?: number
   offset?: number
+}
+
+export interface GetUserTokenListParams {
+  chainId: number
+  action: 1 | 2 // token0: 1,token1: 2
+}
+
+export interface SearchTokenListParams {
+  chainId: ChainId
+  limit?: number
+  offset?: number
+  value: string
 }
 export interface UserUpdateServiceParams {
   category: number

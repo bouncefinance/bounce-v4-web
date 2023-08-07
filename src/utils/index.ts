@@ -159,6 +159,16 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${parsed.substring(0, chars + 2)}...${parsed.substring(42 - chars)}`
 }
 
+export function shortenHash(hash: string, suffixLength = 6): string {
+  if (typeof hash !== 'string' || hash.length <= 4 + suffixLength) {
+    return hash // Return original hash if it's not a string or shorter than prefix + suffix length
+  }
+
+  const prefix = hash.slice(0, 4)
+  const suffix = hash.slice(-suffixLength)
+  return `${prefix}...${suffix}`
+}
+
 // add 10%
 export function calculateGasMargin(value: BigNumber, add = 10): BigNumber {
   return value.mul(BigNumber.from(10000).add(BigNumber.from(add * 100))).div(BigNumber.from(10000))
@@ -276,4 +286,13 @@ export const getfilesize = (size: number): string => {
   if (size < Math.pow(num, 4)) return (size / Math.pow(num, 3)).toFixed(0) + 'GB' //G
   if (size < Math.pow(num, 5)) return (size / Math.pow(num, 4)).toFixed(0) + 'TB' //T
   return size + 'B'
+}
+
+export const formatNumberWithCommas = (number: number | string) => {
+  const strNum = String(number)
+  const parts = strNum.split('.')
+  const intPart = parts[0]
+  const decimalsPart = parts[1] || ''
+  const commas = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return decimalsPart.length > 0 ? `${commas}.${decimalsPart}` : commas
 }

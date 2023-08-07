@@ -7,8 +7,13 @@ interface Window {
     isMetaMask?: true
     on?: (...args: any[]) => void
     send: (...args: any[]) => void
-    request?: (...args: any[]) => void
+    request?: (...args: any[]) => Promise<any>
     removeListener?: (...args: any[]) => void
+    isBraveWallet?: true
+    isRabby?: true
+    isTrust?: true
+    isLedgerConnect?: true
+    isCoinbaseWallet?: true
   }
   okxwallet?: {
     isMetaMask?: false
@@ -26,7 +31,22 @@ interface Window {
     _chainId?: number
   }
   // eslint-disable-next-line @typescript-eslint/ban-types
-  web3?: {}
+  web3?: {
+    isMetaMask?: false
+    on?: (...args: any[]) => void
+    send: (...args: any[]) => Promise<any>
+    enable: (...args: any[]) => Promise<any>
+    request?: (...args: any[]) => Promise<any>
+    removeListener?: (...args: any[]) => void
+    autoRefreshOnNetworkChange?: any
+    cachedResults?: any
+    isDapper?: boolean
+    chainId?: number
+    netVersion?: number
+    networkVersion?: number
+    _chainId?: number
+    currentProvider: any
+  }
 }
 
 declare module 'content-hash' {
@@ -48,4 +68,20 @@ declare namespace JSX {
   interface IntrinsicElements {
     'lottie-player': any
   }
+}
+declare module 'react-typewriter-effect' {
+  interface TypeWriterEffectProps {
+    text?: string
+    multiText?: string[]
+    multiTextDelay?: number
+    multiTextLoop?: boolean
+    typeSpeed?: number
+    startDelay?: number
+    hideCursorAfterText?: boolean
+    cursorColor?: string
+    textStyle?: React.CSSProperties
+    scrollArea?: Element | Document | Window
+  }
+
+  export default class TypeWriterEffect extends React.Component<TypeWriterEffectProps, any> {}
 }

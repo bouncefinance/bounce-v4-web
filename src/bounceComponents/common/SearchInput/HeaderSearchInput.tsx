@@ -196,6 +196,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                     option.values.chainId ?? 1,
                     option.values.poolId ?? 0
                   )
+                  console.log('_to>>>', _to)
                   navigate(_to)
                 }}
               >
@@ -271,7 +272,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                       )}
                     </Typography>
                   </div>
-                  <VerifiedIcon isVerify={option?.values?.value?.isVerify} />
+                  <VerifiedIcon ifKyc={option?.values?.value?.ifKyc} />
                 </Stack>
               </MenuItem>
             </>

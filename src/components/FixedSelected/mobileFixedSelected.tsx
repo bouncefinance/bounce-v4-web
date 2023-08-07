@@ -3,11 +3,13 @@ import { Button, Drawer, Box, IconButton, Stack, Typography, InputBase } from '@
 import { useDebounce } from 'ahooks'
 import { ReactComponent as BottomArrowIcon } from 'assets/imgs/common/bottomArrow.svg'
 import { ReactComponent as SearchSvg } from 'assets/imgs/common/search.svg'
-import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
+import { ChainId } from 'constants/chain'
 import { InitialValuesPros, initialValues } from 'pages/tokenAuction/components/listDialog'
 import { useEffect, useMemo, useState } from 'react'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { getLabelById } from 'utils'
+import { PoolType } from 'api/pool/type'
 export interface IDrawerOpen {
   open: boolean
   title: 'search' | 'filter' | ''
@@ -19,10 +21,9 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
   const [currOpen, setCurrOpen] = useState<IDrawerOpen>({ open: false, title: '' })
   const [chain] = useState<number>(0)
   const [searchVal, setSearchVal] = useState('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
-  const debouncedSearchVal = useDebounce(searchVal, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, debouncedSearchVal, false)
-  console.log('tokenList:', tokenList)
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
+  const debouncedFilterInputValue = useDebounce(searchVal, { wait: 400 })
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState(initialValues)
 
   const [selectButton, setSelectButton] = useState('')
@@ -55,11 +56,19 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         list: [
           {
             label: 'Fixed Price',
-            value: 1
+            value: PoolType.FixedSwap
           },
           {
             label: 'Random Selection',
-            value: 3
+            value: PoolType.Lottery
+          },
+          {
+            label: 'Dutch Auction',
+            value: PoolType.DUTCH_AUCTION
+          },
+          {
+            label: 'English Auction',
+            value: PoolType.ENGLISH_AUCTION
           }
         ]
       },
@@ -88,7 +97,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
       {
         title: 'Token',
         name: 'tokenFromSymbol',
-        list: []
+        list: tokenList || []
       },
       {
         title: 'Sort By',
@@ -103,7 +112,6 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
           }
         ]
       },
-
       {
         title: 'Search',
         list: searchTypeOptions.map((item, index) => {
@@ -112,9 +120,13 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
             value: index
           }
         })
+      },
+      {
+        title: 'Clear',
+        list: []
       }
     ],
-    [chainList]
+    [chainList, tokenList]
   )
   const setValues = ({ type, item, isCancel }: { type: string; item: any; isCancel?: boolean }) => {
     const body = { ...filterValues }
@@ -129,7 +141,11 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         body.poolStatus = isCancel ? initialValues['poolStatus'] : item.value
         break
       case 'Token':
-        body.tokenFromAddress = isCancel ? initialValues['tokenFromAddress'] : item.address
+        body.tokenFromAddress = isCancel
+          ? initialValues['tokenFromAddress']
+          : item.contract
+          ? item.contract
+          : item.address
         body.tokenFromSymbol = isCancel ? initialValues['tokenFromSymbol'] : item.symbol
         body.tokenFromLogoURI = isCancel ? initialValues['tokenFromLogoURI'] : item.logoURI
         body.tokenFromDecimals = isCancel ? initialValues['tokenFromDecimals'] : item.decimals
@@ -236,14 +252,16 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
           }}
           sx={{ border: selectButton === data.title ? '1px solid #E1F25C' : '' }}
         >
-          <Typography>{data.title}</Typography>
+          <Typography>
+            {data.title} {data.title === 'Search' ? ' Type' : ''}
+          </Typography>
           <BottomArrowIcon />
         </FilterButton>
         {data.list?.length > 0 && (
           <Stack
             sx={{
               display: selectButton === data.title ? 'block' : 'none',
-              maxHeight: 123,
+              maxHeight: 158,
               marginTop: 8,
               padding: '20px 22px',
               overflowY: 'scroll',
@@ -294,7 +312,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         <DrawerTitle title="Filter" />
         <Stack gap={16} mt={36}>
           {selecteOption
-            .filter(item => item.title !== 'Search')
+            .filter(item => item.title !== 'Search' && item.title !== 'Clear')
             .map((type, tid) => (
               <SelectItem data={type} key={tid} />
             ))}
@@ -331,7 +349,7 @@ const MobileFixedSelected = ({ handleSubmit }: { handleSubmit: (values: InitialV
         />
         <Stack gap={16} mt={36}>
           {selecteOption
-            .filter(item => item.title === 'Search' || item.title === 'Clear')
+            .filter(item => item.title === 'Search')
             .map((type, tid) => (
               <SelectItem data={type} key={tid} />
             ))}

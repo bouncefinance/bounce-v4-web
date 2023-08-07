@@ -21,6 +21,11 @@ import Erc721Pool from './Erc721Pool'
 
 import RandomSelection from './RandomSelection'
 import useBreakpoint from 'hooks/useBreakpoint'
+import Erc20EnglishAuctionPool from './Erc20EnglishAuctionPool'
+import DutchAuction from './DutchAuction'
+import { getUserDashboardStat } from 'api/account'
+import MutantEnglish721Pool from './MutantEnglish721Pool'
+
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
 const CreateAuctionPool = () => {
@@ -48,8 +53,14 @@ const CreateAuctionPool = () => {
             <Stepper steps={steps} valuesState={valuesState} valuesDispatch={valuesDispatch} />
           </Box>
         )}
+        {valuesState.auctionType === AuctionType.ENGLISH_AUCTION && valuesState.tokenType === TokenType.ERC20 ? (
+          <Erc20EnglishAuctionPool />
+        ) : null}
         {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC20 ? (
           <Erc20Pool />
+        ) : null}
+        {valuesState.auctionType === AuctionType.DUTCH_AUCTION && valuesState.tokenType === TokenType.ERC20 ? (
+          <DutchAuction />
         ) : null}
         {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC1155 ? (
           <Erc1155Pool />
@@ -57,7 +68,12 @@ const CreateAuctionPool = () => {
         {valuesState.auctionType === AuctionType.RANDOM_SELECTION && valuesState.tokenType === TokenType.ERC20 ? (
           <RandomSelection />
         ) : null}
-        {valuesState.tokenType === TokenType.ERC721 ? <Erc721Pool /> : null}
+        {valuesState.tokenType === TokenType.ERC721 && AuctionType.MUTANT_ENGLISH === valuesState.auctionType ? (
+          <MutantEnglish721Pool />
+        ) : null}
+        {valuesState.tokenType === TokenType.ERC721 && AuctionType.MUTANT_ENGLISH !== valuesState.auctionType ? (
+          <Erc721Pool />
+        ) : null}
       </RoundedContainer>
     </>
   )
@@ -73,6 +89,11 @@ const CreateAuctionPoolPage = () => {
   const { account } = useActiveWeb3React()
 
   const { auctionType } = useQueryParams()
+
+  useEffect(() => {
+    // check token is expired
+    getUserDashboardStat()
+  }, [])
 
   useEffect(() => {
     if (!account || typeof auctionType !== 'string' || !isSupportedAuctionType(auctionType)) {

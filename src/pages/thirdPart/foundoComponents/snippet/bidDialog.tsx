@@ -4,7 +4,7 @@ import ProductIcon from 'assets/imgs/thirdPart/foundoDetail/productIcon.png'
 import CloseIcon from 'assets/imgs/thirdPart/foundoDetail/x.svg'
 import LogoIcon from 'assets/imgs/thirdPart/foundoDetail/logo.png'
 import ArrowbottomIcon from 'assets/imgs/thirdPart/foundoDetail/Arrowbottom.png'
-import { RowLabel } from './bidAction'
+import { RowLabel } from './creatorBidAuction'
 import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
@@ -65,6 +65,7 @@ export const PlaceBidBtn = styled(LoadingButton)({
   width: '100%',
   flexFlow: 'row nowrap',
   justifyContent: 'center',
+  margin: '48px auto',
   alignItems: 'center',
   border: '1px solid #959595',
   backgroundColor: 'transparent',
@@ -419,8 +420,6 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
                     .replace('.', '$#$')
                     .replace(/\./g, '')
                     .replace('$#$', '.')
-                  //   e.target.value
-                  console.log('result>>>', result)
                   bidHandler(result)
                 }}
                 onBlurCapture={e => {
@@ -549,7 +548,7 @@ function BidButton({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || err || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
       })
     }
@@ -652,7 +651,7 @@ function BidButton({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toApprove
       })
     }

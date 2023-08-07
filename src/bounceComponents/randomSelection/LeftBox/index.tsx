@@ -74,8 +74,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
                 addTokenToWallet(poolInfo.token0.address, poolInfo.token0.symbol, poolInfo.token0.decimals)
               }
               sx={{
-                width: 140,
-                height: 20
+                width: isMobile ? '100%' : 140,
+                height: isMobile ? 30 : 20
               }}
             >
               Add To Wallet

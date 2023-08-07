@@ -15,6 +15,10 @@ import { Currency } from '../../constants/token'
 import { ChainId } from 'constants/chain'
 import { arrayify, parseBytes32String } from 'ethers/lib/utils'
 import isZero from 'utils/isZero'
+import { useCallback } from 'react'
+import { useAppDispatch, useAppSelector } from 'state/hooks'
+import { addConnectedWallet } from './reducer'
+import { Wallet } from './reducer'
 
 export function useETHBalances(
   uncheckedAddresses?: (string | undefined)[],
@@ -112,7 +116,6 @@ export function useCurrencyBalances(
   currencies?: (Currency | undefined)[],
   chainId?: ChainId
 ): (CurrencyAmount | undefined)[] {
-  // console.log('currencies>>>>', currencies)
   const tokens = useMemo(
     () => currencies?.map(currency => (currency && !currency?.isNative ? currency : undefined)) ?? [],
     [currencies]
@@ -120,9 +123,7 @@ export function useCurrencyBalances(
   const eths = useMemo(() => currencies?.find(currency => currency && currency.isNative), [currencies])
 
   const tokenBalances = useTokenBalancesWithLoadingIndicator(account, tokens, chainId)[0]
-
   const ethBalance = useETHBalance(eths ? account : undefined, chainId)
-  // console.log('ethBalance>>>', ethBalance)
   return useMemo(
     () =>
       currencies?.map(currency => {
@@ -242,4 +243,16 @@ export function useTokens(
       return new Currency(curChainId, address, decimal[0], symbol[0], tokenName[0])
     })
   }, [curChainId, decimalss, symbols, tokenAddress, tokenNames])
+}
+
+export function useConnectedWallets(): [Wallet[], (wallet: Wallet) => void] {
+  const dispatch = useAppDispatch()
+  const connectedWallets = useAppSelector(state => state.wallets.connectedWallets)
+  const addWallet = useCallback(
+    (wallet: Wallet) => {
+      dispatch(addConnectedWallet(wallet))
+    },
+    [dispatch]
+  )
+  return [connectedWallets, addWallet]
 }

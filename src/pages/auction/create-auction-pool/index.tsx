@@ -27,6 +27,7 @@ import { useUserInfo, useShowLoginModal } from 'state/users/hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { IS_TEST_ENV } from '../../../constants'
 
 const validationSchema = Yup.object({
   // auctionType: Yup.string().required('Auction Type is required')
@@ -39,7 +40,7 @@ const initialValues = {
 const CreateAuctionPoolIntroPage = () => {
   const navigate = useNavigate()
   const { redirect } = useQueryParams()
-  const { account, active, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const { userId, userInfo } = useUserInfo()
   const showLoginModal = useShowLoginModal()
@@ -118,7 +119,7 @@ const CreateAuctionPoolIntroPage = () => {
               <Stack component={Form} spacing={20}>
                 <Typography variant="h3">Select Creation Type</Typography>
 
-                <FormItem error={!active}>
+                <FormItem error={!account}>
                   <Select<ChainId>
                     value={chainId}
                     displayEmpty
@@ -173,7 +174,6 @@ const CreateAuctionPoolIntroPage = () => {
                   <Select
                     value={curAuctionType}
                     onChange={e => {
-                      console.log('e.target.value>>>', e.target.value)
                       setCurAuctionType(e.target.value as AuctionType)
                     }}
                   >
@@ -238,7 +238,7 @@ const CreateAuctionPoolIntroPage = () => {
 
                 <Stack direction="row" spacing={10} justifyContent="end">
                   {/* && userInfo?.twitterName */}
-                  {account && userId && userInfo?.email ? (
+                  {account && userId && userInfo?.email && (userInfo?.twitterName || IS_TEST_ENV) ? (
                     <>
                       <Button variant="outlined" sx={{ width: 140 }} onClick={handleCancel}>
                         Cancel
@@ -251,8 +251,7 @@ const CreateAuctionPoolIntroPage = () => {
                     <Button variant="contained" sx={{ width: 140 }} onClick={showLoginModal}>
                       Login
                     </Button>
-                  ) : !userInfo?.email ? (
-                    //  || !userInfo?.twitterName
+                  ) : !userInfo?.email || (!userInfo?.twitterName && !IS_TEST_ENV) ? (
                     <Button
                       variant="contained"
                       sx={{ width: 300 }}
@@ -260,8 +259,7 @@ const CreateAuctionPoolIntroPage = () => {
                         navigate(routes.account.myAccount)
                       }}
                     >
-                      You need to bind your email
-                      {/* and twitter first */}
+                      You need to bind your email and twitter first
                     </Button>
                   ) : (
                     <Button

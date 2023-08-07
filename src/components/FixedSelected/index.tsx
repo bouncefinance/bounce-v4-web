@@ -4,11 +4,14 @@ import UpArrowIcon from 'assets/imgs/common/upArrow.svg'
 import BottomArrowIcon from 'assets/imgs/common/bottomArrow.svg'
 import SearchSvg from 'assets/imgs/common/search.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
 import { useDebounce } from 'ahooks'
-import { getLabelById } from 'utils'
 import SearchIcon from '@mui/icons-material/Search'
 import { initialValues, InitialValuesPros } from 'pages/tokenAuction/components/listDialog'
+import { PoolType } from 'api/pool/type'
+import { getLabelById } from 'utils'
+import { ChainId } from 'constants/chain'
+
 const SearchInput = styled(Input)(() => ({
   height: 38,
   lineHeight: '38px',
@@ -54,9 +57,9 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(0)
   const [filterInputValue, setFilterInputValue] = useState<string>('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, debouncedFilterInputValue, false)
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
   const chainList = useMemo(
     () =>
@@ -81,11 +84,19 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         list: [
           {
             label: 'Fixed Price',
-            value: 1
+            value: PoolType.FixedSwap
           },
           {
             label: 'Random Selection',
-            value: 3
+            value: PoolType.Lottery
+          },
+          {
+            label: 'Dutch Auction',
+            value: PoolType.DUTCH_AUCTION
+          },
+          {
+            label: 'English Auction',
+            value: PoolType.ENGLISH_AUCTION
           }
         ]
       },
@@ -279,7 +290,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         result.chain = Number(item.value)
         break
       case 'Token':
-        result.tokenFromAddress = item.address
+        result.tokenFromAddress = item.contract
         result.tokenFromSymbol = item.symbol
         result.tokenFromLogoURI = item.logoURI
         result.tokenFromDecimals = item.decimals
@@ -301,7 +312,6 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
       }
       result = Object.assign(result, seatchValue)
     }
-    console.log('result>>>', result)
     setFilterValues(result)
     handleSubmit(result)
     setDialogOpen(false)

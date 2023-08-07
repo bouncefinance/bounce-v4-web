@@ -40,7 +40,6 @@ const BidButtonBlock = ({
     () => CurrencyAmount.fromRawAmount(poolInfo.currencyAmountTotal1.currency, bidAmount),
     [bidAmount, poolInfo.currencyAmountTotal1.currency]
   )
-  console.log('userBalance111>>', userBalance)
   const isBalanceInsufficient = useMemo(() => {
     if (!userBalance || !currencySlicedBidAmount) return true
     return userBalance.lessThan(currencySlicedBidAmount)
@@ -143,7 +142,6 @@ const BidButtonBlock = ({
       </>
     )
   }
-
   return null
 }
 

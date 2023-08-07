@@ -55,7 +55,6 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
       }
 
       const args = [poolInfo.poolId, proofArr]
-      console.log('bidAmount.raw.toString()>>>', bidAmount.raw.toString())
       const estimatedGas = await randomSelectionERC20Contract.estimateGas
         .bet(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
         .catch((error: Error) => {
@@ -72,7 +71,7 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
             summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
             userSubmitted: {
               account,
-              action: `fixed_price_swap`,
+              action: `random_selection_swap`,
               key: poolInfo.poolId
             }
           })

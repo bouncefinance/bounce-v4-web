@@ -5,7 +5,7 @@ import PoolInfoItem from '../../PoolInfoItem'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { formatNumber } from 'utils/number'
-import { FixedSwapPoolProp } from 'api/pool/type'
+import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { useMaxSwapAmount1Limit } from 'bounceHooks/auction/useIsLimitExceeded'
@@ -43,6 +43,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
       <NumberInput
         sx={{ mt: 12 }}
         fullWidth
+        disabled={poolInfo.status === PoolStatus.Upcoming}
         value={bidAmount}
         placeholder={`Enter ${poolInfo.token1.symbol} amount`}
         onUserInput={value => {
@@ -50,7 +51,12 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
         }}
         endAdornment={
           <>
-            <Button size="small" variant="outlined" sx={{ mr: 20, minWidth: 60 }} onClick={handleMaxButtonClick}>
+            <Button
+              size="small"
+              variant="outlined"
+              sx={{ mr: 20, minWidth: 60 }}
+              onClick={() => poolInfo.status !== PoolStatus.Upcoming && handleMaxButtonClick()}
+            >
               Max
             </Button>
             <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={24} />

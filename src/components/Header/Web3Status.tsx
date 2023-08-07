@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { styled, Button, Box, useTheme, Typography, Popper, Stack, Link, MenuItem, Avatar } from '@mui/material'
-import { NetworkContextName } from '../../constants'
+// import { NetworkContextName } from '../../constants'
 import useENSName from '../../hooks/useENSName'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
@@ -16,7 +15,6 @@ import { ChainList } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChevronLeft, ExpandLess, ExpandMore, IosShare } from '@mui/icons-material'
 import Copy from 'components/essential/Copy'
-import { setInjectedConnected } from 'utils/isInjectedConnectedPrev'
 import { useETHBalance } from 'state/wallet/hooks'
 import { Currency } from 'constants/token'
 import { ClickAwayListener } from '@mui/base'
@@ -32,9 +30,10 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import { useLogout, useUserInfo } from 'state/users/hooks'
 import { ReactComponent as DisconnectSvg } from 'assets/svg/account/disconnect.svg'
 import { ReactComponent as TransactionsSvg } from 'assets/svg/account/transactions.svg'
-import { ReactComponent as UserSvg } from 'assets/svg/account/user.svg'
+// import { ReactComponent as UserSvg } from 'assets/svg/account/user.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
+import { useWalletDeactivate } from 'connection/activate'
 
 const ActionButton = styled(Button)(({ theme }) => ({
   fontSize: '14px',
@@ -91,7 +90,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 }
 
 function Web3StatusInner() {
-  const { account, error } = useWeb3React()
+  const { account, errorNetwork } = useActiveWeb3React()
   const isSm = useBreakpoint('sm')
   const { userInfo } = useUserInfo()
   const { chainId } = useActiveWeb3React()
@@ -110,6 +109,12 @@ function Web3StatusInner() {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget)
+  }
+
+  const { token } = useUserInfo()
+
+  if (!token) {
+    return null
   }
 
   if (account && chainId) {
@@ -137,7 +142,8 @@ function Web3StatusInner() {
                 fontSize: 18
               }}
             >
-              <UserSvg />
+              {/* <UserSvg /> */}
+              <Avatar sx={{ width: 24, height: 24 }} src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg} />
             </Button>
             <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
           </Box>
@@ -197,7 +203,7 @@ function Web3StatusInner() {
         )}
       </ClickAwayListener>
     )
-  } else if (error) {
+  } else if (errorNetwork) {
     return (
       <ActionButton
         sx={{
@@ -207,7 +213,7 @@ function Web3StatusInner() {
         }}
         onClick={toggleWalletModal}
       >
-        {error instanceof UnsupportedChainIdError ? 'Wrong Network' : 'Error'}
+        {'Wrong Network'}
       </ActionButton>
     )
   } else {
@@ -227,9 +233,9 @@ function Web3StatusInner() {
 }
 
 export default function Web3Status() {
-  const { active, account } = useWeb3React()
-  const { token } = useUserInfo()
-  const contextNetwork = useWeb3React(NetworkContextName)
+  // const { active, account } = useWeb3React()
+  const { account } = useActiveWeb3React()
+  // const contextNetwork = useWeb3React(NetworkContextName)
 
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -243,13 +249,13 @@ export default function Web3Status() {
   const pending = sortedRecentTransactions.filter(tx => !tx.receipt).map(tx => tx.hash)
   const confirmed = sortedRecentTransactions.filter(tx => tx.receipt).map(tx => tx.hash)
 
-  if (!contextNetwork.active && !active) {
-    return null
-  }
+  // if (!contextNetwork.active && !active) {
+  //   return null
+  // }
 
   return (
     <>
-      {token && <Web3StatusInner />}
+      <Web3StatusInner />
       <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
     </>
   )
@@ -265,7 +271,6 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
   const open = !!anchorEl
   const theme = useTheme()
   const { userInfo } = useUserInfo()
-  const { deactivate, connector } = useWeb3React()
   const { account, chainId } = useActiveWeb3React()
   const { ENSName } = useENSName(account || undefined)
   const myETH = useETHBalance(account || undefined)
@@ -288,6 +293,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
   }, [dispatch, chainId])
   const { logout } = useLogout()
   const navigate = useNavigate()
+  const walletDeactivate = useWalletDeactivate()
 
   if (!chainId || !account) return null
   return (
@@ -350,9 +356,7 @@ function WalletPopper({ anchorEl, close }: { anchorEl: null | HTMLElement; close
                     <DisconnectSvg
                       onClick={() => {
                         logout()
-                        setInjectedConnected()
-                        deactivate()
-                        connector?.deactivate()
+                        walletDeactivate()
                         close()
                       }}
                     />

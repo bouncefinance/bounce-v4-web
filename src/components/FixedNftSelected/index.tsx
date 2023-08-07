@@ -4,11 +4,14 @@ import UpArrowIcon from 'assets/imgs/common/upArrow.svg'
 import BottomArrowIcon from 'assets/imgs/common/bottomArrow.svg'
 import SearchSvg from 'assets/imgs/common/search.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import useTokenList from 'bounceHooks/auction/useTokenList'
+import { useGetListBySearchValue } from 'bounceHooks/auction/useTokenList'
 import { useDebounce } from 'ahooks'
-import { getLabelById } from 'utils'
 import SearchIcon from '@mui/icons-material/Search'
 import { initialValues, InitialValuesPros } from 'pages/nftAuction/components/listDialog'
+import { getLabelById } from 'utils'
+import { ChainId } from 'constants/chain'
+import { PoolType } from 'api/pool/type'
+
 const SearchInput = styled(Input)(() => ({
   height: 38,
   lineHeight: '38px',
@@ -53,9 +56,9 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
   const optionDatas = useOptionDatas()
   const [chain, setChain] = useState<number>(3)
   const [filterInputValue, setFilterInputValue] = useState<string>('')
-  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || [])
+  const chainId = getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) as ChainId
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
-  const { tokenList: tokenList } = useTokenList(chainId, debouncedFilterInputValue)
+  const { data: tokenList } = useGetListBySearchValue(chainId, debouncedFilterInputValue)
   const [filterValues, setFilterValues] = useState<InitialValuesPros>(initialValues)
   const chainList = useMemo(
     () =>
@@ -84,11 +87,11 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
           },
           {
             label: 'Fixed Swap NFT',
-            value: 5
+            value: PoolType.fixedSwapNft
           },
           {
             label: 'English Auction NFT',
-            value: 6
+            value: PoolType.ENGLISH_AUCTION_NFT
           }
         ]
       },
@@ -282,7 +285,7 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
         result.chain = Number(item.value)
         break
       case 'Token':
-        result.tokenFromAddress = item.address
+        result.tokenFromAddress = item.contract
         result.tokenFromSymbol = item.symbol
         result.tokenFromLogoURI = item.logoURI
         result.tokenFromDecimals = item.decimals
@@ -304,7 +307,6 @@ export default function FixedSelected({ handleSubmit }: { handleSubmit: (values:
       }
       result = Object.assign(result, seatchValue)
     }
-    console.log('result>>>', result)
     setFilterValues(result)
     handleSubmit(result)
     setDialogOpen(false)

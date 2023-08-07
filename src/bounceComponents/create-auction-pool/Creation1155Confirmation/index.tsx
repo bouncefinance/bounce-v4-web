@@ -35,7 +35,7 @@ import { ApprovalState } from 'hooks/useApproveCallback'
 import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
-
+import AuctionNotification from '../AuctionNotification'
 export const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
   opacity: 0.5
@@ -85,7 +85,7 @@ const CreatePoolButton = () => {
         if (redirect && typeof redirect === 'string') {
           navigate(redirect)
         } else {
-          navigate(routes.market.pools)
+          navigate(routes.market.index)
         }
       }
 
@@ -125,7 +125,7 @@ const CreatePoolButton = () => {
             againBtn: 'To the pool',
             cancelBtn: 'Not now',
             title: 'Congratulations!',
-            content: `You have successfully created the auction.`,
+            content: 'You have successfully created the auction.',
             onAgain: goToPoolInfoPage,
             onCancel: handleCloseDialog,
             onClose: handleCloseDialog
@@ -142,7 +142,7 @@ const CreatePoolButton = () => {
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toCreate
       })
     }
@@ -179,7 +179,7 @@ const CreatePoolButton = () => {
         content:
           typeof err === 'string'
             ? err
-            : err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+            : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toApprove
       })
     }
@@ -430,7 +430,7 @@ const CreationConfirmation = () => {
             </Box>
           </Stack>
         </Box>
-
+        <AuctionNotification />
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
           {account ? (
             <CreatePoolButton />

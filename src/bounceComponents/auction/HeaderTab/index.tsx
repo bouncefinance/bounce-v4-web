@@ -27,7 +27,10 @@ const StyledTab = styled(Button)(({ theme }) => ({
   }
 }))
 
-const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ onTabChange }) => {
+const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: React.CSSProperties }> = ({
+  onTabChange,
+  style
+}) => {
   const navigate = useNavigate()
   const isSm = useBreakpoint('sm')
   const tabs = [
@@ -83,7 +86,8 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         alignItems: 'center',
         width: '100%',
         maxWidth: '1296px',
-        margin: '0 auto'
+        margin: '0 auto',
+        ...style
       }}
     >
       <Box
@@ -109,9 +113,10 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void }> = ({ o
         }}
       >
         <Box gap={'6px'}>
-          {tabs.map((tab: string) => (
+          {tabs.map((tab: string, index: number) => (
             <StyledTab
               variant="contained"
+              id={`tab${index}`}
               key={tab}
               className={tab === currentTab ? 'selected' : ''}
               onClick={() => {

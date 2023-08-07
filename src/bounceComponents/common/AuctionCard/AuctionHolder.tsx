@@ -10,10 +10,11 @@ export type IAuctionHolderProps = {
   name: string
   description: string
   href: string
-  isVerify: VerifyStatus
+  ifKyc: VerifyStatus
 }
 
-export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, description, name, href, isVerify }) => {
+export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, description, name, href, ifKyc }) => {
+  console.log('🚀 ~ file: AuctionHolder.tsx:17 ~ ifKyc:', ifKyc)
   const navigate = useNavigate()
   return (
     <Stack
@@ -36,8 +37,14 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
       <Avatar src={avatar || DefaultAvatarSVG} sx={{ width: 52, height: 52 }} />
       <Stack spacing={4}>
         <Stack direction={'row'} alignItems="center" spacing={8}>
-          <Typography variant="h6">{name}</Typography>
-          <VerifiedIcon isVerify={isVerify} />
+          <Typography
+            variant="h6"
+            sx={{ width: 'fit-content', maxWidth: 200, textOverflow: 'ellipsis', overflow: 'hidden' }}
+            noWrap
+          >
+            {name}
+          </Typography>
+          <VerifiedIcon ifKyc={ifKyc} />
         </Stack>
 
         <Typography

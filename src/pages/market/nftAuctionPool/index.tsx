@@ -47,6 +47,7 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { Currency, CurrencyAmount } from 'constants/token'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { useActiveWeb3React } from 'hooks'
+import VerifiedIcon from 'bounceComponents/common/VerifiedIcon'
 
 const StyledChainSpan = styled(Box)({
   fontFamily: 'Sharp Grotesk DB Cyr Book 20',
@@ -255,20 +256,23 @@ export const NFTCard = (props: NFTPrams) => {
                 padding: '4px 0'
               }}
             >
-              <Typography
-                sx={{
-                  fontFamily: 'Inter',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  fontSize: '13px',
-                  lineHeight: '140%',
-                  color: '#FFFFFF'
-                }}
-              >
-                {(creatorUserInfo?.userType === UserType.Profile
-                  ? creatorUserInfo.name
-                  : creatorUserInfo.companyName) || '--'}
-              </Typography>
+              <Stack direction={'row'} alignItems="center" spacing={8}>
+                <Typography
+                  sx={{
+                    fontFamily: 'Inter',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    fontSize: '13px',
+                    lineHeight: '140%',
+                    color: '#FFFFFF'
+                  }}
+                >
+                  {(creatorUserInfo?.userType === UserType.Profile
+                    ? creatorUserInfo.name
+                    : creatorUserInfo.companyName) || '--'}
+                </Typography>
+                <VerifiedIcon ifKyc={creatorUserInfo.ifKyc ? creatorUserInfo.ifKyc : 1} />
+              </Stack>
               <Typography
                 sx={{
                   fontFamily: 'Inter',
@@ -406,6 +410,7 @@ export const NFTCard = (props: NFTPrams) => {
               noWrap
               sx={{
                 fontSize: 20,
+                fontWeight: 600,
                 color:
                   status === PoolStatus.Upcoming
                     ? 'var(--ps-text-2)'

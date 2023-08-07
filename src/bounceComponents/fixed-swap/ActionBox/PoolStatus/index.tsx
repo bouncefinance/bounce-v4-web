@@ -143,7 +143,7 @@ const PoolStatusBox = ({
       return (
         <Box sx={{ px: 12, py: 4, bgcolor: '#D6DFF6', borderRadius: 20, marginRight: '16px', ...style }}>
           <Typography variant="body1" color="#2663FF">
-            Closed
+            Cancelled
           </Typography>
         </Box>
       )

@@ -72,9 +72,19 @@ export function useSwitchNetworkModalToggle(): () => void {
   return useToggleModal(ApplicationModal.SWITCH_NETWORK)
 }
 
-export function useSignLoginModalToggle(): () => void {
-  return useToggleModal(ApplicationModal.SIGN_LOGIN)
+export function useSignLoginModalControl() {
+  const dispatch = useDispatch<AppDispatch>()
+  return {
+    open: useCallback(() => {
+      dispatch(setOpenModal(ApplicationModal.SIGN_LOGIN))
+    }, [dispatch]),
+    close: useCallback(() => dispatch(setOpenModal(null)), [dispatch])
+  }
 }
+
+// export function useSignLoginModalToggle(): () => void {
+//   return useToggleModal(ApplicationModal.SIGN_LOGIN)
+// }
 
 export function useSettingsModalToggle(): () => void {
   return useToggleModal(ApplicationModal.SETTINGS)

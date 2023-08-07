@@ -1,14 +1,15 @@
 import { Box, Typography } from '@mui/material'
-import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
+import PriceChartView from 'bounceComponents/englishAuction/PriceChartView'
 import { useIsSMDown } from 'themes/useTheme'
 
-const PoolBaseInfo = () => {
+const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
   return (
     <Box
       sx={{
         width: isSm ? '100%' : '458px',
+        padding: '120px 63px 120px 0',
         marginBottom: isSm ? '43px' : '0'
       }}
     >
@@ -52,6 +53,7 @@ const PoolBaseInfo = () => {
       >
         Physically Backed NFT
       </Box>
+      {poolInfo && <PriceChartView isDark showText={false} poolInfo={poolInfo} />}
     </Box>
   )
 }

@@ -21,10 +21,8 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
   const { poolId, chainShortName, sysId: _sysId } = useQueryParams()
   const { account } = useActiveWeb3React()
   const { chainInfoOpt } = useOptionDatas()
-
   const chainConfigInBackend = useChainConfigInBackend('shortName', chainShortName || '')
   const sysId = useMemo(() => backedId || _sysId, [_sysId, backedId])
-
   return useRequest(
     async (): Promise<FixedSwapPool & { ethChainId: ChainId }> => {
       if (!sysId) {
@@ -96,8 +94,8 @@ export const useBackedPoolInfo = (category: PoolType = PoolType.FixedSwap, backe
 //   return FIXED_SWAP_ERC20_ADDRESSES[chainId]
 // }
 
-const usePoolInfo = () => {
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo()
+const usePoolInfo = (backedId?: number) => {
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.FixedSwap, backedId)
 
   const currentBounceContractAddress = useMemo(() => poolInfo?.contract, [poolInfo?.contract])
   const fixedSwapERC20Contract = useFixedSwapERC20Contract(currentBounceContractAddress || '', poolInfo?.ethChainId)
@@ -209,7 +207,7 @@ const usePoolInfo = () => {
       ),
       currencySwappedTotal1: CurrencyAmount.fromRawAmount(
         t1,
-        amountSwap1PRes?.[0].toString() || poolInfo.currentTotal1
+        amountSwap1PRes?.[0].toString() || (Number(poolInfo.currentTotal1) > 0 ? poolInfo.currentTotal1 : '0')
       ),
       enableReverses: v2FixedSwapData.enableReverses,
       releaseType: v2FixedSwapData.releaseType,

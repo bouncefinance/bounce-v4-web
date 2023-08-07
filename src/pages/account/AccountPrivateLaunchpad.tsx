@@ -14,6 +14,7 @@ import { ChainListMap, ChainId } from 'constants/chain'
 import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
+import useBreakpoint from 'hooks/useBreakpoint'
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
@@ -161,7 +162,7 @@ export default function AccountPrivateLaunchpad() {
   const [curChain, setCurChain] = useState(0)
   const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
   const navigate = useNavigate()
-
+  const isSm = useBreakpoint('sm')
   return (
     <AccountLayout>
       <Box padding="40px 20px">
@@ -171,7 +172,7 @@ export default function AccountPrivateLaunchpad() {
             position: 'relative'
           }}
         >
-          <Typography variant="h3" fontSize={30}>
+          <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily={'Public Sans'} fontWeight={600}>
             Private Launchpad
           </Typography>
           <Row sx={{ justifyContent: 'flex-start' }} mt={28}>

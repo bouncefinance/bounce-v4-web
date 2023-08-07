@@ -20,7 +20,7 @@ import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import Radio from '../Radio'
 import ImportWhitelistDialog from '../ImportWhitelistDialog'
-import { IReleaseData, IReleaseType, ParticipantStatus } from '../types'
+import { AuctionType, IReleaseData, IReleaseType, ParticipantStatus, PriceSegmentType } from '../types'
 import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
@@ -51,6 +51,7 @@ interface MyFormValues {
   enableReverse: boolean
   releaseDataArr: IReleaseData[]
   whitelist: string[]
+  segmentAmount: string | undefined
   participantStatus: ParticipantStatus
   fragmentReleaseSize?: string
 }
@@ -60,11 +61,28 @@ const defaultFragmentRelease = {
   radio: ''
 }
 
-export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: boolean }) => {
+export const AddIReleaseTypeAdvanced = ({
+  showInstantRelease = true,
+  hideRefundable
+}: {
+  showInstantRelease?: boolean
+  hideRefundable?: boolean
+}) => {
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
+  const resetEndTime = useCallback((startTime: Moment | null, endTime: Moment | null, stage: string | undefined) => {
+    if (!startTime || !endTime || !stage) return moment(null)
+    const duration = endTime.valueOf() - startTime.valueOf()
+    const segment = Number(stage) * 1000
+    const val = duration % segment
+    let _integer = endTime.valueOf() - val
+    if (val > 50000) {
+      _integer = _integer + segment
+    }
+    return moment(_integer)
+  }, [])
 
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -82,6 +100,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
       : [defaultFragmentRelease],
     releaseDataArr: valuesState.releaseDataArr,
     whitelist: valuesState.whitelist,
+    segmentAmount: valuesState.segmentAmount,
     enableReverse: !!valuesState.enableReverse,
     participantStatus: valuesState.participantStatus
   }
@@ -206,7 +225,7 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
         const endTime = context.parent.endTime?.valueOf() || 0
         for (const item of context.parent.fragmentReleaseTimes) {
           if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
-            return context.createError({ message: 'Please select a time earlier than end time' })
+            return context.createError({ message: 'Please select a time later than end time' })
           }
         }
         return (
@@ -262,7 +281,9 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Box sx={{ mt: 52, px: { xs: 16, md: 0 } }}>
         <Typography variant="h2">Advanced Settings</Typography>
-        <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
+        <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>
+          {valuesState.auctionType || 'Fixed Price Auction'}
+        </Typography>
 
         <Formik
           initialValues={initialValues}
@@ -311,16 +332,53 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                     disablePast
                     maxDateTime={values.endTime}
                     textField={{ sx: { flex: 1 } }}
+                    onChange={(startTime: Moment) => {
+                      setFieldValue('startTime', startTime)
+                      if (
+                        valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
+                        valuesState.priceSegmentType === PriceSegmentType.Staged &&
+                        values.startTime &&
+                        moment.isMoment(startTime) &&
+                        values.endTime
+                      ) {
+                        const endTime = resetEndTime(startTime, valuesState.endTime, valuesState.segmentAmount)
+                        setFieldValue('endTime', endTime)
+                      }
+                    }}
                   />
+
                   <Field
                     component={DateTimePickerFormItem}
                     name="endTime"
                     disablePast
                     minDateTime={values.startTime}
                     textField={{ sx: { flex: 1 } }}
+                    onChange={(res: Moment) => {
+                      let endTime = null
+                      if (
+                        valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
+                        valuesState.priceSegmentType === PriceSegmentType.Staged &&
+                        values.startTime &&
+                        valuesState.segmentAmount
+                      ) {
+                        endTime = resetEndTime(values.startTime, res, valuesState.segmentAmount)
+                      } else endTime = res
+                      setFieldValue('endTime', endTime)
+                    }}
                   />
                 </Stack>
-
+                {valuesState.auctionType === AuctionType.DUTCH_AUCTION &&
+                  valuesState.priceSegmentType === PriceSegmentType.Staged && (
+                    <Typography sx={{ mt: 12, color: '#212121' }}>
+                      <span style={{ opacity: 0.5 }}>
+                        *After setting up staged mode, there is a difference between the block time and the current
+                        actual time, ending time after correction is{' '}
+                      </span>
+                      <span style={{ fontWeight: 700, color: '#171717' }}>
+                        {values?.endTime?.format('MMM D, YYYY HH:mm:ss') || ''}
+                      </span>
+                    </Typography>
+                  )}
                 <Box sx={{ mt: 38 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 20 }}>
                     <Stack direction="row" alignItems="center" spacing={8}>
@@ -335,11 +393,13 @@ export const AddIReleaseTypeAdvanced = ({ hideRefundable }: { hideRefundable?: b
                   </Box>
 
                   <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
-                    <FormControlLabel
-                      value={IReleaseType.Instant}
-                      control={<Radio disableRipple />}
-                      label={<span>Instant</span>}
-                    />
+                    {showInstantRelease && (
+                      <FormControlLabel
+                        value={IReleaseType.Instant}
+                        control={<Radio disableRipple />}
+                        label={<span>Instant</span>}
+                      />
+                    )}
                     <FormControlLabel
                       value={IReleaseType.Cliff}
                       control={<Radio disableRipple />}

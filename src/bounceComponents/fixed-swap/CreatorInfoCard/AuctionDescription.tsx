@@ -6,18 +6,20 @@ import { updateAuctionBackground } from 'api/pool'
 import { UpdateAuctionBackgroundParams } from 'api/pool/type'
 
 import { ReactComponent as EditSVG } from 'assets/imgs/icon/edit.svg'
+import { ReactComponent as EditWhiteSVG } from 'assets/imgs/icon/edit_white.svg'
 import { PoolInfoProp } from '../type'
 import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 
 export interface AuctionDescriptionProps {
   poolInfo: PoolInfoProp
   canEdit?: boolean
+  isDutchAuction?: boolean
   getPoolInfo: () => void
 }
 
 const MAX_DESCRIPTION_CHARACTER_COUNT = 350
 
-const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionDescriptionProps) => {
+const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false, isDutchAuction }: AuctionDescriptionProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [inputValue, setInputValue] = useState(poolInfo?.description || 'No description')
 
@@ -41,8 +43,14 @@ const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionD
   return (
     <Box sx={{ mt: 26, width: '100%' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 36 }}>
-        <Typography variant="h5">Auction Background</Typography>
-
+        <Typography
+          variant="h5"
+          sx={{
+            color: isDutchAuction ? '#fff' : ''
+          }}
+        >
+          Auction Background
+        </Typography>
         {canEdit ? (
           !isEditing ? (
             <IconButton
@@ -50,7 +58,7 @@ const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionD
                 setIsEditing(true)
               }}
             >
-              <EditSVG />
+              {isDutchAuction ? <EditWhiteSVG /> : <EditSVG />}
             </IconButton>
           ) : (
             <ButtonBase
@@ -87,7 +95,7 @@ const AuctionDescription = ({ poolInfo, getPoolInfo, canEdit = false }: AuctionD
             </Typography>
           </Box>
         ) : (
-          <Typography variant="body1" sx={{ color: '#878A8E' }}>
+          <Typography variant="body1" sx={{ color: '#878A8E', wordBreak: 'break-word' }}>
             {inputValue}
           </Typography>
         )}

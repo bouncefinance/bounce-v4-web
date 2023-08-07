@@ -17,8 +17,8 @@ export interface ILikeUnlikeProps {
 }
 
 const LikeUnlike: React.FC<ILikeUnlikeProps> = ({ likeObj, objId, likeAmount, onSuccess, likeSx, unlikeSx }) => {
-  const { postLike } = useLike()
-
+  const { postLike, likeRes } = useLike()
+  likeAmount = likeRes?.data || likeAmount
   const postLikeStatus = async (likeType: LIKE_TYPE): Promise<any> => {
     try {
       const res = await postLike({

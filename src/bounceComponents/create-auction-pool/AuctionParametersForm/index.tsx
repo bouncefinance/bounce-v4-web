@@ -3,9 +3,7 @@ import { Field, Form, Formik } from 'formik'
 import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-
 import { show } from '@ebay/nice-modal-react'
-
 import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
@@ -20,7 +18,6 @@ import Radio from '../Radio'
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
-
 import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
@@ -48,10 +45,9 @@ interface FormValues {
   allocationPerWallet: string
 }
 
-const AuctionParametersForm = (): JSX.Element => {
+const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-
   const { currencyFrom } = useAuctionERC20Currency()
   const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
   const isSm = useBreakpoint('sm')
@@ -136,14 +132,14 @@ const AuctionParametersForm = (): JSX.Element => {
     values: FormValues,
     setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
   ) => {
-    show<Token>(TokenDialog, { enableEth: true, chainId })
+    show<Token>(TokenDialog, { enableEth: true, chainId, action: 2 })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
           ...values,
           tokenToAddress: res.address,
-          tokenToSymbol: res.symbol || '',
-          tokenToLogoURI: res.logoURI,
+          tokenToSymbol: res.symbol?.toLocaleUpperCase() || '',
+          tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenToDecimals: res.decimals
         })
       })
@@ -155,7 +151,9 @@ const AuctionParametersForm = (): JSX.Element => {
   return (
     <Box sx={{ mt: 52, px: isSm ? 16 : '0' }}>
       <Typography variant="h2">Auction Parameters</Typography>
-      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>Fixed Price Auction</Typography>
+      <Typography sx={{ color: 'var(--ps-gray-700)', mt: 5, mb: 42 }}>
+        {title ? title : 'Fixed Price Auction'}
+      </Typography>
 
       <Formik
         initialValues={internalInitialValues}

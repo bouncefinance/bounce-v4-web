@@ -14,7 +14,8 @@ import {
   TokenType,
   AuctionType,
   IReleaseType,
-  IReleaseData
+  IReleaseData,
+  PriceSegmentType
 } from '../types'
 
 const ValuesStateContext = createContext<AuctionPool | null>(null)
@@ -103,12 +104,20 @@ const initialValues: AuctionPool = {
     decimals: 18
   },
   swapRatio: '',
+  startPrice: '',
+  endPrice: '',
+  segmentAmount: '',
   poolSize: '',
   allocationPerWallet: '',
+  priceSegmentType: PriceSegmentType.BySecond,
   allocationStatus: AllocationStatus.NoLimits,
   poolName: '',
   startTime: null,
   endTime: null,
+  closeHour: '',
+  closeMinute: '',
+  claimHour: '',
+  claimMinute: '',
   shouldDelayUnlocking: false,
   delayUnlockingTime: null,
   releaseType: IReleaseType.Cliff,
@@ -180,9 +189,14 @@ type Payload = {
     tokenTo: Token
     swapRatio: string
     poolSize: string
+    priceSegmentType: PriceSegmentType
     allocationStatus: AllocationStatus
     allocationPerWallet: string
     priceFloor?: string
+    startPrice?: string
+    endPrice?: string
+    reservePrice?: string
+    segmentAmount?: string
     amountMinIncr1?: string
     activeStep: number
     completed: CompletedSteps
@@ -202,11 +216,21 @@ type Payload = {
     endTime: Moment
     delayUnlockingTime: Moment
     whitelist: string[]
+    segmentAmount?: string
     enableReverse: boolean
     participantStatus: ParticipantStatus
     shouldDelayUnlocking: boolean
     releaseType: IReleaseType
     releaseDataArr: IReleaseData[]
+    closeHour?: string
+    closeMinute?: string
+    claimHour?: string
+    claimMinute?: string
+    delayUnlockingHour?: string
+    delayUnlockingMinute?: string
+    creatorRatio?: string
+    prevBidderRatio?: string
+    lastBidderRatio?: string
   }
   [ActionType.HandleStep]: {
     activeStep: number
@@ -280,8 +304,13 @@ const reducer = (state: AuctionPool, action: Actions) => {
           ...state.tokenTo,
           ...action.payload.tokenTo
         },
+        segmentAmount: action.payload.segmentAmount,
+        startPrice: action.payload.startPrice,
+        reservePrice: action.payload.reservePrice,
+        endPrice: action.payload.endPrice,
         swapRatio: action.payload.swapRatio,
         poolSize: action.payload.poolSize,
+        priceSegmentType: action.payload.priceSegmentType,
         allocationStatus: action.payload.allocationStatus,
         priceFloor: action.payload.priceFloor,
         amountMinIncr1: action.payload.amountMinIncr1,
@@ -317,7 +346,16 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true },
         participantStatus: action.payload.participantStatus,
-        shouldDelayUnlocking: action.payload.shouldDelayUnlocking
+        shouldDelayUnlocking: action.payload.shouldDelayUnlocking,
+        closeHour: action.payload.closeHour,
+        closeMinute: action.payload.closeMinute,
+        claimHour: action.payload.claimHour,
+        claimMinute: action.payload.claimMinute,
+        delayUnlockingHour: action.payload.delayUnlockingHour,
+        delayUnlockingMinute: action.payload.delayUnlockingMinute,
+        creatorRatio: action.payload.creatorRatio,
+        prevBidderRatio: action.payload.prevBidderRatio,
+        lastBidderRatio: action.payload.lastBidderRatio
       }
 
     case ActionType.HandleStep:

@@ -1,15 +1,15 @@
 import { Box, Typography } from '@mui/material'
 import HeadImg from 'assets/imgs/thirdPart/foundoDetail/head.png'
 import { shortenAddress } from 'utils'
-import { RowLabel } from '../snippet/bidAction'
+import { RowLabel } from './creatorBidAuction'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import EthIcon from 'assets/imgs/thirdPart/foundoDetail/chart.png'
 import { formatNumber } from 'utils/number'
 import { useIsSMDown } from 'themes/useTheme'
-
 import moment from 'moment'
-import { EnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
-const TopThreeWinner = ({ list, poolInfo }: { list: PoolHistory[]; poolInfo: EnglishAuctionNFTPoolProp }) => {
+import { MutantEnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
+
+const TopThreeWinner = ({ list, poolInfo }: { list: PoolHistory[]; poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
   const ItemEl = ({ data, index, style }: { data: PoolHistory; index: number; style?: React.CSSProperties }) => {
     return (

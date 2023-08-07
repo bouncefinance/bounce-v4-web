@@ -82,7 +82,7 @@ const PrivatePad: React.FC = () => {
       <LaunchCardLive />
       <LaunchCardUpcoming /> */}
       <Stack spacing={40}>
-        {PrivatePadDataList.map(item => (
+        {PrivatePadDataList.filter(v => v.hidden !== true).map(item => (
           <LaunchCardSocial key={item.keyId} data={item} />
         ))}
       </Stack>
