@@ -32,7 +32,7 @@ import Radio from 'bounceComponents/create-auction-pool/Radio'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
-import { AllocationStatus, AuctionType, IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import moment, { Moment } from 'moment'
 import { show } from '@ebay/nice-modal-react'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
@@ -44,6 +44,16 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import BigNumber from 'bignumber.js'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
+import MarkdownEditor from 'pages/realWorldAuction/markdownEditor'
+enum IAuctionType {
+  FIXED_PRICE_AUCTION = 'Fixed Price Auction',
+  PLAYABLE_AUCTION = 'Playable Auction',
+  SEALED_BID_AUCTION = 'Sealed-Bid Auction',
+  ORDER_BOOK_AUCTION = 'Order Book Auction',
+  DUTCH_AUCTION = 'Dutch Auction',
+  NONE = 'None, need to customize'
+}
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -70,7 +80,8 @@ interface IDetailInitValue {
   ChainId: ChainId
   ContractAddress: string
   ContractDecimalPlaces: string
-  AuctionType: AuctionType
+  AuctionType: IAuctionType
+  CustomizedNeeds: string
   Token: ITokenProps
   SwapRatio: string
   TotalSupply: string
@@ -100,6 +111,14 @@ const detailValidationSchema = yup.object({
   ChainId: yup.number().required(),
   ContractAddress: yup.string().required(),
   ContractDecimalPlaces: yup.string().required(),
+  AuctionType: yup.string().required(),
+  CustomizedNeeds: yup
+    .string()
+    .test(
+      'customized',
+      'Customized needs is a required field',
+      (val, context) => !!val && !!(context.parent.AuctionType === IAuctionType.NONE)
+    ),
   Token: yup.object({
     tokenToAddress: yup.string().required(),
     tokenToSymbol: yup.string().required('Funding Currency is a required field'),
@@ -420,10 +439,11 @@ const DetailForm = () => {
       id: 0
     },
     TokenName: '',
-    ChainId: chainId as ChainId,
+    ChainId: chainId ?? ChainId.MAINNET,
     ContractAddress: '',
     ContractDecimalPlaces: '',
-    AuctionType: AuctionType.FIXED_PRICE,
+    AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
+    CustomizedNeeds: '',
     Token: {
       tokenToAddress: '',
       tokenToSymbol: '',
@@ -480,7 +500,7 @@ const DetailForm = () => {
                     }
                   />
                   <FormLayout
-                    title1="TokenName"
+                    title1="Token Name"
                     childForm={
                       <FormItem name={'TokenName'}>
                         <OutlinedInput placeholder="Name of the project, eg. Bounce" />
@@ -523,7 +543,9 @@ const DetailForm = () => {
                               selected={values.ChainId === t.id ? true : false}
                               sx={{
                                 '&.Mui-selected': {
-                                  background: '#E1F25C'
+                                  '& > .MuiStack-root > p': {
+                                    color: '#2B51DA'
+                                  }
                                 }
                               }}
                             >
@@ -563,7 +585,32 @@ const DetailForm = () => {
               </BaseBox>
 
               <BaseBox>
-                <Title sx={{ color: '#20201E', marginBottom: 64 }}>launchpad information</Title>
+                <Title sx={{ color: '#20201E' }}>launchpad information</Title>
+                <Box my={40}>
+                  <Stack
+                    sx={{
+                      flexDirection: 'row',
+                      gap: 8,
+                      alignItems: 'center',
+                      padding: '19px 20px 21px',
+                      background: '#FFF8E8'
+                    }}
+                  >
+                    <YellowErrSVG width={20} height={18} />
+                    <Typography
+                      sx={{
+                        width: 'calc(100% - 20px - 8px)',
+                        fontFamily: 'Inter',
+                        color: '#171717',
+                        fontSize: isSm ? 13 : 14,
+                        fontWeight: 400
+                      }}
+                    >
+                      This section is for pre auction information collection. You can change auction details after
+                      submit
+                    </Typography>
+                  </Stack>
+                </Box>
                 <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
                   <FormLayout
                     title1="Auction Type"
@@ -572,30 +619,45 @@ const DetailForm = () => {
                         <Select
                           value={values.AuctionType}
                           onChange={e => {
-                            console.log(e.target.value)
                             setFieldValue('AuctionType', e.target.value)
                           }}
                           renderValue={selected => {
-                            return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 400 }}>{selected}</Title>
+                            return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 500 }}>{selected}</Title>
                           }}
                         >
-                          {Object.values(AuctionType).map((value, index) => (
+                          {Object.values(IAuctionType).map((value, index) => (
                             <MenuItem key={index} value={value}>
-                              <Title
+                              <Typography
                                 sx={{
-                                  fontSize: 16,
-                                  color: values.AuctionType === value ? '#2B51DA' : '#20201E',
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  color: values.AuctionType === value ? '#2B51DA' : '#121212',
                                   fontWeight: 400
                                 }}
                               >
                                 {value}
-                              </Title>
+                              </Typography>
                             </MenuItem>
                           ))}
                         </Select>
                       </FormItem>
                     }
                   />
+                  {values.AuctionType === IAuctionType.NONE && (
+                    <FormLayout
+                      title1="Customized needs"
+                      title2="We will contact you after receipt"
+                      childForm={
+                        <FormItem style={{ marginTop: 20 }} name="CustomizedNeeds">
+                          <MarkdownEditor
+                            value={values.CustomizedNeeds}
+                            setEditorValue={value => setFieldValue('CustomizedNeeds', value)}
+                            placeholder="Customized needs description"
+                          />
+                        </FormItem>
+                      }
+                    />
+                  )}
                   <FormLayout
                     title1="Funding Currency"
                     childForm={

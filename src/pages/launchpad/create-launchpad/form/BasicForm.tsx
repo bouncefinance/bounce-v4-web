@@ -7,7 +7,7 @@ import FormItem from 'bounceComponents/common/FormItem'
 
 import MarkdownEditor from '../components/markdownEditor'
 import Image from 'components/Image'
-import { ChainList } from 'constants/chain'
+import { ChainId, ChainList } from 'constants/chain'
 import { Body02 } from 'components/Text'
 import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -152,7 +152,7 @@ const BasicForm = () => {
     Tokenomics: '',
     ProjectRoadmap: '',
     ProjectName: '',
-    ChainId: chainId
+    ChainId: chainId ?? ChainId.MAINNET
   }
   const onSubmit = (values: any) => {
     console.log('submit')
@@ -250,7 +250,7 @@ const BasicForm = () => {
                     title1="Describe Your Project (100-500 Words)"
                     title2="Please address the following questions in your description."
                     childTitle={
-                      <Title mt={16} sx={{ fontSize: 16, fontWeight: 500, color: '#959595', lineHeight: '1.7' }}>
+                      <Title mt={16} sx={{ fontSize: 14, fontWeight: 600, color: '#959595', lineHeight: '1.5' }}>
                         1. What is the project about?
                         <br />
                         2. What makes your project unique? <br />
@@ -311,9 +311,12 @@ const BasicForm = () => {
                             <MenuItem
                               key={t.id}
                               value={t.id}
+                              selected={values.ChainId === t.id ? true : false}
                               sx={{
                                 '&.Mui-selected': {
-                                  background: values.ChainId === t.id ? '#E1F25C' : ''
+                                  '& > .MuiStack-root > p': {
+                                    color: '#2B51DA'
+                                  }
                                 }
                               }}
                             >
@@ -345,7 +348,7 @@ const BasicForm = () => {
                       <MarkdownEditor
                         value={values.Tokenomics}
                         setEditorValue={value => setFieldValue('Tokenomics', value)}
-                        placeholder="Project description."
+                        placeholder="PHello, nice to meet you ^^... My Name is Eleanor Pena. I work as an Comic Artist, Freelance Illustrator, and concepting Character Design. I can do drawing for personal or business. I started my career as an illustrator in 2018."
                       />
                     </FormItem>
                   </Box>
