@@ -984,21 +984,12 @@ function BidResultAlert({
         </Typography>
       )}
       <RowLabel>
-        <img
-          style={{
-            display: 'inline-block',
-            width: '20px',
-            height: '20px',
-            marginRight: '8px'
-          }}
-          src={tokenImg}
-          alt=""
-          srcSet=""
-        />
+        <TokenImage src={tokenImg} alt={'token img'} size={20} />
         <Typography
           className="value"
           style={{
             color: '#fff',
+            marginLeft: 8,
             fontWeight: 600,
             lineHeight: '130%',
             fontSize: isSm ? '24px' : '36px'
