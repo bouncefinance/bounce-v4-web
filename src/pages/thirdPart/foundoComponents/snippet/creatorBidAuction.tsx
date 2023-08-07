@@ -83,7 +83,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
     >
       {countdown > 0 ? (
         <>
-          <LiveStr>{text || 'Open At'} </LiveStr>
+          <LiveStr>{text || 'Upcoming'} </LiveStr>
           <LiveStr>{days}d</LiveStr>
           <LiveStr>:</LiveStr>
           <LiveStr>{hours}h</LiveStr>
@@ -179,14 +179,14 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Finish</Typography>
+          <Typography color={'#fff'}>Cancel</Typography>
         )}
       </Box>
       <DataView
         priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${poolInfo?.currencyAmountMin1?.currency.symbol}`}
         increase={`${poolInfo?.amountMinIncrRatio1?.toSignificant()}`}
       />
-      {poolStatus === PoolStatus.Upcoming && (
+      {!poolInfo.creatorClaimed && poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn onClick={toCreatorClaim} loadingPosition="start" variant="contained" fullWidth>
           <img
             src={BidIcon}

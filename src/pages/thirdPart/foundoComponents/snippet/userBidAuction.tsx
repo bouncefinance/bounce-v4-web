@@ -118,7 +118,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string; style?:
     >
       {countdown > 0 ? (
         <>
-          <LiveStr>{text || 'Open At'} </LiveStr>
+          <LiveStr>{text || 'Upcoming'} </LiveStr>
           <LiveStr>{days}d</LiveStr>
           <LiveStr>:</LiveStr>
           <LiveStr>{hours}h</LiveStr>
@@ -222,7 +222,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Finish</Typography>
+          <Typography color={'#fff'}>Cancel</Typography>
         )}
       </Box>
       <DataView
@@ -632,12 +632,13 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
                   </Typography>
                 </PlaceBidBtn>
                 <PoolInfoItem
+                  sx={{ paddingBottom: 30 }}
                   title="You will pay"
                   tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
                     bidPrevGasFee?.currency.symbol
                   }) cost of the previous participant`}
                 >
-                  <Typography color={'#fff'} mt={10}>
+                  <Typography color={'#fff'}>
                     {bidPrevGasFee &&
                     poolInfo.currentBidderAmount &&
                     bidPrevGasFee.currency.equals(poolInfo.currentBidderAmount.currency)
@@ -653,9 +654,9 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
         </Box>
       ) : null}
       <Box>
-        {!poolInfo.participant.accountBidAmount && approveContent && !isInsufficientBalance?.disabled ? (
+        {!isWinner && !poolInfo.participant.accountBidAmount && approveContent && !isInsufficientBalance?.disabled ? (
           approveContent
-        ) : !poolInfo.participant.accountBidAmount ? (
+        ) : !isWinner && !poolInfo.participant.accountBidAmount ? (
           <Stack>
             <PlaceBidBtn
               disabled={isInsufficientBalance?.disabled === true}
