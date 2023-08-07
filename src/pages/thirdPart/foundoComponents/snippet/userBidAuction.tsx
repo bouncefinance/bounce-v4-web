@@ -345,10 +345,12 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
       {poolStatus === PoolStatus.Live &&
         poolInfo &&
         poolInfo.enableWhiteList &&
-        poolInfo.whitelistData?.isUserInWhitelist && <LiveSection poolInfo={poolInfo}></LiveSection>}
-      {poolStatus === PoolStatus.Live && poolInfo && !poolInfo.enableWhiteList && (
-        <LiveSection poolInfo={poolInfo}></LiveSection>
-      )}
+        !poolInfo.whitelistData?.isUserInWhitelist && <></>}
+      {poolStatus === PoolStatus.Live &&
+        poolInfo &&
+        (!poolInfo.enableWhiteList || (poolInfo.enableWhiteList && poolInfo.whitelistData?.isUserInWhitelist)) && (
+          <LiveSection poolInfo={poolInfo}></LiveSection>
+        )}
     </Box>
   )
 }
