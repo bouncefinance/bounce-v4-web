@@ -429,7 +429,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
         distributeRatios?.prevBidderRatio
       ),
       lastBidderRewards: calcDistributeRewards(extraAmount1, distributeRatios?.lastBidderRatio),
-      creatorRewards: calcDistributeRewards(extraAmount1, distributeRatios?.prevBidderRatio)
+      creatorRewards: calcDistributeRewards(extraAmount1, distributeRatios?.creatorRatio)
     }
 
     const curTimeStamp = getCurrentTimeStamp()

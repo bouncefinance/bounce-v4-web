@@ -323,7 +323,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
             Final Bid Price
           </Typography>
           <Typography className="value" style={{ fontSize: 28 }}>
-            {poolInfo?.currentBidderAmount?.toSignificant() || '--'} {poolInfo?.currentBidderAmount?.currency.symbol}
+            {poolInfo?.currentBidderAmount1?.toSignificant() || '--'} {poolInfo?.currentBidderAmount1?.currency.symbol}
           </Typography>
         </RowLabel>
       )}
