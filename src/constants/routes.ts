@@ -8,6 +8,7 @@ export const routes = {
     randomSelection: '/auction/random-selection/:chainShortName/:poolId',
     dutchAuction: '/auction/dutch-auction/:chainShortName/:poolId',
     erc20EnglishAuction: '/auction/erc20-english-auction/:chainShortName/:poolId',
+    // mutantEnglishAuction: '/auction/mutant-english-auction/:chainShortName/:poolId',
     v2: {
       fixedSwapNft: '/auction/fixed-swap-1155/:sysId',
       fixedPrice: '/auction/fixed-price/:sysId',
@@ -15,6 +16,7 @@ export const routes = {
       randomSelection: '/auction/random-selection/:sysId',
       dutchAuction: '/auction/dutch-auction/:sysId',
       erc20EnglishAuction: '/auction/erc20-english-auction/:sysId'
+      // mutantEnglishAuction: '/auction/mutant-english-auction/:sysId'
     }
   },
   okxActivity: '/okxActivity/:chainShortName/:poolId',
@@ -82,14 +84,12 @@ export const routes = {
   thirdPart: {
     poseiswapAuction: '/launchpad/poseiswap/auction/:sysId',
     digitalAssetsOffering: '/launchpad/poseiswap-intro',
-    foundoDetail: 'foundo/detail',
     OmegaAuction: '/launchpad/omega/auction/:sysId',
     TypeitAuction: '/launchpad/typeit/:sysId',
     TypeitAuctionWhitelist: '/launchpad/typeit/whitelist/:sysId',
     OpenfabricAuction: '/launchpad/openfabric',
     DeelanceAuction: '/launchpad/deelance',
     DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
-
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange',
     MetaBloxAuction: '/launchpad/metablox'
@@ -103,6 +103,7 @@ export const routes = {
   },
   foundo: {
     home: '/foundo/home/index',
-    detail: 'foundo/detail/index'
+    detail: '/foundo/detail/index',
+    foundoDetail: '/foundo/detail'
   }
 }

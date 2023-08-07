@@ -50,8 +50,7 @@ export default function Header() {
     },
     {
       title: 'AUCTION  DETAILS',
-      link: routes.foundo.detail,
-      // link: routes.thirdPart.foundoDetail,
+      link: routes.foundo.foundoDetail,
       external: false
     },
     {

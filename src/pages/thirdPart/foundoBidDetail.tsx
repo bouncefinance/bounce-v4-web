@@ -2,7 +2,7 @@ import { Box, Tab, Tabs, Typography, styled } from '@mui/material'
 import Header from './foundoComponents/section/headerSection'
 import PcBanner from './foundoComponents/section/pcBannerSection'
 import BidSection from './foundoComponents/section/bidSection'
-import { RowLabel } from './foundoComponents/snippet/bidAction'
+import { RowLabel } from './foundoComponents/snippet/creatorBidAuction'
 import Icon1 from 'assets/imgs/thirdPart/foundoDetail/icon1.svg'
 import Icon2 from 'assets/imgs/thirdPart/foundoDetail/icon2.svg'
 import Icon3 from 'assets/imgs/thirdPart/foundoDetail/icon3.svg'
@@ -10,14 +10,16 @@ import Icon4 from 'assets/imgs/thirdPart/foundoDetail/icon4.svg'
 import Icon5 from 'assets/imgs/thirdPart/foundoDetail/icon5.svg'
 import FoundoLogo from 'assets/imgs/thirdPart/foundoDetail/foundoLogo.png'
 import ShareIcon from 'assets/imgs/thirdPart/foundoDetail/share.png'
-import WinnerList from './foundoComponents/section/winnerSection'
-import EnglishAuctionValuesProvider, { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
+// import WinnerList from './foundoComponents/section/winnerSection'
 import { ChainListMap } from 'constants/chain'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { getEtherscanLink } from 'utils'
 import { useIsSMDown } from 'themes/useTheme'
 import { useCallback, useState } from 'react'
 import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
+import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
+import ActionHistory from './foundoComponents/snippet/auctionHistory'
+import { useParams } from 'react-router-dom'
 
 const NewTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
@@ -64,6 +66,9 @@ const FoundoBidDetail = () => {
   }, [])
   const tabList = [
     {
+      label: 'Auction History'
+    },
+    {
       label: 'Product Description'
     },
     {
@@ -74,9 +79,6 @@ const FoundoBidDetail = () => {
     },
     {
       label: 'Token Detail'
-    },
-    {
-      label: 'Auction Detail'
     }
   ]
   const detailConfig = [
@@ -106,8 +108,11 @@ const FoundoBidDetail = () => {
       value: '40.5 cm'
     }
   ]
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
 
+  const { '*': sysId } = useParams()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(sysId && isFinite(Number(sysId)) ? Number(sysId) : 20346)
+  console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
+  if (!poolInfo) return <></>
   return (
     <Box
       sx={{
@@ -117,19 +122,21 @@ const FoundoBidDetail = () => {
         background: '#000'
       }}
     >
-      <Header />
+      <Header poolInfo={poolInfo} />
       <PcBanner />
-      <BidSection />
+      <BidSection poolInfo={poolInfo} />
       <NewTabs value={tabIndex} onChange={handleChange}>
         {tabList.map((item: any) => (
           <Tab label={item.label} key={item.label}></Tab>
         ))}
       </NewTabs>
       <CenterSeciont>
-        {tabIndex === 0 && (
+        {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />}
+        {tabIndex === 1 && (
           <Box
             sx={{
               width: isSm ? '100%' : '680px',
+              minHeight: 500,
               padding: '24px 0 48px'
             }}
           >
@@ -151,7 +158,7 @@ const FoundoBidDetail = () => {
               >
                 Details
               </Typography>
-              <Typography className="value">Ref.: 356934</Typography>
+              <Typography className="value">Ref: LG578319461</Typography>
             </RowLabel>
             {detailConfig.map((item, index) => {
               return (
@@ -177,11 +184,12 @@ const FoundoBidDetail = () => {
             })}
           </Box>
         )}
-        {tabIndex === 1 && <Box></Box>}
-        {tabIndex === 2 && (
+        {tabIndex === 2 && <Box minHeight={500}></Box>}
+        {tabIndex === 3 && (
           <Box
             sx={{
               width: isSm ? '100%' : '680px',
+              minHeight: 500,
               padding: '24px 0 48px'
             }}
           >
@@ -211,10 +219,11 @@ const FoundoBidDetail = () => {
             </Box>
           </Box>
         )}
-        {tabIndex === 3 && (
+        {tabIndex === 4 && (
           <Box
             sx={{
               width: isSm ? '100%' : '680px',
+              minHeight: 500,
               padding: '24px 0 48px'
             }}
           >
@@ -267,6 +276,7 @@ const FoundoBidDetail = () => {
                   width: '100%',
                   display: 'flex',
                   flexFlow: 'row nowrap',
+                  alignItems: 'center',
                   justifyContent: 'flex-start',
                   marginTop: isSm ? '8px' : '0'
                 }}
@@ -361,7 +371,7 @@ const FoundoBidDetail = () => {
             </RowLabel>
           </Box>
         )}
-        {tabIndex === 4 && (
+        {/* {tabIndex === 4 && (
           <Box
             sx={{
               width: isSm ? '100%' : '763px',
@@ -370,15 +380,11 @@ const FoundoBidDetail = () => {
           >
             {poolInfo && <WinnerList poolInfo={poolInfo} />}
           </Box>
-        )}
+        )} */}
       </CenterSeciont>
     </Box>
   )
 }
 export default function FoundoBidDetailContent() {
-  return (
-    <EnglishAuctionValuesProvider backedId={7484}>
-      <FoundoBidDetail />
-    </EnglishAuctionValuesProvider>
-  )
+  return <FoundoBidDetail />
 }

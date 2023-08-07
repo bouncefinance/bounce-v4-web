@@ -10,6 +10,8 @@ export const BAST_TOKEN: { [chainId in ChainId]?: Currency } = {
   [ChainId.MAINNET]: new Currency(ChainId.MAINNET, '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D', 18, 'USDT', 'USDT')
 }
 
+export const TX_FEE_DENOMINATOR = `${Number(1e18)}`
+
 export const autoConnectInjectedEveryone = false
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -227,6 +229,43 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
+  [ChainId.LINEA_GORLI]: ''
+}
+
+export const MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: Record<ChainId, string> = {
+  [ChainId.MAINNET]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0xe06A754AFaAFFFC44F650420e496bbe1F765D71B',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
   [ChainId.LINEA_GORLI]: ''
 }
 

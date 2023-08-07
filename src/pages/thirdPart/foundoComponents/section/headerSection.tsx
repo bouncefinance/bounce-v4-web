@@ -2,13 +2,12 @@ import { Box, Typography } from '@mui/material'
 import BackIcon from 'assets/imgs/thirdPart/foundoDetail/back.svg'
 import { useNavigate } from 'react-router-dom'
 import CenterSeciont from '../centerSection'
-import { useEnglishAuctionPoolInfo } from 'pages/auction/englishAuctionNFT/ValuesProvider'
 import { ChainListMap } from 'constants/chain'
 import { useIsSMDown } from 'themes/useTheme'
+import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 
-const Header = () => {
+const Header = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp | undefined }) => {
   const navigate = useNavigate()
-  const { data: poolInfo } = useEnglishAuctionPoolInfo()
   const isSm = useIsSMDown()
   return (
     <CenterSeciont

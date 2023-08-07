@@ -13,6 +13,7 @@ export enum PoolType {
   'fixedSwapNft' = 5,
   ENGLISH_AUCTION_NFT = 6,
   ENGLISH_AUCTION = 8,
+  MUTANT_ENGLISH_AUCTION_NFT = 9,
   'PlayableAuction' = 100
 }
 
@@ -34,6 +35,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Playable Auction'
     case PoolType.ENGLISH_AUCTION:
       return 'English Auction'
+    case PoolType.MUTANT_ENGLISH_AUCTION_NFT:
+      return 'Mutant English'
   }
 }
 
@@ -363,6 +366,41 @@ export interface EnglishAuctionNFTPoolProp extends FixedSwapPool {
   isUserJoinedPool: boolean
 }
 
+export interface MutantEnglishAuctionNFTPoolProp
+  extends Omit<EnglishAuctionNFTPoolProp, 'currencyAmountMinIncr1' | 'currentBidderMinAmount'> {
+  amountMinIncrRatio1: CurrencyAmount | undefined
+  currentBidderAmount: CurrencyAmount | undefined
+  firstBidderAmount: CurrencyAmount | undefined
+  extraAmount1: CurrencyAmount | undefined
+  nextDistributionAmount1: CurrencyAmount | undefined
+  closeIncrInterval: number | undefined
+  claimDelay: number | undefined
+  distributeRatios: {
+    prevBidderRatio: CurrencyAmount | undefined
+    lastBidderRatio: CurrencyAmount | undefined
+    creatorRatio: CurrencyAmount | undefined
+  }
+  distributeRewards: {
+    prevBidderRewardsEstimate: CurrencyAmount | undefined
+    lastBidderRewards: CurrencyAmount | undefined
+    creatorRewards: CurrencyAmount | undefined
+  }
+  whitelistData: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+  participant: {
+    address?: string
+    claimed?: boolean
+    is721?: 1 | 2
+    tokenId?: string
+    accountBidAmount: CurrencyAmount | undefined
+    prevBidderGasfeeAmount: CurrencyAmount | undefined
+    prevBidderRewardAmount: CurrencyAmount | undefined
+  }
+}
+
 export interface GetPoolInfoResponse {
   poolVersion: number | undefined
   dutchPool: any
@@ -432,6 +470,9 @@ export interface PoolHistory {
   txHash: string
 
   avatar: string
+  // previous round bid reward
+  prevBidderReward: string
+  prevBidderGasfee: string
 }
 
 export interface GetPoolHistoryResponse {

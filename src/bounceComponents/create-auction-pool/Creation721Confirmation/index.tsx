@@ -3,11 +3,10 @@ import Image from 'components/Image'
 import { useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { CreationStep, ParticipantStatus } from '../types'
+import { AuctionType, CreationStep, ParticipantStatus } from '../types'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import TokenImage from 'bounceComponents/common/TokenImage'
-
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 // import { ReactComponent as ZeroIcon } from 'assets/imgs/auction/zero-icon.svg'
 import { useQueryParams } from 'hooks/useQueryParams'
@@ -25,7 +24,6 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
-import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
@@ -33,6 +31,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
 import AuctionNotification from '../AuctionNotification'
+import { ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
 const CreatePoolButton = () => {
@@ -125,7 +124,7 @@ const CreatePoolButton = () => {
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toCreate
       })
     }
@@ -162,7 +161,7 @@ const CreatePoolButton = () => {
         content:
           typeof err === 'string'
             ? err
-            : err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+            : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toApprove
       })
     }
@@ -250,10 +249,8 @@ const CreatePoolButton = () => {
 
 const CreationConfirmation = () => {
   const { account } = useActiveWeb3React()
-
   const auctionChainId = useAuctionInChain()
   const showLoginModal = useShowLoginModal()
-
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const { auctionType } = useQueryParams()
@@ -347,9 +344,15 @@ const CreationConfirmation = () => {
                   <Typography>{values.priceFloor}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="The minimum price increase">
-                  <Typography>{values.amountMinIncr1}</Typography>
-                </ConfirmationInfoItem>
+                {values.auctionType === AuctionType.MUTANT_ENGLISH ? (
+                  <ConfirmationInfoItem title="The minimum increase ratio">
+                    <Typography>{values.amountMinIncr1}%</Typography>
+                  </ConfirmationInfoItem>
+                ) : (
+                  <ConfirmationInfoItem title="The minimum price increase">
+                    <Typography>{values.amountMinIncr1}</Typography>
+                  </ConfirmationInfoItem>
+                )}
               </Stack>
             </Box>
 

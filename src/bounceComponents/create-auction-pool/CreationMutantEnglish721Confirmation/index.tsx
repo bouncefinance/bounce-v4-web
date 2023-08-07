@@ -1,22 +1,18 @@
-import { Box, IconButton, Stack, styled, Typography } from '@mui/material'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
 import Image from 'components/Image'
-import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { show } from '@ebay/nice-modal-react'
 import { LoadingButton } from '@mui/lab'
-import { AllocationStatus, CreationStep, ParticipantStatus } from '../types'
+import { AuctionType, CreationStep, ParticipantStatus } from '../types'
 import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
-import EmptyNFTIcon from '../TokenERC1155InforationForm/components/NFTCard/emptyNFTIcon.png'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import TokenImage from 'bounceComponents/common/TokenImage'
-
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 // import { ReactComponent as ZeroIcon } from 'assets/imgs/auction/zero-icon.svg'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useActiveWeb3React } from 'hooks'
 import { ChainListMap } from 'constants/chain'
 import { shortenAddress } from 'utils'
-import { formatNumber } from 'utils/number'
-import { useCreateFixedSwap1155Pool } from 'hooks/useCreateFixedSwap1155Pool'
 import {
   hideDialogConfirmation,
   showRequestApprovalDialog,
@@ -27,27 +23,15 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
-import { FIXED_SWAP_NFT_CONTRACT_ADDRESSES } from '../../../constants'
+import { MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES } from '../../../constants'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
-import { useERC1155Balance } from 'hooks/useNFTTokenBalance'
-import JSBI from 'jsbi'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import { ConfirmationInfoItem, ConfirmationSubtitle } from '../Creation1155Confirmation'
 import { useShowLoginModal } from 'state/users/hooks'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { PoolType } from 'api/pool/type'
 import AuctionNotification from '../AuctionNotification'
-export const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
-  color: theme.palette.grey[900],
-  opacity: 0.5
-}))
-
-export const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
-  <Stack direction="row" justifyContent="space-between" alignItems="center" columnGap={20}>
-    {typeof title === 'string' ? <ConfirmationSubtitle>{title}</ConfirmationSubtitle> : title}
-    {children}
-  </Stack>
-)
-
+import { useCreateMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
 const CreatePoolButton = () => {
@@ -55,30 +39,24 @@ const CreatePoolButton = () => {
   const navigate = useNavigate()
   const { account, chainId } = useActiveWeb3React()
   const values = useValuesState()
-  const createFixedSwap1155Pool = useCreateFixedSwap1155Pool()
+  const createMutantEnglishAuctionPool = useCreateMutantEnglishAuctionPool()
   const auctionInChainId = useAuctionInChain()
   const showLoginModal = useShowLoginModal()
-
   const switchNetwork = useSwitchNetwork()
-  const auctionAccountBalance = useERC1155Balance(
-    values.nftTokenFrom.contractAddr,
-    account || undefined,
-    values.nftTokenFrom.tokenId,
-    auctionInChainId
-  )
-
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
   const [approvalState, approveCallback] = useNFTApproveAllCallback(
-    values.nftTokenFrom.contractAddr,
-    chainId === auctionInChainId ? FIXED_SWAP_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
+    values.nft721TokenFrom?.[0].contractAddr,
+    chainId === auctionInChainId ? MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES[auctionInChainId] : undefined
   )
+
+  console.log('state', values.nft721TokenFrom[0].contractAddr, values.nft721TokenFrom?.[0].contractAddr)
 
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createFixedSwap1155Pool()
+      const { transactionResult } = await createMutantEnglishAuctionPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -95,10 +73,9 @@ const CreatePoolButton = () => {
           rpt()
           handleCloseDialog()
         })
-        transactionReceipt.then(curReceipt => {
-          const poolId = getPoolId(curReceipt.logs)
-          if (poolId) {
-            resolve(poolId)
+        transactionResult.then(sysId => {
+          if (sysId) {
+            resolve(sysId.toString())
             setButtonCommitted('success')
           } else {
             hideDialogConfirmation()
@@ -113,9 +90,13 @@ const CreatePoolButton = () => {
         })
       })
       ret
-        .then(poolId => {
+        .then(sysId => {
           const goToPoolInfoPage = () => {
-            const route = getAuctionPoolLink(sysId, PoolType.fixedSwapNft, chainConfigInBackend?.id as number, poolId)
+            const route = getAuctionPoolLink(
+              sysId,
+              PoolType.MUTANT_ENGLISH_AUCTION_NFT,
+              chainConfigInBackend?.id as number
+            )
             navigate(route)
           }
 
@@ -146,7 +127,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createFixedSwap1155Pool, navigate, redirect])
+  }, [chainConfigInBackend?.id, createMutantEnglishAuctionPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -215,20 +196,10 @@ const CreatePoolButton = () => {
         loading: true
       }
     }
-    if (
-      !auctionAccountBalance ||
-      !values.poolSize ||
-      JSBI.lessThan(JSBI.BigInt(auctionAccountBalance), JSBI.BigInt(values.poolSize))
-    ) {
-      return {
-        text: 'Insufficient Balance',
-        disabled: true
-      }
-    }
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
-          text: `Approving use of ${values.nftTokenFrom.contractName || 'NFT'} ...`,
+          text: `Approving use of ${values.nft721TokenFrom[0]?.contractName || 'NFT'} ...`,
           loading: true
         }
       }
@@ -240,7 +211,7 @@ const CreatePoolButton = () => {
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
         return {
-          text: `Approve use of ${values.nftTokenFrom.contractName || 'NFT'}`,
+          text: `Approve use of  ${values.nft721TokenFrom[0]?.contractName || 'NFT'}`,
           run: toApprove
         }
       }
@@ -251,16 +222,14 @@ const CreatePoolButton = () => {
   }, [
     account,
     approvalState,
-    auctionAccountBalance,
     auctionInChainId,
     buttonCommitted,
     chainId,
+    showLoginModal,
     switchNetwork,
     toApprove,
     toCreate,
-    values.nftTokenFrom.contractName,
-    values.poolSize,
-    showLoginModal
+    values.nft721TokenFrom
   ])
 
   return (
@@ -277,12 +246,10 @@ const CreatePoolButton = () => {
   )
 }
 
-const CreationConfirmation = () => {
+const CreationMutantEnglish721Confirmation = () => {
   const { account } = useActiveWeb3React()
-
   const auctionChainId = useAuctionInChain()
   const showLoginModal = useShowLoginModal()
-
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const { auctionType } = useQueryParams()
@@ -306,14 +273,14 @@ const CreationConfirmation = () => {
         <CloseSVG />
       </IconButton>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', pb: 48, width: 'fit-content', px: { xs: 16, md: 0 } }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', pb: 48, width: 'fit-content' }}>
         <Typography variant="h2" sx={{ textAlign: 'center', mb: 42 }}>
           Creation confirmation
         </Typography>
 
         <Box sx={{ borderRadius: '20px', border: '1px solid #D7D6D9', px: 24, py: 30 }}>
           <Typography variant="h3" sx={{ fontSize: 16, mb: 24 }}>
-            {values.poolName} Fixed-swap Pool
+            {values.poolName} English Auction Pool
           </Typography>
 
           <Stack spacing={24}>
@@ -343,25 +310,15 @@ const CreationConfirmation = () => {
                       width={20}
                       height={20}
                     />
-                    <Typography ml={4}>{shortenAddress(values.nftTokenFrom?.contractAddr || '')}</Typography>
+                    <Typography ml={4}>{shortenAddress(values.nft721TokenFrom?.[0]?.contractAddr || '')}</Typography>
                   </Box>
                 </ConfirmationInfoItem>
-                <ConfirmationInfoItem title="Token Type">
-                  <Typography>ERC1155</Typography>
+                <ConfirmationInfoItem title="Token type">
+                  <Typography>ERC721</Typography>
                 </ConfirmationInfoItem>
-                <ConfirmationInfoItem title="Token symbol">
-                  <Stack direction="row" spacing={8} alignItems="center">
-                    <TokenImage
-                      alt={values.nftTokenFrom.contractName}
-                      src={values.nftTokenFrom.image || EmptyNFTIcon}
-                      size={20}
-                    />
-                    <Typography>{values.nftTokenFrom.contractName || '--'}</Typography>
-                  </Stack>
+                <ConfirmationInfoItem title="Token amount">
+                  <Typography>{values.nft721TokenFrom.length}</Typography>
                 </ConfirmationInfoItem>
-                {/* <ConfirmationInfoItem title="Token decimal">
-                  <Typography>{values.tokenFrom.decimals}</Typography>
-                </ConfirmationInfoItem> */}
               </Stack>
             </Box>
 
@@ -382,24 +339,19 @@ const CreationConfirmation = () => {
                   </Stack>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Swap Ratio">
-                  <Typography>
-                    1 {values.nftTokenFrom.contractName} ={' '}
-                    {formatNumber(values.swapRatio, { unit: 0, decimalPlaces: 10 })} {values.tokenTo.symbol}
-                  </Typography>
+                <ConfirmationInfoItem title="Price floor (Bundle price)">
+                  <Typography>{values.priceFloor}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Amount">
-                  <Typography>{values.poolSize}</Typography>
-                </ConfirmationInfoItem>
-
-                <ConfirmationInfoItem title="Allocation per Wallet">
-                  <Typography>
-                    {values.allocationStatus === AllocationStatus.NoLimits
-                      ? 'No'
-                      : `Limit ${Number(values.allocationPerWallet).toLocaleString()} NFT`}
-                  </Typography>
-                </ConfirmationInfoItem>
+                {values.auctionType === AuctionType.MUTANT_ENGLISH ? (
+                  <ConfirmationInfoItem title="The minimum increase ratio">
+                    <Typography>{values.amountMinIncr1}%</Typography>
+                  </ConfirmationInfoItem>
+                ) : (
+                  <ConfirmationInfoItem title="The minimum price increase">
+                    <Typography>{values.amountMinIncr1}</Typography>
+                  </ConfirmationInfoItem>
+                )}
               </Stack>
             </Box>
 
@@ -409,21 +361,37 @@ const CreationConfirmation = () => {
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Pool duration">
+                <ConfirmationInfoItem title="Creator distribution ratio">
+                  <Typography>{values.creatorRatio}%</Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Prev bidder distribution ratio">
+                  <Typography>{values.prevBidderRatio}%</Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Last bidder distribution ratio">
+                  <Typography>{values.lastBidderRatio}%</Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Pool start time">
+                  <Typography>From {values.startTime?.format('MM.DD.Y HH:mm')}</Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Delay close time">
                   <Typography>
-                    From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
+                    {values.closeHour || '0'} Hour {values.closeMinute || '0'} Minute
+                  </Typography>
+                </ConfirmationInfoItem>
+
+                <ConfirmationInfoItem title="Delay claim time">
+                  <Typography>
+                    {values.delayUnlockingHour || '0'} Hour {values.delayUnlockingMinute || '0'} Minute
                   </Typography>
                 </ConfirmationInfoItem>
 
                 <ConfirmationInfoItem title="Participant">
                   <Typography>
                     {values.participantStatus === ParticipantStatus.Public ? 'Public' : 'Whitelist'}
-                  </Typography>
-                </ConfirmationInfoItem>
-
-                <ConfirmationInfoItem title="Delay Unlocking Token">
-                  <Typography>
-                    {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'}
                   </Typography>
                 </ConfirmationInfoItem>
               </Stack>
@@ -440,22 +408,6 @@ const CreationConfirmation = () => {
             </LoadingButton>
           )}
 
-          {/* <ConfirmationSubtitle sx={{ mt: 12, opacity: 1, color: '#908E96' }}>
-            Transaction Fee is{' '}
-            <span
-              style={{
-                textDecoration: 'line-through'
-              }}
-            >
-              2.5%
-            </span>
-            <ZeroIcon
-              style={{
-                marginLeft: '6px',
-                verticalAlign: 'middle'
-              }}
-            />
-          </ConfirmationSubtitle> */}
           <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>
         </Box>
       </Box>
@@ -463,4 +415,4 @@ const CreationConfirmation = () => {
   )
 }
 
-export default CreationConfirmation
+export default CreationMutantEnglish721Confirmation

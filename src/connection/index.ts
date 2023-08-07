@@ -11,7 +11,6 @@ import WALLET_CONNECT_ICON from 'assets/walletIcon/walletConnectIcon.svg'
 import OkxIcon_ICON from 'assets/walletIcon/okxIcon.png'
 import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
-
 import { Connection, ConnectionType } from './types'
 import { getInjection, getIsCoinbaseWallet, getIsInjected, getIsMetaMaskWallet, getIsOkxWallet } from './utils'
 import { UniwalletConnect as UniwalletWCV2Connect, WalletConnectV2 } from './WalletConnectV2'

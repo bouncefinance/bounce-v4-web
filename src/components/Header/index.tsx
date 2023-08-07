@@ -22,6 +22,8 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
+import FundoHead from 'components/Fundo/Header'
+
 interface TabContent {
   title: string
   route?: string
@@ -125,7 +127,7 @@ const transparentRoutes = [
   routes.launchpad.bladeDao,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.poseiswapAuction,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
   routes.thirdPart.TypeitAuction,
@@ -142,7 +144,7 @@ const transparentRoutes = [
 
 export const whiteLogoRoutes = [
   routes.launchpad.bladeDao,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.TypeitAuction,
   routes.thirdPart.TypeitAuctionWhitelist,
@@ -166,6 +168,9 @@ export default function Header() {
   //     return ''
   //   }
   // })
+  const showBounseHead = useMemo(() => {
+    return location.pathname.indexOf('foundo') === -1
+  }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
@@ -258,7 +263,13 @@ export default function Header() {
     >
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
-      <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
+      <StyledAppBar
+        isTransparent={isTransparentRoute}
+        sx={{
+          display: showBounseHead ? 'flex' : 'none',
+          ...headerBg
+        }}
+      >
         <Box display="flex" alignItems="center">
           <MainLogo id={'logo'} to={'/'}>
             <Image
@@ -302,6 +313,7 @@ export default function Header() {
           </ShowOnMobile>
         </Box>
       </StyledAppBar>
+      {!showBounseHead && <FundoHead />}
     </Box>
   )
 }
