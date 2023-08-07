@@ -222,7 +222,21 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Cancel</Typography>
+          <Typography color={'#fff'} fontSize={isSm ? 20 : 28}>
+            Cancel
+          </Typography>
+        )}
+        {poolStatus === PoolStatus.Live && poolInfo.enableWhiteList && !poolInfo.whitelistData?.isUserInWhitelist && (
+          <Typography
+            sx={{
+              fontFamily: `'Public Sans'`,
+              fontWeight: 600,
+              fontSize: isSm ? 20 : 28,
+              color: '#FD3333'
+            }}
+          >
+            You are not whitelisted
+          </Typography>
         )}
       </Box>
       <DataView
@@ -328,7 +342,13 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
         </RowLabel>
       )}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
-      {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
+      {poolStatus === PoolStatus.Live &&
+        poolInfo &&
+        poolInfo.enableWhiteList &&
+        poolInfo.whitelistData?.isUserInWhitelist && <LiveSection poolInfo={poolInfo}></LiveSection>}
+      {poolStatus === PoolStatus.Live && poolInfo && !poolInfo.enableWhiteList && (
+        <LiveSection poolInfo={poolInfo}></LiveSection>
+      )}
     </Box>
   )
 }
