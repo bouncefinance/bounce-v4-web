@@ -179,7 +179,9 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Cancel</Typography>
+          <Typography color={'#fff'} fontSize={isSm ? 20 : 28}>
+            Cancel
+          </Typography>
         )}
       </Box>
       <DataView

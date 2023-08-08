@@ -222,7 +222,21 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Cancel</Typography>
+          <Typography color={'#fff'} fontSize={isSm ? 20 : 28}>
+            Cancel
+          </Typography>
+        )}
+        {poolStatus === PoolStatus.Live && poolInfo.enableWhiteList && !poolInfo.whitelistData?.isUserInWhitelist && (
+          <Typography
+            sx={{
+              fontFamily: `'Public Sans'`,
+              fontWeight: 600,
+              fontSize: isSm ? 20 : 28,
+              color: '#FD3333'
+            }}
+          >
+            You are not whitelisted
+          </Typography>
         )}
       </Box>
       <DataView
@@ -328,7 +342,15 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
         </RowLabel>
       )}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
-      {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
+      {poolStatus === PoolStatus.Live &&
+        poolInfo &&
+        poolInfo.enableWhiteList &&
+        !poolInfo.whitelistData?.isUserInWhitelist && <></>}
+      {poolStatus === PoolStatus.Live &&
+        poolInfo &&
+        (!poolInfo.enableWhiteList || (poolInfo.enableWhiteList && poolInfo.whitelistData?.isUserInWhitelist)) && (
+          <LiveSection poolInfo={poolInfo}></LiveSection>
+        )}
     </Box>
   )
 }
@@ -541,6 +563,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
     <>
       {isWinner ? (
         <BidResultAlert
+          isWinner={false}
           isClose={false}
           winnerImg={undefined}
           leftText="You are the highest bidder!"
@@ -788,6 +811,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   return isWinner ? (
     <Stack>
       <BidResultAlert
+        isWinner={true}
         isClose={true}
         winnerImg={WinTips}
         leftText="Congratulations! You win the auction and get rewarded"
@@ -874,12 +898,14 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
 }
 
 function BidResultAlert({
+  isWinner = false,
   isClose,
   winnerImg,
   tokenImg,
   leftText,
   tokenText
 }: {
+  isWinner: boolean
   isClose: boolean
   winnerImg: string | undefined
   tokenImg: string | undefined
@@ -955,6 +981,7 @@ function BidResultAlert({
           />
         )}
         {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
+        {isWinner && <WhiteText>{leftText}</WhiteText>}
       </Box>
       {!isClose && (
         <Typography color={'#D7D6D9'} fontSize={14} mb={25}>
@@ -962,21 +989,12 @@ function BidResultAlert({
         </Typography>
       )}
       <RowLabel>
-        <img
-          style={{
-            display: 'inline-block',
-            width: '20px',
-            height: '20px',
-            marginRight: '8px'
-          }}
-          src={tokenImg}
-          alt=""
-          srcSet=""
-        />
+        <TokenImage src={tokenImg} alt={'token img'} size={20} />
         <Typography
           className="value"
           style={{
             color: '#fff',
+            marginLeft: 8,
             fontWeight: 600,
             lineHeight: '130%',
             fontSize: isSm ? '24px' : '36px'
