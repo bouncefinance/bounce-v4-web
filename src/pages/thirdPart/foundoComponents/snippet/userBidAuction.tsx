@@ -438,31 +438,16 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
     showRequestConfirmDialog({ dark: true })
     try {
       const { transactionResult } = await bidCallback(poolInfo.currentBidderAmount)
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(
-          () => {
-            hideDialogConfirmation()
-            rpt()
-          },
-          { dark: true }
-        )
-        transactionResult.then(curReceipt => {
-          resolve(curReceipt)
-        })
+      await transactionResult
+      hideDialogConfirmation()
+      show(DialogDarkTips, {
+        iconType: 'success',
+        againBtn: 'Close',
+        title: 'Congratulations!',
+        content: `You have successfully bid amount ${poolInfo.currentBidderAmount?.toSignificant()} ${
+          poolInfo.token1.symbol
+        }`
       })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-          show(DialogDarkTips, {
-            iconType: 'success',
-            againBtn: 'Close',
-            title: 'Congratulations!',
-            content: `You have successfully bid amount ${poolInfo.currentBidderAmount?.toSignificant()} ${
-              poolInfo.token1.symbol
-            }`
-          })
-        })
-        .catch()
     } catch (error) {
       const err: any = error
       hideDialogConfirmation()

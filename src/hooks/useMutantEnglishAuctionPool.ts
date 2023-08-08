@@ -704,9 +704,9 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
             hash: response.hash,
             transactionResult: response.wait(1).then(receipt => {
               if (receipt.status === 1) {
-                Promise.resolve()
+                return Promise.resolve()
               }
-              Promise.reject('The transaction seems to have failed')
+              return Promise.reject('The transaction seems to have failed')
             })
           }
         })
