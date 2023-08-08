@@ -1,159 +1,20 @@
 import { Box, MenuItem, OutlinedInput, Select, Stack } from '@mui/material'
 import { CardBox, BaseBox, Title, SubmitComp, FormLayout, FormUploadAdd, AddFile } from './BaseComponent'
 import { Formik } from 'formik'
-import { useActiveWeb3React } from 'hooks'
-import * as yup from 'yup'
 import FormItem from 'bounceComponents/common/FormItem'
-
 import MarkdownEditor from '../components/markdownEditor'
 import Image from 'components/Image'
-import { ChainId, ChainList } from 'constants/chain'
+import { ChainList } from 'constants/chain'
 import { Body02 } from 'components/Text'
 import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
-const basicValidationSchema = yup.object({
-  ProjectPictureBig: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number()
-  }),
-  ProjectPictureSmall: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number()
-  }),
-  ProjectLogo: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number()
-  }),
-  BannerBigPicture: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
-    id: yup.number()
-  }),
-  ProjectDescribe: yup
-    .string()
-    .required()
-    .min(100, 'Describe your project (100-500 words)')
-    .max(500, 'Describe your project (100-500 words)'),
-  Tokenomics: yup.string(),
-  WebsiteURL: yup.string().url().required(),
-  Whitepaper: yup.string().url().required(),
-  ProjectName: yup.string().required(),
-  ProjectRoadmap: yup.string(),
-  ChainId: yup.number().required(),
-  ProjectLink: yup.object().shape({
-    TwitterLink: yup
-      .string()
-      .url('TwitterLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    TelegramLink: yup
-      .string()
-      .url('TelegramLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    FacebookLink: yup
-      .string()
-      .url('FacebookLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    YoutubeLink: yup
-      .string()
-      .url('YoutubeLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    SubredditLink: yup
-      .string()
-      .url('SubredditLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    MediumLink: yup
-      .string()
-      .url('MediumLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    DiscordLink: yup
-      .string()
-      .url('DiscordLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      )
-  })
-})
-const BasicForm = () => {
+import { basicValidationSchema } from '../schema'
+import { TinitBasicValue } from '../type'
+const BasicForm = ({ initBasicValue }: { initBasicValue: TinitBasicValue }) => {
   const isSm = useBreakpoint('sm')
-  const { chainId } = useActiveWeb3React()
-  const initBasicValue = {
-    ProjectPictureBig: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: ''
-    },
-    ProjectPictureSmall: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: ''
-    },
-    ProjectLogo: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: ''
-    },
-    BannerBigPicture: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: ''
-    },
-
-    ProjectLink: {
-      WebsiteURL: '',
-      Whitepaper: '',
-      TwitterLink: '',
-      TelegramLink: '',
-      FacebookLink: '',
-      YoutubeLink: '',
-      SubredditLink: '',
-      MediumLink: '',
-      DiscordLink: ''
-    },
-    ProjectDescribe: '',
-    Tokenomics: '',
-    ProjectRoadmap: '',
-    ProjectName: '',
-    ChainId: chainId ?? ChainId.MAINNET
-  }
+  // const {} = useFormikContext()
+  // console.log('values')
+  // console.log(values)
   const onSubmit = (values: any) => {
     console.log('submit')
     console.log(values)
@@ -176,7 +37,7 @@ const BasicForm = () => {
                   <FormLayout
                     title1="Project Name"
                     childForm={
-                      <FormItem name={'ProjectName'}>
+                      <FormItem name={'projectName'}>
                         <OutlinedInput placeholder={'Name of the project, eg. Bounce'} />
                       </FormItem>
                     }
@@ -188,8 +49,8 @@ const BasicForm = () => {
                     }
                     childForm={
                       <FormUploadAdd
-                        formItemName="ProjectLogo"
-                        fileUrl={values.ProjectLogo.fileUrl}
+                        formItemName="projectLogo"
+                        fileUrl={values.projectLogo.fileUrl}
                         setFieldValue={setFieldValue}
                         labelId="ProjectLogoImg"
                         labelChild={<AddFile />}
@@ -203,10 +64,10 @@ const BasicForm = () => {
                     }
                     childForm={
                       <FormUploadAdd
-                        formItemName="BannerBigPicture"
-                        fileUrl={values.BannerBigPicture.fileUrl}
+                        formItemName="projectPicture"
+                        fileUrl={values.projectPicture.fileUrl}
                         setFieldValue={setFieldValue}
-                        labelId="BannerBigPicture"
+                        labelId="projectPicture"
                         labelChild={<BigAddIcon />}
                         labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
                       />
@@ -223,8 +84,8 @@ const BasicForm = () => {
                       <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
                           <FormUploadAdd
-                            formItemName="ProjectPictureBig"
-                            fileUrl={values.ProjectPictureBig.fileUrl}
+                            formItemName="banner"
+                            fileUrl={values.banner.fileUrl}
                             setFieldValue={setFieldValue}
                             labelId="ProjectPictureBigImg"
                             labelChild={<BigAddIcon />}
@@ -234,8 +95,8 @@ const BasicForm = () => {
                         </Stack>
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
                           <FormUploadAdd
-                            formItemName="ProjectPictureSmall"
-                            fileUrl={values.ProjectPictureSmall.fileUrl}
+                            formItemName="projectMobilePicture"
+                            fileUrl={values.projectMobilePicture.fileUrl}
                             setFieldValue={setFieldValue}
                             labelId="ProjectPictureSmallImg"
                             labelChild={<BigAddIcon />}
@@ -262,10 +123,10 @@ const BasicForm = () => {
                       </Title>
                     }
                     childForm={
-                      <FormItem style={{ marginTop: 20 }} name="ProjectDescribe">
+                      <FormItem style={{ marginTop: 20 }} name="description">
                         <MarkdownEditor
-                          value={values.ProjectDescribe}
-                          setEditorValue={value => setFieldValue('ProjectDescribe', value)}
+                          value={values.description}
+                          setEditorValue={value => setFieldValue('description', value)}
                           placeholder="Project description"
                         />
                       </FormItem>
@@ -274,7 +135,7 @@ const BasicForm = () => {
                   <FormLayout
                     title1="Website URL"
                     childForm={
-                      <FormItem name={'WebsiteURL'}>
+                      <FormItem name={'website'}>
                         <OutlinedInput placeholder="https://bitcoin.org" />
                       </FormItem>
                     }
@@ -285,9 +146,9 @@ const BasicForm = () => {
                     childForm={
                       <FormItem>
                         <Select
-                          value={values.ChainId}
+                          value={values.chainId}
                           onChange={({ target }) => {
-                            setFieldValue('ChainId', target.value)
+                            setFieldValue('chainId', target.value)
                           }}
                           renderValue={selected => {
                             const currentChain = ChainList.find(item => item.id === selected)
@@ -311,7 +172,7 @@ const BasicForm = () => {
                             <MenuItem
                               key={t.id}
                               value={t.id}
-                              selected={values.ChainId === t.id ? true : false}
+                              selected={values.chainId === t.id ? true : false}
                               sx={{
                                 '&.Mui-selected': {
                                   '& > .MuiStack-root > p': {
@@ -333,7 +194,7 @@ const BasicForm = () => {
                   <FormLayout
                     title1="Whitepaper/Technical Documentation Link"
                     childForm={
-                      <FormItem name={'Whitepaper'}>
+                      <FormItem name={'whitepaperLink'}>
                         <OutlinedInput placeholder="https://bitcoin.org/bitcoin.pdf" />
                       </FormItem>
                     }
@@ -344,10 +205,10 @@ const BasicForm = () => {
                       <Title sx={{ fontSize: 18, color: '#20201E' }}>Tokenomics </Title>
                       <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
                     </Stack>
-                    <FormItem style={{ marginTop: 15 }} name="Tokenomics">
+                    <FormItem style={{ marginTop: 15 }} name="tokennomics">
                       <MarkdownEditor
-                        value={values.Tokenomics}
-                        setEditorValue={value => setFieldValue('Tokenomics', value)}
+                        value={values.tokennomics}
+                        setEditorValue={value => setFieldValue('tokennomics', value)}
                         placeholder="PHello, nice to meet you ^^... My Name is Eleanor Pena. I work as an Comic Artist, Freelance Illustrator, and concepting Character Design. I can do drawing for personal or business. I started my career as an illustrator in 2018."
                       />
                     </FormItem>
@@ -357,10 +218,10 @@ const BasicForm = () => {
                       <Title sx={{ fontSize: 18, color: '#20201E' }}>Project Roadmap </Title>
                       <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
                     </Stack>
-                    <FormItem style={{ marginTop: 15 }} name="ProjectRoadmap">
+                    <FormItem style={{ marginTop: 15 }} name="roadmap">
                       <MarkdownEditor
-                        value={values.ProjectRoadmap}
-                        setEditorValue={value => setFieldValue('ProjectRoadmap', value)}
+                        value={values.roadmap}
+                        setEditorValue={value => setFieldValue('roadmap', value)}
                         placeholder="Project description."
                       />
                     </FormItem>

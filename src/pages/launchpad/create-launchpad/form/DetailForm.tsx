@@ -20,10 +20,7 @@ import {
   AddFile
 } from './BaseComponent'
 import { Field, Formik } from 'formik'
-import { useActiveWeb3React } from 'hooks'
-import * as yup from 'yup'
 import FormItem from 'bounceComponents/common/FormItem'
-
 import { useCallback } from 'react'
 import Image from 'components/Image'
 import { ChainId, ChainList } from 'constants/chain'
@@ -33,7 +30,7 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
-import moment, { Moment } from 'moment'
+import { Moment } from 'moment'
 import { show } from '@ebay/nice-modal-react'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
 import { Token } from 'bounceComponents/fixed-swap/type'
@@ -41,268 +38,13 @@ import NumberInput from 'bounceComponents/common/NumberInput'
 import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTimePickerFormItem'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
-import BigNumber from 'bignumber.js'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
 import MarkdownEditor from 'pages/realWorldAuction/markdownEditor'
-enum IAuctionType {
-  FIXED_PRICE_AUCTION = 'Fixed Price Auction',
-  PLAYABLE_AUCTION = 'Playable Auction',
-  SEALED_BID_AUCTION = 'Sealed-Bid Auction',
-  ORDER_BOOK_AUCTION = 'Order Book Auction',
-  DUTCH_AUCTION = 'Dutch Auction',
-  NONE = 'None, need to customize'
-}
-interface IFragmentReleaseTimes {
-  startAt: Moment | null
-  radio: string
-  key?: number
-}
-interface ITokenProps {
-  tokenToAddress: string
-  tokenToSymbol: string
-  tokenToLogoURI: string
-  tokenToDecimals: string
-}
-interface ITokenLogo {
-  fileName: string
-  fileSize: number
-  fileThumbnailUrl: string
-  fileType: string
-  fileUrl: string
-  id: number
-}
-interface IDetailInitValue {
-  fragmentReleaseTimes: IFragmentReleaseTimes[]
-  TokenLogo: ITokenLogo
-  TokenName: string
-  ChainId: ChainId
-  ContractAddress: string
-  ContractDecimalPlaces: string
-  AuctionType: IAuctionType
-  CustomizedNeeds: string
-  Token: ITokenProps
-  SwapRatio: string
-  TotalSupply: string
+import { detailValidationSchema } from '../schema'
+import { IAuctionType, IFragmentReleaseTimes, IDetailInitValue } from '../type'
 
-  startTime: Moment | null
-  endTime: Moment | null
-
-  allocationStatus: AllocationStatus
-  allocationPerWallet: string
-  releaseType: IReleaseType
-  delayUnlockingTime: moment.Moment | null
-  linearUnlockingStartTime: moment.Moment | null
-  linearUnlockingEndTime: moment.Moment | null
-  fragmentReleaseSize?: string
-  isRefundable: boolean
-}
-const detailValidationSchema = yup.object({
-  TokenLogo: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Token Logo'),
-    id: yup.number()
-  }),
-  TokenName: yup.string().required(),
-  ChainId: yup.number().required(),
-  ContractAddress: yup.string().required(),
-  ContractDecimalPlaces: yup.string().required(),
-  AuctionType: yup.string().required(),
-  CustomizedNeeds: yup
-    .string()
-    .test(
-      'customized',
-      'Customized needs is a required field',
-      (val, context) => !!val && !!(context.parent.AuctionType === IAuctionType.NONE)
-    ),
-  Token: yup.object({
-    tokenToAddress: yup.string().required(),
-    tokenToSymbol: yup.string().required('Funding Currency is a required field'),
-    tokenToLogoURI: yup.string().required(),
-    tokenToDecimals: yup.string().required()
-  }),
-  SwapRatio: yup
-    .number()
-    .positive('Swap ratio must be positive')
-    .typeError('Please input valid number')
-    .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-      const _value = new BigNumber(value || 0).toFixed()
-      return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-    })
-    .required('Swap ratio is required'),
-  TotalSupply: yup.number().positive('Total Supply must be positive').required('Total Supply is required'),
-  startTime: yup
-    .date()
-    // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
-    .min(moment(), 'Please select a time earlier than current time')
-    .typeError('Please select a valid time')
-    .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value: any, context: any) => {
-      return !context.parent.endTime.valueOf() || (value?.valueOf() || 0) < context.parent.endTime.valueOf()
-    }),
-  endTime: yup
-    .date()
-    .min(moment(), 'Please select a time earlier than current time')
-    .typeError('Please select a valid time')
-    .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value: any, context: any) => {
-      return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
-    }),
-  allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
-  allocationPerWallet: yup
-    .number()
-    .when('allocationStatus', {
-      is: AllocationStatus.Limited,
-      then: yup
-        .number()
-        .typeError('Please input valid number')
-        .positive('Allocation per wallet must be positive')
-        .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-          const _value = new BigNumber(value || 0).toFixed()
-          return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-        })
-        .required('Allocation per wallet is required')
-    })
-    .when('allocationStatus', {
-      is: AllocationStatus.Limited,
-      then: yup
-        .number()
-        .typeError('Please input valid number')
-        .test(
-          'GREATER_THAN_POOL_SIZE',
-          'Allocation per wallet cannot be greater than pool size times swap ratio',
-          (value, context) =>
-            !context.parent.poolSize ||
-            !context.parent.swapRatio ||
-            (value || 0) <= context.parent.poolSize * context.parent.swapRatio
-        )
-    }),
-  delayUnlockingTime: yup
-    .date()
-    .nullable(true)
-    .when('releaseType', {
-      is: (val: any) => Number(val) === IReleaseType.Cliff,
-      then: yup
-        .date()
-        .typeError('Please select a valid time')
-        .required('Please select a valid time')
-        .test({
-          name: 'check-delayUnlockingTime',
-          test: (input, context) => {
-            if (moment(input) < moment()) {
-              return context.createError({ message: 'Please select a time earlier than current time' })
-            }
-            if (
-              !(
-                !context.parent.endTime?.valueOf() ||
-                !context.parent.startTime?.valueOf() ||
-                ((input?.valueOf() || 0) >= context.parent.startTime?.valueOf() &&
-                  (input?.valueOf() || 0) >= context.parent.endTime?.valueOf())
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than start time and end time' })
-            }
-            return true
-          }
-        })
-    }),
-  linearUnlockingStartTime: yup
-    .date()
-    .nullable(true)
-    .when('releaseType', {
-      is: (val: any) => Number(val) === IReleaseType.Linear,
-      then: yup
-        .date()
-        .typeError('Please select a valid time')
-        .required('Please select a valid time')
-        .test({
-          name: 'check-linearUnlockingStartTime',
-          test: (input, context) => {
-            if (moment(input) < moment()) {
-              return context.createError({ message: 'Please select a time earlier than current time' })
-            }
-            if (
-              !(
-                !context.parent.endTime.valueOf() ||
-                !context.parent.startTime.valueOf() ||
-                ((input?.valueOf() || 0) >= context.parent.startTime.valueOf() &&
-                  (input?.valueOf() || 0) >= context.parent.endTime.valueOf())
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than start time and end time' })
-            }
-            return true
-          }
-        })
-    }),
-  linearUnlockingEndTime: yup
-    .date()
-    .nullable(true)
-    .when('releaseType', {
-      is: (val: any) => Number(val) === IReleaseType.Linear,
-      then: yup
-        .date()
-        .typeError('Please select a valid time')
-        .required('Please select a valid time')
-        .test({
-          name: 'check-linearUnlockingEndTime',
-          test: (input, context) => {
-            if (moment(input) < moment()) {
-              return context.createError({ message: 'Please select a time earlier than current time' })
-            }
-            if (
-              !(
-                !context.parent.linearUnlockingStartTime.valueOf() ||
-                (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime.valueOf()
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than linear unlocking end time' })
-            }
-            return true
-          }
-        })
-    }),
-  fragmentReleaseTimes: yup.array().when('releaseType', {
-    is: (val: any) => Number(val) === IReleaseType.Fragment,
-    then: yup.array().of(
-      yup.object().shape({
-        startAt: yup
-          .date()
-          .typeError('Please select a valid time')
-          .required('Please select a valid time')
-          .test({
-            name: 'check-fragmentReleaseTimes',
-            test: (input, context) => {
-              if (moment(input) < moment()) {
-                return context.createError({ message: 'Please select a time earlier than current time' })
-              }
-              return true
-            }
-          }),
-        radio: yup.string().required('Must enter the release ratio')
-      })
-    )
-  }),
-  fragmentReleaseSize: yup.string().when('releaseType', {
-    is: (val: any) => Number(val) === IReleaseType.Fragment,
-    then: yup.string().test('TEST_FRAGMENT_TOTAL', 'Release ratio must add up to 100%', (_, context) => {
-      const endTime = context.parent.endTime?.valueOf() || 0
-      for (const item of context.parent.fragmentReleaseTimes) {
-        if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
-          return context.createError({ message: 'Please select a time earlier than end time' })
-        }
-      }
-      return (
-        context.parent.fragmentReleaseTimes
-          .map((item: { radio: string }) => item.radio)
-          .reduce((a: any, b: any) => (Number(a) || 0) + (Number(b) || 0), [0]) === 100
-      )
-    })
-  }),
-  isRefundable: yup.boolean()
-})
 const defaultFragmentRelease = {
   startAt: null,
   radio: ''
@@ -427,43 +169,7 @@ const showTokenDialog = async ({
     tokenToDecimals: res.decimals
   })
 }
-const DetailForm = () => {
-  const { chainId } = useActiveWeb3React()
-  const initDetailValue: IDetailInitValue = {
-    TokenLogo: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: 0
-    },
-    TokenName: '',
-    ChainId: chainId ?? ChainId.MAINNET,
-    ContractAddress: '',
-    ContractDecimalPlaces: '',
-    AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
-    CustomizedNeeds: '',
-    Token: {
-      tokenToAddress: '',
-      tokenToSymbol: '',
-      tokenToLogoURI: '',
-      tokenToDecimals: ''
-    },
-    SwapRatio: '',
-    TotalSupply: '',
-    startTime: null,
-    endTime: null,
-    allocationStatus: AllocationStatus.NoLimits,
-    allocationPerWallet: '',
-    releaseType: IReleaseType.Cliff,
-    delayUnlockingTime: null,
-    linearUnlockingStartTime: null,
-    linearUnlockingEndTime: null,
-    fragmentReleaseTimes: [],
-    fragmentReleaseSize: '',
-    isRefundable: true
-  }
+const DetailForm = ({ initDetailValue }: { initDetailValue: IDetailInitValue }) => {
   const onSubmit = (value: IDetailInitValue) => {
     console.log('submitsubmitsubmitsubmitsubmit')
     console.log(value)

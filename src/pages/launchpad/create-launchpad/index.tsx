@@ -7,8 +7,96 @@ import { HeadTitle } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 import useBreakpoint from 'hooks/useBreakpoint'
-
+import { ChainId } from 'constants/chain'
+import { IDetailInitValue, TinitBasicValue, IAuctionType } from './type'
+import { useActiveWeb3React } from 'hooks'
+import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
 const CreateLaunchpad = () => {
+  const { chainId } = useActiveWeb3React()
+  const [initBasicValue, setBasicValue] = useState<TinitBasicValue>({
+    id: 0,
+    banner: {
+      fileName: '',
+      fileSize: 0,
+      fileThumbnailUrl: '',
+      fileType: '',
+      fileUrl: ''
+    },
+    projectMobilePicture: {
+      fileName: '',
+      fileSize: 0,
+      fileThumbnailUrl: '',
+      fileType: '',
+      fileUrl: ''
+    },
+    projectLogo: {
+      fileName: '',
+      fileSize: 0,
+      fileThumbnailUrl: '',
+      fileType: '',
+      fileUrl: ''
+    },
+    projectPicture: {
+      fileName: '',
+      fileSize: 0,
+      fileThumbnailUrl: '',
+      fileType: '',
+      fileUrl: ''
+    },
+    projectLink: {
+      TwitterLink: '',
+      TelegramLink: '',
+      FacebookLink: '',
+      YoutubeLink: '',
+      SubredditLink: '',
+      MediumLink: '',
+      DiscordLink: ''
+    },
+    website: '',
+    whitepaperLink: '',
+    description: '',
+    tokennomics: '',
+    roadmap: '',
+    projectName: '',
+    chainId: chainId ?? ChainId.MAINNET
+  })
+  const [initDetailValue, setDetailValue] = useState<IDetailInitValue>({
+    TokenLogo: {
+      fileName: '',
+      fileSize: 0,
+      fileThumbnailUrl: '',
+      fileType: '',
+      fileUrl: '',
+      id: 0
+    },
+    TokenName: '',
+    ChainId: chainId ?? ChainId.MAINNET,
+    ContractAddress: '',
+    ContractDecimalPlaces: '',
+    AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
+    CustomizedNeeds: '',
+    Token: {
+      tokenToAddress: '',
+      tokenToSymbol: '',
+      tokenToLogoURI: '',
+      tokenToDecimals: ''
+    },
+    SwapRatio: '',
+    TotalSupply: '',
+    startTime: null,
+    endTime: null,
+    allocationStatus: AllocationStatus.NoLimits,
+    allocationPerWallet: '',
+    releaseType: IReleaseType.Cliff,
+    delayUnlockingTime: null,
+    linearUnlockingStartTime: null,
+    linearUnlockingEndTime: null,
+    fragmentReleaseTimes: [],
+    fragmentReleaseSize: '',
+    isRefundable: true
+  })
+  console.log(setBasicValue, setDetailValue)
+
   const [tabActive, setTabActive] = useState(0)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
@@ -31,8 +119,8 @@ const CreateLaunchpad = () => {
               </Tab>
             ))}
           </Stack>
-          {tabActive === 0 && <BasicForm />}
-          {tabActive === 1 && <DetailForm />}
+          {tabActive === 0 && <BasicForm initBasicValue={initBasicValue} />}
+          {tabActive === 1 && <DetailForm initDetailValue={initDetailValue} />}
         </ContainerBox>
         <FooterBox>
           <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
