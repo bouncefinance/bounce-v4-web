@@ -197,7 +197,6 @@ export function useCreateMutantEnglishAuctionPool() {
     }
 
     const args = [id, contractCallParams, distributeRatio, distributes, false, expiredTime, signature]
-    console.log('args', args)
 
     const estimatedGas = await mutantEnglishContract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create english auction', error)
@@ -529,7 +528,7 @@ export function useMutantEnglishCreatorClaim(poolId: number | string, name: stri
 
   const run = useCallback(async (): Promise<{
     hash: string
-    transactionResult: Promise<string>
+    transactionResult: Promise<void>
   }> => {
     if (!account) {
       return Promise.reject('no account')
@@ -558,11 +557,10 @@ export function useMutantEnglishCreatorClaim(poolId: number | string, name: stri
       return {
         hash: response.hash,
         transactionResult: response.wait(1).then(receipt => {
-          const index = getEventLog(mutantEnglishContract, receipt.logs, 'CreatorClaimed', 'index')
-          if (!index) {
-            Promise.reject('The transaction seems to have failed')
+          if (receipt.status === 1) {
+            Promise.resolve()
           }
-          return index
+          Promise.reject('The transaction seems to have failed')
         })
       }
     })
@@ -581,7 +579,7 @@ export function useMutantEnglishBidderClaim(poolInfo: MutantEnglishAuctionNFTPoo
 
   const run = useCallback(async (): Promise<{
     hash: string
-    transactionResult: Promise<string>
+    transactionResult: Promise<void>
   }> => {
     if (!account) {
       return Promise.reject('no account')
@@ -612,11 +610,10 @@ export function useMutantEnglishBidderClaim(poolInfo: MutantEnglishAuctionNFTPoo
         return {
           hash: response.hash,
           transactionResult: response.wait(1).then(receipt => {
-            const index = getEventLog(mutantEnglishContract, receipt.logs, 'BidderClaimed', 'index')
-            if (!index) {
-              Promise.reject('The transaction seems to have failed')
+            if (receipt.status === 1) {
+              Promise.resolve()
             }
-            return index
+            Promise.reject('The transaction seems to have failed')
           })
         }
       })
@@ -650,7 +647,7 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
       bidAmount: CurrencyAmount
     ): Promise<{
       hash: string
-      transactionResult: Promise<string>
+      transactionResult: Promise<void>
     }> => {
       if (!account) {
         return Promise.reject('no account')
@@ -706,11 +703,10 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
           return {
             hash: response.hash,
             transactionResult: response.wait(1).then(receipt => {
-              const index = getEventLog(mutantEnglishContract, receipt.logs, 'Bid0', 'index')
-              if (!index) {
-                Promise.reject('The transaction seems to have failed')
+              if (receipt.status === 1) {
+                Promise.resolve()
               }
-              return index
+              Promise.reject('The transaction seems to have failed')
             })
           }
         })
@@ -734,7 +730,7 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
       bidAmount1: CurrencyAmount
     ): Promise<{
       hash: string
-      transactionResult: Promise<string>
+      transactionResult: Promise<void>
     }> => {
       if (!account) {
         return Promise.reject('no account')
@@ -778,11 +774,10 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
           return {
             hash: response.hash,
             transactionResult: response.wait(1).then(receipt => {
-              const index = getEventLog(mutantEnglishContract, receipt.logs, 'Bid1', 'index')
-              if (!index) {
-                Promise.reject('The transaction seems to have failed')
+              if (receipt.status === 1) {
+                Promise.resolve()
               }
-              return index
+              Promise.reject('The transaction seems to have failed')
             })
           }
         })
