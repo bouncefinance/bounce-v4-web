@@ -589,7 +589,7 @@ const DetailForm = ({ initDetailValue, sx }: { initDetailValue: IDetailInitValue
                   </Box>
                 </Stack>
               </BaseBox>
-              <SubmitComp />
+              <SubmitComp loading={false} />
             </Stack>
           )
         }}

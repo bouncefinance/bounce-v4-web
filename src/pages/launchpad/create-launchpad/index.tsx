@@ -26,6 +26,7 @@ const community: ICommunity[] = [
 ]
 const CreateLaunchpad = () => {
   const { chainId } = useActiveWeb3React()
+
   const initBasicValue: IBasicInfoParams = {
     id: 0,
     banner: {

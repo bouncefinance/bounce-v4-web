@@ -10,6 +10,9 @@ import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { basicValidationSchema } from '../schema'
 import { IBasicInfoParams } from '../type'
+import { useState } from 'react'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+
 const communityInfo = [
   { title: 'Twitter Profile Link', placeholder: 'eg. https://twitter.com/bounce_finance' },
   { title: 'Telegram Channel Link', placeholder: 'eg. https://t.me/bounce_finance' },
@@ -19,14 +22,19 @@ const communityInfo = [
   { title: 'Medium Url', placeholder: 'eg. https://medium.com/bounce_finance' },
   { title: 'Discord Invitation Url', placeholder: 'eg. https://medium.com/bounce_finance' }
 ]
+
 const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProps }) => {
+  const [curChaiId, setCurChaiId] = useState(initValue.chainId)
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', curChaiId)
+  console.log(chainConfigInBackend?.id)
+
   const isSm = useBreakpoint('sm')
 
   const onSubmit = (values: IBasicInfoParams) => {
     console.log('submit')
     console.log(values)
   }
-
+  // const submitBasic = (values: IBasicInfoParams) => {}
   return (
     <CardBox sx={{ ...sx }}>
       <Formik onSubmit={onSubmit} enableReinitialize validationSchema={basicValidationSchema} initialValues={initValue}>
@@ -258,7 +266,7 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
                   </Stack>
                   <DropFile />
                 </BaseBox> */}
-              <SubmitComp />
+              <SubmitComp loading={false} />
             </Stack>
           )
         }}

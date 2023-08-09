@@ -1,4 +1,5 @@
 import { Box, styled, Typography, SxProps, Stack, Button, Switch, FormLabel } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
 import Image from 'components/Image'
 import FormItem from 'bounceComponents/common/FormItem'
 import { IFile } from 'bounceComponents/common/Uploader'
@@ -43,7 +44,7 @@ export const HeadTitle = styled(Title)({
   }
 })
 
-export const SubmitComp = () => (
+export const SubmitComp = ({ loading }: { loading: boolean }) => (
   <Stack
     sx={{
       flexDirection: 'column',
@@ -84,9 +85,11 @@ export const SubmitComp = () => (
       >
         <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
       </Button>
-      <Button
+      <LoadingButton
         type="submit"
         variant="contained"
+        loading={loading}
+        loadingPosition="start"
         sx={{
           padding: '20px 40px',
           boxSizing: 'border-box',
@@ -101,7 +104,7 @@ export const SubmitComp = () => (
         }}
       >
         <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
-      </Button>
+      </LoadingButton>
     </Box>
     <Typography
       sx={{
