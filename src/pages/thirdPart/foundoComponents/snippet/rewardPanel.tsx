@@ -49,7 +49,7 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
             <Typography color={'#959595'} fontSize={16}>
               Next Round Prize
             </Typography>
-            <Tooltip title="Please do not select deflationary or inflationary token.">
+            <Tooltip title="If there is another participant bidding after you, you will receive the following rewards.">
               <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
             </Tooltip>
           </Stack>
@@ -65,7 +65,7 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
             <Typography color={'#959595'} fontSize={16}>
               Next Final Bidder Prize
             </Typography>
-            <Tooltip title="Please do not select deflationary or inflationary token.">
+            <Tooltip title="If you become the next winning bidder, you will receive all the rewards from the prize pool.">
               <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
             </Tooltip>
           </Stack>
