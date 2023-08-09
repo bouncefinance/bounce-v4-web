@@ -101,6 +101,7 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.OKEX]: null,
   [ChainId.BSCTEST]: null,
   [ChainId.KLAYTN]: null,
+  [ChainId.BASE]: null,
   [ChainId.GNOSIS]: null,
   [ChainId.POLYGON]: null,
   [ChainId.FANTOM]: null,
