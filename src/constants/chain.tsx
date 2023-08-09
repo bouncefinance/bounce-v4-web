@@ -44,6 +44,7 @@ export enum ChainId {
   KAVA = 2222,
   KLAYTN = 8217,
   BASE = 8453,
+  BASE_TESTNET = 84531,
   FUSION = 32659,
   ARBITRUM = 42161,
   CELO = 42220,
@@ -419,6 +420,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://mainnet.base.org'],
     blockExplorerUrls: ['https://basescan.org']
+  },
+  [ChainId.BASE_TESTNET]: {
+    id: ChainId.BASE_TESTNET,
+    hexChainId: numberToHex(ChainId.BASE_TESTNET),
+    chainName: 'Base Goerli',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18,
+      logo: BaseUrl
+    },
+    rpcUrls: ['https://goerli.base.org'],
+    blockExplorerUrls: ['https://goerli.basescan.org']
   },
   [ChainId.FUSION]: {
     id: ChainId.FUSION,

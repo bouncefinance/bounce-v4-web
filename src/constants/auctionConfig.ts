@@ -112,6 +112,10 @@ export const AuctionConfig: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.ENGLISH_AUCTION, AuctionType.DUTCH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
+  [ChainId.BASE_TESTNET]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.ENGLISH_AUCTION, AuctionType.DUTCH_AUCTION],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
+  },
   [ChainId.FUSION]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
   },
