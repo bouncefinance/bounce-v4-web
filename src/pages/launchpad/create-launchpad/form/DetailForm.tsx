@@ -6,7 +6,8 @@ import {
   Typography,
   FormControlLabel,
   OutlinedInput,
-  FormHelperText
+  FormHelperText,
+  SxProps
 } from '@mui/material'
 import {
   CardBox,
@@ -169,14 +170,14 @@ const showTokenDialog = async ({
     tokenToDecimals: res.decimals
   })
 }
-const DetailForm = ({ initDetailValue }: { initDetailValue: IDetailInitValue }) => {
+const DetailForm = ({ initDetailValue, sx }: { initDetailValue: IDetailInitValue; sx?: SxProps }) => {
   const onSubmit = (value: IDetailInitValue) => {
     console.log('submitsubmitsubmitsubmitsubmit')
     console.log(value)
   }
   const isSm = useBreakpoint('sm')
   return (
-    <CardBox>
+    <CardBox sx={{ ...sx }}>
       <Formik
         enableReinitialize
         initialValues={initDetailValue}

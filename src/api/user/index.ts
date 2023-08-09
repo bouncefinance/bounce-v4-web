@@ -36,6 +36,7 @@ import {
 } from './type'
 
 import { ApiInstance } from 'api'
+import { IBasicInfoParams } from 'pages/launchpad/create-launchpad/type'
 
 export const getConfig = async () => {
   return ApiInstance.get<IConfigResponse>('/com/cfg/opt_data', {})
@@ -181,4 +182,7 @@ export const getUserSearchTokenList = (params: SearchTokenListParams) => {
 }
 export const applySeller = (params: IBodySeller) => {
   return ApiInstance.post('/user/seller_apply', params)
+}
+export const updateLaunchpadBasic = (params: IBasicInfoParams) => {
+  return ApiInstance.post('/user/launchpad/basic', params)
 }

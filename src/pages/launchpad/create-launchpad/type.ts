@@ -2,9 +2,9 @@ import { IFile } from 'bounceComponents/common/Uploader'
 import { ChainId } from 'constants/chain'
 import { Moment } from 'moment'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
-interface ICommunity {
-  property1: string
-  property2: string
+export interface ICommunity {
+  communityName: string
+  communityLink: string
 }
 interface ITokenProps {
   tokenToAddress: string
@@ -17,7 +17,7 @@ export interface IFragmentReleaseTimes {
   radio: string
   key?: number
 }
-export interface IBasicInfo {
+export interface IBasicInfoParams {
   banner: IFile
   chainId: number | ChainId
   community: ICommunity[]
@@ -33,7 +33,6 @@ export interface IBasicInfo {
   website: string
   whitepaperLink: string
 }
-export type TinitBasicValue = Omit<IBasicInfo, 'community'> & { projectLink: any }
 export enum IAuctionType {
   FIXED_PRICE_AUCTION = 'Fixed Price Auction',
   PLAYABLE_AUCTION = 'Playable Auction',

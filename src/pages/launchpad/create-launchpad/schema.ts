@@ -47,50 +47,79 @@ export const basicValidationSchema = yup.object({
   projectName: yup.string().required(),
   roadmap: yup.string(),
   chainId: yup.number().required(),
-  ProjectLink: yup.object().shape({
-    TwitterLink: yup
-      .string()
-      .url('TwitterLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    TelegramLink: yup
-      .string()
-      .url('TelegramLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    FacebookLink: yup
-      .string()
-      .url('FacebookLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    YoutubeLink: yup
-      .string()
-      .url('YoutubeLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    SubredditLink: yup
-      .string()
-      .url('SubredditLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    MediumLink: yup
-      .string()
-      .url('MediumLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
-      ),
-    DiscordLink: yup
-      .string()
-      .url('DiscordLink must be a valid URL')
-      .test('notEmpty', 'fill in at least one', (val, context) =>
-        Object.keys(context.parent).some(key => !!context.parent[key])
+  community: yup.array().of(
+    yup
+      .object({
+        communityLink: yup
+          .string()
+          .url('twitter link must be a valid URL')
+          .test('notEmpty', 'fill in at least one', (val, context: any) => {
+            console.log('context')
+            console.log(context)
+            return context.from[1].value.community.some((item: any) => item.communityLink)
+          })
+      })
+      .concat(
+        yup.object({
+          communityLink: yup
+            .string()
+            .url('telegram link must be a valid URL')
+            .test('notEmpty', 'fill in at least one', (val, context: any) => {
+              return context.from[1].value.community.some((item: any) => item.communityLink)
+            })
+        })
       )
-  })
+      .concat(
+        yup.object({
+          communityLink: yup
+            .string()
+            .url('facebook link must be a valid URL')
+            .test('notEmpty', 'fill in at least one', (val, context: any) => {
+              return context.from[1].value.community.some((item: any) => item.communityLink)
+            })
+        })
+      )
+      .concat(
+        yup.object({
+          communityLink: yup
+            .string()
+            .url('youtube link must be a valid URL')
+            .test('notEmpty', 'fill in at least one', (val, context: any) => {
+              return context.from[1].value.community.some((item: any) => item.communityLink)
+            })
+        })
+      )
+      .concat(
+        yup.object({
+          communityLink: yup
+            .string()
+            .url('subreddit link must be a valid URL')
+            .test('notEmpty', 'fill in at least one', (val, context: any) => {
+              return context.from[1].value.community.some((item: any) => item.communityLink)
+            })
+        })
+      )
+      .concat(
+        yup.object({
+          communityLink: yup
+            .string()
+            .url('medium link must be a valid URL')
+            .test('notEmpty', 'fill in at least one', (val, context: any) => {
+              return context.from[1].value.community.some((item: any) => item.communityLink)
+            })
+        })
+      )
+      .concat(
+        yup.object({
+          communityLink: yup
+            .string()
+            .url('discord link must be a valid URL')
+            .test('notEmpty', 'fill in at least one', (val, context: any) => {
+              return context.from[1].value.community.some((item: any) => item.communityLink)
+            })
+        })
+      )
+  )
 })
 export const detailValidationSchema = yup.object({
   TokenLogo: yup.object({

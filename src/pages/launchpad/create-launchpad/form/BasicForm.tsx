@@ -1,4 +1,4 @@
-import { Box, MenuItem, OutlinedInput, Select, Stack } from '@mui/material'
+import { Box, MenuItem, OutlinedInput, Select, Stack, SxProps } from '@mui/material'
 import { CardBox, BaseBox, Title, SubmitComp, FormLayout, FormUploadAdd, AddFile } from './BaseComponent'
 import { Formik } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -9,25 +9,27 @@ import { Body02 } from 'components/Text'
 import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { basicValidationSchema } from '../schema'
-import { TinitBasicValue } from '../type'
-const BasicForm = ({ initBasicValue }: { initBasicValue: TinitBasicValue }) => {
+import { IBasicInfoParams } from '../type'
+const communityInfo = [
+  { title: 'Twitter Profile Link', placeholder: 'eg. https://twitter.com/bounce_finance' },
+  { title: 'Telegram Channel Link', placeholder: 'eg. https://t.me/bounce_finance' },
+  { title: 'Facebook Profile Link', placeholder: 'eg. https://facebook.com/bounce_finance' },
+  { title: 'Youtube Channel Link', placeholder: 'eg. https://www.youtube.com/c/bounce_finance' },
+  { title: 'Subreddit Link', placeholder: 'eg. https://www.reddit.com/r/bounce_finance' },
+  { title: 'Medium Url', placeholder: 'eg. https://medium.com/bounce_finance' },
+  { title: 'Discord Invitation Url', placeholder: 'eg. https://medium.com/bounce_finance' }
+]
+const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProps }) => {
   const isSm = useBreakpoint('sm')
-  // const {} = useFormikContext()
-  // console.log('values')
-  // console.log(values)
-  const onSubmit = (values: any) => {
+
+  const onSubmit = (values: IBasicInfoParams) => {
     console.log('submit')
     console.log(values)
   }
 
   return (
-    <CardBox>
-      <Formik
-        onSubmit={onSubmit}
-        enableReinitialize
-        validationSchema={basicValidationSchema}
-        initialValues={initBasicValue}
-      >
+    <CardBox sx={{ ...sx }}>
+      <Formik onSubmit={onSubmit} enableReinitialize validationSchema={basicValidationSchema} initialValues={initValue}>
         {({ values, setFieldValue, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
@@ -235,62 +237,17 @@ const BasicForm = ({ initBasicValue }: { initBasicValue: TinitBasicValue }) => {
                   <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>* Fill in at least one</Title>
                 </Box>
                 <Stack flexDirection={'column'} gap={32}>
-                  <FormLayout
-                    title1="Twitter Profile Link"
-                    childForm={
-                      <FormItem name={'ProjectLink.TwitterLink'}>
-                        <OutlinedInput placeholder="eg. https://twitter.com/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Telegram Channel Link"
-                    childForm={
-                      <FormItem name={'ProjectLink.TelegramLink'}>
-                        <OutlinedInput placeholder="eg. https://t.me/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Facebook Profile Link"
-                    childForm={
-                      <FormItem name={'ProjectLink.FacebookLink'}>
-                        <OutlinedInput placeholder="eg. https://facebook.com/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Youtube Channel Link"
-                    childForm={
-                      <FormItem name={'ProjectLink.YoutubeLink'}>
-                        <OutlinedInput placeholder="eg. https://www.youtube.com/c/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Subreddit Link"
-                    childForm={
-                      <FormItem name={'ProjectLink.SubredditLink'}>
-                        <OutlinedInput placeholder="eg. https://www.reddit.com/r/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Medium Url"
-                    childForm={
-                      <FormItem name={'ProjectLink.MediumLink'}>
-                        <OutlinedInput placeholder="eg. https://medium.com/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Discord Invitation Url"
-                    childForm={
-                      <FormItem name={'ProjectLink.DiscordLink'}>
-                        <OutlinedInput placeholder="eg. https://medium.com/bounce_finance" />
-                      </FormItem>
-                    }
-                  />
+                  {communityInfo.map((item, index) => (
+                    <FormLayout
+                      key={index}
+                      title1={item.title}
+                      childForm={
+                        <FormItem name={`community[${index}].communityLink`}>
+                          <OutlinedInput placeholder={item.placeholder} />
+                        </FormItem>
+                      }
+                    />
+                  ))}
                 </Stack>
               </BaseBox>
 

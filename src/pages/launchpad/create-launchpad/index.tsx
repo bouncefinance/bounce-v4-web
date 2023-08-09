@@ -8,12 +8,25 @@ import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ChainId } from 'constants/chain'
-import { IDetailInitValue, TinitBasicValue, IAuctionType } from './type'
+import { IDetailInitValue, IBasicInfoParams, IAuctionType, ICommunity } from './type'
 import { useActiveWeb3React } from 'hooks'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
+enum ITab {
+  'Basic',
+  'Detail'
+}
+const community: ICommunity[] = [
+  { communityName: 'twitter', communityLink: '' },
+  { communityName: 'telegram', communityLink: '' },
+  { communityName: 'facebook', communityLink: '' },
+  { communityName: 'youtube', communityLink: '' },
+  { communityName: 'subreddit', communityLink: '' },
+  { communityName: 'medium', communityLink: '' },
+  { communityName: 'discord', communityLink: '' }
+]
 const CreateLaunchpad = () => {
   const { chainId } = useActiveWeb3React()
-  const [initBasicValue, setBasicValue] = useState<TinitBasicValue>({
+  const initBasicValue: IBasicInfoParams = {
     id: 0,
     banner: {
       fileName: '',
@@ -43,15 +56,7 @@ const CreateLaunchpad = () => {
       fileType: '',
       fileUrl: ''
     },
-    projectLink: {
-      TwitterLink: '',
-      TelegramLink: '',
-      FacebookLink: '',
-      YoutubeLink: '',
-      SubredditLink: '',
-      MediumLink: '',
-      DiscordLink: ''
-    },
+    community: community,
     website: '',
     whitepaperLink: '',
     description: '',
@@ -59,8 +64,8 @@ const CreateLaunchpad = () => {
     roadmap: '',
     projectName: '',
     chainId: chainId ?? ChainId.MAINNET
-  })
-  const [initDetailValue, setDetailValue] = useState<IDetailInitValue>({
+  }
+  const initDetailValue: IDetailInitValue = {
     TokenLogo: {
       fileName: '',
       fileSize: 0,
@@ -94,10 +99,9 @@ const CreateLaunchpad = () => {
     fragmentReleaseTimes: [],
     fragmentReleaseSize: '',
     isRefundable: true
-  })
-  console.log(setBasicValue, setDetailValue)
+  }
 
-  const [tabActive, setTabActive] = useState(0)
+  const [tabActive, setTabActive] = useState(ITab.Basic)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
   return (
@@ -119,8 +123,11 @@ const CreateLaunchpad = () => {
               </Tab>
             ))}
           </Stack>
-          {tabActive === 0 && <BasicForm initBasicValue={initBasicValue} />}
-          {tabActive === 1 && <DetailForm initDetailValue={initDetailValue} />}
+          <BasicForm sx={{ display: tabActive === ITab.Basic ? 'block' : 'none' }} initValue={initBasicValue} />
+          <DetailForm
+            sx={{ display: tabActive === ITab.Detail ? 'block' : 'none' }}
+            initDetailValue={initDetailValue}
+          />
         </ContainerBox>
         <FooterBox>
           <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
