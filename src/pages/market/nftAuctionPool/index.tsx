@@ -238,7 +238,7 @@ export const NFTCard = (props: NFTPrams) => {
               padding: '8px 12px'
             }}
             onClick={e => {
-              e.preventDefault()
+              e.stopPropagation()
               navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
             }}
           >

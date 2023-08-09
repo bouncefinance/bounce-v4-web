@@ -258,8 +258,8 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           {poolInfo.currentBidder &&
           poolInfo.currentBidder !== ZERO_ADDRESS &&
           poolInfo.firstBidderAmount &&
-          poolInfo.distributeRewards.lastBidderRewards
-            ? (poolInfo.firstBidderAmount?.add(poolInfo.distributeRewards.lastBidderRewards).toSignificant() || '--') +
+          poolInfo.distributeRewards.creatorRewards
+            ? (poolInfo.firstBidderAmount?.add(poolInfo.distributeRewards.creatorRewards).toSignificant() || '--') +
               ` ${poolInfo.currencyAmountMin1?.currency.symbol}`
             : '--'}
         </Typography>

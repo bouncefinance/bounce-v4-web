@@ -141,7 +141,17 @@ const PoolStatusBox = ({
       )
     case PoolStatus.Cancelled:
       return (
-        <Box sx={{ px: 12, py: 4, bgcolor: '#D6DFF6', borderRadius: 20, marginRight: '16px', ...style }}>
+        <Box
+          sx={{
+            px: 12,
+            display: 'inline-block',
+            py: 4,
+            bgcolor: '#D6DFF6',
+            borderRadius: 20,
+            marginRight: '16px',
+            ...style
+          }}
+        >
           <Typography variant="body1" color="#2663FF">
             Cancelled
           </Typography>
