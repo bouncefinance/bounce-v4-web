@@ -34,7 +34,7 @@ const ApplyShop = () => {
             marginBottom: '40px'
           }}
         >
-          The physical auction supports various auction mode.{' '}
+          BOUNCE REAL-WORLD COLLECTIBLES MARKETPLACE SUPPORTS VARIOUS TRADING MODES
         </Typography>
       </AnimatedComponent>
       <AnimatedComponent>
@@ -50,7 +50,8 @@ const ApplyShop = () => {
             marginBottom: isMd ? '40px' : '80px'
           }}
         >
-          You are bidding for a physical backed NFTs and you can redeem it post auction
+          In your store on Bounce, the NFTs representing your tangible products will be displayed. Tangible products are
+          shipped to buyers who can access the NFTs upon receiving the products.
         </Typography>
       </AnimatedComponent>
       <AnimatedComponent>
