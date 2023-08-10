@@ -486,6 +486,7 @@ export const NFTCard = (props: NFTPrams) => {
 }
 const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
+  const navigate = useNavigate()
   const [chain, setChain] = useState<number>(3)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) })
@@ -713,13 +714,17 @@ const Pools: React.FC = ({}) => {
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={index}>
                               <Box
-                                component={'a'}
-                                href={getAuctionPoolLink(
-                                  fixedSwaptem.id,
-                                  fixedSwaptem.category,
-                                  fixedSwaptem.chainId,
-                                  fixedSwaptem.poolId.toString()
-                                )}
+                                onClick={e => {
+                                  navigate(
+                                    getAuctionPoolLink(
+                                      fixedSwaptem.id,
+                                      fixedSwaptem.category,
+                                      fixedSwaptem.chainId,
+                                      fixedSwaptem.poolId.toString()
+                                    )
+                                  )
+                                  e.stopPropagation()
+                                }}
                               >
                                 <NFTCard nft={fixedSwaptem} hiddenStatus={true} />
                               </Box>
