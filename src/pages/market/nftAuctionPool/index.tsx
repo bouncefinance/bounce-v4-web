@@ -341,7 +341,7 @@ export const NFTCard = (props: NFTPrams) => {
               >
                 {category === PoolType.fixedSwapNft
                   ? 'Fixed Price'
-                  : category === PoolType.ENGLISH_AUCTION
+                  : category === PoolType.ENGLISH_AUCTION_NFT
                   ? 'English Auction'
                   : 'Mutant English'}
               </Box>
@@ -400,7 +400,7 @@ export const NFTCard = (props: NFTPrams) => {
           {name}{' '}
           {category === PoolType.fixedSwapNft
             ? 'Fixed Price'
-            : category === PoolType.ENGLISH_AUCTION
+            : category === PoolType.ENGLISH_AUCTION_NFT
             ? 'English'
             : 'Mutant English'}{' '}
           Auction Pool

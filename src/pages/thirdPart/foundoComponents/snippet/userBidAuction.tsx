@@ -766,11 +766,11 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
 
-  const {
-    run: bidderClaim,
-    submitted,
-    isClaimed
-  } = useBidderClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
+  const { run: bidderClaim, submitted } = useBidderClaimEnglishAuctionNFT(
+    poolInfo.poolId,
+    poolInfo.name,
+    poolInfo.contract
+  )
 
   const toBidderClaim = useCallback(async () => {
     showRequestConfirmDialog({ dark: true })
@@ -851,7 +851,8 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           srcSet=""
         />
         {/* Check Logistics Information */}
-        {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'}
+        {/* {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'} */}
+        Edit info && Send address
       </PlaceBidBtn>
       <Typography
         sx={{
