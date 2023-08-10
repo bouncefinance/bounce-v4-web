@@ -324,7 +324,10 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
 
-  const isSuccess = useMemo(() => account && poolInfo.firstBidderAmount, [account, poolInfo.firstBidderAmount])
+  const isSuccess = useMemo(
+    () => account && poolInfo.firstBidderAmount?.greaterThan('0'),
+    [account, poolInfo.firstBidderAmount]
+  )
 
   const {
     run: creatorClaim,

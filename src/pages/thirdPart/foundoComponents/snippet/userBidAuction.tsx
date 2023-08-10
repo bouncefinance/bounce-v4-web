@@ -862,14 +862,15 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           fontSize: '13px'
         }}
       >
-        {poolInfo.participant.claimed || isClaimed
+        {/* {poolInfo.participant.claimed || isClaimed
           ? 'We will contact you in the near future'
-          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
+          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`} */}
+        Please submit personal information，We will contact you in the near future.
       </Typography>
 
       {openShippingDialog && (
         <ShippingDialog
-          submitCallback={isClaimed ? undefined : toBidderClaim}
+          // submitCallback={isClaimed ? undefined : toBidderClaim}
           handleClose={() => setOpenShippingDialog(false)}
         />
       )}
