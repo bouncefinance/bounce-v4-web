@@ -54,7 +54,7 @@ import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
 import FoundoDetail from 'pages/thirdPart/foundoBidDetail'
-
+import FoundoNfcDetail from 'pages/thirdPart/nfcDetail'
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
@@ -179,6 +179,7 @@ export default function App() {
                   <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                   <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
+                  <Route path={routes.foundo.foundoNfcDetail} element={<FoundoNfcDetail />} />
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}
