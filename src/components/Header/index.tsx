@@ -175,7 +175,7 @@ export default function Header() {
   const { pathname } = useLocation()
 
   const mobileHideHeader = useMemo(() => {
-    return pathname.includes('okxActivity')
+    return pathname.includes('okxActivity') || pathname.includes('nfc_detail')
   }, [pathname])
 
   const navigate = useNavigate()
