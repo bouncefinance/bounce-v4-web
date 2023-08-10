@@ -21,6 +21,7 @@ import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 import ActionHistory from './foundoComponents/snippet/auctionHistory'
 import { useParams } from 'react-router-dom'
+import Footer from 'bounceComponents/common/Footer'
 
 const NewTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
@@ -134,8 +135,15 @@ const FoundoBidDetail = () => {
       <CenterSeciont>
         {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />}
         {tabIndex === 1 && (
-          <Stack direction={'row'} mt={120}>
-            <Typography width={470} sx={{ ml: 12, color: '#fff', mt: 20, fontSize: 36 }}>
+          <Stack
+            direction={'row'}
+            sx={{
+              mt: { xs: 0, sm: 120 },
+              width: 'inherit',
+              flexWrap: { xs: 'wrap', sm: 'unset' }
+            }}
+          >
+            <Typography width={470} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
               Product Description
             </Typography>
             <Box
@@ -192,8 +200,15 @@ const FoundoBidDetail = () => {
         )}
         {tabIndex === 2 && <Box minHeight={500}></Box>}
         {tabIndex === 3 && (
-          <Stack direction={'row'} mt={120}>
-            <Typography width={320} sx={{ ml: 12, color: '#fff', mt: 20, fontSize: 36 }}>
+          <Stack
+            direction={'row'}
+            sx={{
+              mt: { xs: 0, sm: 120 },
+              width: 'inherit',
+              flexWrap: { xs: 'wrap', sm: 'unset' }
+            }}
+          >
+            <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
               About Foundo
             </Typography>
             <Box
@@ -231,8 +246,15 @@ const FoundoBidDetail = () => {
           </Stack>
         )}
         {tabIndex === 4 && (
-          <Stack direction={'row'} mt={120}>
-            <Typography width={320} sx={{ ml: 12, color: '#fff', mt: 20, fontSize: 36 }}>
+          <Stack
+            direction={'row'}
+            sx={{
+              mt: { xs: 0, sm: 120 },
+              width: 'inherit',
+              flexWrap: { xs: 'wrap', sm: 'unset' }
+            }}
+          >
+            <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
               Token Detail
             </Typography>
             <Box
@@ -398,6 +420,9 @@ const FoundoBidDetail = () => {
           </Box>
         )} */}
       </CenterSeciont>
+      <Box sx={{ mt: { xs: 80, sm: 120 } }}>
+        <Footer />
+      </Box>
     </Box>
   )
 }

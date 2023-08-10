@@ -13,6 +13,7 @@ const Header = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp | unde
     <CenterSeciont
       style={{
         maxWidth: '100vw',
+        minHeight: isSm ? 100 : 300,
         justifyContent: 'space-between',
         height: isSm ? '77px' : '104px'
       }}
