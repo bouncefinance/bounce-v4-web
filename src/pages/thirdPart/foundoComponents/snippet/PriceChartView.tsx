@@ -36,11 +36,13 @@ export default function PriceChartView({
       .reverse()
   }, [data?.list, poolInfo.currentBidderAmount1?.currency])
 
+  if (!chatData?.length) return null
+
   return (
     <Box
-      mt={80}
       minHeight={minHeight || 220}
       sx={{
+        mt: { xs: 40, sm: 80 },
         position: 'relative'
       }}
     >

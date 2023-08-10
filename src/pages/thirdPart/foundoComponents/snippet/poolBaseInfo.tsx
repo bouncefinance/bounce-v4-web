@@ -9,7 +9,8 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
     <Box
       sx={{
         width: isSm ? '100%' : '458px',
-        padding: '120px 0',
+        padding: { xs: '40px 0', sm: '120px 0' },
+        borderBottom: { xs: '1px solid rgba(255, 255, 255, 0.4)', sm: 'none' },
         marginBottom: isSm ? '43px' : '0'
       }}
     >

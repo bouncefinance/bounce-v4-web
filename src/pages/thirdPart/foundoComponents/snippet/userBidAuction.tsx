@@ -194,9 +194,9 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
     <Box
       sx={{
         width: isSm ? '100%' : '640px',
+        borderLeft: { xs: 'none', sm: '1px solid rgba(255, 255, 255, 0.20)' },
         margin: 'auto',
-        borderLeft: '1px solid rgba(255, 255, 255, 0.20)',
-        padding: '120px 0 120px 63px'
+        padding: { xs: '0', sm: '120px 0 120px 63px' }
       }}
     >
       <Box

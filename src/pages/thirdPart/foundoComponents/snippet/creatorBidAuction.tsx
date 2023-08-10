@@ -151,9 +151,9 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
     <Box
       sx={{
         width: isSm ? '100%' : '640px',
-        borderLeft: '1px solid rgba(255, 255, 255, 0.20)',
+        borderLeft: { xs: 'none', sm: '1px solid rgba(255, 255, 255, 0.20)' },
         margin: 'auto',
-        padding: '120px 0 120px 63px'
+        padding: { xs: '0', sm: '120px 0 120px 63px' }
       }}
     >
       <Box
