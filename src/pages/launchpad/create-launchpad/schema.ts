@@ -54,8 +54,6 @@ export const basicValidationSchema = yup.object({
           .string()
           .url('twitter link must be a valid URL')
           .test('notEmpty', 'fill in at least one', (val, context: any) => {
-            console.log('context')
-            console.log(context)
             return context.from[1].value.community.some((item: any) => item.communityLink)
           })
       })

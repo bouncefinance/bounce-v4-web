@@ -2,7 +2,7 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { HeadTitle } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
@@ -27,45 +27,48 @@ const community: ICommunity[] = [
 const CreateLaunchpad = () => {
   const { chainId } = useActiveWeb3React()
 
-  const initBasicValue: IBasicInfoParams = {
-    id: 0,
-    banner: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    projectMobilePicture: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    projectLogo: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    projectPicture: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    community: community,
-    website: '',
-    whitepaperLink: '',
-    description: '',
-    tokennomics: '',
-    roadmap: '',
-    projectName: '',
-    chainId: chainId ?? ChainId.MAINNET
-  }
+  const initBasicValue = useMemo<IBasicInfoParams>(() => {
+    const value = {
+      id: 0,
+      banner: {
+        fileName: '',
+        fileSize: 0,
+        fileThumbnailUrl: '',
+        fileType: '',
+        fileUrl: ''
+      },
+      projectMobilePicture: {
+        fileName: '',
+        fileSize: 0,
+        fileThumbnailUrl: '',
+        fileType: '',
+        fileUrl: ''
+      },
+      projectLogo: {
+        fileName: '',
+        fileSize: 0,
+        fileThumbnailUrl: '',
+        fileType: '',
+        fileUrl: ''
+      },
+      projectPicture: {
+        fileName: '',
+        fileSize: 0,
+        fileThumbnailUrl: '',
+        fileType: '',
+        fileUrl: ''
+      },
+      community: community,
+      website: '',
+      whitepaperLink: '',
+      description: '',
+      tokennomics: '',
+      roadmap: '',
+      projectName: '',
+      chainId: chainId ?? ChainId.MAINNET
+    }
+    return value
+  }, [chainId])
   const initDetailValue: IDetailInitValue = {
     TokenLogo: {
       fileName: '',
