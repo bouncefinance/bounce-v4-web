@@ -69,7 +69,7 @@ export interface IPoolInfoParams {
   chainId: number
   name: string
   token0?: string
-  token0Decimals?: number
+  token0Decimals?: number | undefined
   token0Logo?: string | IFile
   token0Name?: string
   token0Symbol?: string
@@ -98,4 +98,9 @@ export interface IPoolInfoParams {
   times?: number
   tokenIds?: string[]
   totalShare?: number
+  customizedNeeds?: string
+}
+export interface IValues {
+  basic: IBasicInfoParams
+  poolInfo: IDetailInitValue
 }

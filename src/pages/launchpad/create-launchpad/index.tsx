@@ -3,18 +3,20 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useMemo, useState } from 'react'
-import { HeadTitle } from './form/BaseComponent'
+import { HeadTitle, SubmitComp } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ChainId } from 'constants/chain'
-import { IDetailInitValue, IBasicInfoParams, IAuctionType, ICommunity } from './type'
+import { IDetailInitValue, IBasicInfoParams, IAuctionType, ICommunity, IValues } from './type'
 import { useActiveWeb3React } from 'hooks'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { Formik } from 'formik'
 enum ITab {
   'Basic',
   'Detail'
 }
+
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -27,8 +29,86 @@ const community: ICommunity[] = [
 const CreateLaunchpad = () => {
   const { chainId } = useActiveWeb3React()
 
-  const initBasicValue = useMemo<IBasicInfoParams>(() => {
-    const value = {
+  // const initBasicValue = useMemo<IBasicInfoParams>(() => {
+  //   const value = {
+  //     id: 0,
+  //     banner: {
+  //       fileName: '',
+  //       fileSize: 0,
+  //       fileThumbnailUrl: '',
+  //       fileType: '',
+  //       fileUrl: ''
+  //     },
+  //     projectMobilePicture: {
+  //       fileName: '',
+  //       fileSize: 0,
+  //       fileThumbnailUrl: '',
+  //       fileType: '',
+  //       fileUrl: ''
+  //     },
+  //     projectLogo: {
+  //       fileName: '',
+  //       fileSize: 0,
+  //       fileThumbnailUrl: '',
+  //       fileType: '',
+  //       fileUrl: ''
+  //     },
+  //     projectPicture: {
+  //       fileName: '',
+  //       fileSize: 0,
+  //       fileThumbnailUrl: '',
+  //       fileType: '',
+  //       fileUrl: ''
+  //     },
+  //     community: community,
+  //     website: '',
+  //     whitepaperLink: '',
+  //     description: '',
+  //     tokennomics: '',
+  //     roadmap: '',
+  //     projectName: '',
+  //     chainId: chainId ?? ChainId.MAINNET,
+  //     posts: ''
+  //   }
+  //   return value
+  // }, [chainId])
+  // const initDetailValue: IDetailInitValue = {
+  //   TokenLogo: {
+  //     fileName: '',
+  //     fileSize: 0,
+  //     fileThumbnailUrl: '',
+  //     fileType: '',
+  //     fileUrl: '',
+  //     id: 0
+  //   },
+  //   TokenName: '',
+  //   ChainId: chainId ?? ChainId.MAINNET,
+  //   ContractAddress: '',
+  //   ContractDecimalPlaces: '',
+  //   AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
+  //   CustomizedNeeds: '',
+  //   Token: {
+  //     tokenToAddress: '',
+  //     tokenToSymbol: '',
+  //     tokenToLogoURI: '',
+  //     tokenToDecimals: ''
+  //   },
+  //   SwapRatio: '',
+  //   TotalSupply: '',
+  //   startTime: null,
+  //   endTime: null,
+  //   allocationStatus: AllocationStatus.NoLimits,
+  //   allocationPerWallet: '',
+  //   releaseType: IReleaseType.Cliff,
+  //   delayUnlockingTime: null,
+  //   linearUnlockingStartTime: null,
+  //   linearUnlockingEndTime: null,
+  //   fragmentReleaseTimes: [],
+  //   fragmentReleaseSize: '',
+  //   isRefundable: true
+  // }
+  const initValue = useMemo<IValues>(() => {
+    const basic: IBasicInfoParams = {
       id: 0,
       banner: {
         fileName: '',
@@ -68,47 +148,50 @@ const CreateLaunchpad = () => {
       chainId: chainId ?? ChainId.MAINNET,
       posts: ''
     }
-    return value
+    const poolInfo: IDetailInitValue = {
+      TokenLogo: {
+        fileName: '',
+        fileSize: 0,
+        fileThumbnailUrl: '',
+        fileType: '',
+        fileUrl: '',
+        id: 0
+      },
+      TokenName: '',
+      ChainId: chainId ?? ChainId.MAINNET,
+      ContractAddress: '',
+      ContractDecimalPlaces: '',
+      AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
+      CustomizedNeeds: '',
+      Token: {
+        tokenToAddress: '',
+        tokenToSymbol: '',
+        tokenToLogoURI: '',
+        tokenToDecimals: ''
+      },
+      SwapRatio: '',
+      TotalSupply: '',
+      startTime: null,
+      endTime: null,
+      allocationStatus: AllocationStatus.NoLimits,
+      allocationPerWallet: '',
+      releaseType: IReleaseType.Cliff,
+      delayUnlockingTime: null,
+      linearUnlockingStartTime: null,
+      linearUnlockingEndTime: null,
+      fragmentReleaseTimes: [],
+      fragmentReleaseSize: '',
+      isRefundable: true
+    }
+    return { basic, poolInfo }
   }, [chainId])
-  const initDetailValue: IDetailInitValue = {
-    TokenLogo: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: 0
-    },
-    TokenName: '',
-    ChainId: chainId ?? ChainId.MAINNET,
-    ContractAddress: '',
-    ContractDecimalPlaces: '',
-    AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
-    CustomizedNeeds: '',
-    Token: {
-      tokenToAddress: '',
-      tokenToSymbol: '',
-      tokenToLogoURI: '',
-      tokenToDecimals: ''
-    },
-    SwapRatio: '',
-    TotalSupply: '',
-    startTime: null,
-    endTime: null,
-    allocationStatus: AllocationStatus.NoLimits,
-    allocationPerWallet: '',
-    releaseType: IReleaseType.Cliff,
-    delayUnlockingTime: null,
-    linearUnlockingStartTime: null,
-    linearUnlockingEndTime: null,
-    fragmentReleaseTimes: [],
-    fragmentReleaseSize: '',
-    isRefundable: true
-  }
 
-  const [tabActive, setTabActive] = useState(ITab.Detail)
+  const [tabActive, setTabActive] = useState(ITab.Basic)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
+  const onSubmit = () => {
+    console.log('essss')
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Box>
@@ -128,11 +211,31 @@ const CreateLaunchpad = () => {
               </Tab>
             ))}
           </Stack>
-          <BasicForm sx={{ display: tabActive === ITab.Basic ? 'block' : 'none' }} initValue={initBasicValue} />
-          <DetailForm
-            sx={{ display: tabActive === ITab.Detail ? 'block' : 'none' }}
-            initDetailValue={initDetailValue}
-          />
+          <Formik
+            onSubmit={onSubmit}
+            enableReinitialize
+            // validationSchema={basicValidationSchema}
+            initialValues={initValue}
+          >
+            {({ values, setFieldValue, handleSubmit, errors }) => {
+              return (
+                <Box component={'form'} onSubmit={handleSubmit}>
+                  <BasicForm
+                    sx={{ display: tabActive === ITab.Basic ? 'block' : 'none' }}
+                    values={values}
+                    setFieldValue={setFieldValue}
+                  />
+                  <DetailForm
+                    sx={{ display: tabActive === ITab.Detail ? 'block' : 'none' }}
+                    values={values}
+                    setFieldValue={setFieldValue}
+                    errors={errors}
+                  />
+                  <SubmitComp loading={false} />
+                </Box>
+              )
+            }}
+          </Formik>
         </ContainerBox>
         <FooterBox>
           <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
