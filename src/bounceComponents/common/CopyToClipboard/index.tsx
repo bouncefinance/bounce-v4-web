@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@mui/material'
+import { IconButton, Tooltip, TooltipProps } from '@mui/material'
 import Image from 'components/Image'
 import React, { useEffect, useState } from 'react'
 import ReactCopyToClipboard from 'react-copy-to-clipboard'
@@ -8,9 +8,10 @@ import SureSVG from './assets/sure.svg'
 export type ICopyToClipboardProps = {
   text: string
   children?: any
+  placement?: TooltipProps['placement']
 }
 
-const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children }) => {
+const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, placement = 'top' }) => {
   const [copied, setCopied] = useState<boolean>(false)
   useEffect(() => {
     if (copied) {
@@ -27,7 +28,7 @@ const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children }) =>
           setCopied(true)
         }}
       >
-        <Tooltip title={copied ? 'Copied' : 'Copy'} placement="top" arrow>
+        <Tooltip title={copied ? 'Copied' : 'Copy'} placement={placement} arrow>
           {children ? (
             <div>{children}</div>
           ) : (

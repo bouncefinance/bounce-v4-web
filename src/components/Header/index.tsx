@@ -22,7 +22,6 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
-import FundoHead from 'components/Fundo/Header'
 
 interface TabContent {
   title: string
@@ -168,9 +167,6 @@ export default function Header() {
   //     return ''
   //   }
   // })
-  const showBounseHead = useMemo(() => {
-    return location.pathname.indexOf('foundo') === -1
-  }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
@@ -266,7 +262,7 @@ export default function Header() {
       <StyledAppBar
         isTransparent={isTransparentRoute}
         sx={{
-          display: showBounseHead ? 'flex' : 'none',
+          display: 'flex',
           ...headerBg
         }}
       >
@@ -313,7 +309,6 @@ export default function Header() {
           </ShowOnMobile>
         </Box>
       </StyledAppBar>
-      {!showBounseHead && <FundoHead />}
     </Box>
   )
 }
