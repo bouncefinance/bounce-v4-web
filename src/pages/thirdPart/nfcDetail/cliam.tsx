@@ -9,6 +9,7 @@ import Icon2 from 'components/Fundo/assets/img/icon2.png'
 import Icon3 from 'components/Fundo/assets/img/icon3.png'
 import Icon4 from 'components/Fundo/assets/img/icon4.png'
 import Icon5 from 'components/Fundo/assets/img/icon5.png'
+import ProductIcon1 from 'components/Fundo/assets/img/productIcon1.png'
 import { BtnCom } from './specification'
 enum AnimateStep {
   'default' = 0,
@@ -26,6 +27,18 @@ const SpanText = styled(Typography)(() => ({
   fontWeight: 500,
   lineHeight: '21px',
   letterSpacing: '-0.28px'
+}))
+const FooterText = styled(Typography)(() => ({
+  color: '#FFF',
+  textAlign: 'center',
+  leadingTrim: 'both',
+  textdge: 'cap',
+  fontVariantNumeric: 'lining-nums proportional-nums',
+  fontFamily: `'Public Sans'`,
+  fontSize: '56px',
+  fontWeight: 600,
+  lineHeight: '67px',
+  textTransform: 'uppercase'
 }))
 const RowTextSectioin = ({ logo, label, value }: { logo: string; label: string; value: string }) => {
   return (
@@ -339,7 +352,47 @@ const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
         {detailInfoList.map((item, index) => (
           <RowTextSectioin key={index} logo={item.logo} label={item.label} value={item.value} />
         ))}
-        <BtnCom>CLAIM</BtnCom>
+        <BtnCom
+          sx={{
+            marginTop: '40px'
+          }}
+        >
+          CLAIM
+        </BtnCom>
+      </Box>
+      <Box
+        sx={{
+          padding: '64px 0 24px',
+          background: '#121212'
+        }}
+      >
+        <FooterText>DIMOND</FooterText>
+        <FooterText>HAND</FooterText>
+        <FooterText>NECKLACE</FooterText>
+        <img
+          style={{
+            display: 'block',
+            width: 80,
+            height: 80,
+            margin: '40px auto 64px'
+          }}
+          src={ProductIcon1}
+          alt=""
+          srcSet=""
+        />
+        <Typography
+          sx={{
+            textAlign: 'center',
+            color: 'rgba(255, 255, 255, 0.80)',
+            fontFamily: `'Inter'`,
+            fontSize: '13px',
+            fontWeight: 400,
+            lineHeight: '18px',
+            textTransform: 'capitalize'
+          }}
+        >
+          ©2023 Bounce dao Ltd. All rights reserved.
+        </Typography>
       </Box>
     </>
   )
