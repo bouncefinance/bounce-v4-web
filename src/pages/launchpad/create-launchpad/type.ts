@@ -18,16 +18,16 @@ export interface IFragmentReleaseTimes {
   key?: number
 }
 export interface IBasicInfoParams {
-  banner: IFile
+  banner: IFile | string
   chainId: number | ChainId
   community: ICommunity[]
   description: string
   id: number
   posts?: string
-  projectLogo: IFile
-  projectMobilePicture: IFile
+  projectLogo: IFile | string
+  projectMobilePicture: IFile | string
   projectName: string
-  projectPicture: IFile
+  projectPicture: IFile | string
   roadmap: string
   tokennomics: string
   website: string
@@ -63,4 +63,39 @@ export interface IDetailInitValue {
   linearUnlockingEndTime: moment.Moment | null
   fragmentReleaseSize?: string
   isRefundable: boolean
+}
+export interface IPoolInfoParams {
+  category: string
+  chainId: number
+  name: string
+  token0?: string
+  token0Decimals?: number
+  token0Logo?: string | IFile
+  token0Name?: string
+  token0Symbol?: string
+  token1?: string
+  tokenId?: string
+  poolId?: number
+  openAt?: number
+  claimAt?: number
+  closeAt?: number
+  closeIncrInterval?: number
+  creator?: string
+  fragments?: string
+  is721?: boolean
+  isReal?: boolean
+  maxAmount1PerWallet?: string
+  maxPlayer?: number
+  merkleroot?: string
+  amountMax1?: string
+  amountMin1?: string
+  amountMinIncr1?: string
+  amountTotal0?: string
+  amountTotal1?: string
+  auctionHodlerEnabled?: boolean
+  releaseData?: { startAt: number; endAtOrRatio: number }[]
+  reverseEnabled?: boolean
+  times?: number
+  tokenIds?: string[]
+  totalShare?: number
 }

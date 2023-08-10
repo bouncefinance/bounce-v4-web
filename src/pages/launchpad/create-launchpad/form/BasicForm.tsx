@@ -16,6 +16,7 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { updateLaunchpadBasic } from 'api/user'
 import { useRequest } from 'ahooks'
+import { IFile } from 'bounceComponents/common/Uploader'
 
 const communityInfo = [
   { title: 'Twitter Profile Link', placeholder: 'eg. https://twitter.com/bounce_finance' },
@@ -37,9 +38,15 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
 
   const isSm = useBreakpoint('sm')
   const submitBasic = async (values: IBasicInfoParams) => {
-    const params = { ...values, chainId: chainConfigInBackend?.id as ChainId }
-    console.log('params')
-    console.log(params)
+    const params: IBasicInfoParams = {
+      ...values,
+      chainId: chainConfigInBackend?.id as ChainId,
+      banner: (values.banner as IFile).fileUrl,
+      projectLogo: (values.projectLogo as IFile).fileUrl,
+      projectMobilePicture: (values.projectMobilePicture as IFile).fileUrl,
+      projectPicture: (values.projectPicture as IFile).fileUrl
+    }
+
     return updateLaunchpadBasic(params)
   }
   const { loading, run } = useRequest(submitBasic, {
@@ -47,15 +54,14 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
     onSuccess(result, params) {
       console.log('result, params')
       console.log(result, params)
-      if (result.code === 200) {
-        show(DialogTips, {
-          iconType: 'success',
-          cancelBtn: 'confirm',
-          title: 'Congratulations!',
-          content: 'You have successfully submit, Please wait patiently for review.'
-        })
-        return
-      }
+      show(DialogTips, {
+        iconType: 'success',
+        cancelBtn: 'confirm',
+        title: 'Congratulations!',
+        content: 'You have successfully submit, Please wait patiently for review.'
+      })
+    },
+    onError() {
       show(DialogTips, {
         iconType: 'error',
         cancelBtn: 'confirm',
@@ -65,7 +71,6 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
     }
   })
   const onSubmit = (values: IBasicInfoParams) => {
-    console.log('submit')
     run(values)
   }
   return (
@@ -93,7 +98,7 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
                     childForm={
                       <FormUploadAdd
                         formItemName="projectLogo"
-                        fileUrl={values.projectLogo.fileUrl}
+                        fileUrl={(values.projectLogo as IFile).fileUrl}
                         setFieldValue={setFieldValue}
                         labelId="ProjectLogoImg"
                         labelChild={<AddFile />}
@@ -108,7 +113,7 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
                     childForm={
                       <FormUploadAdd
                         formItemName="projectPicture"
-                        fileUrl={values.projectPicture.fileUrl}
+                        fileUrl={(values.projectPicture as IFile).fileUrl}
                         setFieldValue={setFieldValue}
                         labelId="projectPicture"
                         labelChild={<BigAddIcon />}
@@ -128,7 +133,7 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
                           <FormUploadAdd
                             formItemName="banner"
-                            fileUrl={values.banner.fileUrl}
+                            fileUrl={(values.banner as IFile).fileUrl}
                             setFieldValue={setFieldValue}
                             labelId="ProjectPictureBigImg"
                             labelChild={<BigAddIcon />}
@@ -139,7 +144,7 @@ const BasicForm = ({ initValue, sx }: { initValue: IBasicInfoParams; sx?: SxProp
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
                           <FormUploadAdd
                             formItemName="projectMobilePicture"
-                            fileUrl={values.projectMobilePicture.fileUrl}
+                            fileUrl={(values.projectMobilePicture as IFile).fileUrl}
                             setFieldValue={setFieldValue}
                             labelId="ProjectPictureSmallImg"
                             labelChild={<BigAddIcon />}

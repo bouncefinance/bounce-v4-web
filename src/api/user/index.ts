@@ -186,3 +186,6 @@ export const applySeller = (params: IBodySeller) => {
 export const updateLaunchpadBasic = (params: IBasicInfoParams) => {
   return ApiInstance.post('/user/launchpad/basic', params)
 }
+// export const getLaunchpadInfo = () => {
+//   return ApiInstance.post('/user/launchpad/pool/list', { chainId: 11155111 })
+// }

@@ -65,7 +65,8 @@ const CreateLaunchpad = () => {
       tokennomics: '',
       roadmap: '',
       projectName: '',
-      chainId: chainId ?? ChainId.MAINNET
+      chainId: chainId ?? ChainId.MAINNET,
+      posts: ''
     }
     return value
   }, [chainId])
@@ -105,7 +106,7 @@ const CreateLaunchpad = () => {
     isRefundable: true
   }
 
-  const [tabActive, setTabActive] = useState(ITab.Basic)
+  const [tabActive, setTabActive] = useState(ITab.Detail)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
   return (
