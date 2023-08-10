@@ -4,7 +4,7 @@ import { ReactComponent as Step1Svg } from 'assets/imgs/thirdPart/nfcDetail/step
 import { ReactComponent as Step2Svg } from 'assets/imgs/thirdPart/nfcDetail/step2.svg'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { PageStep } from '../nfcDetail'
-const BtnCom = styled(Box)(() => ({
+export const BtnCom = styled(Box)(() => ({
   width: '100%',
   padding: '16px',
   border: '1px solid #fff',

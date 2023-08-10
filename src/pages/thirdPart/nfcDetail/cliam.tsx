@@ -1,8 +1,15 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Stack, styled } from '@mui/material'
 import { useIsMDDown } from 'themes/useTheme'
 import A1 from 'assets/imgs/thirdPart/nfcDetail/a1.png'
 import { useEffect, useState } from 'react'
-import classnames from 'classnames'
+// import classnames from 'classnames'
+require('@lottiefiles/lottie-player')
+import Icon1 from 'components/Fundo/assets/img/icon1.png'
+import Icon2 from 'components/Fundo/assets/img/icon2.png'
+import Icon3 from 'components/Fundo/assets/img/icon3.png'
+import Icon4 from 'components/Fundo/assets/img/icon4.png'
+import Icon5 from 'components/Fundo/assets/img/icon5.png'
+import { BtnCom } from './specification'
 enum AnimateStep {
   'default' = 0,
   'lineDown' = 1,
@@ -11,139 +18,230 @@ enum AnimateStep {
   'blockClose' = 4,
   'done' = 5
 }
-const AnimationBlock = ({ animateStep }: { animateStep: AnimateStep }) => {
-  const isMd = useIsMDDown()
+const SpanText = styled(Typography)(() => ({
+  color: '#D7D6D9',
+  textAlign: 'right',
+  fontFamily: `'Public Sans'`,
+  fontSize: '14px',
+  fontWeight: 500,
+  lineHeight: '21px',
+  letterSpacing: '-0.28px'
+}))
+const RowTextSectioin = ({ logo, label, value }: { logo: string; label: string; value: string }) => {
   return (
-    <Box
-      className={classnames(
-        { animation1: animateStep >= AnimateStep.lineDown },
-        { animation2: animateStep >= AnimateStep.imgUp },
-        { animation3: animateStep >= AnimateStep.black },
-        { animation4: animateStep >= AnimateStep.blockClose }
-      )}
+    <Stack
+      direction={'row'}
+      justifyContent={'space-between'}
+      alignItems={'center'}
       sx={{
-        position: 'fixed',
-        top: 0,
-        left: '50%',
-        transform: 'translate3D(-50%, 0, 0)',
-        width: isMd ? '100%' : '360px',
-        height: '100vh',
-        zIndex: 999999999,
-        display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'center',
-        alignItems: 'center',
-        background: '#121212',
-        '.lineBox': {
-          flex: 1,
-          display: 'flex',
-          flexFlow: 'column nowrap',
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-          '.line': {
-            width: '1px',
-            height: 0,
-            background: 'rgba(255, 255, 255, 0.80)'
-          }
-        },
-        '.imgBox': {
-          width: '100%',
-          height: 0,
-          overflow: 'hidden',
-          '.imgEl': {
-            display: 'block',
-            width: '100%',
-            height: '100vh',
-            objectFit: 'cover',
-            transform: 'scale(4)'
-          },
-          '.borderEl': {
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            border: '0px solid #121212',
-            boxSizing: 'border-box',
-            background: 'transparent'
-          }
-        },
-        '&.animation1': {
-          '.line': {
-            transition: 'height 1.6s',
-            height: '100vh'
-          }
-        },
-        '&.animation2': {
-          '.line': {
-            transition: 'height 1.6s',
-            height: '0'
-          },
-          '.imgBox': {
-            transition: 'all 1.6s',
-            height: '100vh',
-            '.imgEl': {
-              transition: 'all 1.6s',
-              transform: 'scale(1) translate3D(0, 0, 0)'
-            }
-          },
-          '.borderEl': {
-            transition: 'all 1.6s',
-            border: '0 solid #121212'
-          }
-        },
-        '&.animation3': {
-          '.borderEl': {
-            transition: 'all 1.6s',
-            borderLeft: `${window.innerWidth / 2 - 60}px solid #121212`,
-            borderRight: `${window.innerWidth / 2 - 60}px solid #121212`,
-            borderTop: `${window.innerHeight / 2 - 60}px solid #121212`,
-            borderBottom: `${window.innerHeight / 2 - 60}px solid #121212`
-          },
-          '.imgEl': {
-            transition: 'all 1.6s',
-            transform: 'scale(1) translate3D(0, 50px, 0) !important'
-          }
-        },
-        '&.animation4': {
-          '.borderEl': {
-            transition: 'all 1s',
-            borderLeft: `${window.innerWidth / 2}px solid #121212`,
-            borderRight: `${window.innerWidth / 2}px solid #121212`,
-            borderTop: `${window.innerHeight / 2}px solid #121212`,
-            borderBottom: `${window.innerHeight / 2}px solid #121212`
-          },
-          '.imgEl': {
-            transform: 'scale(1) translate3D(0, 50px, 0) !important'
-          }
-        }
+        margin: '0 0 16px 0'
       }}
     >
-      <Box className={'lineBox'}>
-        <Box className={'line'}></Box>
-      </Box>
-      <Box className={'imgBox'}>
-        <img className={'imgEl'} src={A1} alt="" srcSet="" />
-        <Box className={'borderEl'}></Box>
-      </Box>
-    </Box>
+      <Stack direction={'row'} justifyContent={'flex-start'} alignItems={'center'}>
+        <img src={logo} alt="" style={{ marginRight: '8px', width: 16, height: 16 }} />
+        <Typography
+          sx={{
+            color: '#959595',
+            fontFamily: `'Public Sans'`,
+            fontSize: '14px',
+            fontWeight: 500,
+            lineHeight: '21px',
+            letterSpacing: '-0.28px'
+          }}
+        >
+          {label}
+        </Typography>
+      </Stack>
+      <SpanText>{value}</SpanText>
+    </Stack>
   )
 }
-const ClaimDetail = () => {
+// const AnimationBlock = ({ animateStep }: { animateStep: AnimateStep }) => {
+//   const isMd = useIsMDDown()
+//   return (
+//     <Box
+//       className={classnames(
+//         { animation1: animateStep >= AnimateStep.lineDown },
+//         { animation2: animateStep >= AnimateStep.imgUp },
+//         { animation3: animateStep >= AnimateStep.black },
+//         { animation4: animateStep >= AnimateStep.blockClose }
+//       )}
+//       sx={{
+//         position: 'fixed',
+//         top: 0,
+//         left: '50%',
+//         transform: 'translate3D(-50%, 0, 0)',
+//         width: isMd ? '100%' : '360px',
+//         height: '100vh',
+//         zIndex: 999999999,
+//         display: 'flex',
+//         flexFlow: 'column nowrap',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         background: '#121212',
+//         '.lineBox': {
+//           flex: 1,
+//           display: 'flex',
+//           flexFlow: 'column nowrap',
+//           justifyContent: 'flex-start',
+//           alignItems: 'flex-start',
+//           '.line': {
+//             width: '1px',
+//             height: 0,
+//             background: 'rgba(255, 255, 255, 0.80)'
+//           }
+//         },
+//         '.imgBox': {
+//           width: '100%',
+//           height: 0,
+//           overflow: 'hidden',
+//           '.imgEl': {
+//             display: 'block',
+//             width: '100%',
+//             height: '100vh',
+//             objectFit: 'cover',
+//             transform: 'scale(4)'
+//           },
+//           '.borderEl': {
+//             position: 'absolute',
+//             top: 0,
+//             left: 0,
+//             width: '100%',
+//             height: '100%',
+//             border: '0px solid #121212',
+//             boxSizing: 'border-box',
+//             background: 'transparent'
+//           }
+//         },
+//         '&.animation1': {
+//           '.line': {
+//             transition: 'height 1.6s',
+//             height: '100vh'
+//           }
+//         },
+//         '&.animation2': {
+//           '.line': {
+//             transition: 'height 1.6s',
+//             height: '0'
+//           },
+//           '.imgBox': {
+//             transition: 'all 1.6s',
+//             height: '100vh',
+//             '.imgEl': {
+//               transition: 'all 1.6s',
+//               transform: 'scale(1) translate3D(0, 0, 0)'
+//             }
+//           },
+//           '.borderEl': {
+//             transition: 'all 1.6s',
+//             border: '0 solid #121212'
+//           }
+//         },
+//         '&.animation3': {
+//           '.borderEl': {
+//             transition: 'all 1.6s',
+//             borderLeft: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
+//             borderRight: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
+//             borderTop: `${window.innerHeight / 2 - 60}px solid #121212`,
+//             borderBottom: `${window.innerHeight / 2 - 60}px solid #121212`
+//           },
+//           '.imgEl': {
+//             transition: 'all 1.6s',
+//             transform: 'scale(1) translate3D(0, 50px, 0) !important'
+//           }
+//         },
+//         '&.animation4': {
+//           '.borderEl': {
+//             transition: 'all 1s',
+//             borderLeft: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
+//             borderRight: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
+//             borderTop: `${window.innerHeight / 2}px solid #121212`,
+//             borderBottom: `${window.innerHeight / 2}px solid #121212`
+//           },
+//           '.imgEl': {
+//             transform: 'scale(1) translate3D(0, 50px, 0) !important'
+//           }
+//         }
+//       }}
+//     >
+//       <Box className={'lineBox'}>
+//         <Box className={'line'}></Box>
+//       </Box>
+//       <Box className={'imgBox'}>
+//         <img className={'imgEl'} src={A1} alt="" srcSet="" />
+//         <Box className={'borderEl'}></Box>
+//       </Box>
+//     </Box>
+//   )
+// }
+const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
+  const [animateClass, setAnimateClass] = useState('')
+  useEffect(() => {
+    if (animateStep === AnimateStep.done) {
+      setAnimateClass('animation')
+    }
+    return () => {}
+  }, [animateStep])
+  const detailInfoList = [
+    {
+      logo: Icon1,
+      label: 'Gemstone',
+      value: 'Diamonds'
+    },
+    {
+      logo: Icon3,
+      label: 'Diamonds (Carats) ',
+      value: '8.81'
+    },
+    {
+      logo: Icon5,
+      label: 'Material',
+      value: '​White gold'
+    },
+    {
+      logo: Icon2,
+      label: 'Made In',
+      value: 'Italy'
+    },
+    {
+      logo: Icon4,
+      label: 'Dimension',
+      value: '40.5 cm'
+    }
+  ]
   return (
     <>
+      {/* banner section */}
       <Box
+        className={animateClass}
         sx={{
           width: '100%',
           minHeight: '100vh',
-          padding: '88px 0 63px',
+          padding: '88px 16px 63px',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          '.down': {
+            transform: 'translate3D(0, -70px, 0)'
+          },
+          '.up': {
+            transform: 'translate3D(0, 70px, 0) !important'
+          },
+          '&.animation': {
+            '.up': {
+              transition: 'all 1s',
+              transform: 'translate3D(0, 0 , 0) !important'
+            },
+            '.down': {
+              transition: 'all 1s',
+              transform: 'translate3D(0, 0 , 0)'
+            }
+          }
         }}
       >
         <Typography
+          className={'down'}
           sx={{
             width: '100%',
             color: '#FFF',
@@ -158,6 +256,7 @@ const ClaimDetail = () => {
           CLAIM
         </Typography>
         <Typography
+          className={'down'}
           sx={{
             color: '#FFF',
             leadingTrim: 'both',
@@ -173,13 +272,81 @@ const ClaimDetail = () => {
         >
           NFT
         </Typography>
+        <lottie-player
+          class={'up'}
+          autoplay={true}
+          src={JSON.stringify('/lottie/animatinDm4.json')}
+          loop={true}
+          style={{
+            position: 'relative',
+            width: '60%',
+            height: 'auto',
+            cursor: 'pointer',
+            margin: '40px auto'
+          }}
+        ></lottie-player>
+        <Typography
+          className={'up'}
+          sx={{
+            width: 215,
+            color: '#FFF',
+            leadingTrim: 'both',
+            textEdge: 'cap',
+            fontVariantNumeric: 'lining-nums proportional-nums',
+            fontFamily: `'Public Sans'`,
+            fontSize: '24px',
+            fontWeight: 600,
+            lineHeight: '33px',
+            textAlign: 'center'
+          }}
+        >
+          DIMOND HAND NECKLACE
+        </Typography>
+      </Box>
+      {/* main img */}
+      <img
+        style={{
+          width: '100%'
+        }}
+        src={A1}
+        alt=""
+        srcSet=""
+      />
+      {/* detail info */}
+      <Box
+        sx={{
+          padding: '64px 16px'
+        }}
+      >
+        <Stack direction={'row'} justifyContent={'space-between'} mb={'24px'}>
+          <Typography
+            sx={{
+              color: '#fff',
+              leadingTrim: 'both',
+              textEdge: 'cap',
+              fontVariantNumeric: 'lining-nums proportional-nums',
+              fontFamily: `'Public Sans'`,
+              fontSize: 22,
+              fontWeight: 600,
+              lineHeight: '28px',
+              letterSpacing: '-0.44px'
+            }}
+          >
+            Details
+          </Typography>
+          <Typography>Ref: 356934</Typography>
+        </Stack>
+        {detailInfoList.map((item, index) => (
+          <RowTextSectioin key={index} logo={item.logo} label={item.label} value={item.value} />
+        ))}
+        <BtnCom>CLAIM</BtnCom>
       </Box>
     </>
   )
 }
 const NfcDetail = () => {
   const isMd = useIsMDDown()
-  const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.default)
+  const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.done)
   useEffect(() => {
     setAnimateStep(AnimateStep.lineDown)
     setTimeout(() => {
@@ -204,12 +371,11 @@ const NfcDetail = () => {
         maxWidth: isMd ? '100vw' : '360px',
         margin: '0 auto',
         background: '#000',
-        padding: '0 16px 0',
         boxSizing: 'border-box'
       }}
     >
-      {animateStep !== AnimateStep.done && <AnimationBlock animateStep={animateStep} />}
-      {animateStep === AnimateStep.done && <ClaimDetail />}
+      {/* {animateStep !== AnimateStep.done && <AnimationBlock animateStep={animateStep} />} */}
+      <ClaimDetail animateStep={animateStep} />
     </Box>
   )
 }

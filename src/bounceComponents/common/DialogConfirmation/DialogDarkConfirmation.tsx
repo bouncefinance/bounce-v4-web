@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { create, NiceModalHocProps, useModal } from '@ebay/nice-modal-react'
 import Lottie from 'react-lottie'
-import bounce_loading from './assets/bounce-loading.json'
+import bounce_loading from '../BounceAnime/bounce-white-loading.json'
 // import { ReactComponent as CloseSVG } from './assets/close.svg'
 
 const defaultOptions = {
@@ -30,7 +30,7 @@ export interface DialogProps extends MuiDialogProps {
   onClose?: () => void
 }
 
-const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((props: DialogProps) => {
+const DialogDarkConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((props: DialogProps) => {
   const { title, subTitle, onClose, ...rest } = props
   const modal = useModal()
 
@@ -86,7 +86,7 @@ const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((pr
               margin: '0 auto'
             }}
           >
-            <Lottie classwidth={200} height={200} options={defaultOptions} />
+            <Lottie classwidth={100} height={100} options={defaultOptions} />
           </Box>
           <Button
             variant="contained"
@@ -108,4 +108,4 @@ const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((pr
   )
 })
 
-export default DialogConfirmation
+export default DialogDarkConfirmation
