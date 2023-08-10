@@ -25,12 +25,17 @@ const NfcDetail = ({ setPageStep }: { setPageStep?: (arg: PageStep) => void }) =
   return (
     <Box
       sx={{
+        position: 'fixed',
+        top: isMd ? 0 : 76,
+        left: '50%',
+        transform: 'translate3D(-50%, 0, 0)',
         width: '100%',
         minHeight: '100vh',
         maxWidth: isMd ? '100vw' : '360px',
         margin: '0 auto',
         background: '#000',
-        padding: '80px 16px 0'
+        padding: '80px 16px 0',
+        zIndex: 9999999999
       }}
     >
       <Typography
@@ -116,7 +121,7 @@ const NfcDetail = ({ setPageStep }: { setPageStep?: (arg: PageStep) => void }) =
         </Box>
         <Step2Svg />
       </Stack>
-      <CopyToClipboard text={'Copy page link'} placement={'bottom'}>
+      <CopyToClipboard text={window.location.href} placement={'bottom'}>
         <BtnCom
           sx={{
             marginBottom: '18px',

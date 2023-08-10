@@ -5,11 +5,13 @@ import { ReactComponent as WalletSvg } from 'assets/imgs/thirdPart/nfcDetail/wal
 import { useActiveWeb3React } from 'hooks'
 import { shortenAddress } from 'utils'
 import { useShowLoginModal } from 'state/users/hooks'
-
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 const Header = () => {
   const isMd = useIsMDDown()
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
+  const navigate = useNavigate()
   return (
     <Stack
       sx={{
@@ -26,7 +28,11 @@ const Header = () => {
       justifyContent={'space-between'}
       alignItems={'center'}
     >
-      <LogoSvg />
+      <LogoSvg
+        onClick={() => {
+          navigate(routes.market.index)
+        }}
+      />
       {!account && (
         <WalletSvg
           onClick={() => {

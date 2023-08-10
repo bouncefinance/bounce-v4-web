@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab'
 import { useIsMDDown } from 'themes/useTheme'
 import A1 from 'assets/imgs/thirdPart/nfcDetail/a1.png'
 import { useEffect, useState, useMemo, useCallback } from 'react'
-// import classnames from 'classnames'
+import classnames from 'classnames'
 require('@lottiefiles/lottie-player')
 import { useShowLoginModal } from 'state/users/hooks'
 import Icon1 from 'components/Fundo/assets/img/icon1.png'
@@ -22,6 +22,7 @@ import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog }
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
+import { PageStep } from '../nfcDetail'
 
 enum AnimateStep {
   'default' = 0,
@@ -106,124 +107,124 @@ const RowTextSectioin = ({ logo, label, value }: { logo: string; label: string; 
     </Stack>
   )
 }
-// const AnimationBlock = ({ animateStep }: { animateStep: AnimateStep }) => {
-//   const isMd = useIsMDDown()
-//   return (
-//     <Box
-//       className={classnames(
-//         { animation1: animateStep >= AnimateStep.lineDown },
-//         { animation2: animateStep >= AnimateStep.imgUp },
-//         { animation3: animateStep >= AnimateStep.black },
-//         { animation4: animateStep >= AnimateStep.blockClose }
-//       )}
-//       sx={{
-//         position: 'fixed',
-//         top: 0,
-//         left: '50%',
-//         transform: 'translate3D(-50%, 0, 0)',
-//         width: isMd ? '100%' : '360px',
-//         height: '100vh',
-//         zIndex: 999999999,
-//         display: 'flex',
-//         flexFlow: 'column nowrap',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         background: '#121212',
-//         '.lineBox': {
-//           flex: 1,
-//           display: 'flex',
-//           flexFlow: 'column nowrap',
-//           justifyContent: 'flex-start',
-//           alignItems: 'flex-start',
-//           '.line': {
-//             width: '1px',
-//             height: 0,
-//             background: 'rgba(255, 255, 255, 0.80)'
-//           }
-//         },
-//         '.imgBox': {
-//           width: '100%',
-//           height: 0,
-//           overflow: 'hidden',
-//           '.imgEl': {
-//             display: 'block',
-//             width: '100%',
-//             height: '100vh',
-//             objectFit: 'cover',
-//             transform: 'scale(4)'
-//           },
-//           '.borderEl': {
-//             position: 'absolute',
-//             top: 0,
-//             left: 0,
-//             width: '100%',
-//             height: '100%',
-//             border: '0px solid #121212',
-//             boxSizing: 'border-box',
-//             background: 'transparent'
-//           }
-//         },
-//         '&.animation1': {
-//           '.line': {
-//             transition: 'height 1.6s',
-//             height: '100vh'
-//           }
-//         },
-//         '&.animation2': {
-//           '.line': {
-//             transition: 'height 1.6s',
-//             height: '0'
-//           },
-//           '.imgBox': {
-//             transition: 'all 1.6s',
-//             height: '100vh',
-//             '.imgEl': {
-//               transition: 'all 1.6s',
-//               transform: 'scale(1) translate3D(0, 0, 0)'
-//             }
-//           },
-//           '.borderEl': {
-//             transition: 'all 1.6s',
-//             border: '0 solid #121212'
-//           }
-//         },
-//         '&.animation3': {
-//           '.borderEl': {
-//             transition: 'all 1.6s',
-//             borderLeft: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
-//             borderRight: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
-//             borderTop: `${window.innerHeight / 2 - 60}px solid #121212`,
-//             borderBottom: `${window.innerHeight / 2 - 60}px solid #121212`
-//           },
-//           '.imgEl': {
-//             transition: 'all 1.6s',
-//             transform: 'scale(1) translate3D(0, 50px, 0) !important'
-//           }
-//         },
-//         '&.animation4': {
-//           '.borderEl': {
-//             transition: 'all 1s',
-//             borderLeft: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
-//             borderRight: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
-//             borderTop: `${window.innerHeight / 2}px solid #121212`,
-//             borderBottom: `${window.innerHeight / 2}px solid #121212`
-//           },
-//           '.imgEl': {
-//             transform: 'scale(1) translate3D(0, 50px, 0) !important'
-//           }
-//         }
-//       }}
-//     >
-//       <Box className={'lineBox'}>
-//         <Box className={'line'}></Box>
-//       </Box>
-//       <Box className={'imgBox'}>
-//         <img className={'imgEl'} src={A1} alt="" srcSet="" />
-//         <Box className={'borderEl'}></Box>
-//       </Box>
-//     </Box>
-//   )
-// }
+const AnimationBlock = ({ animateStep }: { animateStep: AnimateStep }) => {
+  const isMd = useIsMDDown()
+  return (
+    <Box
+      className={classnames(
+        { animation1: animateStep >= AnimateStep.lineDown },
+        { animation2: animateStep >= AnimateStep.imgUp },
+        { animation3: animateStep >= AnimateStep.black },
+        { animation4: animateStep >= AnimateStep.blockClose }
+      )}
+      sx={{
+        position: 'fixed',
+        top: isMd ? 0 : 76,
+        left: '50%',
+        transform: 'translate3D(-50%, 0, 0)',
+        width: isMd ? '100%' : '360px',
+        height: '100vh',
+        zIndex: 999999999,
+        display: 'flex',
+        flexFlow: 'column nowrap',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: '#121212',
+        '.lineBox': {
+          flex: 1,
+          display: 'flex',
+          flexFlow: 'column nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
+          '.line': {
+            width: '1px',
+            height: 0,
+            background: 'rgba(255, 255, 255, 0.80)'
+          }
+        },
+        '.imgBox': {
+          width: '100%',
+          height: 0,
+          overflow: 'hidden',
+          '.imgEl': {
+            display: 'block',
+            width: '100%',
+            height: '100vh',
+            objectFit: 'cover',
+            transform: 'scale(4)'
+          },
+          '.borderEl': {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            border: '0px solid #121212',
+            boxSizing: 'border-box',
+            background: 'transparent'
+          }
+        },
+        '&.animation1': {
+          '.line': {
+            transition: 'height 1.6s',
+            height: '100vh'
+          }
+        },
+        '&.animation2': {
+          '.line': {
+            transition: 'height 1.6s',
+            height: '0'
+          },
+          '.imgBox': {
+            transition: 'all 1.6s',
+            height: '100vh',
+            '.imgEl': {
+              transition: 'all 1.6s',
+              transform: 'scale(1) translate3D(0, 0, 0)'
+            }
+          },
+          '.borderEl': {
+            transition: 'all 1.6s',
+            border: '0 solid #121212'
+          }
+        },
+        '&.animation3': {
+          '.borderEl': {
+            transition: 'all 1.6s',
+            borderLeft: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
+            borderRight: isMd ? `${window.innerWidth / 2 - 60}px solid #121212` : `60px solid #121212`,
+            borderTop: `${window.innerHeight / 2 - 60}px solid #121212`,
+            borderBottom: `${window.innerHeight / 2 - 60}px solid #121212`
+          },
+          '.imgEl': {
+            transition: 'all 1.6s',
+            transform: 'scale(1) translate3D(0, 50px, 0) !important'
+          }
+        },
+        '&.animation4': {
+          '.borderEl': {
+            transition: 'all 1s',
+            borderLeft: isMd ? `${window.innerWidth / 2}px solid #121212` : `60px solid #121212`,
+            borderRight: isMd ? `${window.innerWidth / 2}px solid #121212` : `60px solid #121212`,
+            borderTop: `${window.innerHeight / 2}px solid #121212`,
+            borderBottom: `${window.innerHeight / 2}px solid #121212`
+          },
+          '.imgEl': {
+            transform: 'scale(1) translate3D(0, 50px, 0) !important'
+          }
+        }
+      }}
+    >
+      <Box className={'lineBox'}>
+        <Box className={'line'}></Box>
+      </Box>
+      <Box className={'imgBox'}>
+        <img className={'imgEl'} src={A1} alt="" srcSet="" />
+        <Box className={'borderEl'}></Box>
+      </Box>
+    </Box>
+  )
+}
 const ClaimDetail = ({
   animateStep,
   poolInfo
@@ -279,6 +280,7 @@ const ClaimDetail = ({
     }
   }, [bidderClaim, poolInfo?.name, poolInfo?.token0?.symbol])
   const switchNetwork = useSwitchNetwork()
+  const isMd = useIsMDDown()
   const { account, chainId } = useActiveWeb3React()
   const isWinner = useMemo(
     () => account && poolInfo?.currentBidder?.toString() === account?.toString(),
@@ -351,7 +353,7 @@ const ClaimDetail = ({
         className={animateClass}
         sx={{
           width: '100%',
-          minHeight: '100vh',
+          minHeight: isMd ? '100vh' : '700px',
           padding: '88px 16px 63px',
           display: 'flex',
           flexFlow: 'column nowrap',
@@ -514,13 +516,18 @@ const ClaimDetail = ({
     </>
   )
 }
-const NfcDetail = () => {
+const NfcDetail = ({ pageStep }: { pageStep: PageStep }) => {
   const isMd = useIsMDDown()
-  const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.done)
+  const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.default)
+  const [onceTime, setOnceTime] = useState<boolean>(false)
   const { '*': sysId } = useParams()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(sysId && isFinite(Number(sysId)) ? Number(sysId) : 20378)
+  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(
+    sysId && isFinite(Number(sysId)) ? Number(sysId) : 20378
+  )
   console.log('poolInfo>>>', poolInfo)
   useEffect(() => {
+    if (onceTime) return
+    if (loading || pageStep !== PageStep.claimPage) return
     setAnimateStep(AnimateStep.lineDown)
     setTimeout(() => {
       setAnimateStep(AnimateStep.imgUp)
@@ -534,8 +541,9 @@ const NfcDetail = () => {
     setTimeout(() => {
       setAnimateStep(AnimateStep.done)
     }, 6000)
+    setOnceTime(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [loading, pageStep, onceTime])
   if (!poolInfo) {
     return <></>
   }
@@ -550,7 +558,7 @@ const NfcDetail = () => {
         boxSizing: 'border-box'
       }}
     >
-      {/* {animateStep !== AnimateStep.done && <AnimationBlock animateStep={animateStep} />} */}
+      {animateStep !== AnimateStep.done && <AnimationBlock animateStep={animateStep} />}
       <ClaimDetail animateStep={animateStep} poolInfo={poolInfo} />
     </Box>
   )

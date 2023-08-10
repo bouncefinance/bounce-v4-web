@@ -9,19 +9,20 @@ export enum PageStep {
   'claimPage' = 1
 }
 const NfcDetail = () => {
-  const [pageStep, setPageStep] = useState<PageStep>(PageStep.claimPage)
+  const [pageStep, setPageStep] = useState<PageStep>(PageStep.specification)
   return (
     <Box
       sx={{
         width: '100%',
         height: '100%',
         minHeight: '100vh',
-        background: `url(${PcBg}) no-repeat top center / cover`
+        background: `url(${PcBg}) no-repeat top center / cover`,
+        backgroundAttachment: 'fixed'
       }}
     >
       <Header />
       {pageStep === PageStep.specification && <Specification setPageStep={setPageStep} />}
-      {pageStep === PageStep.claimPage && <Cliam />}
+      <Cliam pageStep={pageStep} />
     </Box>
   )
 }
