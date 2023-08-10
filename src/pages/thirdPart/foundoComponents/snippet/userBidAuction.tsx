@@ -45,8 +45,9 @@ const WhiteText = styled(Typography)(({ theme }) => ({
   color: '#fff',
   fontSize: '16px',
   margin: '20px auto',
+  textAlign: 'center',
   [theme.breakpoints.down('sm')]: {
-    width: 145
+    width: '100%'
   }
 }))
 
@@ -358,6 +359,7 @@ export default BidAction
 
 export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
   const { account, chainId } = useActiveWeb3React()
+  const isSm = useIsSMDown()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
   const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
@@ -568,12 +570,27 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
             mt: 48
           }}
         >
+          {isSm && (
+            <Typography
+              mb={32}
+              sx={{
+                fontFamily: 'Inter',
+                fontSize: 16,
+                lineHeight: '150%',
+                color: '#D7D6D9'
+              }}
+            >
+              Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
+              Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
+            </Typography>
+          )}
           <Stack
             width={'100%'}
-            direction={'row'}
+            direction={isSm ? 'column' : 'row'}
             justifyContent={'space-between'}
             alignItems={'center'}
             gridTemplateColumns={'1fr 1px 1fr'}
+            sx={{}}
           >
             <RewardBox
               icon={Icon0}
@@ -582,7 +599,15 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               symbol={poolInfo.token1.symbol}
               Amount={poolInfo.participant.prevBidderRewardAmount?.toSignificant() || '--'}
             />
-            <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
+            <Stack
+              sx={{
+                width: isSm ? '100%' : '1px',
+                borderBottom: isSm ? '1px solid #fff' : 'none',
+                height: isSm ? 0 : 43,
+                margin: isSm ? '23px 0' : 'unset',
+                backgroundColor: '#fff'
+              }}
+            ></Stack>
             <RewardBox
               icon={Icon1}
               text="Return bid amount and gas fee"
@@ -591,19 +616,21 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               Amount={poolInfo.participant.prevBidderGasfeeAmount?.toSignificant() || '--'}
             />
           </Stack>
-          <Typography
-            ml={12}
-            mt={48}
-            sx={{
-              fontFamily: 'Inter',
-              fontSize: 16,
-              lineHeight: '150%',
-              color: '#D7D6D9'
-            }}
-          >
-            Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
-            Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
-          </Typography>
+          {!isSm && (
+            <Typography
+              ml={12}
+              mt={48}
+              sx={{
+                fontFamily: 'Inter',
+                fontSize: 16,
+                lineHeight: '150%',
+                color: '#D7D6D9'
+              }}
+            >
+              Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
+              Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
+            </Typography>
+          )}
           <Box sx={{ marginBottom: '-48px' }}>
             {approveContent && !isInsufficientBalance?.disabled ? (
               approveContent
@@ -910,13 +937,14 @@ function BidResultAlert({
         justifyContent: 'center',
         alignItems: 'center',
         background: '#20201e',
-        padding: '40px 16px 32px'
+        padding: isSm ? '32px' : '40px 16px 32px'
       }}
       mt={48}
       mb={32}
     >
       <Box
         sx={{
+          width: '100%',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'center',
@@ -982,7 +1010,7 @@ function BidResultAlert({
             marginLeft: 8,
             fontWeight: 600,
             lineHeight: '130%',
-            fontSize: isSm ? '24px' : '36px'
+            fontSize: isSm ? '22px' : '36px'
           }}
         >
           {tokenText}
