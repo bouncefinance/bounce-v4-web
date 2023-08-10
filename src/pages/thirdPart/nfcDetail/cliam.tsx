@@ -1,16 +1,28 @@
 import { Box, Typography, Stack, styled } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import { useIsMDDown } from 'themes/useTheme'
 import A1 from 'assets/imgs/thirdPart/nfcDetail/a1.png'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 // import classnames from 'classnames'
 require('@lottiefiles/lottie-player')
+import { useShowLoginModal } from 'state/users/hooks'
 import Icon1 from 'components/Fundo/assets/img/icon1.png'
 import Icon2 from 'components/Fundo/assets/img/icon2.png'
 import Icon3 from 'components/Fundo/assets/img/icon3.png'
 import Icon4 from 'components/Fundo/assets/img/icon4.png'
 import Icon5 from 'components/Fundo/assets/img/icon5.png'
 import ProductIcon1 from 'components/Fundo/assets/img/productIcon1.png'
-import { BtnCom } from './specification'
+import { getCurrentTimeStamp } from 'utils'
+import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
+import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
+import { useParams } from 'react-router-dom'
+import { useActiveWeb3React } from 'hooks'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
+
 enum AnimateStep {
   'default' = 0,
   'lineDown' = 1,
@@ -19,6 +31,31 @@ enum AnimateStep {
   'blockClose' = 4,
   'done' = 5
 }
+export const PlaceBidBtn = styled(LoadingButton)({
+  display: 'flex',
+  width: '100%',
+  flexFlow: 'row nowrap',
+  justifyContent: 'center',
+  margin: '48px auto 0',
+  alignItems: 'center',
+  border: '1px solid #959595',
+  backgroundColor: 'transparent',
+  borderRadius: '100px',
+  height: '56px',
+  fontFamily: `'Public Sans'`,
+  fontStyle: 'italic',
+  fontWeight: 100,
+  fontSize: 20,
+  color: '#fff',
+  '&:hover': {
+    borderColor: '#fff',
+    backgroundColor: 'transparent'
+  },
+  '&:disabled': {
+    backgroundColor: 'transparent',
+    opacity: 0.6
+  }
+})
 const SpanText = styled(Typography)(() => ({
   color: '#D7D6D9',
   textAlign: 'right',
@@ -187,8 +224,66 @@ const RowTextSectioin = ({ logo, label, value }: { logo: string; label: string; 
 //     </Box>
 //   )
 // }
-const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
+const ClaimDetail = ({
+  animateStep,
+  poolInfo
+}: {
+  animateStep: AnimateStep
+  poolInfo: MutantEnglishAuctionNFTPoolProp
+}) => {
   const [animateClass, setAnimateClass] = useState('')
+  const { run: bidderClaim, submitted } = useBidderClaimEnglishAuctionNFT(
+    poolInfo?.poolId || '',
+    poolInfo?.name || '',
+    poolInfo?.contract
+  )
+  const showLoginModal = useShowLoginModal()
+  const toBidderClaim = useCallback(async () => {
+    showRequestConfirmDialog({ dark: true })
+    try {
+      const { transactionReceipt } = await bidderClaim()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            rpt()
+          },
+          { dark: true }
+        )
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: `You have successfully claim ${poolInfo?.token0?.symbol || 'NFT'} for ${poolInfo?.name}`
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toBidderClaim
+      })
+    }
+  }, [bidderClaim, poolInfo?.name, poolInfo?.token0?.symbol])
+  const switchNetwork = useSwitchNetwork()
+  const { account, chainId } = useActiveWeb3React()
+  const isWinner = useMemo(
+    () => account && poolInfo?.currentBidder?.toString() === account?.toString(),
+    [account, poolInfo?.currentBidder]
+  )
   useEffect(() => {
     if (animateStep === AnimateStep.done) {
       setAnimateClass('animation')
@@ -222,6 +317,33 @@ const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
       value: '40.5 cm'
     }
   ]
+  const CliamBtn = () => {
+    if (!account) {
+      return (
+        <PlaceBidBtn
+          onClick={() => {
+            showLoginModal()
+          }}
+        >
+          Connect Wallet
+        </PlaceBidBtn>
+      )
+    }
+    if (chainId !== poolInfo?.ethChainId) {
+      return <PlaceBidBtn onClick={() => switchNetwork(poolInfo?.ethChainId)}>Switch Network</PlaceBidBtn>
+    }
+    if (!isWinner || poolInfo.participant.claimed) return <></>
+    return (
+      <PlaceBidBtn
+        onClick={() => toBidderClaim()}
+        loadingPosition="start"
+        loading={submitted.submitted}
+        disabled={Number(poolInfo?.claimAt) > getCurrentTimeStamp()}
+      >
+        Cliam
+      </PlaceBidBtn>
+    )
+  }
   return (
     <>
       {/* banner section */}
@@ -325,7 +447,7 @@ const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
         alt=""
         srcSet=""
       />
-      {/* detail info */}
+      {/* detail info & cliam btn */}
       <Box
         sx={{
           padding: '64px 16px'
@@ -352,14 +474,9 @@ const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
         {detailInfoList.map((item, index) => (
           <RowTextSectioin key={index} logo={item.logo} label={item.label} value={item.value} />
         ))}
-        <BtnCom
-          sx={{
-            marginTop: '40px'
-          }}
-        >
-          CLAIM
-        </BtnCom>
+        <CliamBtn />
       </Box>
+      {/* footer */}
       <Box
         sx={{
           padding: '64px 0 24px',
@@ -400,6 +517,9 @@ const ClaimDetail = ({ animateStep }: { animateStep: AnimateStep }) => {
 const NfcDetail = () => {
   const isMd = useIsMDDown()
   const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.done)
+  const { '*': sysId } = useParams()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(sysId && isFinite(Number(sysId)) ? Number(sysId) : 20378)
+  console.log('poolInfo>>>', poolInfo)
   useEffect(() => {
     setAnimateStep(AnimateStep.lineDown)
     setTimeout(() => {
@@ -416,6 +536,9 @@ const NfcDetail = () => {
     }, 6000)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  if (!poolInfo) {
+    return <></>
+  }
   return (
     <Box
       sx={{
@@ -428,7 +551,7 @@ const NfcDetail = () => {
       }}
     >
       {/* {animateStep !== AnimateStep.done && <AnimationBlock animateStep={animateStep} />} */}
-      <ClaimDetail animateStep={animateStep} />
+      <ClaimDetail animateStep={animateStep} poolInfo={poolInfo} />
     </Box>
   )
 }

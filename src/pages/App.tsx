@@ -179,7 +179,7 @@ export default function App() {
                   <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                   <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
-                  <Route path={routes.foundo.foundoNfcDetail} element={<FoundoNfcDetail />} />
+                  <Route path={routes.foundo.foundoNfcDetail + '/*'} element={<FoundoNfcDetail />} />
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}
