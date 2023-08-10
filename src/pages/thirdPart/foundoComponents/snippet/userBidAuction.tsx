@@ -936,7 +936,6 @@ function BidResultAlert({
   tokenText: string
 }) {
   const isSm = useIsSMDown()
-
   return (
     <Box
       sx={{

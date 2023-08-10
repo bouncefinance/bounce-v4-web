@@ -1,10 +1,15 @@
-import { Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 import { useIsMDDown } from 'themes/useTheme'
 import { ReactComponent as LogoSvg } from 'assets/imgs/thirdPart/nfcDetail/logo.svg'
 import { ReactComponent as WalletSvg } from 'assets/imgs/thirdPart/nfcDetail/wallet.svg'
+import { useActiveWeb3React } from 'hooks'
+import { shortenAddress } from 'utils'
+import { useShowLoginModal } from 'state/users/hooks'
 
 const Header = () => {
   const isMd = useIsMDDown()
+  const { account } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
   return (
     <Stack
       sx={{
@@ -22,7 +27,32 @@ const Header = () => {
       alignItems={'center'}
     >
       <LogoSvg />
-      <WalletSvg />
+      {!account && (
+        <WalletSvg
+          onClick={() => {
+            showLoginModal()
+          }}
+        />
+      )}
+      {account && (
+        <Box
+          sx={{
+            height: '24px',
+            padding: '0 16px',
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: 'rgba(255, 255, 255, 0.20)',
+            borderRadius: '90px',
+            color: '#E1F25C',
+            fontFamily: `'Poppins'`,
+            fontSize: '14px'
+          }}
+        >
+          {shortenAddress(account)}
+        </Box>
+      )}
     </Stack>
   )
 }
