@@ -166,7 +166,10 @@ export const Notable721 = () => {
             {data
               ? data.list.map((item, idx: number) => (
                   <Box style={{ width: '309px' }} key={idx}>
-                    <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
+                    <Link
+                      style={{ width: 'inherit', display: 'block' }}
+                      to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}
+                    >
                       <NFTCard nft={item} hiddenStatus={true} />
                     </Link>
                   </Box>

@@ -164,7 +164,11 @@ export const NFTCard = (props: NFTPrams) => {
     amountTotal0
   } = props.nft as NFTPoolListProp
 
-  const isEnglishAuction721 = useMemo(() => is721 === 2 && category === PoolType.ENGLISH_AUCTION_NFT, [category, is721])
+  const isEnglishAuction721 = useMemo(
+    () =>
+      (is721 === 2 && category === PoolType.ENGLISH_AUCTION_NFT) || category === PoolType.MUTANT_ENGLISH_AUCTION_NFT,
+    [category, is721]
+  )
 
   const highestBidAmount = useMemo(() => {
     if (isEnglishAuction721) {
@@ -335,7 +339,11 @@ export const NFTCard = (props: NFTPrams) => {
                 }}
                 mr={4}
               >
-                {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English Auction'}
+                {category === PoolType.fixedSwapNft
+                  ? 'Fixed Price'
+                  : category === PoolType.ENGLISH_AUCTION
+                  ? 'English Auction'
+                  : 'Mutant English'}
               </Box>
               <Box
                 sx={{
@@ -389,7 +397,13 @@ export const NFTCard = (props: NFTPrams) => {
             marginBottom: '17px'
           }}
         >
-          {name} {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English'} Auction Pool
+          {name}{' '}
+          {category === PoolType.fixedSwapNft
+            ? 'Fixed Price'
+            : category === PoolType.ENGLISH_AUCTION
+            ? 'English'
+            : 'Mutant English'}{' '}
+          Auction Pool
         </Typography>
         {isEnglishAuction721 ? (
           <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
