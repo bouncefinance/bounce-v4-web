@@ -168,6 +168,7 @@ export const Notable721 = () => {
               ? data.list.map((item, idx: number) => (
                   <Box style={{ width: '309px' }} key={idx}>
                     <Box
+                      style={{ width: 'inherit', display: 'block' }}
                       onClick={e => {
                         e.stopPropagation()
                         navigate(getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString()))

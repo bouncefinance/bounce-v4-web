@@ -10,7 +10,7 @@ import DefaultAvatar from 'assets/imgs/realWorld/defaultHeadIgm.png'
 import { CurrencyAmount } from 'constants/token'
 import { useMemo } from 'react'
 
-const StatsBoard = styled(Stack)({
+const StatsBoard = styled(Stack)(({ theme }) => ({
   width: 320,
   marginTop: 80,
   padding: '24px 0',
@@ -34,8 +34,12 @@ const StatsBoard = styled(Stack)({
     color: '#D7D6D9',
     paddingTop: 24,
     fontSize: 36
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    marginTop: 60
   }
-})
+}))
 
 const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const totalReward = useMemo(() => {
@@ -58,10 +62,19 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   return (
     <Stack
       direction={'row'}
-      sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#171717', margin: '120px auto', minHeight: 500 }}
+      sx={{
+        borderRadius: 20,
+        padding: { xs: 0, sm: '12px 20px' },
+        bgcolor: { xs: 'transparent', sm: '#171717' },
+        margin: { xs: '0px auto', sm: '120px auto' },
+        width: { sm: 1296, xs: 'inherit' },
+        maxWidth: '100%',
+        justifyContent: 'space-between',
+        flexWrap: { xs: 'wrap', sm: 'unset' }
+      }}
     >
-      <Stack>
-        <Typography variant="h2" width={320} sx={{ ml: 12, color: '#fff', mt: 20 }}>
+      <Stack sx={{ width: { xs: '100%', sm: 'unset' } }}>
+        <Typography variant="h2" width={320} sx={{ fontSize: { xs: 16, sm: 36 }, color: '#fff', mt: 16 }}>
           Auction History
         </Typography>
         <StatsBoard>
@@ -78,8 +91,8 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       </Stack>
 
       {list.list && list.list.length > 0 ? (
-        <TableContainer sx={{ mt: 20 }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer sx={{ mt: 30, maxWidth: { xs: '100vw', sm: 763 } }}>
+          <Table sx={{ minWidth: { xs: '100%', sm: 650 } }} aria-label="simple table">
             <TableHead>
               <StyledHistoryTableRow
                 sx={{ '& th': { backgroundColor: '#171717 !important', color: '#fff', borderBottom: 0 } }}
