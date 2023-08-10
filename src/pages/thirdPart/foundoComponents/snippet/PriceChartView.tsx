@@ -4,6 +4,7 @@ import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import LineChart from 'components/LineChart'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useMemo } from 'react'
+import { useIsSMDown } from 'themes/useTheme'
 
 export default function PriceChartView({
   poolInfo,
@@ -15,7 +16,7 @@ export default function PriceChartView({
   isDark?: true
 }) {
   const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category, '', ['Bid'])
-
+  const isSm = useIsSMDown()
   const chatData:
     | {
         value: number
@@ -46,7 +47,14 @@ export default function PriceChartView({
         position: 'relative'
       }}
     >
-      <Typography color={'#e8e9e4'} fontSize={12}>
+      <Typography
+        color={'#e8e9e4'}
+        fontSize={12}
+        sx={{
+          position: isSm ? 'relative' : 'unset',
+          left: isSm ? 40 : 'unset'
+        }}
+      >
         Price
       </Typography>
       <Typography

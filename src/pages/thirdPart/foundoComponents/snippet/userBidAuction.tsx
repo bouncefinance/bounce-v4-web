@@ -750,6 +750,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
+  const isSm = useIsSMDown()
   const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
   const { bidPrevGasFee } = useMutantEnglishBidCallback(poolInfo)
 
@@ -885,10 +886,10 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       </Typography>
       <Stack
         width={'100%'}
-        direction={'row'}
+        direction={isSm ? 'column' : 'row'}
         justifyContent={'space-between'}
         alignItems={'center'}
-        mt={48}
+        mt={isSm ? 32 : 48}
         gridTemplateColumns={'1fr 1px 1fr'}
       >
         <RewardBox
@@ -898,7 +899,15 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           symbol={poolInfo.token1.symbol}
           Amount={poolInfo.participant.prevBidderRewardAmount?.toSignificant() || '--'}
         />
-        <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
+        <Stack
+          sx={{
+            width: isSm ? '100%' : '1px',
+            height: isSm ? 0 : 43,
+            margin: isSm ? '23px 0' : 'unset',
+            borderBottom: isSm ? '1px solid #fff' : 'none',
+            backgroundColor: '#fff'
+          }}
+        ></Stack>
         <RewardBox
           icon={Icon1}
           text="Return bid amount and gas fee"
