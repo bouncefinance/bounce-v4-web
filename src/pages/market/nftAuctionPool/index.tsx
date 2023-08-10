@@ -238,8 +238,8 @@ export const NFTCard = (props: NFTPrams) => {
               padding: '8px 12px'
             }}
             onClick={e => {
-              e.stopPropagation()
               navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
+              e.stopPropagation()
             }}
           >
             <Avatar
@@ -335,7 +335,11 @@ export const NFTCard = (props: NFTPrams) => {
                 }}
                 mr={4}
               >
-                {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English Auction'}
+                {category === PoolType.fixedSwapNft
+                  ? 'Fixed Price'
+                  : category === PoolType.MUTANT_ENGLISH_AUCTION_NFT
+                  ? 'Mutant English'
+                  : 'English Auction'}
               </Box>
               <Box
                 sx={{
