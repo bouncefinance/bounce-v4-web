@@ -3,9 +3,23 @@ import { ReactComponent as LongArrowSvg } from 'assets/imgs/realworldShop/longAr
 import { useIsMDDown } from 'themes/useTheme'
 import { routes } from 'constants/routes'
 import AnimatedComponent from './animation'
+import YouTube, { YouTubeProps } from 'react-youtube'
 
 const ApplyShop = () => {
   const isMd = useIsMDDown()
+  const onPlayerReady: YouTubeProps['onReady'] = event => {
+    // access to player in all event handlers via event.target
+    event.target.pauseVideo()
+  }
+
+  const opts: YouTubeProps['opts'] = {
+    height: isMd ? 'auto' : '390',
+    width: isMd ? '100%' : '640',
+    playerVars: {
+      // https://developers.google.com/youtube/player_parameters
+      autoplay: false
+    }
+  }
   return (
     <Box
       sx={{
@@ -64,6 +78,7 @@ const ApplyShop = () => {
             lineHeight: isMd ? '37px' : '42px',
             borderRadius: isMd ? '37px' : '42px',
             border: '1px solid #121212',
+            marginBottom: '40px',
             '&:hover': {
               '.title': {
                 color: '#fff'
@@ -93,6 +108,7 @@ const ApplyShop = () => {
           <LongArrowSvg />
         </Button>
       </AnimatedComponent>
+      <YouTube videoId="0XjjbcT090w" opts={opts} onReady={onPlayerReady} />
     </Box>
   )
 }
