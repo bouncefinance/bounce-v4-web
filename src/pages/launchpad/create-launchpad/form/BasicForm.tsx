@@ -174,7 +174,7 @@ const BasicForm = ({
               <FormItem style={{ marginTop: 20 }} name="basic.description">
                 <MarkdownEditor
                   value={values.basic.description}
-                  setEditorValue={value => setFieldValue('description', value)}
+                  setEditorValue={value => setFieldValue('basic.description', value)}
                   placeholder="Project description"
                 />
               </FormItem>
@@ -196,7 +196,7 @@ const BasicForm = ({
                 <Select<ChainId>
                   value={values.basic.chainId}
                   onChange={({ target }) => {
-                    setFieldValue('chainId', target.value)
+                    setFieldValue('basic.chainId', target.value)
                     // console.log('target')
                     // console.log(target.value)
 
@@ -258,7 +258,7 @@ const BasicForm = ({
             <FormItem style={{ marginTop: 15 }} name="basic.tokennomics">
               <MarkdownEditor
                 value={values.basic.tokennomics}
-                setEditorValue={value => setFieldValue('tokennomics', value)}
+                setEditorValue={value => setFieldValue('basic.tokennomics', value)}
                 placeholder="PHello, nice to meet you ^^... My Name is Eleanor Pena. I work as an Comic Artist, Freelance Illustrator, and concepting Character Design. I can do drawing for personal or business. I started my career as an illustrator in 2018."
               />
             </FormItem>
@@ -271,7 +271,7 @@ const BasicForm = ({
             <FormItem style={{ marginTop: 15 }} name="basic.roadmap">
               <MarkdownEditor
                 value={values.basic.roadmap}
-                setEditorValue={value => setFieldValue('roadmap', value)}
+                setEditorValue={value => setFieldValue('basic.roadmap', value)}
                 placeholder="Project description."
               />
             </FormItem>

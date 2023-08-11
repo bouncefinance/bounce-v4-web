@@ -163,7 +163,6 @@ const CreateLaunchpad = () => {
       ContractAddress: '',
       ContractDecimalPlaces: '',
       AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
-      CustomizedNeeds: '',
       Token: {
         tokenToAddress: '',
         tokenToSymbol: '',
@@ -190,8 +189,9 @@ const CreateLaunchpad = () => {
   const [tabActive, setTabActive] = useState(ITab.Basic)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
-  const onSubmit = () => {
-    console.log('ssss')
+  const onSubmit = (values: IValues) => {
+    console.log('<<<<<ssss>>>>')
+    console.log(values)
   }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>

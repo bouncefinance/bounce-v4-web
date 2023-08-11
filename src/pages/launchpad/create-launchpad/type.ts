@@ -49,7 +49,7 @@ export interface IDetailInitValue {
   ContractAddress: string
   ContractDecimalPlaces: string
   AuctionType: IAuctionType
-  CustomizedNeeds: string
+
   Token: ITokenProps
   SwapRatio: string
   TotalSupply: string

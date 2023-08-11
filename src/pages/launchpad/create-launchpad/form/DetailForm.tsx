@@ -32,7 +32,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
-import MarkdownEditor from 'pages/realWorldAuction/markdownEditor'
+
 // import { detailValidationSchema } from '../schema'
 import { IAuctionType, IFragmentReleaseTimes, IValues } from '../type'
 
@@ -153,10 +153,10 @@ const showTokenDialog = async ({
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
 }) => {
   const res = await show<Token>(TokenDialog, { chainId, enableEth })
-  setFieldValue('Token', {
+  setFieldValue('pool.Token', {
     tokenToAddress: res.address,
     tokenToSymbol: res.symbol,
-    tokenToLogoURI: res.logoURI,
+    tokenToLogoURI: res.logoURI || res.smallUrl,
     tokenToDecimals: res.decimals
   })
 }
@@ -208,7 +208,7 @@ const DetailForm = ({
                   value={values.pool.ChainId}
                   displayEmpty
                   onChange={({ target }) => {
-                    setFieldValue('ChainId', target.value)
+                    setFieldValue('pool.ChainId', target.value)
                   }}
                   renderValue={selected => {
                     const currentChain = ChainList.find(item => item.id === selected)
@@ -308,7 +308,7 @@ const DetailForm = ({
                 <Select
                   value={values.pool.AuctionType}
                   onChange={e => {
-                    setFieldValue('AuctionType', e.target.value)
+                    setFieldValue('pool.AuctionType', e.target.value)
                   }}
                   renderValue={selected => {
                     return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 500 }}>{selected}</Title>
@@ -332,21 +332,7 @@ const DetailForm = ({
               </FormItem>
             }
           />
-          {values.pool.AuctionType === IAuctionType.NONE && (
-            <FormLayout
-              title1="Customized needs"
-              title2="We will contact you after receipt"
-              childForm={
-                <FormItem style={{ marginTop: 20 }} name="pool.CustomizedNeeds">
-                  <MarkdownEditor
-                    value={values.pool.CustomizedNeeds}
-                    setEditorValue={value => setFieldValue('pool.CustomizedNeeds', value)}
-                    placeholder="Customized needs description"
-                  />
-                </FormItem>
-              }
-            />
-          )}
+
           <FormLayout
             title1="Funding Currency"
             childForm={
@@ -377,7 +363,7 @@ const DetailForm = ({
                 <FormItem placeholder="0.00" sx={{ flex: 1 }} name="pool.SwapRatio">
                   <NumberInput
                     value={values.pool.SwapRatio}
-                    onUserInput={value => setFieldValue('SwapRatio', value)}
+                    onUserInput={value => setFieldValue('pool.SwapRatio', value)}
                     endAdornment={
                       <>
                         <TokenImage

@@ -44,85 +44,87 @@ export const HeadTitle = styled(Title)({
   }
 })
 
-export const SubmitComp = ({ loading }: { loading: boolean }) => (
-  <Stack
-    sx={{
-      flexDirection: 'column',
-      gap: 15,
-      '@media(max-width:600px)': {
-        gap: 24
-      }
-    }}
-  >
-    <Box
-      mt={48}
+export const SubmitComp = ({ loading }: { loading: boolean }) => {
+  return (
+    <Stack
       sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: 12,
-        '@media(max-width)': {
-          gap: 16
-        }
-      }}
-    >
-      <Button
-        variant="contained"
-        sx={{
-          padding: '20px 40px',
-
-          background: '#FFF',
-          border: '1px solid  #121212',
-          '&:hover': { background: '#FFF' },
-          '@media(max-width:600px)': {
-            width: 92,
-            height: 10,
-            padding: '16px 24px',
-            boxSizing: 'content-box'
-          }
-        }}
-      >
-        <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
-      </Button>
-      <LoadingButton
-        type="submit"
-        variant="contained"
-        loading={loading}
-        loadingPosition="start"
-        startIcon={<></>}
-        sx={{
-          padding: '20px 40px',
-          boxSizing: 'border-box',
-          background: '#121212',
-          '&:hover': { background: '#121212', border: 'none' },
-          '@media(max-width:600px)': {
-            width: 92,
-            height: 10,
-            padding: '16px 24px',
-            boxSizing: 'content-box'
-          }
-        }}
-      >
-        <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
-      </LoadingButton>
-    </Box>
-    <Typography
-      sx={{
-        fontFamily: 'Public Sans',
-        fontSize: 14,
-        fontWidth: 600,
-        color: '#959595',
-        textAlign: 'center',
+        flexDirection: 'column',
+        gap: 15,
         '@media(max-width:600px)': {
-          fontSize: 13
+          gap: 24
         }
       }}
     >
-      After submitting, it will be successfully published after being reviewed by Bounce
-    </Typography>
-  </Stack>
-)
+      <Box
+        mt={48}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 12,
+          '@media(max-width)': {
+            gap: 16
+          }
+        }}
+      >
+        <Button
+          variant="contained"
+          sx={{
+            padding: '20px 40px',
+
+            background: '#FFF',
+            border: '1px solid  #121212',
+            '&:hover': { background: '#FFF' },
+            '@media(max-width:600px)': {
+              width: 92,
+              height: 10,
+              padding: '16px 24px',
+              boxSizing: 'content-box'
+            }
+          }}
+        >
+          <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
+        </Button>
+        <LoadingButton
+          type="submit"
+          variant="contained"
+          loading={loading}
+          loadingPosition="start"
+          startIcon={<></>}
+          sx={{
+            padding: '20px 40px',
+            boxSizing: 'border-box',
+            background: '#121212',
+            '&:hover': { background: '#121212', border: 'none' },
+            '@media(max-width:600px)': {
+              width: 92,
+              height: 10,
+              padding: '16px 24px',
+              boxSizing: 'content-box'
+            }
+          }}
+        >
+          <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
+        </LoadingButton>
+      </Box>
+      <Typography
+        sx={{
+          fontFamily: 'Public Sans',
+          fontSize: 14,
+          fontWidth: 600,
+          color: '#959595',
+          textAlign: 'center',
+          '@media(max-width:600px)': {
+            fontSize: 13
+          }
+        }}
+      >
+        After submitting, it will be successfully published after being reviewed by Bounce
+      </Typography>
+    </Stack>
+  )
+}
 export const GraySwitch = styled(Switch)({
   width: 42,
   height: 26,

@@ -1,6 +1,5 @@
 import * as yup from 'yup'
 import BigNumber from 'bignumber.js'
-import { IAuctionType } from './type'
 import moment from 'moment'
 import { AllocationStatus, IReleaseType } from '../../../bounceComponents/create-auction-pool/types'
 
@@ -134,17 +133,11 @@ const poolSchema = yup.object({
   ContractAddress: yup.string().required(),
   ContractDecimalPlaces: yup.string().required(),
   AuctionType: yup.string().required(),
-  CustomizedNeeds: yup
-    .string()
-    .test(
-      'customized',
-      'Customized needs is a required field',
-      (val, context) => !!val && !!(context.parent.AuctionType === IAuctionType.NONE)
-    ),
+
   Token: yup.object({
     tokenToAddress: yup.string().required(),
     tokenToSymbol: yup.string().required('Funding Currency is a required field'),
-    tokenToLogoURI: yup.string().required(),
+    tokenToLogoURI: yup.string(),
     tokenToDecimals: yup.string().required()
   }),
   SwapRatio: yup
