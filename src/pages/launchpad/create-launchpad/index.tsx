@@ -8,16 +8,25 @@ import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ChainId } from 'constants/chain'
-import { IDetailInitValue, IBasicInfoParams, IAuctionType, ICommunity, IValues } from './type'
+import {
+  IDetailInitValue,
+  IBasicInfoParams,
+  IAuctionType,
+  ICommunity,
+  IValues,
+  ITab,
+  IPoolInfoParams,
+  IAuctionTypeMap
+} from './type'
 import { useActiveWeb3React } from 'hooks'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Formik } from 'formik'
 import { createLaunchpadSchema } from './schema'
-enum ITab {
-  'Basic',
-  'Detail'
-}
-
+import { useRequest } from 'ahooks'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { updateLaunchpadBasic, updateLaunchpadPool } from 'api/user'
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -28,86 +37,7 @@ const community: ICommunity[] = [
   { communityName: 'discord', communityLink: '' }
 ]
 const CreateLaunchpad = () => {
-  const { chainId } = useActiveWeb3React()
-
-  // const initBasicValue = useMemo<IBasicInfoParams>(() => {
-  //   const value = {
-  //     id: 0,
-  //     banner: {
-  //       fileName: '',
-  //       fileSize: 0,
-  //       fileThumbnailUrl: '',
-  //       fileType: '',
-  //       fileUrl: ''
-  //     },
-  //     projectMobilePicture: {
-  //       fileName: '',
-  //       fileSize: 0,
-  //       fileThumbnailUrl: '',
-  //       fileType: '',
-  //       fileUrl: ''
-  //     },
-  //     projectLogo: {
-  //       fileName: '',
-  //       fileSize: 0,
-  //       fileThumbnailUrl: '',
-  //       fileType: '',
-  //       fileUrl: ''
-  //     },
-  //     projectPicture: {
-  //       fileName: '',
-  //       fileSize: 0,
-  //       fileThumbnailUrl: '',
-  //       fileType: '',
-  //       fileUrl: ''
-  //     },
-  //     community: community,
-  //     website: '',
-  //     whitepaperLink: '',
-  //     description: '',
-  //     tokennomics: '',
-  //     roadmap: '',
-  //     projectName: '',
-  //     chainId: chainId ?? ChainId.MAINNET,
-  //     posts: ''
-  //   }
-  //   return value
-  // }, [chainId])
-  // const initDetailValue: IDetailInitValue = {
-  //   TokenLogo: {
-  //     fileName: '',
-  //     fileSize: 0,
-  //     fileThumbnailUrl: '',
-  //     fileType: '',
-  //     fileUrl: '',
-  //     id: 0
-  //   },
-  //   TokenName: '',
-  //   ChainId: chainId ?? ChainId.MAINNET,
-  //   ContractAddress: '',
-  //   ContractDecimalPlaces: '',
-  //   AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
-  //   CustomizedNeeds: '',
-  //   Token: {
-  //     tokenToAddress: '',
-  //     tokenToSymbol: '',
-  //     tokenToLogoURI: '',
-  //     tokenToDecimals: ''
-  //   },
-  //   SwapRatio: '',
-  //   TotalSupply: '',
-  //   startTime: null,
-  //   endTime: null,
-  //   allocationStatus: AllocationStatus.NoLimits,
-  //   allocationPerWallet: '',
-  //   releaseType: IReleaseType.Cliff,
-  //   delayUnlockingTime: null,
-  //   linearUnlockingStartTime: null,
-  //   linearUnlockingEndTime: null,
-  //   fragmentReleaseTimes: [],
-  //   fragmentReleaseSize: '',
-  //   isRefundable: true
-  // }
+  const { chainId, account } = useActiveWeb3React()
   const initValue = useMemo<IValues>(() => {
     const basic: IBasicInfoParams = {
       id: 0,
@@ -161,7 +91,7 @@ const CreateLaunchpad = () => {
       TokenName: '',
       ChainId: chainId ?? ChainId.MAINNET,
       ContractAddress: '',
-      ContractDecimalPlaces: '',
+      ContractDecimalPlaces: 18,
       AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
       Token: {
         tokenToAddress: '',
@@ -189,9 +119,94 @@ const CreateLaunchpad = () => {
   const [tabActive, setTabActive] = useState(ITab.Basic)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
+  const { chainInfoOpt } = useOptionDatas()
+  const handleSubmit = (values: IValues) => {
+    const { basic, pool } = values
+    const basicParams: IBasicInfoParams = {
+      ...basic,
+      chainId: chainInfoOpt?.find(item => item.ethChainId === basic.chainId)?.id as number
+    }
+    const poolParams: IPoolInfoParams = {
+      id: 0,
+      creator: account,
+      category: IAuctionTypeMap[pool.AuctionType],
+      chainId: chainInfoOpt?.find(item => item.ethChainId === pool.ChainId)?.id as number,
+      releaseType: pool.releaseType,
+      token0: pool.ContractAddress,
+      token0Decimals: pool.ContractDecimalPlaces,
+      token0Logo: pool.Token.tokenToLogoURI,
+      token0Name: pool.TokenName,
+      token0Symbol: pool.TokenName,
+      totalAmount0: pool.TotalSupply,
+      token1: pool.Token.tokenToAddress,
+      ratio: pool.SwapRatio,
+      openAt: pool.startTime?.valueOf(),
+      closeAt: pool.endTime?.valueOf(),
+      reverseEnabled: pool.isRefundable
+    }
+    if (pool.allocationStatus === AllocationStatus.Limited) {
+      poolParams['maxAmount1PerWallet'] = `${
+        Number(pool.allocationPerWallet) * Math.pow(10, Number(pool.Token.tokenToDecimals))
+      }`
+    }
+    const releaseType = Number(pool.releaseType)
+    if (releaseType !== IReleaseType.Instant) {
+      if (releaseType === IReleaseType.Cliff) {
+        poolParams.releaseData = [{ startAt: pool.delayUnlockingTime?.valueOf() as number, endAtOrRatio: 0 }]
+      }
+      if (releaseType === IReleaseType.Linear) {
+        poolParams.releaseData = [
+          {
+            startAt: pool.linearUnlockingStartTime?.valueOf() as number,
+            endAtOrRatio: pool.linearUnlockingEndTime?.valueOf() as number
+          }
+        ]
+      }
+      if (releaseType === IReleaseType.Fragment) {
+        const releaseData: { startAt: number; endAtOrRatio: number }[] = []
+        pool.fragmentReleaseTimes.forEach(item => {
+          releaseData.push({
+            startAt: item.startAt?.valueOf() as number,
+            endAtOrRatio: Number(item.radio)
+          })
+        })
+        poolParams.releaseData = releaseData
+      }
+    }
+    console.log('<<<<<<data>>>>>>')
+    console.log(basicParams)
+    console.log(poolParams)
+    // 两个请求都失败了 555～
+    return Promise.all([updateLaunchpadBasic(basicParams), updateLaunchpadPool(poolParams)])
+  }
+  const { runAsync, loading, data } = useRequest(handleSubmit, { manual: true })
+  console.log('run, loading ')
+  console.log(loading)
+  console.log(data)
+
   const onSubmit = (values: IValues) => {
     console.log('<<<<<ssss>>>>')
     console.log(values)
+    runAsync(values)
+      .then(() => {
+        show(DialogTips, {
+          iconType: 'success',
+          cancelBtn: 'confirm',
+          title: 'Congratulations!',
+          content: 'You have successfully submit, Please wait patiently for review.'
+        })
+      })
+      .catch(() => {
+        show(DialogTips, {
+          iconType: 'error',
+          cancelBtn: 'confirm',
+          title: 'Oops..',
+          content: 'Something went wrong'
+        })
+      })
+  }
+  const setTab = (tab: ITab) => {
+    setTabActive(tab)
   }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -218,7 +233,7 @@ const CreateLaunchpad = () => {
             validationSchema={createLaunchpadSchema}
             initialValues={initValue}
           >
-            {({ values, setFieldValue, handleSubmit, errors }) => {
+            {({ values, setFieldValue, handleSubmit, errors, isValid }) => {
               return (
                 <Box component={'form'} onSubmit={handleSubmit}>
                   <BasicForm
@@ -232,7 +247,7 @@ const CreateLaunchpad = () => {
                     setFieldValue={setFieldValue}
                     errors={errors}
                   />
-                  <SubmitComp loading={false} />
+                  <SubmitComp loading={false} errors={errors} isValid={isValid} setTab={setTab} curTab={tabActive} />
                 </Box>
               )
             }}

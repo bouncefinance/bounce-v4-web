@@ -267,7 +267,17 @@ const DetailForm = ({
             title1="Contract Decimal Places"
             childForm={
               <FormItem name="pool.ContractDecimalPlaces">
-                <OutlinedInput placeholder="Explorer Link" />
+                <OutlinedInput
+                  sx={{
+                    '& input[type="number"]::-webkit-inner-spin-button,& input[type="number"]::-webkit-outer-spin-button':
+                      {
+                        '-webkit-appearance': 'none',
+                        margin: 0
+                      }
+                  }}
+                  type="number"
+                  placeholder="Explorer Link"
+                />
               </FormItem>
             }
           />

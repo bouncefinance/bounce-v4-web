@@ -2,6 +2,10 @@ import { IFile } from 'bounceComponents/common/Uploader'
 import { ChainId } from 'constants/chain'
 import { Moment } from 'moment'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
+export enum ITab {
+  'Basic',
+  'Detail'
+}
 export interface ICommunity {
   communityName: string
   communityLink: string
@@ -35,11 +39,13 @@ export interface IBasicInfoParams {
 }
 export enum IAuctionType {
   FIXED_PRICE_AUCTION = 'Fixed Price Auction',
-  PLAYABLE_AUCTION = 'Playable Auction',
-  SEALED_BID_AUCTION = 'Sealed-Bid Auction',
-  ORDER_BOOK_AUCTION = 'Order Book Auction',
   DUTCH_AUCTION = 'Dutch Auction',
-  NONE = 'None, need to customize'
+  PLAYABLE_AUCTION = 'Playable Auction'
+}
+export enum IAuctionTypeMap {
+  'Fixed Price Auction' = 1,
+  'Dutch Auction' = 2,
+  'Playable Auction' = 100
 }
 export interface IDetailInitValue {
   fragmentReleaseTimes: IFragmentReleaseTimes[]
@@ -47,9 +53,8 @@ export interface IDetailInitValue {
   TokenName: string
   ChainId: ChainId
   ContractAddress: string
-  ContractDecimalPlaces: string
+  ContractDecimalPlaces: number
   AuctionType: IAuctionType
-
   Token: ITokenProps
   SwapRatio: string
   TotalSupply: string
@@ -65,14 +70,17 @@ export interface IDetailInitValue {
   isRefundable: boolean
 }
 export interface IPoolInfoParams {
-  category: string
+  id: number
+  category: IAuctionTypeMap
   chainId: number
-  name: string
+  releaseType: IReleaseType
+  ratio: string
   token0?: string
   token0Decimals?: number | undefined
   token0Logo?: string | IFile
   token0Name?: string
   token0Symbol?: string
+  totalAmount0: string
   token1?: string
   tokenId?: string
   poolId?: number

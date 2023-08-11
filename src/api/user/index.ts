@@ -36,7 +36,7 @@ import {
 } from './type'
 
 import { ApiInstance } from 'api'
-import { IBasicInfoParams } from 'pages/launchpad/create-launchpad/type'
+import { IBasicInfoParams, IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
 
 export const getConfig = async () => {
   return ApiInstance.get<IConfigResponse>('/com/cfg/opt_data', {})
@@ -185,6 +185,9 @@ export const applySeller = (params: IBodySeller) => {
 }
 export const updateLaunchpadBasic = (params: IBasicInfoParams) => {
   return ApiInstance.post('/user/launchpad/basic', params)
+}
+export const updateLaunchpadPool = (params: IPoolInfoParams) => {
+  return ApiInstance.post('/user/launchpad/pool', params)
 }
 // export const getLaunchpadInfo = () => {
 //   return ApiInstance.post('/user/launchpad/pool/list', { chainId: 11155111 })

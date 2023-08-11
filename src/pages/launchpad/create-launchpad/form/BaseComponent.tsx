@@ -6,6 +6,8 @@ import { IFile } from 'bounceComponents/common/Uploader'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import { ReactComponent as AddCircleIcon } from 'assets/imgs/icon/add_circle_outline.svg'
 import { Body02 } from 'components/Text'
+import { ITab, IValues } from '../type'
+import { FormikErrors } from 'formik'
 
 export const CardBox = styled(Box)({
   display: 'flex',
@@ -44,7 +46,33 @@ export const HeadTitle = styled(Title)({
   }
 })
 
-export const SubmitComp = ({ loading }: { loading: boolean }) => {
+export const SubmitComp = ({
+  loading,
+  setTab,
+  errors,
+  isValid,
+  curTab
+}: {
+  loading: boolean
+  setTab: (tab: ITab) => void
+  errors: FormikErrors<IValues>
+  isValid: boolean
+  curTab: ITab
+}) => {
+  const handleClick = () => {
+    const { basic, pool } = errors
+    if (isValid || (!basic && !pool)) {
+      return
+    }
+    if (typeof basic === 'object' && Object.keys(basic).length) {
+      curTab === ITab.Detail && setTab(ITab.Basic)
+      return
+    }
+    if (typeof pool === 'object' && Object.keys(pool).length) {
+      curTab === ITab.Basic && setTab(ITab.Detail)
+      return
+    }
+  }
   return (
     <Stack
       sx={{
@@ -72,7 +100,6 @@ export const SubmitComp = ({ loading }: { loading: boolean }) => {
           variant="contained"
           sx={{
             padding: '20px 40px',
-
             background: '#FFF',
             border: '1px solid  #121212',
             '&:hover': { background: '#FFF' },
@@ -87,6 +114,7 @@ export const SubmitComp = ({ loading }: { loading: boolean }) => {
           <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
         </Button>
         <LoadingButton
+          onClick={handleClick}
           type="submit"
           variant="contained"
           loading={loading}
