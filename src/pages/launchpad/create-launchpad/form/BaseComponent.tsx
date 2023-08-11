@@ -90,6 +90,7 @@ export const SubmitComp = ({ loading }: { loading: boolean }) => (
         variant="contained"
         loading={loading}
         loadingPosition="start"
+        startIcon={<></>}
         sx={{
           padding: '20px 40px',
           boxSizing: 'border-box',

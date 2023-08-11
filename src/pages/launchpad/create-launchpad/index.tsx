@@ -12,6 +12,7 @@ import { IDetailInitValue, IBasicInfoParams, IAuctionType, ICommunity, IValues }
 import { useActiveWeb3React } from 'hooks'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { Formik } from 'formik'
+import { createLaunchpadSchema } from './schema'
 enum ITab {
   'Basic',
   'Detail'
@@ -148,7 +149,7 @@ const CreateLaunchpad = () => {
       chainId: chainId ?? ChainId.MAINNET,
       posts: ''
     }
-    const poolInfo: IDetailInitValue = {
+    const pool: IDetailInitValue = {
       TokenLogo: {
         fileName: '',
         fileSize: 0,
@@ -183,14 +184,14 @@ const CreateLaunchpad = () => {
       fragmentReleaseSize: '',
       isRefundable: true
     }
-    return { basic, poolInfo }
+    return { basic, pool }
   }, [chainId])
 
   const [tabActive, setTabActive] = useState(ITab.Basic)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
   const onSubmit = () => {
-    console.log('essss')
+    console.log('ssss')
   }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -214,7 +215,7 @@ const CreateLaunchpad = () => {
           <Formik
             onSubmit={onSubmit}
             enableReinitialize
-            // validationSchema={basicValidationSchema}
+            validationSchema={createLaunchpadSchema}
             initialValues={initValue}
           >
             {({ values, setFieldValue, handleSubmit, errors }) => {

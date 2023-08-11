@@ -102,5 +102,5 @@ export interface IPoolInfoParams {
 }
 export interface IValues {
   basic: IBasicInfoParams
-  poolInfo: IDetailInitValue
+  pool: IDetailInitValue
 }

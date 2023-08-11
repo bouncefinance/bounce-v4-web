@@ -183,8 +183,8 @@ const DetailForm = ({
             childTitle={<Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>}
             childForm={
               <FormUploadAdd
-                fileUrl={values.poolInfo.TokenLogo.fileUrl}
-                formItemName="TokenLogo"
+                fileUrl={values.pool.TokenLogo.fileUrl}
+                formItemName="pool.TokenLogo"
                 labelId="TokenLogo"
                 setFieldValue={setFieldValue}
                 labelChild={<AddFile />}
@@ -194,7 +194,7 @@ const DetailForm = ({
           <FormLayout
             title1="Token Name"
             childForm={
-              <FormItem name={'TokenName'}>
+              <FormItem name={'pool.TokenName'}>
                 <OutlinedInput placeholder="Name of the project, eg. Bounce" />
               </FormItem>
             }
@@ -203,9 +203,9 @@ const DetailForm = ({
             title1="Blockchain Platform"
             title2="What platform is this token issued on?"
             childForm={
-              <FormItem name="ChainId">
+              <FormItem name="pool.ChainId">
                 <Select
-                  value={values.poolInfo.ChainId}
+                  value={values.pool.ChainId}
                   displayEmpty
                   onChange={({ target }) => {
                     setFieldValue('ChainId', target.value)
@@ -230,7 +230,7 @@ const DetailForm = ({
                     <MenuItem
                       key={t.id}
                       value={t.id}
-                      selected={values.poolInfo.ChainId === t.id ? true : false}
+                      selected={values.pool.ChainId === t.id ? true : false}
                       sx={{
                         '&.Mui-selected': {
                           '& > .MuiStack-root > p': {
@@ -258,7 +258,7 @@ const DetailForm = ({
           <FormLayout
             title1="Contract Address"
             childForm={
-              <FormItem name="ContractAddress">
+              <FormItem name="pool.ContractAddress">
                 <OutlinedInput placeholder="Explorer Link" />
               </FormItem>
             }
@@ -266,7 +266,7 @@ const DetailForm = ({
           <FormLayout
             title1="Contract Decimal Places"
             childForm={
-              <FormItem name="ContractDecimalPlaces">
+              <FormItem name="pool.ContractDecimalPlaces">
                 <OutlinedInput placeholder="Explorer Link" />
               </FormItem>
             }
@@ -304,9 +304,9 @@ const DetailForm = ({
           <FormLayout
             title1="Auction Type"
             childForm={
-              <FormItem name="AuctionType">
+              <FormItem name="pool.AuctionType">
                 <Select
-                  value={values.poolInfo.AuctionType}
+                  value={values.pool.AuctionType}
                   onChange={e => {
                     setFieldValue('AuctionType', e.target.value)
                   }}
@@ -320,7 +320,7 @@ const DetailForm = ({
                         sx={{
                           fontFamily: 'Inter',
                           fontSize: 14,
-                          color: values.poolInfo.AuctionType === value ? '#2B51DA' : '#121212',
+                          color: values.pool.AuctionType === value ? '#2B51DA' : '#121212',
                           fontWeight: 400
                         }}
                       >
@@ -332,15 +332,15 @@ const DetailForm = ({
               </FormItem>
             }
           />
-          {values.poolInfo.AuctionType === IAuctionType.NONE && (
+          {values.pool.AuctionType === IAuctionType.NONE && (
             <FormLayout
               title1="Customized needs"
               title2="We will contact you after receipt"
               childForm={
-                <FormItem style={{ marginTop: 20 }} name="CustomizedNeeds">
+                <FormItem style={{ marginTop: 20 }} name="pool.CustomizedNeeds">
                   <MarkdownEditor
-                    value={values.poolInfo.CustomizedNeeds}
-                    setEditorValue={value => setFieldValue('CustomizedNeeds', value)}
+                    value={values.pool.CustomizedNeeds}
+                    setEditorValue={value => setFieldValue('pool.CustomizedNeeds', value)}
                     placeholder="Customized needs description"
                   />
                 </FormItem>
@@ -351,21 +351,17 @@ const DetailForm = ({
             title1="Funding Currency"
             childForm={
               <FormItem
-                name="Token.tokenToSymbol"
+                name="pool.Token.tokenToSymbol"
                 label="Select Token"
                 required
                 sx={{ flex: 1 }}
                 startAdornment={
-                  <TokenImage
-                    alt={values.poolInfo.Token.tokenToSymbol}
-                    src={values.poolInfo.Token.tokenToLogoURI}
-                    size={32}
-                  />
+                  <TokenImage alt={values.pool.Token.tokenToSymbol} src={values.pool.Token.tokenToLogoURI} size={32} />
                 }
               >
                 <FakeOutlinedInput
                   readOnly
-                  onClick={() => showTokenDialog({ chainId: values.poolInfo.ChainId as ChainId, setFieldValue })}
+                  onClick={() => showTokenDialog({ chainId: values.pool.ChainId as ChainId, setFieldValue })}
                 />
               </FormItem>
             }
@@ -375,21 +371,21 @@ const DetailForm = ({
             childForm={
               <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}>
                 <Title sx={{ fontSize: 20, color: '#171717' }}>
-                  1 {!values.poolInfo.TokenName ? 'USDT' : values.poolInfo.TokenName} =
+                  1 {!values.pool.TokenName ? 'USDT' : values.pool.TokenName} =
                 </Title>
                 {/* 小数点位数大于 精度时还没有报错？ */}
-                <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
+                <FormItem placeholder="0.00" sx={{ flex: 1 }} name="pool.SwapRatio">
                   <NumberInput
-                    value={values.poolInfo.SwapRatio}
+                    value={values.pool.SwapRatio}
                     onUserInput={value => setFieldValue('SwapRatio', value)}
                     endAdornment={
                       <>
                         <TokenImage
-                          alt={values.poolInfo.Token.tokenToSymbol}
-                          src={values.poolInfo.Token.tokenToLogoURI}
+                          alt={values.pool.Token.tokenToSymbol}
+                          src={values.pool.Token.tokenToLogoURI}
                           size={24}
                         />
-                        <Typography sx={{ ml: 8 }}>{values.poolInfo.Token.tokenToSymbol}</Typography>
+                        <Typography sx={{ ml: 8 }}>{values.pool.Token.tokenToSymbol}</Typography>
                       </>
                     }
                   />
@@ -400,7 +396,7 @@ const DetailForm = ({
           <FormLayout
             title1="Total Supply"
             childForm={
-              <FormItem name="TotalSupply">
+              <FormItem name="pool.TotalSupply">
                 <OutlinedInput placeholder="Enter  amount" />
               </FormItem>
             }
@@ -413,38 +409,38 @@ const DetailForm = ({
             <Stack flexDirection={'row'}>
               <Field
                 component={DateTimePickerFormItem}
-                name="startTime"
+                name="pool.startTime"
                 disablePast
-                maxDateTime={values.poolInfo.endTime}
+                maxDateTime={values.pool.endTime}
                 textField={{ sx: { flex: 1 } }}
               />
               <Field
                 component={DateTimePickerFormItem}
-                name="endTime"
+                name="pool.endTime"
                 disablePast
-                minDateTime={values.poolInfo.startTime}
+                minDateTime={values.pool.startTime}
                 textField={{ sx: { flex: 1 } }}
               />
             </Stack>
           </Box>
           <Box>
             <Title sx={{ color: '#20201E', fontSize: 20 }}>Allocation per wallet</Title>
-            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
+            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="pool.allocationStatus">
               <FormControlLabel value={AllocationStatus.NoLimits} control={<Radio disableRipple />} label="No Limits" />
               <FormControlLabel value={AllocationStatus.Limited} control={<Radio disableRipple />} label="Limited" />
             </Field>
-            {values.poolInfo.allocationStatus === AllocationStatus.Limited && (
-              <FormItem name="allocationPerWallet" sx={{ flex: 1 }}>
+            {values.pool.allocationStatus === AllocationStatus.Limited && (
+              <FormItem name="pool.allocationPerWallet" sx={{ flex: 1 }}>
                 <OutlinedInput
                   sx={{ mt: 10 }}
                   endAdornment={
                     <>
                       <TokenImage
-                        alt={values.poolInfo.Token.tokenToSymbol}
-                        src={values.poolInfo.Token.tokenToLogoURI}
+                        alt={values.pool.Token.tokenToSymbol}
+                        src={values.pool.Token.tokenToLogoURI}
                         size={24}
                       />
-                      <Typography sx={{ ml: 8 }}>{values.poolInfo.Token.tokenToSymbol}</Typography>
+                      <Typography sx={{ ml: 8 }}>{values.pool.Token.tokenToSymbol}</Typography>
                     </>
                   }
                 />
@@ -455,14 +451,14 @@ const DetailForm = ({
             <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
               <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay unlocking token</Title>
               <FormControlLabel
-                checked={values.poolInfo.releaseType === 0}
-                onChange={() => setFieldValue('releaseType', values.poolInfo.releaseType ? 0 : 1)}
+                checked={values.pool.releaseType === 0}
+                onChange={() => setFieldValue('pool.releaseType', values.pool.releaseType ? 0 : 1)}
                 control={<GraySwitch defaultChecked />}
                 label=""
               />
             </Stack>
-            {values.poolInfo.releaseType > 0 && (
-              <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
+            {values.pool.releaseType > 0 && (
+              <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="pool.releaseType">
                 <FormControlLabel
                   value={IReleaseType.Cliff}
                   control={<Radio disableRipple />}
@@ -492,26 +488,26 @@ const DetailForm = ({
                 />
               </Field>
             )}
-            {Number(values.poolInfo.releaseType) === IReleaseType.Cliff ? (
+            {Number(values.pool.releaseType) === IReleaseType.Cliff ? (
               <Stack spacing={6}>
                 <LabelTitle>Unlocking Start Time</LabelTitle>
                 <Field
                   component={DateTimePickerFormItem}
                   disablePast
-                  name="delayUnlockingTime"
-                  minDateTime={values.poolInfo.endTime}
+                  name="pool.delayUnlockingTime"
+                  minDateTime={values.pool.endTime}
                   textField={{ sx: { width: '100%' } }}
                 />
               </Stack>
-            ) : Number(values.poolInfo.releaseType) === IReleaseType.Linear ? (
+            ) : Number(values.pool.releaseType) === IReleaseType.Linear ? (
               <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
                 <Stack spacing={6}>
                   <LabelTitle>Start Time</LabelTitle>
                   <Field
                     component={DateTimePickerFormItem}
                     disablePast
-                    name="linearUnlockingStartTime"
-                    minDateTime={values.poolInfo.endTime}
+                    name="pool.linearUnlockingStartTime"
+                    minDateTime={values.pool.endTime}
                     textField={{ sx: { width: '100%' } }}
                   />
                 </Stack>
@@ -521,41 +517,43 @@ const DetailForm = ({
                   <Field
                     component={DateTimePickerFormItem}
                     disablePast
-                    name="linearUnlockingEndTime"
-                    minDateTime={values.poolInfo.linearUnlockingStartTime}
+                    name="pool.linearUnlockingEndTime"
+                    minDateTime={values.pool.linearUnlockingStartTime}
                     textField={{ sx: { width: '100%' } }}
                   />
                 </Stack>
               </Box>
-            ) : Number(values.poolInfo.releaseType) === IReleaseType.Fragment ? (
+            ) : Number(values.pool.releaseType) === IReleaseType.Fragment ? (
               <SetFragmentReleaseTime
-                minDateTime={values.poolInfo.endTime}
-                errors={errors.poolInfo?.fragmentReleaseTimes}
-                releaseTimes={values.poolInfo.fragmentReleaseTimes}
-                setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) => setFieldValue('fragmentReleaseTimes', val)}
+                minDateTime={values.pool.endTime}
+                errors={errors.pool?.fragmentReleaseTimes}
+                releaseTimes={values.pool.fragmentReleaseTimes}
+                setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) =>
+                  setFieldValue('pool.fragmentReleaseTimes', val)
+                }
               />
             ) : (
               <LabelTitle>No unlocking method is set; tokens can be claimed after the specified end.</LabelTitle>
             )}
-            <FormHelperText error={!!errors.poolInfo?.fragmentReleaseSize}>
-              {errors.poolInfo?.fragmentReleaseSize}
+            <FormHelperText error={!!errors.pool?.fragmentReleaseSize}>
+              {errors.pool?.fragmentReleaseSize}
             </FormHelperText>
           </Box>
           <Box>
             <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
               <Title sx={{ fontSize: 20, color: '#20201E' }}>Refundable</Title>
               <FormControlLabel
-                checked={values.poolInfo.isRefundable}
-                onChange={() => setFieldValue('isRefundable', !values.poolInfo.isRefundable)}
+                checked={values.pool.isRefundable}
+                onChange={() => setFieldValue('pool.isRefundable', !values.pool.isRefundable)}
                 control={<GraySwitch defaultChecked />}
                 label=""
               />
             </Stack>
-            {values.poolInfo.isRefundable && values.poolInfo.endTime && (
+            {values.pool.isRefundable && values.pool.endTime && (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="body1">Auction will be refundable before the end time</Typography>
                 <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
-                  Before {values.poolInfo.endTime.format('MMM D, YYYY hh:mm A')}
+                  Before {values.pool.endTime.format('MMM D, YYYY hh:mm A')}
                 </Box>
               </Box>
             )}

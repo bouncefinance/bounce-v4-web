@@ -89,7 +89,7 @@ const BasicForm = ({
           <FormLayout
             title1="Project Name"
             childForm={
-              <FormItem name={'projectName'}>
+              <FormItem name={'basic.projectName'}>
                 <OutlinedInput placeholder={'Name of the project, eg. Bounce'} />
               </FormItem>
             }
@@ -99,7 +99,7 @@ const BasicForm = ({
             childTitle={<Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>}
             childForm={
               <FormUploadAdd
-                formItemName="projectLogo"
+                formItemName="basic.projectLogo"
                 fileUrl={(values.basic.projectLogo as IFile).fileUrl}
                 setFieldValue={setFieldValue}
                 labelId="ProjectLogoImg"
@@ -112,7 +112,7 @@ const BasicForm = ({
             childTitle={<Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>}
             childForm={
               <FormUploadAdd
-                formItemName="projectPicture"
+                formItemName="basic.projectPicture"
                 fileUrl={(values.basic.projectPicture as IFile).fileUrl}
                 setFieldValue={setFieldValue}
                 labelId="projectPicture"
@@ -132,7 +132,7 @@ const BasicForm = ({
               <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
                 <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
                   <FormUploadAdd
-                    formItemName="banner"
+                    formItemName="basic.banner"
                     fileUrl={(values.basic.banner as IFile).fileUrl}
                     setFieldValue={setFieldValue}
                     labelId="ProjectPictureBigImg"
@@ -143,7 +143,7 @@ const BasicForm = ({
                 </Stack>
                 <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
                   <FormUploadAdd
-                    formItemName="projectMobilePicture"
+                    formItemName="basic.projectMobilePicture"
                     fileUrl={(values.basic.projectMobilePicture as IFile).fileUrl}
                     setFieldValue={setFieldValue}
                     labelId="ProjectPictureSmallImg"
@@ -171,7 +171,7 @@ const BasicForm = ({
               </Title>
             }
             childForm={
-              <FormItem style={{ marginTop: 20 }} name="description">
+              <FormItem style={{ marginTop: 20 }} name="basic.description">
                 <MarkdownEditor
                   value={values.basic.description}
                   setEditorValue={value => setFieldValue('description', value)}
@@ -183,7 +183,7 @@ const BasicForm = ({
           <FormLayout
             title1="Website URL"
             childForm={
-              <FormItem name={'website'}>
+              <FormItem name={'basic.website'}>
                 <OutlinedInput placeholder="https://bitcoin.org" />
               </FormItem>
             }
@@ -244,7 +244,7 @@ const BasicForm = ({
           <FormLayout
             title1="Whitepaper/Technical Documentation Link"
             childForm={
-              <FormItem name={'whitepaperLink'}>
+              <FormItem name={'basic.whitepaperLink'}>
                 <OutlinedInput placeholder="https://bitcoin.org/bitcoin.pdf" />
               </FormItem>
             }
@@ -255,7 +255,7 @@ const BasicForm = ({
               <Title sx={{ fontSize: 18, color: '#20201E' }}>Tokenomics </Title>
               <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
             </Stack>
-            <FormItem style={{ marginTop: 15 }} name="tokennomics">
+            <FormItem style={{ marginTop: 15 }} name="basic.tokennomics">
               <MarkdownEditor
                 value={values.basic.tokennomics}
                 setEditorValue={value => setFieldValue('tokennomics', value)}
@@ -268,7 +268,7 @@ const BasicForm = ({
               <Title sx={{ fontSize: 18, color: '#20201E' }}>Project Roadmap </Title>
               <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
             </Stack>
-            <FormItem style={{ marginTop: 15 }} name="roadmap">
+            <FormItem style={{ marginTop: 15 }} name="basic.roadmap">
               <MarkdownEditor
                 value={values.basic.roadmap}
                 setEditorValue={value => setFieldValue('roadmap', value)}
@@ -290,7 +290,7 @@ const BasicForm = ({
               key={index}
               title1={item.title}
               childForm={
-                <FormItem name={`community[${index}].communityLink`}>
+                <FormItem name={`basic.community[${index}].communityLink`}>
                   <OutlinedInput placeholder={item.placeholder} />
                 </FormItem>
               }
