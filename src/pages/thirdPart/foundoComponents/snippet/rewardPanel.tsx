@@ -21,13 +21,11 @@ const RowLabel = styled(Box)(({ theme }) => ({
     padding: '24px 32px',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    width: '100%',
-    '& .Left': {
-      fontSize: 16
-    }
+    width: '100%'
   },
   '& .Left': {
     width: '100%',
+    minWidth: 220,
     color: '#959595',
     fontSize: 20,
     [theme.breakpoints.down('sm')]: {
@@ -49,7 +47,7 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
         <Typography className="Left">Next Bid Price Target</Typography>
         <Stack direction={'row'} alignItems={'center'} spacing={8} width={'100%'} mt={isSm ? 18 : 0}>
           <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={28} />
-          <Typography color={'#D7D6D9'} sx={{ fontSize: { md: 36, xs: 22 } }}>
+          <Typography color={'#D7D6D9'} sx={{ fontSize: { md: 36, xs: 22 }, wordBreak: 'break-all' }}>
             {poolInfo.currentBidderAmount?.toSignificant()} {poolInfo.token1.symbol}
           </Typography>
         </Stack>
