@@ -9,7 +9,7 @@ import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporte
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
-import { Questions } from 'bounceComponents/common/Questions'
+// import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
 // import { Mobile } from 'bounceComponents/common/Mobile'
 // import { ShowOnMobile } from 'themes/context'
@@ -116,7 +116,7 @@ export default function App() {
               <LoginModal />
               <Header />
               <ToastContainer />
-              <Questions />
+              {/* <Questions /> */}
               <UnSupportedMobileRouter />
               <BodyWrapper id="body">
                 <Popups />
