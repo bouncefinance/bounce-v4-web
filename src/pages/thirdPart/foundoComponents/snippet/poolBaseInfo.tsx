@@ -18,7 +18,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
         sx={{
           fontFamily: `'Public Sans'`,
           fontWeight: 600,
-          fontSize: isSm ? 20 : 28,
+          fontSize: isSm ? 20 : 36,
           color: '#fff',
           lineHeight: '34px',
           marginBottom: '16px'

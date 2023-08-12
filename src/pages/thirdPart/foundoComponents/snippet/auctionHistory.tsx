@@ -65,7 +65,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       sx={{
         borderRadius: 20,
         padding: { xs: 0, sm: '12px 20px' },
-        bgcolor: { xs: 'transparent', sm: '#171717' },
+        bgcolor: 'transparent',
         margin: { xs: '0px auto', sm: '120px auto' },
         width: { sm: 1296, xs: 'inherit' },
         maxWidth: '100%',
@@ -81,7 +81,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           <Typography>Total Bid Times</Typography>
           <Typography>{list.total}</Typography>
         </StatsBoard>
-        <StatsBoard>
+        <StatsBoard sx={{ marginTop: 32 }}>
           <Typography>Total Bidder Reward</Typography>
           <Typography>
             {totalReward}
@@ -95,7 +95,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           <Table sx={{ minWidth: { xs: '100%', sm: 650 } }} aria-label="simple table">
             <TableHead>
               <StyledHistoryTableRow
-                sx={{ '& th': { backgroundColor: '#171717 !important', color: '#fff', borderBottom: 0 } }}
+                sx={{ '& th': { backgroundColor: 'transparent !important', color: '#fff', borderBottom: 0 } }}
               >
                 <StyledHistoryTableCell>From</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Bid Price</StyledHistoryTableCell>
@@ -115,7 +115,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     backgroundColor: '#fff !important'
                   }}
                 >
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     <Stack direction={'row'} alignItems={'center'}>
                       <img
                         src={record.avatar || DefaultAvatar}
@@ -131,7 +131,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                       {shortenAddress(record.requestor)}
                     </Stack>
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     {poolInfo.currencyAmountMin1
                       ? CurrencyAmount.fromRawAmount(
                           poolInfo.currencyAmountMin1?.currency,
@@ -141,7 +141,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     {poolInfo.currencyAmountMin1
                       ? CurrencyAmount.fromRawAmount(
                           poolInfo.currencyAmountMin1.currency,
@@ -151,7 +151,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     <Box>
                       <a
                         style={{ display: 'flex', alignItems: 'center' }}
@@ -164,7 +164,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                       </a>
                     </Box>
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     {moment(record.blockTs * 1000).format('Y/M/D HH:mm')}
                   </StyledHistoryTableCell>
                 </StyledHistoryTableRow>

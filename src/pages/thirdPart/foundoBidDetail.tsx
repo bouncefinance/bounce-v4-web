@@ -121,7 +121,7 @@ const FoundoBidDetail = () => {
         mt: theme => (isSm ? 0 : `-${theme.height.header}`),
         pt: theme => (isSm ? 0 : `${theme.height.header}`),
         width: '100%',
-        background: '#000'
+        backgroundColor: '#121212'
       }}
     >
       <Header poolInfo={poolInfo} />
@@ -129,7 +129,19 @@ const FoundoBidDetail = () => {
       <BidSection poolInfo={poolInfo} />
       <NewTabs value={tabIndex} onChange={handleChange}>
         {tabList.map((item: any) => (
-          <Tab label={item.label} key={item.label}></Tab>
+          <Tab
+            sx={{
+              '&.MuiTab-root': {
+                fontSize: isSm ? 20 : 28,
+                'line-height': '130%',
+                'letter-spacing': '-0.56px',
+                'text-transform': 'capitalize',
+                padding: isSm ? 16 : 24
+              }
+            }}
+            label={item.label}
+            key={item.label}
+          ></Tab>
         ))}
       </NewTabs>
       <CenterSeciont>
@@ -140,7 +152,8 @@ const FoundoBidDetail = () => {
             sx={{
               mt: { xs: 0, sm: 120 },
               width: 'inherit',
-              flexWrap: { xs: 'wrap', sm: 'unset' }
+              flexWrap: { xs: 'wrap', sm: 'unset' },
+              justifyContent: 'space-between'
             }}
           >
             <Typography width={470} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
@@ -205,7 +218,8 @@ const FoundoBidDetail = () => {
             sx={{
               mt: { xs: 0, sm: 120 },
               width: 'inherit',
-              flexWrap: { xs: 'wrap', sm: 'unset' }
+              flexWrap: { xs: 'wrap', sm: 'unset' },
+              justifyContent: 'space-between'
             }}
           >
             <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>

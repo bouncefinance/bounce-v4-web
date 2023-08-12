@@ -45,7 +45,14 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
     <Container>
       <RowLabel>
         <Typography className="Left">Next Bid Price Target</Typography>
-        <Stack direction={'row'} alignItems={'center'} spacing={8} width={'100%'} mt={isSm ? 18 : 0}>
+        <Stack
+          direction={'row'}
+          justifyContent={'end'}
+          alignItems={'center'}
+          spacing={8}
+          width={'100%'}
+          mt={isSm ? 18 : 0}
+        >
           <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={28} />
           <Typography color={'#D7D6D9'} sx={{ fontSize: { md: 36, xs: 22 }, wordBreak: 'break-all' }}>
             {poolInfo.currentBidderAmount?.toSignificant()} {poolInfo.token1.symbol}

@@ -45,7 +45,8 @@ const PcBanenr = () => {
     <Box
       sx={{
         width: '100%',
-        height: isSm ? '404px' : '680px'
+        height: isSm ? '404px' : '680px',
+        background: '#000'
       }}
     >
       <Box

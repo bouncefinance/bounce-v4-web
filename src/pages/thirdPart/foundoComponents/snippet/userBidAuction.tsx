@@ -34,6 +34,7 @@ import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import BigNumber from 'bignumber.js'
 import RewardPanel from './rewardPanel'
 import { RowLabel } from './creatorBidAuction'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 interface DataViewParam {
   priceFloor: number | string
@@ -56,16 +57,15 @@ const CounterText = styled(Typography)(({ theme }) => ({
   fontStyle: 'italic',
   fontWeight: 100,
   color: 'var(--ps-text-5)',
-  [theme.breakpoints.down('xs')]: {
-    fontSize: 18
-  },
+  fontSize: 20,
   [theme.breakpoints.down('md')]: {
-    fontSize: 20
+    fontSize: 18
   }
 }))
 
 export function DataView(props: DataViewParam) {
   const { priceFloor, increase } = props
+  const isSm = useBreakpoint('sm')
   return (
     <Stack
       spacing={16}
@@ -73,7 +73,7 @@ export function DataView(props: DataViewParam) {
         padding: '0 0 24px'
       }}
     >
-      <Typography fontSize={28} color={'#fff'}>
+      <Typography fontSize={isSm ? 20 : 28} color={'#fff'}>
         {' '}
         About This Auction
       </Typography>
@@ -110,6 +110,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string; style?:
   })
   return (
     <Box
+      className="upcoming-status"
       sx={{
         position: 'relative',
         display: 'flex',
@@ -197,7 +198,8 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
         width: isSm ? '100%' : '640px',
         borderLeft: { xs: 'none', sm: '1px solid rgba(255, 255, 255, 0.20)' },
         margin: 'auto',
-        padding: { xs: '0', sm: '120px 0 120px 63px' }
+        padding: { xs: '0', sm: '120px 0 120px 63px' },
+        marginTop: 0
       }}
     >
       <Box
@@ -205,7 +207,10 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          '& .upcoming-status': {
+            marginBottom: isSm ? 32 : 48
+          }
         }}
       >
         {/* Pool Status */}
@@ -298,7 +303,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
                 alt=""
                 srcSet=""
               />
-              <Typography className="value" style={{ fontSize: 28 }}>
+              <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
                 {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
                 {poolInfo?.currentBidderAmount1?.currency.symbol}
               </Typography>
