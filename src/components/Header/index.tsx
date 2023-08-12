@@ -136,7 +136,8 @@ const transparentRoutes = [
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
-  routes.thirdPart.DipExchange
+  routes.thirdPart.DipExchange,
+  routes.foundo.foundoDetail + '/*'
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -151,7 +152,8 @@ export const whiteLogoRoutes = [
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
-  routes.thirdPart.DipExchange
+  routes.thirdPart.DipExchange,
+  routes.foundo.foundoDetail + '/*'
 ]
 
 export default function Header() {

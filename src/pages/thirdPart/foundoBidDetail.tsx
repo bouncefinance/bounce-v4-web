@@ -136,7 +136,11 @@ const FoundoBidDetail = () => {
                 'line-height': '130%',
                 'letter-spacing': '-0.56px',
                 'text-transform': 'capitalize',
-                padding: isSm ? 16 : 24
+                padding: isSm ? 16 : 24,
+                '&:hover': {
+                  background: '#fff',
+                  color: '#000 !important'
+                }
               }
             }}
             label={item.label}
