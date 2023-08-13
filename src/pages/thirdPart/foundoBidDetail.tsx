@@ -22,7 +22,8 @@ import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 import ActionHistory from './foundoComponents/snippet/auctionHistory'
 import { useParams } from 'react-router-dom'
 import Footer from 'bounceComponents/common/Footer'
-
+import Image from 'components/Image'
+import authenticationDefalut from 'assets/imgs/thirdPart/foundoDetail/authentication-defalut.png'
 const NewTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
   '.MuiTabs-scroller': {
@@ -215,7 +216,16 @@ const FoundoBidDetail = () => {
             </Box>
           </Stack>
         )}
-        {tabIndex === 2 && <Box minHeight={500}></Box>}
+        {tabIndex === 2 && (
+          <Box sx={{ width: '100%', paddingTop: isSm ? 0 : 120 }}>
+            <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
+              Authentication
+            </Typography>
+            <Box sx={{ width: '100%', maxWidth: 1296, margin: '0 auto ', marginTop: isSm ? 56 : 64 }}>
+              <Image width={'100%'} height={'100%'} src={authenticationDefalut} />
+            </Box>
+          </Box>
+        )}
         {tabIndex === 3 && (
           <Stack
             direction={'row'}
