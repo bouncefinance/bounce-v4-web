@@ -143,7 +143,7 @@ const PcBanenr = () => {
             return (
               <BannerSmallItem
                 onClick={() => {
-                  swiperInstance.slideTo(index)
+                  swiperInstance.slideToLoop(index)
                 }}
                 src={item}
                 key={index}
