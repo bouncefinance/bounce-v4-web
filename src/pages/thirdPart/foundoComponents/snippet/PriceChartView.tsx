@@ -3,8 +3,21 @@ import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import LineChart from 'components/LineChart'
 import { Currency, CurrencyAmount } from 'constants/token'
+import { DeepPartial, ChartOptions } from 'lightweight-charts'
 import { useMemo } from 'react'
 import { useIsSMDown } from 'themes/useTheme'
+const chartOptions: DeepPartial<ChartOptions> = {
+  layout: { fontSize: 12 },
+  leftPriceScale: {
+    borderColor: 'rgba(255, 255, 255, 0.20)',
+    borderVisible: true,
+    drawTicks: false
+  },
+  timeScale: {
+    borderVisible: true,
+    borderColor: 'rgba(255, 255, 255, 0.20)'
+  }
+}
 
 export default function PriceChartView({
   poolInfo,
@@ -44,7 +57,8 @@ export default function PriceChartView({
       minHeight={minHeight || 220}
       sx={{
         mt: { xs: 40, sm: 80 },
-        position: 'relative'
+        position: 'relative',
+        paddingRight: isSm ? 0 : 35
       }}
     >
       <Typography
@@ -62,13 +76,15 @@ export default function PriceChartView({
         fontSize={12}
         sx={{
           position: 'absolute',
-          bottom: 10,
-          right: 20
+          bottom: 15,
+          right: 0
         }}
       >
         Time
       </Typography>
-      {!!chatData?.length && <LineChart data={chatData} isDark={isDark} token1Name={poolInfo.token1.symbol} />}
+      {!!chatData?.length && (
+        <LineChart data={chatData} isDark={isDark} token1Name={poolInfo.token1.symbol} chartOption={chartOptions} />
+      )}
     </Box>
   )
 }
