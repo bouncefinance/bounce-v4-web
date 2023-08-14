@@ -273,6 +273,8 @@ export const MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: Record<ChainId, stri
   [ChainId.SEPOLIA]: '0xe06A754AFaAFFFC44F650420e496bbe1F765D71B',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
+  [ChainId.BASE]: '',
+  [ChainId.BASE_TESTNET]: '',
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '',
