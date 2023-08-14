@@ -208,9 +208,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           flexFlow: 'row nowrap',
           justifyContent: 'space-between',
           alignItems: 'center',
-          '& .upcoming-status': {
-            marginBottom: isSm ? 32 : 48
-          }
+          marginBottom: isSm ? 32 : 48
         }}
       >
         {/* Pool Status */}

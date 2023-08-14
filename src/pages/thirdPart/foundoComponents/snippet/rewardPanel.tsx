@@ -24,8 +24,8 @@ const RowLabel = styled(Box)(({ theme }) => ({
     width: '100%'
   },
   '& .Left': {
-    width: '100%',
-    minWidth: 220,
+    // width: '100%',
+    // minWidth: 220,
     color: '#959595',
     fontSize: 20,
     [theme.breakpoints.down('sm')]: {

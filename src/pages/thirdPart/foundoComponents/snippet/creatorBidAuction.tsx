@@ -161,7 +161,8 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginBottom: isSm ? 32 : 48
         }}
       >
         {/* Pool Status */}
