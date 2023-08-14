@@ -1,6 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { useState, useMemo, useCallback } from 'react'
-import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
+import { ReactComponent as BidIconSvg } from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
 import Icon0 from 'assets/imgs/auction/icon0.png'
 import Icon1 from 'assets/imgs/auction/icon1.png'
@@ -249,16 +249,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
       />
       {poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn disabled={true} loadingPosition="start" variant="contained" fullWidth>
-          <img
-            src={BidIcon}
-            style={{
-              width: '16px',
-              height: '16px',
-              marginRight: '10px'
-            }}
-            alt=""
-            srcSet=""
-          />
+          <BidIconSvg />
           <CounterText>
             Place A Bid in
             {countdown > 0 ? (
@@ -647,16 +638,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
                   variant="contained"
                   fullWidth
                 >
-                  <img
-                    src={BidIcon}
-                    style={{
-                      width: '16px',
-                      height: '16px',
-                      marginRight: '10px'
-                    }}
-                    alt=""
-                    srcSet=""
-                  />
+                  <BidIconSvg />
                   <Typography
                     sx={{
                       fontFamily: `'Public Sans'`,
@@ -704,16 +686,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               variant="contained"
               fullWidth
             >
-              <img
-                src={BidIcon}
-                style={{
-                  width: '16px',
-                  height: '16px',
-                  marginRight: '10px'
-                }}
-                alt=""
-                srcSet=""
-              />
+              <BidIconSvg />
               <Typography
                 sx={{
                   fontFamily: `'Public Sans'`,
@@ -844,16 +817,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         loading={submitted.submitted}
         disabled={poolInfo.claimAt > getCurrentTimeStamp()}
       >
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
+        <BidIconSvg />
         {/* Check Logistics Information */}
         {/* {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'} */}
         Edit info && Send address

@@ -1,6 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { useMemo, useCallback } from 'react'
-import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
+import { ReactComponent as BidIconSvg } from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import { PlaceBidBtn } from './bidDialog'
 import { useCountDown } from 'ahooks'
 import { MutantEnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
@@ -191,16 +191,7 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
       />
       {!poolInfo.creatorClaimed && poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn onClick={toCreatorClaim} loadingPosition="start" variant="contained" fullWidth>
-          <img
-            src={BidIcon}
-            style={{
-              width: '16px',
-              height: '16px',
-              marginRight: '10px'
-            }}
-            alt=""
-            srcSet=""
-          />
+          <BidIconSvg />
           <CounterText>Cancel & Claim</CounterText>
         </PlaceBidBtn>
       )}
@@ -404,16 +395,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         loading={submitted.submitted}
         disabled={poolInfo.claimAt > getCurrentTimeStamp() || creatorClaimed}
       >
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
+        <BidIconSvg />
         {/* Check Logistics Information */}
         {creatorClaimed ? 'Claimed' : 'Claim Reward'}
       </PlaceBidBtn>
@@ -440,16 +422,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         loading={submitted.submitted}
         disabled={poolInfo.claimAt > getCurrentTimeStamp() || creatorClaimed}
       >
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
+        <BidIconSvg />
         {/* Check Logistics Information */}
         {creatorClaimed ? 'Claimed' : 'Claim Your NFT'}
       </PlaceBidBtn>
