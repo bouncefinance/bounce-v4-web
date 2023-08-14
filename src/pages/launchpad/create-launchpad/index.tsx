@@ -180,14 +180,10 @@ const CreateLaunchpad = () => {
     }
     return Promise.all([updateLaunchpadBasic(basicParams), updateLaunchpadPool(poolParams)])
   }
-  // 这个函数没执行
   const handleClose = () => {
-    console.log('handleClose')
-
     navigate('/account/private_launchpad', { replace: true })
   }
   const { runAsync, loading } = useRequest(handleSubmit, { manual: true })
-
   const onSubmit = (values: IValues) => {
     runAsync(values)
       .then(() => {
@@ -196,7 +192,8 @@ const CreateLaunchpad = () => {
           cancelBtn: 'confirm',
           title: 'Congratulations!',
           content: 'You have successfully submit, Please wait patiently for review.',
-          onclose: handleClose
+          onclose: handleClose,
+          onCancel: handleClose
         })
       })
       .catch(() => {
