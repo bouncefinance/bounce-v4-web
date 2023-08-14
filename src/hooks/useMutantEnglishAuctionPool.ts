@@ -437,6 +437,8 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
         ? poolInfo.status
         : poolInfo.openAt > curTimeStamp
         ? PoolStatus.Upcoming
+        : !_pools.closeAt
+        ? PoolStatus.Live
         : (_pools.closeAt || poolInfo.closeAt) > curTimeStamp
         ? PoolStatus.Live
         : PoolStatus.Closed

@@ -105,7 +105,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
               fontFamily: 'Public Sans'
             }}
           >
-            Auction just started! be the fist bidder
+            Auction just started! be the first bidder
           </Typography>
         </Stack>
       </Stack>
