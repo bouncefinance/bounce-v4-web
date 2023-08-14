@@ -1,5 +1,4 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useMemo, useState } from 'react'
@@ -27,6 +26,8 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { updateLaunchpadBasic, updateLaunchpadPool } from 'api/user'
+import { IFile } from 'bounceComponents/common/Uploader'
+import { useNavigate } from 'react-router-dom'
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -115,16 +116,20 @@ const CreateLaunchpad = () => {
     }
     return { basic, pool }
   }, [chainId])
-
   const [tabActive, setTabActive] = useState(ITab.Basic)
   const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
   const isSm = useBreakpoint('sm')
+  const navigate = useNavigate()
   const { chainInfoOpt } = useOptionDatas()
   const handleSubmit = (values: IValues) => {
     const { basic, pool } = values
     const basicParams: IBasicInfoParams = {
       ...basic,
-      chainId: chainInfoOpt?.find(item => item.ethChainId === basic.chainId)?.id as number
+      chainId: chainInfoOpt?.find(item => item.ethChainId === basic.chainId)?.id as number,
+      banner: (basic.banner as IFile).fileUrl,
+      projectLogo: (basic.projectLogo as IFile).fileUrl,
+      projectMobilePicture: (basic.projectMobilePicture as IFile).fileUrl,
+      projectPicture: (basic.projectPicture as IFile).fileUrl
     }
     const poolParams: IPoolInfoParams = {
       id: 0,
@@ -173,27 +178,25 @@ const CreateLaunchpad = () => {
         poolParams.releaseData = releaseData
       }
     }
-    console.log('<<<<<<data>>>>>>')
-    console.log(basicParams)
-    console.log(poolParams)
-    // 两个请求都失败了 555～
     return Promise.all([updateLaunchpadBasic(basicParams), updateLaunchpadPool(poolParams)])
   }
-  const { runAsync, loading, data } = useRequest(handleSubmit, { manual: true })
-  console.log('run, loading ')
-  console.log(loading)
-  console.log(data)
+  // 这个函数没执行
+  const handleClose = () => {
+    console.log('handleClose')
+
+    navigate('/account/private_launchpad', { replace: true })
+  }
+  const { runAsync, loading } = useRequest(handleSubmit, { manual: true })
 
   const onSubmit = (values: IValues) => {
-    console.log('<<<<<ssss>>>>')
-    console.log(values)
     runAsync(values)
       .then(() => {
         show(DialogTips, {
           iconType: 'success',
           cancelBtn: 'confirm',
           title: 'Congratulations!',
-          content: 'You have successfully submit, Please wait patiently for review.'
+          content: 'You have successfully submit, Please wait patiently for review.',
+          onclose: handleClose
         })
       })
       .catch(() => {
@@ -247,7 +250,7 @@ const CreateLaunchpad = () => {
                     setFieldValue={setFieldValue}
                     errors={errors}
                   />
-                  <SubmitComp loading={false} errors={errors} isValid={isValid} setTab={setTab} curTab={tabActive} />
+                  <SubmitComp loading={loading} errors={errors} isValid={isValid} setTab={setTab} curTab={tabActive} />
                 </Box>
               )
             }}

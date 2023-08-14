@@ -22,7 +22,6 @@ export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
   cancelBtn?: string
   againBtn?: string
 }
-
 const DialogTips = create((props: DialogProps) => {
   const { content, title, onAgain, onClose, cancelBtn, againBtn, onCancel, iconType, ...rest } = props
   const modal = useModal()

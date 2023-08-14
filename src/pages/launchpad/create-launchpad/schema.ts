@@ -131,7 +131,7 @@ const poolSchema = yup.object({
   TokenName: yup.string().required(),
   ChainId: yup.number().required(),
   ContractAddress: yup.string().required(),
-  ContractDecimalPlaces: yup.string().required(),
+  ContractDecimalPlaces: yup.number().required(),
   AuctionType: yup.string().required(),
 
   Token: yup.object({
