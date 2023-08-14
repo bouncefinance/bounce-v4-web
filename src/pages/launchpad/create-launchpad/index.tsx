@@ -192,7 +192,7 @@ const CreateLaunchpad = () => {
           cancelBtn: 'confirm',
           title: 'Congratulations!',
           content: 'You have successfully submit, Please wait patiently for review.',
-          onclose: handleClose,
+          onClose: handleClose,
           onCancel: handleClose
         })
       })
