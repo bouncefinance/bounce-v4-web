@@ -81,6 +81,8 @@ import PerformKYCVerification from 'bounceComponents/profile/account/components/
 import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
+import TokenToolBox from './tokenToolBox'
+import Loyaltyprogram from './loyaltyprogram'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -198,6 +200,9 @@ export default function App() {
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
+
+                  <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
+                  <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}
