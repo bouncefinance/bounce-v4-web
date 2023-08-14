@@ -28,8 +28,8 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserClaimed = useMemo(() => {
-    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
-  }, [poolInfo.participant.currencyCurClaimableAmount])
+    return poolInfo.participant.claimed
+  }, [poolInfo.participant.claimed])
   const [actionStep, setActionStep] = useState<ActionStep>(ActionStep.UpComing)
 
   useEffect(() => {
@@ -59,6 +59,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
       setAmount('0')
     }
   }
+  console.log('step', isUserClaimed, actionStep, ActionStep.ClosedAndNotClaim)
 
   if (!poolInfo) return <></>
   if (!account) {
