@@ -891,8 +891,10 @@ function BidResultAlert({
   isWinner = false,
   isClose,
   winnerImg,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tokenImg,
   leftText,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tokenText
 }: {
   isWinner: boolean
@@ -973,26 +975,9 @@ function BidResultAlert({
         {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
         {isWinner && <WhiteText>{leftText}</WhiteText>}
       </Box>
-      {!isClose && (
-        <Typography color={'#D7D6D9'} fontSize={14} mb={25}>
-          Current Final Winner Prize Pool
-        </Typography>
-      )}
-      <RowLabel>
-        <TokenImage src={tokenImg} alt={'token img'} size={20} />
-        <Typography
-          className="value"
-          style={{
-            color: '#fff',
-            marginLeft: 8,
-            fontWeight: 600,
-            lineHeight: '130%',
-            fontSize: isSm ? '22px' : '36px'
-          }}
-        >
-          {tokenText}
-        </Typography>
-      </RowLabel>
+      <Typography color={'#D7D6D9'} fontSize={isSm ? 16 : 20} pt={20} mb={25}>
+        Commemorative NFT
+      </Typography>
     </Box>
   )
 }

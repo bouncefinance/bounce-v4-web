@@ -73,25 +73,9 @@ export default function RewardPanel({ poolInfo }: { poolInfo: MutantEnglishAucti
             </Tooltip>
           </Stack>
           <Stack direction={'row'} spacing={8}>
-            <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={20} />
-            <Typography color={'#D7D6D9'}>
+            <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={isSm ? 20 : 25} />
+            <Typography color={'#D7D6D9'} fontSize={isSm ? 14 : 18}>
               {nextAuctionRewards?.prevEstimate || '--'} {poolInfo.token1.symbol}
-            </Typography>
-          </Stack>
-        </Stack>
-        <Stack direction={'row'} justifyContent={'space-between'} mt={24}>
-          <Stack direction={'row'} spacing={8}>
-            <Typography color={'#959595'} fontSize={isSm ? 14 : 16}>
-              Next Final Bidder Prize
-            </Typography>
-            <Tooltip title="If you become the next winning bidder, you will receive all the rewards from the prize pool.">
-              <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-            </Tooltip>
-          </Stack>
-          <Stack direction={'row'} spacing={8}>
-            <TokenImage src={poolInfo.token1.smallUrl} alt={poolInfo.token1.symbol} size={20} />
-            <Typography color={'#D7D6D9'}>
-              {nextAuctionRewards?.winnerTotal || '--'} {poolInfo.token1.symbol}
             </Typography>
           </Stack>
         </Stack>
