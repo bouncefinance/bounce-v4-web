@@ -13,7 +13,7 @@ export const AuctionConfig: {
       AuctionType.DUTCH_AUCTION,
       AuctionType.ENGLISH_AUCTION
     ],
-    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION, AuctionType.MUTANT_ENGLISH]
     // [TokenType.ERC1155]: []
   },
   [ChainId.GÖRLI]: {
@@ -135,7 +135,7 @@ export const AuctionConfig: {
       AuctionType.RANDOM_SELECTION,
       AuctionType.DUTCH_AUCTION
     ],
-    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION, AuctionType.MUTANT_ENGLISH],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.AUROEA]: {

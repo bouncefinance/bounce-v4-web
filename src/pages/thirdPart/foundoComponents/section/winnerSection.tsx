@@ -17,7 +17,7 @@ import NoData from 'bounceComponents/common/NoData'
 // import { formatNumber, removeRedundantZeroOfFloat } from 'utils/number'
 import { formatNumber } from 'utils/number'
 import { getEtherscanLink, shortenAddress } from 'utils'
-import { EnglishAuctionNFTPoolProp } from 'api/pool/type'
+import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import TopThreeWinner from '../snippet/topThreeWinner'
 import { useIsSMDown } from 'themes/useTheme'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(() => ({
   }
 }))
 
-const WinnerList = ({ poolInfo }: { poolInfo: EnglishAuctionNFTPoolProp }) => {
+const WinnerList = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
   const { data } = usePoolHistory(poolInfo.chainId, poolInfo.poolId, poolInfo.category, '', ['Bid'])
   const defaultIdeaPageSize = 12

@@ -67,6 +67,7 @@ export enum TokenType {
 export enum AuctionType {
   DUTCH_AUCTION = 'Dutch Auction',
   ENGLISH_AUCTION = 'English Auction',
+  MUTANT_ENGLISH = 'Mutant English',
   FIXED_PRICE = 'Fixed Price',
   RANDOM_SELECTION = 'Random Selection'
 }
@@ -105,4 +106,13 @@ export interface AuctionPool {
   reservePrice?: string
   segmentAmount?: string
   endPrice?: string
+  closeHour?: string
+  closeMinute?: string
+  claimHour?: string
+  claimMinute?: string
+  delayUnlockingHour?: string
+  delayUnlockingMinute?: string
+  creatorRatio?: string
+  prevBidderRatio?: string
+  lastBidderRatio?: string
 }
