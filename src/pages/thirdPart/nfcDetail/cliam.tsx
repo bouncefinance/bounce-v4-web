@@ -468,7 +468,7 @@ const ClaimDetail = ({
             textAlign: 'center'
           }}
         >
-          DIMOND HAND NECKLACE
+          DIAMOND HAND NECKLACE
         </Typography>
       </Box>
       {/* main img */}
@@ -502,7 +502,13 @@ const ClaimDetail = ({
           >
             Details
           </Typography>
-          <Typography>Ref: 356934</Typography>
+          <SpanText
+            sx={{
+              fontSize: '12px'
+            }}
+          >
+            Ref: 356934
+          </SpanText>
         </Stack>
         {detailInfoList.map((item, index) => (
           <RowTextSectioin key={index} logo={item.logo} label={item.label} value={item.value} />
@@ -516,7 +522,7 @@ const ClaimDetail = ({
           background: '#121212'
         }}
       >
-        <FooterText>DIMOND</FooterText>
+        <FooterText>DIAMOND</FooterText>
         <FooterText>HAND</FooterText>
         <FooterText>NECKLACE</FooterText>
         <img
