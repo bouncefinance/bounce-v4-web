@@ -106,5 +106,11 @@ export const routes = {
     detail: '/foundo/detail/index',
     foundoDetail: '/foundo/detail',
     foundoNfcDetail: '/foundo/nfc_detail'
+  },
+  tokenToolBox: {
+    index: '/TokenToolBox'
+  },
+  loyaltyprogram: {
+    index: '/Loyaltyprogram'
   }
 }
