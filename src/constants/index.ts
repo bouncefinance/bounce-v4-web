@@ -243,7 +243,7 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
 }
 
 export const MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: Record<ChainId, string> = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0x8adA332eA4A16C08C033B1F17682A8C0D8BB275D',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
