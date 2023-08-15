@@ -2,14 +2,14 @@ import * as yup from 'yup'
 import BigNumber from 'bignumber.js'
 import moment from 'moment'
 import { AllocationStatus, IReleaseType } from '../../../bounceComponents/create-auction-pool/types'
-
+import { isAddress } from 'utils'
 const basicSchema = yup.object({
   banner: yup.object({
     fileName: yup.string(),
     fileSize: yup.number(),
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
+    fileUrl: yup.string().required('Please upload your banner'),
     id: yup.number()
   }),
   projectMobilePicture: yup.object({
@@ -17,7 +17,7 @@ const basicSchema = yup.object({
     fileSize: yup.number(),
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
+    fileUrl: yup.string().required('Please upload your project mobile picture'),
     id: yup.number()
   }),
   projectLogo: yup.object({
@@ -25,7 +25,7 @@ const basicSchema = yup.object({
     fileSize: yup.number(),
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
+    fileUrl: yup.string().required('Please upload your project logo'),
     id: yup.number()
   }),
   projectPicture: yup.object({
@@ -33,20 +33,20 @@ const basicSchema = yup.object({
     fileSize: yup.number(),
     fileThumbnailUrl: yup.string(),
     fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Profile Picture'),
+    fileUrl: yup.string().required('Please upload your project picture'),
     id: yup.number()
   }),
   description: yup
     .string()
-    .required()
+    .required('description is a required field')
     .min(100, 'Describe your project (100-500 words)')
     .max(500, 'Describe your project (100-500 words)'),
   tokennomics: yup.string(),
-  website: yup.string().url().required(),
-  whitepaperLink: yup.string().url().required(),
-  projectName: yup.string().required(),
+  website: yup.string().url().required('website is a required field'),
+  whitepaperLink: yup.string().url().required('website is a required field'),
+  projectName: yup.string().required('Project Name is a required field'),
   roadmap: yup.string(),
-  chainId: yup.number().required(),
+  chainId: yup.number().required('chainId is a required field'),
   community: yup.array().of(
     yup
       .object({
@@ -128,10 +128,13 @@ const poolSchema = yup.object({
     fileUrl: yup.string().required('Please upload your Token Logo'),
     id: yup.number()
   }),
-  TokenName: yup.string().required(),
-  ChainId: yup.number().required(),
-  ContractAddress: yup.string().required(),
-  ContractDecimalPlaces: yup.number().required(),
+  TokenName: yup.string().required('Token Name is a required field'),
+  ChainId: yup.number().required('ChainId is a required field'),
+  ContractAddress: yup
+    .string()
+    .required('Contract Address is a required field')
+    .test('address', 'Please enter the correct contract address!', val => !!isAddress(val)),
+  ContractDecimalPlaces: yup.number().required('Contract Decimal Places is a required field'),
   AuctionType: yup.string().required(),
 
   Token: yup.object({

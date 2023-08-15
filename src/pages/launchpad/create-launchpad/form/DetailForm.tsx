@@ -33,7 +33,6 @@ import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
 
-// import { detailValidationSchema } from '../schema'
 import { IAuctionType, IFragmentReleaseTimes, IValues } from '../type'
 
 const defaultFragmentRelease = {
@@ -110,14 +109,6 @@ function SetFragmentReleaseTime({
                   }}
                   onUserInput={value => {
                     setItemValue(idx, 'radio', value.toString())
-
-                    // if (val > 100) {
-                    //   setItemValue(idx, 'radio', '100')
-                    // } else if (val < 0.01) {
-                    //   setItemValue(idx, 'radio', '')
-                    // } else {
-                    //   setItemValue(idx, 'radio', val)
-                    // }
                   }}
                   endAdornment={<>%</>}
                 />
@@ -359,7 +350,6 @@ const DetailForm = ({
                 <Title sx={{ fontSize: 20, color: '#171717' }}>
                   1 {!values.pool.TokenName ? 'USDT' : values.pool.TokenName} =
                 </Title>
-                {/* 小数点位数大于 精度时还没有报错？ */}
                 <FormItem placeholder="0.00" sx={{ flex: 1 }} name="pool.SwapRatio">
                   <NumberInput
                     value={values.pool.SwapRatio}
