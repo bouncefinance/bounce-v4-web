@@ -81,6 +81,7 @@ const CreateLaunchpad = () => {
       posts: ''
     }
     const pool: IDetailInitValue = {
+      id: 0,
       TokenLogo: {
         fileName: '',
         fileSize: 0,
@@ -138,8 +139,8 @@ const CreateLaunchpad = () => {
       chainId: chainInfoOpt?.find(item => item.ethChainId === pool.ChainId)?.id as number,
       releaseType: pool.releaseType,
       token0: pool.ContractAddress,
-      token0Decimals: pool.ContractDecimalPlaces,
-      token0Logo: pool.Token.tokenToLogoURI,
+      token0Decimals: Number(pool.ContractDecimalPlaces),
+      token0Logo: pool.TokenLogo.fileUrl,
       token0Name: pool.TokenName,
       token0Symbol: pool.TokenName,
       totalAmount0: pool.TotalSupply,

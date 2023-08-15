@@ -48,6 +48,7 @@ export enum IAuctionTypeMap {
   'Playable Auction' = 100
 }
 export interface IDetailInitValue {
+  id: number
   fragmentReleaseTimes: IFragmentReleaseTimes[]
   TokenLogo: IFile
   TokenName: string
