@@ -12,7 +12,7 @@ import StageLine from 'pages/auction/dutchAuction/components/userBlock/stageLine
 import PoolTextItem from 'pages/auction/dutchAuction/components/poolTextItem'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 import { useIsMDDown } from 'themes/useTheme'
-import OneTime from '../oneTime'
+import OneTime from '../delay'
 import { useActiveWeb3React } from 'hooks'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'

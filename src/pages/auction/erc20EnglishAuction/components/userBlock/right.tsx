@@ -63,6 +63,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
       setAmount('0')
     }
   }
+  console.log('step', isUserClaimed, actionStep, ActionStep.ClosedAndNotClaim)
 
   if (!poolInfo) return <></>
   if (!account) {
