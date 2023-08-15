@@ -845,7 +845,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       )}
     </Stack>
   ) : isOutBid ? (
-    <Box sx={{ backgroundColor: '#20201e' }} padding={32}>
+    <Box sx={{ backgroundColor: '#20201e' }} padding={32} mb={64}>
       <Typography sx={{ fontSize: 16, fontFamily: 'Inter', color: '#fff' }}>
         {`You didn't succeed in the auction and your tokens are returned to your wallet with gas compensation.(Your Bid Amount: ${
           poolInfo.participant.accountBidAmount?.toSignificant() || '-'
