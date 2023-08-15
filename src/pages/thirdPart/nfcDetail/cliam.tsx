@@ -372,7 +372,7 @@ const ClaimDetail = ({
         loading={submitted.submitted}
         disabled={Number(poolInfo?.claimAt) > getCurrentTimeStamp()}
       >
-        Cliam
+        claim
       </PlaceBidBtn>
     )
   }

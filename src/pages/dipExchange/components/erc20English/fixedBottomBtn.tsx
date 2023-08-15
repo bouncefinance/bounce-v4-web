@@ -134,7 +134,7 @@ const FixedBottomBtn = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
           }}
         >
           <ComBtn fullWidth disabled={poolInfo.participant.claimed} onClick={() => scrollTopBtn()}>
-            Cliam
+            Claim
           </ComBtn>
         </Box>
       )
