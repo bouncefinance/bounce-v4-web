@@ -11,6 +11,7 @@ import Icon2 from 'components/Fundo/assets/img/icon2.png'
 import Icon3 from 'components/Fundo/assets/img/icon3.png'
 import Icon4 from 'components/Fundo/assets/img/icon4.png'
 import Icon5 from 'components/Fundo/assets/img/icon5.png'
+import { ReactComponent as DoneStausSvg } from 'components/Fundo/assets/img/done.svg'
 import ProductIcon1 from 'components/Fundo/assets/img/productIcon1.png'
 import { getCurrentTimeStamp } from 'utils'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
@@ -23,7 +24,6 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import { PageStep } from '../nfcDetail'
-
 enum AnimateStep {
   'default' = 0,
   'lineDown' = 1,
@@ -334,7 +334,37 @@ const ClaimDetail = ({
     if (chainId !== poolInfo?.ethChainId) {
       return <PlaceBidBtn onClick={() => switchNetwork(poolInfo?.ethChainId)}>Switch Network</PlaceBidBtn>
     }
-    if (!isWinner || poolInfo.participant.claimed) return <></>
+    if (!isWinner) return <></>
+    if (isWinner && poolInfo.participant.claimed)
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+          gap={'24px'}
+        >
+          <DoneStausSvg />
+          <Typography
+            sx={{
+              color: '#fff',
+              leadingTrim: 'both',
+              textEdge: 'cap',
+              fontVariantNumeric: `'lining-nums proportional-nums'`,
+              fontFamily: `'Public Sans'`,
+              fontSize: '18px',
+              fontStyle: `'italic'`,
+              fontWeight: 100,
+              lineHeight: '18px',
+              textAlign: 'center'
+            }}
+          >
+            You already CLAIMED
+          </Typography>
+        </Box>
+      )
     return (
       <PlaceBidBtn
         onClick={() => toBidderClaim()}
@@ -417,6 +447,7 @@ const ClaimDetail = ({
           style={{
             position: 'relative',
             width: '60%',
+            maxWidth: '200px',
             height: 'auto',
             cursor: 'pointer',
             margin: '40px auto'
