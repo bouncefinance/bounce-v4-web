@@ -1,6 +1,7 @@
 import { AuctionType } from 'bounceComponents/create-auction-pool/types'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { ChainId } from 'constants/chain'
+import EthUrl from 'assets/images/eth_logo.png'
 
 export const AUCTION_TYPES: string[] = Object.values(AuctionType)
 
@@ -64,7 +65,8 @@ export const SEPOLIA_TOKEN_LIST: Token[] = [
     address: '0x0000000000000000000000000000000000000000',
     symbol: 'ETH',
     decimals: 18,
-    logoURI: ''
+    logoURI: '',
+    smallUrl: EthUrl
   },
   {
     chainId: ChainId.SEPOLIA,

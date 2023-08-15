@@ -54,7 +54,7 @@ import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
 import FoundoDetail from 'pages/thirdPart/foundoBidDetail'
-
+import FoundoNfcDetail from 'pages/thirdPart/nfcDetail'
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
@@ -81,6 +81,8 @@ import PerformKYCVerification from 'bounceComponents/profile/account/components/
 import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
+import TokenToolBox from './tokenToolBox'
+import Loyaltyprogram from './loyaltyprogram'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -130,6 +132,7 @@ export default function App() {
 
                   <Route path={routes.auction.fixedPrice} element={<AuctionFixedPricePoolId />} />
                   <Route path={routes.auction.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
+                  {/* <Route path={routes.auction.mutantEnglishAuction} element={<AuctionFixedSwap1155PoolId />} /> */}
                   <Route path={routes.auction.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                   <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
                   <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
@@ -138,6 +141,7 @@ export default function App() {
                   <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                   <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
                   <Route path={routes.auction.v2.fixedSwapNft} element={<AuctionFixedSwap1155PoolId />} />
+                  {/* <Route path={routes.auction.v2.mutantEnglishAuction} element={<AuctionFixedSwap1155PoolId />} /> */}
                   <Route path={routes.auction.v2.englishAuction} element={<EnglishAuctionNFTPoolId />} />
                   <Route path={routes.auction.v2.randomSelection} element={<RandomSelectionPricePoolId />} />
 
@@ -176,7 +180,8 @@ export default function App() {
                   <Route path={routes.account.adsAuction} element={<AccountAdsAuction />} />
                   <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
-                  <Route path={routes.thirdPart.foundoDetail} element={<FoundoDetail />} />
+                  <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
+                  <Route path={routes.foundo.foundoNfcDetail + '/*'} element={<FoundoNfcDetail />} />
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}
@@ -195,6 +200,9 @@ export default function App() {
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
+
+                  <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
+                  <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

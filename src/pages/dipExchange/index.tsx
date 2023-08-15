@@ -29,6 +29,7 @@ interface poolsDataItem {
     id: number
   }
 }
+
 const DipExchange = () => {
   const nowDate = new Date().valueOf()
   const oneDay = 60 * 60 * 24 * 1000
@@ -45,15 +46,15 @@ const DipExchange = () => {
         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
         // english auction
         dip: {
-          startAt: 1692003300000,
-          closeAt: 1692004800000,
-          id: 20460
+          startAt: 1692093900000,
+          closeAt: 1692095700000,
+          id: 20490
         },
         // dutch aution
         dgt: {
-          startAt: 1692003600000,
-          closeAt: 1692005400000,
-          id: 20461
+          startAt: 1692093660000,
+          closeAt: 1692095700000,
+          id: 20489
         }
       }
     })

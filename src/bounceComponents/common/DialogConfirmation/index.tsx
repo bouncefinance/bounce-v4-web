@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { create, NiceModalHocProps, useModal } from '@ebay/nice-modal-react'
 import Lottie from 'react-lottie'
-import bounce_loading from './assets/bounce-loading.json'
+import bounce_loading from '../BounceAnime/bounce-loading.json'
 import { ReactComponent as CloseSVG } from './assets/close.svg'
 
 const defaultOptions = {

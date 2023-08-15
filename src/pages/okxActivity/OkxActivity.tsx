@@ -139,7 +139,7 @@ export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
       })
     }
@@ -180,7 +180,7 @@ export function Activity({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) {
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toClaim
       })
     }

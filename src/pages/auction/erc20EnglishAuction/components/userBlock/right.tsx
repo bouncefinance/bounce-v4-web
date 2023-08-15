@@ -13,6 +13,7 @@ import { useActiveWeb3React } from 'hooks'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { PoolSaleInfo } from './poolSaleInfo'
+import { useCountDown } from 'ahooks'
 const RightBox = () => {
   const { data: poolInfo } = useErc20EnglishAuctionPoolInfo()
   if (poolInfo) return <RightBoxContent poolInfo={poolInfo}></RightBoxContent>
@@ -21,6 +22,9 @@ const RightBox = () => {
 
 const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const [amount, setAmount] = useState('')
+  const [countdown] = useCountDown({
+    targetDate: poolInfo.claimAt * 1000
+  })
   const isUserJoined = useMemo(
     () => Number(poolInfo?.participant.swappedAmount0),
     [poolInfo?.participant.swappedAmount0]
@@ -28,8 +32,8 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const isUserClaimed = useMemo(() => {
-    return Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
-  }, [poolInfo.participant.currencyCurClaimableAmount])
+    return countdown === 0 && Number(poolInfo.participant.currencyCurClaimableAmount?.toExact()) <= 0
+  }, [countdown, poolInfo.participant.currencyCurClaimableAmount])
   const [actionStep, setActionStep] = useState<ActionStep>(ActionStep.UpComing)
 
   useEffect(() => {
@@ -59,6 +63,7 @@ const RightBoxContent = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
       setAmount('0')
     }
   }
+  console.log('step', isUserClaimed, actionStep, ActionStep.ClosedAndNotClaim)
 
   if (!poolInfo) return <></>
   if (!account) {

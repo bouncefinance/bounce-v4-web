@@ -9,6 +9,8 @@ import { useCallback } from 'react'
 import { poolWinnerInfoCommit } from 'api/fundo'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
+import { show } from '@ebay/nice-modal-react'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 
 const InputBox = styled(Input)(({ theme }) => ({
   height: '48px',
@@ -108,6 +110,13 @@ const BidDialog = ({ handleClose, submitCallback }: { handleClose: () => void; s
         })
         handleClose && handleClose()
         submitCallback && submitCallback()
+        show(DialogDarkTips, {
+          iconType: 'success',
+          againBtn: 'OK',
+          title: 'Success',
+          content: `You have successfully submit your shipping information.
+          We will prepare your goods for you as soon as possible`
+        })
       } catch (error) {}
     },
     [account, handleClose, signMessage, submitCallback]

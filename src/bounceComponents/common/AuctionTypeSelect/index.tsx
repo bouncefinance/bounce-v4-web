@@ -29,7 +29,10 @@ export default function AuctionTypeSelect({
         return [{ label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }]
       }
       if (ercType === ERCType.ERC721) {
-        return [{ label: 'English Auction NFT', value: PoolType.ENGLISH_AUCTION_NFT }]
+        return [
+          { label: 'English Auction NFT', value: PoolType.ENGLISH_AUCTION_NFT },
+          { label: 'Mutant English Auction', value: PoolType.MUTANT_ENGLISH_AUCTION_NFT }
+        ]
       }
       return [
         { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft },

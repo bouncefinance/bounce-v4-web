@@ -91,7 +91,7 @@ const ClaimBlock = ({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toClaim
       })
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
@@ -100,6 +100,7 @@ const ClaimBlock = ({
   //   const isNotTimeToClaim = useMemo(() => {
   //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   //   }, [poolInfo?.claimAt])
+
   const claimStatus = useMemo(() => {
     if (poolInfo.status === PoolStatus.Closed && countdown > 0) {
       return ClaimStatus.NotTimeToClaim
@@ -112,6 +113,8 @@ const ClaimBlock = ({
       return ClaimStatus.Claimed
     }
   }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
+  console.log('status', claimStatus, ClaimStatus.NotTimeToClaim, ClaimStatus.Claimed)
+
   if (!account) {
     return <ConnectWalletButton />
   }

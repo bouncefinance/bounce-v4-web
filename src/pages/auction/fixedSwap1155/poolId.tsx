@@ -15,6 +15,7 @@ import useBreakpoint from '../../../hooks/useBreakpoint'
 const FixedSwapPoolPageContent = () => {
   const { account } = useActiveWeb3React()
   const { data: poolInfo, run: getPoolInfo } = useNftPoolInfo()
+  console.log('🚀 ~ file: poolId.tsx:18 ~ FixedSwapPoolPageContent ~ poolInfo:', poolInfo)
   const isBlock = useCurrentRegionBlock(poolInfo?.ethChainId, poolInfo?.poolId)
   const isMobile = useBreakpoint('lg')
 

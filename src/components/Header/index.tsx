@@ -22,6 +22,7 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
+
 interface TabContent {
   title: string
   route?: string
@@ -125,7 +126,7 @@ const transparentRoutes = [
   routes.launchpad.bladeDao,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.poseiswapAuction,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.OmegaAuction,
   routes.thirdPart.TypeitAuction,
@@ -135,14 +136,15 @@ const transparentRoutes = [
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
-  routes.thirdPart.DipExchange
+  routes.thirdPart.DipExchange,
+  routes.foundo.foundoDetail + '/*'
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
 
 export const whiteLogoRoutes = [
   routes.launchpad.bladeDao,
-  routes.thirdPart.foundoDetail,
+  routes.foundo.foundoDetail,
   routes.launchpad.bladeDaoInfo,
   routes.thirdPart.TypeitAuction,
   routes.thirdPart.TypeitAuctionWhitelist,
@@ -150,7 +152,8 @@ export const whiteLogoRoutes = [
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
-  routes.thirdPart.DipExchange
+  routes.thirdPart.DipExchange,
+  routes.foundo.foundoDetail + '/*'
 ]
 
 export default function Header() {
@@ -174,7 +177,7 @@ export default function Header() {
   const { pathname } = useLocation()
 
   const mobileHideHeader = useMemo(() => {
-    return pathname.includes('okxActivity')
+    return pathname.includes('okxActivity') || pathname.includes('nfc_detail')
   }, [pathname])
 
   const navigate = useNavigate()
@@ -258,7 +261,13 @@ export default function Header() {
     >
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
-      <StyledAppBar isTransparent={isTransparentRoute} sx={headerBg}>
+      <StyledAppBar
+        isTransparent={isTransparentRoute}
+        sx={{
+          display: 'flex',
+          ...headerBg
+        }}
+      >
         <Box display="flex" alignItems="center">
           <MainLogo id={'logo'} to={'/'}>
             <Image

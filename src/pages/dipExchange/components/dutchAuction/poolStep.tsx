@@ -9,6 +9,7 @@ import moment from 'moment'
 import FinalTokenclaim from './finalTokenclaim'
 import SubscriptionPeriod from './subscriptionPeriod'
 import BidHistory from './bidHistory'
+import { useActiveWeb3React } from 'hooks'
 const StepCom = styled(Stepper)(() => ({
   '.MuiStepLabel-root': {
     padding: 0
@@ -46,6 +47,7 @@ const StepCom = styled(Stepper)(() => ({
 }))
 const PoolStep = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
   const [activeStep, setActiveStep] = useState<number>(0)
+  const { account } = useActiveWeb3React()
   useEffect(() => {
     if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
       setActiveStep(0)
@@ -96,7 +98,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               </Typography>
               {activeStep === 0 && <SubscriptionPeriod poolInfo={poolInfo} />}
               {activeStep === 1 && <FinalTokenclaim poolInfo={poolInfo} />}
-              <BidHistory poolInfo={poolInfo} />
+              {account && <BidHistory poolInfo={poolInfo} />}
             </StepContent>
           </Step>
         ))}
