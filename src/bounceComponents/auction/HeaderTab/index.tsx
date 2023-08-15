@@ -50,9 +50,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     'Private Launchpad',
     'Auction',
     'Real World Collectibles Auction',
-    'Ads Auction'
-    // 'Token ToolBox',
-    // 'Bounce Loyalty program'
+    'Ads Auction',
+    'Token ToolBox',
+    'Bounce Loyalty program'
   ]
   const auctionTabs = Object.values(auctionTabMap)
 
