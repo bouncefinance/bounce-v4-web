@@ -4,7 +4,7 @@ import ComingSoon from 'pages/ComingSoon'
 import FooterPc from 'components/Footer/FooterPc'
 import useBreakpoint from 'hooks/useBreakpoint'
 
-export default function AdsAuction({ sx }: { sx?: SxProps<Theme> | undefined }) {
+export default function LoyaltyProgram({ sx }: { sx?: SxProps<Theme> | undefined }) {
   const isSm = useBreakpoint('sm')
   return (
     <>
@@ -15,7 +15,7 @@ export default function AdsAuction({ sx }: { sx?: SxProps<Theme> | undefined }) 
         }}
       >
         <HeaderTab />
-        <ComingSoon prompt={'The Ads Auction will be available soon. Please stay tuned.'} />
+        <ComingSoon prompt={'The Bounce Loyalty Program will be available soon. Please stay tuned.'} />
       </Box>
       <FooterPc />
     </>
