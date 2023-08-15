@@ -50,9 +50,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     'Private Launchpad',
     'Auction',
     'Real World Collectibles Auction',
-    'Ads Auction',
-    'Token ToolBox',
-    'Bounce Loyalty program'
+    'Ads Auction'
+    // 'Token ToolBox',
+    // 'Bounce Loyalty program'
   ]
   const auctionTabs = Object.values(auctionTabMap)
 
@@ -107,6 +107,8 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     >
       <Box
         sx={{
+          width: 'max-content',
+          maxWidth: '100%',
           marginTop: '32px',
           flexFlow: 'row nowrap',
           justifyContent: 'flex-start',
@@ -117,7 +119,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
           borderRadius: '10px',
           overflowX: 'scroll',
           whiteSpace: 'nowrap',
-          maxWidth: 1100,
+
           margin: isSm ? ' 8px 14px' : '',
           '&::-webkit-scrollbar': {
             display: 'none'
