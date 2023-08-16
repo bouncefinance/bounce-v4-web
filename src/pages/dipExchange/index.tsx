@@ -35,7 +35,7 @@ const DipExchange = () => {
   const oneDay = 60 * 60 * 24 * 1000
   // all activities line data
   //   const poolsData: poolsDataItem[] = useMemo(() => [], [])
-  const poolsData: poolsDataItem[] = Array(10)
+  const poolsData: poolsDataItem[] = Array(7)
     .fill({
       timaSteamp: nowDate - oneDay * 2,
       active: false
@@ -52,8 +52,8 @@ const DipExchange = () => {
         },
         // dutch aution
         dgt: {
-          startAt: 1692237600000,
-          closeAt: 1692267000000,
+          startAt: 1692158400000,
+          closeAt: 1692173400000,
           id: 20492
         }
       }
