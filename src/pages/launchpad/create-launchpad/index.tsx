@@ -12,6 +12,7 @@ import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useUserInfo } from 'state/users/hooks'
 
 enum CreTab {
   'BASIC' = 1,
@@ -45,12 +46,16 @@ interface ICreComProps {
 // }
 const CreateLaunchpad = () => {
   const { tab, id } = useQueryParams()
-  const { loading, data } = useRequest(() => {
-    return getUserLaunchpadInfo({})
-  })
+  const { token } = useUserInfo()
+
+  const { loading, data } = useRequest(
+    () => {
+      return getUserLaunchpadInfo({})
+    },
+    { ready: !!token }
+  )
   console.log('loading, data')
   console.log(loading, data)
-
   const [curTab, setCurTab] = useState(Number(tab) ?? CreTab.POOL)
   const curProps = useMemo<ICreComProps>(() => {
     const props: ICreComProps = {
@@ -65,6 +70,7 @@ const CreateLaunchpad = () => {
   }, [curTab, id, data])
 
   console.log('props')
+
   console.log(curProps)
 
   return <LaunchpadForm {...curProps} />
