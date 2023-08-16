@@ -16,7 +16,9 @@ const homeShowList = [
   routes.tokenAuction.index,
   routes.nftAuction.index,
   routes.realAuction.index,
-  routes.adsAuction.index
+  routes.adsAuction.index,
+  routes.tokenToolBox.index,
+  routes.loyaltyprogram.index
 ]
 
 const sessionStorage_KYC_HIDE_NOTICE = 'sessionStorage_KYC_HIDE_NOTICE'
