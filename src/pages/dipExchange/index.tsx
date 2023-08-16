@@ -46,15 +46,15 @@ const DipExchange = () => {
         active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
         // english auction
         dip: {
-          startAt: 1692158400000,
-          closeAt: 1692174000000,
-          id: 20491
+          startAt: 1692201600000,
+          closeAt: 1692288000000,
+          id: 20497
         },
         // dutch aution
         dgt: {
-          startAt: 1692158400000,
-          closeAt: 1692173400000,
-          id: 20492
+          startAt: 1692288000000,
+          closeAt: 1692374400000,
+          id: 20498
         }
       }
     })

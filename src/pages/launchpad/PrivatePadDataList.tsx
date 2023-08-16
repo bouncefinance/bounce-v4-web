@@ -780,16 +780,16 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         value: ['ERC20 English Auction']
       },
       {
-        title: ['dipTokenOffered'],
+        title: ['DIPTokenOffered'],
         value: 'TBD $DIP'
       },
       {
-        title: ['dgtTokenOffered'],
+        title: ['DGTTokenOffered'],
         value: 'TBD $DGP'
       },
       {
         title: ['DIP Auction Method'],
-        value: 'ERC20 Dunch Auction'
+        value: 'ERC20 Dutch Auction'
       }
     ],
     isFAQ: true
