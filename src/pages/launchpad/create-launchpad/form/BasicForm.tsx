@@ -12,6 +12,7 @@ import { basicSchema } from '../schema'
 import { IBasicInfoParams, ICommunity } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { IFile } from 'bounceComponents/common/Uploader'
+import { IUserLaunchpadInfo } from 'api/user/type'
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -30,10 +31,10 @@ const communityInfo = [
   { title: 'Medium Url', placeholder: 'eg. https://medium.com/bounce_finance' },
   { title: 'Discord Invitation Url', placeholder: 'eg. https://medium.com/bounce_finance' }
 ]
-const BasicForm = ({ sx }: { sx?: SxProps }) => {
+const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLaunchpadInfo }) => {
   const { chainId } = useActiveWeb3React()
   const isSm = useBreakpoint('sm')
-  const initValue: IBasicInfoParams = {
+  const initValue = launchpadInfo?.basicInfo ?? {
     id: 0,
     banner: {
       fileName: '',

@@ -102,7 +102,7 @@ const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo 
             ))}
           </Stack>
 
-          <BasicForm sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }} />
+          <BasicForm launchpadInfo={launchpadInfo} sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }} />
           <DetailForm sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }} />
         </ContainerBox>
         <FooterBox>
