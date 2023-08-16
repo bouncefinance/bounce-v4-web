@@ -81,7 +81,7 @@ export interface IPoolInfoParams {
   token0Logo?: string | IFile
   token0Name?: string
   token0Symbol?: string
-  totalAmount0?: string
+  totalAmount0: string
   token1?: string
   tokenId?: string
   poolId?: number

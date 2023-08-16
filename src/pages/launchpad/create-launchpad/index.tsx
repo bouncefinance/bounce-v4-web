@@ -1,214 +1,81 @@
-import { Box, Stack, Typography, styled } from '@mui/material'
+import { useQueryParams } from 'hooks/useQueryParams'
+import React, { useMemo, useState } from 'react'
+import { useRequest } from 'ahooks'
+import { IUserLaunchpadInfo } from 'api/user/type'
+import { getUserLaunchpadInfo } from 'api/user'
+import { Box, Stack, styled, Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
-import { useMemo, useState } from 'react'
-import { HeadTitle, SubmitComp } from './form/BaseComponent'
+
+import { HeadTitle } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
+
 import useBreakpoint from 'hooks/useBreakpoint'
-import { ChainId } from 'constants/chain'
-import {
-  IDetailInitValue,
-  IBasicInfoParams,
-  IAuctionType,
-  ICommunity,
-  IValues,
-  ITab,
-  IPoolInfoParams,
-  IAuctionTypeMap
-} from './type'
-import { useActiveWeb3React } from 'hooks'
-import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
-import { Formik } from 'formik'
-import { createLaunchpadSchema } from './schema'
-import { useRequest } from 'ahooks'
-import { useOptionDatas } from 'state/configOptions/hooks'
-import { show } from '@ebay/nice-modal-react'
-import DialogTips from 'bounceComponents/common/DialogTips'
-import { updateLaunchpadBasic, updateLaunchpadPool } from 'api/user'
-import { IFile } from 'bounceComponents/common/Uploader'
-import { useNavigate } from 'react-router-dom'
-const community: ICommunity[] = [
-  { communityName: 'twitter', communityLink: '' },
-  { communityName: 'telegram', communityLink: '' },
-  { communityName: 'facebook', communityLink: '' },
-  { communityName: 'youtube', communityLink: '' },
-  { communityName: 'subreddit', communityLink: '' },
-  { communityName: 'medium', communityLink: '' },
-  { communityName: 'discord', communityLink: '' }
-]
+
+enum CreTab {
+  'BASIC' = 1,
+  'POOL' = 2
+}
+
+interface ICreComProps {
+  tab?: CreTab
+  id?: number
+  setTab: (tab: CreTab) => void
+  launchpadInfo: IUserLaunchpadInfo
+}
+// const launchpadInfo: IUserLaunchpadInfo = {
+//   basicInfo: {
+//     banner: '',
+//     chainId: 0,
+//     community: [],
+//     description: '',
+//     id: 0,
+//     projectLogo: '',
+//     projectMobilePicture: '',
+//     projectName: '',
+//     projectPicture: '',
+//     roadmap: '',
+//     tokennomics: '',
+//     website: '',
+//     whitepaperLink: ''
+//   },
+//   list: [{ id: 1, category: 1, chainId: 5, releaseType: 0, ratio: '0.001' }],
+//   total: 1
+// }
 const CreateLaunchpad = () => {
-  const { chainId, account } = useActiveWeb3React()
-  const initValue = useMemo<IValues>(() => {
-    const basic: IBasicInfoParams = {
-      id: 0,
-      banner: {
-        fileName: '',
-        fileSize: 0,
-        fileThumbnailUrl: '',
-        fileType: '',
-        fileUrl: ''
-      },
-      projectMobilePicture: {
-        fileName: '',
-        fileSize: 0,
-        fileThumbnailUrl: '',
-        fileType: '',
-        fileUrl: ''
-      },
-      projectLogo: {
-        fileName: '',
-        fileSize: 0,
-        fileThumbnailUrl: '',
-        fileType: '',
-        fileUrl: ''
-      },
-      projectPicture: {
-        fileName: '',
-        fileSize: 0,
-        fileThumbnailUrl: '',
-        fileType: '',
-        fileUrl: ''
-      },
-      community: community,
-      website: '',
-      whitepaperLink: '',
-      description: '',
-      tokennomics: '',
-      roadmap: '',
-      projectName: '',
-      chainId: chainId ?? ChainId.MAINNET,
-      posts: ''
+  const { tab, id } = useQueryParams()
+  const { loading, data } = useRequest(() => {
+    return getUserLaunchpadInfo({})
+  })
+  console.log('loading, data')
+  console.log(loading, data)
+
+  const [curTab, setCurTab] = useState(Number(tab) ?? CreTab.POOL)
+  const curProps = useMemo<ICreComProps>(() => {
+    const props: ICreComProps = {
+      tab: curTab,
+      setTab: setCurTab,
+      launchpadInfo: data?.data as IUserLaunchpadInfo
     }
-    const pool: IDetailInitValue = {
-      id: 0,
-      TokenLogo: {
-        fileName: '',
-        fileSize: 0,
-        fileThumbnailUrl: '',
-        fileType: '',
-        fileUrl: '',
-        id: 0
-      },
-      TokenName: '',
-      ChainId: chainId ?? ChainId.MAINNET,
-      ContractAddress: '',
-      ContractDecimalPlaces: 18,
-      AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
-      Token: {
-        tokenToAddress: '',
-        tokenToSymbol: '',
-        tokenToLogoURI: '',
-        tokenToDecimals: ''
-      },
-      SwapRatio: '',
-      TotalSupply: '',
-      startTime: null,
-      endTime: null,
-      allocationStatus: AllocationStatus.NoLimits,
-      allocationPerWallet: '',
-      releaseType: IReleaseType.Cliff,
-      delayUnlockingTime: null,
-      linearUnlockingStartTime: null,
-      linearUnlockingEndTime: null,
-      fragmentReleaseTimes: [],
-      fragmentReleaseSize: '',
-      isRefundable: true
+    if (id) {
+      props.id = Number(id)
     }
-    return { basic, pool }
-  }, [chainId])
-  const [tabActive, setTabActive] = useState(ITab.Basic)
-  const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
+    return props
+  }, [curTab, id, data])
+
+  console.log('props')
+  console.log(curProps)
+
+  return <LaunchpadForm {...curProps} />
+}
+export default CreateLaunchpad
+const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
+const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo }) => {
+  console.log('id, launchpadInfo')
+  console.log(id, launchpadInfo)
+
   const isSm = useBreakpoint('sm')
-  const navigate = useNavigate()
-  const { chainInfoOpt } = useOptionDatas()
-  const handleSubmit = (values: IValues) => {
-    const { basic, pool } = values
-    const basicParams: IBasicInfoParams = {
-      ...basic,
-      chainId: chainInfoOpt?.find(item => item.ethChainId === basic.chainId)?.id as number,
-      banner: (basic.banner as IFile).fileUrl,
-      projectLogo: (basic.projectLogo as IFile).fileUrl,
-      projectMobilePicture: (basic.projectMobilePicture as IFile).fileUrl,
-      projectPicture: (basic.projectPicture as IFile).fileUrl
-    }
-    const poolParams: IPoolInfoParams = {
-      id: 0,
-      creator: account,
-      category: IAuctionTypeMap[pool.AuctionType],
-      chainId: chainInfoOpt?.find(item => item.ethChainId === pool.ChainId)?.id as number,
-      releaseType: pool.releaseType,
-      token0: pool.ContractAddress,
-      token0Decimals: Number(pool.ContractDecimalPlaces),
-      token0Logo: pool.TokenLogo.fileUrl,
-      token0Name: pool.TokenName,
-      token0Symbol: pool.TokenName,
-      totalAmount0: pool.TotalSupply,
-      token1: pool.Token.tokenToAddress,
-      ratio: pool.SwapRatio,
-      openAt: pool.startTime?.valueOf(),
-      closeAt: pool.endTime?.valueOf(),
-      reverseEnabled: pool.isRefundable
-    }
-    if (pool.allocationStatus === AllocationStatus.Limited) {
-      poolParams['maxAmount1PerWallet'] = `${
-        Number(pool.allocationPerWallet) * Math.pow(10, Number(pool.Token.tokenToDecimals))
-      }`
-    }
-    const releaseType = Number(pool.releaseType)
-    if (releaseType !== IReleaseType.Instant) {
-      if (releaseType === IReleaseType.Cliff) {
-        poolParams.releaseData = [{ startAt: pool.delayUnlockingTime?.valueOf() as number, endAtOrRatio: 0 }]
-      }
-      if (releaseType === IReleaseType.Linear) {
-        poolParams.releaseData = [
-          {
-            startAt: pool.linearUnlockingStartTime?.valueOf() as number,
-            endAtOrRatio: pool.linearUnlockingEndTime?.valueOf() as number
-          }
-        ]
-      }
-      if (releaseType === IReleaseType.Fragment) {
-        const releaseData: { startAt: number; endAtOrRatio: number }[] = []
-        pool.fragmentReleaseTimes.forEach(item => {
-          releaseData.push({
-            startAt: item.startAt?.valueOf() as number,
-            endAtOrRatio: Number(item.radio)
-          })
-        })
-        poolParams.releaseData = releaseData
-      }
-    }
-    return Promise.all([updateLaunchpadBasic(basicParams), updateLaunchpadPool(poolParams)])
-  }
-  const handleClose = () => {
-    navigate('/account/private_launchpad', { replace: true })
-  }
-  const { runAsync, loading } = useRequest(handleSubmit, { manual: true })
-  const onSubmit = (values: IValues) => {
-    runAsync(values)
-      .then(() => {
-        show(DialogTips, {
-          iconType: 'success',
-          cancelBtn: 'confirm',
-          title: 'Congratulations!',
-          content: 'You have successfully submit, Please wait patiently for review.',
-          onClose: handleClose,
-          onCancel: handleClose
-        })
-      })
-      .catch(() => {
-        show(DialogTips, {
-          iconType: 'error',
-          cancelBtn: 'confirm',
-          title: 'Oops..',
-          content: 'Something went wrong'
-        })
-      })
-  }
-  const setTab = (tab: ITab) => {
-    setTabActive(tab)
-  }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Box>
@@ -216,7 +83,7 @@ const CreateLaunchpad = () => {
           <HeadTitle>Create Program</HeadTitle>
           <Stack sx={{ flexDirection: 'row', mt: isSm ? 32 : 48 }}>
             {tabs.map((t, i) => (
-              <Tab onClick={() => setTabActive(i)} key={i} className={tabActive === i ? 'active' : ''}>
+              <Tab onClick={() => setTab(i + 1)} key={i} className={tab === i + 1 ? 'active' : ''}>
                 {Array.isArray(t) ? (
                   <>
                     <TabTitle1>{t[0]}</TabTitle1>
@@ -228,31 +95,9 @@ const CreateLaunchpad = () => {
               </Tab>
             ))}
           </Stack>
-          <Formik
-            onSubmit={onSubmit}
-            enableReinitialize
-            validationSchema={createLaunchpadSchema}
-            initialValues={initValue}
-          >
-            {({ values, setFieldValue, handleSubmit, errors, isValid }) => {
-              return (
-                <Box component={'form'} onSubmit={handleSubmit}>
-                  <BasicForm
-                    sx={{ display: tabActive === ITab.Basic ? 'block' : 'none' }}
-                    values={values}
-                    setFieldValue={setFieldValue}
-                  />
-                  <DetailForm
-                    sx={{ display: tabActive === ITab.Detail ? 'block' : 'none' }}
-                    values={values}
-                    setFieldValue={setFieldValue}
-                    errors={errors}
-                  />
-                  <SubmitComp loading={loading} errors={errors} isValid={isValid} setTab={setTab} curTab={tabActive} />
-                </Box>
-              )
-            }}
-          </Formik>
+
+          <BasicForm sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }} />
+          <DetailForm sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }} />
         </ContainerBox>
         <FooterBox>
           <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>
@@ -331,5 +176,3 @@ const TabTitle2 = styled(Typography)({
   textTransform: 'capitalize',
   color: '#959595'
 })
-
-export default CreateLaunchpad

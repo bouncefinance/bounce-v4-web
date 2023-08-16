@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import moment from 'moment'
 import { AllocationStatus, IReleaseType } from '../../../bounceComponents/create-auction-pool/types'
 import { isAddress } from 'utils'
-export const basicSchema = yup.object({
+const basicSchema = yup.object({
   banner: yup.object({
     fileName: yup.string(),
     fileSize: yup.number(),
@@ -119,7 +119,7 @@ export const basicSchema = yup.object({
       )
   )
 })
-export const poolSchema = yup.object({
+const poolSchema = yup.object({
   TokenLogo: yup.object({
     fileName: yup.string(),
     fileSize: yup.number(),
@@ -321,7 +321,6 @@ export const poolSchema = yup.object({
   }),
   isRefundable: yup.boolean()
 })
-
 export const createLaunchpadSchema = yup.object({
   basic: basicSchema,
   pool: poolSchema

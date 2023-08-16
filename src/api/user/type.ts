@@ -4,6 +4,7 @@ import { VerifyStatus } from '../profile/type'
 import { IFile } from 'bounceComponents/common/Uploader'
 import { Post } from '../type'
 import { ChainId } from 'constants/chain'
+import { IBasicInfoParams, IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
 
 export enum ACCOUNT_TYPE {
   EMAIL = 1,
@@ -349,3 +350,11 @@ export interface UserServiceResponse {
   avatar: string
   userId: number
 }
+export interface GetUserLaunchpadInfo {
+  category?: number
+  chainId?: number
+  launchpadId?: number
+  limit?: number
+  offset?: number
+}
+export type IUserLaunchpadInfo = { basicInfo: IBasicInfoParams; list: IPoolInfoParams[]; total: number }

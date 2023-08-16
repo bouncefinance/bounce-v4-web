@@ -32,7 +32,9 @@ import {
   IChangeEmailParams,
   GetUserPermitSignResponse,
   GetUserTokenListParams,
-  SearchTokenListParams
+  SearchTokenListParams,
+  GetUserLaunchpadInfo,
+  IUserLaunchpadInfo
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -189,6 +191,6 @@ export const updateLaunchpadBasic = (params: IBasicInfoParams) => {
 export const updateLaunchpadPool = (params: IPoolInfoParams) => {
   return ApiInstance.post('/user/launchpad/pool', params)
 }
-// export const getLaunchpadInfo = () => {
-//   return ApiInstance.post('/user/launchpad/pool/list', { chainId: 11155111 })
-// }
+export const getUserLaunchpadInfo = (params: GetUserLaunchpadInfo) => {
+  return ApiInstance.post<IUserLaunchpadInfo>('/user/launchpad/pool/list', params)
+}
