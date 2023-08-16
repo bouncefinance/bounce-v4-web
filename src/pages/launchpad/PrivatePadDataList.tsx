@@ -12,7 +12,7 @@ import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.s
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
-import { ReactComponent as InstagramSvg } from 'assets/socialLinksIcon/instagram-dashboard.svg'
+import { ReactComponent as InstagramSvg } from 'assets/imgs/profile/links/instagram.svg'
 import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
 
 import BlodeAvatar from './avatar/blade-icon.ico'
@@ -825,13 +825,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/deelance_com" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/deelanceofficial/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/deelanceofficial/" target="_blank">
+        <InstagramSvg width={40} />
       </Link>
     ],
     moreData: [
@@ -873,13 +868,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/deelance_com" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/deelanceofficial/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/deelanceofficial/" target="_blank">
+        <InstagramSvg width={40} />
       </Link>
     ],
     moreData: [
@@ -1062,13 +1052,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={5} href="https://twitter.com/Lasmetaio" target="_blank">
         <Twitter />
       </Link>,
-      <Link
-        key={6}
-        sx={{ width: '41.5px!important', height: '41.5px!important' }}
-        href="https://www.linkedin.com/company/lasmeta"
-        target="_blank"
-      >
-        <LinkinSvg width={41.5} height={41.5} />
+      <Link key={6} href="https://www.linkedin.com/company/lasmeta" target="_blank">
+        <LinkinSvg />
       </Link>
     ],
     moreData: [
@@ -1155,21 +1140,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/typeit_official/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/typeit_official/" target="_blank">
+        <InstagramSvg width={40} height={40} />
       </Link>,
-      <Link
-        key={6}
-        sx={{ width: '41.5px!important', height: '41.5px!important' }}
-        href=" https://www.linkedin.com/company/typeit-official"
-        target="_blank"
-      >
-        <LinkinSvg width={41.5} height={41.5} />
+      <Link key={6} href=" https://www.linkedin.com/company/typeit-official" target="_blank">
+        <LinkinSvg />
       </Link>
     ],
     moreData: [
@@ -1256,21 +1231,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/typeit_official/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/typeit_official/" target="_blank">
+        <InstagramSvg width={40} />
       </Link>,
-      <Link
-        key={6}
-        sx={{ width: '41.5px!important', height: '41.5px!important' }}
-        href=" https://www.linkedin.com/company/typeit-official"
-        target="_blank"
-      >
-        <LinkinSvg width={41.5} height={41.5} />
+      <Link key={6} href=" https://www.linkedin.com/company/typeit-official" target="_blank">
+        <LinkinSvg />
       </Link>
     ],
     moreData: [
