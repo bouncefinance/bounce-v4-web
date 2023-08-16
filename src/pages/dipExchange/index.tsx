@@ -13,6 +13,7 @@ import { PoolIndexType } from './components/poolTabs'
 import DutchAuction from './components/dutchAuction/dutctAuction'
 const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
 import Erc20English from './components/erc20English/erc20english'
+import { IS_TEST_ENV } from '../../constants'
 // interface poolsDataItem {
 //   timaSteamp: number
 //   active: boolean
@@ -34,40 +35,42 @@ const DipExchange = () => {
   //   const oneDay = 60 * 60 * 24 * 1000
   // all activities line data
   //   const poolsData: poolsDataItem[] = useMemo(() => [], [])
-  const poolsData = [
-    {
-      timaSteamp: 1692201600000,
-      active: 1692201600000 <= new Date().valueOf(),
-      // english auction
-      dip: {
-        startAt: 1692201600000,
-        closeAt: 1692288000000,
-        id: 20497
-      },
-      // dutch aution
-      dgt: {
-        startAt: 1692288000000,
-        closeAt: 1692374400000,
-        id: 20498
-      }
-    },
-    {
-      timaSteamp: 1692720000000,
-      active: 1692720000000 <= new Date().valueOf(),
-      // english auction
-      dip: {
-        startAt: 1692720000000,
-        closeAt: 1692806400000,
-        id: 20499
-      },
-      // dutch aution
-      dgt: {
-        startAt: 1692892800000,
-        closeAt: 1692979200000,
-        id: 20500
-      }
-    }
-  ]
+  const poolsData = !IS_TEST_ENV
+    ? []
+    : [
+        {
+          timaSteamp: 1692201600000,
+          active: 1692201600000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1692201600000,
+            closeAt: 1692288000000,
+            id: 20497
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1692288000000,
+            closeAt: 1692374400000,
+            id: 20498
+          }
+        },
+        {
+          timaSteamp: 1692720000000,
+          active: 1692720000000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1692720000000,
+            closeAt: 1692806400000,
+            id: 20499
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1692892800000,
+            closeAt: 1692979200000,
+            id: 20500
+          }
+        }
+      ]
   // last date higt light
   let lastActiveIndex = 0
   poolsData.map((item, index) => {
