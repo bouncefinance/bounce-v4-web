@@ -41,6 +41,7 @@ const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp
   if (!account) {
     return (
       <Box
+        id={'bidBtn'}
         sx={{
           flex: 317,
           padding: '16px 0'
@@ -53,6 +54,7 @@ const SubscriptRight = ({ poolInfo, maxValue }: { poolInfo: DutchAuctionPoolProp
   if (!isCurrentChainEqualChainOfPool) {
     return (
       <Box
+        id={'bidBtn'}
         sx={{
           flex: 317,
           padding: '16px 0'
