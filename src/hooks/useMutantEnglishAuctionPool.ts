@@ -416,7 +416,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
       if (!currentBidderAmount || !currentBidderAmount1) return
       const nextExceedAmount = JSBI.subtract(JSBI.BigInt(currentBidderAmount), JSBI.BigInt(currentBidderAmount1))
       const nextFee = JSBI.divide(
-        JSBI.multiply(JSBI.BigInt(currentBidderAmount1), JSBI.BigInt(txFeeRatioE18.toString())),
+        JSBI.multiply(JSBI.BigInt(currentBidderAmount), JSBI.BigInt(txFeeRatioE18.toString())),
         JSBI.BigInt(TX_FEE_DENOMINATOR)
       )
       return CurrencyAmount.fromRawAmount(t1, JSBI.subtract(nextExceedAmount, nextFee))
