@@ -1,4 +1,4 @@
-import { Box, styled, Typography, SxProps, Stack, Button, Switch, FormLabel } from '@mui/material'
+import { Box, styled, Typography, SxProps, Stack, Button, Switch, FormLabel, Tooltip } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Image from 'components/Image'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -44,7 +44,10 @@ export const HeadTitle = styled(Title)({
   }
 })
 
-export const SubmitComp = () => {
+export const SubmitComp = ({ isChange, loading }: { isChange: boolean; loading: boolean }) => {
+  console.log('isChange')
+  console.log(isChange)
+
   return (
     <Stack
       sx={{
@@ -85,26 +88,57 @@ export const SubmitComp = () => {
         >
           <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
         </Button>
-        <LoadingButton
-          type="submit"
-          variant="contained"
-          loadingPosition="start"
-          startIcon={<></>}
-          sx={{
-            padding: '20px 40px',
-            boxSizing: 'border-box',
-            background: '#121212',
-            '&:hover': { background: '#121212', border: 'none' },
-            '@media(max-width:600px)': {
-              width: 92,
-              height: 10,
-              padding: '16px 24px',
-              boxSizing: 'content-box'
-            }
-          }}
-        >
-          <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
-        </LoadingButton>
+        {!isChange && (
+          <Tooltip title="The form content has not changed at all.">
+            <span>
+              <LoadingButton
+                type="submit"
+                variant="contained"
+                loadingPosition="start"
+                disabled={true}
+                startIcon={<></>}
+                sx={{
+                  padding: '20px 40px',
+                  boxSizing: 'border-box',
+                  background: '#121212',
+                  '&:hover': { background: '#121212', border: 'none' },
+                  '@media(max-width:600px)': {
+                    width: 92,
+                    height: 10,
+                    padding: '16px 24px',
+                    boxSizing: 'content-box'
+                  }
+                }}
+              >
+                <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
+              </LoadingButton>
+            </span>
+          </Tooltip>
+        )}
+
+        {isChange && (
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loadingPosition="start"
+            startIcon={<></>}
+            loading={loading}
+            sx={{
+              padding: '20px 40px',
+              boxSizing: 'border-box',
+              background: '#121212',
+              '&:hover': { background: '#121212', border: 'none' },
+              '@media(max-width:600px)': {
+                width: 92,
+                height: 10,
+                padding: '16px 24px',
+                boxSizing: 'content-box'
+              }
+            }}
+          >
+            <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
+          </LoadingButton>
+        )}
       </Box>
       <Typography
         sx={{
@@ -200,7 +234,7 @@ export const FormUploadAdd = ({
         inputId={labelId}
         value={{ fileUrl: fileUrl }}
         onChange={(file: IFile) => {
-          setFieldValue(formItemName, file)
+          setFieldValue(formItemName, file.fileUrl)
         }}
         accept={['image/jpeg', 'image/png', 'image/webp']}
         tips={'Please do not exceed a file size of 10MB'}

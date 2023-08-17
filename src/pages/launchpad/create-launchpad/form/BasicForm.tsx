@@ -11,8 +11,14 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { basicSchema } from '../schema'
 import { IBasicInfoParams, ICommunity } from '../type'
 import { useActiveWeb3React } from 'hooks'
-import { IFile } from 'bounceComponents/common/Uploader'
 import { IUserLaunchpadInfo } from 'api/user/type'
+import { updateLaunchpadBasic } from 'api/user'
+import { show } from '@ebay/nice-modal-react'
+import { useMemo } from 'react'
+import { isEqual } from 'lodash'
+import { useRequest } from 'ahooks'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import { useOptionDatas } from 'state/configOptions/hooks'
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -31,52 +37,95 @@ const communityInfo = [
   { title: 'Medium Url', placeholder: 'eg. https://medium.com/bounce_finance' },
   { title: 'Discord Invitation Url', placeholder: 'eg. https://medium.com/bounce_finance' }
 ]
-const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLaunchpadInfo }) => {
+const BasicForm = ({
+  sx,
+  launchpadInfo,
+  first
+}: {
+  sx?: SxProps
+  launchpadInfo: IUserLaunchpadInfo
+  first: boolean
+}) => {
   const { chainId } = useActiveWeb3React()
   const isSm = useBreakpoint('sm')
-  const initValue = launchpadInfo?.basicInfo ?? {
-    id: 0,
-    banner: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
+  const { loading, runAsync, data } = useRequest(
+    (values: IBasicInfoParams) => {
+      return updateLaunchpadBasic(values)
     },
-    projectMobilePicture: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    projectLogo: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    projectPicture: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: ''
-    },
-    community: community,
-    website: '',
-    whitepaperLink: '',
-    description: '',
-    tokennomics: '',
-    roadmap: '',
-    projectName: '',
-    chainId: chainId ?? ChainId.MAINNET,
-    posts: ''
-  }
-  const onSubmit = (values: IBasicInfoParams) => {
-    console.log('submit')
-    console.log(values)
+    { manual: true }
+  )
+  const optionsDatas = useOptionDatas()
+
+  const initValue = useMemo(() => {
+    let defaultValue: IBasicInfoParams = {
+      id: 0,
+      banner: '',
+      projectMobilePicture: '',
+      projectLogo: '',
+      projectPicture: '',
+      community: community,
+      website: '',
+      whitepaperLink: '',
+      description: '',
+      tokennomics: '',
+      roadmap: '',
+      projectName: '',
+      chainId: chainId ?? ChainId.MAINNET,
+      posts: ''
+    }
+    if (launchpadInfo && launchpadInfo.basicInfo) {
+      defaultValue = { ...launchpadInfo.basicInfo }
+      defaultValue.chainId = ChainId.MAINNET
+      if (optionsDatas && optionsDatas.chainInfoOpt) {
+        const network = optionsDatas.chainInfoOpt?.find(item => item.id === launchpadInfo.basicInfo.chainId)
+        if (network) {
+          defaultValue.chainId = network.ethChainId as number
+        }
+      }
+    }
+    console.log('defaultValue')
+    console.log(defaultValue)
+
+    return defaultValue
+  }, [chainId, launchpadInfo, optionsDatas])
+
+  const onSubmit = async (values: IBasicInfoParams) => {
+    const body = { ...values, community }
+    body.chainId = optionsDatas.chainInfoOpt?.find(item => item.ethChainId === body.chainId)?.id as number
+    try {
+      await runAsync(body)
+      console.log('body')
+      console.log(body)
+      show(DialogDarkTips, {
+        iconType: 'success',
+        title: 'Сongratulations!',
+        content: 'You have successfully submit, Please wait patiently for review.',
+        cancelBtn: 'Continue filling in',
+        againBtn: 'Go Account',
+        onAgain: () => {},
+        onCancel: () => {},
+        onClose: () => {}
+        // sx: {
+        //   '& .MuiDialog-paper': {
+        //     backgroundColor: 'red',
+        //     // minWidth: 480,
+        //     borderRadius: 20,
+        //     width: 480
+        //   }
+        // }
+      })
+    } catch (error) {
+      show(DialogDarkTips, {
+        iconType: 'error',
+        title: 'Сongratulations!',
+        content: 'err',
+        cancelBtn: 'Continue filling in',
+        againBtn: 'Go Account',
+        onAgain: () => {},
+        onCancel: () => {},
+        onClose: () => {}
+      })
+    }
   }
 
   return (
@@ -104,7 +153,7 @@ const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLa
                     childForm={
                       <FormUploadAdd
                         formItemName="projectLogo"
-                        fileUrl={(values.projectLogo as IFile).fileUrl}
+                        fileUrl={values.projectLogo}
                         setFieldValue={setFieldValue}
                         labelId="ProjectLogoImg"
                         labelChild={<AddFile />}
@@ -118,10 +167,10 @@ const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLa
                     }
                     childForm={
                       <FormUploadAdd
-                        formItemName="projectPicture"
-                        fileUrl={(values.projectPicture as IFile).fileUrl}
+                        formItemName="banner"
+                        fileUrl={values.banner}
                         setFieldValue={setFieldValue}
-                        labelId="projectPicture"
+                        labelId="banner"
                         labelChild={<BigAddIcon />}
                         labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
                       />
@@ -138,8 +187,8 @@ const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLa
                       <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
                           <FormUploadAdd
-                            formItemName="banner"
-                            fileUrl={(values.banner as IFile).fileUrl}
+                            formItemName="projectPicture"
+                            fileUrl={values.projectPicture}
                             setFieldValue={setFieldValue}
                             labelId="ProjectPictureBigImg"
                             labelChild={<BigAddIcon />}
@@ -150,7 +199,7 @@ const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLa
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
                           <FormUploadAdd
                             formItemName="projectMobilePicture"
-                            fileUrl={(values.projectMobilePicture as IFile).fileUrl}
+                            fileUrl={values.projectMobilePicture}
                             setFieldValue={setFieldValue}
                             labelId="ProjectPictureSmallImg"
                             labelChild={<BigAddIcon />}
@@ -302,15 +351,7 @@ const BasicForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLa
                   ))}
                 </Stack>
               </BaseBox>
-
-              {/* <BaseBox>
-                  <Stack flexDirection={'row'} gap={5}>
-                    <Title sx={{ fontSize: 18, color: '#20201E' }}>Attachments</Title>
-                    <Title sx={{ fontSize: 18, color: '#959595' }}>(Optional)</Title>
-                  </Stack>
-                  <DropFile />
-                </BaseBox> */}
-              <SubmitComp />
+              <SubmitComp loading={loading} isChange={first || !isEqual(values, launchpadInfo?.basicInfo)} />
             </Stack>
           )
         }}

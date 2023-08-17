@@ -22,16 +22,16 @@ export interface IFragmentReleaseTimes {
   key?: number
 }
 export interface IBasicInfoParams {
-  banner: IFile | string
+  banner: string
   chainId: number | ChainId
   community: ICommunity[]
   description: string
   id: number
   posts?: string
-  projectLogo: IFile | string
-  projectMobilePicture: IFile | string
+  projectLogo: string
+  projectMobilePicture: string
   projectName: string
-  projectPicture: IFile | string
+  projectPicture: string
   roadmap: string
   tokennomics: string
   website: string

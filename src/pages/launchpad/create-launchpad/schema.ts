@@ -4,38 +4,10 @@ import moment from 'moment'
 import { AllocationStatus, IReleaseType } from '../../../bounceComponents/create-auction-pool/types'
 import { isAddress } from 'utils'
 export const basicSchema = yup.object({
-  banner: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your banner'),
-    id: yup.number()
-  }),
-  projectMobilePicture: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your project mobile picture'),
-    id: yup.number()
-  }),
-  projectLogo: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your project logo'),
-    id: yup.number()
-  }),
-  projectPicture: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your project picture'),
-    id: yup.number()
-  }),
+  banner: yup.string().required('Please upload your banner'),
+  projectMobilePicture: yup.string().required('Please upload your project mobile picture'),
+  projectLogo: yup.string().required('Please upload your project logo'),
+  projectPicture: yup.string().required('Please upload your project picture'),
   description: yup
     .string()
     .required('description is a required field')

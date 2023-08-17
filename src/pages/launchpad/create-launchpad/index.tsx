@@ -6,24 +6,22 @@ import { getUserLaunchpadInfo } from 'api/user'
 import { Box, Stack, styled, Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
-
 import { HeadTitle } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
-
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useUserInfo } from 'state/users/hooks'
-
+import Tooltip from 'bounceComponents/common/Tooltip'
 enum CreTab {
   'BASIC' = 1,
   'POOL' = 2
 }
-
 interface ICreComProps {
   tab?: CreTab
   id?: number
   setTab: (tab: CreTab) => void
   launchpadInfo: IUserLaunchpadInfo
+  first: boolean
 }
 // const launchpadInfo: IUserLaunchpadInfo = {
 //   basicInfo: {
@@ -47,40 +45,35 @@ interface ICreComProps {
 const CreateLaunchpad = () => {
   const { tab, id } = useQueryParams()
   const { token } = useUserInfo()
-
-  const { loading, data } = useRequest(
+  const [curTab, setCurTab] = useState(tab ? Number(tab) : CreTab.POOL)
+  const [isFirst, setIsFirst] = useState(false)
+  const { data } = useRequest(
     () => {
       return getUserLaunchpadInfo({})
     },
     { ready: !!token }
   )
-  console.log('loading, data')
-  console.log(loading, data)
-  const [curTab, setCurTab] = useState(Number(tab) ?? CreTab.POOL)
+  if (data && !data.data.basicInfo) {
+    if (!isFirst) setIsFirst(true)
+    if (curTab !== CreTab.BASIC) setCurTab(CreTab.BASIC)
+  }
   const curProps = useMemo<ICreComProps>(() => {
     const props: ICreComProps = {
       tab: curTab,
       setTab: setCurTab,
-      launchpadInfo: data?.data as IUserLaunchpadInfo
+      launchpadInfo: data?.data as IUserLaunchpadInfo,
+      first: isFirst
     }
     if (id) {
       props.id = Number(id)
     }
     return props
-  }, [curTab, id, data])
-
-  console.log('props')
-
-  console.log(curProps)
-
+  }, [curTab, id, data, isFirst])
   return <LaunchpadForm {...curProps} />
 }
 export default CreateLaunchpad
 const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
-const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo }) => {
-  console.log('id, launchpadInfo')
-  console.log(id, launchpadInfo)
-
+const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo, first }) => {
   const isSm = useBreakpoint('sm')
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -89,20 +82,31 @@ const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo 
           <HeadTitle>Create Program</HeadTitle>
           <Stack sx={{ flexDirection: 'row', mt: isSm ? 32 : 48 }}>
             {tabs.map((t, i) => (
-              <Tab onClick={() => setTab(i + 1)} key={i} className={tab === i + 1 ? 'active' : ''}>
+              <Tab onClick={() => !first && setTab(i + 1)} key={i} className={tab === i + 1 ? 'active' : ''}>
                 {Array.isArray(t) ? (
                   <>
                     <TabTitle1>{t[0]}</TabTitle1>
                     {!isSm && <TabTitle2>{t[1]}</TabTitle2>}
                   </>
                 ) : (
-                  <TabTitle1>{t}</TabTitle1>
+                  <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                    {!first && <TabTitle1>{t}</TabTitle1>}
+                    {first && (
+                      <Tooltip title="Complete the Basic Information before filling in the Launchpad Detail (optional).">
+                        <TabTitle1 className="dis">{t}</TabTitle1>
+                      </Tooltip>
+                    )}
+                  </Stack>
                 )}
               </Tab>
             ))}
           </Stack>
 
-          <BasicForm launchpadInfo={launchpadInfo} sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }} />
+          <BasicForm
+            first={first}
+            launchpadInfo={launchpadInfo}
+            sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }}
+          />
           <DetailForm sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }} />
         </ContainerBox>
         <FooterBox>
@@ -171,6 +175,10 @@ const TabTitle1 = styled(Typography)({
   color: '#121212',
   '@media(max-width:600px)': {
     fontSize: 14
+  },
+  '&.dis': {
+    color: 'gray',
+    cursor: 'initial'
   }
 })
 const TabTitle2 = styled(Typography)({
