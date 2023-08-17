@@ -146,10 +146,18 @@ const ClaimBlock = ({
     }
   }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
   if (!account) {
-    return <ConnectWalletButton />
+    return (
+      <Box id={'claimBtn'}>
+        <ConnectWalletButton />
+      </Box>
+    )
   }
   if (!isCurrentChainEqualChainOfPool) {
-    return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+    return (
+      <Box id={'claimBtn'}>
+        <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
+      </Box>
+    )
   }
   if (claimStatus === ClaimStatus.Claimed) {
     return (
@@ -165,6 +173,7 @@ const ClaimBlock = ({
   }
   return (
     <Box
+      id={'claimBtn'}
       sx={{
         width: '100%',
         padding: '0 16px'
