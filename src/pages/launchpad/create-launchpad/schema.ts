@@ -92,14 +92,7 @@ export const basicSchema = yup.object({
   )
 })
 export const poolSchema = yup.object({
-  TokenLogo: yup.object({
-    fileName: yup.string(),
-    fileSize: yup.number(),
-    fileThumbnailUrl: yup.string(),
-    fileType: yup.string(),
-    fileUrl: yup.string().required('Please upload your Token Logo'),
-    id: yup.number()
-  }),
+  TokenLogo: yup.string().required('Please upload your Token Logo'),
   TokenName: yup.string().required('Token Name is a required field'),
   ChainId: yup.number().required('ChainId is a required field'),
   ContractAddress: yup

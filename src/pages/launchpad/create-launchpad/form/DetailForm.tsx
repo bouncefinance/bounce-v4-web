@@ -7,7 +7,8 @@ import {
   FormControlLabel,
   OutlinedInput,
   FormHelperText,
-  SxProps
+  SxProps,
+  Chip
 } from '@mui/material'
 import {
   CardBox,
@@ -22,7 +23,7 @@ import {
 } from './BaseComponent'
 import { Field, Formik } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import Image from 'components/Image'
 import { ChainId, ChainList } from 'constants/chain'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
@@ -43,10 +44,22 @@ import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
 import { poolSchema } from '../schema'
-import { IAuctionType, IFragmentReleaseTimes, IDetailInitValue } from '../type'
+import { IFragmentReleaseTimes, IDetailInitValue } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { IUserLaunchpadInfo } from 'api/user/type'
-
+import { PoolType } from 'api/pool/type'
+import { useQueryParams } from 'hooks/useQueryParams'
+enum PoolState {
+  'CREATE' = 1,
+  'MODIFY' = 2,
+  'UP_CHAIN' = 3
+}
+const auctionType = [
+  { label: 'Fixed Price', value: PoolType.FixedSwap },
+  { label: 'Random Selection', value: PoolType.Lottery },
+  { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
+  { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
+]
 const defaultFragmentRelease = {
   startAt: null,
   radio: ''
@@ -164,25 +177,32 @@ const showTokenDialog = async ({
   })
 }
 const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLaunchpadInfo }) => {
-  console.log('launchpadInfo')
-  console.log(launchpadInfo)
+  const { type = PoolState.CREATE, id } = useQueryParams()
+  const poolState = useMemo(() => {
+    if (!launchpadInfo?.total) {
+      return PoolState.CREATE
+    }
+    if (Number(type) === PoolState.MODIFY && !!id) {
+      return PoolState.MODIFY
+    }
+    if (PoolState[Number(type)]) {
+      return Number(type) as PoolState
+    }
+    return PoolState.CREATE
+  }, [id, launchpadInfo?.total, type])
 
+  const curPoolList = useMemo(() => {
+
+  }, [])
   const { chainId } = useActiveWeb3React()
   const initValue: IDetailInitValue = {
     id: 0,
-    TokenLogo: {
-      fileName: '',
-      fileSize: 0,
-      fileThumbnailUrl: '',
-      fileType: '',
-      fileUrl: '',
-      id: 0
-    },
+    TokenLogo: '',
     TokenName: '',
     ChainId: chainId ?? ChainId.MAINNET,
     ContractAddress: '',
     ContractDecimalPlaces: 18,
-    AuctionType: IAuctionType.FIXED_PRICE_AUCTION,
+    AuctionType: PoolType.FixedSwap,
     Token: {
       tokenToAddress: '',
       tokenToSymbol: '',
@@ -203,6 +223,7 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
     fragmentReleaseSize: '',
     isRefundable: true
   }
+
   const onSubmit = (value: IDetailInitValue) => {
     console.log('submitsubmitsubmitsubmitsubmit')
     console.log(value)
@@ -215,6 +236,12 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
+                <Title sx={{ color: '#20201E', fontSize: 28 }}>auction Round</Title>
+                <Stack>
+                  <Chip label="Chip Filled" />
+                </Stack>
+              </BaseBox>
+              <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
                 <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
                   <FormLayout
@@ -225,7 +252,7 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
                     }
                     childForm={
                       <FormUploadAdd
-                        fileUrl={values.TokenLogo.fileUrl}
+                        fileUrl={values.TokenLogo}
                         formItemName="TokenLogo"
                         labelId="TokenLogo"
                         setFieldValue={setFieldValue}
@@ -356,20 +383,23 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
                             setFieldValue('AuctionType', e.target.value)
                           }}
                           renderValue={selected => {
-                            return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 500 }}>{selected}</Title>
+                            const auction = auctionType.find(item => item.value === selected)
+                            return (
+                              <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 500 }}>{auction?.label}</Title>
+                            )
                           }}
                         >
-                          {Object.values(IAuctionType).map((value, index) => (
-                            <MenuItem key={index} value={value}>
+                          {auctionType.map(value => (
+                            <MenuItem key={value.value} value={value.value}>
                               <Typography
                                 sx={{
                                   fontFamily: 'Inter',
                                   fontSize: 14,
-                                  color: values.AuctionType === value ? '#2B51DA' : '#121212',
+                                  color: values.AuctionType === value.value ? '#2B51DA' : '#121212',
                                   fontWeight: 400
                                 }}
                               >
-                                {value}
+                                {value.label}
                               </Typography>
                             </MenuItem>
                           ))}
@@ -602,7 +632,7 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
                   </Box>
                 </Stack>
               </BaseBox>
-              <SubmitComp />
+              <SubmitComp loading={false} isChange={true} />
             </Stack>
           )
         }}

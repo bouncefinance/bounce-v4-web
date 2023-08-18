@@ -2,6 +2,7 @@ import { IFile } from 'bounceComponents/common/Uploader'
 import { ChainId } from 'constants/chain'
 import { Moment } from 'moment'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { PoolType } from 'api/pool/type'
 export enum ITab {
   'Basic',
   'Detail'
@@ -50,12 +51,12 @@ export enum IAuctionTypeMap {
 export interface IDetailInitValue {
   id: number
   fragmentReleaseTimes: IFragmentReleaseTimes[]
-  TokenLogo: IFile
+  TokenLogo: string
   TokenName: string
   ChainId: ChainId
   ContractAddress: string
   ContractDecimalPlaces: number
-  AuctionType: IAuctionType
+  AuctionType: PoolType
   Token: ITokenProps
   SwapRatio: string
   TotalSupply: string
