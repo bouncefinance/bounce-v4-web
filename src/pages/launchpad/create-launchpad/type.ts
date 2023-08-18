@@ -50,6 +50,7 @@ export enum IAuctionTypeMap {
 }
 export interface IDetailInitValue {
   id: number
+  name: string
   fragmentReleaseTimes: IFragmentReleaseTimes[]
   TokenLogo: string
   TokenName: string

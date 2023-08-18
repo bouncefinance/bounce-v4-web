@@ -23,7 +23,7 @@ import {
 } from './BaseComponent'
 import { Field, Formik } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import Image from 'components/Image'
 import { ChainId, ChainList } from 'constants/chain'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
@@ -178,6 +178,8 @@ const showTokenDialog = async ({
 }
 const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLaunchpadInfo }) => {
   const { type = PoolState.CREATE, id } = useQueryParams()
+  const { chainId } = useActiveWeb3React()
+
   const poolState = useMemo(() => {
     if (!launchpadInfo?.total) {
       return PoolState.CREATE
@@ -190,39 +192,51 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
     }
     return PoolState.CREATE
   }, [id, launchpadInfo?.total, type])
+  const [curPoolId, setCurPoolId] = useState(
+    poolState === PoolState.UP_CHAIN
+      ? Number(id) || 0
+      : poolState === PoolState.MODIFY
+      ? Number(id) || 0
+      : PoolState.CREATE
+  )
+  const { poolList, curPoolList } = useMemo<{ poolList: IDetailInitValue[]; curPoolList: IDetailInitValue }>(() => {
+    const poolList: IDetailInitValue[] = []
+    const defaultValue: IDetailInitValue = {
+      id: 0,
+      name: '',
+      TokenLogo: '',
+      TokenName: '',
+      ChainId: chainId ?? ChainId.MAINNET,
+      ContractAddress: '',
+      ContractDecimalPlaces: 18,
+      AuctionType: PoolType.FixedSwap,
+      Token: {
+        tokenToAddress: '',
+        tokenToSymbol: '',
+        tokenToLogoURI: '',
+        tokenToDecimals: ''
+      },
+      SwapRatio: '',
+      TotalSupply: '',
+      startTime: null,
+      endTime: null,
+      allocationStatus: AllocationStatus.NoLimits,
+      allocationPerWallet: '',
+      releaseType: IReleaseType.Cliff,
+      delayUnlockingTime: null,
+      linearUnlockingStartTime: null,
+      linearUnlockingEndTime: null,
+      fragmentReleaseTimes: [],
+      fragmentReleaseSize: '',
+      isRefundable: true
+    }
+    if (!launchpadInfo?.total) {
+      poolList.push(defaultValue)
 
-  const curPoolList = useMemo(() => {
-
-  }, [])
-  const { chainId } = useActiveWeb3React()
-  const initValue: IDetailInitValue = {
-    id: 0,
-    TokenLogo: '',
-    TokenName: '',
-    ChainId: chainId ?? ChainId.MAINNET,
-    ContractAddress: '',
-    ContractDecimalPlaces: 18,
-    AuctionType: PoolType.FixedSwap,
-    Token: {
-      tokenToAddress: '',
-      tokenToSymbol: '',
-      tokenToLogoURI: '',
-      tokenToDecimals: ''
-    },
-    SwapRatio: '',
-    TotalSupply: '',
-    startTime: null,
-    endTime: null,
-    allocationStatus: AllocationStatus.NoLimits,
-    allocationPerWallet: '',
-    releaseType: IReleaseType.Cliff,
-    delayUnlockingTime: null,
-    linearUnlockingStartTime: null,
-    linearUnlockingEndTime: null,
-    fragmentReleaseTimes: [],
-    fragmentReleaseSize: '',
-    isRefundable: true
-  }
+      return { poolList, curPoolList: { ...defaultValue } as IDetailInitValue }
+    }
+    return poolList
+  }, [chainId, launchpadInfo])
 
   const onSubmit = (value: IDetailInitValue) => {
     console.log('submitsubmitsubmitsubmitsubmit')
@@ -231,14 +245,26 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
   const isSm = useBreakpoint('sm')
   return (
     <CardBox sx={{ ...sx }}>
-      <Formik enableReinitialize initialValues={initValue} validationSchema={poolSchema} onSubmit={onSubmit}>
+      <Formik enableReinitialize initialValues={curPoolList} validationSchema={poolSchema} onSubmit={onSubmit}>
         {({ values, setFieldValue, errors, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>auction Round</Title>
-                <Stack>
-                  <Chip label="Chip Filled" />
+                <Stack mt={20}>
+                  {poolList.map(item => {
+                    return (
+                      <Chip
+                        sx={{
+                          width: 'max-content',
+                          padding: 5
+                        }}
+                        key={item.id}
+                        label={poolState === PoolState.CREATE ? 'new pool' : item.name}
+                        variant={curPoolId === item.id ? 'outlined' : 'filled'}
+                      />
+                    )
+                  })}
                 </Stack>
               </BaseBox>
               <BaseBox>
