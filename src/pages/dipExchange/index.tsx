@@ -14,6 +14,7 @@ import DutchAuction from './components/dutchAuction/dutctAuction'
 const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
 import Erc20English from './components/erc20English/erc20english'
 import { IS_TEST_ENV } from '../../constants'
+
 // interface poolsDataItem {
 //   timaSteamp: number
 //   active: boolean

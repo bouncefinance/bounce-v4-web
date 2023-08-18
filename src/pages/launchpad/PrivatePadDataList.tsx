@@ -84,9 +84,9 @@ const DipProjectInfo: IProjectInfo[] = [
       'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism. It offers a number of features that make it stand out from other decentralized exchanges, including:',
       <ul key={1}>
         <li>
-          <strong>Strong ecosystem:</strong> DIP Exchange is built on top of the Fantom blockchain, which gives it
-          access to a wide range of decentralized applications and services. This allows traders to easily access
-          liquidity and other resources, such as price feeds and oracles.
+          <strong>Strong ecosystem:</strong> DIP Exchange is built on top of the Base blockchain, which gives it access
+          to a wide range of decentralized applications and services. This allows traders to easily access liquidity and
+          other resources, such as price feeds and oracles.
         </li>
         <li>
           <strong>Full decentralization:</strong> DIP Exchange is fully decentralized, meaning that it is not subject to
@@ -743,7 +743,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
-    chainId: 250,
+    chainId: 8453,
     tokenName: '$DIP',
     whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
     upcomingLink: '/launchpad/dip_exchange',
@@ -772,7 +772,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Name', content: '$DIP $DGT' },
       { title: 'Token Price', content: 'TBD' },
       { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Fantom' }
+      { title: 'Blockchain', content: 'BASE' }
     ],
     privatePrices: [
       {
