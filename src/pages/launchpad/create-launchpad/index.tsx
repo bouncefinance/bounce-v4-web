@@ -107,7 +107,7 @@ const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo,
             launchpadInfo={launchpadInfo}
             sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }}
           />
-          <DetailForm sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }} />
+          <DetailForm launchpadInfo={launchpadInfo} sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }} />
         </ContainerBox>
         <FooterBox>
           <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>

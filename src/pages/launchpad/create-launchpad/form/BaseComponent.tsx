@@ -45,9 +45,6 @@ export const HeadTitle = styled(Title)({
 })
 
 export const SubmitComp = ({ isChange, loading }: { isChange: boolean; loading: boolean }) => {
-  console.log('isChange')
-  console.log(isChange)
-
   return (
     <Stack
       sx={{

@@ -48,7 +48,7 @@ const BasicForm = ({
 }) => {
   const { chainId } = useActiveWeb3React()
   const isSm = useBreakpoint('sm')
-  const { loading, runAsync, data } = useRequest(
+  const { loading, runAsync } = useRequest(
     (values: IBasicInfoParams) => {
       return updateLaunchpadBasic(values)
     },
@@ -83,19 +83,15 @@ const BasicForm = ({
         }
       }
     }
-    console.log('defaultValue')
-    console.log(defaultValue)
 
     return defaultValue
   }, [chainId, launchpadInfo, optionsDatas])
 
   const onSubmit = async (values: IBasicInfoParams) => {
-    const body = { ...values, community }
+    const body = { ...values }
     body.chainId = optionsDatas.chainInfoOpt?.find(item => item.ethChainId === body.chainId)?.id as number
     try {
       await runAsync(body)
-      console.log('body')
-      console.log(body)
       show(DialogDarkTips, {
         iconType: 'success',
         title: 'Сongratulations!',
@@ -105,14 +101,6 @@ const BasicForm = ({
         onAgain: () => {},
         onCancel: () => {},
         onClose: () => {}
-        // sx: {
-        //   '& .MuiDialog-paper': {
-        //     backgroundColor: 'red',
-        //     // minWidth: 480,
-        //     borderRadius: 20,
-        //     width: 480
-        //   }
-        // }
       })
     } catch (error) {
       show(DialogDarkTips, {
@@ -351,7 +339,7 @@ const BasicForm = ({
                   ))}
                 </Stack>
               </BaseBox>
-              <SubmitComp loading={loading} isChange={first || !isEqual(values, launchpadInfo?.basicInfo)} />
+              <SubmitComp loading={loading} isChange={first || !isEqual(values, initValue)} />
             </Stack>
           )
         }}

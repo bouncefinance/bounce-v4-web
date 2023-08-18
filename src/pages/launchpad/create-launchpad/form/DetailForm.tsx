@@ -45,6 +45,7 @@ import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
 import { poolSchema } from '../schema'
 import { IAuctionType, IFragmentReleaseTimes, IDetailInitValue } from '../type'
 import { useActiveWeb3React } from 'hooks'
+import { IUserLaunchpadInfo } from 'api/user/type'
 
 const defaultFragmentRelease = {
   startAt: null,
@@ -162,7 +163,10 @@ const showTokenDialog = async ({
     tokenToDecimals: res.decimals
   })
 }
-const DetailForm = ({ sx }: { sx?: SxProps }) => {
+const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLaunchpadInfo }) => {
+  console.log('launchpadInfo')
+  console.log(launchpadInfo)
+
   const { chainId } = useActiveWeb3React()
   const initValue: IDetailInitValue = {
     id: 0,
