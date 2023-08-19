@@ -12,7 +12,7 @@ import { ReactComponent as TwitterWhite } from 'assets/socialLinksIcon/twitter.s
 import { ReactComponent as WebWhite } from 'assets/socialLinksIcon/website.svg'
 import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg'
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
-import { ReactComponent as InstagramSvg } from 'assets/socialLinksIcon/instagram-dashboard.svg'
+import { ReactComponent as InstagramSvg } from 'assets/imgs/profile/links/instagram.svg'
 import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
 
 import BlodeAvatar from './avatar/blade-icon.ico'
@@ -84,9 +84,9 @@ const DipProjectInfo: IProjectInfo[] = [
       'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism. It offers a number of features that make it stand out from other decentralized exchanges, including:',
       <ul key={1}>
         <li>
-          <strong>Strong ecosystem:</strong> DIP Exchange is built on top of the Fantom blockchain, which gives it
-          access to a wide range of decentralized applications and services. This allows traders to easily access
-          liquidity and other resources, such as price feeds and oracles.
+          <strong>Strong ecosystem:</strong> DIP Exchange is built on top of the Base blockchain, which gives it access
+          to a wide range of decentralized applications and services. This allows traders to easily access liquidity and
+          other resources, such as price feeds and oracles.
         </li>
         <li>
           <strong>Full decentralization:</strong> DIP Exchange is fully decentralized, meaning that it is not subject to
@@ -743,7 +743,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     img: DipImg,
     avatar: DipAvatar,
     title: 'DIP Exchange',
-    chainId: 250,
+    chainId: 8453,
     tokenName: '$DIP',
     whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
     upcomingLink: '/launchpad/dip_exchange',
@@ -772,7 +772,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Name', content: '$DIP $DGT' },
       { title: 'Token Price', content: 'TBD' },
       { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Fantom' }
+      { title: 'Blockchain', content: 'BASE' }
     ],
     privatePrices: [
       {
@@ -780,16 +780,16 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         value: ['ERC20 English Auction']
       },
       {
-        title: ['dipTokenOffered'],
+        title: ['DIP Token Offered'],
         value: 'TBD $DIP'
       },
       {
-        title: ['dgtTokenOffered'],
+        title: ['DGT Token Offered'],
         value: 'TBD $DGP'
       },
       {
         title: ['DIP Auction Method'],
-        value: 'ERC20 Dunch Auction'
+        value: 'ERC20 Dutch Auction'
       }
     ],
     isFAQ: true
@@ -825,13 +825,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/deelance_com" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/deelanceofficial/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/deelanceofficial/" target="_blank">
+        <InstagramSvg width={40} />
       </Link>
     ],
     moreData: [
@@ -873,13 +868,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/deelance_com" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/deelanceofficial/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/deelanceofficial/" target="_blank">
+        <InstagramSvg width={40} />
       </Link>
     ],
     moreData: [
@@ -1062,13 +1052,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={5} href="https://twitter.com/Lasmetaio" target="_blank">
         <Twitter />
       </Link>,
-      <Link
-        key={6}
-        sx={{ width: '41.5px!important', height: '41.5px!important' }}
-        href="https://www.linkedin.com/company/lasmeta"
-        target="_blank"
-      >
-        <LinkinSvg width={41.5} height={41.5} />
+      <Link key={6} href="https://www.linkedin.com/company/lasmeta" target="_blank">
+        <LinkinSvg />
       </Link>
     ],
     moreData: [
@@ -1155,21 +1140,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/typeit_official/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/typeit_official/" target="_blank">
+        <InstagramSvg width={40} height={40} />
       </Link>,
-      <Link
-        key={6}
-        sx={{ width: '41.5px!important', height: '41.5px!important' }}
-        href=" https://www.linkedin.com/company/typeit-official"
-        target="_blank"
-      >
-        <LinkinSvg width={41.5} height={41.5} />
+      <Link key={6} href=" https://www.linkedin.com/company/typeit-official" target="_blank">
+        <LinkinSvg />
       </Link>
     ],
     moreData: [
@@ -1256,21 +1231,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://t.me/Typeit_Official" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/typeit_official/"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
+      <Link key={5} href="https://www.instagram.com/typeit_official/" target="_blank">
+        <InstagramSvg width={40} />
       </Link>,
-      <Link
-        key={6}
-        sx={{ width: '41.5px!important', height: '41.5px!important' }}
-        href=" https://www.linkedin.com/company/typeit-official"
-        target="_blank"
-      >
-        <LinkinSvg width={41.5} height={41.5} />
+      <Link key={6} href=" https://www.linkedin.com/company/typeit-official" target="_blank">
+        <LinkinSvg />
       </Link>
     ],
     moreData: [

@@ -158,7 +158,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
               </StyledHistoryTableRow>
             </TableHead>
             <TableBody>
-              {list.list.map((record: PoolHistory) => (
+              {list.list.map((record: PoolHistory, index: number) => (
                 <StyledHistoryTableRow
                   key={record.id}
                   sx={{
@@ -194,7 +194,16 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
+                  <StyledHistoryTableCell
+                    sx={{ backgroundColor: '#121212', color: '#fff', cursor: 'pointer' }}
+                    onClick={() => {
+                      if (index < 1) return
+                      window.open(
+                        getEtherscanLink(poolInfo.ethChainId, list.list[index - 1].txHash, 'transaction'),
+                        '_blank'
+                      )
+                    }}
+                  >
                     {poolInfo.currencyAmountMin1
                       ? CurrencyAmount.fromRawAmount(
                           poolInfo.currencyAmountMin1.currency,
