@@ -2,7 +2,7 @@ import { useQueryParams } from 'hooks/useQueryParams'
 import { useMemo } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 // if pool use the whitelist and need to binding email,and then user is lack of email,we use this hook
-const needEmailValidPoolId = [20509]
+const needEmailValidPoolId = [20508]
 export const useRequireWhitelistAndEmail = () => {
   const { sysId } = useQueryParams()
   const { userInfo } = useUserInfo()
