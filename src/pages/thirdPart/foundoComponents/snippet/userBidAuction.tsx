@@ -716,7 +716,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
             </PoolInfoItem>
           </Stack>
         ) : null}
-        {isInsufficientBalance?.children}
+        {!isWinner && isInsufficientBalance?.children}
       </Box>
     </>
   )
