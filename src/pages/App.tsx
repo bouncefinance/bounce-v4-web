@@ -166,6 +166,7 @@ export default function App() {
                   <Route path={routes.realAuction.applySeller} element={<ApplyToBeSeller />} />
                   <Route path={routes.realAuction.bounceShop} element={<BounceShop />} />
                   <Route path={routes.realAuction.foundoShop} element={<FoundoShop />} />
+                  <Route path={routes.realAuction.zetaShop} element={<div />} />
                   <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                   <Route path={routes.profile.summary} element={<ProfileHome />} />
