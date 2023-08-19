@@ -15,7 +15,9 @@ import { useActiveWeb3React } from 'hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import { useShowLoginModal } from 'state/users/hooks'
-
+import { useRequireWhitelistAndEmail } from 'bounceHooks/auction/useRequireWhitelistAndEmail'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 interface BidButtonBlockProps {
   action: UserBidAction
   handleGoToCheck: () => void
@@ -36,9 +38,18 @@ const BidButtonBlock = ({
   handleCancelButtonClick
 }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
+  const navigate = useNavigate()
   const showLoginModal = useShowLoginModal()
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
-
+  const isRequireWhiteListAndEmail = useRequireWhitelistAndEmail()
+  const connectEmail = () => {
+    const url = new URL(window.location.href)
+    const pathname = url?.pathname
+    navigate({
+      pathname: routes.account.myAccount,
+      search: `?redirectUrl=${pathname}`
+    })
+  }
   const slicedBidAmount = useMemo(
     () => (bidAmount ? fixToDecimals(bidAmount, poolInfo.token1.decimals).toString() : ''),
     [bidAmount, poolInfo.token1.decimals]
@@ -77,7 +88,13 @@ const BidButtonBlock = ({
       </>
     )
   }
-
+  if (isRequireWhiteListAndEmail) {
+    return (
+      <Button variant="contained" fullWidth onClick={() => connectEmail()}>
+        Connect Email
+      </Button>
+    )
+  }
   if (isLimitExceeded) {
     return (
       <>
