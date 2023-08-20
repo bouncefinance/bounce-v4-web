@@ -7,6 +7,10 @@ export enum ITab {
   'Basic',
   'Detail'
 }
+export enum ParticipantStatus {
+  'Public' = 'PUBLIC',
+  'Whitelist' = 'WHITELIST'
+}
 export interface ICommunity {
   communityName: string
   communityLink: string
@@ -30,9 +34,9 @@ export interface IBasicInfoParams {
   id: number
   posts?: string
   projectLogo: string
-  projectMobilePicture: string
+
   projectName: string
-  projectPicture: string
+
   roadmap: string
   tokennomics: string
   website: string
@@ -48,9 +52,13 @@ export enum IAuctionTypeMap {
   'Dutch Auction' = 2,
   'Playable Auction' = 100
 }
+
 export interface IDetailInitValue {
   id: number
   name: string
+  creator?: string
+  projectPicture: string
+  projectMobilePicture: string
   fragmentReleaseTimes: IFragmentReleaseTimes[]
   TokenLogo: string
   TokenName: string
@@ -71,10 +79,15 @@ export interface IDetailInitValue {
   linearUnlockingEndTime: moment.Moment | null
   fragmentReleaseSize?: string
   isRefundable: boolean
+  participantStatus: ParticipantStatus
+  whitelist: string[]
 }
 export interface IPoolInfoParams {
   id: number
-  category: IAuctionTypeMap
+  name?: string
+  picture1: string
+  picture2: string
+  category: PoolType
   chainId: number
   releaseType: IReleaseType
   ratio: string
@@ -110,6 +123,8 @@ export interface IPoolInfoParams {
   tokenIds?: string[]
   totalShare?: number
   customizedNeeds?: string
+  whitelistEnabled?: boolean
+  whitelistAddresses?: string[]
 }
 export interface IValues {
   basic: IBasicInfoParams

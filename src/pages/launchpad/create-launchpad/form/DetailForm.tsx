@@ -8,7 +8,8 @@ import {
   OutlinedInput,
   FormHelperText,
   SxProps,
-  Chip
+  Chip,
+  ButtonBase
 } from '@mui/material'
 import {
   CardBox,
@@ -23,7 +24,7 @@ import {
 } from './BaseComponent'
 import { Field, Formik } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'components/Image'
 import { ChainId, ChainList } from 'constants/chain'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
@@ -32,7 +33,7 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import FakeOutlinedInput from 'bounceComponents/create-auction-pool/FakeOutlinedInput'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
-import { Moment } from 'moment'
+import moment, { Moment } from 'moment'
 import { show } from '@ebay/nice-modal-react'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
 import { Token } from 'bounceComponents/fixed-swap/type'
@@ -44,11 +45,17 @@ import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
 import { poolSchema } from '../schema'
-import { IFragmentReleaseTimes, IDetailInitValue } from '../type'
+import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { IUserLaunchpadInfo } from 'api/user/type'
 import { PoolType } from 'api/pool/type'
 import { useQueryParams } from 'hooks/useQueryParams'
+import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import ImportWhitelistDialog from 'bounceComponents/create-auction-pool/ImportWhitelistDialog'
+import { useRequest } from 'ahooks'
+import { useOptionDatas } from 'state/configOptions/hooks'
+import { updateLaunchpadPool } from 'api/user'
 enum PoolState {
   'CREATE' = 1,
   'MODIFY' = 2,
@@ -176,12 +183,37 @@ const showTokenDialog = async ({
     tokenToDecimals: res.decimals
   })
 }
-const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserLaunchpadInfo }) => {
+const showImportWhitelistDialog = (
+  values: IDetailInitValue,
+  setValues: (values: any, shouldValidate?: boolean) => void
+) => {
+  show(ImportWhitelistDialog, { whitelist: values.whitelist })
+    .then(whitelist => {
+      console.log('ImportWhitelistDialog Resolved: ', whitelist)
+
+      setValues({
+        ...values,
+        whitelist
+      })
+    })
+    .catch(err => {
+      console.log('ImportWhitelistDialog Rejected: ', err)
+    })
+}
+const DetailForm = ({
+  getLaunchpadInfo,
+  sx,
+  launchpadInfo
+}: {
+  getLaunchpadInfo: () => void
+  sx?: SxProps
+  launchpadInfo: IUserLaunchpadInfo
+}) => {
   const { type = PoolState.CREATE, id } = useQueryParams()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
 
   const poolState = useMemo(() => {
-    if (!launchpadInfo?.total) {
+    if (!launchpadInfo?.total || !launchpadInfo?.list.find(item => item.id === Number(id))) {
       return PoolState.CREATE
     }
     if (Number(type) === PoolState.MODIFY && !!id) {
@@ -191,19 +223,30 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
       return Number(type) as PoolState
     }
     return PoolState.CREATE
-  }, [id, launchpadInfo?.total, type])
+  }, [id, launchpadInfo, type])
   const [curPoolId, setCurPoolId] = useState(
-    poolState === PoolState.UP_CHAIN
-      ? Number(id) || 0
-      : poolState === PoolState.MODIFY
-      ? Number(id) || 0
-      : PoolState.CREATE
+    poolState === PoolState.UP_CHAIN ? Number(id) || 0 : poolState === PoolState.MODIFY ? Number(id) || 0 : 0
   )
+  useEffect(() => {
+    const newCurPoolId =
+      poolState === PoolState.UP_CHAIN ? Number(id) || 0 : poolState === PoolState.MODIFY ? Number(id) || 0 : 0
+
+    setCurPoolId(newCurPoolId)
+  }, [poolState, id])
+  console.log('setCurPoolId')
+  console.log(setCurPoolId)
+  console.log(curPoolId)
+
+  console.log(poolState === PoolState.UP_CHAIN ? Number(id) || 0 : poolState === PoolState.MODIFY ? Number(id) || 0 : 0)
+
+  const { chainInfoOpt } = useOptionDatas()
   const { poolList, curPoolList } = useMemo<{ poolList: IDetailInitValue[]; curPoolList: IDetailInitValue }>(() => {
-    const poolList: IDetailInitValue[] = []
+    let poolList: IDetailInitValue[] = []
     const defaultValue: IDetailInitValue = {
       id: 0,
-      name: '',
+      name: 'New Pool',
+      projectPicture: '',
+      projectMobilePicture: '',
       TokenLogo: '',
       TokenName: '',
       ChainId: chainId ?? ChainId.MAINNET,
@@ -228,25 +271,117 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
       linearUnlockingEndTime: null,
       fragmentReleaseTimes: [],
       fragmentReleaseSize: '',
-      isRefundable: true
+      isRefundable: true,
+      whitelist: [],
+      participantStatus: ParticipantStatus.Public
     }
-    if (!launchpadInfo?.total) {
+    if (launchpadInfo?.total) {
+      const list: IDetailInitValue[] = launchpadInfo.list.map(item => {
+        return {
+          id: item.id,
+          ChainId: chainInfoOpt?.find(i => item.chainId === i.id)?.ethChainId,
+          name: item.name,
+          projectPicture: item.picture1,
+          projectMobilePicture: item.picture2,
+          creator: item.creator,
+          releaseType: item.releaseType,
+          ContractAddress: item.token0,
+          ContractDecimalPlaces: item.token0Decimals,
+          Token: {
+            tokenToAddress: item.token1
+          },
+          TokenLogo: item.token0Logo,
+          SwapRatio: item.ratio,
+          startTime: item.openAt ? moment(item.openAt) : null,
+          endTime: item.closeAt ? moment(item.closeAt) : null,
+          isRefundable: item.reverseEnabled,
+          whitelist: item.whitelistAddresses,
+          participantStatus: item.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public
+        } as IDetailInitValue
+      })
+      poolList = poolList.concat(list)
+    }
+    if (!launchpadInfo?.total || curPoolId === 0) {
       poolList.push(defaultValue)
-
-      return { poolList, curPoolList: { ...defaultValue } as IDetailInitValue }
     }
-    return poolList
-  }, [chainId, launchpadInfo])
+    return { poolList, curPoolList: poolList.find(item => item.id === curPoolId) || defaultValue }
+  }, [chainId, chainInfoOpt, curPoolId, launchpadInfo])
+  console.log('curPoolList')
+  console.log(curPoolList)
+  console.log(poolList)
 
-  const onSubmit = (value: IDetailInitValue) => {
-    console.log('submitsubmitsubmitsubmitsubmit')
+  const { loading, runAsync } = useRequest(
+    (values: IDetailInitValue) => {
+      const poolParams: IPoolInfoParams = {
+        id: values.id,
+        name: values.name,
+        picture1: values.projectPicture,
+        picture2: values.projectMobilePicture,
+        creator: account,
+        category: values.AuctionType,
+        chainId: chainInfoOpt?.find(item => item.ethChainId === values.ChainId)?.id as number,
+        releaseType: values.releaseType,
+        token0: values.ContractAddress,
+        token0Decimals: values.ContractDecimalPlaces,
+        token0Logo: values.TokenLogo,
+        token0Name: values.TokenName,
+        token0Symbol: values.TokenName,
+        totalAmount0: values.TotalSupply,
+        token1: values.Token.tokenToAddress,
+        ratio: values.SwapRatio,
+        openAt: values.startTime?.valueOf(),
+        closeAt: values.endTime?.valueOf(),
+        reverseEnabled: values.isRefundable,
+        whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
+        whitelistAddresses: values.whitelist
+      }
+      if (values.allocationStatus === AllocationStatus.Limited) {
+        poolParams['maxAmount1PerWallet'] = `${
+          Number(values.allocationPerWallet) * Math.pow(10, Number(values.Token.tokenToDecimals))
+        }`
+      }
+      const releaseType = Number(values.releaseType)
+      if (releaseType !== IReleaseType.Instant) {
+        if (releaseType === IReleaseType.Cliff) {
+          poolParams.releaseData = [{ startAt: values.delayUnlockingTime?.valueOf() as number, endAtOrRatio: 0 }]
+        }
+        if (releaseType === IReleaseType.Linear) {
+          poolParams.releaseData = [
+            {
+              startAt: values.linearUnlockingStartTime?.valueOf() as number,
+              endAtOrRatio: values.linearUnlockingEndTime?.valueOf() as number
+            }
+          ]
+        }
+        if (releaseType === IReleaseType.Fragment) {
+          const releaseData: { startAt: number; endAtOrRatio: number }[] = []
+          values.fragmentReleaseTimes.forEach(item => {
+            releaseData.push({
+              startAt: item.startAt?.valueOf() as number,
+              endAtOrRatio: Number(item.radio)
+            })
+          })
+          poolParams.releaseData = releaseData
+        }
+      }
+      console.log('poolParams')
+      console.log(poolParams)
+
+      return updateLaunchpadPool(poolParams)
+    },
+    { manual: true }
+  )
+  const onSubmit = async (value: IDetailInitValue) => {
+    console.log('submit submit submit submit submit')
     console.log(value)
+    await runAsync(value)
+    getLaunchpadInfo()
   }
   const isSm = useBreakpoint('sm')
   return (
     <CardBox sx={{ ...sx }}>
       <Formik enableReinitialize initialValues={curPoolList} validationSchema={poolSchema} onSubmit={onSubmit}>
-        {({ values, setFieldValue, errors, handleSubmit }) => {
+        {({ values, setFieldValue, setValues, errors, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
@@ -260,16 +395,58 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
                           padding: 5
                         }}
                         key={item.id}
-                        label={poolState === PoolState.CREATE ? 'new pool' : item.name}
+                        label={item.name}
                         variant={curPoolId === item.id ? 'outlined' : 'filled'}
-                      />
+                      ></Chip>
                     )
                   })}
                 </Stack>
               </BaseBox>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
-                <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
+                <Stack flexDirection={'column'} mt={32} gap={isSm ? 16 : 32}>
+                  <FormLayout
+                    title1="Project Picture"
+                    childTitle={
+                      <Body02
+                        sx={{ fontSize: 12, color: '#626262' }}
+                      >{`(Please upload same picture with different size. JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
+                    }
+                    childForm={
+                      <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
+                        <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
+                          <FormUploadAdd
+                            formItemName="projectPicture"
+                            fileUrl={values?.projectPicture}
+                            setFieldValue={setFieldValue}
+                            labelId="ProjectPictureBigImg"
+                            labelChild={<BigAddIcon />}
+                            labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                          />
+                          <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 375px*290px`}</Body02>
+                        </Stack>
+                        <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
+                          <FormUploadAdd
+                            formItemName="projectMobilePicture"
+                            fileUrl={values?.projectMobilePicture}
+                            setFieldValue={setFieldValue}
+                            labelId="ProjectPictureSmallImg"
+                            labelChild={<BigAddIcon />}
+                            labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                          />
+                          <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 1360px*600px`}</Body02>
+                        </Stack>
+                      </Stack>
+                    }
+                  />
+                  <FormLayout
+                    title1="Pool Name"
+                    childForm={
+                      <FormItem name={'name'}>
+                        <OutlinedInput placeholder="Name of the project, eg. Bounce" />
+                      </FormItem>
+                    }
+                  />
                   <FormLayout
                     sxStyle={{ marginTop: isSm ? 24 : 40 }}
                     title1="Token Logo"
@@ -290,7 +467,7 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
                     title1="Token Name"
                     childForm={
                       <FormItem name={'TokenName'}>
-                        <OutlinedInput placeholder="Name of the project, eg. Bounce" />
+                        <OutlinedInput placeholder="Name of the token, eg. Bounce" />
                       </FormItem>
                     }
                   />
@@ -656,9 +833,52 @@ const DetailForm = ({ sx, launchpadInfo }: { sx?: SxProps; launchpadInfo: IUserL
                       </Box>
                     )}
                   </Box>
+                  <Box sx={{ mt: 38, mb: 34 }}>
+                    <Stack direction="row" alignItems="center" spacing={8}>
+                      <Typography variant="h3" sx={{ fontSize: 16 }}>
+                        Participant
+                      </Typography>
+
+                      <Tooltip title="Once activated, only traders you put in this whitelist can join your auction.">
+                        <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                      </Tooltip>
+                    </Stack>
+
+                    <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
+                      <FormControlLabel
+                        value={ParticipantStatus.Public}
+                        control={<Radio disableRipple />}
+                        label="Public"
+                      />
+                      <FormControlLabel
+                        value={ParticipantStatus.Whitelist}
+                        control={<Radio disableRipple />}
+                        label="Whitelist"
+                      />
+                    </Field>
+                    <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
+                    <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
+                  </Box>
+                  <Stack
+                    sx={{ flexDirection: { xs: 'column', md: 'row' } }}
+                    spacing={10}
+                    justifyContent="space-between"
+                  >
+                    <ButtonBase
+                      sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
+                      disabled={values.participantStatus !== ParticipantStatus.Whitelist}
+                      onClick={() => {
+                        showImportWhitelistDialog(values, setValues)
+                      }}
+                    >
+                      {values.participantStatus === ParticipantStatus.Whitelist && (
+                        <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                      )}
+                    </ButtonBase>
+                  </Stack>
                 </Stack>
               </BaseBox>
-              <SubmitComp loading={false} isChange={true} />
+              <SubmitComp errors={errors} loading={loading} isChange={true} />
             </Stack>
           )
         }}

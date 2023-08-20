@@ -3,11 +3,10 @@ import BigNumber from 'bignumber.js'
 import moment from 'moment'
 import { AllocationStatus, IReleaseType } from '../../../bounceComponents/create-auction-pool/types'
 import { isAddress } from 'utils'
+import { ParticipantStatus } from './type'
 export const basicSchema = yup.object({
   banner: yup.string().required('Please upload your banner'),
-  projectMobilePicture: yup.string().required('Please upload your project mobile picture'),
   projectLogo: yup.string().required('Please upload your project logo'),
-  projectPicture: yup.string().required('Please upload your project picture'),
   description: yup
     .string()
     .required('description is a required field')
@@ -92,8 +91,184 @@ export const basicSchema = yup.object({
   )
 })
 export const poolSchema = yup.object({
+  name: yup.string(),
+  TokenLogo: yup.string(),
+  TokenName: yup.string(),
+
+  ChainId: yup.number(),
+  ContractAddress: yup
+    .string()
+    .test('address', 'Please enter the correct contract address!', val => (!val ? true : !!isAddress(val))),
+  ContractDecimalPlaces: yup.number(),
+  AuctionType: yup.string(),
+  Token: yup.object({
+    tokenToAddress: yup.string(),
+    tokenToSymbol: yup.string(),
+    tokenToLogoURI: yup.string(),
+    tokenToDecimals: yup.string()
+  }),
+  SwapRatio: yup
+    .number()
+    .positive('Swap ratio must be positive')
+    .typeError('Please input valid number')
+    .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+      const _value = new BigNumber(value || 0).toFixed()
+      return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+    }),
+  TotalSupply: yup.number().positive('Total Supply must be positive'),
+  startTime: yup
+    .date()
+    .nullable()
+    // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value: any, context: any) => {
+      return !value
+        ? true
+        : !context.parent.endTime.valueOf() || (value?.valueOf() || 0) < context.parent.endTime.valueOf()
+    }),
+  endTime: yup
+    .date()
+    .nullable()
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value: any, context: any) => {
+      return !value
+        ? true
+        : !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
+    }),
+  allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
+  allocationPerWallet: yup
+    .number()
+    .nullable()
+    .when('allocationStatus', {
+      is: AllocationStatus.Limited,
+      then: yup
+        .number()
+        .typeError('Please input valid number')
+        .positive('Allocation per wallet must be positive')
+        .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+          const _value = new BigNumber(value || 0).toFixed()
+          return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+        })
+    })
+    .when('allocationStatus', {
+      is: AllocationStatus.Limited,
+      then: yup
+        .number()
+        .typeError('Please input valid number')
+        .test(
+          'GREATER_THAN_POOL_SIZE',
+          'Allocation per wallet cannot be greater than pool size times swap ratio',
+          (value, context) =>
+            !context.parent.poolSize ||
+            !context.parent.swapRatio ||
+            (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+        )
+    }),
+  delayUnlockingTime: yup.date().nullable(true),
+  linearUnlockingStartTime: yup
+    .date()
+    .nullable(true)
+    .when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Linear,
+      then: yup
+        .date()
+        .nullable()
+        .typeError('Please select a valid time')
+        .test({
+          name: 'check-linearUnlockingStartTime',
+          test: (input, context) => {
+            if (moment(input) < moment()) {
+              return context.createError({ message: 'Please select a time earlier than current time' })
+            }
+            if (
+              !(
+                !context.parent.endTime.valueOf() ||
+                !context.parent.startTime.valueOf() ||
+                ((input?.valueOf() || 0) >= context.parent.startTime.valueOf() &&
+                  (input?.valueOf() || 0) >= context.parent.endTime.valueOf())
+              )
+            ) {
+              return context.createError({ message: 'Please select a time later than start time and end time' })
+            }
+            return true
+          }
+        })
+    }),
+  linearUnlockingEndTime: yup
+    .date()
+    .nullable(true)
+    .when('releaseType', {
+      is: (val: any) => Number(val) === IReleaseType.Linear,
+      then: yup
+        .date()
+        .typeError('Please select a valid time')
+        .test({
+          name: 'check-linearUnlockingEndTime',
+          test: (input, context) => {
+            if (moment(input) < moment()) {
+              return context.createError({ message: 'Please select a time earlier than current time' })
+            }
+            if (
+              !(
+                !context.parent.linearUnlockingStartTime.valueOf() ||
+                (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime.valueOf()
+              )
+            ) {
+              return context.createError({ message: 'Please select a time later than linear unlocking end time' })
+            }
+            return true
+          }
+        })
+    }),
+  fragmentReleaseTimes: yup.array().when('releaseType', {
+    is: (val: any) => Number(val) === IReleaseType.Fragment,
+    then: yup.array().of(
+      yup.object().shape({
+        startAt: yup
+          .date()
+          .nullable()
+          .typeError('Please select a valid time')
+          .test({
+            name: 'check-fragmentReleaseTimes',
+            test: (input, context) => {
+              if (moment(input) < moment()) {
+                return context.createError({ message: 'Please select a time earlier than current time' })
+              }
+              return true
+            }
+          }),
+        radio: yup.string()
+      })
+    )
+  }),
+  fragmentReleaseSize: yup.string().nullable(),
+  isRefundable: yup.boolean(),
+  whitelist: yup
+    .array()
+    .of(yup.string())
+    .test(
+      'NOT_EMPTY_ARRAY',
+      'Whitelist is required',
+      (inputArray, context) =>
+        context.parent.participantStatus !== ParticipantStatus.Whitelist ||
+        (inputArray instanceof Array && inputArray.length > 0)
+    )
+    .test('VALID_ADDRESS_ARRAY', 'Please make sure all addresses are valid', (inputArray, context) => {
+      return (
+        context.parent.participantStatus !== ParticipantStatus.Whitelist ||
+        (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
+      )
+    }),
+  participantStatus: yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status')
+})
+export const poolStrictSchema = yup.object({
   TokenLogo: yup.string().required('Please upload your Token Logo'),
   TokenName: yup.string().required('Token Name is a required field'),
+  projectMobilePicture: yup.string().required('Please upload your project mobile picture'),
+
+  projectPicture: yup.string().required('Please upload your project picture'),
   ChainId: yup.number().required('ChainId is a required field'),
   ContractAddress: yup
     .string()
@@ -286,7 +461,6 @@ export const poolSchema = yup.object({
   }),
   isRefundable: yup.boolean()
 })
-
 export const createLaunchpadSchema = yup.object({
   basic: basicSchema,
   pool: poolSchema

@@ -22,6 +22,7 @@ interface ICreComProps {
   setTab: (tab: CreTab) => void
   launchpadInfo: IUserLaunchpadInfo
   first: boolean
+  getLaunchpadInfo: () => void
 }
 // const launchpadInfo: IUserLaunchpadInfo = {
 //   basicInfo: {
@@ -47,7 +48,7 @@ const CreateLaunchpad = () => {
   const { token } = useUserInfo()
   const [curTab, setCurTab] = useState(tab ? Number(tab) : CreTab.POOL)
   const [isFirst, setIsFirst] = useState(false)
-  const { data } = useRequest(
+  const { data, run: getLaunchpadInfo } = useRequest(
     () => {
       return getUserLaunchpadInfo({})
     },
@@ -62,18 +63,19 @@ const CreateLaunchpad = () => {
       tab: curTab,
       setTab: setCurTab,
       launchpadInfo: data?.data as IUserLaunchpadInfo,
-      first: isFirst
+      first: isFirst,
+      getLaunchpadInfo
     }
     if (id) {
       props.id = Number(id)
     }
     return props
-  }, [curTab, id, data, isFirst])
+  }, [curTab, id, data, isFirst, getLaunchpadInfo])
   return <LaunchpadForm {...curProps} />
 }
 export default CreateLaunchpad
 const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
-const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo, first }) => {
+const LaunchpadForm: React.FC<ICreComProps> = ({ getLaunchpadInfo, tab, setTab, id, launchpadInfo, first }) => {
   const isSm = useBreakpoint('sm')
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -107,7 +109,11 @@ const LaunchpadForm: React.FC<ICreComProps> = ({ tab, setTab, id, launchpadInfo,
             launchpadInfo={launchpadInfo}
             sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }}
           />
-          <DetailForm launchpadInfo={launchpadInfo} sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }} />
+          <DetailForm
+            getLaunchpadInfo={getLaunchpadInfo}
+            launchpadInfo={launchpadInfo}
+            sx={{ display: tab === CreTab.POOL ? 'block' : 'none' }}
+          />
         </ContainerBox>
         <FooterBox>
           <TabTitle2>©2023 Bounce dao Ltd. All rights reserved.</TabTitle2>

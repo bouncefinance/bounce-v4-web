@@ -60,9 +60,7 @@ const BasicForm = ({
     let defaultValue: IBasicInfoParams = {
       id: 0,
       banner: '',
-      projectMobilePicture: '',
       projectLogo: '',
-      projectPicture: '',
       community: community,
       website: '',
       whitepaperLink: '',
@@ -164,40 +162,7 @@ const BasicForm = ({
                       />
                     }
                   />
-                  <FormLayout
-                    title1="Project Picture"
-                    childTitle={
-                      <Body02
-                        sx={{ fontSize: 12, color: '#626262' }}
-                      >{`(Please upload same picture with different size. JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
-                    }
-                    childForm={
-                      <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
-                        <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
-                          <FormUploadAdd
-                            formItemName="projectPicture"
-                            fileUrl={values.projectPicture}
-                            setFieldValue={setFieldValue}
-                            labelId="ProjectPictureBigImg"
-                            labelChild={<BigAddIcon />}
-                            labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
-                          />
-                          <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 375px*290px`}</Body02>
-                        </Stack>
-                        <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
-                          <FormUploadAdd
-                            formItemName="projectMobilePicture"
-                            fileUrl={values.projectMobilePicture}
-                            setFieldValue={setFieldValue}
-                            labelId="ProjectPictureSmallImg"
-                            labelChild={<BigAddIcon />}
-                            labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
-                          />
-                          <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 1360px*600px`}</Body02>
-                        </Stack>
-                      </Stack>
-                    }
-                  />
+
                   <FormLayout
                     title1="Describe Your Project (100-500 Words)"
                     title2="Please address the following questions in your description."
