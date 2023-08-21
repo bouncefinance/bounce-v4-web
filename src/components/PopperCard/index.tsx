@@ -1,7 +1,7 @@
 import { SxProps, Theme } from '@mui/material'
 import Box from '@mui/material/Box'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Popper from '@mui/material/Popper'
+import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import React, { useState } from 'react'
 import useBreakpoint from '../../hooks/useBreakpoint'
 
@@ -10,13 +10,15 @@ export default function PopperCard({
   sx,
   targetElement,
   closeHandler,
-  children
+  children,
+  placement
 }: {
   popperSx?: SxProps<Theme>
   sx?: SxProps<Theme>
   targetElement: JSX.Element
   children: JSX.Element | string | number
   closeHandler?: () => void
+  placement?: PopperPlacementType
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = !!anchorEl
@@ -46,6 +48,7 @@ export default function PopperCard({
             zIndex: theme => theme.zIndex.modal,
             ...popperSx
           }}
+          placement={placement}
         >
           <Box
             sx={{

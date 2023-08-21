@@ -1,4 +1,4 @@
-import { Box, Stack, Table, TableBody, TableContainer, TableHead, Typography, styled } from '@mui/material'
+import { Box, Stack, SxProps, Table, TableBody, TableContainer, TableHead, Typography, styled } from '@mui/material'
 import moment from 'moment'
 import NoData from 'bounceComponents/common/NoData'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
@@ -9,8 +9,9 @@ import { MutantEnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
 import DefaultAvatar from 'assets/imgs/realWorld/defaultHeadIgm.png'
 import { CurrencyAmount } from 'constants/token'
 import { useMemo } from 'react'
+import useBreakpoint from 'hooks/useBreakpoint'
 
-const StatsBoard = styled(Stack)({
+const StatsBoard = styled(Stack)(({ theme }) => ({
   width: 320,
   marginTop: 80,
   padding: '24px 0',
@@ -34,8 +35,12 @@ const StatsBoard = styled(Stack)({
     color: '#D7D6D9',
     paddingTop: 24,
     fontSize: 36
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    marginTop: 60
   }
-})
+}))
 
 const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const totalReward = useMemo(() => {
@@ -50,26 +55,87 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
     '',
     ['Bid']
   )
-
+  const isSm = useBreakpoint('sm')
+  const fontSizeStyle: SxProps = { fontSize: isSm ? '22px !important' : '36px !important' }
   if (!list || (Array.isArray(list.list) && list.list.length === 0)) {
-    return null
+    return (
+      <Stack
+        direction={'row'}
+        sx={{
+          borderRadius: 20,
+          padding: { xs: 0, sm: '12px 20px' },
+          bgcolor: 'transparent',
+          margin: { xs: '0px auto', sm: '120px auto' },
+          width: { sm: 1296, xs: 'inherit' },
+          maxWidth: '100%',
+          justifyContent: 'space-between',
+          flexWrap: { xs: 'wrap', sm: 'unset' },
+          alignItems: 'center'
+        }}
+      >
+        <Stack sx={{ width: { xs: '100%', sm: 'unset' } }}>
+          <Typography variant="h2" width={320} sx={{ fontSize: { xs: 16, sm: 36 }, color: '#fff', mt: 16 }}>
+            Auction History
+          </Typography>
+          <StatsBoard>
+            <Typography>Total Bid Times</Typography>
+            <Typography sx={{ ...fontSizeStyle }}>0</Typography>
+          </StatsBoard>
+          <StatsBoard sx={{ marginTop: 32 }}>
+            <Typography>Total Bidder Reward</Typography>
+            <Typography sx={{ ...fontSizeStyle }}>0 ETH</Typography>
+          </StatsBoard>
+        </Stack>
+        <Stack
+          sx={{
+            width: '100%',
+            height: isSm ? 400 : '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Typography
+            sx={{
+              width: isSm ? 194 : 271,
+              fontSize: isSm ? 20 : 28,
+              fontWeight: 600,
+              color: '#fff',
+              fontFamily: 'Public Sans'
+            }}
+          >
+            Auction just started! be the first bidder
+          </Typography>
+        </Stack>
+      </Stack>
+    )
   }
 
   return (
     <Stack
       direction={'row'}
-      sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#171717', margin: '120px auto', minHeight: 500 }}
+      sx={{
+        borderRadius: 20,
+        padding: { xs: 0, sm: '12px 20px' },
+        bgcolor: 'transparent',
+        margin: { xs: '0px auto', sm: '120px auto' },
+        width: { sm: 1296, xs: 'inherit' },
+        maxWidth: '100%',
+        justifyContent: 'space-between',
+        flexWrap: { xs: 'wrap', sm: 'unset' }
+      }}
     >
-      <Stack>
-        <Typography variant="h2" width={320} sx={{ ml: 12, color: '#fff', mt: 20 }}>
+      <Stack sx={{ width: { xs: '100%', sm: 'unset' } }}>
+        <Typography variant="h2" width={320} sx={{ fontSize: { xs: 16, sm: 36 }, color: '#fff', mt: 16 }}>
           Auction History
         </Typography>
         <StatsBoard>
           <Typography>Total Bid Times</Typography>
           <Typography>{list.total}</Typography>
         </StatsBoard>
-        <StatsBoard>
-          <Typography>Total Bid Reward</Typography>
+        <StatsBoard sx={{ marginTop: 32 }}>
+          <Typography>Total Bidder Reward</Typography>
           <Typography>
             {totalReward}
             {poolInfo.token1.symbol}
@@ -78,11 +144,11 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       </Stack>
 
       {list.list && list.list.length > 0 ? (
-        <TableContainer sx={{ mt: 20 }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableContainer sx={{ mt: 30, maxWidth: { xs: '100vw', sm: 763 } }}>
+          <Table sx={{ minWidth: { xs: '100%', sm: 650 } }} aria-label="simple table">
             <TableHead>
               <StyledHistoryTableRow
-                sx={{ '& th': { backgroundColor: '#171717 !important', color: '#fff', borderBottom: 0 } }}
+                sx={{ '& th': { backgroundColor: 'transparent !important', color: '#fff', borderBottom: 0 } }}
               >
                 <StyledHistoryTableCell>From</StyledHistoryTableCell>
                 <StyledHistoryTableCell>Bid Price</StyledHistoryTableCell>
@@ -92,7 +158,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
               </StyledHistoryTableRow>
             </TableHead>
             <TableBody>
-              {list.list.map((record: PoolHistory) => (
+              {list.list.map((record: PoolHistory, index: number) => (
                 <StyledHistoryTableRow
                   key={record.id}
                   sx={{
@@ -102,7 +168,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     backgroundColor: '#fff !important'
                   }}
                 >
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     <Stack direction={'row'} alignItems={'center'}>
                       <img
                         src={record.avatar || DefaultAvatar}
@@ -118,7 +184,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                       {shortenAddress(record.requestor)}
                     </Stack>
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     {poolInfo.currencyAmountMin1
                       ? CurrencyAmount.fromRawAmount(
                           poolInfo.currencyAmountMin1?.currency,
@@ -128,7 +194,16 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell
+                    sx={{ backgroundColor: '#121212', color: '#fff', cursor: 'pointer' }}
+                    onClick={() => {
+                      if (index < 1) return
+                      window.open(
+                        getEtherscanLink(poolInfo.ethChainId, list.list[index - 1].txHash, 'transaction'),
+                        '_blank'
+                      )
+                    }}
+                  >
                     {poolInfo.currencyAmountMin1
                       ? CurrencyAmount.fromRawAmount(
                           poolInfo.currencyAmountMin1.currency,
@@ -138,7 +213,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                     &nbsp;
                     {poolInfo.token1.symbol}
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     <Box>
                       <a
                         style={{ display: 'flex', alignItems: 'center' }}
@@ -151,7 +226,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                       </a>
                     </Box>
                   </StyledHistoryTableCell>
-                  <StyledHistoryTableCell sx={{ backgroundColor: '#171717', color: '#fff' }}>
+                  <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
                     {moment(record.blockTs * 1000).format('Y/M/D HH:mm')}
                   </StyledHistoryTableCell>
                 </StyledHistoryTableRow>

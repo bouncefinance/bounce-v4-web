@@ -22,7 +22,6 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
-import FundoHead from 'components/Fundo/Header'
 
 interface TabContent {
   title: string
@@ -137,7 +136,8 @@ const transparentRoutes = [
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
-  routes.thirdPart.DipExchange
+  routes.thirdPart.DipExchange,
+  routes.foundo.foundoDetail + '/*'
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -152,7 +152,8 @@ export const whiteLogoRoutes = [
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
-  routes.thirdPart.DipExchange
+  routes.thirdPart.DipExchange,
+  routes.foundo.foundoDetail + '/*'
 ]
 
 export default function Header() {
@@ -168,9 +169,6 @@ export default function Header() {
   //     return ''
   //   }
   // })
-  const showBounseHead = useMemo(() => {
-    return location.pathname.indexOf('foundo') === -1
-  }, [location])
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
@@ -179,7 +177,7 @@ export default function Header() {
   const { pathname } = useLocation()
 
   const mobileHideHeader = useMemo(() => {
-    return pathname.includes('okxActivity')
+    return pathname.includes('okxActivity') || pathname.includes('nfc_detail')
   }, [pathname])
 
   const navigate = useNavigate()
@@ -266,7 +264,7 @@ export default function Header() {
       <StyledAppBar
         isTransparent={isTransparentRoute}
         sx={{
-          display: showBounseHead ? 'flex' : 'none',
+          display: 'flex',
           ...headerBg
         }}
       >
@@ -313,7 +311,6 @@ export default function Header() {
           </ShowOnMobile>
         </Box>
       </StyledAppBar>
-      {!showBounseHead && <FundoHead />}
     </Box>
   )
 }

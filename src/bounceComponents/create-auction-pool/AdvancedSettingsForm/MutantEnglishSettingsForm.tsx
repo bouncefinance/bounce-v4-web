@@ -280,39 +280,40 @@ export const MutantEnglishSettingsForm = ({
 
                       <Field component={SwitchFormItem} type="checkbox" name="shouldDelayUnlocking" />
                     </Box>
-
-                    <Stack direction="row" sx={{ mt: 24, width: '100%' }} spacing={20}>
-                      <FormItem name="delayUnlockingHour" placeholder="0" sx={{ flex: 1 }}>
-                        <NumberInput
-                          disabled={!values.shouldDelayUnlocking}
-                          placeholder="0"
-                          value={values.delayUnlockingHour}
-                          onUserInput={value => {
-                            setFieldValue('delayUnlockingHour', value)
-                          }}
-                          endAdornment={
-                            <>
-                              <Typography sx={{ mr: 8 }}>Hours</Typography>
-                            </>
-                          }
-                        />
-                      </FormItem>
-                      <FormItem name="delayUnlockingMinute" placeholder="0" sx={{ flex: 1 }}>
-                        <NumberInput
-                          disabled={!values.shouldDelayUnlocking}
-                          placeholder="0"
-                          value={values.delayUnlockingMinute}
-                          onUserInput={value => {
-                            setFieldValue('delayUnlockingMinute', value)
-                          }}
-                          endAdornment={
-                            <>
-                              <Typography sx={{ mr: 8 }}>Minutes</Typography>
-                            </>
-                          }
-                        />
-                      </FormItem>
-                    </Stack>
+                    {values.shouldDelayUnlocking && (
+                      <Stack direction="row" sx={{ mt: 24, width: '100%' }} spacing={20}>
+                        <FormItem name="delayUnlockingHour" placeholder="0" sx={{ flex: 1 }}>
+                          <NumberInput
+                            disabled={!values.shouldDelayUnlocking}
+                            placeholder="0"
+                            value={values.delayUnlockingHour}
+                            onUserInput={value => {
+                              setFieldValue('delayUnlockingHour', value)
+                            }}
+                            endAdornment={
+                              <>
+                                <Typography sx={{ mr: 8 }}>Hours</Typography>
+                              </>
+                            }
+                          />
+                        </FormItem>
+                        <FormItem name="delayUnlockingMinute" placeholder="0" sx={{ flex: 1 }}>
+                          <NumberInput
+                            disabled={!values.shouldDelayUnlocking}
+                            placeholder="0"
+                            value={values.delayUnlockingMinute}
+                            onUserInput={value => {
+                              setFieldValue('delayUnlockingMinute', value)
+                            }}
+                            endAdornment={
+                              <>
+                                <Typography sx={{ mr: 8 }}>Minutes</Typography>
+                              </>
+                            }
+                          />
+                        </FormItem>
+                      </Stack>
+                    )}
                   </Box>
                 )}
                 <Stack sx={{ mt: 24, width: '100%' }} spacing={20}>

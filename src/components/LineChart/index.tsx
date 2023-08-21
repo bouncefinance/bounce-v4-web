@@ -14,7 +14,7 @@ import {
   ISeriesApi
 } from 'lightweight-charts'
 import { useRef, useEffect, useState, useMemo } from 'react'
-
+import { merge } from 'lodash'
 const darkStyle = {
   layoutTextColor: 'rgba(255,255,255,0.3)',
   layoutBackground: 'black',
@@ -65,9 +65,10 @@ const initChart = (
     borderColor: string
     lineColor: string
     tooltipColor: string
-  }
+  },
+  chartOption: DeepPartial<ChartOptions> = {}
 ) => {
-  const chartOptions: DeepPartial<ChartOptions> = {
+  let chartOptions: DeepPartial<ChartOptions> = {
     layout: {
       textColor: style.layoutTextColor,
       background: { color: style.layoutBackground }
@@ -92,6 +93,7 @@ const initChart = (
       shiftVisibleRangeOnNewBar: true
     }
   }
+  chartOptions = merge(chartOptions, chartOption)
   chart = createChart(dom, chartOptions)
   lineSeries = chart.addLineSeries({
     color: style.lineColor,
@@ -116,11 +118,13 @@ const initChart = (
 export default function LineChart({
   isDark,
   data,
-  token1Name
+  token1Name,
+  chartOption
 }: {
   isDark?: true
   data: IDataType[]
   token1Name: string
+  chartOption?: DeepPartial<ChartOptions>
 }) {
   const style = useMemo(() => (isDark ? darkStyle : whiteStyle), [isDark])
   const [localData, setLocalData] = useState<IDataType[]>([])
@@ -132,8 +136,9 @@ export default function LineChart({
 
   useEffect(() => {
     if (!chart) {
-      initChart(BoxRef.current as HTMLElement, style)
+      initChart(BoxRef.current as HTMLElement, style, chartOption ?? {})
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, style])
 
   useEffect(() => {
