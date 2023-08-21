@@ -81,6 +81,7 @@ import PerformKYCVerification from 'bounceComponents/profile/account/components/
 import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
+import ZataShop from './realWorldAuction/shop/zeta'
 import TokenToolBox from './tokenToolBox'
 import Loyaltyprogram from './loyaltyprogram'
 const GlobalHooks = () => {
@@ -166,7 +167,7 @@ export default function App() {
                   <Route path={routes.realAuction.applySeller} element={<ApplyToBeSeller />} />
                   <Route path={routes.realAuction.bounceShop} element={<BounceShop />} />
                   <Route path={routes.realAuction.foundoShop} element={<FoundoShop />} />
-                  <Route path={routes.realAuction.zetaShop} element={<div />} />
+                  <Route path={routes.realAuction.zetaShop} element={<ZataShop />} />
                   <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                   <Route path={routes.profile.summary} element={<ProfileHome />} />

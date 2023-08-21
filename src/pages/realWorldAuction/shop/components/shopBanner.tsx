@@ -21,7 +21,7 @@ const ShopBanner = ({ bannerData }: { bannerData: BannerType }) => {
       sx={{
         position: 'relative',
         width: '100%',
-        height: isMd ? 'auto' : `calc(100vh - ${theme.height.head})`,
+        height: isMd ? 'auto' : `calc(100vh - ${theme.height.head ? theme.height.head : '0px'})`,
         minHeight: isMd ? 'unset' : '680px'
       }}
     >
