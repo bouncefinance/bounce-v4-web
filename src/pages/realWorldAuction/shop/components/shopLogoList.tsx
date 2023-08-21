@@ -1,6 +1,7 @@
 import { Box, Typography, styled } from '@mui/material'
 import { useIsMDDown } from 'themes/useTheme'
 import { ReactComponent as Icon1Svg } from 'assets/imgs/realworldShop/icon1.svg'
+import { ReactComponent as ZetaIcon1Svg } from 'assets/imgs/realworldShop/zeta_icon1.svg'
 import { ReactComponent as Icon1mobileSvg } from 'assets/imgs/realworldShop/icon1mobile.svg'
 import productImg from 'assets/imgs/thirdPart/foundoDetail/productIcon.png'
 import { ReactComponent as FoundoIcon1Svg } from 'assets/imgs/realworldShop/foundoIcon1.svg'
@@ -71,6 +72,25 @@ const ShopLogoList = () => {
         }
       }}
     >
+      <LogoItem
+        sx={{
+          minWidth: isMd ? '100px' : '200px',
+          '&:hover svg path': {
+            fill: '#fff'
+          }
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          {isMd ? <ZetaIcon1Svg style={{ transform: 'scale(0.5)' }} /> : <ZetaIcon1Svg />}
+        </Box>
+      </LogoItem>
       <LogoItem
         sx={{
           minWidth: isMd ? '195px' : '478px'
