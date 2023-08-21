@@ -264,7 +264,7 @@ const ZataShop = () => {
                   fontSize: isMd ? 32 : 64,
                   fontWeight: 400,
                   textTransform: 'uppercase',
-                  color: '#121212',
+                  color: '#005741',
                   textAlign: 'center'
                 }}
               >
