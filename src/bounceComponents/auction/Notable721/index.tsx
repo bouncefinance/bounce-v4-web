@@ -8,7 +8,7 @@ import { useRequest } from 'ahooks'
 import { getPools } from '../../../api/market'
 import { NFTPoolListProp } from '../../../api/pool/type'
 import { SwiperSlide } from 'swiper/react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
@@ -82,7 +82,6 @@ export const Notable721 = () => {
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
   const isSm = useBreakpoint('sm')
-  const navigate = useNavigate()
   const [slidesPerView] = useResizeView()
   const { data, loading } = useRequest(
     async () => {
@@ -167,15 +166,9 @@ export const Notable721 = () => {
             {data
               ? data.list.map((item, idx: number) => (
                   <Box style={{ width: '309px' }} key={idx}>
-                    <Box
-                      style={{ width: 'inherit', display: 'block' }}
-                      onClick={e => {
-                        e.stopPropagation()
-                        navigate(getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString()))
-                      }}
-                    >
+                    <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
                       <NFTCard nft={item} hiddenStatus={true} />
-                    </Box>
+                    </Link>
                   </Box>
                 ))
               : []}
@@ -191,15 +184,10 @@ export const Notable721 = () => {
             {data
               ? data.list.map((item, idx: number) => (
                   <SwiperSlide key={idx}>
-                    <Box style={{ width: '309px', cursor: 'pointer' }}>
-                      <Box
-                        onClick={e => {
-                          navigate(getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString()))
-                          e.stopPropagation()
-                        }}
-                      >
+                    <Box style={{ width: '309px' }}>
+                      <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
                         <NFTCard nft={item} hiddenStatus={true} />
-                      </Box>
+                      </Link>
                     </Box>
                   </SwiperSlide>
                 ))

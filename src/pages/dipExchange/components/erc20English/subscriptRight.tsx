@@ -52,7 +52,6 @@ const SubscriptRight = ({
           flex: 317,
           padding: '16px 0'
         }}
-        id={'bidBtn'}
       >
         <ConnectWalletButton />
       </Box>
@@ -65,7 +64,6 @@ const SubscriptRight = ({
           flex: 317,
           padding: '16px 0'
         }}
-        id={'bidBtn'}
       >
         <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
       </Box>

@@ -123,7 +123,7 @@ const BidBlock = ({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toApprove
       })
     }
@@ -174,7 +174,7 @@ const BidBlock = ({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toBid
       })
       setConfirmLoading(false)

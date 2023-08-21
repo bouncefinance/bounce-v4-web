@@ -24,7 +24,6 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
       onClick={ev => {
         ev.preventDefault()
         navigate(href)
-        ev.stopPropagation()
       }}
       sx={{
         px: 10,

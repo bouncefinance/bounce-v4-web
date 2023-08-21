@@ -164,11 +164,7 @@ export const NFTCard = (props: NFTPrams) => {
     amountTotal0
   } = props.nft as NFTPoolListProp
 
-  const isEnglishAuction721 = useMemo(
-    () =>
-      (is721 === 2 && category === PoolType.ENGLISH_AUCTION_NFT) || category === PoolType.MUTANT_ENGLISH_AUCTION_NFT,
-    [category, is721]
-  )
+  const isEnglishAuction721 = useMemo(() => is721 === 2 && category === PoolType.ENGLISH_AUCTION_NFT, [category, is721])
 
   const highestBidAmount = useMemo(() => {
     if (isEnglishAuction721) {
@@ -242,8 +238,8 @@ export const NFTCard = (props: NFTPrams) => {
               padding: '8px 12px'
             }}
             onClick={e => {
+              e.preventDefault()
               navigate(`${routes.profile.summary}?id=${creatorUserInfo?.userId}`)
-              e.stopPropagation()
             }}
           >
             <Avatar
@@ -339,11 +335,7 @@ export const NFTCard = (props: NFTPrams) => {
                 }}
                 mr={4}
               >
-                {category === PoolType.fixedSwapNft
-                  ? 'Fixed Price'
-                  : category === PoolType.ENGLISH_AUCTION_NFT
-                  ? 'English Auction'
-                  : 'Mutant English'}
+                {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English Auction'}
               </Box>
               <Box
                 sx={{
@@ -397,13 +389,7 @@ export const NFTCard = (props: NFTPrams) => {
             marginBottom: '17px'
           }}
         >
-          {name}{' '}
-          {category === PoolType.fixedSwapNft
-            ? 'Fixed Price'
-            : category === PoolType.ENGLISH_AUCTION_NFT
-            ? 'English'
-            : 'Mutant English'}{' '}
-          Auction Pool
+          {name} {category === PoolType.fixedSwapNft ? 'Fixed Price' : 'English'} Auction Pool
         </Typography>
         {isEnglishAuction721 ? (
           <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
@@ -486,7 +472,6 @@ export const NFTCard = (props: NFTPrams) => {
 }
 const Pools: React.FC = ({}) => {
   const optionDatas = useOptionDatas()
-  const navigate = useNavigate()
   const [chain, setChain] = useState<number>(3)
   const showTokenDialog = (setFieldValue: (field: string, value: any) => void) => {
     show<Token>(TokenDialog, { chainId: getLabelById(chain, 'ethChainId', optionDatas?.chainInfoOpt || []) })
@@ -714,17 +699,13 @@ const Pools: React.FC = ({}) => {
                           {poolsData?.list?.map((fixedSwaptem: any, index: number) => (
                             <Grid item xs={4} sm={4} md={4} lg={4} xl={4} key={index}>
                               <Box
-                                onClick={e => {
-                                  navigate(
-                                    getAuctionPoolLink(
-                                      fixedSwaptem.id,
-                                      fixedSwaptem.category,
-                                      fixedSwaptem.chainId,
-                                      fixedSwaptem.poolId.toString()
-                                    )
-                                  )
-                                  e.stopPropagation()
-                                }}
+                                component={'a'}
+                                href={getAuctionPoolLink(
+                                  fixedSwaptem.id,
+                                  fixedSwaptem.category,
+                                  fixedSwaptem.chainId,
+                                  fixedSwaptem.poolId.toString()
+                                )}
                               >
                                 <NFTCard nft={fixedSwaptem} hiddenStatus={true} />
                               </Box>

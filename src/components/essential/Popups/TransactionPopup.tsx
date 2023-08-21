@@ -26,7 +26,7 @@ export default function TransactionPopup({
             <ReportGmailerrorredOutlinedIcon color="error" height={20} width={20} />
           )}
         </div>
-        <Typography variant="inherit" paddingRight={10}>
+        <Typography variant="inherit">
           {summary ? summary : hash ? 'Hash: ' + hash.slice(0, 8) + '...' + hash.slice(58, 65) : '-'}
         </Typography>{' '}
       </Box>

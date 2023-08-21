@@ -100,7 +100,6 @@ const ClaimBlock = ({
   //   const isNotTimeToClaim = useMemo(() => {
   //     return Number(poolInfo?.claimAt) * 1000 >= new Date().valueOf()
   //   }, [poolInfo?.claimAt])
-
   const claimStatus = useMemo(() => {
     if (poolInfo.status === PoolStatus.Closed && countdown > 0) {
       return ClaimStatus.NotTimeToClaim
@@ -113,8 +112,6 @@ const ClaimBlock = ({
       return ClaimStatus.Claimed
     }
   }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
-  console.log('status', claimStatus, ClaimStatus.NotTimeToClaim, ClaimStatus.Claimed)
-
   if (!account) {
     return <ConnectWalletButton />
   }

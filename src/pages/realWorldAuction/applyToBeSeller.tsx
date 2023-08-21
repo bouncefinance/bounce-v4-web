@@ -240,12 +240,13 @@ export const ApplyToBeSeller = () => {
                 title2="Please address the following questions in your description."
                 childTitle={
                   <Title mt={16} sx={{ fontSize: 16, fontWeight: 500, color: '#959595', lineHeight: '1.7' }}>
-                    1. Provide a short blurb/intro of your project (within 400 characters).
+                    1. What is the project about?
                     <br />
-                    {`2. How would you define your brand's identity and values? How do you envision your brand store`}
-                    design reflecting these aspects?
+                    2. What makes your project unique? <br />
+                    3. History of your project.
                     <br />
-                    3. What types of tangible collectibles do you plan to feature in your store?
+                    4. What’s next for your project?
+                    <br /> 5. What can your token be used for? (Utility, NOT tokenomics)
                     <br />
                   </Title>
                 }

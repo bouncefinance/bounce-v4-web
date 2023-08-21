@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
+import PriceChartView from 'bounceComponents/englishAuction/PriceChartView'
 import { useIsSMDown } from 'themes/useTheme'
-import PriceChartView from './PriceChartView'
 
 const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const isSm = useIsSMDown()
@@ -9,8 +9,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
     <Box
       sx={{
         width: isSm ? '100%' : '458px',
-        padding: { xs: '40px 0', sm: '120px 0' },
-        borderBottom: { xs: '1px solid rgba(255, 255, 255, 0.4)', sm: 'none' },
+        padding: '120px 63px 120px 0',
         marginBottom: isSm ? '43px' : '0'
       }}
     >
@@ -18,7 +17,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
         sx={{
           fontFamily: `'Public Sans'`,
           fontWeight: 600,
-          fontSize: isSm ? 20 : 36,
+          fontSize: isSm ? 20 : 28,
           color: '#fff',
           lineHeight: '34px',
           marginBottom: '16px'
@@ -54,7 +53,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
       >
         Physically Backed NFT
       </Box>
-      {poolInfo && <PriceChartView isDark poolInfo={poolInfo} />}
+      {poolInfo && <PriceChartView isDark showText={false} poolInfo={poolInfo} />}
     </Box>
   )
 }

@@ -78,19 +78,7 @@ export const PlaceBidBtn = styled(LoadingButton)({
   color: '#fff',
   '&:hover': {
     borderColor: '#fff',
-    backgroundColor: '#fff',
-    color: '#000',
-    '& svg': {
-      '& path, & rect ': {
-        fill: 'black'
-      }
-    },
-    '& p , & span': {
-      color: '#000'
-    }
-  },
-  '& img, & svg': {
-    marginRight: 10
+    backgroundColor: 'transparent'
   },
   '&:disabled': {
     backgroundColor: 'transparent',

@@ -10,7 +10,6 @@ import FinalTokenclaim from './finalTokenclaim'
 import SubscriptionPeriod from './subscriptionPeriod'
 import BidHistory from './bidHistory'
 import { useIsMDDown } from 'themes/useTheme'
-import { useActiveWeb3React } from 'hooks'
 const StepCom = styled(Stepper)(() => ({
   '.MuiStepLabel-root': {
     padding: 0
@@ -48,7 +47,6 @@ const StepCom = styled(Stepper)(() => ({
 }))
 const PoolStep = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const [activeStep, setActiveStep] = useState<number>(0)
-  const { account } = useActiveWeb3React()
   const isMd = useIsMDDown()
   useEffect(() => {
     if (poolInfo.status === PoolStatus.Upcoming || poolInfo.status === PoolStatus.Live) {
@@ -100,7 +98,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
               </Typography>
               {activeStep === 0 && <SubscriptionPeriod poolInfo={poolInfo} />}
               {activeStep === 1 && <FinalTokenclaim poolInfo={poolInfo} />}
-              {account && <BidHistory poolInfo={poolInfo} />}
+              <BidHistory poolInfo={poolInfo} />
             </StepContent>
           </Step>
         ))}

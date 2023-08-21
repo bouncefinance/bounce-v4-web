@@ -146,9 +146,10 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           iconUrl={successSvg}
           label={'Deducted DIP'}
           value={
-            (poolInfo?.highestPrice?.toExact() && poolInfo?.currencyLowestBidPrice?.toExact()
-              ? BigNumber(poolInfo?.highestPrice?.toExact())
-                  .minus(poolInfo?.currencyLowestBidPrice?.toExact())
+            (poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
+              ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+                  .times(poolInfo?.participant.currencySwappedAmount1?.toExact())
+                  .times('0.025')
                   .toFixed(6, BigNumber.ROUND_DOWN)
               : '0') +
             ' ' +
@@ -160,8 +161,10 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
           iconUrl={successSvg}
           label={'Remaining DIP'}
           value={
-            (poolInfo?.participant?.currencyUnfilledAmount1?.toExact()
-              ? BigNumber(poolInfo.participant?.currencyUnfilledAmount1?.toExact()).toFixed(6, BigNumber.ROUND_DOWN)
+            (poolInfo?.currencyLowestBidPrice?.toExact() && poolInfo?.participant.currencySwappedAmount1?.toExact()
+              ? BigNumber(poolInfo?.currencyLowestBidPrice?.toExact())
+                  .times(poolInfo?.participant.currencySwappedAmount1?.toExact())
+                  .toFixed(6, BigNumber.ROUND_DOWN)
               : '0') +
             ' ' +
             poolInfo.token1.symbol.toUpperCase() +

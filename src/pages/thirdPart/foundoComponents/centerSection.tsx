@@ -9,7 +9,6 @@ const CenterSection = ({ children, style }: { children?: React.ReactNode; style?
       sx={{
         width: '100%',
         maxWidth: isSm ? '100%' : '1440px',
-        minHeight: 300,
         padding: isSm ? '0 16px' : '0 72px',
         margin: '0 auto',
         display: 'flex',

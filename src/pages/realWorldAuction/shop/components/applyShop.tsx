@@ -3,23 +3,9 @@ import { ReactComponent as LongArrowSvg } from 'assets/imgs/realworldShop/longAr
 import { useIsMDDown } from 'themes/useTheme'
 import { routes } from 'constants/routes'
 import AnimatedComponent from './animation'
-import YouTube, { YouTubeProps } from 'react-youtube'
 
 const ApplyShop = () => {
   const isMd = useIsMDDown()
-  const onPlayerReady: YouTubeProps['onReady'] = event => {
-    // access to player in all event handlers via event.target
-    event.target.pauseVideo()
-  }
-
-  const opts: YouTubeProps['opts'] = {
-    height: isMd ? 'auto' : '390',
-    width: isMd ? '100%' : '640',
-    playerVars: {
-      // https://developers.google.com/youtube/player_parameters
-      autoplay: false
-    }
-  }
   return (
     <Box
       sx={{
@@ -48,7 +34,7 @@ const ApplyShop = () => {
             marginBottom: '40px'
           }}
         >
-          BOUNCE REAL-WORLD COLLECTIBLES MARKETPLACE SUPPORTS VARIOUS TRADING MODES
+          The physical auction supports various auction mode.{' '}
         </Typography>
       </AnimatedComponent>
       <AnimatedComponent>
@@ -64,8 +50,7 @@ const ApplyShop = () => {
             marginBottom: isMd ? '40px' : '80px'
           }}
         >
-          In your store on Bounce, the NFTs representing your tangible products will be displayed. Tangible products are
-          shipped to buyers who can access the NFTs upon receiving the products.
+          You are bidding for a physical backed NFTs and you can redeem it post auction
         </Typography>
       </AnimatedComponent>
       <AnimatedComponent>
@@ -78,7 +63,6 @@ const ApplyShop = () => {
             lineHeight: isMd ? '37px' : '42px',
             borderRadius: isMd ? '37px' : '42px',
             border: '1px solid #121212',
-            marginBottom: '40px',
             '&:hover': {
               '.title': {
                 color: '#fff'
@@ -108,7 +92,6 @@ const ApplyShop = () => {
           <LongArrowSvg />
         </Button>
       </AnimatedComponent>
-      <YouTube videoId="0XjjbcT090w" opts={opts} onReady={onPlayerReady} />
     </Box>
   )
 }

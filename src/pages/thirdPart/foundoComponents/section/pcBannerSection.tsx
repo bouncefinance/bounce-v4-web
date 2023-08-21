@@ -45,8 +45,7 @@ const PcBanenr = () => {
     <Box
       sx={{
         width: '100%',
-        height: isSm ? '404px' : '680px',
-        background: '#000'
+        height: isSm ? '404px' : '680px'
       }}
     >
       <Box
@@ -143,7 +142,7 @@ const PcBanenr = () => {
             return (
               <BannerSmallItem
                 onClick={() => {
-                  swiperInstance.slideToLoop(index)
+                  swiperInstance.slideTo(index)
                 }}
                 src={item}
                 key={index}

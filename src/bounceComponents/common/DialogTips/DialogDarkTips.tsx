@@ -46,14 +46,8 @@ const DialogTips = create((props: DialogProps) => {
         '& .MuiDialog-paper': {
           backgroundColor: 'rgba(73, 73, 73, 0.3)',
           // minWidth: 480,
-          borderRadius: 0,
-          width: 480,
-          border: '1px solid rgba(255, 255, 255, 0.20)',
-          '& .MuiButton-root': {
-            background: 'transparent',
-            border: '1px solid #D7D6D9',
-            color: '#fff'
-          }
+          borderRadius: 20,
+          width: 480
         }
       }}
       {...rest}

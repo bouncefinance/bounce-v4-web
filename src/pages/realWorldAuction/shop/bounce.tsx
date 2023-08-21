@@ -47,11 +47,7 @@ const BounceShop = () => {
         <img
           style={{
             display: 'block',
-            width: '100%',
-            cursor: 'pointer'
-          }}
-          onClick={() => {
-            window.open('https://diamondhand.bounce.finance', '_blank')
+            width: '100%'
           }}
           src={P1}
           alt=""
@@ -111,11 +107,7 @@ const BounceShop = () => {
           <img
             style={{
               display: 'block',
-              width: '100%',
-              cursor: 'pointer'
-            }}
-            onClick={() => {
-              window.open('https://diamondhand.bounce.finance', '_blank')
+              width: '100%'
             }}
             src={P2}
             alt=""

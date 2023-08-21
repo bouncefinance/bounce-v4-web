@@ -75,9 +75,6 @@ const StageLine = ({
         onSwiper={swiper => {
           setSwiperInstance(swiper)
         }}
-        style={{
-          width: '100%'
-        }}
       >
         {list.map((item, index) => {
           return (

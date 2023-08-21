@@ -105,13 +105,6 @@ export const routes = {
   foundo: {
     home: '/foundo/home/index',
     detail: '/foundo/detail/index',
-    foundoDetail: '/foundo/detail',
-    foundoNfcDetail: '/foundo/nfc_detail'
-  },
-  tokenToolBox: {
-    index: '/TokenToolBox'
-  },
-  loyaltyprogram: {
-    index: '/Loyaltyprogram'
+    foundoDetail: '/foundo/detail'
   }
 }

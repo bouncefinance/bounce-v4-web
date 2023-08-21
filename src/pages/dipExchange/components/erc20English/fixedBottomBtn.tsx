@@ -7,7 +7,6 @@ import { useCountDown } from 'ahooks'
 import { useErc20EnglishUserClaim } from 'bounceHooks/auction/useErc20EnglishAuctionCallback'
 import { ClaimStatus } from './claimBlock'
 import BigNumber from 'bignumber.js'
-import { useActiveWeb3React } from 'hooks'
 
 enum FixBtnStatus {
   'show' = 0,
@@ -15,8 +14,6 @@ enum FixBtnStatus {
 }
 const FixedBottomBtn = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isUserJoined = useErc20EnglishUserClaim(poolInfo)
-  const { account, chainId } = useActiveWeb3React()
-  const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
   const [showFixedBtn, setShowFixedBtn] = useState<FixBtnStatus>(FixBtnStatus.show)
   const { status, openAt, closeAt, claimAt } = poolInfo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -42,7 +39,7 @@ const FixedBottomBtn = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
     }
   }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
   const scrollTopBtn = () => {
-    const claimBtnEl = document.getElementById('claimBtn')
+    const claimBtnEl = document.getElementById('claimSection')
     const bidBtnEl = document.getElementById('bidBtn')
     if (bidBtnEl) {
       bidBtnEl.scrollIntoView({ block: 'end', inline: 'nearest', behavior: 'smooth' })
@@ -75,42 +72,6 @@ const FixedBottomBtn = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
       window.removeEventListener('scroll', handleBtnDisabled)
     }
   }, [])
-  if (!account) {
-    return (
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          zIndex: 999,
-          display: showFixedBtn === FixBtnStatus.show ? 'block' : 'none'
-        }}
-      >
-        <ComBtn fullWidth onClick={() => scrollTopBtn()}>
-          Connect Wallet
-        </ComBtn>
-      </Box>
-    )
-  }
-  if (!isCurrentChainEqualChainOfPool) {
-    return (
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          zIndex: 999,
-          display: showFixedBtn === FixBtnStatus.show ? 'block' : 'none'
-        }}
-      >
-        <ComBtn fullWidth onClick={() => scrollTopBtn()}>
-          Switch network
-        </ComBtn>
-      </Box>
-    )
-  }
   if (poolInfo.status === PoolStatus.Upcoming) {
     return (
       <DisableBtn
@@ -173,7 +134,7 @@ const FixedBottomBtn = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
           }}
         >
           <ComBtn fullWidth disabled={poolInfo.participant.claimed} onClick={() => scrollTopBtn()}>
-            Claim
+            Cliam
           </ComBtn>
         </Box>
       )

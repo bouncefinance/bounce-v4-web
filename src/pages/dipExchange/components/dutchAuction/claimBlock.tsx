@@ -127,7 +127,7 @@ const ClaimBlock = ({
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
         title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        content: err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
         onAgain: toClaim
       })
       handleSetActionStep && handleSetActionStep(ActionStep.ClosedAndClaimed)
@@ -146,18 +146,10 @@ const ClaimBlock = ({
     }
   }, [countdown, poolInfo?.participant?.currencyCurClaimableAmount, poolInfo.status])
   if (!account) {
-    return (
-      <Box id={'claimBtn'}>
-        <ConnectWalletButton />
-      </Box>
-    )
+    return <ConnectWalletButton />
   }
   if (!isCurrentChainEqualChainOfPool) {
-    return (
-      <Box id={'claimBtn'}>
-        <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
-      </Box>
-    )
+    return <SwitchNetworkButton targetChain={poolInfo.ethChainId} />
   }
   if (claimStatus === ClaimStatus.Claimed) {
     return (
@@ -173,7 +165,6 @@ const ClaimBlock = ({
   }
   return (
     <Box
-      id={'claimBtn'}
       sx={{
         width: '100%',
         padding: '0 16px'
