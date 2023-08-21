@@ -22,7 +22,7 @@ const ShopBanner = ({ bannerData }: { bannerData: BannerType }) => {
         position: 'relative',
         width: '100%',
         height: isMd ? 'auto' : `calc(100vh - ${theme.height.head ? theme.height.head : '0px'})`,
-        minHeight: isMd ? 'unset' : '680px'
+        maxHeight: isMd ? 'unset' : '680px'
       }}
     >
       <img
