@@ -3,7 +3,9 @@ import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/err.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { useIsMDDown } from 'themes/useTheme'
-import { useRequireWhitelistAndEmail } from 'bounceHooks/auction/useRequireWhitelistAndEmail'
+import { needEmailValidPoolId, useRequireWhitelistAndEmail } from 'bounceHooks/auction/useRequireWhitelistAndEmail'
+import { useActiveWeb3React } from 'hooks'
+import { useQueryParams } from 'hooks/useQueryParams'
 const NotEligibleAlert = () => {
   const isRequireWhiteListAndEmail = useRequireWhitelistAndEmail()
   const connectEmail = () => {
@@ -15,6 +17,8 @@ const NotEligibleAlert = () => {
     })
   }
   const isMd = useIsMDDown()
+  const { account } = useActiveWeb3React()
+  const { sysId } = useQueryParams()
   const navigate = useNavigate()
   return (
     <Alert
@@ -52,7 +56,21 @@ const NotEligibleAlert = () => {
           </Button>
         </Box>
       )}
-      {!isRequireWhiteListAndEmail && (
+      {!account && needEmailValidPoolId.indexOf(Number(sysId)) > -1 && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: isMd ? 'column wrap' : 'row wrap',
+            justifyContent: 'flex-start',
+            alignItems: isMd ? 'flex-start' : 'center'
+          }}
+        >
+          <Typography variant="body1" component="span">
+            You need to connect to your email to participate in this auction
+          </Typography>
+        </Box>
+      )}
+      {!isRequireWhiteListAndEmail && needEmailValidPoolId.indexOf(Number(sysId)) === -1 && (
         <>
           <Typography variant="body1" component="span">
             You are not eligible.&nbsp;{' '}
