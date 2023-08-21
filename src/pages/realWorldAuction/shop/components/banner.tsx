@@ -100,7 +100,6 @@ export const SwiperSkeleton = () => {
 
 function ArrowBanner() {
   const [swiper, setSwiper] = useState<SwiperCore>()
-  console.log('swiper>>>', swiper)
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
   const bannerList = [

@@ -34,7 +34,6 @@ const FixedSwapPoolPageContent = () => {
     <Container maxWidth="lg">
       <Box sx={{ mt: 60 }}>
         <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} />
-
         <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
           {!isMobile && (
             <CreatorInfoCard
