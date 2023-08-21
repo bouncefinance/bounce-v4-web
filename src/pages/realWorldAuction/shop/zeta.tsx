@@ -223,7 +223,16 @@ const ZataShop = () => {
   }
   return (
     <ValuesProvider>
-      <ShopBanner bannerData={bannerData} />
+      <ShopBanner bannerData={bannerData}>
+        <div
+          style={{
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            background: `url(${isMd ? bannerData.bannerMobile : bannerData.banner}) no-repeat bottom right / cover`
+          }}
+        ></div>
+      </ShopBanner>
       <Box
         sx={{
           boxSizing: 'border-box',
@@ -271,12 +280,59 @@ const ZataShop = () => {
                   textAlign: 'center'
                 }}
               >
-                ZetaChain is the world’s first and only decentralized EVM-compatible L1 blockchain with built-in
-                cross-chain interoperability, connecting all blockchains, even non-smart contract chains like Bitcoin
-                and Dogecoin. With ZetaChain’s complete Omnichain toolkit, developers can build true omnichain dApps
-                from a single point of logic, and users can access all of their assets, data, and liquidity in a single
-                place, securely. Follow ZetaChain on Twitter @zetablockchain and join the conversation on Discord and
-                Telegram.
+                <span>
+                  ZetaChain is the world’s first and only decentralized EVM-compatible L1 blockchain with built-in
+                  cross-chain interoperability, connecting all blockchains, even non-smart contract chains like Bitcoin
+                  and Dogecoin. With ZetaChain’s complete{' '}
+                </span>
+                <a
+                  style={{
+                    textDecoration: 'underline'
+                  }}
+                  href="https://www.zetachain.com/docs/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Omnichain toolkit
+                </a>
+                <span>
+                  , developers can build true omnichain dApps from a single point of logic, and users can access all of
+                  their assets, data, and liquidity in a single place, securely. <br />
+                  Follow ZetaChain on Twitter{' '}
+                  <a
+                    style={{
+                      textDecoration: 'underline'
+                    }}
+                    href="https://twitter.com/zetablockchain"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    @zetablockchain
+                  </a>{' '}
+                  and join the conversation on{' '}
+                  <a
+                    style={{
+                      textDecoration: 'underline'
+                    }}
+                    href={'https://discord.com/invite/zetachain'}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Discord
+                  </a>{' '}
+                  and{' '}
+                  <a
+                    style={{
+                      textDecoration: 'underline'
+                    }}
+                    href={'https://t.me/zetachainofficial'}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Telegram
+                  </a>
+                  .
+                </span>
               </Typography>
             </Box>
           </Grid>

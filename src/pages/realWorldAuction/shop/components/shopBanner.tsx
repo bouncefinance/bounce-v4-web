@@ -13,7 +13,7 @@ export interface BannerType {
   link3?: string
   link4?: string
 }
-const ShopBanner = ({ bannerData }: { bannerData: BannerType }) => {
+const ShopBanner = ({ bannerData, children }: { bannerData: BannerType; children?: React.ReactNode }) => {
   const theme = useTheme()
   const isMd = useIsMDDown()
   return (
@@ -21,21 +21,25 @@ const ShopBanner = ({ bannerData }: { bannerData: BannerType }) => {
       sx={{
         position: 'relative',
         width: '100%',
-        height: isMd ? 'auto' : `calc(100vh - ${theme.height.head ? theme.height.head : '0px'})`,
-        maxHeight: isMd ? 'unset' : '680px'
+        height: isMd ? '100vh' : `calc(100vh - ${theme.height.head ? theme.height.head : '0px'})`,
+        maxHeight: isMd ? '440px' : '680px'
       }}
     >
-      <img
-        style={{
-          position: 'relative',
-          display: 'block',
-          width: '100%',
-          height: isMd ? 'unset' : '100%',
-          objectFit: 'cover'
-        }}
-        src={isMd ? bannerData.bannerMobile : bannerData.banner}
-        alt=""
-      />
+      {children ? (
+        children
+      ) : (
+        <img
+          style={{
+            position: 'relative',
+            display: 'block',
+            width: '100%',
+            height: isMd ? 'unset' : '100%',
+            objectFit: 'cover'
+          }}
+          src={isMd ? bannerData.bannerMobile : bannerData.banner}
+          alt=""
+        />
+      )}
       <Box
         sx={{
           position: 'absolute',
