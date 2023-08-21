@@ -82,6 +82,7 @@ import { ApplyToBeSeller } from 'pages/realWorldAuction/applyToBeSeller'
 import BounceShop from 'pages/realWorldAuction/shop/bounce'
 import FoundoShop from 'pages/realWorldAuction/shop/bounce'
 import MetaBlox from './projectIntro/MetaBloxProjectInfo'
+import LaunchpadDetail from './launchpad/detail'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -199,6 +200,7 @@ export default function App() {
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
+                  <Route path={routes.launchpad.account.launchpadDetail} element={<LaunchpadDetail />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

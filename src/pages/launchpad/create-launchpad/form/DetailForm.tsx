@@ -235,8 +235,6 @@ const DetailForm = ({
   }, [poolState, id])
   console.log('setCurPoolId')
   console.log(setCurPoolId)
-  console.log(curPoolId)
-
   console.log(poolState === PoolState.UP_CHAIN ? Number(id) || 0 : poolState === PoolState.MODIFY ? Number(id) || 0 : 0)
 
   const { chainInfoOpt } = useOptionDatas()
@@ -306,17 +304,14 @@ const DetailForm = ({
     }
     return { poolList, curPoolList: poolList.find(item => item.id === curPoolId) || defaultValue }
   }, [chainId, chainInfoOpt, curPoolId, launchpadInfo])
-  console.log('curPoolList')
-  console.log(curPoolList)
-  console.log(poolList)
 
   const { loading, runAsync } = useRequest(
     (values: IDetailInitValue) => {
       const poolParams: IPoolInfoParams = {
         id: values.id,
         name: values.name,
-        picture1: values.projectPicture,
-        picture2: values.projectMobilePicture,
+        picture1: values.projectMobilePicture,
+        picture2: values.projectPicture,
         creator: account,
         category: values.AuctionType,
         chainId: chainInfoOpt?.find(item => item.ethChainId === values.ChainId)?.id as number,
@@ -416,10 +411,10 @@ const DetailForm = ({
                       <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
                           <FormUploadAdd
-                            formItemName="projectPicture"
-                            fileUrl={values?.projectPicture}
+                            formItemName="projectMobilePicture"
+                            fileUrl={values?.projectMobilePicture}
                             setFieldValue={setFieldValue}
-                            labelId="ProjectPictureBigImg"
+                            labelId="ProjectPictureSmallImg"
                             labelChild={<BigAddIcon />}
                             labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
                           />
@@ -427,10 +422,10 @@ const DetailForm = ({
                         </Stack>
                         <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
                           <FormUploadAdd
-                            formItemName="projectMobilePicture"
-                            fileUrl={values?.projectMobilePicture}
+                            formItemName="projectPicture"
+                            fileUrl={values?.projectPicture}
                             setFieldValue={setFieldValue}
-                            labelId="ProjectPictureSmallImg"
+                            labelId="ProjectPictureBigImg"
                             labelChild={<BigAddIcon />}
                             labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
                           />

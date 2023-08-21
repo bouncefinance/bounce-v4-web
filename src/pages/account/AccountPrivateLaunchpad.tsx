@@ -38,7 +38,7 @@ enum ETabList {
   Close = 'Close'
 }
 
-const socialMap: { [key: string]: string } = {
+export const socialMap: { [key: string]: string } = {
   twitter: Twitter,
   telegram: Telegram,
   facebook: Facebook,
@@ -203,8 +203,11 @@ const LaunchpadCard = ({ poolInfo, basicInfo }: { poolInfo: IPoolInfoParams; bas
             gap: 74
           }}
         >
-          <Image src={ShowDetailIcon} />
-          <Link href={`${routes.thirdPart.CreateLaunchpad}?tab=2&id=${poolInfo.id}`}>
+          <Link href={`/account/launchpad/${poolInfo.id}`}>
+            <Image src={ShowDetailIcon} />
+          </Link>
+
+          <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
             <Image src={EditDetailIcon} />
           </Link>
         </Stack>
@@ -261,11 +264,6 @@ export default function AccountPrivateLaunchpad() {
     console.log('curPoolType', curPoolType)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, curPoolType, curChain])
-  console.log(' loading, data')
-  console.log(loading)
-  console.log(data)
-  console.log(pagination)
-
   return (
     <AccountLayout>
       <Box padding="40px 20px">
@@ -312,7 +310,7 @@ export default function AccountPrivateLaunchpad() {
                   sx={{ height: 44 }}
                   variant="contained"
                   color="secondary"
-                  onClick={() => navigate(routes.thirdPart.CreateLaunchpad)}
+                  onClick={() => navigate(`${routes.thirdPart.CreateLaunchpad}?tab=1`)}
                 >
                   <EditIcon /> Edit BasicInfo
                 </Button>

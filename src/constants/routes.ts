@@ -39,7 +39,10 @@ export const routes = {
   launchpad: {
     index: '/launchpad',
     bladeDao: '/launchpad/bladedao',
-    bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId'
+    bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId',
+    account: {
+      launchpadDetail: '/account/launchpad/:id'
+    }
   },
   realAuction: {
     index: '/real-auction',
