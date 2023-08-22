@@ -31,6 +31,10 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import ShowDetailIcon from 'assets/imgs/auction/show-detail-icon.svg'
 import EditDetailIcon from 'assets/imgs/auction/edit-detail-icon.svg'
+import { poolStrictSchema } from '../launchpad/create-launchpad/schema'
+import { useToDetailInfo } from 'bounceHooks/launchpad/useToDetailInfo'
+import { toast } from 'react-toastify'
+
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
@@ -68,11 +72,14 @@ const LaunchpadCard = ({
   getInfo: () => void
 }) => {
   const optionDatas = useOptionDatas()
-
   const chainName = useMemo(() => {
     const chainInfo = optionDatas.chainInfoOpt?.find(item => item.ethChainId === poolInfo.chainId)
     return chainInfo?.chainName
   }, [optionDatas, poolInfo])
+  const detailInfo = useToDetailInfo({ ...poolInfo, chainId: poolInfo.opId as number })
+  const navigate = useNavigate()
+  console.log('detailInfo')
+  console.log(detailInfo)
   const { run } = useRequest(
     (status: PoolStatus.Released) => {
       const newPool = { ...poolInfo, chainId: poolInfo.opId, status }
@@ -86,6 +93,17 @@ const LaunchpadCard = ({
       }
     }
   )
+  const toCreatePool = () => {
+    poolStrictSchema
+      .validate(detailInfo.poolInfo)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(() => {
+        toast.error('There is still some content that has not been filled out!')
+        setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
+      })
+  }
   return (
     <Row
       sx={{
@@ -231,7 +249,7 @@ const LaunchpadCard = ({
             <Image src={EditDetailIcon} />
           </Link>
           {poolInfo.status !== PoolStatus.On_Chain} <Box onClick={() => run(PoolStatus.Released)}>发布</Box>
-          <Box>上链</Box>
+          <Box onClick={toCreatePool}>上链</Box>
         </Stack>
       </Box>
     </Row>

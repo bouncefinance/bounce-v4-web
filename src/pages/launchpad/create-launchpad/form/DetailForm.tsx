@@ -44,10 +44,10 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
-import { poolSchema } from '../schema'
+import { poolSchema, poolStrictSchema } from '../schema'
 import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams, PoolStatus } from '../type'
 import { useActiveWeb3React } from 'hooks'
-import { IUserLaunchpadInfo } from 'api/user/type'
+import { ChainInfoOpt, IUserLaunchpadInfo } from 'api/user/type'
 import { PoolType } from 'api/pool/type'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
@@ -71,6 +71,57 @@ const auctionType = [
 const defaultFragmentRelease = {
   startAt: null,
   radio: ''
+}
+export const toDetailType = (values: IPoolInfoParams, chainInfoOpt: ChainInfoOpt[] | undefined) => {
+  const poolInfo = {
+    id: values.id,
+    ChainId: chainInfoOpt?.find(i => values.chainId === i.id)?.ethChainId,
+    TokenName: values.token0Name,
+    AuctionType: values.category,
+    name: values.name,
+    projectPicture: values.picture1,
+    projectMobilePicture: values.picture2,
+    creator: values.creator,
+    releaseType: values.releaseType,
+    allocationStatus: Number(values.maxAmount1PerWallet) > 0 ? AllocationStatus.Limited : AllocationStatus.NoLimits,
+    allocationPerWallet: Number(values.maxAmount1PerWallet) > 0 ? values.maxAmount1PerWallet : '',
+    ContractAddress: values.token0,
+    ContractDecimalPlaces: values.token0Decimals,
+    TotalSupply: values.totalAmount0,
+    Token: {
+      address: values.token1,
+      chainId: undefined
+    },
+    TokenLogo: values.token0Logo,
+    SwapRatio: values.ratio,
+    startTime: values.openAt ? moment(values.openAt) : null,
+    endTime: values.closeAt ? moment(values.closeAt) : null,
+    isRefundable: values.reverseEnabled,
+    whitelist: values.whitelistAddresses,
+    participantStatus: values.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public,
+    status: values.status,
+    delayUnlockingTime: null,
+    linearUnlockingStartTime: null,
+    linearUnlockingEndTime: null,
+    fragmentReleaseTimes: [{ startAt: null, radio: '0' }]
+  } as IDetailInitValue
+  if (values.releaseType === IReleaseType.Cliff) {
+    poolInfo.delayUnlockingTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt) : null
+  }
+  if (values.releaseType === IReleaseType.Linear) {
+    poolInfo.linearUnlockingStartTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt) : null
+    poolInfo.linearUnlockingEndTime = values.releaseData[0].endAtOrRatio
+      ? moment(values.releaseData[0].endAtOrRatio)
+      : null
+  }
+  if (values.releaseType === IReleaseType.Fragment) {
+    const fragment = values.releaseData.map<IFragmentReleaseTimes>(item => ({
+      startAt: item.startAt ? moment(item.startAt) : null,
+      radio: `${item.endAtOrRatio}`
+    }))
+    poolInfo.fragmentReleaseTimes = fragment
+  }
+  return poolInfo
 }
 function SetFragmentReleaseTime({
   releaseTimes,
@@ -180,7 +231,7 @@ const showTokenDialog = async ({
   setFieldValue('Token', {
     tokenToAddress: res.address,
     tokenToSymbol: res.symbol,
-    tokenToLogoURI: res.smallUrl,
+    tokenToLogoURI: res.logoURI || res.smallUrl,
     tokenToDecimals: res.decimals
   })
 }
@@ -272,55 +323,7 @@ const DetailForm = ({
     }
     if (launchpadInfo?.total) {
       const list: IDetailInitValue[] = launchpadInfo.list.map(item => {
-        const poolInfo = {
-          id: item.id,
-          ChainId: chainInfoOpt?.find(i => item.chainId === i.id)?.ethChainId,
-          TokenName: item.token0Name,
-          AuctionType: item.category,
-          name: item.name,
-          projectPicture: item.picture1,
-          projectMobilePicture: item.picture2,
-          creator: item.creator,
-          releaseType: item.releaseType,
-          allocationStatus: Number(item.maxAmount1PerWallet) > 0 ? AllocationStatus.Limited : AllocationStatus.NoLimits,
-          allocationPerWallet: Number(item.maxAmount1PerWallet) > 0 ? item.maxAmount1PerWallet : '',
-          ContractAddress: item.token0,
-          ContractDecimalPlaces: item.token0Decimals,
-          TotalSupply: item.totalAmount0,
-          Token: {
-            address: item.token1,
-            chainId: undefined
-          },
-          TokenLogo: item.token0Logo,
-          SwapRatio: item.ratio,
-          startTime: item.openAt ? moment(item.openAt) : null,
-          endTime: item.closeAt ? moment(item.closeAt) : null,
-          isRefundable: item.reverseEnabled,
-          whitelist: item.whitelistAddresses,
-          participantStatus: item.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public,
-          status: item.status,
-          delayUnlockingTime: null,
-          linearUnlockingStartTime: null,
-          linearUnlockingEndTime: null,
-          fragmentReleaseTimes: [{ startAt: null, radio: '0' }]
-        } as IDetailInitValue
-        if (item.releaseType === IReleaseType.Cliff) {
-          poolInfo.delayUnlockingTime = item.releaseData[0].startAt ? moment(item.releaseData[0].startAt) : null
-        }
-        if (item.releaseType === IReleaseType.Linear) {
-          poolInfo.linearUnlockingStartTime = item.releaseData[0].startAt ? moment(item.releaseData[0].startAt) : null
-          poolInfo.linearUnlockingEndTime = item.releaseData[0].endAtOrRatio
-            ? moment(item.releaseData[0].endAtOrRatio)
-            : null
-        }
-        if (item.releaseType === IReleaseType.Fragment) {
-          const fragment = item.releaseData.map<IFragmentReleaseTimes>(item => ({
-            startAt: item.startAt ? moment(item.startAt) : null,
-            radio: `${item.endAtOrRatio}`
-          }))
-          poolInfo.fragmentReleaseTimes = fragment
-        }
-
+        const poolInfo = toDetailType(item, chainInfoOpt)
         return poolInfo
       })
       poolList = poolList.concat(list)
@@ -406,7 +409,12 @@ const DetailForm = ({
   const isSm = useBreakpoint('sm')
   return (
     <CardBox sx={{ ...sx }}>
-      <Formik enableReinitialize initialValues={curPoolList} validationSchema={poolSchema} onSubmit={onSubmit}>
+      <Formik
+        enableReinitialize
+        initialValues={curPoolList}
+        validationSchema={poolStrictSchema || poolSchema}
+        onSubmit={onSubmit}
+      >
         {({ values, setFieldValue, setValues, errors, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>

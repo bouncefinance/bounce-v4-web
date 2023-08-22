@@ -267,7 +267,6 @@ export const poolStrictSchema = yup.object({
   TokenLogo: yup.string().required('Please upload your Token Logo'),
   TokenName: yup.string().required('Token Name is a required field'),
   projectMobilePicture: yup.string().required('Please upload your project mobile picture'),
-
   projectPicture: yup.string().required('Please upload your project picture'),
   ChainId: yup.number().required('ChainId is a required field'),
   ContractAddress: yup
@@ -276,12 +275,11 @@ export const poolStrictSchema = yup.object({
     .test('address', 'Please enter the correct contract address!', val => !!isAddress(val)),
   ContractDecimalPlaces: yup.number().required('Contract Decimal Places is a required field'),
   AuctionType: yup.string().required(),
-
   Token: yup.object({
-    tokenToAddress: yup.string().required(),
-    tokenToSymbol: yup.string().required('Funding Currency is a required field'),
-    tokenToLogoURI: yup.string(),
-    tokenToDecimals: yup.string().required()
+    address: yup.string().required(),
+    symbol: yup.string().required('Funding Currency is a required field'),
+    logoURI: yup.string(),
+    decimals: yup.number().required()
   }),
   SwapRatio: yup
     .number()
@@ -299,14 +297,20 @@ export const poolStrictSchema = yup.object({
     .min(moment(), 'Please select a time earlier than current time')
     .typeError('Please select a valid time')
     .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value: any, context: any) => {
-      return !context.parent.endTime.valueOf() || (value?.valueOf() || 0) < context.parent.endTime.valueOf()
+      return (
+        // context.parent.endTime &&
+        !context.parent.endTime?.valueOf() || (value?.valueOf() || 0) < context.parent.endTime?.valueOf()
+      )
     }),
   endTime: yup
     .date()
     .min(moment(), 'Please select a time earlier than current time')
     .typeError('Please select a valid time')
     .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value: any, context: any) => {
-      return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
+      return (
+        context.parent.startTime &&
+        (!context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf())
+      )
     }),
   allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
   allocationPerWallet: yup
@@ -383,10 +387,10 @@ export const poolStrictSchema = yup.object({
             }
             if (
               !(
-                !context.parent.endTime.valueOf() ||
-                !context.parent.startTime.valueOf() ||
-                ((input?.valueOf() || 0) >= context.parent.startTime.valueOf() &&
-                  (input?.valueOf() || 0) >= context.parent.endTime.valueOf())
+                !context.parent.endTime?.valueOf() ||
+                !context.parent.startTime?.valueOf() ||
+                ((input?.valueOf() || 0) >= context.parent.startTime?.valueOf() &&
+                  (input?.valueOf() || 0) >= context.parent.endTime?.valueOf())
               )
             ) {
               return context.createError({ message: 'Please select a time later than start time and end time' })
@@ -412,8 +416,8 @@ export const poolStrictSchema = yup.object({
             }
             if (
               !(
-                !context.parent.linearUnlockingStartTime.valueOf() ||
-                (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime.valueOf()
+                !context.parent.linearUnlockingStartTime?.valueOf() ||
+                (input?.valueOf() || 0) > context.parent.linearUnlockingStartTime?.valueOf()
               )
             ) {
               return context.createError({ message: 'Please select a time later than linear unlocking end time' })
