@@ -14,3 +14,10 @@ export const useRequireWhitelistAndEmail = (): boolean => {
   }, [account, sysId, userInfo?.email])
   return isRequireWhiteListAndEmail
 }
+export const useIsSpecialPoolId = (): boolean => {
+  const { sysId } = useQueryParams()
+  const isSpecialPoolId = useMemo(() => {
+    return !!(sysId && needEmailValidPoolId.indexOf(Number(sysId)) > -1)
+  }, [sysId])
+  return isSpecialPoolId
+}
