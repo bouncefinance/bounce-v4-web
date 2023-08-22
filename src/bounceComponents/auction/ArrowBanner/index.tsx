@@ -319,11 +319,24 @@ export function Banner({ banner }: { banner: BannerType }) {
   return (
     <Box
       sx={{
-        position: 'relative',
         display: 'flex',
         height: isSm ? '400px' : '460px',
+        // width: { sm: '328px', lg: '100%' },
         width: '100%',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        position: 'relative',
+        '@media(min-width:1440px)': {
+          height: isSm ? '400px' : '460px'
+        },
+        '@media(min-width:1920px)': {
+          height: isSm ? '400px' : '629px'
+        },
+        '@media(min-width:2560px)': {
+          height: isSm ? '400px' : '857px'
+        },
+        '@media(min-width:3840px)': {
+          height: isSm ? '400px' : '1313px'
+        }
       }}
       onClick={() => handleClick(banner.url || '')}
     >
