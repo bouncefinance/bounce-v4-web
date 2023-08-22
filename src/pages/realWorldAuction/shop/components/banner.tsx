@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useBreakpoint from 'hooks/useBreakpoint'
 import Banner1 from 'assets/imgs/realworldShop/banner1.png'
+import ZataBanner1 from 'assets/imgs/realworldShop/zeta-img1.png'
 import Banner1Mobile from 'assets/imgs/realworldShop/banner1mobile.png'
 import Banner2 from 'assets/imgs/realworldShop/banner2.png'
 import { routes } from 'constants/routes'
@@ -100,10 +101,16 @@ export const SwiperSkeleton = () => {
 
 function ArrowBanner() {
   const [swiper, setSwiper] = useState<SwiperCore>()
-  console.log('swiper>>>', swiper)
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
   const bannerList = [
+    {
+      title: 'ZETACHAIN',
+      imgPc: ZataBanner1,
+      imgMobile: ZataBanner1,
+      url: routes.realAuction.zetaShop,
+      mainColor: '#005741'
+    },
     {
       title: 'BOUNCE',
       imgPc: Banner1,

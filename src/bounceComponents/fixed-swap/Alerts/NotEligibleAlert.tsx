@@ -1,11 +1,9 @@
-import { Alert, Typography, Button, Box } from '@mui/material'
+import { Alert, Typography, Button } from '@mui/material'
 import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/err.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { useIsMDDown } from 'themes/useTheme'
-import { needEmailValidPoolId, useRequireWhitelistAndEmail } from 'bounceHooks/auction/useRequireWhitelistAndEmail'
-import { useActiveWeb3React } from 'hooks'
-import { useQueryParams } from 'hooks/useQueryParams'
+import { useRequireWhitelistAndEmail } from 'bounceHooks/auction/useRequireWhitelistAndEmail'
 const NotEligibleAlert = () => {
   const isRequireWhiteListAndEmail = useRequireWhitelistAndEmail()
   const connectEmail = () => {
@@ -17,8 +15,6 @@ const NotEligibleAlert = () => {
     })
   }
   const isMd = useIsMDDown()
-  const { account } = useActiveWeb3React()
-  const { sysId } = useQueryParams()
   const navigate = useNavigate()
   return (
     <Alert
@@ -34,43 +30,22 @@ const NotEligibleAlert = () => {
       icon={<ErrorIcon />}
     >
       {isRequireWhiteListAndEmail && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexFlow: isMd ? 'column wrap' : 'row wrap',
-            justifyContent: 'flex-start',
-            alignItems: isMd ? 'flex-start' : 'center'
-          }}
-        >
+        <>
           <Typography variant="body1" component="span">
             You need to connect to your email to participate in this auction
           </Typography>
           <Button
             sx={{
-              margin: isMd ? '8px 0 0' : '0 10px'
+              margin: '0 10px'
             }}
             variant="contained"
             onClick={() => connectEmail()}
           >
             Please connect your email.
           </Button>
-        </Box>
+        </>
       )}
-      {!account && needEmailValidPoolId.indexOf(Number(sysId)) > -1 && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexFlow: isMd ? 'column wrap' : 'row wrap',
-            justifyContent: 'flex-start',
-            alignItems: isMd ? 'flex-start' : 'center'
-          }}
-        >
-          <Typography variant="body1" component="span">
-            You need to connect to your email to participate in this auction
-          </Typography>
-        </Box>
-      )}
-      {!isRequireWhiteListAndEmail && needEmailValidPoolId.indexOf(Number(sysId)) === -1 && (
+      {!isRequireWhiteListAndEmail && (
         <>
           <Typography variant="body1" component="span">
             You are not eligible.&nbsp;{' '}

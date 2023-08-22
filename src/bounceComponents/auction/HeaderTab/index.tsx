@@ -100,7 +100,8 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         justifyContent: 'flex-start',
         alignItems: 'center',
         width: '100%',
-        maxWidth: '1296px',
+        // maxWidth: '1296px',
+        padding: { xs: 0, sm: '0 72px' },
         margin: '0 auto',
         ...style
       }}

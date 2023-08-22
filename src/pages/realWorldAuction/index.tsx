@@ -48,23 +48,22 @@ export default function RealWorldAuction({ sx }: { sx?: SxProps<Theme> | undefin
   }, [])
   return (
     <ValuesProvider>
+      <HeaderTab
+        style={{
+          maxWidth: '100%'
+        }}
+      />
       <Box
         sx={{
           padding: isSm ? '0' : '0 72px 0',
           background: '#fff',
           '@media(max-width:1920px)': {
-            maxWidth: '1296px',
-            margin: '0 auto',
-            padding: '0'
+            // maxWidth: '1296px',
+            margin: '0 auto'
           },
           ...sx
         }}
       >
-        <HeaderTab
-          style={{
-            maxWidth: '100%'
-          }}
-        />
         <ArrowBanner />
       </Box>
       <ComTitle

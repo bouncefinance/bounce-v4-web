@@ -125,8 +125,9 @@ function ArrowBanner({ type }: { type?: string }) {
       justifyContent={'center'}
       alignItems={'center'}
       sx={{
-        maxWidth: '1296px',
+        // maxWidth: '1296px',
         width: '100%',
+        padding: '0 72px',
         minHeight: isSm ? 125 : 460,
         margin: '16px auto 0',
         '@media(max-width:1296px)': {
@@ -170,7 +171,7 @@ function ArrowBanner({ type }: { type?: string }) {
             delay: delay
           }}
           style={{
-            maxWidth: '1296px',
+            // maxWidth: '1296px',
             width: '100%'
           }}
         >
@@ -216,20 +217,18 @@ const ArrowBg = styled(Box)`
 `
 const ArrowBgLeft = styled(ArrowBg)`
   position: absolute;
-  left: -30px;
+  left: 30px;
   top: 50%;
   transform: translateY(-50%);
-
   @media (max-width: 600px) {
     left: -25px;
   }
 `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
-  right: -30px;
+  right: 30px;
   top: 50%;
   transform: translateY(-50%);
-
   @media (max-width: 600px) {
     right: -25px;
   }
@@ -303,18 +302,6 @@ const Shadow = styled(Box)`
   }
 `
 
-// const ChainBg = styled(Box)`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   background: rgba(18, 18, 18, 0.2);
-//   backdrop-filter: blur(2px);
-//   border-radius: 100px;
-//   color: white;
-//   font-size: 13px;
-//   line-height: 140%;
-// `
-
 export function Banner({ banner }: { banner: BannerType }) {
   const isSm = useBreakpoint('sm')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -332,12 +319,11 @@ export function Banner({ banner }: { banner: BannerType }) {
   return (
     <Box
       sx={{
+        position: 'relative',
         display: 'flex',
         height: isSm ? '400px' : '460px',
-        // width: { sm: '328px', lg: '100%' },
         width: '100%',
-        cursor: 'pointer',
-        position: 'relative'
+        cursor: 'pointer'
       }}
       onClick={() => handleClick(banner.url || '')}
     >
@@ -345,9 +331,8 @@ export function Banner({ banner }: { banner: BannerType }) {
         src={isSm ? banner.mobileImg : banner.avatar}
         alt=""
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
+          position: 'relative',
+          display: 'block',
           width: '100%',
           height: '100%',
           borderRadius: isSm ? '15px' : '30px',
