@@ -6,7 +6,7 @@ import { useUserInfo } from 'state/users/hooks'
 import { useMemo } from 'react'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { IPrivatePadProp, IProjectInfo } from '../PrivatePadDataList'
-import { PoolType } from 'api/pool/type'
+import { PoolStatus, PoolType } from 'api/pool/type'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
@@ -24,6 +24,9 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { useActiveWeb3React } from 'hooks'
 import { addTokenToWallet } from 'utils/addTokenToWallet'
 import useTokenList from 'bounceHooks/auction/useTokenList'
+import { AuctionProgressPrimaryColor } from 'constants/auction/color'
+import PoolProgress from 'bounceComponents/common/PoolProgress'
+import { formatNumber } from 'utils/number'
 const LaunchpadDetail = () => {
   const { chainId } = useActiveWeb3React()
   const { id } = useQueryParams()
@@ -152,7 +155,16 @@ const LaunchpadDetail = () => {
     <Box>
       <ProjectHead item={privatePadData} />
       <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
-        <Stack sx={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Stack
+          sx={{
+            maxWidth: '1296px',
+            margin: '0 auto',
+            marginBottom: 40,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
           <H3 sx={{ color: '#121212', fontSize: isSm ? 22 : 36 }}>Join The Pool</H3>
           <Box
             onClick={() => navigate('/account/private_launchpad')}
@@ -220,7 +232,7 @@ const LaunchpadDetail = () => {
                 contract and price. Bounce auction is a decentralized tool where anyone can launch.
               </Typography>
             </Stack>
-            <Stack>
+            <Box sx={{ display: 'flex', columnGap: 12, flexWrap: 'wrap', minWidth: '300px' }}>
               {/* left box */}
               <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
                 <Stack spacing={36}>
@@ -296,32 +308,92 @@ const LaunchpadDetail = () => {
                         ? Number(curPoolInfo.maxAmount1PerWallet) + ' ' + curToken1?.symbol
                         : 'No Limit'}
                     </PoolInfoItem>
-                    {/* <PoolInfoItem title="Total available Amount">
-                      {poolInfo.currencyAmountTotal0.toSignificant()} {poolInfo.token0.symbol}
+                    <PoolInfoItem title="Total available Amount">
+                      {curPoolInfo.totalAmount0} {curPoolInfo.token0Symbol}
                     </PoolInfoItem>
                     <PoolInfoItem title="Price per unit, $">
-                      {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
-                    </PoolInfoItem> */}
+                      {/* {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()} */}0
+                    </PoolInfoItem>
                   </Stack>
-                  {/*
-                <Box>
-                  <PoolInfoItem title="Progress">
-                    <Box>
-                      <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[poolInfo.status] }}>
-                        {poolInfo.currencySwappedAmount0.toSignificant()} {poolInfo.token0.symbol}
-                      </Typography>
-                      <Typography component="span">
-                        &nbsp;/ {poolInfo.currencyAmountTotal0.toSignificant()} {poolInfo.token0.symbol}
-                      </Typography>
-                    </Box>
-                  </PoolInfoItem>
 
-                  <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status} />
-                </Box>
-               */}
+                  <Box>
+                    <PoolInfoItem title="Progress">
+                      <Box>
+                        <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[PoolStatus.Upcoming] }}>
+                          0 {curPoolInfo.token0Symbol}
+                        </Typography>
+                        <Typography component="span">
+                          &nbsp;/ {curPoolInfo.totalAmount0} {curPoolInfo.token0Symbol}
+                        </Typography>
+                      </Box>
+                    </PoolInfoItem>
+                    <PoolProgress value={0} sx={{ mt: 12 }} poolStatus={PoolStatus.Upcoming} />
+                  </Box>
                 </Stack>
               </Box>
-            </Stack>
+              {/* right box */}
+              <Box sx={{ flex: 1, pt: 28 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h2">{'Join The Pool'}</Typography>
+                  <Box
+                    style={{
+                      display: 'inline-block',
+                      padding: '4px 8px',
+                      background: '#E6E6E6',
+                      borderRadius: 20
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      color="var(--ps-gray-600)"
+                      fontSize={12}
+                      component="span"
+                      style={{
+                        marginRight: '5px'
+                      }}
+                    >
+                      Upcoming
+                    </Typography>
+                  </Box>
+                </Box>
+                <Stack spacing={10} sx={{ mt: 24 }}>
+                  <PoolInfoItem title="Bid swap ratio">
+                    <Stack direction="row" spacing={8}>
+                      <Typography>1</Typography>
+                      <TokenImage
+                        alt={curPoolInfo.token0Symbol}
+                        src={(curPoolInfo.token0Logo as string) || ''}
+                        size={20}
+                      />
+                      <Typography>
+                        {curPoolInfo.token0Symbol} = {formatNumber(curPoolInfo.ratio, { unit: 0 })}
+                      </Typography>
+                      <TokenImage alt={curToken1?.symbol} src={curToken1?.logoURI} size={20} />
+                      <Typography>{curToken1?.symbol}</Typography>
+                    </Stack>
+                  </PoolInfoItem>
+
+                  <PoolInfoItem title="Successful bid amount" tip="The amount of token you successfully secured.">
+                    <Stack direction="row" spacing={6}>
+                      <Typography>{'0'}</Typography>
+                      <TokenImage
+                        alt={curPoolInfo.token0Symbol}
+                        src={(curPoolInfo.token0Logo as string) || ''}
+                        size={20}
+                      />
+                      <Typography>{curPoolInfo.token0Symbol}</Typography>
+                    </Stack>
+                  </PoolInfoItem>
+
+                  <PoolInfoItem title="Creator wallet address">
+                    <Stack direction="row" spacing={6}>
+                      <Typography>{shortenAddress((curPoolInfo.creator as string) || '')}</Typography>
+                      <CopyToClipboard text={(curPoolInfo.creator as string) || ''} />
+                    </Stack>
+                  </PoolInfoItem>
+                </Stack>
+              </Box>
+            </Box>
           </Stack>
         )}
         <Tabs item={privatePadData} />
