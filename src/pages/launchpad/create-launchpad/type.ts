@@ -120,7 +120,7 @@ export interface IPoolInfoParams {
   amountTotal0?: string
   amountTotal1?: string
   auctionHodlerEnabled?: boolean
-  releaseData?: { startAt: number; endAtOrRatio: number }[]
+  releaseData: { startAt: number; endAtOrRatio: number }[]
   reverseEnabled?: boolean
   times?: number
   tokenIds?: string[]

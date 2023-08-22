@@ -272,7 +272,7 @@ const DetailForm = ({
     }
     if (launchpadInfo?.total) {
       const list: IDetailInitValue[] = launchpadInfo.list.map(item => {
-        return {
+        const poolInfo = {
           id: item.id,
           ChainId: chainInfoOpt?.find(i => item.chainId === i.id)?.ethChainId,
           TokenName: item.token0Name,
@@ -298,8 +298,30 @@ const DetailForm = ({
           isRefundable: item.reverseEnabled,
           whitelist: item.whitelistAddresses,
           participantStatus: item.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public,
-          status: item.status
+          status: item.status,
+          delayUnlockingTime: null,
+          linearUnlockingStartTime: null,
+          linearUnlockingEndTime: null,
+          fragmentReleaseTimes: [{ startAt: null, radio: '0' }]
         } as IDetailInitValue
+        if (item.releaseType === IReleaseType.Cliff) {
+          poolInfo.delayUnlockingTime = item.releaseData[0].startAt ? moment(item.releaseData[0].startAt) : null
+        }
+        if (item.releaseType === IReleaseType.Linear) {
+          poolInfo.linearUnlockingStartTime = item.releaseData[0].startAt ? moment(item.releaseData[0].startAt) : null
+          poolInfo.linearUnlockingEndTime = item.releaseData[0].endAtOrRatio
+            ? moment(item.releaseData[0].endAtOrRatio)
+            : null
+        }
+        if (item.releaseType === IReleaseType.Fragment) {
+          const fragment = item.releaseData.map<IFragmentReleaseTimes>(item => ({
+            startAt: item.startAt ? moment(item.startAt) : null,
+            radio: `${item.endAtOrRatio}`
+          }))
+          poolInfo.fragmentReleaseTimes = fragment
+        }
+
+        return poolInfo
       })
       poolList = poolList.concat(list)
     }
@@ -322,7 +344,7 @@ const DetailForm = ({
         creator: account,
         category: values.AuctionType,
         chainId: chainInfoOpt?.find(item => item.ethChainId === values.ChainId)?.id as number,
-        releaseType: values.releaseType,
+        releaseType: Number(values.releaseType),
         token0: values.ContractAddress,
         token0Decimals: values.ContractDecimalPlaces,
         token0Logo: values.TokenLogo,
@@ -336,7 +358,8 @@ const DetailForm = ({
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
         whitelistAddresses: values.whitelist,
-        status: values.status
+        status: values.status,
+        releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
         poolParams['maxAmount1PerWallet'] = `${
@@ -646,7 +669,6 @@ const DetailForm = ({
                         <Title sx={{ fontSize: 20, color: '#171717' }}>
                           1 {!values.TokenName ? 'USDT' : values.TokenName} =
                         </Title>
-                        {/* 小数点位数大于 精度时还没有报错？ */}
                         <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
                           <NumberInput
                             value={values.SwapRatio}
