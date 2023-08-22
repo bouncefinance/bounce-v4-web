@@ -27,6 +27,7 @@ import useTokenList from 'bounceHooks/auction/useTokenList'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { formatNumber } from 'utils/number'
+import NoData from 'bounceComponents/common/NoData'
 const LaunchpadDetail = () => {
   const { chainId } = useActiveWeb3React()
   const { id } = useQueryParams()
@@ -192,212 +193,224 @@ const LaunchpadDetail = () => {
         */}
         {/* not ont chain */}
         {curPoolInfo && privatePadData && (
-          <Stack
-            my={40}
-            sx={{
-              maxWidth: '1296px',
-              gap: 24,
-              margin: '0 auto 40px',
-              padding: isSm ? 20 : '48px 56px',
-              background: '#FFF',
-              borderRadius: 24
-            }}
-          >
+          <Box sx={{ maxWidth: '1296px', margin: '0 auto' }}>
             <Stack
-              mt={32}
+              my={40}
               sx={{
-                padding: 16,
-                background: '#F9FCDE',
-                borderRadius: 8,
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 16
+                maxWidth: '1296px',
+                gap: 24,
+                margin: '0 auto 40px',
+                padding: isSm ? 20 : '48px 56px',
+                background: '#FFF',
+                borderRadius: 24
               }}
             >
-              <Image src={GreenWarn} style={{ width: 27, height: 24 }} />
-              <Typography
+              <Stack
+                mt={32}
                 sx={{
-                  maxWidth: '100%',
-                  color: '#908E96',
-                  leadingTrim: 'both',
-                  textEdge: 'cap',
-                  fontFamily: 'Inter',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '150%'
+                  padding: 16,
+                  background: '#F9FCDE',
+                  borderRadius: 8,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 16
                 }}
               >
-                <span style={{ color: '#171717' }}>Please pay attention.</span> Check the auction creator, token
-                contract and price. Bounce auction is a decentralized tool where anyone can launch.
-              </Typography>
-            </Stack>
-            <Box sx={{ display: 'flex', columnGap: 12, flexWrap: 'wrap', minWidth: '300px' }}>
-              {/* left box */}
-              <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
-                <Stack spacing={36}>
-                  <Stack spacing={10}>
-                    <Typography variant="h6" sx={{ mb: 10 }}>
-                      Token Information
-                    </Typography>
+                <Image src={GreenWarn} style={{ width: 27, height: 24 }} />
+                <Typography
+                  sx={{
+                    maxWidth: '100%',
+                    color: '#908E96',
+                    leadingTrim: 'both',
+                    textEdge: 'cap',
+                    fontFamily: 'Inter',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '150%'
+                  }}
+                >
+                  <span style={{ color: '#171717' }}>Please pay attention.</span> Check the auction creator, token
+                  contract and price. Bounce auction is a decentralized tool where anyone can launch.
+                </Typography>
+              </Stack>
+              <Box sx={{ display: 'flex', columnGap: 12, flexWrap: 'wrap', minWidth: '300px' }}>
+                {/* left box */}
+                <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
+                  <Stack spacing={36}>
+                    <Stack spacing={10}>
+                      <Typography variant="h6" sx={{ mb: 10 }}>
+                        Token Information
+                      </Typography>
 
-                    <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
-                      <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-                        {curPoolInfo.token0 && (
-                          <>
-                            <CertifiedTokenImage
-                              address={curPoolInfo?.token0}
-                              ethChainId={ethChainId}
-                              backedChainId={curPoolInfo.chainId}
-                              coingeckoId={''}
-                            />
+                      <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
+                        <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
+                          {curPoolInfo.token0 && (
+                            <>
+                              <CertifiedTokenImage
+                                address={curPoolInfo?.token0}
+                                ethChainId={ethChainId}
+                                backedChainId={curPoolInfo.chainId}
+                                coingeckoId={''}
+                              />
 
-                            <Typography>{shortenAddress(curPoolInfo.token0)}</Typography>
+                              <Typography>{shortenAddress(curPoolInfo.token0)}</Typography>
 
-                            <CopyToClipboard text={curPoolInfo.token0} />
-                          </>
+                              <CopyToClipboard text={curPoolInfo.token0} />
+                            </>
+                          )}
+                          {!curPoolInfo.token0 && '-- -- --'}
+                        </Stack>
+                      </PoolInfoItem>
+
+                      <PoolInfoItem title="Token Symbol">
+                        <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
+                          {curPoolInfo.token0Logo && (
+                            <TokenImage src={curPoolInfo.token0Logo as string} alt={curPoolInfo.token0Name} size={20} />
+                          )}
+                          {!curPoolInfo.token0Logo && '--'}
+                          {curPoolInfo.token0Symbol && <Typography>{curPoolInfo.token0Symbol}</Typography>}
+                          {!curPoolInfo.token0Symbol && '--'}
+                        </Stack>
+                      </PoolInfoItem>
+                      {ethChainId &&
+                        chainId === ethChainId &&
+                        curPoolInfo.token0 &&
+                        curPoolInfo.token0Symbol &&
+                        curPoolInfo.token0Decimals && (
+                          <Button
+                            variant="outlined"
+                            onClick={() =>
+                              addTokenToWallet(
+                                curPoolInfo.token0 as string,
+                                curPoolInfo.token0Symbol as string,
+                                curPoolInfo.token0Decimals as number
+                              )
+                            }
+                            sx={{
+                              width: 140,
+                              height: 20
+                            }}
+                          >
+                            Add To Wallet
+                          </Button>
                         )}
-                        {!curPoolInfo.token0 && '-- -- --'}
-                      </Stack>
-                    </PoolInfoItem>
+                    </Stack>
 
-                    <PoolInfoItem title="Token Symbol">
-                      <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-                        {curPoolInfo.token0Logo && (
-                          <TokenImage src={curPoolInfo.token0Logo as string} alt={curPoolInfo.token0Name} size={20} />
-                        )}
-                        {!curPoolInfo.token0Logo && '--'}
-                        {curPoolInfo.token0Symbol && <Typography>{curPoolInfo.token0Symbol}</Typography>}
-                        {!curPoolInfo.token0Symbol && '--'}
-                      </Stack>
-                    </PoolInfoItem>
-                    {ethChainId &&
-                      chainId === ethChainId &&
-                      curPoolInfo.token0 &&
-                      curPoolInfo.token0Symbol &&
-                      curPoolInfo.token0Decimals && (
-                        <Button
-                          variant="outlined"
-                          onClick={() =>
-                            addTokenToWallet(
-                              curPoolInfo.token0 as string,
-                              curPoolInfo.token0Symbol as string,
-                              curPoolInfo.token0Decimals as number
-                            )
-                          }
-                          sx={{
-                            width: 140,
-                            height: 20
-                          }}
-                        >
-                          Add To Wallet
-                        </Button>
-                      )}
+                    <Stack spacing={10}>
+                      <Typography variant="h6" sx={{ mb: 10 }}>
+                        Auction Information
+                      </Typography>
+                      <PoolInfoItem title="Auction Type">Fixed-Price</PoolInfoItem>
+                      <PoolInfoItem title="Participant">
+                        {curPoolInfo.whitelistEnabled ? 'Whitelist' : 'Public'}
+                      </PoolInfoItem>
+                      <PoolInfoItem title="Allocation per Wallet">
+                        {Number(curPoolInfo.maxAmount1PerWallet) > 0
+                          ? Number(curPoolInfo.maxAmount1PerWallet) + ' ' + curToken1?.symbol
+                          : 'No Limit'}
+                      </PoolInfoItem>
+                      <PoolInfoItem title="Total available Amount">
+                        {curPoolInfo.totalAmount0} {curPoolInfo.token0Symbol}
+                      </PoolInfoItem>
+                      <PoolInfoItem title="Price per unit, $">
+                        {/* {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()} */}0
+                      </PoolInfoItem>
+                    </Stack>
+
+                    <Box>
+                      <PoolInfoItem title="Progress">
+                        <Box>
+                          <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[PoolStatus.Upcoming] }}>
+                            0 {curPoolInfo.token0Symbol}
+                          </Typography>
+                          <Typography component="span">
+                            &nbsp;/ {curPoolInfo.totalAmount0} {curPoolInfo.token0Symbol}
+                          </Typography>
+                        </Box>
+                      </PoolInfoItem>
+                      <PoolProgress value={0} sx={{ mt: 12 }} poolStatus={PoolStatus.Upcoming} />
+                    </Box>
                   </Stack>
-
-                  <Stack spacing={10}>
-                    <Typography variant="h6" sx={{ mb: 10 }}>
-                      Auction Information
-                    </Typography>
-                    <PoolInfoItem title="Auction Type">Fixed-Price</PoolInfoItem>
-                    <PoolInfoItem title="Participant">
-                      {curPoolInfo.whitelistEnabled ? 'Whitelist' : 'Public'}
-                    </PoolInfoItem>
-                    <PoolInfoItem title="Allocation per Wallet">
-                      {Number(curPoolInfo.maxAmount1PerWallet) > 0
-                        ? Number(curPoolInfo.maxAmount1PerWallet) + ' ' + curToken1?.symbol
-                        : 'No Limit'}
-                    </PoolInfoItem>
-                    <PoolInfoItem title="Total available Amount">
-                      {curPoolInfo.totalAmount0} {curPoolInfo.token0Symbol}
-                    </PoolInfoItem>
-                    <PoolInfoItem title="Price per unit, $">
-                      {/* {new BigNumber(poolInfo.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()} */}0
-                    </PoolInfoItem>
-                  </Stack>
-
-                  <Box>
-                    <PoolInfoItem title="Progress">
-                      <Box>
-                        <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[PoolStatus.Upcoming] }}>
-                          0 {curPoolInfo.token0Symbol}
-                        </Typography>
-                        <Typography component="span">
-                          &nbsp;/ {curPoolInfo.totalAmount0} {curPoolInfo.token0Symbol}
-                        </Typography>
-                      </Box>
-                    </PoolInfoItem>
-                    <PoolProgress value={0} sx={{ mt: 12 }} poolStatus={PoolStatus.Upcoming} />
-                  </Box>
-                </Stack>
-              </Box>
-              {/* right box */}
-              <Box sx={{ flex: 1, pt: 28 }}>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography variant="h2">{'Join The Pool'}</Typography>
+                </Box>
+                {/* right box */}
+                <Box sx={{ flex: 1, pt: 28 }}>
                   <Box
-                    style={{
-                      display: 'inline-block',
-                      padding: '4px 8px',
-                      background: '#E6E6E6',
-                      borderRadius: 20
-                    }}
+                    sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}
                   >
-                    <Typography
-                      variant="body1"
-                      color="var(--ps-gray-600)"
-                      fontSize={12}
-                      component="span"
+                    <Typography variant="h2">{'Join The Pool'}</Typography>
+                    <Box
                       style={{
-                        marginRight: '5px'
+                        display: 'inline-block',
+                        padding: '4px 8px',
+                        background: '#E6E6E6',
+                        borderRadius: 20
                       }}
                     >
-                      Upcoming
-                    </Typography>
-                  </Box>
-                </Box>
-                <Stack spacing={10} sx={{ mt: 24 }}>
-                  <PoolInfoItem title="Bid swap ratio">
-                    <Stack direction="row" spacing={8}>
-                      <Typography>1</Typography>
-                      <TokenImage
-                        alt={curPoolInfo.token0Symbol}
-                        src={(curPoolInfo.token0Logo as string) || ''}
-                        size={20}
-                      />
-                      <Typography>
-                        {curPoolInfo.token0Symbol} = {formatNumber(curPoolInfo.ratio, { unit: 0 })}
+                      <Typography
+                        variant="body1"
+                        color="var(--ps-gray-600)"
+                        fontSize={12}
+                        component="span"
+                        style={{
+                          marginRight: '5px'
+                        }}
+                      >
+                        Upcoming
                       </Typography>
-                      <TokenImage alt={curToken1?.symbol} src={curToken1?.logoURI} size={20} />
-                      <Typography>{curToken1?.symbol}</Typography>
-                    </Stack>
-                  </PoolInfoItem>
+                    </Box>
+                  </Box>
+                  <Stack spacing={10} sx={{ mt: 24 }}>
+                    <PoolInfoItem title="Bid swap ratio">
+                      <Stack direction="row" spacing={8}>
+                        <Typography>1</Typography>
+                        <TokenImage
+                          alt={curPoolInfo.token0Symbol}
+                          src={(curPoolInfo.token0Logo as string) || ''}
+                          size={20}
+                        />
+                        <Typography>
+                          {curPoolInfo.token0Symbol} = {formatNumber(curPoolInfo.ratio, { unit: 0 })}
+                        </Typography>
+                        <TokenImage alt={curToken1?.symbol} src={curToken1?.logoURI} size={20} />
+                        <Typography>{curToken1?.symbol}</Typography>
+                      </Stack>
+                    </PoolInfoItem>
 
-                  <PoolInfoItem title="Successful bid amount" tip="The amount of token you successfully secured.">
-                    <Stack direction="row" spacing={6}>
-                      <Typography>{'0'}</Typography>
-                      <TokenImage
-                        alt={curPoolInfo.token0Symbol}
-                        src={(curPoolInfo.token0Logo as string) || ''}
-                        size={20}
-                      />
-                      <Typography>{curPoolInfo.token0Symbol}</Typography>
-                    </Stack>
-                  </PoolInfoItem>
+                    <PoolInfoItem title="Successful bid amount" tip="The amount of token you successfully secured.">
+                      <Stack direction="row" spacing={6}>
+                        <Typography>{'0'}</Typography>
+                        <TokenImage
+                          alt={curPoolInfo.token0Symbol}
+                          src={(curPoolInfo.token0Logo as string) || ''}
+                          size={20}
+                        />
+                        <Typography>{curPoolInfo.token0Symbol}</Typography>
+                      </Stack>
+                    </PoolInfoItem>
 
-                  <PoolInfoItem title="Creator wallet address">
-                    <Stack direction="row" spacing={6}>
-                      <Typography>{shortenAddress((curPoolInfo.creator as string) || '')}</Typography>
-                      <CopyToClipboard text={(curPoolInfo.creator as string) || ''} />
-                    </Stack>
-                  </PoolInfoItem>
-                </Stack>
+                    <PoolInfoItem title="Creator wallet address">
+                      <Stack direction="row" spacing={6}>
+                        <Typography>{shortenAddress((curPoolInfo.creator as string) || '')}</Typography>
+                        <CopyToClipboard text={(curPoolInfo.creator as string) || ''} />
+                      </Stack>
+                    </PoolInfoItem>
+                  </Stack>
+                </Box>
+              </Box>
+            </Stack>
+            <Box sx={{ borderRadius: 20, px: 12, py: 20, bgcolor: '#fff' }}>
+              <Typography variant="h2" sx={{ ml: 12 }}>
+                Auction History
+              </Typography>
+              <Box sx={{ width: '100%' }}>
+                <NoData />
               </Box>
             </Box>
-          </Stack>
+          </Box>
         )}
-        <Tabs item={privatePadData} />
       </Box>
+      <Tabs item={privatePadData} />
       <FooterPc />
     </Box>
   )
