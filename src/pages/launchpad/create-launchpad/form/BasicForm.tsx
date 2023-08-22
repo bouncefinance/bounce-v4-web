@@ -304,7 +304,7 @@ const BasicForm = ({
                   ))}
                 </Stack>
               </BaseBox>
-              <SubmitComp loading={loading} isChange={first || !isEqual(values, initValue)} />
+              <SubmitComp isShowPreview={false} loading={loading} isChange={first || !isEqual(values, initValue)} />
             </Stack>
           )
         }}

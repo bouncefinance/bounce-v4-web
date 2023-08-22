@@ -56,6 +56,7 @@ import ImportWhitelistDialog from 'bounceComponents/create-auction-pool/ImportWh
 import { useRequest } from 'ahooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { updateLaunchpadPool } from 'api/user'
+import useTokenList from 'bounceHooks/auction/useTokenList'
 enum PoolState {
   'CREATE' = 1,
   'MODIFY' = 2,
@@ -179,7 +180,7 @@ const showTokenDialog = async ({
   setFieldValue('Token', {
     tokenToAddress: res.address,
     tokenToSymbol: res.symbol,
-    tokenToLogoURI: res.logoURI,
+    tokenToLogoURI: res.smallUrl,
     tokenToDecimals: res.decimals
   })
 }
@@ -200,6 +201,7 @@ const showImportWhitelistDialog = (
       console.log('ImportWhitelistDialog Rejected: ', err)
     })
 }
+// Allocation Per Wallet
 const DetailForm = ({
   getLaunchpadInfo,
   sx,
@@ -211,7 +213,6 @@ const DetailForm = ({
 }) => {
   const { type = PoolState.CREATE, id } = useQueryParams()
   const { chainId, account } = useActiveWeb3React()
-
   const poolState = useMemo(() => {
     if (!launchpadInfo?.total || !launchpadInfo?.list.find(item => item.id === Number(id))) {
       return PoolState.CREATE
@@ -230,12 +231,8 @@ const DetailForm = ({
   useEffect(() => {
     const newCurPoolId =
       poolState === PoolState.UP_CHAIN ? Number(id) || 0 : poolState === PoolState.MODIFY ? Number(id) || 0 : 0
-
     setCurPoolId(newCurPoolId)
   }, [poolState, id])
-  console.log('setCurPoolId')
-  console.log(setCurPoolId)
-  console.log(poolState === PoolState.UP_CHAIN ? Number(id) || 0 : poolState === PoolState.MODIFY ? Number(id) || 0 : 0)
 
   const { chainInfoOpt } = useOptionDatas()
   const { poolList, curPoolList } = useMemo<{ poolList: IDetailInitValue[]; curPoolList: IDetailInitValue }>(() => {
@@ -252,10 +249,9 @@ const DetailForm = ({
       ContractDecimalPlaces: 18,
       AuctionType: PoolType.FixedSwap,
       Token: {
-        tokenToAddress: '',
-        tokenToSymbol: '',
-        tokenToLogoURI: '',
-        tokenToDecimals: ''
+        address: '',
+        chainId: undefined,
+        decimals: 18
       },
       SwapRatio: '',
       TotalSupply: '',
@@ -278,15 +274,21 @@ const DetailForm = ({
         return {
           id: item.id,
           ChainId: chainInfoOpt?.find(i => item.chainId === i.id)?.ethChainId,
+          TokenName: item.token0Name,
+          AuctionType: item.category,
           name: item.name,
           projectPicture: item.picture1,
           projectMobilePicture: item.picture2,
           creator: item.creator,
           releaseType: item.releaseType,
+          allocationStatus: Number(item.maxAmount1PerWallet) > 0 ? AllocationStatus.Limited : AllocationStatus.NoLimits,
+          allocationPerWallet: Number(item.maxAmount1PerWallet) > 0 ? item.maxAmount1PerWallet : '',
           ContractAddress: item.token0,
           ContractDecimalPlaces: item.token0Decimals,
+          TotalSupply: item.totalAmount0,
           Token: {
-            tokenToAddress: item.token1
+            address: item.token1,
+            chainId: undefined
           },
           TokenLogo: item.token0Logo,
           SwapRatio: item.ratio,
@@ -305,6 +307,9 @@ const DetailForm = ({
     return { poolList, curPoolList: poolList.find(item => item.id === curPoolId) || defaultValue }
   }, [chainId, chainInfoOpt, curPoolId, launchpadInfo])
 
+  const { tokenList } = useTokenList(curPoolList.ChainId, 2, '', true)
+  const token1 = tokenList.find(item => item.address === curPoolList.Token.address)
+  token1 && (curPoolList.Token = token1)
   const { loading, runAsync } = useRequest(
     (values: IDetailInitValue) => {
       const poolParams: IPoolInfoParams = {
@@ -322,7 +327,7 @@ const DetailForm = ({
         token0Name: values.TokenName,
         token0Symbol: values.TokenName,
         totalAmount0: values.TotalSupply,
-        token1: values.Token.tokenToAddress,
+        token1: values.Token.address,
         ratio: values.SwapRatio,
         openAt: values.startTime?.valueOf(),
         closeAt: values.endTime?.valueOf(),
@@ -332,7 +337,7 @@ const DetailForm = ({
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
         poolParams['maxAmount1PerWallet'] = `${
-          Number(values.allocationPerWallet) * Math.pow(10, Number(values.Token.tokenToDecimals))
+          Number(values.allocationPerWallet) * Math.pow(10, Number(values.Token.decimals))
         }`
       }
       const releaseType = Number(values.releaseType)
@@ -381,7 +386,7 @@ const DetailForm = ({
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>auction Round</Title>
-                <Stack mt={20}>
+                <Stack mt={20} sx={{ flexDirection: 'row', gap: 10 }}>
                   {poolList.map(item => {
                     return (
                       <Chip
@@ -392,9 +397,13 @@ const DetailForm = ({
                         key={item.id}
                         label={item.name}
                         variant={curPoolId === item.id ? 'outlined' : 'filled'}
-                      ></Chip>
+                        onClick={() => {
+                          setCurPoolId(item.id)
+                        }}
+                      />
                     )
                   })}
+                  {!poolList.find(item => !item.id) && <Chip label="Add New List" onClick={() => setCurPoolId(0)} />}
                 </Stack>
               </BaseBox>
               <BaseBox>
@@ -610,15 +619,14 @@ const DetailForm = ({
                     title1="Funding Currency"
                     childForm={
                       <FormItem
-                        name="Token.tokenToSymbol"
+                        name="Token.symbol"
                         label="Select Token"
                         required
                         sx={{ flex: 1 }}
-                        startAdornment={
-                          <TokenImage alt={values.Token.tokenToSymbol} src={values.Token.tokenToLogoURI} size={32} />
-                        }
+                        startAdornment={<TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={32} />}
                       >
                         <FakeOutlinedInput
+                          value={values.Token.symbol}
                           readOnly
                           onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
                         />
@@ -642,12 +650,8 @@ const DetailForm = ({
                             onUserInput={value => setFieldValue('SwapRatio', value)}
                             endAdornment={
                               <>
-                                <TokenImage
-                                  alt={values.Token.tokenToSymbol}
-                                  src={values.Token.tokenToLogoURI}
-                                  size={24}
-                                />
-                                <Typography sx={{ ml: 8 }}>{values.Token.tokenToSymbol}</Typography>
+                                <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
+                                <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
                               </>
                             }
                           />
@@ -705,12 +709,8 @@ const DetailForm = ({
                           sx={{ mt: 10 }}
                           endAdornment={
                             <>
-                              <TokenImage
-                                alt={values.Token.tokenToSymbol}
-                                src={values.Token.tokenToLogoURI}
-                                size={24}
-                              />
-                              <Typography sx={{ ml: 8 }}>{values.Token.tokenToSymbol}</Typography>
+                              <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
+                              <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
                             </>
                           }
                         />

@@ -44,7 +44,17 @@ export const HeadTitle = styled(Title)({
   }
 })
 
-export const SubmitComp = ({ errors, isChange, loading }: { errors?: any; isChange: boolean; loading: boolean }) => {
+export const SubmitComp = ({
+  errors,
+  isChange,
+  loading,
+  isShowPreview = true
+}: {
+  errors?: any
+  isChange: boolean
+  loading: boolean
+  isShowPreview?: boolean
+}) => {
   console.log('errors')
   console.log(errors)
 
@@ -71,23 +81,25 @@ export const SubmitComp = ({ errors, isChange, loading }: { errors?: any; isChan
           }
         }}
       >
-        <Button
-          variant="contained"
-          sx={{
-            padding: '20px 40px',
-            background: '#FFF',
-            border: '1px solid  #121212',
-            '&:hover': { background: '#FFF' },
-            '@media(max-width:600px)': {
-              width: 92,
-              height: 10,
-              padding: '16px 24px',
-              boxSizing: 'content-box'
-            }
-          }}
-        >
-          <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
-        </Button>
+        {isShowPreview && (
+          <Button
+            variant="contained"
+            sx={{
+              padding: '20px 40px',
+              background: '#FFF',
+              border: '1px solid  #121212',
+              '&:hover': { background: '#FFF' },
+              '@media(max-width:600px)': {
+                width: 92,
+                height: 10,
+                padding: '16px 24px',
+                boxSizing: 'content-box'
+              }
+            }}
+          >
+            <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
+          </Button>
+        )}
         {!isChange && (
           <Tooltip title="The form content has not changed at all.">
             <span>

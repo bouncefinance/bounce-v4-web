@@ -3,6 +3,7 @@ import { ChainId } from 'constants/chain'
 import { Moment } from 'moment'
 import { AllocationStatus, IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { PoolType } from 'api/pool/type'
+import { Token } from 'bounceComponents/fixed-swap/type'
 export enum ITab {
   'Basic',
   'Detail'
@@ -14,12 +15,6 @@ export enum ParticipantStatus {
 export interface ICommunity {
   communityName: string
   communityLink: string
-}
-interface ITokenProps {
-  tokenToAddress: string
-  tokenToSymbol: string
-  tokenToLogoURI: string
-  tokenToDecimals: string
 }
 export interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -66,7 +61,7 @@ export interface IDetailInitValue {
   ContractAddress: string
   ContractDecimalPlaces: number
   AuctionType: PoolType
-  Token: ITokenProps
+  Token: Token
   SwapRatio: string
   TotalSupply: string
   startTime: Moment | null

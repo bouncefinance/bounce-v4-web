@@ -12,6 +12,7 @@ import DetailForm from './form/DetailForm'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useUserInfo } from 'state/users/hooks'
 import Tooltip from 'bounceComponents/common/Tooltip'
+import { toast } from 'react-toastify'
 enum CreTab {
   'BASIC' = 1,
   'POOL' = 2
@@ -24,25 +25,6 @@ interface ICreComProps {
   first: boolean
   getLaunchpadInfo: () => void
 }
-// const launchpadInfo: IUserLaunchpadInfo = {
-//   basicInfo: {
-//     banner: '',
-//     chainId: 0,
-//     community: [],
-//     description: '',
-//     id: 0,
-//     projectLogo: '',
-//     projectMobilePicture: '',
-//     projectName: '',
-//     projectPicture: '',
-//     roadmap: '',
-//     tokennomics: '',
-//     website: '',
-//     whitepaperLink: ''
-//   },
-//   list: [{ id: 1, category: 1, chainId: 5, releaseType: 0, ratio: '0.001' }],
-//   total: 1
-// }
 const CreateLaunchpad = () => {
   const { tab, id } = useQueryParams()
   const { token } = useUserInfo()
@@ -52,7 +34,12 @@ const CreateLaunchpad = () => {
     () => {
       return getUserLaunchpadInfo({})
     },
-    { ready: !!token }
+    {
+      ready: !!token,
+      onError: () => {
+        toast.error('network error')
+      }
+    }
   )
   if (data && !data.data.basicInfo) {
     if (!isFirst) setIsFirst(true)
@@ -76,6 +63,8 @@ const CreateLaunchpad = () => {
 export default CreateLaunchpad
 const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
 const LaunchpadForm: React.FC<ICreComProps> = ({ getLaunchpadInfo, tab, setTab, id, launchpadInfo, first }) => {
+  console.log(id)
+
   const isSm = useBreakpoint('sm')
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
