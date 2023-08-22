@@ -12,6 +12,13 @@ export enum ParticipantStatus {
   'Public' = 'PUBLIC',
   'Whitelist' = 'WHITELIST'
 }
+export enum PoolStatus {
+  'Init' = 0,
+  'Released' = 1,
+  'Approved' = 2,
+  'Approved_Failed' = 3,
+  'On_Chain' = 4
+}
 export interface ICommunity {
   communityName: string
   communityLink: string
@@ -76,6 +83,7 @@ export interface IDetailInitValue {
   isRefundable: boolean
   participantStatus: ParticipantStatus
   whitelist: string[]
+  status: PoolStatus
 }
 export interface IPoolInfoParams {
   id: number
@@ -120,6 +128,7 @@ export interface IPoolInfoParams {
   customizedNeeds?: string
   whitelistEnabled?: boolean
   whitelistAddresses?: string[]
+  status: PoolStatus
 }
 export interface IValues {
   basic: IBasicInfoParams

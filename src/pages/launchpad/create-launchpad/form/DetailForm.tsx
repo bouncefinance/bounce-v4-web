@@ -45,7 +45,7 @@ import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
 import { poolSchema } from '../schema'
-import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams } from '../type'
+import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams, PoolStatus } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { IUserLaunchpadInfo } from 'api/user/type'
 import { PoolType } from 'api/pool/type'
@@ -267,7 +267,8 @@ const DetailForm = ({
       fragmentReleaseSize: '',
       isRefundable: true,
       whitelist: [],
-      participantStatus: ParticipantStatus.Public
+      participantStatus: ParticipantStatus.Public,
+      status: PoolStatus.Init
     }
     if (launchpadInfo?.total) {
       const list: IDetailInitValue[] = launchpadInfo.list.map(item => {
@@ -296,7 +297,8 @@ const DetailForm = ({
           endTime: item.closeAt ? moment(item.closeAt) : null,
           isRefundable: item.reverseEnabled,
           whitelist: item.whitelistAddresses,
-          participantStatus: item.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public
+          participantStatus: item.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public,
+          status: item.status
         } as IDetailInitValue
       })
       poolList = poolList.concat(list)
@@ -333,7 +335,8 @@ const DetailForm = ({
         closeAt: values.endTime?.valueOf(),
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
-        whitelistAddresses: values.whitelist
+        whitelistAddresses: values.whitelist,
+        status: values.status
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
         poolParams['maxAmount1PerWallet'] = `${

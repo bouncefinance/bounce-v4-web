@@ -14,13 +14,13 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainListMap, ChainId } from 'constants/chain'
 // import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import useBreakpoint from 'hooks/useBreakpoint'
-import { usePagination } from 'ahooks'
-import { getUserLaunchpadInfo } from 'api/user'
+import { usePagination, useRequest } from 'ahooks'
+import { getUserLaunchpadInfo, updateLaunchpadPool } from 'api/user'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { getLabelById } from 'utils'
 import { useActiveWeb3React } from 'hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { IBasicInfoParams, IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
+import { IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
 import Twitter from 'assets/imgs/auction/round-icon-twitter.svg'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import Facebook from 'assets/imgs/common/Facebook-Blue-Logo.svg'
@@ -58,13 +58,34 @@ const MoreDataBox = ({ title, content }: { title: string; content: string }) => 
 }
 const tabList = [ETabList.All, ETabList.Close, ETabList.Live, ETabList.Upcoming]
 
-const LaunchpadCard = ({ poolInfo, basicInfo }: { poolInfo: IPoolInfoParams; basicInfo: IBasicInfoParams }) => {
+const LaunchpadCard = ({
+  poolInfo,
+  basicInfo,
+  getInfo
+}: {
+  poolInfo: IPoolInfoParams & { opId?: number }
+  basicInfo: IBasicInfoParams
+  getInfo: () => void
+}) => {
   const optionDatas = useOptionDatas()
 
   const chainName = useMemo(() => {
     const chainInfo = optionDatas.chainInfoOpt?.find(item => item.ethChainId === poolInfo.chainId)
     return chainInfo?.chainName
   }, [optionDatas, poolInfo])
+  const { run } = useRequest(
+    (status: PoolStatus.Released) => {
+      const newPool = { ...poolInfo, chainId: poolInfo.opId, status }
+      delete newPool.opId
+      return updateLaunchpadPool(newPool as IPoolInfoParams)
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        getInfo()
+      }
+    }
+  )
   return (
     <Row
       sx={{
@@ -206,10 +227,11 @@ const LaunchpadCard = ({ poolInfo, basicInfo }: { poolInfo: IPoolInfoParams; bas
           <Link href={`/account/launchpad/${poolInfo.id}`}>
             <Image src={ShowDetailIcon} />
           </Link>
-
           <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
             <Image src={EditDetailIcon} />
           </Link>
+          {poolInfo.status !== PoolStatus.On_Chain} <Box onClick={() => run(PoolStatus.Released)}>发布</Box>
+          <Box>上链</Box>
         </Stack>
       </Box>
     </Row>
@@ -224,7 +246,12 @@ export default function AccountPrivateLaunchpad() {
   const { account } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
   const isSm = useBreakpoint('sm')
-  const { loading, data, pagination } = usePagination<any, Params>(
+  const {
+    loading,
+    data,
+    pagination,
+    run: getLaunchpadInfo
+  } = usePagination<any, Params>(
     async ({ current, pageSize }) => {
       const chainInfoOptId = optionDatas?.chainInfoOpt?.find(item => item.ethChainId === curChain)
       if (!account) {
@@ -243,7 +270,7 @@ export default function AccountPrivateLaunchpad() {
       return {
         list: res.data.list.map(i => {
           const ethChainId = getLabelById(i.chainId, 'ethChainId', optionDatas?.chainInfoOpt || [])
-          return { ...i, chainId: ethChainId }
+          return { ...i, chainId: ethChainId, opId: i.chainId }
         }),
         total: res.data.total,
         basicInfo: res.data.basicInfo as IBasicInfoParams
@@ -333,8 +360,13 @@ export default function AccountPrivateLaunchpad() {
             ) : !loading && data && data.list.length > 0 ? (
               <>
                 <Stack sx={{ flexDirection: 'column', gap: 48 }}>
-                  {data?.list.map((item: IPoolInfoParams) => (
-                    <LaunchpadCard key={item.id} poolInfo={item} basicInfo={data.basicInfo} />
+                  {data?.list.map((item: IPoolInfoParams & { opId?: number }) => (
+                    <LaunchpadCard
+                      key={item.id}
+                      poolInfo={item}
+                      basicInfo={data.basicInfo}
+                      getInfo={() => getLaunchpadInfo({ current: pagination.current, pageSize: pagination.pageSize })}
+                    />
                   ))}
                 </Stack>
                 <Stack mt={48} alignItems={'center'}>
