@@ -4,7 +4,7 @@ import 'swiper/swiper-bundle.css'
 import { Box, styled, Skeleton, Typography, Button } from '@mui/material'
 import { ReactComponent as LeftArrow } from 'assets/imgs/realworldShop/leftArrow.svg'
 import { ReactComponent as RightArrow } from 'assets/imgs/realworldShop/rightArrow.svg'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 // import EthIcon from 'assets/imgs/auction/eth-icon.svg'
 import { useNavigate } from 'react-router-dom'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -103,30 +103,32 @@ function ArrowBanner() {
   const [swiper, setSwiper] = useState<SwiperCore>()
   const isSm = useBreakpoint('sm')
   const [showSwiperIcon, setShowSwiperIcon] = useState<boolean>(false)
-  const bannerList = [
-    {
-      title: 'ZETACHAIN',
-      imgPc: ZataBanner1,
-      imgMobile: ZataBanner1,
-      url: routes.realAuction.zetaShop,
-      mainColor: '#005741'
-    },
-    {
-      title: 'BOUNCE',
-      imgPc: Banner1,
-      imgMobile: Banner1Mobile,
-      url: routes.realAuction.bounceShop,
-      mainColor: '#B5E529'
-    },
-    {
-      title: 'FOUNDO',
-      imgPc: Banner2,
-      imgMobile: Banner2,
-      url: routes.realAuction.foundoShop,
-      mainColor: '#000'
-    }
-  ]
-
+  const bannerList = useMemo(
+    () => [
+      {
+        title: 'ZETACHAIN',
+        imgPc: ZataBanner1,
+        imgMobile: ZataBanner1,
+        url: routes.realAuction.zetaShop,
+        mainColor: '#005741'
+      },
+      {
+        title: 'BOUNCE',
+        imgPc: Banner1,
+        imgMobile: Banner1Mobile,
+        url: routes.realAuction.bounceShop,
+        mainColor: '#B5E529'
+      },
+      {
+        title: 'FOUNDO',
+        imgPc: Banner2,
+        imgMobile: Banner2,
+        url: routes.realAuction.foundoShop,
+        mainColor: '#000'
+      }
+    ],
+    []
+  )
   const EnterSwiper = () => {
     setShowSwiperIcon(true)
   }
@@ -205,6 +207,32 @@ function ArrowBanner() {
           <RightArrow />
         </ArrowBgRight>
       )}
+      <Box
+        sx={{
+          position: 'absolute',
+          boxSizing: 'border-box',
+          top: isSm ? '18.5px' : '57px',
+          left: 0,
+          width: isSm ? 12 : 48,
+          height: isSm ? 'calc(100% - 18.5px)' : 'calc(100% - 57px)',
+          borderTop: `1px solid ${bannerList[swiper?.realIndex || 0]?.mainColor}`,
+          borderLeft: `1px solid ${bannerList[swiper?.realIndex || 0]?.mainColor}`,
+          borderBottom: `1px solid ${bannerList[swiper?.realIndex || 0]?.mainColor}`
+        }}
+      ></Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          boxSizing: 'border-box',
+          top: isSm ? '18.5px' : '57px',
+          right: 0,
+          width: isSm ? 12 : 48,
+          height: isSm ? 'calc(100% - 18.5px)' : 'calc(100% - 57px)',
+          borderTop: `1px solid ${bannerList[swiper?.realIndex || 0]?.mainColor}`,
+          borderRight: `1px solid ${bannerList[swiper?.realIndex || 0]?.mainColor}`,
+          borderBottom: `1px solid ${bannerList[swiper?.realIndex || 0]?.mainColor}`
+        }}
+      ></Box>
     </Box>
   )
 }
@@ -303,32 +331,6 @@ export function Banner({ banner }: { banner: BannerType }) {
       onClick={() => handleClick(banner.url || '')}
     >
       <img className="bannerImg" src={isSm ? banner.imgMobile : banner.imgPc} alt="" />
-      <Box
-        sx={{
-          position: 'absolute',
-          boxSizing: 'border-box',
-          top: isSm ? '18.5px' : '57px',
-          left: 0,
-          width: isSm ? 12 : 48,
-          height: isSm ? 'calc(100% - 18.5px)' : 'calc(100% - 57px)',
-          borderTop: `1px solid ${banner.mainColor}`,
-          borderLeft: `1px solid ${banner.mainColor}`,
-          borderBottom: `1px solid ${banner.mainColor}`
-        }}
-      ></Box>
-      <Box
-        sx={{
-          position: 'absolute',
-          boxSizing: 'border-box',
-          top: isSm ? '18.5px' : '57px',
-          right: 0,
-          width: isSm ? 12 : 48,
-          height: isSm ? 'calc(100% - 18.5px)' : 'calc(100% - 57px)',
-          borderTop: `1px solid ${banner.mainColor}`,
-          borderRight: `1px solid ${banner.mainColor}`,
-          borderBottom: `1px solid ${banner.mainColor}`
-        }}
-      ></Box>
       <Typography
         className="title"
         sx={{
