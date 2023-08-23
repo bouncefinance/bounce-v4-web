@@ -61,17 +61,6 @@ export function use1155TokenList(
           })
         }
         if (chainId === 5 && isERC721) {
-          nftCollection['0xa3620AcffC7b0dC97875C360946b7847E619596c'] = []
-          nftCollection['0xa3620AcffC7b0dC97875C360946b7847E619596c'].push({
-            balance: '1',
-            contractAddr: '0xa3620AcffC7b0dC97875C360946b7847E619596c',
-            contractName: 'DiamondHand Necklace',
-            description: 'DiamondHand Necklace',
-            image: '',
-            name: 'DiamondHand Necklace',
-            tokenId: '0'
-          })
-
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
             balance: '1',
@@ -147,6 +136,17 @@ export function use1155TokenList(
         setIsLoading(false)
         const nftCollection: Response1155Token = {}
         if (chainId === 5 && isERC721) {
+          nftCollection['0xa3620AcffC7b0dC97875C360946b7847E619596c'] = []
+          nftCollection['0xa3620AcffC7b0dC97875C360946b7847E619596c'].push({
+            balance: '1',
+            contractAddr: '0xa3620AcffC7b0dC97875C360946b7847E619596c',
+            contractName: 'DiamondHand Necklace',
+            description: 'DiamondHand Necklace',
+            image: '',
+            name: 'DiamondHand Necklace',
+            tokenId: '0'
+          })
+
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
             balance: '1',
