@@ -403,22 +403,32 @@ const DetailForm = ({
     },
     { manual: true }
   )
+  const toUpdate = async (value: IDetailInitValue) => {
+    const res = await runAsync(value)
+    getLaunchpadInfo()
+    return res
+  }
   const onSubmit = async (value: IDetailInitValue) => {
     console.log('submit submit submit submit submit')
     console.log(value)
-    await runAsync(value)
-    getLaunchpadInfo()
+    await toUpdate(value)
   }
   const isSm = useBreakpoint('sm')
   return (
     <CardBox sx={{ ...sx }}>
-      <Formik enableReinitialize initialValues={curPoolList} validationSchema={poolSchema} onSubmit={onSubmit}>
+      <Formik
+        enableReinitialize
+        initialValues={curPoolList}
+        validationSchema={poolSchema}
+        onSubmit={onSubmit}
+        validateOnMount
+      >
         {({ values, setFieldValue, setValues, errors, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>auction Round</Title>
-                <Stack mt={20} sx={{ flexDirection: 'row', gap: 10 }}>
+                <Stack mt={20} sx={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
                   {poolList.map(item => {
                     return (
                       <Chip
@@ -458,6 +468,7 @@ const DetailForm = ({
                             labelId="ProjectPictureSmallImg"
                             labelChild={<BigAddIcon />}
                             labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                            firstTrigger={true}
                           />
                           <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 375px*290px`}</Body02>
                         </Stack>
@@ -469,12 +480,14 @@ const DetailForm = ({
                             labelId="ProjectPictureBigImg"
                             labelChild={<BigAddIcon />}
                             labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                            firstTrigger={true}
                           />
                           <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 1360px*600px`}</Body02>
                         </Stack>
                       </Stack>
                     }
                   />
+
                   <FormLayout
                     title1="Pool Name"
                     childForm={
@@ -903,7 +916,7 @@ const DetailForm = ({
                   </Stack>
                 </Stack>
               </BaseBox>
-              <SubmitComp errors={errors} loading={loading} isChange={true} />
+              <SubmitComp toUpdate={toUpdate} values={values} errors={errors} loading={loading} isChange={true} />
             </Stack>
           )
         }}

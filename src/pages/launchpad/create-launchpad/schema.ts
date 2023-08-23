@@ -94,7 +94,8 @@ export const poolSchema = yup.object({
   name: yup.string(),
   TokenLogo: yup.string(),
   TokenName: yup.string(),
-
+  projectMobilePicture: yup.string().required('Please upload your project mobile picture'),
+  projectPicture: yup.string().required('Please upload your project picture'),
   ChainId: yup.number(),
   ContractAddress: yup
     .string()
@@ -162,8 +163,8 @@ export const poolSchema = yup.object({
           'Allocation per wallet cannot be greater than pool size times swap ratio',
           (value, context) =>
             !context.parent.poolSize ||
-            !context.parent.swapRatio ||
-            (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+            !context.parent.amountTotal0 ||
+            (value || 0) <= context.parent.amountTotal0 * context.parent.SwapRatio
         )
     }),
   delayUnlockingTime: yup.date().nullable(true),
@@ -336,9 +337,9 @@ export const poolStrictSchema = yup.object({
           'GREATER_THAN_POOL_SIZE',
           'Allocation per wallet cannot be greater than pool size times swap ratio',
           (value, context) =>
-            !context.parent.poolSize ||
-            !context.parent.swapRatio ||
-            (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+            !context.parent.amountTotal0 ||
+            !context.parent.SwapRatio ||
+            (value || 0) <= context.parent.amountTotal0 * context.parent.SwapRatio
         )
     }),
   delayUnlockingTime: yup

@@ -6,7 +6,7 @@ import { IFile } from 'bounceComponents/common/Uploader'
 import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import { ReactComponent as AddCircleIcon } from 'assets/imgs/icon/add_circle_outline.svg'
 import { Body02 } from 'components/Text'
-
+import { IDetailInitValue } from '../type'
 export const CardBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
@@ -48,15 +48,23 @@ export const SubmitComp = ({
   errors,
   isChange,
   loading,
-  isShowPreview = true
+  isShowPreview = true,
+  values,
+  toUpdate
 }: {
   errors?: any
   isChange: boolean
   loading: boolean
   isShowPreview?: boolean
+  values?: IDetailInitValue
+  toUpdate?: (values: IDetailInitValue) => Promise<any>
 }) => {
   console.log('errors')
   console.log(errors)
+  let isCanPreview = false
+  if (errors && !Object.keys(errors).length) {
+    isCanPreview = true
+  }
 
   return (
     <Stack
@@ -82,23 +90,36 @@ export const SubmitComp = ({
         }}
       >
         {isShowPreview && (
-          <Button
-            variant="contained"
-            sx={{
-              padding: '20px 40px',
-              background: '#FFF',
-              border: '1px solid  #121212',
-              '&:hover': { background: '#FFF' },
-              '@media(max-width:600px)': {
-                width: 92,
-                height: 10,
-                padding: '16px 24px',
-                boxSizing: 'content-box'
-              }
-            }}
-          >
-            <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
-          </Button>
+          <Tooltip title={!isCanPreview ? 'Necessary information not filled in' : 'Preview represents creating.'}>
+            <span>
+              <Button
+                variant="contained"
+                disabled={!isCanPreview}
+                onClick={async () => {
+                  if (toUpdate && values) {
+                    const res = await toUpdate(values)
+                    window.open(`/account/launchpad/${res.data.id}`)
+                    console.log('res')
+                    console.log(res)
+                  }
+                }}
+                sx={{
+                  padding: '20px 40px',
+                  background: '#FFF',
+                  border: '1px solid  #121212',
+                  '&:hover': { background: '#FFF' },
+                  '@media(max-width:600px)': {
+                    width: 92,
+                    height: 10,
+                    padding: '16px 24px',
+                    boxSizing: 'content-box'
+                  }
+                }}
+              >
+                <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Preview</Body02>
+              </Button>
+            </span>
+          </Tooltip>
         )}
         {!isChange && (
           <Tooltip title="The form content has not changed at all.">
@@ -231,7 +252,8 @@ export const FormUploadAdd = ({
   formItemName,
   labelId,
   labelChild,
-  labelSx
+  labelSx,
+  firstTrigger
 }: {
   fileUrl: string
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
@@ -239,9 +261,10 @@ export const FormUploadAdd = ({
   labelId: string
   labelChild: React.ReactElement
   labelSx?: SxProps
+  firstTrigger?: boolean
 }) => {
   return (
-    <FormItem name={formItemName} fieldType="custom">
+    <FormItem name={formItemName} fieldType="custom" firstTrigger={firstTrigger}>
       <UploadItem
         inputId={labelId}
         value={{ fileUrl: fileUrl }}
