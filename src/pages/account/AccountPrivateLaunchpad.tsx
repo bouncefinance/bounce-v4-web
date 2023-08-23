@@ -1,8 +1,19 @@
-import { Box, Button, Container, Stack, Typography, styled, Link, Pagination } from '@mui/material'
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography,
+  styled,
+  Link,
+  Pagination,
+  Dialog,
+  DialogContent
+} from '@mui/material'
 import { Add } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import tabStyles from './tabStyles'
 import ChainSelect from 'bounceComponents/common/ChainSelect'
 import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
@@ -17,7 +28,7 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { usePagination, useRequest } from 'ahooks'
 import { getUserLaunchpadInfo, updateLaunchpadPool } from 'api/user'
 import { Params } from 'ahooks/lib/usePagination/types'
-import { getLabelById } from 'utils'
+import { getLabelById, shortenAddress } from 'utils'
 import { useActiveWeb3React } from 'hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
@@ -34,14 +45,37 @@ import EditDetailIcon from 'assets/imgs/auction/edit-detail-icon.svg'
 import { poolStrictSchema } from '../launchpad/create-launchpad/schema'
 import { useToDetailInfo } from 'bounceHooks/launchpad/useToDetailInfo'
 import { toast } from 'react-toastify'
-
+import { ConfirmationInfoItem } from 'bounceComponents/create-auction-pool/Creation1155Confirmation'
+import useTokenList from 'bounceHooks/auction/useTokenList'
+import moment from 'moment'
+import AuctionNotification from 'bounceComponents/create-auction-pool/AuctionNotification'
+import { tokenReleaseTypeText } from 'bounceComponents/create-auction-pool/CreationConfirmation'
+import { useCurrencyBalance, useToken } from 'state/wallet/hooks'
+import { Currency, CurrencyAmount } from 'constants/token'
+import { useShowLoginModal } from 'state/users/hooks'
+// import { useAuctionInChain } from 'bounceComponents/create-auction-pool/ValuesProvider'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { LoadingButton } from '@mui/lab'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { FIXED_SWAP_ERC20_ADDRESSES } from 'constants/index'
+import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+import { useCreateLaunchpadFixedSwapPool } from 'hooks/useCreateLaunchpadFixedSwapPool'
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
   Live = 'Live',
   Close = 'Close'
 }
-
+type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 export const socialMap: { [key: string]: string } = {
   twitter: Twitter,
   telegram: Telegram,
@@ -61,6 +95,395 @@ const MoreDataBox = ({ title, content }: { title: string; content: string }) => 
   )
 }
 const tabList = [ETabList.All, ETabList.Close, ETabList.Live, ETabList.Upcoming]
+const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
+  color: theme.palette.grey[900],
+  opacity: 0.5,
+  textTransform: 'capitalize'
+}))
+const CreatePoolButton = ({
+  poolInfo,
+  currencyFrom,
+  currencyTo
+}: {
+  poolInfo: IPoolInfoParams
+  currencyFrom: Currency | undefined
+  currencyTo: Currency | undefined
+}) => {
+  const navigate = useNavigate()
+
+  const { account, chainId } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
+  const auctionInChainId = poolInfo.chainId
+  const switchNetwork = useSwitchNetwork()
+  // const { currencyFrom } = useAuctionERC20Currency()
+  const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyFrom)
+  // const values = useValuesState()
+  // useCreateFixedSwapPool
+  const createFixedSwapPool = useCreateLaunchpadFixedSwapPool({
+    currencyFrom: currencyFrom as Currency,
+    currencyTo: currencyTo as Currency,
+    poolInfo
+  })
+  const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
+
+  const auctionPoolSizeAmount = useMemo(
+    () =>
+      currencyFrom && poolInfo.totalAmount0
+        ? CurrencyAmount.fromAmount(currencyFrom, poolInfo.totalAmount0)
+        : undefined,
+    [currencyFrom, poolInfo.totalAmount0]
+  )
+  const [approvalState, approveCallback] = useApproveCallback(
+    auctionPoolSizeAmount,
+    // erc20
+    chainId === auctionInChainId ? FIXED_SWAP_ERC20_ADDRESSES[auctionInChainId] : undefined,
+    true
+  )
+
+  const toCreate = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      setButtonCommitted('wait')
+      const { getPoolId, transactionReceipt, sysId } = await createFixedSwapPool()
+      setButtonCommitted('inProgress')
+
+      const ret: Promise<string> = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then((curReceipt: any) => {
+          const poolId = getPoolId(curReceipt.logs)
+          if (poolId) {
+            resolve(poolId)
+            setButtonCommitted('success')
+          } else {
+            hideDialogConfirmation()
+            show(DialogTips, {
+              iconType: 'error',
+              cancelBtn: 'Cancel',
+              title: 'Oops..',
+              content: 'The creation may have failed. Please check some parameters, such as the start time'
+            })
+            rpt()
+          }
+        })
+      })
+      ret
+        .then(poolId => {
+          const goToPoolInfoPage = () => {
+            const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
+            navigate(route)
+          }
+
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'To the pool',
+            cancelBtn: 'Not now',
+            title: 'Congratulations!',
+            content: 'You have successfully created the auction.',
+            onAgain: goToPoolInfoPage
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      setButtonCommitted(undefined)
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content:
+          typeof err === 'string'
+            ? err
+            : err?.data?.message || err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toCreate
+      })
+    }
+  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate])
+
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      // show(DialogTips, {
+      //   iconType: 'success',
+      //   cancelBtn: 'Close',
+      //   title: 'Transaction Submitted!',
+      //   content: `Approving use of ${currencyFrom?.symbol} ...`,
+      //   handleCancel: () => hide(DialogTips)
+      // })
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          toCreate()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback, toCreate])
+
+  const confirmBtn: {
+    disabled?: boolean
+    loading?: boolean
+    text?: string
+    run?: () => void
+  } = useMemo(() => {
+    if (!account) {
+      return {
+        text: 'Connect wallet',
+        run: showLoginModal
+      }
+    }
+    if (chainId !== auctionInChainId) {
+      return {
+        text: 'Switch network',
+        run: () => switchNetwork(auctionInChainId)
+      }
+    }
+    if (buttonCommitted !== undefined) {
+      if (buttonCommitted === 'success') {
+        return {
+          text: 'Success',
+          disabled: true
+        }
+      }
+      return {
+        text: 'Confirm',
+        loading: true
+      }
+    }
+    if (!auctionAccountBalance || !auctionPoolSizeAmount || auctionPoolSizeAmount.greaterThan(auctionAccountBalance)) {
+      return {
+        text: 'Insufficient Balance',
+        disabled: true
+      }
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return {
+          text: `Approving use of ${currencyFrom?.symbol} ...`,
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return {
+          text: 'Loading...',
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return {
+          text: `Approve use of ${currencyFrom?.symbol}`,
+          run: toApprove
+        }
+      }
+    }
+    return {
+      run: toCreate
+    }
+  }, [
+    account,
+    approvalState,
+    auctionAccountBalance,
+    auctionInChainId,
+    auctionPoolSizeAmount,
+    buttonCommitted,
+    chainId,
+    currencyFrom?.symbol,
+    showLoginModal,
+    switchNetwork,
+    toApprove,
+    toCreate
+  ])
+
+  return (
+    <LoadingButton
+      fullWidth
+      variant="contained"
+      loadingPosition="start"
+      loading={confirmBtn.loading}
+      disabled={confirmBtn.disabled}
+      onClick={confirmBtn.run}
+    >
+      {confirmBtn.text || 'Confirm'}
+    </LoadingButton>
+  )
+}
+const ToCreateDialog = ({ show, poolInfo }: { show: boolean; poolInfo: IPoolInfoParams }) => {
+  console.log('ToCreateDialog')
+  console.log(show)
+  console.log(poolInfo)
+  const { tokenList } = useTokenList(poolInfo.chainId, 2, '', true)
+  const token1 = tokenList.find(item => item.address === poolInfo.token1)
+  const token1Currency = useToken(token1?.address || '', token1?.chainId)
+  const token0Currency = useToken(poolInfo.token0 || '', poolInfo.chainId)
+  return (
+    <Dialog sx={{ width: 'max-content', height: 'max-content' }} open={show}>
+      <DialogContent>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', pb: 48, width: 'fit-content', px: { xs: 16, md: 0 } }}>
+            <Typography variant="h2" sx={{ textAlign: 'center', mb: 42 }}>
+              Creation confirmation
+            </Typography>
+
+            <Box sx={{ borderRadius: '20px', border: '1px solid #D7D6D9', px: 24, py: 30 }}>
+              <Typography variant="h3" sx={{ fontSize: 16, mb: 24 }}>
+                {poolInfo.name} Fixed-price Pool
+              </Typography>
+
+              <Stack spacing={24}>
+                <ConfirmationInfoItem title="Chain">
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Image
+                      src={poolInfo.chainId ? ChainListMap[poolInfo.chainId as ChainId]?.logo || '' : ''}
+                      alt={poolInfo.chainId ? ChainListMap[poolInfo.chainId as ChainId]?.name : ''}
+                      width={20}
+                      height={20}
+                    />
+                    <Typography sx={{ ml: 4 }}>
+                      {poolInfo.chainId ? ChainListMap[poolInfo.chainId as ChainId]?.name : ''}
+                    </Typography>
+                  </Box>
+                </ConfirmationInfoItem>
+
+                <Box>
+                  <Typography variant="h3" sx={{ fontSize: 14, mb: 12 }}>
+                    Token Information
+                  </Typography>
+
+                  <Stack spacing={15}>
+                    <ConfirmationInfoItem title="Token Contract address">
+                      <Typography>{shortenAddress(poolInfo.token0 || '')}</Typography>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Token symbol">
+                      <Stack direction="row" spacing={8} alignItems="center">
+                        <TokenImage alt={poolInfo.token0Symbol} src={(poolInfo.token0Logo as string) || ''} size={20} />
+                        <Typography>{poolInfo.token0Symbol}</Typography>
+                      </Stack>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Token decimal">
+                      <Typography>{poolInfo.token0Decimals}</Typography>
+                    </ConfirmationInfoItem>
+                  </Stack>
+                </Box>
+
+                <Box>
+                  <Typography variant="h3" sx={{ fontSize: 14, mb: 12 }}>
+                    Auction Parameters
+                  </Typography>
+
+                  <Stack spacing={15}>
+                    <ConfirmationInfoItem title="Pool type">
+                      <Typography>{PoolType[poolInfo.category]}</Typography>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="To">
+                      <Stack direction="row" spacing={8} alignItems="center">
+                        <TokenImage alt={token1?.symbol} src={token1?.logoURI || token1?.smallUrl} size={20} />
+                        <Typography>{token1?.symbol}</Typography>
+                      </Stack>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Swap Ratio">
+                      <Typography>
+                        1 {poolInfo.token0Symbol} = {poolInfo.ratio} {token1?.symbol}
+                      </Typography>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Amount">
+                      <Typography>{poolInfo.totalAmount0}</Typography>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Allocation per Wallet">
+                      <Typography>
+                        {Number(poolInfo.maxAmount1PerWallet) > 0
+                          ? `Limit ${
+                              token1Currency
+                                ? CurrencyAmount.fromAmount(
+                                    token1Currency,
+                                    poolInfo.maxAmount1PerWallet || ''
+                                  )?.toSignificant()
+                                : 0
+                            } ${token1?.symbol}`
+                          : 'No'}
+                      </Typography>
+                    </ConfirmationInfoItem>
+                  </Stack>
+                </Box>
+
+                <Box>
+                  <Typography variant="h3" sx={{ fontSize: 14, mb: 12 }}>
+                    Advanced Settings
+                  </Typography>
+
+                  <Stack spacing={15}>
+                    <ConfirmationInfoItem title="Pool duration">
+                      <Typography>
+                        From {moment(poolInfo.openAt)?.format('MM.DD.Y HH:mm')} - To{' '}
+                        {moment(poolInfo.closeAt)?.format('MM.DD.Y HH:mm')}
+                      </Typography>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Participant">
+                      <Typography>{poolInfo.whitelistEnabled ? 'Whitelist' : 'Public'}</Typography>
+                    </ConfirmationInfoItem>
+
+                    <ConfirmationInfoItem title="Unlocking Token Type">
+                      <Typography>
+                        {tokenReleaseTypeText(poolInfo.releaseType)}
+                        {/* {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'} */}
+                      </Typography>
+                    </ConfirmationInfoItem>
+                  </Stack>
+                </Box>
+              </Stack>
+            </Box>
+            <AuctionNotification />
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
+              {token1Currency && token0Currency && (
+                <CreatePoolButton
+                  poolInfo={poolInfo}
+                  currencyTo={token1Currency as Currency | undefined}
+                  currencyFrom={token0Currency as Currency | undefined}
+                />
+              )}
+
+              <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>
+            </Box>
+          </Box>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
 const LaunchpadCard = ({
   poolInfo,
@@ -77,6 +500,7 @@ const LaunchpadCard = ({
     return chainInfo?.chainName
   }, [optionDatas, poolInfo])
   const detailInfo = useToDetailInfo({ ...poolInfo, chainId: poolInfo.opId as number })
+  const [showCreateDia, setShowCreateDia] = useState(false)
   const navigate = useNavigate()
   console.log('detailInfo')
   console.log(detailInfo)
@@ -98,8 +522,9 @@ const LaunchpadCard = ({
       .validate(detailInfo.poolInfo)
       .then(res => {
         console.log(res)
+        setShowCreateDia(true)
       })
-      .catch(() => {
+      .catch(err => {
         toast.error('There is still some content that has not been filled out!')
         setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
       })
@@ -252,6 +677,8 @@ const LaunchpadCard = ({
           <Box onClick={toCreatePool}>上链</Box>
         </Stack>
       </Box>
+
+      {showCreateDia && <ToCreateDialog show={showCreateDia} poolInfo={poolInfo} />}
     </Row>
   )
 }
@@ -264,6 +691,7 @@ export default function AccountPrivateLaunchpad() {
   const { account } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
   const isSm = useBreakpoint('sm')
+
   const {
     loading,
     data,

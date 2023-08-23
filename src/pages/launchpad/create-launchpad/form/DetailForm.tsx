@@ -44,7 +44,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
-import { poolSchema, poolStrictSchema } from '../schema'
+import { poolSchema } from '../schema'
 import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams, PoolStatus } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { ChainInfoOpt, IUserLaunchpadInfo } from 'api/user/type'
@@ -228,12 +228,7 @@ const showTokenDialog = async ({
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
 }) => {
   const res = await show<Token>(TokenDialog, { chainId, enableEth })
-  setFieldValue('Token', {
-    tokenToAddress: res.address,
-    tokenToSymbol: res.symbol,
-    tokenToLogoURI: res.logoURI || res.smallUrl,
-    tokenToDecimals: res.decimals
-  })
+  setFieldValue('Token', res)
 }
 const showImportWhitelistDialog = (
   values: IDetailInitValue,
@@ -349,7 +344,7 @@ const DetailForm = ({
         chainId: chainInfoOpt?.find(item => item.ethChainId === values.ChainId)?.id as number,
         releaseType: Number(values.releaseType),
         token0: values.ContractAddress,
-        token0Decimals: values.ContractDecimalPlaces,
+        token0Decimals: Number(values.ContractDecimalPlaces),
         token0Logo: values.TokenLogo,
         token0Name: values.TokenName,
         token0Symbol: values.TokenName,
@@ -360,14 +355,12 @@ const DetailForm = ({
         closeAt: values.endTime?.valueOf(),
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
-        whitelistAddresses: values.whitelist,
+        whitelistAddresses: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
         status: values.status,
         releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
-        poolParams['maxAmount1PerWallet'] = `${
-          Number(values.allocationPerWallet) * Math.pow(10, Number(values.Token.decimals))
-        }`
+        poolParams['maxAmount1PerWallet'] = `${Number(values.allocationPerWallet)}`
       }
       const releaseType = Number(values.releaseType)
       if (releaseType !== IReleaseType.Instant) {
@@ -383,13 +376,23 @@ const DetailForm = ({
           ]
         }
         if (releaseType === IReleaseType.Fragment) {
-          const releaseData: { startAt: number; endAtOrRatio: number }[] = []
+          let releaseData: { startAt: number; endAtOrRatio: number }[] = []
           values.fragmentReleaseTimes.forEach(item => {
             releaseData.push({
               startAt: item.startAt?.valueOf() as number,
               endAtOrRatio: Number(item.radio)
             })
           })
+          releaseData = releaseData.sort((a, b) => {
+            if (a.startAt < b.startAt) {
+              return -1
+            }
+            if (a.startAt > b.startAt) {
+              return 1
+            }
+            return 0
+          })
+
           poolParams.releaseData = releaseData
         }
       }
@@ -409,12 +412,7 @@ const DetailForm = ({
   const isSm = useBreakpoint('sm')
   return (
     <CardBox sx={{ ...sx }}>
-      <Formik
-        enableReinitialize
-        initialValues={curPoolList}
-        validationSchema={poolStrictSchema || poolSchema}
-        onSubmit={onSubmit}
-      >
+      <Formik enableReinitialize initialValues={curPoolList} validationSchema={poolSchema} onSubmit={onSubmit}>
         {({ values, setFieldValue, setValues, errors, handleSubmit }) => {
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
@@ -660,7 +658,6 @@ const DetailForm = ({
                         startAdornment={<TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={32} />}
                       >
                         <FakeOutlinedInput
-                          value={values.Token.symbol}
                           readOnly
                           onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
                         />
