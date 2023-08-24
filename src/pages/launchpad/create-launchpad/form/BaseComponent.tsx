@@ -73,11 +73,12 @@ export const SubmitComp = ({
 }) => {
   console.log('errors')
   console.log(errors)
+
   let isCanPreview = false
+
   if (errors && !Object.keys(errors).length) {
     isCanPreview = true
   }
-
   return (
     <Stack
       sx={{
@@ -134,13 +135,13 @@ export const SubmitComp = ({
           </Tooltip>
         )}
         {!isChange && (
-          <Tooltip title="The form content has not changed at all.">
+          <Tooltip title="The form content has not changed.">
             <span>
               <LoadingButton
                 type="submit"
                 variant="contained"
                 loadingPosition="start"
-                disabled={true}
+                disabled={!isChange}
                 startIcon={<></>}
                 sx={{
                   padding: '20px 40px',
@@ -155,7 +156,7 @@ export const SubmitComp = ({
                   }
                 }}
               >
-                <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#fff' }}>Submit</Body02>
+                <Body02 sx={{ fontSize: 16, fontWeight: 400, color: '#121212' }}>Submit</Body02>
               </LoadingButton>
             </span>
           </Tooltip>

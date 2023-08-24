@@ -57,6 +57,9 @@ import { useRequest } from 'ahooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { updateLaunchpadPool } from 'api/user'
 import useTokenList from 'bounceHooks/auction/useTokenList'
+import _ from 'lodash'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import { useNavigate } from 'react-router-dom'
 enum PoolState {
   'CREATE' = 1,
   'MODIFY' = 2,
@@ -258,6 +261,7 @@ const DetailForm = ({
   launchpadInfo: IUserLaunchpadInfo
 }) => {
   const { type = PoolState.CREATE, id } = useQueryParams()
+  const navigate = useNavigate()
   const { chainId, account } = useActiveWeb3React()
   const poolState = useMemo(() => {
     if (!launchpadInfo?.total || !launchpadInfo?.list.find(item => item.id === Number(id))) {
@@ -356,7 +360,7 @@ const DetailForm = ({
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
         whitelistAddresses: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-        status: PoolStatus.Init,
+        status: values.status,
         releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
@@ -411,7 +415,32 @@ const DetailForm = ({
   const onSubmit = async (value: IDetailInitValue) => {
     console.log('submit submit submit submit submit')
     console.log(value)
-    await toUpdate(value)
+    try {
+      await toUpdate(value)
+      show(DialogDarkTips, {
+        iconType: 'success',
+        title: 'Сongratulations!',
+        content: 'You have successfully submit, Please wait patiently for review.',
+        cancelBtn: 'Continue filling in',
+        againBtn: 'Go Account',
+        onAgain: () => {
+          navigate('/account/private_launchpad')
+        },
+        onCancel: () => {},
+        onClose: () => {}
+      })
+    } catch (error) {
+      show(DialogDarkTips, {
+        iconType: 'error',
+        title: 'Сongratulations!',
+        content: 'err',
+        cancelBtn: 'Continue filling in',
+        againBtn: 'Go Account',
+        onAgain: () => {},
+        onCancel: () => {},
+        onClose: () => {}
+      })
+    }
   }
   const isSm = useBreakpoint('sm')
   return (
@@ -429,22 +458,24 @@ const DetailForm = ({
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>auction Round</Title>
                 <Stack mt={20} sx={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
-                  {poolList.map(item => {
-                    return (
-                      <Chip
-                        sx={{
-                          width: 'max-content',
-                          padding: 5
-                        }}
-                        key={item.id}
-                        label={item.name}
-                        variant={curPoolId === item.id ? 'outlined' : 'filled'}
-                        onClick={() => {
-                          setCurPoolId(item.id)
-                        }}
-                      />
-                    )
-                  })}
+                  {poolList
+                    .filter(item => item.status !== PoolStatus.On_Chain)
+                    .map(item => {
+                      return (
+                        <Chip
+                          sx={{
+                            width: 'max-content',
+                            padding: 5
+                          }}
+                          key={item.id}
+                          label={item.name}
+                          variant={curPoolId === item.id ? 'outlined' : 'filled'}
+                          onClick={() => {
+                            setCurPoolId(item.id)
+                          }}
+                        />
+                      )
+                    })}
                   {!poolList.find(item => !item.id) && <Chip label="Add New List" onClick={() => setCurPoolId(0)} />}
                 </Stack>
               </BaseBox>
@@ -916,7 +947,13 @@ const DetailForm = ({
                   </Stack>
                 </Stack>
               </BaseBox>
-              <SubmitComp toUpdate={toUpdate} values={values} errors={errors} loading={loading} isChange={true} />
+              <SubmitComp
+                toUpdate={toUpdate}
+                values={values}
+                errors={errors}
+                loading={loading}
+                isChange={!_.isEqual(values, curPoolList)}
+              />
             </Stack>
           )
         }}

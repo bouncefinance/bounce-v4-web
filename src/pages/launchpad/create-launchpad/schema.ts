@@ -316,6 +316,8 @@ export const poolStrictSchema = yup.object({
   allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
   allocationPerWallet: yup
     .number()
+    .transform(value => (Number.isNaN(value) ? null : value))
+    .nullable()
     .when('allocationStatus', {
       is: AllocationStatus.Limited,
       then: yup

@@ -8,7 +8,9 @@ import {
   Link,
   Pagination,
   Dialog,
-  DialogContent
+  DialogContent,
+  DialogTitle,
+  IconButton
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
@@ -72,6 +74,9 @@ import { useCreateLaunchpadFixedSwapPool } from 'hooks/useCreateLaunchpadFixedSw
 import { Body02 } from 'components/Text'
 import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import LanguageIcon from '@mui/icons-material/Language'
+import SendIcon from '@mui/icons-material/Send'
+import CloseIcon from '@mui/icons-material/Close'
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
@@ -154,7 +159,6 @@ const CreatePoolButton = ({
 
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
-
     try {
       setButtonCommitted('wait')
       const { getPoolId, transactionReceipt, sysId } = await createFixedSwapPool()
@@ -184,8 +188,6 @@ const CreatePoolButton = ({
       })
       ret
         .then(poolId => {
-          console.log('poolId')
-          console.log(poolId)
           const requestBody = { ...poolInfo, status: PoolStatus.On_Chain, chainId: poolInfo.opId as number }
           delete requestBody.opId
           updateLaunchpadPool(requestBody)
@@ -222,19 +224,12 @@ const CreatePoolButton = ({
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate])
+  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate, poolInfo])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
     try {
       const { transactionReceipt } = await approveCallback()
-      // show(DialogTips, {
-      //   iconType: 'success',
-      //   cancelBtn: 'Close',
-      //   title: 'Transaction Submitted!',
-      //   content: `Approving use of ${currencyFrom?.symbol} ...`,
-      //   handleCancel: () => hide(DialogTips)
-      // })
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
           hideDialogConfirmation()
@@ -352,20 +347,55 @@ const CreatePoolButton = ({
     </LoadingButton>
   )
 }
-const ToCreateDialog = ({ show, poolInfo }: { show: boolean; poolInfo: IPoolInfoParams }) => {
+const ToCreateDialog = ({
+  show,
+  poolInfo,
+  setShow
+}: {
+  show: boolean
+  poolInfo: IPoolInfoParams
+  setShow: (v: boolean) => void
+}) => {
   const { tokenList } = useTokenList(poolInfo.chainId, 2, '', true)
   const token1 = tokenList.find(item => item.address === poolInfo.token1)
   const token1Currency = useToken(token1?.address || '', token1?.chainId)
   const token0Currency = useToken(poolInfo.token0 || '', poolInfo.chainId)
   return (
-    <Dialog sx={{ width: 'max-content', height: 'max-content' }} open={show}>
+    <Dialog
+      sx={{
+        maxHeight: '800px',
+        overflow: 'auto',
+        '& ::-webkit-scrollbar': {
+          display: 'none'
+        },
+        '& .MuiDialog-paper': {
+          width: 'max-content',
+          height: 'max-content',
+          borderRadius: 20
+        }
+      }}
+      open={show}
+      onClose={() => setShow(false)}
+    >
+      <DialogTitle id="customized-dialog-title">
+        <Typography variant="h2" sx={{ textAlign: 'center' }}>
+          Creation confirmation
+        </Typography>
+      </DialogTitle>
+      <IconButton
+        aria-label="close"
+        onClick={() => setShow(false)}
+        sx={{
+          position: 'absolute',
+          right: 8,
+          top: 8
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', pb: 48, width: 'fit-content', px: { xs: 16, md: 0 } }}>
-            <Typography variant="h2" sx={{ textAlign: 'center', mb: 42 }}>
-              Creation confirmation
-            </Typography>
-
             <Box sx={{ borderRadius: '20px', border: '1px solid #D7D6D9', px: 24, py: 30 }}>
               <Typography variant="h3" sx={{ fontSize: 16, mb: 24 }}>
                 {poolInfo.name} Fixed-price Pool
@@ -728,7 +758,7 @@ const LaunchpadCard = ({
         console.log(res)
         setShowCreateDia(true)
       })
-      .catch(err => {
+      .catch(() => {
         toast.error('There is still some content that has not been filled out!')
         setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
       })
@@ -763,13 +793,25 @@ const LaunchpadCard = ({
             <Link href={`/account/launchpad/${poolInfo.id}`}>
               <Image src={ShowDetailIcon} />
             </Link>
-            <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
-              <Image src={EditDetailIcon} />
-            </Link>
-            {poolInfo.status !== PoolStatus.On_Chain} <Box onClick={() => run(PoolStatus.Released)}>发布</Box>
-            <Box onClick={toCreatePool}>上链</Box>
+            {poolInfo.status !== PoolStatus.On_Chain && (
+              <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
+                <Image src={EditDetailIcon} />
+              </Link>
+            )}
+
+            {poolInfo.status !== PoolStatus.On_Chain && (
+              <Box onClick={() => run(PoolStatus.Released)}>
+                <SendIcon sx={{ color: '#fff', fontSize: 60 }} />
+              </Box>
+            )}
+
+            {poolInfo.status === PoolStatus.Approved && (
+              <Box onClick={toCreatePool}>
+                <LanguageIcon sx={{ color: '#fff', fontSize: 60 }} />
+              </Box>
+            )}
           </Stack>
-          {showCreateDia && <ToCreateDialog show={showCreateDia} poolInfo={poolInfo} />}
+          {showCreateDia && <ToCreateDialog setShow={setShowCreateDia} show={showCreateDia} poolInfo={poolInfo} />}
         </Box>
       }
     />
