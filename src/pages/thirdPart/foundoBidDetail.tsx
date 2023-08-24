@@ -98,7 +98,7 @@ const FoundoBidDetail = () => {
     {
       img: Icon3,
       label: 'Material',
-      value: 'White gold'
+      value: '18k White gold'
     },
     {
       img: Icon4,
@@ -107,8 +107,8 @@ const FoundoBidDetail = () => {
     },
     {
       img: Icon5,
-      label: 'Dimension',
-      value: '40.5 cm'
+      label: 'Necklace length',
+      value: '50 cm'
     }
   ]
 

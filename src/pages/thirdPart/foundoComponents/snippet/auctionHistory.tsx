@@ -5,7 +5,7 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getEtherscanLink, shortenAddress, shortenHash } from 'utils'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import { StyledHistoryTableCell, StyledHistoryTableRow } from 'bounceComponents/fixed-swap/ActionHistory'
-import { MutantEnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
+import { MutantEnglishAuctionNFTPoolProp, PoolHistory, PoolStatus } from 'api/pool/type'
 import DefaultAvatar from 'assets/imgs/realWorld/defaultHeadIgm.png'
 import { CurrencyAmount } from 'constants/token'
 import { useMemo } from 'react'
@@ -105,7 +105,9 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
               fontFamily: 'Public Sans'
             }}
           >
-            Auction just started! be the first bidder
+            {poolInfo.status === PoolStatus.Upcoming
+              ? 'The auction activities have not yet started'
+              : 'Auction just started! be the first bidder'}
           </Typography>
         </Stack>
       </Stack>
