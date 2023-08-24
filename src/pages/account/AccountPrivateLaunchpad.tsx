@@ -69,11 +69,18 @@ import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { FIXED_SWAP_ERC20_ADDRESSES } from 'constants/index'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { useCreateLaunchpadFixedSwapPool } from 'hooks/useCreateLaunchpadFixedSwapPool'
+import { Body02 } from 'components/Text'
+import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
   Live = 'Live',
   Close = 'Close'
+}
+enum CardSize {
+  Small = 1,
+  Medium = 2,
+  Large = 3
 }
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 export const socialMap: { [key: string]: string } = {
@@ -84,11 +91,16 @@ export const socialMap: { [key: string]: string } = {
   medium: Medium,
   discord: Discord
 }
-const MoreDataBox = ({ title, content }: { title: string; content: string }) => {
+const MoreDataBox = ({ title, content, size }: { title: string; content: string; size: CardSize }) => {
   return (
     <Box>
-      <InterTitle sx={{ fontSize: 8 }}>{title}</InterTitle>
-      <InterTitle mt={4} sx={{ fontSize: 10, fontWeight: 500 }}>
+      <InterTitle sx={{ fontSize: size === CardSize.Small ? 8 : size === CardSize.Medium ? 12 : 13 }}>
+        {title}
+      </InterTitle>
+      <InterTitle
+        mt={4}
+        sx={{ fontSize: size === CardSize.Small ? 10 : size === CardSize.Medium ? 14 : 16, fontWeight: 500 }}
+      >
         {content}
       </InterTitle>
     </Box>
@@ -485,6 +497,171 @@ const ToCreateDialog = ({ show, poolInfo }: { show: boolean; poolInfo: IPoolInfo
   )
 }
 
+export const Launchpad = ({
+  poolInfo,
+  basicInfo,
+  size,
+  mark
+}: {
+  poolInfo: IPoolInfoParams & { opId?: number }
+  basicInfo: IBasicInfoParams
+  size: CardSize
+  mark?: JSX.Element
+}) => {
+  const optionDatas = useOptionDatas()
+  const chainName = useMemo(() => {
+    const chainInfo = optionDatas.chainInfoOpt?.find(item => item.ethChainId === poolInfo.chainId)
+    return chainInfo?.chainName
+  }, [optionDatas, poolInfo])
+  return (
+    <Row
+      sx={[
+        {
+          position: 'relative',
+          borderRadius: 18,
+          overflow: 'hidden',
+          cursor: 'pointer',
+          '& .mask': {
+            display: 'none'
+          },
+          '& .left_banner': {
+            transform: 'scale(1)',
+            transition: 'all .6s'
+          },
+          '&:hover': {
+            '& .mask': {
+              display: 'block'
+            },
+            '& .left_banner': {
+              transform: 'scale(1.2)'
+            }
+          }
+        },
+        size === CardSize.Small && {
+          height: 292
+        },
+        size === CardSize.Medium && {
+          height: 373
+        },
+        size === CardSize.Large && {
+          height: 500
+        }
+      ]}
+      mt={48}
+    >
+      <Box
+        sx={[
+          {
+            height: '100%',
+            position: 'relative',
+            overflow: 'hidden'
+          },
+          size === CardSize.Small && {
+            width: 375
+          },
+          (size === CardSize.Medium || size === CardSize.Large) && {
+            width: 600
+          }
+        ]}
+      >
+        <Image
+          className="left_banner"
+          style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0 }}
+          src={poolInfo.picture2 || 'http://localhost:3000/static/media/deelance.883555954fb281ea1f93.png'}
+        />
+        <Row sx={{ position: 'absolute', top: 0, left: 0, gap: 8, padding: 15 }}>
+          <RoundedBox>
+            <TokenImage
+              src={ChainListMap[poolInfo.chainId as ChainId]?.logo}
+              size={size === CardSize.Small ? 15 : 24}
+            />
+            <SansTitle sx={{ color: '#FFF', fontSize: size === CardSize.Small ? 10 : 16 }}>
+              {ChainListMap[poolInfo.chainId as ChainId]?.name}
+            </SansTitle>
+          </RoundedBox>
+          <RoundedBox sx={{ color: '#B5E529', fontSize: size === CardSize.Small ? 10 : 16 }}>
+            {PoolType[poolInfo.category]}
+          </RoundedBox>
+        </Row>
+      </Box>
+      <Box sx={{ flex: 1, background: '#E8E9E4', padding: 24 }}>
+        <Row sx={{ justifyContent: 'space-between' }}>
+          <Row gap={10} sx={{ alignItems: 'center', gap: 10 }}>
+            {size !== CardSize.Medium && (
+              <Image
+                style={{
+                  width: size === CardSize.Large ? 60 : 37,
+                  height: size === CardSize.Large ? 60 : 37,
+                  borderRadius: 4
+                }}
+                src={
+                  basicInfo.projectLogo ||
+                  'https://images-v3.bounce.finance/2fb011f35fc0c258b50d44f1fb6b70c0-1683626370.png'
+                }
+              />
+            )}
+            <Stack sx={{ justifyContent: 'start', alignItems: 'start' }}>
+              <SansTitle sx={{ fontSize: size === CardSize.Small ? 17 : 28, fontWeight: 600 }}>
+                {basicInfo.projectName}
+              </SansTitle>
+              {size === CardSize.Large && <Body02>Hiley Golbel Coin and text and the coin</Body02>}
+            </Stack>
+          </Row>
+          {poolInfo.status === PoolStatus.On_Chain && (
+            <Box>
+              <RoundedBox sx={{ color: AuctionProgressPrimaryColor[1] }}>Upcoming in 32h : 12m : 10s</RoundedBox>
+            </Box>
+          )}
+        </Row>
+
+        <Box sx={{ paddingLeft: 6 }} mt={18}>
+          <InterTitle
+            sx={{
+              fontSize: 14,
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {basicInfo.description}
+          </InterTitle>
+          <Row mt={10} gap={6}>
+            {basicInfo.community
+              .filter(item => !!item.communityLink)
+              .map(item => (
+                <Link
+                  sx={{ width: size === CardSize.Small ? 20 : 32, height: size === CardSize.Small ? 20 : 32 }}
+                  key={item.communityLink}
+                  href={item.communityLink}
+                  target="_blank"
+                >
+                  <Image width={'100%'} height={'100%'} src={socialMap[item.communityName]} />
+                </Link>
+              ))}
+          </Row>
+        </Box>
+        <Box
+          mt={12}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gridRowGap: 8,
+            paddingLeft: 6
+          }}
+        >
+          {poolInfo.token0Name && <MoreDataBox size={size} title="Token Name" content={poolInfo.token0Name} />}
+          {poolInfo.ratio && <MoreDataBox size={size} title="Token Price" content={poolInfo.ratio} />}
+          {poolInfo.totalAmount0 && <MoreDataBox size={size} title="Token Amount" content={poolInfo.totalAmount0} />}
+          {chainName && <MoreDataBox size={size} title="Blockchain / Platform" content={chainName} />}
+        </Box>
+      </Box>
+
+      {mark && mark}
+    </Row>
+  )
+}
 const LaunchpadCard = ({
   poolInfo,
   basicInfo,
@@ -493,17 +670,12 @@ const LaunchpadCard = ({
   poolInfo: IPoolInfoParams & { opId?: number }
   basicInfo: IBasicInfoParams
   getInfo: () => void
+  size: CardSize
+  Mark?: JSX.Element
 }) => {
-  const optionDatas = useOptionDatas()
-  const chainName = useMemo(() => {
-    const chainInfo = optionDatas.chainInfoOpt?.find(item => item.ethChainId === poolInfo.chainId)
-    return chainInfo?.chainName
-  }, [optionDatas, poolInfo])
   const detailInfo = useToDetailInfo({ ...poolInfo, chainId: poolInfo.opId as number })
   const [showCreateDia, setShowCreateDia] = useState(false)
   const navigate = useNavigate()
-  console.log('detailInfo')
-  console.log(detailInfo)
   const { run } = useRequest(
     (status: PoolStatus.Released) => {
       const newPool = { ...poolInfo, chainId: poolInfo.opId, status }
@@ -530,158 +702,48 @@ const LaunchpadCard = ({
       })
   }
   return (
-    <Row
-      sx={{
-        position: 'relative',
-        height: 292,
-        borderRadius: 18,
-        overflow: 'hidden',
-        cursor: 'pointer',
-        '& .mask': {
-          display: 'none'
-        },
-        '& .left_banner': {
-          transform: 'scale(1)',
-          transition: 'all .6s'
-        },
-        '&:hover': {
-          '& .mask': {
-            display: 'block'
-          },
-          '& .left_banner': {
-            transform: 'scale(1.2)'
-          }
-        }
-      }}
-      mt={48}
-    >
-      <Box
-        sx={{
-          width: 375,
-          height: 292,
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        <Image
-          className="left_banner"
-          style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0 }}
-          src={poolInfo.picture2 || 'http://localhost:3000/static/media/deelance.883555954fb281ea1f93.png'}
-        />
-        <Row sx={{ position: 'absolute', top: 0, left: 0, gap: 8, padding: 15 }}>
-          <RoundedBox>
-            <TokenImage src={ChainListMap[poolInfo.chainId as ChainId]?.logo} size={15} />
-            <SansTitle sx={{ color: '#FFF', fontSize: 10 }}>
-              {ChainListMap[poolInfo.chainId as ChainId]?.name}
-            </SansTitle>
-          </RoundedBox>
-          <RoundedBox sx={{ color: '#B5E529', fontSize: 10 }}>{PoolType[poolInfo.category]}</RoundedBox>
-        </Row>
-      </Box>
-      <Box sx={{ flex: 1, background: '#E8E9E4', padding: 24 }}>
-        <Row sx={{ justifyContent: 'space-between' }}>
-          <Row gap={10} sx={{ alignItems: 'center', gap: 10 }}>
-            <Image
-              style={{ width: 37, height: 37, borderRadius: 4 }}
-              src={
-                basicInfo.projectLogo ||
-                'https://images-v3.bounce.finance/2fb011f35fc0c258b50d44f1fb6b70c0-1683626370.png'
-              }
-            />
-            <SansTitle sx={{ fontSize: 17, fontWeight: 600 }}>{basicInfo.projectName}</SansTitle>
-          </Row>
-          {/* <Box>
-            <RoundedBox sx={{ color: AuctionProgressPrimaryColor[1] }}>Upcoming in 32h : 12m : 10s</RoundedBox>
-          </Box> */}
-        </Row>
-
-        <Box sx={{ paddingLeft: 6 }} mt={18}>
-          <InterTitle
-            sx={{
-              fontSize: 14,
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
-          >
-            {basicInfo.description}
-          </InterTitle>
-          <Row
-            mt={10}
-            gap={6}
-            sx={{
-              '&>a': {
-                width: 20,
-                height: 20
-              },
-              '&>a>svg': {
-                width: 20,
-                height: 20
-              }
-            }}
-          >
-            {basicInfo.community
-              .filter(item => !!item.communityLink)
-              .map(item => (
-                <Link key={item.communityLink} href={item.communityLink} target="_blank">
-                  <Image width={20} height={20} src={socialMap[item.communityName]} />
-                </Link>
-              ))}
-          </Row>
-        </Box>
+    <Launchpad
+      poolInfo={poolInfo}
+      basicInfo={basicInfo}
+      size={CardSize.Small}
+      mark={
         <Box
-          mt={12}
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridRowGap: 8,
-            paddingLeft: 6
-          }}
-        >
-          {poolInfo.token0Name && <MoreDataBox title="Token Name" content={poolInfo.token0Name} />}
-          {poolInfo.ratio && <MoreDataBox title="Token Price" content={poolInfo.ratio} />}
-          {poolInfo.totalAmount0 && <MoreDataBox title="Token Amount" content={poolInfo.totalAmount0} />}
-          {chainName && <MoreDataBox title="Blockchain / Platform" content={chainName} />}
-        </Box>
-      </Box>
-      <Box
-        className="mask"
-        sx={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          background: 'rgba(23, 23, 23, 0.30)'
-        }}
-      >
-        <Stack
+          className="mask"
           sx={{
             width: '100%',
             height: '100%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 74
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            background: 'rgba(23, 23, 23, 0.30)'
           }}
         >
-          <Link href={`/account/launchpad/${poolInfo.id}`}>
-            <Image src={ShowDetailIcon} />
-          </Link>
-          <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
-            <Image src={EditDetailIcon} />
-          </Link>
-          {poolInfo.status !== PoolStatus.On_Chain} <Box onClick={() => run(PoolStatus.Released)}>发布</Box>
-          <Box onClick={toCreatePool}>上链</Box>
-        </Stack>
-      </Box>
-
-      {showCreateDia && <ToCreateDialog show={showCreateDia} poolInfo={poolInfo} />}
-    </Row>
+          <Stack
+            sx={{
+              width: '100%',
+              height: '100%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 74
+            }}
+          >
+            <Link href={`/account/launchpad/${poolInfo.id}`}>
+              <Image src={ShowDetailIcon} />
+            </Link>
+            <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
+              <Image src={EditDetailIcon} />
+            </Link>
+            {poolInfo.status !== PoolStatus.On_Chain} <Box onClick={() => run(PoolStatus.Released)}>发布</Box>
+            <Box onClick={toCreatePool}>上链</Box>
+          </Stack>
+          {showCreateDia && <ToCreateDialog show={showCreateDia} poolInfo={poolInfo} />}
+        </Box>
+      }
+    />
   )
 }
+
 const defaultPageSize = 4
 export default function AccountPrivateLaunchpad() {
   const [curTab, setCurTab] = useState(ETabList.All)
@@ -812,6 +874,7 @@ export default function AccountPrivateLaunchpad() {
                       poolInfo={item}
                       basicInfo={data.basicInfo}
                       getInfo={() => getLaunchpadInfo({ current: pagination.current, pageSize: pagination.pageSize })}
+                      size={CardSize.Small}
                     />
                   ))}
                 </Stack>
