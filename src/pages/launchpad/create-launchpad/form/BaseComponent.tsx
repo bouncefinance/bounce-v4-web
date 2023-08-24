@@ -1,4 +1,15 @@
-import { Box, styled, Typography, SxProps, Stack, Button, Switch, FormLabel, Tooltip } from '@mui/material'
+import {
+  Box,
+  styled,
+  Typography,
+  SxProps,
+  Stack,
+  Button,
+  Switch,
+  FormLabel,
+  Tooltip,
+  CircularProgress
+} from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Image from 'components/Image'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -7,6 +18,7 @@ import UploadItem from 'bounceComponents/common/UploadCard/UploadItem'
 import { ReactComponent as AddCircleIcon } from 'assets/imgs/icon/add_circle_outline.svg'
 import { Body02 } from 'components/Text'
 import { IDetailInitValue } from '../type'
+import { useState } from 'react'
 export const CardBox = styled(Box)({
   display: 'flex',
   flexDirection: 'column',
@@ -263,6 +275,10 @@ export const FormUploadAdd = ({
   labelSx?: SxProps
   firstTrigger?: boolean
 }) => {
+  const [loading, setLoading] = useState<boolean>(false)
+  const getLoading = (loading: boolean) => {
+    setLoading(loading)
+  }
   return (
     <FormItem name={formItemName} fieldType="custom" firstTrigger={firstTrigger}>
       <UploadItem
@@ -275,8 +291,9 @@ export const FormUploadAdd = ({
         tips={'Please do not exceed a file size of 10MB'}
         limitSize={10}
         sx={{ display: 'none' }}
+        getLoading={getLoading}
       />
-      <UpLabelBox htmlFor={labelId} fileUrl={fileUrl} child={labelChild} labelSx={labelSx} />
+      <UpLabelBox loading={loading} htmlFor={labelId} fileUrl={fileUrl} child={labelChild} labelSx={labelSx} />
     </FormItem>
   )
 }
@@ -284,12 +301,14 @@ export const UpLabelBox = ({
   htmlFor,
   fileUrl,
   child,
-  labelSx
+  labelSx,
+  loading
 }: {
   htmlFor: string
   fileUrl: string
   child: React.ReactElement
   labelSx?: SxProps
+  loading: boolean
 }) => {
   return (
     <Box sx={{ display: 'block', cursor: 'pointer' }} component={'label'} htmlFor={htmlFor}>
@@ -306,11 +325,12 @@ export const UpLabelBox = ({
           ...labelSx
         }}
       >
-        {!fileUrl && child}
+        {!fileUrl && !loading && child}
         {
-          fileUrl && <Image src={fileUrl} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          !loading && fileUrl && <Image src={fileUrl} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           // <Box sx={{ width: '100%', height: '100%', background: `url(${fileUrl}) no-repeat` }}></Box>
         }
+        {loading && <CircularProgress sx={{ color: '#D7D6D9' }} />}
       </Stack>
     </Box>
   )
