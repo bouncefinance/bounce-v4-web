@@ -356,7 +356,7 @@ const DetailForm = ({
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
         whitelistAddresses: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-        status: values.status,
+        status: PoolStatus.Init,
         releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {

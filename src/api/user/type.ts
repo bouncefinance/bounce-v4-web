@@ -358,3 +358,4 @@ export interface GetUserLaunchpadInfo {
   offset?: number
 }
 export type IUserLaunchpadInfo = { basicInfo: IBasicInfoParams; list: IPoolInfoParams[]; total: number }
+export type ILaunchpadList = { list: { basicInfo: IBasicInfoParams; poolInfo: IPoolInfoParams }[]; total: number }

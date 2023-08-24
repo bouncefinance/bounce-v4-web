@@ -77,7 +77,7 @@ enum ETabList {
   Live = 'Live',
   Close = 'Close'
 }
-enum CardSize {
+export enum CardSize {
   Small = 1,
   Medium = 2,
   Large = 3
@@ -117,7 +117,7 @@ const CreatePoolButton = ({
   currencyFrom,
   currencyTo
 }: {
-  poolInfo: IPoolInfoParams
+  poolInfo: IPoolInfoParams & { opId?: number }
   currencyFrom: Currency | undefined
   currencyTo: Currency | undefined
 }) => {
@@ -127,10 +127,8 @@ const CreatePoolButton = ({
   const showLoginModal = useShowLoginModal()
   const auctionInChainId = poolInfo.chainId
   const switchNetwork = useSwitchNetwork()
-  // const { currencyFrom } = useAuctionERC20Currency()
   const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyFrom)
-  // const values = useValuesState()
-  // useCreateFixedSwapPool
+
   const createFixedSwapPool = useCreateLaunchpadFixedSwapPool({
     currencyFrom: currencyFrom as Currency,
     currencyTo: currencyTo as Currency,
@@ -155,6 +153,7 @@ const CreatePoolButton = ({
 
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog()
+
     try {
       setButtonCommitted('wait')
       const { getPoolId, transactionReceipt, sysId } = await createFixedSwapPool()
@@ -184,6 +183,11 @@ const CreatePoolButton = ({
       })
       ret
         .then(poolId => {
+          console.log('poolId')
+          console.log(poolId)
+          const requestBody = { ...poolInfo, status: PoolStatus.On_Chain, chainId: poolInfo.opId as number }
+          delete requestBody.opId
+          updateLaunchpadPool(requestBody)
           const goToPoolInfoPage = () => {
             const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
             navigate(route)
@@ -348,9 +352,6 @@ const CreatePoolButton = ({
   )
 }
 const ToCreateDialog = ({ show, poolInfo }: { show: boolean; poolInfo: IPoolInfoParams }) => {
-  console.log('ToCreateDialog')
-  console.log(show)
-  console.log(poolInfo)
   const { tokenList } = useTokenList(poolInfo.chainId, 2, '', true)
   const token1 = tokenList.find(item => item.address === poolInfo.token1)
   const token1Currency = useToken(token1?.address || '', token1?.chainId)

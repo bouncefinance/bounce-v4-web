@@ -36,9 +36,7 @@ export interface IBasicInfoParams {
   id: number
   posts?: string
   projectLogo: string
-
   projectName: string
-
   roadmap: string
   tokennomics: string
   website: string
@@ -128,7 +126,7 @@ export interface IPoolInfoParams {
   customizedNeeds?: string
   whitelistEnabled?: boolean
   whitelistAddresses?: string[]
-  status: PoolStatus
+  status?: PoolStatus
 }
 export interface IValues {
   basic: IBasicInfoParams

@@ -34,7 +34,8 @@ import {
   GetUserTokenListParams,
   SearchTokenListParams,
   GetUserLaunchpadInfo,
-  IUserLaunchpadInfo
+  IUserLaunchpadInfo,
+  ILaunchpadList
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -193,4 +194,7 @@ export const updateLaunchpadPool = (params: IPoolInfoParams) => {
 }
 export const getUserLaunchpadInfo = (params: GetUserLaunchpadInfo) => {
   return ApiInstance.post<IUserLaunchpadInfo>('/user/launchpad/pool/list', params)
+}
+export const searchLaunchpad = (params: Omit<GetUserLaunchpadInfo, 'launchpadId'>) => {
+  return ApiInstance.post<ILaunchpadList>('/com/search/launchpad', params)
 }
