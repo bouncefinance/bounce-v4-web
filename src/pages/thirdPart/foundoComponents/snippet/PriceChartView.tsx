@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
+import Image from 'components/Image'
 import LineChart from 'components/LineChart'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { DeepPartial, ChartOptions } from 'lightweight-charts'
@@ -50,7 +51,12 @@ export default function PriceChartView({
       .reverse()
   }, [data?.list, poolInfo.currentBidderAmount1?.currency])
 
-  if (!chatData?.length) return null
+  if (!chatData?.length)
+    return (
+      <Box sx={{ padding: { sm: '30px 60px 0', xs: '30px 50px 0' } }}>
+        <Image style={{ borderRadius: 20 }} width={'100%'} src={poolInfo.token0.largeUrl || ''} />
+      </Box>
+    )
 
   return (
     <Box
