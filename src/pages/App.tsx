@@ -83,6 +83,7 @@ import BounceShop from 'pages/realWorldAuction/shop/bounce'
 import FoundoShop from 'pages/realWorldAuction/shop/bounce'
 import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import LaunchpadDetail from './launchpad/detail'
+import Party from './launchpad/detail/party'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -201,6 +202,7 @@ export default function App() {
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.launchpad.account.launchpadDetail} element={<LaunchpadDetail />} />
+                  <Route path={routes.launchpad.account.launchpadParty} element={<Party />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

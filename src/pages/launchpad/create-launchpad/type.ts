@@ -110,7 +110,7 @@ export interface IPoolInfoParams {
   is721?: boolean
   isReal?: boolean
   maxAmount1PerWallet?: string
-  maxPlayer?: number
+  maxPlayer?: string
   merkleroot?: string
   amountMax1?: string
   amountMin1?: string
@@ -122,7 +122,7 @@ export interface IPoolInfoParams {
   reverseEnabled?: boolean
   times?: number
   tokenIds?: string[]
-  totalShare?: number
+  totalShare?: string
   customizedNeeds?: string
   whitelistEnabled?: boolean
   whitelistAddresses?: string[]

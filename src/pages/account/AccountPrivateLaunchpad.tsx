@@ -70,7 +70,8 @@ import { FIXED_SWAP_ERC20_ADDRESSES } from 'constants/index'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { useCreateLaunchpadFixedSwapPool } from 'hooks/useCreateLaunchpadFixedSwapPool'
 import { Body02 } from 'components/Text'
-import { AuctionProgressPrimaryColor } from 'constants/auction/color'
+import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
@@ -502,24 +503,36 @@ export const Launchpad = ({
   poolInfo,
   basicInfo,
   size,
-  mark
+  mark,
+  onClick
 }: {
-  poolInfo: IPoolInfoParams & { opId?: number }
+  poolInfo: IPoolInfoParams
   basicInfo: IBasicInfoParams
   size: CardSize
   mark?: JSX.Element
+  onClick?: () => void
 }) => {
   const optionDatas = useOptionDatas()
   const chainName = useMemo(() => {
     const chainInfo = optionDatas.chainInfoOpt?.find(item => item.ethChainId === poolInfo.chainId)
     return chainInfo?.chainName
   }, [optionDatas, poolInfo])
+  const { openAt, closeAt } = poolInfo
+  const status = useMemo(() => {
+    const cur = new Date().valueOf()
+    if (!openAt || !closeAt) return ChainPoolStatus.Upcoming
+    if (cur < openAt) return ChainPoolStatus.Upcoming
+    if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
+    return ChainPoolStatus.Closed
+  }, [openAt, closeAt])
   return (
     <Row
+      onClick={onClick}
       sx={[
         {
+          width: '100%',
           position: 'relative',
-          borderRadius: 18,
+          borderRadius: 30,
           overflow: 'hidden',
           cursor: 'pointer',
           '& .mask': {
@@ -539,7 +552,8 @@ export const Launchpad = ({
           }
         },
         size === CardSize.Small && {
-          height: 292
+          height: 292,
+          borderRadius: 18
         },
         size === CardSize.Medium && {
           height: 373
@@ -585,7 +599,17 @@ export const Launchpad = ({
           </RoundedBox>
         </Row>
       </Box>
-      <Box sx={{ flex: 1, background: '#E8E9E4', padding: 24 }}>
+      <Box
+        sx={{
+          flex: 1,
+          background: '#E8E9E4',
+          padding: size === CardSize.Small ? 24 : 40,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          height: '100%'
+        }}
+      >
         <Row sx={{ justifyContent: 'space-between' }}>
           <Row gap={10} sx={{ alignItems: 'center', gap: 10 }}>
             {size !== CardSize.Medium && (
@@ -605,58 +629,65 @@ export const Launchpad = ({
               <SansTitle sx={{ fontSize: size === CardSize.Small ? 17 : 28, fontWeight: 600 }}>
                 {basicInfo.projectName}
               </SansTitle>
-              {size === CardSize.Large && <Body02>Hiley Golbel Coin and text and the coin</Body02>}
+              {size === CardSize.Large && (
+                <Body02 sx={{ color: '#121212' }}>Hiley Golbel Coin and text and the coin</Body02>
+              )}
             </Stack>
           </Row>
           {poolInfo.status === PoolStatus.On_Chain && (
-            <Box>
-              <RoundedBox sx={{ color: AuctionProgressPrimaryColor[1] }}>Upcoming in 32h : 12m : 10s</RoundedBox>
-            </Box>
+            <PoolStatusBox
+              style={{ width: 'max-content', height: 'max-content' }}
+              status={status}
+              claimAt={0}
+              closeTime={(poolInfo.closeAt as number) / 1000}
+              openTime={(poolInfo.openAt as number) / 1000}
+            />
           )}
         </Row>
-
-        <Box sx={{ paddingLeft: 6 }} mt={18}>
-          <InterTitle
+        <Stack flexDirection={'column'} justifyContent={'space-between'}>
+          <Box sx={{ paddingLeft: 6 }} mt={18}>
+            <InterTitle
+              sx={{
+                fontSize: 14,
+                display: '-webkit-box',
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}
+            >
+              {basicInfo.description}
+            </InterTitle>
+            <Row mt={10} gap={6}>
+              {basicInfo?.community
+                .filter(item => !!item.communityLink)
+                .map(item => (
+                  <Link
+                    sx={{ width: size === CardSize.Small ? 20 : 32, height: size === CardSize.Small ? 20 : 32 }}
+                    key={item.communityLink}
+                    href={item.communityLink}
+                    target="_blank"
+                  >
+                    <Image width={'100%'} height={'100%'} src={socialMap[item.communityName]} />
+                  </Link>
+                ))}
+            </Row>
+          </Box>
+          <Box
+            mt={12}
             sx={{
-              fontSize: 14,
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gridRowGap: 8,
+              paddingLeft: 6
             }}
           >
-            {basicInfo.description}
-          </InterTitle>
-          <Row mt={10} gap={6}>
-            {basicInfo.community
-              .filter(item => !!item.communityLink)
-              .map(item => (
-                <Link
-                  sx={{ width: size === CardSize.Small ? 20 : 32, height: size === CardSize.Small ? 20 : 32 }}
-                  key={item.communityLink}
-                  href={item.communityLink}
-                  target="_blank"
-                >
-                  <Image width={'100%'} height={'100%'} src={socialMap[item.communityName]} />
-                </Link>
-              ))}
-          </Row>
-        </Box>
-        <Box
-          mt={12}
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gridRowGap: 8,
-            paddingLeft: 6
-          }}
-        >
-          {poolInfo.token0Name && <MoreDataBox size={size} title="Token Name" content={poolInfo.token0Name} />}
-          {poolInfo.ratio && <MoreDataBox size={size} title="Token Price" content={poolInfo.ratio} />}
-          {poolInfo.totalAmount0 && <MoreDataBox size={size} title="Token Amount" content={poolInfo.totalAmount0} />}
-          {chainName && <MoreDataBox size={size} title="Blockchain / Platform" content={chainName} />}
-        </Box>
+            {poolInfo.token0Name && <MoreDataBox size={size} title="Token Name" content={poolInfo.token0Name} />}
+            {poolInfo.ratio && <MoreDataBox size={size} title="Token Price" content={poolInfo.ratio} />}
+            {poolInfo.totalAmount0 && <MoreDataBox size={size} title="Token Amount" content={poolInfo.totalAmount0} />}
+            {chainName && <MoreDataBox size={size} title="Blockchain / Platform" content={chainName} />}
+          </Box>
+        </Stack>
       </Box>
 
       {mark && mark}

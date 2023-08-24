@@ -27,11 +27,12 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
 interface IShowProps {
   basicInfo: IBasicInfoParams
-  poolInfo: IPoolInfoParams
+  poolInfo?: IPoolInfoParams
   isPooleEmpty?: boolean
+  poolListEl?: JSX.Element
 }
 
-const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false }: IShowProps) => {
+const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }: IShowProps) => {
   const { chainId } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
   const ethChainId = useMemo(() => {
@@ -133,7 +134,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false }: IShowProps
   return (
     <Box>
       <ProjectHead item={privatePadData} />
-      {!isPooleEmpty && (
+      {!!poolInfo && !poolListEl && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
           <Stack
             sx={{
@@ -395,6 +396,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false }: IShowProps
       )}
       {isPooleEmpty && <Box>111</Box>}
       <Tabs item={privatePadData} />
+      {!!poolListEl && poolListEl}
       <FooterPc />
     </Box>
   )

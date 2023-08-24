@@ -41,7 +41,8 @@ export const routes = {
     bladeDao: '/launchpad/bladedao',
     bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId',
     account: {
-      launchpadDetail: '/account/launchpad/:id'
+      launchpadDetail: '/account/launchpad/:id',
+      launchpadParty: '/launchpad/party/:id'
     }
   },
   realAuction: {
