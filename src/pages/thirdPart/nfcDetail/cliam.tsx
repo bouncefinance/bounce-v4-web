@@ -301,7 +301,7 @@ const ClaimDetail = ({
     {
       logo: Icon3,
       label: 'Diamonds (Carats) ',
-      value: '8.81'
+      value: '19.21'
     },
     {
       logo: Icon5,

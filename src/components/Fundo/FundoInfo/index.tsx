@@ -17,7 +17,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
     },
     {
       label: 'Diamonds (Carats) ',
-      value: '19.82 Carats',
+      value: '19.21 Carats',
       img: Icon3
     },
     {

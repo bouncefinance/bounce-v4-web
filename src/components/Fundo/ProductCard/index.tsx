@@ -29,7 +29,7 @@ export default function ProductCard({
       img: Icon2
     },
     {
-      text: 'Diamonds (Carats): 19.82',
+      text: 'Diamonds (Carats): 19.21',
       img: Icon3
     },
     {
