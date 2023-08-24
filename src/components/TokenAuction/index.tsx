@@ -720,7 +720,7 @@ const TokenAuction: React.FC = () => {
                       {data?.list?.map((fixedSwaptem: any, index: number) => (
                         <AuctionCardFull
                           key={index}
-                          style={{ minWidth: 330, gap: 20, boxSizing: 'border-box' }}
+                          style={{ maxWidth: 320, gap: 20, boxSizing: 'border-box' }}
                           auctionPoolItem={fixedSwaptem}
                         />
                       ))}
