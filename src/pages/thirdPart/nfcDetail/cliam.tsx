@@ -557,11 +557,7 @@ const NfcDetail = ({ pageStep }: { pageStep: PageStep }) => {
   const isMd = useIsMDDown()
   const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.default)
   const [onceTime, setOnceTime] = useState<boolean>(false)
-  const { '*': sysId } = useParams()
-  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(
-    sysId && isFinite(Number(sysId)) ? Number(sysId) : 20378
-  )
-  console.log('poolInfo>>>', poolInfo)
+  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(18392)
   useEffect(() => {
     if (onceTime) return
     if (loading || pageStep !== PageStep.claimPage) return
