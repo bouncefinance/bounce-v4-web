@@ -93,7 +93,7 @@ const FoundoBidDetail = () => {
     {
       img: Icon2,
       label: 'Diamonds (Carats) ',
-      value: '8.81'
+      value: '19.21'
     },
     {
       img: Icon3,
