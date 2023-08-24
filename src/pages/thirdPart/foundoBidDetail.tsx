@@ -20,7 +20,7 @@ import { useCallback, useState } from 'react'
 import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 import ActionHistory from './foundoComponents/snippet/auctionHistory'
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
 import Footer from 'bounceComponents/common/Footer'
 import Image from 'components/Image'
 import authenticationDefalut from 'assets/imgs/thirdPart/foundoDetail/authentication-defalut.png'
@@ -112,9 +112,8 @@ const FoundoBidDetail = () => {
     }
   ]
 
-  const { '*': sysId } = useParams()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(sysId && isFinite(Number(sysId)) ? Number(sysId) : 20346)
-  console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
+  // const { '*': sysId } = useParams()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(18392)
   if (!poolInfo) return <></>
   return (
     <Box
