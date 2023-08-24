@@ -16,8 +16,8 @@ export default function TokenToolBox({ sx }: { sx?: SxProps<Theme> | undefined }
         }}
       >
         <ModulesList />
-        <TokenList />
       </Box>
+      <TokenList />
       <FooterPc />
     </>
   )

@@ -1,6 +1,6 @@
 import {
   Box,
-  Pagination,
+  Button,
   Stack,
   styled,
   Table,
@@ -10,46 +10,38 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  InputBase
 } from '@mui/material'
-import moment from 'moment'
-import { PoolType } from 'api/pool/type'
-import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
-import { getLabelById, shortenAddress } from 'utils'
-import { useOptionDatas } from 'state/configOptions/hooks'
-import { useEffect, useState } from 'react'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import { usePagination } from 'ahooks'
-import { getAddressActivities } from 'api/account'
-import { useActiveWeb3React } from 'hooks'
-import { IAuctionPoolsItems } from 'api/profile/type'
-import { Params } from 'ahooks/lib/usePagination/types'
-import { GetAddressActivitiesRes } from 'api/account/types'
-import { ChainListMap } from 'constants/chain'
 import Image from 'components/Image'
-import { Currency, CurrencyAmount } from 'constants/token'
-import { ZERO_ADDRESS } from '../../../constants'
-import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
-import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
-import ChainSelect from 'bounceComponents/common/ChainSelect'
 import EmptyData from 'bounceComponents/common/EmptyData'
-import { PoolEventTypography } from 'bounceComponents/fixed-swap/ActionHistory'
-
+import { useState, useEffect } from 'react'
+import IconImg from 'assets/imgs/icon/default_file.svg'
+import IconButton from '@mui/material/IconButton'
+import SearchIcon from '@mui/icons-material/Search'
+import { useIsMDDown } from 'themes/useTheme'
 const StyledTableCell = styled(TableCell)(() => ({
+  borderColor: '#626262',
   [`&.${tableCellClasses.head}`]: {
-    color: '#908E96',
-    paddingTop: '4px',
-    paddingBottom: '4px'
+    color: '#777E90',
+    fontFamily: `'Inter'`,
+    fontFize: 13,
+    lineHeight: '18px',
+    textTransform: 'capitalize',
+    paddingTop: '16px',
+    paddingBottom: '16px'
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14
+    color: '#fff',
+    fontSize: 14,
+    fontFamily: `'Inter'`
   }
 }))
 
 const StyledTableRow = styled(TableRow)(() => ({
+  cursor: 'pointer',
   '&:nth-of-type(even)': {
-    backgroundColor: '#fff',
-
     'td:first-of-type': {
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8
@@ -63,136 +55,196 @@ const StyledTableRow = styled(TableRow)(() => ({
     border: 0
   }
 }))
-
-const defaultPageSize = 10
-
-const TokenList = ({ backedTokenType }: { backedTokenType?: BackedTokenType }) => {
-  const optionDatas = useOptionDatas()
-  const [curChain, setCurChain] = useState(0)
-  const { account } = useActiveWeb3React()
-  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
-
-  const { pagination, data, loading } = usePagination<IAuctionPoolsItems<GetAddressActivitiesRes>, Params>(
-    async ({ current, pageSize }) => {
-      if (!account)
-        return {
-          total: 0,
-          list: []
-        }
-      const category = curPoolType
-      const resp = await getAddressActivities({
-        offset: (current - 1) * pageSize,
-        limit: pageSize,
-        category,
-        chainId: curChain,
-        address: account,
-        tokenType: backedTokenType || BackedTokenType.TOKEN
-      })
-      return {
-        list: resp.data.list.map(i => {
-          const ethChainId = getLabelById(i.chainId, 'ethChainId', optionDatas?.chainInfoOpt || [])
-          return {
-            ...i,
-            ethChainId,
-            currency0Amount: CurrencyAmount.fromRawAmount(
-              new Currency(ethChainId, ZERO_ADDRESS, i.token0Decimals, i.token0Symbol),
-              i.token0Amount
-            )
-          }
-        }),
-        total: resp.data.total
-      }
+const BtnCom = styled(Button)(() => ({
+  height: '42px',
+  lineHeight: '42px',
+  fontSize: 14,
+  fontWeight: 400,
+  letterSpacing: '-0.28px',
+  fontFamily: `'Inter'`,
+  borderRadius: '4px',
+  border: '0',
+  '&:hover': {
+    border: '0'
+  }
+}))
+const TokenList = () => {
+  const [loading, setLoading] = useState(true)
+  const isMd = useIsMDDown()
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
+  const dataList = [
+    {
+      id: 0,
+      tokenSymbol: IconImg,
+      tokenName: 'USDT',
+      amount: '20,184.04',
+      totalValue: '$4,585,165.51',
+      tokenType: 'Token'
     },
     {
-      defaultPageSize,
-      ready: !!account,
-      refreshDeps: [account, curChain, curPoolType, backedTokenType],
-      debounceWait: 100
+      id: 1,
+      tokenSymbol: IconImg,
+      tokenName: 'USDT',
+      amount: '20,184.04',
+      totalValue: '$4,585,165.51',
+      tokenType: 'Token'
     }
-  )
-
-  useEffect(() => {
-    pagination.changeCurrent(1)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, curPoolType, backedTokenType])
-
-  const handlePageChange = (_: any, p: number) => {
-    pagination.changeCurrent(p)
-  }
+  ]
 
   return (
-    <Box>
-      <Box display={'flex'} alignItems="center" justifyContent={'space-between'}>
-        <Stack spacing={10} direction="row">
-          <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
-          <AuctionTypeSelect
-            tokenType={backedTokenType}
-            curPoolType={curPoolType}
-            setCurPoolType={t => setCurPoolType(t)}
-          />
-        </Stack>
-      </Box>
-      {loading ? (
-        <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <BounceAnime />
-        </Box>
-      ) : data && data?.list.length > 0 && !loading ? (
-        <TableContainer sx={{ mt: 40 }}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell>Chain</StyledTableCell>
-                <StyledTableCell>Pool ID</StyledTableCell>
-                <StyledTableCell>Auction Type</StyledTableCell>
-                <StyledTableCell>Event</StyledTableCell>
-                <StyledTableCell>Amount</StyledTableCell>
-                <StyledTableCell>Address</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {data.list.map(record => (
-                <StyledTableRow key={record.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Image src={record.ethChainId ? ChainListMap[record.ethChainId]?.logo || '' : ''} width="24px" />
-                  </StyledTableCell>
-                  <StyledTableCell>#{record.poolId}</StyledTableCell>
-                  <StyledTableCell>
-                    {record.category === PoolType.fixedSwapNft
-                      ? 'NFT Fixed Price Auction'
-                      : record.category === PoolType.Lottery
-                      ? 'Random Selection'
-                      : 'Token Fixed Price Auction'}
-                  </StyledTableCell>
-                  <StyledTableCell>{PoolEventTypography[record.event]}</StyledTableCell>
-                  <StyledTableCell>
-                    {record.currency0Amount?.toSignificant(6)}
-                    &nbsp;
-                    {record.token0Symbol}
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>{shortenAddress(record.requestor)}</Typography>
-                      <CopyToClipboard text={record.requestor} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>{moment(record.blockTs * 1000).format('Y/M/D hh:mm A')}</StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <Box mt={40} display={'flex'} justifyContent="center">
-            <Pagination
-              onChange={handlePageChange}
-              page={pagination.current}
-              sx={{ alignItems: 'end' }}
-              count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
-            />
+    <Box
+      sx={{
+        width: '100%',
+        padding: isMd ? '0 16px 40px' : '0 72px 40px',
+        overflowX: 'auto'
+      }}
+      mt={'60px'}
+    >
+      <Box
+        sx={{
+          padding: '80px 70px',
+          borderRadius: '30px',
+          background: '#121212',
+          width: '100%',
+          minWidth: isMd ? '1296px' : 'unset'
+        }}
+      >
+        <Box mb={'24px'} display={'flex'} alignItems="center" justifyContent={'space-between'}>
+          <Typography
+            sx={{
+              color: '#fff',
+              leadingTrim: 'both',
+              textEdge: 'cap',
+              fontVariantNumeric: 'lining-nums proportional-nums',
+              fontFamily: `'Public Sans'`,
+              fontSize: 36,
+              fontWeight: 600,
+              lineHeight: '46px',
+              letterSpacing: '-0.72px'
+            }}
+          >
+            Token list
+          </Typography>
+          <Box display={'flex'} gap={'12px'}>
+            <BtnCom variant={'contained'}>View My Lock</BtnCom>
+            <BtnCom variant={'contained'}>View My token</BtnCom>
+            <BtnCom variant={'contained'}>View My disperse</BtnCom>
           </Box>
-        </TableContainer>
-      ) : (
-        <EmptyData />
-      )}
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'row nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            border: '1px solid #959595',
+            borderRadius: '10px'
+          }}
+          mb={'48px'}
+        >
+          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+            <SearchIcon
+              sx={{
+                color: '#fff'
+              }}
+            />
+          </IconButton>
+          <InputBase
+            sx={{ ml: 1, flex: 1, background: 'transparent', border: '0', color: '#fff' }}
+            placeholder="Token address/Token name"
+            inputProps={{ 'aria-label': 'Token address/Token name' }}
+          />
+        </Box>
+        {loading ? (
+          <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <BounceAnime />
+          </Box>
+        ) : dataList && dataList.length > 0 && !loading ? (
+          <TableContainer sx={{ mt: 40 }}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell>Token</StyledTableCell>
+                  <StyledTableCell>Amount</StyledTableCell>
+                  <StyledTableCell>Total value</StyledTableCell>
+                  <StyledTableCell>Token type</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {dataList.map(record => (
+                  <StyledTableRow
+                    key={record.id}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      '&:hover': {
+                        background: '#20201E'
+                      }
+                    }}
+                  >
+                    <StyledTableCell>
+                      <Stack direction={'row'} gap={'8px'}>
+                        <Image src={record.tokenSymbol} width="24px" />
+                        <Typography>{record.tokenName}</Typography>
+                      </Stack>
+                    </StyledTableCell>
+                    <StyledTableCell>{record.amount}</StyledTableCell>
+                    <StyledTableCell>{record.totalValue}</StyledTableCell>
+                    <StyledTableCell>{record.tokenType}</StyledTableCell>
+                    <StyledTableCell align={'right'}>
+                      <Stack
+                        direction={'row'}
+                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                      >
+                        <Button
+                          sx={{
+                            height: '37px',
+                            lineHeight: '37px',
+                            fontFamily: `'Public Sans'`,
+                            fontSize: 14,
+                            fontWeight: 600,
+                            letterSpacing: '-0.28px',
+                            borderRadius: '6px'
+                          }}
+                          variant={'contained'}
+                        >
+                          Lock
+                        </Button>
+                        <Button
+                          sx={{
+                            height: '37px',
+                            lineHeight: '37px',
+                            fontFamily: `'Public Sans'`,
+                            fontSize: 14,
+                            fontWeight: 600,
+                            letterSpacing: '-0.28px',
+                            marginLeft: '10px',
+                            background: 'transparent',
+                            borderRadius: '6px',
+                            color: '#fff',
+                            '&:hover': {
+                              color: '#121212'
+                            }
+                          }}
+                          variant={'outlined'}
+                        >
+                          Disperse
+                        </Button>
+                      </Stack>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <EmptyData />
+        )}
+      </Box>
     </Box>
   )
 }

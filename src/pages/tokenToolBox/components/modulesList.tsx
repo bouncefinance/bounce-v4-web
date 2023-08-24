@@ -2,6 +2,7 @@ import { Box, Grid, Typography, Button } from '@mui/material'
 import P1 from 'assets/imgs/toolBox/p1.png'
 import P2 from 'assets/imgs/toolBox/p2.png'
 import P3 from 'assets/imgs/toolBox/p3.png'
+import { routes } from 'constants/routes'
 import { useIsMDDown } from 'themes/useTheme'
 interface ModulesConfigParams {
   logoImg: string
@@ -18,7 +19,7 @@ const ModulesList = () => {
       title: 'Token Locker',
       subTitle: 'Explain what is a token locker........',
       btnTitle: 'Create Lock',
-      link: ''
+      link: routes.tokenToolBox.tokenLocker
     },
     {
       logoImg: P1,
@@ -115,6 +116,7 @@ const ModulesList = () => {
                     height: '42px',
                     lineHeight: '42px'
                   }}
+                  href={item.link}
                 >
                   {item.btnTitle}
                 </Button>

@@ -109,7 +109,8 @@ export const routes = {
     foundoNfcDetail: '/foundo/nfc_detail'
   },
   tokenToolBox: {
-    index: '/TokenToolBox'
+    index: '/TokenToolBox',
+    tokenLocker: '/TokenToolBox/TokenLocker'
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'

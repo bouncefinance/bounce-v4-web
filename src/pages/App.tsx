@@ -83,6 +83,7 @@ import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
 import ZataShop from './realWorldAuction/shop/zeta'
 import TokenToolBox from './tokenToolBox'
+import TokenLocker from './tokenToolBox/page/tokenLocker'
 import Loyaltyprogram from './loyaltyprogram'
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -204,6 +205,8 @@ export default function App() {
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
+                  <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
+
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
