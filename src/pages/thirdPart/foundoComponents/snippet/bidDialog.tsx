@@ -80,7 +80,7 @@ export const PlaceBidBtn = styled(LoadingButton)({
     borderColor: '#fff',
     backgroundColor: '#fff',
     color: '#000',
-    '& svg': {
+    '& svg.diamond': {
       '& path, & rect ': {
         fill: 'black'
       }
@@ -89,7 +89,7 @@ export const PlaceBidBtn = styled(LoadingButton)({
       color: '#000'
     }
   },
-  '& img, & svg': {
+  '& img, & svg.diamond': {
     marginRight: 10
   },
   '&:disabled': {
