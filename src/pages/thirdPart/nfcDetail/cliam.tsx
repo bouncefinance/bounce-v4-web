@@ -314,8 +314,8 @@ const ClaimDetail = ({
     },
     {
       logo: Icon4,
-      label: 'Dimension',
-      value: '40.5 cm'
+      label: 'Necklace Length',
+      value: '50 cm'
     }
   ]
   const CliamBtn = () => {
@@ -506,7 +506,7 @@ const ClaimDetail = ({
               fontSize: '12px'
             }}
           >
-            Ref: 356934
+            Ref : LG578319461
           </SpanText>
         </Stack>
         {detailInfoList.map((item, index) => (
