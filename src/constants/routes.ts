@@ -49,6 +49,7 @@ export const routes = {
     index: '/real-auction',
     applySeller: '/real-auction/apply-seller',
     bounceShop: '/real-auction/bounce',
+    zetaShop: '/real-auction/zeta',
     foundoShop: '/real-auction/foundo'
   },
   adsAuction: {

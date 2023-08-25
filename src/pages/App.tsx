@@ -84,6 +84,8 @@ import FoundoShop from 'pages/realWorldAuction/shop/bounce'
 import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import LaunchpadDetail from './launchpad/detail'
 import Party from './launchpad/detail/party'
+import ZataShop from './realWorldAuction/shop/zeta'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -167,6 +169,7 @@ export default function App() {
                   <Route path={routes.realAuction.applySeller} element={<ApplyToBeSeller />} />
                   <Route path={routes.realAuction.bounceShop} element={<BounceShop />} />
                   <Route path={routes.realAuction.foundoShop} element={<FoundoShop />} />
+                  <Route path={routes.realAuction.zetaShop} element={<ZataShop />} />
                   <Route path={routes.adsAuction.index} element={<AdsAuction />} />
 
                   <Route path={routes.profile.summary} element={<ProfileHome />} />

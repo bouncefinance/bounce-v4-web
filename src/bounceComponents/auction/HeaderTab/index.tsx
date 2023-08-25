@@ -86,7 +86,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         alignItems: 'center',
         width: '100%',
         // maxWidth: '1296px',
-        padding: '0 72px',
+        padding: { xs: 0, sm: '0 72px' },
         margin: '0 auto',
         ...style
       }}
