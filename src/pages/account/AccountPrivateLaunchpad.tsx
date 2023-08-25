@@ -77,6 +77,7 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import LanguageIcon from '@mui/icons-material/Language'
 import SendIcon from '@mui/icons-material/Send'
 import CloseIcon from '@mui/icons-material/Close'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 enum ETabList {
   All = 'All',
   Upcoming = 'Upcoming',
@@ -192,9 +193,9 @@ const CreatePoolButton = ({
       })
       ret
         .then(poolId => {
-          const requestBody = { ...poolInfo, status: PoolStatus.On_Chain, chainId: poolInfo.opId as number }
-          delete requestBody.opId
-          updateLaunchpadPool(requestBody)
+          // const requestBody = { ...poolInfo, status: PoolStatus.On_Chain, chainId: poolInfo.opId as number }
+          // delete requestBody.opId
+          // updateLaunchpadPool(requestBody)
           const goToPoolInfoPage = () => {
             const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
             navigate(route)
@@ -228,7 +229,7 @@ const CreatePoolButton = ({
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate, poolInfo])
+  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -750,6 +751,12 @@ const LaunchpadCard = ({
       manual: true,
       onSuccess: () => {
         getInfo()
+        show(DialogDarkTips, {
+          iconType: 'success',
+          title: 'Сongratulations!',
+          content: 'You have successfully submit, Please wait patiently for review.',
+          cancelBtn: 'Confirm'
+        })
       }
     }
   )
