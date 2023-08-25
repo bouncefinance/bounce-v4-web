@@ -21,11 +21,9 @@ const Party = () => {
     return null
   }
   if (data?.list.length === 1) {
-    navigate('/account/launchpad/' + data.list[0].id, { replace: true })
+    navigate(`/account/launchpad/${data.list[0].id}?party=${id}`, { replace: true })
     return null
   }
-  console.log('data')
-  console.log(data)
 
   return (
     <ShowLaunchpad

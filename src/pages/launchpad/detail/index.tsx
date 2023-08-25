@@ -7,19 +7,21 @@ import { useMemo } from 'react'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
 import ShowLaunchpad from './showLaunchpad'
+import { GetUserLaunchpadInfo } from 'api/user/type'
 const LaunchpadDetail = () => {
-  const { id } = useQueryParams()
+  const { id, party } = useQueryParams()
   const { token } = useUserInfo()
   const { data } = useRequest(
     async () => {
-      const res = await getUserLaunchpadInfo({})
+      const params: GetUserLaunchpadInfo = party ? { launchpadId: Number(party) } : ({} as GetUserLaunchpadInfo)
+      const res = await getUserLaunchpadInfo(params)
       return {
         list: res.data.list,
         basicInfo: res.data.basicInfo,
         total: res.data.total
       }
     },
-    { ready: !!token }
+    { ready: !!token, refreshDeps: [id, party] }
   )
   const curPoolInfo = useMemo(() => {
     const pool = data?.list.find(item => item.id === Number(id))
