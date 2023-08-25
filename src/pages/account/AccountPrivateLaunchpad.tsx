@@ -368,7 +368,7 @@ const ToCreateDialog = ({
   return (
     <Dialog
       sx={{
-        maxHeight: '800px',
+        maxHeight: '85vh',
         overflow: 'auto',
         '& ::-webkit-scrollbar': {
           display: 'none'
@@ -767,7 +767,7 @@ const LaunchpadCard = ({
         console.log(res)
         setShowCreateDia(true)
       })
-      .catch(() => {
+      .catch(err => {
         toast.error('There is still some content that has not been filled out!')
         setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
       })

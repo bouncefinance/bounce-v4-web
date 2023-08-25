@@ -34,8 +34,8 @@ export const useToDetailInfo = (values: IPoolInfoParams) => {
       Token: token1,
       TokenLogo: values.token0Logo,
       SwapRatio: values.ratio,
-      startTime: values.openAt ? moment(values.openAt) : null,
-      endTime: values.closeAt ? moment(values.closeAt) : null,
+      startTime: values.openAt ? moment(values.openAt * 1000) : null,
+      endTime: values.closeAt ? moment(values.closeAt * 1000) : null,
       isRefundable: values.reverseEnabled,
       whitelist: values.whitelistAddresses,
       participantStatus: values.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public,
@@ -46,25 +46,24 @@ export const useToDetailInfo = (values: IPoolInfoParams) => {
       fragmentReleaseTimes: [{ startAt: null, radio: '0' }]
     } as IDetailInitValue
     if (values.releaseType === IReleaseType.Cliff) {
-      info.delayUnlockingTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt) : null
+      info.delayUnlockingTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt * 1000) : null
     }
     if (values.releaseType === IReleaseType.Linear) {
-      info.linearUnlockingStartTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt) : null
+      info.linearUnlockingStartTime = values.releaseData[0].startAt
+        ? moment(values.releaseData[0].startAt * 1000)
+        : null
       info.linearUnlockingEndTime = values.releaseData[0].endAtOrRatio
-        ? moment(values.releaseData[0].endAtOrRatio)
+        ? moment(values.releaseData[0].endAtOrRatio * 1000)
         : null
     }
     if (values.releaseType === IReleaseType.Fragment) {
       const fragment = values.releaseData.map<IFragmentReleaseTimes>(item => ({
-        startAt: item.startAt ? moment(item.startAt) : null,
+        startAt: item.startAt ? moment(item.startAt * 1000) : null,
         radio: `${item.endAtOrRatio}`
       }))
       info.fragmentReleaseTimes = fragment
     }
     return info
   }, [chainInfoOpt, token1, values])
-  console.log('poolInfo')
-  console.log(poolInfo)
-
   return { poolInfo }
 }

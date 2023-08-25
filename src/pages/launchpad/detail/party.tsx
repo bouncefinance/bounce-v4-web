@@ -37,7 +37,7 @@ const Party = () => {
               data.list.length &&
               data.list.map(item => (
                 <Launchpad
-                  onClick={() => navigate('/account/launchpad/' + item.id)}
+                  onClick={() => navigate(`/account/launchpad/${data.list[0].id}?party=${id}`)}
                   key={item.id}
                   size={CardSize.Medium}
                   poolInfo={item}

@@ -97,8 +97,8 @@ export const toDetailType = (values: IPoolInfoParams, chainInfoOpt: ChainInfoOpt
     },
     TokenLogo: values.token0Logo,
     SwapRatio: values.ratio,
-    startTime: values.openAt ? moment(values.openAt) : null,
-    endTime: values.closeAt ? moment(values.closeAt) : null,
+    startTime: values.openAt ? moment(values.openAt * 1000) : null,
+    endTime: values.closeAt ? moment(values.closeAt * 1000) : null,
     isRefundable: values.reverseEnabled,
     whitelist: values.whitelistAddresses,
     participantStatus: values.whitelistEnabled ? ParticipantStatus.Whitelist : ParticipantStatus.Public,
@@ -109,17 +109,19 @@ export const toDetailType = (values: IPoolInfoParams, chainInfoOpt: ChainInfoOpt
     fragmentReleaseTimes: [{ startAt: null, radio: '0' }]
   } as IDetailInitValue
   if (values.releaseType === IReleaseType.Cliff) {
-    poolInfo.delayUnlockingTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt) : null
+    poolInfo.delayUnlockingTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt * 1000) : null
   }
   if (values.releaseType === IReleaseType.Linear) {
-    poolInfo.linearUnlockingStartTime = values.releaseData[0].startAt ? moment(values.releaseData[0].startAt) : null
+    poolInfo.linearUnlockingStartTime = values.releaseData[0].startAt
+      ? moment(values.releaseData[0].startAt * 1000)
+      : null
     poolInfo.linearUnlockingEndTime = values.releaseData[0].endAtOrRatio
-      ? moment(values.releaseData[0].endAtOrRatio)
+      ? moment(values.releaseData[0].endAtOrRatio * 1000)
       : null
   }
   if (values.releaseType === IReleaseType.Fragment) {
     const fragment = values.releaseData.map<IFragmentReleaseTimes>(item => ({
-      startAt: item.startAt ? moment(item.startAt) : null,
+      startAt: item.startAt ? moment(item.startAt * 1000) : null,
       radio: `${item.endAtOrRatio}`
     }))
     poolInfo.fragmentReleaseTimes = fragment
@@ -355,12 +357,12 @@ const DetailForm = ({
         totalAmount0: values.TotalSupply,
         token1: values.Token.address,
         ratio: values.SwapRatio,
-        openAt: values.startTime?.valueOf(),
-        closeAt: values.endTime?.valueOf(),
+        openAt: values.startTime?.unix(),
+        closeAt: values.endTime?.unix(),
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
         whitelistAddresses: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-        status: PoolStatus.Init,
+        status: values.status,
         releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
@@ -369,13 +371,13 @@ const DetailForm = ({
       const releaseType = Number(values.releaseType)
       if (releaseType !== IReleaseType.Instant) {
         if (releaseType === IReleaseType.Cliff) {
-          poolParams.releaseData = [{ startAt: values.delayUnlockingTime?.valueOf() as number, endAtOrRatio: 0 }]
+          poolParams.releaseData = [{ startAt: values.delayUnlockingTime?.unix() as number, endAtOrRatio: 0 }]
         }
         if (releaseType === IReleaseType.Linear) {
           poolParams.releaseData = [
             {
-              startAt: values.linearUnlockingStartTime?.valueOf() as number,
-              endAtOrRatio: values.linearUnlockingEndTime?.valueOf() as number
+              startAt: values.linearUnlockingStartTime?.unix() as number,
+              endAtOrRatio: values.linearUnlockingEndTime?.unix() as number
             }
           ]
         }
@@ -383,7 +385,7 @@ const DetailForm = ({
           let releaseData: { startAt: number; endAtOrRatio: number }[] = []
           values.fragmentReleaseTimes.forEach(item => {
             releaseData.push({
-              startAt: item.startAt?.valueOf() as number,
+              startAt: item.startAt?.unix() as number,
               endAtOrRatio: Number(item.radio)
             })
           })
@@ -400,7 +402,15 @@ const DetailForm = ({
           poolParams.releaseData = releaseData
         }
       }
-      console.log('poolParams')
+      ;(poolParams.claimAt =
+        IReleaseType.Linear === poolParams.releaseType || IReleaseType.Fragment === poolParams.releaseType
+          ? poolParams.releaseData?.[0].startAt || 0
+          : IReleaseType.Instant === poolParams.releaseType
+          ? 0
+          : IReleaseType.Cliff === poolParams.releaseType
+          ? poolParams.releaseData?.[0].startAt || 0
+          : poolParams.closeAt || 0),
+        console.log('poolParams')
       console.log(poolParams)
 
       return updateLaunchpadPool(poolParams)

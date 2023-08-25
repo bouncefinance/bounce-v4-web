@@ -14,7 +14,6 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 
 import { Params, getEventLog } from './useCreateFixedSwapPool'
 import { IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
-import moment from 'moment'
 const NO_LIMIT_ALLOCATION = '0'
 
 function getFragmentRawArr(releaseData: { startAt: number; endAtOrRatio: number }[]) {
@@ -42,26 +41,26 @@ export function makeValuesReleaseData(values: IPoolInfoParams) {
   return values.releaseType === IReleaseType.Cliff
     ? [
         {
-          startAt: moment(values.releaseData[0].startAt).unix() || 0,
+          startAt: values.releaseData[0].startAt || 0,
           endAtOrRatio: 0
         }
       ]
     : values.releaseType === IReleaseType.Linear
     ? values.releaseData.map(item => ({
-        startAt: moment(item.startAt).unix() || 0,
-        endAtOrRatio: moment(item.endAtOrRatio)?.unix() || 0
+        startAt: item.startAt || 0,
+        endAtOrRatio: item.endAtOrRatio || 0
       }))
     : values.releaseType === IReleaseType.Fragment
     ? values.releaseData.map((item, idx) => {
         console.log('fragmentRawArr[idx].raw.toString()')
         console.log(fragmentRawArr[idx])
         return {
-          startAt: moment(item.startAt).unix() || 0,
+          startAt: item.startAt || 0,
           endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
         }
       })
     : values.releaseData.map(item => ({
-        startAt: moment(item.startAt).unix() || 0,
+        startAt: item.startAt || 0,
         endAtOrRatio: item.endAtOrRatio || 0
       }))
 }
@@ -95,16 +94,16 @@ export function useCreateLaunchpadFixedSwapPool({
         Number(poolInfo.maxAmount1PerWallet) > 0
           ? new BigNumber(poolInfo.maxAmount1PerWallet || '').toString()
           : NO_LIMIT_ALLOCATION,
-      startTime: moment(poolInfo.openAt).unix() || 0,
-      endTime: moment(poolInfo.closeAt).unix() || 0,
+      startTime: poolInfo.openAt || 0,
+      endTime: poolInfo.closeAt || 0,
       delayUnlockingTime:
         IReleaseType.Linear === poolInfo.releaseType || IReleaseType.Fragment === poolInfo.releaseType
-          ? moment(poolInfo.releaseData?.[0].startAt).unix() || 0
+          ? poolInfo.releaseData?.[0].startAt || 0
           : IReleaseType.Instant === poolInfo.releaseType
           ? 0
           : IReleaseType.Cliff === poolInfo.releaseType
-          ? moment(poolInfo.releaseData?.[0].startAt).unix() || 0
-          : moment(poolInfo.closeAt).unix() || 0,
+          ? poolInfo.releaseData?.[0].startAt || 0
+          : poolInfo.closeAt || 0,
       poolName: poolInfo.name ? poolInfo.name.slice(0, 50) : '',
       tokenFromAddress: poolInfo.token0 || '',
       tokenFormDecimal: poolInfo.token0Decimals || '',
