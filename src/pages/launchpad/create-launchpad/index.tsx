@@ -1,5 +1,5 @@
 import { useQueryParams } from 'hooks/useQueryParams'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useRequest } from 'ahooks'
 import { IUserLaunchpadInfo } from 'api/user/type'
 import { getUserLaunchpadInfo } from 'api/user'
@@ -10,9 +10,10 @@ import { HeadTitle } from './form/BaseComponent'
 import BasicForm from './form/BasicForm'
 import DetailForm from './form/DetailForm'
 import useBreakpoint from 'hooks/useBreakpoint'
-import { useUserInfo } from 'state/users/hooks'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { toast } from 'react-toastify'
+import { useActiveWeb3React } from 'hooks'
 enum CreTab {
   'BASIC' = 1,
   'POOL' = 2
@@ -30,6 +31,8 @@ const CreateLaunchpad = () => {
   const { token } = useUserInfo()
   const [curTab, setCurTab] = useState(tab ? Number(tab) : CreTab.POOL)
   const [isFirst, setIsFirst] = useState(false)
+  const showLoginModal = useShowLoginModal()
+  const { account } = useActiveWeb3React()
   const { data, run: getLaunchpadInfo } = useRequest(
     () => {
       return getUserLaunchpadInfo({})
@@ -41,6 +44,10 @@ const CreateLaunchpad = () => {
       }
     }
   )
+  useEffect(() => {
+    !account && showLoginModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
   if (data && !data.data.basicInfo) {
     if (!isFirst) setIsFirst(true)
     if (curTab !== CreTab.BASIC) setCurTab(CreTab.BASIC)

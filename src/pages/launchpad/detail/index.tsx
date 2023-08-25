@@ -2,13 +2,16 @@ import { Box } from '@mui/material'
 import { useRequest } from 'ahooks'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { getUserLaunchpadInfo } from 'api/user'
-import { useUserInfo } from 'state/users/hooks'
-import { useMemo } from 'react'
+import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
+import { useEffect, useMemo } from 'react'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
 import ShowLaunchpad from './showLaunchpad'
 import { GetUserLaunchpadInfo } from 'api/user/type'
+import { useActiveWeb3React } from 'hooks'
 const LaunchpadDetail = () => {
+  const showLoginModal = useShowLoginModal()
+  const { account } = useActiveWeb3React()
   const { id, party } = useQueryParams()
   const { token } = useUserInfo()
   const { data } = useRequest(
@@ -23,6 +26,10 @@ const LaunchpadDetail = () => {
     },
     { ready: !!token, refreshDeps: [id, party] }
   )
+  useEffect(() => {
+    !account && showLoginModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
   const curPoolInfo = useMemo(() => {
     const pool = data?.list.find(item => item.id === Number(id))
     return pool
