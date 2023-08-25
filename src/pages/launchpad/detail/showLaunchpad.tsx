@@ -1,7 +1,7 @@
 import { IBasicInfoParams, IPoolInfoParams } from '../create-launchpad/type'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { IPrivatePadProp, IProjectInfo } from '../PrivatePadDataList'
+import { IPrivatePadProp, IPrivatePricesInfo, IProjectInfo } from '../PrivatePadDataList'
 import { PoolStatus, PoolType } from 'api/pool/type'
 import { getLabelById, shortenAddress } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
@@ -71,6 +71,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
           </Link>
         ))
     }
+    const privatePrices: IPrivatePricesInfo[] = []
     const moreData: {
       title: string
       content: string
@@ -80,11 +81,19 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
         title: 'Token Name',
         content: poolInfo.token0Name
       })
+      privatePrices.push({
+        title: 'Token Name',
+        value: poolInfo.token0Name
+      })
     }
     if (poolInfo.ratio) {
       moreData.push({
         title: 'Token Price',
         content: poolInfo.ratio
+      })
+      privatePrices.push({
+        title: 'Token Price',
+        value: poolInfo.ratio || '--'
       })
     }
     if (poolInfo.totalAmount0) {
@@ -92,12 +101,20 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
         title: 'Token Amount',
         content: poolInfo.totalAmount0
       })
+      privatePrices.push({
+        title: 'Token Amount',
+        value: poolInfo.totalAmount0 || '--'
+      })
     }
     if (poolInfo.chainId) {
       const ethChainName = getLabelById(poolInfo.chainId, 'chainName', optionDatas?.chainInfoOpt || [])
       moreData.push({
-        title: 'Token Amount',
+        title: 'Blockchain',
         content: ethChainName
+      })
+      privatePrices.push({
+        title: 'Blockchain',
+        value: ethChainName || '--'
       })
     }
     const privateDate: IPrivatePadProp = {
@@ -116,7 +133,8 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
       projectInfo: projectInfo,
       tokenMetrics: [],
       social: social,
-      moreData: moreData
+      moreData: moreData,
+      privatePrices: privatePrices
     }
     return privateDate
   }, [poolInfo, basicInfo, ethChainId, optionDatas])

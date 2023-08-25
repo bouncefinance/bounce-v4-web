@@ -4,19 +4,25 @@ import ShowLaunchpad from './showLaunchpad'
 import { getUserLaunchpadInfo } from 'api/user'
 import { useRequest } from 'ahooks'
 import { CardSize, Launchpad } from 'pages/account/AccountPrivateLaunchpad'
-import { IBasicInfoParams } from '../create-launchpad/type'
+import { IBasicInfoParams, PoolStatus } from '../create-launchpad/type'
 const Party = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { data } = useRequest(async () => {
     const res = await getUserLaunchpadInfo({ launchpadId: Number(id) })
-    return { basicInfo: res.data.basicInfo, list: res.data.list, total: res.data.total }
+    return {
+      basicInfo: res.data.basicInfo,
+      list: res.data.list.filter(item => item.status === PoolStatus.Approved || item.status === PoolStatus.On_Chain),
+      total: res.data.total
+    }
   })
-  if (data?.total === 0) {
+  if (data?.list.length === 0) {
     navigate('/')
+    return null
   }
-  if (data?.total === 1) {
-    navigate('/account/launchpad/' + data.list[0].id)
+  if (data?.list.length === 1) {
+    navigate('/account/launchpad/' + data.list[0].id, { replace: true })
+    return null
   }
   console.log('data')
   console.log(data)

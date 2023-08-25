@@ -105,7 +105,11 @@ const MoreDataBox = ({ title, content, size }: { title: string; content: string;
       </InterTitle>
       <InterTitle
         mt={4}
-        sx={{ fontSize: size === CardSize.Small ? 10 : size === CardSize.Medium ? 14 : 16, fontWeight: 500 }}
+        sx={{
+          fontSize: size === CardSize.Small ? 10 : size === CardSize.Medium ? 14 : 16,
+          fontWeight: 500,
+          textTransform: 'capitalize'
+        }}
       >
         {content}
       </InterTitle>
@@ -636,8 +640,7 @@ export const Launchpad = ({
           padding: size === CardSize.Small ? 24 : 40,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
-          height: '100%'
+          justifyContent: 'space-between'
         }}
       >
         <Row sx={{ justifyContent: 'space-between' }}>
@@ -674,7 +677,7 @@ export const Launchpad = ({
             />
           )}
         </Row>
-        <Stack flexDirection={'column'} justifyContent={'space-between'}>
+        <Stack flexDirection={'column'} justifyContent={'space-between'} sx={{ height: '100%' }}>
           <Box sx={{ paddingLeft: 6 }} mt={18}>
             <InterTitle
               sx={{
@@ -733,7 +736,6 @@ const LaunchpadCard = ({
   basicInfo: IBasicInfoParams
   getInfo: () => void
   size: CardSize
-  Mark?: JSX.Element
 }) => {
   const detailInfo = useToDetailInfo({ ...poolInfo, chainId: poolInfo.opId as number })
   const [showCreateDia, setShowCreateDia] = useState(false)
@@ -793,11 +795,16 @@ const LaunchpadCard = ({
             <Link href={`/account/launchpad/${poolInfo.id}`}>
               <Image src={ShowDetailIcon} />
             </Link>
-            {poolInfo.status !== PoolStatus.On_Chain && (
-              <Link href={`${routes.thirdPart.CreateLaunchpad}?type=2&id=${poolInfo.id}`}>
-                <Image src={EditDetailIcon} />
-              </Link>
-            )}
+
+            <Link
+              href={`${
+                poolInfo.status !== PoolStatus.On_Chain
+                  ? routes.thirdPart.CreateLaunchpad + '?type=2&id=' + poolInfo.id
+                  : routes.thirdPart.CreateLaunchpad + '?tab=1'
+              }`}
+            >
+              <Image src={EditDetailIcon} />
+            </Link>
 
             {poolInfo.status !== PoolStatus.On_Chain && (
               <Box onClick={() => run(PoolStatus.Released)}>
