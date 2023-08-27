@@ -554,7 +554,7 @@ export const Launchpad = ({
   }, [optionDatas, poolInfo])
   const { openAt, closeAt } = poolInfo
   const status = useMemo(() => {
-    const cur = new Date().valueOf()
+    const cur = new Date().valueOf() / 1000
     if (!openAt || !closeAt) return ChainPoolStatus.Upcoming
     if (cur < openAt) return ChainPoolStatus.Upcoming
     if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
@@ -672,9 +672,9 @@ export const Launchpad = ({
             <PoolStatusBox
               style={{ width: 'max-content', height: 'max-content' }}
               status={status}
-              claimAt={0}
-              closeTime={(poolInfo.closeAt as number) / 1000}
-              openTime={(poolInfo.openAt as number) / 1000}
+              claimAt={poolInfo.claimAt || 0}
+              closeTime={poolInfo.closeAt as number}
+              openTime={poolInfo.openAt as number}
             />
           )}
         </Row>

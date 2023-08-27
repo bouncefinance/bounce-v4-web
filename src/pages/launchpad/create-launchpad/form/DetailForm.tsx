@@ -66,10 +66,10 @@ enum PoolState {
   'UP_CHAIN' = 3
 }
 const auctionType = [
-  { label: 'Fixed Price', value: PoolType.FixedSwap },
-  { label: 'Random Selection', value: PoolType.Lottery },
-  { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
-  { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
+  { label: 'Fixed Price', value: PoolType.FixedSwap }
+  // { label: 'Random Selection', value: PoolType.Lottery },
+  // { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
+  // { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
 ]
 const defaultFragmentRelease = {
   startAt: null,
