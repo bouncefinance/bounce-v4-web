@@ -193,6 +193,9 @@ export const updateLaunchpadPool = (params: IPoolInfoParams) => {
   return ApiInstance.post('/user/launchpad/pool', params)
 }
 export const getUserLaunchpadInfo = (params: GetUserLaunchpadInfo) => {
+  if (params.launchpadId) {
+    return ApiInstance.post<IUserLaunchpadInfo>('/user/launchpad/pools', params)
+  }
   return ApiInstance.post<IUserLaunchpadInfo>('/user/launchpad/pool/list', params)
 }
 export const searchLaunchpad = (params: Omit<GetUserLaunchpadInfo, 'launchpadId'>) => {
