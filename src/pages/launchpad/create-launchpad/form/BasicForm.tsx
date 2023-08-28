@@ -19,6 +19,7 @@ import { isEqual } from 'lodash'
 import { useRequest } from 'ahooks'
 import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import { useNavigate } from 'react-router-dom'
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -38,15 +39,18 @@ const communityInfo = [
   { title: 'Discord Invitation Url', placeholder: 'eg. https://medium.com/bounce_finance' }
 ]
 const BasicForm = ({
+  getLaunchpadInfo,
   sx,
   launchpadInfo,
   first
 }: {
+  getLaunchpadInfo: () => void
   sx?: SxProps
   launchpadInfo: IUserLaunchpadInfo
   first: boolean
 }) => {
   const { chainId } = useActiveWeb3React()
+  const navigate = useNavigate()
   const isSm = useBreakpoint('sm')
   const { loading, runAsync } = useRequest(
     (values: IBasicInfoParams) => {
@@ -90,15 +94,16 @@ const BasicForm = ({
     body.chainId = optionsDatas.chainInfoOpt?.find(item => item.ethChainId === body.chainId)?.id as number
     try {
       await runAsync(body)
+      await getLaunchpadInfo()
       show(DialogDarkTips, {
         iconType: 'success',
         title: 'Сongratulations!',
         content: 'You have successfully submit, Please wait patiently for review.',
         cancelBtn: 'Continue filling in',
         againBtn: 'Go Account',
-        onAgain: () => {},
-        onCancel: () => {},
-        onClose: () => {}
+        onAgain: () => {
+          navigate('/account/private_launchpad')
+        }
       })
     } catch (error) {
       show(DialogDarkTips, {
@@ -106,8 +111,6 @@ const BasicForm = ({
         title: 'Сongratulations!',
         content: 'err',
         cancelBtn: 'Continue filling in',
-        againBtn: 'Go Account',
-        onAgain: () => {},
         onCancel: () => {},
         onClose: () => {}
       })

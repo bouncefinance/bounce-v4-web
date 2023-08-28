@@ -102,6 +102,7 @@ const LaunchpadForm: React.FC<ICreComProps> = ({ getLaunchpadInfo, tab, setTab, 
 
           <BasicForm
             first={first}
+            getLaunchpadInfo={getLaunchpadInfo}
             launchpadInfo={launchpadInfo}
             sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }}
           />
