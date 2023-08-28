@@ -160,7 +160,17 @@ const TokenList = () => {
           />
         </Box>
         {loading ? (
-          <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box
+            sx={{
+              width: '100%',
+              height: '70vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              background: '#fff',
+              borderRadius: '20px'
+            }}
+          >
             <BounceAnime />
           </Box>
         ) : dataList && dataList.length > 0 && !loading ? (
