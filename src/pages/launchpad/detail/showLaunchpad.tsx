@@ -146,9 +146,9 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
   return (
     <Box>
       <ProjectHead item={privatePadData} />
-      {!!poolInfo && !poolListEl && (
+      {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolId && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
-          {poolInfo.status === PoolStatus.On_Chain && poolInfo.poolId && (
+          {
             <>
               <Stack
                 sx={{
@@ -184,10 +184,10 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
               </Stack>
               <UserBlock backedId={Number(poolInfo.poolId)} />
             </>
-          )}
+          }
         </Box>
       )}
-      {isPooleEmpty && <Box>111</Box>}
+      {/* {isPooleEmpty && <Box>111</Box>} */}
       <Tabs item={privatePadData} />
       {!!poolListEl && poolListEl}
       <FooterPc />
@@ -223,7 +223,8 @@ function UserBlock({ backedId }: { backedId: number }) {
     <Box
       sx={{
         width: '100%',
-        maxWidth: '1296px'
+        maxWidth: '1296px',
+        margin: '0 auto'
       }}
     >
       <UserMainBlock
