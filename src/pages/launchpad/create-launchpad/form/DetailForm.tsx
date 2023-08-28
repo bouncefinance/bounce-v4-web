@@ -58,7 +58,7 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { updateLaunchpadPool } from 'api/user'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import _ from 'lodash'
-import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import DialogDarkTips from 'bounceComponents/common/DialogTips'
 import { useNavigate } from 'react-router-dom'
 enum PoolState {
   'CREATE' = 1,

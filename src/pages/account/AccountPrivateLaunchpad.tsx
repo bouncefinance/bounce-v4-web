@@ -661,7 +661,7 @@ export const Launchpad = ({
             )}
             <Stack sx={{ justifyContent: 'start', alignItems: 'start' }}>
               <SansTitle sx={{ fontSize: size === CardSize.Small ? 17 : 28, fontWeight: 600 }}>
-                {basicInfo.projectName}
+                {window.location.pathname === routes.launchpad.index ? basicInfo.projectName : poolInfo.name}
               </SansTitle>
               {size === CardSize.Large && (
                 <Body02 sx={{ color: '#121212' }}>Hiley Golbel Coin and text and the coin</Body02>

@@ -14,7 +14,7 @@ import { useShowLoginModal, useUserInfo } from 'state/users/hooks'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { toast } from 'react-toastify'
 import { useActiveWeb3React } from 'hooks'
-enum CreTab {
+export enum CreTab {
   'BASIC' = 1,
   'POOL' = 2
 }
@@ -69,9 +69,7 @@ const CreateLaunchpad = () => {
 }
 export default CreateLaunchpad
 const tabs = [['Basic Information', 'Promotional Display Before The Launchpad'], 'Launchpad Detail(Optional)']
-const LaunchpadForm: React.FC<ICreComProps> = ({ getLaunchpadInfo, tab, setTab, id, launchpadInfo, first }) => {
-  console.log(id)
-
+const LaunchpadForm: React.FC<ICreComProps> = ({ getLaunchpadInfo, tab, setTab, launchpadInfo, first }) => {
   const isSm = useBreakpoint('sm')
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -105,6 +103,7 @@ const LaunchpadForm: React.FC<ICreComProps> = ({ getLaunchpadInfo, tab, setTab, 
             getLaunchpadInfo={getLaunchpadInfo}
             launchpadInfo={launchpadInfo}
             sx={{ display: tab === CreTab.BASIC ? 'block' : 'none' }}
+            setTab={setTab}
           />
           <DetailForm
             getLaunchpadInfo={getLaunchpadInfo}

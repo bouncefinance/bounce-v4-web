@@ -17,9 +17,9 @@ import { show } from '@ebay/nice-modal-react'
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
 import { useRequest } from 'ahooks'
-import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import DialogDarkTips from 'bounceComponents/common/DialogTips'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { useNavigate } from 'react-router-dom'
+import { CreTab } from '..'
 const community: ICommunity[] = [
   { communityName: 'twitter', communityLink: '' },
   { communityName: 'telegram', communityLink: '' },
@@ -42,15 +42,16 @@ const BasicForm = ({
   getLaunchpadInfo,
   sx,
   launchpadInfo,
-  first
+  first,
+  setTab
 }: {
   getLaunchpadInfo: () => void
   sx?: SxProps
   launchpadInfo: IUserLaunchpadInfo
   first: boolean
+  setTab: (c: CreTab) => void
 }) => {
   const { chainId } = useActiveWeb3React()
-  const navigate = useNavigate()
   const isSm = useBreakpoint('sm')
   const { loading, runAsync } = useRequest(
     (values: IBasicInfoParams) => {
@@ -100,9 +101,9 @@ const BasicForm = ({
         title: 'Сongratulations!',
         content: 'You have successfully submit, Please wait patiently for review.',
         cancelBtn: 'Continue filling in',
-        againBtn: 'Go Account',
+        againBtn: 'Go Pool Info',
         onAgain: () => {
-          navigate('/account/private_launchpad')
+          setTab(CreTab.POOL)
         }
       })
     } catch (error) {
