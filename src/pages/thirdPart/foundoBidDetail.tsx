@@ -113,7 +113,7 @@ const FoundoBidDetail = () => {
   ]
 
   // const { '*': sysId } = useParams()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(18392)
+  const { data: poolInfo } = useMutantEnglishAuctionPool(18406)
   if (!poolInfo) return <></>
   return (
     <Box

@@ -556,7 +556,7 @@ const NfcDetail = ({ pageStep }: { pageStep: PageStep }) => {
   const isMd = useIsMDDown()
   const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.default)
   const [onceTime, setOnceTime] = useState<boolean>(false)
-  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(18392)
+  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(18406)
   useEffect(() => {
     if (onceTime) return
     if (loading || pageStep !== PageStep.claimPage) return
