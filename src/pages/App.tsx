@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
+
 BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
 import { ModalProvider } from 'context/ModalContext'
@@ -85,6 +86,9 @@ import ZataShop from './realWorldAuction/shop/zeta'
 import TokenToolBox from './tokenToolBox'
 import TokenLocker from './tokenToolBox/page/tokenLocker'
 import Loyaltyprogram from './loyaltyprogram'
+import Disperse from './tokenToolBox/page/disperse'
+import MyDisperse from './tokenToolBox/page/myDiperse'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -206,6 +210,8 @@ export default function App() {
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
+                  <Route path={routes.tokenToolBox.disperse} element={<Disperse />} />
+                  <Route path={routes.tokenToolBox.myDisperse} element={<MyDisperse />} />
 
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}

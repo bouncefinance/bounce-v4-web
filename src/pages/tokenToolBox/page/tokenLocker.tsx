@@ -92,7 +92,7 @@ const TokenLocker = () => {
     </>
   )
 }
-const ContainerBox = styled(Box)({
+export const ContainerBox = styled(Box)({
   width: '100%',
   maxWidth: 1164,
   margin: '48px auto',
@@ -101,7 +101,7 @@ const ContainerBox = styled(Box)({
     padding: '0'
   }
 })
-const Title = styled(Typography)({
+export const Title = styled(Typography)({
   fontFamily: 'Public Sans',
   fontSize: '36px',
   fontStyle: 'normal',

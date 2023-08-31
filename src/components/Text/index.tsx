@@ -94,6 +94,14 @@ export const SmallText = styled(Typography)`
   letter-spacing: -0.02em;
   color: var(--ps-text-3);
 `
+export const Body01 = styled(Typography)`
+  color: var(--black-100, #121212);
+  font-family: 'Inter';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+`
 export const Body02 = styled(Typography)`
   font-family: 'Inter';
   font-style: normal;
@@ -120,3 +128,12 @@ export const Body04 = styled(Typography)({
   fontWeight: 400,
   lineHeight: '150%'
 })
+
+export const GrayBody02 = styled(Typography)`
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  color: #959595;
+`

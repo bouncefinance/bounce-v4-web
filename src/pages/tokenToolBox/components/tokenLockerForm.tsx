@@ -73,7 +73,7 @@ const sellerValidationSchema = yup.object({
   anotherTokenAddress: yup.string().required('Token Address is a required'),
   chainId: yup.number().required()
 })
-const ToolBoxSelect = styled(Select)(() => ({
+export const ToolBoxSelect = styled(Select)(() => ({
   border: '0',
   borderRadius: '8px',
   background: '#F6F6F3',
@@ -93,7 +93,7 @@ const ToolBoxSelect = styled(Select)(() => ({
     border: '0'
   }
 }))
-const ToolBoxInput = styled(OutlinedInput)(() => ({
+export const ToolBoxInput = styled(OutlinedInput)(() => ({
   background: '#F6F6F3',
   border: '0',
   fieldset: {
@@ -103,7 +103,7 @@ const ToolBoxInput = styled(OutlinedInput)(() => ({
     border: '0'
   }
 }))
-const LineCom = styled(Box)(() => ({
+export const LineCom = styled(Box)(() => ({
   width: '100%',
   height: '1px',
   background: '#D4D6CF',
@@ -532,7 +532,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
     })
   }
 }))
-const FormLayout = ({
+export const FormLayout = ({
   title1,
   childForm,
   isShowByChecked,

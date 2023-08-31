@@ -110,7 +110,9 @@ export const routes = {
   },
   tokenToolBox: {
     index: '/TokenToolBox',
-    tokenLocker: '/TokenToolBox/TokenLocker'
+    tokenLocker: '/TokenToolBox/TokenLocker',
+    disperse: '/TokenToolBox/Disperse',
+    myDisperse: '/TokenToolBox/MyDisperse'
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'
