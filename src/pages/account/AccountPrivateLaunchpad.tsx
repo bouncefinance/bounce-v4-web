@@ -541,16 +541,16 @@ export const Launchpad = ({
   mark,
   onClick
 }: {
-  poolInfo: IPoolInfoParams
+  poolInfo: IPoolInfoParams & { opId?: number }
   basicInfo: IBasicInfoParams
   size: CardSize
   mark?: JSX.Element
   onClick?: () => void
 }) => {
   const optionDatas = useOptionDatas()
-  const chainName = useMemo(() => {
-    const chainInfo = optionDatas.chainInfoOpt?.find(item => item.ethChainId === poolInfo.chainId)
-    return chainInfo?.chainName
+  const curChain = useMemo(() => {
+    const chainInfo = optionDatas.chainInfoOpt?.find(item => item.id === (poolInfo.opId || poolInfo.chainId))
+    return chainInfo
   }, [optionDatas, poolInfo])
   const { openAt, closeAt } = poolInfo
   const status = useMemo(() => {
@@ -719,7 +719,7 @@ export const Launchpad = ({
             {poolInfo.token0Name && <MoreDataBox size={size} title="Token Name" content={poolInfo.token0Name} />}
             {poolInfo.ratio && <MoreDataBox size={size} title="Token Price" content={poolInfo.ratio} />}
             {poolInfo.totalAmount0 && <MoreDataBox size={size} title="Token Amount" content={poolInfo.totalAmount0} />}
-            {chainName && <MoreDataBox size={size} title="Blockchain / Platform" content={chainName} />}
+            {curChain && <MoreDataBox size={size} title="Blockchain / Platform" content={curChain.chainName} />}
           </Box>
         </Stack>
       </Box>
