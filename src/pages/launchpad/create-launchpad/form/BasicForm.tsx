@@ -17,7 +17,7 @@ import { show } from '@ebay/nice-modal-react'
 import { useMemo } from 'react'
 import { isEqual } from 'lodash'
 import { useRequest } from 'ahooks'
-import DialogDarkTips from 'bounceComponents/common/DialogTips'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { CreTab } from '..'
 const community: ICommunity[] = [
@@ -100,8 +100,25 @@ const BasicForm = ({
         iconType: 'success',
         title: 'Сongratulations!',
         content: 'You have successfully submit, Please wait patiently for review.',
-        cancelBtn: 'Continue filling in',
+        cancelBtn: 'Confirm',
         againBtn: 'Go Pool Info',
+        PaperProps: {
+          sx: {
+            '&.MuiPaper-root': {
+              '& .MuiButtonBase-root': {
+                backgroundColor: '#121212',
+                color: '#fff'
+              },
+              backgroundColor: '#fff',
+              '& svg path': {
+                stroke: '#171717'
+              },
+              '& .MuiDialogContent-root h2': {
+                color: '#121212'
+              }
+            }
+          }
+        },
         onAgain: () => {
           setTab(CreTab.POOL)
         }
@@ -112,6 +129,23 @@ const BasicForm = ({
         title: 'Сongratulations!',
         content: 'err',
         cancelBtn: 'Continue filling in',
+        PaperProps: {
+          sx: {
+            '&.MuiPaper-root': {
+              '& .MuiButtonBase-root': {
+                backgroundColor: '#121212',
+                color: '#fff'
+              },
+              backgroundColor: '#fff',
+              '& svg path': {
+                stroke: '#171717'
+              },
+              '& .MuiDialogContent-root h2': {
+                color: '#121212'
+              }
+            }
+          }
+        },
         onCancel: () => {},
         onClose: () => {}
       })

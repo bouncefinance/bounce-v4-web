@@ -755,7 +755,24 @@ const LaunchpadCard = ({
           iconType: 'success',
           title: 'Сongratulations!',
           content: 'You have successfully submit, Please wait patiently for review.',
-          cancelBtn: 'Confirm'
+          cancelBtn: 'Confirm',
+          PaperProps: {
+            sx: {
+              '&.MuiPaper-root': {
+                '& .MuiButtonBase-root': {
+                  backgroundColor: '#121212',
+                  color: '#fff'
+                },
+                backgroundColor: '#fff',
+                '& svg path': {
+                  stroke: '#171717'
+                },
+                '& .MuiDialogContent-root h2': {
+                  color: '#121212'
+                }
+              }
+            }
+          }
         })
       }
     }

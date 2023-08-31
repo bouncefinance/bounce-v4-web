@@ -58,7 +58,7 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { updateLaunchpadPool } from 'api/user'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import _ from 'lodash'
-import DialogDarkTips from 'bounceComponents/common/DialogTips'
+import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { useNavigate } from 'react-router-dom'
 enum PoolState {
   'CREATE' = 1,
@@ -431,8 +431,25 @@ const DetailForm = ({
         iconType: 'success',
         title: 'Сongratulations!',
         content: 'You have successfully submit, Please wait patiently for review.',
-        cancelBtn: 'Continue filling in',
+        cancelBtn: 'Confirm',
         againBtn: 'Go Account',
+        PaperProps: {
+          sx: {
+            '&.MuiPaper-root': {
+              '& .MuiButtonBase-root': {
+                backgroundColor: '#121212',
+                color: '#fff'
+              },
+              backgroundColor: '#fff',
+              '& svg path': {
+                stroke: '#171717'
+              },
+              '& .MuiDialogContent-root h2': {
+                color: '#121212'
+              }
+            }
+          }
+        },
         onAgain: () => {
           navigate('/account/private_launchpad')
         },
@@ -444,8 +461,25 @@ const DetailForm = ({
         iconType: 'error',
         title: 'Сongratulations!',
         content: 'err',
-        cancelBtn: 'Continue filling in',
+        cancelBtn: 'Confirm',
         againBtn: 'Go Account',
+        PaperProps: {
+          sx: {
+            '&.MuiPaper-root': {
+              '& .MuiButtonBase-root': {
+                backgroundColor: '#121212',
+                color: '#fff'
+              },
+              backgroundColor: '#fff',
+              '& svg path': {
+                stroke: '#171717'
+              },
+              '& .MuiDialogContent-root h2': {
+                color: '#121212'
+              }
+            }
+          }
+        },
         onAgain: () => {},
         onCancel: () => {},
         onClose: () => {}
