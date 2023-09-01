@@ -19,7 +19,7 @@ import { useIsSMDown } from 'themes/useTheme'
 import { useCallback, useState } from 'react'
 import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
-import ActionHistory from './foundoComponents/snippet/auctionHistory'
+// import ActionHistory from './foundoComponents/snippet/auctionHistory'
 // import { useParams } from 'react-router-dom'
 import Footer from 'bounceComponents/common/Footer'
 import Image from 'components/Image'
@@ -68,9 +68,9 @@ const FoundoBidDetail = () => {
     setTabIndex(newValue)
   }, [])
   const tabList = [
-    {
-      label: 'Auction History'
-    },
+    // {
+    //   label: 'Auction History'
+    // },
     {
       label: 'Product Description'
     },
@@ -149,8 +149,8 @@ const FoundoBidDetail = () => {
         ))}
       </NewTabs>
       <CenterSeciont>
-        {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />}
-        {tabIndex === 1 && (
+        {/* {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />} */}
+        {tabIndex === 0 && (
           <Stack
             direction={'row'}
             sx={{
@@ -215,7 +215,7 @@ const FoundoBidDetail = () => {
             </Box>
           </Stack>
         )}
-        {tabIndex === 2 && (
+        {tabIndex === 1 && (
           <Box sx={{ width: '100%', paddingTop: isSm ? 0 : 120 }}>
             <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
               Authentication
@@ -225,7 +225,7 @@ const FoundoBidDetail = () => {
             </Box>
           </Box>
         )}
-        {tabIndex === 3 && (
+        {tabIndex === 2 && (
           <Stack
             direction={'row'}
             sx={{
@@ -272,7 +272,7 @@ const FoundoBidDetail = () => {
             </Box>
           </Stack>
         )}
-        {tabIndex === 4 && (
+        {tabIndex === 3 && (
           <Stack
             direction={'row'}
             sx={{
