@@ -47,7 +47,7 @@ const ModulesList = () => {
       title: 'Disperse',
       subTitle: 'Explain what is a Disperse........',
       btnTitle: 'Disperse',
-      link: ''
+      link: routes.tokenToolBox.disperse
     }
   ]
   return (

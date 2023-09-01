@@ -21,6 +21,8 @@ import IconImg from 'assets/imgs/icon/default_file.svg'
 import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
 import { useIsMDDown } from 'themes/useTheme'
+import { routes } from '../../../constants/routes'
+
 const StyledTableCell = styled(TableCell)(() => ({
   borderColor: '#626262',
   [`&.${tableCellClasses.head}`]: {
@@ -132,7 +134,9 @@ const TokenList = () => {
           <Box display={'flex'} gap={'12px'}>
             <BtnCom variant={'contained'}>View My Lock</BtnCom>
             <BtnCom variant={'contained'}>View My token</BtnCom>
-            <BtnCom variant={'contained'}>View My disperse</BtnCom>
+            <BtnCom variant={'contained'} href={routes.tokenToolBox.myDisperse}>
+              View My disperse
+            </BtnCom>
           </Box>
         </Box>
         <Box

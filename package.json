@@ -93,6 +93,7 @@
     "@ebay/nice-modal-react": "1.2.8",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@fast-csv/parse": "^4.3.6",
     "@lottiefiles/lottie-interactivity": "^1.6.2",
     "@lottiefiles/lottie-player": "^1.7.1",
     "@mui/icons-material": "^5.8.4",
@@ -136,6 +137,7 @@
     "react-lottie": "^1.2.3",
     "react-markdown": "6.0.1",
     "react-markdown-editor-lite": "1.3.0",
+    "react-papaparse": "^4.1.0",
     "react-toastify": "9.1.1",
     "react-typewriter-effect": "^1.1.0",
     "react-unity-webgl": "^9.4.0",
@@ -146,6 +148,7 @@
     "ua-parser-js": "1.0.35",
     "web3": "^1.7.4",
     "web3-react-binance-wallet": "^1.0.1",
+    "xlsx-style": "^0.8.13",
     "yup": "0.32.11"
   }
 }
