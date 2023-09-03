@@ -127,6 +127,7 @@ export interface IPoolInfoParams {
   whitelistEnabled?: boolean
   whitelistAddresses?: string[]
   status?: PoolStatus
+  poolsId?: number
 }
 export interface IValues {
   basic: IBasicInfoParams
