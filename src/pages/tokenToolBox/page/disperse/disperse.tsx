@@ -359,7 +359,7 @@ export const BoxSpaceBetween = styled(Box)`
   display: flex;
   justify-content: space-between;
 `
-const LineBtn = styled(`button`)`
+export const LineBtn = styled(`button`)`
   display: flex;
   padding: 20px 40px;
   justify-content: center;

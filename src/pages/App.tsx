@@ -90,6 +90,7 @@ import Disperse from './tokenToolBox/page/disperse/disperse'
 import MyDisperse from './tokenToolBox/page/disperse/myDiperse'
 import TokenMinter from './tokenToolBox/page/tokenMinter/tokenMinter'
 import TokenInfo from './tokenToolBox/page/tokenMinter/TokenInfo'
+import LockerInfo from './tokenToolBox/page/LockerInfo'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -212,6 +213,7 @@ export default function App() {
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
+                  <Route path={routes.tokenToolBox.tokenLockerInfo} element={<LockerInfo />} />
                   <Route path={routes.tokenToolBox.disperse} element={<Disperse />} />
                   <Route path={routes.tokenToolBox.myDisperse} element={<MyDisperse />} />
                   <Route path={routes.tokenToolBox.tokenMinter} element={<TokenMinter />} />

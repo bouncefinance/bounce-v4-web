@@ -97,7 +97,7 @@ const LineBg = styled(Box)`
   border-radius: 20px;
   border: 1px solid var(--grey-05, #e8e9e4);
 `
-const GrayBg = styled(Box)`
+export const GrayBg = styled(Box)`
   display: flex;
   padding: 24px;
   flex-direction: column;
@@ -107,7 +107,7 @@ const GrayBg = styled(Box)`
   border-radius: 16px;
   background: var(--grey-06, #f6f6f3);
 `
-const WhiteBg = styled(Box)`
+export const WhiteBg = styled(Box)`
   display: flex;
   padding: 12px 24px;
   flex-direction: column;
@@ -116,11 +116,11 @@ const WhiteBg = styled(Box)`
   border-radius: 12px;
   background: var(--white-100, #fff);
 `
-const FullSpaceBetweenBox = styled(BoxSpaceBetween)`
+export const FullSpaceBetweenBox = styled(BoxSpaceBetween)`
   width: 100%;
   padding: 20px 0;
 `
-const BottomLineBox = styled(BoxSpaceBetween)`
+export const BottomLineBox = styled(BoxSpaceBetween)`
   width: 100%;
   padding: 20px 0;
   border-bottom: 1px solid var(--grey-05, #e8e9e4);
