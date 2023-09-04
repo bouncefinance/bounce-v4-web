@@ -1,5 +1,5 @@
 import { Box, Button, Link, Stack, Typography, styled } from '@mui/material'
-import { IPoolInfoParams, IBasicInfoParams, IAuctionTypeMap } from '../create-launchpad/type'
+import { IPoolInfoParams, IBasicInfoParams, IAuctionTypeMap, PoolStatus } from '../create-launchpad/type'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Image from 'components/Image'
 import { socialMap } from 'pages/account/AccountPrivateLaunchpad'
@@ -7,18 +7,41 @@ import { ReactComponent as IconBook } from 'assets/svg/icon-book.svg'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { useMemo } from 'react'
 import TokenImage from 'bounceComponents/common/TokenImage'
+import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
+import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import { matchPath, useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+export enum HeadLayout {
+  CENTER = 1,
+  SPACE = 2
+}
 interface IHeadProps {
   poolInfo: IPoolInfoParams
   basicInfo: IBasicInfoParams
+  headLayout?: HeadLayout
 }
-const LaunchpadHead = ({ poolInfo, basicInfo }: IHeadProps) => {
+const LaunchpadHead = ({ poolInfo, basicInfo, headLayout }: IHeadProps) => {
+  const isLaunchpadPartyRoute = matchPath(routes.launchpad.account.launchpadParty, window.location.pathname)
+  const isLaunchpadDetailRoute = matchPath(routes.launchpad.account.launchpadDetail, window.location.pathname)
+
   const optionDatas = useOptionDatas()
   const curChain = useMemo(() => {
     const chainInfo = optionDatas.chainInfoOpt?.find(item => item.id === poolInfo.chainId)
     return chainInfo
   }, [optionDatas, poolInfo])
-  console.log('poolInfo', poolInfo)
-
+  const { openAt, closeAt } = poolInfo
+  const status = useMemo(() => {
+    const cur = new Date().valueOf() / 1000
+    if (!openAt || !closeAt) return ChainPoolStatus.Upcoming
+    if (cur < openAt) return ChainPoolStatus.Upcoming
+    if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
+    return ChainPoolStatus.Closed
+  }, [openAt, closeAt])
+  if (poolInfo.status === PoolStatus.On_Chain && !!isLaunchpadDetailRoute) {
+    headLayout = HeadLayout.SPACE
+  } else {
+    headLayout = HeadLayout.CENTER
+  }
   return (
     <Box sx={{ position: 'relative', height: 600, width: '100%', padding: '0 35px', marginTop: '-76px' }}>
       <img
@@ -43,16 +66,30 @@ const LaunchpadHead = ({ poolInfo, basicInfo }: IHeadProps) => {
           backgroundSize: 'cover',
           objectFit: 'scale-down',
           backgroundRepeat: 'no-repeat',
-          borderRadius: '20px'
+          borderRadius: '0 0 20px 20px'
         }}
       >
-        <Stack flexDirection={'row'} px={40} justifyContent={'space-between'}>
-          <Stack flexDirection={'row'}>
-            <TextBox title="Preview" color="#E1F25C" />
-            <HomeBtn />
+        <Stack
+          flexDirection={headLayout === HeadLayout.CENTER ? 'row' : 'column'}
+          px={40}
+          justifyContent={'space-between'}
+          gap={headLayout === HeadLayout.SPACE ? 20 : 0}
+        >
+          <Stack flexDirection={'row'} justifyContent={'flex-start'}>
+            {/* <TextBox title="Preview" color="#E1F25C" /> */}
+            {!!isLaunchpadPartyRoute && <HomeBtn />}
           </Stack>
-          <Stack flexDirection={'row'}>
-            <TextBox title="Coming soon" color="#fff" />
+          <Stack flexDirection={'row'} justifyContent={'flex-end'}>
+            {poolInfo.status !== PoolStatus.On_Chain && <TextBox title="Coming soon" color="#fff" />}
+            {poolInfo.status === PoolStatus.On_Chain && (
+              <PoolStatusBox
+                style={{ width: 'max-content', height: 'max-content' }}
+                status={status}
+                claimAt={poolInfo.claimAt || 0}
+                closeTime={poolInfo.closeAt as number}
+                openTime={poolInfo.openAt as number}
+              />
+            )}
           </Stack>
         </Stack>
         <Stack
@@ -63,15 +100,37 @@ const LaunchpadHead = ({ poolInfo, basicInfo }: IHeadProps) => {
             background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
           }}
         >
-          <Stack gap={16} justifyContent={'center'} alignItems={'center'}>
+          {headLayout === HeadLayout.SPACE && (
+            <SansTitle sx={{ fontSize: 44, fontWeight: 700, color: '#fff' }}>{poolInfo.name}</SansTitle>
+          )}
+          <Stack
+            gap={16}
+            // justifyContent={'center'}
+            alignItems={'center'}
+            flexDirection={headLayout === HeadLayout.CENTER ? 'column' : 'row'}
+          >
             <Image src={basicInfo.projectLogo} style={{ width: 60, height: 60, borderRadius: '6px' }} />
-            <Stack gap={14} justifyContent={'center'} alignItems={'center'} textAlign={'center'}>
-              <SansTitle sx={{ fontSize: 44, fontWeight: 700, color: '#fff' }}>{basicInfo.projectName}</SansTitle>
-              <InterTitle sx={{ color: '#D7D6D9', maxWidth: 800 }}>{basicInfo.description}</InterTitle>
+            <Stack
+              gap={headLayout === HeadLayout.CENTER ? 14 : 0}
+              justifyContent={'center'}
+              alignItems={headLayout === HeadLayout.CENTER ? 'center' : 'flex-start'}
+            >
+              <SansTitle sx={{ fontSize: headLayout === HeadLayout.CENTER ? 44 : 16, fontWeight: 700, color: '#fff' }}>
+                {basicInfo.projectName}
+              </SansTitle>
+              <InterTitle
+                sx={{ fontSize: headLayout === HeadLayout.CENTER ? 16 : 13, color: '#D7D6D9', maxWidth: 800 }}
+              >
+                {basicInfo.description}
+              </InterTitle>
             </Stack>
           </Stack>
           <Stack gap={16}>
-            <Stack flexDirection={'row'} gap={16} justifyContent={'center'}>
+            <Stack
+              flexDirection={'row'}
+              gap={16}
+              justifyContent={headLayout === HeadLayout.CENTER ? 'center' : 'flex-end'}
+            >
               {basicInfo?.community
                 .filter(item => !!item.communityLink)
                 .map(item => (
@@ -95,7 +154,12 @@ const LaunchpadHead = ({ poolInfo, basicInfo }: IHeadProps) => {
                 </WhiteButton>
               )}
             </Stack>
-            <Stack flexDirection={'row'} justifyContent={'center'} alignItems={'center'} gap={16}>
+            <Stack
+              flexDirection={'row'}
+              justifyContent={headLayout === HeadLayout.CENTER ? 'center' : 'flex-end'}
+              alignItems={'center'}
+              gap={16}
+            >
               <Stack
                 flexDirection={'row'}
                 justifyContent={'center'}
@@ -110,47 +174,51 @@ const LaunchpadHead = ({ poolInfo, basicInfo }: IHeadProps) => {
                 <SansTitle sx={{ color: '#B5E529' }}>{Object.assign({}, IAuctionTypeMap)[poolInfo.category]}</SansTitle>
               </Box>
             </Stack>
-            <Stack flexDirection={'row'} gap={24} alignItems={'center'} justifyContent={'center'}>
-              {poolInfo.token0Name && (
-                <>
-                  <Stack gap={8}>
-                    <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Token Name</InterTitle>
-                    <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>{poolInfo.token0Name}</SansTitle>
-                  </Stack>
-                  <VerticalLine />
-                </>
-              )}
-              {poolInfo.ratio && (
-                <>
-                  <Stack gap={8}>
-                    <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Token Price</InterTitle>
-                    <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>{poolInfo.ratio}</SansTitle>
-                  </Stack>
-                  <VerticalLine />
-                </>
-              )}
+            {headLayout === HeadLayout.CENTER && (
+              <Stack flexDirection={'row'} gap={24} alignItems={'center'} justifyContent={'center'}>
+                {poolInfo.token0Name && (
+                  <>
+                    <Stack gap={8}>
+                      <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Token Name</InterTitle>
+                      <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>{poolInfo.token0Name}</SansTitle>
+                    </Stack>
+                    <VerticalLine />
+                  </>
+                )}
+                {poolInfo.ratio && (
+                  <>
+                    <Stack gap={8}>
+                      <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Token Price</InterTitle>
+                      <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>{poolInfo.ratio}</SansTitle>
+                    </Stack>
+                    <VerticalLine />
+                  </>
+                )}
 
-              {poolInfo.totalAmount0 && (
-                <>
-                  <Stack gap={8}>
-                    <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Token Amount</InterTitle>
-                    <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>{poolInfo.totalAmount0}</SansTitle>
-                  </Stack>
-                  <VerticalLine />
-                </>
-              )}
-              {poolInfo.chainId && (
-                <>
-                  <Stack gap={8}>
-                    <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Blockchain / Platform</InterTitle>
-                    <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>
-                      {curChain && curChain.chainName}
-                    </SansTitle>
-                  </Stack>
-                  <VerticalLine />
-                </>
-              )}
-            </Stack>
+                {poolInfo.totalAmount0 && (
+                  <>
+                    <Stack gap={8}>
+                      <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Token Amount</InterTitle>
+                      <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>
+                        {poolInfo.totalAmount0}
+                      </SansTitle>
+                    </Stack>
+                    <VerticalLine />
+                  </>
+                )}
+                {poolInfo.chainId && (
+                  <>
+                    <Stack gap={8}>
+                      <InterTitle sx={{ color: '#D7D6D9', fontSize: 14 }}>Blockchain / Platform</InterTitle>
+                      <SansTitle sx={{ color: '#fff', fontSize: 20, fontWeight: 600 }}>
+                        {curChain && curChain.chainName}
+                      </SansTitle>
+                    </Stack>
+                    <VerticalLine />
+                  </>
+                )}
+              </Stack>
+            )}
           </Stack>
         </Stack>
       </Stack>
@@ -168,8 +236,9 @@ const TextBox = ({ title, color }: { title: string; color: string }) => {
   )
 }
 const HomeBtn = () => {
+  const nav = useNavigate()
   return (
-    <GrayButton>
+    <GrayButton onClick={() => nav(routes.launchpad.index)}>
       <ArrowBackIcon />
       <Typography variant={'h5'}>Launchpad homepage</Typography>
     </GrayButton>

@@ -830,16 +830,20 @@ const LaunchpadCard = ({
               gap: 74
             }}
           >
-            <Link href={`/account/launchpad/${poolInfo.id}`}>
+            <Link onClick={() => navigate(`/account/launchpad/${poolInfo.id}`)}>
               <Image src={ShowDetailIcon} />
             </Link>
 
             <Link
-              href={`${
-                poolInfo.status !== PoolStatus.On_Chain
-                  ? routes.thirdPart.CreateLaunchpad + '?type=2&id=' + poolInfo.id
-                  : routes.thirdPart.CreateLaunchpad + '?tab=1'
-              }`}
+              onClick={() =>
+                navigate(
+                  `${
+                    poolInfo.status !== PoolStatus.On_Chain
+                      ? routes.thirdPart.CreateLaunchpad + '?type=2&id=' + poolInfo.id
+                      : routes.thirdPart.CreateLaunchpad + '?tab=1'
+                  }`
+                )
+              }
             >
               <Image src={EditDetailIcon} />
             </Link>

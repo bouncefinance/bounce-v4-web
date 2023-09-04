@@ -343,8 +343,8 @@ const DetailForm = ({
       const poolParams: IPoolInfoParams = {
         id: values.id,
         name: values.name,
-        picture1: values.projectMobilePicture,
-        picture2: values.projectPicture,
+        picture1: values.projectPicture,
+        picture2: values.projectMobilePicture,
         creator: account,
         category: values.AuctionType,
         chainId: chainInfoOpt?.find(item => item.ethChainId === values.ChainId)?.id as number,
