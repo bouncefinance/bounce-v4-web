@@ -22,6 +22,7 @@ import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 
 import { PoolStatus } from 'pages/launchpad/create-launchpad/type'
+import LaunchpadHead from '../components/LaunchpadHead'
 interface IShowProps {
   basicInfo: IBasicInfoParams
   poolInfo?: IPoolInfoParams
@@ -144,7 +145,9 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
   }
   return (
     <Box>
-      <ProjectHead item={privatePadData} />
+      <Box sx={{ display: 'none' }}>{!!privatePadData && <ProjectHead item={privatePadData} />}</Box>
+
+      {poolInfo && <LaunchpadHead poolInfo={poolInfo} basicInfo={basicInfo} />}
       {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolsId && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
           {

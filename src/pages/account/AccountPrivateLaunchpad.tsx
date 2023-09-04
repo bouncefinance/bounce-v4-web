@@ -539,13 +539,15 @@ export const Launchpad = ({
   basicInfo,
   size,
   mark,
-  onClick
+  onClick,
+  approvedNum
 }: {
   poolInfo: IPoolInfoParams & { opId?: number }
   basicInfo: IBasicInfoParams
   size: CardSize
   mark?: JSX.Element
   onClick?: () => void
+  approvedNum?: number
 }) => {
   const optionDatas = useOptionDatas()
   const curChain = useMemo(() => {
@@ -560,6 +562,7 @@ export const Launchpad = ({
     if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
     return ChainPoolStatus.Closed
   }, [openAt, closeAt])
+
   return (
     <Row
       onClick={onClick}
@@ -678,6 +681,7 @@ export const Launchpad = ({
             />
           )}
         </Row>
+
         <Stack flexDirection={'column'} justifyContent={'space-between'} sx={{ height: '100%' }}>
           <Box sx={{ paddingLeft: 6 }} mt={18}>
             <InterTitle
@@ -707,20 +711,30 @@ export const Launchpad = ({
                 ))}
             </Row>
           </Box>
-          <Box
-            mt={12}
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gridRowGap: 8,
-              paddingLeft: 6
-            }}
-          >
-            {poolInfo.token0Name && <MoreDataBox size={size} title="Token Name" content={poolInfo.token0Name} />}
-            {poolInfo.ratio && <MoreDataBox size={size} title="Token Price" content={poolInfo.ratio} />}
-            {poolInfo.totalAmount0 && <MoreDataBox size={size} title="Token Amount" content={poolInfo.totalAmount0} />}
-            {curChain && <MoreDataBox size={size} title="Blockchain / Platform" content={curChain.chainName} />}
-          </Box>
+          <Stack justifyContent={'space-between'} gap={20}>
+            <Box
+              mt={12}
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gridRowGap: 8,
+                paddingLeft: 6
+              }}
+            >
+              {poolInfo.token0Name && <MoreDataBox size={size} title="Token Name" content={poolInfo.token0Name} />}
+              {poolInfo.ratio && <MoreDataBox size={size} title="Token Price" content={poolInfo.ratio} />}
+              {poolInfo.totalAmount0 && (
+                <MoreDataBox size={size} title="Token Amount" content={poolInfo.totalAmount0} />
+              )}
+              {curChain && <MoreDataBox size={size} title="Blockchain / Platform" content={curChain.chainName} />}
+            </Box>
+            {!!approvedNum && (
+              <Stack pl={10} gap={8}>
+                <SansTitle sx={{ fontSize: 20, fontWeight: 600 }}>Auction Pool</SansTitle>
+                <SansTitle sx={{ color: '#2B51DA', fontSize: 44, fontWeight: 700 }}>{approvedNum}</SansTitle>
+              </Stack>
+            )}
+          </Stack>
         </Stack>
       </Box>
 

@@ -1,21 +1,18 @@
 import { Box } from '@mui/material'
 import { useRequest } from 'ahooks'
-import { searchLaunchpad } from 'api/user'
+import { getUserLaunchpadInfo, searchLaunchpad } from 'api/user'
 import { CardSize, Launchpad } from 'pages/account/AccountPrivateLaunchpad'
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { IBasicInfoParams, IPoolInfoParams, PoolStatus } from './create-launchpad/type'
 const LaunchpadList = () => {
-  const navigate = useNavigate()
   const { data } = useRequest(async () => {
     const res = await searchLaunchpad({})
-    console.log('res')
-    console.log(res)
     return {
       list: res.data.list,
       total: res.data.total
     }
   })
-  console.log('launchpad list')
-  console.log(data)
 
   return (
     <Box sx={{ maxWidth: 1320 }}>
@@ -23,15 +20,32 @@ const LaunchpadList = () => {
         data.list &&
         data.list.length &&
         data.list.map(item => (
-          <Launchpad
-            onClick={() => navigate('/launchpad/party/' + item.basicInfo.id)}
-            key={item.basicInfo.id}
-            size={CardSize.Large}
-            poolInfo={item.poolInfo}
-            basicInfo={item.basicInfo}
-          />
+          <LaunchpadItem key={item.basicInfo.id} poolInfo={item.poolInfo} basicInfo={item.basicInfo} />
         ))}
     </Box>
+  )
+}
+const LaunchpadItem = ({ poolInfo, basicInfo }: { poolInfo: IPoolInfoParams; basicInfo: IBasicInfoParams }) => {
+  const navigate = useNavigate()
+  const { data: poolList } = useRequest(
+    async () => {
+      const res = await getUserLaunchpadInfo({ launchpadId: basicInfo.id })
+      return res.data.list
+    },
+    { refreshDeps: [basicInfo.id] }
+  )
+  const approvedNum = useMemo(
+    () => poolList?.filter(item => item.status === PoolStatus.Approved || item.status === PoolStatus.On_Chain).length,
+    [poolList]
+  )
+  return (
+    <Launchpad
+      onClick={() => navigate('/launchpad/party/' + basicInfo.id)}
+      size={CardSize.Large}
+      poolInfo={poolInfo}
+      basicInfo={basicInfo}
+      approvedNum={approvedNum}
+    />
   )
 }
 export default LaunchpadList
