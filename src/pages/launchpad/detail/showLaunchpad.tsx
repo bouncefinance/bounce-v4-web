@@ -7,7 +7,7 @@ import { getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
 import { socialMap } from 'pages/account/AccountPrivateLaunchpad'
-import { ProjectHead, Tabs } from 'pages/projectIntro'
+import { Tabs } from 'pages/projectIntro'
 import FooterPc from 'components/Footer/FooterPc'
 import { H3 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -136,7 +136,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
   }, [poolInfo, basicInfo, ethChainId, optionDatas])
   const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
-  if (!privatePadData) {
+  if (!poolInfo || !privatePadData) {
     return (
       <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <BounceAnime />
@@ -145,8 +145,6 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
   }
   return (
     <Box>
-      <Box sx={{ display: 'none' }}>{!!privatePadData && <ProjectHead item={privatePadData} />}</Box>
-
       {poolInfo && <LaunchpadHead poolInfo={poolInfo} basicInfo={basicInfo} />}
       {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolsId && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
