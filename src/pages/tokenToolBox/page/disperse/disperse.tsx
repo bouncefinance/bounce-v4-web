@@ -1,21 +1,21 @@
 import { Box, MenuItem, Stack, styled, Typography } from '@mui/material'
-import { ContainerBox, Title } from './tokenLocker'
+import { ContainerBox, Title } from '../tokenLocker'
 import { Formik } from 'formik'
-import { ChainId, ChainList } from '../../../constants/chain'
-import Image from '../../../components/Image'
-import { FormLayout, LineCom, ToolBoxInput, ToolBoxSelect } from '../components/tokenLockerForm'
-import FormItem from '../../../bounceComponents/common/FormItem'
-import { Body01, GrayBody02, H4, SmallText } from '../../../components/Text'
-import DropZone from '../../../bounceComponents/common/DropZone/DropZone'
-import { useActiveWeb3React } from '../../../hooks'
+import { ChainId, ChainList } from '../../../../constants/chain'
+import Image from '../../../../components/Image'
+import { FormLayout, LineCom, ToolBoxInput, ToolBoxSelect } from '../../components/tokenLockerForm'
+import FormItem from '../../../../bounceComponents/common/FormItem'
+import { Body01, GrayBody02, H4, SmallText } from '../../../../components/Text'
+import DropZone from '../../../../bounceComponents/common/DropZone/DropZone'
+import { useActiveWeb3React } from '../../../../hooks'
 import Papa from 'papaparse'
-import { useETHBalance } from '../../../state/wallet/hooks'
+import { useETHBalance } from '../../../../state/wallet/hooks'
 import { useCallback, useState } from 'react'
-import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
-import { CurrencyAmount } from '../../../constants/token'
-import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from '../../../utils/auction'
+import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
+import { CurrencyAmount } from '../../../../constants/token'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from '../../../../utils/auction'
 import { show } from '@ebay/nice-modal-react'
-import DialogTips from '../../../bounceComponents/common/DialogTips'
+import DialogTips from '../../../../bounceComponents/common/DialogTips'
 
 interface IDisperse {
   chainId: number
@@ -355,7 +355,7 @@ const ConfirmDetailBox = styled(Box)`
   margin-top: 16px;
   background: var(--white-100, #fff);
 `
-const BoxSpaceBetween = styled(Box)`
+export const BoxSpaceBetween = styled(Box)`
   display: flex;
   justify-content: space-between;
 `
@@ -373,7 +373,7 @@ const LineBtn = styled(`button`)`
     cursor: pointer;
   }
 `
-const SolidBtn = styled(`button`)`
+export const SolidBtn = styled(`button`)`
   display: flex;
   padding: 20px 40px;
   justify-content: center;

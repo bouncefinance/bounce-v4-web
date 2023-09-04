@@ -24,6 +24,9 @@ export const H3 = styled(Typography)`
   letter-spacing: -0.02em;
   color: #b5e529;
 `
+export const H3Black = styled(H3)`
+  color: #121212;
+`
 export const H4 = styled(Typography)`
   font-family: 'Public Sans';
   font-style: normal;

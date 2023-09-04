@@ -1,8 +1,8 @@
 import { Box } from '@mui/material'
-import { ContainerBox, Title } from './tokenLocker'
-import { H4 } from '../../../components/Text'
-import Search from '../../../bounceComponents/common/Header/Search'
-import BackButton from '../../../bounceComponents/common/BackButton'
+import { ContainerBox, Title } from '../tokenLocker'
+import { H4 } from '../../../../components/Text'
+import Search from '../../../../bounceComponents/common/Header/Search'
+import BackButton from '../../../../bounceComponents/common/BackButton'
 
 export default function MyDisperse() {
   return (

@@ -40,7 +40,7 @@ const ModulesList = () => {
       title: 'Token Minter',
       subTitle: 'Explain what is a token minter........',
       btnTitle: 'Token Minter',
-      link: ''
+      link: routes.tokenToolBox.tokenMinter
     },
     {
       logoImg: P3,
