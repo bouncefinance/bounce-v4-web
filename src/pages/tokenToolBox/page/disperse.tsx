@@ -9,22 +9,70 @@ import { Body01, GrayBody02, H4, SmallText } from '../../../components/Text'
 import DropZone from '../../../bounceComponents/common/DropZone/DropZone'
 import { useActiveWeb3React } from '../../../hooks'
 import Papa from 'papaparse'
+import { useETHBalance } from '../../../state/wallet/hooks'
+import { useCallback, useState } from 'react'
+import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
+import { CurrencyAmount } from '../../../constants/token'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from '../../../utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from '../../../bounceComponents/common/DialogTips'
 
 interface IDisperse {
   chainId: number
   type: string
   recipients: string
-  recipientsList: string[][]
 }
 
 export default function Disperse() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
+  const [currentChain, setCurrentChain] = useState(chainId)
+  const myBalance = useETHBalance(account, currentChain)
+  const [approvalState, approveCallback] = useApproveCallback(
+    myBalance ? CurrencyAmount.fromAmount(myBalance?.currency, myBalance?.toSignificant()) : undefined,
+    '0x1506e699A53224e5cE1FdF7917f623D0a9Da5A64',
+    true
+  )
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content:
+          typeof err === 'string'
+            ? err
+            : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback])
+
   const onSubmit = (value: IDisperse) => {}
   const disperse: IDisperse = {
     chainId: chainId || ChainId.MAINNET,
     type: 'chain',
-    recipients: '',
-    recipientsList: []
+    recipients: ''
   }
 
   return (
@@ -92,6 +140,7 @@ export default function Disperse() {
                           value={values.chainId}
                           onChange={({ target }) => {
                             setFieldValue('chainId', target.value)
+                            setCurrentChain(target.value as ChainId)
                           }}
                           placeholder={'Select chain'}
                           renderValue={selected => {
@@ -165,7 +214,13 @@ export default function Disperse() {
                   title1="You have"
                   childForm={
                     <FormItem name={'balance'}>
-                      <GreenToolbox placeholder={'0.0'} />
+                      <GreenToolbox>
+                        <SmallText>{myBalance?.toSignificant() || '-'}</SmallText>
+                        <Box display={'flex'} alignItems={'center'} gap={8}>
+                          <img src={myBalance?.currency?.logo} style={{ width: 28, height: 28 }} />
+                          <SmallText>{myBalance?.currency?.symbol}</SmallText>
+                        </Box>
+                      </GreenToolbox>
                     </FormItem>
                   }
                 />
@@ -191,8 +246,7 @@ export default function Disperse() {
                             Papa.parse(file, {
                               skipEmptyLines: true,
                               complete: function (results) {
-                                setFieldValue('recipients', results.data.join('\n'))
-                                setFieldValue('recipientsList', results.data)
+                                setFieldValue('recipients', results.data.join('\n').replaceAll(',', ' '))
                               }
                             })
                           }}
@@ -208,9 +262,11 @@ export default function Disperse() {
                               <SmallText>Amount</SmallText>
                             </BoxSpaceBetween>
                             <LineCom />
-                            {values.recipientsList &&
-                              values.recipientsList
-                                .filter(v => v.length == 2)
+                            {values.recipients &&
+                              values.recipients
+                                .split('\n')
+                                .filter(v => v.split(' ').length == 2)
+                                .map(v => v.split(' '))
                                 .map((v, idx) => {
                                   return (
                                     <BoxSpaceBetween key={idx}>
@@ -219,13 +275,25 @@ export default function Disperse() {
                                     </BoxSpaceBetween>
                                   )
                                 })}
-                            <BoxSpaceBetween>
+                            <BoxSpaceBetween mt={30}>
                               <SmallText>Your balance</SmallText>
-                              <Body01>ETH</Body01>
+                              <Body01>
+                                {myBalance?.toSignificant()}
+                                {myBalance?.currency?.symbol}
+                              </Body01>
                             </BoxSpaceBetween>
                             <BoxSpaceBetween>
                               <SmallText>Remaining</SmallText>
-                              <Body01>ETH</Body01>
+                              <Body01>
+                                {myBalance &&
+                                  Number(myBalance?.toSignificant()) -
+                                    values.recipients
+                                      .split('\n')
+                                      .filter(v => v.split(' ').length == 2 && Number(v.split(' ')[1]))
+                                      .map(v => Number(v.split(' ')[1]))
+                                      .reduce((sum, current) => sum + current, 0)}
+                                {myBalance?.currency?.symbol}
+                              </Body01>
                             </BoxSpaceBetween>
                           </ConfirmDetailBox>
                         </ConfirmBox>
@@ -234,7 +302,19 @@ export default function Disperse() {
                   }
                 />
                 <BoxSpaceBetween gap={10}>
-                  <LineBtn>Approve</LineBtn>
+                  <LineBtn onClick={() => {}}>
+                    {(() => {
+                      switch (approvalState) {
+                        case ApprovalState.APPROVED:
+                          return 'APPROVED'
+                        case ApprovalState.UNKNOWN:
+                        case ApprovalState.NOT_APPROVED:
+                          return 'APPROVE'
+                        case ApprovalState.PENDING:
+                          return 'PENDING...'
+                      }
+                    })()}
+                  </LineBtn>
                   <SolidBtn>Disperse token</SolidBtn>
                 </BoxSpaceBetween>
               </Box>
@@ -254,7 +334,13 @@ const SubTitle = styled(Box)`
 const Desc = styled(Typography)`
   color: #626262;
 `
-const GreenToolbox = styled(ToolBoxInput)`
+const GreenToolbox = styled(Box)`
+  display: flex;
+  padding: 14px 24px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 8px;
   background: var(--yellow, #e1f25c);
 `
 const ConfirmBox = styled(Box)`
