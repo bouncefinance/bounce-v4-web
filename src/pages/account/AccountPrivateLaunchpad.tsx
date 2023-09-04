@@ -639,6 +639,7 @@ export const Launchpad = ({
       </Box>
       <Box
         sx={{
+          width: `calc(100% - ${size === CardSize.Small ? '375px' : '600px'})`,
           flex: 1,
           background: '#E8E9E4',
           padding: size === CardSize.Small ? 24 : 40,
