@@ -146,7 +146,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
   return (
     <Box>
       <ProjectHead item={privatePadData} />
-      {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolId && (
+      {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolsId && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
           {
             <>
@@ -182,7 +182,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
                   My private launchpad
                 </Box>
               </Stack>
-              <UserBlock backedId={Number(poolInfo.poolId)} />
+              <UserBlock backedId={Number(poolInfo.poolsId)} />
             </>
           }
         </Box>
