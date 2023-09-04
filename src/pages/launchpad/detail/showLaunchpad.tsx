@@ -1,5 +1,5 @@
 import { IBasicInfoParams, IPoolInfoParams } from '../create-launchpad/type'
-import { Box, Link, Stack } from '@mui/material'
+import { Box, Link, Stack, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { IPrivatePadProp, IPrivatePricesInfo, IProjectInfo } from '../PrivatePadDataList'
 import { PoolType } from 'api/pool/type'
@@ -7,7 +7,7 @@ import { getLabelById } from 'utils'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import Image from 'components/Image'
 import { socialMap } from 'pages/account/AccountPrivateLaunchpad'
-import { ProjectHead, Tabs } from 'pages/projectIntro'
+import { Tabs } from 'pages/projectIntro'
 import FooterPc from 'components/Footer/FooterPc'
 import { H3 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -22,14 +22,14 @@ import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 
 import { PoolStatus } from 'pages/launchpad/create-launchpad/type'
+import LaunchpadHead from '../components/LaunchpadHead'
 interface IShowProps {
   basicInfo: IBasicInfoParams
   poolInfo?: IPoolInfoParams
-  isPooleEmpty?: boolean
   poolListEl?: JSX.Element
 }
 
-const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }: IShowProps) => {
+const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
   const optionDatas = useOptionDatas()
   const ethChainId = useMemo(() => {
     if (!poolInfo || !poolInfo.chainId) return undefined
@@ -136,7 +136,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
   }, [poolInfo, basicInfo, ethChainId, optionDatas])
   const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
-  if (!privatePadData) {
+  if (!poolInfo || !privatePadData) {
     return (
       <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <BounceAnime />
@@ -145,7 +145,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
   }
   return (
     <Box>
-      <ProjectHead item={privatePadData} />
+      {poolInfo && <LaunchpadHead poolInfo={poolInfo} basicInfo={basicInfo} />}
       {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolsId && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
           {
@@ -187,10 +187,59 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, isPooleEmpty = false, poolListEl }
           }
         </Box>
       )}
-      {/* {isPooleEmpty && <Box>111</Box>} */}
-      <Tabs item={privatePadData} />
+
+      {!!poolInfo && poolInfo.status !== PoolStatus.On_Chain ? (
+        <Box mb={120} sx={{ '&>div': { marginBottom: '0px ' } }}>
+          <Tabs item={privatePadData} />
+          <NoPoolInfo />
+        </Box>
+      ) : (
+        <Tabs item={privatePadData} />
+      )}
+
       {!!poolListEl && poolListEl}
       <FooterPc />
+    </Box>
+  )
+}
+const NoPoolInfo = () => {
+  return (
+    <Box sx={{ background: '#E8E9E4' }}>
+      <Stack
+        sx={{ margin: '0 auto', textAlign: 'center' }}
+        py={120}
+        gap={30}
+        maxWidth={700}
+        alignItems={'center'}
+        justifyContent={'center'}
+      >
+        <Typography
+          sx={{
+            color: '#121212',
+            fontFamily: 'Inter',
+            fontSize: '16px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '150%'
+          }}
+        >
+          Investment and Partners
+        </Typography>
+        <Typography
+          sx={{
+            color: '#000',
+            fontFamily: 'Public Sans',
+            fontSize: '28px',
+            fontStyle: 'normal',
+            fontWeight: 600,
+            lineHeight: '130%',
+            letterSpacing: '-0.56px',
+            textTransform: 'capitalize'
+          }}
+        >
+          The team raised a small round from angel investors and degen groups for game development and working capital.
+        </Typography>
+      </Stack>
     </Box>
   )
 }
