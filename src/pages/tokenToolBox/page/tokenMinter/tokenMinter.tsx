@@ -27,7 +27,7 @@ export default function TokenMinter() {
     <Box>
       <ContainerBox>
         <Formik initialValues={minter} onSubmit={() => {}}>
-          {({ values, errors, setFieldValue, handleSubmit }) => (
+          {({ values, setFieldValue, handleSubmit }) => (
             <Box
               component={'form'}
               sx={{
@@ -138,7 +138,11 @@ export default function TokenMinter() {
                   <FormItem name={'Token Image'}>
                     <Box>
                       <H5 sx={{ marginBottom: 10 }}>Token image</H5>
-                      <DropZone getFile={file => {}} />
+                      <DropZone
+                        getFile={file => {
+                          console.log('file>>>', file)
+                        }}
+                      />
                       <FeeBox>
                         <H4>Fee 0</H4>
                         <Body03>+ 0.3% total supply</Body03>

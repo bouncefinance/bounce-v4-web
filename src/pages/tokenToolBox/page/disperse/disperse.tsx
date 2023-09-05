@@ -68,7 +68,9 @@ export default function Disperse() {
     }
   }, [approveCallback])
 
-  const onSubmit = (value: IDisperse) => {}
+  const onSubmit = (value: IDisperse) => {
+    console.log('value>>>', value)
+  }
   const disperse: IDisperse = {
     chainId: chainId || ChainId.MAINNET,
     type: 'chain',
@@ -90,7 +92,7 @@ export default function Disperse() {
           <Desc>View history</Desc>
         </SubTitle>
         <Formik initialValues={disperse} onSubmit={onSubmit}>
-          {({ values, errors, setFieldValue, handleSubmit }) => (
+          {({ values, setFieldValue, handleSubmit }) => (
             <Box
               component={'form'}
               sx={{
@@ -245,7 +247,7 @@ export default function Disperse() {
                           getFile={file => {
                             Papa.parse(file, {
                               skipEmptyLines: true,
-                              complete: function (results) {
+                              complete: function (results: any) {
                                 setFieldValue('recipients', results.data.join('\n').replaceAll(',', ' '))
                               }
                             })
