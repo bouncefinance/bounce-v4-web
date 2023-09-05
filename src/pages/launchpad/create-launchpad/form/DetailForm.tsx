@@ -460,7 +460,7 @@ const DetailForm = ({
       show(DialogDarkTips, {
         iconType: 'error',
         title: 'Сongratulations!',
-        content: 'err',
+        content: 'Save failed.',
         cancelBtn: 'Confirm',
         againBtn: 'Go Account',
         PaperProps: {
@@ -500,7 +500,7 @@ const DetailForm = ({
           return (
             <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
               <BaseBox>
-                <Title sx={{ color: '#20201E', fontSize: 28 }}>auction Round</Title>
+                <Title sx={{ color: '#20201E', fontSize: 28 }}>Auction Round</Title>
                 <Stack mt={20} sx={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
                   {poolList
                     .filter(item => item.status !== PoolStatus.On_Chain)
@@ -673,7 +673,7 @@ const DetailForm = ({
               </BaseBox>
 
               <BaseBox>
-                <Title sx={{ color: '#20201E' }}>launchpad information</Title>
+                <Title sx={{ color: '#20201E', fontSize: 28 }}>Launchpad Information</Title>
                 <Box my={40}>
                   <Stack
                     sx={{
@@ -753,7 +753,7 @@ const DetailForm = ({
                     }
                   />
                   <FormLayout
-                    title1="Swap ratio"
+                    title1="Swap Ratio"
                     childForm={
                       <Stack
                         flexDirection={'row'}
@@ -837,7 +837,7 @@ const DetailForm = ({
                   </Box>
                   <Box>
                     <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay unlocking token</Title>
+                      <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay Unlocking Token</Title>
                       <FormControlLabel
                         checked={values.releaseType === 0}
                         onChange={() => setFieldValue('releaseType', values.releaseType ? 0 : 1)}

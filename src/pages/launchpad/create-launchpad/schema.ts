@@ -15,7 +15,7 @@ export const basicSchema = yup.object({
   tokennomics: yup.string(),
   website: yup.string().url().required('website is a required field'),
   whitepaperLink: yup.string().url().required('website is a required field'),
-  projectName: yup.string().required('Project Name is a required field'),
+  projectName: yup.string().required('Project Name is a required field').max(30, 'Within 30 characters'),
   roadmap: yup.string(),
   chainId: yup.number().required('chainId is a required field'),
   community: yup.array().of(
@@ -93,7 +93,7 @@ export const basicSchema = yup.object({
 export const poolSchema = yup.object({
   name: yup.string(),
   TokenLogo: yup.string(),
-  TokenName: yup.string(),
+  TokenName: yup.string().max(10, 'Within 10 characters'),
   projectMobilePicture: yup.string().required('Please upload your project mobile picture'),
   projectPicture: yup.string().required('Please upload your project picture'),
   ChainId: yup.number(),
@@ -244,7 +244,22 @@ export const poolSchema = yup.object({
       })
     )
   }),
-  fragmentReleaseSize: yup.string().nullable(),
+  fragmentReleaseSize: yup.string().when('releaseType', {
+    is: (val: any) => Number(val) === IReleaseType.Fragment,
+    then: yup.string().test('TEST_FRAGMENT_TOTAL', 'Release ratio must add up to 100%', (_, context) => {
+      const endTime = context.parent.endTime?.valueOf() || 0
+      for (const item of context.parent.fragmentReleaseTimes) {
+        if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
+          return context.createError({ message: 'Please select a time earlier than end time' })
+        }
+      }
+      return (
+        context.parent.fragmentReleaseTimes
+          .map((item: { radio: string }) => item.radio)
+          .reduce((a: any, b: any) => (Number(a) || 0) + (Number(b) || 0), [0]) === 100
+      )
+    })
+  }),
   isRefundable: yup.boolean(),
   whitelist: yup
     .array()

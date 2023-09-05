@@ -127,7 +127,7 @@ const BasicForm = ({
       show(DialogDarkTips, {
         iconType: 'error',
         title: 'Сongratulations!',
-        content: 'err',
+        content: 'Save failed.',
         cancelBtn: 'Continue filling in',
         PaperProps: {
           sx: {
