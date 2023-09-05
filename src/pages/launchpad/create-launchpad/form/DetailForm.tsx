@@ -838,14 +838,15 @@ const DetailForm = ({
                   <Box>
                     <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
                       <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay Unlocking Token</Title>
-                      <FormControlLabel
+                      {/* <FormControlLabel
                         checked={values.releaseType === 0}
                         onChange={() => setFieldValue('releaseType', values.releaseType ? 0 : 1)}
                         control={<GraySwitch defaultChecked />}
                         label=""
-                      />
+                      /> */}
                     </Stack>
-                    {values.releaseType > 0 && (
+                    {/* {values.releaseType > 0 && ( */}
+                    {
                       <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
                         <FormControlLabel
                           value={IReleaseType.Cliff}
@@ -875,7 +876,7 @@ const DetailForm = ({
                           }
                         />
                       </Field>
-                    )}
+                    }
                     {Number(values.releaseType) === IReleaseType.Cliff ? (
                       <Stack spacing={6}>
                         <LabelTitle>Unlocking Start Time</LabelTitle>
@@ -922,9 +923,10 @@ const DetailForm = ({
                       />
                     ) : (
                       <LabelTitle>
-                        No unlocking method is set; tokens can be claimed after the specified end.
+                        {/* No unlocking method is set; tokens can be claimed after the specified end. */}
                       </LabelTitle>
                     )}
+
                     <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
                   </Box>
                   <Box>
