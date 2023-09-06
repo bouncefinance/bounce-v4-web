@@ -732,7 +732,7 @@ export const Launchpad = ({
               )}
               {curChain && <MoreDataBox size={size} title="Blockchain / Platform" content={curChain.chainName} />}
             </Box>
-            {!!approvedNum && (
+            {!!approvedNum && approvedNum > 1 && (
               <Stack pl={10} gap={8}>
                 <SansTitle sx={{ fontSize: 20, fontWeight: 600 }}>Auction Pool</SansTitle>
                 <SansTitle sx={{ color: '#2B51DA', fontSize: 44, fontWeight: 700 }}>{approvedNum}</SansTitle>
