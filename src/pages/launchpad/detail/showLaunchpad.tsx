@@ -146,7 +146,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
   return (
     <Box>
       {poolInfo && <LaunchpadHead poolInfo={poolInfo} basicInfo={basicInfo} />}
-      {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && poolInfo.poolsId && (
+      {!!poolInfo && !poolListEl && poolInfo.status === PoolStatus.On_Chain && !!poolInfo.poolsId && (
         <Box sx={{ background: '#F6F7F3', marginTop: 50, padding: 80 }}>
           {
             <>
@@ -188,7 +188,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
         </Box>
       )}
 
-      {!!poolInfo && poolInfo.status !== PoolStatus.On_Chain ? (
+      {!!poolInfo && poolInfo.status !== PoolStatus.On_Chain && !poolListEl ? (
         <Box mb={120} sx={{ '&>div': { marginBottom: '0px ' } }}>
           <Tabs item={privatePadData} />
           <NoPoolInfo />

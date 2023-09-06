@@ -41,7 +41,7 @@ export const Title = styled(Typography)({
   fontWeight: 600,
   lineHeight: '130%',
   letterSpacing: '-0.56px',
-  textTransform: 'capitalize',
+  // textTransform: 'capitalize',
   textAlign: 'left',
   color: '#20201E',
   '@media(max-width:600px)': {

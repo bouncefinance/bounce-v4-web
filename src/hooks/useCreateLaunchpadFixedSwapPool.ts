@@ -59,10 +59,7 @@ export function makeValuesReleaseData(values: IPoolInfoParams) {
           endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
         }
       })
-    : values.releaseData.map(item => ({
-        startAt: item.startAt || 0,
-        endAtOrRatio: item.endAtOrRatio || 0
-      }))
+    : []
 }
 export function useCreateLaunchpadFixedSwapPool({
   currencyFrom,

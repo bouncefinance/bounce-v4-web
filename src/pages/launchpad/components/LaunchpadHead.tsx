@@ -66,6 +66,7 @@ const LaunchpadHead = ({ poolInfo, basicInfo, headLayout }: IHeadProps) => {
           backgroundSize: 'cover',
           objectFit: 'scale-down',
           backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
           borderRadius: '0 0 20px 20px'
         }}
       >

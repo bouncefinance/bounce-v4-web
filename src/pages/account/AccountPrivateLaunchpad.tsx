@@ -517,14 +517,17 @@ const ToCreateDialog = ({
             </Box>
             <AuctionNotification />
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 32, width: '100%' }}>
-              {token1Currency && token0Currency && (
+              {token1Currency && token0Currency ? (
                 <CreatePoolButton
                   poolInfo={poolInfo}
                   currencyTo={token1Currency as Currency | undefined}
                   currencyFrom={token0Currency as Currency | undefined}
                 />
+              ) : (
+                <Typography sx={{ color: '#FD3333' }}>
+                  Please check if the token address is present or correct
+                </Typography>
               )}
-
               <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle>
             </Box>
           </Box>
@@ -729,7 +732,7 @@ export const Launchpad = ({
               )}
               {curChain && <MoreDataBox size={size} title="Blockchain / Platform" content={curChain.chainName} />}
             </Box>
-            {!!approvedNum && (
+            {!!approvedNum && approvedNum > 1 && (
               <Stack pl={10} gap={8}>
                 <SansTitle sx={{ fontSize: 20, fontWeight: 600 }}>Auction Pool</SansTitle>
                 <SansTitle sx={{ color: '#2B51DA', fontSize: 44, fontWeight: 700 }}>{approvedNum}</SansTitle>
@@ -834,22 +837,13 @@ const LaunchpadCard = ({
             <Link onClick={() => navigate(`/account/launchpad/${poolInfo.id}`)}>
               <Image src={ShowDetailIcon} />
             </Link>
-
-            <Link
-              onClick={() =>
-                navigate(
-                  `${
-                    poolInfo.status !== PoolStatus.On_Chain
-                      ? routes.thirdPart.CreateLaunchpad + '?type=2&id=' + poolInfo.id
-                      : routes.thirdPart.CreateLaunchpad + '?tab=1'
-                  }`
-                )
-              }
-            >
-              <Image src={EditDetailIcon} />
-            </Link>
-
             {poolInfo.status !== PoolStatus.On_Chain && (
+              <Link onClick={() => navigate(routes.thirdPart.CreateLaunchpad + '?type=2&id=' + poolInfo.id)}>
+                <Image src={EditDetailIcon} />
+              </Link>
+            )}
+
+            {poolInfo.status !== PoolStatus.On_Chain && poolInfo.status !== PoolStatus.Approved && (
               <Box onClick={() => run(PoolStatus.Released)}>
                 <SendIcon sx={{ color: '#fff', fontSize: 60 }} />
               </Box>
