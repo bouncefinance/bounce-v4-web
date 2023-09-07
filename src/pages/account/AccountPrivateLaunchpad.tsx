@@ -483,8 +483,8 @@ const ToCreateDialog = ({
                   <Stack spacing={15}>
                     <ConfirmationInfoItem title="Pool duration">
                       <Typography>
-                        From {moment(poolInfo.openAt)?.format('MM.DD.Y HH:mm')} - To{' '}
-                        {moment(poolInfo.closeAt)?.format('MM.DD.Y HH:mm')}
+                        From {moment((poolInfo.openAt as number) * 1000)?.format('MM.DD.Y HH:mm')} - To{' '}
+                        {moment((poolInfo.closeAt as number) * 1000)?.format('MM.DD.Y HH:mm')}
                       </Typography>
                     </ConfirmationInfoItem>
 
