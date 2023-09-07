@@ -5,6 +5,7 @@ import { Body02 } from 'components/Text'
 import { useShowLoginModal } from 'state/users/hooks'
 import TokenLockerForm from '../components/tokenLockerForm'
 import TOkenLPLockerForm from '../components/tokenLPLockerForm'
+
 enum Tabstype {
   'Token' = 0,
   'LP Token' = 1

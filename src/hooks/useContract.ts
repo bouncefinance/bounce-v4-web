@@ -20,6 +20,7 @@ import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
 import MUTANT_ENGLISH_AUCTION_NFT_ABI from '../constants/abis/mutantEnglishAuctionNFT.json'
 import ENGLISH_AUCTION_ERC20_ABI from '../constants/abis/erc20EnglishAuction.json'
 import DUTCH_AUCTION_NFT_ABI from '../constants/abis/dutchAuction.json'
+import ToolboxERC20TimelockFactory from '../constants/abis/ToolboxERC20TimelockFactory.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -27,7 +28,8 @@ import {
   FIXED_SWAP_ERC20_ADDRESSES,
   FIXED_SWAP_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_CONTRACT_ADDRESSES,
-  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES
+  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
+  TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -212,4 +214,13 @@ export function useDutchAuctionContract(address?: string, queryChainId?: ChainId
   const cur = queryChainId || chainId
   const curAddress = address === '' ? undefined : address || (cur ? DUTCH_AUCTION_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, DUTCH_AUCTION_NFT_ABI, true, queryChainId)
+}
+
+// token locker
+export function useToolboxERC20TimelockFactory(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress =
+    address === '' ? undefined : address || (cur ? TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, ToolboxERC20TimelockFactory, true, cur)
 }
