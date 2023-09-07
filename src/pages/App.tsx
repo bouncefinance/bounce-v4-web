@@ -70,6 +70,8 @@ import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjec
 import CreateLaunchpad from './launchpad/create-launchpad'
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
+import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
+import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -203,6 +205,8 @@ export default function App() {
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
+                  <Route path={routes.thirdPart.SolaceAuction} element={<SolaceProjectInfo />} />
+                  <Route path={routes.thirdPart.CreateProtocolAuction} element={<CreateProtocolProjectInfo />} />
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.launchpad.account.launchpadDetail} element={<LaunchpadDetail />} />
                   <Route path={routes.launchpad.account.launchpadParty} element={<Party />} />

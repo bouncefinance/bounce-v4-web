@@ -98,7 +98,9 @@ export const routes = {
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange',
     CreateLaunchpad: '/launchpad/create',
-    MetaBloxAuction: '/launchpad/metablox'
+    MetaBloxAuction: '/launchpad/metablox',
+    SolaceAuction: '/launchpad/solace',
+    CreateProtocolAuction: '/launchpad/create_protocol'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

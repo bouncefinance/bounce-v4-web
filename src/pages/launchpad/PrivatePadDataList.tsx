@@ -31,6 +31,9 @@ import MetaBlox from './imgs/metablox.png'
 import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
 import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
+import SolaceImg from './imgs/solace.png'
+import SolaceAvatar from './imgs/solace-na.png'
+import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
 
@@ -669,7 +672,176 @@ const DeelanceProjectInfo: IProjectInfo[] = [
   }
 ]
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 12
+  // current privatePad max keyId is 14
+  {
+    keyId: 14,
+    liveTimeStamp: {
+      start: 1695571200000,
+      end: 0
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    img: '',
+    avatar: CreateProtocolAvatar,
+    title: 'Create Protocol',
+    chainId: 1,
+    tokenName: 'TBD',
+    whitePaperLink: 'https://createprotocol.gitbook.io/create-protocol-whitepaper/',
+    upcomingLink: '/launchpad/create_protocol',
+    liveLink: '/launchpad/create_protocol',
+    projectInfo: [
+      {
+        title: 'What is Create Protocol?',
+        info: ['AI powered Web 3 Infrastructure']
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            <a href="https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing">
+              https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing
+            </a>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <div key={1}>
+            <ul>
+              <li>
+                <p>
+                  Investors - Ice Capital (UAE) - <b> Lead investor</b>
+                </p>
+                <p>
+                  Cogitent Ventures (USA) - <b> Co Lead </b>
+                </p>
+              </li>
+            </ul>
+            <div style={{ marginTop: 20 }}>
+              <p>Snowy August Family Office - (Miami)</p>
+              <p>Stanford AI and Web3 club angels (USA)</p>
+              <p>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</p>
+              <p>Hue Nguyen : Ex- SEC USA + Official Advisor (USA)</p>
+              <p>Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )</p>
+              <p>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</p>
+              <p>Kalyan Singh : Co-founder, Lumenci ( Austin )</p>
+              <p>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</p>
+              <p>Sayantan Biswas : Co-founder, UniAcco ( London )</p>
+              <p>Aashish Jindal : Co-founder, GripInvest ( India )</p>
+              <p>Sian Elizabeth : Sian Elizabeth Wellness ( London )</p>
+              <p>Bharat Thakur : Creator - Royal Artist ( Dubai ) </p>
+              <p style={{ margin: '10px 0' }}>and many more. </p>
+              <p>KOL- Waqar Zaka Few Degen KOLs</p>
+              <p>Media Partners -Edge of NFT</p>
+              <p>Big Brands- Binance Polygon</p>
+            </div>
+          </div>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'AI powered Web 3 Infrastructure.',
+    social: [
+      <Link key={0} href="https://www.createprotocol.org/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://t.me/CreateProtocolOfficial" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/create.protocol/?hl=en"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: 'TBD' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'TBD' }
+    ]
+  },
+  {
+    keyId: 13,
+    liveTimeStamp: {
+      start: 1695139200000,
+      end: 0
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    img: SolaceImg,
+    avatar: SolaceAvatar,
+    title: 'Solace',
+    chainId: 1,
+    tokenName: '$SGT',
+    whitePaperLink: 'https://docs.solace.fi/solace-docs-v2/solace-protocol/introduction',
+    upcomingLink: '/launchpad/solace',
+    liveLink: '/launchpad/solace',
+    projectInfo: [
+      {
+        title: 'What is Solace?',
+        info: [
+          'Solace is a DeFi protocol built on top of Ajna protocol. Solace introduces veTokenomics on a set of markets across Ajna, purposefully created to accept derivatives as collateral for borrowing ETH (or stablecoins). By implementing this integration, Solace Protocol encourages the influx of liquidity into derivatives lending markets, enabling enhanced risk ad yield strategies'
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            <a href="https://docs.solace.fi/solace-docs-v2/sgt-token/sgt-and-vesgt">
+              https://docs.solace.fi/solace-docs-v2/sgt-token/sgt-and-vesgt
+            </a>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          'Parataxis Capital, LD capital, Prycto, StableLab, Stake capital, Julien Bouteloup (StakeDAO), Sandeep Nailwal (Polygon), Illia Polosukhin (Near), Evgeny Yurtaev (Zerion), Alex Shevchenko (Aurora), Aleksander Larsen and Jeffrey Zirlin (Axie Infinity), Seth Ginns (Coinfund), Kiril Nikolov (Nexo) — investors; Preston van Loon (Offchain Labs), Cameron Dennis (Near), Gustav Arentoft (1Inch), Arjun Kalsy (Mantle) — advisors; Ajna — partner'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Solace is a DeFi protocol built on top of Ajna protocol. Solace introduces veTokenomics on a set of markets across Ajna, purposefully created to accept derivatives as collateral for borrowing ETH (or stablecoins). By implementing this integration, Solace Protocol encourages the influx of liquidity into derivatives lending markets, enabling enhanced risk ad yield strategies.',
+    social: [
+      <Link key={0} href="http://solace.fi/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/XKrQgwAjBa" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={6} href="https://twitter.com/solacefi" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$SGT' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   {
     keyId: 12,
     liveTimeStamp: {
