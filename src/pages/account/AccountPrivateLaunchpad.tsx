@@ -67,9 +67,7 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { LoadingButton } from '@mui/lab'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { FIXED_SWAP_ERC20_ADDRESSES } from 'constants/index'
-import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import { useCreateLaunchpadFixedSwapPool } from 'hooks/useCreateLaunchpadFixedSwapPool'
 import { Body02 } from 'components/Text'
 import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
@@ -132,8 +130,6 @@ const CreatePoolButton = ({
   currencyFrom: Currency | undefined
   currencyTo: Currency | undefined
 }) => {
-  const navigate = useNavigate()
-
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const auctionInChainId = poolInfo.chainId
@@ -146,7 +142,6 @@ const CreatePoolButton = ({
     poolInfo
   })
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
 
   const auctionPoolSizeAmount = useMemo(
     () =>
@@ -166,7 +161,7 @@ const CreatePoolButton = ({
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createFixedSwapPool()
+      const { getPoolId, transactionReceipt } = await createFixedSwapPool()
       setButtonCommitted('inProgress')
 
       const ret: Promise<string> = new Promise((resolve, rpt) => {
@@ -192,23 +187,15 @@ const CreatePoolButton = ({
         })
       })
       ret
-        .then(poolId => {
-          // const requestBody = { ...poolInfo, status: PoolStatus.On_Chain, chainId: poolInfo.opId as number }
-          // delete requestBody.opId
-          // updateLaunchpadPool(requestBody)
-          const goToPoolInfoPage = () => {
-            const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
-            navigate(route)
-          }
-
+        .then(() => {
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            againBtn: 'To the pool',
-            cancelBtn: 'Not now',
+            cancelBtn: 'Confirm',
             title: 'Congratulations!',
-            content: 'You have successfully created the auction.',
-            onAgain: goToPoolInfoPage
+            content: 'Operation successful, please wait patiently for 5 to 10 minutes.',
+            // onAgain: goToPoolInfoPage
+            onCancel: () => {}
           })
         })
         .catch()
@@ -229,7 +216,7 @@ const CreatePoolButton = ({
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate])
+  }, [createFixedSwapPool])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -802,7 +789,7 @@ const LaunchpadCard = ({
         console.log(res)
         setShowCreateDia(true)
       })
-      .catch(err => {
+      .catch(() => {
         toast.error('There is still some content that has not been filled out!')
         setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
       })
