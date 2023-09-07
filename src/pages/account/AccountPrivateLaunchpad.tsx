@@ -33,7 +33,7 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import { getLabelById, shortenAddress } from 'utils'
 import { useActiveWeb3React } from 'hooks'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import { IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
+import { IAuctionTypeMap, IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
 import Twitter from 'assets/imgs/auction/round-icon-twitter.svg'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import Facebook from 'assets/imgs/common/Facebook-Blue-Logo.svg'
@@ -659,11 +659,11 @@ export const Launchpad = ({
               size={size === CardSize.Small ? 15 : 24}
             />
             <SansTitle sx={{ color: '#FFF', fontSize: size === CardSize.Small ? 10 : 16 }}>
-              {ChainListMap[poolInfo.chainId as ChainId]?.name}
+              {curChain?.chainName}
             </SansTitle>
           </RoundedBox>
           <RoundedBox sx={{ color: '#B5E529', fontSize: size === CardSize.Small ? 10 : 16 }}>
-            {PoolType[poolInfo.category]}
+            {Object.assign({}, IAuctionTypeMap)[poolInfo.category]}
           </RoundedBox>
         </Row>
       </Box>
