@@ -189,13 +189,30 @@ const CreatePoolButton = ({
       ret
         .then(() => {
           hideDialogConfirmation()
-          show(DialogTips, {
+          show(DialogDarkTips, {
             iconType: 'success',
             cancelBtn: 'Confirm',
             title: 'Congratulations!',
             content: 'Operation successful, please wait patiently for 5 to 10 minutes.',
             // onAgain: goToPoolInfoPage
-            onCancel: () => {}
+            onCancel: () => {},
+            PaperProps: {
+              sx: {
+                '&.MuiPaper-root': {
+                  '& .MuiButtonBase-root': {
+                    backgroundColor: '#121212',
+                    color: '#fff'
+                  },
+                  backgroundColor: '#fff',
+                  '& svg path': {
+                    stroke: '#171717'
+                  },
+                  '& .MuiDialogContent-root h2': {
+                    color: '#121212'
+                  }
+                }
+              }
+            }
           })
         })
         .catch()
@@ -204,7 +221,7 @@ const CreatePoolButton = ({
       console.error(err)
       hideDialogConfirmation()
       setButtonCommitted(undefined)
-      show(DialogTips, {
+      show(DialogDarkTips, {
         iconType: 'error',
         againBtn: 'Try Again',
         cancelBtn: 'Cancel',
@@ -213,7 +230,24 @@ const CreatePoolButton = ({
           typeof err === 'string'
             ? err
             : err?.data?.message || err?.error?.message || err?.message || 'Something went wrong',
-        onAgain: toCreate
+        onAgain: toCreate,
+        PaperProps: {
+          sx: {
+            '&.MuiPaper-root': {
+              '& .MuiButtonBase-root': {
+                backgroundColor: '#121212',
+                color: '#fff'
+              },
+              backgroundColor: '#fff',
+              '& svg path': {
+                stroke: '#171717'
+              },
+              '& .MuiDialogContent-root h2': {
+                color: '#121212'
+              }
+            }
+          }
+        }
       })
     }
   }, [createFixedSwapPool])
@@ -420,13 +454,19 @@ const ToCreateDialog = ({
 
                     <ConfirmationInfoItem title="Token symbol">
                       <Stack direction="row" spacing={8} alignItems="center">
-                        <TokenImage alt={poolInfo.token0Symbol} src={(poolInfo.token0Logo as string) || ''} size={20} />
-                        <Typography>{poolInfo.token0Symbol}</Typography>
+                        {!!token0Currency ? (
+                          <>
+                            <TokenImage alt={token0Currency?.symbol} src={token0Currency?.logo || ''} size={20} />
+                            <Typography>{token0Currency?.symbol}</Typography>
+                          </>
+                        ) : (
+                          '-- --'
+                        )}
                       </Stack>
                     </ConfirmationInfoItem>
 
                     <ConfirmationInfoItem title="Token decimal">
-                      <Typography>{poolInfo.token0Decimals}</Typography>
+                      {!!token0Currency ? <Typography>{token0Currency?.decimals}</Typography> : '--'}
                     </ConfirmationInfoItem>
                   </Stack>
                 </Box>
