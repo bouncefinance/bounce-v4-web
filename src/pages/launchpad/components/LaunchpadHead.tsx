@@ -134,10 +134,10 @@ const LaunchpadHead = ({ poolInfo, basicInfo, headLayout }: IHeadProps) => {
             >
               {basicInfo?.community
                 .filter(item => !!item.communityLink)
-                .map(item => (
+                .map((item, index) => (
                   <Link
                     sx={{ width: 32, height: 32 }}
-                    key={item.communityLink}
+                    key={item.communityName + index}
                     href={item.communityLink}
                     target="_blank"
                   >

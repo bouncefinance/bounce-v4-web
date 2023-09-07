@@ -730,10 +730,10 @@ export const Launchpad = ({
             <Row mt={10} gap={6}>
               {basicInfo?.community
                 .filter(item => !!item.communityLink)
-                .map(item => (
+                .map((item, index) => (
                   <Link
                     sx={{ width: size === CardSize.Small ? 20 : 32, height: size === CardSize.Small ? 20 : 32 }}
-                    key={item.communityLink}
+                    key={item.communityName + index}
                     href={item.communityLink}
                     target="_blank"
                   >
