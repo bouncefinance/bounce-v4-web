@@ -52,7 +52,7 @@ const NewTabs = styled(Tabs)(({ theme }) => ({
   }
 }))
 
-const G_IPHONE_ID = 20689
+const G_IPHONE_ID = 18456
 
 const bannerList = [Banner2, Banner3, Banner2, Banner3]
 const FoundoBidDetail = () => {
