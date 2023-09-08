@@ -674,6 +674,7 @@ const DeelanceProjectInfo: IProjectInfo[] = [
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 14
   {
+    hidden: true,
     keyId: 14,
     liveTimeStamp: {
       start: 1695571200000,
@@ -776,6 +777,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 13,
     liveTimeStamp: {
       start: 1695139200000,
