@@ -20,6 +20,8 @@ import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
 import MUTANT_ENGLISH_AUCTION_NFT_ABI from '../constants/abis/mutantEnglishAuctionNFT.json'
 import ENGLISH_AUCTION_ERC20_ABI from '../constants/abis/erc20EnglishAuction.json'
 import DUTCH_AUCTION_NFT_ABI from '../constants/abis/dutchAuction.json'
+import DISPERSE_ABI from '../constants/abis/Disperse.json'
+
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -27,7 +29,8 @@ import {
   FIXED_SWAP_ERC20_ADDRESSES,
   FIXED_SWAP_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_CONTRACT_ADDRESSES,
-  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES
+  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
+  DISPERSE_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -212,4 +215,11 @@ export function useDutchAuctionContract(address?: string, queryChainId?: ChainId
   const cur = queryChainId || chainId
   const curAddress = address === '' ? undefined : address || (cur ? DUTCH_AUCTION_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, DUTCH_AUCTION_NFT_ABI, true, queryChainId)
+}
+
+export function useDisperseContract(queryChainId: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? DISPERSE_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, DISPERSE_ABI, true, queryChainId)
 }

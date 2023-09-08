@@ -1,122 +1,91 @@
-{
-  "address": "0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9",
-  "abi": [
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "token",
-          "type": "address"
-        },
-        {
-          "name": "recipients",
-          "type": "address[]"
-        },
-        {
-          "name": "values",
-          "type": "uint256[]"
-        }
-      ],
-      "name": "disperseToken",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "recipients",
-          "type": "address[]"
-        },
-        {
-          "name": "values",
-          "type": "uint256[]"
-        }
-      ],
-      "name": "disperseEther",
-      "outputs": [],
-      "payable": true,
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "count",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "EtherDispersed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "token",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "count",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "ERC20Dispersed",
-      "type": "event"
-    }
-  ],
-  "transactionHash": "0xd48ef058d31824e060da1b46290c41d119df03cc0924c035d86671ba3270e58d",
-  "receipt": {
-    "to": null,
-    "from": "0xc6a34b2bf59baF984884A0cf4C84eD1541E710d7",
-    "contractAddress": "0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9",
-    "transactionIndex": 31,
-    "gasUsed": "389169",
-    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-    "blockHash": "0xc66c590350da1835c5093249805b9bb52f8d43cf52dc76f9f33414cf14e5eddf",
-    "transactionHash": "0xd48ef058d31824e060da1b46290c41d119df03cc0924c035d86671ba3270e58d",
-    "logs": [],
-    "blockNumber": 4203307,
-    "cumulativeGasUsed": "4050417",
-    "status": 1,
-    "byzantium": true
+[
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "name": "recipients",
+        "type": "address[]"
+      },
+      {
+        "name": "values",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "disperseToken",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
-  "args": [],
-  "numDeployments": 2,
-  "solcInputHash": "aff94a30ed7f74fee2ca20b69900ad46",
-  "metadata": "{\"compiler\":{\"version\":\"0.4.25+commit.59dbf8f1\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"token\",\"type\":\"address\"},{\"name\":\"recipients\",\"type\":\"address[]\"},{\"name\":\"values\",\"type\":\"uint256[]\"}],\"name\":\"disperseToken\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"recipients\",\"type\":\"address[]\"},{\"name\":\"values\",\"type\":\"uint256[]\"}],\"name\":\"disperseEther\",\"outputs\":[],\"payable\":true,\"stateMutability\":\"payable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"count\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"EtherDispersed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"name\":\"count\",\"type\":\"uint256\"},{\"indexed\":false,\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"ERC20Dispersed\",\"type\":\"event\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"contracts/toolbox/Disperse.sol\":\"Disperse\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/toolbox/Disperse.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.4.25;\\n\\ninterface IERC20 {\\n    function transfer(address to, uint256 value) external returns (bool);\\n\\n    function transferFrom(address from, address to, uint256 value) external returns (bool);\\n}\\n\\ncontract Disperse {\\n    event EtherDispersed(address sender, uint256 count, uint256 amount);\\n    event ERC20Dispersed(address sender, address token, uint256 count, uint256 amount);\\n\\n    function disperseEther(address[] recipients, uint256[] values) external payable {\\n        for (uint256 i = 0; i < recipients.length; i++) recipients[i].transfer(values[i]);\\n        uint256 balance = address(this).balance;\\n        emit EtherDispersed(msg.sender, recipients.length, msg.value - balance);\\n        if (balance > 0) msg.sender.transfer(balance);\\n    }\\n\\n    function disperseToken(IERC20 token, address[] recipients, uint256[] values) external {\\n        uint256 total = 0;\\n        for (uint256 i = 0; i < recipients.length; i++) total += values[i];\\n        require(token.transferFrom(msg.sender, address(this), total));\\n        for (i = 0; i < recipients.length; i++) require(token.transfer(recipients[i], values[i]));\\n        emit ERC20Dispersed(msg.sender, address(token), recipients.length, total);\\n    }\\n}\\n\",\"keccak256\":\"0x4ace439404c2ceadaf10f544841c09a0f055259989806aa9b71db1cbeaf08fe7\"}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610617806100206000396000f30060806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063c73a2d6014610051578063e63d38ed146100c4575b600080fd5b34801561005d57600080fd5b506100c2600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190820180359060200191909192939192939080359060200190820180359060200191909192939192939050505061010a565b005b61010860048036038101908080359060200190820180359060200191909192939192939080359060200190820180359060200191909192939192939050505061045b565b005b60008060009150600090505b8585905081101561014757838382818110151561012f57fe5b90506020020135820191508080600101915050610116565b8673ffffffffffffffffffffffffffffffffffffffff166323b872dd3330856040518463ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019350505050602060405180830381600087803b15801561021e57600080fd5b505af1158015610232573d6000803e3d6000fd5b505050506040513d602081101561024857600080fd5b8101908080519060200190929190505050151561026457600080fd5b600090505b858590508110156103a8578673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb878784818110151561029e57fe5b9050602002013573ffffffffffffffffffffffffffffffffffffffff1686868581811015156102c957fe5b905060200201356040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050602060405180830381600087803b15801561035557600080fd5b505af1158015610369573d6000803e3d6000fd5b505050506040513d602081101561037f57600080fd5b8101908080519060200190929190505050151561039b57600080fd5b8080600101915050610269565b7f63b5d75e48823cb5b66dee218a7cb56bfa305ccc112b24fa8f0931c8851602a933888888905085604051808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200183815260200182815260200194505050505060405180910390a150505050505050565b600080600091505b8585905082101561050057858583818110151561047c57fe5b9050602002013573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc85858581811015156104c057fe5b905060200201359081150290604051600060405180830381858888f193505050501580156104f2573d6000803e3d6000fd5b508180600101925050610463565b3073ffffffffffffffffffffffffffffffffffffffff163190507f62fc23e1a4f26c28915ff145677656db45ca0d9fb080cf725b113f72be5d914f3387879050833403604051808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001838152602001828152602001935050505060405180910390a160008111156105e3573373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f193505050501580156105e1573d6000803e3d6000fd5b505b5050505050505600a165627a7a72305820984317986d994da9d1be6ab732e9d5178bc4a627d854e51a5c64558b297cc15c0029",
-  "deployedBytecode": "0x60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063c73a2d6014610051578063e63d38ed146100c4575b600080fd5b34801561005d57600080fd5b506100c2600480360381019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919080359060200190820180359060200191909192939192939080359060200190820180359060200191909192939192939050505061010a565b005b61010860048036038101908080359060200190820180359060200191909192939192939080359060200190820180359060200191909192939192939050505061045b565b005b60008060009150600090505b8585905081101561014757838382818110151561012f57fe5b90506020020135820191508080600101915050610116565b8673ffffffffffffffffffffffffffffffffffffffff166323b872dd3330856040518463ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018281526020019350505050602060405180830381600087803b15801561021e57600080fd5b505af1158015610232573d6000803e3d6000fd5b505050506040513d602081101561024857600080fd5b8101908080519060200190929190505050151561026457600080fd5b600090505b858590508110156103a8578673ffffffffffffffffffffffffffffffffffffffff1663a9059cbb878784818110151561029e57fe5b9050602002013573ffffffffffffffffffffffffffffffffffffffff1686868581811015156102c957fe5b905060200201356040518363ffffffff167c0100000000000000000000000000000000000000000000000000000000028152600401808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200182815260200192505050602060405180830381600087803b15801561035557600080fd5b505af1158015610369573d6000803e3d6000fd5b505050506040513d602081101561037f57600080fd5b8101908080519060200190929190505050151561039b57600080fd5b8080600101915050610269565b7f63b5d75e48823cb5b66dee218a7cb56bfa305ccc112b24fa8f0931c8851602a933888888905085604051808573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200183815260200182815260200194505050505060405180910390a150505050505050565b600080600091505b8585905082101561050057858583818110151561047c57fe5b9050602002013573ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166108fc85858581811015156104c057fe5b905060200201359081150290604051600060405180830381858888f193505050501580156104f2573d6000803e3d6000fd5b508180600101925050610463565b3073ffffffffffffffffffffffffffffffffffffffff163190507f62fc23e1a4f26c28915ff145677656db45ca0d9fb080cf725b113f72be5d914f3387879050833403604051808473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001838152602001828152602001935050505060405180910390a160008111156105e3573373ffffffffffffffffffffffffffffffffffffffff166108fc829081150290604051600060405180830381858888f193505050501580156105e1573d6000803e3d6000fd5b505b5050505050505600a165627a7a72305820984317986d994da9d1be6ab732e9d5178bc4a627d854e51a5c64558b297cc15c0029",
-  "devdoc": {
-    "methods": {}
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "recipients",
+        "type": "address[]"
+      },
+      {
+        "name": "values",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "disperseEther",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
   },
-  "userdoc": {
-    "methods": {}
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "count",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "EtherDispersed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "count",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "ERC20Dispersed",
+    "type": "event"
   }
-}
+]
