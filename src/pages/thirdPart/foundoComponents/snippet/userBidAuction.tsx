@@ -35,10 +35,12 @@ import BigNumber from 'bignumber.js'
 import RewardPanel from './rewardPanel'
 import { RowLabel } from './creatorBidAuction'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { G_FOUNDO_ID } from 'pages/thirdPart/foundoBidDetail'
 
 interface DataViewParam {
   priceFloor: number | string
   increase: string
+  isFoundo?: boolean
 }
 const WhiteText = styled(Typography)(({ theme }) => ({
   width: 'auto',
@@ -64,8 +66,8 @@ const CounterText = styled(Typography)(({ theme }) => ({
 }))
 
 export function DataView(props: DataViewParam) {
-  const { increase } = props
-  const priceFloor = '5 ETH'
+  const { increase, isFoundo, priceFloor: _priceFloor } = props
+  const priceFloor = isFoundo ? '5 ETH' : _priceFloor
   const isSm = useBreakpoint('sm')
   return (
     <Stack
@@ -245,6 +247,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
         )}
       </Box>
       <DataView
+        isFoundo={poolInfo.id === G_FOUNDO_ID}
         priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${poolInfo?.currencyAmountMin1?.currency.symbol}`}
         increase={`${poolInfo?.amountMinIncrRatio1?.toSignificant()}`}
       />
@@ -293,18 +296,10 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
                 alt=""
                 srcSet=""
               />
-              {!poolInfo?.currentBidderAmount1 ? (
-                '--'
-              ) : poolInfo?.currentBidderAmount1?.greaterThan('0') ? (
-                <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
-                  {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
-                  {poolInfo?.currentBidderAmount1?.currency.symbol}
-                </Typography>
-              ) : (
-                <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
-                  23.952 ETH
-                </Typography>
-              )}
+              <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
+                {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
+                {poolInfo?.currentBidderAmount1?.currency.symbol}
+              </Typography>
             </RowLabel>
           </RowLabel>
           {poolInfo.currentBidderAmount1?.greaterThan('0') && (
@@ -752,11 +747,11 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
 
-  const { run: bidderClaim, submitted } = useBidderClaimEnglishAuctionNFT(
-    poolInfo.poolId,
-    poolInfo.name,
-    poolInfo.contract
-  )
+  const {
+    run: bidderClaim,
+    submitted,
+    isClaimed
+  } = useBidderClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
 
   const toBidderClaim = useCallback(async () => {
     showRequestConfirmDialog({ dark: true })
@@ -798,6 +793,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       })
     }
   }, [bidderClaim, poolInfo.name, poolInfo.token0.symbol])
+  const isFoundo = useMemo(() => poolInfo.id === 18406, [poolInfo.id])
 
   if (!account) {
     return <PlaceBidBtn onClick={toggleWallet}>Connect Wallet</PlaceBidBtn>
@@ -812,7 +808,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         isWinner={true}
         isClose={true}
         winnerImg={WinTips}
-        leftText="Congratulations! You win the auction and get rewarded"
+        leftText="Congratulations! You win the auction."
         tokenImg={poolInfo.token1.smallUrl || ''}
         tokenText={`${poolInfo.distributeRewards.lastBidderRewards?.toSignificant()} ${poolInfo.token1.symbol}`}
       />
@@ -828,8 +824,12 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       >
         <BidIconSvg />
         {/* Check Logistics Information */}
-        {/* {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'} */}
-        Edit info && Send address
+        {!isFoundo
+          ? poolInfo.participant.claimed || isClaimed
+            ? 'Claimed & Edit info'
+            : 'Claim NFT & Send address'
+          : 'Edit info && Send address'}
+        {/* Edit info && Send address */}
       </PlaceBidBtn>
       <Typography
         sx={{
@@ -840,15 +840,17 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           fontSize: '13px'
         }}
       >
-        {/* {poolInfo.participant.claimed || isClaimed
-          ? 'We will contact you in the near future'
-          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`} */}
-        Please submit personal information，We will contact you in the near future.
+        {!isFoundo
+          ? poolInfo.participant.claimed || isClaimed
+            ? 'We will contact you in the near future'
+            : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()} `
+          : ''}
+        <Typography mt={10}>Please submit personal information，We will contact you in the near future.</Typography>
       </Typography>
 
       {openShippingDialog && (
         <ShippingDialog
-          // submitCallback={isClaimed ? undefined : toBidderClaim}
+          submitCallback={!isFoundo ? (isClaimed ? undefined : toBidderClaim) : undefined}
           handleClose={() => setOpenShippingDialog(false)}
         />
       )}
@@ -981,12 +983,12 @@ function BidResultAlert({
             srcSet=""
           />
         )}
-        {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
+        {/* {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>} */}
         {isWinner && <WhiteText>{leftText}</WhiteText>}
       </Box>
-      <Typography color={'#D7D6D9'} fontSize={isSm ? 16 : 20} pt={20} mb={25}>
+      {/* <Typography color={'#D7D6D9'} fontSize={isSm ? 16 : 20} pt={20} mb={25}>
         Commemorative NFT
-      </Typography>
+      </Typography> */}
     </Box>
   )
 }

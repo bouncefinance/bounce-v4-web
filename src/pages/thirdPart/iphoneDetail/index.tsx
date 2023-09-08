@@ -1,29 +1,20 @@
 import { Box, Stack, Tab, Tabs, Typography, styled } from '@mui/material'
-import Header from './foundoComponents/section/headerSection'
-import PcBanner from './foundoComponents/section/pcBannerSection'
-import BidSection from './foundoComponents/section/bidSection'
-import { RowLabel } from './foundoComponents/snippet/creatorBidAuction'
-import Icon1 from 'assets/imgs/thirdPart/foundoDetail/icon1.svg'
-import Icon2 from 'assets/imgs/thirdPart/foundoDetail/icon2.svg'
-import Icon3 from 'assets/imgs/thirdPart/foundoDetail/icon3.svg'
-import Icon4 from 'assets/imgs/thirdPart/foundoDetail/icon4.svg'
-import Icon5 from 'assets/imgs/thirdPart/foundoDetail/icon5.svg'
-// import FoundoLogo from 'assets/imgs/thirdPart/foundoDetail/foundoLogo.png'
-import FoundoLogo from 'assets/imgs/thirdPart/foundoDetail/FOUNDO.png'
+import Header from '../foundoComponents/section/headerSection'
+import PcBanner from '../foundoComponents/section/pcBannerSection'
+import BidSection from './bidSection'
+import { RowLabel } from '../foundoComponents/snippet/creatorBidAuction'
 import ShareIcon from 'assets/imgs/thirdPart/foundoDetail/share.png'
-// import WinnerList from './foundoComponents/section/winnerSection'
 import { ChainListMap } from 'constants/chain'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { getEtherscanLink } from 'utils'
 import { useIsSMDown } from 'themes/useTheme'
 import { useCallback, useState } from 'react'
-import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
+import CenterSeciont from '../../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
-// import ActionHistory from './foundoComponents/snippet/auctionHistory'
-// import { useParams } from 'react-router-dom'
+import ActionHistory from '../foundoComponents/snippet/auctionHistory'
 import Footer from 'bounceComponents/common/Footer'
-import Image from 'components/Image'
-import authenticationDefalut from 'assets/imgs/thirdPart/foundoDetail/authentication-defalut.png'
+import Banner2 from 'assets/imgs/thirdPart/iphoneDetail/banner2.jpeg'
+import Banner3 from 'assets/imgs/thirdPart/iphoneDetail/banner3.jpeg'
 const NewTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: '1px solid rgba(255, 255, 255, 0.4)',
   '.MuiTabs-scroller': {
@@ -61,8 +52,9 @@ const NewTabs = styled(Tabs)(({ theme }) => ({
   }
 }))
 
-export const G_FOUNDO_ID = 18406
+const G_IPHONE_ID = 20689
 
+const bannerList = [Banner2, Banner3, Banner2, Banner3]
 const FoundoBidDetail = () => {
   const isSm = useIsSMDown()
   const [tabIndex, setTabIndex] = useState(0)
@@ -70,52 +62,22 @@ const FoundoBidDetail = () => {
     setTabIndex(newValue)
   }, [])
   const tabList = [
-    // {
-    //   label: 'Auction History'
-    // },
+    {
+      label: 'Auction History'
+    },
     {
       label: 'Product Description'
     },
     {
-      label: 'Authentication'
-    },
-    {
-      label: 'About Foundo'
+      label: 'About Bounce Finance'
     },
     {
       label: 'Token Detail'
     }
   ]
-  const detailConfig = [
-    {
-      img: Icon1,
-      label: 'Gemstone',
-      value: 'Diamonds'
-    },
-    {
-      img: Icon2,
-      label: 'Diamonds (Carats) ',
-      value: '19.21'
-    },
-    {
-      img: Icon3,
-      label: 'Material',
-      value: '18k White gold'
-    },
-    {
-      img: Icon4,
-      label: 'Made In',
-      value: 'Italy'
-    },
-    {
-      img: Icon5,
-      label: 'Necklace length',
-      value: '50 cm'
-    }
-  ]
 
-  // const { '*': sysId } = useParams()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(G_FOUNDO_ID)
+  const { data: poolInfo } = useMutantEnglishAuctionPool(G_IPHONE_ID)
+  console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
   if (!poolInfo) return <></>
   return (
     <Box
@@ -127,7 +89,7 @@ const FoundoBidDetail = () => {
       }}
     >
       <Header poolInfo={poolInfo} />
-      <PcBanner />
+      <PcBanner bannerList={bannerList} />
       <BidSection poolInfo={poolInfo} />
       <NewTabs value={tabIndex} onChange={handleChange}>
         {tabList.map((item: any) => (
@@ -151,8 +113,8 @@ const FoundoBidDetail = () => {
         ))}
       </NewTabs>
       <CenterSeciont>
-        {/* {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />} */}
-        {tabIndex === 0 && (
+        {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />}
+        {tabIndex === 1 && (
           <Stack
             direction={'row'}
             sx={{
@@ -179,53 +141,22 @@ const FoundoBidDetail = () => {
                   fontSize: 16,
                   color: 'var(--ps-text-2)'
                 }}
-              >{`Blossoming between the marvellous monuments of the Eternal City, Fiorever draws inspiration from the alluring four-petal flower that was cherished by the Romans as a symbol of happiness and joy. A blend of two meaningful words: Fiore - Italian for flower, and forever. Fiorever celebrates the Roman love for life with a free-spirited and passionate design. Designed to sparkle with an eternal glow, the precious floral icon is crafted with a corolla of the highest quality diamonds. Fiorever necklace in 18 kt white gold, set with round brilliant-cut diamonds and pavé diamonds.`}</Typography>
-              <RowLabel style={{ height: '64px', borderBottom: `1px solid #343434` }}>
-                <Typography
-                  className="label"
-                  style={{
-                    color: '#D7D6D9',
-                    fontSize: isSm ? '13px' : '14px'
-                  }}
-                >
-                  Details
-                </Typography>
-                <Typography className="value">Ref: LG578319461</Typography>
-              </RowLabel>
-              {detailConfig.map((item, index) => {
-                return (
-                  <RowLabel key={index} style={{ height: '48px', borderBottom: `1px solid #343434` }}>
-                    <Typography className="label">
-                      <img
-                        src={item.img}
-                        style={{
-                          width: isSm ? '16px' : '20px',
-                          height: isSm ? '16px' : '20px',
-                          marginRight: '8px',
-                          verticalAlign: 'middle',
-                          marginTop: '-5px'
-                        }}
-                        alt=""
-                        srcSet=""
-                      />
-                      {item.label}
-                    </Typography>
-                    <Typography className="value">{item.value}</Typography>
-                  </RowLabel>
-                )
-              })}
+              >{`
+              The iPhone 15, Apple's latest iteration, is on the horizon. Stay tuned for the official details, which are rumored to be revealed during Apple's special event on September 12th. The product is expected for an official release on September 22nd.
+              `}</Typography>
+              <Typography
+                mt={15}
+                sx={{
+                  fontFamily: `'Inter'`,
+                  fontWeight: 400,
+                  fontSize: 16,
+                  color: 'var(--ps-text-2)'
+                }}
+              >{`
+              Additionally, please note that upon the iPhone 15's official release, Bounce Finance will acquire one unit and promptly deliver it to the lucky winner of this auction.
+              `}</Typography>
             </Box>
           </Stack>
-        )}
-        {tabIndex === 1 && (
-          <Box sx={{ width: '100%', paddingTop: isSm ? 0 : 120 }}>
-            <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
-              Authentication
-            </Typography>
-            <Box sx={{ width: '100%', maxWidth: 1296, margin: '0 auto ', marginTop: isSm ? 56 : 64 }}>
-              <Image width={'100%'} height={'100%'} src={authenticationDefalut} />
-            </Box>
-          </Box>
         )}
         {tabIndex === 2 && (
           <Stack
@@ -238,7 +169,7 @@ const FoundoBidDetail = () => {
             }}
           >
             <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
-              About Foundo
+              About Bounce Finance
             </Typography>
             <Box
               sx={{
@@ -252,25 +183,11 @@ const FoundoBidDetail = () => {
                   fontFamily: `'Inter'`,
                   fontWeight: 400,
                   fontSize: isSm ? 14 : 16,
-                  color: 'var(--ps-text-2)'
+                  color: 'var(--ps-text-2)',
+                  lineHeight: '1.5'
                 }}
                 mb={'40px'}
-              >{`FOUNDO® is a new luxury brand that uses the latest in blockchain technology, superior materials and world-class craftsmanship to provide customer-centric products and experiences. It has an extensive line of collections ranging from fine jewelry, home goods, bags, accessorized installations, artwork to NFTs - seeking to unite the virtual-reality world with inter-human verse.`}</Typography>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: isSm ? 'flex-start' : 'flex-end'
-                }}
-              >
-                <img
-                  src={FoundoLogo}
-                  style={{
-                    width: isSm ? '90px' : '160px',
-                    height: isSm ? '90px' : '160px'
-                  }}
-                  alt=""
-                />
-              </Box>
+              >{`Bounce Finance is a decentralized platform dedicated to meeting the evolving needs of the Web3 space. Established in 2020, Bounce Finance is proudly known for outstanding user experience and seamless integration of blockchain technology in trading both digital and tangible assets. We provide a decentralized auction protocol that empowers users to create and participate in diverse types of auctions on multiple blockchain networks. With a focus on Auction as a Service, Bounce Finance offers a wide range of products, including Token & NFT Auctions, Real-World Collectible Auctions, Ad Space Auction, and SDKs & Plug-Ins. Bounce Finance also provides Private Launchpad services, an on-chain solution designed to streamline IDOs for new projects.`}</Typography>
             </Box>
           </Stack>
         )}
@@ -438,16 +355,6 @@ const FoundoBidDetail = () => {
             </Box>
           </Stack>
         )}
-        {/* {tabIndex === 4 && (
-          <Box
-            sx={{
-              width: isSm ? '100%' : '763px',
-              padding: '70px 0'
-            }}
-          >
-            {poolInfo && <WinnerList poolInfo={poolInfo} />}
-          </Box>
-        )} */}
       </CenterSeciont>
       <Box sx={{ mt: { xs: 80, sm: 120 } }}>
         <Footer />

@@ -23,6 +23,7 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { MutantEnglishAuctionNFTPoolProp } from 'api/pool/type'
 import { PageStep } from '../nfcDetail'
+import { G_FOUNDO_ID } from '../foundoBidDetail'
 enum AnimateStep {
   'default' = 0,
   'lineDown' = 1,
@@ -556,7 +557,7 @@ const NfcDetail = ({ pageStep }: { pageStep: PageStep }) => {
   const isMd = useIsMDDown()
   const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.default)
   const [onceTime, setOnceTime] = useState<boolean>(false)
-  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(18406)
+  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(G_FOUNDO_ID)
   useEffect(() => {
     if (onceTime) return
     if (loading || pageStep !== PageStep.claimPage) return

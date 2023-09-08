@@ -89,7 +89,7 @@ import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import LaunchpadDetail from './launchpad/detail'
 import Party from './launchpad/detail/party'
 import ZataShop from './realWorldAuction/shop/zeta'
-
+import IphoneDetail from './thirdPart/iphoneDetail'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -218,6 +218,7 @@ export default function App() {
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
+                  <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

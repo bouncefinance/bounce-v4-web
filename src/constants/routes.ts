@@ -100,7 +100,8 @@ export const routes = {
     CreateLaunchpad: '/launchpad/create',
     MetaBloxAuction: '/launchpad/metablox',
     SolaceAuction: '/launchpad/solace',
-    CreateProtocolAuction: '/launchpad/create_protocol'
+    CreateProtocolAuction: '/launchpad/create_protocol',
+    IphoneAuctionDetail: '/rwa/iphone15'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
