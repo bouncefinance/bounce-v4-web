@@ -802,7 +802,7 @@ const LaunchpadCard = ({
         console.log(res)
         setShowCreateDia(true)
       })
-      .catch(err => {
+      .catch(() => {
         toast.error('There is still some content that has not been filled out!')
         setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
       })
