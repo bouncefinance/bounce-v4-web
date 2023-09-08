@@ -3,6 +3,7 @@ import { defaultPoolVersionRoute } from '../../constants'
 import { routes } from 'constants/routes'
 import store from 'state'
 import { getLabelById } from 'utils'
+import { G_FOUNDO_ID } from 'pages/thirdPart/foundoBidDetail'
 
 export default function getAuctionPoolLink(
   sysId: number | string | undefined,
@@ -26,6 +27,9 @@ export default function getAuctionPoolLink(
         : routes.auction.fixedPrice
 
     if (category === PoolType.MUTANT_ENGLISH_AUCTION_NFT) {
+      if (Number(poolId) > 2) {
+        return routes.thirdPart.IphoneAuctionDetail
+      }
       return routes.foundo.foundoDetail
     }
     return route
@@ -45,6 +49,9 @@ export default function getAuctionPoolLink(
       ? routes.auction.v2.erc20EnglishAuction
       : routes.auction.v2.fixedPrice
   if (category === PoolType.MUTANT_ENGLISH_AUCTION_NFT) {
+    if (Number(sysId) > G_FOUNDO_ID) {
+      return routes.thirdPart.IphoneAuctionDetail + `/${sysId.toString()}`
+    }
     return routes.foundo.foundoDetail + `/${sysId.toString()}`
   }
   return route.replace(':sysId', sysId.toString())
