@@ -97,6 +97,9 @@ export const SmallText = styled(Typography)`
   letter-spacing: -0.02em;
   color: var(--ps-text-3);
 `
+export const SmallTextGray = styled(SmallText)`
+  color: #959595;
+`
 export const Body01 = styled(Typography)`
   color: var(--black-100, #121212);
   font-family: 'Inter';

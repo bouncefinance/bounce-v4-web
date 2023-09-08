@@ -1,4 +1,4 @@
-import { Box, MenuItem, Stack, styled, Typography } from '@mui/material'
+import { Box, MenuItem, Stack, Typography } from '@mui/material'
 import { ContainerBox, Title } from '../tokenLocker'
 import { Formik } from 'formik'
 import { useActiveWeb3React } from '../../../../hooks'
@@ -6,9 +6,8 @@ import { ChainId, ChainList } from '../../../../constants/chain'
 import { FormLayout, ToolBoxInput, ToolBoxSelect } from '../../components/tokenLockerForm'
 import FormItem from '../../../../bounceComponents/common/FormItem'
 import Image from '../../../../components/Image'
-import DropZone from '../../../../bounceComponents/common/DropZone/DropZone'
-import { SolidBtn } from '../disperse/disperse'
-import { Body03, H3Black, H4, H5, SmallText } from 'components/Text'
+import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
+import { H3Black, SmallTextGray } from 'components/Text'
 import { hideDialogConfirmation, showRequestConfirmDialog } from '../../../../utils/auction'
 import { useTokenMinter } from '../../../../hooks/useTokenMinter'
 import { useState } from 'react'
@@ -173,43 +172,53 @@ export default function TokenMinter() {
               />
               <FormLayout
                 childForm={
-                  <FormItem name={'initial_supply'}>
-                    <Box width={'100%'}>
+                  <Box width={'100%'}>
+                    <FormItem name={'initial_supply'}>
                       <ToolBoxInput
+                        type={'number'}
+                        style={{ width: '100%' }}
                         value={values.initial_supply}
                         onChange={e => setFieldValue('initial_supply', e.target.value)}
                         placeholder={'Total supply'}
                       />
-                      <SmallText>Total supply(excluding decimals e.g. 100 tokens)</SmallText>
-                    </Box>
-                  </FormItem>
+                    </FormItem>
+                    <SmallTextGray mt={8}>Total supply(excluding decimals e.g. 100 tokens)</SmallTextGray>
+                  </Box>
                 }
               />
               <FormLayout
                 childForm={
-                  <FormItem name={'decimals'}>
-                    <ToolBoxInput
-                      value={values.decimals}
-                      onChange={e => setFieldValue('decimals', e.target.value)}
-                      placeholder={'Token decimal'}
-                    />
-                  </FormItem>
+                  <Box width={'100%'}>
+                    <FormItem name={'decimals'}>
+                      <ToolBoxInput
+                        type={'number'}
+                        value={values.decimals}
+                        onChange={e => setFieldValue('decimals', e.target.value)}
+                        placeholder={'Token decimal'}
+                      />
+                    </FormItem>
+                    <SmallTextGray mt={8}>18 reconmended</SmallTextGray>
+                    <BoxSpaceBetween>
+                      <SmallTextGray mt={8}>Total supply (including decimals - raw amount)</SmallTextGray>
+                      <SmallTextGray mt={8}>10000000000000000000000</SmallTextGray>
+                    </BoxSpaceBetween>
+                  </Box>
                 }
               />
-              <FormLayout
-                childForm={
-                  <FormItem name={'Token Image'}>
-                    <Box>
-                      <H5 sx={{ marginBottom: 10 }}>Token image</H5>
-                      <DropZone getFile={file => {}} />
-                      <FeeBox>
-                        <H4>Fee 0</H4>
-                        <Body03>+ 0.3% total supply</Body03>
-                      </FeeBox>
-                    </Box>
-                  </FormItem>
-                }
-              />
+              {/*<FormLayout*/}
+              {/*  childForm={*/}
+              {/*    <FormItem name={'Token Image'}>*/}
+              {/*      <Box>*/}
+              {/*        <H5 sx={{ marginBottom: 10 }}>Token image</H5>*/}
+              {/*        <DropZone getFile={file => {}} />*/}
+              {/*        <FeeBox>*/}
+              {/*          <H4>Fee 0</H4>*/}
+              {/*          <Body03>+ 0.3% total supply</Body03>*/}
+              {/*        </FeeBox>*/}
+              {/*      </Box>*/}
+              {/*    </FormItem>*/}
+              {/*  }*/}
+              {/*/>*/}
               <FormLayout
                 childForm={
                   <FormItem name={'Mint Button'}>
@@ -233,13 +242,13 @@ export default function TokenMinter() {
   )
 }
 
-const FeeBox = styled(Box)`
-  margin-top: 16px;
-  display: flex;
-  padding: 12px;
-  flex-direction: column;
-  align-items: center;
-  align-self: stretch;
-  border-radius: 8px;
-  background: var(--yellow-15, rgba(225, 242, 92, 0.15));
-`
+// const FeeBox = styled(Box)`
+//   margin-top: 16px;
+//   display: flex;
+//   padding: 12px;
+//   flex-direction: column;
+//   align-items: center;
+//   align-self: stretch;
+//   border-radius: 8px;
+//   background: var(--yellow-15, rgba(225, 242, 92, 0.15));
+// `
