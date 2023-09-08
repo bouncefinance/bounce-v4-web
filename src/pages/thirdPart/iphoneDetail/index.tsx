@@ -1,7 +1,7 @@
 import { Box, Stack, Tab, Tabs, Typography, styled } from '@mui/material'
 import Header from '../foundoComponents/section/headerSection'
 import PcBanner from '../foundoComponents/section/pcBannerSection'
-import BidSection from '../foundoComponents/section/bidSection'
+import BidSection from './bidSection'
 import { RowLabel } from '../foundoComponents/snippet/creatorBidAuction'
 import ShareIcon from 'assets/imgs/thirdPart/foundoDetail/share.png'
 import { ChainListMap } from 'constants/chain'

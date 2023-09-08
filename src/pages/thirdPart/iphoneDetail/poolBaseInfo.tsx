@@ -36,7 +36,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
           marginBottom: '16px'
         }}
       >
-        NFT issued by foundo
+        NFT issued by BOUNCE
       </Typography>
       <Box
         sx={{
