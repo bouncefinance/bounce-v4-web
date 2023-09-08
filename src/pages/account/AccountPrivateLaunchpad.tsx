@@ -220,7 +220,8 @@ export const SansTitle = styled(Typography)({
   fontStyle: 'normal',
   fontWeight: 500,
   lineHeight: '150%',
-  letterSpacing: -0.2
+  letterSpacing: -0.2,
+  wordBreak: 'break-all'
 })
 export const InterTitle = styled(Typography)({
   color: '#121212',

@@ -10,21 +10,23 @@ import { ChainListMap, ChainId } from 'constants/chain'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import { IAuctionTypeMap, IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
 
-import { Body02 } from 'components/Text'
+// import { Body02 } from 'components/Text'
 import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { CardSize, InterTitle, RoundedBox, SansTitle, socialMap } from 'pages/account/AccountPrivateLaunchpad'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const MoreDataBox = ({ title, content, size }: { title: string; content: string; size: CardSize }) => {
+  const isMd = useBreakpoint('md')
   return (
     <Box>
-      <InterTitle sx={{ fontSize: size === CardSize.Small ? 8 : size === CardSize.Medium ? 12 : 13 }}>
+      <InterTitle sx={{ fontSize: isMd ? 12 : size === CardSize.Small ? 8 : size === CardSize.Medium ? 12 : 13 }}>
         {title}
       </InterTitle>
       <InterTitle
         mt={4}
         sx={{
-          fontSize: size === CardSize.Small ? 10 : size === CardSize.Medium ? 14 : 16,
+          fontSize: isMd ? 14 : size === CardSize.Small ? 10 : size === CardSize.Medium ? 14 : 16,
           fontWeight: 500,
           textTransform: 'capitalize'
         }}
@@ -62,7 +64,7 @@ const LaunchpadCover = ({
     if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
     return ChainPoolStatus.Closed
   }, [openAt, closeAt])
-
+  const isMd = useBreakpoint('md')
   return (
     <Row
       onClick={onClick}
@@ -98,6 +100,10 @@ const LaunchpadCover = ({
         },
         size === CardSize.Large && {
           height: 500
+        },
+        isMd && {
+          flexDirection: 'column',
+          height: '100%'
         }
       ]}
       mt={48}
@@ -114,12 +120,15 @@ const LaunchpadCover = ({
           },
           (size === CardSize.Medium || size === CardSize.Large) && {
             width: 600
+          },
+          isMd && {
+            width: '100%'
           }
         ]}
       >
         <Image
           className="left_banner"
-          style={{ width: '100%', height: '100%', position: 'absolute', left: 0, top: 0 }}
+          style={{ width: '100%', height: isMd ? 200 : '100%' }}
           src={poolInfo.picture2 || 'http://localhost:3000/static/media/deelance.883555954fb281ea1f93.png'}
         />
         <Row sx={{ position: 'absolute', top: 0, left: 0, gap: 8, padding: 15 }}>
@@ -139,22 +148,28 @@ const LaunchpadCover = ({
       </Box>
       <Box
         sx={{
-          width: `calc(100% - ${size === CardSize.Small ? '375px' : '600px'})`,
+          width: isMd ? '100%' : `calc(100% - ${size === CardSize.Small ? '375px' : '600px'})`,
           flex: 1,
           background: '#E8E9E4',
-          padding: size === CardSize.Small ? 24 : 40,
+          padding: { xs: 16, md: size === CardSize.Small ? 24 : 40 },
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between'
         }}
       >
-        <Row sx={{ justifyContent: 'space-between' }}>
+        <Row
+          sx={{
+            justifyContent: 'space-between',
+            flexDirection: { xs: 'column-reverse', md: 'row' },
+            gap: isMd ? 12 : 0
+          }}
+        >
           <Row gap={10} sx={{ alignItems: 'center', gap: 10 }}>
             {size !== CardSize.Medium && (
               <Image
                 style={{
-                  width: size === CardSize.Large ? 60 : 37,
-                  height: size === CardSize.Large ? 60 : 37,
+                  width: isMd ? 40 : size === CardSize.Large ? 60 : 37,
+                  height: isMd ? 40 : size === CardSize.Large ? 60 : 37,
                   borderRadius: 4
                 }}
                 src={
@@ -164,12 +179,12 @@ const LaunchpadCover = ({
               />
             )}
             <Stack sx={{ justifyContent: 'start', alignItems: 'start' }}>
-              <SansTitle sx={{ fontSize: size === CardSize.Small ? 17 : 28, fontWeight: 600 }}>
+              <SansTitle sx={{ fontSize: isMd ? 20 : size === CardSize.Small ? 17 : 28, fontWeight: 600 }}>
                 {window.location.pathname === routes.launchpad.index ? basicInfo.projectName : poolInfo.name}
               </SansTitle>
-              {size === CardSize.Large && (
+              {/* {size === CardSize.Large && (
                 <Body02 sx={{ color: '#121212' }}>Hiley Golbel Coin and text and the coin</Body02>
-              )}
+              )} */}
             </Stack>
           </Row>
           {poolInfo.status === PoolStatus.On_Chain && (
@@ -184,12 +199,12 @@ const LaunchpadCover = ({
         </Row>
 
         <Stack flexDirection={'column'} justifyContent={'space-between'} sx={{ height: '100%' }}>
-          <Box sx={{ paddingLeft: 6 }} mt={18}>
+          <Box sx={{ paddingLeft: 6 }} mt={isMd ? 12 : 18}>
             <InterTitle
               sx={{
                 fontSize: 14,
                 display: '-webkit-box',
-                WebkitLineClamp: 3,
+                WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis'
@@ -229,7 +244,7 @@ const LaunchpadCover = ({
               )}
               {curChain && <MoreDataBox size={size} title="Blockchain / Platform" content={curChain.chainName} />}
             </Box>
-            {!!approvedNum && approvedNum > 1 && (
+            {!!approvedNum && approvedNum > 1 && !isMd && (
               <Stack pl={10} gap={8}>
                 <SansTitle sx={{ fontSize: 20, fontWeight: 600 }}>Auction Pool</SansTitle>
                 <SansTitle sx={{ color: '#2B51DA', fontSize: 44, fontWeight: 700 }}>{approvedNum}</SansTitle>
