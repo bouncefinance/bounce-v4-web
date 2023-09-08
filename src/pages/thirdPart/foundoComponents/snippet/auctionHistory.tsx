@@ -45,11 +45,9 @@ const StatsBoard = styled(Stack)(({ theme }) => ({
 
 const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const totalReward = useMemo(() => {
-    if (!poolInfo.distributeRatios.prevBidderRatio || !poolInfo.currencyAmountMin1?.currency) return
-    const _old = CurrencyAmount.fromAmount(poolInfo.currencyAmountMin1.currency, '10.082118')
-    if (!_old) return undefined
-    return poolInfo.extraAmount1?.multiply(poolInfo.distributeRatios.prevBidderRatio).add(_old).toFixed(6)
-  }, [poolInfo.currencyAmountMin1?.currency, poolInfo.distributeRatios.prevBidderRatio, poolInfo.extraAmount1])
+    if (!poolInfo.distributeRatios.prevBidderRatio) return
+    return poolInfo.extraAmount1?.multiply(poolInfo.distributeRatios.prevBidderRatio).toFixed(6)
+  }, [poolInfo.distributeRatios.prevBidderRatio, poolInfo.extraAmount1])
 
   const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,

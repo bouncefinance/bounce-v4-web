@@ -52,6 +52,8 @@ const NewTabs = styled(Tabs)(({ theme }) => ({
   }
 }))
 
+const G_IPHONE_ID = 20689
+
 const bannerList = [Banner2, Banner3, Banner2, Banner3]
 const FoundoBidDetail = () => {
   const isSm = useIsSMDown()
@@ -74,7 +76,7 @@ const FoundoBidDetail = () => {
     }
   ]
 
-  const { data: poolInfo } = useMutantEnglishAuctionPool(20684)
+  const { data: poolInfo } = useMutantEnglishAuctionPool(G_IPHONE_ID)
   console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
   if (!poolInfo) return <></>
   return (
@@ -140,7 +142,7 @@ const FoundoBidDetail = () => {
                   color: 'var(--ps-text-2)'
                 }}
               >{`
-              The iPhone 15, Apple's latest iteration, is on the horizon. Stay tuned for the official details, which are rumored to be revealed during Apple's special event on September 12th. The product is expected for an official release on September 22nd. 
+              The iPhone 15, Apple's latest iteration, is on the horizon. Stay tuned for the official details, which are rumored to be revealed during Apple's special event on September 12th. The product is expected for an official release on September 22nd.
               `}</Typography>
               <Typography
                 mt={15}

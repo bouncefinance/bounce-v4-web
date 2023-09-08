@@ -61,6 +61,8 @@ const NewTabs = styled(Tabs)(({ theme }) => ({
   }
 }))
 
+export const G_FOUNDO_ID = 18406
+
 const FoundoBidDetail = () => {
   const isSm = useIsSMDown()
   const [tabIndex, setTabIndex] = useState(0)
@@ -113,7 +115,7 @@ const FoundoBidDetail = () => {
   ]
 
   // const { '*': sysId } = useParams()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(18406)
+  const { data: poolInfo } = useMutantEnglishAuctionPool(G_FOUNDO_ID)
   if (!poolInfo) return <></>
   return (
     <Box
