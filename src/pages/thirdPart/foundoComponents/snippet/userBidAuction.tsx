@@ -64,7 +64,8 @@ const CounterText = styled(Typography)(({ theme }) => ({
 }))
 
 export function DataView(props: DataViewParam) {
-  const { priceFloor, increase } = props
+  const { increase } = props
+  const priceFloor = '5 ETH'
   const isSm = useBreakpoint('sm')
   return (
     <Stack
@@ -292,10 +293,18 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
                 alt=""
                 srcSet=""
               />
-              <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
-                {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
-                {poolInfo?.currentBidderAmount1?.currency.symbol}
-              </Typography>
+              {!poolInfo?.currentBidderAmount1 ? (
+                '--'
+              ) : poolInfo?.currentBidderAmount1?.greaterThan('0') ? (
+                <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
+                  {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
+                  {poolInfo?.currentBidderAmount1?.currency.symbol}
+                </Typography>
+              ) : (
+                <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
+                  23.952 ETH
+                </Typography>
+              )}
             </RowLabel>
           </RowLabel>
           {poolInfo.currentBidderAmount1?.greaterThan('0') && (
@@ -669,7 +678,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
                 </PoolInfoItem>
               </Stack>
             )}
-            {isInsufficientBalance?.children}
+            {/* {isInsufficientBalance?.children} */}
           </Box>
         </Box>
       ) : null}

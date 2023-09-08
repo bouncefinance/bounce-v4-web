@@ -112,8 +112,8 @@ export const routes = {
   foundo: {
     home: '/foundo/home/index',
     detail: '/foundo/detail/index',
-    foundoDetail: '/foundo/detail',
-    foundoNfcDetail: '/foundo/nfc_detail'
+    foundoDetail: '/rwa/detail',
+    foundoNfcDetail: '/rwa/nfc_detail'
   },
   tokenToolBox: {
     index: '/TokenToolBox'
