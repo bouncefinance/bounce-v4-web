@@ -8,26 +8,74 @@ import FormItem from '../../../../bounceComponents/common/FormItem'
 import Image from '../../../../components/Image'
 import DropZone from '../../../../bounceComponents/common/DropZone/DropZone'
 import { SolidBtn } from '../disperse/disperse'
-import { Body03, H3Black, H4, H5 } from 'components/Text'
+import { Body03, H3Black, H4, H5, SmallText } from 'components/Text'
+import { hideDialogConfirmation, showRequestConfirmDialog } from '../../../../utils/auction'
+import { useTokenMinter } from '../../../../hooks/useTokenMinter'
+import { useState } from 'react'
+import { isAddress } from '@ethersproject/address'
 
 interface IMinter {
   chainId: number
-  type: string
-  recipients: string
+  title: string
+  name: string
+  symbol: string
+  decimals: string
+  initial_supply: string
 }
 
 export default function TokenMinter() {
   const { chainId } = useActiveWeb3React()
+  const [currentChain, setCurrentChain] = useState(chainId)
+  const tokenMinter = useTokenMinter(currentChain as ChainId)
   const minter: IMinter = {
-    chainId: chainId || ChainId.MAINNET,
-    type: 'chain',
-    recipients: ''
+    chainId: chainId || ChainId.SEPOLIA,
+    title: '',
+    name: '',
+    symbol: '',
+    decimals: '',
+    initial_supply: ''
+  }
+
+  const onSubmit = (value: IMinter) => {
+    showRequestConfirmDialog()
+    console.log('Mintervalue', value)
+    try {
+      tokenMinter(
+        value.title,
+        value.name,
+        value.symbol,
+        value.decimals ? value.decimals : '18',
+        value.initial_supply
+      ).then(resp => {
+        console.log('Minter', resp)
+        hideDialogConfirmation()
+      })
+    } catch (e) {
+      console.log('Minter', e)
+      hideDialogConfirmation()
+    }
   }
   return (
     <Box>
       <ContainerBox>
-        <Formik initialValues={minter} onSubmit={() => {}}>
-          {({ values, errors, setFieldValue, handleSubmit }) => (
+        <Formik
+          initialValues={minter}
+          onSubmit={onSubmit}
+          validate={values => {
+            const errors: any = {}
+            if (!values.name) {
+              errors.name = 'Name must have at least 1 character'
+            }
+            if (!values.symbol) {
+              errors.symbol = 'Token symbol must have at least 1 character'
+            }
+            if (!values.initial_supply) {
+              errors.initial_supply = 'Token supply must have at least 1 token'
+            }
+            return errors
+          }}
+        >
+          {({ values, errors, touched, setFieldValue, handleSubmit }) => (
             <Box
               component={'form'}
               sx={{
@@ -38,98 +86,121 @@ export default function TokenMinter() {
               onSubmit={handleSubmit}
             >
               <H3Black>Token Minter</H3Black>
-              {values.type == 'chain' && (
-                <FormLayout
-                  childForm={
-                    <FormItem>
-                      <ToolBoxSelect
-                        variant="outlined"
-                        value={values.chainId}
-                        onChange={({ target }) => {
-                          setFieldValue('chainId', target.value)
-                        }}
-                        placeholder={'Select chain'}
-                        renderValue={selected => {
-                          const currentChain = ChainList.find(item => item.id === selected)
-                          return (
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                gap: 16,
-                                alignItems: 'center'
-                              }}
-                            >
-                              {selected ? (
-                                <>
-                                  <Image style={{ width: 32, height: 32 }} src={currentChain?.logo as string} />
-                                  <Stack>
-                                    <Typography
-                                      component={'span'}
-                                      sx={{
-                                        color: '#959595',
-                                        fontFamily: `'Inter'`,
-                                        fontSize: 12
-                                      }}
-                                    >
-                                      Select Chain
-                                    </Typography>
-                                    <Title sx={{ fontSize: 14, color: '#121212' }}>{currentChain?.name}</Title>
-                                  </Stack>
-                                </>
-                              ) : (
-                                <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>Select Chain</Title>
-                              )}
-                            </Box>
-                          )
-                        }}
-                      >
-                        {ChainList.map(t => (
-                          <MenuItem
-                            key={t.id}
-                            value={t.id}
+              <FormLayout
+                childForm={
+                  <FormItem>
+                    <ToolBoxSelect
+                      variant="outlined"
+                      value={values.chainId}
+                      onChange={({ target }) => {
+                        setFieldValue('chainId', target.value)
+                        setCurrentChain(target.value as ChainId)
+                      }}
+                      placeholder={'Select chain'}
+                      renderValue={selected => {
+                        const currentChain = ChainList.find(item => item.id === selected)
+                        return (
+                          <Box
                             sx={{
-                              '&.Mui-selected': {
-                                background: values.chainId === t.id ? '#E1F25C' : ''
-                              }
+                              display: 'flex',
+                              flexDirection: 'row',
+                              gap: 16,
+                              alignItems: 'center'
                             }}
                           >
-                            <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-                              <Image style={{ width: 25, height: 25 }} src={t.logo} />
-                              <Title sx={{ fontSize: 16 }}>{t.name}</Title>
-                            </Stack>
-                          </MenuItem>
-                        ))}
-                      </ToolBoxSelect>
-                    </FormItem>
-                  }
-                />
-              )}
-              <FormLayout
-                childForm={
-                  <FormItem name={'Token name'}>
-                    <ToolBoxInput placeholder={'Token name'} />
+                            {selected ? (
+                              <>
+                                <Image style={{ width: 32, height: 32 }} src={currentChain?.logo as string} />
+                                <Stack>
+                                  <Typography
+                                    component={'span'}
+                                    sx={{
+                                      color: '#959595',
+                                      fontFamily: `'Inter'`,
+                                      fontSize: 12
+                                    }}
+                                  >
+                                    Select Chain
+                                  </Typography>
+                                  <Title sx={{ fontSize: 14, color: '#121212' }}>{currentChain?.name}</Title>
+                                </Stack>
+                              </>
+                            ) : (
+                              <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>Select Chain</Title>
+                            )}
+                          </Box>
+                        )
+                      }}
+                    >
+                      {ChainList.filter(item => item.id === ChainId.SEPOLIA).map(t => (
+                        <MenuItem
+                          key={t.id}
+                          value={t.id}
+                          sx={{
+                            '&.Mui-selected': {
+                              background: values.chainId === t.id ? '#E1F25C' : ''
+                            }
+                          }}
+                        >
+                          <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                            <Image style={{ width: 25, height: 25 }} src={t.logo} />
+                            <Title sx={{ fontSize: 16 }}>{t.name}</Title>
+                          </Stack>
+                        </MenuItem>
+                      ))}
+                    </ToolBoxSelect>
                   </FormItem>
                 }
               />
               <FormLayout
                 childForm={
-                  <FormItem name={'Token symbol'}>
-                    <ToolBoxInput placeholder={'Token symbol'} />
+                  <FormItem name={'name'}>
+                    <ToolBoxInput
+                      value={values.name}
+                      onChange={e => {
+                        console.log('Minter-e', e)
+                        if (isAddress(e.target.value)) {
+                          setFieldValue('name', e.target.value)
+                        }
+                      }}
+                      placeholder={'Token name'}
+                    />
                   </FormItem>
                 }
               />
               <FormLayout
                 childForm={
-                  <FormItem name={'Total supply'}>
-                    <ToolBoxInput placeholder={'Total supply'} />
+                  <FormItem name={'symbol'}>
+                    <ToolBoxInput
+                      value={values.symbol}
+                      onChange={e => setFieldValue('symbol', e.target.value)}
+                      placeholder={'Token symbol'}
+                    />
                   </FormItem>
                 }
               />
               <FormLayout
                 childForm={
-                  <FormItem name={'Token decimal'}>
-                    <ToolBoxInput placeholder={'Token decimal'} />
+                  <FormItem name={'initial_supply'}>
+                    <Box width={'100%'}>
+                      <ToolBoxInput
+                        value={values.initial_supply}
+                        onChange={e => setFieldValue('initial_supply', e.target.value)}
+                        placeholder={'Total supply'}
+                      />
+                      <SmallText>Total supply(excluding decimals e.g. 100 tokens)</SmallText>
+                    </Box>
+                  </FormItem>
+                }
+              />
+              <FormLayout
+                childForm={
+                  <FormItem name={'decimals'}>
+                    <ToolBoxInput
+                      value={values.decimals}
+                      onChange={e => setFieldValue('decimals', e.target.value)}
+                      placeholder={'Token decimal'}
+                    />
                   </FormItem>
                 }
               />
@@ -151,6 +222,8 @@ export default function TokenMinter() {
                 childForm={
                   <FormItem name={'Mint Button'}>
                     <SolidBtn
+                      type={'submit'}
+                      className={errors.name || errors.symbol || errors.initial_supply ? '' : 'active'}
                       style={{
                         width: '100%'
                       }}

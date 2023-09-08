@@ -7,11 +7,9 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { calculateGasMargin } from '../utils'
 
 export function useDisperseEther(chain: ChainId) {
-  const { library, account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const disperseContract = useDisperseContract(chain || chainId)
   const addTransaction = useTransactionAdder()
-  const signer = library ? disperseContract?.connect(library.getSigner()) : undefined
-  console.log(signer)
   return useCallback(
     async (currency: string, recipients: string[], values: string[]): Promise<any> => {
       if (!account) {

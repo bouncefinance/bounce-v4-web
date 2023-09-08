@@ -21,6 +21,7 @@ import MUTANT_ENGLISH_AUCTION_NFT_ABI from '../constants/abis/mutantEnglishAucti
 import ENGLISH_AUCTION_ERC20_ABI from '../constants/abis/erc20EnglishAuction.json'
 import DUTCH_AUCTION_NFT_ABI from '../constants/abis/dutchAuction.json'
 import DISPERSE_ABI from '../constants/abis/Disperse.json'
+import TOKEN_MINTER_ABI from '../constants/abis/ToolboxERC20Factory.json'
 
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
@@ -30,7 +31,8 @@ import {
   FIXED_SWAP_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_CONTRACT_ADDRESSES,
   MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
-  DISPERSE_CONTRACT_ADDRESSES
+  DISPERSE_CONTRACT_ADDRESSES,
+  MINTER_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -222,4 +224,11 @@ export function useDisperseContract(queryChainId: ChainId) {
   const cur = queryChainId || chainId
   const curAddress = cur ? DISPERSE_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, DISPERSE_ABI, true, queryChainId)
+}
+
+export function useMinterContract(queryChainId: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? MINTER_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, TOKEN_MINTER_ABI, true, queryChainId)
 }
