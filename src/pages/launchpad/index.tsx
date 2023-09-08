@@ -15,6 +15,7 @@ import {
 } from '../../bounceComponents/launchpad/LaunchCard'
 import FooterPc from '../../components/Footer/FooterPc'
 import { PrivatePadDataList } from './PrivatePadDataList'
+import LaunchpadList from './launchapadList'
 
 export const Launchpad: React.FC = () => {
   return (
@@ -82,6 +83,7 @@ const PrivatePad: React.FC = () => {
       <LaunchCardLive />
       <LaunchCardUpcoming /> */}
       <Stack spacing={40}>
+        <LaunchpadList />
         {PrivatePadDataList.filter(v => v.hidden !== true).map(item => (
           <LaunchCardSocial key={item.keyId} data={item} />
         ))}

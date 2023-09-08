@@ -63,6 +63,15 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
       >
         Create an auction
       </MenuItem>
+      <MenuItem
+        onClick={() => {
+          navigate(`${routes.thirdPart.CreateLaunchpad}`)
+          setAnchorEl(null)
+          onDismiss && onDismiss()
+        }}
+      >
+        Create an Launchpad
+      </MenuItem>
       {/* <MenuItem
         onClick={() => {
           navigate(routes.idea.create)

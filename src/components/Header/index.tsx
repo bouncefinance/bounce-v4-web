@@ -137,6 +137,8 @@ const transparentRoutes = [
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange,
+  routes.launchpad.account.launchpadParty,
+  routes.launchpad.account.launchpadDetail,
   routes.foundo.foundoDetail + '/*'
 ]
 
@@ -153,6 +155,8 @@ export const whiteLogoRoutes = [
   routes.thirdPart.LasMetaAuction,
   routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange,
+  routes.launchpad.account.launchpadParty,
+  routes.launchpad.account.launchpadDetail,
   routes.foundo.foundoDetail + '/*'
 ]
 

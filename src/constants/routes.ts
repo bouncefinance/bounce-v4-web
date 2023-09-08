@@ -39,7 +39,11 @@ export const routes = {
   launchpad: {
     index: '/launchpad',
     bladeDao: '/launchpad/bladedao',
-    bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId'
+    bladeDaoInfo: '/launchpad/bladedao/:chainShortName/:poolId',
+    account: {
+      launchpadDetail: '/account/launchpad/:id',
+      launchpadParty: '/launchpad/party/:id'
+    }
   },
   realAuction: {
     index: '/real-auction',
@@ -93,7 +97,10 @@ export const routes = {
     DeelanceAuctionWhitelist: '/launchpad/deelance/whitelist',
     LasMetaAuction: '/launchpad/lasmeta',
     DipExchange: '/launchpad/dip_exchange',
-    MetaBloxAuction: '/launchpad/metablox'
+    CreateLaunchpad: '/launchpad/create',
+    MetaBloxAuction: '/launchpad/metablox',
+    SolaceAuction: '/launchpad/solace',
+    CreateProtocolAuction: '/launchpad/create_protocol'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

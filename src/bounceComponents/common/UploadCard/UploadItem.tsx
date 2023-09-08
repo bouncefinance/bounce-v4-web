@@ -14,6 +14,7 @@ export type IUploadItemProps = {
   sx?: any
   tips?: string
   inputId?: string
+  getLoading?: (loading: boolean) => void
 }
 
 export const StyledAvatarInputIdLabel = styled('label')({
@@ -34,9 +35,18 @@ export const StyledAvatarInputIdLabel = styled('label')({
   }
 })
 
-const UploadItem: React.FC<IUploadItemProps> = ({ inputId, value, accept, limitSize, onChange, sx, tips }) => {
+const UploadItem: React.FC<IUploadItemProps> = ({
+  inputId,
+  value,
+  accept,
+  limitSize,
+  onChange,
+  sx,
+  tips,
+  getLoading
+}) => {
   const [loading, setLoading] = useState<boolean>(false)
-
+  getLoading?.(loading)
   const UploadContent = useMemo(() => {
     if (loading)
       return (

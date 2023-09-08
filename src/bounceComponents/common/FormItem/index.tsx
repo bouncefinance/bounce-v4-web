@@ -12,6 +12,7 @@ export type IFormItemProps = {
   tips?: React.ReactNode
   fieldType?: IFormItemType
   startAdornment?: React.ReactNode
+  firstTrigger?: boolean
 } & FormControlProps
 
 const CloneChildren = (children: any, { field }: FieldProps) => {
@@ -46,6 +47,7 @@ const FormItem: React.FC<IFormItemProps> = ({
   fieldType = 'text',
   sx,
   startAdornment,
+  firstTrigger = false,
   ...rest
 }) => {
   const formik = useFormikContext<any>()
@@ -59,7 +61,7 @@ const FormItem: React.FC<IFormItemProps> = ({
       ? meta.error
       : Object.values(meta.error as unknown as object)[0]
     : ''
-  const showError = (meta.touched || submitCount > 0) && !!error
+  const showError = firstTrigger ? !!error : (meta.touched || submitCount > 0) && !!error
   const showTips = showError || !!tips
 
   return (

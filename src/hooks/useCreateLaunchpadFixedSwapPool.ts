@@ -5,64 +5,23 @@ import { NULL_BYTES } from '../constants'
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
-import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { BigNumber } from 'bignumber.js'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt, Log } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import {
-  AllocationStatus,
-  AuctionPool,
-  IReleaseData,
-  IReleaseType,
-  ParticipantStatus
-} from 'bounceComponents/create-auction-pool/types'
-import { Contract } from 'ethers'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 
-export interface Params {
-  whitelist: string[]
-  poolSize: string
-  swapRatio: string
-  allocationPerWallet: string
-  startTime: number
-  endTime: number
-  delayUnlockingTime: number
-  poolName: string
-  tokenFromAddress: string
-  tokenToAddress: string
-  tokenFormDecimal: string | number
-  tokenToDecimal: string | number
-  releaseType: IReleaseType
-  releaseData: {
-    startAt: number | string
-    endAtOrRatio: number | string
-  }[]
-}
+import { Params, getEventLog } from './useCreateFixedSwapPool'
+import { IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
 const NO_LIMIT_ALLOCATION = '0'
 
-export function sortReleaseData(releaseData: IReleaseData[]): IReleaseData[] {
-  return releaseData.sort((a, b) => {
-    if (a.startAt === null || b.startAt === null) {
-      if (a.startAt === null && b.startAt === null) {
-        return 0
-      } else if (a.startAt === null) {
-        return 1
-      } else {
-        return -1
-      }
-    }
-
-    return a.startAt.diff(b.startAt)
-  })
-}
-
-export function getFragmentRawArr(releaseData: IReleaseData[]) {
+function getFragmentRawArr(releaseData: { startAt: number; endAtOrRatio: number }[]) {
   if (!releaseData.length) return []
   const arr = releaseData.map(item => {
     const _ca = CurrencyAmount.fromAmount(
       Currency.getNativeCurrency(),
-      new BigNumber(item.ratio || 0).dividedBy(100).toString()
+      new BigNumber(item.endAtOrRatio || 0).dividedBy(100).toString()
     )
     if (!_ca) throw new Error('releaseData error')
     return _ca
@@ -76,47 +35,47 @@ export function getFragmentRawArr(releaseData: IReleaseData[]) {
   arr[arr.length - 1] = arrEnd
   return arr
 }
-
-export function makeValuesReleaseData(values: AuctionPool) {
-  const fragmentRawArr = IReleaseType.Fragment === values.releaseType ? getFragmentRawArr(values.releaseDataArr) : []
-
-  return values.releaseType === 1000
+export function makeValuesReleaseData(values: IPoolInfoParams) {
+  const fragmentRawArr =
+    IReleaseType.Fragment === values.releaseType ? getFragmentRawArr(values.releaseData as any) : []
+  return values.releaseType === IReleaseType.Cliff
     ? [
         {
-          startAt: values.endTime?.unix() || 0,
-          endAtOrRatio: 0
-        }
-      ]
-    : values.releaseType === IReleaseType.Cliff
-    ? [
-        {
-          startAt: values.shouldDelayUnlocking ? values.delayUnlockingTime?.unix() || 0 : values.endTime?.unix() || 0,
+          startAt: values.releaseData[0].startAt || 0,
           endAtOrRatio: 0
         }
       ]
     : values.releaseType === IReleaseType.Linear
-    ? values.releaseDataArr.map(item => ({
-        startAt: item.startAt?.unix() || 0,
-        endAtOrRatio: item.endAt?.unix() || 0
+    ? values.releaseData.map(item => ({
+        startAt: item.startAt || 0,
+        endAtOrRatio: item.endAtOrRatio || 0
       }))
     : values.releaseType === IReleaseType.Fragment
-    ? values.releaseDataArr.map((item, idx) => ({
-        startAt: item.startAt?.unix() || 0,
-        endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
-      }))
-    : values.releaseDataArr.map(item => ({
-        startAt: item.startAt?.unix() || 0,
-        endAtOrRatio: item.ratio || 0
-      }))
+    ? values.releaseData.map((item, idx) => {
+        console.log('fragmentRawArr[idx].raw.toString()')
+        console.log(fragmentRawArr[idx])
+        return {
+          startAt: item.startAt || 0,
+          endAtOrRatio: Number(fragmentRawArr[idx].raw.toString())
+        }
+      })
+    : []
 }
-
-export function useCreateFixedSwapPool() {
+export function useCreateLaunchpadFixedSwapPool({
+  currencyFrom,
+  currencyTo,
+  poolInfo
+}: {
+  currencyFrom: Currency
+  currencyTo: Currency
+  poolInfo: IPoolInfoParams
+}) {
   const { account, chainId } = useActiveWeb3React()
   const fixedSwapERC20Contract = useFixedSwapERC20Contract()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
-  const { currencyFrom, currencyTo } = useAuctionERC20Currency()
+  // const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
-  const values = useValuesState()
+  // const values = useValuesState()
 
   return useCallback(async (): Promise<{
     hash: string
@@ -125,32 +84,30 @@ export function useCreateFixedSwapPool() {
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
     const params: Params = {
-      whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-      poolSize: values.poolSize,
-      swapRatio: values.swapRatio,
+      whitelist: poolInfo.whitelistEnabled ? poolInfo.whitelistAddresses || [] : [],
+      poolSize: poolInfo.totalAmount0 || '',
+      swapRatio: poolInfo.ratio,
       allocationPerWallet:
-        values.allocationStatus === AllocationStatus.Limited
-          ? new BigNumber(values.allocationPerWallet).toString()
+        Number(poolInfo.maxAmount1PerWallet) > 0
+          ? new BigNumber(poolInfo.maxAmount1PerWallet || '').toString()
           : NO_LIMIT_ALLOCATION,
-      startTime: values.startTime?.unix() || 0,
-      endTime: values.endTime?.unix() || 0,
+      startTime: poolInfo.openAt || 0,
+      endTime: poolInfo.closeAt || 0,
       delayUnlockingTime:
-        IReleaseType.Linear === values.releaseType || IReleaseType.Fragment === values.releaseType
-          ? values.releaseDataArr?.[0].startAt?.unix() || 0
-          : IReleaseType.Instant === values.releaseType
+        IReleaseType.Linear === poolInfo.releaseType || IReleaseType.Fragment === poolInfo.releaseType
+          ? poolInfo.releaseData?.[0].startAt || 0
+          : IReleaseType.Instant === poolInfo.releaseType
           ? 0
-          : values.shouldDelayUnlocking || IReleaseType.Cliff === values.releaseType
-          ? values.shouldDelayUnlocking
-            ? values.delayUnlockingTime?.unix() || 0
-            : values.endTime?.unix() || 0
-          : values.endTime?.unix() || 0,
-      poolName: values.poolName.slice(0, 50),
-      tokenFromAddress: values.tokenFrom.address,
-      tokenFormDecimal: values.tokenFrom.decimals,
-      tokenToAddress: values.tokenTo.address,
-      tokenToDecimal: values.tokenTo.decimals,
-      releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
-      releaseData: makeValuesReleaseData(values)
+          : IReleaseType.Cliff === poolInfo.releaseType
+          ? poolInfo.releaseData?.[0].startAt || 0
+          : poolInfo.closeAt || 0,
+      poolName: poolInfo.name ? poolInfo.name.slice(0, 50) : '',
+      tokenFromAddress: poolInfo.token0 || '',
+      tokenFormDecimal: poolInfo.token0Decimals || '',
+      tokenToAddress: currencyTo.address,
+      tokenToDecimal: currencyTo.decimals,
+      releaseType: poolInfo.releaseType,
+      releaseData: makeValuesReleaseData(poolInfo)
     }
 
     if (!currencyFrom || !currencyTo) {
@@ -186,10 +143,7 @@ export function useCreateFixedSwapPool() {
 
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
-      amountTotal1: new BigNumber(amountTotal1.raw.toString())
-        .times(params.swapRatio)
-        // Prevent exponential notation
-        .toFixed(0, BigNumber.ROUND_DOWN),
+      amountTotal1: new BigNumber(amountTotal1.raw.toString()).times(params.swapRatio).toFixed(0, BigNumber.ROUND_DOWN),
       category: PoolType.FixedSwap,
       chainId: chainConfigInBackend.id,
       claimAt: params.delayUnlockingTime,
@@ -221,6 +175,7 @@ export function useCreateFixedSwapPool() {
       maxAmount1PerWallet: signatureParams.maxAmount1PerWallet,
       whitelistRoot: merkleroot || NULL_BYTES
     }
+    console.log('contractCallParams', contractCallParams)
 
     const args = [
       id,
@@ -228,7 +183,7 @@ export function useCreateFixedSwapPool() {
       params.releaseType,
       params.releaseData.map(item => ({ ...item, endAtOrRatio: item.endAtOrRatio.toString() })),
       false,
-      !!values.enableReverse,
+      !!poolInfo.reverseEnabled,
       expiredTime,
       signature
     ]
@@ -257,21 +212,5 @@ export function useCreateFixedSwapPool() {
           getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
-}
-
-export function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {
-  for (const log of logs) {
-    if (log.address !== contract.address) {
-      continue
-    }
-    const data = contract.interface.parseLog(log)
-    if (eventName !== data.name) {
-      continue
-    }
-    if (data.args?.[name]) {
-      return data.args[name].toString()
-    }
-  }
-  return undefined
+  }, [account, addTransaction, chainConfigInBackend, currencyFrom, currencyTo, fixedSwapERC20Contract, poolInfo])
 }

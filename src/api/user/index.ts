@@ -32,10 +32,14 @@ import {
   IChangeEmailParams,
   GetUserPermitSignResponse,
   GetUserTokenListParams,
-  SearchTokenListParams
+  SearchTokenListParams,
+  GetUserLaunchpadInfo,
+  IUserLaunchpadInfo,
+  ILaunchpadList
 } from './type'
 
 import { ApiInstance } from 'api'
+import { IBasicInfoParams, IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
 
 export const getConfig = async () => {
   return ApiInstance.get<IConfigResponse>('/com/cfg/opt_data', {})
@@ -181,4 +185,19 @@ export const getUserSearchTokenList = (params: SearchTokenListParams) => {
 }
 export const applySeller = (params: IBodySeller) => {
   return ApiInstance.post('/user/seller_apply', params)
+}
+export const updateLaunchpadBasic = (params: IBasicInfoParams) => {
+  return ApiInstance.post('/user/launchpad/basic', params)
+}
+export const updateLaunchpadPool = (params: IPoolInfoParams) => {
+  return ApiInstance.post('/user/launchpad/pool', params)
+}
+export const getUserLaunchpadInfo = (params: GetUserLaunchpadInfo) => {
+  if (params.launchpadId) {
+    return ApiInstance.post<IUserLaunchpadInfo>('/user/launchpad/pools', params)
+  }
+  return ApiInstance.post<IUserLaunchpadInfo>('/user/launchpad/pool/list', params)
+}
+export const searchLaunchpad = (params: Omit<GetUserLaunchpadInfo, 'launchpadId'>) => {
+  return ApiInstance.post<ILaunchpadList>('/com/search/launchpad', params)
 }

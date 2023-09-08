@@ -4,8 +4,8 @@ import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
+
 BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
-import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
@@ -67,10 +67,11 @@ import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteLis
 import OpenfabricProjectInfo from './projectIntro/OpenfabricProjectInfo'
 import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
 import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
-
+import CreateLaunchpad from './launchpad/create-launchpad'
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
-import MetaBlox from './projectIntro/MetaBloxProjectInfo'
+import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
+import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -81,9 +82,14 @@ import PerformKYCVerification from 'bounceComponents/profile/account/components/
 import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
-import ZataShop from './realWorldAuction/shop/zeta'
 import TokenToolBox from './tokenToolBox'
 import Loyaltyprogram from './loyaltyprogram'
+import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
+import MetaBlox from './projectIntro/MetaBloxProjectInfo'
+import LaunchpadDetail from './launchpad/detail'
+import Party from './launchpad/detail/party'
+import ZataShop from './realWorldAuction/shop/zeta'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -202,6 +208,13 @@ export default function App() {
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
+                  <Route path={routes.thirdPart.SolaceAuction} element={<SolaceProjectInfo />} />
+                  <Route path={routes.thirdPart.CreateProtocolAuction} element={<CreateProtocolProjectInfo />} />
+                  <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
+                  <Route path={routes.launchpad.account.launchpadDetail} element={<LaunchpadDetail />} />
+                  <Route path={routes.launchpad.account.launchpadParty} element={<Party />} />
+                  {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
+                  <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
