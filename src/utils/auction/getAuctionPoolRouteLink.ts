@@ -50,7 +50,7 @@ export default function getAuctionPoolLink(
       : routes.auction.v2.fixedPrice
   if (category === PoolType.MUTANT_ENGLISH_AUCTION_NFT) {
     if (Number(sysId) > G_FOUNDO_ID) {
-      return routes.thirdPart.IphoneAuctionDetail + `/${sysId.toString()}`
+      return routes.thirdPart.IphoneAuctionDetail
     }
     return routes.foundo.foundoDetail + `/${sysId.toString()}`
   }
