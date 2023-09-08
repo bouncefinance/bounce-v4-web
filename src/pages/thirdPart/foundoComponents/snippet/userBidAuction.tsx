@@ -1,6 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { useState, useMemo, useCallback } from 'react'
-import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
+import { ReactComponent as BidIconSvg } from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import WinTips from 'assets/imgs/thirdPart/foundoDetail/winTips.png'
 import Icon0 from 'assets/imgs/auction/icon0.png'
 import Icon1 from 'assets/imgs/auction/icon1.png'
@@ -34,6 +34,7 @@ import { useCurrencyBalance, useETHBalance } from 'state/wallet/hooks'
 import BigNumber from 'bignumber.js'
 import RewardPanel from './rewardPanel'
 import { RowLabel } from './creatorBidAuction'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 interface DataViewParam {
   priceFloor: number | string
@@ -45,8 +46,9 @@ const WhiteText = styled(Typography)(({ theme }) => ({
   color: '#fff',
   fontSize: '16px',
   margin: '20px auto',
+  textAlign: 'center',
   [theme.breakpoints.down('sm')]: {
-    width: 145
+    width: '100%'
   }
 }))
 
@@ -55,16 +57,15 @@ const CounterText = styled(Typography)(({ theme }) => ({
   fontStyle: 'italic',
   fontWeight: 100,
   color: 'var(--ps-text-5)',
-  [theme.breakpoints.down('xs')]: {
-    fontSize: 18
-  },
+  fontSize: 20,
   [theme.breakpoints.down('md')]: {
-    fontSize: 20
+    fontSize: 18
   }
 }))
 
 export function DataView(props: DataViewParam) {
   const { priceFloor, increase } = props
+  const isSm = useBreakpoint('sm')
   return (
     <Stack
       spacing={16}
@@ -72,7 +73,7 @@ export function DataView(props: DataViewParam) {
         padding: '0 0 24px'
       }}
     >
-      <Typography fontSize={28} color={'#fff'}>
+      <Typography fontSize={isSm ? 20 : 28} color={'#fff'}>
         {' '}
         About This Auction
       </Typography>
@@ -109,6 +110,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string; style?:
   })
   return (
     <Box
+      className="upcoming-status"
       sx={{
         position: 'relative',
         display: 'flex',
@@ -118,7 +120,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string; style?:
     >
       {countdown > 0 ? (
         <>
-          <LiveStr>{text || 'Open At'} </LiveStr>
+          <LiveStr>{text || 'Upcoming'} </LiveStr>
           <LiveStr>{days}d</LiveStr>
           <LiveStr>:</LiveStr>
           <LiveStr>{hours}h</LiveStr>
@@ -194,9 +196,10 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
     <Box
       sx={{
         width: isSm ? '100%' : '640px',
+        borderLeft: { xs: 'none', sm: '1px solid rgba(255, 255, 255, 0.20)' },
         margin: 'auto',
-        borderLeft: '1px solid rgba(255, 255, 255, 0.20)',
-        padding: '120px 0 120px 63px'
+        padding: { xs: '0', sm: '120px 0 120px 63px' },
+        marginTop: 0
       }}
     >
       <Box
@@ -204,7 +207,8 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginBottom: poolStatus === PoolStatus.Live ? 0 : isSm ? 32 : 48
         }}
       >
         {/* Pool Status */}
@@ -222,7 +226,21 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Finish</Typography>
+          <Typography color={'#fff'} fontSize={isSm ? 20 : 28}>
+            Cancel
+          </Typography>
+        )}
+        {poolStatus === PoolStatus.Live && poolInfo.enableWhiteList && !poolInfo.whitelistData?.isUserInWhitelist && (
+          <Typography
+            sx={{
+              fontFamily: `'Public Sans'`,
+              fontWeight: 600,
+              fontSize: isSm ? 20 : 28,
+              color: '#FD3333'
+            }}
+          >
+            You are not whitelisted
+          </Typography>
         )}
       </Box>
       <DataView
@@ -231,16 +249,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
       />
       {poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn disabled={true} loadingPosition="start" variant="contained" fullWidth>
-          <img
-            src={BidIcon}
-            style={{
-              width: '16px',
-              height: '16px',
-              marginRight: '10px'
-            }}
-            alt=""
-            srcSet=""
-          />
+          <BidIconSvg />
           <CounterText>
             Place A Bid in
             {countdown > 0 ? (
@@ -283,7 +292,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
                 alt=""
                 srcSet=""
               />
-              <Typography className="value" style={{ fontSize: 28 }}>
+              <Typography className="value" style={{ fontSize: isSm ? 20 : 36, fontWeight: 600 }}>
                 {poolInfo?.currentBidderAmount1?.toSignificant() || '--'}{' '}
                 {poolInfo?.currentBidderAmount1?.currency.symbol}
               </Typography>
@@ -323,12 +332,20 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
             Final Bid Price
           </Typography>
           <Typography className="value" style={{ fontSize: 28 }}>
-            {poolInfo?.currentBidderAmount?.toSignificant() || '--'} {poolInfo?.currentBidderAmount?.currency.symbol}
+            {poolInfo?.currentBidderAmount1?.toSignificant() || '--'} {poolInfo?.currentBidderAmount1?.currency.symbol}
           </Typography>
         </RowLabel>
       )}
       {poolStatus === PoolStatus.Closed && poolInfo && <ClosedSection poolInfo={poolInfo} />}
-      {poolStatus === PoolStatus.Live && poolInfo && <LiveSection poolInfo={poolInfo}></LiveSection>}
+      {poolStatus === PoolStatus.Live &&
+        poolInfo &&
+        poolInfo.enableWhiteList &&
+        !poolInfo.whitelistData?.isUserInWhitelist && <></>}
+      {poolStatus === PoolStatus.Live &&
+        poolInfo &&
+        (!poolInfo.enableWhiteList || (poolInfo.enableWhiteList && poolInfo.whitelistData?.isUserInWhitelist)) && (
+          <LiveSection poolInfo={poolInfo}></LiveSection>
+        )}
     </Box>
   )
 }
@@ -336,6 +353,7 @@ export default BidAction
 
 export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) {
   const { account, chainId } = useActiveWeb3React()
+  const isSm = useIsSMDown()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
   const ethBalance = useETHBalance(account || undefined, poolInfo.ethChainId)
@@ -416,31 +434,16 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
     showRequestConfirmDialog({ dark: true })
     try {
       const { transactionResult } = await bidCallback(poolInfo.currentBidderAmount)
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(
-          () => {
-            hideDialogConfirmation()
-            rpt()
-          },
-          { dark: true }
-        )
-        transactionResult.then(curReceipt => {
-          resolve(curReceipt)
-        })
+      await transactionResult
+      hideDialogConfirmation()
+      show(DialogDarkTips, {
+        iconType: 'success',
+        againBtn: 'Close',
+        title: 'Congratulations!',
+        content: `You have successfully bid amount ${poolInfo.currentBidderAmount?.toSignificant()} ${
+          poolInfo.token1.symbol
+        }`
       })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-          show(DialogDarkTips, {
-            iconType: 'success',
-            againBtn: 'Close',
-            title: 'Congratulations!',
-            content: `You have successfully bid amount ${poolInfo.currentBidderAmount?.toSignificant()} ${
-              poolInfo.token1.symbol
-            }`
-          })
-        })
-        .catch()
     } catch (error) {
       const err: any = error
       hideDialogConfirmation()
@@ -541,6 +544,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
     <>
       {isWinner ? (
         <BidResultAlert
+          isWinner={false}
           isClose={false}
           winnerImg={undefined}
           leftText="You are the highest bidder!"
@@ -560,12 +564,27 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
             mt: 48
           }}
         >
+          {isSm && (
+            <Typography
+              mb={32}
+              sx={{
+                fontFamily: 'Inter',
+                fontSize: 16,
+                lineHeight: '150%',
+                color: '#D7D6D9'
+              }}
+            >
+              Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
+              Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
+            </Typography>
+          )}
           <Stack
             width={'100%'}
-            direction={'row'}
+            direction={isSm ? 'column' : 'row'}
             justifyContent={'space-between'}
             alignItems={'center'}
             gridTemplateColumns={'1fr 1px 1fr'}
+            sx={{}}
           >
             <RewardBox
               icon={Icon0}
@@ -574,7 +593,15 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               symbol={poolInfo.token1.symbol}
               Amount={poolInfo.participant.prevBidderRewardAmount?.toSignificant() || '--'}
             />
-            <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
+            <Stack
+              sx={{
+                width: isSm ? '100%' : '1px',
+                borderBottom: isSm ? '1px solid #fff' : 'none',
+                height: isSm ? 0 : 43,
+                margin: isSm ? '23px 0' : 'unset',
+                backgroundColor: '#fff'
+              }}
+            ></Stack>
             <RewardBox
               icon={Icon1}
               text="Return bid amount and gas fee"
@@ -583,19 +610,21 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               Amount={poolInfo.participant.prevBidderGasfeeAmount?.toSignificant() || '--'}
             />
           </Stack>
-          <Typography
-            ml={12}
-            mt={48}
-            sx={{
-              fontFamily: 'Inter',
-              fontSize: 16,
-              lineHeight: '150%',
-              color: '#D7D6D9'
-            }}
-          >
-            Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
-            Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
-          </Typography>
+          {!isSm && (
+            <Typography
+              ml={12}
+              mt={48}
+              sx={{
+                fontFamily: 'Inter',
+                fontSize: 16,
+                lineHeight: '150%',
+                color: '#D7D6D9'
+              }}
+            >
+              Someone made a higher offer and your money is returned to your wallet with gas compensation.(Your Bid
+              Amount: {poolInfo.participant.accountBidAmount?.toSignificant() || '-'} {poolInfo.token1.symbol})
+            </Typography>
+          )}
           <Box sx={{ marginBottom: '-48px' }}>
             {approveContent && !isInsufficientBalance?.disabled ? (
               approveContent
@@ -609,16 +638,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
                   variant="contained"
                   fullWidth
                 >
-                  <img
-                    src={BidIcon}
-                    style={{
-                      width: '16px',
-                      height: '16px',
-                      marginRight: '10px'
-                    }}
-                    alt=""
-                    srcSet=""
-                  />
+                  <BidIconSvg />
                   <Typography
                     sx={{
                       fontFamily: `'Public Sans'`,
@@ -632,12 +652,13 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
                   </Typography>
                 </PlaceBidBtn>
                 <PoolInfoItem
+                  sx={{ paddingBottom: 30 }}
                   title="You will pay"
                   tip={`Including the GAS(${bidPrevGasFee?.toSignificant() || '-'} ${
                     bidPrevGasFee?.currency.symbol
                   }) cost of the previous participant`}
                 >
-                  <Typography color={'#fff'} mt={10}>
+                  <Typography color={'#fff'}>
                     {bidPrevGasFee &&
                     poolInfo.currentBidderAmount &&
                     bidPrevGasFee.currency.equals(poolInfo.currentBidderAmount.currency)
@@ -653,9 +674,9 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
         </Box>
       ) : null}
       <Box>
-        {!poolInfo.participant.accountBidAmount && approveContent && !isInsufficientBalance?.disabled ? (
+        {!isWinner && !poolInfo.participant.accountBidAmount && approveContent && !isInsufficientBalance?.disabled ? (
           approveContent
-        ) : !poolInfo.participant.accountBidAmount ? (
+        ) : !isWinner && !poolInfo.participant.accountBidAmount ? (
           <Stack>
             <PlaceBidBtn
               disabled={isInsufficientBalance?.disabled === true}
@@ -665,16 +686,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               variant="contained"
               fullWidth
             >
-              <img
-                src={BidIcon}
-                style={{
-                  width: '16px',
-                  height: '16px',
-                  marginRight: '10px'
-                }}
-                alt=""
-                srcSet=""
-              />
+              <BidIconSvg />
               <Typography
                 sx={{
                   fontFamily: `'Public Sans'`,
@@ -704,7 +716,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
             </PoolInfoItem>
           </Stack>
         ) : null}
-        {isInsufficientBalance?.children}
+        {!isWinner && isInsufficientBalance?.children}
       </Box>
     </>
   )
@@ -714,6 +726,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   const { account, chainId } = useActiveWeb3React()
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
+  const isSm = useIsSMDown()
   const [openShippingDialog, setOpenShippingDialog] = useState<boolean>(false)
   const { bidPrevGasFee } = useMutantEnglishBidCallback(poolInfo)
 
@@ -730,11 +743,11 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
     )
   }, [account, poolInfo.currentBidder, poolInfo.participant.address])
 
-  const {
-    run: bidderClaim,
-    submitted,
-    isClaimed
-  } = useBidderClaimEnglishAuctionNFT(poolInfo.poolId, poolInfo.name, poolInfo.contract)
+  const { run: bidderClaim, submitted } = useBidderClaimEnglishAuctionNFT(
+    poolInfo.poolId,
+    poolInfo.name,
+    poolInfo.contract
+  )
 
   const toBidderClaim = useCallback(async () => {
     showRequestConfirmDialog({ dark: true })
@@ -787,6 +800,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   return isWinner ? (
     <Stack>
       <BidResultAlert
+        isWinner={true}
         isClose={true}
         winnerImg={WinTips}
         leftText="Congratulations! You win the auction and get rewarded"
@@ -803,18 +817,10 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         loading={submitted.submitted}
         disabled={poolInfo.claimAt > getCurrentTimeStamp()}
       >
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
+        <BidIconSvg />
         {/* Check Logistics Information */}
-        {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'}
+        {/* {poolInfo.participant.claimed || isClaimed ? 'Claimed & Edit info' : 'Claim NFT & Send address'} */}
+        Edit info && Send address
       </PlaceBidBtn>
       <Typography
         sx={{
@@ -825,20 +831,21 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           fontSize: '13px'
         }}
       >
-        {poolInfo.participant.claimed || isClaimed
+        {/* {poolInfo.participant.claimed || isClaimed
           ? 'We will contact you in the near future'
-          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`}
+          : `Claim start time: ${new Date(poolInfo.claimAt * 1000).toLocaleString()}`} */}
+        Please submit personal information，We will contact you in the near future.
       </Typography>
 
       {openShippingDialog && (
         <ShippingDialog
-          submitCallback={isClaimed ? undefined : toBidderClaim}
+          // submitCallback={isClaimed ? undefined : toBidderClaim}
           handleClose={() => setOpenShippingDialog(false)}
         />
       )}
     </Stack>
   ) : isOutBid ? (
-    <Box sx={{ backgroundColor: '#20201e' }} padding={32}>
+    <Box sx={{ backgroundColor: '#20201e' }} padding={32} mb={64}>
       <Typography sx={{ fontSize: 16, fontFamily: 'Inter', color: '#fff' }}>
         {`You didn't succeed in the auction and your tokens are returned to your wallet with gas compensation.(Your Bid Amount: ${
           poolInfo.participant.accountBidAmount?.toSignificant() || '-'
@@ -846,10 +853,10 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
       </Typography>
       <Stack
         width={'100%'}
-        direction={'row'}
+        direction={isSm ? 'column' : 'row'}
         justifyContent={'space-between'}
         alignItems={'center'}
-        mt={48}
+        mt={isSm ? 32 : 48}
         gridTemplateColumns={'1fr 1px 1fr'}
       >
         <RewardBox
@@ -859,7 +866,15 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
           symbol={poolInfo.token1.symbol}
           Amount={poolInfo.participant.prevBidderRewardAmount?.toSignificant() || '--'}
         />
-        <Stack sx={{ width: '1px', height: 43, backgroundColor: '#fff' }}></Stack>
+        <Stack
+          sx={{
+            width: isSm ? '100%' : '1px',
+            height: isSm ? 0 : 43,
+            margin: isSm ? '23px 0' : 'unset',
+            borderBottom: isSm ? '1px solid #fff' : 'none',
+            backgroundColor: '#fff'
+          }}
+        ></Stack>
         <RewardBox
           icon={Icon1}
           text="Return bid amount and gas fee"
@@ -873,12 +888,16 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
 }
 
 function BidResultAlert({
+  isWinner = false,
   isClose,
   winnerImg,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tokenImg,
   leftText,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   tokenText
 }: {
+  isWinner: boolean
   isClose: boolean
   winnerImg: string | undefined
   tokenImg: string | undefined
@@ -886,7 +905,6 @@ function BidResultAlert({
   tokenText: string
 }) {
   const isSm = useIsSMDown()
-
   return (
     <Box
       sx={{
@@ -898,13 +916,14 @@ function BidResultAlert({
         justifyContent: 'center',
         alignItems: 'center',
         background: '#20201e',
-        padding: '40px 16px 32px'
+        padding: isSm ? '32px' : '40px 16px 32px'
       }}
       mt={48}
       mb={32}
     >
       <Box
         sx={{
+          width: '100%',
           display: 'flex',
           flexFlow: 'column nowrap',
           justifyContent: 'center',
@@ -954,36 +973,11 @@ function BidResultAlert({
           />
         )}
         {!isClose && <WhiteText>If you are the final winner you will get an extra</WhiteText>}
+        {isWinner && <WhiteText>{leftText}</WhiteText>}
       </Box>
-      {!isClose && (
-        <Typography color={'#D7D6D9'} fontSize={14} mb={25}>
-          Current Final Winner Prize Pool
-        </Typography>
-      )}
-      <RowLabel>
-        <img
-          style={{
-            display: 'inline-block',
-            width: '20px',
-            height: '20px',
-            marginRight: '8px'
-          }}
-          src={tokenImg}
-          alt=""
-          srcSet=""
-        />
-        <Typography
-          className="value"
-          style={{
-            color: '#fff',
-            fontWeight: 600,
-            lineHeight: '130%',
-            fontSize: isSm ? '24px' : '36px'
-          }}
-        >
-          {tokenText}
-        </Typography>
-      </RowLabel>
+      <Typography color={'#D7D6D9'} fontSize={isSm ? 16 : 20} pt={20} mb={25}>
+        Commemorative NFT
+      </Typography>
     </Box>
   )
 }

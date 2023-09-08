@@ -166,13 +166,17 @@ export default function ParticipatedTab({
                     <AuctionCardFull auctionPoolItem={auctionPoolItem} />
                   ) : (
                     <Box
-                      component={'a'}
-                      href={getAuctionPoolLink(
-                        auctionPoolItem.id,
-                        auctionPoolItem.category,
-                        auctionPoolItem.chainId,
-                        auctionPoolItem.poolId
-                      )}
+                      sx={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        navigate(
+                          getAuctionPoolLink(
+                            auctionPoolItem.id,
+                            auctionPoolItem.category,
+                            auctionPoolItem.chainId,
+                            auctionPoolItem.poolId
+                          )
+                        )
+                      }}
                     >
                       <NFTCard nft={auctionPoolItem} hiddenStatus={true} />
                     </Box>

@@ -8,7 +8,7 @@ import { useRequest } from 'ahooks'
 import { getPools } from '../../../api/market'
 import { FixedSwapPool } from '../../../api/pool/type'
 import { SwiperSlide } from 'swiper/react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { CenterRow, Row } from '../../../components/Layout'
 import AuctionTypeSelect from '../../common/AuctionTypeSelect'
 import { BackedTokenType } from '../../../pages/account/MyTokenOrNFT'
@@ -25,6 +25,7 @@ import { TokenType as ERCType } from 'bounceComponents/create-auction-pool/types
 // export const Notable1155 = (props: Notable1155Props) => {
 export const Notable1155 = () => {
   //   const { handleViewAll } = props
+  const navigate = useNavigate()
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
@@ -115,9 +116,15 @@ export const Notable1155 = () => {
             {data
               ? data.list.map((item: FixedSwapPool, idx: number) => (
                   <Box style={{ width: '309px' }} key={idx}>
-                    <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
+                    <Box
+                      onClick={e => {
+                        navigate(getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString()))
+                        e.stopPropagation()
+                      }}
+                      style={{ width: 'inherit', display: 'block' }}
+                    >
                       <NFTCard nft={item} hiddenStatus={true} />
-                    </Link>
+                    </Box>
                   </Box>
                 ))
               : []}
@@ -134,10 +141,15 @@ export const Notable1155 = () => {
             {data
               ? data.list.map((item: FixedSwapPool, idx: number) => (
                   <SwiperSlide key={idx}>
-                    <Box style={{ width: '309px' }}>
-                      <Link to={getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString())}>
+                    <Box style={{ width: '309px', cursor: 'pointer' }}>
+                      <Box
+                        onClick={e => {
+                          navigate(getAuctionPoolLink(item.id, item.category, item.chainId, item.poolId.toString()))
+                          e.stopPropagation()
+                        }}
+                      >
                         <NFTCard nft={item} hiddenStatus={true} />
-                      </Link>
+                      </Box>
                     </Box>
                   </SwiperSlide>
                 ))

@@ -29,7 +29,7 @@ export default function AuctionCardFull({
   return (
     <Box
       component={'a'}
-      onClick={() =>
+      onClick={e => {
         navigate(
           getAuctionPoolLink(
             auctionPoolItem.id,
@@ -38,7 +38,8 @@ export default function AuctionCardFull({
             auctionPoolItem.poolId
           )
         )
-      }
+        e.stopPropagation()
+      }}
     >
       <AuctionCard
         style={style || { minWidth: 'unset' }}

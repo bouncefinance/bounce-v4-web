@@ -7,67 +7,78 @@ import TabBg from 'assets/imgs/dipExchange/tab-bg.png'
 import FooterPc from 'components/Footer/FooterPc'
 import { PrivatePadDataList } from '../launchpad/PrivatePadDataList'
 import StageLine from './components/stageLine'
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import PoolTabs from './components/poolTabs'
 import { PoolIndexType } from './components/poolTabs'
 import DutchAuction from './components/dutchAuction/dutctAuction'
 const defaultHeadData = PrivatePadDataList.find(item => item.keyId === 11) as IPrivatePadProp
 import Erc20English from './components/erc20English/erc20english'
-interface poolsDataItem {
-  timaSteamp: number
-  active: boolean
-  // english auction
-  dip: {
-    startAt: number
-    closeAt: number
-    id: number
-  }
-  // dutch aution
-  dgt: {
-    startAt: number
-    closeAt: number
-    id: number
-  }
-}
+import { IS_TEST_ENV } from '../../constants'
+
+// interface poolsDataItem {
+//   timaSteamp: number
+//   active: boolean
+//   // english auction
+//   dip: {
+//     startAt: number
+//     closeAt: number
+//     id: number
+//   }
+//   // dutch aution
+//   dgt: {
+//     startAt: number
+//     closeAt: number
+//     id: number
+//   }
+// }
 const DipExchange = () => {
-  const nowDate = new Date().valueOf()
-  const oneDay = 60 * 60 * 24 * 1000
+  //   const nowDate = new Date().valueOf()
+  //   const oneDay = 60 * 60 * 24 * 1000
   // all activities line data
   //   const poolsData: poolsDataItem[] = useMemo(() => [], [])
-  const poolsData: poolsDataItem[] = Array(10)
-    .fill({
-      timaSteamp: nowDate - oneDay * 2,
-      active: false
-    })
-    .map((item, index) => {
-      return {
-        timaSteamp: item.timaSteamp + oneDay * index,
-        active: item.timaSteamp + oneDay * index <= new Date().valueOf(),
-        // english auction
-        dip: {
-          startAt: 1690905600000,
-          closeAt: 1690992000000,
-          id: 20259
+  const poolsData = !IS_TEST_ENV
+    ? []
+    : [
+        {
+          timaSteamp: 1692201600000,
+          active: 1692201600000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1692201600000,
+            closeAt: 1692288000000,
+            id: 20497
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1692288000000,
+            closeAt: 1692374400000,
+            id: 20498
+          }
         },
-        // dutch aution
-        dgt: {
-          startAt: 1691078400000,
-          closeAt: 1691164800000,
-          id: 20260
+        {
+          timaSteamp: 1692720000000,
+          active: 1692720000000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1692720000000,
+            closeAt: 1692806400000,
+            id: 20499
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1692892800000,
+            closeAt: 1692979200000,
+            id: 20500
+          }
         }
-      }
-    })
+      ]
   // last date higt light
-  const lastActiveIndex = useMemo(() => {
-    let lastIndex = 0
-    poolsData.length > 0 &&
-      poolsData.map((item, index) => {
-        if (item?.active) {
-          lastIndex = index
-        }
-      })
-    return lastIndex
-  }, [poolsData])
+  let lastActiveIndex = 0
+  poolsData.map((item, index) => {
+    if (item?.active) {
+      lastActiveIndex = index
+    }
+  })
   const [dataIndex, setDataIndex] = useState(lastActiveIndex)
   const setShowDataIndex = (index: number) => {
     setDataIndex(index)

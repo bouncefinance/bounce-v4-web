@@ -3,6 +3,7 @@ import {
   GetPoolCreationSignatureParams,
   GetWhitelistMerkleTreeRootParams,
   MutantEnglishAuctionNFTPoolProp,
+  PoolStatus,
   PoolType
 } from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
@@ -11,7 +12,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { CurrencyAmount } from 'constants/token'
-import { calculateGasMargin } from 'utils'
+import { calculateGasMargin, getCurrentTimeStamp } from 'utils'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { IReleaseType, ParticipantStatus } from 'bounceComponents/create-auction-pool/types'
@@ -196,7 +197,6 @@ export function useCreateMutantEnglishAuctionPool() {
     }
 
     const args = [id, contractCallParams, distributeRatio, distributes, false, expiredTime, signature]
-    console.log('args', args)
 
     const estimatedGas = await mutantEnglishContract.estimateGas.createV2(...args).catch((error: Error) => {
       console.debug('Failed to create english auction', error)
@@ -416,7 +416,7 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
       if (!currentBidderAmount || !currentBidderAmount1) return
       const nextExceedAmount = JSBI.subtract(JSBI.BigInt(currentBidderAmount), JSBI.BigInt(currentBidderAmount1))
       const nextFee = JSBI.divide(
-        JSBI.multiply(JSBI.BigInt(currentBidderAmount1), JSBI.BigInt(txFeeRatioE18.toString())),
+        JSBI.multiply(JSBI.BigInt(currentBidderAmount), JSBI.BigInt(txFeeRatioE18.toString())),
         JSBI.BigInt(TX_FEE_DENOMINATOR)
       )
       return CurrencyAmount.fromRawAmount(t1, JSBI.subtract(nextExceedAmount, nextFee))
@@ -428,11 +428,24 @@ export function useMutantEnglishAuctionPool(backedId?: number) {
         distributeRatios?.prevBidderRatio
       ),
       lastBidderRewards: calcDistributeRewards(extraAmount1, distributeRatios?.lastBidderRatio),
-      creatorRewards: calcDistributeRewards(extraAmount1, distributeRatios?.prevBidderRatio)
+      creatorRewards: calcDistributeRewards(extraAmount1, distributeRatios?.creatorRatio)
     }
+
+    const curTimeStamp = getCurrentTimeStamp()
+    const status =
+      poolInfo.status === PoolStatus.Cancelled || poolInfo.status === PoolStatus.Finish
+        ? poolInfo.status
+        : poolInfo.openAt > curTimeStamp
+        ? PoolStatus.Upcoming
+        : !_pools.closeAt
+        ? PoolStatus.Live
+        : (_pools.closeAt || poolInfo.closeAt) > curTimeStamp
+        ? PoolStatus.Live
+        : PoolStatus.Closed
 
     const result: MutantEnglishAuctionNFTPoolProp = {
       ...poolInfo,
+      status,
       ..._pools,
       distributeRatios: {
         prevBidderRatio: distributeRatios?.prevBidderRatio,
@@ -517,7 +530,7 @@ export function useMutantEnglishCreatorClaim(poolId: number | string, name: stri
 
   const run = useCallback(async (): Promise<{
     hash: string
-    transactionResult: Promise<string>
+    transactionResult: Promise<void>
   }> => {
     if (!account) {
       return Promise.reject('no account')
@@ -546,11 +559,10 @@ export function useMutantEnglishCreatorClaim(poolId: number | string, name: stri
       return {
         hash: response.hash,
         transactionResult: response.wait(1).then(receipt => {
-          const index = getEventLog(mutantEnglishContract, receipt.logs, 'CreatorClaimed', 'index')
-          if (!index) {
-            Promise.reject('The transaction seems to have failed')
+          if (receipt.status === 1) {
+            Promise.resolve()
           }
-          return index
+          Promise.reject('The transaction seems to have failed')
         })
       }
     })
@@ -569,7 +581,7 @@ export function useMutantEnglishBidderClaim(poolInfo: MutantEnglishAuctionNFTPoo
 
   const run = useCallback(async (): Promise<{
     hash: string
-    transactionResult: Promise<string>
+    transactionResult: Promise<void>
   }> => {
     if (!account) {
       return Promise.reject('no account')
@@ -600,11 +612,10 @@ export function useMutantEnglishBidderClaim(poolInfo: MutantEnglishAuctionNFTPoo
         return {
           hash: response.hash,
           transactionResult: response.wait(1).then(receipt => {
-            const index = getEventLog(mutantEnglishContract, receipt.logs, 'BidderClaimed', 'index')
-            if (!index) {
-              Promise.reject('The transaction seems to have failed')
+            if (receipt.status === 1) {
+              Promise.resolve()
             }
-            return index
+            Promise.reject('The transaction seems to have failed')
           })
         }
       })
@@ -638,7 +649,7 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
       bidAmount: CurrencyAmount
     ): Promise<{
       hash: string
-      transactionResult: Promise<string>
+      transactionResult: Promise<void>
     }> => {
       if (!account) {
         return Promise.reject('no account')
@@ -694,11 +705,10 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
           return {
             hash: response.hash,
             transactionResult: response.wait(1).then(receipt => {
-              const index = getEventLog(mutantEnglishContract, receipt.logs, 'Bid', 'index')
-              if (!index) {
-                Promise.reject('The transaction seems to have failed')
+              if (receipt.status === 1) {
+                return Promise.resolve()
               }
-              return index
+              return Promise.reject('The transaction seems to have failed')
             })
           }
         })
@@ -722,7 +732,7 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
       bidAmount1: CurrencyAmount
     ): Promise<{
       hash: string
-      transactionResult: Promise<string>
+      transactionResult: Promise<void>
     }> => {
       if (!account) {
         return Promise.reject('no account')
@@ -766,11 +776,10 @@ export function useMutantEnglishBidCallback(poolInfo: MutantEnglishAuctionNFTPoo
           return {
             hash: response.hash,
             transactionResult: response.wait(1).then(receipt => {
-              const index = getEventLog(mutantEnglishContract, receipt.logs, 'Bid', 'index')
-              if (!index) {
-                Promise.reject('The transaction seems to have failed')
+              if (receipt.status === 1) {
+                Promise.resolve()
               }
-              return index
+              Promise.reject('The transaction seems to have failed')
             })
           }
         })

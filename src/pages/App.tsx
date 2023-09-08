@@ -9,7 +9,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
-import { Questions } from 'bounceComponents/common/Questions'
+// import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
 // import { Mobile } from 'bounceComponents/common/Mobile'
 // import { ShowOnMobile } from 'themes/context'
@@ -54,7 +54,7 @@ import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
 import FoundoDetail from 'pages/thirdPart/foundoBidDetail'
-
+import FoundoNfcDetail from 'pages/thirdPart/nfcDetail'
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
@@ -78,11 +78,13 @@ import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
+import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
+import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
+import BounceShop from './realWorldAuction/shop/bounce'
+import FoundoShop from './realWorldAuction/shop/foundo'
+import TokenToolBox from './tokenToolBox'
+import Loyaltyprogram from './loyaltyprogram'
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
-import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification/index'
-import { ApplyToBeSeller } from 'pages/realWorldAuction/applyToBeSeller'
-import BounceShop from 'pages/realWorldAuction/shop/bounce'
-import FoundoShop from 'pages/realWorldAuction/shop/bounce'
 import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import LaunchpadDetail from './launchpad/detail'
 import Party from './launchpad/detail/party'
@@ -123,7 +125,7 @@ export default function App() {
               <LoginModal />
               <Header />
               <ToastContainer />
-              <Questions />
+              {/* <Questions /> */}
               <UnSupportedMobileRouter />
               <BodyWrapper id="body">
                 <Popups />
@@ -187,6 +189,7 @@ export default function App() {
                   <Route path={routes.account.myPrivateLaunchpad} element={<AccountPrivateLaunchpad />} />
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                   <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
+                  <Route path={routes.foundo.foundoNfcDetail + '/*'} element={<FoundoNfcDetail />} />
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}
@@ -210,6 +213,11 @@ export default function App() {
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.launchpad.account.launchpadDetail} element={<LaunchpadDetail />} />
                   <Route path={routes.launchpad.account.launchpadParty} element={<Party />} />
+                  {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
+                  <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
+
+                  <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
+                  <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

@@ -1,4 +1,4 @@
-import { Alert, Typography, Button } from '@mui/material'
+import { Alert, Typography, Button, Box } from '@mui/material'
 import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/err.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
@@ -30,20 +30,27 @@ const NotEligibleAlert = () => {
       icon={<ErrorIcon />}
     >
       {isRequireWhiteListAndEmail && (
-        <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: isMd ? 'column wrap' : 'row wrap',
+            justifyContent: 'flex-start',
+            alignItems: isMd ? 'flex-start' : 'center'
+          }}
+        >
           <Typography variant="body1" component="span">
             You need to connect to your email to participate in this auction
           </Typography>
           <Button
             sx={{
-              margin: '0 10px'
+              margin: isMd ? '8px 0 0' : '0 10px'
             }}
             variant="contained"
             onClick={() => connectEmail()}
           >
             Please connect your email.
           </Button>
-        </>
+        </Box>
       )}
       {!isRequireWhiteListAndEmail && (
         <>

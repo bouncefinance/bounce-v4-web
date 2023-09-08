@@ -1,6 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { useMemo, useCallback } from 'react'
-import BidIcon from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
+import { ReactComponent as BidIconSvg } from 'assets/imgs/thirdPart/foundoDetail/bidIcon.svg'
 import { PlaceBidBtn } from './bidDialog'
 import { useCountDown } from 'ahooks'
 import { MutantEnglishAuctionNFTPoolProp, PoolStatus } from 'api/pool/type'
@@ -83,7 +83,7 @@ const UpcomingStatus = (props: { OpenAt: string | number; text?: string }) => {
     >
       {countdown > 0 ? (
         <>
-          <LiveStr>{text || 'Open At'} </LiveStr>
+          <LiveStr>{text || 'Upcoming'} </LiveStr>
           <LiveStr>{days}d</LiveStr>
           <LiveStr>:</LiveStr>
           <LiveStr>{hours}h</LiveStr>
@@ -151,9 +151,9 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
     <Box
       sx={{
         width: isSm ? '100%' : '640px',
-        borderLeft: '1px solid rgba(255, 255, 255, 0.20)',
+        borderLeft: { xs: 'none', sm: '1px solid rgba(255, 255, 255, 0.20)' },
         margin: 'auto',
-        padding: '120px 0 120px 63px'
+        padding: { xs: '0', sm: '120px 0 120px 63px' }
       }}
     >
       <Box
@@ -161,7 +161,8 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          marginBottom: poolStatus === PoolStatus.Live ? 0 : isSm ? 32 : 48
         }}
       >
         {/* Pool Status */}
@@ -179,25 +180,18 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           </Typography>
         )}
         {(poolStatus === PoolStatus.Cancelled || poolStatus === PoolStatus.Finish) && (
-          <Typography color={'#fff'}>Finish</Typography>
+          <Typography color={'#fff'} fontSize={isSm ? 20 : 28}>
+            Cancel
+          </Typography>
         )}
       </Box>
       <DataView
         priceFloor={`${poolInfo?.currencyAmountMin1?.toSignificant()} ${poolInfo?.currencyAmountMin1?.currency.symbol}`}
         increase={`${poolInfo?.amountMinIncrRatio1?.toSignificant()}`}
       />
-      {poolStatus === PoolStatus.Upcoming && (
+      {!poolInfo.creatorClaimed && poolStatus === PoolStatus.Upcoming && (
         <PlaceBidBtn onClick={toCreatorClaim} loadingPosition="start" variant="contained" fullWidth>
-          <img
-            src={BidIcon}
-            style={{
-              width: '16px',
-              height: '16px',
-              marginRight: '10px'
-            }}
-            alt=""
-            srcSet=""
-          />
+          <BidIconSvg />
           <CounterText>Cancel & Claim</CounterText>
         </PlaceBidBtn>
       )}
@@ -256,8 +250,8 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
           {poolInfo.currentBidder &&
           poolInfo.currentBidder !== ZERO_ADDRESS &&
           poolInfo.firstBidderAmount &&
-          poolInfo.distributeRewards.lastBidderRewards
-            ? (poolInfo.firstBidderAmount?.add(poolInfo.distributeRewards.lastBidderRewards).toSignificant() || '--') +
+          poolInfo.distributeRewards.creatorRewards
+            ? (poolInfo.firstBidderAmount?.add(poolInfo.distributeRewards.creatorRewards).toSignificant() || '--') +
               ` ${poolInfo.currencyAmountMin1?.currency.symbol}`
             : '--'}
         </Typography>
@@ -322,7 +316,10 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
   const toggleWallet = useWalletModalToggle()
   const switchNetwork = useSwitchNetwork()
 
-  const isSuccess = useMemo(() => account && poolInfo.firstBidderAmount, [account, poolInfo.firstBidderAmount])
+  const isSuccess = useMemo(
+    () => account && poolInfo.firstBidderAmount?.greaterThan('0'),
+    [account, poolInfo.firstBidderAmount]
+  )
 
   const {
     run: creatorClaim,
@@ -398,16 +395,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         loading={submitted.submitted}
         disabled={poolInfo.claimAt > getCurrentTimeStamp() || creatorClaimed}
       >
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
+        <BidIconSvg />
         {/* Check Logistics Information */}
         {creatorClaimed ? 'Claimed' : 'Claim Reward'}
       </PlaceBidBtn>
@@ -434,16 +422,7 @@ function ClosedSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         loading={submitted.submitted}
         disabled={poolInfo.claimAt > getCurrentTimeStamp() || creatorClaimed}
       >
-        <img
-          src={BidIcon}
-          style={{
-            width: '16px',
-            height: '16px',
-            marginRight: '10px'
-          }}
-          alt=""
-          srcSet=""
-        />
+        <BidIconSvg />
         {/* Check Logistics Information */}
         {creatorClaimed ? 'Claimed' : 'Claim Your NFT'}
       </PlaceBidBtn>
