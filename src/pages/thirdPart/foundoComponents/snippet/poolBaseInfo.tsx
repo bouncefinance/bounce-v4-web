@@ -24,7 +24,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
           marginBottom: '16px'
         }}
       >
-        {poolInfo?.name || '--'}
+        {'Diamond Hands'}
       </Typography>
       <Typography
         sx={{

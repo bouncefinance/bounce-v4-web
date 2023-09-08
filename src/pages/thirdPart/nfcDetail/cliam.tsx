@@ -16,7 +16,6 @@ import ProductIcon1 from 'components/Fundo/assets/img/productIcon1.png'
 import { getCurrentTimeStamp } from 'utils'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
 import { useBidderClaimEnglishAuctionNFT } from 'bounceHooks/auction/useCreatorClaimNFT'
-import { useParams } from 'react-router-dom'
 import { useActiveWeb3React } from 'hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
@@ -315,8 +314,8 @@ const ClaimDetail = ({
     },
     {
       logo: Icon4,
-      label: 'Dimension',
-      value: '40.5 cm'
+      label: 'Necklace Length',
+      value: '50 cm'
     }
   ]
   const CliamBtn = () => {
@@ -507,7 +506,7 @@ const ClaimDetail = ({
               fontSize: '12px'
             }}
           >
-            Ref: 356934
+            Ref : LG578319461
           </SpanText>
         </Stack>
         {detailInfoList.map((item, index) => (
@@ -557,10 +556,7 @@ const NfcDetail = ({ pageStep }: { pageStep: PageStep }) => {
   const isMd = useIsMDDown()
   const [animateStep, setAnimateStep] = useState<AnimateStep>(AnimateStep.default)
   const [onceTime, setOnceTime] = useState<boolean>(false)
-  const { '*': sysId } = useParams()
-  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(
-    sysId && isFinite(Number(sysId)) ? Number(sysId) : 20378
-  )
+  const { data: poolInfo, loading } = useMutantEnglishAuctionPool(18406)
   useEffect(() => {
     if (onceTime) return
     if (loading || pageStep !== PageStep.claimPage) return

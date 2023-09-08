@@ -27,7 +27,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
     },
     {
       label: 'Made In',
-      value: 'Lab-grown',
+      value: 'Italy',
       img: Icon2
     },
     {

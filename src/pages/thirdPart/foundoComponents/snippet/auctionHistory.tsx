@@ -5,11 +5,12 @@ import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { getEtherscanLink, shortenAddress, shortenHash } from 'utils'
 import usePoolHistory from 'bounceHooks/auction/usePoolHistory'
 import { StyledHistoryTableCell, StyledHistoryTableRow } from 'bounceComponents/fixed-swap/ActionHistory'
-import { MutantEnglishAuctionNFTPoolProp, PoolHistory } from 'api/pool/type'
-import DefaultAvatar from 'assets/imgs/realWorld/defaultHeadIgm.png'
+import { MutantEnglishAuctionNFTPoolProp, PoolHistory, PoolStatus } from 'api/pool/type'
+import DefaultAvatar from 'assets/imgs/profile/yellow_avatar.svg'
 import { CurrencyAmount } from 'constants/token'
 import { useMemo } from 'react'
 import useBreakpoint from 'hooks/useBreakpoint'
+import useENSName from 'hooks/useENSName'
 
 const StatsBoard = styled(Stack)(({ theme }) => ({
   width: 320,
@@ -44,9 +45,11 @@ const StatsBoard = styled(Stack)(({ theme }) => ({
 
 const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) => {
   const totalReward = useMemo(() => {
-    if (!poolInfo.distributeRatios.prevBidderRatio) return
-    return poolInfo.extraAmount1?.multiply(poolInfo.distributeRatios.prevBidderRatio).toFixed(6)
-  }, [poolInfo.distributeRatios.prevBidderRatio, poolInfo.extraAmount1])
+    if (!poolInfo.distributeRatios.prevBidderRatio || !poolInfo.currencyAmountMin1?.currency) return
+    const _old = CurrencyAmount.fromAmount(poolInfo.currencyAmountMin1.currency, '10.082118')
+    if (!_old) return undefined
+    return poolInfo.extraAmount1?.multiply(poolInfo.distributeRatios.prevBidderRatio).add(_old).toFixed(6)
+  }, [poolInfo.currencyAmountMin1?.currency, poolInfo.distributeRatios.prevBidderRatio, poolInfo.extraAmount1])
 
   const { data: list, loading: isGettingPoolHistory } = usePoolHistory(
     poolInfo?.chainId || 0,
@@ -105,7 +108,9 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
               fontFamily: 'Public Sans'
             }}
           >
-            Auction just started! be the first bidder
+            {poolInfo.status === PoolStatus.Upcoming
+              ? 'The auction activities have not yet started'
+              : 'Auction just started! be the first bidder'}
           </Typography>
         </Stack>
       </Stack>
@@ -181,7 +186,8 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
                         alt=""
                         srcSet=""
                       />
-                      {shortenAddress(record.requestor)}
+
+                      <ShowEns address={record.requestor} />
                     </Stack>
                   </StyledHistoryTableCell>
                   <StyledHistoryTableCell sx={{ backgroundColor: '#121212', color: '#fff' }}>
@@ -244,3 +250,9 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
 }
 
 export default ActionHistory
+
+function ShowEns({ address }: { address: string }) {
+  const { ENSName } = useENSName(address)
+
+  return ENSName ? <>{ENSName}</> : <>{shortenAddress(address)}</>
+}
