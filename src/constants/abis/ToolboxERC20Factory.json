@@ -231,11 +231,6 @@
     "inputs": [
       {
         "internalType": "string",
-        "name": "_title",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
         "name": "_name",
         "type": "string"
       },

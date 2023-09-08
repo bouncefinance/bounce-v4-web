@@ -11,14 +11,14 @@ export function useTokenMinter(chain: ChainId) {
   const minterContract = useMinterContract(chain || chainId)
   const addTransaction = useTransactionAdder()
   return useCallback(
-    async (title: string, name: string, symbol: string, decimals: string, initial_supply: string): Promise<any> => {
+    async (name: string, symbol: string, decimals: string, initial_supply: string): Promise<any> => {
       if (!account) {
         return Promise.reject('no account')
       }
       if (!minterContract) {
         return Promise.reject('no contract')
       }
-      const args = [title, name, symbol, decimals, initial_supply]
+      const args = [name, symbol, decimals, initial_supply]
       console.log('Minter', args)
       const estimatedGas = await minterContract.estimateGas.deployERC20(...args).catch((error: Error) => {
         console.debug('Failed to mint token', error)

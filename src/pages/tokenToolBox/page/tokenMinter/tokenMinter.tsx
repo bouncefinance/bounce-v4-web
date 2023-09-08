@@ -16,7 +16,6 @@ import { isAddress } from '@ethersproject/address'
 
 interface IMinter {
   chainId: number
-  title: string
   name: string
   symbol: string
   decimals: string
@@ -29,7 +28,6 @@ export default function TokenMinter() {
   const tokenMinter = useTokenMinter(currentChain as ChainId)
   const minter: IMinter = {
     chainId: chainId || ChainId.SEPOLIA,
-    title: '',
     name: '',
     symbol: '',
     decimals: '',
@@ -40,13 +38,7 @@ export default function TokenMinter() {
     showRequestConfirmDialog()
     console.log('Mintervalue', value)
     try {
-      tokenMinter(
-        value.title,
-        value.name,
-        value.symbol,
-        value.decimals ? value.decimals : '18',
-        value.initial_supply
-      ).then(resp => {
+      tokenMinter(value.name, value.symbol, value.decimals ? value.decimals : '18', value.initial_supply).then(resp => {
         console.log('Minter', resp)
         hideDialogConfirmation()
       })

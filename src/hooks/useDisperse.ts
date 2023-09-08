@@ -18,7 +18,7 @@ export function useDisperseEther(chain: ChainId) {
       if (!disperseContract) {
         return Promise.reject('no contract')
       }
-      console.log('disperse-eth-value', values[0])
+      console.log('disperse-eth-value', currency)
       console.log('disperse-recipients', recipients)
       console.log('disperse-values', values)
       const args = [recipients, values]

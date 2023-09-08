@@ -38,8 +38,9 @@ export default function Disperse() {
       showRequestConfirmDialog()
       try {
         if (myBalance) {
+          const currency = values.map(v => Number(v)).reduce((sum, current) => sum + current, 0)
           const hash = await disperseEther(
-            myBalance.raw.toString(),
+            CurrencyAmount.fromAmount(myBalance?.currency, currency)?.raw.toString() || '',
             recipients,
             values.map(v => CurrencyAmount.fromAmount(myBalance?.currency, v)?.raw.toString() || '')
           )
