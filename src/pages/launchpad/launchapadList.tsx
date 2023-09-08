@@ -18,7 +18,7 @@ const LaunchpadList = () => {
     <Box sx={{ maxWidth: 1320 }}>
       {data &&
         data.list &&
-        data.list.length &&
+        !!data.list.length &&
         data.list.map(item => (
           <LaunchpadItem key={item.basicInfo.id} poolInfo={item.poolInfo} basicInfo={item.basicInfo} />
         ))}
