@@ -142,7 +142,7 @@ const FoundoBidDetail = () => {
                   color: 'var(--ps-text-2)'
                 }}
               >{`
-              The iPhone 15, Apple's latest iteration, is on the horizon. Stay tuned for the official details, which are rumored to be revealed during Apple's special event on September 12th. The product is expected for an official release on September 22nd.
+              In a world driven by innovation, there’s a device that’s creating waves of excitement — the iPhone 15. It’s not just a smartphone; it’s a glimpse into the future, a portal to possibilities, and the epitome of cutting-edge technology. You’re on the brink of acquiring the iPhone 15 Pro Max, through Bounce Finance’s innovative Mutant English Auction using $AUCTION.
               `}</Typography>
               <Typography
                 mt={15}
@@ -153,7 +153,7 @@ const FoundoBidDetail = () => {
                   color: 'var(--ps-text-2)'
                 }}
               >{`
-              Additionally, please note that upon the iPhone 15's official release, Bounce Finance will acquire one unit and promptly deliver it to the lucky winner of this auction.
+              Please note that upon the iPhone 15's official release, Bounce Finance will acquire one unit of the iPhone 15 Pro Max and promptly deliver it to the final winner of this auction.
               `}</Typography>
             </Box>
           </Stack>
