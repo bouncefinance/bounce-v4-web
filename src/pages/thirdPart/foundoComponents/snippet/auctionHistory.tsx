@@ -139,10 +139,8 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
         </StatsBoard>
         <StatsBoard sx={{ marginTop: 32 }}>
           <Typography>Total Bidder Reward</Typography>
-          <Typography>
-            {totalReward}
-            {poolInfo.token1.symbol}
-          </Typography>
+          <Typography>{totalReward}</Typography>
+          <Typography>{poolInfo.token1.symbol}</Typography>
         </StatsBoard>
       </Stack>
 
