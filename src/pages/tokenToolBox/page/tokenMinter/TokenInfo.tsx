@@ -5,8 +5,14 @@ import { Body01, H4, H6 } from '../../../../components/Text'
 import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
 import Grid2 from '@mui/material/Unstable_Grid2'
 import { ReactComponent as EmptyBox } from 'assets/imgs/toolBox/empty-box.svg'
+import { useParams } from 'react-router-dom'
+import { useTokenInfo } from '../../../../bounceHooks/toolbox/useTokenInfo'
+import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 
 export default function TokenInfo() {
+  const { chain, token } = useParams()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || '')
+  const { data } = useTokenInfo(chainConfigInBackend?.id || 0, token)
   return (
     <Box>
       <ContainerBox>
@@ -24,11 +30,11 @@ export default function TokenInfo() {
               <WhiteBg>
                 <BottomLineBox>
                   <Body01 sx={{ color: '#959595' }}>Contract address</Body01>
-                  <Body01>0xdac17f958d2ee523a2206206994597c13d831ec7</Body01>
+                  <Body01>{data?.token}</Body01>
                 </BottomLineBox>
                 <BottomLineBox>
                   <Body01 sx={{ color: '#959595' }}>Balance</Body01>
-                  <Body01>100,000,000</Body01>
+                  <Body01>{data?.supply}</Body01>
                 </BottomLineBox>
                 <BottomLineBox>
                   <Body01 sx={{ color: '#959595' }}>Chain</Body01>

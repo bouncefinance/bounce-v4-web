@@ -4,6 +4,9 @@ import { useActiveWeb3React } from 'hooks'
 import { useMemo } from 'react'
 import { useTokenAllowance } from 'data/Allowances'
 import { DISPERSE_CONTRACT_ADDRESSES } from '../../constants'
+import { useRequest } from 'ahooks'
+import { getMyDisperse } from '../../api/toolbox'
+import useChainConfigInBackend from '../web3/useChainConfigInBackend'
 
 export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId): any => {
   const { account } = useActiveWeb3React()
@@ -14,7 +17,6 @@ export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId)
     account ?? undefined,
     DISPERSE_CONTRACT_ADDRESSES[queryChainId]
   )
-  console.log('currentAllowance>>>', currentAllowance?.toExact())
   const max = useMemo(() => {
     return balance && currentAllowance
       ? balance?.greaterThan(currentAllowance)
@@ -25,4 +27,23 @@ export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId)
   return useMemo(() => {
     return { ...res, balance: balance, allowance: currentAllowance, max }
   }, [balance, currentAllowance, max, res])
+}
+
+export const useDisperseList = (chain?: ChainId, token?: string) => {
+  const { account, chainId } = useActiveWeb3React()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || chainId || '')
+  return useRequest(
+    async (): Promise<any> => {
+      return await getMyDisperse({
+        address: account || '',
+        chainId: chainConfigInBackend?.id || 0,
+        token: token || ''
+      })
+    },
+    {
+      refreshDeps: [account],
+      retryInterval: 10000,
+      retryCount: 20
+    }
+  )
 }

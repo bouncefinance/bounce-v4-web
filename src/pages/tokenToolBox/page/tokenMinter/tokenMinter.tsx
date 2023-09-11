@@ -12,6 +12,10 @@ import { hideDialogConfirmation, showRequestConfirmDialog } from '../../../../ut
 import { useTokenMinter } from '../../../../hooks/useTokenMinter'
 import { useState } from 'react'
 import { isAddress } from '@ethersproject/address'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from '../../../../bounceComponents/common/DialogTips'
+import { routes } from '../../../../constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 interface IMinter {
   chainId: number
@@ -24,6 +28,7 @@ interface IMinter {
 export default function TokenMinter() {
   const { chainId } = useActiveWeb3React()
   const [currentChain, setCurrentChain] = useState(chainId)
+  const nav = useNavigate()
   const tokenMinter = useTokenMinter(currentChain as ChainId)
   const minter: IMinter = {
     chainId: chainId || ChainId.SEPOLIA,
@@ -39,6 +44,14 @@ export default function TokenMinter() {
     try {
       tokenMinter(value.name, value.symbol, value.decimals ? value.decimals : '18', value.initial_supply).then(resp => {
         console.log('Minter', resp)
+        show(DialogTips, {
+          iconType: 'success',
+          againBtn: 'Check Detail',
+          title: 'Congratulations!',
+          content: 'You have successfully mint a new token'
+        }).then(() => {
+          nav(`${routes.tokenToolBox.tokenMinterInfo}/${currentChain}/${resp.hash}`)
+        })
         hideDialogConfirmation()
       })
     } catch (e) {

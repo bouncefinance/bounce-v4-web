@@ -28,8 +28,10 @@ export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
   const [currentChain, setCurrentChain] = useState(chainId)
   const [tokenAddr, setTokenAddr] = useState('')
-  const myBalance = useETHBalance(account, currentChain)
-  const myTokenBalance = useErc20TokenDetail(tokenAddr, currentChain || ChainId.SEPOLIA)
+  const [type, setType] = useState('chain')
+  const myChainBalance = useETHBalance(account, currentChain)
+  const { balance } = useErc20TokenDetail(tokenAddr, currentChain || ChainId.SEPOLIA)
+  const myBalance: CurrencyAmount = type == 'chain' ? myChainBalance : balance
   const disperseEther = useDisperseEther(currentChain as ChainId)
   const disperseToken = useDisperseToken()
 
@@ -37,12 +39,12 @@ export default function Disperse() {
     async (recipients: string[], values: string[]) => {
       showRequestConfirmDialog()
       try {
-        if (myBalance) {
+        if (myChainBalance) {
           const currency = values.map(v => Number(v)).reduce((sum, current) => sum + current, 0)
           const hash = await disperseEther(
-            CurrencyAmount.fromAmount(myBalance?.currency, currency)?.raw.toString() || '',
+            CurrencyAmount.fromAmount(myChainBalance?.currency, currency)?.raw.toString() || '',
             recipients,
-            values.map(v => CurrencyAmount.fromAmount(myBalance?.currency, v)?.raw.toString() || '')
+            values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
           )
           console.log('disperse-result', hash)
         }
@@ -50,17 +52,17 @@ export default function Disperse() {
         console.log('disperse', e)
       }
     },
-    [disperseEther, myBalance]
+    [disperseEther, myChainBalance]
   )
   const toDisperseToken = useCallback(
     async (token: string, recipients: string[], values: string[]) => {
       showRequestConfirmDialog()
       try {
-        if (myBalance) {
+        if (myChainBalance) {
           const { hash } = await disperseToken(
             token,
             recipients,
-            values.map(v => CurrencyAmount.fromAmount(myBalance?.currency, v)?.raw.toString() || '')
+            values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
           )
           console.log('disperse', hash)
         }
@@ -68,7 +70,7 @@ export default function Disperse() {
         console.log('disperse', e)
       }
     },
-    [disperseToken, myBalance]
+    [disperseToken, myChainBalance]
   )
 
   const onSubmit = (value: IDisperse) => {
@@ -135,18 +137,22 @@ export default function Disperse() {
                     <FormItem sx={{ width: '30%' }}>
                       <Box display={'flex'} gap={10}>
                         <Tab
+                          type={'button'}
                           className={values.type == 'chain' ? 'active' : ''}
-                          // onClick={() => {
-                          //   setFieldValue('type', 'chain')
-                          // }}
+                          onClick={() => {
+                            setFieldValue('type', 'chain')
+                            setType('chain')
+                          }}
                         >
                           Chain
                         </Tab>
                         <Tab
+                          type={'button'}
                           className={values.type == 'token' ? 'active' : ''}
-                          // onClick={() => {
-                          //   setFieldValue('type', 'token')
-                          // }}
+                          onClick={() => {
+                            setFieldValue('type', 'token')
+                            setType('token')
+                          }}
                         >
                           Token
                         </Tab>
@@ -247,15 +253,11 @@ export default function Disperse() {
                   childForm={
                     <FormItem name={'balance'}>
                       <GreenToolbox>
-                        <SmallText>
-                          {values.type == 'chain'
-                            ? myBalance?.toSignificant() || '-'
-                            : myTokenBalance.balance?.toExact()}
-                        </SmallText>
+                        <SmallText>{myBalance?.toSignificant() || '-'}</SmallText>
                         {values.type == 'chain' && (
                           <Box display={'flex'} alignItems={'center'} gap={8}>
-                            <img src={myBalance?.currency?.logo} style={{ width: 28, height: 28 }} />
-                            <SmallText>{myBalance?.currency?.symbol}</SmallText>
+                            <img src={myChainBalance?.currency?.logo} style={{ width: 28, height: 28 }} />
+                            <SmallText>{myChainBalance?.currency?.symbol}</SmallText>
                           </Box>
                         )}
                       </GreenToolbox>
@@ -316,21 +318,21 @@ export default function Disperse() {
                             <BoxSpaceBetween mt={30}>
                               <SmallText>Your balance</SmallText>
                               <Body01>
-                                {myBalance?.toSignificant()}
-                                {myBalance?.currency?.symbol}
+                                {myChainBalance?.toSignificant()}
+                                {myChainBalance?.currency?.symbol}
                               </Body01>
                             </BoxSpaceBetween>
                             <BoxSpaceBetween>
                               <SmallText>Remaining</SmallText>
                               <Body01>
-                                {myBalance &&
-                                  Number(myBalance?.toSignificant()) -
+                                {myChainBalance &&
+                                  Number(myChainBalance?.toSignificant()) -
                                     values.recipients
                                       .split('\n')
                                       .filter(v => v.split(' ').length == 2 && Number(v.split(' ')[1]))
                                       .map(v => Number(v.split(' ')[1]))
                                       .reduce((sum, current) => sum + current, 0)}
-                                {myBalance?.currency?.symbol}
+                                {myChainBalance?.currency?.symbol}
                               </Body01>
                             </BoxSpaceBetween>
                           </ConfirmDetailBox>
