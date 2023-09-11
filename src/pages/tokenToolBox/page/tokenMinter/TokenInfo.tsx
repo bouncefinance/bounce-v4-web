@@ -1,9 +1,10 @@
-import { Box, styled, Typography } from '@mui/material'
+import { Box, styled } from '@mui/material'
 import BackButton from '../../../../bounceComponents/common/BackButton'
 import { ContainerBox } from '../tokenLocker'
-import { Body01, H4 } from '../../../../components/Text'
+import { Body01, H4, H6 } from '../../../../components/Text'
 import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
 import Grid2 from '@mui/material/Unstable_Grid2'
+import { ReactComponent as EmptyBox } from 'assets/imgs/toolBox/empty-box.svg'
 
 export default function TokenInfo() {
   return (
@@ -47,17 +48,10 @@ export default function TokenInfo() {
                     <H4>Token Locked</H4>
                     <SolidBtnSmall>+ Lock</SolidBtnSmall>
                   </BoxSpaceBetween>
-                  <WhiteBg>
-                    <BottomLineBox>
-                      <Body01 sx={{ color: '#959595' }}>Locked of Total</Body01>
-                      <Body01>50%</Body01>
-                    </BottomLineBox>
-                    <BottomLineBox>
-                      <Body01 sx={{ color: '#959595' }}>Model</Body01>
-                      <Body01>Normal</Body01>
-                    </BottomLineBox>
-                    <LinkBtn>Check detail</LinkBtn>
-                  </WhiteBg>
+                  <EmptyBg>
+                    <EmptyBox />
+                    <H6 mt={10}>No data</H6>
+                  </EmptyBg>
                 </GrayBg>
               </Grid2>
               <Grid2 md={6}>
@@ -66,17 +60,10 @@ export default function TokenInfo() {
                     <H4>Token Disperse</H4>
                     <SolidBtnSmall>+ Disperse</SolidBtnSmall>
                   </BoxSpaceBetween>
-                  <WhiteBg>
-                    <BottomLineBox>
-                      <Body01 sx={{ color: '#959595' }}>Disperse Amount</Body01>
-                      <Body01>500,000</Body01>
-                    </BottomLineBox>
-                    <BottomLineBox>
-                      <Body01 sx={{ color: '#959595' }}>Total Address</Body01>
-                      <Body01>50</Body01>
-                    </BottomLineBox>
-                    <LinkBtn>Check detail</LinkBtn>
-                  </WhiteBg>
+                  <EmptyBg>
+                    <EmptyBox />
+                    <H6 mt={10}>No data</H6>
+                  </EmptyBg>
                 </GrayBg>
               </Grid2>
             </Grid2>
@@ -135,10 +122,8 @@ const SolidBtnSmall = styled(`button`)`
   border: transparent;
   background: var(--black-100, #121212);
 `
-const LinkBtn = styled(Typography)`
-  text-decoration-line: underline;
-  width: 100%;
-  padding: 20px;
-  text-align: center;
-  color: #2b51da;
+const EmptyBg = styled(WhiteBg)`
+  padding: 32px 24px;
+  justify-content: center;
+  align-items: center;
 `

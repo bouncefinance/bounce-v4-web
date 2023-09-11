@@ -322,7 +322,46 @@ export const DUTCH_AUCTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } 
 
 export const defaultPoolVersionRoute: 1 | 2 = 2
 
-export const TOOL_BOX_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+export const DISPERSE_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.BASE]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.BASE_TESTNET]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.FANTOM]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.FANTOM_TESTNET]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.LINEA]: '0x4A22bf1D03Fc72b15C59AD38E7e538037144e4A9',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: ''
+}
+
+export const MINTER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x1506e699A53224e5cE1FdF7917f623D0a9Da5A64',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '0x1506e699A53224e5cE1FdF7917f623D0a9Da5A64',

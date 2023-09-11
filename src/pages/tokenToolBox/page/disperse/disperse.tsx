@@ -11,70 +11,91 @@ import { useActiveWeb3React } from '../../../../hooks'
 import Papa from 'papaparse'
 import { useETHBalance } from '../../../../state/wallet/hooks'
 import { useCallback, useState } from 'react'
-import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
 import { CurrencyAmount } from '../../../../constants/token'
-import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from '../../../../utils/auction'
-import { show } from '@ebay/nice-modal-react'
-import DialogTips from '../../../../bounceComponents/common/DialogTips'
+import { showRequestConfirmDialog } from '../../../../utils/auction'
+import { useDisperseEther, useDisperseToken } from '../../../../hooks/useDisperse'
+import { isAddress } from '@ethersproject/address'
+import { useErc20TokenDetail } from '../../../../bounceHooks/toolbox/useDisperseCallback'
 
 interface IDisperse {
   chainId: number
   type: string
   recipients: string
+  token: string
 }
 
 export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
   const [currentChain, setCurrentChain] = useState(chainId)
+  const [tokenAddr, setTokenAddr] = useState('')
   const myBalance = useETHBalance(account, currentChain)
-  const [approvalState, approveCallback] = useApproveCallback(
-    myBalance ? CurrencyAmount.fromAmount(myBalance?.currency, myBalance?.toSignificant()) : undefined,
-    '0x1506e699A53224e5cE1FdF7917f623D0a9Da5A64',
-    true
+  const myTokenBalance = useErc20TokenDetail(tokenAddr, currentChain || ChainId.SEPOLIA)
+  const disperseEther = useDisperseEther(currentChain as ChainId)
+  const disperseToken = useDisperseToken()
+
+  const toDisperseEther = useCallback(
+    async (recipients: string[], values: string[]) => {
+      showRequestConfirmDialog()
+      try {
+        if (myBalance) {
+          const currency = values.map(v => Number(v)).reduce((sum, current) => sum + current, 0)
+          const hash = await disperseEther(
+            CurrencyAmount.fromAmount(myBalance?.currency, currency)?.raw.toString() || '',
+            recipients,
+            values.map(v => CurrencyAmount.fromAmount(myBalance?.currency, v)?.raw.toString() || '')
+          )
+          console.log('disperse-result', hash)
+        }
+      } catch (e) {
+        console.log('disperse', e)
+      }
+    },
+    [disperseEther, myBalance]
   )
-  const toApprove = useCallback(async () => {
-    showRequestApprovalDialog()
-    try {
-      const { transactionReceipt } = await approveCallback()
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
-        transactionReceipt.then(curReceipt => {
-          resolve(curReceipt)
-        })
-      })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-        })
-        .catch()
-    } catch (error) {
-      const err: any = error
-      console.error(err)
-      hideDialogConfirmation()
-      show(DialogTips, {
-        iconType: 'error',
-        againBtn: 'Try Again',
-        cancelBtn: 'Cancel',
-        title: 'Oops..',
-        content:
-          typeof err === 'string'
-            ? err
-            : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toApprove
-      })
-    }
-  }, [approveCallback])
+  const toDisperseToken = useCallback(
+    async (token: string, recipients: string[], values: string[]) => {
+      showRequestConfirmDialog()
+      try {
+        if (myBalance) {
+          const { hash } = await disperseToken(
+            token,
+            recipients,
+            values.map(v => CurrencyAmount.fromAmount(myBalance?.currency, v)?.raw.toString() || '')
+          )
+          console.log('disperse', hash)
+        }
+      } catch (e) {
+        console.log('disperse', e)
+      }
+    },
+    [disperseToken, myBalance]
+  )
 
   const onSubmit = (value: IDisperse) => {
-    console.log('value>>>', value)
+    console.log('disperse', 'onSubmit')
+    const recipients: string[] = []
+    const amount: string[] = []
+    value.recipients
+      .split('\n')
+      .map(v => v.split(' '))
+      .filter(v => v.length == 2 && isAddress(v[0]))
+      .forEach(v => {
+        recipients.push(v[0])
+        amount.push(v[1])
+      })
+    if (value.type == 'token') {
+      console.log('disperse', 'onSubmit-token')
+      toDisperseToken(value.token, recipients, amount)
+    } else {
+      console.log('disperse', 'onSubmit-eth')
+      toDisperseEther(recipients, amount)
+    }
   }
   const disperse: IDisperse = {
     chainId: chainId || ChainId.MAINNET,
     type: 'chain',
-    recipients: ''
+    recipients: '',
+    token: ''
   }
 
   return (
@@ -115,17 +136,17 @@ export default function Disperse() {
                       <Box display={'flex'} gap={10}>
                         <Tab
                           className={values.type == 'chain' ? 'active' : ''}
-                          onClick={() => {
-                            setFieldValue('type', 'chain')
-                          }}
+                          // onClick={() => {
+                          //   setFieldValue('type', 'chain')
+                          // }}
                         >
                           Chain
                         </Tab>
                         <Tab
                           className={values.type == 'token' ? 'active' : ''}
-                          onClick={() => {
-                            setFieldValue('type', 'token')
-                          }}
+                          // onClick={() => {
+                          //   setFieldValue('type', 'token')
+                          // }}
                         >
                           Token
                         </Tab>
@@ -180,7 +201,7 @@ export default function Disperse() {
                             )
                           }}
                         >
-                          {ChainList.map(t => (
+                          {ChainList.filter(item => item.id == ChainId.SEPOLIA).map(t => (
                             <MenuItem
                               key={t.id}
                               value={t.id}
@@ -206,7 +227,16 @@ export default function Disperse() {
                     title1="Token address"
                     childForm={
                       <FormItem name={'tokenAddress'}>
-                        <ToolBoxInput placeholder={'Token Address'} />
+                        <ToolBoxInput
+                          value={values.token}
+                          onChange={e => {
+                            if (isAddress(e.target.value)) {
+                              setFieldValue('token', e.target.value)
+                              setTokenAddr(e.target.value)
+                            }
+                          }}
+                          placeholder={'Token Address'}
+                        />
                       </FormItem>
                     }
                   />
@@ -217,11 +247,17 @@ export default function Disperse() {
                   childForm={
                     <FormItem name={'balance'}>
                       <GreenToolbox>
-                        <SmallText>{myBalance?.toSignificant() || '-'}</SmallText>
-                        <Box display={'flex'} alignItems={'center'} gap={8}>
-                          <img src={myBalance?.currency?.logo} style={{ width: 28, height: 28 }} />
-                          <SmallText>{myBalance?.currency?.symbol}</SmallText>
-                        </Box>
+                        <SmallText>
+                          {values.type == 'chain'
+                            ? myBalance?.toSignificant() || '-'
+                            : myTokenBalance.balance?.toExact()}
+                        </SmallText>
+                        {values.type == 'chain' && (
+                          <Box display={'flex'} alignItems={'center'} gap={8}>
+                            <img src={myBalance?.currency?.logo} style={{ width: 28, height: 28 }} />
+                            <SmallText>{myBalance?.currency?.symbol}</SmallText>
+                          </Box>
+                        )}
                       </GreenToolbox>
                     </FormItem>
                   }
@@ -304,20 +340,27 @@ export default function Disperse() {
                   }
                 />
                 <BoxSpaceBetween gap={10}>
-                  <LineBtn onClick={() => {}}>
-                    {(() => {
-                      switch (approvalState) {
-                        case ApprovalState.APPROVED:
-                          return 'APPROVED'
-                        case ApprovalState.UNKNOWN:
-                        case ApprovalState.NOT_APPROVED:
-                          return 'APPROVE'
-                        case ApprovalState.PENDING:
-                          return 'PENDING...'
-                      }
-                    })()}
-                  </LineBtn>
-                  <SolidBtn>Disperse token</SolidBtn>
+                  {/*<LineBtn onClick={approveCallback}>*/}
+                  {/*  {(() => {*/}
+                  {/*    switch (approvalState) {*/}
+                  {/*      case ApprovalState.APPROVED:*/}
+                  {/*        return 'APPROVED'*/}
+                  {/*      case ApprovalState.UNKNOWN:*/}
+                  {/*      case ApprovalState.NOT_APPROVED:*/}
+                  {/*        return 'APPROVE'*/}
+                  {/*      case ApprovalState.PENDING:*/}
+                  {/*        return 'PENDING...'*/}
+                  {/*    }*/}
+                  {/*  })()}*/}
+                  {/*</LineBtn>*/}
+                  <SolidBtn
+                    type="submit"
+                    className={
+                      values.recipients.split('\n').filter(v => v.split(' ').length == 2).length > 0 ? 'active' : ''
+                    }
+                  >
+                    Disperse token
+                  </SolidBtn>
                 </BoxSpaceBetween>
               </Box>
             </Box>
