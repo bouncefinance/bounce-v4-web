@@ -12,7 +12,6 @@ import {
   FormLabel,
   Button
 } from '@mui/material'
-import { sortReleaseData } from 'hooks/useCreateFixedSwapPool'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
 import Radio from 'bounceComponents/create-auction-pool/Radio'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
@@ -62,6 +61,7 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import BigNumber from 'bignumber.js'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -630,7 +630,6 @@ const TokenLockerForm = () => {
             amoutAraw,
             value?.delayUnlockingTime?.unix() + ''
           ).then(resp => {
-            console.log('Lock', resp)
             show(DialogTips, {
               iconType: 'success',
               againBtn: 'Check Detail',
@@ -643,26 +642,29 @@ const TokenLockerForm = () => {
           })
           break
         case IReleaseType.Fragment:
-          //   const releaseTimeAndRadio = value?.fragmentReleaseTimes?.map(item => {
-          //     return [item?.startAt?.unix() + '', item?.radio]
-          //   })
-          let releaseDataArr = []
-          releaseDataArr = value?.fragmentReleaseTimes.map(item => ({
-            startAt: item.startAt,
-            ratio: item.radio
-          }))
-          releaseDataArr = sortReleaseData(releaseDataArr)
-          const result = releaseDataArr.map(item => {
-            return [item?.startAt?.unix() + '' || '', item?.ratio || '']
-          })
+          const releaseTimeAndRadio = value?.fragmentReleaseTimes
+            .sort((a, b) => {
+              if (a.startAt === null || b.startAt === null) {
+                if (a.startAt === null && b.startAt === null) {
+                  return 0
+                } else if (a.startAt === null) {
+                  return 1
+                } else {
+                  return -1
+                }
+              }
+              return a.startAt.diff(b.startAt)
+            })
+            .map(item => {
+              return [item?.startAt?.unix() + '', BigNumber(item.radio).times('0.01').times(1e18).toString()]
+            })
           lockStageHandle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             amoutAraw,
-            result
+            releaseTimeAndRadio
           ).then(resp => {
-            console.log('Lock', resp)
             show(DialogTips, {
               iconType: 'success',
               againBtn: 'Check Detail',
@@ -683,7 +685,6 @@ const TokenLockerForm = () => {
             value.linearUnlockingEndTime?.unix() + '',
             amoutAraw
           ).then(resp => {
-            console.log('Lock', resp)
             show(DialogTips, {
               iconType: 'success',
               againBtn: 'Check Detail',
@@ -711,7 +712,6 @@ const TokenLockerForm = () => {
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
           // update hook params
-          console.log('values,errors>>>', values, errors)
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
           setReleaseType(Number(values.releaseType))
@@ -871,7 +871,6 @@ const TokenLockerForm = () => {
                                 filtered.slice(0, decimalIndex + 1) +
                                 filtered.slice(decimalIndex + 1).replace(/\./g, '')
                             }
-                            console.log('amount>>>', filtered)
                             if (
                               erc20TokenDeatail &&
                               erc20TokenDeatail.balance &&
@@ -911,7 +910,6 @@ const TokenLockerForm = () => {
                             }
                           }}
                           onClick={() => {
-                            console.log('erc20TokenDeatail.max>>>', erc20TokenDeatail.max)
                             setFieldValue('amount', erc20TokenDeatail.max)
                           }}
                         >

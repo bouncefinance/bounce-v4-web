@@ -32,7 +32,6 @@ export function useTokenTimelock(chain: ChainId) {
         return Promise.reject('no amount')
       }
       const args = [title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
-      console.log('Lock args， erc20TimelockContract>>>', args, erc20TimelockContract)
       const isToken1Native = amount?.currency.isNative
       const estimatedGas = await erc20TimelockContract.estimateGas
         .deployERC20Timelock(...args, { value: isToken1Native ? amount?.raw?.toString() : undefined })
@@ -45,7 +44,6 @@ export function useTokenTimelock(chain: ChainId) {
           gasLimit: calculateGasMargin(estimatedGas)
         })
         .then((response: TransactionResponse) => {
-          console.log('Lock', 'enter')
           addTransaction(response, {
             summary: 'Lock token',
             userSubmitted: {
@@ -97,7 +95,6 @@ export function useTokenTimeStagelock(chain: ChainId) {
           gasLimit: calculateGasMargin(estimatedGas)
         })
         .then((response: TransactionResponse) => {
-          console.log('Lock', 'enter')
           addTransaction(response, {
             summary: 'Lock token',
             userSubmitted: {
@@ -150,7 +147,6 @@ export function useTokenTimeLinearlock(chain: ChainId) {
           gasLimit: calculateGasMargin(estimatedGas)
         })
         .then((response: TransactionResponse) => {
-          console.log('Lock', 'enter')
           addTransaction(response, {
             summary: 'Lock token',
             userSubmitted: {
