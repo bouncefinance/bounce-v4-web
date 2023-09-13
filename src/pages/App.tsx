@@ -84,13 +84,13 @@ import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
 import ZataShop from './realWorldAuction/shop/zeta'
 import TokenToolBox from './tokenToolBox'
-import TokenLocker from './tokenToolBox/page/tokenLocker'
+import TokenLocker from './tokenToolBox/page/tokenlocker/tokenLocker'
 import Loyaltyprogram from './loyaltyprogram'
 import Disperse from './tokenToolBox/page/disperse/disperse'
 import MyDisperse from './tokenToolBox/page/disperse/myDiperse'
 import TokenMinter from './tokenToolBox/page/tokenMinter/tokenMinter'
 import TokenInfo from './tokenToolBox/page/tokenMinter/TokenInfo'
-import LockerInfo from './tokenToolBox/page/LockerInfo'
+import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
 
 const GlobalHooks = () => {
   useGetOptionsData()

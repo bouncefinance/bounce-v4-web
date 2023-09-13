@@ -427,7 +427,7 @@ export const TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.ARBITRUM]: '',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
-  [ChainId.SEPOLIA]: '0x1506e699A53224e5cE1FdF7917f623D0a9Da5A64',
+  [ChainId.SEPOLIA]: '0x6b2F9CDEbAdDa7778cD01a7519CAb375729512eF',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.BASE]: '',

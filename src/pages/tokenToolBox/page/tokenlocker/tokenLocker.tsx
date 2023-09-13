@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
 import { Body02 } from 'components/Text'
 import { useShowLoginModal } from 'state/users/hooks'
-import TokenLockerForm from '../components/tokenLockerForm'
-import TOkenLPLockerForm from '../components/tokenLPLockerForm'
+import TokenLockerForm from '../../components/tokenLockerForm'
+import TOkenLPLockerForm from '../../components/tokenLPLockerForm'
 
 enum Tabstype {
   'Token' = 0,

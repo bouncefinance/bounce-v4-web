@@ -10,8 +10,8 @@ import {
   TableRow,
   Typography
 } from '@mui/material'
-import { ContainerBox, Title } from '../tokenLocker'
 import { useDisperseList } from '../../../../bounceHooks/toolbox/useDisperseCallback'
+import { ContainerBox, Title } from '../tokenlocker/tokenLocker'
 import BackButton from '../../../../bounceComponents/common/BackButton'
 import { Stack } from '@mui/system'
 import { Disperse } from '../../../../api/toolbox/type'

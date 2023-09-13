@@ -21,12 +21,12 @@ import Switch, { SwitchProps } from '@mui/material/Switch'
 import FormItem from 'bounceComponents/common/FormItem'
 import Image from 'components/Image'
 import * as yup from 'yup'
-import { Formik, Field, Form } from 'formik'
-import React, { useEffect, useState, useCallback } from 'react'
+import { Formik, Field, Form, FormikErrors } from 'formik'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChainList } from 'constants/chain'
-import { useOptionDatas } from 'state/configOptions/hooks'
+// import { useOptionDatas } from 'state/configOptions/hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { ReactComponent as TipIcon } from 'assets/imgs/toolBox/tips.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
@@ -39,6 +39,21 @@ import { LoadingButton } from '@mui/lab'
 import { TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES } from 'constants/index'
 import { isAddress } from 'web3-utils'
 import { useErc20TokenDetail } from 'bounceHooks/toolbox/useTokenLocakCallback'
+import { useTokenTimelock, useApproveCallback } from 'hooks/useTokenTimelock'
+import { TokenlockResponse } from 'bounceHooks/toolbox/useTokenLocakCallback'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from 'utils/auction'
+import { CurrencyAmount } from 'constants/token'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
+import { ApprovalState } from 'hooks/useApproveCallback'
+
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -64,8 +79,6 @@ interface ISeller {
   title: string
   amount: string
   releaseType: IReleaseType
-  startTime: Moment | null
-  endTime: Moment | null
   delayUnlockingTime: Moment | null
   linearUnlockingStartTime: Moment | null
   linearUnlockingEndTime: Moment | null
@@ -95,33 +108,31 @@ export const AddBtn = styled(Button)(() => ({
   }
 }))
 const sellerValidationSchema = yup.object({
-  tokenAddress: yup.string().required('Token Address is a required'),
-  anotherTokenAddress: yup.string().test('is-another-token', 'Token Address is a required', function (value) {
-    // 根据表单的当前内容进行自定义校验
-    const anotherTokenChecked = this.parent.anotherTokenChecked
-    console.log('anotherTokenChecked, value>>>', anotherTokenChecked, value)
-    if (anotherTokenChecked && !value) {
-      return false
-    }
-    return true
-  }),
+  tokenAddress: yup
+    .string()
+    .required('Token Address is a required')
+    .test('is-address', 'Please input a valid token address', function (value) {
+      return isAddress(value || '')
+    }),
+  anotherTokenAddress: yup
+    .string()
+    .test('is-address', 'Please input a valid address', function (value) {
+      const anotherTokenChecked = this.parent.anotherTokenChecked
+      if (anotherTokenChecked && !isAddress(value || '')) {
+        return false
+      }
+      return true
+    })
+    .test('is-another-token', 'Token Address is a required', function (value) {
+      // 根据表单的当前内容进行自定义校验
+      const anotherTokenChecked = this.parent.anotherTokenChecked
+      if (anotherTokenChecked && !value) {
+        return false
+      }
+      return true
+    }),
   title: yup.string().required('Title is a required'),
   amount: yup.number().typeError('Please input valid number').required('Amount is a required'),
-  startTime: yup
-    .date()
-    // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
-    .min(moment(), 'Please select a time earlier than current time')
-    .typeError('Please select a valid time')
-    .test('EARLIER_THAN_END_TIME', 'Please select a time earlier than end time', (value, context) => {
-      return !context.parent.endTime.valueOf() || (value?.valueOf() || 0) < context.parent.endTime.valueOf()
-    }),
-  endTime: yup
-    .date()
-    .min(moment(), 'Please select a time earlier than current time')
-    .typeError('Please select a valid time')
-    .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value, context) => {
-      return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
-    }),
   delayUnlockingTime: yup
     .date()
     .nullable(true)
@@ -136,16 +147,6 @@ const sellerValidationSchema = yup.object({
           test: (input, context) => {
             if (moment(input) < moment()) {
               return context.createError({ message: 'Please select a time earlier than current time' })
-            }
-            if (
-              !(
-                !context.parent.endTime?.valueOf() ||
-                !context.parent.startTime?.valueOf() ||
-                ((input?.valueOf() || 0) >= context.parent.startTime?.valueOf() &&
-                  (input?.valueOf() || 0) >= context.parent.endTime?.valueOf())
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than start time and end time' })
             }
             return true
           }
@@ -165,16 +166,6 @@ const sellerValidationSchema = yup.object({
           test: (input, context) => {
             if (moment(input) < moment()) {
               return context.createError({ message: 'Please select a time earlier than current time' })
-            }
-            if (
-              !(
-                !context.parent.endTime.valueOf() ||
-                !context.parent.startTime.valueOf() ||
-                ((input?.valueOf() || 0) >= context.parent.startTime.valueOf() &&
-                  (input?.valueOf() || 0) >= context.parent.endTime.valueOf())
-              )
-            ) {
-              return context.createError({ message: 'Please select a time later than start time and end time' })
             }
             return true
           }
@@ -430,47 +421,155 @@ function SetFragmentReleaseTime({
 function LabelTitle({ children }: { children: any }) {
   return <FormLabel sx={{ fontWeight: 600, color: '#222223', mt: 10 }}>{children}</FormLabel>
 }
-const BidBlock = ({ formValues, erc20TokenDeatail }: { formValues: ISeller; erc20TokenDeatail: any }) => {
-  console.log('erc20TokenDeatail, erc20TokenDeatail>>', formValues, erc20TokenDeatail)
+const BidBlock = ({
+  formValues,
+  erc20TokenDeatail,
+  errors,
+  handleSubmit
+}: {
+  formValues: ISeller
+  erc20TokenDeatail: TokenlockResponse
+  errors: FormikErrors<ISeller>
+  handleSubmit: () => void
+}) => {
+  const { account } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
+  const isNeedToApprove = useMemo(() => {
+    return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
+  }, [erc20TokenDeatail?.allowance, formValues.amount])
+  const lockAmount = useMemo(() => {
+    return erc20TokenDeatail?.tokenCurrency && formValues.amount
+      ? CurrencyAmount.fromAmount(erc20TokenDeatail?.tokenCurrency, formValues.amount)
+      : undefined
+  }, [erc20TokenDeatail?.tokenCurrency, formValues.amount])
+  const [approvalState, approveCallback] = useApproveCallback(
+    lockAmount,
+    TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[formValues.chainId],
+    true
+  )
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback])
+  const approveBtn: {
+    disabled?: boolean
+    loading?: boolean
+    text?: string
+    run?: () => void
+  } = useMemo(() => {
+    if (!account) {
+      return {
+        text: 'Connect wallet',
+        run: showLoginModal
+      }
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return {
+          text: `Approving use of ${erc20TokenDeatail?.tokenCurrency?.symbol} ...`,
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return {
+          text: 'Loading...',
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return {
+          text: `Approve use of ${erc20TokenDeatail?.tokenCurrency?.symbol}`,
+          run: toApprove
+        }
+      }
+    }
+    return {
+      run: toApprove
+    }
+  }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
   return (
-    <Stack gap={'32px'} mt={'24px'}>
-      <Box
-        sx={{
-          width: '100%',
-          height: 70,
-          display: 'flex',
-          flexFlow: 'row nowrap',
-          justifyContent: 'center',
-          alignItems: 'center',
-          background: 'rgba(225, 242, 92, 0.15)'
-        }}
-      >
-        <Typography
-          component={'span'}
-          sx={{
-            fontFamily: `'Public Sans'`,
-            fontSize: '20px',
-            fontWeight: 600,
-            lineHeight: '28px',
-            color: '#121212'
-          }}
-        >
-          Fee 2.33BNB
-        </Typography>
-      </Box>
-      <Grid container spacing={{ xs: 10, xl: 18 }}>
-        <Grid item xs={6}>
-          <LoadingButton>Approve</LoadingButton>
-        </Grid>
-        <Grid item xs={6}></Grid>
-      </Grid>
-    </Stack>
+    <FormLayout
+      childForm={
+        <Stack gap={'32px'} mt={'24px'}>
+          <Grid container spacing={{ xs: 10, xl: 18 }} justifyContent={'center'}>
+            {isNeedToApprove && (
+              <Grid item xs={6}>
+                <LoadingButton
+                  sx={{
+                    width: '100%',
+                    border: '1px solid #121212',
+                    '&:hover': {
+                      background: '#121212',
+                      color: '#fff'
+                    }
+                  }}
+                  loading={approveBtn.loading}
+                  onClick={() => {
+                    approveBtn.run && approveBtn.run()
+                  }}
+                >
+                  {approveBtn.text}
+                </LoadingButton>
+              </Grid>
+            )}
+
+            <Grid item xs={6}>
+              <LoadingButton
+                sx={{
+                  width: '100%',
+                  background: '#121212',
+                  color: '#fff',
+                  '&:hover': {
+                    background: '#121212',
+                    color: '#fff'
+                  }
+                }}
+                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                onClick={() => {
+                  handleSubmit && handleSubmit()
+                }}
+              >
+                Lock
+              </LoadingButton>
+            </Grid>
+          </Grid>
+        </Stack>
+      }
+    />
   )
 }
 const TokenLockerForm = () => {
   const showLoginModal = useShowLoginModal()
   const { account } = useActiveWeb3React()
-  const optionDatas = useOptionDatas()
+  //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
   const [chainId, setChainId] = useState<ChainId>(ChainId.SEPOLIA)
   const ChainSelectOption = ChainList.filter(item => {
@@ -492,8 +591,6 @@ const TokenLockerForm = () => {
     title: '',
     amount: '',
     releaseType: IReleaseType.Cliff,
-    startTime: null,
-    endTime: null,
     delayUnlockingTime: null,
     linearUnlockingStartTime: null,
     linearUnlockingEndTime: null,
@@ -502,9 +599,45 @@ const TokenLockerForm = () => {
     segmentAmount: '',
     fragmentReleaseSize: ''
   }
+  const lockHandle = useTokenTimelock(chainId)
+  const nav = useNavigate()
   const onSubmit = (value: ISeller) => {
-    const chainInfoOptId = optionDatas?.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === value.chainId)
-    console.log('chainInfoOptId?.id as ChainId>>>', chainInfoOptId?.id as ChainId)
+    showRequestConfirmDialog()
+    console.log('Mintervalues>>>', value)
+    try {
+      const amoutAraw = erc20TokenDeatail?.tokenCurrency
+        ? CurrencyAmount.fromAmount(erc20TokenDeatail.tokenCurrency, value.amount)
+        : undefined
+      const args = [
+        value.title,
+        value.tokenAddress,
+        value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account,
+        amoutAraw,
+        value?.delayUnlockingTime?.unix() + ''
+      ]
+      console.log('args>>>', args)
+      lockHandle(
+        value.title,
+        value.tokenAddress,
+        value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
+        amoutAraw,
+        value?.delayUnlockingTime?.unix() + ''
+      ).then(resp => {
+        console.log('Lock', resp)
+        show(DialogTips, {
+          iconType: 'success',
+          againBtn: 'Check Detail',
+          title: 'Congratulations!',
+          content: 'You have successfully lock token'
+        }).then(() => {
+          nav(`${routes.tokenToolBox.tokenLockerInfo}/${chainId}/${resp.hash}`)
+        })
+        hideDialogConfirmation()
+      })
+    } catch (e) {
+      console.log('Lock', e)
+      hideDialogConfirmation()
+    }
   }
   return (
     // TODO: move LocalizationProvider to _app.tex
@@ -516,285 +649,297 @@ const TokenLockerForm = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
-          console.log('values>>>', values)
           // update hook params
+          console.log('values,errors>>>', values, errors)
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
           return (
-            <Form>
-              <Box
-                component={'form'}
-                sx={{
-                  borderRadius: '0 25px 25px 25px',
-                  background: '#fff',
-                  padding: '56px'
-                }}
-                onSubmit={handleSubmit}
-              >
-                <FormLayout
-                  childForm={
-                    <FormItem>
-                      <ToolBoxSelect
-                        variant="outlined"
-                        value={values.chainId}
-                        onChange={({ target }) => {
-                          setFieldValue('chainId', target.value)
-                        }}
-                        placeholder={'Select chain'}
-                        renderValue={selected => {
-                          const currentChain = ChainSelectOption.find(item => item.id === selected)
-                          return (
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                gap: 16,
-                                alignItems: 'center'
-                              }}
-                            >
-                              {selected ? (
-                                <>
-                                  <Image style={{ width: 32, height: 32 }} src={currentChain?.logo as string} />
-                                  <Stack>
-                                    <Typography
-                                      component={'span'}
-                                      sx={{
-                                        color: '#959595',
-                                        fontFamily: `'Inter'`,
-                                        fontSize: 12
-                                      }}
-                                    >
-                                      Select Chain
-                                    </Typography>
-                                    <Title sx={{ fontSize: 14, color: '#121212' }}>{currentChain?.name}</Title>
-                                  </Stack>
-                                </>
-                              ) : (
-                                <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>Select Chain</Title>
-                              )}
-                            </Box>
-                          )
-                        }}
-                      >
-                        {ChainSelectOption.map(t => (
-                          <MenuItem
-                            key={t.id}
-                            value={t.id}
-                            sx={{
-                              '&.Mui-selected': {
-                                background: values.chainId === t.id ? '#E1F25C' : ''
-                              }
-                            }}
-                          >
-                            <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-                              <Image style={{ width: 25, height: 25 }} src={t.logo} />
-                              <Title sx={{ fontSize: 16 }}>{t.name}</Title>
-                            </Stack>
-                          </MenuItem>
-                        ))}
-                      </ToolBoxSelect>
-                    </FormItem>
-                  }
-                />
-                <LineCom />
-                <FormLayout
-                  title1="Token address"
-                  childForm={
-                    <FormItem name={'tokenAddress'}>
-                      <ToolBoxInput
-                        value={values.tokenAddress}
-                        onChange={e => {
-                          if (isAddress(e.target.value)) {
-                            setFieldValue('tokenAddress', e.target.value)
-                          }
-                        }}
-                        placeholder={'Token Address'}
-                      />
-                    </FormItem>
-                  }
-                />
-                <FormLayout
-                  title1="Use another owner"
-                  isShowByChecked={true}
-                  checkedHandle={(value: boolean) => {
-                    setFieldValue('anotherTokenChecked', value)
-                  }}
-                  description={'The address you input here will be receive the tokens once they are unlocked'}
-                  childForm={
-                    <FormItem name={'anotherTokenAddress'}>
-                      <ToolBoxInput placeholder={'Token Address'} />
-                    </FormItem>
-                  }
-                />
-                <LineCom />
-                <RowTextInfo label={'Token name'} value={erc20TokenDeatail?.name || '--'} />
-                <RowTextInfo label={'Token symbol'} value={erc20TokenDeatail?.symbol || '--'} />
-                <RowTextInfo
-                  label={'Token decimal'}
-                  value={erc20TokenDeatail?.decimals ? erc20TokenDeatail?.decimals + '' : '--'}
-                />
-                <RowTextInfo label={'Balance'} value={erc20TokenDeatail?.balance?.toExact() || '--'} />
-                <RowTextInfo label={'Allowance'} value={erc20TokenDeatail?.allowance?.toExact() || '--'} line={false} />
-                <LineCom />
-                <FormLayout
-                  title1="Title"
-                  childForm={
-                    <FormItem name={'title'}>
-                      <ToolBoxInput placeholder={'Please enter locker title'} />
-                    </FormItem>
-                  }
-                />
-                <FormLayout
-                  title1="Amount"
-                  childForm={
-                    <>
-                      <FormItem
-                        name={'amount'}
-                        sx={{
-                          position: 'relative'
-                        }}
-                      >
-                        <>
-                          <ToolBoxInput
-                            placeholder={'Please enter amount'}
-                            value={values.amount}
-                            sx={{
-                              paddingRight: '100px'
-                            }}
-                            onChange={e => {
-                              const value = e.target.value
-                              let filtered = value.replace(/[^0-9.]/g, '').replace(/(\.\d{8})[\d.]+/g, '$1')
-                              if (filtered.startsWith('.')) {
-                                filtered = '0' + filtered
-                              }
-                              // 处理多个小数点的情况，只保留第一个小数点
-                              const decimalIndex = filtered.indexOf('.')
-                              if (decimalIndex !== -1) {
-                                filtered =
-                                  filtered.slice(0, decimalIndex + 1) +
-                                  filtered.slice(decimalIndex + 1).replace(/\./g, '')
-                              }
-                              console.log('amount>>>', filtered)
-                              if (Number(filtered) > Number(erc20TokenDeatail.balance.toExact())) {
-                                filtered = erc20TokenDeatail.balance.toExact()
-                              }
-                              setFieldValue('amount', filtered)
-                            }}
-                          />
-                          {/* max btn */}
+            <Form
+              style={{
+                borderRadius: '0 25px 25px 25px',
+                background: '#fff',
+                padding: '56px'
+              }}
+              onSubmit={handleSubmit}
+            >
+              <FormLayout
+                childForm={
+                  <FormItem>
+                    <ToolBoxSelect
+                      variant="outlined"
+                      value={values.chainId}
+                      onChange={({ target }) => {
+                        setFieldValue('chainId', target.value)
+                      }}
+                      placeholder={'Select chain'}
+                      renderValue={selected => {
+                        const currentChain = ChainSelectOption.find(item => item.id === selected)
+                        return (
                           <Box
                             sx={{
-                              width: '60px',
-                              height: '40px',
-                              position: 'absolute',
-                              top: '50%',
-                              right: 34,
-                              transform: 'translate3D(0, -50%, 0)',
                               display: 'flex',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              cursor: 'pointer',
-                              '.max': {
-                                color: '#121212',
-                                lineHeight: '20px',
-                                borderBottom: '2px solid #121212'
-                              },
-                              '&:hover': {
-                                background: '#121212',
-                                borderRadius: '8px',
-                                '.max': {
-                                  color: '#fff',
-                                  lineHeight: '20px',
-                                  borderBottom: '2px solid #121212'
-                                }
-                              }
-                            }}
-                            onClick={() => {
-                              console.log('erc20TokenDeatail.max>>>', erc20TokenDeatail.max)
-                              setFieldValue('amount', erc20TokenDeatail.max)
+                              flexDirection: 'row',
+                              gap: 16,
+                              alignItems: 'center'
                             }}
                           >
-                            <Typography className={'max'}>Max</Typography>
+                            {selected ? (
+                              <>
+                                <Image style={{ width: 32, height: 32 }} src={currentChain?.logo as string} />
+                                <Stack>
+                                  <Typography
+                                    component={'span'}
+                                    sx={{
+                                      color: '#959595',
+                                      fontFamily: `'Inter'`,
+                                      fontSize: 12
+                                    }}
+                                  >
+                                    Select Chain
+                                  </Typography>
+                                  <Title sx={{ fontSize: 14, color: '#121212' }}>{currentChain?.name}</Title>
+                                </Stack>
+                              </>
+                            ) : (
+                              <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>Select Chain</Title>
+                            )}
                           </Box>
-                        </>
-                      </FormItem>
-                    </>
-                  }
-                />
-                <LineCom />
-                <FormLayout
-                  title1={
-                    <>
-                      <Title sx={{ color: '#20201E', fontSize: 20, lineHeight: '28px' }}>Locking model</Title>
-                      <Tooltip title="Coming soon">
-                        <TipIcon
-                          style={{
-                            cursor: 'pointer'
+                        )
+                      }}
+                    >
+                      {ChainSelectOption.map(t => (
+                        <MenuItem
+                          key={t.id}
+                          value={t.id}
+                          sx={{
+                            '&.Mui-selected': {
+                              background: values.chainId === t.id ? '#E1F25C' : ''
+                            }
+                          }}
+                        >
+                          <Stack sx={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                            <Image style={{ width: 25, height: 25 }} src={t.logo} />
+                            <Title sx={{ fontSize: 16 }}>{t.name}</Title>
+                          </Stack>
+                        </MenuItem>
+                      ))}
+                    </ToolBoxSelect>
+                  </FormItem>
+                }
+              />
+              <LineCom />
+              <FormLayout
+                title1="Token address"
+                childForm={
+                  <FormItem name={'tokenAddress'}>
+                    <ToolBoxInput
+                      sx={{
+                        color: '#121212'
+                      }}
+                      value={values.tokenAddress}
+                      onChange={e => {
+                        if (isAddress(e.target.value)) {
+                          setFieldValue('tokenAddress', e.target.value)
+                        }
+                      }}
+                      placeholder={'Token Address'}
+                    />
+                  </FormItem>
+                }
+              />
+              <FormLayout
+                title1="Use another owner"
+                isShowByChecked={true}
+                checkedHandle={(value: boolean) => {
+                  setFieldValue('anotherTokenChecked', value)
+                }}
+                description={'The address you input here will be receive the tokens once they are unlocked'}
+                childForm={
+                  <FormItem name={'anotherTokenAddress'}>
+                    <ToolBoxInput placeholder={'Token Address'} />
+                  </FormItem>
+                }
+              />
+              <LineCom />
+              <RowTextInfo label={'Token name'} value={erc20TokenDeatail?.tokenCurrency?.name || '--'} />
+              <RowTextInfo label={'Token symbol'} value={erc20TokenDeatail?.tokenCurrency?.symbol || '--'} />
+              <RowTextInfo
+                label={'Token decimal'}
+                value={
+                  erc20TokenDeatail?.tokenCurrency?.decimals ? erc20TokenDeatail?.tokenCurrency?.decimals + '' : '--'
+                }
+              />
+              <RowTextInfo label={'Balance'} value={erc20TokenDeatail?.balance?.toExact() || '--'} />
+              <RowTextInfo label={'Allowance'} value={erc20TokenDeatail?.allowance?.toExact() || '--'} line={false} />
+              <LineCom />
+              <FormLayout
+                title1="Title"
+                childForm={
+                  <FormItem name={'title'}>
+                    <ToolBoxInput placeholder={'Please enter locker title'} />
+                  </FormItem>
+                }
+              />
+              <FormLayout
+                title1="Amount"
+                childForm={
+                  <>
+                    <FormItem
+                      name={'amount'}
+                      sx={{
+                        position: 'relative'
+                      }}
+                    >
+                      <>
+                        <ToolBoxInput
+                          placeholder={'Please enter amount'}
+                          value={values.amount}
+                          sx={{
+                            paddingRight: '100px'
+                          }}
+                          onChange={e => {
+                            const value = e.target.value
+                            let filtered = value.replace(/[^0-9.]/g, '').replace(/(\.\d{8})[\d.]+/g, '$1')
+                            if (filtered.startsWith('.')) {
+                              filtered = '0' + filtered
+                            }
+                            // 处理多个小数点的情况，只保留第一个小数点
+                            const decimalIndex = filtered.indexOf('.')
+                            if (decimalIndex !== -1) {
+                              filtered =
+                                filtered.slice(0, decimalIndex + 1) +
+                                filtered.slice(decimalIndex + 1).replace(/\./g, '')
+                            }
+                            console.log('amount>>>', filtered)
+                            if (
+                              erc20TokenDeatail &&
+                              erc20TokenDeatail.balance &&
+                              Number(filtered) > Number(erc20TokenDeatail.balance.toExact())
+                            ) {
+                              filtered = erc20TokenDeatail.balance.toExact()
+                            }
+                            setFieldValue('amount', filtered)
                           }}
                         />
-                      </Tooltip>
-                    </>
-                  }
-                  childForm={
-                    <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
-                      <FormControlLabel value={IReleaseType.Cliff} control={<Radio />} label="Normal" />
-                      <FormControlLabel value={IReleaseType.Linear} control={<Radio />} label="Linear" />
-                      <FormControlLabel value={IReleaseType.Fragment} control={<Radio />} label="Stage" />
-                    </Field>
-                  }
-                />
-                {Number(values.releaseType) === IReleaseType.Instant ? (
-                  <LabelTitle>Participate in the auction to get tokens immediately</LabelTitle>
-                ) : Number(values.releaseType) === IReleaseType.Cliff ? (
+                        {/* max btn */}
+                        <Box
+                          sx={{
+                            width: '60px',
+                            height: '40px',
+                            position: 'absolute',
+                            top: '50%',
+                            right: 34,
+                            transform: 'translate3D(0, -50%, 0)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            cursor: 'pointer',
+                            '.max': {
+                              color: '#121212',
+                              lineHeight: '20px',
+                              borderBottom: '2px solid #121212'
+                            },
+                            '&:hover': {
+                              background: '#121212',
+                              borderRadius: '8px',
+                              '.max': {
+                                color: '#fff',
+                                lineHeight: '20px',
+                                borderBottom: '2px solid #121212'
+                              }
+                            }
+                          }}
+                          onClick={() => {
+                            console.log('erc20TokenDeatail.max>>>', erc20TokenDeatail.max)
+                            setFieldValue('amount', erc20TokenDeatail.max)
+                          }}
+                        >
+                          <Typography className={'max'}>Max</Typography>
+                        </Box>
+                      </>
+                    </FormItem>
+                  </>
+                }
+              />
+              <LineCom />
+              <FormLayout
+                title1={
+                  <>
+                    <Title sx={{ color: '#20201E', fontSize: 20, lineHeight: '28px' }}>Locking model</Title>
+                    <Tooltip title="Coming soon">
+                      <TipIcon
+                        style={{
+                          cursor: 'pointer'
+                        }}
+                      />
+                    </Tooltip>
+                  </>
+                }
+                childForm={
+                  <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
+                    <FormControlLabel value={IReleaseType.Cliff} control={<Radio />} label="Normal" />
+                    <FormControlLabel value={IReleaseType.Linear} control={<Radio />} label="Linear" />
+                    <FormControlLabel value={IReleaseType.Fragment} control={<Radio />} label="Stage" />
+                  </Field>
+                }
+              />
+              {Number(values.releaseType) === IReleaseType.Instant ? (
+                <LabelTitle>Participate in the auction to get tokens immediately</LabelTitle>
+              ) : Number(values.releaseType) === IReleaseType.Cliff ? (
+                <Stack spacing={6}>
+                  <LabelTitle>Unlocking Start Time</LabelTitle>
+                  <Field
+                    component={DateTimePickerFormItem}
+                    disablePast
+                    name="delayUnlockingTime"
+                    minDateTime={moment()}
+                    textField={{ sx: { width: '100%' } }}
+                  />
+                </Stack>
+              ) : Number(values.releaseType) === IReleaseType.Linear ? (
+                <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
                   <Stack spacing={6}>
-                    <LabelTitle>Unlocking Start Time</LabelTitle>
+                    <LabelTitle>Start Time</LabelTitle>
                     <Field
                       component={DateTimePickerFormItem}
                       disablePast
-                      name="delayUnlockingTime"
-                      minDateTime={values.endTime}
+                      name="linearUnlockingStartTime"
+                      minDateTime={moment()}
+                      maxDateTime={values.linearUnlockingEndTime}
                       textField={{ sx: { width: '100%' } }}
                     />
                   </Stack>
-                ) : Number(values.releaseType) === IReleaseType.Linear ? (
-                  <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
-                    <Stack spacing={6}>
-                      <LabelTitle>Start Time</LabelTitle>
-                      <Field
-                        component={DateTimePickerFormItem}
-                        disablePast
-                        name="linearUnlockingStartTime"
-                        minDateTime={values.endTime}
-                        textField={{ sx: { width: '100%' } }}
-                      />
-                    </Stack>
 
-                    <Stack spacing={6}>
-                      <LabelTitle>End Time</LabelTitle>
-                      <Field
-                        component={DateTimePickerFormItem}
-                        disablePast
-                        name="linearUnlockingEndTime"
-                        minDateTime={values.linearUnlockingStartTime}
-                        textField={{ sx: { width: '100%' } }}
-                      />
-                    </Stack>
-                  </Box>
-                ) : Number(values.releaseType) === IReleaseType.Fragment ? (
-                  <SetFragmentReleaseTime
-                    minDateTime={values.endTime}
-                    errors={errors.fragmentReleaseTimes}
-                    sizeError={errors.fragmentReleaseSize}
-                    releaseTimes={values.fragmentReleaseTimes}
-                    setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) =>
-                      setFieldValue('fragmentReleaseTimes', val)
-                    }
-                  />
-                ) : (
-                  <LabelTitle>No unlocking method is set; tokens can be claimed after the specified end.</LabelTitle>
-                )}
-                <BidBlock formValues={values} erc20TokenDeatail={erc20TokenDeatail} />
-              </Box>
+                  <Stack spacing={6}>
+                    <LabelTitle>End Time</LabelTitle>
+                    <Field
+                      component={DateTimePickerFormItem}
+                      disablePast
+                      name="linearUnlockingEndTime"
+                      minDateTime={values.linearUnlockingStartTime}
+                      textField={{ sx: { width: '100%' } }}
+                    />
+                  </Stack>
+                </Box>
+              ) : Number(values.releaseType) === IReleaseType.Fragment ? (
+                <SetFragmentReleaseTime
+                  minDateTime={moment()}
+                  errors={errors.fragmentReleaseTimes}
+                  sizeError={errors.fragmentReleaseSize}
+                  releaseTimes={values.fragmentReleaseTimes}
+                  setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) => setFieldValue('fragmentReleaseTimes', val)}
+                />
+              ) : (
+                <LabelTitle>No unlocking method is set; tokens can be claimed after the specified end.</LabelTitle>
+              )}
+              <BidBlock
+                formValues={values}
+                erc20TokenDeatail={erc20TokenDeatail}
+                errors={errors}
+                handleSubmit={() => {
+                  handleSubmit()
+                }}
+              />
             </Form>
           )
         }}
