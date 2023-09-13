@@ -61,13 +61,16 @@ export function useDisperseToken() {
         return Promise.reject('no contract')
       }
       const args = [token, recipients, values]
-      const estimatedGas = await disperseContract.estimateGas.disperseToken(...args).catch((error: Error) => {
-        console.debug('Failed to disperse ether', error)
-        throw error
-      })
+      const estimatedGas = await disperseContract.estimateGas
+        .disperseToken(...args, { value: 0.000000000000000001 })
+        .catch((error: Error) => {
+          console.debug('Failed to disperse ether', error)
+          throw error
+        })
       return disperseContract
         .disperseToken(...args, {
-          gasLimit: calculateGasMargin(estimatedGas)
+          gasLimit: calculateGasMargin(estimatedGas),
+          value: 0.000000000000000001
         })
         .then((response: TransactionResponse) => {
           console.log('disperse', 'enter')

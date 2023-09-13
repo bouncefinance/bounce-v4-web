@@ -21,12 +21,11 @@ import {
 import { useDisperseEther, useDisperseToken } from '../../../../hooks/useDisperse'
 import { isAddress } from '@ethersproject/address'
 import { useErc20TokenDetail } from '../../../../bounceHooks/toolbox/useDisperseCallback'
-import { useNFTApproveAllCallback } from '../../../../hooks/useNFTApproveAllCallback'
-import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from '../../../../bounceComponents/common/DialogTips'
-import { ApprovalState } from '../../../../hooks/useApproveCallback'
+import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
 import { useShowLoginModal } from '../../../../state/users/hooks'
+import JSBI from 'jsbi'
 
 interface IDisperse {
   chainId: number
@@ -45,9 +44,12 @@ export default function Disperse() {
   const disperseEther = useDisperseEther(chainId as ChainId)
   const disperseToken = useDisperseToken()
   const showLoginModal = useShowLoginModal()
-  const [approvalState, approveCallback] = useNFTApproveAllCallback(
-    DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
-    account
+  const [needApprove, setNeedApprove] = useState(0)
+  console.log('needApprove', needApprove)
+  const [approvalState, approveCallback] = useApproveCallback(
+    CurrencyAmount.fromAmount(balance?.currency, needApprove),
+    account,
+    true
   )
   const toDisperseEther = useCallback(
     async (recipients: string[], values: string[]) => {
@@ -201,10 +203,26 @@ export default function Disperse() {
           <Desc>View history</Desc>
         </SubTitle>
         <Formik initialValues={disperse} onSubmit={onSubmit}>
-          {({ values, setFieldValue, handleSubmit }) => {
+          {({ values, errors, setFieldValue, handleSubmit }) => {
             setTokenAddr(values.tokenAddress)
-            const currentBalance = values.type == 'chain' ? myChainBalance : balance
-            // setType(values.type)
+            const currentBalance: CurrencyAmount = values.type == 'chain' ? myChainBalance : balance
+            const amount = values.recipients
+              .split('\n')
+              .map(v => v.split(' '))
+              .filter(v => v.length == 2 && isAddress(v[0]) && Number(v[1]))
+              .map(v => Number(v[1]))
+              .reduce((sum, current) => sum + current, 0)
+            const currencyAmount = CurrencyAmount.fromAmount(currentBalance?.currency, amount)
+            const validAmount =
+              currentBalance && currencyAmount && JSBI.lessThan(currencyAmount.raw, currentBalance.raw)
+            console.log('validAmountamount', amount)
+            console.log('validAmountcurrentBalance', currentBalance)
+            console.log('validAmountcurrencyAmount', currencyAmount)
+            console.log('validAmount', validAmount)
+            if (!validAmount) {
+              errors.recipients = 'Amount of disperse is bigger than your balance'
+            }
+            setNeedApprove(amount)
             return (
               <Box
                 component={'form'}
@@ -398,23 +416,19 @@ export default function Disperse() {
                                   })}
                               <BoxSpaceBetween mt={30}>
                                 <SmallText>Your balance</SmallText>
-                                <Body01>
-                                  {currentBalance?.toSignificant()}
-                                  {currentBalance?.currency?.symbol}
-                                </Body01>
+                                <Box display={'flex'}>
+                                  <Body01>{currentBalance?.toSignificant()}</Body01>
+                                  <Body01 ml={8}> {currentBalance?.currency?.symbol}</Body01>
+                                </Box>
                               </BoxSpaceBetween>
                               <BoxSpaceBetween>
                                 <SmallText>Remaining</SmallText>
-                                <Body01>
-                                  {currentBalance &&
-                                    Number(currentBalance?.toSignificant()) -
-                                      values.recipients
-                                        .split('\n')
-                                        .filter(v => v.split(' ').length == 2 && Number(v.split(' ')[1]))
-                                        .map(v => Number(v.split(' ')[1]))
-                                        .reduce((sum, current) => sum + current, 0)}
-                                  {currentBalance?.currency?.symbol}
-                                </Body01>
+                                <Box display={'flex'}>
+                                  <Body01>
+                                    {validAmount ? currentBalance.subtract(currencyAmount).toSignificant() : '-'}
+                                  </Body01>
+                                  <Body01 ml={8}>{currentBalance?.currency?.symbol}</Body01>
+                                </Box>
                               </BoxSpaceBetween>
                             </ConfirmDetailBox>
                           </ConfirmBox>
@@ -424,14 +438,16 @@ export default function Disperse() {
                   />
                   <BoxSpaceBetween gap={10}>
                     {values.type == 'token' && (
-                      <LineBtn type="button" onClick={confirmBtn.run}>
+                      <LineBtn type="button" onClick={toApprove}>
                         {confirmBtn.text}
                       </LineBtn>
                     )}
                     <SolidBtn
                       type="submit"
                       className={
-                        values.recipients.split('\n').filter(v => v.split(' ').length == 2).length > 0 ? 'active' : ''
+                        values.recipients.split('\n').filter(v => v.split(' ').length == 2).length > 0 && validAmount
+                          ? 'active'
+                          : ''
                       }
                     >
                       Disperse token

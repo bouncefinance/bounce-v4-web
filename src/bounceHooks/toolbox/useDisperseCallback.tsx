@@ -7,6 +7,7 @@ import { DISPERSE_CONTRACT_ADDRESSES } from '../../constants'
 import { useRequest } from 'ahooks'
 import { getMyDisperse } from '../../api/toolbox'
 import useChainConfigInBackend from '../web3/useChainConfigInBackend'
+import { MyDisperseList } from '../../api/toolbox/type'
 
 export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId): any => {
   const { account } = useActiveWeb3React()
@@ -33,12 +34,12 @@ export const useDisperseList = (chain?: ChainId, token?: string) => {
   const { account, chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || chainId || '')
   return useRequest(
-    async (): Promise<any> => {
+    async (): Promise<MyDisperseList> => {
       return await getMyDisperse({
         address: account || '',
         chainId: chainConfigInBackend?.id || 0,
         token: token || ''
-      })
+      }).then(resp => resp.data)
     },
     {
       refreshDeps: [account],

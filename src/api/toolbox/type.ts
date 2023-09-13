@@ -30,3 +30,21 @@ export interface TokenInfo {
   created_at: string
   updated_at: string
 }
+export interface MyDisperseList {
+  list: Disperse[]
+  total: number
+}
+export interface Disperse {
+  id: number
+  contract: string
+  creator: string
+  chain_id: number
+  token: string
+  name: string
+  amount: string
+  hash: string
+  tx_ts: number
+  block_height: number
+  created_at: string
+  updated_at: string
+}
