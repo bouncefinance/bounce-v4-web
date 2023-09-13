@@ -606,8 +606,8 @@ const TokenLockerForm = () => {
     console.log('Mintervalues>>>', value)
     try {
       const amoutAraw = erc20TokenDeatail?.tokenCurrency
-        ? CurrencyAmount.fromAmount(erc20TokenDeatail.tokenCurrency, value.amount)?.raw?.toString() || '0'
-        : '0'
+        ? CurrencyAmount.fromAmount(erc20TokenDeatail.tokenCurrency, value.amount)
+        : undefined
       const args = [
         value.title,
         value.tokenAddress,

@@ -19,7 +19,7 @@ export function useTokenTimelock(chain: ChainId) {
       title: string,
       tokenAddress: string,
       accountAddress: string,
-      amount: number | string,
+      amount: CurrencyAmount | undefined,
       releaseTime: string
     ): Promise<any> => {
       if (!account) {
@@ -28,16 +28,18 @@ export function useTokenTimelock(chain: ChainId) {
       if (!erc20TimelockContract) {
         return Promise.reject('no contract')
       }
-      console.log('erc20TimelockContract>>', erc20TimelockContract)
-      const args = [title, tokenAddress, accountAddress, amount, releaseTime]
-      console.log('Lock args>>>', args)
+      if (!(amount instanceof CurrencyAmount)) {
+        return Promise.reject('no amount')
+      }
+      const args = [title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
+      console.log('Lock args， erc20TimelockContract>>>', args, erc20TimelockContract)
+      const isToken1Native = amount?.currency.isNative
       const estimatedGas = await erc20TimelockContract.estimateGas
-        .deployERC20Timelock(...args, { value: amount })
+        .deployERC20Timelock(...args, { value: isToken1Native ? amount?.raw?.toString() : undefined })
         .catch((error: Error) => {
           console.debug('Failed to mint token', error)
           throw error
         })
-      console.log('estimatedGas>>', estimatedGas)
       return erc20TimelockContract
         .deployERC20Timelock(...args, {
           gasLimit: calculateGasMargin(estimatedGas)
