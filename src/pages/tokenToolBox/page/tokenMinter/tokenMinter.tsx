@@ -14,7 +14,6 @@ import { useState } from 'react'
 import { isAddress } from '@ethersproject/address'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from '../../../../bounceComponents/common/DialogTips'
-import { routes } from '../../../../constants/routes'
 import { useNavigate } from 'react-router-dom'
 
 interface IMinter {
@@ -48,9 +47,10 @@ export default function TokenMinter() {
           iconType: 'success',
           againBtn: 'Check Detail',
           title: 'Congratulations!',
-          content: 'You have successfully mint a new token'
-        }).then(() => {
-          nav(`${routes.tokenToolBox.tokenMinterInfo}/${currentChain}/${resp.hash}`)
+          content: 'You have successfully mint a new token',
+          onAgain: () => {
+            nav(`/TokenToolBox/tokenMinterInfo/${currentChain}/${resp.hash}`)
+          }
         })
         hideDialogConfirmation()
       })
