@@ -399,6 +399,9 @@ export const MINTER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.OMNI_TESTNET]: '',
   [ChainId.ROLLUX]: ''
 }
+// 【token locker】
+//  Cliff,normal (ToolboxERC20TimelockFactory.deployERC20Timelock)
+//  Fragment,stage (ToolboxERC20TimelockFactory.deployERC20MultiTimelock)
 export const TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
   [ChainId.GÖRLI]: '',
@@ -428,6 +431,46 @@ export const TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.SEPOLIA]: '0x6b2F9CDEbAdDa7778cD01a7519CAb375729512eF',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.BASE]: '',
+  [ChainId.BASE_TESTNET]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
+  [ChainId.LINEA_GORLI]: ''
+}
+// 【token locker】
+//  Linear,line ToolboxERC20VestingFactory.deployERC20Vesting
+export const TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0xd52eb3d7E23112e7D6AAB41b510fFb41751d9BD7',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.BASE]: '',
