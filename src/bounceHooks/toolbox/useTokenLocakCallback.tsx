@@ -4,7 +4,14 @@ import { useActiveWeb3React } from 'hooks'
 import { useMemo } from 'react'
 import { useTokenAllowance } from 'data/Allowances'
 import { TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES } from 'constants/index'
-export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId): any => {
+import { Currency, CurrencyAmount } from 'constants/token'
+export interface TokenlockResponse {
+  tokenCurrency: Currency | undefined
+  balance: CurrencyAmount | undefined
+  allowance: CurrencyAmount | undefined
+  max: string
+}
+export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId): TokenlockResponse => {
   const { account } = useActiveWeb3React()
   const res = useToken(tokenAddress, queryChainId)
   const balance = useCurrencyBalance(account, res ?? undefined, queryChainId)
@@ -13,7 +20,6 @@ export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId)
     account ?? undefined,
     TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[queryChainId]
   )
-  console.log('currentAllowance>>>', currentAllowance?.toExact())
   const max = useMemo(() => {
     return balance && currentAllowance
       ? balance?.greaterThan(currentAllowance)
@@ -22,6 +28,6 @@ export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId)
       : '0'
   }, [balance, currentAllowance])
   return useMemo(() => {
-    return { ...res, balance: balance, allowance: currentAllowance, max }
+    return { tokenCurrency: res || undefined, balance: balance, allowance: currentAllowance, max }
   }, [balance, currentAllowance, max, res])
 }

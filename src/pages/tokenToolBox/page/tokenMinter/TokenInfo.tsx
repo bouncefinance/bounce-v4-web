@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material'
 import BackButton from '../../../../bounceComponents/common/BackButton'
-import { ContainerBox } from '../tokenLocker'
+import { ContainerBox } from '../tokenlocker/tokenLocker'
 import { Body01, H4, H6 } from '../../../../components/Text'
 import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
 import Grid2 from '@mui/material/Unstable_Grid2'

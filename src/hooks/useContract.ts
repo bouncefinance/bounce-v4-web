@@ -221,11 +221,10 @@ export function useDutchAuctionContract(address?: string, queryChainId?: ChainId
 }
 
 // token locker
-export function useToolboxERC20TimelockFactory(address?: string, queryChainId?: ChainId) {
+export function useToolboxERC20TimelockFactory(queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
-  const curAddress =
-    address === '' ? undefined : address || (cur ? TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[cur] : undefined)
+  const curAddress = cur ? TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, ToolboxERC20TimelockFactory, true, cur)
 }
 export function useDisperseContract(queryChainId: ChainId) {

@@ -12,7 +12,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material'
-import { ContainerBox, Title } from '../tokenLocker'
+import { ContainerBox, Title } from '../tokenlocker/tokenLocker'
 import { H4 } from '../../../../components/Text'
 import Search from '../../../../bounceComponents/common/Header/Search'
 import BackButton from '../../../../bounceComponents/common/BackButton'

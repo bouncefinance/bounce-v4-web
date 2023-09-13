@@ -1,10 +1,10 @@
 import { Box } from '@mui/material'
-import BackButton from '../../../bounceComponents/common/BackButton'
+import BackButton from '../../../../bounceComponents/common/BackButton'
 import { ContainerBox } from './tokenLocker'
-import { BottomLineBox, FullSpaceBetweenBox, GrayBg, WhiteBg } from './tokenMinter/TokenInfo'
-import { Body01, H4 } from '../../../components/Text'
+import { BottomLineBox, FullSpaceBetweenBox, GrayBg, WhiteBg } from '../tokenMinter/TokenInfo'
+import { Body01, H4 } from '../../../../components/Text'
 import Grid2 from '@mui/material/Unstable_Grid2'
-import { LineBtn, SolidBtn } from './disperse/disperse'
+import { LineBtn, SolidBtn } from '../disperse/disperse'
 
 export default function LockerInfo() {
   return (

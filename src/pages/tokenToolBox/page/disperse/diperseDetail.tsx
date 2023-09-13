@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { ContainerBox } from '../tokenLocker'
+import { ContainerBox } from '../tokenlocker/tokenLocker'
 import { H4 } from '../../../../components/Text'
 import BackButton from '../../../../bounceComponents/common/BackButton'
 
