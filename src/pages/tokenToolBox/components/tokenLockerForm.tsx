@@ -604,18 +604,20 @@ const TokenLockerForm = () => {
   const onSubmit = (value: ISeller) => {
     showRequestConfirmDialog()
     console.log('Mintervalues>>>', value)
+    show(DialogTips, {
+      iconType: 'success',
+      againBtn: 'Check Detail',
+      title: 'Congratulations!',
+      content: 'You have successfully lock token'
+    }).then(() => {
+      nav(
+        `${routes.tokenToolBox.tokenLockerInfo}/${chainId}/0xee975700f2b099b375ae007ba08a80f762d81931b5334903286bea474a3b894c`
+      )
+    })
     try {
       const amoutAraw = erc20TokenDeatail?.tokenCurrency
         ? CurrencyAmount.fromAmount(erc20TokenDeatail.tokenCurrency, value.amount)
         : undefined
-      const args = [
-        value.title,
-        value.tokenAddress,
-        value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account,
-        amoutAraw,
-        value?.delayUnlockingTime?.unix() + ''
-      ]
-      console.log('args>>>', args)
       lockHandle(
         value.title,
         value.tokenAddress,
@@ -635,7 +637,6 @@ const TokenLockerForm = () => {
         hideDialogConfirmation()
       })
     } catch (e) {
-      console.log('Lock', e)
       hideDialogConfirmation()
     }
   }
@@ -803,7 +804,6 @@ const TokenLockerForm = () => {
                             if (filtered.startsWith('.')) {
                               filtered = '0' + filtered
                             }
-                            // 处理多个小数点的情况，只保留第一个小数点
                             const decimalIndex = filtered.indexOf('.')
                             if (decimalIndex !== -1) {
                               filtered =
