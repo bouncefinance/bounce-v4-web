@@ -44,7 +44,7 @@ export default function Disperse() {
   const disperseEther = useDisperseEther(chainId as ChainId)
   const disperseToken = useDisperseToken()
   const showLoginModal = useShowLoginModal()
-  const [needApprove, setNeedApprove] = useState(0)
+  const [needApprove, setNeedApprove] = useState('0')
   console.log('needApprove', needApprove)
   const [approvalState, approveCallback] = useApproveCallback(
     CurrencyAmount.fromAmount(balance?.currency, needApprove),
@@ -83,7 +83,7 @@ export default function Disperse() {
           console.log('disperse', hash)
         }
       } catch (e) {
-        console.log('disperse', e)
+        console.log('disperse-useCallback', e)
       }
     },
     [disperseToken, myChainBalance]
@@ -212,6 +212,7 @@ export default function Disperse() {
               .filter(v => v.length == 2 && isAddress(v[0]) && Number(v[1]))
               .map(v => Number(v[1]))
               .reduce((sum, current) => sum + current, 0)
+              .toFixed(20)
             const currencyAmount = CurrencyAmount.fromAmount(currentBalance?.currency, amount)
             const validAmount =
               currentBalance && currencyAmount && JSBI.lessThan(currencyAmount.raw, currentBalance.raw)
@@ -222,7 +223,7 @@ export default function Disperse() {
             if (!validAmount) {
               errors.recipients = 'Amount of disperse is bigger than your balance'
             }
-            setNeedApprove(amount)
+            setNeedApprove(currencyAmount?.raw.toString() || '0')
             return (
               <Box
                 component={'form'}

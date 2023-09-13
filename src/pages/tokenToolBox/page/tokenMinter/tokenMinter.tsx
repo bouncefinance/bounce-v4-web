@@ -43,6 +43,7 @@ export default function TokenMinter() {
     try {
       tokenMinter(value.name, value.symbol, value.decimals ? value.decimals : '18', value.initial_supply).then(resp => {
         console.log('Minter', resp)
+        hideDialogConfirmation()
         show(DialogTips, {
           iconType: 'success',
           againBtn: 'Check Detail',
@@ -52,7 +53,6 @@ export default function TokenMinter() {
             nav(`/TokenToolBox/tokenMinterInfo/${currentChain}/${resp.hash}`)
           }
         })
-        hideDialogConfirmation()
       })
     } catch (e) {
       console.log('Minter', e)
@@ -210,7 +210,7 @@ export default function TokenMinter() {
                         placeholder={'Token decimal'}
                       />
                     </FormItem>
-                    <SmallTextGray mt={8}>18 reconmended</SmallTextGray>
+                    <SmallTextGray mt={8}>18 recommended</SmallTextGray>
                     <BoxSpaceBetween>
                       <SmallTextGray mt={8}>Total supply (including decimals - raw amount)</SmallTextGray>
                       <SmallTextGray mt={8}>10000000000000000000000</SmallTextGray>
