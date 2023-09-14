@@ -5,6 +5,7 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import { useCallback } from 'react'
 import { calculateGasMargin } from '../utils'
 import { TransactionResponse } from '@ethersproject/providers'
+import JSBI from 'jsbi'
 
 export function useTokenMinter(chain: ChainId) {
   const { account, chainId } = useActiveWeb3React()
@@ -18,8 +19,14 @@ export function useTokenMinter(chain: ChainId) {
       if (!minterContract) {
         return Promise.reject('no contract')
       }
-      const args = [name, symbol, decimals, initial_supply]
-      console.log('Minter', args)
+      let d = '1'
+      for (let i = 0; i < Number(decimals); i++) {
+        d = d + '0'
+      }
+      console.log('useTokenMinter', d)
+      const decimalsSupply = JSBI.multiply(JSBI.BigInt(d), JSBI.BigInt(initial_supply)).toString()
+      const args = [name, symbol, decimals, decimalsSupply]
+      console.log('useTokenMinter', args)
       const estimatedGas = await minterContract.estimateGas.deployERC20(...args).catch((error: Error) => {
         console.debug('Failed to mint token', error)
         throw error

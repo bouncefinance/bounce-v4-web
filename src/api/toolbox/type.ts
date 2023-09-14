@@ -46,11 +46,11 @@ export interface LockInfo {
   chain_id: number
   exchange_id: number
   token0: string
-  token0_name: ''
-  token1: ''
-  token1_name: ''
+  token0_name: string
+  token1: string
+  token1_name: string
   token: string
-  token_id: ''
+  token_id: string
   deploy_contract: string
   new_owner: string
   title: string
@@ -66,4 +66,22 @@ export interface LockInfo {
   updated_at: string
   status: number
   released_amount: string
+}
+export interface MyDisperseList {
+  list: Disperse[]
+  total: number
+}
+export interface Disperse {
+  id: number
+  contract: string
+  creator: string
+  chain_id: number
+  token: string
+  name: string
+  amount: string
+  hash: string
+  tx_ts: number
+  block_height: number
+  created_at: string
+  updated_at: string
 }
