@@ -47,7 +47,7 @@ export default function Disperse() {
   const [needApprove, setNeedApprove] = useState('0')
   console.log('needApprove', needApprove)
   const [approvalState, approveCallback] = useApproveCallback(
-    CurrencyAmount.fromAmount(balance?.currency, needApprove),
+    CurrencyAmount.fromRawAmount(balance?.currency, needApprove),
     account,
     true
   )
