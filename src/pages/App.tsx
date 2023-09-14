@@ -48,7 +48,7 @@ import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 
 import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
-import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
+import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpadComing'
 
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
