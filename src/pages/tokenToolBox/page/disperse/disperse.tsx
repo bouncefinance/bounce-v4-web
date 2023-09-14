@@ -64,9 +64,17 @@ export default function Disperse() {
             values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
           )
           console.log('disperse-result', hash)
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: 'You have successfully disperse Ether'
+          })
         }
       } catch (e) {
         console.log('disperse', e)
+        hideDialogConfirmation()
       }
     },
     [disperseEther, myChainBalance]
@@ -83,8 +91,16 @@ export default function Disperse() {
           )
           console.log('disperse', hash)
         }
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'success',
+          againBtn: 'Close',
+          title: 'Congratulations!',
+          content: 'You have successfully disperse Token'
+        })
       } catch (e) {
         console.log('disperse-useCallback', e)
+        hideDialogConfirmation()
       }
     },
     [disperseToken, myChainBalance]
