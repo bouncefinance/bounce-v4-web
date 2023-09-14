@@ -8,7 +8,6 @@ const useChainConfigInBackend = (searchKey: keyof ChainInfoOpt, searchValue: str
 
   return useMemo(() => {
     if (!optionDatas?.chainInfoOpt) return null
-
     return optionDatas.chainInfoOpt.find(chainInfo => chainInfo?.[searchKey] === searchValue)
   }, [searchKey, searchValue, optionDatas.chainInfoOpt])
 }

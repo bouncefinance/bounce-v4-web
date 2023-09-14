@@ -58,7 +58,6 @@ import {
 import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import BigNumber from 'bignumber.js'
@@ -615,6 +614,7 @@ const TokenLockerForm = () => {
   const lockLinearHandle = useTokenTimeLinearlock(chainId)
   const nav = useNavigate()
   const onSubmit = (value: ISeller) => {
+    // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
     showRequestConfirmDialog()
     try {
       const amoutAraw = erc20TokenDeatail?.tokenCurrency
@@ -636,7 +636,7 @@ const TokenLockerForm = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock token'
             }).then(() => {
-              nav(`${routes.tokenToolBox.tokenLockerInfo}/${chainId}/${resp.hash}`)
+              nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
             })
             hideDialogConfirmation()
           })
@@ -671,7 +671,7 @@ const TokenLockerForm = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock token'
             }).then(() => {
-              nav(`${routes.tokenToolBox.tokenLockerInfo}/${chainId}/${resp.hash}`)
+              nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
             })
             hideDialogConfirmation()
           })
@@ -691,7 +691,7 @@ const TokenLockerForm = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock token'
             }).then(() => {
-              nav(`${routes.tokenToolBox.tokenLockerInfo}/${chainId}/${resp.hash}`)
+              nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
             })
             hideDialogConfirmation()
           })
@@ -711,6 +711,7 @@ const TokenLockerForm = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
+          console.log('values>>>', values)
           // update hook params
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)

@@ -111,7 +111,7 @@ export const routes = {
   tokenToolBox: {
     index: '/TokenToolBox',
     tokenLocker: '/TokenToolBox/TokenLocker',
-    tokenLockerInfo: '/TokenToolBox/TokenLockerInfo/:chain/:token',
+    tokenLockerInfo: '/TokenToolBox/TokenLockerInfo/:chain/:hash',
     disperse: '/TokenToolBox/Disperse',
     tokenMinter: '/TokenToolBox/tokenMinter',
     tokenMinterInfo: '/TokenToolBox/tokenMinterInfo/:chain/:token',
