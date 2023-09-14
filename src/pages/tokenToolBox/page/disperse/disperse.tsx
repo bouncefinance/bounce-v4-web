@@ -26,6 +26,7 @@ import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import JSBI from 'jsbi'
+import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
 
 interface IDisperse {
   chainId: number
@@ -48,7 +49,7 @@ export default function Disperse() {
   console.log('needApprove', needApprove)
   const [approvalState, approveCallback] = useApproveCallback(
     CurrencyAmount.fromRawAmount(balance?.currency, needApprove),
-    account,
+    DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
     true
   )
   const toDisperseEther = useCallback(
