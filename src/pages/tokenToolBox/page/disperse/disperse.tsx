@@ -46,9 +46,9 @@ export default function Disperse() {
   const disperseToken = useDisperseToken()
   const showLoginModal = useShowLoginModal()
   const [needApprove, setNeedApprove] = useState('0')
-  console.log('needApprove', needApprove)
+  console.log('balance', balance)
   const [approvalState, approveCallback] = useApproveCallback(
-    CurrencyAmount.fromRawAmount(balance?.currency, needApprove),
+    balance ? CurrencyAmount.fromRawAmount(balance?.currency, needApprove) : undefined,
     DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
     true
   )
