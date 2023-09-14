@@ -629,17 +629,22 @@ const TokenLockerForm = () => {
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             amoutAraw,
             value?.delayUnlockingTime?.unix() + ''
-          ).then(resp => {
-            show(DialogTips, {
-              iconType: 'success',
-              againBtn: 'Check Detail',
-              title: 'Congratulations!',
-              content: 'You have successfully lock token'
-            }).then(() => {
-              nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+          )
+            .then(resp => {
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Check Detail',
+                title: 'Congratulations!',
+                content: 'You have successfully lock token',
+                onAgain: () => {
+                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+                }
+              })
+              hideDialogConfirmation()
             })
-            hideDialogConfirmation()
-          })
+            .catch(() => {
+              hideDialogConfirmation()
+            })
           break
         case IReleaseType.Fragment:
           const releaseTimeAndRadio = value?.fragmentReleaseTimes
@@ -664,17 +669,22 @@ const TokenLockerForm = () => {
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             amoutAraw,
             releaseTimeAndRadio
-          ).then(resp => {
-            show(DialogTips, {
-              iconType: 'success',
-              againBtn: 'Check Detail',
-              title: 'Congratulations!',
-              content: 'You have successfully lock token'
-            }).then(() => {
-              nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+          )
+            .then(resp => {
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Check Detail',
+                title: 'Congratulations!',
+                content: 'You have successfully lock token',
+                onAgain: () => {
+                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+                }
+              })
+              hideDialogConfirmation()
             })
-            hideDialogConfirmation()
-          })
+            .catch(() => {
+              hideDialogConfirmation()
+            })
           break
         case IReleaseType.Linear:
           lockLinearHandle(
@@ -684,17 +694,22 @@ const TokenLockerForm = () => {
             value.linearUnlockingStartTime?.unix() + '',
             value.linearUnlockingEndTime?.unix() + '',
             amoutAraw
-          ).then(resp => {
-            show(DialogTips, {
-              iconType: 'success',
-              againBtn: 'Check Detail',
-              title: 'Congratulations!',
-              content: 'You have successfully lock token'
-            }).then(() => {
-              nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+          )
+            .then(resp => {
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Check Detail',
+                title: 'Congratulations!',
+                content: 'You have successfully lock token',
+                onAgain: () => {
+                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+                }
+              })
+              hideDialogConfirmation()
             })
-            hideDialogConfirmation()
-          })
+            .catch(() => {
+              hideDialogConfirmation()
+            })
           break
       }
     } catch (e) {
