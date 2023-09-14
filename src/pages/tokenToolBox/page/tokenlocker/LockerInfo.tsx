@@ -18,7 +18,7 @@ export default function TokenInfo() {
   const { chain, hash } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const { data } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
-  const tokenInfo = useToken(data?.token || '', chain as unknown as ChainId)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
   console.log('tokenInfo>>>', tokenInfo, chain, chainConfigInBackend)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
