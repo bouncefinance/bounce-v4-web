@@ -36,10 +36,18 @@ import NumberInput from 'bounceComponents/common/NumberInput'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { LoadingButton } from '@mui/lab'
-import { TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES } from 'constants/index'
+import {
+  TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES,
+  TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES
+} from 'constants/index'
 import { isAddress } from 'web3-utils'
 import { useErc20TokenDetail } from 'bounceHooks/toolbox/useTokenLocakCallback'
-import { useTokenTimelock, useApproveCallback } from 'hooks/useTokenTimelock'
+import {
+  useTokenTimelock,
+  useApproveCallback,
+  useTokenTimeStagelock,
+  useTokenTimeLinearlock
+} from 'hooks/useTokenTimelock'
 import { TokenlockResponse } from 'bounceHooks/toolbox/useTokenLocakCallback'
 import {
   hideDialogConfirmation,
@@ -50,9 +58,9 @@ import {
 import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import BigNumber from 'bignumber.js'
 
 interface IFragmentReleaseTimes {
   startAt: Moment | null
@@ -83,7 +91,7 @@ interface ISeller {
   linearUnlockingStartTime: Moment | null
   linearUnlockingEndTime: Moment | null
   releaseDataArr: releaseItemParam[]
-  fragmentReleaseTimes: []
+  fragmentReleaseTimes: IFragmentReleaseTimes[]
   segmentAmount?: string
   fragmentReleaseSize?: string
 }
@@ -442,11 +450,12 @@ const BidBlock = ({
       ? CurrencyAmount.fromAmount(erc20TokenDeatail?.tokenCurrency, formValues.amount)
       : undefined
   }, [erc20TokenDeatail?.tokenCurrency, formValues.amount])
-  const [approvalState, approveCallback] = useApproveCallback(
-    lockAmount,
-    TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[formValues.chainId],
-    true
-  )
+  const contractAddress = useMemo(() => {
+    return Number(formValues.releaseType) === IReleaseType.Linear
+      ? TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
+      : TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
+  }, [formValues.chainId, formValues.releaseType])
+  const [approvalState, approveCallback] = useApproveCallback(lockAmount, contractAddress, true)
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -572,10 +581,11 @@ const TokenLockerForm = () => {
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
   const [chainId, setChainId] = useState<ChainId>(ChainId.SEPOLIA)
+  const [releaseType, setReleaseType] = useState<IReleaseType>(IReleaseType.Cliff)
   const ChainSelectOption = ChainList.filter(item => {
     return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
   })
-  const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId)
+  const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, releaseType)
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -600,42 +610,109 @@ const TokenLockerForm = () => {
     fragmentReleaseSize: ''
   }
   const lockHandle = useTokenTimelock(chainId)
+  const lockStageHandle = useTokenTimeStagelock(chainId)
+  const lockLinearHandle = useTokenTimeLinearlock(chainId)
   const nav = useNavigate()
   const onSubmit = (value: ISeller) => {
+    // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
     showRequestConfirmDialog()
-    console.log('Mintervalues>>>', value)
     try {
       const amoutAraw = erc20TokenDeatail?.tokenCurrency
         ? CurrencyAmount.fromAmount(erc20TokenDeatail.tokenCurrency, value.amount)
         : undefined
-      const args = [
-        value.title,
-        value.tokenAddress,
-        value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account,
-        amoutAraw,
-        value?.delayUnlockingTime?.unix() + ''
-      ]
-      console.log('args>>>', args)
-      lockHandle(
-        value.title,
-        value.tokenAddress,
-        value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
-        amoutAraw,
-        value?.delayUnlockingTime?.unix() + ''
-      ).then(resp => {
-        console.log('Lock', resp)
-        show(DialogTips, {
-          iconType: 'success',
-          againBtn: 'Check Detail',
-          title: 'Congratulations!',
-          content: 'You have successfully lock token'
-        }).then(() => {
-          nav(`${routes.tokenToolBox.tokenLockerInfo}/${chainId}/${resp.hash}`)
-        })
-        hideDialogConfirmation()
-      })
+      const type = Number(value.releaseType)
+      switch (type) {
+        case IReleaseType.Cliff:
+          lockHandle(
+            value.title,
+            value.tokenAddress,
+            value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
+            amoutAraw,
+            value?.delayUnlockingTime?.unix() + ''
+          )
+            .then(resp => {
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Check Detail',
+                title: 'Congratulations!',
+                content: 'You have successfully lock token',
+                onAgain: () => {
+                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+                }
+              })
+              hideDialogConfirmation()
+            })
+            .catch(() => {
+              hideDialogConfirmation()
+            })
+          break
+        case IReleaseType.Fragment:
+          const releaseTimeAndRadio = value?.fragmentReleaseTimes
+            .sort((a, b) => {
+              if (a.startAt === null || b.startAt === null) {
+                if (a.startAt === null && b.startAt === null) {
+                  return 0
+                } else if (a.startAt === null) {
+                  return 1
+                } else {
+                  return -1
+                }
+              }
+              return a.startAt.diff(b.startAt)
+            })
+            .map(item => {
+              return [item?.startAt?.unix() + '', BigNumber(item.radio).times('0.01').times(1e18).toString()]
+            })
+          lockStageHandle(
+            value.title,
+            value.tokenAddress,
+            value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
+            amoutAraw,
+            releaseTimeAndRadio
+          )
+            .then(resp => {
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Check Detail',
+                title: 'Congratulations!',
+                content: 'You have successfully lock token',
+                onAgain: () => {
+                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+                }
+              })
+              hideDialogConfirmation()
+            })
+            .catch(() => {
+              hideDialogConfirmation()
+            })
+          break
+        case IReleaseType.Linear:
+          lockLinearHandle(
+            value.title,
+            value.tokenAddress,
+            value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
+            value.linearUnlockingStartTime?.unix() + '',
+            value.linearUnlockingEndTime?.unix() + '',
+            amoutAraw
+          )
+            .then(resp => {
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Check Detail',
+                title: 'Congratulations!',
+                content: 'You have successfully lock token',
+                onAgain: () => {
+                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
+                }
+              })
+              hideDialogConfirmation()
+            })
+            .catch(() => {
+              hideDialogConfirmation()
+            })
+          break
+      }
     } catch (e) {
-      console.log('Lock', e)
       hideDialogConfirmation()
     }
   }
@@ -649,10 +726,11 @@ const TokenLockerForm = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
+          console.log('values>>>', values)
           // update hook params
-          console.log('values,errors>>>', values, errors)
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
+          setReleaseType(Number(values.releaseType))
           return (
             <Form
               style={{
@@ -803,14 +881,12 @@ const TokenLockerForm = () => {
                             if (filtered.startsWith('.')) {
                               filtered = '0' + filtered
                             }
-                            // 处理多个小数点的情况，只保留第一个小数点
                             const decimalIndex = filtered.indexOf('.')
                             if (decimalIndex !== -1) {
                               filtered =
                                 filtered.slice(0, decimalIndex + 1) +
                                 filtered.slice(decimalIndex + 1).replace(/\./g, '')
                             }
-                            console.log('amount>>>', filtered)
                             if (
                               erc20TokenDeatail &&
                               erc20TokenDeatail.balance &&
@@ -850,7 +926,6 @@ const TokenLockerForm = () => {
                             }
                           }}
                           onClick={() => {
-                            console.log('erc20TokenDeatail.max>>>', erc20TokenDeatail.max)
                             setFieldValue('amount', erc20TokenDeatail.max)
                           }}
                         >
