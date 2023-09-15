@@ -8,7 +8,7 @@ import { useTokenLockInfo } from '../../../../bounceHooks/toolbox/useTokenLockIn
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 import { useToken } from 'state/wallet/hooks'
 import { ChainId } from 'constants/chain'
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
@@ -17,12 +17,16 @@ import LineChartSection from 'pages/tokenToolBox/components/lineChart'
 import TimeStageLine from '../../components/timeStageLine'
 import { StageParams } from '../../components/timeStageLine'
 import BigNumber from 'bignumber.js'
-
+import { useWithDrawByTokenLock } from 'hooks/useTokenTimelock'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { show } from '@ebay/nice-modal-react'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 export default function TokenInfo() {
   const { chain, hash } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
+  const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
   }, [data?.amount, tokenInfo])
@@ -78,6 +82,38 @@ export default function TokenInfo() {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
+  const toWithDraw = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await withDrawFn()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toWithDraw
+      })
+    }
+  }, [withDrawFn])
   if (loading) {
     return <></>
   }
@@ -187,7 +223,14 @@ export default function TokenInfo() {
               )}
             </Box>
           )}
-          <SolidBtn style={{ width: '100%' }}>Withdraw</SolidBtn>
+          <SolidBtn
+            style={{ width: '100%' }}
+            onClick={() => {
+              toWithDraw()
+            }}
+          >
+            Withdraw
+          </SolidBtn>
         </GrayBg>
       </Box>
     </ContainerBox>
