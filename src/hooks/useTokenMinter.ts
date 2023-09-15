@@ -36,7 +36,6 @@ export function useTokenMinter(chain: ChainId) {
           gasLimit: calculateGasMargin(estimatedGas)
         })
         .then((response: TransactionResponse) => {
-          console.log('Minter', 'enter')
           addTransaction(response, {
             summary: 'Minter token',
             userSubmitted: {
