@@ -27,6 +27,8 @@ import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveC
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import JSBI from 'jsbi'
 import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '../../../../constants/routes'
 
 interface IDisperse {
   chainId: number
@@ -37,6 +39,7 @@ interface IDisperse {
 
 export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
+  const nav = useNavigate()
   // const [currentChain, setCurrentChain] = useState(chainId)
   const [tokenAddr, setTokenAddr] = useState('')
   const myChainBalance = useETHBalance(account, chainId)
@@ -47,7 +50,6 @@ export default function Disperse() {
   const showLoginModal = useShowLoginModal()
   const [needApprove, setNeedApprove] = useState('0')
   console.log('balance', balance)
-  const regexNumber = /[-+]?\d*\.?\d+/g
   const [approvalState, approveCallback] = useApproveCallback(
     balance ? CurrencyAmount.fromRawAmount(balance?.currency, needApprove) : undefined,
     DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
@@ -196,13 +198,14 @@ export default function Disperse() {
     }
   }
   const disperse: IDisperse = {
-    chainId: chainId || ChainId.MAINNET,
+    chainId: chainId || ChainId.SEPOLIA,
     type: 'chain',
     recipients: '',
     tokenAddress: ''
   }
 
   function formatInput(input: string) {
+    const regexNumber = /\b\d+(\.\d+)?\b/g
     return input
       .split('\n')
       .filter(v => v.length > 42)
@@ -223,7 +226,15 @@ export default function Disperse() {
         </Title>
         <SubTitle>
           <Desc>Verb distribute ether or tokens to multiple addresses</Desc>
-          <Desc>View history</Desc>
+          <Desc
+            sx={{
+              cursor: 'pointer',
+              borderBottom: '1px solid #121212'
+            }}
+            onClick={() => nav(routes.tokenToolBox.myDisperse)}
+          >
+            View history
+          </Desc>
         </SubTitle>
         <Formik initialValues={disperse} onSubmit={onSubmit}>
           {({ values, errors, setFieldValue, handleSubmit }) => {

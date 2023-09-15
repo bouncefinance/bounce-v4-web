@@ -79,6 +79,7 @@ export interface Disperse {
   token: string
   name: string
   amount: string
+  total_count: string
   hash: string
   tx_ts: number
   block_height: number

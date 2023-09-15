@@ -63,7 +63,7 @@ export default function MyDisperse() {
                       </Stack>
                     </StyledTableCell>
                     <StyledTableCell>{record.amount}</StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell>{record.total_count}</StyledTableCell>
                     {/*<StyledTableCell align={'right'}>*/}
                     {/*  <Stack*/}
                     {/*    direction={'row'}*/}
