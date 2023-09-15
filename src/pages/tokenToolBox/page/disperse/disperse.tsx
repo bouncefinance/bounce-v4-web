@@ -405,7 +405,7 @@ export default function Disperse() {
                             }}
                           />
                           <GrayBody02>
-                            We accept documents in the form of CSV, EXCEL,or PDF files. The size limit document is 10MB
+                            We accept documents in the form of CSV files. The size limit document is 10MB
                           </GrayBody02>
                           <ConfirmBox>
                             <H4>Confirm</H4>
