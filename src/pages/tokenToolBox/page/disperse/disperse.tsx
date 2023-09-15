@@ -311,7 +311,7 @@ export default function Disperse() {
                               setFieldValue('type', 'token')
                             }}
                           >
-                            Token
+                            ERC20
                           </Tab>
                         </Box>
                       </FormItem>
