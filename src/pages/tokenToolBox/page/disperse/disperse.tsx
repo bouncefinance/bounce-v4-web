@@ -26,6 +26,9 @@ import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import JSBI from 'jsbi'
+import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
+import { useNavigate } from 'react-router-dom'
+import { routes } from '../../../../constants/routes'
 
 interface IDisperse {
   chainId: number
@@ -36,6 +39,7 @@ interface IDisperse {
 
 export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
+  const nav = useNavigate()
   // const [currentChain, setCurrentChain] = useState(chainId)
   const [tokenAddr, setTokenAddr] = useState('')
   const myChainBalance = useETHBalance(account, chainId)
@@ -45,10 +49,10 @@ export default function Disperse() {
   const disperseToken = useDisperseToken()
   const showLoginModal = useShowLoginModal()
   const [needApprove, setNeedApprove] = useState('0')
-  console.log('needApprove', needApprove)
+  console.log('balance', balance)
   const [approvalState, approveCallback] = useApproveCallback(
-    CurrencyAmount.fromAmount(balance?.currency, needApprove),
-    account,
+    balance ? CurrencyAmount.fromRawAmount(balance?.currency, needApprove) : undefined,
+    DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
     true
   )
   const toDisperseEther = useCallback(
@@ -63,9 +67,17 @@ export default function Disperse() {
             values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
           )
           console.log('disperse-result', hash)
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Close',
+            title: 'Congratulations!',
+            content: 'You have successfully disperse Ether'
+          })
         }
       } catch (e) {
         console.log('disperse', e)
+        hideDialogConfirmation()
       }
     },
     [disperseEther, myChainBalance]
@@ -82,8 +94,16 @@ export default function Disperse() {
           )
           console.log('disperse', hash)
         }
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'success',
+          againBtn: 'Close',
+          title: 'Congratulations!',
+          content: 'You have successfully disperse Token'
+        })
       } catch (e) {
         console.log('disperse-useCallback', e)
+        hideDialogConfirmation()
       }
     },
     [disperseToken, myChainBalance]
@@ -165,14 +185,10 @@ export default function Disperse() {
     console.log('disperse', 'onSubmit')
     const recipients: string[] = []
     const amount: string[] = []
-    value.recipients
-      .split('\n')
-      .map(v => v.split(' '))
-      .filter(v => v.length == 2 && isAddress(v[0]))
-      .forEach(v => {
-        recipients.push(v[0])
-        amount.push(v[1])
-      })
+    formatInput(value.recipients).forEach(v => {
+      recipients.push(v[0])
+      amount.push(v[1])
+    })
     if (value.type == 'token') {
       console.log('disperse', 'onSubmit-token')
       toDisperseToken(value.tokenAddress, recipients, amount)
@@ -182,10 +198,20 @@ export default function Disperse() {
     }
   }
   const disperse: IDisperse = {
-    chainId: chainId || ChainId.MAINNET,
+    chainId: chainId || ChainId.SEPOLIA,
     type: 'chain',
     recipients: '',
     tokenAddress: ''
+  }
+
+  function formatInput(input: string) {
+    const regexNumber = /\b\d+(\.\d+)?\b/g
+    return input
+      .split('\n')
+      .filter(v => v.length > 42)
+      .filter(v => isAddress(v.substring(0, 42)))
+      .filter(v => v.substring(42).match(regexNumber)) // contain number
+      .map(v => [v.substring(0, 42), v.substring(42).match(regexNumber)![0]])
   }
 
   return (
@@ -200,26 +226,27 @@ export default function Disperse() {
         </Title>
         <SubTitle>
           <Desc>Verb distribute ether or tokens to multiple addresses</Desc>
-          <Desc>View history</Desc>
+          <Desc
+            sx={{
+              cursor: 'pointer',
+              borderBottom: '1px solid #121212'
+            }}
+            onClick={() => nav(routes.tokenToolBox.myDisperse)}
+          >
+            View history
+          </Desc>
         </SubTitle>
         <Formik initialValues={disperse} onSubmit={onSubmit}>
           {({ values, errors, setFieldValue, handleSubmit }) => {
             setTokenAddr(values.tokenAddress)
             const currentBalance: CurrencyAmount = values.type == 'chain' ? myChainBalance : balance
-            const amount = values.recipients
-              .split('\n')
-              .map(v => v.split(' '))
-              .filter(v => v.length == 2 && isAddress(v[0]) && Number(v[1]))
+            const amount = formatInput(values.recipients)
               .map(v => Number(v[1]))
               .reduce((sum, current) => sum + current, 0)
-              .toFixed(20)
+              .toFixed(10)
             const currencyAmount = CurrencyAmount.fromAmount(currentBalance?.currency, amount)
             const validAmount =
               currentBalance && currencyAmount && JSBI.lessThan(currencyAmount.raw, currentBalance.raw)
-            console.log('validAmountamount', amount)
-            console.log('validAmountcurrentBalance', currentBalance)
-            console.log('validAmountcurrencyAmount', currencyAmount)
-            console.log('validAmount', validAmount)
             if (!validAmount) {
               errors.recipients = 'Amount of disperse is bigger than your balance'
             }
@@ -389,7 +416,7 @@ export default function Disperse() {
                             }}
                           />
                           <GrayBody02>
-                            We accept documents in the form of CSV, EXCEL,or PDF files. The size limit document is 10MB
+                            We accept documents in the form of CSV files. The size limit document is 10MB
                           </GrayBody02>
                           <ConfirmBox>
                             <H4>Confirm</H4>
@@ -400,21 +427,16 @@ export default function Disperse() {
                               </BoxSpaceBetween>
                               <LineCom />
                               {values.recipients &&
-                                values.recipients
-                                  .split('\n')
-                                  .filter(v => v.split(' ').length == 2)
-                                  .map(v => v.split(' '))
-                                  .map((v, idx) => {
-                                    return (
-                                      <BoxSpaceBetween key={idx}>
-                                        <SmallText>{v[0]}</SmallText>
-                                        <Body01>
-                                          {v[1]}
-                                          {currentBalance?.currency.symbol}
-                                        </Body01>
-                                      </BoxSpaceBetween>
-                                    )
-                                  })}
+                                formatInput(values.recipients).map((v, idx) => {
+                                  return (
+                                    <BoxSpaceBetween key={idx}>
+                                      <SmallText>{v[0]}</SmallText>
+                                      <Body01>
+                                        {v[1]} {currentBalance?.currency.symbol}
+                                      </Body01>
+                                    </BoxSpaceBetween>
+                                  )
+                                })}
                               <BoxSpaceBetween mt={30}>
                                 <SmallText>Your balance</SmallText>
                                 <Box display={'flex'}>
@@ -439,17 +461,13 @@ export default function Disperse() {
                   />
                   <BoxSpaceBetween gap={10}>
                     {values.type == 'token' && (
-                      <LineBtn type="button" onClick={toApprove}>
+                      <LineBtn type="button" onClick={confirmBtn.run}>
                         {confirmBtn.text}
                       </LineBtn>
                     )}
                     <SolidBtn
                       type="submit"
-                      className={
-                        values.recipients.split('\n').filter(v => v.split(' ').length == 2).length > 0 && validAmount
-                          ? 'active'
-                          : ''
-                      }
+                      className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
                     >
                       Disperse token
                     </SolidBtn>

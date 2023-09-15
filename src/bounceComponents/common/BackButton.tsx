@@ -10,6 +10,7 @@ export default function BackButton() {
   return (
     <Box
       sx={{
+        width: 'fit-content',
         display: 'flex',
         flexFlow: 'row nowrap',
         justifyContent: 'flex-start',
