@@ -455,9 +455,22 @@ export default function Disperse() {
                               {values.recipients &&
                                 formatInput(values.recipients).map((v, idx) => {
                                   return (
-                                    <BoxSpaceBetween key={idx}>
-                                      <SmallText>{v[0]}</SmallText>
-                                      <Body01>
+                                    <BoxSpaceBetween
+                                      key={idx}
+                                      sx={{
+                                        alignItems: 'center'
+                                      }}
+                                    >
+                                      <Body01>{v[0]}</Body01>
+                                      <div
+                                        style={{
+                                          margin: '0 12px',
+                                          background: '#121212',
+                                          height: '1px',
+                                          width: '100%'
+                                        }}
+                                      ></div>
+                                      <Body01 sx={{ whiteSpace: 'nowrap' }}>
                                         {v[1]} {currentBalance?.currency.symbol}
                                       </Body01>
                                     </BoxSpaceBetween>

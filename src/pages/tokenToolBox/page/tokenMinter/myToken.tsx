@@ -17,13 +17,18 @@ import { Stack } from '@mui/system'
 import { useTokenList } from '../../../../bounceHooks/toolbox/useTokenInfo'
 import { TokenInfo } from '../../../../api/toolbox/type'
 import { routes } from '../../../../constants/routes'
+import { useOptionDatas } from '../../../../state/configOptions/hooks'
+import { Currency, CurrencyAmount } from '../../../../constants/token'
+import { ChainId } from '../../../../constants/chain'
 
 export default function MyToken() {
+  const optionDatas = useOptionDatas()
   const { data } = useTokenList()
+
   //
-  // function getChainName(chain_id: number) {
-  //   const { data: exchangeList } = useChainConfigInBackend('ethChainId', chain_id)
-  // }
+  function getChainName(chain_id: number) {
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+  }
 
   return (
     <Box>
@@ -67,8 +72,13 @@ export default function MyToken() {
                       </Stack>
                     </StyledTableCell>
                     <StyledTableCell>{record.token}</StyledTableCell>
-                    <StyledTableCell>{record.chain_id}</StyledTableCell>
-                    <StyledTableCell>{record.supply}</StyledTableCell>
+                    <StyledTableCell>{getChainName(Number(record.chain_id))?.chainName}</StyledTableCell>
+                    <StyledTableCell>
+                      {CurrencyAmount.fromRawAmount(
+                        new Currency(ChainId.SEPOLIA, '', record.decimals),
+                        record.supply
+                      )?.toSignificant()}
+                    </StyledTableCell>
                     <StyledTableCell align={'right'}>
                       <Stack
                         direction={'row'}
