@@ -1,4 +1,8 @@
-import { useToolboxERC20TimelockFactory, useToolboxERC20TimelockLineFactory } from './useContract'
+import {
+  useToolboxERC20TimelockFactory,
+  useToolboxERC20TimelockLineFactory,
+  useToolboxERC721TimelockFactory
+} from './useContract'
 import { useActiveWeb3React } from './index'
 import { ChainId } from '../constants/chain'
 import { useCallback, useMemo } from 'react'
@@ -9,6 +13,8 @@ import { CurrencyAmount } from 'constants/token'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import { useTokenContract } from './useContract'
 import { MaxUint256 } from '@ethersproject/constants'
+import { useRequest } from 'ahooks'
+import { getExchangeList } from 'api/toolbox'
 // normal
 export function useTokenTimelock(chain: ChainId) {
   const { account, chainId } = useActiveWeb3React()
@@ -163,14 +169,111 @@ export function useTokenTimeLinearlock(chain: ChainId) {
     [account, addTransaction, erc20TimelockContract]
   )
 }
-
+//  LP v2 normal: ToolboxERC20TimelockFactory.deployUniswapV2Timelock
+export function useDeployUniswapV2Timelock(chain: ChainId) {
+  const { account, chainId } = useActiveWeb3React()
+  const erc20TimelockContract = useToolboxERC20TimelockFactory(chain || chainId)
+  const addTransaction = useTransactionAdder()
+  return useCallback(
+    async (
+      title: string,
+      tokenAddress: string,
+      accountAddress: string,
+      amount: CurrencyAmount | undefined,
+      releaseTime: string
+    ): Promise<any> => {
+      if (!account) {
+        return Promise.reject('no account')
+      }
+      if (!erc20TimelockContract) {
+        return Promise.reject('no contract')
+      }
+      if (!(amount instanceof CurrencyAmount)) {
+        return Promise.reject('no amount')
+      }
+      const args = [title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
+      console.log('args>>>', args)
+      const isToken1Native = amount?.currency.isNative
+      const estimatedGas = await erc20TimelockContract.estimateGas
+        .deployUniswapV2Timelock(...args, { value: isToken1Native ? amount?.raw?.toString() : undefined })
+        .catch((error: Error) => {
+          console.debug('Failed to mint token', error)
+          throw error
+        })
+      return erc20TimelockContract
+        .deployUniswapV2Timelock(...args, {
+          gasLimit: calculateGasMargin(estimatedGas)
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: 'Lock token',
+            userSubmitted: {
+              account,
+              action: 'deployERC20V2MultiTimelock'
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionReceipt: response.wait(1)
+          }
+        })
+    },
+    [account, addTransaction, erc20TimelockContract]
+  )
+}
+//  LP v3 normal: ToolboxERC721TimelockFactory.deployUniswapV3Timelock
+export function useDeployUniswapV3Timelock(chain: ChainId) {
+  const { account, chainId } = useActiveWeb3React()
+  const erc721TimelockContract = useToolboxERC721TimelockFactory(chain || chainId)
+  const addTransaction = useTransactionAdder()
+  return useCallback(
+    async (
+      title: string,
+      tokenAddress: string,
+      id: string,
+      accountAddress: string,
+      releaseTime: string
+    ): Promise<any> => {
+      if (!account) {
+        return Promise.reject('no account')
+      }
+      if (!erc721TimelockContract) {
+        return Promise.reject('no contract')
+      }
+      const args = [title, tokenAddress, id, accountAddress, releaseTime]
+      const estimatedGas = await erc721TimelockContract.estimateGas
+        .deployUniswapV3Timelock(...args)
+        .catch((error: Error) => {
+          console.debug('Failed to mint token', error)
+          throw error
+        })
+      return erc721TimelockContract
+        .deployUniswapV3Timelock(...args, {
+          gasLimit: calculateGasMargin(estimatedGas)
+        })
+        .then((response: TransactionResponse) => {
+          addTransaction(response, {
+            summary: 'Lock token',
+            userSubmitted: {
+              account,
+              action: 'deployERC721MultiTimelock'
+            }
+          })
+          return {
+            hash: response.hash,
+            transactionReceipt: response.wait(1)
+          }
+        })
+    },
+    [account, addTransaction, erc721TimelockContract]
+  )
+}
 export enum ApprovalState {
   UNKNOWN,
   NOT_APPROVED,
   PENDING,
   APPROVED
 }
-
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 export function useApproveCallback(
   amountToApprove?: CurrencyAmount,
@@ -245,4 +348,21 @@ export function useApproveCallback(
   }, [approvalState, token, tokenContract, amountToApprove, spender, useExact, addTransaction])
 
   return [approvalState, approve]
+}
+export function useGetExchangeList(chainId: number, chainType: number) {
+  return useRequest(
+    async () => {
+      const response = await getExchangeList({
+        chainId,
+        chainType,
+        limit: 999,
+        offset: 0
+      })
+      return response?.data?.list
+    },
+    {
+      refreshDeps: [chainId],
+      debounceWait: 100
+    }
+  )
 }

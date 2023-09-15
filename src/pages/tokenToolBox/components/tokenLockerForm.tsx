@@ -613,7 +613,7 @@ const TokenLockerForm = () => {
   const lockStageHandle = useTokenTimeStagelock(chainId)
   const lockLinearHandle = useTokenTimeLinearlock(chainId)
   const nav = useNavigate()
-  const onSubmit = (value: ISeller) => {
+  const onSubmit = async (value: ISeller) => {
     // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
     showRequestConfirmDialog()
     try {
@@ -623,7 +623,7 @@ const TokenLockerForm = () => {
       const type = Number(value.releaseType)
       switch (type) {
         case IReleaseType.Cliff:
-          lockHandle(
+          await lockHandle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
@@ -663,7 +663,7 @@ const TokenLockerForm = () => {
             .map(item => {
               return [item?.startAt?.unix() + '', BigNumber(item.radio).times('0.01').times(1e18).toString()]
             })
-          lockStageHandle(
+          await lockStageHandle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',

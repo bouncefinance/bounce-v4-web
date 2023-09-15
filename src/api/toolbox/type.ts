@@ -18,6 +18,19 @@ export interface LockInfoList {
   list: LockInfo[]
   total: number
 }
+export interface ExchangeInfo {
+  id: number
+  chain_id: number
+  name: string
+  logo?: string
+  chain_type: number
+  created_at: string
+  updated_at: string
+}
+export interface ExchangeList {
+  list: ExchangeInfo[]
+  total: number
+}
 export interface TokenInfo {
   id: number
   contract: string
@@ -85,4 +98,10 @@ export interface Disperse {
   block_height: number
   created_at: string
   updated_at: string
+}
+export interface ExchangeParam {
+  chainId: number
+  chainType: number
+  limit?: number
+  offset?: number
 }
