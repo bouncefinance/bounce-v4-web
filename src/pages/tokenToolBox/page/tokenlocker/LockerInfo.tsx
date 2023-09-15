@@ -13,13 +13,16 @@ import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useCountDown } from 'ahooks'
+import LineChartSection from 'pages/tokenToolBox/components/lineChart'
+import TimeStageLine from '../../components/timeStageLine'
+import { StageParams } from '../../components/timeStageLine'
+import BigNumber from 'bignumber.js'
 
 export default function TokenInfo() {
   const { chain, hash } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
-  const { data } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
+  const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
-  console.log('tokenInfo>>>', tokenInfo, chain, chainConfigInBackend)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
   }, [data?.amount, tokenInfo])
@@ -36,9 +39,48 @@ export default function TokenInfo() {
         return '--'
     }
   }, [data?.lock_type])
+  const releaseData = useMemo(() => {
+    try {
+      const result = data?.release_data && JSON.parse(data?.release_data)
+      if (data?.release_data && Array.isArray(result) && result.length > 0) {
+        const updatedData = result.reduce((accumulator, currentValue, index) => {
+          if (index === 0) {
+            return [currentValue]
+          } else {
+            const previousRatio = accumulator[index - 1].ratio
+            currentValue.ratio += previousRatio
+            return [...accumulator, currentValue]
+          }
+        }, [])
+        // const specificTime = moment(data?.lock_start * 1000)
+        // const currentTime = moment()
+        // const diffDuration = moment.duration(currentTime.diff(specificTime))
+        // updatedData.unshift({
+        //   ratio: '0',
+        //   releaseTime: data?.lock_start,
+        //   released: !!(diffDuration.asMilliseconds() > 0) // time is pass
+        // })
+        return updatedData.map((item: StageParams) => {
+          return {
+            ratio: tokenInfo
+              ? BigNumber(CurrencyAmount.fromRawAmount(tokenInfo, item.ratio + '').toExact()).times(100) + '%'
+              : '--',
+            releaseTime: item?.releaseTime ? moment(item?.releaseTime * 1000).format('YYYY-MM-DD HH:MM:ss') : '--',
+            released: item.released
+          } as unknown as StageParams
+        })
+      }
+      return result
+    } catch (error) {
+      return []
+    }
+  }, [data?.release_data, tokenInfo])
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
+  if (loading) {
+    return <></>
+  }
   return (
     <ContainerBox>
       <BackButton />
@@ -99,14 +141,29 @@ export default function TokenInfo() {
                 {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
               </Body01>
             </FullSpaceBetweenBox>
-            <FullSpaceBetweenBox>
-              <Body01 sx={{ color: '#959595' }}>Unlock time</Body01>
-              <Body01>
-                {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
-              </Body01>
-            </FullSpaceBetweenBox>
+            {replasetype === 'Normal' && (
+              <FullSpaceBetweenBox>
+                <Body01 sx={{ color: '#959595' }}>Unlock time</Body01>
+                <Body01>
+                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
+                </Body01>
+              </FullSpaceBetweenBox>
+            )}
+            {replasetype === 'Linear' && (
+              <FullSpaceBetweenBox>
+                <Body01 sx={{ color: '#959595' }}>Time</Body01>
+                <Body01>
+                  {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'} to{' '}
+                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
+                </Body01>
+              </FullSpaceBetweenBox>
+            )}
+            {replasetype === 'Linear' && tokenInfo && data && (
+              <LineChartSection lockToken={tokenInfo} lockInfo={data}></LineChartSection>
+            )}
+            {replasetype === 'Stage' && tokenInfo && releaseData && <TimeStageLine stageData={releaseData} />}
           </WhiteBg>
-          {countdown > 0 && (
+          {replasetype === 'Normal' && countdown > 0 && (
             <Box
               sx={{
                 position: 'relative',

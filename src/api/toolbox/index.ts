@@ -1,4 +1,12 @@
-import { DisperseListParam, TokenInfoList, MyDisperseList, LockInfoList, LocksListParam } from './type'
+import {
+  DisperseListParam,
+  TokenInfoList,
+  MyDisperseList,
+  LockInfoList,
+  LocksListParam,
+  ExchangeParam,
+  ExchangeList
+} from './type'
 import { ApiInstance } from '../index'
 
 export const getMyDisperse = (params: DisperseListParam) => {
@@ -10,4 +18,8 @@ export const getTokenInfo = (params: DisperseListParam) => {
 }
 export const getTokenLocksInfo = (params: LocksListParam) => {
   return ApiInstance.post<LockInfoList>('/toolbox/locks', params)
+}
+//
+export const getExchangeList = (params: ExchangeParam) => {
+  return ApiInstance.post<ExchangeList>('/toolbox/exchange', params)
 }
