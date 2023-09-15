@@ -65,7 +65,7 @@ export default function TokenInfo() {
             ratio: tokenInfo
               ? BigNumber(CurrencyAmount.fromRawAmount(tokenInfo, item.ratio + '').toExact()).times(100) + '%'
               : '--',
-            releaseTime: item?.releaseTime ? moment(item?.releaseTime * 1000).format('YYYY-MM-DD HH:MM:ss') : '--',
+            releaseTime: item?.releaseTime ? moment(item?.releaseTime * 1000).format('YYYY-MM-DD HH:mm:ss') : '--',
             released: item.released
           } as unknown as StageParams
         })
@@ -138,14 +138,14 @@ export default function TokenInfo() {
             <FullSpaceBetweenBox>
               <Body01 sx={{ color: '#959595' }}>Lock date</Body01>
               <Body01>
-                {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
+                {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
               </Body01>
             </FullSpaceBetweenBox>
             {replasetype === 'Normal' && (
               <FullSpaceBetweenBox>
                 <Body01 sx={{ color: '#959595' }}>Unlock time</Body01>
                 <Body01>
-                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
+                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
                 </Body01>
               </FullSpaceBetweenBox>
             )}
@@ -153,8 +153,8 @@ export default function TokenInfo() {
               <FullSpaceBetweenBox>
                 <Body01 sx={{ color: '#959595' }}>Time</Body01>
                 <Body01>
-                  {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'} to{' '}
-                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:MM:ss') : '--'}
+                  {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'} to{' '}
+                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
                 </Body01>
               </FullSpaceBetweenBox>
             )}
