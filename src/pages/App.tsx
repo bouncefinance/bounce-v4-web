@@ -91,6 +91,7 @@ import MyDisperse from './tokenToolBox/page/disperse/myDiperse'
 import TokenMinter from './tokenToolBox/page/tokenMinter/tokenMinter'
 import TokenInfo from './tokenToolBox/page/tokenMinter/TokenInfo'
 import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
+import MyToken from './tokenToolBox/page/tokenMinter/myToken'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -217,7 +218,8 @@ export default function App() {
                   <Route path={routes.tokenToolBox.disperse} element={<Disperse />} />
                   <Route path={routes.tokenToolBox.myDisperse} element={<MyDisperse />} />
                   <Route path={routes.tokenToolBox.tokenMinter} element={<TokenMinter />} />
-                  <Route path={routes.tokenToolBox.tokenMinterInfo} element={<TokenInfo />} />
+                  <Route path={`${routes.tokenToolBox.tokenMinterInfo}/:chain/:token`} element={<TokenInfo />} />
+                  <Route path={routes.tokenToolBox.tokenMinterList} element={<MyToken />} />
 
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}

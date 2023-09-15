@@ -114,7 +114,8 @@ export const routes = {
     tokenLockerInfo: '/TokenToolBox/TokenLockerInfo/:chain/:hash',
     disperse: '/TokenToolBox/Disperse',
     tokenMinter: '/TokenToolBox/tokenMinter',
-    tokenMinterInfo: '/TokenToolBox/tokenMinterInfo/:chain/:token',
+    tokenMinterInfo: '/TokenToolBox/tokenMinterInfo',
+    tokenMinterList: '/TokenToolBox/tokenMinterList',
     myDisperse: '/TokenToolBox/MyDisperse'
   },
   loyaltyprogram: {

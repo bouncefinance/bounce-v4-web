@@ -8,13 +8,14 @@ import FormItem from '../../../../bounceComponents/common/FormItem'
 import Image from '../../../../components/Image'
 import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
 import { H3Black, SmallTextGray } from 'components/Text'
-import { hideDialogConfirmation, showRequestConfirmDialog } from '../../../../utils/auction'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from '../../../../utils/auction'
 import { useTokenMinter } from '../../../../hooks/useTokenMinter'
 import { useState } from 'react'
 import { isAddress } from '@ethersproject/address'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { useNavigate } from 'react-router-dom'
+import { useShowLoginModal } from '../../../../state/users/hooks'
 
 interface IMinter {
   chainId: number
@@ -25,10 +26,11 @@ interface IMinter {
 }
 
 export default function TokenMinter() {
-  const { chainId } = useActiveWeb3React()
-  const [currentChain, setCurrentChain] = useState(chainId)
+  const { chainId, account } = useActiveWeb3React()
+  const [currentChain, setCurrentChain] = useState(chainId || ChainId.SEPOLIA)
   const nav = useNavigate()
   const tokenMinter = useTokenMinter(currentChain as ChainId)
+  const showLoginModal = useShowLoginModal()
   const minter: IMinter = {
     chainId: chainId || ChainId.SEPOLIA,
     name: '',
@@ -37,23 +39,39 @@ export default function TokenMinter() {
     initial_supply: ''
   }
 
-  const onSubmit = (value: IMinter) => {
+  const onSubmit = async (value: IMinter) => {
     showRequestConfirmDialog()
     console.log('Mintervalue', value)
     try {
-      tokenMinter(value.name, value.symbol, value.decimals ? value.decimals : '18', value.initial_supply).then(resp => {
-        console.log('Minter', resp)
-        hideDialogConfirmation()
-        show(DialogTips, {
-          iconType: 'success',
-          againBtn: 'Check Detail',
-          title: 'Congratulations!',
-          content: 'You have successfully mint a new token',
-          onAgain: () => {
-            nav(`/TokenToolBox/tokenMinterInfo/${currentChain}/${resp.hash}`)
-          }
+      const { hash, transactionReceipt } = await tokenMinter(
+        value.name,
+        value.symbol,
+        value.decimals ? value.decimals : '18',
+        value.initial_supply
+      )
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then((curReceipt: any) => {
+          resolve(curReceipt)
         })
       })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Check Detail',
+            title: 'Congratulations!',
+            content: 'You have successfully mint a new token',
+            onAgain: () => {
+              nav(`/TokenToolBox/tokenMinterInfo/${currentChain}/${hash}`)
+            }
+          })
+        })
+        .catch()
     } catch (e) {
       console.log('Minter', e)
       hideDialogConfirmation()
@@ -232,21 +250,27 @@ export default function TokenMinter() {
               {/*    </FormItem>*/}
               {/*  }*/}
               {/*/>*/}
-              <FormLayout
-                childForm={
-                  <FormItem name={'Mint Button'}>
-                    <SolidBtn
-                      type={'submit'}
-                      className={errors.name || errors.symbol || errors.initial_supply ? '' : 'active'}
-                      style={{
-                        width: '100%'
-                      }}
-                    >
-                      Mint a new token
-                    </SolidBtn>
-                  </FormItem>
-                }
-              />
+              {account ? (
+                <FormLayout
+                  childForm={
+                    <FormItem name={'Mint Button'}>
+                      <SolidBtn
+                        type={'submit'}
+                        className={errors.name || errors.symbol || errors.initial_supply ? '' : 'active'}
+                        style={{
+                          width: '100%'
+                        }}
+                      >
+                        Mint a new token
+                      </SolidBtn>
+                    </FormItem>
+                  }
+                />
+              ) : (
+                <SolidBtn style={{ width: '100%' }} className={'active'} type={'button'} onClick={showLoginModal}>
+                  Connect wallet
+                </SolidBtn>
+              )}
             </Box>
           )}
         </Formik>

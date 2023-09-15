@@ -133,7 +133,9 @@ const TokenList = () => {
           </Typography>
           <Box display={'flex'} gap={'12px'}>
             <BtnCom variant={'contained'}>View My Lock</BtnCom>
-            <BtnCom variant={'contained'}>View My token</BtnCom>
+            <BtnCom variant={'contained'} href={routes.tokenToolBox.tokenMinterList}>
+              View My token
+            </BtnCom>
             <BtnCom variant={'contained'} href={routes.tokenToolBox.myDisperse}>
               View My disperse
             </BtnCom>

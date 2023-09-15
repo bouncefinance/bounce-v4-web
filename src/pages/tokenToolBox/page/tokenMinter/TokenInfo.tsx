@@ -5,14 +5,16 @@ import { Body01, H4, H6 } from '../../../../components/Text'
 import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
 import Grid2 from '@mui/material/Unstable_Grid2'
 import { ReactComponent as EmptyBox } from 'assets/imgs/toolBox/empty-box.svg'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useTokenInfo } from '../../../../bounceHooks/toolbox/useTokenInfo'
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
+import { routes } from '../../../../constants/routes'
 
 export default function TokenInfo() {
   const { chain, token } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || '')
   const { data } = useTokenInfo(chainConfigInBackend?.id || 0, token)
+  const nav = useNavigate()
   return (
     <Box>
       <ContainerBox>
@@ -52,7 +54,14 @@ export default function TokenInfo() {
                 <GrayBg>
                   <BoxSpaceBetween width={'100%'}>
                     <H4>Token Locked</H4>
-                    <SolidBtnSmall>+ Lock</SolidBtnSmall>
+                    <SolidBtnSmall
+                      onClick={() => {
+                        data &&
+                          nav(`${routes.tokenToolBox.tokenLocker}?chain=${data?.chain_id}&tokenAddr=${data?.token}`)
+                      }}
+                    >
+                      + Lock
+                    </SolidBtnSmall>
                   </BoxSpaceBetween>
                   <EmptyBg>
                     <EmptyBox />
@@ -64,7 +73,13 @@ export default function TokenInfo() {
                 <GrayBg>
                   <BoxSpaceBetween width={'100%'}>
                     <H4>Token Disperse</H4>
-                    <SolidBtnSmall>+ Disperse</SolidBtnSmall>
+                    <SolidBtnSmall
+                      onClick={() => {
+                        data && nav(`${routes.tokenToolBox.disperse}?disperseType=token&tokenAddr=${data?.token}`)
+                      }}
+                    >
+                      + Disperse
+                    </SolidBtnSmall>
                   </BoxSpaceBetween>
                   <EmptyBg>
                     <EmptyBox />

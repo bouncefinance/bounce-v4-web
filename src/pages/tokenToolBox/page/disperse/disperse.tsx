@@ -41,15 +41,16 @@ export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
   const nav = useNavigate()
   // const [currentChain, setCurrentChain] = useState(chainId)
-  const [tokenAddr, setTokenAddr] = useState('')
+  const params = new URLSearchParams(location.search)
+  const disperseType = params.get('disperseType')
+  const tokenAddrIn = params.get('tokenAddr')
+  const [tokenAddr, setTokenAddr] = useState(tokenAddrIn || '')
   const myChainBalance = useETHBalance(account, chainId)
-  const { balance, currentAllowance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
-  console.log('currentAllowance', currentAllowance)
+  const { balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
   const disperseEther = useDisperseEther(chainId as ChainId)
   const disperseToken = useDisperseToken()
   const showLoginModal = useShowLoginModal()
   const [needApprove, setNeedApprove] = useState('0')
-  console.log('balance', balance)
   const [approvalState, approveCallback] = useApproveCallback(
     balance ? CurrencyAmount.fromRawAmount(balance?.currency, needApprove) : undefined,
     DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
@@ -61,19 +62,31 @@ export default function Disperse() {
       try {
         if (myChainBalance) {
           const amount = values.map(v => Number(v)).reduce((sum, current) => sum + current, 0)
-          const hash = await disperseEther(
+          const { transactionReceipt } = await disperseEther(
             CurrencyAmount.fromAmount(myChainBalance?.currency, amount)?.raw.toString() || '',
             recipients,
             values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
           )
-          console.log('disperse-result', hash)
-          hideDialogConfirmation()
-          show(DialogTips, {
-            iconType: 'success',
-            againBtn: 'Close',
-            title: 'Congratulations!',
-            content: 'You have successfully disperse Ether'
+          const ret = new Promise((resolve, rpt) => {
+            showWaitingTxDialog(() => {
+              hideDialogConfirmation()
+              rpt()
+            })
+            transactionReceipt.then((curReceipt: any) => {
+              resolve(curReceipt)
+            })
           })
+          ret
+            .then(() => {
+              hideDialogConfirmation()
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Close',
+                title: 'Congratulations!',
+                content: 'You have successfully disperse Eth'
+              })
+            })
+            .catch()
         }
       } catch (e) {
         console.log('disperse', e)
@@ -87,20 +100,32 @@ export default function Disperse() {
       showRequestConfirmDialog()
       try {
         if (myChainBalance) {
-          const { hash } = await disperseToken(
+          const { transactionReceipt } = await disperseToken(
             token,
             recipients,
             values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
           )
-          console.log('disperse', hash)
+          const ret = new Promise((resolve, rpt) => {
+            showWaitingTxDialog(() => {
+              hideDialogConfirmation()
+              rpt()
+            })
+            transactionReceipt.then((curReceipt: any) => {
+              resolve(curReceipt)
+            })
+          })
+          ret
+            .then(() => {
+              hideDialogConfirmation()
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Close',
+                title: 'Congratulations!',
+                content: 'You have successfully disperse Token'
+              })
+            })
+            .catch()
         }
-        hideDialogConfirmation()
-        show(DialogTips, {
-          iconType: 'success',
-          againBtn: 'Close',
-          title: 'Congratulations!',
-          content: 'You have successfully disperse Token'
-        })
       } catch (e) {
         console.log('disperse-useCallback', e)
         hideDialogConfirmation()
@@ -166,8 +191,8 @@ export default function Disperse() {
       }
       if (approvalState === ApprovalState.UNKNOWN) {
         return {
-          text: 'Loading...',
-          loading: true
+          text: 'Approve use of token',
+          loading: false
         }
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
@@ -199,9 +224,9 @@ export default function Disperse() {
   }
   const disperse: IDisperse = {
     chainId: chainId || ChainId.SEPOLIA,
-    type: 'chain',
+    type: disperseType || 'chain',
     recipients: '',
-    tokenAddress: ''
+    tokenAddress: tokenAddrIn || ''
   }
 
   function formatInput(input: string) {
@@ -244,6 +269,7 @@ export default function Disperse() {
               .map(v => Number(v[1]))
               .reduce((sum, current) => sum + current, 0)
               .toFixed(10)
+            console.log('amount', amount)
             const currencyAmount = CurrencyAmount.fromAmount(currentBalance?.currency, amount)
             const validAmount =
               currentBalance && currencyAmount && JSBI.lessThan(currencyAmount.raw, currentBalance.raw)
@@ -279,7 +305,7 @@ export default function Disperse() {
                               setFieldValue('type', 'chain')
                             }}
                           >
-                            Chain
+                            ETH
                           </Tab>
                           <Tab
                             type={'button'}
@@ -288,7 +314,7 @@ export default function Disperse() {
                               setFieldValue('type', 'token')
                             }}
                           >
-                            Token
+                            ERC20
                           </Tab>
                         </Box>
                       </FormItem>
@@ -429,9 +455,22 @@ export default function Disperse() {
                               {values.recipients &&
                                 formatInput(values.recipients).map((v, idx) => {
                                   return (
-                                    <BoxSpaceBetween key={idx}>
-                                      <SmallText>{v[0]}</SmallText>
-                                      <Body01>
+                                    <BoxSpaceBetween
+                                      key={idx}
+                                      sx={{
+                                        alignItems: 'center'
+                                      }}
+                                    >
+                                      <Body01>{v[0]}</Body01>
+                                      <div
+                                        style={{
+                                          margin: '0 12px',
+                                          background: '#121212',
+                                          height: '1px',
+                                          width: '100%'
+                                        }}
+                                      ></div>
+                                      <Body01 sx={{ whiteSpace: 'nowrap' }}>
                                         {v[1]} {currentBalance?.currency.symbol}
                                       </Body01>
                                     </BoxSpaceBetween>
@@ -460,7 +499,7 @@ export default function Disperse() {
                     }
                   />
                   <BoxSpaceBetween gap={10}>
-                    {values.type == 'token' && (
+                    {values.type == 'token' && approvalState != ApprovalState.APPROVED && (
                       <LineBtn type="button" onClick={confirmBtn.run}>
                         {confirmBtn.text}
                       </LineBtn>
@@ -469,7 +508,11 @@ export default function Disperse() {
                       type="submit"
                       className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
                     >
-                      Disperse token
+                      {formatInput(values.recipients).length > 0
+                        ? validAmount
+                          ? 'Disperse' + (values.type == 'token' ? ' token' : '')
+                          : 'Insufficient balance'
+                        : 'Please input token address'}
                     </SolidBtn>
                   </BoxSpaceBetween>
                 </Box>
