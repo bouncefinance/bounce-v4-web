@@ -15,6 +15,7 @@ import { isAddress } from '@ethersproject/address'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { useNavigate } from 'react-router-dom'
+import { useShowLoginModal } from '../../../../state/users/hooks'
 
 interface IMinter {
   chainId: number
@@ -25,10 +26,11 @@ interface IMinter {
 }
 
 export default function TokenMinter() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const [currentChain, setCurrentChain] = useState(chainId || ChainId.SEPOLIA)
   const nav = useNavigate()
   const tokenMinter = useTokenMinter(currentChain as ChainId)
+  const showLoginModal = useShowLoginModal()
   const minter: IMinter = {
     chainId: chainId || ChainId.SEPOLIA,
     name: '',
@@ -248,21 +250,27 @@ export default function TokenMinter() {
               {/*    </FormItem>*/}
               {/*  }*/}
               {/*/>*/}
-              <FormLayout
-                childForm={
-                  <FormItem name={'Mint Button'}>
-                    <SolidBtn
-                      type={'submit'}
-                      className={errors.name || errors.symbol || errors.initial_supply ? '' : 'active'}
-                      style={{
-                        width: '100%'
-                      }}
-                    >
-                      Mint a new token
-                    </SolidBtn>
-                  </FormItem>
-                }
-              />
+              {account ? (
+                <FormLayout
+                  childForm={
+                    <FormItem name={'Mint Button'}>
+                      <SolidBtn
+                        type={'submit'}
+                        className={errors.name || errors.symbol || errors.initial_supply ? '' : 'active'}
+                        style={{
+                          width: '100%'
+                        }}
+                      >
+                        Mint a new token
+                      </SolidBtn>
+                    </FormItem>
+                  }
+                />
+              ) : (
+                <SolidBtn style={{ width: '100%' }} className={'active'} type={'button'} onClick={showLoginModal}>
+                  Connect wallet
+                </SolidBtn>
+              )}
             </Box>
           )}
         </Formik>
