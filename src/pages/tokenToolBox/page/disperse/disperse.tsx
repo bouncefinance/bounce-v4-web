@@ -41,7 +41,10 @@ export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
   const nav = useNavigate()
   // const [currentChain, setCurrentChain] = useState(chainId)
-  const [tokenAddr, setTokenAddr] = useState('')
+  const params = new URLSearchParams(location.search)
+  const disperseType = params.get('disperseType')
+  const tokenAddrIn = params.get('tokenAddr')
+  const [tokenAddr, setTokenAddr] = useState(tokenAddrIn || '')
   const myChainBalance = useETHBalance(account, chainId)
   const { balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
   const disperseEther = useDisperseEther(chainId as ChainId)
@@ -221,9 +224,9 @@ export default function Disperse() {
   }
   const disperse: IDisperse = {
     chainId: chainId || ChainId.SEPOLIA,
-    type: 'chain',
+    type: disperseType || 'chain',
     recipients: '',
-    tokenAddress: ''
+    tokenAddress: tokenAddrIn || ''
   }
 
   function formatInput(input: string) {
