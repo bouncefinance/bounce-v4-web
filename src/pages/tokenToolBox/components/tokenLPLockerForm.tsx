@@ -17,10 +17,15 @@ import moment, { Moment } from 'moment'
 import { LoadingButton } from '@mui/lab'
 import {
   TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES,
-  TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES
+  TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES,
+  TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES
 } from 'constants/index'
 import { isAddress } from 'web3-utils'
-import { useErc721TokenDetail } from 'bounceHooks/toolbox/useTokenLocakCallback'
+import {
+  Token721lockResponse,
+  useErc20TokenDetail,
+  useErc721TokenDetail
+} from 'bounceHooks/toolbox/useTokenLocakCallback'
 import { useDeployUniswapV2Timelock, useDeployUniswapV3Timelock, useApproveCallback } from 'hooks/useTokenTimelock'
 import { TokenlockResponse } from 'bounceHooks/toolbox/useTokenLocakCallback'
 import {
@@ -36,11 +41,14 @@ import { useNavigate } from 'react-router-dom'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useGetExchangeList } from 'hooks/useTokenTimelock'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
 interface ISeller {
   tokenAddress: string
   anotherTokenAddress?: string
   anotherTokenChecked?: boolean
   chainId: ChainId
+  nftId?: number | string
   version: VersionType
   exchangeId: string
   tokanName: string
@@ -97,7 +105,13 @@ const sellerValidationSchema = yup.object({
       return true
     }),
   title: yup.string().required('Title is a required'),
-  amount: yup.number().typeError('Please input valid number').required('Amount is a required'),
+  amount: yup
+    .number()
+    .nullable(true)
+    .when('version', {
+      is: (val: any) => Number(val) === VersionType.v2,
+      then: yup.number().typeError('Please input valid number').required('Amount is a required')
+    }),
   delayUnlockingTime: yup
     .date()
     .nullable(true)
@@ -189,32 +203,30 @@ export enum VersionType {
   'v2' = 0,
   'v3' = 1
 }
-const BidBlock = ({
+const V2BidBlock = ({
   formValues,
-  erc721TokenDeatail,
+  erc20TokenDeatail,
   errors,
   handleSubmit
 }: {
   formValues: ISeller
-  erc721TokenDeatail: TokenlockResponse
+  erc20TokenDeatail: TokenlockResponse
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
-    return erc721TokenDeatail?.allowance && Number(formValues.amount) > Number(erc721TokenDeatail?.allowance?.toExact())
-  }, [erc721TokenDeatail?.allowance, formValues.amount])
+    return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
+  }, [erc20TokenDeatail?.allowance, formValues.amount])
   const lockAmount = useMemo(() => {
-    return erc721TokenDeatail?.tokenCurrency && formValues.amount
-      ? CurrencyAmount.fromAmount(erc721TokenDeatail?.tokenCurrency, formValues.amount)
+    return erc20TokenDeatail?.tokenCurrency && formValues.amount
+      ? CurrencyAmount.fromAmount(erc20TokenDeatail?.tokenCurrency, formValues.amount)
       : undefined
-  }, [erc721TokenDeatail?.tokenCurrency, formValues.amount])
+  }, [erc20TokenDeatail?.tokenCurrency, formValues.amount])
   const contractAddress = useMemo(() => {
-    return Number(formValues.version) === VersionType.v2
-      ? TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
-      : TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
-  }, [formValues.chainId, formValues.version])
+    return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
+  }, [formValues.chainId])
   const [approvalState, approveCallback] = useApproveCallback(lockAmount, contractAddress, true)
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -263,7 +275,7 @@ const BidBlock = ({
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
-          text: `Approving use of ${erc721TokenDeatail?.tokenCurrency?.symbol} ...`,
+          text: `Approving use of ${erc20TokenDeatail?.tokenCurrency?.symbol} ...`,
           loading: true
         }
       }
@@ -275,7 +287,7 @@ const BidBlock = ({
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
         return {
-          text: `Approve use of ${erc721TokenDeatail?.tokenCurrency?.symbol}`,
+          text: `Approve use of ${erc20TokenDeatail?.tokenCurrency?.symbol}`,
           run: toApprove
         }
       }
@@ -283,7 +295,146 @@ const BidBlock = ({
     return {
       run: toApprove
     }
-  }, [account, approvalState, toApprove, showLoginModal, erc721TokenDeatail?.tokenCurrency?.symbol])
+  }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
+  return (
+    <FormLayout
+      childForm={
+        <Stack gap={'32px'} mt={'24px'}>
+          <Grid container spacing={{ xs: 10, xl: 18 }} justifyContent={'center'}>
+            {isNeedToApprove && (
+              <Grid item xs={6}>
+                <LoadingButton
+                  sx={{
+                    width: '100%',
+                    border: '1px solid #121212',
+                    '&:hover': {
+                      background: '#121212',
+                      color: '#fff'
+                    }
+                  }}
+                  loading={approveBtn.loading}
+                  onClick={() => {
+                    approveBtn.run && approveBtn.run()
+                  }}
+                >
+                  {approveBtn.text}
+                </LoadingButton>
+              </Grid>
+            )}
+
+            <Grid item xs={6}>
+              <LoadingButton
+                sx={{
+                  width: '100%',
+                  background: '#121212',
+                  color: '#fff',
+                  '&:hover': {
+                    background: '#121212',
+                    color: '#fff'
+                  }
+                }}
+                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                onClick={() => {
+                  handleSubmit && handleSubmit()
+                }}
+              >
+                Lock
+              </LoadingButton>
+            </Grid>
+          </Grid>
+        </Stack>
+      }
+    />
+  )
+}
+const V3BidBlock = ({
+  formValues,
+  erc721TokenDeatail,
+  errors,
+  handleSubmit
+}: {
+  formValues: ISeller
+  erc721TokenDeatail: Token721lockResponse
+  errors: FormikErrors<ISeller>
+  handleSubmit: () => void
+}) => {
+  const { account } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
+  const isNeedToApprove = useMemo(() => {
+    return !erc721TokenDeatail?.isApprovedAll
+  }, [erc721TokenDeatail?.isApprovedAll])
+  const contractAddress = useMemo(() => {
+    return TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
+  }, [formValues.chainId])
+  const [approvalState, approveCallback] = useNFTApproveAllCallback(formValues?.tokenAddress, contractAddress)
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approveCallback()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approveCallback])
+  const approveBtn: {
+    disabled?: boolean
+    loading?: boolean
+    text?: string
+    run?: () => void
+  } = useMemo(() => {
+    if (!account) {
+      return {
+        text: 'Connect wallet',
+        run: showLoginModal
+      }
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.PENDING) {
+        return {
+          text: `Approving use of NFT ...`,
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.UNKNOWN) {
+        return {
+          text: 'Loading...',
+          loading: true
+        }
+      }
+      if (approvalState === ApprovalState.NOT_APPROVED) {
+        return {
+          text: `Approve use of NFT`,
+          run: toApprove
+        }
+      }
+    }
+    return {
+      run: toApprove
+    }
+  }, [account, approvalState, toApprove, showLoginModal])
   return (
     <FormLayout
       childForm={
@@ -338,16 +489,25 @@ const BidBlock = ({
 const TokenLockerL2L3Form = () => {
   const showLoginModal = useShowLoginModal()
   const { account } = useActiveWeb3React()
+  const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
   const [chainId, setChainId] = useState<ChainId>(ChainId.SEPOLIA)
   const [version, setVersion] = useState<VersionType>(VersionType.v2)
-  const ChainSelectOption = ChainList.filter(item => {
-    return TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
-  })
+  const ChainSelectOption = useMemo(() => {
+    return ChainList.filter(item => {
+      if (version === VersionType.v2) {
+        return TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
+      } else {
+        return TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
+      }
+    })
+  }, [version])
+
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
   const { data: exchangeList } = useGetExchangeList(chainConfigInBackend?.id || 0, 2)
-  const erc721TokenDeatail = useErc721TokenDetail(tokenAddress, chainId, version)
+  const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
+  const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -355,6 +515,7 @@ const TokenLockerL2L3Form = () => {
   const sellerValue: ISeller = {
     tokenAddress: '',
     chainId: ChainId.SEPOLIA,
+    nftId: '',
     exchangeId: '',
     anotherTokenChecked: false,
     tokanName: '',
@@ -368,64 +529,133 @@ const TokenLockerL2L3Form = () => {
     segmentAmount: ''
   }
   const lockV2Handle = useDeployUniswapV2Timelock(chainId)
+  const toLockV2Handle = useCallback(
+    async (
+      title: string,
+      tokenAddress: string,
+      accountAddress: string,
+      amount: CurrencyAmount | undefined,
+      releaseTime: string
+    ) => {
+      showRequestApprovalDialog()
+      try {
+        const { transactionReceipt, hash } = await lockV2Handle(
+          title,
+          tokenAddress,
+          accountAddress,
+          amount,
+          releaseTime
+        )
+        const ret = new Promise((resolve, rpt) => {
+          showWaitingTxDialog(() => {
+            hideDialogConfirmation()
+            rpt()
+          })
+          transactionReceipt.then(curReceipt => {
+            resolve(curReceipt)
+            show(DialogTips, {
+              iconType: 'success',
+              againBtn: 'Check Detail',
+              title: 'Congratulations!',
+              content: 'You have successfully lock LP',
+              onAgain: () => {
+                nav(`/TokenToolBox/TokenLPLockerInfo/${chainId}/${hash}`)
+              }
+            })
+          })
+        })
+        ret
+          .then(() => {
+            hideDialogConfirmation()
+          })
+          .catch()
+      } catch (error) {
+        const err: any = error
+        console.error(err)
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+          onAgain: toLockV2Handle
+        })
+      }
+    },
+    [lockV2Handle, nav, chainId]
+  )
   const lockV3Handle = useDeployUniswapV3Timelock(chainId)
-  const nav = useNavigate()
+  const toLockV3Handle = useCallback(
+    async (title: string, tokenAddress: string, id: string, accountAddress: string, releaseTime: string) => {
+      showRequestApprovalDialog()
+      try {
+        const { transactionReceipt, hash } = await lockV3Handle(title, tokenAddress, id, accountAddress, releaseTime)
+        const ret = new Promise((resolve, rpt) => {
+          showWaitingTxDialog(() => {
+            hideDialogConfirmation()
+            rpt()
+          })
+          transactionReceipt.then(curReceipt => {
+            resolve(curReceipt)
+            show(DialogTips, {
+              iconType: 'success',
+              againBtn: 'Check Detail',
+              title: 'Congratulations!',
+              content: 'You have successfully lock LP',
+              onAgain: () => {
+                nav(`/TokenToolBox/TokenLPLockerInfo/${chainId}/${hash}`)
+              }
+            })
+          })
+        })
+        ret
+          .then(() => {
+            hideDialogConfirmation()
+          })
+          .catch()
+      } catch (error) {
+        const err: any = error
+        console.error(err)
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+          onAgain: toLockV3Handle
+        })
+      }
+    },
+    [lockV3Handle, nav, chainId]
+  )
   const onSubmit = async (value: ISeller) => {
     // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
     showRequestConfirmDialog()
     try {
-      const amoutAraw = erc721TokenDeatail?.tokenCurrency
-        ? CurrencyAmount.fromAmount(erc721TokenDeatail.tokenCurrency, value.amount)
+      const amoutAraw = erc20TokenDeatail?.tokenCurrency
+        ? CurrencyAmount.fromAmount(erc20TokenDeatail?.tokenCurrency, value.amount)
         : undefined
       const type = Number(value.version)
       switch (type) {
         case VersionType.v2:
-          await lockV2Handle(
+          toLockV2Handle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             amoutAraw,
             value?.delayUnlockingTime?.unix() + ''
           )
-            .then(resp => {
-              show(DialogTips, {
-                iconType: 'success',
-                againBtn: 'Check Detail',
-                title: 'Congratulations!',
-                content: 'You have successfully lock token',
-                onAgain: () => {
-                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
-                }
-              })
-              hideDialogConfirmation()
-            })
-            .catch(() => {
-              hideDialogConfirmation()
-            })
           break
         case VersionType.v3:
-          await lockV3Handle(
+          toLockV3Handle(
             value.title,
             value.tokenAddress,
-            '',
+            value.nftId + '' || '',
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             value?.delayUnlockingTime?.unix() + ''
           )
-            .then(resp => {
-              show(DialogTips, {
-                iconType: 'success',
-                againBtn: 'Check Detail',
-                title: 'Congratulations!',
-                content: 'You have successfully lock token',
-                onAgain: () => {
-                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
-                }
-              })
-              hideDialogConfirmation()
-            })
-            .catch(() => {
-              hideDialogConfirmation()
-            })
           break
       }
     } catch (e) {
@@ -442,7 +672,7 @@ const TokenLockerL2L3Form = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
-          console.log('values>>>', values)
+          console.log('values,errors>>>', values, errors)
           // update hook params
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
@@ -657,17 +887,44 @@ const TokenLockerL2L3Form = () => {
                   </FormItem>
                 }
               />
+              {values.version === VersionType.v3 && (
+                <FormLayout
+                  childForm={
+                    <FormItem name={'nftId'}>
+                      <ToolBoxInput
+                        sx={{
+                          color: '#121212'
+                        }}
+                        value={values.tokenAddress}
+                        onChange={e => {
+                          if (isAddress(e.target.value)) {
+                            setFieldValue('nftId', e.target.value)
+                          }
+                        }}
+                        placeholder={'NFT ID'}
+                      />
+                    </FormItem>
+                  }
+                />
+              )}
+
               <LineCom />
-              <RowTextInfo label={'Token name'} value={erc721TokenDeatail?.tokenCurrency?.name || '--'} />
-              <RowTextInfo label={'Token symbol'} value={erc721TokenDeatail?.tokenCurrency?.symbol || '--'} />
-              <RowTextInfo
-                label={'Token decimal'}
-                value={
-                  erc721TokenDeatail?.tokenCurrency?.decimals ? erc721TokenDeatail?.tokenCurrency?.decimals + '' : '--'
-                }
-              />
-              <RowTextInfo label={'Balance'} value={erc721TokenDeatail?.balance?.toExact() || '--'} />
-              <RowTextInfo label={'Allowance'} value={erc721TokenDeatail?.allowance?.toExact() || '--'} line={false} />
+              {values.version === VersionType.v2 && (
+                <>
+                  <RowTextInfo label={'Balance'} value={erc20TokenDeatail?.balance?.toExact() || '--'} />
+                  <RowTextInfo
+                    label={'Allowance'}
+                    value={erc20TokenDeatail?.allowance?.toExact() || '--'}
+                    line={false}
+                  />
+                </>
+              )}
+              {values.version === VersionType.v3 && (
+                <>
+                  <RowTextInfo label={'Balance'} value={erc721TokenDetail?.balance || '--'} />{' '}
+                  <RowTextInfo label={'Approved All'} value={erc721TokenDetail?.isApprovedAll ? 'true' : 'false'} />{' '}
+                </>
+              )}
               <LineCom />
               <FormLayout
                 title1="Title"
@@ -677,84 +934,86 @@ const TokenLockerL2L3Form = () => {
                   </FormItem>
                 }
               />
-              <FormLayout
-                title1="Amount"
-                childForm={
-                  <>
-                    <FormItem
-                      name={'amount'}
-                      sx={{
-                        position: 'relative'
-                      }}
-                    >
-                      <>
-                        <ToolBoxInput
-                          placeholder={'Please enter amount'}
-                          value={values.amount}
-                          sx={{
-                            paddingRight: '100px'
-                          }}
-                          onChange={e => {
-                            const value = e.target.value
-                            let filtered = value.replace(/[^0-9.]/g, '').replace(/(\.\d{8})[\d.]+/g, '$1')
-                            if (filtered.startsWith('.')) {
-                              filtered = '0' + filtered
-                            }
-                            const decimalIndex = filtered.indexOf('.')
-                            if (decimalIndex !== -1) {
-                              filtered =
-                                filtered.slice(0, decimalIndex + 1) +
-                                filtered.slice(decimalIndex + 1).replace(/\./g, '')
-                            }
-                            if (
-                              erc721TokenDeatail &&
-                              erc721TokenDeatail.balance &&
-                              Number(filtered) > Number(erc721TokenDeatail.balance.toExact())
-                            ) {
-                              filtered = erc721TokenDeatail.balance.toExact()
-                            }
-                            setFieldValue('amount', filtered)
-                          }}
-                        />
-                        {/* max btn */}
-                        <Box
-                          sx={{
-                            width: '60px',
-                            height: '40px',
-                            position: 'absolute',
-                            top: '50%',
-                            right: 34,
-                            transform: 'translate3D(0, -50%, 0)',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            cursor: 'pointer',
-                            '.max': {
-                              color: '#121212',
-                              lineHeight: '20px',
-                              borderBottom: '2px solid #121212'
-                            },
-                            '&:hover': {
-                              background: '#121212',
-                              borderRadius: '8px',
+              {values.version === VersionType.v2 && (
+                <FormLayout
+                  title1="Amount"
+                  childForm={
+                    <>
+                      <FormItem
+                        name={'amount'}
+                        sx={{
+                          position: 'relative'
+                        }}
+                      >
+                        <>
+                          <ToolBoxInput
+                            placeholder={'Please enter amount'}
+                            value={values.amount}
+                            sx={{
+                              paddingRight: '100px'
+                            }}
+                            onChange={e => {
+                              const value = e.target.value
+                              let filtered = value.replace(/[^0-9.]/g, '').replace(/(\.\d{8})[\d.]+/g, '$1')
+                              if (filtered.startsWith('.')) {
+                                filtered = '0' + filtered
+                              }
+                              const decimalIndex = filtered.indexOf('.')
+                              if (decimalIndex !== -1) {
+                                filtered =
+                                  filtered.slice(0, decimalIndex + 1) +
+                                  filtered.slice(decimalIndex + 1).replace(/\./g, '')
+                              }
+                              if (
+                                erc20TokenDeatail &&
+                                erc20TokenDeatail.balance &&
+                                Number(filtered) > Number(erc20TokenDeatail.balance.toExact())
+                              ) {
+                                filtered = erc20TokenDeatail.balance.toExact()
+                              }
+                              setFieldValue('amount', filtered)
+                            }}
+                          />
+                          {/* max btn */}
+                          <Box
+                            sx={{
+                              width: '60px',
+                              height: '40px',
+                              position: 'absolute',
+                              top: '50%',
+                              right: 34,
+                              transform: 'translate3D(0, -50%, 0)',
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              cursor: 'pointer',
                               '.max': {
-                                color: '#fff',
+                                color: '#121212',
                                 lineHeight: '20px',
                                 borderBottom: '2px solid #121212'
+                              },
+                              '&:hover': {
+                                background: '#121212',
+                                borderRadius: '8px',
+                                '.max': {
+                                  color: '#fff',
+                                  lineHeight: '20px',
+                                  borderBottom: '2px solid #121212'
+                                }
                               }
-                            }
-                          }}
-                          onClick={() => {
-                            setFieldValue('amount', erc721TokenDeatail.max)
-                          }}
-                        >
-                          <Typography className={'max'}>Max</Typography>
-                        </Box>
-                      </>
-                    </FormItem>
-                  </>
-                }
-              />
+                            }}
+                            onClick={() => {
+                              setFieldValue('amount', erc20TokenDeatail.max)
+                            }}
+                          >
+                            <Typography className={'max'}>Max</Typography>
+                          </Box>
+                        </>
+                      </FormItem>
+                    </>
+                  }
+                />
+              )}
               <LineCom />
               <Stack spacing={6}>
                 <LabelTitle>Unlocking Start Time</LabelTitle>
@@ -766,14 +1025,26 @@ const TokenLockerL2L3Form = () => {
                   textField={{ sx: { width: '100%' } }}
                 />
               </Stack>
-              <BidBlock
-                formValues={values}
-                erc721TokenDeatail={erc721TokenDeatail}
-                errors={errors}
-                handleSubmit={() => {
-                  handleSubmit()
-                }}
-              />
+              {values.version === VersionType.v2 && (
+                <V2BidBlock
+                  formValues={values}
+                  erc20TokenDeatail={erc20TokenDeatail}
+                  errors={errors}
+                  handleSubmit={() => {
+                    handleSubmit()
+                  }}
+                />
+              )}
+              {values.version === VersionType.v3 && (
+                <V3BidBlock
+                  formValues={values}
+                  erc721TokenDeatail={erc721TokenDetail}
+                  errors={errors}
+                  handleSubmit={() => {
+                    handleSubmit()
+                  }}
+                />
+              )}
             </Form>
           )
         }}

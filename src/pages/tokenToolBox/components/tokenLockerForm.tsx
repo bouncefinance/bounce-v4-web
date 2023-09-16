@@ -578,6 +578,7 @@ const BidBlock = ({
 const TokenLockerForm = () => {
   const showLoginModal = useShowLoginModal()
   const { account } = useActiveWeb3React()
+  const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
   const [chainId, setChainId] = useState<ChainId>(ChainId.SEPOLIA)
@@ -610,9 +611,172 @@ const TokenLockerForm = () => {
     fragmentReleaseSize: ''
   }
   const lockHandle = useTokenTimelock(chainId)
+  const toLockHandle = useCallback(
+    async (
+      title: string,
+      tokenAddress: string,
+      accountAddress: string,
+      amount: CurrencyAmount | undefined,
+      releaseTime: string
+    ) => {
+      showRequestApprovalDialog()
+      try {
+        const { transactionReceipt, hash } = await lockHandle(title, tokenAddress, accountAddress, amount, releaseTime)
+        const ret = new Promise((resolve, rpt) => {
+          showWaitingTxDialog(() => {
+            hideDialogConfirmation()
+            rpt()
+          })
+          transactionReceipt.then(curReceipt => {
+            resolve(curReceipt)
+            show(DialogTips, {
+              iconType: 'success',
+              againBtn: 'Check Detail',
+              title: 'Congratulations!',
+              content: 'You have successfully lock token',
+              onAgain: () => {
+                nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${hash}`)
+              }
+            })
+          })
+        })
+        ret
+          .then(() => {
+            hideDialogConfirmation()
+          })
+          .catch()
+      } catch (error) {
+        const err: any = error
+        console.error(err)
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+          onAgain: toLockHandle
+        })
+      }
+    },
+    [chainId, lockHandle, nav]
+  )
   const lockStageHandle = useTokenTimeStagelock(chainId)
+  const toLockStageHandle = useCallback(
+    async (
+      title: string,
+      tokenAddress: string,
+      accountAddress: string,
+      amount: CurrencyAmount | undefined,
+      releaseTime: string[][]
+    ) => {
+      showRequestApprovalDialog()
+      try {
+        const { transactionReceipt, hash } = await lockStageHandle(
+          title,
+          tokenAddress,
+          accountAddress,
+          amount,
+          releaseTime
+        )
+        const ret = new Promise((resolve, rpt) => {
+          showWaitingTxDialog(() => {
+            hideDialogConfirmation()
+            rpt()
+          })
+          transactionReceipt.then(curReceipt => {
+            resolve(curReceipt)
+            show(DialogTips, {
+              iconType: 'success',
+              againBtn: 'Check Detail',
+              title: 'Congratulations!',
+              content: 'You have successfully lock token',
+              onAgain: () => {
+                nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${hash}`)
+              }
+            })
+          })
+        })
+        ret
+          .then(() => {
+            hideDialogConfirmation()
+          })
+          .catch()
+      } catch (error) {
+        const err: any = error
+        console.error(err)
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+          onAgain: toLockStageHandle
+        })
+      }
+    },
+    [chainId, lockStageHandle, nav]
+  )
   const lockLinearHandle = useTokenTimeLinearlock(chainId)
-  const nav = useNavigate()
+  const toLockLinearHandle = useCallback(
+    async (
+      title: string,
+      tokenAddress: string,
+      accountAddress: string,
+      startAt: string,
+      duration: string,
+      amount: CurrencyAmount | undefined
+    ) => {
+      showRequestApprovalDialog()
+      try {
+        const { transactionReceipt, hash } = await lockLinearHandle(
+          title,
+          tokenAddress,
+          accountAddress,
+          startAt,
+          duration,
+          amount
+        )
+        const ret = new Promise((resolve, rpt) => {
+          showWaitingTxDialog(() => {
+            hideDialogConfirmation()
+            rpt()
+          })
+          transactionReceipt.then(curReceipt => {
+            resolve(curReceipt)
+            show(DialogTips, {
+              iconType: 'success',
+              againBtn: 'Check Detail',
+              title: 'Congratulations!',
+              content: 'You have successfully lock token',
+              onAgain: () => {
+                nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${hash}`)
+              }
+            })
+          })
+        })
+        ret
+          .then(() => {
+            hideDialogConfirmation()
+          })
+          .catch()
+      } catch (error) {
+        const err: any = error
+        console.error(err)
+        hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
+          onAgain: toLockStageHandle
+        })
+      }
+    },
+    [chainId, lockStageHandle, nav]
+  )
   const onSubmit = async (value: ISeller) => {
     // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
     showRequestConfirmDialog()
@@ -623,28 +787,13 @@ const TokenLockerForm = () => {
       const type = Number(value.releaseType)
       switch (type) {
         case IReleaseType.Cliff:
-          await lockHandle(
+          toLockHandle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             amoutAraw,
             value?.delayUnlockingTime?.unix() + ''
           )
-            .then(resp => {
-              show(DialogTips, {
-                iconType: 'success',
-                againBtn: 'Check Detail',
-                title: 'Congratulations!',
-                content: 'You have successfully lock token',
-                onAgain: () => {
-                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
-                }
-              })
-              hideDialogConfirmation()
-            })
-            .catch(() => {
-              hideDialogConfirmation()
-            })
           break
         case IReleaseType.Fragment:
           const releaseTimeAndRadio = value?.fragmentReleaseTimes
@@ -663,31 +812,16 @@ const TokenLockerForm = () => {
             .map(item => {
               return [item?.startAt?.unix() + '', BigNumber(item.radio).times('0.01').times(1e18).toString()]
             })
-          await lockStageHandle(
+          toLockStageHandle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             amoutAraw,
             releaseTimeAndRadio
           )
-            .then(resp => {
-              show(DialogTips, {
-                iconType: 'success',
-                againBtn: 'Check Detail',
-                title: 'Congratulations!',
-                content: 'You have successfully lock token',
-                onAgain: () => {
-                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
-                }
-              })
-              hideDialogConfirmation()
-            })
-            .catch(() => {
-              hideDialogConfirmation()
-            })
           break
         case IReleaseType.Linear:
-          lockLinearHandle(
+          toLockLinearHandle(
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
@@ -695,21 +829,6 @@ const TokenLockerForm = () => {
             value.linearUnlockingEndTime?.unix() + '',
             amoutAraw
           )
-            .then(resp => {
-              show(DialogTips, {
-                iconType: 'success',
-                againBtn: 'Check Detail',
-                title: 'Congratulations!',
-                content: 'You have successfully lock token',
-                onAgain: () => {
-                  nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${resp.hash}`)
-                }
-              })
-              hideDialogConfirmation()
-            })
-            .catch(() => {
-              hideDialogConfirmation()
-            })
           break
       }
     } catch (e) {

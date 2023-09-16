@@ -28,7 +28,7 @@ export function useTokenTimelock(chain: ChainId) {
       accountAddress: string,
       amount: CurrencyAmount | undefined,
       releaseTime: string
-    ): Promise<any> => {
+    ): Promise<{ transactionReceipt: Promise<TransactionReceipt>; hash: string }> => {
       if (!account) {
         return Promise.reject('no account')
       }
@@ -79,7 +79,7 @@ export function useTokenTimeStagelock(chain: ChainId) {
       accountAddress: string,
       amount: CurrencyAmount | undefined,
       releaseTime: string[][]
-    ): Promise<any> => {
+    ): Promise<{ transactionReceipt: Promise<TransactionReceipt>; hash: string }> => {
       if (!account) {
         return Promise.reject('no account')
       }
@@ -131,7 +131,7 @@ export function useTokenTimeLinearlock(chain: ChainId) {
       startAt: string,
       duration: string,
       amount: CurrencyAmount | undefined
-    ): Promise<any> => {
+    ): Promise<{ transactionReceipt: Promise<TransactionReceipt>; hash: string }> => {
       if (!account) {
         return Promise.reject('no account')
       }
@@ -182,7 +182,7 @@ export function useDeployUniswapV2Timelock(chain: ChainId) {
       accountAddress: string,
       amount: CurrencyAmount | undefined,
       releaseTime: string
-    ): Promise<any> => {
+    ): Promise<{ transactionReceipt: Promise<TransactionReceipt>; hash: string }> => {
       if (!account) {
         return Promise.reject('no account')
       }
@@ -234,7 +234,7 @@ export function useDeployUniswapV3Timelock(chain: ChainId) {
       id: string,
       accountAddress: string,
       releaseTime: string
-    ): Promise<any> => {
+    ): Promise<{ transactionReceipt: Promise<TransactionReceipt>; hash: string }> => {
       if (!account) {
         return Promise.reject('no account')
       }
@@ -407,7 +407,11 @@ export const useReleasableERC20Vesting = (chain?: ChainId) => {
   const erc20TimelockContract = useToolboxERC20TimelockLineFactory(chain || chainId)
   const addTransaction = useTransactionAdder()
   return useCallback(
-    async (tokenAddress: string, accountAddress: string, amount: CurrencyAmount | undefined): Promise<any> => {
+    async (
+      tokenAddress: string,
+      accountAddress: string,
+      amount: CurrencyAmount | undefined
+    ): Promise<{ transactionReceipt: Promise<TransactionReceipt>; hash: string }> => {
       if (!account) {
         return Promise.reject('no account')
       }
