@@ -16,12 +16,16 @@ import {
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import Image from 'components/Image'
 import EmptyData from 'bounceComponents/common/EmptyData'
-import { useState, useEffect } from 'react'
-import IconImg from 'assets/imgs/icon/default_file.svg'
 import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
 import { useIsMDDown } from 'themes/useTheme'
 import { routes } from '../../../constants/routes'
+import { useTokenList } from '../../../bounceHooks/toolbox/useTokenInfo'
+import { Currency, CurrencyAmount } from '../../../constants/token'
+import { ChainId } from '../../../constants/chain'
+import { useOptionDatas } from '../../../state/configOptions/hooks'
+import { TokenInfo } from '../../../api/toolbox/type'
+import { useNavigate } from 'react-router-dom'
 
 const StyledTableCell = styled(TableCell)(() => ({
   borderColor: '#626262',
@@ -71,31 +75,21 @@ const BtnCom = styled(Button)(() => ({
   }
 }))
 const TokenList = () => {
-  const [loading, setLoading] = useState(true)
+  const optionDatas = useOptionDatas()
+  const { data, loading } = useTokenList()
   const isMd = useIsMDDown()
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false)
-    }, 2000)
-  }, [])
-  const dataList = [
-    {
-      id: 0,
-      tokenSymbol: IconImg,
-      tokenName: 'USDT',
-      amount: '20,184.04',
-      totalValue: '$4,585,165.51',
-      tokenType: 'Token'
-    },
-    {
-      id: 1,
-      tokenSymbol: IconImg,
-      tokenName: 'USDT',
-      amount: '20,184.04',
-      totalValue: '$4,585,165.51',
-      tokenType: 'Token'
-    }
-  ]
+  const nav = useNavigate()
+
+  function getChainName(chain_id: number) {
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+  }
+
+  function getAmount(record: TokenInfo) {
+    return CurrencyAmount.fromRawAmount(
+      new Currency(getChainName(Number(record.chain_id))?.id || ChainId.SEPOLIA, record.contract, record.decimals),
+      record.supply
+    )
+  }
 
   return (
     <Box
@@ -179,7 +173,7 @@ const TokenList = () => {
           >
             <BounceAnime />
           </Box>
-        ) : dataList && dataList.length > 0 && !loading ? (
+        ) : data && data.list.length > 0 && !loading ? (
           <TableContainer sx={{ mt: 40 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -192,7 +186,7 @@ const TokenList = () => {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {dataList.map(record => (
+                {data.list.map(record => (
                   <StyledTableRow
                     key={record.id}
                     sx={{
@@ -204,13 +198,13 @@ const TokenList = () => {
                   >
                     <StyledTableCell>
                       <Stack direction={'row'} gap={'8px'}>
-                        <Image src={record.tokenSymbol} width="24px" />
-                        <Typography>{record.tokenName}</Typography>
+                        <Image src={record.small_url} width="24px" />
+                        <Typography>{record.name}</Typography>
                       </Stack>
                     </StyledTableCell>
-                    <StyledTableCell>{record.amount}</StyledTableCell>
-                    <StyledTableCell>{record.totalValue}</StyledTableCell>
-                    <StyledTableCell>{record.tokenType}</StyledTableCell>
+                    <StyledTableCell>{getAmount(record)?.toSignificant()}</StyledTableCell>
+                    <StyledTableCell>{Number(getAmount(record).toExact()) * Number(record.price)}</StyledTableCell>
+                    <StyledTableCell>{record.token_type}</StyledTableCell>
                     <StyledTableCell align={'right'}>
                       <Stack
                         direction={'row'}
@@ -227,6 +221,11 @@ const TokenList = () => {
                             borderRadius: '6px'
                           }}
                           variant={'contained'}
+                          onClick={() => {
+                            nav(
+                              `${routes.tokenToolBox.tokenLocker}?chain=${record?.chain_id}&tokenAddr=${record?.token}`
+                            )
+                          }}
                         >
                           Lock
                         </Button>
@@ -247,6 +246,9 @@ const TokenList = () => {
                             }
                           }}
                           variant={'outlined'}
+                          onClick={() => {
+                            nav(`${routes.tokenToolBox.disperse}?disperseType=token&tokenAddr=${record?.token}`)
+                          }}
                         >
                           Disperse
                         </Button>

@@ -477,18 +477,23 @@ export default function Disperse() {
                                   )
                                 })}
                               <BoxSpaceBetween mt={30}>
-                                <SmallText>Your balance</SmallText>
+                                <SmallText>Total</SmallText>
                                 <Box display={'flex'}>
-                                  <Body01>{currentBalance?.toSignificant()}</Body01>
+                                  <Body01>{currencyAmount?.toExact()}</Body01>
                                   <Body01 ml={8}> {currentBalance?.currency?.symbol}</Body01>
                                 </Box>
                               </BoxSpaceBetween>
                               <BoxSpaceBetween>
                                 <SmallText>Remaining</SmallText>
                                 <Box display={'flex'}>
-                                  <Body01>
-                                    {validAmount ? currentBalance.subtract(currencyAmount).toSignificant() : '-'}
-                                  </Body01>
+                                  {validAmount ? (
+                                    <Body01>{currentBalance.subtract(currencyAmount).toSignificant()}</Body01>
+                                  ) : (
+                                    <Body01 sx={{ color: '#FD3333' }}>{`-${currencyAmount
+                                      ?.subtract(currentBalance)
+                                      .toSignificant()}`}</Body01>
+                                  )}
+
                                   <Body01 ml={8}>{currentBalance?.currency?.symbol}</Body01>
                                 </Box>
                               </BoxSpaceBetween>
