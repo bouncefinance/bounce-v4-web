@@ -75,7 +75,11 @@ export default function MyToken() {
                     <StyledTableCell>{getChainName(Number(record.chain_id))?.chainName}</StyledTableCell>
                     <StyledTableCell>
                       {CurrencyAmount.fromRawAmount(
-                        new Currency(ChainId.SEPOLIA, '', record.decimals),
+                        new Currency(
+                          getChainName(Number(record.chain_id))?.id || ChainId.SEPOLIA,
+                          record.contract,
+                          record.decimals
+                        ),
                         record.supply
                       )?.toSignificant()}
                     </StyledTableCell>
