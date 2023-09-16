@@ -2,19 +2,30 @@ import { Box, styled } from '@mui/material'
 import BackButton from '../../../../bounceComponents/common/BackButton'
 import { ContainerBox } from '../tokenlocker/tokenLocker'
 import { Body01, H4, H6 } from '../../../../components/Text'
-import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
+import { BoxSpaceBetween } from '../disperse/disperse'
 import Grid2 from '@mui/material/Unstable_Grid2'
 import { ReactComponent as EmptyBox } from 'assets/imgs/toolBox/empty-box.svg'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useTokenInfo } from '../../../../bounceHooks/toolbox/useTokenInfo'
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 import { routes } from '../../../../constants/routes'
+import { Currency, CurrencyAmount } from '../../../../constants/token'
+import { ChainId } from '../../../../constants/chain'
+import { TokenInfo as TokenInfoData } from '../../../../api/toolbox/type'
 
 export default function TokenInfo() {
   const { chain, token } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || '')
   const { data } = useTokenInfo(chainConfigInBackend?.id || 0, token)
   const nav = useNavigate()
+
+  function getAmount(record: TokenInfoData | undefined) {
+    return CurrencyAmount.fromRawAmount(
+      new Currency(ChainId.SEPOLIA, record?.contract || '', record?.decimals || 18),
+      record?.supply || '0'
+    )
+  }
+
   return (
     <Box>
       <ContainerBox>
@@ -36,18 +47,18 @@ export default function TokenInfo() {
                 </BottomLineBox>
                 <BottomLineBox>
                   <Body01 sx={{ color: '#959595' }}>Balance</Body01>
-                  <Body01>{data?.supply}</Body01>
+                  <Body01>{getAmount(data).toSignificant()}</Body01>
                 </BottomLineBox>
                 <BottomLineBox>
                   <Body01 sx={{ color: '#959595' }}>Chain</Body01>
                   <Body01>Ethereum</Body01>
                 </BottomLineBox>
-                <FullSpaceBetweenBox>
-                  <Body01 sx={{ color: '#959595' }}>Token image</Body01>
-                  <img style={{ width: 24, height: 24 }} />
-                </FullSpaceBetweenBox>
+                {/*<FullSpaceBetweenBox>*/}
+                {/*  <Body01 sx={{ color: '#959595' }}>Token image</Body01>*/}
+                {/*  <img style={{ width: 24, height: 24 }} />*/}
+                {/*</FullSpaceBetweenBox>*/}
               </WhiteBg>
-              <SolidBtn style={{ width: '100%' }}>Transfer</SolidBtn>
+              {/*<SolidBtn style={{ width: '100%' }}>Transfer</SolidBtn>*/}
             </GrayBg>
             <Grid2 container sx={{ width: '100%' }} columnSpacing={20}>
               <Grid2 md={6}>

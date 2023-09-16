@@ -202,16 +202,7 @@ const TokenList = () => {
                         <Typography>{record.name}</Typography>
                       </Stack>
                     </StyledTableCell>
-                    <StyledTableCell>
-                      {CurrencyAmount.fromRawAmount(
-                        new Currency(
-                          getChainName(Number(record.chain_id))?.id || ChainId.SEPOLIA,
-                          record.contract,
-                          record.decimals
-                        ),
-                        record.supply
-                      )?.toSignificant()}
-                    </StyledTableCell>
+                    <StyledTableCell>{getAmount(record)?.toSignificant()}</StyledTableCell>
                     <StyledTableCell>{Number(getAmount(record).toExact()) * Number(record.price)}</StyledTableCell>
                     <StyledTableCell>{record.token_type}</StyledTableCell>
                     <StyledTableCell align={'right'}>
