@@ -21,9 +21,7 @@ export const useTokenInfo = (chain?: number, token?: string) => {
   )
   return { data, loading }
 }
-export const useTokenList = () => {
-  const { account } = useActiveWeb3React()
-
+export const useTokenList = (account?: string) => {
   const { data, loading } = useRequest(
     async (): Promise<TokenInfoList | undefined> => {
       return await getTokenInfo({

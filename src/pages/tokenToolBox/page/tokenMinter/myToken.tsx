@@ -20,10 +20,12 @@ import { routes } from '../../../../constants/routes'
 import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { Currency, CurrencyAmount } from '../../../../constants/token'
 import { ChainId } from '../../../../constants/chain'
+import { useActiveWeb3React } from '../../../../hooks'
 
 export default function MyToken() {
   const optionDatas = useOptionDatas()
-  const { data } = useTokenList()
+  const { account } = useActiveWeb3React()
+  const { data } = useTokenList(account)
 
   function getChainName(chain_id: number) {
     return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
