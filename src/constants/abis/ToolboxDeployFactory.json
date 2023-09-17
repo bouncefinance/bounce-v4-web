@@ -1,9 +1,0 @@
-[
-  {
-    "inputs": [],
-    "name": "release",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  }
-]

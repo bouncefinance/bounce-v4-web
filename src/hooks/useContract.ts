@@ -25,7 +25,7 @@ import ToolboxERC721TimelockFactory from '../constants/abis/ToolboxERC721Timeloc
 import ToolboxERC20VestingFactory from '../constants/abis/ToolboxERC20VestingFactory.json'
 import DISPERSE_ABI from '../constants/abis/Disperse.json'
 import TOKEN_MINTER_ABI from '../constants/abis/ToolboxERC20Factory.json'
-import WithDrawContractABI from '../constants/abis/ToolboxDeployFactory.json'
+import WithDrawContractABI from '../constants/abis/ToolboxDeployErc20Factory.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,

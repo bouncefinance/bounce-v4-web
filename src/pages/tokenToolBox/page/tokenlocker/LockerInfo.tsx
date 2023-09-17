@@ -17,12 +17,15 @@ import LineChartSection from 'pages/tokenToolBox/components/lineChart'
 import TimeStageLine from '../../components/timeStageLine'
 import { StageParams } from '../../components/timeStageLine'
 import BigNumber from 'bignumber.js'
-import { useWithDrawByTokenLock } from 'hooks/useTokenTimelock'
+import { useWithDrawByTokenLock, useReleasableERC20 } from 'hooks/useTokenTimelock'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import { useActiveWeb3React } from 'hooks'
 export default function TokenInfo() {
   const { chain, hash } = useParams()
+  const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
@@ -56,14 +59,6 @@ export default function TokenInfo() {
             return [...accumulator, currentValue]
           }
         }, [])
-        // const specificTime = moment(data?.lock_start * 1000)
-        // const currentTime = moment()
-        // const diffDuration = moment.duration(currentTime.diff(specificTime))
-        // updatedData.unshift({
-        //   ratio: '0',
-        //   releaseTime: data?.lock_start,
-        //   released: !!(diffDuration.asMilliseconds() > 0) // time is pass
-        // })
         return updatedData.map((item: StageParams) => {
           return {
             ratio: tokenInfo
@@ -82,6 +77,12 @@ export default function TokenInfo() {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
+  const releasableResult = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  console.log('releasableResult>>>', releasableResult)
+  const releasableNum = useMemo(() => {
+    return releasableResult && tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, releasableResult).toExact() : '0'
+  }, [releasableResult, tokenInfo])
+  console.log('data,releasableNum>>>', data, releasableNum)
   const toWithDraw = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -114,6 +115,9 @@ export default function TokenInfo() {
       })
     }
   }, [withDrawFn])
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return Number(chainId) === Number(chain)
+  }, [chainId, chain])
   if (loading) {
     return <></>
   }
@@ -223,14 +227,23 @@ export default function TokenInfo() {
               )}
             </Box>
           )}
-          <SolidBtn
-            style={{ width: '100%' }}
-            onClick={() => {
-              toWithDraw()
-            }}
-          >
-            Withdraw
-          </SolidBtn>
+          {isCurrentChainEqualChainOfPool && (
+            <SolidBtn
+              style={{
+                width: '100%',
+                background: Number(releasableNum) === 0 ? '#d7d6d9' : '#121212',
+                color: Number(releasableNum) === 0 ? '' : '#fff',
+                cursor: Number(releasableNum) === 0 ? 'not-allowed' : 'pointer'
+              }}
+              disabled={Number(releasableNum) === 0}
+              onClick={() => {
+                toWithDraw()
+              }}
+            >
+              {Number(releasableNum) === 0 ? 'Withdrawed' : 'Withdraw'}
+            </SolidBtn>
+          )}
+          {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={Number(chain) || 0} />}
         </GrayBg>
       </Box>
     </ContainerBox>

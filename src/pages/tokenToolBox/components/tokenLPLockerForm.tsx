@@ -44,6 +44,8 @@ import { useGetExchangeList } from 'hooks/useTokenTimelock'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 interface ISeller {
   tokenAddress: string
   anotherTokenAddress?: string
@@ -215,7 +217,7 @@ const V2BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
@@ -297,6 +299,9 @@ const V2BidBlock = ({
       run: toApprove
     }
   }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return chainId === formValues.chainId
+  }, [chainId, formValues.chainId])
   return (
     <FormLayout
       childForm={
@@ -324,23 +329,26 @@ const V2BidBlock = ({
             )}
 
             <Grid item xs={6}>
-              <LoadingButton
-                sx={{
-                  width: '100%',
-                  background: '#121212',
-                  color: '#fff',
-                  '&:hover': {
+              {isCurrentChainEqualChainOfPool && (
+                <LoadingButton
+                  sx={{
+                    width: '100%',
                     background: '#121212',
-                    color: '#fff'
-                  }
-                }}
-                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
-                onClick={() => {
-                  handleSubmit && handleSubmit()
-                }}
-              >
-                Lock
-              </LoadingButton>
+                    color: '#fff',
+                    '&:hover': {
+                      background: '#121212',
+                      color: '#fff'
+                    }
+                  }}
+                  disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                  onClick={() => {
+                    handleSubmit && handleSubmit()
+                  }}
+                >
+                  Lock
+                </LoadingButton>
+              )}
+              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={formValues.chainId} />}
             </Grid>
           </Grid>
         </Stack>
@@ -359,7 +367,7 @@ const V3BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return !erc721TokenDeatail?.isApprovedAll
@@ -436,6 +444,9 @@ const V3BidBlock = ({
       run: toApprove
     }
   }, [account, approvalState, toApprove, showLoginModal])
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return chainId === formValues.chainId
+  }, [chainId, formValues.chainId])
   return (
     <FormLayout
       childForm={
@@ -461,25 +472,27 @@ const V3BidBlock = ({
                 </LoadingButton>
               </Grid>
             )}
-
             <Grid item xs={6}>
-              <LoadingButton
-                sx={{
-                  width: '100%',
-                  background: '#121212',
-                  color: '#fff',
-                  '&:hover': {
+              {isCurrentChainEqualChainOfPool && (
+                <LoadingButton
+                  sx={{
+                    width: '100%',
                     background: '#121212',
-                    color: '#fff'
-                  }
-                }}
-                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
-                onClick={() => {
-                  handleSubmit && handleSubmit()
-                }}
-              >
-                Lock
-              </LoadingButton>
+                    color: '#fff',
+                    '&:hover': {
+                      background: '#121212',
+                      color: '#fff'
+                    }
+                  }}
+                  disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                  onClick={() => {
+                    handleSubmit && handleSubmit()
+                  }}
+                >
+                  Lock
+                </LoadingButton>
+              )}
+              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={formValues.chainId} />}
             </Grid>
           </Grid>
         </Stack>
@@ -489,6 +502,7 @@ const V3BidBlock = ({
 }
 const TokenLockerL2L3Form = () => {
   const showLoginModal = useShowLoginModal()
+  const switchChain = useSwitchNetwork()
   const { account } = useActiveWeb3React()
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
@@ -505,7 +519,6 @@ const TokenLockerL2L3Form = () => {
     })
   }, [version])
   const location = useLocation()
-
   const uniswapAddress = useMemo(() => {
     // only support to Goerli
     return version === VersionType.v2
@@ -770,6 +783,7 @@ const TokenLockerL2L3Form = () => {
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
+                        switchChain(target.value as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}
                       renderValue={selected => {

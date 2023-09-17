@@ -62,6 +62,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import BigNumber from 'bignumber.js'
 import queryString from 'query-string'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -440,7 +442,7 @@ const BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
@@ -524,6 +526,9 @@ const BidBlock = ({
       run: toApprove
     }
   }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return chainId === formValues.chainId
+  }, [chainId, formValues.chainId])
   return (
     <FormLayout
       childForm={
@@ -551,23 +556,26 @@ const BidBlock = ({
             )}
 
             <Grid item xs={6}>
-              <LoadingButton
-                sx={{
-                  width: '100%',
-                  background: '#121212',
-                  color: '#fff',
-                  '&:hover': {
+              {isCurrentChainEqualChainOfPool && (
+                <LoadingButton
+                  sx={{
+                    width: '100%',
                     background: '#121212',
-                    color: '#fff'
-                  }
-                }}
-                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
-                onClick={() => {
-                  handleSubmit && handleSubmit()
-                }}
-              >
-                Lock
-              </LoadingButton>
+                    color: '#fff',
+                    '&:hover': {
+                      background: '#121212',
+                      color: '#fff'
+                    }
+                  }}
+                  disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                  onClick={() => {
+                    handleSubmit && handleSubmit()
+                  }}
+                >
+                  Lock
+                </LoadingButton>
+              )}
+              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={formValues.chainId} />}
             </Grid>
           </Grid>
         </Stack>
@@ -576,12 +584,13 @@ const BidBlock = ({
   )
 }
 const TokenLockerForm = () => {
+  const switchChain = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
-  const { account } = useActiveWeb3React()
+  const { account, chainId: CurrenChainId } = useActiveWeb3React()
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
-  const [chainId, setChainId] = useState<ChainId>(ChainId.SEPOLIA)
+  const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const [releaseType, setReleaseType] = useState<IReleaseType>(IReleaseType.Cliff)
   const ChainSelectOption = ChainList.filter(item => {
     return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
@@ -594,7 +603,7 @@ const TokenLockerForm = () => {
   const sellerValue: ISeller = useMemo(() => {
     return {
       tokenAddress: '',
-      chainId: ChainId.SEPOLIA,
+      chainId: Number(CurrenChainId) as ChainId,
       anotherTokenChecked: false,
       tokanName: '',
       tokenSymbol: '',
@@ -611,7 +620,7 @@ const TokenLockerForm = () => {
       segmentAmount: '',
       fragmentReleaseSize: ''
     }
-  }, [])
+  }, [CurrenChainId])
   const location = useLocation()
   useEffect(() => {
     const queryParams = queryString.parse(location.search)
@@ -884,6 +893,7 @@ const TokenLockerForm = () => {
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
+                        switchChain(target.value as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}
                       renderValue={selected => {
