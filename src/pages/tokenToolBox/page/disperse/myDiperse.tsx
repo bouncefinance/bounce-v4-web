@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   styled,
   Table,
   TableBody,
@@ -15,11 +16,20 @@ import { ContainerBox, Title } from '../tokenlocker/tokenLocker'
 import BackButton from '../../../../bounceComponents/common/BackButton'
 import { Stack } from '@mui/system'
 import { Disperse } from '../../../../api/toolbox/type'
+import { ChainId } from '../../../../constants/chain'
+import { useOptionDatas } from '../../../../state/configOptions/hooks'
+import { Currency, CurrencyAmount } from '../../../../constants/token'
+import { getEtherscanLink } from '../../../../utils'
 
 export default function MyDisperse() {
+  const optionDatas = useOptionDatas()
   const { loading, data } = useDisperseList()
+
+  function getChainName(chain_id: number) {
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+  }
+
   console.log('MyDisperse-loading', loading)
-  console.log('MyDisperse', data)
   return (
     <Box>
       <ContainerBox>
@@ -47,10 +57,10 @@ export default function MyDisperse() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <StyledTableRow>
-                  <StyledTableCell>Token</StyledTableCell>
+                  <StyledTableCell>Token/Chain</StyledTableCell>
                   <StyledTableCell>Disperse Amount</StyledTableCell>
                   <StyledTableCell>Total address</StyledTableCell>
-                  {/*<StyledTableCell></StyledTableCell>*/}
+                  <StyledTableCell></StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -59,32 +69,51 @@ export default function MyDisperse() {
                     <StyledTableCell>
                       <Stack direction={'row'} gap={'8px'}>
                         {/*<Image src={record.logo} width="24px" />*/}
-                        <Typography>{record.name}</Typography>
+                        <Typography>{record.name || getChainName(record.chain_id)?.chainName}</Typography>
                       </Stack>
                     </StyledTableCell>
-                    <StyledTableCell>{record.amount}</StyledTableCell>
+                    <StyledTableCell>
+                      {CurrencyAmount.fromRawAmount(
+                        new Currency(
+                          getChainName(Number(record.chain_id))?.id || ChainId.SEPOLIA,
+                          record.contract,
+                          record.decimals
+                        ),
+                        record.amount
+                      )?.toSignificant()}
+                    </StyledTableCell>
                     <StyledTableCell>{record.total_count}</StyledTableCell>
-                    {/*<StyledTableCell align={'right'}>*/}
-                    {/*  <Stack*/}
-                    {/*    direction={'row'}*/}
-                    {/*    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}*/}
-                    {/*  >*/}
-                    {/*    <Button*/}
-                    {/*      sx={{*/}
-                    {/*        height: '37px',*/}
-                    {/*        lineHeight: '37px',*/}
-                    {/*        fontFamily: `'Public Sans'`,*/}
-                    {/*        fontSize: 14,*/}
-                    {/*        fontWeight: 600,*/}
-                    {/*        letterSpacing: '-0.28px',*/}
-                    {/*        borderRadius: '6px'*/}
-                    {/*      }}*/}
-                    {/*      variant={'contained'}*/}
-                    {/*    >*/}
-                    {/*      Detail*/}
-                    {/*    </Button>*/}
-                    {/*  </Stack>*/}
-                    {/*</StyledTableCell>*/}
+                    <StyledTableCell align={'right'}>
+                      <Stack
+                        direction={'row'}
+                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                      >
+                        <Button
+                          sx={{
+                            height: '37px',
+                            lineHeight: '37px',
+                            fontFamily: `'Public Sans'`,
+                            fontSize: 14,
+                            fontWeight: 600,
+                            letterSpacing: '-0.28px',
+                            borderRadius: '6px'
+                          }}
+                          variant={'contained'}
+                          onClick={() => {
+                            window.open(
+                              getEtherscanLink(
+                                getChainName(record.chain_id)?.ethChainId || ChainId.SEPOLIA,
+                                record.hash,
+                                'transaction'
+                              ),
+                              '_blank'
+                            )
+                          }}
+                        >
+                          Detail
+                        </Button>
+                      </Stack>
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

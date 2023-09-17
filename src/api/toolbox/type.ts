@@ -4,20 +4,24 @@ export interface DisperseListParam {
   token?: string
   hash?: string
 }
+
 export interface LocksListParam {
   address: string
   chainId: number
   hash?: string
   token?: string
 }
+
 export interface TokenInfoList {
   list: TokenInfo[]
   total: number
 }
+
 export interface LockInfoList {
   list: LockInfo[]
   total: number
 }
+
 export interface ExchangeInfo {
   id: number
   chain_id: number
@@ -27,10 +31,12 @@ export interface ExchangeInfo {
   created_at: string
   updated_at: string
 }
+
 export interface ExchangeList {
   list: ExchangeInfo[]
   total: number
 }
+
 export interface TokenInfo {
   id: number
   contract: string
@@ -52,6 +58,7 @@ export interface TokenInfo {
   created_at: string
   updated_at: string
 }
+
 export interface LockInfo {
   id: number
   contract: string
@@ -80,10 +87,12 @@ export interface LockInfo {
   status: number
   released_amount: string
 }
+
 export interface MyDisperseList {
   list: Disperse[]
   total: number
 }
+
 export interface Disperse {
   id: number
   contract: string
@@ -93,12 +102,14 @@ export interface Disperse {
   name: string
   amount: string
   total_count: string
+  decimals: number
   hash: string
   tx_ts: number
   block_height: number
   created_at: string
   updated_at: string
 }
+
 export interface ExchangeParam {
   chainId: number
   chainType: number
