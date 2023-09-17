@@ -442,7 +442,7 @@ const BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
@@ -526,9 +526,6 @@ const BidBlock = ({
       run: toApprove
     }
   }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
-  const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return chainId === formValues.chainId
-  }, [chainId, formValues.chainId])
   return (
     <FormLayout
       childForm={
@@ -556,26 +553,23 @@ const BidBlock = ({
             )}
 
             <Grid item xs={6}>
-              {isCurrentChainEqualChainOfPool && (
-                <LoadingButton
-                  sx={{
-                    width: '100%',
+              <LoadingButton
+                sx={{
+                  width: '100%',
+                  background: '#121212',
+                  color: '#fff',
+                  '&:hover': {
                     background: '#121212',
-                    color: '#fff',
-                    '&:hover': {
-                      background: '#121212',
-                      color: '#fff'
-                    }
-                  }}
-                  disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
-                  onClick={() => {
-                    handleSubmit && handleSubmit()
-                  }}
-                >
-                  Lock
-                </LoadingButton>
-              )}
-              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={formValues.chainId} />}
+                    color: '#fff'
+                  }
+                }}
+                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                onClick={() => {
+                  handleSubmit && handleSubmit()
+                }}
+              >
+                Lock
+              </LoadingButton>
             </Grid>
           </Grid>
         </Stack>
@@ -596,6 +590,9 @@ const TokenLockerForm = () => {
     return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
   })
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, releaseType)
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return chainId === CurrenChainId
+  }, [chainId, CurrenChainId])
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1153,14 +1150,17 @@ const TokenLockerForm = () => {
               ) : (
                 <LabelTitle>No unlocking method is set; tokens can be claimed after the specified end.</LabelTitle>
               )}
-              <BidBlock
-                formValues={values}
-                erc20TokenDeatail={erc20TokenDeatail}
-                errors={errors}
-                handleSubmit={() => {
-                  handleSubmit()
-                }}
-              />
+              {isCurrentChainEqualChainOfPool && (
+                <BidBlock
+                  formValues={values}
+                  erc20TokenDeatail={erc20TokenDeatail}
+                  errors={errors}
+                  handleSubmit={() => {
+                    handleSubmit()
+                  }}
+                />
+              )}
+              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={values.chainId} />}
             </Form>
           )
         }}

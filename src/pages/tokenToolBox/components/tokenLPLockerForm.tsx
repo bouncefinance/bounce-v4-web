@@ -217,7 +217,7 @@ const V2BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
@@ -299,9 +299,6 @@ const V2BidBlock = ({
       run: toApprove
     }
   }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
-  const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return chainId === formValues.chainId
-  }, [chainId, formValues.chainId])
   return (
     <FormLayout
       childForm={
@@ -327,28 +324,24 @@ const V2BidBlock = ({
                 </LoadingButton>
               </Grid>
             )}
-
             <Grid item xs={6}>
-              {isCurrentChainEqualChainOfPool && (
-                <LoadingButton
-                  sx={{
-                    width: '100%',
+              <LoadingButton
+                sx={{
+                  width: '100%',
+                  background: '#121212',
+                  color: '#fff',
+                  '&:hover': {
                     background: '#121212',
-                    color: '#fff',
-                    '&:hover': {
-                      background: '#121212',
-                      color: '#fff'
-                    }
-                  }}
-                  disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
-                  onClick={() => {
-                    handleSubmit && handleSubmit()
-                  }}
-                >
-                  Lock
-                </LoadingButton>
-              )}
-              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={formValues.chainId} />}
+                    color: '#fff'
+                  }
+                }}
+                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                onClick={() => {
+                  handleSubmit && handleSubmit()
+                }}
+              >
+                Lock
+              </LoadingButton>
             </Grid>
           </Grid>
         </Stack>
@@ -367,11 +360,11 @@ const V3BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
-    return !erc721TokenDeatail?.isApprovedAll
-  }, [erc721TokenDeatail?.isApprovedAll])
+    return formValues.tokenAddress && !erc721TokenDeatail?.isApprovedAll
+  }, [erc721TokenDeatail?.isApprovedAll, formValues.tokenAddress])
   const contractAddress = useMemo(() => {
     return TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[formValues.chainId]
   }, [formValues.chainId])
@@ -444,9 +437,7 @@ const V3BidBlock = ({
       run: toApprove
     }
   }, [account, approvalState, toApprove, showLoginModal])
-  const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return chainId === formValues.chainId
-  }, [chainId, formValues.chainId])
+
   return (
     <FormLayout
       childForm={
@@ -473,26 +464,23 @@ const V3BidBlock = ({
               </Grid>
             )}
             <Grid item xs={6}>
-              {isCurrentChainEqualChainOfPool && (
-                <LoadingButton
-                  sx={{
-                    width: '100%',
+              <LoadingButton
+                sx={{
+                  width: '100%',
+                  background: '#121212',
+                  color: '#fff',
+                  '&:hover': {
                     background: '#121212',
-                    color: '#fff',
-                    '&:hover': {
-                      background: '#121212',
-                      color: '#fff'
-                    }
-                  }}
-                  disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
-                  onClick={() => {
-                    handleSubmit && handleSubmit()
-                  }}
-                >
-                  Lock
-                </LoadingButton>
-              )}
-              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={formValues.chainId} />}
+                    color: '#fff'
+                  }
+                }}
+                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                onClick={() => {
+                  handleSubmit && handleSubmit()
+                }}
+              >
+                Lock
+              </LoadingButton>
             </Grid>
           </Grid>
         </Stack>
@@ -503,7 +491,7 @@ const V3BidBlock = ({
 const TokenLockerL2L3Form = () => {
   const showLoginModal = useShowLoginModal()
   const switchChain = useSwitchNetwork()
-  const { account } = useActiveWeb3React()
+  const { account, chainId: CurrenChainId } = useActiveWeb3React()
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
@@ -714,6 +702,9 @@ const TokenLockerL2L3Form = () => {
       hideDialogConfirmation()
     }
   }
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return chainId === CurrenChainId
+  }, [chainId, CurrenChainId])
   return (
     // TODO: move LocalizationProvider to _app.tex
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -1078,7 +1069,8 @@ const TokenLockerL2L3Form = () => {
                   textField={{ sx: { width: '100%' } }}
                 />
               </Stack>
-              {values.version === VersionType.v2 && (
+              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={values.chainId} />}
+              {isCurrentChainEqualChainOfPool && values.version === VersionType.v2 && (
                 <V2BidBlock
                   formValues={values}
                   erc20TokenDeatail={erc20TokenDeatail}
@@ -1088,7 +1080,7 @@ const TokenLockerL2L3Form = () => {
                   }}
                 />
               )}
-              {values.version === VersionType.v3 && (
+              {isCurrentChainEqualChainOfPool && values.version === VersionType.v3 && (
                 <V3BidBlock
                   formValues={values}
                   erc721TokenDeatail={erc721TokenDetail}

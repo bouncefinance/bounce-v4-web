@@ -1,7 +1,8 @@
 import {
   useToolboxERC20TimelockFactory,
   useToolboxERC20TimelockLineFactory,
-  useToolboxERC721TimelockFactory
+  useToolboxERC721TimelockFactory,
+  useWithDrawVestingContract
 } from './useContract'
 import { useActiveWeb3React } from './index'
 import { ChainId } from '../constants/chain'
@@ -193,7 +194,6 @@ export function useDeployUniswapV2Timelock(chain: ChainId) {
         return Promise.reject('no contract')
       }
       const args = [uniswapAddress, title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
-      console.log('args>>>', args)
       const isToken1Native = amount?.currency.isNative
       const estimatedGas = await erc20TimelockContract.estimateGas
         .deployUniswapV2Timelock(...args, { value: isToken1Native ? amount?.raw?.toString() : undefined })
@@ -405,7 +405,22 @@ export function useWithDrawByTokenLock(contractAddress: string, queryChainId?: n
 // token lock ToolboxERC20Timelock.releasable() // normal stage
 export const useReleasableERC20 = (contractAddress: string, queryChainId?: number): string => {
   const erc20TimelockContract = useWithDrawContract(contractAddress, queryChainId)
-  console.log('useWithDrawContract>>', erc20TimelockContract)
-  const res = useSingleCallResult(erc20TimelockContract, 'releasableAmount').result
+  const releasable = useSingleCallResult(erc20TimelockContract, 'releasableAmount').result
+  const released = useSingleCallResult(erc20TimelockContract, 'releasedAmount').result
+  console.log('releasable>>>', releasable, released)
+  return useMemo(() => {
+    return (
+      (releasable?.[0] &&
+        released?.[0] &&
+        releasable?.[0].comparedTo(released?.[0]) === 1 &&
+        releasable.minus(released).toString()) ||
+      '0'
+    )
+  }, [releasable, released])
+}
+// useWithDrawVestingContract
+export const useReleasableVestingERC20 = (contractAddress: string, queryChainId?: number): string => {
+  const erc20TimelockContract = useWithDrawVestingContract(contractAddress, queryChainId)
+  const res = useSingleCallResult(erc20TimelockContract, 'releasable').result
   return res?.[0]?.toString()
 }

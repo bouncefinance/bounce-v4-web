@@ -17,7 +17,7 @@ import LineChartSection from 'pages/tokenToolBox/components/lineChart'
 import TimeStageLine from '../../components/timeStageLine'
 import { StageParams } from '../../components/timeStageLine'
 import BigNumber from 'bignumber.js'
-import { useWithDrawByTokenLock, useReleasableERC20 } from 'hooks/useTokenTimelock'
+import { useWithDrawByTokenLock, useReleasableERC20, useReleasableVestingERC20 } from 'hooks/useTokenTimelock'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
@@ -28,7 +28,7 @@ export default function TokenInfo() {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
-  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', Number(chain) as unknown as ChainId)
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
@@ -77,12 +77,22 @@ export default function TokenInfo() {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
-  const releasableResult = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
-  console.log('releasableResult>>>', releasableResult)
+  const releasableResult = useReleasableERC20(data?.deploy_contract || '', chainConfigInBackend?.id || undefined)
+  const releasableVestingResult = useReleasableVestingERC20(
+    data?.deploy_contract || '',
+    chainConfigInBackend?.id || undefined
+  )
+  console.log('releasableResult, releasableVestingResult>>>', releasableResult, releasableVestingResult)
   const releasableNum = useMemo(() => {
-    return releasableResult && tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, releasableResult).toExact() : '0'
-  }, [releasableResult, tokenInfo])
-  console.log('data,releasableNum>>>', data, releasableNum)
+    if (replasetype === 'Linear') {
+      return releasableVestingResult && tokenInfo
+        ? CurrencyAmount.fromRawAmount(tokenInfo, releasableVestingResult).toExact()
+        : '0'
+    } else {
+      return releasableResult && tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, releasableResult).toExact() : '0'
+    }
+  }, [releasableResult, releasableVestingResult, replasetype, tokenInfo])
+  console.log('tokenInfo,data,releasableNum>>>', tokenInfo, data, releasableNum)
   const toWithDraw = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -240,7 +250,7 @@ export default function TokenInfo() {
                 toWithDraw()
               }}
             >
-              {Number(releasableNum) === 0 ? 'Withdrawed' : 'Withdraw'}
+              {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
             </SolidBtn>
           )}
           {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={Number(chain) || 0} />}
