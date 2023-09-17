@@ -18,6 +18,7 @@ import { useRequest } from 'ahooks'
 import { getExchangeList } from 'api/toolbox'
 import { useWithDrawContract } from './useContract'
 import { useSingleCallResult } from 'state/multicall/hooks'
+import BigNumber from 'bignumber.js'
 
 // normal
 export function useTokenTimelock(chain: ChainId) {
@@ -402,25 +403,20 @@ export function useWithDrawByTokenLock(contractAddress: string, queryChainId?: n
       })
   }, [account, addTransaction, withdrawContract])
 }
-// token lock ToolboxERC20Timelock.releasable() // normal stage
+// token lock normal stage，[can releasAmount] = releasableAmount - releasedAmount, ToolboxERC20Timelock
 export const useReleasableERC20 = (contractAddress: string, queryChainId?: number): string => {
   const erc20TimelockContract = useWithDrawContract(contractAddress, queryChainId)
   const releasable = useSingleCallResult(erc20TimelockContract, 'releasableAmount').result
   const released = useSingleCallResult(erc20TimelockContract, 'releasedAmount').result
-  console.log('releasable>>>', releasable, released)
   return useMemo(() => {
-    return (
-      (releasable?.[0] &&
-        released?.[0] &&
-        releasable?.[0].comparedTo(released?.[0]) === 1 &&
-        releasable.minus(released).toString()) ||
-      '0'
-    )
+    const releasableAmount = releasable?.toString() || '0'
+    const releasedAmount = released?.toString() || '0'
+    return BigNumber(releasableAmount).minus(releasedAmount).toString()
   }, [releasable, released])
 }
-// useWithDrawVestingContract
+// token lock Linear， Releasable - useWithDrawVestingContract
 export const useReleasableVestingERC20 = (contractAddress: string, queryChainId?: number): string => {
   const erc20TimelockContract = useWithDrawVestingContract(contractAddress, queryChainId)
   const res = useSingleCallResult(erc20TimelockContract, 'releasable').result
-  return res?.[0]?.toString()
+  return res?.toString() || '0'
 }

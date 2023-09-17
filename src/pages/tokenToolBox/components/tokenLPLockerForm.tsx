@@ -495,7 +495,7 @@ const TokenLockerL2L3Form = () => {
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
-  const [chainId, setChainId] = useState<ChainId>(ChainId.SEPOLIA)
+  const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const [version, setVersion] = useState<VersionType>(VersionType.v2)
   const ChainSelectOption = useMemo(() => {
     return ChainList.filter(item => {
@@ -517,7 +517,6 @@ const TokenLockerL2L3Form = () => {
   const { data: exchangeList } = useGetExchangeList(chainConfigInBackend?.id || 0, 2)
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
-  console.log('erc20TokenDeatail, erc721TokenDetail>>>>', erc20TokenDeatail, erc721TokenDetail)
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -525,7 +524,7 @@ const TokenLockerL2L3Form = () => {
   const sellerValue: ISeller = useMemo(() => {
     return {
       tokenAddress: '',
-      chainId: ChainId.SEPOLIA,
+      chainId: Number(CurrenChainId) as ChainId,
       nftId: '',
       exchangeId: '',
       anotherTokenChecked: false,
@@ -547,7 +546,6 @@ const TokenLockerL2L3Form = () => {
       setVersion(versionResult)
       sellerValue.version = versionResult
     }
-    console.log('queryParams>>>', queryParams)
     return () => {}
   }, [location.search, sellerValue])
   const lockV2Handle = useDeployUniswapV2Timelock(chainId)

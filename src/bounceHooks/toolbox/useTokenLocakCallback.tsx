@@ -54,7 +54,6 @@ export function useErc721BalanceOf(
   queryChainId: ChainId
 ): string | undefined {
   const result = useERC721Balance(tokenAddress, account, queryChainId)
-  console.log('useERC721Balance result>>>', result)
   return result
 }
 
