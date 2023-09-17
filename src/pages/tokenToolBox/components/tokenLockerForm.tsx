@@ -58,10 +58,10 @@ import {
 import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import BigNumber from 'bignumber.js'
-
+import queryString from 'query-string'
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -591,25 +591,42 @@ const TokenLockerForm = () => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
-  const sellerValue: ISeller = {
-    tokenAddress: '',
-    chainId: ChainId.SEPOLIA,
-    anotherTokenChecked: false,
-    tokanName: '',
-    tokenSymbol: '',
-    tokenDecimal: 18,
-    balance: '',
-    title: '',
-    amount: '',
-    releaseType: IReleaseType.Cliff,
-    delayUnlockingTime: null,
-    linearUnlockingStartTime: null,
-    linearUnlockingEndTime: null,
-    fragmentReleaseTimes: [],
-    releaseDataArr: [],
-    segmentAmount: '',
-    fragmentReleaseSize: ''
-  }
+  const sellerValue: ISeller = useMemo(() => {
+    return {
+      tokenAddress: '',
+      chainId: ChainId.SEPOLIA,
+      anotherTokenChecked: false,
+      tokanName: '',
+      tokenSymbol: '',
+      tokenDecimal: 18,
+      balance: '',
+      title: '',
+      amount: '',
+      releaseType: IReleaseType.Cliff,
+      delayUnlockingTime: null,
+      linearUnlockingStartTime: null,
+      linearUnlockingEndTime: null,
+      fragmentReleaseTimes: [],
+      releaseDataArr: [],
+      segmentAmount: '',
+      fragmentReleaseSize: ''
+    }
+  }, [])
+  const location = useLocation()
+  useEffect(() => {
+    const queryParams = queryString.parse(location.search)
+    if (queryParams?.chain && Object.values(ChainId).includes(Number(queryParams?.chain) || '')) {
+      const chainId = Number(queryParams?.chain) as unknown as ChainId
+      setChainId(Number(chainId))
+      sellerValue.chainId = chainId
+    }
+    if (queryParams?.tokenAddr) {
+      setTokenAddress(queryParams?.tokenAddr + '')
+      sellerValue.tokenAddress = queryParams?.tokenAddr + ''
+    }
+    console.log('queryParams>>>', queryParams)
+    return () => {}
+  }, [location.search, sellerValue])
   const lockHandle = useTokenTimelock(chainId)
   const toLockHandle = useCallback(
     async (
@@ -771,11 +788,11 @@ const TokenLockerForm = () => {
           cancelBtn: 'Cancel',
           title: 'Oops..',
           content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
-          onAgain: toLockStageHandle
+          onAgain: toLockLinearHandle
         })
       }
     },
-    [chainId, lockStageHandle, nav]
+    [lockLinearHandle, nav, chainId]
   )
   const onSubmit = async (value: ISeller) => {
     // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
