@@ -37,7 +37,8 @@ import {
 import { CurrencyAmount } from 'constants/token'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useGetExchangeList } from 'hooks/useTokenTimelock'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
@@ -503,34 +504,55 @@ const TokenLockerL2L3Form = () => {
       }
     })
   }, [version])
+  const location = useLocation()
 
+  const uniswapAddress = useMemo(() => {
+    // only support to Goerli
+    return version === VersionType.v2
+      ? '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
+      : '0x1F98431c8aD98523631AE4a59f267346ea31F984'
+  }, [version])
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
   const { data: exchangeList } = useGetExchangeList(chainConfigInBackend?.id || 0, 2)
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
+  console.log('erc20TokenDeatail, erc721TokenDetail>>>>', erc20TokenDeatail, erc721TokenDetail)
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
-  const sellerValue: ISeller = {
-    tokenAddress: '',
-    chainId: ChainId.SEPOLIA,
-    nftId: '',
-    exchangeId: '',
-    anotherTokenChecked: false,
-    tokanName: '',
-    tokenSymbol: '',
-    version: VersionType.v2,
-    tokenDecimal: 18,
-    balance: '',
-    title: '',
-    amount: '',
-    delayUnlockingTime: null,
-    segmentAmount: ''
-  }
+  const sellerValue: ISeller = useMemo(() => {
+    return {
+      tokenAddress: '',
+      chainId: ChainId.SEPOLIA,
+      nftId: '',
+      exchangeId: '',
+      anotherTokenChecked: false,
+      tokanName: '',
+      tokenSymbol: '',
+      version: VersionType.v2,
+      tokenDecimal: 18,
+      balance: '',
+      title: '',
+      amount: '',
+      delayUnlockingTime: null,
+      segmentAmount: ''
+    }
+  }, [])
+  useEffect(() => {
+    const queryParams = queryString.parse(location.search)
+    if (queryParams?.version) {
+      const versionResult = queryParams?.version === 'v2' ? VersionType.v2 : VersionType.v3
+      setVersion(versionResult)
+      sellerValue.version = versionResult
+    }
+    console.log('queryParams>>>', queryParams)
+    return () => {}
+  }, [location.search, sellerValue])
   const lockV2Handle = useDeployUniswapV2Timelock(chainId)
   const toLockV2Handle = useCallback(
     async (
+      uniswapAddress: string,
       title: string,
       tokenAddress: string,
       accountAddress: string,
@@ -540,6 +562,7 @@ const TokenLockerL2L3Form = () => {
       showRequestApprovalDialog()
       try {
         const { transactionReceipt, hash } = await lockV2Handle(
+          uniswapAddress,
           title,
           tokenAddress,
           accountAddress,
@@ -587,10 +610,24 @@ const TokenLockerL2L3Form = () => {
   )
   const lockV3Handle = useDeployUniswapV3Timelock(chainId)
   const toLockV3Handle = useCallback(
-    async (title: string, tokenAddress: string, id: string, accountAddress: string, releaseTime: string) => {
+    async (
+      uniswapAddress: string,
+      title: string,
+      tokenAddress: string,
+      id: string,
+      accountAddress: string,
+      releaseTime: string
+    ) => {
       showRequestApprovalDialog()
       try {
-        const { transactionReceipt, hash } = await lockV3Handle(title, tokenAddress, id, accountAddress, releaseTime)
+        const { transactionReceipt, hash } = await lockV3Handle(
+          uniswapAddress,
+          title,
+          tokenAddress,
+          id,
+          accountAddress,
+          releaseTime
+        )
         const ret = new Promise((resolve, rpt) => {
           showWaitingTxDialog(() => {
             hideDialogConfirmation()
@@ -641,6 +678,7 @@ const TokenLockerL2L3Form = () => {
       switch (type) {
         case VersionType.v2:
           toLockV2Handle(
+            uniswapAddress,
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
@@ -650,6 +688,7 @@ const TokenLockerL2L3Form = () => {
           break
         case VersionType.v3:
           toLockV3Handle(
+            uniswapAddress,
             value.title,
             value.tokenAddress,
             value.nftId + '' || '',

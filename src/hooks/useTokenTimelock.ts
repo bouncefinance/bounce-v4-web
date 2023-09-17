@@ -177,6 +177,7 @@ export function useDeployUniswapV2Timelock(chain: ChainId) {
   const addTransaction = useTransactionAdder()
   return useCallback(
     async (
+      uniswapAddress: string,
       title: string,
       tokenAddress: string,
       accountAddress: string,
@@ -189,10 +190,7 @@ export function useDeployUniswapV2Timelock(chain: ChainId) {
       if (!erc20TimelockContract) {
         return Promise.reject('no contract')
       }
-      if (!(amount instanceof CurrencyAmount)) {
-        return Promise.reject('no amount')
-      }
-      const args = [title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
+      const args = [uniswapAddress, title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
       console.log('args>>>', args)
       const isToken1Native = amount?.currency.isNative
       const estimatedGas = await erc20TimelockContract.estimateGas
@@ -229,6 +227,7 @@ export function useDeployUniswapV3Timelock(chain: ChainId) {
   const addTransaction = useTransactionAdder()
   return useCallback(
     async (
+      uniswapAddress: string,
       title: string,
       tokenAddress: string,
       id: string,
@@ -241,7 +240,7 @@ export function useDeployUniswapV3Timelock(chain: ChainId) {
       if (!erc721TimelockContract) {
         return Promise.reject('no contract')
       }
-      const args = [title, tokenAddress, id, accountAddress, releaseTime]
+      const args = [uniswapAddress, title, tokenAddress, id, accountAddress, releaseTime]
       const estimatedGas = await erc721TimelockContract.estimateGas
         .deployUniswapV3Timelock(...args)
         .catch((error: Error) => {

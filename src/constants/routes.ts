@@ -112,6 +112,7 @@ export const routes = {
     index: '/TokenToolBox',
     tokenLocker: '/TokenToolBox/TokenLocker',
     tokenLockerInfo: '/TokenToolBox/TokenLockerInfo/:chain/:hash',
+    TokenLPLockerInfo: '/TokenToolBox/TokenLPLockerInfo/:chain/:hash',
     disperse: '/TokenToolBox/Disperse',
     tokenMinter: '/TokenToolBox/tokenMinter',
     tokenMinterInfo: '/TokenToolBox/tokenMinterInfo',
