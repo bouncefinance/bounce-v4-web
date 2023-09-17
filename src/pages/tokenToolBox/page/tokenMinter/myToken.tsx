@@ -25,7 +25,6 @@ export default function MyToken() {
   const optionDatas = useOptionDatas()
   const { data } = useTokenList()
 
-  //
   function getChainName(chain_id: number) {
     return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
   }
