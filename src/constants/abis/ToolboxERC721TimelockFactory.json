@@ -134,6 +134,12 @@
         {
           "indexed": false,
           "internalType": "address",
+          "name": "uniswapV3Factory",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
           "name": "contractAddr",
           "type": "address"
         },
@@ -206,6 +212,19 @@
     {
       "inputs": [
         {
+          "internalType": "address",
+          "name": "_uniswapV3Factory",
+          "type": "address"
+        }
+      ],
+      "name": "addUniswapV3Factory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "bytes32",
           "name": "_bytecodeHash",
           "type": "bytes32"
@@ -229,6 +248,11 @@
     },
     {
       "inputs": [
+        {
+          "internalType": "address",
+          "name": "_uniswapV3Factory",
+          "type": "address"
+        },
         {
           "internalType": "string",
           "name": "_title",
@@ -269,9 +293,9 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "_uniswapV3Factory",
-          "type": "address"
+          "internalType": "address[]",
+          "name": "_uniswapV3Factorys",
+          "type": "address[]"
         }
       ],
       "name": "initialize",
@@ -306,6 +330,19 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_uniswapV3Factory",
+          "type": "address"
+        }
+      ],
+      "name": "removeUniswapV3Factory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "renounceOwnership",
       "outputs": [],
@@ -326,13 +363,19 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "uniswapV3Factory",
-      "outputs": [
+      "inputs": [
         {
           "internalType": "address",
           "name": "",
           "type": "address"
+        }
+      ],
+      "name": "uniswapV3Factorys",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
         }
       ],
       "stateMutability": "view",

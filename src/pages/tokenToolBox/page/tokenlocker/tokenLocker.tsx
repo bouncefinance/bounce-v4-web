@@ -5,7 +5,8 @@ import { Body02 } from 'components/Text'
 import { useShowLoginModal } from 'state/users/hooks'
 import TokenLockerForm from '../../components/tokenLockerForm'
 import TOkenLPLockerForm from '../../components/tokenLPLockerForm'
-
+import { useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 enum Tabstype {
   'Token' = 0,
   'LP Token' = 1
@@ -56,6 +57,14 @@ const TokenLocker = () => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
+  const location = useLocation()
+  useEffect(() => {
+    const queryParams = queryString.parse(location.search)
+    if (queryParams?.tokenType) {
+      setCurrentTab(queryParams?.tokenType === 'lp' ? Tabstype['LP Token'] : Tabstype.Token)
+    }
+    return () => {}
+  }, [location.search])
   return (
     <>
       <ContainerBox>

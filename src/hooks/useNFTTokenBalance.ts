@@ -20,7 +20,15 @@ export function useERC1155Balance(
 
   return res?.[0].toString()
 }
-
+export function useERC721Balance(
+  tokenAddress: string | undefined,
+  account: string | undefined,
+  queryChainId?: ChainId
+): string | undefined {
+  const contract = useERC721Contract(tokenAddress, queryChainId)
+  const res = useSingleCallResult(account ? contract : null, 'balanceOf', [account], undefined, queryChainId).result
+  return res?.[0].toString()
+}
 export function useERC721MultiOwner(
   tokenAddress: string | undefined,
   account: string | undefined,

@@ -26,14 +26,14 @@ const ModulesList = () => {
       title: 'V2 LP Locker',
       subTitle: 'Explain what is a v2 LP locker........',
       btnTitle: 'V2 LP Locker',
-      link: ''
+      link: routes.tokenToolBox.tokenLocker + '?tokenType=lp&version=v2'
     },
     {
       logoImg: P1,
       title: 'V3 LP Locker',
       subTitle: 'Explain what is a token locker........',
       btnTitle: 'V3 LP Locker',
-      link: ''
+      link: routes.tokenToolBox.tokenLocker + '?tokenType=lp&version=v3'
     },
     {
       logoImg: P2,

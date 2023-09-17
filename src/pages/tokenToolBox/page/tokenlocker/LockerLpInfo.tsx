@@ -11,88 +11,23 @@ import { ChainId } from 'constants/chain'
 import { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
-import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useCountDown } from 'ahooks'
-import LineChartSection from 'pages/tokenToolBox/components/lineChart'
-import TimeStageLine from '../../components/timeStageLine'
-import { StageParams } from '../../components/timeStageLine'
-import BigNumber from 'bignumber.js'
-import { useWithDrawByTokenLock, useReleasableERC20, useReleasableVestingERC20 } from 'hooks/useTokenTimelock'
+import { useWithDrawByTokenLock } from 'hooks/useTokenTimelock'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
-import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
-import { useActiveWeb3React } from 'hooks'
 export default function TokenInfo() {
   const { chain, hash } = useParams()
-  const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
-  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', Number(chain) as unknown as ChainId)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
   }, [data?.amount, tokenInfo])
-  const replasetype = useMemo(() => {
-    const type = data?.lock_type
-    switch (type) {
-      case IReleaseType.Cliff:
-        return 'Normal'
-      case IReleaseType.Linear:
-        return 'Linear'
-      case IReleaseType.Fragment:
-        return 'Stage'
-      default:
-        return '--'
-    }
-  }, [data?.lock_type])
-  const releaseData = useMemo(() => {
-    try {
-      const result = data?.release_data && JSON.parse(data?.release_data)
-      if (data?.release_data && Array.isArray(result) && result.length > 0) {
-        const updatedData = result.reduce((accumulator, currentValue, index) => {
-          if (index === 0) {
-            return [currentValue]
-          } else {
-            const previousRatio = accumulator[index - 1].ratio
-            currentValue.ratio += previousRatio
-            return [...accumulator, currentValue]
-          }
-        }, [])
-        return updatedData.map((item: StageParams) => {
-          return {
-            ratio: tokenInfo
-              ? BigNumber(CurrencyAmount.fromRawAmount(tokenInfo, item.ratio + '').toExact()).times(100) + '%'
-              : '--',
-            releaseTime: item?.releaseTime ? moment(item?.releaseTime * 1000).format('YYYY-MM-DD HH:mm:ss') : '--',
-            released: item.released
-          } as unknown as StageParams
-        })
-      }
-      return result
-    } catch (error) {
-      return []
-    }
-  }, [data?.release_data, tokenInfo])
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
-  const releasableResult = useReleasableERC20(data?.deploy_contract || '', chainConfigInBackend?.id || undefined)
-  const releasableVestingResult = useReleasableVestingERC20(
-    data?.deploy_contract || '',
-    chainConfigInBackend?.id || undefined
-  )
-  console.log('releasableResult, releasableVestingResult>>>', releasableResult, releasableVestingResult)
-  const releasableNum = useMemo(() => {
-    if (replasetype === 'Linear') {
-      return releasableVestingResult && tokenInfo
-        ? CurrencyAmount.fromRawAmount(tokenInfo, releasableVestingResult).toExact()
-        : '0'
-    } else {
-      return releasableResult && tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, releasableResult).toExact() : '0'
-    }
-  }, [releasableResult, releasableVestingResult, replasetype, tokenInfo])
-  console.log('tokenInfo,data,releasableNum>>>', tokenInfo, data, releasableNum)
   const toWithDraw = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -125,9 +60,6 @@ export default function TokenInfo() {
       })
     }
   }, [withDrawFn])
-  const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return Number(chainId) === Number(chain)
-  }, [chainId, chain])
   if (loading) {
     return <></>
   }
@@ -182,38 +114,19 @@ export default function TokenInfo() {
               <Body01>{data?.new_owner}</Body01>
             </BottomLineBox>
             <FullSpaceBetweenBox>
-              <Body01 sx={{ color: '#959595' }}>Lock model</Body01>
-              <Body01>{replasetype}</Body01>
-            </FullSpaceBetweenBox>
-            <FullSpaceBetweenBox>
               <Body01 sx={{ color: '#959595' }}>Lock date</Body01>
               <Body01>
                 {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
               </Body01>
             </FullSpaceBetweenBox>
-            {replasetype === 'Normal' && (
-              <FullSpaceBetweenBox>
-                <Body01 sx={{ color: '#959595' }}>Unlock time</Body01>
-                <Body01>
-                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
-                </Body01>
-              </FullSpaceBetweenBox>
-            )}
-            {replasetype === 'Linear' && (
-              <FullSpaceBetweenBox>
-                <Body01 sx={{ color: '#959595' }}>Time</Body01>
-                <Body01>
-                  {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'} to{' '}
-                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
-                </Body01>
-              </FullSpaceBetweenBox>
-            )}
-            {replasetype === 'Linear' && tokenInfo && data && (
-              <LineChartSection lockToken={tokenInfo} lockInfo={data}></LineChartSection>
-            )}
-            {replasetype === 'Stage' && tokenInfo && releaseData && <TimeStageLine stageData={releaseData} />}
+            <FullSpaceBetweenBox>
+              <Body01 sx={{ color: '#959595' }}>Unlock time</Body01>
+              <Body01>
+                {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
+              </Body01>
+            </FullSpaceBetweenBox>
           </WhiteBg>
-          {replasetype === 'Normal' && countdown > 0 && (
+          {countdown > 0 && (
             <Box
               sx={{
                 position: 'relative',
@@ -225,7 +138,7 @@ export default function TokenInfo() {
                 gap: '8px'
               }}
             >
-              {replasetype === 'Normal' && countdown > 0 ? (
+              {countdown > 0 ? (
                 <>
                   <CountDownBg key={'banner0'}>{days}d</CountDownBg>
                   <CountDownBg key={'banner1'}>{hours}h</CountDownBg>
@@ -237,23 +150,14 @@ export default function TokenInfo() {
               )}
             </Box>
           )}
-          {isCurrentChainEqualChainOfPool && (
-            <SolidBtn
-              style={{
-                width: '100%',
-                background: Number(releasableNum) === 0 ? '#d7d6d9' : '#121212',
-                color: Number(releasableNum) === 0 ? '' : '#fff',
-                cursor: Number(releasableNum) === 0 ? 'not-allowed' : 'pointer'
-              }}
-              disabled={Number(releasableNum) === 0}
-              onClick={() => {
-                toWithDraw()
-              }}
-            >
-              {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
-            </SolidBtn>
-          )}
-          {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={Number(chain) || 0} />}
+          <SolidBtn
+            style={{ width: '100%' }}
+            onClick={() => {
+              toWithDraw()
+            }}
+          >
+            Withdraw
+          </SolidBtn>
         </GrayBg>
       </Box>
     </ContainerBox>

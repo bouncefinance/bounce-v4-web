@@ -402,9 +402,10 @@ export const MINTER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
 // 【token locker】
 //  Cliff,normal (ToolboxERC20TimelockFactory.deployERC20Timelock)
 //  Fragment,stage (ToolboxERC20TimelockFactory.deployERC20MultiTimelock)
+//  LP V2 ToolboxERC20VestingFactory.deployUniswapV2Timelock
 export const TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
-  [ChainId.GÖRLI]: '',
+  [ChainId.GÖRLI]: '0x6B142c939e686f24E8De46f9D5669EFEEa2250D7',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
   [ChainId.BSC]: '',
@@ -444,7 +445,7 @@ export const TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
 //  Linear,line ToolboxERC20VestingFactory.deployERC20Vesting
 export const TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
-  [ChainId.GÖRLI]: '',
+  [ChainId.GÖRLI]: '0x3d21BE625d53eD391B99C5c5DC2d6dA6cc9Ba14F',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
   [ChainId.BSC]: '',
@@ -483,7 +484,7 @@ export const TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in Chai
 //  LP v3 normal: ToolboxERC721TimelockFactory.deployUniswapV3Timelock
 export const TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
-  [ChainId.GÖRLI]: '',
+  [ChainId.GÖRLI]: '0x380589A27266fd28530d1FcAa0D3005D9ab63f6b',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
   [ChainId.BSC]: '',
