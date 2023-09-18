@@ -24,6 +24,7 @@ import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog 
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { useActiveWeb3React } from 'hooks'
 import { LockInfo } from 'api/toolbox/type'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 const WithdrawBtnForLinear = ({
   toWithDraw,
   data,
@@ -186,7 +187,11 @@ export default function TokenInfo() {
     return Number(chainId) === Number(chain)
   }, [chainId, chain])
   if (loading) {
-    return <></>
+    return (
+      <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
+        <BounceAnime />
+      </Box>
+    )
   }
   return (
     <ContainerBox>
