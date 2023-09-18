@@ -849,7 +849,7 @@ const TokenLockerForm = () => {
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             value.linearUnlockingStartTime?.unix() + '',
-            value.linearUnlockingEndTime?.unix() + '',
+            value.linearUnlockingStartTime?.diff(value.linearUnlockingEndTime, 'seconds') + '', // duration, endTime - startTime
             amoutAraw
           )
           break

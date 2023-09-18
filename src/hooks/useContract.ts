@@ -26,6 +26,7 @@ import ToolboxERC20VestingFactory from '../constants/abis/ToolboxERC20VestingFac
 import DISPERSE_ABI from '../constants/abis/Disperse.json'
 import TOKEN_MINTER_ABI from '../constants/abis/ToolboxERC20Factory.json'
 import WithDrawContractABI from '../constants/abis/ToolboxDeployErc20Factory.json'
+import ToolboxDeployERC721Factory from '../constants/abis/ToolboxDeployERC721Factory.json'
 import ToolboxDeployErc20VestingFactory from '../constants/abis/ToolboxDeployErc20VestingFactory.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
@@ -256,6 +257,12 @@ export function useWithDrawContract(contractAddress: string, queryChainId?: Chai
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   return useContract(contractAddress, WithDrawContractABI, true, cur)
+}
+//  erc721 lp lock Withdraw contract
+export function useErc721WithDrawContract(contractAddress: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(contractAddress, ToolboxDeployERC721Factory, true, cur)
 }
 // token lock, linear Withdraw contract vesting erc20
 export function useWithDrawVestingContract(contractAddress: string, queryChainId?: ChainId) {

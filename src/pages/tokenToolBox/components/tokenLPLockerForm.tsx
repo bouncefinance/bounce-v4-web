@@ -56,6 +56,7 @@ interface ISeller {
   exchangeId: string
   tokanName: string
   tokenSymbol: string
+  uniswapAddress?: string
   tokenDecimal: number
   balance: string
   title: string
@@ -507,16 +508,17 @@ const TokenLockerL2L3Form = () => {
     })
   }, [version])
   const location = useLocation()
-  const uniswapAddress = useMemo(() => {
-    // only support to Goerli
-    return version === VersionType.v2
-      ? '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
-      : '0x1F98431c8aD98523631AE4a59f267346ea31F984'
-  }, [version])
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
-  const { data: exchangeList } = useGetExchangeList(chainConfigInBackend?.id || 0, 2)
+  const { data: exchangeData } = useGetExchangeList(chainConfigInBackend?.id || 0, 2)
+  const exchangeList = useMemo(() => {
+    return exchangeData?.filter(item =>
+      item.name.toLocaleLowerCase().includes(version === VersionType.v2 ? 'v2' : 'v3')
+    )
+  }, [exchangeData, version])
+  const [uniswapAddress, setUniswapAddress] = useState('')
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
+  console.log('erc20TokenDeatail, erc721TokenDetail>>>', erc20TokenDeatail, erc721TokenDetail)
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -530,6 +532,7 @@ const TokenLockerL2L3Form = () => {
       anotherTokenChecked: false,
       tokanName: '',
       tokenSymbol: '',
+      uniswapAddress: '',
       version: VersionType.v2,
       tokenDecimal: 18,
       balance: '',
@@ -538,7 +541,16 @@ const TokenLockerL2L3Form = () => {
       delayUnlockingTime: null,
       segmentAmount: ''
     }
-  }, [])
+  }, [CurrenChainId])
+  useEffect(() => {
+    if (Array.isArray(exchangeList) && exchangeList.length > 0) {
+      const uniswapAddr = exchangeList[0].uniswap
+      setUniswapAddress(uniswapAddr)
+      sellerValue.uniswapAddress = uniswapAddr
+      sellerValue.exchangeId = exchangeList[0]?.id + ''
+    }
+    return () => {}
+  }, [exchangeList, sellerValue])
   useEffect(() => {
     const queryParams = queryString.parse(location.search)
     if (queryParams?.version) {
@@ -838,10 +850,15 @@ const TokenLockerL2L3Form = () => {
                       value={values.exchangeId}
                       onChange={({ target }) => {
                         setFieldValue('exchangeId', target.value)
+                        const resultItem = exchangeList?.find(item => Number(item.id) === Number(target.value))
+                        if (resultItem) {
+                          setFieldValue('uniswapAddress', resultItem?.uniswap)
+                          setUniswapAddress(resultItem?.uniswap)
+                        }
                       }}
                       placeholder={'Select exchange'}
                       renderValue={selected => {
-                        const currentChain = exchangeList?.find(item => item.id === selected)
+                        const currentChain = exchangeList?.find(item => Number(item.id) === Number(values.exchangeId))
                         return (
                           <Box
                             sx={{
@@ -882,7 +899,7 @@ const TokenLockerL2L3Form = () => {
                             value={t.id}
                             sx={{
                               '&.Mui-selected': {
-                                background: values.chainId === t.id ? '#E1F25C' : ''
+                                background: Number(values?.exchangeId) === Number(t.id) ? '#E1F25C' : ''
                               }
                             }}
                           >

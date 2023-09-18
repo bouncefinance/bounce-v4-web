@@ -27,6 +27,7 @@ export interface ExchangeInfo {
   chain_id: number
   name: string
   logo?: string
+  uniswap: string
   chain_type: number
   created_at: string
   updated_at: string

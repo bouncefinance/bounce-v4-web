@@ -10,9 +10,10 @@ import {
 } from 'constants/index'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
-import { useERC721Contract } from 'hooks/useContract'
+import { useERC721Contract, useErc721WithDrawContract } from 'hooks/useContract'
 import { useERC721Balance } from 'hooks/useNFTTokenBalance'
 import { useGetApproved } from 'hooks/useNFTApproveAllCallback'
+import { useSingleCallResult } from 'state/multicall/hooks'
 export interface TokenlockResponse {
   tokenCurrency: Currency | undefined
   balance: CurrencyAmount | undefined
@@ -48,6 +49,7 @@ export const useErc20TokenDetail = (
     return { tokenCurrency: res || undefined, balance: balance, allowance: currentAllowance, max }
   }, [balance, currentAllowance, max, res])
 }
+// TODO delete
 export function useErc721BalanceOf(
   tokenAddress: string | undefined,
   account: string | undefined,
@@ -56,7 +58,18 @@ export function useErc721BalanceOf(
   const result = useERC721Balance(tokenAddress, account, queryChainId)
   return result
 }
-
+// TODO delete
+export function useERC721Owner(
+  tokenAddress: string | undefined,
+  account: string | undefined,
+  queryChainId?: ChainId
+): string | undefined {
+  console.log('ownerOf>>>', tokenAddress, account, queryChainId)
+  const contract = useErc721WithDrawContract(tokenAddress || '', queryChainId)
+  const res = useSingleCallResult(account ? contract : null, 'owner', [], undefined, queryChainId).result
+  return res?.[0].toString()
+}
+// TODO delete
 export const useErc721TokenDetail = (tokenAddress: string, queryChainId: ChainId): Token721lockResponse => {
   const { account } = useActiveWeb3React()
   const contractAddress = TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[queryChainId]
