@@ -117,7 +117,7 @@ export interface Disperse {
 
 export interface ExchangeParam {
   chainId: number
-  chainType: number
+  version: number
   limit?: number
   offset?: number
 }

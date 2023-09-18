@@ -353,12 +353,12 @@ export function useApproveCallback(
 
   return [approvalState, approve]
 }
-export function useGetExchangeList(chainId: number, chainType: number) {
+export function useGetExchangeList(chainId: number, version: number) {
   return useRequest(
     async () => {
       const response = await getExchangeList({
         chainId,
-        chainType,
+        version,
         limit: 999,
         offset: 0
       })

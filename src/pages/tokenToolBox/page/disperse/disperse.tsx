@@ -113,7 +113,7 @@ export default function Disperse() {
         })
       }
     },
-    [disperseEther, myChainBalance]
+    [disperseEther, myChainBalance, nav]
   )
   const toDisperseToken = useCallback(
     async (token: string, recipients: string[], values: string[]) => {
@@ -164,7 +164,7 @@ export default function Disperse() {
         })
       }
     },
-    [disperseToken, myChainBalance]
+    [disperseToken, myChainBalance, nav]
   )
 
   const toApprove = useCallback(async () => {
