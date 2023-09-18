@@ -91,6 +91,7 @@ const sellerValidationSchema = yup.object({
     .test('is-address', 'Please input a valid token address', function (value) {
       return isAddress(value || '')
     }),
+  exchangeId: yup.string().required('Exchange is a required'),
   anotherTokenAddress: yup
     .string()
     .test('is-address', 'Please input a valid address', function (value) {
@@ -517,7 +518,6 @@ const TokenLockerL2L3Form = () => {
   const [uniswapAddress, setUniswapAddress] = useState('')
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
-  console.log('erc20TokenDeatail, erc721TokenDetail>>>', erc20TokenDeatail, erc721TokenDetail)
   useEffect(() => {
     !account && showLoginModal()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -543,10 +543,10 @@ const TokenLockerL2L3Form = () => {
   }, [CurrenChainId])
   useEffect(() => {
     if (Array.isArray(exchangeList) && exchangeList.length > 0) {
-      const uniswapAddr = exchangeList[0].uniswap
-      setUniswapAddress(uniswapAddr)
-      sellerValue.uniswapAddress = uniswapAddr
-      sellerValue.exchangeId = exchangeList[0]?.id + ''
+      //   const uniswapAddr = exchangeList[0].uniswap
+      //   setUniswapAddress(uniswapAddr)
+      //   sellerValue.uniswapAddress = uniswapAddr
+      //   sellerValue.exchangeId = exchangeList[0]?.id + ''
     }
     return () => {}
   }, [exchangeList, sellerValue])
@@ -724,7 +724,6 @@ const TokenLockerL2L3Form = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
-          console.log('values,errors>>>', values, errors)
           // update hook params
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
@@ -843,7 +842,7 @@ const TokenLockerL2L3Form = () => {
               />
               <FormLayout
                 childForm={
-                  <FormItem>
+                  <FormItem name={'exchangeId'}>
                     <ToolBoxSelect
                       variant="outlined"
                       value={values.exchangeId}

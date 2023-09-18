@@ -585,7 +585,6 @@ const TokenLockerForm = () => {
   const switchChain = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const { account, chainId: CurrenChainId } = useActiveWeb3React()
-  console.log('CurrenChainId>>>', CurrenChainId)
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
@@ -638,7 +637,6 @@ const TokenLockerForm = () => {
       setTokenAddress(queryParams?.tokenAddr + '')
       sellerValue.tokenAddress = queryParams?.tokenAddr + ''
     }
-    console.log('queryParams>>>', queryParams)
     return () => {}
   }, [location.search, sellerValue])
   const lockHandle = useTokenTimelock(chainId)
@@ -876,7 +874,6 @@ const TokenLockerForm = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
-          //   console.log('values>>>', values)
           // update hook params
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
