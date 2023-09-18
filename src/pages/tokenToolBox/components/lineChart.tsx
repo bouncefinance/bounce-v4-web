@@ -153,7 +153,7 @@ const LineChartSection = ({ lockInfo, lockToken }: { lockInfo: LockInfo; lockTok
   const { lock_start: openAt, lock_end: closeAt, amount: highestPrice } = lockInfo
   const segments = Math.floor((closeAt - openAt) / 3600 > 1 ? (closeAt - openAt) / 3600 : 1)
   const startTime = openAt ? Number(openAt * 1000) : 0
-  const endTime = closeAt ? Number(closeAt * 1000) : 0
+  const endTime = closeAt ? Number((openAt + closeAt) * 1000) : 0
   const startPrice = highestPrice ? CurrencyAmount.fromRawAmount(lockToken, highestPrice).toSignificant() : 0
   const endPrice = 0
   const arrayRange = (start: number | string, stop: number, step: number | string) =>

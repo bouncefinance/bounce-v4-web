@@ -261,7 +261,9 @@ export default function TokenInfo() {
                 <Body01 sx={{ color: '#959595' }}>Time</Body01>
                 <Body01>
                   {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'} to{' '}
-                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
+                  {data?.lock_end
+                    ? moment(new Date((data?.lock_start + data?.lock_end) * 1000)).format('YYYY-MM-DD HH:mm:ss')
+                    : '--'}
                 </Body01>
               </FullSpaceBetweenBox>
             )}
