@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Pagination,
   styled,
   Table,
   TableBody,
@@ -21,13 +22,15 @@ import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { Currency, CurrencyAmount } from '../../../../constants/token'
 import { getEtherscanLink } from '../../../../utils'
 import { useShowLoginModal } from '../../../../state/users/hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from '../../../../hooks'
 
 export default function MyDisperse() {
+  const defaultPageSize = 10
+  const [curPage, setCurPage] = useState(1)
   const optionDatas = useOptionDatas()
   console.log('optionDatas', optionDatas)
-  const { loading, data } = useDisperseList()
+  const { loading, data } = useDisperseList(curPage, defaultPageSize)
   const { account } = useActiveWeb3React()
 
   function getChainName(chain_id: number) {
@@ -129,6 +132,13 @@ export default function MyDisperse() {
                 ))}
               </TableBody>
             </Table>
+            <Box mt={40} display={'flex'} justifyContent="center">
+              <Pagination
+                onChange={(_, p) => setCurPage(p)}
+                page={curPage}
+                count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
+              />
+            </Box>{' '}
           </TableContainer>
         </Box>
       </ContainerBox>

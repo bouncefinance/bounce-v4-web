@@ -21,15 +21,17 @@ export const useTokenInfo = (chain?: number, token?: string) => {
   )
   return { data, loading }
 }
-export const useTokenList = (account?: string) => {
+export const useTokenList = (page: number, pageSize: number, account?: string) => {
   const { data, loading } = useRequest(
     async (): Promise<TokenInfoList | undefined> => {
       return await getTokenInfo({
-        address: account || ''
+        address: account || '',
+        offset: (page - 1) * pageSize,
+        limit: pageSize
       }).then(resp => resp.data)
     },
     {
-      refreshDeps: [account],
+      refreshDeps: [account, page, pageSize],
       retryInterval: 10000,
       retryCount: 20
     }
@@ -37,17 +39,19 @@ export const useTokenList = (account?: string) => {
   return { data, loading }
 }
 
-export const useMyTokenList = (account?: string) => {
+export const useMyTokenList = (page: number, pageSize: number, account?: string) => {
   const { data, loading } = useRequest(
     async (): Promise<TokenInfoList | undefined> => {
       return account
         ? await getTokenInfo({
-            address: account || ''
+            address: account || '',
+            offset: (page - 1) * pageSize,
+            limit: pageSize
           }).then(resp => resp.data)
         : undefined
     },
     {
-      refreshDeps: [account],
+      refreshDeps: [account, page, pageSize],
       retryInterval: 10000,
       retryCount: 20
     }

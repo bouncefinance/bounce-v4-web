@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Pagination,
   styled,
   Table,
   TableBody,
@@ -22,12 +23,14 @@ import { Currency, CurrencyAmount } from '../../../../constants/token'
 import { ChainId } from '../../../../constants/chain'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useShowLoginModal } from '../../../../state/users/hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function MyToken() {
+  const defaultPageSize = 10
+  const [curPage, setCurPage] = useState(1)
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
-  const { data } = useMyTokenList(account)
+  const { data } = useMyTokenList(curPage, defaultPageSize, account)
   const showLoginModal = useShowLoginModal()
   useEffect(() => {
     !account && showLoginModal()
@@ -117,6 +120,13 @@ export default function MyToken() {
                 ))}
               </TableBody>
             </Table>
+            <Box mt={40} display={'flex'} justifyContent="center">
+              <Pagination
+                onChange={(_, p) => setCurPage(p)}
+                page={curPage}
+                count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
+              />
+            </Box>
           </TableContainer>
         </Box>
       </ContainerBox>

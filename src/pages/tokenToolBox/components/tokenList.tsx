@@ -6,6 +6,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  Pagination,
   tableCellClasses,
   TableContainer,
   TableHead,
@@ -26,6 +27,7 @@ import { ChainId } from '../../../constants/chain'
 import { useOptionDatas } from '../../../state/configOptions/hooks'
 import { TokenInfo } from '../../../api/toolbox/type'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 const StyledTableCell = styled(TableCell)(() => ({
   borderColor: '#626262',
@@ -75,8 +77,10 @@ const BtnCom = styled(Button)(() => ({
   }
 }))
 const TokenList = () => {
+  const defaultPageSize = 10
+  const [curPage, setCurPage] = useState(1)
   const optionDatas = useOptionDatas()
-  const { data, loading } = useTokenList()
+  const { data, loading } = useTokenList(curPage, defaultPageSize)
   const isMd = useIsMDDown()
   const nav = useNavigate()
 
@@ -260,6 +264,13 @@ const TokenList = () => {
                 ))}
               </TableBody>
             </Table>
+            <Box mt={40} display={'flex'} justifyContent="center">
+              <Pagination
+                onChange={(_, p) => setCurPage(p)}
+                page={curPage}
+                count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
+              />
+            </Box>
           </TableContainer>
         ) : (
           <EmptyData />
