@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Pagination,
   styled,
   Table,
   TableBody,
@@ -19,14 +20,43 @@ import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { useMyLocks } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useShowLoginModal } from '../../../../state/users/hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { IReleaseType } from '../../../../bounceComponents/create-auction-pool/types'
 
 export default function MyLock() {
+  const defaultPageSize = 10
+  const [curPage, setCurPage] = useState(1)
   const optionDatas = useOptionDatas()
-  const { data } = useMyLocks()
+  const { data } = useMyLocks(curPage, defaultPageSize)
 
   function getChainName(chain_id: number) {
     return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id)
+  }
+
+  function mapType(type: number) {
+    switch (type) {
+      case IReleaseType.Cliff:
+        return 'Normal'
+      case IReleaseType.Linear:
+        return 'Linear'
+      case IReleaseType.Fragment:
+        return 'Stage'
+      case 4:
+        return 'V2 LP Token'
+      case 5:
+        return 'V3 LP Token'
+      default:
+        return ''
+    }
+  }
+
+  function calTime(record: LockInfo) {
+    switch (record.lock_type) {
+      case IReleaseType.Linear:
+        return new Date((record.lock_start + record.lock_end) * 1000).toLocaleString()
+      default:
+        return new Date(record.lock_end * 1000).toLocaleString()
+    }
   }
 
   const { account } = useActiveWeb3React()
@@ -79,8 +109,8 @@ export default function MyLock() {
                     </StyledTableCell>
                     <StyledTableCell>{record.title}</StyledTableCell>
                     <StyledTableCell>{record.amount}</StyledTableCell>
-                    {/*<StyledTableCell>{record.}</StyledTableCell>*/}
-                    <StyledTableCell>{record.release_data}</StyledTableCell>
+                    <StyledTableCell>{mapType(record.lock_type)}</StyledTableCell>
+                    <StyledTableCell>{calTime(record)}</StyledTableCell>
                     <StyledTableCell align={'right'}>
                       <Stack
                         direction={'row'}
@@ -107,6 +137,13 @@ export default function MyLock() {
                 ))}
               </TableBody>
             </Table>
+            <Box mt={40} display={'flex'} justifyContent="center">
+              <Pagination
+                onChange={(_, p) => setCurPage(p)}
+                page={curPage}
+                count={Math.ceil((data?.total || 0) / (defaultPageSize || 0))}
+              />
+            </Box>
           </TableContainer>
         </Box>
       </ContainerBox>

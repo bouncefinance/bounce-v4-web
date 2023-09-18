@@ -3,6 +3,8 @@ export interface DisperseListParam {
   chainId?: number
   token?: string
   hash?: string
+  offset?: number
+  limit?: number
 }
 
 export interface LocksListParam {
@@ -10,6 +12,8 @@ export interface LocksListParam {
   chainId?: number
   hash?: string
   token?: string
+  offset?: number
+  limit?: number
 }
 
 export interface TokenInfoList {

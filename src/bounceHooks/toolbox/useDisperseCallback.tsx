@@ -29,19 +29,21 @@ export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId)
   }, [balance, currentAllowance, max, res])
 }
 
-export const useDisperseList = (token?: string) => {
+export const useDisperseList = (page: number, pageSize: number, token?: string) => {
   const { account } = useActiveWeb3React()
   return useRequest(
     async (): Promise<MyDisperseList | undefined> => {
       return account
         ? await getMyDisperse({
             address: account || '',
-            token: token || ''
+            token: token || '',
+            offset: (page - 1) * pageSize,
+            limit: pageSize
           }).then(resp => resp.data)
         : undefined
     },
     {
-      refreshDeps: [account],
+      refreshDeps: [account, page, pageSize],
       retryInterval: 10000,
       retryCount: 20
     }
