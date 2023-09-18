@@ -7,7 +7,7 @@ export interface DisperseListParam {
 
 export interface LocksListParam {
   address: string
-  chainId: number
+  chainId?: number
   hash?: string
   token?: string
 }

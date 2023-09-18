@@ -1,0 +1,131 @@
+import {
+  Box,
+  Button,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
+} from '@mui/material'
+import { ContainerBox, Title } from '../tokenlocker/tokenLocker'
+import BackButton from '../../../../bounceComponents/common/BackButton'
+import { Stack } from '@mui/system'
+import { LockInfo } from '../../../../api/toolbox/type'
+import { useOptionDatas } from '../../../../state/configOptions/hooks'
+import { useMyLocks } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
+
+export default function MyLock() {
+  const optionDatas = useOptionDatas()
+  const { data } = useMyLocks()
+  console.log('mylock', data)
+
+  function getChainName(chain_id: number) {
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+  }
+
+  return (
+    <Box>
+      <ContainerBox>
+        <BackButton />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: '25px',
+            background: '#fff',
+            padding: '56px'
+          }}
+        >
+          <Title
+            sx={{
+              alignSelf: 'center',
+              marginBottom: '48px'
+            }}
+          >
+            My Lock
+          </Title>
+          <TableContainer sx={{ mt: 40 }}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell>Token</StyledTableCell>
+                  <StyledTableCell>Title</StyledTableCell>
+                  <StyledTableCell>Lock Amount</StyledTableCell>
+                  <StyledTableCell>Chlock Modelain</StyledTableCell>
+                  <StyledTableCell>Unlock Date</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
+              <TableBody>
+                {data?.list.map((record: LockInfo, idx: number) => (
+                  <StyledTableRow key={idx} className={idx % 2 == 0 ? 'odd' : ''}>
+                    <StyledTableCell>
+                      <Stack direction={'row'} gap={'8px'}>
+                        {/*<Image src={record.logo} width="24px" />*/}
+                        <Typography>{getChainName(record.chain_id)?.shortName}</Typography>
+                      </Stack>
+                    </StyledTableCell>
+                    <StyledTableCell>{record.title}</StyledTableCell>
+                    <StyledTableCell>{record.amount}</StyledTableCell>
+                    {/*<StyledTableCell>{record.}</StyledTableCell>*/}
+                    <StyledTableCell>{record.release_data}</StyledTableCell>
+                    <StyledTableCell align={'right'}>
+                      <Stack
+                        direction={'row'}
+                        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                      >
+                        <Button
+                          sx={{
+                            height: '37px',
+                            lineHeight: '37px',
+                            fontFamily: `'Public Sans'`,
+                            fontSize: 14,
+                            fontWeight: 600,
+                            letterSpacing: '-0.28px',
+                            borderRadius: '6px'
+                          }}
+                          variant={'contained'}
+                          onClick={() => {}}
+                        >
+                          Detail
+                        </Button>
+                      </Stack>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </ContainerBox>
+    </Box>
+  )
+}
+const StyledTableCell = styled(TableCell)(() => ({
+  border: 'transparent',
+  [`&.${tableCellClasses.head}`]: {
+    color: '#777E90',
+    fontFamily: `'Inter'`,
+    fontFize: 13,
+    lineHeight: '18px',
+    textTransform: 'capitalize',
+    borderBottom: '1px solid #e8e9e4',
+    paddingTop: '16px',
+    paddingBottom: '16px'
+  },
+  [`&.${tableCellClasses.body}`]: {
+    color: '#121212',
+    fontSize: 14,
+    fontFamily: `'Inter'`
+  }
+}))
+const StyledTableRow = styled(TableRow)`
+  &.odd {
+    background: #f6f6f3;
+    border-radius: 8px;
+  }
+`

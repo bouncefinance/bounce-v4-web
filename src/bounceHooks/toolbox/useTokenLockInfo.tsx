@@ -1,7 +1,7 @@
 import { useActiveWeb3React } from 'hooks'
 import { useRequest } from 'ahooks'
 import { getTokenLocksInfo } from '../../api/toolbox'
-import { LockInfo } from '../../api/toolbox/type'
+import { LockInfo, LockInfoList } from '../../api/toolbox/type'
 
 export const useTokenLockInfo = (chain: number, hash?: string) => {
   const { account } = useActiveWeb3React()
@@ -19,5 +19,23 @@ export const useTokenLockInfo = (chain: number, hash?: string) => {
       retryCount: 20
     }
   )
+  return { data, loading }
+}
+
+export const useMyLocks = () => {
+  const { account } = useActiveWeb3React()
+  const { data, loading } = useRequest(
+    async (): Promise<LockInfoList> => {
+      return await getTokenLocksInfo({
+        address: account || ''
+      }).then(resp => resp.data)
+    },
+    {
+      refreshDeps: [account],
+      retryInterval: 10000,
+      retryCount: 20
+    }
+  )
+  console.log('mylockuseMyLocks', data)
   return { data, loading }
 }
