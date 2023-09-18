@@ -36,7 +36,7 @@ import SolaceAvatar from './imgs/solace-na.png'
 import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
-
+import CreateProtocol from './imgs/CreateProtocol.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -676,16 +676,16 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 14,
     liveTimeStamp: {
-      start: 1695571200000,
-      end: 0
+      start: 1696525200000,
+      end: 1696698000000
     },
     hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
-    img: '',
+    img: CreateProtocol,
     avatar: CreateProtocolAvatar,
-    title: 'Create Protocol',
+    title: 'Create',
     chainId: 1,
-    tokenName: 'TBD',
+    tokenName: '$CREATE',
     whitePaperLink: 'https://createprotocol.gitbook.io/create-protocol-whitepaper/',
     upcomingLink: '/launchpad/create_protocol',
     liveLink: '/launchpad/create_protocol',
@@ -769,10 +769,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>
     ],
     moreData: [
-      { title: 'Token Name', content: 'TBD' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'TBD' }
+      { title: 'Token Name', content: '$CREATE' },
+      { title: 'Token Price', content: '0.0044' },
+      { title: 'Token Amount', content: '20,000,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
   {
