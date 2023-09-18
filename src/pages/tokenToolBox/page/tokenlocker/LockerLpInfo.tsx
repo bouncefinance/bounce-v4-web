@@ -20,8 +20,11 @@ import { useERC721Owner } from 'bounceHooks/toolbox/useTokenLocakCallback'
 import { useActiveWeb3React } from 'hooks'
 import { LockInfo } from 'api/toolbox/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
+  const { account, chainId } = useActiveWeb3React()
   const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, Number(chain) as unknown as ChainId)
   const releasNum = useMemo(() => {
@@ -37,6 +40,33 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return Number(chainId) === Number(chain)
+  }, [chainId, chain])
+  const BidBlock = () => {
+    if (!account) {
+      return <ConnectWalletButton />
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={Number(chain) || 0} />
+    }
+    return (
+      <SolidBtn
+        style={{
+          width: '100%',
+          background: !isReleasable ? '#d7d6d9' : '#121212',
+          color: !isReleasable ? '' : '#fff',
+          cursor: !isReleasable ? 'not-allowed' : 'pointer'
+        }}
+        disabled={!isReleasable}
+        onClick={() => {
+          toWithDraw()
+        }}
+      >
+        {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
+      </SolidBtn>
+    )
+  }
   return (
     <>
       <GrayBg mb={'20px'}>
@@ -116,27 +146,14 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
             )}
           </Box>
         )}
-        <SolidBtn
-          style={{
-            width: '100%',
-            background: !isReleasable ? '#d7d6d9' : '#121212',
-            color: !isReleasable ? '' : '#fff',
-            cursor: !isReleasable ? 'not-allowed' : 'pointer'
-          }}
-          disabled={!isReleasable}
-          onClick={() => {
-            toWithDraw()
-          }}
-        >
-          {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
-        </SolidBtn>
+        <BidBlock />
       </GrayBg>
     </>
   )
 }
 const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
@@ -145,6 +162,33 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
   const isReleasable = useMemo(() => {
     return erc721Owner === data?.deploy_contract && data?.lock_end * 1000 < new Date().valueOf()
   }, [data?.deploy_contract, data?.lock_end, erc721Owner])
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return Number(chainId) === Number(chain)
+  }, [chainId, chain])
+  const BidBlock = () => {
+    if (!account) {
+      return <ConnectWalletButton />
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={Number(chain) || 0} />
+    }
+    return (
+      <SolidBtn
+        style={{
+          width: '100%',
+          background: !isReleasable ? '#d7d6d9' : '#121212',
+          color: !isReleasable ? '' : '#fff',
+          cursor: !isReleasable ? 'not-allowed' : 'pointer'
+        }}
+        disabled={!isReleasable}
+        onClick={() => {
+          toWithDraw()
+        }}
+      >
+        {isReleasable ? 'Withdraw' : 'Withdrawed'}
+      </SolidBtn>
+    )
+  }
   return (
     <>
       <GrayBg mb={'20px'}>
@@ -208,20 +252,7 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
             )}
           </Box>
         )}
-        <SolidBtn
-          style={{
-            width: '100%',
-            background: !isReleasable ? '#d7d6d9' : '#121212',
-            color: !isReleasable ? '' : '#fff',
-            cursor: !isReleasable ? 'not-allowed' : 'pointer'
-          }}
-          disabled={!isReleasable}
-          onClick={() => {
-            toWithDraw()
-          }}
-        >
-          {isReleasable ? 'Withdraw' : 'Withdrawed'}
-        </SolidBtn>
+        <BidBlock />
       </GrayBg>
     </>
   )
