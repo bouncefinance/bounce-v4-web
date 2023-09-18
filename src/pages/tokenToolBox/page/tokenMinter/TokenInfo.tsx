@@ -15,8 +15,8 @@ import { TokenInfo as TokenInfoData } from '../../../../api/toolbox/type'
 
 export default function TokenInfo() {
   const { chain, token } = useParams()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || '')
-  const { data } = useTokenInfo(chainConfigInBackend?.id || 0, token)
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
+  const { data } = useTokenInfo(chainConfigInBackend?.id || 0, token, token)
   const nav = useNavigate()
 
   function getAmount(record: TokenInfoData | undefined) {
