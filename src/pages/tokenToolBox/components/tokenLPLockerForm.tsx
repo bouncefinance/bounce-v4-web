@@ -101,7 +101,6 @@ const sellerValidationSchema = yup.object({
       return true
     })
     .test('is-another-token', 'Token Address is a required', function (value) {
-      // 根据表单的当前内容进行自定义校验
       const anotherTokenChecked = this.parent.anotherTokenChecked
       if (anotherTokenChecked && !value) {
         return false

@@ -67,7 +67,7 @@ export interface ICompanyProfileParams {
 
 export interface ICompanyInfoParams {
   thirdpartId?: number
-  userId?: number // 要查询的id
+  userId?: number
 }
 
 export interface ICompanyTeamListItems {

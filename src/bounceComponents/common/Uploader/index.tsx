@@ -18,7 +18,7 @@ export type IFile = {
   fileType: string
   originFileObj?: File
 }
-// 视频需要扩展：| `video/${string}`
+// ：| `video/${string}`
 export type IAccept = 'image/jpeg' | 'image/png' | 'video/mp4'
 export interface IUploaderError {
   msg: string
