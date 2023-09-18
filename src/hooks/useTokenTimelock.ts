@@ -196,6 +196,7 @@ export function useDeployUniswapV2Timelock(chain: ChainId) {
         return Promise.reject('no contract')
       }
       const args = [uniswapAddress, title, tokenAddress, accountAddress, amount?.raw.toString(), releaseTime]
+      console.log('args>>', args)
       const isToken1Native = amount?.currency.isNative
       const estimatedGas = await erc20TimelockContract.estimateGas
         .deployUniswapV2Timelock(...args, { value: isToken1Native ? amount?.raw?.toString() : undefined })

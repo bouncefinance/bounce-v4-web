@@ -587,7 +587,7 @@ const TokenLockerL2L3Form = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock LP',
               onAgain: () => {
-                nav(`/TokenToolBox/TokenLPLockerInfo/${chainId}/${hash}`)
+                nav(`/TokenToolBox/TokenLPLockerInfo/${chainConfigInBackend?.id}/${hash}`)
               }
             })
           })
@@ -611,7 +611,7 @@ const TokenLockerL2L3Form = () => {
         })
       }
     },
-    [lockV2Handle, nav, chainId]
+    [lockV2Handle, nav, chainConfigInBackend?.id]
   )
   const lockV3Handle = useDeployUniswapV3Timelock(chainId)
   const toLockV3Handle = useCallback(
@@ -646,7 +646,7 @@ const TokenLockerL2L3Form = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock LP',
               onAgain: () => {
-                nav(`/TokenToolBox/TokenLPLockerInfo/${chainId}/${hash}`)
+                nav(`/TokenToolBox/TokenLPLockerInfo/${chainConfigInBackend?.id}/${hash}`)
               }
             })
           })
@@ -670,7 +670,7 @@ const TokenLockerL2L3Form = () => {
         })
       }
     },
-    [lockV3Handle, nav, chainId]
+    [lockV3Handle, nav, chainConfigInBackend?.id]
   )
   const onSubmit = async (value: ISeller) => {
     // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)

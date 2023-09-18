@@ -64,6 +64,7 @@ import BigNumber from 'bignumber.js'
 import queryString from 'query-string'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -587,6 +588,7 @@ const TokenLockerForm = () => {
   const { account, chainId: CurrenChainId } = useActiveWeb3React()
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
   const [tokenAddress, setTokenAddress] = useState<string>('')
   const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const [releaseType, setReleaseType] = useState<IReleaseType>(IReleaseType.Cliff)
@@ -664,7 +666,7 @@ const TokenLockerForm = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock token',
               onAgain: () => {
-                nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${hash}`)
+                nav(`/TokenToolBox/TokenLockerInfo/${chainConfigInBackend?.id}/${hash}`)
               }
             })
           })
@@ -688,7 +690,7 @@ const TokenLockerForm = () => {
         })
       }
     },
-    [chainId, lockHandle, nav]
+    [chainConfigInBackend?.id, lockHandle, nav]
   )
   const lockStageHandle = useTokenTimeStagelock(chainId)
   const toLockStageHandle = useCallback(
@@ -721,7 +723,7 @@ const TokenLockerForm = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock token',
               onAgain: () => {
-                nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${hash}`)
+                nav(`/TokenToolBox/TokenLockerInfo/${chainConfigInBackend?.id}/${hash}`)
               }
             })
           })
@@ -745,7 +747,7 @@ const TokenLockerForm = () => {
         })
       }
     },
-    [chainId, lockStageHandle, nav]
+    [chainConfigInBackend?.id, lockStageHandle, nav]
   )
   const lockLinearHandle = useTokenTimeLinearlock(chainId)
   const toLockLinearHandle = useCallback(
