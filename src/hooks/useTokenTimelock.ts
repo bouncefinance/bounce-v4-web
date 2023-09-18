@@ -365,7 +365,7 @@ export function useGetExchangeList(chainId: number, version: number) {
       return response?.data?.list
     },
     {
-      refreshDeps: [chainId],
+      refreshDeps: [chainId, version],
       debounceWait: 100
     }
   )
