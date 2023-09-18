@@ -16,8 +16,8 @@ import { useWithDrawBy721TokenLock, useWithDrawByTokenLock } from 'hooks/useToke
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
-import { useERC721Owner } from 'bounceHooks/toolbox/useTokenLocakCallback'
-import { useActiveWeb3React } from 'hooks'
+// import { useERC721Owner } from 'bounceHooks/toolbox/useTokenLocakCallback'
+// import { useActiveWeb3React } from 'hooks'
 import { LockInfo } from 'api/toolbox/type'
 const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
@@ -122,14 +122,14 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
 }
 const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
-  const { account } = useActiveWeb3React()
+  //   const { account } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   //   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
-  const erc721Owner = useERC721Owner(data?.deploy_contract || '', account, chainConfigInBackend?.ethChainId)
-  console.log('erc721Owner>>', erc721Owner)
+  //   const erc721Owner = useERC721Owner(data?.deploy_contract || '', account, chainConfigInBackend?.ethChainId)
+  //   console.log('erc721Owner>>', erc721Owner)
   return (
     <>
       <GrayBg mb={'20px'}>
