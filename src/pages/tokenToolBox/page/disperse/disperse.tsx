@@ -518,6 +518,11 @@ export default function Disperse() {
                         {confirmBtn.text}
                       </LineBtn>
                     )}
+                    {values.type == 'chain' && !account && (
+                      <LineBtn type="button" onClick={showLoginModal}>
+                        Connect wallet
+                      </LineBtn>
+                    )}
                     <SolidBtn
                       type="submit"
                       className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
