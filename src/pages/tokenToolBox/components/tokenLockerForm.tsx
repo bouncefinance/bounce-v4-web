@@ -446,10 +446,11 @@ const BidBlock = ({
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return (
-      !erc20TokenDeatail?.allowance ||
-      (erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact()))
+      formValues?.tokenAddress &&
+      (!erc20TokenDeatail?.allowance ||
+        (erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())))
     )
-  }, [erc20TokenDeatail?.allowance, formValues.amount])
+  }, [erc20TokenDeatail?.allowance, formValues.amount, formValues?.tokenAddress])
   const lockAmount = useMemo(() => {
     return erc20TokenDeatail?.tokenCurrency && formValues.amount
       ? CurrencyAmount.fromAmount(erc20TokenDeatail?.tokenCurrency, formValues.amount)
@@ -599,7 +600,7 @@ const TokenLockerForm = () => {
   }, [releaseType])
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, releaseType)
   const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return chainId === CurrenChainId
+    return Number(chainId) === Number(CurrenChainId)
   }, [chainId, CurrenChainId])
   useEffect(() => {
     !account && showLoginModal()
@@ -631,7 +632,6 @@ const TokenLockerForm = () => {
     const queryParams = queryString.parse(location.search)
     if (queryParams?.chain && Object.values(ChainId).includes(Number(queryParams?.chain) || '')) {
       const chainId = Number(queryParams?.chain) as unknown as ChainId
-      !isNaN(Number(chainId)) && setChainId(Number(chainId))
       sellerValue.chainId = chainId
     }
     if (queryParams?.tokenAddr) {
@@ -878,6 +878,7 @@ const TokenLockerForm = () => {
         {({ values, errors, setFieldValue, handleSubmit }) => {
           //   console.log('values>>>', values)
           // update hook params
+          setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
           setReleaseType(Number(values.releaseType))
           return (
@@ -897,7 +898,6 @@ const TokenLockerForm = () => {
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
-                        setChainId(Number(target.value) as unknown as ChainId)
                         switchChain(target.value as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}
