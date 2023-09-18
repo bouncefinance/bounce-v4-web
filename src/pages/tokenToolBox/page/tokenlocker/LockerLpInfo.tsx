@@ -16,8 +16,8 @@ import { useReleasableERC20, useWithDrawBy721TokenLock, useWithDrawByTokenLock }
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
-// import { useERC721Owner } from 'bounceHooks/toolbox/useTokenLocakCallback'
-// import { useActiveWeb3React } from 'hooks'
+import { useERC721Owner } from 'bounceHooks/toolbox/useTokenLocakCallback'
+import { useActiveWeb3React } from 'hooks'
 import { LockInfo } from 'api/toolbox/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
@@ -136,13 +136,15 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
 }
 const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
-  //   const { account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
-  //   const erc721Owner = useERC721Owner(data?.deploy_contract || '', account, chainConfigInBackend?.ethChainId)
-  //   console.log('erc721Owner>>', erc721Owner)
+  const erc721Owner = useERC721Owner(data?.token || '', account, Number(chain), data?.token_id)
+  const isReleasable = useMemo(() => {
+    return erc721Owner === data?.deploy_contract && data?.lock_end * 1000 < new Date().valueOf()
+  }, [data?.deploy_contract, data?.lock_end, erc721Owner])
   return (
     <>
       <GrayBg mb={'20px'}>
@@ -207,12 +209,18 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
           </Box>
         )}
         <SolidBtn
-          style={{ width: '100%' }}
+          style={{
+            width: '100%',
+            background: !isReleasable ? '#d7d6d9' : '#121212',
+            color: !isReleasable ? '' : '#fff',
+            cursor: !isReleasable ? 'not-allowed' : 'pointer'
+          }}
+          disabled={!isReleasable}
           onClick={() => {
             toWithDraw()
           }}
         >
-          Withdraw
+          {isReleasable ? 'Withdraw' : 'Withdrawed'}
         </SolidBtn>
       </GrayBg>
     </>

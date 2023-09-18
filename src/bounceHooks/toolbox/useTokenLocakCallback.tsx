@@ -10,7 +10,7 @@ import {
 } from 'constants/index'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
-import { useERC721Contract, useErc721WithDrawContract } from 'hooks/useContract'
+import { useERC721Contract } from 'hooks/useContract'
 import { useERC721Balance } from 'hooks/useNFTTokenBalance'
 import { useGetApproved } from 'hooks/useNFTApproveAllCallback'
 import { useSingleCallResult } from 'state/multicall/hooks'
@@ -58,18 +58,19 @@ export function useErc721BalanceOf(
   const result = useERC721Balance(tokenAddress, account, queryChainId)
   return result
 }
-// TODO delete
 export function useERC721Owner(
   tokenAddress: string | undefined,
   account: string | undefined,
-  queryChainId?: ChainId
-): string | undefined {
-  console.log('owner>>>', tokenAddress, account, queryChainId)
-  const contract = useErc721WithDrawContract(tokenAddress || '', queryChainId)
-  const res = useSingleCallResult(account ? contract : null, 'owner', [], undefined, queryChainId).result
-  return res?.[0].toString()
+  queryChainId: ChainId,
+  tokenId: string | number
+) {
+  const contract = useERC721Contract(tokenAddress || '', queryChainId)
+  const res = useSingleCallResult(account ? contract : null, 'ownerOf', [tokenId])
+  return useMemo(() => {
+    if (res.loading || !res.result) return undefined
+    return res.result?.[0]
+  }, [res.loading, res.result])
 }
-// TODO delete
 export const useErc721TokenDetail = (tokenAddress: string, queryChainId: ChainId): Token721lockResponse => {
   const { account } = useActiveWeb3React()
   const contractAddress = TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[queryChainId]
