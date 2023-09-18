@@ -445,7 +445,10 @@ const BidBlock = ({
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
-    return erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact())
+    return (
+      !erc20TokenDeatail?.allowance ||
+      (erc20TokenDeatail?.allowance && Number(formValues.amount) > Number(erc20TokenDeatail?.allowance?.toExact()))
+    )
   }, [erc20TokenDeatail?.allowance, formValues.amount])
   const lockAmount = useMemo(() => {
     return erc20TokenDeatail?.tokenCurrency && formValues.amount
@@ -581,6 +584,7 @@ const TokenLockerForm = () => {
   const switchChain = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const { account, chainId: CurrenChainId } = useActiveWeb3React()
+  console.log('CurrenChainId>>>', CurrenChainId)
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
   const [tokenAddress, setTokenAddress] = useState<string>('')
@@ -590,7 +594,7 @@ const TokenLockerForm = () => {
     return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
   })
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, releaseType)
-  console.log('erc20TokenDeatail>>', erc20TokenDeatail)
+  console.log('chainId>>', chainId)
   const isCurrentChainEqualChainOfPool = useMemo(() => {
     return chainId === CurrenChainId
   }, [chainId, CurrenChainId])
@@ -624,7 +628,7 @@ const TokenLockerForm = () => {
     const queryParams = queryString.parse(location.search)
     if (queryParams?.chain && Object.values(ChainId).includes(Number(queryParams?.chain) || '')) {
       const chainId = Number(queryParams?.chain) as unknown as ChainId
-      setChainId(Number(chainId))
+      !isNaN(Number(chainId)) && setChainId(Number(chainId))
       sellerValue.chainId = chainId
     }
     if (queryParams?.tokenAddr) {
@@ -890,7 +894,7 @@ const TokenLockerForm = () => {
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
-                        setChainId(target.value as unknown as ChainId)
+                        setChainId(Number(target.value) as unknown as ChainId)
                         switchChain(target.value as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}
