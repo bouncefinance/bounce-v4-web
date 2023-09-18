@@ -83,6 +83,7 @@ import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
 import TokenToolBox from './tokenToolBox'
+import TokenLocker from './tokenToolBox/page/tokenlocker/tokenLocker'
 import Loyaltyprogram from './loyaltyprogram'
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
 import MetaBlox from './projectIntro/MetaBloxProjectInfo'
@@ -90,6 +91,16 @@ import LaunchpadDetail from './launchpad/detail'
 import Party from './launchpad/detail/party'
 import ZataShop from './realWorldAuction/shop/zeta'
 import IphoneDetail from './thirdPart/iphoneDetail'
+import Disperse from './tokenToolBox/page/disperse/disperse'
+import MyDisperse from './tokenToolBox/page/disperse/myDiperse'
+import TokenMinter from './tokenToolBox/page/tokenMinter/tokenMinter'
+import TokenInfo from './tokenToolBox/page/tokenMinter/TokenInfo'
+import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
+import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
+
+import MyToken from './tokenToolBox/page/tokenMinter/myToken'
+import MyLock from './tokenToolBox/page/tokenlocker/myLock'
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -217,6 +228,16 @@ export default function App() {
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
+                  <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
+                  <Route path={routes.tokenToolBox.myLock} element={<MyLock />} />
+                  <Route path={routes.tokenToolBox.tokenLockerInfo} element={<LockerInfo />} />
+                  <Route path={routes.tokenToolBox.TokenLPLockerInfo} element={<LockerLpInfo />} />
+                  <Route path={routes.tokenToolBox.disperse} element={<Disperse />} />
+                  <Route path={routes.tokenToolBox.myDisperse} element={<MyDisperse />} />
+                  <Route path={routes.tokenToolBox.tokenMinter} element={<TokenMinter />} />
+                  <Route path={`${routes.tokenToolBox.tokenMinterInfo}/:chain/:token`} element={<TokenInfo />} />
+                  <Route path={routes.tokenToolBox.tokenMinterList} element={<MyToken />} />
+
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}

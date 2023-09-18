@@ -159,7 +159,9 @@ export function useToken(tokenAddress: string, chainId?: ChainId): Currency | un
   const { chainId: linkChainId } = useActiveWeb3React()
   const curChainId = chainId || linkChainId
 
-  const address = isZero(tokenAddress) ? '' : isAddress(tokenAddress)
+  const address = useMemo(() => {
+    return isZero(tokenAddress) ? '' : isAddress(tokenAddress)
+  }, [tokenAddress])
 
   const tokenContract = useTokenContract(address ? address : undefined, false, curChainId)
   const tokenContractBytes32 = useBytes32TokenContract(address ? address : undefined, false, curChainId)
