@@ -327,7 +327,7 @@ export default function TokenInfo() {
       })
     }
   }, [withDrawFn721])
-  if (loading) {
+  if (loading || !data) {
     return (
       <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
         <BounceAnime />
