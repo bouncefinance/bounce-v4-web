@@ -1,4 +1,5 @@
 import {
+  useErc721WithDrawContract,
   useToolboxERC20TimelockFactory,
   useToolboxERC20TimelockLineFactory,
   useToolboxERC721TimelockFactory,
@@ -18,6 +19,7 @@ import { useRequest } from 'ahooks'
 import { getExchangeList } from 'api/toolbox'
 import { useWithDrawContract } from './useContract'
 import { useSingleCallResult } from 'state/multicall/hooks'
+import BigNumber from 'bignumber.js'
 
 // normal
 export function useTokenTimelock(chain: ChainId) {
@@ -368,6 +370,7 @@ export function useGetExchangeList(chainId: number, chainType: number) {
     }
   )
 }
+// withdraw erc20 for token lock & lp lock
 export function useWithDrawByTokenLock(contractAddress: string, queryChainId?: number) {
   const { account } = useActiveWeb3React()
   const withdrawContract = useWithDrawContract(contractAddress, queryChainId)
@@ -402,25 +405,55 @@ export function useWithDrawByTokenLock(contractAddress: string, queryChainId?: n
       })
   }, [account, addTransaction, withdrawContract])
 }
-// token lock ToolboxERC20Timelock.releasable() // normal stage
+// withdraw erc721 for lp lock (v3)
+export function useWithDrawBy721TokenLock(contractAddress: string, queryChainId?: number) {
+  const { account } = useActiveWeb3React()
+  const withdrawContract = useErc721WithDrawContract(contractAddress, queryChainId)
+  const addTransaction = useTransactionAdder()
+  return useCallback(async (): Promise<{ transactionReceipt: Promise<TransactionReceipt> }> => {
+    if (!account) {
+      return Promise.reject('no account')
+    }
+    if (!withdrawContract) {
+      return Promise.reject('no contract')
+    }
+    const estimatedGas = await withdrawContract.estimateGas.release().catch((error: Error) => {
+      console.debug('Failed to withdraw token', error)
+      throw error
+    })
+    return withdrawContract
+      .release({
+        gasLimit: calculateGasMargin(estimatedGas)
+      })
+      .then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: 'withdraw token',
+          userSubmitted: {
+            account,
+            action: 'deployERC721TimelockWithdraw'
+          }
+        })
+        return {
+          hash: response.hash,
+          transactionReceipt: response.wait(1)
+        }
+      })
+  }, [account, addTransaction, withdrawContract])
+}
+// token lock normal stage，[can releasAmount] = releasableAmount - releasedAmount, ToolboxERC20Timelock
 export const useReleasableERC20 = (contractAddress: string, queryChainId?: number): string => {
   const erc20TimelockContract = useWithDrawContract(contractAddress, queryChainId)
   const releasable = useSingleCallResult(erc20TimelockContract, 'releasableAmount').result
   const released = useSingleCallResult(erc20TimelockContract, 'releasedAmount').result
-  console.log('releasable>>>', releasable, released)
   return useMemo(() => {
-    return (
-      (releasable?.[0] &&
-        released?.[0] &&
-        releasable?.[0].comparedTo(released?.[0]) === 1 &&
-        releasable.minus(released).toString()) ||
-      '0'
-    )
+    const releasableAmount = releasable?.toString() || '0'
+    const releasedAmount = released?.toString() || '0'
+    return BigNumber(releasableAmount).minus(releasedAmount).toString()
   }, [releasable, released])
 }
-// useWithDrawVestingContract
+// token lock Linear， Releasable - useWithDrawVestingContract
 export const useReleasableVestingERC20 = (contractAddress: string, queryChainId?: number): string => {
   const erc20TimelockContract = useWithDrawVestingContract(contractAddress, queryChainId)
   const res = useSingleCallResult(erc20TimelockContract, 'releasable').result
-  return res?.[0]?.toString()
+  return res?.toString() || '0'
 }

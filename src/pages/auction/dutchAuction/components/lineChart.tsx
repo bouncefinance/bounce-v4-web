@@ -177,7 +177,7 @@ export const LineChartView = ({
       timeScale: {
         borderVisible: true,
         borderColor: '#D7D6D9',
-        timeVisible: false // 每个时间点显示日期
+        timeVisible: false
       },
       leftPriceScale: {
         visible: true,

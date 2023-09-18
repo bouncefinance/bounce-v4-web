@@ -17,12 +17,85 @@ import LineChartSection from 'pages/tokenToolBox/components/lineChart'
 import TimeStageLine from '../../components/timeStageLine'
 import { StageParams } from '../../components/timeStageLine'
 import BigNumber from 'bignumber.js'
-import { useWithDrawByTokenLock, useReleasableERC20, useReleasableVestingERC20 } from 'hooks/useTokenTimelock'
+import { useReleasableERC20, useReleasableVestingERC20, useWithDrawByTokenLock } from 'hooks/useTokenTimelock'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import { useActiveWeb3React } from 'hooks'
+import { LockInfo } from 'api/toolbox/type'
+const WithdrawBtnForLinear = ({
+  toWithDraw,
+  data,
+  countdown
+}: {
+  toWithDraw: () => void
+  data: LockInfo
+  countdown: number
+}) => {
+  const { chain } = useParams()
+  const releasableNum = useReleasableVestingERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  const isReleasable = useMemo(() => {
+    return Number(releasableNum) !== 0
+  }, [releasableNum])
+  if (!data) {
+    return <></>
+  }
+  return (
+    <SolidBtn
+      style={{
+        width: '100%',
+        background: !isReleasable ? '#d7d6d9' : '#121212',
+        color: !isReleasable ? '' : '#fff',
+        cursor: !isReleasable ? 'not-allowed' : 'pointer'
+      }}
+      disabled={!isReleasable}
+      onClick={() => {
+        toWithDraw()
+      }}
+    >
+      {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
+    </SolidBtn>
+  )
+}
+const WithdrawBtnForNotLinear = ({
+  toWithDraw,
+  data,
+  countdown
+}: {
+  toWithDraw: () => void
+  data: LockInfo
+  countdown: number
+}) => {
+  const { chain } = useParams()
+  const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, Number(chain) as unknown as ChainId)
+  const releasNum = useMemo(() => {
+    return tokenInfo && releasableNum ? CurrencyAmount.fromRawAmount(tokenInfo, releasableNum)?.toExact() : '--'
+  }, [releasableNum, tokenInfo])
+  const isReleasable = useMemo(() => {
+    return Number(releasNum) !== 0
+  }, [releasNum])
+  if (!data) {
+    return <></>
+  }
+  return (
+    <SolidBtn
+      style={{
+        width: '100%',
+        background: !isReleasable ? '#d7d6d9' : '#121212',
+        color: !isReleasable ? '' : '#fff',
+        cursor: !isReleasable ? 'not-allowed' : 'pointer'
+      }}
+      disabled={!isReleasable}
+      onClick={() => {
+        toWithDraw()
+      }}
+    >
+      {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
+    </SolidBtn>
+  )
+}
 export default function TokenInfo() {
   const { chain, hash } = useParams()
   const { chainId } = useActiveWeb3React()
@@ -77,22 +150,6 @@ export default function TokenInfo() {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
-  const releasableResult = useReleasableERC20(data?.deploy_contract || '', chainConfigInBackend?.id || undefined)
-  const releasableVestingResult = useReleasableVestingERC20(
-    data?.deploy_contract || '',
-    chainConfigInBackend?.id || undefined
-  )
-  console.log('releasableResult, releasableVestingResult>>>', releasableResult, releasableVestingResult)
-  const releasableNum = useMemo(() => {
-    if (replasetype === 'Linear') {
-      return releasableVestingResult && tokenInfo
-        ? CurrencyAmount.fromRawAmount(tokenInfo, releasableVestingResult).toExact()
-        : '0'
-    } else {
-      return releasableResult && tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, releasableResult).toExact() : '0'
-    }
-  }, [releasableResult, releasableVestingResult, replasetype, tokenInfo])
-  console.log('tokenInfo,data,releasableNum>>>', tokenInfo, data, releasableNum)
   const toWithDraw = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -204,7 +261,9 @@ export default function TokenInfo() {
                 <Body01 sx={{ color: '#959595' }}>Time</Body01>
                 <Body01>
                   {data?.lock_start ? moment(new Date(data?.lock_start * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'} to{' '}
-                  {data?.lock_end ? moment(new Date(data?.lock_end * 1000)).format('YYYY-MM-DD HH:mm:ss') : '--'}
+                  {data?.lock_end
+                    ? moment(new Date((data?.lock_start + data?.lock_end) * 1000)).format('YYYY-MM-DD HH:mm:ss')
+                    : '--'}
                 </Body01>
               </FullSpaceBetweenBox>
             )}
@@ -237,21 +296,11 @@ export default function TokenInfo() {
               )}
             </Box>
           )}
-          {isCurrentChainEqualChainOfPool && (
-            <SolidBtn
-              style={{
-                width: '100%',
-                background: Number(releasableNum) === 0 ? '#d7d6d9' : '#121212',
-                color: Number(releasableNum) === 0 ? '' : '#fff',
-                cursor: Number(releasableNum) === 0 ? 'not-allowed' : 'pointer'
-              }}
-              disabled={Number(releasableNum) === 0}
-              onClick={() => {
-                toWithDraw()
-              }}
-            >
-              {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
-            </SolidBtn>
+          {isCurrentChainEqualChainOfPool && replasetype === 'Linear' && data && (
+            <WithdrawBtnForLinear toWithDraw={toWithDraw} data={data} countdown={countdown} />
+          )}
+          {isCurrentChainEqualChainOfPool && replasetype !== 'Linear' && data && (
+            <WithdrawBtnForNotLinear toWithDraw={toWithDraw} data={data} countdown={countdown} />
           )}
           {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={Number(chain) || 0} />}
         </GrayBg>

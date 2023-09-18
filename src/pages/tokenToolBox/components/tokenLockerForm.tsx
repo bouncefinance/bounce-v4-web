@@ -134,7 +134,7 @@ const sellerValidationSchema = yup.object({
       return true
     })
     .test('is-another-token', 'Token Address is a required', function (value) {
-      // 根据表单的当前内容进行自定义校验
+      //
       const anotherTokenChecked = this.parent.anotherTokenChecked
       if (anotherTokenChecked && !value) {
         return false
@@ -590,6 +590,7 @@ const TokenLockerForm = () => {
     return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
   })
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, releaseType)
+  console.log('erc20TokenDeatail>>', erc20TokenDeatail)
   const isCurrentChainEqualChainOfPool = useMemo(() => {
     return chainId === CurrenChainId
   }, [chainId, CurrenChainId])
@@ -849,7 +850,7 @@ const TokenLockerForm = () => {
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
             value.linearUnlockingStartTime?.unix() + '',
-            value.linearUnlockingEndTime?.unix() + '',
+            value.linearUnlockingEndTime?.diff(value.linearUnlockingStartTime, 'seconds') + '', // duration, endTime - startTime
             amoutAraw
           )
           break
@@ -868,9 +869,8 @@ const TokenLockerForm = () => {
         onSubmit={onSubmit}
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
-          console.log('values>>>', values)
+          //   console.log('values>>>', values)
           // update hook params
-          setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
           setReleaseType(Number(values.releaseType))
           return (
@@ -890,6 +890,7 @@ const TokenLockerForm = () => {
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
+                        setChainId(target.value as unknown as ChainId)
                         switchChain(target.value as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}

@@ -5,7 +5,6 @@ import { LockInfo } from '../../api/toolbox/type'
 
 export const useTokenLockInfo = (chain: number, hash?: string) => {
   const { account } = useActiveWeb3React()
-
   const { data, loading } = useRequest(
     async (): Promise<LockInfo | undefined> => {
       return await getTokenLocksInfo({
