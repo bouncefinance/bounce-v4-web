@@ -509,12 +509,7 @@ const TokenLockerL2L3Form = () => {
   }, [version])
   const location = useLocation()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
-  const { data: exchangeData } = useGetExchangeList(chainConfigInBackend?.id || 0, version === VersionType.v2 ? 2 : 3)
-  const exchangeList = useMemo(() => {
-    return exchangeData?.filter(item =>
-      item.name.toLocaleLowerCase().includes(version === VersionType.v2 ? 'v2' : 'v3')
-    )
-  }, [exchangeData, version])
+  const { data: exchangeList } = useGetExchangeList(chainConfigInBackend?.id || 0, version === VersionType.v2 ? 2 : 3)
   const [uniswapAddress, setUniswapAddress] = useState('')
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)

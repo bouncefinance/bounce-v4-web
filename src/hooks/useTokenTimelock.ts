@@ -358,7 +358,7 @@ export function useGetExchangeList(chainId: number, version: number) {
     async () => {
       const response = await getExchangeList({
         chainId,
-        version,
+        uniVersion: version,
         limit: 999,
         offset: 0
       })

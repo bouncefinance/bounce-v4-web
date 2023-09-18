@@ -187,7 +187,7 @@ export default function TokenInfo() {
   const isCurrentChainEqualChainOfPool = useMemo(() => {
     return Number(chainId) === chainConfigInBackend?.ethChainId
   }, [chainId, chainConfigInBackend?.ethChainId])
-  if (loading) {
+  if (loading || !data) {
     return (
       <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
         <BounceAnime />
