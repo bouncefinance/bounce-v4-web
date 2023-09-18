@@ -12,17 +12,25 @@ import { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 import { useCountDown } from 'ahooks'
-import { useWithDrawBy721TokenLock, useWithDrawByTokenLock } from 'hooks/useTokenTimelock'
+import { useReleasableERC20, useWithDrawBy721TokenLock, useWithDrawByTokenLock } from 'hooks/useTokenTimelock'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 // import { useERC721Owner } from 'bounceHooks/toolbox/useTokenLocakCallback'
 // import { useActiveWeb3React } from 'hooks'
 import { LockInfo } from 'api/toolbox/type'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
+  const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, Number(chain) as unknown as ChainId)
+  const releasNum = useMemo(() => {
+    return tokenInfo && releasableNum ? CurrencyAmount.fromRawAmount(tokenInfo, releasableNum)?.toExact() : '--'
+  }, [releasableNum, tokenInfo])
+  const isReleasable = useMemo(() => {
+    return Number(releasNum) !== 0
+  }, [releasNum])
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
-  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
   }, [data?.amount, tokenInfo])
@@ -109,12 +117,18 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
           </Box>
         )}
         <SolidBtn
-          style={{ width: '100%' }}
+          style={{
+            width: '100%',
+            background: !isReleasable ? '#d7d6d9' : '#121212',
+            color: !isReleasable ? '' : '#fff',
+            cursor: !isReleasable ? 'not-allowed' : 'pointer'
+          }}
+          disabled={!isReleasable}
           onClick={() => {
             toWithDraw()
           }}
         >
-          Withdraw
+          {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
         </SolidBtn>
       </GrayBg>
     </>
@@ -124,7 +138,6 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
   const { chain } = useParams()
   //   const { account } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
-  //   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chain as unknown as ChainId)
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
@@ -276,7 +289,11 @@ export default function TokenInfo() {
     }
   }, [withDrawFn721])
   if (loading) {
-    return <></>
+    return (
+      <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
+        <BounceAnime />
+      </Box>
+    )
   }
   return (
     <ContainerBox>

@@ -64,7 +64,7 @@ export function useERC721Owner(
   account: string | undefined,
   queryChainId?: ChainId
 ): string | undefined {
-  console.log('ownerOf>>>', tokenAddress, account, queryChainId)
+  console.log('owner>>>', tokenAddress, account, queryChainId)
   const contract = useErc721WithDrawContract(tokenAddress || '', queryChainId)
   const res = useSingleCallResult(account ? contract : null, 'owner', [], undefined, queryChainId).result
   return res?.[0].toString()
