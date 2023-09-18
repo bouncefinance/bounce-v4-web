@@ -588,9 +588,9 @@ const TokenLockerForm = () => {
   const { account, chainId: CurrenChainId } = useActiveWeb3React()
   const nav = useNavigate()
   //   const optionDatas = useOptionDatas()
+  const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
   const [tokenAddress, setTokenAddress] = useState<string>('')
-  const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const [releaseType, setReleaseType] = useState<IReleaseType>(IReleaseType.Cliff)
   const ChainSelectOption = useMemo(() => {
     return ChainList.filter(item => {

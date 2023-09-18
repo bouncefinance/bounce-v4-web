@@ -28,7 +28,7 @@ export const useMyLocks = (page: number, pageSize: number) => {
     async (): Promise<LockInfoList | undefined> => {
       return account
         ? await getTokenLocksInfo({
-            address: '',
+            address: account || '',
             offset: (page - 1) * pageSize,
             limit: pageSize
           }).then(resp => resp.data)
