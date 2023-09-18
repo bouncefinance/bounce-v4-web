@@ -25,6 +25,7 @@ import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton
 import { useActiveWeb3React } from 'hooks'
 import { LockInfo } from 'api/toolbox/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 const WithdrawBtnForLinear = ({
   toWithDraw,
   data,
@@ -99,7 +100,7 @@ const WithdrawBtnForNotLinear = ({
 }
 export default function TokenInfo() {
   const { chain, hash } = useParams()
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', Number(chain) as unknown as ChainId)
@@ -191,6 +192,24 @@ export default function TokenInfo() {
       <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
         <BounceAnime />
       </Box>
+    )
+  }
+  const BidBlock = () => {
+    if (!account) {
+      return <ConnectWalletButton />
+    }
+    if (!isCurrentChainEqualChainOfPool) {
+      return <SwitchNetworkButton targetChain={Number(chain) || 0} />
+    }
+    return (
+      <>
+        {isCurrentChainEqualChainOfPool && replasetype === 'Linear' && data && (
+          <WithdrawBtnForLinear toWithDraw={toWithDraw} data={data} countdown={countdown} />
+        )}
+        {isCurrentChainEqualChainOfPool && replasetype !== 'Linear' && data && (
+          <WithdrawBtnForNotLinear toWithDraw={toWithDraw} data={data} countdown={countdown} />
+        )}
+      </>
     )
   }
   return (
@@ -301,13 +320,7 @@ export default function TokenInfo() {
               )}
             </Box>
           )}
-          {isCurrentChainEqualChainOfPool && replasetype === 'Linear' && data && (
-            <WithdrawBtnForLinear toWithDraw={toWithDraw} data={data} countdown={countdown} />
-          )}
-          {isCurrentChainEqualChainOfPool && replasetype !== 'Linear' && data && (
-            <WithdrawBtnForNotLinear toWithDraw={toWithDraw} data={data} countdown={countdown} />
-          )}
-          {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={Number(chain) || 0} />}
+          <BidBlock />
         </GrayBg>
       </Box>
     </ContainerBox>
