@@ -22,7 +22,7 @@ interface IMinter {
   chainId: number
   name: string
   symbol: string
-  decimals: string
+  decimals: number
   initial_supply: string
 }
 
@@ -39,7 +39,7 @@ export default function TokenMinter() {
     chainId: chainId || ChainId.SEPOLIA,
     name: '',
     symbol: '',
-    decimals: '',
+    decimals: 18,
     initial_supply: ''
   }
 
@@ -50,7 +50,7 @@ export default function TokenMinter() {
       const { hash, transactionReceipt } = await tokenMinter(
         value.name,
         value.symbol,
-        value.decimals ? value.decimals : '18',
+        value.decimals ? value.decimals.toString() : '18',
         value.initial_supply
       )
       const ret = new Promise((resolve, rpt) => {
@@ -97,6 +97,9 @@ export default function TokenMinter() {
             }
             if (!values.initial_supply) {
               errors.initial_supply = 'Token supply must have at least 1 token'
+            }
+            if (values.decimals < 1) {
+              errors.decimals = 'Decimals can not less than 1'
             }
             return errors
           }}
@@ -260,7 +263,9 @@ export default function TokenMinter() {
                     <FormItem name={'Mint Button'}>
                       <SolidBtn
                         type={'submit'}
-                        className={errors.name || errors.symbol || errors.initial_supply ? '' : 'active'}
+                        className={
+                          errors.name || errors.symbol || errors.initial_supply || errors.decimals ? '' : 'active'
+                        }
                         style={{
                           width: '100%'
                         }}
