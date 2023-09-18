@@ -126,7 +126,9 @@ const TokenList = () => {
             Token list
           </Typography>
           <Box display={'flex'} gap={'12px'}>
-            <BtnCom variant={'contained'}>View My Lock</BtnCom>
+            <BtnCom variant={'contained'} href={routes.tokenToolBox.myLock}>
+              View My Lock
+            </BtnCom>
             <BtnCom variant={'contained'} href={routes.tokenToolBox.tokenMinterList}>
               View My token
             </BtnCom>

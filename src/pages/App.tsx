@@ -94,6 +94,7 @@ import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
 import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
 
 import MyToken from './tokenToolBox/page/tokenMinter/myToken'
+import MyLock from './tokenToolBox/page/tokenlocker/myLock'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -216,6 +217,7 @@ export default function App() {
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
+                  <Route path={routes.tokenToolBox.myLock} element={<MyLock />} />
                   <Route path={routes.tokenToolBox.tokenLockerInfo} element={<LockerInfo />} />
                   <Route path={routes.tokenToolBox.TokenLPLockerInfo} element={<LockerLpInfo />} />
                   <Route path={routes.tokenToolBox.disperse} element={<Disperse />} />
