@@ -590,11 +590,14 @@ const TokenLockerForm = () => {
   const [tokenAddress, setTokenAddress] = useState<string>('')
   const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const [releaseType, setReleaseType] = useState<IReleaseType>(IReleaseType.Cliff)
-  const ChainSelectOption = ChainList.filter(item => {
-    return TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
-  })
+  const ChainSelectOption = useMemo(() => {
+    return ChainList.filter(item => {
+      return Number(releaseType) === IReleaseType.Linear
+        ? TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
+        : TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[item.id] !== ''
+    })
+  }, [releaseType])
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, releaseType)
-  console.log('chainId>>', chainId)
   const isCurrentChainEqualChainOfPool = useMemo(() => {
     return chainId === CurrenChainId
   }, [chainId, CurrenChainId])
