@@ -3,18 +3,19 @@ import { useRequest } from 'ahooks'
 import { getTokenInfo } from '../../api/toolbox'
 import { TokenInfo, TokenInfoList } from '../../api/toolbox/type'
 
-export const useTokenInfo = (chain?: number, token?: string) => {
+export const useTokenInfo = (chain?: number, token?: string, hash?: string) => {
   const { account } = useActiveWeb3React()
 
   const { data, loading } = useRequest(
     async (): Promise<TokenInfo | undefined> => {
       return await getTokenInfo({
         address: account || '',
-        chainId: chain
+        chainId: chain,
+        hash: hash
       }).then(resp => resp.data.list.find(i => i.hash == token))
     },
     {
-      refreshDeps: [account, token, chain],
+      refreshDeps: [account, token, chain, hash],
       retryInterval: 10000,
       retryCount: 20
     }
