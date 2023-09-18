@@ -94,9 +94,20 @@ export default function Disperse() {
             })
             .catch()
         }
-      } catch (e) {
-        console.log('disperse', e)
+      } catch (err: any) {
+        console.log('disperse', err)
         hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content:
+            err === 'string'
+              ? err
+              : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+          onAgain: toDisperseEther
+        })
       }
     },
     [disperseEther, myChainBalance]
@@ -132,9 +143,19 @@ export default function Disperse() {
             })
             .catch()
         }
-      } catch (e) {
-        console.log('disperse-useCallback', e)
+      } catch (err: any) {
         hideDialogConfirmation()
+        show(DialogTips, {
+          iconType: 'error',
+          againBtn: 'Try Again',
+          cancelBtn: 'Cancel',
+          title: 'Oops..',
+          content:
+            err === 'string'
+              ? err
+              : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+          onAgain: toDisperseToken
+        })
       }
     },
     [disperseToken, myChainBalance]
@@ -157,7 +178,22 @@ export default function Disperse() {
         .then(() => {
           hideDialogConfirmation()
         })
-        .catch()
+        .catch(error => {
+          const err: any = error
+          console.error(err)
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'error',
+            againBtn: 'Try Again',
+            cancelBtn: 'Cancel',
+            title: 'Oops..',
+            content:
+              typeof err === 'string'
+                ? err
+                : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+            onAgain: toApprove
+          })
+        })
     } catch (error) {
       const err: any = error
       console.error(err)
