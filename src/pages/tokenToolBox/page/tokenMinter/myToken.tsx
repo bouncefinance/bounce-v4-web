@@ -14,21 +14,28 @@ import {
 import { ContainerBox, Title } from '../tokenlocker/tokenLocker'
 import BackButton from '../../../../bounceComponents/common/BackButton'
 import { Stack } from '@mui/system'
-import { useTokenList } from '../../../../bounceHooks/toolbox/useTokenInfo'
+import { useMyTokenList } from '../../../../bounceHooks/toolbox/useTokenInfo'
 import { TokenInfo } from '../../../../api/toolbox/type'
 import { routes } from '../../../../constants/routes'
 import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { Currency, CurrencyAmount } from '../../../../constants/token'
 import { ChainId } from '../../../../constants/chain'
 import { useActiveWeb3React } from '../../../../hooks'
+import { useShowLoginModal } from '../../../../state/users/hooks'
+import { useEffect } from 'react'
 
 export default function MyToken() {
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
-  const { data } = useTokenList(account)
+  const { data } = useMyTokenList(account)
+  const showLoginModal = useShowLoginModal()
+  useEffect(() => {
+    !account && showLoginModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
 
   function getChainName(chain_id: number) {
-    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id)
   }
 
   return (

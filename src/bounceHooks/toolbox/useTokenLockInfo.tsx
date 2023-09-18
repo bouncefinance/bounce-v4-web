@@ -25,10 +25,12 @@ export const useTokenLockInfo = (chain: number, hash?: string) => {
 export const useMyLocks = () => {
   const { account } = useActiveWeb3React()
   const { data, loading } = useRequest(
-    async (): Promise<LockInfoList> => {
-      return await getTokenLocksInfo({
-        address: account || ''
-      }).then(resp => resp.data)
+    async (): Promise<LockInfoList | undefined> => {
+      return account
+        ? await getTokenLocksInfo({
+            address: account || ''
+          }).then(resp => resp.data)
+        : undefined
     },
     {
       refreshDeps: [account],
@@ -36,6 +38,5 @@ export const useMyLocks = () => {
       retryCount: 20
     }
   )
-  console.log('mylockuseMyLocks', data)
   return { data, loading }
 }

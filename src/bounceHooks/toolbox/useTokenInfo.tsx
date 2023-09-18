@@ -36,3 +36,21 @@ export const useTokenList = (account?: string) => {
   )
   return { data, loading }
 }
+
+export const useMyTokenList = (account?: string) => {
+  const { data, loading } = useRequest(
+    async (): Promise<TokenInfoList | undefined> => {
+      return account
+        ? await getTokenInfo({
+            address: account || ''
+          }).then(resp => resp.data)
+        : undefined
+    },
+    {
+      refreshDeps: [account],
+      retryInterval: 10000,
+      retryCount: 20
+    }
+  )
+  return { data, loading }
+}
