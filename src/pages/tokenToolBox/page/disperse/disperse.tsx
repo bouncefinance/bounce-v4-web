@@ -29,9 +29,10 @@ import JSBI from 'jsbi'
 import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
 import { useNavigate } from 'react-router-dom'
 import { routes } from '../../../../constants/routes'
+import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
 
 interface IDisperse {
-  chainId: ChainId
+  chainId: number
   type: string
   recipients: string
   tokenAddress: string
@@ -39,6 +40,8 @@ interface IDisperse {
 
 export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
+  console.log('chainId', chainId)
+  const switchChain = useSwitchNetwork()
   const nav = useNavigate()
   // const [currentChain, setCurrentChain] = useState(chainId)
   const params = new URLSearchParams(location.search)
@@ -226,7 +229,7 @@ export default function Disperse() {
     }
   }
   const disperse: IDisperse = {
-    chainId: chainId || ChainId.GÖRLI,
+    chainId: Number(chainId as ChainId),
     type: disperseType || 'chain',
     recipients: '',
     tokenAddress: tokenAddrIn || ''
@@ -331,9 +334,12 @@ export default function Disperse() {
                             value={values.chainId}
                             onChange={({ target }) => {
                               setFieldValue('chainId', target.value)
+                              switchChain(target.value as unknown as ChainId)
                             }}
                             placeholder={'Select chain'}
                             renderValue={selected => {
+                              console.log('chainId-selected', selected)
+                              console.log('chainId-selected-value', values.chainId)
                               const currentChain = ChainList.find(item => item.id === selected)
                               return (
                                 <Box
