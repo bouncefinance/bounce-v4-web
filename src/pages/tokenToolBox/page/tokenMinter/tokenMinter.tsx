@@ -10,12 +10,13 @@ import { BoxSpaceBetween, SolidBtn } from '../disperse/disperse'
 import { H3Black, SmallTextGray } from 'components/Text'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from '../../../../utils/auction'
 import { useTokenMinter } from '../../../../hooks/useTokenMinter'
-import { useState } from 'react'
 import { isAddress } from '@ethersproject/address'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { useNavigate } from 'react-router-dom'
 import { useShowLoginModal } from '../../../../state/users/hooks'
+import { MINTER_CONTRACT_ADDRESSES } from '../../../../constants'
+import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
 
 interface IMinter {
   chainId: number
@@ -27,10 +28,13 @@ interface IMinter {
 
 export default function TokenMinter() {
   const { chainId, account } = useActiveWeb3React()
-  const [currentChain, setCurrentChain] = useState(chainId || ChainId.SEPOLIA)
+  const switchChain = useSwitchNetwork()
   const nav = useNavigate()
-  const tokenMinter = useTokenMinter(currentChain as ChainId)
+  const tokenMinter = useTokenMinter(chainId as ChainId)
   const showLoginModal = useShowLoginModal()
+  const ChainSelectOption = ChainList.filter(item => {
+    return MINTER_CONTRACT_ADDRESSES[item.id] !== ''
+  })
   const minter: IMinter = {
     chainId: chainId || ChainId.SEPOLIA,
     name: '',
@@ -67,7 +71,7 @@ export default function TokenMinter() {
             title: 'Congratulations!',
             content: 'You have successfully mint a new token',
             onAgain: () => {
-              nav(`/TokenToolBox/tokenMinterInfo/${currentChain}/${hash}`)
+              nav(`/TokenToolBox/tokenMinterInfo/${chainId}/${hash}`)
             }
           })
         })
@@ -116,7 +120,7 @@ export default function TokenMinter() {
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
-                        setCurrentChain(target.value as ChainId)
+                        switchChain(target.value as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}
                       renderValue={selected => {
@@ -154,7 +158,7 @@ export default function TokenMinter() {
                         )
                       }}
                     >
-                      {ChainList.filter(item => item.id === ChainId.SEPOLIA).map(t => (
+                      {ChainSelectOption.map(t => (
                         <MenuItem
                           key={t.id}
                           value={t.id}

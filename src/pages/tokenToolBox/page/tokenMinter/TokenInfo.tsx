@@ -51,7 +51,7 @@ export default function TokenInfo() {
                 </BottomLineBox>
                 <BottomLineBox>
                   <Body01 sx={{ color: '#959595' }}>Chain</Body01>
-                  <Body01>Ethereum</Body01>
+                  <Body01>{chainConfigInBackend?.chainName}</Body01>
                 </BottomLineBox>
                 {/*<FullSpaceBetweenBox>*/}
                 {/*  <Body01 sx={{ color: '#959595' }}>Token image</Body01>*/}

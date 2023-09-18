@@ -31,7 +31,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from '../../../../constants/routes'
 
 interface IDisperse {
-  chainId: number
+  chainId: ChainId
   type: string
   recipients: string
   tokenAddress: string
@@ -56,6 +56,9 @@ export default function Disperse() {
     DISPERSE_CONTRACT_ADDRESSES[chainId || ChainId.SEPOLIA],
     true
   )
+  const ChainSelectOption = ChainList.filter(item => {
+    return DISPERSE_CONTRACT_ADDRESSES[item.id] !== ''
+  })
   const toDisperseEther = useCallback(
     async (recipients: string[], values: string[]) => {
       showRequestConfirmDialog()
@@ -223,7 +226,7 @@ export default function Disperse() {
     }
   }
   const disperse: IDisperse = {
-    chainId: chainId || ChainId.SEPOLIA,
+    chainId: chainId || ChainId.GÖRLI,
     type: disperseType || 'chain',
     recipients: '',
     tokenAddress: tokenAddrIn || ''
@@ -269,7 +272,6 @@ export default function Disperse() {
               .map(v => Number(v[1]))
               .reduce((sum, current) => sum + current, 0)
               .toFixed(10)
-            console.log('amount', amount)
             const currencyAmount = CurrencyAmount.fromAmount(currentBalance?.currency, amount)
             const validAmount =
               currentBalance && currencyAmount && JSBI.lessThan(currencyAmount.raw, currentBalance.raw)
@@ -366,7 +368,7 @@ export default function Disperse() {
                               )
                             }}
                           >
-                            {ChainList.filter(item => item.id == ChainId.SEPOLIA).map(t => (
+                            {ChainSelectOption.map(t => (
                               <MenuItem
                                 key={t.id}
                                 value={t.id}
@@ -488,12 +490,13 @@ export default function Disperse() {
                                 <Box display={'flex'}>
                                   {validAmount ? (
                                     <Body01>{currentBalance.subtract(currencyAmount).toSignificant()}</Body01>
-                                  ) : (
+                                  ) : currencyAmount ? (
                                     <Body01 sx={{ color: '#FD3333' }}>{`-${currencyAmount
                                       ?.subtract(currentBalance)
                                       .toSignificant()}`}</Body01>
+                                  ) : (
+                                    ''
                                   )}
-
                                   <Body01 ml={8}>{currentBalance?.currency?.symbol}</Body01>
                                 </Box>
                               </BoxSpaceBetween>
