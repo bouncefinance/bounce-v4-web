@@ -17,16 +17,24 @@ import { Stack } from '@mui/system'
 import { LockInfo } from '../../../../api/toolbox/type'
 import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { useMyLocks } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useShowLoginModal } from '../../../../state/users/hooks'
+import { useEffect } from 'react'
 
 export default function MyLock() {
   const optionDatas = useOptionDatas()
   const { data } = useMyLocks()
-  console.log('mylock', data)
 
   function getChainName(chain_id: number) {
     return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
   }
 
+  const { account } = useActiveWeb3React()
+  const showLoginModal = useShowLoginModal()
+  useEffect(() => {
+    !account && showLoginModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
   return (
     <Box>
       <ContainerBox>
@@ -61,7 +69,7 @@ export default function MyLock() {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {data?.list.map((record: LockInfo, idx: number) => (
+                {data?.list?.map((record: LockInfo, idx: number) => (
                   <StyledTableRow key={idx} className={idx % 2 == 0 ? 'odd' : ''}>
                     <StyledTableCell>
                       <Stack direction={'row'} gap={'8px'}>

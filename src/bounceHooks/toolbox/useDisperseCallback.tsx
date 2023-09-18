@@ -34,12 +34,14 @@ export const useDisperseList = (chain?: ChainId, token?: string) => {
   const { account, chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chain || chainId || '')
   return useRequest(
-    async (): Promise<MyDisperseList> => {
-      return await getMyDisperse({
-        address: account || '',
-        chainId: chainConfigInBackend?.id || 0,
-        token: token || ''
-      }).then(resp => resp.data)
+    async (): Promise<MyDisperseList | undefined> => {
+      return account
+        ? await getMyDisperse({
+            address: account || '',
+            chainId: chainConfigInBackend?.id || 0,
+            token: token || ''
+          }).then(resp => resp.data)
+        : undefined
     },
     {
       refreshDeps: [account],

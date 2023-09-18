@@ -20,14 +20,24 @@ import { ChainId } from '../../../../constants/chain'
 import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { Currency, CurrencyAmount } from '../../../../constants/token'
 import { getEtherscanLink } from '../../../../utils'
+import { useShowLoginModal } from '../../../../state/users/hooks'
+import { useEffect } from 'react'
+import { useActiveWeb3React } from '../../../../hooks'
 
 export default function MyDisperse() {
   const optionDatas = useOptionDatas()
   const { loading, data } = useDisperseList()
+  const { account } = useActiveWeb3React()
 
   function getChainName(chain_id: number) {
     return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
   }
+
+  const showLoginModal = useShowLoginModal()
+  useEffect(() => {
+    !account && showLoginModal()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
 
   console.log('MyDisperse-loading', loading)
   return (
