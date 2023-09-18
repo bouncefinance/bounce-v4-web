@@ -87,9 +87,12 @@ export default function Disperse() {
               hideDialogConfirmation()
               show(DialogTips, {
                 iconType: 'success',
-                againBtn: 'Close',
+                againBtn: 'View History',
                 title: 'Congratulations!',
-                content: 'You have successfully disperse Eth'
+                content: 'You have successfully disperse Eth',
+                onAgain: () => {
+                  nav(routes.tokenToolBox.myDisperse)
+                }
               })
             })
             .catch()
@@ -136,9 +139,12 @@ export default function Disperse() {
               hideDialogConfirmation()
               show(DialogTips, {
                 iconType: 'success',
-                againBtn: 'Close',
+                againBtn: 'View History',
                 title: 'Congratulations!',
-                content: 'You have successfully disperse Token'
+                content: 'You have successfully disperse Token',
+                onAgain: () => {
+                  nav(routes.tokenToolBox.myDisperse)
+                }
               })
             })
             .catch()
