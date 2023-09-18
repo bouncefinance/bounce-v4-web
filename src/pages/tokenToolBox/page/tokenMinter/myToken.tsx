@@ -35,7 +35,7 @@ export default function MyToken() {
   }, [account])
 
   function getChainName(chain_id: number) {
-    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id)
   }
 
   return (

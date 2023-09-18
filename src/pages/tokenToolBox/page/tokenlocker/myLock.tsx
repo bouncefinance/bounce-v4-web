@@ -26,7 +26,7 @@ export default function MyLock() {
   const { data } = useMyLocks()
 
   function getChainName(chain_id: number) {
-    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id)
   }
 
   const { account } = useActiveWeb3React()

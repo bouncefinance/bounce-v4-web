@@ -26,11 +26,12 @@ import { useActiveWeb3React } from '../../../../hooks'
 
 export default function MyDisperse() {
   const optionDatas = useOptionDatas()
+  console.log('optionDatas', optionDatas)
   const { loading, data } = useDisperseList()
   const { account } = useActiveWeb3React()
 
   function getChainName(chain_id: number) {
-    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+    return optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id)
   }
 
   const showLoginModal = useShowLoginModal()
