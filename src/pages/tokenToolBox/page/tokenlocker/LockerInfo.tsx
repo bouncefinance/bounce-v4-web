@@ -101,9 +101,9 @@ const WithdrawBtnForNotLinear = ({
 export default function TokenInfo() {
   const { chain, hash } = useParams()
   const { account, chainId } = useActiveWeb3React()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
-  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', Number(chain) as unknown as ChainId)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chainConfigInBackend?.ethChainId)
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
@@ -185,8 +185,8 @@ export default function TokenInfo() {
     }
   }, [withDrawFn])
   const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return Number(chainId) === Number(chain)
-  }, [chainId, chain])
+    return Number(chainId) === chainConfigInBackend?.ethChainId
+  }, [chainId, chainConfigInBackend?.ethChainId])
   if (loading) {
     return (
       <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
@@ -199,7 +199,7 @@ export default function TokenInfo() {
       return <ConnectWalletButton />
     }
     if (!isCurrentChainEqualChainOfPool) {
-      return <SwitchNetworkButton targetChain={Number(chain) || 0} />
+      return <SwitchNetworkButton targetChain={chainConfigInBackend?.ethChainId || 0} />
     }
     return (
       <>

@@ -20,9 +20,14 @@ import { useOptionDatas } from '../../../../state/configOptions/hooks'
 import { useMyLocks } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useShowLoginModal } from '../../../../state/users/hooks'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { IReleaseType } from '../../../../bounceComponents/create-auction-pool/types'
 import { useNavigate } from 'react-router-dom'
+import { useToken } from 'state/wallet/hooks'
+import { ChainId } from 'constants/chain'
+import { useSingleCallResult } from 'state/multicall/hooks'
+import { useTokenContract } from 'hooks/useContract'
+import { CurrencyAmount } from 'constants/token'
 
 export default function MyLock() {
   const defaultPageSize = 10
@@ -112,11 +117,18 @@ export default function MyLock() {
                     <StyledTableCell>
                       {/*<Stack direction={'row'} gap={'8px'}>*/}
                       {/*<Image src={record.logo} width="24px" />*/}
-                      <Typography>{getChainName(record.chain_id)?.shortName}</Typography>
+                      {/* <Typography>{getChainName(record.chain_id)?.shortName}</Typography> */}
+                      <ShowTokenName item={record} chainId={getChainName(record.chain_id)?.ethChainId} />
                       {/*</Stack>*/}
                     </StyledTableCell>
-                    <StyledTableCell>{record.title}</StyledTableCell>
-                    <StyledTableCell>{record.amount}</StyledTableCell>
+                    <StyledTableCell>
+                      <Typography maxWidth={160} noWrap>
+                        {record.title}
+                      </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <ShowTokenAmount item={record} chainId={getChainName(record.chain_id)?.ethChainId} />
+                    </StyledTableCell>
                     <StyledTableCell>{mapType(record.lock_type)}</StyledTableCell>
                     <StyledTableCell>{calTime(record)}</StyledTableCell>
                     <StyledTableCell align={'right'}>
@@ -193,3 +205,17 @@ const StyledTableRow = styled(TableRow)`
     border-radius: 8px;
   }
 `
+
+function ShowTokenName({ item, chainId }: { item: LockInfo; chainId: ChainId | undefined }) {
+  const token = useToken(item.token_id ? '' : item.token, chainId)
+  const ta = useTokenContract(item.token_id ? item.token : undefined)
+  const nameRes = useSingleCallResult(ta, 'symbol', undefined, undefined, chainId).result
+  return <Typography>{token?.symbol || nameRes?.[0] || '--'}</Typography>
+}
+
+function ShowTokenAmount({ item, chainId }: { item: LockInfo; chainId: ChainId | undefined }) {
+  const isNft = useMemo(() => !!item.token_id, [item.token_id])
+  const token = useToken(isNft ? '' : item.token, chainId)
+  const taAmount = useMemo(() => (token ? new CurrencyAmount(token, item.amount) : undefined), [item.amount, token])
+  return <Typography>{isNft ? '1' : taAmount?.toSignificant() || '--'}</Typography>
+}

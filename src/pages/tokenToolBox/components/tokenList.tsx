@@ -209,7 +209,9 @@ const TokenList = () => {
                       </Stack>
                     </StyledTableCell>
                     <StyledTableCell>{getAmount(record)?.toSignificant()}</StyledTableCell>
-                    <StyledTableCell>{Number(getAmount(record).toExact()) * Number(record.price)}</StyledTableCell>
+                    <StyledTableCell>
+                      {Number(getAmount(record).toExact()) * Number(record.price) || '--'}
+                    </StyledTableCell>
                     <StyledTableCell>Token</StyledTableCell>
                     <StyledTableCell align={'right'}>
                       <Stack
