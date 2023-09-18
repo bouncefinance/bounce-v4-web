@@ -76,9 +76,17 @@ export default function TokenMinter() {
           })
         })
         .catch()
-    } catch (e) {
-      console.log('Minter', e)
+    } catch (err: any) {
       hideDialogConfirmation()
+      // show(DialogTips, {
+      //   iconType: 'error',
+      //   cancelBtn: 'Ok',
+      //   title: 'Oops..',
+      //   content:
+      //     err === 'string'
+      //       ? err
+      //       : err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong'
+      // })
     }
   }
   return (

@@ -1,21 +1,16 @@
-import { useActiveWeb3React } from 'hooks'
 import { useRequest } from 'ahooks'
 import { getTokenInfo } from '../../api/toolbox'
 import { TokenInfo, TokenInfoList } from '../../api/toolbox/type'
 
-export const useTokenInfo = (chain?: number, token?: string, hash?: string) => {
-  const { account } = useActiveWeb3React()
-
+export const useTokenInfo = (hash?: string) => {
   const { data, loading } = useRequest(
     async (): Promise<TokenInfo | undefined> => {
       return await getTokenInfo({
-        address: account || '',
-        chainId: chain,
         hash: hash
-      }).then(resp => resp.data.list.find(i => i.hash == token))
+      }).then(resp => resp.data.list.find(i => i.hash == hash))
     },
     {
-      refreshDeps: [account, token, chain, hash],
+      refreshDeps: [hash],
       retryInterval: 10000,
       retryCount: 20
     }

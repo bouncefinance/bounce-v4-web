@@ -1,5 +1,5 @@
 export interface DisperseListParam {
-  address: string
+  address?: string
   chainId?: number
   token?: string
   hash?: string
