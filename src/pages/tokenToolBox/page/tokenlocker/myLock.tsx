@@ -22,11 +22,13 @@ import { useActiveWeb3React } from '../../../../hooks'
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import { useEffect, useState } from 'react'
 import { IReleaseType } from '../../../../bounceComponents/create-auction-pool/types'
+import { useNavigate } from 'react-router-dom'
 
 export default function MyLock() {
   const defaultPageSize = 10
   const [curPage, setCurPage] = useState(1)
   const optionDatas = useOptionDatas()
+  const nav = useNavigate()
   const { data } = useMyLocks(curPage, defaultPageSize)
 
   function getChainName(chain_id: number) {
@@ -54,6 +56,12 @@ export default function MyLock() {
     switch (record.lock_type) {
       case IReleaseType.Linear:
         return new Date((record.lock_start + record.lock_end) * 1000).toLocaleString()
+      case IReleaseType.Fragment:
+        const result = record?.release_data && JSON.parse(record?.release_data)
+        if (Array.isArray(result) && result.length > 0) {
+          return new Date(result[result.length - 1].releaseTime * 1000).toLocaleString()
+        }
+        return ''
       default:
         return new Date(record.lock_end * 1000).toLocaleString()
     }
@@ -102,10 +110,10 @@ export default function MyLock() {
                 {data?.list?.map((record: LockInfo, idx: number) => (
                   <StyledTableRow key={idx} className={idx % 2 == 0 ? 'odd' : ''}>
                     <StyledTableCell>
-                      <Stack direction={'row'} gap={'8px'}>
-                        {/*<Image src={record.logo} width="24px" />*/}
-                        <Typography>{getChainName(record.chain_id)?.shortName}</Typography>
-                      </Stack>
+                      {/*<Stack direction={'row'} gap={'8px'}>*/}
+                      {/*<Image src={record.logo} width="24px" />*/}
+                      <Typography>{getChainName(record.chain_id)?.shortName}</Typography>
+                      {/*</Stack>*/}
                     </StyledTableCell>
                     <StyledTableCell>{record.title}</StyledTableCell>
                     <StyledTableCell>{record.amount}</StyledTableCell>
@@ -127,7 +135,18 @@ export default function MyLock() {
                             borderRadius: '6px'
                           }}
                           variant={'contained'}
-                          onClick={() => {}}
+                          onClick={() => {
+                            switch (record.lock_type) {
+                              case IReleaseType.Cliff:
+                              case IReleaseType.Linear:
+                              case IReleaseType.Fragment:
+                                nav(`/TokenToolBox/TokenLockerInfo/${record.chain_id}/${record.hash}`)
+                                break
+                              default:
+                                nav(`/TokenToolBox/TokenLPLockerInfo/${record.chain_id}/${record.hash}`)
+                                break
+                            }
+                          }}
                         >
                           Detail
                         </Button>
