@@ -7,12 +7,17 @@ export const useTokenInfo = (hash?: string) => {
     async (): Promise<TokenInfo | undefined> => {
       return await getTokenInfo({
         hash: hash
-      }).then(resp => resp.data.list.find(i => i.hash == hash))
+      }).then(resp => {
+        if (!resp.data.list.length) {
+          throw new Error('fetch error')
+        }
+        return resp.data.list.find(i => i.hash == hash)
+      })
     },
     {
       refreshDeps: [hash],
       retryInterval: 10000,
-      retryCount: 20
+      retryCount: 30
     }
   )
   return { data, loading }
