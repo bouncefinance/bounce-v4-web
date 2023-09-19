@@ -39,12 +39,8 @@ export const useErc20TokenDetail = (
   }, [queryChainId, releaseType])
   const currentAllowance = useTokenAllowance(res ?? undefined, account ?? undefined, contractAddress)
   const max = useMemo(() => {
-    return balance && currentAllowance
-      ? balance?.greaterThan(currentAllowance)
-        ? currentAllowance.toExact()
-        : balance?.toExact()
-      : '0'
-  }, [balance, currentAllowance])
+    return balance ? balance?.toExact() : '0'
+  }, [balance])
   return useMemo(() => {
     return { tokenCurrency: res || undefined, balance: balance, allowance: currentAllowance, max }
   }, [balance, currentAllowance, max, res])

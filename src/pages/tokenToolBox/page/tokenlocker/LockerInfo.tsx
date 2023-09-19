@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom'
 import { useTokenLockInfo } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 import { useToken } from 'state/wallet/hooks'
-import { ChainId } from 'constants/chain'
 import { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
@@ -36,7 +35,11 @@ const WithdrawBtnForLinear = ({
   countdown: number
 }) => {
   const { chain } = useParams()
-  const releasableNum = useReleasableVestingERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain))
+  const releasableNum = useReleasableVestingERC20(
+    data?.deploy_contract || '',
+    chainConfigInBackend?.ethChainId || undefined
+  )
   console.log('releasableNum>>>', releasableNum)
   const isReleasable = useMemo(() => {
     return Number(releasableNum) !== 0
@@ -71,11 +74,12 @@ const WithdrawBtnForNotLinear = ({
   countdown: number
 }) => {
   const { chain } = useParams()
-  const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
-  console.log('releasableNum>>>', releasableNum)
-  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, Number(chain) as unknown as ChainId)
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain))
+  const releasableNum = useReleasableERC20(data?.deploy_contract || '', chainConfigInBackend?.ethChainId || undefined)
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, chainConfigInBackend?.ethChainId)
+  console.log('tokenInfo releasableNum>>>', tokenInfo, releasableNum)
   const isReleasable = useMemo(() => {
-    return tokenInfo && releasableNum && CurrencyAmount.fromRawAmount(tokenInfo, releasableNum).greaterThan('0')
+    return tokenInfo && Number(releasableNum) !== 0
   }, [releasableNum, tokenInfo])
   if (!data) {
     return <></>

@@ -20,7 +20,7 @@ export const useTokenInfo = (hash?: string) => {
 export const useTokenList = (page: number, pageSize: number, account?: string) => {
   const { data, loading } = useRequest(
     async (): Promise<TokenInfoList | undefined> => {
-      if (!account) return undefined
+      if (!account) Promise.reject(undefined)
       return await getTokenInfo({
         address: account || '',
         offset: (page - 1) * pageSize,

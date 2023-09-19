@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom'
 import { useTokenLockInfo } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 import { useToken } from 'state/wallet/hooks'
-import { ChainId } from 'constants/chain'
 import { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
@@ -26,14 +25,14 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
   const { chain } = useParams()
   const { account, chainId } = useActiveWeb3React()
   const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
-  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, Number(chain) as unknown as ChainId)
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
+  const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, chainConfigInBackend?.ethChainId)
   const releasNum = useMemo(() => {
     return tokenInfo && releasableNum ? CurrencyAmount.fromRawAmount(tokenInfo, releasableNum)?.toExact() : '--'
   }, [releasableNum, tokenInfo])
   const isReleasable = useMemo(() => {
     return Number(releasNum) !== 0
   }, [releasNum])
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
   const showAmount = useMemo(() => {
     return tokenInfo ? CurrencyAmount.fromRawAmount(tokenInfo, data?.amount || '0')?.toExact() : '--'
   }, [data?.amount, tokenInfo])

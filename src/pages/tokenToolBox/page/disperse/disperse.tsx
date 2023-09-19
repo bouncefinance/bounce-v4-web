@@ -27,9 +27,12 @@ import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveC
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import JSBI from 'jsbi'
 import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { routes } from '../../../../constants/routes'
 import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 
 interface IDisperse {
   chainId: number
@@ -47,6 +50,12 @@ export default function Disperse() {
   const params = new URLSearchParams(location.search)
   const disperseType = params.get('disperseType')
   const tokenAddrIn = params.get('tokenAddr')
+  const { chain } = useParams()
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
+  console.log('chainConfigInBackend, >>>', chainConfigInBackend, chain)
+  const isCurrentChainEqualChainOfPool = useMemo(() => {
+    return Number(chainId) === chainConfigInBackend?.ethChainId
+  }, [chainId, chainConfigInBackend?.ethChainId])
   const [tokenAddr, setTokenAddr] = useState(tokenAddrIn || '')
   const myChainBalance = useETHBalance(account, chainId)
   const { balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
@@ -224,12 +233,6 @@ export default function Disperse() {
     text?: string
     run?: () => void
   } = useMemo(() => {
-    if (!account) {
-      return {
-        text: 'Connect wallet',
-        run: showLoginModal
-      }
-    }
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
@@ -253,14 +256,14 @@ export default function Disperse() {
     return {
       text: 'Approved'
     }
-  }, [account, approvalState, toApprove, showLoginModal])
+  }, [approvalState, toApprove])
   const onSubmit = (value: IDisperse) => {
     console.log('disperse', 'onSubmit')
     const recipients: string[] = []
     const amount: string[] = []
     formatInput(value.recipients).forEach(v => {
-      recipients.push(v[0])
-      amount.push(v[1])
+      v[0] && recipients.push(v[0])
+      v[1] && amount.push(v[1])
     })
     if (value.type == 'token') {
       console.log('disperse', 'onSubmit-token')
@@ -284,7 +287,7 @@ export default function Disperse() {
       .filter(v => v.length > 42)
       .filter(v => isAddress(v.substring(0, 42)))
       .filter(v => v.substring(42).match(regexNumber)) // contain number
-      .map(v => [v.substring(0, 42), v.substring(42).match(regexNumber)![0]])
+      .map(v => [v.substring(0, 42), v.substring(42).match(regexNumber)?.[0]])
   }
 
   return (
@@ -554,28 +557,34 @@ export default function Disperse() {
                       </FormItem>
                     }
                   />
-                  <BoxSpaceBetween gap={10}>
-                    {values.type == 'token' && approvalState != ApprovalState.APPROVED && (
-                      <LineBtn type="button" onClick={confirmBtn.run}>
-                        {confirmBtn.text}
-                      </LineBtn>
-                    )}
-                    {values.type == 'chain' && !account && (
-                      <LineBtn type="button" onClick={showLoginModal}>
-                        Connect wallet
-                      </LineBtn>
-                    )}
-                    <SolidBtn
-                      type="submit"
-                      className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
-                    >
-                      {formatInput(values.recipients).length > 0
-                        ? validAmount
-                          ? 'Disperse' + (values.type == 'token' ? ' token' : '')
-                          : 'Insufficient balance'
-                        : 'Please input token address'}
-                    </SolidBtn>
-                  </BoxSpaceBetween>
+                  {!account && <ConnectWalletButton />}
+                  {account && !isCurrentChainEqualChainOfPool && (
+                    <SwitchNetworkButton targetChain={chainConfigInBackend?.ethChainId || 0} />
+                  )}
+                  {account && isCurrentChainEqualChainOfPool && (
+                    <BoxSpaceBetween gap={10}>
+                      {values.type == 'token' && approvalState != ApprovalState.APPROVED && (
+                        <LineBtn type="button" onClick={confirmBtn.run}>
+                          {confirmBtn.text}
+                        </LineBtn>
+                      )}
+                      {values.type == 'chain' && !account && (
+                        <LineBtn type="button" onClick={showLoginModal}>
+                          Connect wallet
+                        </LineBtn>
+                      )}
+                      <SolidBtn
+                        type="submit"
+                        className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
+                      >
+                        {formatInput(values.recipients).length > 0
+                          ? validAmount
+                            ? 'Disperse' + (values.type == 'token' ? ' token' : '')
+                            : 'Insufficient balance'
+                          : 'Please input token address'}
+                      </SolidBtn>
+                    </BoxSpaceBetween>
+                  )}
                 </Box>
               </Box>
             )

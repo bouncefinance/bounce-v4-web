@@ -255,7 +255,9 @@ const TokenList = () => {
                           }}
                           variant={'outlined'}
                           onClick={() => {
-                            nav(`${routes.tokenToolBox.disperse}?disperseType=token&tokenAddr=${record?.token}`)
+                            nav(
+                              `${routes.tokenToolBox.disperse}?chain=${record?.chain_id}&disperseType=token&tokenAddr=${record?.token}`
+                            )
                           }}
                         >
                           Disperse

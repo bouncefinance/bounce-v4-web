@@ -767,7 +767,7 @@ const TokenLockerForm = () => {
               title: 'Congratulations!',
               content: 'You have successfully lock token',
               onAgain: () => {
-                nav(`/TokenToolBox/TokenLockerInfo/${chainId}/${hash}`)
+                nav(`/TokenToolBox/TokenLockerInfo/${chainConfigInBackend?.id}/${hash}`)
               }
             })
           })

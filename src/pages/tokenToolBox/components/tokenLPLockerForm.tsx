@@ -362,7 +362,6 @@ const V3BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account } = useActiveWeb3React()
   const isNeedToApprove = useMemo(() => {
     return formValues.tokenAddress && !erc721TokenDeatail?.isApprovedAll
   }, [erc721TokenDeatail?.isApprovedAll, formValues.tokenAddress])
@@ -431,7 +430,7 @@ const V3BidBlock = ({
     return {
       run: toApprove
     }
-  }, [account, approvalState, toApprove])
+  }, [approvalState, toApprove])
 
   return (
     <FormLayout
