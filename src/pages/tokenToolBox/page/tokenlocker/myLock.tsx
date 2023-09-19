@@ -207,7 +207,7 @@ const StyledTableRow = styled(TableRow)`
 `
 
 function ShowTokenName({ item, chainId }: { item: LockInfo; chainId: ChainId | undefined }) {
-  const token = useToken(item.token_id ? '' : item.token, chainId)
+  const token = useToken(item.token_id ? '' : item.token || item.token0, chainId)
   const ta = useTokenContract(item.token_id ? item.token : undefined)
   const nameRes = useSingleCallResult(ta, 'symbol', undefined, undefined, chainId).result
   return <Typography>{token?.symbol || nameRes?.[0] || '--'}</Typography>
@@ -215,7 +215,7 @@ function ShowTokenName({ item, chainId }: { item: LockInfo; chainId: ChainId | u
 
 function ShowTokenAmount({ item, chainId }: { item: LockInfo; chainId: ChainId | undefined }) {
   const isNft = useMemo(() => !!item.token_id, [item.token_id])
-  const token = useToken(isNft ? '' : item.token, chainId)
+  const token = useToken(isNft ? '' : item.token || item.token0, chainId)
   const taAmount = useMemo(() => (token ? new CurrencyAmount(token, item.amount) : undefined), [item.amount, token])
   return <Typography>{isNft ? '1' : taAmount?.toSignificant() || '--'}</Typography>
 }
