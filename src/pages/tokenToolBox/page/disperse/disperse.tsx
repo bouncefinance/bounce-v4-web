@@ -517,15 +517,23 @@ export default function Disperse() {
                                       }}
                                     >
                                       <Body01>{v[0]}</Body01>
-                                      <div
+                                      {/* <div
                                         style={{
                                           margin: '0 12px',
                                           background: '#121212',
                                           height: '1px',
                                           width: '100%'
                                         }}
-                                      ></div>
-                                      <Body01 sx={{ whiteSpace: 'nowrap' }}>
+                                      ></div> */}
+                                      <Body01
+                                        sx={{
+                                          whiteSpace: 'nowrap',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          maxWidth: 250,
+                                          paddingLeft: 20
+                                        }}
+                                      >
                                         {v[1]} {currentBalance?.currency.symbol}
                                       </Body01>
                                     </BoxSpaceBetween>
@@ -577,6 +585,7 @@ export default function Disperse() {
                       )}
                       <SolidBtn
                         type="submit"
+                        disabled={values.type == 'token' && approvalState !== ApprovalState.APPROVED}
                         className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
                       >
                         {formatInput(values.recipients).length > 0
