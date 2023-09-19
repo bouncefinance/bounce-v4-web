@@ -2,7 +2,7 @@ import { Box, MenuItem, Stack, Typography } from '@mui/material'
 import { ContainerBox, Title } from '../tokenlocker/tokenLocker'
 import { Formik } from 'formik'
 import { useActiveWeb3React } from '../../../../hooks'
-import { ChainId, ChainList, NETWORK_CHAIN_ID } from '../../../../constants/chain'
+import { ChainId, ChainList } from '../../../../constants/chain'
 import { FormLayout, ToolBoxInput, ToolBoxSelect } from '../../components/tokenLockerForm'
 import FormItem from '../../../../bounceComponents/common/FormItem'
 import Image from '../../../../components/Image'
@@ -41,13 +41,13 @@ export default function TokenMinter() {
   })
   const minter: IMinter = useMemo(() => {
     return {
-      chainId: NETWORK_CHAIN_ID,
+      chainId: Number(chainId) as ChainId,
       name: '',
       symbol: '',
       decimals: '18',
       initial_supply: ''
     }
-  }, [])
+  }, [chainId])
 
   const onSubmit = async (value: IMinter) => {
     showRequestConfirmDialog()
@@ -99,6 +99,7 @@ export default function TokenMinter() {
     <Box>
       <ContainerBox>
         <Formik
+          enableReinitialize
           initialValues={minter}
           onSubmit={onSubmit}
           validate={values => {
@@ -133,7 +134,7 @@ export default function TokenMinter() {
                 <H3Black>Token Minter</H3Black>
                 <FormLayout
                   childForm={
-                    <FormItem>
+                    <FormItem name={'chainId'}>
                       <ToolBoxSelect
                         variant="outlined"
                         value={values.chainId}

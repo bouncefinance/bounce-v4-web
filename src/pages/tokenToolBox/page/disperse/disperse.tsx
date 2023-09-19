@@ -578,11 +578,17 @@ export default function Disperse() {
                       )}
                       <SolidBtn
                         type="submit"
-                        disabled={values.type === 'chain' && !isCurrentChainEqualChainOfPool}
+                        disabled={
+                          (values.type === 'chain' && !isCurrentChainEqualChainOfPool) ||
+                          approvalState !== ApprovalState.APPROVED
+                        }
                         className={
                           formatInput(values.recipients).length > 0 &&
                           validAmount &&
-                          !(values.type === 'chain' && !isCurrentChainEqualChainOfPool)
+                          !(
+                            (values.type === 'chain' && !isCurrentChainEqualChainOfPool) ||
+                            approvalState !== ApprovalState.APPROVED
+                          )
                             ? 'active'
                             : ''
                         }
