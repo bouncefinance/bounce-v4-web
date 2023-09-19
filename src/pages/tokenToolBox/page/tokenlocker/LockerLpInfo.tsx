@@ -174,7 +174,7 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
       return <ConnectWalletButton />
     }
     if (!isCurrentChainEqualChainOfPool) {
-      return <SwitchNetworkButton targetChain={chainConfigInBackend?.id || 0} />
+      return <SwitchNetworkButton targetChain={chainConfigInBackend?.ethChainId || 0} />
     }
     return (
       <SolidBtn
