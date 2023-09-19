@@ -650,6 +650,7 @@ export const SolidBtn = styled(`button`)`
   justify-content: center;
   align-items: center;
   flex: 1;
+  cursor: pointer;
   border-radius: 8px;
   background: var(--gray-04, #d7d6d9);
   border: transparent;
