@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useTokenLockInfo } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 import { useToken } from 'state/wallet/hooks'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useEffect } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 import { useCountDown } from 'ahooks'
@@ -268,7 +268,15 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
 export default function TokenInfo() {
   const { chain, hash } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
-  const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
+  const { data, loading, run } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
+  useEffect(() => {
+    if (!loading && (!data || (Array.isArray(data) && data.length === 0))) {
+      setTimeout(() => {
+        run()
+      }, 3000)
+    }
+    return () => {}
+  }, [data, loading, run])
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const withDrawFn721 = useWithDrawBy721TokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const toWithDraw = useCallback(async () => {

@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useTokenLockInfo } from '../../../../bounceHooks/toolbox/useTokenLockInfo'
 import useChainConfigInBackend from '../../../../bounceHooks/web3/useChainConfigInBackend'
 import { useToken } from 'state/wallet/hooks'
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useEffect } from 'react'
 import moment from 'moment'
 import { CurrencyAmount } from 'constants/token'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
@@ -105,7 +105,15 @@ export default function TokenInfo() {
   const { chain, hash } = useParams()
   const { account, chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
-  const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id, hash)
+  const { data, loading, run } = useTokenLockInfo(chainConfigInBackend?.id, hash)
+  useEffect(() => {
+    if (!loading && (!data || (Array.isArray(data) && data.length === 0))) {
+      setTimeout(() => {
+        run()
+      }, 3000)
+    }
+    return () => {}
+  }, [data, loading, run])
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chainConfigInBackend?.ethChainId)
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const showAmount = useMemo(() => {

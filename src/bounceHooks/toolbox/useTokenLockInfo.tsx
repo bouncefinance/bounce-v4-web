@@ -5,7 +5,7 @@ import { LockInfo, LockInfoList } from '../../api/toolbox/type'
 
 export const useTokenLockInfo = (chain: number | undefined, hash?: string) => {
   const { account } = useActiveWeb3React()
-  const { data, loading } = useRequest(
+  const { data, loading, run } = useRequest(
     async (): Promise<LockInfo | undefined> => {
       if ((chain === 0 && !chain) || !hash) {
         return Promise.reject(undefined)
@@ -22,12 +22,12 @@ export const useTokenLockInfo = (chain: number | undefined, hash?: string) => {
       retryCount: 20
     }
   )
-  return { data, loading }
+  return { data, loading, run }
 }
 
 export const useMyLocks = (page: number, pageSize: number) => {
   const { account } = useActiveWeb3React()
-  const { data, loading } = useRequest(
+  const { data, loading, run } = useRequest(
     async (): Promise<LockInfoList | undefined> => {
       return account
         ? await getTokenLocksInfo({
@@ -43,5 +43,5 @@ export const useMyLocks = (page: number, pageSize: number) => {
       retryCount: 20
     }
   )
-  return { data, loading }
+  return { data, loading, run }
 }
