@@ -1,8 +1,6 @@
 import { Box, Stack, styled, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useActiveWeb3React } from 'hooks'
 import { Body02 } from 'components/Text'
-import { useShowLoginModal } from 'state/users/hooks'
 import TokenLockerForm from '../../components/tokenLockerForm'
 import TOkenLPLockerForm from '../../components/tokenLPLockerForm'
 import { useLocation } from 'react-router-dom'
@@ -51,12 +49,6 @@ const Tab = styled(Box)`
 const TokenLocker = () => {
   const Tabs = [Tabstype.Token, Tabstype['LP Token']]
   const [currentTab, setCurrentTab] = useState(Tabstype.Token)
-  const showLoginModal = useShowLoginModal()
-  const { account } = useActiveWeb3React()
-  useEffect(() => {
-    !account && showLoginModal()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
   const location = useLocation()
   useEffect(() => {
     const queryParams = queryString.parse(location.search)

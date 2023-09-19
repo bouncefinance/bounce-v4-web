@@ -50,12 +50,13 @@ export default function Disperse() {
   const params = new URLSearchParams(location.search)
   const disperseType = params.get('disperseType')
   const tokenAddrIn = params.get('tokenAddr')
-  const { chain } = useParams()
-  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
-  console.log('chainConfigInBackend, >>>', chainConfigInBackend, chain)
+  const { chain: urlChainParam } = useParams()
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(urlChainParam) || '')
+  console.log('chainConfigInBackend, >>>', chainConfigInBackend, urlChainParam)
+  const [currentChain, setCurrentChain] = useState(urlChainParam ? Number(urlChainParam) : '')
   const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return Number(chainId) === chainConfigInBackend?.ethChainId
-  }, [chainId, chainConfigInBackend?.ethChainId])
+    return Number(currentChain) === Number(chainId)
+  }, [currentChain, chainId])
   const [tokenAddr, setTokenAddr] = useState(tokenAddrIn || '')
   const myChainBalance = useETHBalance(account, chainId)
   const { balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
@@ -327,6 +328,7 @@ export default function Disperse() {
               errors.recipients = 'Amount of disperse is bigger than your balance'
             }
             setNeedApprove(currencyAmount?.raw.toString() || '0')
+            setCurrentChain(values?.chainId)
             return (
               <Box
                 component={'form'}
@@ -559,7 +561,7 @@ export default function Disperse() {
                   />
                   {!account && <ConnectWalletButton />}
                   {account && !isCurrentChainEqualChainOfPool && (
-                    <SwitchNetworkButton targetChain={chainConfigInBackend?.ethChainId || 0} />
+                    <SwitchNetworkButton targetChain={Number(currentChain) || 0} />
                   )}
                   {account && isCurrentChainEqualChainOfPool && (
                     <BoxSpaceBetween gap={10}>
