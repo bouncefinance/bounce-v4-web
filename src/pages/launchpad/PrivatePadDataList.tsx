@@ -786,7 +786,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'AI powered Web 3 Infrastructure.',
+    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
     social: [
       <Link key={0} href="https://www.createprotocol.org/" target="_blank">
         <Web />

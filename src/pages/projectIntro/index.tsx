@@ -562,7 +562,8 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        minHeight: isMD ? 'unset' : '600px',
+        // minHeight: isMD ? 'unset' : '600px',
+        minHeight: 600,
         marginTop: '-76px'
       }}
     >
@@ -590,6 +591,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           bottom: 0,
           borderRadius: '0 0 20px 20px',
           backgroundSize: 'cover',
+          backgroundPosition: 'center',
           objectFit: 'scale-down',
           left: isDark && isSm ? '' : { xs: 20, sm: '40px' }
         }}
@@ -898,6 +900,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
               gap={24}
               mt={51}
               alignItems={'flex-start'}
+              justifyContent={'center'}
               sx={{
                 width: '100%',
                 '@media(max-width:600px)': isDark
