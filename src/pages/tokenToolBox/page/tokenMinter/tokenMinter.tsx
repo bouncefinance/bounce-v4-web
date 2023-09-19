@@ -18,6 +18,7 @@ import { useShowLoginModal } from '../../../../state/users/hooks'
 import { MINTER_CONTRACT_ADDRESSES } from '../../../../constants'
 import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
 import BigNumber from 'bignumber.js'
+import { useMemo } from 'react'
 
 interface IMinter {
   chainId: number
@@ -36,13 +37,15 @@ export default function TokenMinter() {
   const ChainSelectOption = ChainList.filter(item => {
     return MINTER_CONTRACT_ADDRESSES[item.id] !== ''
   })
-  const minter: IMinter = {
-    chainId: chainId || ChainId.SEPOLIA,
-    name: '',
-    symbol: '',
-    decimals: 18,
-    initial_supply: ''
-  }
+  const minter: IMinter = useMemo(() => {
+    return {
+      chainId: Number(chainId) as ChainId,
+      name: '',
+      symbol: '',
+      decimals: 18,
+      initial_supply: ''
+    }
+  }, [chainId])
 
   const onSubmit = async (value: IMinter) => {
     showRequestConfirmDialog()
