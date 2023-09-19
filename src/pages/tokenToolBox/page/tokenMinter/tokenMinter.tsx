@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import { MINTER_CONTRACT_ADDRESSES } from '../../../../constants'
 import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
+import BigNumber from 'bignumber.js'
 
 interface IMinter {
   chainId: number
@@ -246,7 +247,11 @@ export default function TokenMinter() {
                     <SmallTextGray mt={8}>18 recommended</SmallTextGray>
                     <BoxSpaceBetween>
                       <SmallTextGray mt={8}>Total supply (including decimals - raw amount)</SmallTextGray>
-                      <SmallTextGray mt={8}>10000000000000000000000</SmallTextGray>
+                      <SmallTextGray mt={8}>
+                        {values.initial_supply
+                          ? new BigNumber(values.initial_supply).shiftedBy(values.decimals).toString()
+                          : '--'}
+                      </SmallTextGray>
                     </BoxSpaceBetween>
                   </Box>
                 }
