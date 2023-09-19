@@ -19,6 +19,7 @@ import { MINTER_CONTRACT_ADDRESSES } from '../../../../constants'
 import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 
 interface IMinter {
   chainId: number
@@ -30,6 +31,7 @@ interface IMinter {
 
 export default function TokenMinter() {
   const { chainId, account } = useActiveWeb3React()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const switchChain = useSwitchNetwork()
   const nav = useNavigate()
   const tokenMinter = useTokenMinter(chainId as ChainId)
@@ -75,7 +77,7 @@ export default function TokenMinter() {
             title: 'Congratulations!',
             content: 'You have successfully mint a new token',
             onAgain: () => {
-              nav(`/TokenToolBox/tokenMinterInfo/${chainId}/${hash}`)
+              nav(`/TokenToolBox/tokenMinterInfo/${chainConfigInBackend?.id}/${hash}`)
             }
           })
         })
@@ -129,17 +131,17 @@ export default function TokenMinter() {
               <H3Black>Token Minter</H3Black>
               <FormLayout
                 childForm={
-                  <FormItem>
+                  <FormItem name={'chainId'}>
                     <ToolBoxSelect
                       variant="outlined"
                       value={values.chainId}
                       onChange={({ target }) => {
                         setFieldValue('chainId', target.value)
-                        switchChain(target.value as unknown as ChainId)
+                        switchChain(Number(target.value) as unknown as ChainId)
                       }}
                       placeholder={'Select chain'}
                       renderValue={selected => {
-                        const currentChain = ChainList.find(item => item.id === selected)
+                        const currentChain = ChainList.find(item => Number(item.id) === Number(selected))
                         return (
                           <Box
                             sx={{
