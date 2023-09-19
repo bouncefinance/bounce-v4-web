@@ -756,8 +756,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                 Cogitent Ventures (USA) - <strong>Co Lead</strong>
               </p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <li>Snowy August Family Office - (Miami)</li>
-                <li>Stanford AI and Web3 club angels (USA)</li>
+                <li>Snowy August Family Office - ( Miami )</li>
+                <li>Stanford AI and Web3 club angels ( USA )</li>
                 <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
                 <li>
                   Hue Nguyen : Ex- SEC USA + Official Advisor (USA)
@@ -774,11 +774,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               </ul>
             </li>
             <li>
-              <p>and many more.</p>
+              <div>and many more.</div>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <li>KOL- Waqar Zaka Few Degen KOLs</li>
-                <li>Media Partners -Edge of NFT</li>
-                <li>Big Brands- Binance Polygon</li>
+                <li>KOL - Waqar Zaka Few Degen KOLs</li>
+                <li>Media Partners - Edge of NFT</li>
+                <li>Big Brands - Binance Polygon</li>
               </ul>
             </li>
           </ul>
