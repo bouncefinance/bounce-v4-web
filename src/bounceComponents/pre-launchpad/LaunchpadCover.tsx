@@ -128,7 +128,7 @@ const LaunchpadCover = ({
       >
         <Image
           className="left_banner"
-          style={{ width: '100%', height: isMd ? 200 : '100%' }}
+          style={{ width: '100%', height: isMd ? 200 : '100%', verticalAlign: 'middle' }}
           src={poolInfo.picture2 || 'http://localhost:3000/static/media/deelance.883555954fb281ea1f93.png'}
         />
         <Row sx={{ position: 'absolute', top: 0, left: 0, gap: 8, padding: 15 }}>

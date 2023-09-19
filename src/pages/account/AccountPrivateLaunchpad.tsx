@@ -19,10 +19,11 @@ import { useOptionDatas } from 'state/configOptions/hooks'
 import { IBasicInfoParams, IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
 import Twitter from 'assets/imgs/auction/round-icon-twitter.svg'
 import Telegram from 'assets/imgs/common/Telegram.png'
-import Facebook from 'assets/imgs/common/Facebook-Blue-Logo.svg'
-import YouTube from 'assets/imgs/common/YouTube-Icon-Full.svg'
+import Facebook from 'assets/imgs/common/facebook.png'
+import YouTube from 'assets/imgs/common/youTube.png'
 import Medium from 'assets/imgs/common/Medium.png'
 import Discord from 'assets/socialLinksIcon/Discord.svg'
+import Subreddit from 'assets/imgs/common/Subreddit.png'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 
@@ -43,9 +44,10 @@ export const socialMap: { [key: string]: string } = {
   twitter: Twitter,
   telegram: Telegram,
   facebook: Facebook,
-  youTube: YouTube,
+  youtube: YouTube,
   medium: Medium,
-  discord: Discord
+  discord: Discord,
+  subreddit: Subreddit
 }
 
 const tabList = [ETabList.All, ETabList.Close, ETabList.Live, ETabList.Upcoming]
@@ -67,7 +69,6 @@ export default function AccountPrivateLaunchpad() {
     run: getLaunchpadInfo
   } = usePagination<any, Params>(
     async ({ current, pageSize }) => {
-      const chainInfoOptId = optionDatas?.chainInfoOpt?.find(item => item.ethChainId === curChain)
       if (!account) {
         return {
           total: 0,
@@ -78,7 +79,7 @@ export default function AccountPrivateLaunchpad() {
       const res = await getUserLaunchpadInfo({
         limit: pageSize,
         offset: (current - 1) * pageSize,
-        chainId: chainInfoOptId?.id,
+        chainId: curChain,
         category: curPoolType
       })
       return {
