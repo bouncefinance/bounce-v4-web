@@ -202,10 +202,14 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
             <Body01 sx={{ color: '#959595' }}>Chain</Body01>
             <Body01>{chainConfigInBackend?.chainName || '--'}</Body01>
           </BottomLineBox>
-          {/* <BottomLineBox>
+          <BottomLineBox>
             <Body01 sx={{ color: '#959595' }}>Contract address</Body01>
-            <Body01>{tokenInfo?.address}</Body01>
-          </BottomLineBox> */}
+            <Body01>{data?.contract}</Body01>
+          </BottomLineBox>
+          <BottomLineBox>
+            <Body01 sx={{ color: '#959595' }}>Token Id</Body01>
+            <Body01>{data?.token_id}</Body01>
+          </BottomLineBox>
         </WhiteBg>
       </GrayBg>
       <GrayBg>
