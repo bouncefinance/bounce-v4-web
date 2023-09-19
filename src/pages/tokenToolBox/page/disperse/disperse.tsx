@@ -456,7 +456,7 @@ export default function Disperse() {
                     childForm={
                       <FormItem name={'balance'}>
                         <GreenToolbox>
-                          <SmallText>{currentBalance?.toSignificant() || '-'}</SmallText>
+                          <SmallText>{currentBalance?.toExact() || '-'}</SmallText>
                           {values.type == 'chain' && (
                             <Box display={'flex'} alignItems={'center'} gap={8}>
                               <img src={myChainBalance?.currency?.logo} style={{ width: 28, height: 28 }} />
@@ -548,11 +548,11 @@ export default function Disperse() {
                                 <SmallText>Remaining</SmallText>
                                 <Box display={'flex'}>
                                   {validAmount ? (
-                                    <Body01>{currentBalance.subtract(currencyAmount).toSignificant()}</Body01>
+                                    <Body01>{currentBalance.subtract(currencyAmount).toExact()}</Body01>
                                   ) : currencyAmount ? (
                                     <Body01 sx={{ color: '#FD3333' }}>{`-${currencyAmount
                                       ?.subtract(currentBalance)
-                                      .toSignificant()}`}</Body01>
+                                      .toExact()}`}</Body01>
                                   ) : (
                                     ''
                                   )}
