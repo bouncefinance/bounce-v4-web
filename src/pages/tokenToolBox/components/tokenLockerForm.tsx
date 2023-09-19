@@ -791,7 +791,7 @@ const TokenLockerForm = () => {
         })
       }
     },
-    [lockLinearHandle, nav, chainId]
+    [lockLinearHandle, nav, chainConfigInBackend?.id]
   )
   const onSubmit = async (value: ISeller) => {
     // nav(`/TokenToolBox/TokenLockerInfo/11155111/0xdd33aa294317da0b74e30e28364caae3b4232bcd30d16043ee85f1b04a9f98da`)
