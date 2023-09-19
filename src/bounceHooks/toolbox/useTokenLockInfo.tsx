@@ -7,7 +7,7 @@ export const useTokenLockInfo = (chain: number | undefined, hash?: string) => {
   const { account } = useActiveWeb3React()
   const { data, loading } = useRequest(
     async (): Promise<LockInfo | undefined> => {
-      if (!chain || !hash) {
+      if ((chain === 0 && !chain) || !hash) {
         return Promise.reject(undefined)
       }
       return await getTokenLocksInfo({
