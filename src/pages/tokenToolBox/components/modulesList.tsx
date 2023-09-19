@@ -17,35 +17,40 @@ const ModulesList = () => {
     {
       logoImg: P1,
       title: 'Token Locker',
-      subTitle: 'Explain what is a token locker........',
+      // subTitle: 'Explain what is a token locker........',
+      subTitle: '',
       btnTitle: 'Create Lock',
       link: routes.tokenToolBox.tokenLocker
     },
     {
       logoImg: P1,
       title: 'V2 LP Locker',
-      subTitle: 'Explain what is a v2 LP locker........',
+      // subTitle: 'Explain what is a v2 LP locker........',
+      subTitle: '',
       btnTitle: 'V2 LP Locker',
       link: routes.tokenToolBox.tokenLocker + '?tokenType=lp&version=v2'
     },
     {
       logoImg: P1,
       title: 'V3 LP Locker',
-      subTitle: 'Explain what is a token locker........',
+      // subTitle: 'Explain what is a token locker........',
+      subTitle: '',
       btnTitle: 'V3 LP Locker',
       link: routes.tokenToolBox.tokenLocker + '?tokenType=lp&version=v3'
     },
     {
       logoImg: P2,
       title: 'Token Minter',
-      subTitle: 'Explain what is a token minter........',
+      // subTitle: 'Explain what is a token minter........',
+      subTitle: '',
       btnTitle: 'Token Minter',
       link: routes.tokenToolBox.tokenMinter
     },
     {
       logoImg: P3,
       title: 'Disperse',
-      subTitle: 'Explain what is a Disperse........',
+      // subTitle: 'Explain what is a Disperse........',
+      subTitle: '',
       btnTitle: 'Disperse',
       link: routes.tokenToolBox.disperse
     }
