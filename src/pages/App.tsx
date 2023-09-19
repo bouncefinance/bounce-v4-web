@@ -86,7 +86,7 @@ import TokenToolBox from './tokenToolBox'
 import TokenLocker from './tokenToolBox/page/tokenlocker/tokenLocker'
 import Loyaltyprogram from './loyaltyprogram'
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
-import MetaBlox from './projectIntro/MetaBloxProjectInfo'
+// import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import LaunchpadDetail from './launchpad/detail'
 import Party from './launchpad/detail/party'
 import ZataShop from './realWorldAuction/shop/zeta'
@@ -218,7 +218,7 @@ export default function App() {
 
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
-                  <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
+                  {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
                   <Route path={routes.thirdPart.SolaceAuction} element={<SolaceProjectInfo />} />
                   <Route path={routes.thirdPart.CreateProtocolAuction} element={<CreateProtocolProjectInfo />} />
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
