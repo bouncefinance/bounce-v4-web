@@ -27,8 +27,8 @@ import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
-import MetaBlox from './imgs/metablox.png'
-import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
+// import MetaBlox from './imgs/metablox.png'
+// import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
 import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import SolaceImg from './imgs/solace.png'
@@ -691,8 +691,41 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     liveLink: '/launchpad/create_protocol',
     projectInfo: [
       {
-        title: 'What is Create Protocol?',
-        info: ['AI powered Web 3 Infrastructure']
+        title: 'Create Launchpad',
+        info: [
+          'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.'
+        ]
+      },
+      {
+        title: 'Advantages',
+        info: [
+          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <li>
+              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
+              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
+              applications that can take advantage of the best features of each blockchain.
+            </li>
+            <li>
+              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
+              secure, reliable, and transparent platform for creators and users.
+            </li>
+            <li>
+              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
+              features, and participate in governance. This gives users more control over their assets.
+            </li>
+            <li>
+              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
+              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
+              decentralized applications.
+            </li>
+            <li>
+              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
+              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
+              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
+              create, share, and monetize content, then the Create Protocol is the platform for you.
+            </li>
+          </ul>
+        ]
       },
       {
         title: 'Tokenomics',
@@ -750,47 +783,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </li>
           </ul>
         ]
-      },
-      {
-        title: 'Introduction',
-        info: [
-          'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.'
-        ]
-      },
-      {
-        title: 'Advantages',
-        info: [
-          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
-            <li>
-              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
-              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
-              applications that can take advantage of the best features of each blockchain.
-            </li>
-            <li>
-              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
-              secure, reliable, and transparent platform for creators and users.
-            </li>
-            <li>
-              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
-              features, and participate in governance. This gives users more control over their assets.
-            </li>
-            <li>
-              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
-              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
-              decentralized applications.
-            </li>
-            <li>
-              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
-              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
-              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
-              create, share, and monetize content, then the Create Protocol is the platform for you.
-            </li>
-          </ul>
-        ]
       }
     ],
     tokenMetrics: [],
-    desc: 'AI powered Web 3 Infrastructure.',
+    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
     social: [
       <Link key={0} href="https://www.createprotocol.org/" target="_blank">
         <Web />
@@ -885,67 +881,67 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-  {
-    keyId: 12,
-    liveTimeStamp: {
-      start: 16908668000000,
-      end: 16908668000000
-    },
-    hideUpcomingCountdown: true,
-    poolTypeName: 'Fixed Swap Auction',
-    img: MetaBlox,
-    avatar: MetaBloxAvatar,
-    title: 'MetaBlox',
-    chainId: 1,
-    tokenName: '$MTBX',
-    whitePaperLink: 'https://drive.google.com/file/d/1TqN0LbGkcOomz3hT-T38InSnJZV8GRrR/view',
-    upcomingLink: '/launchpad/metablox',
-    liveLink: '/launchpad/metablox',
-    projectInfo: [
-      {
-        title: 'What is MetaBlox?',
-        info: [
-          'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
-          `MetaBlox offers access to 3,000,000 WiFi mining locations on Day 1, and aims to expand this network to 6,000,000 mining locations by 2025. As of Apr 2023, 2,500 miners was active. Metablox@ONE dapp is already the top 3 gas burners in Harmony One.
-          MetaBlox is the only web3 project that was officially listed into WiFi Standard by the WBA(Wireless Broadband Alliance), together with Cisco, Google etc. By incentivizing WiFi and Cellular with web3, MetaBlox is leading the industry transformation, making global WiFi roaming a reality.`
-        ]
-      },
-      {
-        title: 'Investment and Partners',
-        info: [
-          <Box key={1}>
-            <Typography sx={{ fontSize: 18, fontWidth: 700 }}>Seed Round:</Typography>
-            <Typography mt={10}>
-              MetaBlox has raised $3 million in funding from various prominent investors and institutions. These include
-              Synergies, Collab+Currency, SNZ, Harmony ONE, Future Life, NFT Tech, Airswift, and Slope.
-            </Typography>
-          </Box>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
-    social: [
-      <Link key={0} href="http://metablox.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={2} href="https://discord.com/invite/metablox" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={4} href="https://t.me/ChatonMetaBloxCommunity" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      <Link key={6} href="https://twitter.com/metablox" target="_blank">
-        <Twitter />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$MTBX' },
-      { title: 'Token Price', content: '0.03' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Ethereum' }
-    ]
-  },
+  // {
+  //   keyId: 12,
+  //   liveTimeStamp: {
+  //     start: 16908668000000,
+  //     end: 16908668000000
+  //   },
+  //   hideUpcomingCountdown: true,
+  //   poolTypeName: 'Fixed Swap Auction',
+  //   img: MetaBlox,
+  //   avatar: MetaBloxAvatar,
+  //   title: 'MetaBlox',
+  //   chainId: 1,
+  //   tokenName: '$MTBX',
+  //   whitePaperLink: 'https://drive.google.com/file/d/1TqN0LbGkcOomz3hT-T38InSnJZV8GRrR/view',
+  //   upcomingLink: '/launchpad/metablox',
+  //   liveLink: '/launchpad/metablox',
+  //   projectInfo: [
+  //     {
+  //       title: 'What is MetaBlox?',
+  //       info: [
+  //         'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+  //         `MetaBlox offers access to 3,000,000 WiFi mining locations on Day 1, and aims to expand this network to 6,000,000 mining locations by 2025. As of Apr 2023, 2,500 miners was active. Metablox@ONE dapp is already the top 3 gas burners in Harmony One.
+  //         MetaBlox is the only web3 project that was officially listed into WiFi Standard by the WBA(Wireless Broadband Alliance), together with Cisco, Google etc. By incentivizing WiFi and Cellular with web3, MetaBlox is leading the industry transformation, making global WiFi roaming a reality.`
+  //       ]
+  //     },
+  //     {
+  //       title: 'Investment and Partners',
+  //       info: [
+  //         <Box key={1}>
+  //           <Typography sx={{ fontSize: 18, fontWidth: 700 }}>Seed Round:</Typography>
+  //           <Typography mt={10}>
+  //             MetaBlox has raised $3 million in funding from various prominent investors and institutions. These include
+  //             Synergies, Collab+Currency, SNZ, Harmony ONE, Future Life, NFT Tech, Airswift, and Slope.
+  //           </Typography>
+  //         </Box>
+  //       ]
+  //     }
+  //   ],
+  //   tokenMetrics: [],
+  //   desc: 'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+  //   social: [
+  //     <Link key={0} href="http://metablox.io/" target="_blank">
+  //       <Web />
+  //     </Link>,
+  //     <Link key={2} href="https://discord.com/invite/metablox" target="_blank">
+  //       <DiscordSVG />
+  //     </Link>,
+  //     <Link key={4} href="https://t.me/ChatonMetaBloxCommunity" target="_blank">
+  //       <img src={Telegram} width={40} />
+  //     </Link>,
+  //     <Link key={6} href="https://twitter.com/metablox" target="_blank">
+  //       <Twitter />
+  //     </Link>
+  //   ],
+  //   moreData: [
+  //     { title: 'Token Name', content: '$MTBX' },
+  //     { title: 'Token Price', content: '0.03' },
+  //     { title: 'Token Amount', content: 'TBD' },
+  //     { title: 'Blockchain', content: 'Ethereum' }
+  //   ]
+  // },
   {
     keyId: 11,
     liveTimeStamp: {
