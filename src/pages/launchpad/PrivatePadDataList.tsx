@@ -691,7 +691,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     liveLink: '/launchpad/create_protocol',
     projectInfo: [
       {
-        title: 'Create Launchpad',
+        title: 'What is Create Protocol?',
         info: [
           'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.'
         ]
