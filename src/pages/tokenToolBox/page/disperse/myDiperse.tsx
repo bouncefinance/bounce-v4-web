@@ -24,6 +24,7 @@ import { getEtherscanLink } from '../../../../utils'
 import { useShowLoginModal } from '../../../../state/users/hooks'
 import { useEffect, useState } from 'react'
 import { useActiveWeb3React } from '../../../../hooks'
+import { ZERO_ADDRESS } from '../../../../constants'
 
 export default function MyDisperse() {
   const defaultPageSize = 10
@@ -31,6 +32,7 @@ export default function MyDisperse() {
   const optionDatas = useOptionDatas()
   console.log('optionDatas', optionDatas)
   const { loading, data } = useDisperseList(curPage, defaultPageSize)
+  console.log('🚀 ~ file: myDiperse.tsx:34 ~ MyDisperse ~ data:', data)
   const { account } = useActiveWeb3React()
 
   function getChainName(chain_id: number) {
@@ -87,14 +89,16 @@ export default function MyDisperse() {
                       </Stack>
                     </StyledTableCell>
                     <StyledTableCell>
-                      {CurrencyAmount.fromRawAmount(
-                        new Currency(
-                          getChainName(Number(record.chain_id))?.id || ChainId.SEPOLIA,
-                          record.contract,
-                          record.decimals
-                        ),
-                        record.amount
-                      )?.toSignificant()}
+                      {record.token === ZERO_ADDRESS
+                        ? CurrencyAmount.ether(record.amount).toSignificant()
+                        : CurrencyAmount.fromRawAmount(
+                            new Currency(
+                              getChainName(Number(record.chain_id))?.id || ChainId.SEPOLIA,
+                              record.contract,
+                              record.decimals
+                            ),
+                            record.amount
+                          )?.toSignificant()}
                     </StyledTableCell>
                     <StyledTableCell>{record.total_count}</StyledTableCell>
                     <StyledTableCell align={'right'}>
