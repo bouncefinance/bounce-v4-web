@@ -246,6 +246,7 @@ export function useDeployUniswapV3Timelock(chain: ChainId) {
         return Promise.reject('no contract')
       }
       const args = [uniswapAddress, title, tokenAddress, id, accountAddress, releaseTime]
+      console.log('deployUniswapV3Timelock args>>>', args)
       const estimatedGas = await erc721TimelockContract.estimateGas
         .deployUniswapV3Timelock(...args)
         .catch((error: Error) => {
