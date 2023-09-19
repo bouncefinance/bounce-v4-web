@@ -24,7 +24,7 @@ interface IMinter {
   chainId: number
   name: string
   symbol: string
-  decimals: number
+  decimals: string
   initial_supply: string
 }
 
@@ -42,7 +42,7 @@ export default function TokenMinter() {
       chainId: Number(chainId) as ChainId,
       name: '',
       symbol: '',
-      decimals: 18,
+      decimals: '18',
       initial_supply: ''
     }
   }, [chainId])
@@ -110,7 +110,7 @@ export default function TokenMinter() {
             if (!values.initial_supply) {
               errors.initial_supply = 'Token supply must have at least 1 token'
             }
-            if (values.decimals < 1) {
+            if (Number(values.decimals) < 1) {
               errors.decimals = 'Decimals can not less than 1'
             }
             return errors
@@ -249,11 +249,9 @@ export default function TokenMinter() {
                     </FormItem>
                     <SmallTextGray mt={8}>18 recommended</SmallTextGray>
                     <BoxSpaceBetween>
-                      <SmallTextGray mt={8}>Total supply (including decimals - raw amount)</SmallTextGray>
+                      <SmallTextGray mt={8}>Total supply</SmallTextGray>
                       <SmallTextGray mt={8}>
-                        {values.initial_supply
-                          ? new BigNumber(values.initial_supply).shiftedBy(values.decimals).toString()
-                          : '--'}
+                        {values.initial_supply ? new BigNumber(values.initial_supply).toString() : '--'}
                       </SmallTextGray>
                     </BoxSpaceBetween>
                   </Box>
