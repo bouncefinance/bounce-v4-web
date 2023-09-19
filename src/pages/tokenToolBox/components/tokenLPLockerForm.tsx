@@ -1070,7 +1070,7 @@ const TokenLockerL2L3Form = () => {
                   }}
                 />
               )}
-              {isCurrentChainEqualChainOfPool && values.version === VersionType.v3 && (
+              {account && isCurrentChainEqualChainOfPool && values.version === VersionType.v3 && (
                 <V3BidBlock
                   formValues={values}
                   erc721TokenDeatail={erc721TokenDetail}

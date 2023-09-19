@@ -24,7 +24,6 @@ import { useErc20TokenDetail } from '../../../../bounceHooks/toolbox/useDisperse
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
-import { useShowLoginModal } from '../../../../state/users/hooks'
 import JSBI from 'jsbi'
 import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -62,7 +61,6 @@ export default function Disperse() {
   const { balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
   const disperseEther = useDisperseEther(chainId as ChainId)
   const disperseToken = useDisperseToken()
-  const showLoginModal = useShowLoginModal()
   const [needApprove, setNeedApprove] = useState('0')
   const [approvalState, approveCallback] = useApproveCallback(
     balance ? CurrencyAmount.fromRawAmount(balance?.currency, needApprove) : undefined,
@@ -578,15 +576,16 @@ export default function Disperse() {
                           {confirmBtn.text}
                         </LineBtn>
                       )}
-                      {values.type == 'chain' && !account && (
-                        <LineBtn type="button" onClick={showLoginModal}>
-                          Connect wallet
-                        </LineBtn>
-                      )}
                       <SolidBtn
                         type="submit"
-                        disabled={values.type == 'token' && approvalState !== ApprovalState.APPROVED}
-                        className={formatInput(values.recipients).length > 0 && validAmount ? 'active' : ''}
+                        disabled={values.type === 'chain' && !isCurrentChainEqualChainOfPool}
+                        className={
+                          formatInput(values.recipients).length > 0 &&
+                          validAmount &&
+                          !(values.type === 'chain' && !isCurrentChainEqualChainOfPool)
+                            ? 'active'
+                            : ''
+                        }
                       >
                         {formatInput(values.recipients).length > 0
                           ? validAmount
