@@ -24,8 +24,8 @@ import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton
 const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
   const { account, chainId } = useActiveWeb3React()
-  const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
-  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain))
+  const releasableNum = useReleasableERC20(data?.deploy_contract || '', chainConfigInBackend?.ethChainId || undefined)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, chainConfigInBackend?.ethChainId)
   const releasNum = useMemo(() => {
     return tokenInfo && releasableNum ? CurrencyAmount.fromRawAmount(tokenInfo, releasableNum)?.toExact() : '--'
@@ -40,8 +40,8 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
   const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return Number(chainId) === Number(chain)
-  }, [chainId, chain])
+    return Number(chainId) === Number(chainConfigInBackend?.ethChainId)
+  }, [chainId, chainConfigInBackend?.ethChainId])
   const BidBlock = () => {
     if (!account) {
       return <ConnectWalletButton />
@@ -153,17 +153,22 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
 const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => void }) => {
   const { chain } = useParams()
   const { account, chainId } = useActiveWeb3React()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain))
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: data?.lock_end ? data?.lock_end * 1000 : '--'
   })
-  const erc721Owner = useERC721Owner(data?.token || '', account, Number(chain), data?.token_id)
+  const erc721Owner = useERC721Owner(
+    data?.token || '',
+    account,
+    chainConfigInBackend?.ethChainId || Number(chain),
+    data?.token_id
+  )
   const isReleasable = useMemo(() => {
     return erc721Owner === data?.deploy_contract && data?.lock_end * 1000 < new Date().valueOf()
   }, [data?.deploy_contract, data?.lock_end, erc721Owner])
   const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return Number(chainId) === Number(chain)
-  }, [chainId, chain])
+    return Number(chainId) === Number(chainConfigInBackend?.ethChainId)
+  }, [chainId, chainConfigInBackend?.ethChainId])
   const BidBlock = () => {
     if (!account) {
       return <ConnectWalletButton />
@@ -258,7 +263,7 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
 }
 export default function TokenInfo() {
   const { chain, hash } = useParams()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', Number(chain) || '')
+  const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
   const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const withDrawFn721 = useWithDrawBy721TokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)

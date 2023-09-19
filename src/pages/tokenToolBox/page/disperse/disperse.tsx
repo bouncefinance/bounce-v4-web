@@ -560,10 +560,10 @@ export default function Disperse() {
                     }
                   />
                   {!account && <ConnectWalletButton />}
-                  {account && !isCurrentChainEqualChainOfPool && (
+                  {account && values.type === 'chain' && !isCurrentChainEqualChainOfPool && (
                     <SwitchNetworkButton targetChain={Number(currentChain) || 0} />
                   )}
-                  {account && isCurrentChainEqualChainOfPool && (
+                  {account && (
                     <BoxSpaceBetween gap={10}>
                       {values.type == 'token' && approvalState != ApprovalState.APPROVED && (
                         <LineBtn type="button" onClick={confirmBtn.run}>

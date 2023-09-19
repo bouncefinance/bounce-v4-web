@@ -28,6 +28,7 @@ import { useOptionDatas } from '../../../state/configOptions/hooks'
 import { TokenInfo } from '../../../api/toolbox/type'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useActiveWeb3React } from 'hooks'
 
 const StyledTableCell = styled(TableCell)(() => ({
   borderColor: '#626262',
@@ -80,7 +81,8 @@ const TokenList = () => {
   const defaultPageSize = 10
   const [curPage, setCurPage] = useState(1)
   const optionDatas = useOptionDatas()
-  const { data, loading } = useTokenList(curPage, defaultPageSize)
+  const { account } = useActiveWeb3React()
+  const { data, loading } = useTokenList(curPage, defaultPageSize, account)
   const isMd = useIsMDDown()
   const nav = useNavigate()
 

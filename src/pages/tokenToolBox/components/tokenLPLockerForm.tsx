@@ -57,7 +57,7 @@ interface ISeller {
   exchangeId: string
   tokanName: string
   tokenSymbol: string
-  uniswapAddress?: string
+  uniswapAddress: string
   tokenDecimal: number
   balance: string
   title: string
@@ -337,7 +337,7 @@ const V2BidBlock = ({
                     color: '#fff'
                   }
                 }}
-                disabled={isNeedToApprove || JSON.stringify(errors) !== '{}'}
+                disabled={isNeedToApprove || (JSON.stringify(errors) !== '{}' && !erc20TokenDeatail?.tokenCurrency)}
                 onClick={() => {
                   handleSubmit && handleSubmit()
                 }}
@@ -502,7 +502,6 @@ const TokenLockerL2L3Form = () => {
   const location = useLocation()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId)
   const { data: exchangeList } = useGetExchangeList(chainConfigInBackend?.id || 0, version === VersionType.v2 ? 2 : 3)
-  const [uniswapAddress, setUniswapAddress] = useState('')
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
   const sellerValue: ISeller = useMemo(() => {
@@ -524,15 +523,6 @@ const TokenLockerL2L3Form = () => {
       segmentAmount: ''
     }
   }, [CurrenChainId])
-  useEffect(() => {
-    if (Array.isArray(exchangeList) && exchangeList.length > 0) {
-      //   const uniswapAddr = exchangeList[0].uniswap
-      //   setUniswapAddress(uniswapAddr)
-      //   sellerValue.uniswapAddress = uniswapAddr
-      //   sellerValue.exchangeId = exchangeList[0]?.id + ''
-    }
-    return () => {}
-  }, [exchangeList, sellerValue])
   useEffect(() => {
     const queryParams = queryString.parse(location.search)
     if (queryParams?.version) {
@@ -668,10 +658,12 @@ const TokenLockerL2L3Form = () => {
         ? CurrencyAmount.fromAmount(erc20TokenDeatail?.tokenCurrency, value.amount)
         : undefined
       const type = Number(value.version)
+      const resultItem = exchangeList?.find(item => Number(item.id) === Number(value.exchangeId))
+      console.log('uniswapAddress>>>', resultItem?.uniswap, amoutAraw)
       switch (type) {
         case VersionType.v2:
           toLockV2Handle(
-            uniswapAddress,
+            resultItem?.uniswap || '',
             value.title,
             value.tokenAddress,
             value.anotherTokenChecked && value.anotherTokenAddress ? value.anotherTokenAddress : account || '',
@@ -681,7 +673,7 @@ const TokenLockerL2L3Form = () => {
           break
         case VersionType.v3:
           toLockV3Handle(
-            uniswapAddress,
+            resultItem?.uniswap || '',
             value.title,
             value.tokenAddress,
             value.nftId + '' || '',
@@ -708,8 +700,14 @@ const TokenLockerL2L3Form = () => {
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
           // update hook params
+          console.log('values>>>', values)
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
+          //   const resultItem = exchangeList?.find(item => Number(item.id) === Number(values.exchangeId))
+          //   if (resultItem) {
+          //     console.log('set uniswapAddress>>>', resultItem?.uniswap)
+          //     setFieldValue('uniswapAddress', resultItem?.uniswap)
+          //   }
           return (
             <Form
               style={{
@@ -831,11 +829,6 @@ const TokenLockerL2L3Form = () => {
                       value={values.exchangeId}
                       onChange={({ target }) => {
                         setFieldValue('exchangeId', target.value)
-                        const resultItem = exchangeList?.find(item => Number(item.id) === Number(target.value))
-                        if (resultItem) {
-                          setFieldValue('uniswapAddress', resultItem?.uniswap)
-                          setUniswapAddress(resultItem?.uniswap)
-                        }
                       }}
                       placeholder={'Select exchange'}
                       renderValue={selected => {
