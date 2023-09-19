@@ -106,7 +106,7 @@ export default function MyLock() {
                   <StyledTableCell>Token</StyledTableCell>
                   <StyledTableCell>Title</StyledTableCell>
                   <StyledTableCell>Lock Amount</StyledTableCell>
-                  <StyledTableCell>Chlock Modelain</StyledTableCell>
+                  <StyledTableCell>Lock Model</StyledTableCell>
                   <StyledTableCell>Unlock Date</StyledTableCell>
                   <StyledTableCell></StyledTableCell>
                 </StyledTableRow>
