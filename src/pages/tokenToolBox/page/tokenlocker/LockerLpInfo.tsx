@@ -63,7 +63,7 @@ const ERC20Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => vo
           toWithDraw()
         }}
       >
-        {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
+        {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawn' : 'Withdraw'}
       </SolidBtn>
     )
   }
@@ -185,7 +185,7 @@ const ERC721Block = ({ data, toWithDraw }: { data: LockInfo; toWithDraw: () => v
           toWithDraw()
         }}
       >
-        {isReleasable ? 'Withdraw' : 'Withdrawed'}
+        {isReleasable ? 'Withdraw' : 'Withdrawn'}
       </SolidBtn>
     )
   }

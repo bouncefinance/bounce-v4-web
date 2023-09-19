@@ -46,6 +46,7 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 interface ISeller {
   tokenAddress: string
   anotherTokenAddress?: string
@@ -362,7 +363,6 @@ const V3BidBlock = ({
   handleSubmit: () => void
 }) => {
   const { account } = useActiveWeb3React()
-  const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return formValues.tokenAddress && !erc721TokenDeatail?.isApprovedAll
   }, [erc721TokenDeatail?.isApprovedAll, formValues.tokenAddress])
@@ -408,12 +408,6 @@ const V3BidBlock = ({
     text?: string
     run?: () => void
   } = useMemo(() => {
-    if (!account) {
-      return {
-        text: 'Connect wallet',
-        run: showLoginModal
-      }
-    }
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
@@ -437,7 +431,7 @@ const V3BidBlock = ({
     return {
       run: toApprove
     }
-  }, [account, approvalState, toApprove, showLoginModal])
+  }, [account, approvalState, toApprove])
 
   return (
     <FormLayout
@@ -490,7 +484,6 @@ const V3BidBlock = ({
   )
 }
 const TokenLockerL2L3Form = () => {
-  const showLoginModal = useShowLoginModal()
   const switchChain = useSwitchNetwork()
   const { account, chainId: CurrenChainId } = useActiveWeb3React()
   const nav = useNavigate()
@@ -513,10 +506,6 @@ const TokenLockerL2L3Form = () => {
   const [uniswapAddress, setUniswapAddress] = useState('')
   const erc20TokenDeatail = useErc20TokenDetail(tokenAddress, chainId, IReleaseType.Fragment)
   const erc721TokenDetail = useErc721TokenDetail(tokenAddress, chainId)
-  useEffect(() => {
-    !account && showLoginModal()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
   const sellerValue: ISeller = useMemo(() => {
     return {
       tokenAddress: '',
@@ -1077,8 +1066,9 @@ const TokenLockerL2L3Form = () => {
                   textField={{ sx: { width: '100%' } }}
                 />
               </Stack>
-              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={values.chainId} />}
-              {isCurrentChainEqualChainOfPool && values.version === VersionType.v2 && (
+              {!account && <ConnectWalletButton />}
+              {account && !isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={values.chainId} />}
+              {account && isCurrentChainEqualChainOfPool && values.version === VersionType.v2 && (
                 <V2BidBlock
                   formValues={values}
                   erc20TokenDeatail={erc20TokenDeatail}

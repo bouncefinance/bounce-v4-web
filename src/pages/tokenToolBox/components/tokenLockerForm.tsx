@@ -26,8 +26,6 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
 import { ChainList } from 'constants/chain'
-// import { useOptionDatas } from 'state/configOptions/hooks'
-import { useShowLoginModal } from 'state/users/hooks'
 import { ReactComponent as TipIcon } from 'assets/imgs/toolBox/tips.svg'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
@@ -65,6 +63,7 @@ import queryString from 'query-string'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 interface IFragmentReleaseTimes {
   startAt: Moment | null
   radio: string
@@ -443,8 +442,6 @@ const BidBlock = ({
   errors: FormikErrors<ISeller>
   handleSubmit: () => void
 }) => {
-  const { account } = useActiveWeb3React()
-  const showLoginModal = useShowLoginModal()
   const isNeedToApprove = useMemo(() => {
     return (
       formValues?.tokenAddress &&
@@ -501,12 +498,6 @@ const BidBlock = ({
     text?: string
     run?: () => void
   } = useMemo(() => {
-    if (!account) {
-      return {
-        text: 'Connect wallet',
-        run: showLoginModal
-      }
-    }
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
@@ -530,7 +521,7 @@ const BidBlock = ({
     return {
       run: toApprove
     }
-  }, [account, approvalState, toApprove, showLoginModal, erc20TokenDeatail?.tokenCurrency?.symbol])
+  }, [approvalState, toApprove, erc20TokenDeatail?.tokenCurrency?.symbol])
   return (
     <FormLayout
       childForm={
@@ -584,10 +575,8 @@ const BidBlock = ({
 }
 const TokenLockerForm = () => {
   const switchChain = useSwitchNetwork()
-  const showLoginModal = useShowLoginModal()
   const { account, chainId: CurrenChainId } = useActiveWeb3React()
   const nav = useNavigate()
-  //   const optionDatas = useOptionDatas()
   const [chainId, setChainId] = useState<ChainId>(Number(CurrenChainId) as ChainId)
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', CurrenChainId || '')
   const [tokenAddress, setTokenAddress] = useState<string>('')
@@ -603,10 +592,6 @@ const TokenLockerForm = () => {
   const isCurrentChainEqualChainOfPool = useMemo(() => {
     return Number(chainId) === Number(CurrenChainId)
   }, [chainId, CurrenChainId])
-  useEffect(() => {
-    !account && showLoginModal()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
   const sellerValue: ISeller = useMemo(() => {
     return {
       tokenAddress: '',
@@ -1157,7 +1142,8 @@ const TokenLockerForm = () => {
               ) : (
                 <LabelTitle>No unlocking method is set; tokens can be claimed after the specified end.</LabelTitle>
               )}
-              {isCurrentChainEqualChainOfPool && (
+              {!account && <ConnectWalletButton />}
+              {account && isCurrentChainEqualChainOfPool && (
                 <BidBlock
                   formValues={values}
                   erc20TokenDeatail={erc20TokenDeatail}
@@ -1167,7 +1153,7 @@ const TokenLockerForm = () => {
                   }}
                 />
               )}
-              {!isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={values.chainId} />}
+              {account && !isCurrentChainEqualChainOfPool && <SwitchNetworkButton targetChain={values.chainId} />}
             </Form>
           )
         }}

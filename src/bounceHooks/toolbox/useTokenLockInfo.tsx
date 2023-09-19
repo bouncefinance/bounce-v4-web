@@ -3,10 +3,13 @@ import { useRequest } from 'ahooks'
 import { getTokenLocksInfo } from '../../api/toolbox'
 import { LockInfo, LockInfoList } from '../../api/toolbox/type'
 
-export const useTokenLockInfo = (chain: number, hash?: string) => {
+export const useTokenLockInfo = (chain: number | undefined, hash?: string) => {
   const { account } = useActiveWeb3React()
   const { data, loading } = useRequest(
     async (): Promise<LockInfo | undefined> => {
+      if (!chain || !hash) {
+        return Promise.reject(undefined)
+      }
       return await getTokenLocksInfo({
         address: account || '',
         chainId: chain,

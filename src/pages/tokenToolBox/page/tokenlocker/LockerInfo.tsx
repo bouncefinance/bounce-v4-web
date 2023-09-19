@@ -37,6 +37,7 @@ const WithdrawBtnForLinear = ({
 }) => {
   const { chain } = useParams()
   const releasableNum = useReleasableVestingERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  console.log('releasableNum>>>', releasableNum)
   const isReleasable = useMemo(() => {
     return Number(releasableNum) !== 0
   }, [releasableNum])
@@ -56,7 +57,7 @@ const WithdrawBtnForLinear = ({
         toWithDraw()
       }}
     >
-      {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
+      {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawn' : 'Withdraw'}
     </SolidBtn>
   )
 }
@@ -71,13 +72,11 @@ const WithdrawBtnForNotLinear = ({
 }) => {
   const { chain } = useParams()
   const releasableNum = useReleasableERC20(data?.deploy_contract || '', Number(chain) || undefined)
+  console.log('releasableNum>>>', releasableNum)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1, Number(chain) as unknown as ChainId)
-  const releasNum = useMemo(() => {
-    return tokenInfo && releasableNum ? CurrencyAmount.fromRawAmount(tokenInfo, releasableNum)?.toExact() : '--'
-  }, [releasableNum, tokenInfo])
   const isReleasable = useMemo(() => {
-    return Number(releasNum) !== 0
-  }, [releasNum])
+    return tokenInfo && releasableNum && CurrencyAmount.fromRawAmount(tokenInfo, releasableNum).greaterThan('0')
+  }, [releasableNum, tokenInfo])
   if (!data) {
     return <></>
   }
@@ -94,7 +93,7 @@ const WithdrawBtnForNotLinear = ({
         toWithDraw()
       }}
     >
-      {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawed' : 'Withdraw'}
+      {Number(releasableNum) === 0 && countdown <= 0 ? 'Withdrawn' : 'Withdraw'}
     </SolidBtn>
   )
 }
@@ -102,7 +101,7 @@ export default function TokenInfo() {
   const { chain, hash } = useParams()
   const { account, chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
-  const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id || 0, hash)
+  const { data, loading } = useTokenLockInfo(chainConfigInBackend?.id, hash)
   const tokenInfo = useToken(data?.token || data?.token0 || data?.token1 || '', chainConfigInBackend?.ethChainId)
   const withDrawFn = useWithDrawByTokenLock(data?.deploy_contract || '', chainConfigInBackend?.ethChainId)
   const showAmount = useMemo(() => {
@@ -187,7 +186,7 @@ export default function TokenInfo() {
   const isCurrentChainEqualChainOfPool = useMemo(() => {
     return Number(chainId) === chainConfigInBackend?.ethChainId
   }, [chainId, chainConfigInBackend?.ethChainId])
-  if (loading || !data) {
+  if (loading || !data || !tokenInfo) {
     return (
       <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
         <BounceAnime />
