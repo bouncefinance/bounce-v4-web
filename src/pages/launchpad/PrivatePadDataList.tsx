@@ -714,36 +714,78 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Investment and Partners',
         info: [
-          <div key={1}>
-            <ul>
-              <li>
-                <p>
-                  Investors - Ice Capital (UAE) - <b> Lead investor</b>
-                </p>
-                <p>
-                  Cogitent Ventures (USA) - <b> Co Lead </b>
-                </p>
-              </li>
-            </ul>
-            <div style={{ marginTop: 20 }}>
-              <p>Snowy August Family Office - (Miami)</p>
-              <p>Stanford AI and Web3 club angels (USA)</p>
-              <p>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</p>
-              <p>Hue Nguyen : Ex- SEC USA + Official Advisor (USA)</p>
-              <p>Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )</p>
-              <p>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</p>
-              <p>Kalyan Singh : Co-founder, Lumenci ( Austin )</p>
-              <p>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</p>
-              <p>Sayantan Biswas : Co-founder, UniAcco ( London )</p>
-              <p>Aashish Jindal : Co-founder, GripInvest ( India )</p>
-              <p>Sian Elizabeth : Sian Elizabeth Wellness ( London )</p>
-              <p>Bharat Thakur : Creator - Royal Artist ( Dubai ) </p>
-              <p style={{ margin: '10px 0' }}>and many more. </p>
-              <p>KOL- Waqar Zaka Few Degen KOLs</p>
-              <p>Media Partners -Edge of NFT</p>
-              <p>Big Brands- Binance Polygon</p>
-            </div>
-          </div>
+          <ul key={1}>
+            <li>
+              Investors - Ice Capital (UAE) - <strong> Lead investor</strong>
+            </li>
+            <li>
+              <p>
+                Cogitent Ventures (USA) - <strong>Co Lead</strong>
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>Snowy August Family Office - (Miami)</li>
+                <li>Stanford AI and Web3 club angels (USA)</li>
+                <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
+                <li>
+                  Hue Nguyen : Ex- SEC USA + Official Advisor (USA)
+                  <br />
+                  Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
+                </li>
+                <li>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</li>
+                <li>Kalyan Singh : Co-founder, Lumenci ( Austin )</li>
+                <li>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</li>
+                <li>Sayantan Biswas : Co-founder, UniAcco ( London )</li>
+                <li>Aashish Jindal : Co-founder, GripInvest ( India )</li>
+                <li>Sian Elizabeth : Sian Elizabeth Wellness ( London )</li>
+                <li>Bharat Thakur : Creator - Royal Artist ( Dubai )</li>
+              </ul>
+            </li>
+            <li>
+              <p>and many more.</p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>KOL- Waqar Zaka Few Degen KOLs</li>
+                <li>Media Partners -Edge of NFT</li>
+                <li>Big Brands- Binance Polygon</li>
+              </ul>
+            </li>
+          </ul>
+        ]
+      },
+      {
+        title: 'Introduction',
+        info: [
+          'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.'
+        ]
+      },
+      {
+        title: 'Advantages',
+        info: [
+          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <li>
+              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
+              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
+              applications that can take advantage of the best features of each blockchain.
+            </li>
+            <li>
+              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
+              secure, reliable, and transparent platform for creators and users.
+            </li>
+            <li>
+              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
+              features, and participate in governance. This gives users more control over their assets.
+            </li>
+            <li>
+              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
+              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
+              decentralized applications.
+            </li>
+            <li>
+              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
+              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
+              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
+              create, share, and monetize content, then the Create Protocol is the platform for you.
+            </li>
+          </ul>
         ]
       }
     ],
