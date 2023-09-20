@@ -587,7 +587,7 @@ export default function Disperse() {
                           validAmount &&
                           !(
                             (values.type === 'chain' && !isCurrentChainEqualChainOfPool) ||
-                            approvalState !== ApprovalState.APPROVED
+                            (values.type === 'token' && approvalState !== ApprovalState.APPROVED)
                           )
                             ? 'active'
                             : ''
