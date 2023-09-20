@@ -774,7 +774,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               </ul>
             </li>
             <li>
-              <div>and many more.</div>
+              {/* <div>and many more.</div> */}
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <li>KOL - Waqar Zaka Few Degen KOLs</li>
                 <li>Media Partners - Edge of NFT</li>
