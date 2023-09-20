@@ -580,7 +580,7 @@ export default function Disperse() {
                         type="submit"
                         disabled={
                           (values.type === 'chain' && !isCurrentChainEqualChainOfPool) ||
-                          approvalState !== ApprovalState.APPROVED
+                          (values.type === 'token' && approvalState !== ApprovalState.APPROVED)
                         }
                         className={
                           formatInput(values.recipients).length > 0 &&

@@ -151,6 +151,7 @@ const SolidBtnSmall = styled(`button`)`
   align-items: center;
   gap: 6px;
   border-radius: 6px;
+  cursor: pointer;
   border: transparent;
   background: var(--black-100, #121212);
 `
