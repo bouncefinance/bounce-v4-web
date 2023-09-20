@@ -11,6 +11,7 @@ import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { matchPath, useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
+import useBreakpoint from 'hooks/useBreakpoint'
 export enum HeadLayout {
   CENTER = 1,
   SPACE = 2
@@ -23,7 +24,7 @@ interface IHeadProps {
 const LaunchpadHead = ({ poolInfo, basicInfo, headLayout }: IHeadProps) => {
   const isLaunchpadPartyRoute = matchPath(routes.launchpad.account.launchpadParty, window.location.pathname)
   const isLaunchpadDetailRoute = matchPath(routes.launchpad.account.launchpadDetail, window.location.pathname)
-
+  const isMd = useBreakpoint('md')
   const optionDatas = useOptionDatas()
   const curChain = useMemo(() => {
     const chainInfo = optionDatas.chainInfoOpt?.find(item => item.id === poolInfo.chainId)
@@ -43,7 +44,9 @@ const LaunchpadHead = ({ poolInfo, basicInfo, headLayout }: IHeadProps) => {
     headLayout = HeadLayout.CENTER
   }
   return (
-    <Box sx={{ position: 'relative', height: 600, width: '100%', padding: '0 35px', marginTop: '-76px' }}>
+    <Box
+      sx={{ position: 'relative', height: 600, width: '100%', padding: isMd ? '0 16px' : '0 35px', marginTop: '-76px' }}
+    >
       <img
         src={poolInfo.picture1}
         style={{
@@ -134,10 +137,10 @@ const LaunchpadHead = ({ poolInfo, basicInfo, headLayout }: IHeadProps) => {
             >
               {basicInfo?.community
                 .filter(item => !!item.communityLink)
-                .map(item => (
+                .map((item, index) => (
                   <Link
                     sx={{ width: 32, height: 32 }}
-                    key={item.communityLink}
+                    key={item.communityName + index}
                     href={item.communityLink}
                     target="_blank"
                   >

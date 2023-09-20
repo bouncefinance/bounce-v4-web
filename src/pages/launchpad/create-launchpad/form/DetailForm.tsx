@@ -303,7 +303,8 @@ const DetailForm = ({
       Token: {
         address: '',
         chainId: undefined,
-        decimals: 18
+        decimals: 18,
+        symbol: ''
       },
       SwapRatio: '',
       TotalSupply: '',

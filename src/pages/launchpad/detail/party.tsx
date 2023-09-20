@@ -3,8 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import ShowLaunchpad from './showLaunchpad'
 import { getUserLaunchpadInfo } from 'api/user'
 import { useRequest } from 'ahooks'
-import { CardSize, Launchpad } from 'pages/account/AccountPrivateLaunchpad'
+import { CardSize } from 'pages/account/AccountPrivateLaunchpad'
 import { IBasicInfoParams, PoolStatus } from '../create-launchpad/type'
+import LaunchpadCover from 'bounceComponents/pre-launchpad/LaunchpadCover'
 const Party = () => {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -36,7 +37,7 @@ const Party = () => {
               data.list &&
               data.list.length &&
               data.list.map(item => (
-                <Launchpad
+                <LaunchpadCover
                   onClick={() => navigate(`/account/launchpad/${item.id}?party=${id}`)}
                   key={item.id}
                   size={CardSize.Medium}

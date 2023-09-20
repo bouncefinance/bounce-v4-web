@@ -1,10 +1,11 @@
 import { Box } from '@mui/material'
 import { useRequest } from 'ahooks'
 import { getUserLaunchpadInfo, searchLaunchpad } from 'api/user'
-import { CardSize, Launchpad } from 'pages/account/AccountPrivateLaunchpad'
+import { CardSize } from 'pages/account/AccountPrivateLaunchpad'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { IBasicInfoParams, IPoolInfoParams, PoolStatus } from './create-launchpad/type'
+import LaunchpadCover from 'bounceComponents/pre-launchpad/LaunchpadCover'
 const LaunchpadList = () => {
   const { data } = useRequest(async () => {
     const res = await searchLaunchpad({})
@@ -39,7 +40,7 @@ const LaunchpadItem = ({ poolInfo, basicInfo }: { poolInfo: IPoolInfoParams; bas
     [poolList]
   )
   return (
-    <Launchpad
+    <LaunchpadCover
       onClick={() => navigate('/launchpad/party/' + basicInfo.id)}
       size={CardSize.Large}
       poolInfo={poolInfo}
