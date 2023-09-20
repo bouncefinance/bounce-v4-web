@@ -25,7 +25,7 @@ export const useErc20TokenDetail = (tokenAddress: string, queryChainId: ChainId)
       : '0'
   }, [balance, currentAllowance])
   return useMemo(() => {
-    return { ...res, balance: balance, allowance: currentAllowance, max }
+    return { tokenCurrency: res, balance: balance, allowance: currentAllowance, max }
   }, [balance, currentAllowance, max, res])
 }
 

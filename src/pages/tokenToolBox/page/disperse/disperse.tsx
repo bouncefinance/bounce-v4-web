@@ -58,7 +58,7 @@ export default function Disperse() {
   }, [currentChain, chainId])
   const [tokenAddr, setTokenAddr] = useState(tokenAddrIn || '')
   const myChainBalance = useETHBalance(account, chainId)
-  const { balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
+  const { tokenCurrency, balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
   const disperseEther = useDisperseEther(chainId as ChainId)
   const disperseToken = useDisperseToken()
   const [needApprove, setNeedApprove] = useState('0')
@@ -131,7 +131,7 @@ export default function Disperse() {
           const { transactionReceipt } = await disperseToken(
             token,
             recipients,
-            values.map(v => CurrencyAmount.fromAmount(myChainBalance?.currency, v)?.raw.toString() || '')
+            values.map(v => CurrencyAmount.fromAmount(tokenCurrency, v)?.raw.toString() || '')
           )
           const ret = new Promise((resolve, rpt) => {
             showWaitingTxDialog(() => {
