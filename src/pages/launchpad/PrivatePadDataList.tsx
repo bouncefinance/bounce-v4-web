@@ -760,7 +760,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                 <li>Stanford AI and Web3 club angels ( USA )</li>
                 <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
                 <li>
-                  Hue Nguyen : Ex - SEC USA + Official Advisor (USA)
+                  Hue Nguyen : Ex SEC USA + Official Advisor (USA)
                   <br />
                   Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
                 </li>
