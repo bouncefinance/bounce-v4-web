@@ -3,7 +3,7 @@ import { getTokenInfo } from '../../api/toolbox'
 import { TokenInfo, TokenInfoList } from '../../api/toolbox/type'
 
 export const useTokenInfo = (hash?: string) => {
-  const { data, loading } = useRequest(
+  const { data, loading, run } = useRequest(
     async (): Promise<TokenInfo | undefined> => {
       return await getTokenInfo({
         hash: hash
@@ -20,7 +20,7 @@ export const useTokenInfo = (hash?: string) => {
       retryCount: 30
     }
   )
-  return { data, loading }
+  return { data, loading, run }
 }
 export const useTokenList = (page: number, pageSize: number, account?: string) => {
   const { data, loading } = useRequest(

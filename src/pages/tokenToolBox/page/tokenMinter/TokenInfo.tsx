@@ -12,11 +12,21 @@ import { routes } from '../../../../constants/routes'
 import { Currency, CurrencyAmount } from '../../../../constants/token'
 import { ChainId } from '../../../../constants/chain'
 import { TokenInfo as TokenInfoData } from '../../../../api/toolbox/type'
+import { useEffect } from 'react'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
 export default function TokenInfo() {
   const { chain, token } = useParams()
   const chainConfigInBackend = useChainConfigInBackend('id', Number(chain) || '')
-  const { data } = useTokenInfo(token)
+  const { loading, data, run } = useTokenInfo(token)
+  useEffect(() => {
+    if (!data || (Array.isArray(data) && data.length === 0)) {
+      setTimeout(() => {
+        run()
+      }, 3000)
+    }
+    return () => {}
+  }, [data, run])
   const nav = useNavigate()
 
   function getAmount(record: TokenInfoData | undefined) {
@@ -25,7 +35,13 @@ export default function TokenInfo() {
       record?.supply || '0'
     )
   }
-
+  if (loading || !data || (Array.isArray(data) && data.length === 0)) {
+    return (
+      <Box sx={{ height: 300 }} display={'flex'} alignItems="center" justifyContent="center">
+        <BounceAnime />
+      </Box>
+    )
+  }
   return (
     <Box>
       <ContainerBox>
