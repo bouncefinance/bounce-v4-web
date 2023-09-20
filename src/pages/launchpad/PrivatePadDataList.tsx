@@ -749,18 +749,18 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           <ul key={1}>
             <li>
-              Investors - Ice Capital (UAE) - <strong> Lead investor</strong>
+              Investors - Ice Capital ( UAE ) - <strong> Lead investor</strong>
             </li>
             <li>
               <p>
-                Cogitent Ventures (USA) - <strong>Co Lead</strong>
+                Cogitent Ventures ( USA ) - <strong>Co Lead</strong>
               </p>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 <li>Snowy August Family Office - ( Miami )</li>
                 <li>Stanford AI and Web3 club angels ( USA )</li>
                 <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
                 <li>
-                  Hue Nguyen : Ex- SEC USA + Official Advisor (USA)
+                  Hue Nguyen : Ex - SEC USA + Official Advisor (USA)
                   <br />
                   Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
                 </li>
