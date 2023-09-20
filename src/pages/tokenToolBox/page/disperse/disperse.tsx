@@ -127,7 +127,7 @@ export default function Disperse() {
     async (token: string, recipients: string[], values: string[]) => {
       showRequestConfirmDialog()
       try {
-        if (myChainBalance) {
+        if (balance) {
           const { transactionReceipt } = await disperseToken(
             token,
             recipients,
@@ -172,7 +172,7 @@ export default function Disperse() {
         })
       }
     },
-    [disperseToken, myChainBalance, nav]
+    [balance, disperseToken, nav, tokenCurrency]
   )
 
   const toApprove = useCallback(async () => {
