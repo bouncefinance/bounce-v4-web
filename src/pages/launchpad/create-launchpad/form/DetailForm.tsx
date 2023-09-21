@@ -44,7 +44,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
-import { poolSchema } from '../schema'
+import { poolSchema, poolStrictSchema } from '../schema'
 import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams, PoolStatus } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { ChainInfoOpt, IUserLaunchpadInfo } from 'api/user/type'
@@ -189,8 +189,9 @@ function SetFragmentReleaseTime({
                 }}
                 minDateTime={minDateTime}
                 textField={{ sx: { width: '100%' } }}
+                firstVery
               />
-              <FormItem label="radio">
+              <FormItem label="radio" firstTrigger>
                 <NumberInput
                   value={item.radio}
                   onBlur={() => {
@@ -262,9 +263,14 @@ const DetailForm = ({
   sx?: SxProps
   launchpadInfo: IUserLaunchpadInfo
 }) => {
-  const { type = PoolState.CREATE, id } = useQueryParams()
+  const { type = PoolState.CREATE, id, strict } = useQueryParams()
   const navigate = useNavigate()
   const { chainId, account } = useActiveWeb3React()
+  const [verifySchema, _strict] = useMemo(() => {
+    const verifySchema = strict !== undefined ? poolStrictSchema : poolSchema
+    const _strict = strict !== undefined
+    return [verifySchema, _strict]
+  }, [strict])
   const poolState = useMemo(() => {
     if (!launchpadInfo?.total || !launchpadInfo?.list.find(item => item.id === Number(id))) {
       return PoolState.CREATE
@@ -362,7 +368,7 @@ const DetailForm = ({
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
         whitelistAddresses: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-        status: PoolStatus.Init,
+        // status: PoolStatus.Init,
         releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
@@ -423,8 +429,6 @@ const DetailForm = ({
     return res
   }
   const onSubmit = async (value: IDetailInitValue) => {
-    console.log('submit submit submit submit submit')
-    console.log(value)
     try {
       await toUpdate(value)
       show(DialogDarkTips, {
@@ -486,15 +490,18 @@ const DetailForm = ({
       })
     }
   }
-
+  const switchPool = (id: number) => {
+    navigate({ search: `?type=2&id=${id}` }, { replace: true })
+    setCurPoolId(id)
+  }
   return (
     <CardBox sx={{ ...sx }}>
       <Formik
         enableReinitialize
         initialValues={curPoolList}
-        validationSchema={poolSchema}
+        validationSchema={verifySchema}
         onSubmit={onSubmit}
-        validateOnMount
+        validateOnMount={true}
       >
         {formikProps => {
           return (
@@ -515,7 +522,7 @@ const DetailForm = ({
                           label={item.name}
                           variant={curPoolId === item.id ? 'outlined' : 'filled'}
                           onClick={() => {
-                            setCurPoolId(item.id)
+                            switchPool(item.id)
                           }}
                         />
                       )
@@ -524,7 +531,7 @@ const DetailForm = ({
                 </Stack>
               </BaseBox>
 
-              <FieldComponents />
+              <FieldComponents isStrict={_strict} />
               <SubmitComp
                 toUpdate={toUpdate}
                 values={formikProps.values}
@@ -539,7 +546,7 @@ const DetailForm = ({
     </CardBox>
   )
 }
-const FieldComponents = () => {
+const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
   const isSm = useBreakpoint('sm')
   const { values, setFieldValue, setValues, errors, setFieldError } = useFormikContext<IDetailInitValue>()
   const { tokenList } = useTokenList(values.ChainId, 1, '', true)
@@ -624,7 +631,7 @@ const FieldComponents = () => {
           <FormLayout
             title1="Pool Name"
             childForm={
-              <FormItem name={'name'}>
+              <FormItem name={'name'} firstTrigger={isStrict}>
                 <OutlinedInput placeholder="Name of the project, eg. Bounce" />
               </FormItem>
             }
@@ -641,13 +648,14 @@ const FieldComponents = () => {
                 labelId="TokenLogo"
                 setFieldValue={setFieldValue}
                 labelChild={<AddFile />}
+                firstTrigger={isStrict}
               />
             }
           />
           <FormLayout
             title1="Token Name"
             childForm={
-              <FormItem name={'TokenName'}>
+              <FormItem name={'TokenName'} firstTrigger={isStrict}>
                 <OutlinedInput placeholder="Name of the token, eg. Bounce" />
               </FormItem>
             }
@@ -656,7 +664,7 @@ const FieldComponents = () => {
             title1="Blockchain Platform"
             title2="What platform is this token issued on?"
             childForm={
-              <FormItem name="ChainId">
+              <FormItem name="ChainId" firstTrigger={isStrict}>
                 <Select
                   value={values.ChainId}
                   displayEmpty
@@ -711,7 +719,7 @@ const FieldComponents = () => {
           <FormLayout
             title1="Contract Address"
             childForm={
-              <FormItem name="ContractAddress">
+              <FormItem name="ContractAddress" firstTrigger={isStrict}>
                 <OutlinedInput placeholder="Explorer Link" />
               </FormItem>
             }
@@ -719,7 +727,7 @@ const FieldComponents = () => {
           <FormLayout
             title1="Contract Decimal Places"
             childForm={
-              <FormItem name="ContractDecimalPlaces">
+              <FormItem name="ContractDecimalPlaces" firstTrigger={isStrict}>
                 <OutlinedInput placeholder="Explorer Link" />
               </FormItem>
             }
@@ -757,7 +765,7 @@ const FieldComponents = () => {
           <FormLayout
             title1="Auction Type"
             childForm={
-              <FormItem name="AuctionType">
+              <FormItem name="AuctionType" firstTrigger={isStrict}>
                 <Select
                   value={values.AuctionType}
                   onChange={e => {
@@ -793,6 +801,7 @@ const FieldComponents = () => {
               <FormItem
                 name="Token.symbol"
                 label="Select Token"
+                firstTrigger={isStrict}
                 required
                 sx={{ flex: 1 }}
                 startAdornment={<TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={32} />}
@@ -811,7 +820,7 @@ const FieldComponents = () => {
                 <Title sx={{ fontSize: 20, color: '#171717' }}>
                   1 {!values.TokenName ? 'USDT' : values.TokenName} =
                 </Title>
-                <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
+                <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio" firstTrigger={isStrict}>
                   <NumberInput
                     value={values.SwapRatio}
                     onUserInput={value => setFieldValue('SwapRatio', value)}
@@ -829,7 +838,7 @@ const FieldComponents = () => {
           <FormLayout
             title1="Total Supply"
             childForm={
-              <FormItem name="TotalSupply">
+              <FormItem name="TotalSupply" firstTrigger={isStrict}>
                 <OutlinedInput placeholder="Enter  amount" />
               </FormItem>
             }
@@ -846,6 +855,7 @@ const FieldComponents = () => {
                 disablePast
                 maxDateTime={values.endTime}
                 textField={{ sx: { flex: 1 } }}
+                firstVery={isStrict}
               />
               <Field
                 component={DateTimePickerFormItem}
@@ -853,6 +863,7 @@ const FieldComponents = () => {
                 disablePast
                 minDateTime={values.startTime}
                 textField={{ sx: { flex: 1 } }}
+                firstVery={isStrict}
               />
             </Stack>
           </Box>
@@ -863,7 +874,7 @@ const FieldComponents = () => {
               <FormControlLabel value={AllocationStatus.Limited} control={<Radio disableRipple />} label="Limited" />
             </Field>
             {values.allocationStatus === AllocationStatus.Limited && (
-              <FormItem name="allocationPerWallet" sx={{ flex: 1 }}>
+              <FormItem name="allocationPerWallet" sx={{ flex: 1 }} firstTrigger={isStrict}>
                 <OutlinedInput
                   sx={{ mt: 10 }}
                   endAdornment={
@@ -923,10 +934,11 @@ const FieldComponents = () => {
                 <LabelTitle>Unlocking Start Time</LabelTitle>
                 <Field
                   component={DateTimePickerFormItem}
-                  disablePast
                   name="delayUnlockingTime"
+                  disablePast
                   minDateTime={values.endTime}
                   textField={{ sx: { width: '100%' } }}
+                  firstVery={isStrict}
                 />
               </Stack>
             ) : Number(values.releaseType) === IReleaseType.Linear ? (
@@ -939,6 +951,7 @@ const FieldComponents = () => {
                     name="linearUnlockingStartTime"
                     minDateTime={values.endTime}
                     textField={{ sx: { width: '100%' } }}
+                    firstVery={isStrict}
                   />
                 </Stack>
 
@@ -950,6 +963,7 @@ const FieldComponents = () => {
                     name="linearUnlockingEndTime"
                     minDateTime={values.linearUnlockingStartTime}
                     textField={{ sx: { width: '100%' } }}
+                    firstVery={isStrict}
                   />
                 </Stack>
               </Box>
