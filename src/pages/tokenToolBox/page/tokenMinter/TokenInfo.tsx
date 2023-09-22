@@ -102,7 +102,10 @@ export default function TokenInfo() {
                     <H4>Token Disperse</H4>
                     <SolidBtnSmall
                       onClick={() => {
-                        data && nav(`${routes.tokenToolBox.disperse}?disperseType=token&tokenAddr=${data?.token}`)
+                        data &&
+                          nav(
+                            `${routes.tokenToolBox.disperse}?chain=${chainConfigInBackend?.id}&disperseType=token&tokenAddr=${data?.token}`
+                          )
                       }}
                     >
                       + Disperse
