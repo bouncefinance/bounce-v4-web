@@ -804,6 +804,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>,
       <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
         <Twitter />
+      </Link>,
+      <Link key={7} href="https://discord.com/invite/M2xcC2Cex5" target="_blank">
+        <DiscordSVG />
       </Link>
     ],
     moreData: [

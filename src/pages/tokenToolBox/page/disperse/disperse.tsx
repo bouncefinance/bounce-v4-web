@@ -26,7 +26,7 @@ import DialogTips from '../../../../bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from '../../../../hooks/useApproveCallback'
 import JSBI from 'jsbi'
 import { DISPERSE_CONTRACT_ADDRESSES } from '../../../../constants'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { routes } from '../../../../constants/routes'
 import { useSwitchNetwork } from '../../../../hooks/useSwitchNetwork'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
@@ -42,20 +42,20 @@ interface IDisperse {
 
 export default function Disperse() {
   const { chainId, account } = useActiveWeb3React()
-  console.log('chainId', chainId)
   const switchChain = useSwitchNetwork()
   const nav = useNavigate()
   // const [currentChain, setCurrentChain] = useState(chainId)
   const params = new URLSearchParams(location.search)
   const disperseType = params.get('disperseType')
   const tokenAddrIn = params.get('tokenAddr')
-  const { chain: urlChainParam } = useParams()
+  const urlChainParam = params.get('chain')
   const chainConfigInBackend = useChainConfigInBackend('id', Number(urlChainParam) || '')
-  console.log('chainConfigInBackend, >>>', chainConfigInBackend, urlChainParam)
-  const [currentChain, setCurrentChain] = useState(urlChainParam ? Number(urlChainParam) : '')
+  const [currentChain, setCurrentChain] = useState(
+    chainConfigInBackend?.ethChainId ? Number(chainConfigInBackend?.ethChainId) : 0
+  )
   const isCurrentChainEqualChainOfPool = useMemo(() => {
-    return Number(currentChain) === Number(chainId)
-  }, [currentChain, chainId])
+    return currentChain === Number(chainId)
+  }, [chainId, currentChain])
   const [tokenAddr, setTokenAddr] = useState(tokenAddrIn || '')
   const myChainBalance = useETHBalance(account, chainId)
   const { tokenCurrency, balance } = useErc20TokenDetail(tokenAddr, chainId || ChainId.SEPOLIA)
@@ -326,7 +326,7 @@ export default function Disperse() {
               errors.recipients = 'Amount of disperse is bigger than your balance'
             }
             setNeedApprove(currencyAmount?.raw.toString() || '0')
-            setCurrentChain(values?.chainId)
+            setCurrentChain(Number(values?.chainId))
             return (
               <Box
                 component={'form'}
