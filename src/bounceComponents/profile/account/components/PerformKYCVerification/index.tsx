@@ -149,10 +149,10 @@ const UpgradeNotice = () => {
                 }}
               >
                 <Typography sx={{ color: '#171717' }} component={'span'}>
-                  {/* We are in the process of enhancing the dapp to improve the user experience. While this upgrade is
+                  We are in the process of enhancing the dapp to improve the user experience. While this upgrade is
                   underway, there may be temporary service interruptions. Rest assured, we will expedite the upgrade to
-                  deliver an enhanced service experience. */}
-                  Our{' '}
+                  deliver an enhanced service experience.
+                  {/* Our{' '}
                   <a
                     target="_blank"
                     href={'https://twitter.com/bounce_finance'}
@@ -163,7 +163,7 @@ const UpgradeNotice = () => {
                   >
                     @bounce_finance
                   </a>{' '}
-                  Twitter has been hacked; please report any suspicious activity as we resolve this issue.
+                  Twitter has been hacked; please report any suspicious activity as we resolve this issue. */}
                 </Typography>
               </Box>
             </Stack>
