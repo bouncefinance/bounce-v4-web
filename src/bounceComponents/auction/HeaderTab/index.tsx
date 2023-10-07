@@ -52,6 +52,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     'Real World Collectibles Auction',
     'Ads Auction',
     'Token ToolBox',
+    'Telegram bot',
     'Bounce Loyalty program'
   ]
   const auctionTabs = Object.values(auctionTabMap)
@@ -86,6 +87,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         break
       case 'Token ToolBox':
         navigate(routes.tokenToolBox.index)
+        break
+      case 'Telegram bot':
+        navigate(routes.telegramBot.index)
         break
       case 'Bounce Loyalty program':
         navigate(routes.loyaltyprogram.index)

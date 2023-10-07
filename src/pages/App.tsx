@@ -49,7 +49,7 @@ import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpadComing'
-
+import TelegramBot from 'pages/tgBot/index'
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
@@ -237,6 +237,7 @@ export default function App() {
                   <Route path={routes.tokenToolBox.tokenMinter} element={<TokenMinter />} />
                   <Route path={`${routes.tokenToolBox.tokenMinterInfo}/:chain/:token`} element={<TokenInfo />} />
                   <Route path={routes.tokenToolBox.tokenMinterList} element={<MyToken />} />
+                  <Route path={routes.telegramBot.index} element={<TelegramBot />} />
 
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
