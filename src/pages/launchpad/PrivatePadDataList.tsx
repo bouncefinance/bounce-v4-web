@@ -800,6 +800,26 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </ul>
           </Box>
         ]
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <Box key={1} sx={{ '& ul li': { margin: '5px 0' } }}>
+            <ul>
+              <li>
+                Peckshield:{` `}
+                <a
+                  href="https://docs.finceptor.app/fundamentals/audit"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  https://docs.finceptor.app/fundamentals/audit
+                </a>
+              </li>
+            </ul>
+          </Box>
+        ]
       }
     ],
     tokenMetrics: [],
@@ -839,7 +859,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 14,
     liveTimeStamp: {
-      start: 1696525200000,
+      start: 1697371200000,
       end: 1696698000000
     },
     hideUpcomingCountdown: true,
@@ -1023,6 +1043,30 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         title: 'Investment and Partners',
         info: [
           'Parataxis Capital, LD capital, Prycto, StableLab, Stake capital, Julien Bouteloup (StakeDAO), Sandeep Nailwal (Polygon), Illia Polosukhin (Near), Evgeny Yurtaev (Zerion), Alex Shevchenko (Aurora), Aleksander Larsen and Jeffrey Zirlin (Axie Infinity), Seth Ginns (Coinfund), Kiril Nikolov (Nexo) — investors; Preston van Loon (Offchain Labs), Cameron Dennis (Near), Gustav Arentoft (1Inch), Arjun Kalsy (Mantle) — advisors; Ajna — partner'
+        ]
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <Box key={1} sx={{ '& ul li': { margin: '5px 0' } }}>
+            <ul>
+              <li>
+                Code4rena in October; Ajna's contracts were audited by quantstamp, sherlock and code4rena
+                <ul>
+                  <li>
+                    <a
+                      href="https://github.com/ajna-finance/audits"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ textDecoration: 'underline' }}
+                    >
+                      https://github.com/ajna-finance/audits
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </Box>
         ]
       }
     ],
