@@ -1093,7 +1093,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
           {Array.isArray(info[currentIdx].info) &&
             info[currentIdx].info.length > 0 &&
             info[currentIdx].info.map((item, index: number) => (
-              <Typography key={'bg' + index} variant={'body1'}>
+              <Typography style={{ width: '100%', wordWrap: 'break-word' }} key={'bg' + index} variant={'body1'}>
                 {item}
               </Typography>
             ))}
