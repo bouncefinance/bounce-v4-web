@@ -37,6 +37,8 @@ import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
 import CreateProtocol from './imgs/CreateProtocol.png'
+import Finceptor from './imgs/Finceptor.png'
+import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -672,7 +674,168 @@ const DeelanceProjectInfo: IProjectInfo[] = [
   }
 ]
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 14
+  // current privatePad max keyId is 15
+  {
+    keyId: 15,
+    liveTimeStamp: {
+      start: 1697371200000,
+      end: 1697976000000
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    img: Finceptor,
+    avatar: FinceptorAvatar,
+    title: 'Finceptor',
+    chainId: 56,
+    tokenName: '$FINC',
+    whitePaperLink: 'https://docs.finceptor.app/',
+    upcomingLink: '/launchpad/finceptor',
+    liveLink: '/launchpad/finceptor',
+    projectInfo: [
+      {
+        title: 'What is Finceptor?',
+        info: [
+          <Typography key={1}>
+            Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens
+            through liquidity vaults and DeFi bonds.
+          </Typography>,
+          <Box key={2} sx={{ '& ul li': { margin: '5px 0' }, '&>ul>li': { marginTop: 15 } }}>
+            <ul>
+              <li>
+                Product Suite
+                <ul>
+                  <li>
+                    Liquidity Vault is on-chain initial liquidity bootstrapping pool to build protocol-owned liquidity.
+                  </li>
+                  <li>
+                    Bond is structured protocol-owned liquidity bootstrapping and token liquidation tool for
+                    publicly-traded tokens.
+                  </li>
+                  <li>Launchpad for a strategic token launch and sales.</li>
+                </ul>
+              </li>
+              <li>
+                Features
+                <ul>
+                  <li>Social Allocations: Web3 Quest-based allocation distribution.</li>
+                  <li>Credit Protocol: A in-protocol $USDT based credit system powered by $FCT token.</li>
+                  <li>Liquidity 2.0: Protocol-owned liquidity via bonds.</li>
+                  <li>Social/Web2 auth (coming).</li>
+                </ul>
+              </li>
+              <li>
+                Highlights
+                <ul>
+                  <li>
+                    Backed by $4B Telecom company Turk Telekom Ventures, Neohub (Denizbank - sub-company of Emirates
+                    NBD) and Brinc VC.
+                  </li>
+                  <li>
+                    Mainnet live with $300k total volume financed on Avalanche and BNB Chain — $250k subscribed in under
+                    120 hours and $50k subscribed in under 120 seconds (FCFS).
+                  </li>
+                  <li>+6,100 active KYC-verified users in 3 months.</li>
+                  <li>+75,000 community in 3 months.</li>
+                  <li>+250 curated KOLs with 50M reach.</li>
+                  <li>+65 affiliate referral partners.</li>
+                  <li>Battle-tested infrastructure with +10k unique testers and +100k transactions.</li>
+                  <li>Accelerated by ZK Advancer S-23, Brinc's Web3 accelerator backed by Animoca Brands.</li>
+                  <li>Accelerated and received financial support from Polygon Labs Hypernest DeFi.</li>
+                  <li>Incubated by Yapı Kredi, one of Turkey's largest private banks, in partnership with Ava Labs.</li>
+                  <li>
+                    Received financial and platform grants from Alchemy WAGBI, Microsoft for Startups, Google for Web3
+                    Startups, BNB Chain Kickstart, and Startup with Chainlink.
+                  </li>
+                  <li>Audited by Peckshield.</li>
+                  <li>Market Making by Kairon Labs.</li>
+                </ul>
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            <a
+              href="https://docs.google.com/spreadsheets/d/1_43S6DusKa_5C_AlWYsqJOCSVNesFnd73ekNG1aPLxw/edit#gid=290952973"
+              target="_blank"
+              rel="noreferrer"
+            >
+              https://docs.google.com/spreadsheets/d/1_43S6DusKa_5C_AlWYsqJOCSVNesFnd73ekNG1aPLxw/edit#gid=290952973
+            </a>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box key={1} sx={{ '& ul li': { margin: '10px 0' } }}>
+            <ul>
+              <li>
+                Investors/Cap table: Turk Telekom Ventures ($4B telecom company), Brinc VC, Evox Capital, Keiretsu
+                Forum, Q Angels, IBSS, and Hypernest DAO.
+              </li>
+              <li>
+                Strategic partners/Supporters:
+                <a
+                  href="https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: '#1199FA' }}
+                >
+                  BNB Chain (https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20)
+                </a>
+                , Polygon, Neohub (Subsidiary of Denizbank/Emirates NBD), Space ID (Grant), Chainlink Labs, Shardeum.
+              </li>
+              <li>+250 KOL army</li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens through liquidity vaults and DeFi bonds.',
+    social: [
+      <Link key={0} href="https://finceptor.app/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://finceptorapp.medium.com/" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/create.protocol/?hl=en"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/FinceptorApp" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={7} href="https://discord.com/invite/finceptor" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={8} href="https://finceptorapp.medium.com/" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$FINC' },
+      { title: 'Token Price', content: '0.05 USDT' },
+      { title: 'Token Amount', content: '1,000,000' },
+      { title: 'Blockchain', content: 'BNB' }
+    ]
+  },
   {
     keyId: 14,
     liveTimeStamp: {
@@ -817,10 +980,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
-    hidden: true,
     keyId: 13,
     liveTimeStamp: {
-      start: 1695139200000,
+      start: 1690672533200000,
       end: 0
     },
     hideUpcomingCountdown: true,
