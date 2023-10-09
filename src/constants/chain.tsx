@@ -236,8 +236,8 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
       logo: OMNIUrl
     },
-    rpcUrls: ['https://testnet-1.omni.network/'],
-    blockExplorerUrls: ['https://testnet-1.explorer.omni.network/']
+    rpcUrls: ['https://testnet.omni.network/'],
+    blockExplorerUrls: ['https://testnet.explorer.omni.network/']
   },
   [ChainId.FANTOM]: {
     id: ChainId.FANTOM,
