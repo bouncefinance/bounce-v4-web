@@ -61,6 +61,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "start:alpha": "env-cmd -f ./.env.alpha.production craco start",
     "start:service-worker": "yarn build && yarn serve -s build",
     "build": "yarn lint:fix && craco build",
     "build:alpha": "env-cmd -f ./.env.alpha.production yarn build",
