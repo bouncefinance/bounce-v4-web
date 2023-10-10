@@ -193,7 +193,7 @@ export function use1155TokenList(
             description: 'test',
             image: '',
             name: 'test',
-            tokenId: '0'
+            tokenId: '1'
           })
         }
         setList(nftCollection)
