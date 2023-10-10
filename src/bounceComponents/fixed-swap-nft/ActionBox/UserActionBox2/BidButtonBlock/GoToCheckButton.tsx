@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { PoolType } from 'api/pool/type'
 import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
-import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import { useIsUserInAllWhitelist } from 'bounceHooks/auction/useIsUserInWhitelist'
 
 export interface GoToCheckButtonProps {
   onClick: () => void
@@ -9,8 +9,10 @@ export interface GoToCheckButtonProps {
 }
 
 const GoToCheckButton = ({ onClick, bidAmount, poolInfo }: GoToCheckButtonProps & FixedSwapPoolParams) => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
-    poolInfo,
+  const { isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInAllWhitelist(
+    poolInfo.chainId,
+    poolInfo.poolId,
+    poolInfo.enableWhiteList,
     PoolType.fixedSwapNft
   )
 
