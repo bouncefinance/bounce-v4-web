@@ -16,7 +16,7 @@ export function use1155TokenList(
   const { account } = useActiveWeb3React()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [list, setList] = useState<Response1155Token>({})
-  console.log('false', chainId, isERC721)
+  // console.log('false', chainId, isERC721)
 
   useEffect(() => {
     const fun = async () => {
@@ -172,7 +172,7 @@ export function use1155TokenList(
             tokenId: i
           }))
         }
-        if (chainId === 29) {
+        if (chainId === 31) {
           nftCollection['0x90D93397Bb0F3880B855Aa6288A067cF34B66Ae6'] = []
           nftCollection['0x90D93397Bb0F3880B855Aa6288A067cF34B66Ae6'].push({
             balance: '1',
