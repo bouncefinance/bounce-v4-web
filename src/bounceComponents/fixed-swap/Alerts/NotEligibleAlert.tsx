@@ -86,7 +86,7 @@ const NotEligibleAlert = () => {
       icon={<ErrorIcon />}
     >
       <Content />
-      {isRequireWhiteListAndEmail && (
+      {/* {isRequireWhiteListAndEmail && (
         <Box
           sx={{
             display: 'flex',
@@ -118,7 +118,7 @@ const NotEligibleAlert = () => {
             You are not whitelisted for this auction.
           </Typography>
         </>
-      )}
+      )} */}
     </Alert>
   )
 }
