@@ -1,4 +1,4 @@
-import { Alert, Typography, Button, Box } from '@mui/material'
+import { Alert, Typography, Button } from '@mui/material'
 import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/err.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
