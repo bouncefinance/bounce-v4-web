@@ -1195,20 +1195,20 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'BASE' }
     ],
     privatePrices: [
-      {
-        title: ['DIP Auction Method'],
-        value: ['ERC20 English Auction']
-      },
-      {
-        title: ['DIP Token Offered'],
-        value: 'TBD $DIP'
-      },
+      // {
+      //   title: ['DIP Auction Method'],
+      //   value: ['ERC20 English Auction']
+      // },
+      // {
+      //   title: ['DIP Token Offered'],
+      //   value: 'TBD $DIP'
+      // },
       {
         title: ['DGT Token Offered'],
         value: 'TBD $DGP'
       },
       {
-        title: ['DIP Auction Method'],
+        title: ['DGT Auction Method'],
         value: 'ERC20 Dutch Auction'
       }
     ],
