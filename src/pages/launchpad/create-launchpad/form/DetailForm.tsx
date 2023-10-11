@@ -22,7 +22,7 @@ import {
   FormUploadAdd,
   AddFile
 } from './BaseComponent'
-import { Field, Formik } from 'formik'
+import { Field, Formik, useFormikContext } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'components/Image'
@@ -44,7 +44,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { Body02 } from 'components/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { ReactComponent as YellowErrSVG } from 'assets/imgs/icon/yellow-err.svg'
-import { poolSchema } from '../schema'
+import { poolSchema, poolStrictSchema } from '../schema'
 import { IFragmentReleaseTimes, IDetailInitValue, ParticipantStatus, IPoolInfoParams, PoolStatus } from '../type'
 import { useActiveWeb3React } from 'hooks'
 import { ChainInfoOpt, IUserLaunchpadInfo } from 'api/user/type'
@@ -189,8 +189,9 @@ function SetFragmentReleaseTime({
                 }}
                 minDateTime={minDateTime}
                 textField={{ sx: { width: '100%' } }}
+                firstVery
               />
-              <FormItem label="radio">
+              <FormItem label="radio" firstTrigger>
                 <NumberInput
                   value={item.radio}
                   onBlur={() => {
@@ -262,9 +263,14 @@ const DetailForm = ({
   sx?: SxProps
   launchpadInfo: IUserLaunchpadInfo
 }) => {
-  const { type = PoolState.CREATE, id } = useQueryParams()
+  const { type = PoolState.CREATE, id, strict } = useQueryParams()
   const navigate = useNavigate()
   const { chainId, account } = useActiveWeb3React()
+  const [verifySchema, _strict] = useMemo(() => {
+    const verifySchema = strict !== undefined ? poolStrictSchema : poolSchema
+    const _strict = strict !== undefined
+    return [verifySchema, _strict]
+  }, [strict])
   const poolState = useMemo(() => {
     if (!launchpadInfo?.total || !launchpadInfo?.list.find(item => item.id === Number(id))) {
       return PoolState.CREATE
@@ -335,7 +341,6 @@ const DetailForm = ({
     }
     return { poolList, curPoolList: poolList.find(item => item.id === curPoolId) || defaultValue }
   }, [chainId, chainInfoOpt, curPoolId, launchpadInfo])
-
   const { tokenList } = useTokenList(curPoolList.ChainId, 2, '', true)
   const token1 = tokenList.find(item => item.address === curPoolList.Token.address)
   token1 && (curPoolList.Token = token1)
@@ -363,7 +368,7 @@ const DetailForm = ({
         reverseEnabled: values.isRefundable,
         whitelistEnabled: values.participantStatus === ParticipantStatus.Whitelist,
         whitelistAddresses: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-        status: PoolStatus.Init,
+        // status: PoolStatus.Init,
         releaseData: [{ startAt: 0, endAtOrRatio: 0 }]
       }
       if (values.allocationStatus === AllocationStatus.Limited) {
@@ -424,8 +429,6 @@ const DetailForm = ({
     return res
   }
   const onSubmit = async (value: IDetailInitValue) => {
-    console.log('submit submit submit submit submit')
-    console.log(value)
     try {
       await toUpdate(value)
       show(DialogDarkTips, {
@@ -487,19 +490,22 @@ const DetailForm = ({
       })
     }
   }
-  const isSm = useBreakpoint('sm')
+  const switchPool = (id: number) => {
+    navigate({ search: `?type=2&id=${id}` }, { replace: true })
+    setCurPoolId(id)
+  }
   return (
     <CardBox sx={{ ...sx }}>
       <Formik
         enableReinitialize
         initialValues={curPoolList}
-        validationSchema={poolSchema}
+        validationSchema={verifySchema}
         onSubmit={onSubmit}
-        validateOnMount
+        validateOnMount={true}
       >
-        {({ values, setFieldValue, setValues, errors, handleSubmit }) => {
+        {formikProps => {
           return (
-            <Stack component={'form'} gap={24} onSubmit={handleSubmit}>
+            <Stack component={'form'} gap={24} onSubmit={formikProps.handleSubmit}>
               <BaseBox>
                 <Title sx={{ color: '#20201E', fontSize: 28 }}>Auction Round</Title>
                 <Stack mt={20} sx={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
@@ -516,7 +522,7 @@ const DetailForm = ({
                           label={item.name}
                           variant={curPoolId === item.id ? 'outlined' : 'filled'}
                           onClick={() => {
-                            setCurPoolId(item.id)
+                            switchPool(item.id)
                           }}
                         />
                       )
@@ -524,488 +530,515 @@ const DetailForm = ({
                   {!poolList.find(item => !item.id) && <Chip label="Add New List" onClick={() => setCurPoolId(0)} />}
                 </Stack>
               </BaseBox>
-              <BaseBox>
-                <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
-                <Stack flexDirection={'column'} mt={32} gap={isSm ? 16 : 32}>
-                  <FormLayout
-                    title1="Project Picture"
-                    childTitle={
-                      <Body02
-                        sx={{ fontSize: 12, color: '#626262' }}
-                      >{`(Please upload same picture with different size. JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
-                    }
-                    childForm={
-                      <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
-                        <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
-                          <FormUploadAdd
-                            formItemName="projectMobilePicture"
-                            fileUrl={values?.projectMobilePicture}
-                            setFieldValue={setFieldValue}
-                            labelId="ProjectPictureSmallImg"
-                            labelChild={<BigAddIcon />}
-                            labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
-                            firstTrigger={true}
-                          />
-                          <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 375px*290px`}</Body02>
-                        </Stack>
-                        <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
-                          <FormUploadAdd
-                            formItemName="projectPicture"
-                            fileUrl={values?.projectPicture}
-                            setFieldValue={setFieldValue}
-                            labelId="ProjectPictureBigImg"
-                            labelChild={<BigAddIcon />}
-                            labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
-                            firstTrigger={true}
-                          />
-                          <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 1360px*600px`}</Body02>
-                        </Stack>
-                      </Stack>
-                    }
-                  />
 
-                  <FormLayout
-                    title1="Pool Name"
-                    childForm={
-                      <FormItem name={'name'}>
-                        <OutlinedInput placeholder="Name of the project, eg. Bounce" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    sxStyle={{ marginTop: isSm ? 24 : 40 }}
-                    title1="Token Logo"
-                    childTitle={
-                      <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
-                    }
-                    childForm={
-                      <FormUploadAdd
-                        fileUrl={values.TokenLogo}
-                        formItemName="TokenLogo"
-                        labelId="TokenLogo"
-                        setFieldValue={setFieldValue}
-                        labelChild={<AddFile />}
-                      />
-                    }
-                  />
-                  <FormLayout
-                    title1="Token Name"
-                    childForm={
-                      <FormItem name={'TokenName'}>
-                        <OutlinedInput placeholder="Name of the token, eg. Bounce" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Blockchain Platform"
-                    title2="What platform is this token issued on?"
-                    childForm={
-                      <FormItem name="ChainId">
-                        <Select
-                          value={values.ChainId}
-                          displayEmpty
-                          onChange={({ target }) => {
-                            setFieldValue('ChainId', target.value)
-                          }}
-                          renderValue={selected => {
-                            const currentChain = ChainList.find(item => item.id === selected)
-                            return (
-                              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-                                {selected ? (
-                                  <>
-                                    <Image style={{ width: 25, height: 25 }} src={currentChain?.logo as string} />
-                                    <Title sx={{ fontSize: 16 }}>{currentChain?.name}</Title>
-                                  </>
-                                ) : (
-                                  <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>
-                                    select asset platform
-                                  </Title>
-                                )}
-                              </Box>
-                            )
-                          }}
-                        >
-                          {ChainList.map(t => (
-                            <MenuItem
-                              key={t.id}
-                              value={t.id}
-                              selected={values.ChainId === t.id ? true : false}
-                              sx={{
-                                '&.Mui-selected': {
-                                  '& > .MuiStack-root > p': {
-                                    color: '#2B51DA'
-                                  }
-                                }
-                              }}
-                            >
-                              <Stack
-                                sx={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  gap: 16
-                                }}
-                              >
-                                <Image style={{ width: 25, height: 25 }} src={t.logo} />
-                                <Title sx={{ fontSize: 16 }}>{t.name}</Title>
-                              </Stack>
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Contract Address"
-                    childForm={
-                      <FormItem name="ContractAddress">
-                        <OutlinedInput placeholder="Explorer Link" />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Contract Decimal Places"
-                    childForm={
-                      <FormItem name="ContractDecimalPlaces">
-                        <OutlinedInput placeholder="Explorer Link" />
-                      </FormItem>
-                    }
-                  />
-                </Stack>
-              </BaseBox>
-
-              <BaseBox>
-                <Title sx={{ color: '#20201E', fontSize: 28 }}>Launchpad Information</Title>
-                <Box my={40}>
-                  <Stack
-                    sx={{
-                      flexDirection: 'row',
-                      gap: 8,
-                      alignItems: 'center',
-                      padding: '19px 20px 21px',
-                      background: '#FFF8E8'
-                    }}
-                  >
-                    <YellowErrSVG width={20} height={18} />
-                    <Typography
-                      sx={{
-                        width: 'calc(100% - 20px - 8px)',
-                        fontFamily: 'Inter',
-                        color: '#171717',
-                        fontSize: isSm ? 13 : 14,
-                        fontWeight: 400
-                      }}
-                    >
-                      This section is for pre auction information collection. You can change auction details after
-                      submit
-                    </Typography>
-                  </Stack>
-                </Box>
-                <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
-                  <FormLayout
-                    title1="Auction Type"
-                    childForm={
-                      <FormItem name="AuctionType">
-                        <Select
-                          value={values.AuctionType}
-                          onChange={e => {
-                            setFieldValue('AuctionType', e.target.value)
-                          }}
-                          renderValue={selected => {
-                            const auction = auctionType.find(item => item.value === selected)
-                            return (
-                              <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 500 }}>{auction?.label}</Title>
-                            )
-                          }}
-                        >
-                          {auctionType.map(value => (
-                            <MenuItem key={value.value} value={value.value}>
-                              <Typography
-                                sx={{
-                                  fontFamily: 'Inter',
-                                  fontSize: 14,
-                                  color: values.AuctionType === value.value ? '#2B51DA' : '#121212',
-                                  fontWeight: 400
-                                }}
-                              >
-                                {value.label}
-                              </Typography>
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormItem>
-                    }
-                  />
-
-                  <FormLayout
-                    title1="Funding Currency"
-                    childForm={
-                      <FormItem
-                        name="Token.symbol"
-                        label="Select Token"
-                        required
-                        sx={{ flex: 1 }}
-                        startAdornment={<TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={32} />}
-                      >
-                        <FakeOutlinedInput
-                          readOnly
-                          onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
-                        />
-                      </FormItem>
-                    }
-                  />
-                  <FormLayout
-                    title1="Swap Ratio"
-                    childForm={
-                      <Stack
-                        flexDirection={'row'}
-                        sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}
-                      >
-                        <Title sx={{ fontSize: 20, color: '#171717' }}>
-                          1 {!values.TokenName ? 'USDT' : values.TokenName} =
-                        </Title>
-                        <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio">
-                          <NumberInput
-                            value={values.SwapRatio}
-                            onUserInput={value => setFieldValue('SwapRatio', value)}
-                            endAdornment={
-                              <>
-                                <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
-                                <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
-                              </>
-                            }
-                          />
-                        </FormItem>
-                      </Stack>
-                    }
-                  />
-                  <FormLayout
-                    title1="Total Supply"
-                    childForm={
-                      <FormItem name="TotalSupply">
-                        <OutlinedInput placeholder="Enter  amount" />
-                      </FormItem>
-                    }
-                  />
-
-                  <Box>
-                    <Title mb={13} sx={{ fontSize: 20, fontWeight: 500, color: '#000' }}>
-                      Time
-                    </Title>
-                    <Stack flexDirection={'row'}>
-                      <Field
-                        component={DateTimePickerFormItem}
-                        name="startTime"
-                        disablePast
-                        maxDateTime={values.endTime}
-                        textField={{ sx: { flex: 1 } }}
-                      />
-                      <Field
-                        component={DateTimePickerFormItem}
-                        name="endTime"
-                        disablePast
-                        minDateTime={values.startTime}
-                        textField={{ sx: { flex: 1 } }}
-                      />
-                    </Stack>
-                  </Box>
-                  <Box>
-                    <Title sx={{ color: '#20201E', fontSize: 20 }}>Allocation per wallet</Title>
-                    <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
-                      <FormControlLabel
-                        value={AllocationStatus.NoLimits}
-                        control={<Radio disableRipple />}
-                        label="No Limits"
-                      />
-                      <FormControlLabel
-                        value={AllocationStatus.Limited}
-                        control={<Radio disableRipple />}
-                        label="Limited"
-                      />
-                    </Field>
-                    {values.allocationStatus === AllocationStatus.Limited && (
-                      <FormItem name="allocationPerWallet" sx={{ flex: 1 }}>
-                        <OutlinedInput
-                          sx={{ mt: 10 }}
-                          endAdornment={
-                            <>
-                              <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
-                              <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
-                            </>
-                          }
-                        />
-                      </FormItem>
-                    )}
-                  </Box>
-                  <Box>
-                    <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay Unlocking Token</Title>
-                      {/* <FormControlLabel
-                        checked={values.releaseType === 0}
-                        onChange={() => setFieldValue('releaseType', values.releaseType ? 0 : 1)}
-                        control={<GraySwitch defaultChecked />}
-                        label=""
-                      /> */}
-                    </Stack>
-                    {/* {values.releaseType > 0 && ( */}
-                    {
-                      <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
-                        <FormControlLabel
-                          value={IReleaseType.Cliff}
-                          control={<Radio disableRipple />}
-                          label={
-                            <Tooltip title="Set a date so traders can only claim tokens by that time.">
-                              <span>Delay</span>
-                            </Tooltip>
-                          }
-                        />
-                        <FormControlLabel
-                          value={IReleaseType.Linear}
-                          control={<Radio disableRipple />}
-                          label={
-                            <Tooltip title="Set a start and end time to unlock tokens in a linear release method.">
-                              <span>Linear</span>
-                            </Tooltip>
-                          }
-                        />
-                        <FormControlLabel
-                          value={IReleaseType.Fragment}
-                          control={<Radio disableRipple />}
-                          label={
-                            <Tooltip title="Set multiple time intervals and proportions for batch token releases">
-                              <span>Staged</span>
-                            </Tooltip>
-                          }
-                        />
-                      </Field>
-                    }
-                    {Number(values.releaseType) === IReleaseType.Cliff ? (
-                      <Stack spacing={6}>
-                        <LabelTitle>Unlocking Start Time</LabelTitle>
-                        <Field
-                          component={DateTimePickerFormItem}
-                          disablePast
-                          name="delayUnlockingTime"
-                          minDateTime={values.endTime}
-                          textField={{ sx: { width: '100%' } }}
-                        />
-                      </Stack>
-                    ) : Number(values.releaseType) === IReleaseType.Linear ? (
-                      <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
-                        <Stack spacing={6}>
-                          <LabelTitle>Start Time</LabelTitle>
-                          <Field
-                            component={DateTimePickerFormItem}
-                            disablePast
-                            name="linearUnlockingStartTime"
-                            minDateTime={values.endTime}
-                            textField={{ sx: { width: '100%' } }}
-                          />
-                        </Stack>
-
-                        <Stack spacing={6}>
-                          <LabelTitle>End Time</LabelTitle>
-                          <Field
-                            component={DateTimePickerFormItem}
-                            disablePast
-                            name="linearUnlockingEndTime"
-                            minDateTime={values.linearUnlockingStartTime}
-                            textField={{ sx: { width: '100%' } }}
-                          />
-                        </Stack>
-                      </Box>
-                    ) : Number(values.releaseType) === IReleaseType.Fragment ? (
-                      <SetFragmentReleaseTime
-                        minDateTime={values.endTime}
-                        errors={errors.fragmentReleaseTimes}
-                        releaseTimes={values.fragmentReleaseTimes}
-                        setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) =>
-                          setFieldValue('fragmentReleaseTimes', val)
-                        }
-                      />
-                    ) : (
-                      <LabelTitle>
-                        {/* No unlocking method is set; tokens can be claimed after the specified end. */}
-                      </LabelTitle>
-                    )}
-
-                    <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
-                  </Box>
-                  <Box>
-                    <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Title sx={{ fontSize: 20, color: '#20201E' }}>Refundable</Title>
-                      <FormControlLabel
-                        checked={values.isRefundable}
-                        onChange={() => setFieldValue('isRefundable', !values.isRefundable)}
-                        control={<GraySwitch defaultChecked />}
-                        label=""
-                      />
-                    </Stack>
-                    {values.isRefundable && values?.endTime && (
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant="body1">Auction will be refundable before the end time</Typography>
-                        <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
-                          Before {values.endTime.format('MMM D, YYYY hh:mm A')}
-                        </Box>
-                      </Box>
-                    )}
-                  </Box>
-                  <Box sx={{ mt: 38, mb: 34 }}>
-                    <Stack direction="row" alignItems="center" spacing={8}>
-                      <Typography variant="h3" sx={{ fontSize: 16 }}>
-                        Participant
-                      </Typography>
-
-                      <Tooltip title="Once activated, only traders you put in this whitelist can join your auction.">
-                        <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-                      </Tooltip>
-                    </Stack>
-
-                    <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
-                      <FormControlLabel
-                        value={ParticipantStatus.Public}
-                        control={<Radio disableRipple />}
-                        label="Public"
-                      />
-                      <FormControlLabel
-                        value={ParticipantStatus.Whitelist}
-                        control={<Radio disableRipple />}
-                        label="Whitelist"
-                      />
-                    </Field>
-                    <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
-                    <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
-                  </Box>
-                  <Stack
-                    sx={{ flexDirection: { xs: 'column', md: 'row' } }}
-                    spacing={10}
-                    justifyContent="space-between"
-                  >
-                    <ButtonBase
-                      sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
-                      disabled={values.participantStatus !== ParticipantStatus.Whitelist}
-                      onClick={() => {
-                        showImportWhitelistDialog(values, setValues)
-                      }}
-                    >
-                      {values.participantStatus === ParticipantStatus.Whitelist && (
-                        <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
-                      )}
-                    </ButtonBase>
-                  </Stack>
-                </Stack>
-              </BaseBox>
+              <FieldComponents isStrict={_strict} />
               <SubmitComp
                 toUpdate={toUpdate}
-                values={values}
-                errors={errors}
+                values={formikProps.values}
+                errors={formikProps.errors}
                 loading={loading}
-                isChange={!_.isEqual(values, curPoolList)}
+                isChange={!_.isEqual(formikProps.values, curPoolList)}
               />
             </Stack>
           )
         }}
       </Formik>
     </CardBox>
+  )
+}
+const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
+  const isSm = useBreakpoint('sm')
+  const { values, setFieldValue, setValues, errors, setFieldError } = useFormikContext<IDetailInitValue>()
+  const { tokenList } = useTokenList(values.ChainId, 1, '', true)
+  const verifyToken = useCallback(() => {
+    const token1 = tokenList.find(i => i.address === values.Token.address)
+    if (!token1) {
+      setFieldError('Token.symbol', 'There is no such token address under the current chain')
+    }
+    if (!!errors.ContractAddress || !values.ContractAddress) {
+      return null
+    }
+    const token0 = tokenList.find(i => i.address === values.ContractAddress)
+    if (!token0) {
+      setFieldError('ContractAddress', 'There is no such token address under the current chain')
+      return null
+    }
+    if (values.TokenName !== token0?.name && values.TokenName !== token0?.symbol) {
+      setFieldError(
+        'TokenName',
+        `It can be seen from the token address that the current token name is ${
+          token0?.name !== token0?.symbol ? token0?.name + ' or ' + token0?.symbol : token0?.symbol
+        } `
+      )
+    }
+    if (Number(values.ContractDecimalPlaces) !== token0?.decimals) {
+      setFieldError(
+        'ContractDecimalPlaces',
+        `It can be seen from the token address that the current token decimals is ${token0?.decimals}`
+      )
+    }
+    if (values.Token.address === token0.address) {
+      setFieldError('Token.symbol', 'Please choose a different token')
+    }
+    return null
+  }, [errors, setFieldError, tokenList, values])
+
+  useEffect(() => {
+    verifyToken()
+  }, [verifyToken])
+  return (
+    <>
+      <BaseBox>
+        <Title sx={{ color: '#20201E', fontSize: 28 }}>Token Information</Title>
+        <Stack flexDirection={'column'} mt={32} gap={isSm ? 16 : 32}>
+          <FormLayout
+            title1="Project Picture"
+            childTitle={
+              <Body02
+                sx={{ fontSize: 12, color: '#626262' }}
+              >{`(Please upload same picture with different size. JPEG, PNG, WEBP Files, Size<10M)`}</Body02>
+            }
+            childForm={
+              <Stack sx={{ flexDirection: isSm ? 'column' : 'row', gap: 16 }}>
+                <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 260 }}>
+                  <FormUploadAdd
+                    formItemName="projectMobilePicture"
+                    fileUrl={values?.projectMobilePicture}
+                    setFieldValue={setFieldValue}
+                    labelId="ProjectPictureSmallImg"
+                    labelChild={<BigAddIcon />}
+                    labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                    firstTrigger={true}
+                  />
+                  <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 375px*290px`}</Body02>
+                </Stack>
+                <Stack sx={{ flexDirection: 'column', gap: 16, width: isSm ? '100%' : 400 }}>
+                  <FormUploadAdd
+                    formItemName="projectPicture"
+                    fileUrl={values?.projectPicture}
+                    setFieldValue={setFieldValue}
+                    labelId="ProjectPictureBigImg"
+                    labelChild={<BigAddIcon />}
+                    labelSx={{ width: '100%', height: 240, border: '1px dashed #D7D6D9' }}
+                    firstTrigger={true}
+                  />
+                  <Body02 sx={{ fontSize: 12, color: '#626262' }}>{`Suggested size: 1360px*600px`}</Body02>
+                </Stack>
+              </Stack>
+            }
+          />
+
+          <FormLayout
+            title1="Pool Name"
+            childForm={
+              <FormItem name={'name'} firstTrigger={isStrict}>
+                <OutlinedInput placeholder="Name of the project, eg. Bounce" />
+              </FormItem>
+            }
+          />
+
+          <FormLayout
+            sxStyle={{ marginTop: isSm ? 24 : 40 }}
+            title1="Token Logo"
+            childTitle={<Body02 sx={{ fontSize: 12, color: '#626262' }}>{`(JPEG, PNG, WEBP Files, Size<10M)`}</Body02>}
+            childForm={
+              <FormUploadAdd
+                fileUrl={values.TokenLogo}
+                formItemName="TokenLogo"
+                labelId="TokenLogo"
+                setFieldValue={setFieldValue}
+                labelChild={<AddFile />}
+                firstTrigger={isStrict}
+              />
+            }
+          />
+          <FormLayout
+            title1="Token Name"
+            childForm={
+              <FormItem name={'TokenName'} firstTrigger={isStrict}>
+                <OutlinedInput placeholder="Name of the token, eg. Bounce" />
+              </FormItem>
+            }
+          />
+          <FormLayout
+            title1="Blockchain Platform"
+            title2="What platform is this token issued on?"
+            childForm={
+              <FormItem name="ChainId" firstTrigger={isStrict}>
+                <Select
+                  value={values.ChainId}
+                  displayEmpty
+                  onChange={({ target }) => {
+                    setFieldValue('ChainId', target.value)
+                  }}
+                  renderValue={selected => {
+                    const currentChain = ChainList.find(item => item.id === selected)
+                    return (
+                      <Box sx={{ display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' }}>
+                        {selected ? (
+                          <>
+                            <Image style={{ width: 25, height: 25 }} src={currentChain?.logo as string} />
+                            <Title sx={{ fontSize: 16 }}>{currentChain?.name}</Title>
+                          </>
+                        ) : (
+                          <Title sx={{ fontSize: 14, color: '#959595', fontWeight: 500 }}>select asset platform</Title>
+                        )}
+                      </Box>
+                    )
+                  }}
+                >
+                  {ChainList.map(t => (
+                    <MenuItem
+                      key={t.id}
+                      value={t.id}
+                      selected={values.ChainId === t.id ? true : false}
+                      sx={{
+                        '&.Mui-selected': {
+                          '& > .MuiStack-root > p': {
+                            color: '#2B51DA'
+                          }
+                        }
+                      }}
+                    >
+                      <Stack
+                        sx={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          gap: 16
+                        }}
+                      >
+                        <Image style={{ width: 25, height: 25 }} src={t.logo} />
+                        <Title sx={{ fontSize: 16 }}>{t.name}</Title>
+                      </Stack>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormItem>
+            }
+          />
+          <FormLayout
+            title1="Contract Address"
+            childForm={
+              <FormItem name="ContractAddress" firstTrigger={isStrict}>
+                <OutlinedInput placeholder="Explorer Link" />
+              </FormItem>
+            }
+          />
+          <FormLayout
+            title1="Contract Decimal Places"
+            childForm={
+              <FormItem name="ContractDecimalPlaces" firstTrigger={isStrict}>
+                <OutlinedInput placeholder="Explorer Link" />
+              </FormItem>
+            }
+          />
+        </Stack>
+      </BaseBox>
+
+      <BaseBox>
+        <Title sx={{ color: '#20201E', fontSize: 28 }}>Launchpad Information</Title>
+        <Box my={40}>
+          <Stack
+            sx={{
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              padding: '19px 20px 21px',
+              background: '#FFF8E8'
+            }}
+          >
+            <YellowErrSVG width={20} height={18} />
+            <Typography
+              sx={{
+                width: 'calc(100% - 20px - 8px)',
+                fontFamily: 'Inter',
+                color: '#171717',
+                fontSize: isSm ? 13 : 14,
+                fontWeight: 400
+              }}
+            >
+              This section is for pre auction information collection. You can change auction details after submit
+            </Typography>
+          </Stack>
+        </Box>
+        <Stack flexDirection={'column'} gap={isSm ? 16 : 32}>
+          <FormLayout
+            title1="Auction Type"
+            childForm={
+              <FormItem name="AuctionType" firstTrigger={isStrict}>
+                <Select
+                  value={values.AuctionType}
+                  onChange={e => {
+                    setFieldValue('AuctionType', e.target.value)
+                  }}
+                  renderValue={selected => {
+                    const auction = auctionType.find(item => item.value === selected)
+                    return <Title sx={{ fontSize: 16, color: '#20201E', fontWeight: 500 }}>{auction?.label}</Title>
+                  }}
+                >
+                  {auctionType.map(value => (
+                    <MenuItem key={value.value} value={value.value}>
+                      <Typography
+                        sx={{
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          color: values.AuctionType === value.value ? '#2B51DA' : '#121212',
+                          fontWeight: 400
+                        }}
+                      >
+                        {value.label}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormItem>
+            }
+          />
+
+          <FormLayout
+            title1="Funding Currency"
+            childForm={
+              <FormItem
+                name="Token.symbol"
+                label="Select Token"
+                firstTrigger={isStrict}
+                required
+                sx={{ flex: 1 }}
+                startAdornment={<TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={32} />}
+              >
+                <FakeOutlinedInput
+                  readOnly
+                  onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
+                />
+              </FormItem>
+            }
+          />
+          <FormLayout
+            title1="Swap Ratio"
+            childForm={
+              <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}>
+                <Title sx={{ fontSize: 20, color: '#171717' }}>
+                  1 {!values.TokenName ? 'USDT' : values.TokenName} =
+                </Title>
+                <FormItem placeholder="0.00" sx={{ flex: 1 }} name="SwapRatio" firstTrigger={isStrict}>
+                  <NumberInput
+                    value={values.SwapRatio}
+                    onUserInput={value => setFieldValue('SwapRatio', value)}
+                    endAdornment={
+                      <>
+                        <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
+                      </>
+                    }
+                  />
+                </FormItem>
+              </Stack>
+            }
+          />
+          <FormLayout
+            title1="Total Supply"
+            childForm={
+              <FormItem name="TotalSupply" firstTrigger={isStrict}>
+                <OutlinedInput placeholder="Enter  amount" />
+              </FormItem>
+            }
+          />
+
+          <Box>
+            <Title mb={13} sx={{ fontSize: 20, fontWeight: 500, color: '#000' }}>
+              Time
+            </Title>
+            <Stack flexDirection={'row'}>
+              <Field
+                component={DateTimePickerFormItem}
+                name="startTime"
+                disablePast
+                maxDateTime={values.endTime}
+                textField={{ sx: { flex: 1 } }}
+                firstVery={isStrict}
+              />
+              <Field
+                component={DateTimePickerFormItem}
+                name="endTime"
+                disablePast
+                minDateTime={values.startTime}
+                textField={{ sx: { flex: 1 } }}
+                firstVery={isStrict}
+              />
+            </Stack>
+          </Box>
+          <Box>
+            <Title sx={{ color: '#20201E', fontSize: 20 }}>Allocation per wallet</Title>
+            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
+              <FormControlLabel value={AllocationStatus.NoLimits} control={<Radio disableRipple />} label="No Limits" />
+              <FormControlLabel value={AllocationStatus.Limited} control={<Radio disableRipple />} label="Limited" />
+            </Field>
+            {values.allocationStatus === AllocationStatus.Limited && (
+              <FormItem name="allocationPerWallet" sx={{ flex: 1 }} firstTrigger={isStrict}>
+                <OutlinedInput
+                  sx={{ mt: 10 }}
+                  endAdornment={
+                    <>
+                      <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
+                      <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
+                    </>
+                  }
+                />
+              </FormItem>
+            )}
+          </Box>
+          <Box>
+            <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+              <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay Unlocking Token</Title>
+              {/* <FormControlLabel
+          checked={values.releaseType === 0}
+          onChange={() => setFieldValue('releaseType', values.releaseType ? 0 : 1)}
+          control={<GraySwitch defaultChecked />}
+          label=""
+        /> */}
+            </Stack>
+            {/* {values.releaseType > 0 && ( */}
+            {
+              <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="releaseType">
+                <FormControlLabel
+                  value={IReleaseType.Cliff}
+                  control={<Radio disableRipple />}
+                  label={
+                    <Tooltip title="Set a date so traders can only claim tokens by that time.">
+                      <span>Delay</span>
+                    </Tooltip>
+                  }
+                />
+                <FormControlLabel
+                  value={IReleaseType.Linear}
+                  control={<Radio disableRipple />}
+                  label={
+                    <Tooltip title="Set a start and end time to unlock tokens in a linear release method.">
+                      <span>Linear</span>
+                    </Tooltip>
+                  }
+                />
+                <FormControlLabel
+                  value={IReleaseType.Fragment}
+                  control={<Radio disableRipple />}
+                  label={
+                    <Tooltip title="Set multiple time intervals and proportions for batch token releases">
+                      <span>Staged</span>
+                    </Tooltip>
+                  }
+                />
+              </Field>
+            }
+            {Number(values.releaseType) === IReleaseType.Cliff ? (
+              <Stack spacing={6}>
+                <LabelTitle>Unlocking Start Time</LabelTitle>
+                <Field
+                  component={DateTimePickerFormItem}
+                  name="delayUnlockingTime"
+                  disablePast
+                  minDateTime={values.endTime}
+                  textField={{ sx: { width: '100%' } }}
+                  firstVery={isStrict}
+                />
+              </Stack>
+            ) : Number(values.releaseType) === IReleaseType.Linear ? (
+              <Box display={'grid'} gridTemplateColumns={'1fr 1fr'} gap={15}>
+                <Stack spacing={6}>
+                  <LabelTitle>Start Time</LabelTitle>
+                  <Field
+                    component={DateTimePickerFormItem}
+                    disablePast
+                    name="linearUnlockingStartTime"
+                    minDateTime={values.endTime}
+                    textField={{ sx: { width: '100%' } }}
+                    firstVery={isStrict}
+                  />
+                </Stack>
+
+                <Stack spacing={6}>
+                  <LabelTitle>End Time</LabelTitle>
+                  <Field
+                    component={DateTimePickerFormItem}
+                    disablePast
+                    name="linearUnlockingEndTime"
+                    minDateTime={values.linearUnlockingStartTime}
+                    textField={{ sx: { width: '100%' } }}
+                    firstVery={isStrict}
+                  />
+                </Stack>
+              </Box>
+            ) : Number(values.releaseType) === IReleaseType.Fragment ? (
+              <SetFragmentReleaseTime
+                minDateTime={values.endTime}
+                errors={errors.fragmentReleaseTimes}
+                releaseTimes={values.fragmentReleaseTimes}
+                setFragmentReleaseTimes={(val: IFragmentReleaseTimes[]) => setFieldValue('fragmentReleaseTimes', val)}
+              />
+            ) : (
+              <LabelTitle>
+                {/* No unlocking method is set; tokens can be claimed after the specified end. */}
+              </LabelTitle>
+            )}
+
+            <FormHelperText error={!!errors.fragmentReleaseSize}>{errors.fragmentReleaseSize}</FormHelperText>
+          </Box>
+          <Box>
+            <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+              <Title sx={{ fontSize: 20, color: '#20201E' }}>Refundable</Title>
+              <FormControlLabel
+                checked={values.isRefundable}
+                onChange={() => setFieldValue('isRefundable', !values.isRefundable)}
+                control={<GraySwitch defaultChecked />}
+                label=""
+              />
+            </Stack>
+            {values.isRefundable && values?.endTime && (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1">Auction will be refundable before the end time</Typography>
+                <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', color: '#908E96', px: 8, py: 4, ml: 6 }}>
+                  Before {values.endTime.format('MMM D, YYYY hh:mm A')}
+                </Box>
+              </Box>
+            )}
+          </Box>
+          <Box sx={{ mt: 38, mb: 34 }}>
+            <Stack direction="row" alignItems="center" spacing={8}>
+              <Typography variant="h3" sx={{ fontSize: 16 }}>
+                Participant
+              </Typography>
+
+              <Tooltip title="Once activated, only traders you put in this whitelist can join your auction.">
+                <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+              </Tooltip>
+            </Stack>
+
+            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
+              <FormControlLabel value={ParticipantStatus.Public} control={<Radio disableRipple />} label="Public" />
+              <FormControlLabel
+                value={ParticipantStatus.Whitelist}
+                control={<Radio disableRipple />}
+                label="Whitelist"
+              />
+            </Field>
+            <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
+            <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
+          </Box>
+          <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} spacing={10} justifyContent="space-between">
+            <ButtonBase
+              sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
+              disabled={values.participantStatus !== ParticipantStatus.Whitelist}
+              onClick={() => {
+                showImportWhitelistDialog(values, setValues)
+              }}
+            >
+              {values.participantStatus === ParticipantStatus.Whitelist && (
+                <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+              )}
+            </ButtonBase>
+          </Stack>
+        </Stack>
+      </BaseBox>
+    </>
   )
 }
 export default DetailForm

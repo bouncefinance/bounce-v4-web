@@ -71,11 +71,7 @@ export const SubmitComp = ({
   values?: IDetailInitValue
   toUpdate?: (values: IDetailInitValue) => Promise<any>
 }) => {
-  console.log('errors')
-  console.log(errors)
-
   let isCanPreview = false
-
   if (errors && !Object.keys(errors).length) {
     isCanPreview = true
   }

@@ -33,11 +33,12 @@ function fieldToDatePicker({
   onChange,
   onError,
   renderInput,
+  firstVery = false,
   ...props
-}: DatePickerProps): MuiDateTimePickerProps<Moment, Moment> {
+}: DatePickerProps & { firstVery?: boolean }): MuiDateTimePickerProps<Moment, Moment> {
   const fieldError = getIn(errors, field.name)
 
-  const showError = getIn(touched, field.name) && !!fieldError
+  const showError = firstVery || (getIn(touched, field.name) && !!fieldError)
 
   return {
     inputFormat: 'MMM D, Y  HH:mm', //Jan 1, 2021  00:00
@@ -82,7 +83,7 @@ function fieldToDatePicker({
   }
 }
 
-function DateTimePickerFormItem({ children, ...props }: DatePickerProps) {
+function DateTimePickerFormItem({ children, ...props }: DatePickerProps & { firstVery?: boolean }) {
   // console.log('field: ', props.field)
   // console.log('form: ', props.form)
   return (
