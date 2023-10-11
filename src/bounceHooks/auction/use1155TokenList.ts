@@ -185,16 +185,17 @@ export function use1155TokenList(
           })
         }
         if (chainId === 29) {
-          nftCollection['0xeaa8b62263cbb81dcd5fa488dcbf8abd6ce119e0'] = []
-          nftCollection['0xeaa8b62263cbb81dcd5fa488dcbf8abd6ce119e0'].push({
+          const _tempIds = Object.keys(new Array(401).fill(''))
+          _tempIds.shift()
+          nftCollection['0xeaa8b62263cbb81dcd5fa488dcbf8abd6ce119e0'] = _tempIds.map(i => ({
             balance: '1',
             contractAddr: '0xeaa8b62263cbb81dcd5fa488dcbf8abd6ce119e0',
-            contractName: 'test',
-            description: 'test',
+            contractName: 'omni-test',
+            description: 'omni-test',
             image: '',
-            name: 'test',
-            tokenId: '1'
-          })
+            name: 'omni-test',
+            tokenId: i
+          }))
         }
         setList(nftCollection)
         console.error('fetch user nfts error', error)
