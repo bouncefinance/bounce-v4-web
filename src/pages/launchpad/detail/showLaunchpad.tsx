@@ -191,7 +191,7 @@ const ShowLaunchpad = ({ basicInfo, poolInfo, poolListEl }: IShowProps) => {
       {!!poolInfo && poolInfo.status !== PoolStatus.On_Chain && !poolListEl ? (
         <Box mb={120} sx={{ '&>div': { marginBottom: '0px ' } }}>
           <Tabs item={privatePadData} />
-          <NoPoolInfo />
+          {false && <NoPoolInfo />}
         </Box>
       ) : (
         <Tabs item={privatePadData} />

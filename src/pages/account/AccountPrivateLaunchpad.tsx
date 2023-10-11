@@ -3,9 +3,9 @@ import { Add } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import AccountLayout from 'bounceComponents/account/AccountLayout'
 import { useEffect, useState } from 'react'
-import tabStyles from './tabStyles'
-import ChainSelect from 'bounceComponents/common/ChainSelect'
-import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
+// import tabStyles from './tabStyles'
+// import ChainSelect from 'bounceComponents/common/ChainSelect'
+// import AuctionTypeSelect from 'bounceComponents/common/AuctionTypeSelect'
 import { PoolType } from 'api/pool/type'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
@@ -28,12 +28,12 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import EmptyData from 'bounceComponents/common/EmptyData'
 
 import LaunchpadMark from 'bounceComponents/pre-launchpad/LaunchpadMark'
-enum ETabList {
-  All = 'All',
-  Upcoming = 'Upcoming',
-  Live = 'Live',
-  Close = 'Close'
-}
+// enum ETabList {
+//   All = 'All',
+//   Upcoming = 'Upcoming',
+//   Live = 'Live',
+//   Close = 'Close'
+// }
 export enum CardSize {
   Small = 1,
   Medium = 2,
@@ -50,13 +50,13 @@ export const socialMap: { [key: string]: string } = {
   subreddit: Subreddit
 }
 
-const tabList = [ETabList.All, ETabList.Close, ETabList.Live, ETabList.Upcoming]
+// const tabList = [ETabList.All, ETabList.Close, ETabList.Live, ETabList.Upcoming]
 
 const defaultPageSize = 4
 export default function AccountPrivateLaunchpad() {
-  const [curTab, setCurTab] = useState(ETabList.All)
-  const [curChain, setCurChain] = useState(0)
-  const [curPoolType, setCurPoolType] = useState<PoolType | 0>(0)
+  // const [curTab, setCurTab] = useState(ETabList.All)
+  const [curChain] = useState(0)
+  const [curPoolType] = useState<PoolType | 0>(0)
   const navigate = useNavigate()
   const { account } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
@@ -115,10 +115,10 @@ export default function AccountPrivateLaunchpad() {
             position: 'relative'
           }}
         >
-          <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily={'Public Sans'} fontWeight={600}>
+          <Typography variant="h3" fontSize={isSm ? 22 : 36} fontFamily={'Public Sans'} fontWeight={600} mb={15}>
             Private Launchpad
           </Typography>
-          <Row sx={{ justifyContent: 'flex-start' }} mt={28}>
+          {/* <Row sx={{ justifyContent: 'flex-start' }} mt={28}>
             {tabList.map((item, index) => (
               <Typography
                 onClick={() => setCurTab(item)}
@@ -134,7 +134,7 @@ export default function AccountPrivateLaunchpad() {
                 {item}
               </Typography>
             ))}
-          </Row>
+          </Row> */}
           <Box
             sx={{
               height: '100%',
@@ -143,10 +143,10 @@ export default function AccountPrivateLaunchpad() {
             }}
           >
             <Row sx={{ justifyContent: 'space-between' }}>
-              <Row sx={{ gap: 8 }}>
+              {/* <Row sx={{ gap: 8 }}>
                 <AuctionTypeSelect curPoolType={curPoolType} setCurPoolType={v => setCurPoolType(v)} />
                 <ChainSelect curChain={curChain} setCurChain={i => setCurChain(i)} />
-              </Row>
+              </Row> */}
               <Stack flexDirection={'row'} gap={20}>
                 <Button
                   sx={{ height: 44 }}

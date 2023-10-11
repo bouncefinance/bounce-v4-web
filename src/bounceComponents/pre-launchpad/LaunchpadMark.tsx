@@ -84,7 +84,7 @@ const LaunchpadMark = ({
       })
       .catch(() => {
         toast.error('There is still some content that has not been filled out!')
-        setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id), 1000)
+        setTimeout(() => navigate('/launchpad/create?type=2&id=' + detailInfo.poolInfo.id + '&strict'), 1000)
       })
   }
   return (
