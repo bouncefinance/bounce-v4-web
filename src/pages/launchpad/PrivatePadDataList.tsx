@@ -824,6 +824,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               }
             }}
           >
+            <Typography>
+              <strong>Public Round is Subject to Change</strong>
+            </Typography>
             <a
               href="https://docs.google.com/spreadsheets/d/1_43S6DusKa_5C_AlWYsqJOCSVNesFnd73ekNG1aPLxw/edit#gid=290952973"
               target="_blank"
@@ -895,7 +898,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining, providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable, mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3 projects and help them grow their liquidity.',
+    desc: 'Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens through liquidity vaults and DeFi bonds.',
     social: [
       <Link key={0} href="https://finceptor.app/" target="_blank">
         <Web />
@@ -903,14 +906,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://finceptorapp.medium.com/" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/create.protocol/?hl=en"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
-      </Link>,
+      // <Link
+      //   key={5}
+      //   sx={{ width: '43px !important', height: '43px !important' }}
+      //   href="https://www.instagram.com/create.protocol/?hl=en"
+      //   target="_blank"
+      // >
+      //   <InstagramSvg width={43} height={43} />
+      // </Link>,
       <Link key={6} href="https://twitter.com/FinceptorApp" target="_blank">
         <Twitter />
       </Link>,
