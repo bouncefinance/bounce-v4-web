@@ -125,29 +125,29 @@ const DipProjectInfo: IProjectInfo[] = [
       `Overall, DIP Exchange is a promising new decentralized exchange that offers a number of features that make it a good choice for traders who are looking for a professional risk management environment and a fully decentralized governance mechanism.`
     ]
   },
-  {
-    title: 'DIP Rules',
-    info: [
-      <Stack flexDirection={'column'} gap={10} key={1}>
-        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
-        <Typography>
-          The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
-          and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
-          on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
-          reached.
-        </Typography>
-        <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
-        <ul style={{ marginTop: 10 }}>
-          <li>Bid Asset: $USDT</li>
-          <li>Starting Price (lowest prices): Preset by DIP DAO</li>
-          <li>Highest Price: Preset by DIP DAO</li>
-          <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
-          <li>Auction Close: Within 24 hours or when token sold out.</li>
-          <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
-        </ul>
-      </Stack>
-    ]
-  },
+  // {
+  //   title: 'DIP Rules',
+  //   info: [
+  //     <Stack flexDirection={'column'} gap={10} key={1}>
+  //       <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
+  //       <Typography>
+  //         The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+  //         and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
+  //         on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
+  //         reached.
+  //       </Typography>
+  //       <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
+  //       <ul style={{ marginTop: 10 }}>
+  //         <li>Bid Asset: $USDT</li>
+  //         <li>Starting Price (lowest prices): Preset by DIP DAO</li>
+  //         <li>Highest Price: Preset by DIP DAO</li>
+  //         <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
+  //         <li>Auction Close: Within 24 hours or when token sold out.</li>
+  //         <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
+  //       </ul>
+  //     </Stack>
+  //   ]
+  // },
   {
     title: 'DGT Rules',
     info: [
@@ -177,133 +177,133 @@ const DipProjectInfo: IProjectInfo[] = [
   }
 ]
 const DipTokenMetrics: IProjectInfo[] = [
+  // {
+  //   title: 'DIP Token',
+  //   info: [
+  //     <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
+  //       <Typography>
+  //         <strong>Token Name: </strong> DIP Token
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Token Ticker: </strong> DIP
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Total Supply: </strong> 1,000,000,000
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Token Release: </strong> TBA
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Contract Address: </strong> TBA
+  //       </Typography>
+  //       <Typography>
+  //         DIP is the utility token and the backbone of DIP Exchange. DIP provides multiple benefits within the platform
+  //         and can only be earned through LP staking and trading participation.
+  //       </Typography>
+  //     </Box>,
+  //     <>
+  //       <strong>Benefits of DIP</strong>
+  //       <ul>
+  //         <li>Stake to earn LP tokens. 10% of protocol revenue is rewarded to DIP stakers in LP tokens.</li>
+  //         <li>Burn to get DGT tokens through weekly dutch auction process.</li>
+  //         <li>Pay discounted fees in DIP and burn (TBD by DIP DAO)</li>
+  //         <li>Collateralize and add liquidity to place trade positions (TBD by DIP DAO)</li>
+  //       </ul>
+  //     </>,
+  //     <Box key={1} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
+  //       <strong>How to earn DIP</strong>
+  //       <ul key={1}>
+  //         <li>
+  //           Provide liquidity in any of the LP tokens, rewarding the highest yield to the portion with the highest risk
+  //           (check
+  //           <a href="https://app.dip.exchange/#/earn"> https://app.dip.exchange/#/earn </a>
+  //           for further details).
+  //         </li>
+  //         <li>Participate in the referral programs and invite new traders to the platform.</li>
+  //         <li>Trade frequently and win trading competitions.</li>
+  //       </ul>
+  //     </Box>,
+  //     <>
+  //       <strong>How to earn DIP</strong>
+  //       <Box sx={{ '& .MuiTableCell-root': { color: 'white', borderDottom: 'rgb(227, 232, 237)' } }}>
+  //         <Table sx={{ maxWidth: 650 }} size="small" aria-label="a dense table">
+  //           <TableHead>
+  //             <TableRow>
+  //               <TableCell>Allocation</TableCell>
+  //               <TableCell>Amount</TableCell>
+  //               <TableCell>Percentage</TableCell>
+  //             </TableRow>
+  //           </TableHead>
+  //           <TableBody>
+  //             {[
+  //               { Allocation: 'Liquidity Providers', Amount: '350,000,000', Percentage: '35%' },
+  //               { Allocation: 'Trader Incentive', Amount: '350,000,000', Percentage: '35%' },
+  //               { Allocation: 'DIP DAO', Amount: '100,000,000', Percentage: '10%' },
+  //               { Allocation: 'Team', Amount: '190,000,000', Percentage: '19%' },
+  //               { Allocation: 'Liquidity', Amount: '10,000,000', Percentage: '1%' }
+  //             ].map(row => (
+  //               <TableRow key={row.Allocation} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+  //                 <TableCell align="left">{row.Allocation}</TableCell>
+  //                 <TableCell align="left">{row.Amount}</TableCell>
+  //                 <TableCell align="left">{row.Percentage}</TableCell>
+  //               </TableRow>
+  //             ))}
+  //           </TableBody>
+  //         </Table>
+  //       </Box>
+  //     </>,
+  //     <Box key={2} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
+  //       <strong>DIP Distribution Schedule</strong>
+  //       <ul key={1}>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-lps">Liquidity Providers </a>
+  //           Liquidity Providers are those that provide liquidity in DIP/FTM, Snr DLP, Mezz DLP and Jnr DLP. The
+  //           allocation is distributed on a daily basis across 4 years as additional incentives to the portion of trading
+  //           fees earned.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-traders">
+  //             {' '}
+  //             Trader Incentive{' '}
+  //           </a>
+  //           is budget set aside to incentivize traders who act as a counterparty to liquidity providers. Such reserves
+  //           are expected to be spent through
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/trade-mining-program">
+  //             {' '}
+  //             trade mining program
+  //           </a>
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/referral-system"> referral system </a>
+  //           and
+  //           <a href="https://dip-exchange.gitbook.io/dip/tokenomics/dip-token"> leaderboard</a>. The allocation is
+  //           unlocked across 4 years with the budget controlled by the DIP DAO.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/governance/dip-dao"> DIP DAO </a> is allocated to the
+  //           <a href="https://dip-exchange.gitbook.io/dip/governance/dao-treasury"> DAO treasury </a>, set aside to
+  //           insure the liquidity pools in the case of default. Its DIP allocation will be auctioned through
+  //           <a href="https://dip-exchange.gitbook.io/dip/tokenomics/auctions/dip-fixed-price-auction">
+  //             {' '}
+  //             DIP Fixed-Price Auction{' '}
+  //           </a>
+  //           or sold to strategic investors who wish to take vested exposure in the DIP Ecosystem. All funds collected
+  //           will be held in the DAO treasury and controlled by DGT stakers. The allocation is vested across 4 years on a
+  //           daily basis.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/core-team"> Team </a>allocation is set to
+  //           incentivise core developers and supporters. DIP tokens are vested across 4 years on a monthly basis. Only
+  //           the unlocked team allocation can be used to earn DGT.
+  //         </li>
+  //         <li>
+  //           Liquidity is a small allocation set aside which is fully unlocked to provide sufficient liquidity from day
+  //           1. The allocation will be fully unlocked and be provided as DIP/FTM LP on Spookyswap.
+  //         </li>
+  //       </ul>
+  //     </Box>
+  //   ]
+  // },
   {
-    title: 'DIP Token',
-    info: [
-      <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
-        <Typography>
-          <strong>Token Name: </strong> DIP Token
-        </Typography>
-        <Typography>
-          <strong>Token Ticker: </strong> DIP
-        </Typography>
-        <Typography>
-          <strong>Total Supply: </strong> 1,000,000,000
-        </Typography>
-        <Typography>
-          <strong>Token Release: </strong> TBA
-        </Typography>
-        <Typography>
-          <strong>Contract Address: </strong> TBA
-        </Typography>
-        <Typography>
-          DIP is the utility token and the backbone of DIP Exchange. DIP provides multiple benefits within the platform
-          and can only be earned through LP staking and trading participation.
-        </Typography>
-      </Box>,
-      <>
-        <strong>Benefits of DIP</strong>
-        <ul>
-          <li>Stake to earn LP tokens. 10% of protocol revenue is rewarded to DIP stakers in LP tokens.</li>
-          <li>Burn to get DGT tokens through weekly dutch auction process.</li>
-          <li>Pay discounted fees in DIP and burn (TBD by DIP DAO)</li>
-          <li>Collateralize and add liquidity to place trade positions (TBD by DIP DAO)</li>
-        </ul>
-      </>,
-      <Box key={1} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
-        <strong>How to earn DIP</strong>
-        <ul key={1}>
-          <li>
-            Provide liquidity in any of the LP tokens, rewarding the highest yield to the portion with the highest risk
-            (check
-            <a href="https://app.dip.exchange/#/earn"> https://app.dip.exchange/#/earn </a>
-            for further details).
-          </li>
-          <li>Participate in the referral programs and invite new traders to the platform.</li>
-          <li>Trade frequently and win trading competitions.</li>
-        </ul>
-      </Box>,
-      <>
-        <strong>How to earn DIP</strong>
-        <Box sx={{ '& .MuiTableCell-root': { color: 'white', borderDottom: 'rgb(227, 232, 237)' } }}>
-          <Table sx={{ maxWidth: 650 }} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Allocation</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Percentage</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {[
-                { Allocation: 'Liquidity Providers', Amount: '350,000,000', Percentage: '35%' },
-                { Allocation: 'Trader Incentive', Amount: '350,000,000', Percentage: '35%' },
-                { Allocation: 'DIP DAO', Amount: '100,000,000', Percentage: '10%' },
-                { Allocation: 'Team', Amount: '190,000,000', Percentage: '19%' },
-                { Allocation: 'Liquidity', Amount: '10,000,000', Percentage: '1%' }
-              ].map(row => (
-                <TableRow key={row.Allocation} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align="left">{row.Allocation}</TableCell>
-                  <TableCell align="left">{row.Amount}</TableCell>
-                  <TableCell align="left">{row.Percentage}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </>,
-      <Box key={2} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
-        <strong>DIP Distribution Schedule</strong>
-        <ul key={1}>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-lps">Liquidity Providers </a>
-            Liquidity Providers are those that provide liquidity in DIP/FTM, Snr DLP, Mezz DLP and Jnr DLP. The
-            allocation is distributed on a daily basis across 4 years as additional incentives to the portion of trading
-            fees earned.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-traders">
-              {' '}
-              Trader Incentive{' '}
-            </a>
-            is budget set aside to incentivize traders who act as a counterparty to liquidity providers. Such reserves
-            are expected to be spent through
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/trade-mining-program">
-              {' '}
-              trade mining program
-            </a>
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/referral-system"> referral system </a>
-            and
-            <a href="https://dip-exchange.gitbook.io/dip/tokenomics/dip-token"> leaderboard</a>. The allocation is
-            unlocked across 4 years with the budget controlled by the DIP DAO.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/governance/dip-dao"> DIP DAO </a> is allocated to the
-            <a href="https://dip-exchange.gitbook.io/dip/governance/dao-treasury"> DAO treasury </a>, set aside to
-            insure the liquidity pools in the case of default. Its DIP allocation will be auctioned through
-            <a href="https://dip-exchange.gitbook.io/dip/tokenomics/auctions/dip-fixed-price-auction">
-              {' '}
-              DIP Fixed-Price Auction{' '}
-            </a>
-            or sold to strategic investors who wish to take vested exposure in the DIP Ecosystem. All funds collected
-            will be held in the DAO treasury and controlled by DGT stakers. The allocation is vested across 4 years on a
-            daily basis.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/core-team"> Team </a>allocation is set to
-            incentivise core developers and supporters. DIP tokens are vested across 4 years on a monthly basis. Only
-            the unlocked team allocation can be used to earn DGT.
-          </li>
-          <li>
-            Liquidity is a small allocation set aside which is fully unlocked to provide sufficient liquidity from day
-            1. The allocation will be fully unlocked and be provided as DIP/FTM LP on Spookyswap.
-          </li>
-        </ul>
-      </Box>
-    ]
-  },
-  {
-    title: 'DGT  Token',
+    title: 'DGT Token',
     info: [
       <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
         <Typography>

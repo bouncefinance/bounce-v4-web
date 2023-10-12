@@ -183,6 +183,17 @@ export function use1155TokenList(
             name: 'test',
             tokenId: '0'
           })
+          nftCollection['0x066682c54041f46e713E9a87FA5b61Ef466aa1d1'] = []
+          nftCollection['0x066682c54041f46e713E9a87FA5b61Ef466aa1d1'].push({
+            balance: '',
+            contractAddr: '0x066682c54041f46e713E9a87FA5b61Ef466aa1d1',
+            contractName: 'OFFZ',
+            description:
+              "We're excited to announce decentralized auction-as-a-service platform Bounce Finance's integration of ZetaChain's testnet. At ZetaChain, we're on a mission to offer an EVM-compatible L1 blockchain that connects everything. A key part of this goal is providing users an easy and safe way to engage in opportunities across any chain. For Bounce, the partnership brings users the ability to create and participate in diverse types of DeFi auctions from any chain — including the Bitcoin network. To make our partnership reveal fun and interesting, we're giving away an Off-White sneaker to one lucky beta-tester.",
+            image: 'https://arweave.net/phHEiIDd5x9lYifnKURzUK_qAEqq6lEF_UOR6bbqxLM"',
+            name: 'OFFZ',
+            tokenId: '0'
+          })
         }
         if (chainId === 29) {
           const _tempIds = Object.keys(new Array(401).fill(''))
