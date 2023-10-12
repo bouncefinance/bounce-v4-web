@@ -17,7 +17,7 @@ import { AmountAndCurrentPriceParam } from 'bounceHooks/auction/useDutchAuctionI
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { ActionStep } from './right'
 import { Dots } from 'themes'
-import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import { useIsUserInAllWhitelist } from 'bounceHooks/auction/useIsUserInWhitelist'
 
 export const ComBtn = styled(LoadingButton)(() => ({
   '&.MuiButtonBase-root': {
@@ -55,8 +55,10 @@ const BidBlock = ({
   handleSetActionStep?: (actionStep: ActionStep) => void
 }) => {
   const { account, chainId } = useActiveWeb3React()
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
-    poolInfo,
+  const { isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInAllWhitelist(
+    poolInfo.chainId,
+    poolInfo.poolId,
+    poolInfo.enableWhiteList,
     PoolType.DUTCH_AUCTION
   )
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencySwappedTotal1?.currency)

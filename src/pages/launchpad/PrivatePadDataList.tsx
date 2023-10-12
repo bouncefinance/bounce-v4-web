@@ -125,29 +125,29 @@ const DipProjectInfo: IProjectInfo[] = [
       `Overall, DIP Exchange is a promising new decentralized exchange that offers a number of features that make it a good choice for traders who are looking for a professional risk management environment and a fully decentralized governance mechanism.`
     ]
   },
-  {
-    title: 'DIP Rules',
-    info: [
-      <Stack flexDirection={'column'} gap={10} key={1}>
-        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
-        <Typography>
-          The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
-          and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
-          on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
-          reached.
-        </Typography>
-        <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
-        <ul style={{ marginTop: 10 }}>
-          <li>Bid Asset: $USDT</li>
-          <li>Starting Price (lowest prices): Preset by DIP DAO</li>
-          <li>Highest Price: Preset by DIP DAO</li>
-          <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
-          <li>Auction Close: Within 24 hours or when token sold out.</li>
-          <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
-        </ul>
-      </Stack>
-    ]
-  },
+  // {
+  //   title: 'DIP Rules',
+  //   info: [
+  //     <Stack flexDirection={'column'} gap={10} key={1}>
+  //       <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
+  //       <Typography>
+  //         The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+  //         and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
+  //         on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
+  //         reached.
+  //       </Typography>
+  //       <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
+  //       <ul style={{ marginTop: 10 }}>
+  //         <li>Bid Asset: $USDT</li>
+  //         <li>Starting Price (lowest prices): Preset by DIP DAO</li>
+  //         <li>Highest Price: Preset by DIP DAO</li>
+  //         <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
+  //         <li>Auction Close: Within 24 hours or when token sold out.</li>
+  //         <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
+  //       </ul>
+  //     </Stack>
+  //   ]
+  // },
   {
     title: 'DGT Rules',
     info: [
@@ -177,133 +177,133 @@ const DipProjectInfo: IProjectInfo[] = [
   }
 ]
 const DipTokenMetrics: IProjectInfo[] = [
+  // {
+  //   title: 'DIP Token',
+  //   info: [
+  //     <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
+  //       <Typography>
+  //         <strong>Token Name: </strong> DIP Token
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Token Ticker: </strong> DIP
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Total Supply: </strong> 1,000,000,000
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Token Release: </strong> TBA
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Contract Address: </strong> TBA
+  //       </Typography>
+  //       <Typography>
+  //         DIP is the utility token and the backbone of DIP Exchange. DIP provides multiple benefits within the platform
+  //         and can only be earned through LP staking and trading participation.
+  //       </Typography>
+  //     </Box>,
+  //     <>
+  //       <strong>Benefits of DIP</strong>
+  //       <ul>
+  //         <li>Stake to earn LP tokens. 10% of protocol revenue is rewarded to DIP stakers in LP tokens.</li>
+  //         <li>Burn to get DGT tokens through weekly dutch auction process.</li>
+  //         <li>Pay discounted fees in DIP and burn (TBD by DIP DAO)</li>
+  //         <li>Collateralize and add liquidity to place trade positions (TBD by DIP DAO)</li>
+  //       </ul>
+  //     </>,
+  //     <Box key={1} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
+  //       <strong>How to earn DIP</strong>
+  //       <ul key={1}>
+  //         <li>
+  //           Provide liquidity in any of the LP tokens, rewarding the highest yield to the portion with the highest risk
+  //           (check
+  //           <a href="https://app.dip.exchange/#/earn"> https://app.dip.exchange/#/earn </a>
+  //           for further details).
+  //         </li>
+  //         <li>Participate in the referral programs and invite new traders to the platform.</li>
+  //         <li>Trade frequently and win trading competitions.</li>
+  //       </ul>
+  //     </Box>,
+  //     <>
+  //       <strong>How to earn DIP</strong>
+  //       <Box sx={{ '& .MuiTableCell-root': { color: 'white', borderDottom: 'rgb(227, 232, 237)' } }}>
+  //         <Table sx={{ maxWidth: 650 }} size="small" aria-label="a dense table">
+  //           <TableHead>
+  //             <TableRow>
+  //               <TableCell>Allocation</TableCell>
+  //               <TableCell>Amount</TableCell>
+  //               <TableCell>Percentage</TableCell>
+  //             </TableRow>
+  //           </TableHead>
+  //           <TableBody>
+  //             {[
+  //               { Allocation: 'Liquidity Providers', Amount: '350,000,000', Percentage: '35%' },
+  //               { Allocation: 'Trader Incentive', Amount: '350,000,000', Percentage: '35%' },
+  //               { Allocation: 'DIP DAO', Amount: '100,000,000', Percentage: '10%' },
+  //               { Allocation: 'Team', Amount: '190,000,000', Percentage: '19%' },
+  //               { Allocation: 'Liquidity', Amount: '10,000,000', Percentage: '1%' }
+  //             ].map(row => (
+  //               <TableRow key={row.Allocation} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+  //                 <TableCell align="left">{row.Allocation}</TableCell>
+  //                 <TableCell align="left">{row.Amount}</TableCell>
+  //                 <TableCell align="left">{row.Percentage}</TableCell>
+  //               </TableRow>
+  //             ))}
+  //           </TableBody>
+  //         </Table>
+  //       </Box>
+  //     </>,
+  //     <Box key={2} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
+  //       <strong>DIP Distribution Schedule</strong>
+  //       <ul key={1}>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-lps">Liquidity Providers </a>
+  //           Liquidity Providers are those that provide liquidity in DIP/FTM, Snr DLP, Mezz DLP and Jnr DLP. The
+  //           allocation is distributed on a daily basis across 4 years as additional incentives to the portion of trading
+  //           fees earned.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-traders">
+  //             {' '}
+  //             Trader Incentive{' '}
+  //           </a>
+  //           is budget set aside to incentivize traders who act as a counterparty to liquidity providers. Such reserves
+  //           are expected to be spent through
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/trade-mining-program">
+  //             {' '}
+  //             trade mining program
+  //           </a>
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/referral-system"> referral system </a>
+  //           and
+  //           <a href="https://dip-exchange.gitbook.io/dip/tokenomics/dip-token"> leaderboard</a>. The allocation is
+  //           unlocked across 4 years with the budget controlled by the DIP DAO.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/governance/dip-dao"> DIP DAO </a> is allocated to the
+  //           <a href="https://dip-exchange.gitbook.io/dip/governance/dao-treasury"> DAO treasury </a>, set aside to
+  //           insure the liquidity pools in the case of default. Its DIP allocation will be auctioned through
+  //           <a href="https://dip-exchange.gitbook.io/dip/tokenomics/auctions/dip-fixed-price-auction">
+  //             {' '}
+  //             DIP Fixed-Price Auction{' '}
+  //           </a>
+  //           or sold to strategic investors who wish to take vested exposure in the DIP Ecosystem. All funds collected
+  //           will be held in the DAO treasury and controlled by DGT stakers. The allocation is vested across 4 years on a
+  //           daily basis.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/core-team"> Team </a>allocation is set to
+  //           incentivise core developers and supporters. DIP tokens are vested across 4 years on a monthly basis. Only
+  //           the unlocked team allocation can be used to earn DGT.
+  //         </li>
+  //         <li>
+  //           Liquidity is a small allocation set aside which is fully unlocked to provide sufficient liquidity from day
+  //           1. The allocation will be fully unlocked and be provided as DIP/FTM LP on Spookyswap.
+  //         </li>
+  //       </ul>
+  //     </Box>
+  //   ]
+  // },
   {
-    title: 'DIP Token',
-    info: [
-      <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
-        <Typography>
-          <strong>Token Name: </strong> DIP Token
-        </Typography>
-        <Typography>
-          <strong>Token Ticker: </strong> DIP
-        </Typography>
-        <Typography>
-          <strong>Total Supply: </strong> 1,000,000,000
-        </Typography>
-        <Typography>
-          <strong>Token Release: </strong> TBA
-        </Typography>
-        <Typography>
-          <strong>Contract Address: </strong> TBA
-        </Typography>
-        <Typography>
-          DIP is the utility token and the backbone of DIP Exchange. DIP provides multiple benefits within the platform
-          and can only be earned through LP staking and trading participation.
-        </Typography>
-      </Box>,
-      <>
-        <strong>Benefits of DIP</strong>
-        <ul>
-          <li>Stake to earn LP tokens. 10% of protocol revenue is rewarded to DIP stakers in LP tokens.</li>
-          <li>Burn to get DGT tokens through weekly dutch auction process.</li>
-          <li>Pay discounted fees in DIP and burn (TBD by DIP DAO)</li>
-          <li>Collateralize and add liquidity to place trade positions (TBD by DIP DAO)</li>
-        </ul>
-      </>,
-      <Box key={1} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
-        <strong>How to earn DIP</strong>
-        <ul key={1}>
-          <li>
-            Provide liquidity in any of the LP tokens, rewarding the highest yield to the portion with the highest risk
-            (check
-            <a href="https://app.dip.exchange/#/earn"> https://app.dip.exchange/#/earn </a>
-            for further details).
-          </li>
-          <li>Participate in the referral programs and invite new traders to the platform.</li>
-          <li>Trade frequently and win trading competitions.</li>
-        </ul>
-      </Box>,
-      <>
-        <strong>How to earn DIP</strong>
-        <Box sx={{ '& .MuiTableCell-root': { color: 'white', borderDottom: 'rgb(227, 232, 237)' } }}>
-          <Table sx={{ maxWidth: 650 }} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Allocation</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Percentage</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {[
-                { Allocation: 'Liquidity Providers', Amount: '350,000,000', Percentage: '35%' },
-                { Allocation: 'Trader Incentive', Amount: '350,000,000', Percentage: '35%' },
-                { Allocation: 'DIP DAO', Amount: '100,000,000', Percentage: '10%' },
-                { Allocation: 'Team', Amount: '190,000,000', Percentage: '19%' },
-                { Allocation: 'Liquidity', Amount: '10,000,000', Percentage: '1%' }
-              ].map(row => (
-                <TableRow key={row.Allocation} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align="left">{row.Allocation}</TableCell>
-                  <TableCell align="left">{row.Amount}</TableCell>
-                  <TableCell align="left">{row.Percentage}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </>,
-      <Box key={2} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
-        <strong>DIP Distribution Schedule</strong>
-        <ul key={1}>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-lps">Liquidity Providers </a>
-            Liquidity Providers are those that provide liquidity in DIP/FTM, Snr DLP, Mezz DLP and Jnr DLP. The
-            allocation is distributed on a daily basis across 4 years as additional incentives to the portion of trading
-            fees earned.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-traders">
-              {' '}
-              Trader Incentive{' '}
-            </a>
-            is budget set aside to incentivize traders who act as a counterparty to liquidity providers. Such reserves
-            are expected to be spent through
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/trade-mining-program">
-              {' '}
-              trade mining program
-            </a>
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/referral-system"> referral system </a>
-            and
-            <a href="https://dip-exchange.gitbook.io/dip/tokenomics/dip-token"> leaderboard</a>. The allocation is
-            unlocked across 4 years with the budget controlled by the DIP DAO.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/governance/dip-dao"> DIP DAO </a> is allocated to the
-            <a href="https://dip-exchange.gitbook.io/dip/governance/dao-treasury"> DAO treasury </a>, set aside to
-            insure the liquidity pools in the case of default. Its DIP allocation will be auctioned through
-            <a href="https://dip-exchange.gitbook.io/dip/tokenomics/auctions/dip-fixed-price-auction">
-              {' '}
-              DIP Fixed-Price Auction{' '}
-            </a>
-            or sold to strategic investors who wish to take vested exposure in the DIP Ecosystem. All funds collected
-            will be held in the DAO treasury and controlled by DGT stakers. The allocation is vested across 4 years on a
-            daily basis.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/core-team"> Team </a>allocation is set to
-            incentivise core developers and supporters. DIP tokens are vested across 4 years on a monthly basis. Only
-            the unlocked team allocation can be used to earn DGT.
-          </li>
-          <li>
-            Liquidity is a small allocation set aside which is fully unlocked to provide sufficient liquidity from day
-            1. The allocation will be fully unlocked and be provided as DIP/FTM LP on Spookyswap.
-          </li>
-        </ul>
-      </Box>
-    ]
-  },
-  {
-    title: 'DGT  Token',
+    title: 'DGT Token',
     info: [
       <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
         <Typography>
@@ -696,22 +696,40 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         title: 'What is Finceptor?',
         info: [
           <Typography key={1}>
-            Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens
-            through liquidity vaults and DeFi bonds.
+            Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded
+            tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining,
+            providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable,
+            mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market
+            liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults
+            and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3
+            projects and help them grow their liquidity.
           </Typography>,
-          <Box key={2} sx={{ '& ul li': { margin: '5px 0' }, '&>ul>li': { marginTop: 15 } }}>
+          <Box
+            key={2}
+            sx={{
+              '& ul li': { margin: '5px 0' },
+              '&>ul>li': { marginTop: 15 },
+              '& a': {
+                textDecoration: 'underline',
+                color: 'gray'
+              }
+            }}
+          >
             <ul>
               <li>
                 Product Suite
                 <ul>
                   <li>
-                    Liquidity Vault is on-chain initial liquidity bootstrapping pool to build protocol-owned liquidity.
+                    <strong> Liquidity Vault</strong> is an on-chain initial liquidity bootstrapping tool to build
+                    protocol-owned liquidity for unlaunched tokens.
                   </li>
                   <li>
-                    Bond is structured protocol-owned liquidity bootstrapping and token liquidation tool for
-                    publicly-traded tokens.
+                    <strong>Bond</strong> is a structured protocol-owned liquidity growth and token liquidation tool for
+                    publicly traded tokens.
                   </li>
-                  <li>Launchpad for a strategic token launch and sales.</li>
+                  <li>
+                    <strong>Launchpad</strong> for a strategic token launch and sales arm.
+                  </li>
                 </ul>
               </li>
               <li>
@@ -720,31 +738,72 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                   <li>Social Allocations: Web3 Quest-based allocation distribution.</li>
                   <li>Credit Protocol: A in-protocol $USDT based credit system powered by $FCT token.</li>
                   <li>Liquidity 2.0: Protocol-owned liquidity via bonds.</li>
-                  <li>Social/Web2 auth (coming).</li>
+                  <li>Social/Web2 auth ( coming ).</li>
                 </ul>
               </li>
               <li>
                 Highlights
                 <ul>
                   <li>
-                    Backed by $4B Telecom company Turk Telekom Ventures, Neohub (Denizbank - sub-company of Emirates
-                    NBD) and Brinc VC.
+                    Accelerated by{' '}
+                    <a
+                      href="https://turktelekomventures.com.tr//girisimler/tt-pilot-girisimleri/finceptor/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Turk Telekom Ventures,{' '}
+                    </a>
+                    <a href="https://www.denizakvaryum.io/en/all-startups/finceptor" target="_blank" rel="noreferrer">
+                      Neohub{' '}
+                    </a>
+                    and{' '}
+                    <a
+                      href="https://www.brinc.io/blog/brinc-announces-summer-2023-cohort-for-web3-focused-accelerator-programs/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Brinc VC
+                    </a>
+                    .
                   </li>
                   <li>
                     Mainnet live with $300k total volume financed on Avalanche and BNB Chain — $250k subscribed in under
                     120 hours and $50k subscribed in under 120 seconds (FCFS).
                   </li>
                   <li>+6,100 active KYC-verified users in 3 months.</li>
-                  <li>+75,000 community in 3 months.</li>
+                  <li>+90,000 community in 3 months.</li>
                   <li>+250 curated KOLs with 50M reach.</li>
                   <li>+65 affiliate referral partners.</li>
                   <li>Battle-tested infrastructure with +10k unique testers and +100k transactions.</li>
-                  <li>Accelerated by ZK Advancer S-23, Brinc's Web3 accelerator backed by Animoca Brands.</li>
-                  <li>Accelerated and received financial support from Polygon Labs Hypernest DeFi.</li>
-                  <li>Incubated by Yapı Kredi, one of Turkey's largest private banks, in partnership with Ava Labs.</li>
                   <li>
-                    Received financial and platform grants from Alchemy WAGBI, Microsoft for Startups, Google for Web3
-                    Startups, BNB Chain Kickstart, and Startup with Chainlink.
+                    Accelerated by{' '}
+                    <a href="https://www.brinc.io/blockchain/" target="_blank" rel="noreferrer">
+                      ZK Advancer S-23
+                    </a>
+                    , Brinc's Web3 accelerator backed by Animoca Brands.
+                  </li>
+                  <li>
+                    Accelerated and received financial support{' '}
+                    <a href="https://www.brinc.io/blockchain/" target="_blank" rel="noreferrer">
+                      from{' '}
+                    </a>
+                    <a
+                      href="https://www.f6s.com/polygon-hypernest-defi-accelerator-2023"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {' '}
+                      Polygon Labs Hypernest DeFi
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    Incubated by <strong> Yapı Kredi</strong>, one of Turkey's largest private banks, in partnership
+                    with Ava Labs.
+                  </li>
+                  <li>
+                    Received financial and platform grants from <strong>Alchemy WAGBI</strong>, Microsoft for Startups,
+                    Google for Web3 Startups, BNB Chain Kickstart, and Startup with Chainlink.
                   </li>
                   <li>Audited by Peckshield.</li>
                   <li>Market Making by Kairon Labs.</li>
@@ -778,25 +837,38 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Investment and Partners',
         info: [
-          <Box key={1} sx={{ '& ul li': { margin: '10px 0' } }}>
+          <Box
+            key={1}
+            sx={{
+              '& ul li': { margin: '10px 0' },
+              '& a': {
+                textDecoration: 'underline',
+                color: 'gray'
+              }
+            }}
+          >
             <ul>
               <li>
-                Investors/Cap table: Turk Telekom Ventures ($4B telecom company), Brinc VC, Evox Capital, Keiretsu
-                Forum, Q Angels, IBSS, and Hypernest DAO.
+                {' '}
+                <strong>Investors/Cap table: </strong> Brinc VC, Evox Capital, Keiretsu Forum, Q Angels, IBSS, and
+                Hypernest DAO.
               </li>
               <li>
-                Strategic partners/Supporters:
+                <strong>Strategic partners/Supporters:</strong>
+                <a href="https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20" target="_blank" rel="noreferrer">
+                  {' '}
+                  BNB Chain{' '}
+                </a>
+                , Polygon, Neohub,{' '}
                 <a
-                  href="https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20"
+                  href="https://x.com/SpaceIDProtocol/status/1705886980146421766?s=20"
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: '#1199FA' }}
                 >
-                  BNB Chain (https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20)
-                </a>
-                , Polygon, Neohub (Subsidiary of Denizbank/Emirates NBD), Space ID (Grant), Chainlink Labs, Shardeum.
+                  Space ID
+                </a>{' '}
+                , Chainlink Labs, Shardeum.
               </li>
-              <li>+250 KOL army</li>
             </ul>
           </Box>
         ]
@@ -823,7 +895,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens through liquidity vaults and DeFi bonds.',
+    desc: 'Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining, providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable, mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3 projects and help them grow their liquidity.',
     social: [
       <Link key={0} href="https://finceptor.app/" target="_blank">
         <Web />
@@ -1195,20 +1267,20 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'BASE' }
     ],
     privatePrices: [
-      {
-        title: ['DIP Auction Method'],
-        value: ['ERC20 English Auction']
-      },
-      {
-        title: ['DIP Token Offered'],
-        value: 'TBD $DIP'
-      },
+      // {
+      //   title: ['DIP Auction Method'],
+      //   value: ['ERC20 English Auction']
+      // },
+      // {
+      //   title: ['DIP Token Offered'],
+      //   value: 'TBD $DIP'
+      // },
       {
         title: ['DGT Token Offered'],
         value: 'TBD $DGP'
       },
       {
-        title: ['DIP Auction Method'],
+        title: ['DGT Auction Method'],
         value: 'ERC20 Dutch Auction'
       }
     ],

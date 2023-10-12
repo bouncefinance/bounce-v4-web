@@ -43,13 +43,17 @@ const useTokenList = (chainId: number | undefined, action: 1 | 2, filterValue?: 
       refreshDeps: [chainId]
     }
   )
+  console.log('apiTokenList', apiTokenList, action)
 
   const baseTokenList = useMemo(() => {
     if (chainId === ChainId.GÖRLI) {
       return (GOERLI_TOKEN_LIST || apiTokenList) ?? []
     }
-    if (chainId === ChainId.OMNI_TESTNET) {
-      return OMNI_TESTNET_TOKEN_LIST || []
+    if (chainId === ChainId.OMNI_TESTNET && action === 1) {
+      return (OMNI_TESTNET_TOKEN_LIST || apiTokenList) ?? []
+    }
+    if (chainId === ChainId.OMNI_TESTNET && action === 2) {
+      return [...OMNI_TESTNET_TOKEN_LIST, ...(apiTokenList ?? [])]
     }
     if (chainId === ChainId.SEPOLIA) {
       return (SEPOLIA_TOKEN_LIST || apiTokenList) ?? []
@@ -57,7 +61,7 @@ const useTokenList = (chainId: number | undefined, action: 1 | 2, filterValue?: 
       const localDefaultList = localDefaultAllList.token.filter(i => i.chainId === chainId)
       return [...localDefaultList, ...(apiTokenList || [])]
     }
-  }, [apiTokenList, chainId])
+  }, [action, apiTokenList, chainId])
 
   const filteredApiTokenList = useMemo(() => {
     if (!baseTokenList) {
