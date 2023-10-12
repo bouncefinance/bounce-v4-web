@@ -7,6 +7,8 @@ import NFTDefaultIcon from 'bounceComponents/create-auction-pool/TokenERC1155Inf
 import useNftGoApi from 'bounceHooks/auction/useNftInfoByNftGo'
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
 import useBreakpoint from '../../../../hooks/useBreakpoint'
+import { useMemo } from 'react'
+import { ChainId } from 'constants/chain'
 
 export interface NftCardParams {
   nft: FixedSwapNFTPoolProp
@@ -14,6 +16,14 @@ export interface NftCardParams {
 }
 export const NftCard = (props: NftCardParams) => {
   const { name, symbol, largeUrl, smallUrl, thumbUrl } = props.nft?.token0
+
+  const customLogo = useMemo(() => {
+    if (props.nft.ethChainId === ChainId.ZETA_CHAIN_TESTNET && props.nft.poolId === '1') {
+      return 'https://arweave.net/phHEiIDd5x9lYifnKURzUK_qAEqq6lEF_UOR6bbqxLM'
+    }
+    return undefined
+  }, [props.nft.ethChainId, props.nft.poolId])
+
   const { swappedAmount0, amountTotal0, tokenId } = props.nft
   const { suspicious } = props
   const isMobile = useBreakpoint('lg')
@@ -47,7 +57,7 @@ export const NftCard = (props: NftCardParams) => {
       >
         <picture>
           <img
-            src={largeUrl || thumbUrl || smallUrl || NFTDefaultIcon}
+            src={largeUrl || thumbUrl || smallUrl || customLogo || NFTDefaultIcon}
             style={{
               width: isMobile ? '220px' : '320px',
               height: isMobile ? '220px' : '320px',
