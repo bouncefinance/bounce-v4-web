@@ -37,7 +37,7 @@ import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
 import CreateProtocol from './imgs/CreateProtocol.png'
-import Finceptor from './imgs/Finceptor.png'
+// import Finceptor from './imgs/Finceptor.png'
 import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 export interface IProjectInfo {
   title: string
@@ -683,7 +683,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     },
     hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
-    img: Finceptor,
+    img: 'https://images-v3.bounce.finance/2e48f48ac5a9717b679ca051e8a43c8c-1697094683.png',
     avatar: FinceptorAvatar,
     title: 'Finceptor',
     chainId: 56,
