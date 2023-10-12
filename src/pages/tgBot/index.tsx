@@ -1,30 +1,43 @@
-import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import { Box } from '@mui/material'
-import FooterPc from 'components/Footer/FooterPc'
-import ConnectAPIToken from './components/ConnectAPIToken'
-import GuideForm from './components/GuideForm'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+import { useValuesDispatch, ActionType } from 'bounceComponents/create-auction-pool/ValuesProvider'
+import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
+import ValuesProvider from 'bounceComponents/create-auction-pool/ValuesProvider'
 
-const TelegramBot = ({}) => {
-  const [isFristConnect, setIsFristConnect] = useState(true)
-  const [isGuide, setIsGuide] = useState(true)
+const TelegramBotPage = () => {
+  const navigate = useNavigate()
+  const [tgToken] = useState(false)
+  const valuesDispatch = useValuesDispatch()
+
   useEffect(() => {
-    setIsFristConnect(false)
-    setIsGuide(true)
-    return () => {}
-  }, [])
-  if (isFristConnect) {
-    return <ConnectAPIToken />
-  }
-  if (isGuide) {
-    return <GuideForm />
-  }
+    if (!tgToken) {
+      valuesDispatch({
+        type: ActionType.SetTgBotActiveStep,
+        payload: {
+          tgBotActiveStep: TgBotActiveStep.GETAPITOKEN
+        }
+      })
+      navigate(routes.telegramBot.guide)
+    }
+    if (tgToken) {
+      valuesDispatch({
+        type: ActionType.SetTgBotActiveStep,
+        payload: {
+          tgBotActiveStep: TgBotActiveStep.GUIDEFORM
+        }
+      })
+    }
+  }, [tgToken, navigate, valuesDispatch])
+  return <Box>123</Box>
+}
+
+const TelegramBot = () => {
   return (
-    <>
-      <HeaderTab />
-      <Box>123</Box>
-      <FooterPc />
-    </>
+    <ValuesProvider>
+      <TelegramBotPage />
+    </ValuesProvider>
   )
 }
 

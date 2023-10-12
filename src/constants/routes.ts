@@ -34,7 +34,8 @@ export const routes = {
     index: '/TokenAuction'
   },
   telegramBot: {
-    index: '/TelegramBot'
+    index: '/TelegramBot',
+    guide: '/TelegramBot/Guide'
   },
   dutchAuction: {
     index: '/DutchAuction'

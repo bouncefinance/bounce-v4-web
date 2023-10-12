@@ -10,7 +10,8 @@ import {
   GetWhitelistMerkleTreeRootResponse,
   UpdateAuctionBackgroundParams,
   GetWinnersListParams,
-  GetWinnersListResponse
+  GetWinnersListResponse,
+  BindTgTokenApiParams
 } from './type'
 
 /**
@@ -18,6 +19,13 @@ import {
  */
 export const getPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
   return ApiInstance.post<GetPoolCreationSignatureResponse>('/user/create_pool_sign', params)
+}
+
+/**
+ * bind tg token_api
+ */
+export const bindTgTokenApi = (params: BindTgTokenApiParams) => {
+  return ApiInstance.post('/user/tg_token/bind', params)
 }
 
 /**
