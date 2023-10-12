@@ -562,8 +562,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        // minHeight: isMD ? 'unset' : '600px',
-        minHeight: 600,
+        minHeight: isMD ? 800 : 600,
         marginTop: '-76px'
       }}
     >
@@ -597,7 +596,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
         }}
       >
         {!isMD && (
-          <>
+          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'flex-start'}>
             <GrayButton
               sx={{
                 background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
@@ -662,7 +661,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
               )}
             </Box>
-          </>
+          </Stack>
         )}
         {isMD && (
           <Box
@@ -762,7 +761,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
             flexDirection: 'column',
             borderRadius: '0 0 20px 20px',
             alignItems: 'center',
-            paddingBottom: '80px',
+            paddingBottom: isMD ? '0' : '80px',
             paddingTop: '20px',
             background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
           }}
@@ -936,7 +935,7 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
   return (
     <Box
       className={isDark ? ' dark' : ''}
-      mt={isDark ? 0 : 120}
+      mt={isDark ? 0 : 200}
       mb={140}
       sx={{ padding: isDark ? { xs: 0, sm: 72 } : 0, '&.dark': { width: '100%', maxWidth: 1296, margin: '0 auto' } }}
     >
