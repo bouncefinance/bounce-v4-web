@@ -804,7 +804,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                   {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
                 </Typography>
               </GrayBg>
-              {isDark && (
+              {/* {isDark && (
                 <GrayBg
                   sx={{
                     background: '#20201E',
@@ -813,7 +813,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 >
                   <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
                 </GrayBg>
-              )}
+              )} */}
               {item.poolTypeName2 && (
                 <GrayBg
                   sx={{
@@ -1093,7 +1093,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
           {Array.isArray(info[currentIdx].info) &&
             info[currentIdx].info.length > 0 &&
             info[currentIdx].info.map((item, index: number) => (
-              <Typography key={'bg' + index} variant={'body1'}>
+              <Typography style={{ width: '100%', wordWrap: 'break-word' }} key={'bg' + index} variant={'body1'}>
                 {item}
               </Typography>
             ))}

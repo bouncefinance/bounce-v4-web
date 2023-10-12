@@ -72,6 +72,7 @@ import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
+import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -226,6 +227,7 @@ export default function App() {
                   <Route path={routes.launchpad.account.launchpadParty} element={<Party />} />
                   {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
+                  <Route path={routes.thirdPart.FinceptorAuction} element={<FinceptorProjectInfo />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />

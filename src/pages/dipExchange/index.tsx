@@ -83,7 +83,7 @@ const DipExchange = () => {
   const setShowDataIndex = (index: number) => {
     setDataIndex(index)
   }
-  const [poolType, setPoolType] = useState<PoolIndexType>(PoolIndexType.DIP)
+  const [poolType, setPoolType] = useState<PoolIndexType>(PoolIndexType.DGT)
   const handleSetPoolType = (type: PoolIndexType) => {
     setPoolType(type)
   }

@@ -1,4 +1,4 @@
-import { Alert, Typography, Button, Box } from '@mui/material'
+import { Alert, Typography, Button } from '@mui/material'
 import { ReactComponent as ErrorIcon } from 'assets/imgs/icon/err.svg'
 import { routes } from 'constants/routes'
 import { useNavigate } from 'react-router-dom'
@@ -86,7 +86,7 @@ const NotEligibleAlert = () => {
       icon={<ErrorIcon />}
     >
       <Content />
-      {isRequireWhiteListAndEmail && (
+      {/* {isRequireWhiteListAndEmail && (
         <Box
           sx={{
             display: 'flex',
@@ -118,7 +118,7 @@ const NotEligibleAlert = () => {
             You are not whitelisted for this auction.
           </Typography>
         </>
-      )}
+      )} */}
     </Alert>
   )
 }
