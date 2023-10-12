@@ -696,22 +696,40 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         title: 'What is Finceptor?',
         info: [
           <Typography key={1}>
-            Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens
-            through liquidity vaults and DeFi bonds.
+            Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded
+            tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining,
+            providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable,
+            mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market
+            liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults
+            and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3
+            projects and help them grow their liquidity.
           </Typography>,
-          <Box key={2} sx={{ '& ul li': { margin: '5px 0' }, '&>ul>li': { marginTop: 15 } }}>
+          <Box
+            key={2}
+            sx={{
+              '& ul li': { margin: '5px 0' },
+              '&>ul>li': { marginTop: 15 },
+              '& a': {
+                textDecoration: 'underline',
+                color: 'gray'
+              }
+            }}
+          >
             <ul>
               <li>
                 Product Suite
                 <ul>
                   <li>
-                    Liquidity Vault is on-chain initial liquidity bootstrapping pool to build protocol-owned liquidity.
+                    <strong> Liquidity Vault</strong> is an on-chain initial liquidity bootstrapping tool to build
+                    protocol-owned liquidity for unlaunched tokens.
                   </li>
                   <li>
-                    Bond is structured protocol-owned liquidity bootstrapping and token liquidation tool for
-                    publicly-traded tokens.
+                    <strong>Bond</strong> is a structured protocol-owned liquidity growth and token liquidation tool for
+                    publicly traded tokens.
                   </li>
-                  <li>Launchpad for a strategic token launch and sales.</li>
+                  <li>
+                    <strong>Launchpad</strong> for a strategic token launch and sales arm.
+                  </li>
                 </ul>
               </li>
               <li>
@@ -720,31 +738,72 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                   <li>Social Allocations: Web3 Quest-based allocation distribution.</li>
                   <li>Credit Protocol: A in-protocol $USDT based credit system powered by $FCT token.</li>
                   <li>Liquidity 2.0: Protocol-owned liquidity via bonds.</li>
-                  <li>Social/Web2 auth (coming).</li>
+                  <li>Social/Web2 auth ( coming ).</li>
                 </ul>
               </li>
               <li>
                 Highlights
                 <ul>
                   <li>
-                    Backed by $4B Telecom company Turk Telekom Ventures, Neohub (Denizbank - sub-company of Emirates
-                    NBD) and Brinc VC.
+                    Accelerated by{' '}
+                    <a
+                      href="https://turktelekomventures.com.tr//girisimler/tt-pilot-girisimleri/finceptor/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Turk Telekom Ventures,{' '}
+                    </a>
+                    <a href="https://www.denizakvaryum.io/en/all-startups/finceptor" target="_blank" rel="noreferrer">
+                      Neohub{' '}
+                    </a>
+                    and{' '}
+                    <a
+                      href="https://www.brinc.io/blog/brinc-announces-summer-2023-cohort-for-web3-focused-accelerator-programs/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Brinc VC
+                    </a>
+                    .
                   </li>
                   <li>
                     Mainnet live with $300k total volume financed on Avalanche and BNB Chain — $250k subscribed in under
                     120 hours and $50k subscribed in under 120 seconds (FCFS).
                   </li>
                   <li>+6,100 active KYC-verified users in 3 months.</li>
-                  <li>+75,000 community in 3 months.</li>
+                  <li>+90,000 community in 3 months.</li>
                   <li>+250 curated KOLs with 50M reach.</li>
                   <li>+65 affiliate referral partners.</li>
                   <li>Battle-tested infrastructure with +10k unique testers and +100k transactions.</li>
-                  <li>Accelerated by ZK Advancer S-23, Brinc's Web3 accelerator backed by Animoca Brands.</li>
-                  <li>Accelerated and received financial support from Polygon Labs Hypernest DeFi.</li>
-                  <li>Incubated by Yapı Kredi, one of Turkey's largest private banks, in partnership with Ava Labs.</li>
                   <li>
-                    Received financial and platform grants from Alchemy WAGBI, Microsoft for Startups, Google for Web3
-                    Startups, BNB Chain Kickstart, and Startup with Chainlink.
+                    Accelerated by{' '}
+                    <a href="https://www.brinc.io/blockchain/" target="_blank" rel="noreferrer">
+                      ZK Advancer S-23
+                    </a>
+                    , Brinc's Web3 accelerator backed by Animoca Brands.
+                  </li>
+                  <li>
+                    Accelerated and received financial support{' '}
+                    <a href="https://www.brinc.io/blockchain/" target="_blank" rel="noreferrer">
+                      from{' '}
+                    </a>
+                    <a
+                      href="https://www.f6s.com/polygon-hypernest-defi-accelerator-2023"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {' '}
+                      Polygon Labs Hypernest DeFi
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    Incubated by <strong> Yapı Kredi</strong>, one of Turkey's largest private banks, in partnership
+                    with Ava Labs.
+                  </li>
+                  <li>
+                    Received financial and platform grants from <strong>Alchemy WAGBI</strong>, Microsoft for Startups,
+                    Google for Web3 Startups, BNB Chain Kickstart, and Startup with Chainlink.
                   </li>
                   <li>Audited by Peckshield.</li>
                   <li>Market Making by Kairon Labs.</li>
@@ -778,25 +837,38 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Investment and Partners',
         info: [
-          <Box key={1} sx={{ '& ul li': { margin: '10px 0' } }}>
+          <Box
+            key={1}
+            sx={{
+              '& ul li': { margin: '10px 0' },
+              '& a': {
+                textDecoration: 'underline',
+                color: 'gray'
+              }
+            }}
+          >
             <ul>
               <li>
-                Investors/Cap table: Turk Telekom Ventures ($4B telecom company), Brinc VC, Evox Capital, Keiretsu
-                Forum, Q Angels, IBSS, and Hypernest DAO.
+                {' '}
+                <strong>Investors/Cap table: </strong> Brinc VC, Evox Capital, Keiretsu Forum, Q Angels, IBSS, and
+                Hypernest DAO.
               </li>
               <li>
-                Strategic partners/Supporters:
+                <strong>Strategic partners/Supporters:</strong>
+                <a href="https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20" target="_blank" rel="noreferrer">
+                  {' '}
+                  BNB Chain{' '}
+                </a>
+                , Polygon, Neohub,{' '}
                 <a
-                  href="https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20"
+                  href="https://x.com/SpaceIDProtocol/status/1705886980146421766?s=20"
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: '#1199FA' }}
                 >
-                  BNB Chain (https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20)
-                </a>
-                , Polygon, Neohub (Subsidiary of Denizbank/Emirates NBD), Space ID (Grant), Chainlink Labs, Shardeum.
+                  Space ID
+                </a>{' '}
+                , Chainlink Labs, Shardeum.
               </li>
-              <li>+250 KOL army</li>
             </ul>
           </Box>
         ]
@@ -823,7 +895,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens through liquidity vaults and DeFi bonds.',
+    desc: 'Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining, providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable, mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3 projects and help them grow their liquidity.',
     social: [
       <Link key={0} href="https://finceptor.app/" target="_blank">
         <Web />
