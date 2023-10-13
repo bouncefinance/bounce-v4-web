@@ -81,7 +81,20 @@ export interface IPrivatePadProp {
   isFAQ?: boolean
   poolTypeName2?: string
 }
-
+const participateProjectInfo: IProjectInfo = {
+  title: 'How to Participate',
+  info: [
+    <a
+      key={1}
+      href="https://docs.bounce.finance/auction-user-guide/fixed-price-auction-guides/participate-in-a-fixed-price-auction"
+      target="_blank"
+      rel="noreferrer"
+      style={{ textDecoration: 'underline', color: 'gray' }}
+    >
+      https://docs.bounce.finance/auction-user-guide/fixed-price-auction-guides/participate-in-a-fixed-price-auction
+    </a>
+  ]
+}
 const DipProjectInfo: IProjectInfo[] = [
   {
     title: 'What is DIP Exchange?',
@@ -174,7 +187,8 @@ const DipProjectInfo: IProjectInfo[] = [
         </ul>
       </Stack>
     ]
-  }
+  },
+  participateProjectInfo
 ]
 const DipTokenMetrics: IProjectInfo[] = [
   // {
@@ -391,7 +405,8 @@ const DipTokenMetrics: IProjectInfo[] = [
         </ul>
       </Box>
     ]
-  }
+  },
+  participateProjectInfo
 ]
 const SocialBg = styled(Box)`
   display: flex;
@@ -671,7 +686,8 @@ const DeelanceProjectInfo: IProjectInfo[] = [
         <img key={3} src={DeelanceInvestment} />
       </Box>
     ]
-  }
+  },
+  participateProjectInfo
 ]
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 15
@@ -892,7 +908,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </ul>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining, providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable, mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3 projects and help them grow their liquidity.',
@@ -1038,7 +1055,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </li>
           </ul>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
@@ -1140,7 +1158,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </ul>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Solace is a DeFi protocol built on top of Ajna protocol. Solace introduces veTokenomics on a set of markets across Ajna, purposefully created to accept derivatives as collateral for borrowing ETH (or stablecoins). By implementing this integration, Solace Protocol encourages the influx of liquidity into derivatives lending markets, enabling enhanced risk ad yield strategies.',
@@ -1434,7 +1453,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             <a href="https://openfabric.ai/#openfabric-partners">https://openfabric.ai/#openfabric-partners</a>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.',
@@ -1524,7 +1544,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </li>
           </ul>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.',
@@ -1612,7 +1633,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </Typography>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
@@ -1703,7 +1725,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </Typography>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
@@ -1769,7 +1792,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           '- 5 month linear vesting. (1.00% monthly)',
           '- 18 month linear vesting. (5.00% monthly).'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
@@ -1868,7 +1892,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             />
           </Link>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Omega is building a real-yield multi level system. With OMG and veOMG people can earn double reward USDT and ETH. Our nontradeable veOMG people can earn double reward and participate in our dao decision making. We inplemented NFT boosted staking into our ecosystem so people can boost their earnings.',
@@ -1939,7 +1964,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'The team raised a small round from angel investors and degen groups for game development and working capital.'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
@@ -2035,7 +2061,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'The team raised a small round from angel investors and degen groups for game development and working capital.'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
@@ -2131,7 +2158,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'The team raised a small round from angel investors and degen groups for game development and working capital.'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
