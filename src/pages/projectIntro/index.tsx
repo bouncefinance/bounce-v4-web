@@ -567,7 +567,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
       }}
     >
       <img
-        src={item.img}
+        src={item.pageInImg || item.img}
         style={{
           position: 'absolute',
           width: '100%',
@@ -584,7 +584,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           position: isDark && isSm ? 'relative' : 'absolute',
           display: 'flex',
           flexDirection: 'column',
-          background: `url(${item.img})`,
+          background: `url(${item.pageInImg || item.img})`,
           top: 0,
           right: isDark && isSm ? '' : { xs: 20, sm: '40px' },
           bottom: 0,
