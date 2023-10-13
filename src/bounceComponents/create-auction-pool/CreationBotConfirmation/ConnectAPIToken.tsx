@@ -161,7 +161,7 @@ const ConnectAPIToken = () => {
           {({ values }) => (
             <Stack component={Form} direction={'row'} justifyContent={'center'} gap={'8px'}>
               <Stack width={'100%'} gap={8} direction={'row'}>
-                <FormItem sx={{ width: '100%' }} name="tgToken" required>
+                <FormItem error={true} sx={{ width: '100%' }} name="tgToken" required>
                   <MTextField
                     sx={{ marginTop: '5px' }}
                     variant="outlined"

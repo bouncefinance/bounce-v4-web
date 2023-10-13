@@ -1,4 +1,4 @@
-import { ApiInstance } from '..'
+import { ApiInstance, BotApiInstance } from '..'
 import {
   GetPoolCreationSignatureParams,
   GetPoolCreationSignatureResponse,
@@ -19,6 +19,13 @@ import {
  */
 export const getPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
   return ApiInstance.post<GetPoolCreationSignatureResponse>('/user/create_pool_sign', params)
+}
+
+/**
+ * Get signature for bot auction pool creation
+ */
+export const getBotPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
+  return BotApiInstance.post<GetPoolCreationSignatureResponse>('/bot/create_pool_sign', params)
 }
 
 /**

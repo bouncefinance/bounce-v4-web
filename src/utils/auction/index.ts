@@ -3,6 +3,8 @@ import { BigNumber } from 'bignumber.js'
 import { formatUnits, parseUnits } from 'ethers/lib/utils.js'
 import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import DialogDarkConfirmation from 'bounceComponents/common/DialogConfirmation/DialogDarkConfirmation'
+import DialogLightBotConfirmation from 'bounceComponents/common/DialogConfirmation/DialogLightBotConfirmation'
+import DialogDarkBotConfirmation from 'bounceComponents/common/DialogConfirmation/DialogDarkBotConfirmation'
 
 export const getToken0AmountFromToken1Amount = (token1Amount: string, ratio: string | number) => {
   return new BigNumber(token1Amount).times(new BigNumber(ratio))
@@ -61,26 +63,47 @@ export const checkIfAllocationLimitExist = (maxAmount1PerWallet: string | number
   return new BigNumber(maxAmount1PerWallet).gt(0)
 }
 
-export const showRequestApprovalDialog = (config?: { dark: boolean }) => {
-  show(config?.dark ? DialogDarkConfirmation : DialogConfirmation, {
-    title: 'Bounce requests wallet approval',
-    subTitle: 'Please manually interact with your wallet. Ease enable Bounce to access your tokens.'
+export const showRequestApprovalDialog = (config?: { dark: boolean; isBot?: boolean }) => {
+  if (!config?.isBot) {
+    show(config?.dark ? DialogDarkConfirmation : DialogConfirmation, {
+      title: 'Bounce requests wallet approval',
+      subTitle: 'Please manually interact with your wallet. Ease enable Bounce to access your tokens.'
+    })
+    return
+  }
+  show(config?.dark ? DialogDarkBotConfirmation : DialogLightBotConfirmation, {
+    title: 'Bot requests wallet approval',
+    subTitle: 'Please manually interact with your wallet. Ease enable bot to access your tokens.'
   })
 }
 
-export const showRequestConfirmDialog = (config?: { dark: boolean }) => {
-  show(config?.dark ? DialogDarkConfirmation : DialogConfirmation, {
-    title: 'Bounce requests wallet interaction',
+export const showRequestConfirmDialog = (config?: { dark: boolean; isBot?: boolean }) => {
+  if (!config?.isBot) {
+    show(config?.dark ? DialogDarkConfirmation : DialogConfirmation, {
+      title: 'Bounce requests wallet interaction',
+      subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
+    })
+    return
+  }
+  show(config?.dark ? DialogDarkBotConfirmation : DialogLightBotConfirmation, {
+    title: 'Bot requests wallet interaction',
     subTitle: 'Please open your wallet and confirm in the transaction activity to proceed your order.'
   })
 }
 
-export const showWaitingTxDialog = (onClose?: () => void, config?: { dark: boolean }) => {
-  show(config?.dark ? DialogDarkConfirmation : DialogConfirmation, {
-    title: 'Bounce waiting for transaction settlement',
-    subTitle:
-      'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
-    onClose
+export const showWaitingTxDialog = (onClose?: () => void, config?: { dark: boolean; isBot?: boolean }) => {
+  if (!config?.isBot) {
+    show(config?.dark ? DialogDarkConfirmation : DialogConfirmation, {
+      title: 'Bounce waiting for transaction settlement',
+      subTitle:
+        'Bounce is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.',
+      onClose
+    })
+    return
+  }
+  show(config?.dark ? DialogDarkBotConfirmation : DialogLightBotConfirmation, {
+    title: 'Almost done! Waiting for transaction settlement',
+    subTitle: 'Bot is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.'
   })
 }
 

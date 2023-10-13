@@ -1,8 +1,8 @@
-import { getPoolCreationSignature } from 'api/pool'
+import { getBotPoolCreationSignature } from 'api/pool'
 import { GetPoolCreationSignatureParams, PoolType } from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useActiveWeb3React } from 'hooks'
-import { useFixedSwapERC20Contract } from 'hooks/useContract'
+import { useBotFixedSwapERC20Contract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { Currency, CurrencyAmount } from 'constants/token'
@@ -113,7 +113,7 @@ export function makeValuesReleaseData(values: AuctionPool) {
 
 export function useCreateBotSwapPool() {
   const { account, chainId } = useActiveWeb3React()
-  const fixedSwapERC20Contract = useFixedSwapERC20Contract()
+  const fixedSwapBotERC20Contract = useBotFixedSwapERC20Contract()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const { currencyFrom, currencyTo } = useAuctionERC20Currency()
   const addTransaction = useTransactionAdder()
@@ -172,7 +172,7 @@ export function useCreateBotSwapPool() {
       return Promise.reject('no account')
     }
 
-    if (!fixedSwapERC20Contract) {
+    if (!fixedSwapBotERC20Contract) {
       return Promise.reject('no contract')
     }
     const signatureParams: GetPoolCreationSignatureParams = {
@@ -197,8 +197,8 @@ export function useCreateBotSwapPool() {
 
     const {
       data: { id, expiredTime, signature }
-    } = await getPoolCreationSignature(signatureParams)
-    console.log('getPoolCreationSignature', id, expiredTime, signature)
+    } = await getBotPoolCreationSignature(signatureParams)
+    console.log('getBotPoolCreationSignature', id, expiredTime, signature)
     const contractCallParams = {
       name: signatureParams.name,
       token0: signatureParams.token0,
@@ -224,14 +224,14 @@ export function useCreateBotSwapPool() {
     ]
     console.log('🚀 ~ file: useCreateFixedSwapPool.ts:230 ~ returnuseCallback ~ args:', args)
 
-    const estimatedGas = await fixedSwapERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
+    const estimatedGas = await fixedSwapBotERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
       console.log('estimatedGas', error)
       console.debug('Failed to create fixedSwap', error)
       throw error
     })
     console.log('estimatedGas', estimatedGas)
 
-    return fixedSwapERC20Contract
+    return fixedSwapBotERC20Contract
       .createV2(...args, {
         gasLimit: calculateGasMargin(estimatedGas)
       })
@@ -247,10 +247,10 @@ export function useCreateBotSwapPool() {
           hash: response.hash,
           transactionReceipt: response.wait(1),
           sysId: id,
-          getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
+          getPoolId: (logs: Log[]) => getEventLog(fixedSwapBotERC20Contract, logs, 'Created', 'index')
         }
       })
-  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
+  }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapBotERC20Contract, values])
 }
 
 export function getEventLog(contract: Contract, logs: Log[], eventName: string, name: string): string | undefined {

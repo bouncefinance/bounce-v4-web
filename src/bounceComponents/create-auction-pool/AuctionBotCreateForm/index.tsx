@@ -36,6 +36,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider'
 // import { useCreateBotSwapPool } from 'hooks/useCreateBotSwapPool'
+import { useUserInfo } from 'state/users/hooks'
+import { IS_TEST_ENV } from '../../../constants'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
@@ -82,7 +86,8 @@ const AuctionBotCreateForm = (): JSX.Element => {
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
   // const createBotSwapPool = useCreateBotSwapPool()
-  console.log('valuesState', valuesState)
+  const navigate = useNavigate()
+  const { userInfo, userId } = useUserInfo()
 
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
@@ -269,13 +274,15 @@ const AuctionBotCreateForm = (): JSX.Element => {
                         address: values.tokenFromAddress,
                         decimals: tokenMap[values.tokenFromAddress].decimals,
                         symbol: tokenMap[values.tokenFromAddress].symbol,
-                        logoURI: tokenMap[values.tokenFromAddress].logoURI
+                        logoURI: tokenMap[values.tokenFromAddress].logoURI,
+                        chainId: tokenMap[values.tokenFromAddress].chainId
                       },
                       tokenTo: {
                         address: values.tokenToAddress,
                         decimals: fundingCurrencyMap[values.tokenToAddress].decimals,
                         symbol: fundingCurrencyMap[values.tokenToAddress].symbol,
-                        logoURI: fundingCurrencyMap[values.tokenToAddress].logoURI
+                        logoURI: fundingCurrencyMap[values.tokenToAddress].logoURI,
+                        chainId: fundingCurrencyMap[values.tokenToAddress].chainId
                       },
                       swapRatio: values.swapRatio,
                       poolSize: values.poolSize,
@@ -603,9 +610,44 @@ const AuctionBotCreateForm = (): JSX.Element => {
                             }}
                           ></Box>
                         </Stack>
-                        <Button type="submit" variant="contained">
+                        {/* <Button type="submit" variant="contained">
                           Deploy
-                        </Button>
+                        </Button> */}
+
+                        <Stack direction="row" spacing={10} justifyContent="end">
+                          {/* && userInfo?.twitterName */}
+                          {account && userId && userInfo?.email && (userInfo?.twitterName || IS_TEST_ENV) ? (
+                            <>
+                              <Button type="submit" variant="contained">
+                                Deploy
+                              </Button>
+                            </>
+                          ) : !userId ? (
+                            <Button variant="contained" sx={{ width: 140 }} onClick={showLoginModal}>
+                              Login
+                            </Button>
+                          ) : !userInfo?.email || (!userInfo?.twitterName && !IS_TEST_ENV) ? (
+                            <Button
+                              variant="contained"
+                              sx={{ width: 300 }}
+                              onClick={() => {
+                                navigate(routes.account.myAccount)
+                              }}
+                            >
+                              You need to bind your email and twitter first
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="contained"
+                              sx={{ width: 140 }}
+                              onClick={() => {
+                                showLoginModal()
+                              }}
+                            >
+                              Connect
+                            </Button>
+                          )}
+                        </Stack>
                       </Stack>
                     </>
                   )

@@ -15,7 +15,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
+import { FIXED_SWAP_BOT_ERC20_ADDRESSES } from '../../../constants'
 import {
   showRequestApprovalDialog,
   showWaitingTxDialog,
@@ -68,17 +68,24 @@ const CreatePoolButton = () => {
     () => (currencyFrom && values.poolSize ? CurrencyAmount.fromAmount(currencyFrom, values.poolSize) : undefined),
     [currencyFrom, values.poolSize]
   )
+  console.log(
+    '$',
+    values.auctionInChain && chainId === values.auctionInChain
+      ? FIXED_SWAP_BOT_ERC20_ADDRESSES[values.auctionInChain]
+      : undefined
+  )
+
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
     values.auctionInChain && chainId === values.auctionInChain
-      ? FIXED_SWAP_ERC20_ADDRESSES[values.auctionInChain]
+      ? FIXED_SWAP_BOT_ERC20_ADDRESSES[values.auctionInChain]
       : undefined,
     true
   )
   const createBotSwapPool = useCreateBotSwapPool()
 
   const toCreate = useCallback(async () => {
-    showRequestConfirmDialog()
+    showRequestConfirmDialog({ isBot: true, dark: false })
 
     try {
       setButtonCommitted('wait')
@@ -87,11 +94,14 @@ const CreatePoolButton = () => {
       console.log('createBotSwapPool>>>>', getPoolId, transactionReceipt, sysId)
       setButtonCommitted('inProgress')
       const ret: Promise<string> = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-          // handleCloseDialog()
-        })
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            rpt()
+            // handleCloseDialog()
+          },
+          { isBot: true, dark: false }
+        )
         transactionReceipt.then(curReceipt => {
           const poolId = getPoolId(curReceipt.logs)
           if (poolId) {
@@ -115,14 +125,10 @@ const CreatePoolButton = () => {
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            againBtn: 'To the pool',
-            cancelBtn: 'Not now',
+            againBtn: 'Confirm',
             title: 'Congratulations!',
             content: 'You have successfully created the auction.',
             onAgain: () => {
-              console.log('poolId', poolId)
-            },
-            onCancel: () => {
               console.log('poolId', poolId)
             },
             onClose: () => {
@@ -151,14 +157,17 @@ const CreatePoolButton = () => {
   }, [createBotSwapPool])
 
   const toApprove = useCallback(async () => {
-    showRequestApprovalDialog()
+    showRequestApprovalDialog({ isBot: true, dark: false })
     try {
       const { transactionReceipt } = await approveCallback()
       const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
+        showWaitingTxDialog(
+          () => {
+            hideDialogConfirmation()
+            rpt()
+          },
+          { isBot: true, dark: false }
+        )
         transactionReceipt.then(curReceipt => {
           resolve(curReceipt)
         })
@@ -203,6 +212,8 @@ const CreatePoolButton = () => {
         run: () => switchNetwork(values.auctionInChain)
       }
     }
+    console.log('-------', buttonCommitted)
+
     if (buttonCommitted !== undefined) {
       if (buttonCommitted === 'success') {
         return {
@@ -221,6 +232,7 @@ const CreatePoolButton = () => {
         disabled: true
       }
     }
+    console.log('1', approvalState)
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {

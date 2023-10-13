@@ -14,6 +14,7 @@ import { getOtherNetworkLibrary } from 'connection/MultiNetworkConnector'
 import ERC721_ABI from '../constants/abis/erc721.json'
 import ERC1155_ABI from '../constants/abis/erc1155.json'
 import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
+import FIXED_SWAP_ABI_BOT from '../constants/abis/fixedSwap_bot.json'
 import RANDOM_SELECTION_ABI from '../constants/abis/randomSelection.json'
 import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
 import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
@@ -33,6 +34,7 @@ import {
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES,
   FIXED_SWAP_ERC20_ADDRESSES,
+  FIXED_SWAP_BOT_ERC20_ADDRESSES,
   FIXED_SWAP_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_CONTRACT_ADDRESSES,
   MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -179,6 +181,12 @@ export function useFixedSwapERC20Contract(address?: string, queryChainId?: Chain
   const cur = queryChainId || chainId
   const curAddress = address === '' ? undefined : address || (cur ? FIXED_SWAP_ERC20_ADDRESSES[cur] : undefined)
   return useContract(curAddress, FIXED_SWAP_ABI, true, queryChainId)
+}
+export function useBotFixedSwapERC20Contract(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = address === '' ? undefined : address || (cur ? FIXED_SWAP_BOT_ERC20_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, FIXED_SWAP_ABI_BOT, true, queryChainId)
 }
 
 export function useRandomSelectionERC20Contract(address?: string, queryChainId?: ChainId) {

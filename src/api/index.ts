@@ -57,3 +57,4 @@ const instance = (baseuri: string) => ({
 })
 
 export const ApiInstance = instance(process.env.REACT_APP_REQUEST_BASEURL || '')
+export const BotApiInstance = instance('https://tg1-api-devnet.bounce.finance/api/v3' || '')
