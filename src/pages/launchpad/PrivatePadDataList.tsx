@@ -695,10 +695,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 15,
     liveTimeStamp: {
-      start: 1697371200000,
-      end: 1697976000000
+      start: 1697360400000,
+      end: 1697965200000
     },
-    hideUpcomingCountdown: true,
+    // hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/2e48f48ac5a9717b679ca051e8a43c8c-1697094683.png',
     pageInImg: 'https://images-v3.bounce.finance/2d282148ec8905a28b2157b7641e265a-1697122606.png',
