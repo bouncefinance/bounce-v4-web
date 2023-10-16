@@ -1,4 +1,3 @@
-import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
@@ -13,9 +12,8 @@ const TelegramBotPage = () => {
   const { userInfo } = useUserInfo()
 
   useEffect(() => {
-    console.log('userInfo', userInfo)
-    if (!userInfo) return
-    if (!userInfo?.tg_token) {
+    console.log('userInfo>>>>>', userInfo)
+    if (!userInfo || !userInfo?.tg_token) {
       valuesDispatch({
         type: ActionType.SetTgBotActiveStep,
         payload: {
@@ -31,10 +29,10 @@ const TelegramBotPage = () => {
           tgBotActiveStep: TgBotActiveStep.GUIDEFORM
         }
       })
-      navigate(routes.telegramBot.guide)
+      navigate(routes.telegramBot.home)
     }
   }, [navigate, userInfo, userInfo?.tg_token, valuesDispatch])
-  return <Box>123</Box>
+  return null
 }
 
 const TelegramBot = () => {

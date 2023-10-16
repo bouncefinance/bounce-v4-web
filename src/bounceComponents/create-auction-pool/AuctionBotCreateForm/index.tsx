@@ -1,5 +1,3 @@
-import HeaderTab from 'bounceComponents/auction/HeaderTab'
-import FooterPc from 'components/Footer/FooterPc'
 import moment, { Moment } from 'moment'
 import {
   Box,
@@ -223,7 +221,6 @@ const AuctionBotCreateForm = (): JSX.Element => {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
-        <HeaderTab />
         <TwoColumnPanel>
           <Stack padding={56}>
             <Stack borderRadius={20} padding={56}>
@@ -656,7 +653,6 @@ const AuctionBotCreateForm = (): JSX.Element => {
             </Box>
           </Stack>
         </TwoColumnPanel>
-        <FooterPc />
       </LocalizationProvider>
     </>
   )

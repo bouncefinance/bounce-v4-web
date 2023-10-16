@@ -79,6 +79,12 @@ export enum TgBotActiveStep {
   COMFIRM
 }
 
+export enum TgBotTabValue {
+  AUCTION,
+  ACCOUNT,
+  BOTSETUP
+}
+
 export interface AuctionPool {
   tokenType: TokenType
   nftTokenFrom: NFTToken
@@ -125,4 +131,5 @@ export interface AuctionPool {
   tgBotActiveStep?: TgBotActiveStep
   tgToken?: string
   auctionInChain: ChainId | number | undefined
+  tgBotTabValue: TgBotTabValue
 }

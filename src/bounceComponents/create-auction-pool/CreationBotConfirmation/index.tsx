@@ -1,5 +1,5 @@
 import { Box, IconButton, Typography, Stack, styled } from '@mui/material'
-import { TgBotActiveStep } from '../types'
+import { TgBotActiveStep, TgBotTabValue } from '../types'
 import { useValuesDispatch, useValuesState, ActionType, useAuctionERC20Currency } from '../ValuesProvider'
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
@@ -16,6 +16,9 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { FIXED_SWAP_BOT_ERC20_ADDRESSES } from '../../../constants'
+import { useNavigate } from 'react-router-dom'
+import { routes } from 'constants/routes'
+
 import {
   showRequestApprovalDialog,
   showWaitingTxDialog,
@@ -68,6 +71,9 @@ const CreatePoolButton = () => {
     () => (currencyFrom && values.poolSize ? CurrencyAmount.fromAmount(currencyFrom, values.poolSize) : undefined),
     [currencyFrom, values.poolSize]
   )
+  const valuesDispatch = useValuesDispatch()
+  const navigate = useNavigate()
+
   console.log(
     '$',
     values.auctionInChain && chainId === values.auctionInChain
@@ -121,7 +127,7 @@ const CreatePoolButton = () => {
       })
 
       ret
-        .then(poolId => {
+        .then(() => {
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
@@ -129,10 +135,16 @@ const CreatePoolButton = () => {
             title: 'Congratulations!',
             content: 'You have successfully created the auction.',
             onAgain: () => {
-              console.log('poolId', poolId)
+              valuesDispatch({
+                type: ActionType.SetTgBotTabValue,
+                payload: {
+                  tgBotActiveStep: TgBotTabValue.BOTSETUP
+                }
+              })
+              navigate(routes.telegramBot.index)
             },
             onClose: () => {
-              console.log('poolId', poolId)
+              hideDialogConfirmation()
             }
           })
         })
@@ -154,7 +166,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [createBotSwapPool])
+  }, [createBotSwapPool, navigate, valuesDispatch])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog({ isBot: true, dark: false })

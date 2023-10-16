@@ -1,4 +1,4 @@
-import { ApiInstance } from '..'
+import { ApiInstance, BotApiInstance } from '..'
 import { ICompanyInformationParams, IInstitutionInvestorsParams, IPoolFilterParams, IPoolsParams } from './type'
 
 export const getInstitutionInvestors = (body: IInstitutionInvestorsParams) => {
@@ -10,6 +10,10 @@ export const getCompanyInformation = (body: ICompanyInformationParams) => {
 
 export const getPools = (body: IPoolsParams) => {
   return ApiInstance.post('/pools', body)
+}
+
+export const getBotPools = (body: IPoolsParams) => {
+  return BotApiInstance.post('/bot/pools', body)
 }
 
 export const getPoolsFilter = (body: IPoolFilterParams) => {

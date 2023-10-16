@@ -16,7 +16,8 @@ import {
   IReleaseType,
   IReleaseData,
   PriceSegmentType,
-  TgBotActiveStep
+  TgBotActiveStep,
+  TgBotTabValue
 } from '../types'
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
@@ -132,7 +133,8 @@ const initialValues: AuctionPool = {
   maxParticipantAllowed: 0,
   tgBotActiveStep: TgBotActiveStep.GETAPITOKEN,
   tgToken: '',
-  auctionInChain: NETWORK_CHAIN_ID
+  auctionInChain: NETWORK_CHAIN_ID,
+  tgBotTabValue: TgBotTabValue.AUCTION
 }
 
 export enum ActionType {
@@ -150,7 +152,8 @@ export enum ActionType {
   SetWhitelist = 'SET_WHITELIST',
   SetTgBotActiveStep = 'SET_TG_BOT_ACTIVE_STEP',
   SetTgToken = 'SET_API_TOKEN',
-  CommitBotAuctionParameters = 'COMMIT_BOT_AUCTION_PARAMETERS'
+  CommitBotAuctionParameters = 'COMMIT_BOT_AUCTION_PARAMETERS',
+  SetTgBotTabValue = 'SET_TG_BOT_TAB_VALUE'
 }
 
 type Payload = {
@@ -261,6 +264,9 @@ type Payload = {
   }
   [ActionType.SetTgToken]: {
     tgToken: string
+  }
+  [ActionType.SetTgBotTabValue]: {
+    tgBotTabValue: TgBotTabValue
   }
 }
 
@@ -428,6 +434,11 @@ const reducer = (state: AuctionPool, action: Actions) => {
       return {
         ...state,
         tgToken: action.payload.tgToken
+      }
+    case ActionType.SetTgBotTabValue:
+      return {
+        ...state,
+        tgBotTabValue: action.payload.tgBotTabValue
       }
     default:
       return state

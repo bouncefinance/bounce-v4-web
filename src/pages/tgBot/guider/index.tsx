@@ -4,8 +4,12 @@ import ConnectAPIToken from 'bounceComponents/create-auction-pool/CreationBotCon
 import AuctionBotCreateForm from 'bounceComponents/create-auction-pool/AuctionBotCreateForm'
 import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import CreationBotConfirmation from 'bounceComponents/create-auction-pool/CreationBotConfirmation'
+// import { useUserInfo } from 'state/users/hooks'
+import HeaderTab from 'bounceComponents/auction/HeaderTab'
+import FooterPc from 'components/Footer/FooterPc'
 
 export function Guide() {
+  // const { userInfo } = useUserInfo()
   const valuesState = useValuesState()
 
   if (valuesState.tgBotActiveStep === TgBotActiveStep.GETAPITOKEN) {
@@ -23,7 +27,9 @@ export function Guide() {
 const GuidePage = () => {
   return (
     <ValuesProvider>
+      <HeaderTab />
       <Guide />
+      <FooterPc />
     </ValuesProvider>
   )
 }

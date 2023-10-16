@@ -47,8 +47,7 @@ const instance = (baseuri: string) => ({
 
     return request(`${baseuri}${url}`, {
       headers: {
-        ..._headers,
-        ...initSignature()
+        ..._headers
       },
       method: 'POST',
       body: body instanceof FormData ? body : JSON.stringify(body)
