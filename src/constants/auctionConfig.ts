@@ -53,7 +53,7 @@ export const AuctionConfig: {
     [TokenType.ERC721]: [AuctionType.MUTANT_ENGLISH]
   },
   [ChainId.ROLLUX]: {
-    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE, AuctionType.ENGLISH_AUCTION, AuctionType.DUTCH_AUCTION],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   },
   [ChainId.GNOSIS]: {

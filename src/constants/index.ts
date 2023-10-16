@@ -179,7 +179,7 @@ export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.POLYGON]: '0x738de648E84b5d990DAA7e6598546f7a4eAC1BB4',
   [ChainId.OMNI_TESTNET]: '',
   [ChainId.FANTOM]: '0xD4D0c9fCd48FBD22452cB6528bE4541249139c0B',
-  [ChainId.ROLLUX]: '',
+  [ChainId.ROLLUX]: '0x92f742a243904818e9167725eC3B7b992f8eeB2E',
   [ChainId.ZKSYNC_ERA]: '0x4e512aeDBaf09A5929C62e25d8aB931b2C4E7b50',
   [ChainId.ZKSYNC_ERA_TESTNET]: '',
   [ChainId.POLYGON_ZK_EVM]: '',
@@ -317,7 +317,7 @@ export const DUTCH_AUCTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } 
   [ChainId.LINEA_GORLI]: '',
   [ChainId.LINEA]: '0x194C02845d77ffCB8580D474Ca99013073C1eAb1',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: ''
+  [ChainId.ROLLUX]: '0x853C97d50604f4C5097D736b2C8B5A5aF15b3C02'
 }
 
 export const defaultPoolVersionRoute: 1 | 2 = 2
