@@ -1,4 +1,17 @@
-import { Stack, Typography, Grid, Box, styled, Button, Pagination, Select, MenuItem, Tabs, Tab } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  Grid,
+  Box,
+  styled,
+  Button,
+  Tabs,
+  Tab,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  OutlinedInput
+} from '@mui/material'
 import { ReactComponent as Calendar } from './svg/calendar.svg'
 import { ReactComponent as Auction } from './svg/auction.svg'
 import { ReactComponent as AuctionGroup } from './svg/auctionGroup.svg'
@@ -6,6 +19,8 @@ import { ReactComponent as Group } from './svg/group.svg'
 import { ReactComponent as Task } from './svg/task.svg'
 import { ReactComponent as User } from './svg/user.svg'
 import { ReactComponent as Add } from './svg/add.svg'
+import { ReactComponent as Arrow } from './svg/arrow.svg'
+import { ReactComponent as Copy } from './svg/copy.svg'
 import { useCallback, useState } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
@@ -14,13 +29,26 @@ import { useValuesDispatch, ActionType } from 'bounceComponents/create-auction-p
 import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
-import useBreakpoint from 'hooks/useBreakpoint'
 import { getBotPools } from 'api/market'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { usePagination } from 'ahooks'
 import { PoolType } from 'api/pool/type'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
-import { useOptionDatas } from 'state/configOptions/hooks'
+import { FixedSwapPool } from 'api/pool/type'
+import { ChainListMap, ChainId } from 'constants/chain'
+import Image from 'components/Image'
+import PoolCountDown from '../components/PoolCountDown'
+import PoolProgress, { AuctionProgressTextPrimaryColor } from '../components/PoolProgress'
+import { CurrencyAmount, Currency } from 'constants/token'
+import BigNumber from 'bignumber.js'
+import PoolInfoItem from '../components/PoolInfoItem'
+import TokenImage from 'bounceComponents/common/TokenImage'
+import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import { shortenAddress } from 'utils'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import { formatNumber } from 'utils/number'
+import NoPool from 'assets/images/noPool.png'
+// import SearchIcon from '@mui/icons-material/Search'
 
 enum PoolStatusFrontend {
   ALLSTATUS = '0',
@@ -61,7 +89,6 @@ const AcctionPoolCard = styled(Box)`
   border-radius: 20px;
   background: var(--grey-01, #20201e);
 `
-
 const CusButton = styled(Button)`
   background-color: #e1f25c;
   display: flex;
@@ -73,7 +100,6 @@ const CusButton = styled(Button)`
     border: 0;
   }
 `
-
 const CusTabs = styled(Tabs)`
   .MuiTab-root {
     font-family: Public Sans;
@@ -101,13 +127,43 @@ const CusTabs = styled(Tabs)`
   .MuiTabs-flexContainer {
   }
 `
+const CusAccordion = styled(Accordion)`
+  background-color: transparent;
+  border-radius: 12px;
+`
+const CusAccordionSummary = styled(AccordionSummary)`
+  background-color: #20201e;
+  border-radius: 12px 12px 0 0;
+  padding: 0 16px;
+
+  .MuiAccordionSummary-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 16px;
+    /* padding: 16px; */
+  }
+  .Mui-expanded {
+    /* transform: translateX(-20px); */
+  }
+`
+const CusAccordionDetails = styled(AccordionDetails)`
+  background-color: #20201e;
+  border-radius: 0 0 12px 12px;
+  padding: 0 16px 16px;
+`
+
+// const CusOutlinedInput = styled(OutlinedInput)`
+//   background-color: #121212;
+//   border: 0;
+// `
+
 export default function Home() {
   const { userInfo } = useUserInfo()
   const navigate = useNavigate()
   const valuesDispatch = useValuesDispatch()
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
-  const optionDatas = useOptionDatas()
   const [tabStatusFrontend, setTabStatusFrontend] = useState(PoolStatusFrontend.LIVE)
   // eslint-disable-next-line @typescript-eslint/ban-types
   const tabHandleChange = (event: React.ChangeEvent<{}>, newValue: PoolStatusFrontend) => {
@@ -138,20 +194,14 @@ export default function Home() {
     }
   }, [account, navigate, showLoginModal, userInfo, valuesDispatch])
 
-  const [curChain, setCurChain] = useState(0)
-
-  const {
-    pagination,
-    data: auctionPoolData,
-    loading
-  } = usePagination<any, Params>(
+  const { data: auctionPoolData, loading } = usePagination<any, Params>(
     async ({ current, pageSize }) => {
       const resp = await getBotPools({
         offset: (current - 1) * pageSize,
         limit: pageSize,
         CreatorUserId: userInfo?.id,
         category: PoolType.FixedSwap,
-        chainId: curChain,
+        chainId: 0,
         orderBy: '',
         tokenType: BackedTokenType.TOKEN,
         poolStatusFrontend: tabStatusFrontend,
@@ -165,12 +215,17 @@ export default function Home() {
     {
       defaultPageSize: defaultPageSize,
       debounceWait: 500,
-      refreshDeps: [curChain, tabStatusFrontend]
+      refreshDeps: [tabStatusFrontend]
     }
   )
-  const handlePageChange = useCallback((_: any, p: number) => pagination.changeCurrent(p), [pagination])
-  const isMobile = useBreakpoint('lg')
   console.log('auctionPoolData', auctionPoolData)
+  const [expanded, setExpanded] = useState<string | false>(false)
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false)
+  }
+
+  // const [filterInputValue, setFilterInputValue] = useState('')
 
   return (
     <Stack>
@@ -291,29 +346,17 @@ export default function Home() {
             <Tab label="Upcoming" value={PoolStatusFrontend.UPCOMING} />
             <Tab label="Close" value={PoolStatusFrontend.CLOSE} />
           </CusTabs>
-          <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems={'center'}>
-            <Stack direction={'row'} spacing={15}>
-              <Select
-                value={curChain}
-                onChange={e => {
-                  setCurChain(Number(e.target?.value) || 0)
-                }}
-                sx={{
-                  width: '200px',
-                  height: '38px'
-                }}
-              >
-                <MenuItem key={0} value={0}>
-                  All Chains
-                </MenuItem>
-                {optionDatas?.chainInfoOpt?.map((item, index) => (
-                  <MenuItem key={index} value={item.id}>
-                    {item.chainName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-          </Box>
+          {/* <CusOutlinedInput
+            value={filterInputValue}
+            onChange={event => {
+              console.log('filterInputValue: ', event.target.value)
+              setFilterInputValue(event.target.value)
+            }}
+            fullWidth
+            sx={{ mb: 30 }}
+            startAdornment={<SearchIcon sx={{ mr: 4 }} />}
+            placeholder="Search by token name or contract address"
+          /> */}
         </Stack>
         <Box
           sx={{
@@ -328,26 +371,140 @@ export default function Home() {
             background: 'var(--black-100, #121212)'
           }}
         >
-          {loading ? <Box></Box> : null}
-        </Box>
+          {loading || auctionPoolData?.total === 0 ? (
+            <Image src={NoPool} width={'548px'} height={'360px'}></Image>
+          ) : (
+            <Box width={'100%'}>
+              {auctionPoolData?.list.map((poolData: FixedSwapPool) => {
+                const _t0 = poolData.token0
+                const t0 = new Currency(poolData.chainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
+                const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(t0, poolData.swappedAmount0 || '0')
+                const swapedPercent = currencySwappedAmount0
+                  ? new BigNumber(currencySwappedAmount0.raw.toString())
+                      .div(poolData.amountTotal0)
+                      .times(100)
+                      .toNumber()
+                  : undefined
 
-        <Box mt={40} display={'flex'} justifyContent="center">
-          <Pagination
-            onChange={handlePageChange}
-            sx={{
-              // '.MuiPagination-ul li button': { border: '1px solid' },
-              alignItems: 'end',
-              overflowX: 'scroll',
-              mb: isMobile ? '24px' : '',
-              '> ul': {
-                flexWrap: 'nowrap'
-              },
-              '&::-webkit-scrollbar': {
-                display: 'none'
-              }
-            }}
-            count={Math.ceil((auctionPoolData?.total || 0) / (defaultPageSize || 0))}
-          />
+                const _t1 = poolData.token1
+                const t1 = new Currency(poolData.chainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
+                const currencyAmountToken0 = CurrencyAmount.fromRawAmount(t1, poolData.currentTotal0 || '0')
+
+                return (
+                  <CusAccordion
+                    key={poolData.id}
+                    expanded={expanded === poolData.poolId}
+                    onChange={handleChange(poolData.poolId)}
+                  >
+                    <CusAccordionSummary expandIcon={<Arrow />} id="panel1bh-header">
+                      <Stack width={'100%'}>
+                        <Stack direction={'row'} justifyContent={'space-between'}>
+                          <Stack gap={16} direction={'row'}>
+                            <Typography
+                              color={'rgba(255, 255, 255, 0.80)'}
+                              fontFamily={'Public Sans'}
+                              fontSize={16}
+                              fontWeight={500}
+                            >
+                              {poolData.poolId}
+                            </Typography>
+                            <Typography color={'#fff'} fontFamily={'Public Sans'} fontSize={16} fontWeight={500}>
+                              {poolData.name} Fixed Price Auction Poo
+                            </Typography>
+                          </Stack>
+                          <Stack gap={16} direction={'row'}>
+                            <Stack gap={8} direction={'row'} alignItems={'center'}>
+                              <Image
+                                width={16}
+                                src={poolData?.chainId ? ChainListMap?.[poolData.chainId as ChainId]?.logo || '' : ''}
+                              />
+                              <Typography color={'#fff'} fontFamily={'Inter'} fontSize={14} fontWeight={400}>
+                                {poolData?.chainId ? ChainListMap?.[poolData.chainId as ChainId]?.name || '' : '-'}
+                              </Typography>
+                            </Stack>
+                            <PoolCountDown
+                              status={poolData.status}
+                              openTime={poolData.openAt}
+                              closeTime={poolData.closeAt}
+                              claimAt={poolData.claimAt}
+                            />
+                          </Stack>
+                        </Stack>
+                        <PoolProgress sx={{ marginTop: '16px' }} value={swapedPercent} poolStatus={poolData.status} />
+                        <Box mt={12}>
+                          <Typography color={AuctionProgressTextPrimaryColor[poolData.status]} component="span">
+                            {currencySwappedAmount0.toSignificant()} {poolData.token0.symbol}
+                          </Typography>
+                          <Typography color={'#D7D6D9'} component="span">
+                            &nbsp;/&nbsp;
+                          </Typography>
+                          <Typography color={'#959595'} component="span">
+                            {currencyAmountToken0.toSignificant()} {poolData.token0.symbol}
+                          </Typography>
+                        </Box>
+                      </Stack>
+
+                      <Stack gap={16} direction={'row'}></Stack>
+                    </CusAccordionSummary>
+                    <CusAccordionDetails>
+                      <Box
+                        sx={{
+                          height: '0.255px',
+                          background: '#626262'
+                        }}
+                      />
+                      <Grid mt={16} container spacing={3}>
+                        <Grid item xs={3}>
+                          <PoolInfoItem title="Token symbol">
+                            <Stack direction="row" spacing={6} sx={{ alignItems: 'center' }}>
+                              <TokenImage src={poolData.token0.largeUrl} alt={poolData.token0.symbol} size={20} />
+                              <Typography color={'#fff'}>{poolData.token0.symbol}</Typography>
+                            </Stack>
+                          </PoolInfoItem>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
+                            <Stack direction="row" gap={6} sx={{ alignItems: 'center' }}>
+                              <CertifiedTokenImage
+                                address={poolData.token0.address}
+                                coingeckoId={poolData.token0.coingeckoId}
+                                ethChainId={poolData.chainId}
+                                backedChainId={poolData.chainId}
+                              />
+                              <Typography color={'#fff'}>{shortenAddress(poolData.token0.address)}</Typography>
+                              <CopyToClipboard text={poolData.token0.address}>
+                                <Copy />
+                              </CopyToClipboard>
+                            </Stack>
+                          </PoolInfoItem>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <PoolInfoItem title="Fixed price ratio">
+                            <Stack direction="row" spacing={8}>
+                              <Typography color={'#fff'}>1</Typography>
+                              <TokenImage alt={poolData.token0.symbol} src={poolData.token0.largeUrl} size={20} />
+                              <Typography color={'#fff'}>
+                                {poolData.token0.symbol} = {formatNumber(poolData.ratio, { unit: 0 })}
+                              </Typography>
+                              <TokenImage alt={poolData.token1.symbol} src={poolData.token1.largeUrl} size={20} />
+                              <Typography color={'#fff'}>{poolData.token1.symbol}</Typography>
+                            </Stack>
+                          </PoolInfoItem>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <PoolInfoItem title="Price,$">
+                            <Typography color={'#fff'}>
+                              {new BigNumber(poolData.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
+                            </Typography>
+                          </PoolInfoItem>
+                        </Grid>
+                      </Grid>
+                    </CusAccordionDetails>
+                  </CusAccordion>
+                )
+              })}
+            </Box>
+          )}
         </Box>
       </AcctionPoolCard>
     </Stack>
