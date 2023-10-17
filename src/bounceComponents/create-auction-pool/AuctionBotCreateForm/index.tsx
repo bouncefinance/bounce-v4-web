@@ -34,10 +34,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider'
 // import { useCreateBotSwapPool } from 'hooks/useCreateBotSwapPool'
-import { useUserInfo } from 'state/users/hooks'
-import { IS_TEST_ENV } from '../../../constants'
-import { useNavigate } from 'react-router-dom'
-import { routes } from 'constants/routes'
+// import { useUserInfo } from 'state/users/hooks'
+// import { IS_TEST_ENV } from '../../../constants'
+// import { useNavigate } from 'react-router-dom'
+// import { routes } from 'constants/routes'
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
@@ -84,8 +84,8 @@ const AuctionBotCreateForm = (): JSX.Element => {
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
   // const createBotSwapPool = useCreateBotSwapPool()
-  const navigate = useNavigate()
-  const { userInfo, userId } = useUserInfo()
+  // const navigate = useNavigate()
+  // const { userInfo, userId } = useUserInfo()
 
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
@@ -607,12 +607,11 @@ const AuctionBotCreateForm = (): JSX.Element => {
                             }}
                           ></Box>
                         </Stack>
-                        {/* <Button type="submit" variant="contained">
+                        <Button type="submit" variant="contained">
                           Deploy
-                        </Button> */}
+                        </Button>
 
-                        <Stack direction="row" spacing={10} justifyContent="end">
-                          {/* && userInfo?.twitterName */}
+                        {/* <Stack direction="row" spacing={10} justifyContent="end">
                           {account && userId && userInfo?.email && (userInfo?.twitterName || IS_TEST_ENV) ? (
                             <>
                               <Button type="submit" variant="contained">
@@ -644,7 +643,7 @@ const AuctionBotCreateForm = (): JSX.Element => {
                               Connect
                             </Button>
                           )}
-                        </Stack>
+                        </Stack> */}
                       </Stack>
                     </>
                   )
