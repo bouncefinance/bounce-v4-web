@@ -9,8 +9,8 @@ import {
   Tab,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
-  OutlinedInput
+  AccordionDetails
+  // OutlinedInput
 } from '@mui/material'
 import { ReactComponent as Calendar } from './svg/calendar.svg'
 import { ReactComponent as Auction } from './svg/auction.svg'
