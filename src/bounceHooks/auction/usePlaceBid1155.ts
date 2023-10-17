@@ -39,8 +39,9 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
       }
       let proofArr: string[] = []
       let _data: any
-      let whiteListType
+      let whiteListType = true
       let _args: any
+
       if (poolInfo.enableWhiteList) {
         try {
           const { data } = await getUserWhitelistProof({
@@ -80,7 +81,7 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
         )
       )
 
-      const args = _args
+      const args = _args ? _args : [poolInfo.poolId, bid0Amount, []]
       if (whiteListType) {
         const estimatedGas = await fixedSwapNFTContract.estimateGas
           .swap(...args, { value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined })

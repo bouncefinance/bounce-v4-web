@@ -35,8 +35,6 @@ const BidButtonBlock = ({
   poolInfo,
   handleCancelButtonClick
 }: BidButtonBlockProps & FixedSwapPoolParams) => {
-  console.log('action', action)
-
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
