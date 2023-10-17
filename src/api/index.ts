@@ -47,6 +47,28 @@ const instance = (baseuri: string) => ({
 
     return request(`${baseuri}${url}`, {
       headers: {
+        ..._headers,
+        ...initSignature()
+      },
+      method: 'POST',
+      body: body instanceof FormData ? body : JSON.stringify(body)
+    })
+  }
+})
+const botInstance = (baseuri: string) => ({
+  get<TData = any>(url: string, params: any, headers?: any): Promise<IResponse<TData>> {
+    return request(`${baseuri}${url}?${new URLSearchParams(params).toString()}`, {
+      headers: {
+        ...headers,
+        ...initSignature()
+      }
+    })
+  },
+  post<TData = any>(url: string, body: any, headers?: any): Promise<IResponse<TData>> {
+    const _headers = headers || { 'Content-Type': 'application/json' }
+
+    return request(`${baseuri}${url}`, {
+      headers: {
         ..._headers
       },
       method: 'POST',
@@ -56,4 +78,4 @@ const instance = (baseuri: string) => ({
 })
 
 export const ApiInstance = instance(process.env.REACT_APP_REQUEST_BASEURL || '')
-export const BotApiInstance = instance('https://tg1-api-devnet.bounce.finance/api/v3' || '')
+export const BotApiInstance = botInstance('https://tg1-api-devnet.bounce.finance/api/v3' || '')
