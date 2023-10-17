@@ -9,8 +9,8 @@ import {
   Tab,
   Accordion,
   AccordionSummary,
-  AccordionDetails
-  // OutlinedInput
+  AccordionDetails,
+  OutlinedInput
 } from '@mui/material'
 import { ReactComponent as Calendar } from './svg/calendar.svg'
 import { ReactComponent as Auction } from './svg/auction.svg'
@@ -48,7 +48,8 @@ import { shortenAddress } from 'utils'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import { formatNumber } from 'utils/number'
 import NoPool from 'assets/images/noPool.png'
-// import SearchIcon from '@mui/icons-material/Search'
+import SearchIcon from '@mui/icons-material/Search'
+import ButtonBlock from './ButtonBlock'
 
 enum PoolStatusFrontend {
   ALLSTATUS = '0',
@@ -153,10 +154,14 @@ const CusAccordionDetails = styled(AccordionDetails)`
   padding: 0 16px 16px;
 `
 
-// const CusOutlinedInput = styled(OutlinedInput)`
-//   background-color: #121212;
-//   border: 0;
-// `
+const CusOutlinedInput = styled(OutlinedInput)`
+  display: flex;
+  align-items: center;
+  background-color: #121212;
+  color: #959595;
+  width: 400px;
+  margin-bottom: 0 !important;
+`
 
 export default function Home() {
   const { userInfo } = useUserInfo()
@@ -165,6 +170,8 @@ export default function Home() {
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const [tabStatusFrontend, setTabStatusFrontend] = useState(PoolStatusFrontend.LIVE)
+  const [filterInputValue, setFilterInputValue] = useState('')
+
   // eslint-disable-next-line @typescript-eslint/ban-types
   const tabHandleChange = (event: React.ChangeEvent<{}>, newValue: PoolStatusFrontend) => {
     setTabStatusFrontend(newValue)
@@ -205,7 +212,8 @@ export default function Home() {
         orderBy: '',
         tokenType: BackedTokenType.TOKEN,
         poolStatusFrontend: tabStatusFrontend,
-        creatorAddress: account
+        creatorAddress: account,
+        poolName: filterInputValue
       })
       return {
         list: resp.data.fixedSwapList.list,
@@ -215,17 +223,16 @@ export default function Home() {
     {
       defaultPageSize: defaultPageSize,
       debounceWait: 500,
-      refreshDeps: [tabStatusFrontend]
+      refreshDeps: [tabStatusFrontend, filterInputValue]
     }
   )
   console.log('auctionPoolData', auctionPoolData)
   const [expanded, setExpanded] = useState<string | false>(false)
+
   // eslint-disable-next-line @typescript-eslint/ban-types
   const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false)
   }
-
-  // const [filterInputValue, setFilterInputValue] = useState('')
 
   return (
     <Stack>
@@ -346,7 +353,7 @@ export default function Home() {
             <Tab label="Upcoming" value={PoolStatusFrontend.UPCOMING} />
             <Tab label="Close" value={PoolStatusFrontend.CLOSE} />
           </CusTabs>
-          {/* <CusOutlinedInput
+          <CusOutlinedInput
             value={filterInputValue}
             onChange={event => {
               console.log('filterInputValue: ', event.target.value)
@@ -355,8 +362,8 @@ export default function Home() {
             fullWidth
             sx={{ mb: 30 }}
             startAdornment={<SearchIcon sx={{ mr: 4 }} />}
-            placeholder="Search by token name or contract address"
-          /> */}
+            placeholder="Search by pool name"
+          />
         </Stack>
         <Box
           sx={{
@@ -371,7 +378,7 @@ export default function Home() {
             background: 'var(--black-100, #121212)'
           }}
         >
-          {loading || auctionPoolData?.total === 0 ? (
+          {loading ? null : auctionPoolData?.total === 0 ? (
             <Image src={NoPool} width={'548px'} height={'360px'}></Image>
           ) : (
             <Box width={'100%'}>
@@ -428,6 +435,7 @@ export default function Home() {
                               closeTime={poolData.closeAt}
                               claimAt={poolData.claimAt}
                             />
+                            {poolData.contract && <ButtonBlock poolData={poolData} />}
                           </Stack>
                         </Stack>
                         <PoolProgress sx={{ marginTop: '16px' }} value={swapedPercent} poolStatus={poolData.status} />
