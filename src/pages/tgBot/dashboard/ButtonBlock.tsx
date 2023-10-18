@@ -4,10 +4,12 @@ import { PoolStatus } from 'api/pool/type'
 import { useBotCreatorClaim } from 'bounceHooks/auction/useBotCreatorClaim'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
-import { LoadingButton } from '@mui/lab'
+import { IconButton } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import DialogBotTips from 'bounceComponents/common/DialogTips/DialogBotTips'
 import DialogTips from 'bounceComponents/common/DialogTips'
+import { ReactComponent as Close } from './svg/close.svg'
 
 const ButtonBlock = ({ poolData }: { poolData: any }) => {
   const { account } = useActiveWeb3React()
@@ -72,49 +74,41 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
   //   return <SwitchNetworkButton targetChain={poolData.ethChainId} />
   // }
 
-  if (poolData.status === PoolStatus.Closed && !poolData.creatorClaimed) {
+  // if (poolData.status === PoolStatus.Closed && !poolData.creatorClaimed) {
+  //   return (
+  //     <IconButton
+  //       disabled={submitted.complete || submitted.submitted}
+  //       onClick={() => {
+  //         show(DialogBotTips, {
+  //           cancelBtn: 'Cancel',
+  //           againBtn: 'Again',
+  //           title: 'delete auction',
+  //           content: 'Are you sure to delete this auction? ',
+  //           onAgain: () => toClaim(false)
+  //         })
+  //       }}
+  //     >
+  //       <Close />
+  //     </IconButton>
+  //   )
+  // }
+
+  if (poolData.status === PoolStatus.Upcoming) {
     return (
-      <LoadingButton
-        variant="contained"
-        fullWidth
-        loadingPosition="start"
-        loading={submitted.complete || submitted.submitted}
+      <IconButton
+        disabled={submitted.complete || submitted.submitted}
         onClick={() => {
-          show(DialogTips, {
-            iconType: 'success',
+          show(DialogBotTips, {
             cancelBtn: 'Cancel',
             againBtn: 'Again',
             title: 'delete auction',
             content: 'Are you sure to delete this auction? ',
-            onAgain: () => toClaim(false)
-          })
-        }}
-      >
-        <span>{'close'}</span>
-      </LoadingButton>
-    )
-  }
-
-  if (poolData.status === PoolStatus.Upcoming) {
-    return (
-      <LoadingButton
-        variant="outlined"
-        fullWidth
-        loadingPosition="start"
-        sx={{ mt: 24, mb: 12 }}
-        loading={submitted.complete || submitted.submitted}
-        onClick={() => {
-          show(DialogTips, {
-            iconType: 'success',
-            cancelBtn: 'Cancel',
-            title: '111',
-            content: '222',
             onAgain: () => toClaim(true)
           })
         }}
       >
-        <span>{'close'}</span>
-      </LoadingButton>
+        <Close />
+      </IconButton>
     )
   }
 

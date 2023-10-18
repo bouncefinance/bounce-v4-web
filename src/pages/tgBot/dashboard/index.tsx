@@ -171,6 +171,7 @@ export default function Home() {
   const showLoginModal = useShowLoginModal()
   const [tabStatusFrontend, setTabStatusFrontend] = useState(PoolStatusFrontend.LIVE)
   const [filterInputValue, setFilterInputValue] = useState('')
+  console.log('userInfo', userInfo)
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const tabHandleChange = (event: React.ChangeEvent<{}>, newValue: PoolStatusFrontend) => {
@@ -226,7 +227,7 @@ export default function Home() {
       refreshDeps: [tabStatusFrontend, filterInputValue]
     }
   )
-  console.log('auctionPoolData', auctionPoolData)
+  // console.log('auctionPoolData', auctionPoolData)
   const [expanded, setExpanded] = useState<string | false>(false)
 
   // eslint-disable-next-line @typescript-eslint/ban-types

@@ -257,6 +257,7 @@ interface IUserInfoData {
   // isVerify: number
   ifKyc: number
   tg_token: string
+  tgIntroduction: string
 }
 
 export function useUserInfo(): ICacheLoginInfo & {

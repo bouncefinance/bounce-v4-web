@@ -15,6 +15,9 @@ export const getPools = (body: IPoolsParams) => {
 export const getBotPools = (body: IPoolsParams) => {
   return BotApiInstance.post('/bot/pools', body)
 }
+export const getInviteLinks = () => {
+  return ApiInstance.post('/bot/invite_links/list', {})
+}
 
 export const getPoolsFilter = (body: IPoolFilterParams) => {
   return ApiInstance.post('/pools/stat/filter', body)

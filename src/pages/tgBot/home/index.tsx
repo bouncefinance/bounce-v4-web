@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Tab, Tabs, styled, Box } from '@mui/material'
 import { useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { TgBotTabValue } from 'bounceComponents/create-auction-pool/types'
@@ -39,15 +39,16 @@ const TabItemContainer = styled(Box)`
   margin: 60px 0 42px;
 `
 
-const TabItem = () => {
+const TabItem = ({ tabValue }: { tabValue: TgBotTabValue }) => {
   const valuesState = useValuesState()
-  if (valuesState.tgBotTabValue === TgBotTabValue.AUCTION) {
+  console.log('valuesState', valuesState)
+  if (tabValue === TgBotTabValue.AUCTION) {
     return <Dashboard />
   }
-  if (valuesState.tgBotTabValue === TgBotTabValue.ACCOUNT) {
+  if (tabValue === TgBotTabValue.ACCOUNT) {
     return <Account />
   }
-  if (valuesState.tgBotTabValue === TgBotTabValue.BOTSETUP) {
+  if (tabValue === TgBotTabValue.BOTSETUP) {
     return <BotSetup />
   }
   return null
@@ -55,27 +56,29 @@ const TabItem = () => {
 
 const HomePage = () => {
   const valuesState = useValuesState()
+  const [tgBotTab, setTgBotTab] = useState(valuesState.tgBotTabValue)
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const handleChange = (event: React.ChangeEvent<{}>, newValue: TgBotTabValue) => {
-    console.log('tab newValue', newValue)
+    console.log('newValue', newValue)
+    setTgBotTab(newValue)
   }
   return (
     <ValuesProvider>
       <ContexContainer>
         <CusTabs
-          value={valuesState.tgBotTabValue}
+          value={tgBotTab}
           indicatorColor="primary"
           textColor="primary"
           onChange={handleChange}
           aria-label="disabled tabs example"
         >
-          <Tab label="Auction" />
-          <Tab label="Account" />
-          <Tab label="Bot setup" />
+          <Tab label="Auction" value={TgBotTabValue.AUCTION} />
+          <Tab label="Account" value={TgBotTabValue.ACCOUNT} />
+          <Tab label="Bot setup" value={TgBotTabValue.BOTSETUP} />
         </CusTabs>
         <TabItemContainer>
-          <TabItem />
+          <TabItem tabValue={tgBotTab} />
         </TabItemContainer>
       </ContexContainer>
     </ValuesProvider>

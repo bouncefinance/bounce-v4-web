@@ -41,6 +41,7 @@ export function getTextFromPoolType(type: PoolType) {
 }
 export interface BindTgTokenApiParams {
   tgToken: string
+  tgIntroduction?: string
 }
 
 export interface GetPoolCreationSignatureParams {

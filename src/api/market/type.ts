@@ -31,6 +31,12 @@ export interface IPoolsParams {
   isERC721?: 1 | 2 //1:1155，2:721
 }
 
+export interface InvitationItem {
+  address: string
+  tgIntroduction: string
+  tgToken: string
+}
+
 export enum UserType {
   Profile = 1,
   Company = 0
