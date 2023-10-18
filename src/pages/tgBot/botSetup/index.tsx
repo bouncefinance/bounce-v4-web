@@ -272,7 +272,7 @@ export default function BotSetup() {
           </Stack>
         </BotSetUpInfoItem>
         <BotSetUpInfoItem
-          title="Introduction"
+          title="Group invitation link"
           iconButton={<Add />}
           iconButtonCallBack={() => {
             show(WordEditDialogTips, {

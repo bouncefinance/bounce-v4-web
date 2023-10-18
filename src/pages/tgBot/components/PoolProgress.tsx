@@ -1,14 +1,14 @@
 import { LinearProgress, SxProps } from '@mui/material'
 import { PoolStatus } from 'api/pool/type'
 export const AuctionProgressPrimaryColor: Record<PoolStatus, string> = {
-  [PoolStatus.Upcoming]: '#171717',
+  [PoolStatus.Upcoming]: '#959595',
   [PoolStatus.Live]: '#E1F25C',
   [PoolStatus.Closed]: '#2663FF',
   [PoolStatus.Finish]: '#2663FF',
   [PoolStatus.Cancelled]: '#2663FF'
 }
 export const AuctionProgressTextPrimaryColor: Record<PoolStatus, string> = {
-  [PoolStatus.Upcoming]: '#171717',
+  [PoolStatus.Upcoming]: '#959595',
   [PoolStatus.Live]: '#20994B',
   [PoolStatus.Closed]: '#2663FF',
   [PoolStatus.Finish]: '#2663FF',
