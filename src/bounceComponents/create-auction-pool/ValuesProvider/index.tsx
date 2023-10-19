@@ -134,7 +134,8 @@ const initialValues: AuctionPool = {
   tgBotActiveStep: TgBotActiveStep.GETAPITOKEN,
   tgToken: '',
   auctionInChain: NETWORK_CHAIN_ID,
-  tgBotTabValue: TgBotTabValue.AUCTION
+  tgBotTabValue: TgBotTabValue.AUCTION,
+  isTgGuide: true
 }
 
 export enum ActionType {
@@ -153,7 +154,8 @@ export enum ActionType {
   SetTgBotActiveStep = 'SET_TG_BOT_ACTIVE_STEP',
   SetTgToken = 'SET_API_TOKEN',
   CommitBotAuctionParameters = 'COMMIT_BOT_AUCTION_PARAMETERS',
-  SetTgBotTabValue = 'SET_TG_BOT_TAB_VALUE'
+  SetTgBotTabValue = 'SET_TG_BOT_TAB_VALUE',
+  SetIsTgGuide = 'SET_IS_TG_GUIDE'
 }
 
 type Payload = {
@@ -267,6 +269,9 @@ type Payload = {
   }
   [ActionType.SetTgBotTabValue]: {
     tgBotTabValue: TgBotTabValue
+  }
+  [ActionType.SetIsTgGuide]: {
+    isTgGuide: boolean
   }
 }
 
@@ -439,6 +444,13 @@ const reducer = (state: AuctionPool, action: Actions) => {
       return {
         ...state,
         tgBotTabValue: action.payload.tgBotTabValue
+      }
+    case ActionType.SetIsTgGuide:
+      console.log('ActionType.SetIsTgGuide', ActionType.SetIsTgGuide, action.payload)
+
+      return {
+        ...state,
+        isTgGuide: action.payload.isTgGuide
       }
     default:
       return state

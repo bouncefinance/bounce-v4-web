@@ -9,14 +9,25 @@ import {
   TextField,
   FormControlLabel,
   Radio,
-  FormHelperText
+  FormHelperText,
+  Grid
+  // IconButton
 } from '@mui/material'
+import {
+  useUserInfo
+  //  useRefreshUserInfoCallback
+} from 'state/users/hooks'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
-import { ReactComponent as Close } from 'assets/svg/close.svg'
+// import { ReactComponent as Close } from 'assets/svg/close.svg'
 import * as Yup from 'yup'
 import { Form, Formik, Field } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
-import { useMemo, useState } from 'react'
+import {
+  useCallback,
+  useMemo,
+  useState
+  //  useCallback
+} from 'react'
 import Image from 'components/Image'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import { useActiveWeb3React } from 'hooks'
@@ -33,7 +44,10 @@ import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTim
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider'
-// import { useUserInfo } from 'state/users/hooks'
+// import { BindTgTokenApiParams } from 'api/pool/type'
+import { useNavigate } from 'react-router-dom'
+// import { bindTgTokenApi } from 'api/pool'
+import { routes } from 'constants/routes'
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
@@ -73,13 +87,16 @@ interface FormValues {
 }
 
 const AuctionBotCreateForm = (): JSX.Element => {
-  // const { userInfo } = useUserInfo()
+  const { userInfo } = useUserInfo()
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const { account, chainId } = useActiveWeb3React()
   const { chainInfoOpt } = useOptionDatas()
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
+  const navigate = useNavigate()
+  // const refreshUserInfoCallback = useRefreshUserInfoCallback()
+
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
     return ChainList.filter(item => supportIds.includes(item.id)).map(item => (
@@ -99,7 +116,6 @@ const AuctionBotCreateForm = (): JSX.Element => {
       </MenuItem>
     ))
   }, [chainInfoOpt])
-
   const [filterInputValue] = useState<string>('')
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
   const { tokenList: tokenList } = useTokenList(chainId, 1, debouncedFilterInputValue, false)
@@ -195,7 +211,8 @@ const AuctionBotCreateForm = (): JSX.Element => {
       .typeError('Please select a valid time')
       .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value, context) => {
         return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
-      })
+      }),
+    poolName: Yup.string().required('Pool name is required')
   })
 
   const internalInitialValues: FormValues = {
@@ -211,37 +228,61 @@ const AuctionBotCreateForm = (): JSX.Element => {
     poolName: valuesState.poolName
   }
 
+  const skipTo = useCallback(() => {
+    valuesDispatch({
+      type: ActionType.SetTgBotActiveStep,
+      payload: {
+        tgBotActiveStep: TgBotActiveStep.GETAPITOKEN
+      }
+    })
+    navigate(routes.telegramBot.home)
+  }, [navigate, valuesDispatch])
+  // const removeTokenApi = useCallback(async () => {
+  //   const params: BindTgTokenApiParams = {
+  //     tgToken: ''
+  //   }
+  //   try {
+  //     const res = await bindTgTokenApi(params)
+  //     refreshUserInfoCallback()
+  //     console.log('bindTgTokenApi res', res)
+  //     valuesDispatch({
+  //       type: ActionType.SetTgToken,
+  //       payload: {
+  //         tgToken: ''
+  //       }
+  //     })
+  //     valuesDispatch({
+  //       type: ActionType.SetTgBotActiveStep,
+  //       payload: {
+  //         tgBotActiveStep: TgBotActiveStep.GETAPITOKEN
+  //       }
+  //     })
+  //     navigate(routes.telegramBot.guide)
+  //   } catch (error) {
+  //     console.log('bindTgTokenApi error', error)
+  //   }
+  // }, [navigate, refreshUserInfoCallback, valuesDispatch])
+
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
         <TwoColumnPanel>
           <Stack padding={56}>
-            <Stack borderRadius={20} padding={56}>
+            <Stack borderRadius={20}>
               <Box mb={32} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                 <Box gap={12} display={'flex'} flexDirection={'row'} alignItems={'center'}>
-                  <Box sx={{ background: 'red' }} height={40} width={40} borderRadius={'50%'}></Box>
-                  <Typography fontWeight={500} color={'#121212'}>
+                  {/* <Box sx={{ background: 'red' }} height={40} width={40} borderRadius={'50%'}></Box> */}
+                  <Typography fontSize={16} fontWeight={500} color={'#121212'}>
                     API token
                   </Typography>
                 </Box>
-                <Box display={'flex'} gap={16}>
-                  <Typography
-                    component={Box}
-                    sx={{
-                      textTransform: 'capitalize',
-                      fontFamily: 'Public Sans',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis'
-                    }}
-                    width={418}
-                    fontSize={14}
-                    fontWeight={500}
-                    color={'#121212'}
-                  >
-                    https://api.telegram.org/bot123456:ABC-DEF1234ghIkl-zyx5...
+                <Box display={'flex'} alignItems={'center'} gap={16}>
+                  <Typography fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
+                    {userInfo?.tg_token}
                   </Typography>
-                  <Close />
+                  {/* <IconButton>
+                    <Close onClick={() => removeTokenApi()} />
+                  </IconButton> */}
                 </Box>
               </Box>
             </Stack>
@@ -253,6 +294,9 @@ const AuctionBotCreateForm = (): JSX.Element => {
                 padding: '30px'
               }}
             >
+              <Typography textAlign={'center'} fontSize={20} fontWeight={600} color={'#121212'}>
+                Create an auction for your telegram bot
+              </Typography>
               <Formik
                 initialValues={internalInitialValues}
                 validationSchema={validationSchema}
@@ -281,7 +325,7 @@ const AuctionBotCreateForm = (): JSX.Element => {
                       participantStatus: values.participantStatus,
                       startTime: values.startTime,
                       endTime: values.endTime,
-                      poolName: 'BOT_POOL1',
+                      poolName: values.poolName,
                       auctionInChain: chainId
                       // tokenFormDecimal: tokenMap[values.tokenFromAddress].decimals,
                       // tokenToDecimal: fundingCurrencyMap[values.tokenToAddress].decimals
@@ -299,6 +343,29 @@ const AuctionBotCreateForm = (): JSX.Element => {
                 {({ values, handleChange }) => {
                   return (
                     <>
+                      <Stack mt={40}>
+                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          title
+                        </Typography>
+                        <FormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
+                          <TextField
+                            placeholder="pool name"
+                            variant="outlined"
+                            onClick={() => !account && showLoginModal()}
+                            value={values.poolName}
+                            inputProps={{ readOnly: false }}
+                          />
+                        </FormItem>
+                        <Box
+                          sx={{
+                            background: '#D4D6CF',
+                            opacity: 0.7,
+                            height: '1px',
+                            width: '100%',
+                            margin: '24px 0'
+                          }}
+                        ></Box>
+                      </Stack>
                       <FormItem error={!account}>
                         <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
                           Select Chain
@@ -503,6 +570,7 @@ const AuctionBotCreateForm = (): JSX.Element => {
                             }}
                           ></Box>
                         </Stack>
+
                         <Stack>
                           <Typography variant="h3" sx={{ fontSize: 20 }}>
                             Time
@@ -600,9 +668,38 @@ const AuctionBotCreateForm = (): JSX.Element => {
                             }}
                           ></Box>
                         </Stack>
-                        <Button type="submit" variant="contained">
-                          Deploy
-                        </Button>
+                        {valuesState.isTgGuide && (
+                          <Grid container spacing={10}>
+                            <Grid item xs={6}>
+                              <Button
+                                sx={{
+                                  width: '100%'
+                                }}
+                                type="submit"
+                                variant="outlined"
+                                onClick={() => skipTo()}
+                              >
+                                skip
+                              </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Button
+                                sx={{
+                                  width: '100%'
+                                }}
+                                type="submit"
+                                variant="contained"
+                              >
+                                Deploy
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        )}
+                        {!valuesState.isTgGuide && (
+                          <Button type="submit" variant="contained">
+                            Save
+                          </Button>
+                        )}
 
                         {/* <Stack direction="row" spacing={10} justifyContent="end">
                           {account && userId && userInfo?.email && (userInfo?.twitterName || IS_TEST_ENV) ? (

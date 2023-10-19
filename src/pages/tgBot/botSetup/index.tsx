@@ -155,7 +155,7 @@ export default function BotSetup() {
       setTimeout(() => {
         setIsRemoveTokening(false)
         navigate(routes.telegramBot.index)
-      }, 2000)
+      }, 3000)
     } catch (error) {
       console.log('bindTgTokenApi error', error)
     }

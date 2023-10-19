@@ -173,6 +173,12 @@ export default function Home() {
   }
 
   const createAuctionHandle = useCallback(() => {
+    valuesDispatch({
+      type: ActionType.SetIsTgGuide,
+      payload: {
+        isTgGuide: false
+      }
+    })
     if (!account) {
       return showLoginModal()
     }

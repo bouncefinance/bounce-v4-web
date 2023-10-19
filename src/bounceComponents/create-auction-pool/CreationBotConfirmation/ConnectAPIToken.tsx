@@ -86,6 +86,12 @@ const ConnectAPIToken = () => {
   )
 
   if (account && userInfo?.tg_token) {
+    // valuesDispatch({
+    //   type: ActionType.SetIsTgGuide,
+    //   payload: {
+    //     isTgGuide: true
+    //   }
+    // })
     valuesDispatch({
       type: ActionType.SetTgBotActiveStep,
       payload: {
