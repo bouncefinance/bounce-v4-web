@@ -21,7 +21,7 @@ export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
   title?: string
   cancelBtn?: string
   againBtn?: string
-  contentType?: 'TextBox' | 'Markdown'
+  contentType?: 'TextBox' | 'Markdown' | 'TextArea'
   value?: string
 }
 
@@ -84,6 +84,18 @@ const WordEditDialogTips = create((props: DialogProps) => {
             <TextField
               sx={{ width: '100%', margin: '24px 0' }}
               value={textValue}
+              onChange={value => setTextValue(value.target.value)}
+            />
+          </Box>
+        )}
+
+        {contentType === 'TextArea' && (
+          <Box mx={8} sx={{ textAlign: 'center' }}>
+            <TextField
+              sx={{ width: '100%', margin: '24px 0' }}
+              value={textValue}
+              multiline
+              maxRows={6}
               onChange={value => setTextValue(value.target.value)}
             />
           </Box>

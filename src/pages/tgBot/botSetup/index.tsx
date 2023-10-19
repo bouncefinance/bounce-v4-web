@@ -27,7 +27,7 @@ import { ReactComponent as Edit } from './svg/edit.svg'
 // import { ReactComponent as Add } from './svg/add.svg'
 // import { ReactComponent as Del } from './svg/del.svg'
 import { ReactComponent as Bot } from './svg/bot.svg'
-import ReactMarkdown from 'react-markdown'
+// import ReactMarkdown from 'react-markdown'
 import { useRequest } from 'ahooks'
 import {
   getInviteLinks
@@ -304,7 +304,7 @@ export default function BotSetup() {
               title: 'Edit introduction',
               content: '',
               value: userInfo ? userInfo?.tgIntroduction : '',
-              contentType: 'Markdown',
+              contentType: 'TextArea',
               onAgain: (value: string) => {
                 editIntroduction(value)
               }
@@ -312,9 +312,10 @@ export default function BotSetup() {
           }}
         >
           <Stack direction="row" spacing={6} sx={{ alignItems: 'center' }}>
-            <CusTextBox>
+            {userInfo ? userInfo?.tgIntroduction : ''}
+            {/* <CusTextBox>
               <ReactMarkdown children={userInfo ? userInfo?.tgIntroduction : ''} />
-            </CusTextBox>
+            </CusTextBox> */}
           </Stack>
         </BotSetUpInfoItem>
         <BotSetUpInfoItem
