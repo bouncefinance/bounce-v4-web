@@ -4,12 +4,11 @@ import {
   Typography,
   Stack,
   styled,
-  Button,
   //  IconButton,
   Grid
 } from '@mui/material'
 import BotSetUpInfoItem from '../components/BotSetUpInfoItem'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { bindTgTokenApi } from 'api/pool'
 import { BindTgTokenApiParams } from 'api/pool/type'
 import { useValuesDispatch, ActionType } from 'bounceComponents/create-auction-pool/ValuesProvider'
@@ -28,8 +27,9 @@ import { ReactComponent as Bot } from './svg/bot.svg'
 import ReactMarkdown from 'react-markdown'
 import { useRequest } from 'ahooks'
 import { getInviteLinks, bindInviteLinks } from 'api/market'
+import { LoadingButton } from '@mui/lab'
 
-const CusButton = styled(Button)`
+const CusButton = styled(LoadingButton)`
   padding: 20px 40px;
 `
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
@@ -129,13 +129,16 @@ export default function BotSetup() {
   const navigate = useNavigate()
   const { userInfo } = useUserInfo()
   const refreshUserInfoCallback = useRefreshUserInfoCallback()
+  const [isRemoveTokening, setIsRemoveTokening] = useState(false)
 
   const removeTokenApi = useCallback(async () => {
     const params: BindTgTokenApiParams = {
       tgToken: ''
     }
     try {
+      setIsRemoveTokening(true)
       const res = await bindTgTokenApi(params)
+      refreshUserInfoCallback()
       console.log('bindTgTokenApi res', res)
       valuesDispatch({
         type: ActionType.SetTgToken,
@@ -149,11 +152,14 @@ export default function BotSetup() {
           tgBotActiveStep: TgBotActiveStep.GUIDEFORM
         }
       })
-      navigate(routes.telegramBot.index)
+      setTimeout(() => {
+        setIsRemoveTokening(false)
+        navigate(routes.telegramBot.index)
+      }, 2000)
     } catch (error) {
       console.log('bindTgTokenApi error', error)
     }
-  }, [valuesDispatch, navigate])
+  }, [refreshUserInfoCallback, valuesDispatch, navigate])
 
   const editIntroduction = useCallback(
     async (value: string) => {
@@ -263,6 +269,8 @@ export default function BotSetup() {
             <CusTextBox>{userInfo ? userInfo?.tg_token : ''}</CusTextBox>
             <CusButton
               variant="contained"
+              loadingPosition="start"
+              loading={isRemoveTokening}
               onClick={() => {
                 show(DialogBotTips, {
                   cancelBtn: 'Cancel',

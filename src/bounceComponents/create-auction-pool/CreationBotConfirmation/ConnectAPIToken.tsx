@@ -7,7 +7,7 @@ import FormItem from 'bounceComponents/common/FormItem'
 import { useCallback } from 'react'
 import { bindTgTokenApi } from 'api/pool'
 import { BindTgTokenApiParams } from 'api/pool/type'
-import { useUserInfo } from 'state/users/hooks'
+import { useUserInfo, useRefreshUserInfoCallback } from 'state/users/hooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 
@@ -52,6 +52,7 @@ const ConnectAPIToken = () => {
   const showLoginModal = useShowLoginModal()
   const valuesDispatch = useValuesDispatch()
   const { userInfo } = useUserInfo()
+  const refreshUserInfoCallback = useRefreshUserInfoCallback()
 
   const bindApiToken = useCallback(
     async (values: formValues) => {
@@ -64,6 +65,7 @@ const ConnectAPIToken = () => {
       try {
         const res = await bindTgTokenApi(params)
         console.log('bindTgTokenApi res', res)
+        refreshUserInfoCallback()
         valuesDispatch({
           type: ActionType.SetTgToken,
           payload: {
@@ -80,7 +82,7 @@ const ConnectAPIToken = () => {
         console.log('bindTgTokenApi error', error)
       }
     },
-    [account, showLoginModal, valuesDispatch]
+    [account, refreshUserInfoCallback, showLoginModal, valuesDispatch]
   )
 
   if (account && userInfo?.tg_token) {

@@ -12,7 +12,9 @@ const TelegramBotPage = () => {
   const { userInfo } = useUserInfo()
 
   useEffect(() => {
-    if (!userInfo || !userInfo?.tg_token) {
+    console.log('index userInfo', userInfo)
+    if (!userInfo) return
+    if (!userInfo?.tg_token) {
       valuesDispatch({
         type: ActionType.SetTgBotActiveStep,
         payload: {

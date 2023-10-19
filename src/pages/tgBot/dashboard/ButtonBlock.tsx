@@ -16,16 +16,12 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
   const { account } = useActiveWeb3React()
 
   const { run: claim, submitted } = useBotCreatorClaim(poolData.poolId, poolData.name, poolData.contract)
-  // const isCurrentChainEqualChainOfPool = useMemo(
-  //   () => chainId === poolData?.ethChainId,
-  //   [chainId, poolData?.ethChainId]
-  // )
+
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog({ isBot: true, dark: false })
       try {
         const { transactionReceipt } = await claim()
-
         const ret = new Promise((resolve, rpt) => {
           showWaitingTxDialog(
             () => {
@@ -73,11 +69,6 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
   if (!account) {
     return <ConnectWalletButton />
   }
-
-  // if (!poolData.creatorClaimed && !isCurrentChainEqualChainOfPool) {
-  //   return <SwitchNetworkButton targetChain={poolData.ethChainId} />
-  // }
-  console.log('poolData', poolData)
 
   if (poolData.status === PoolStatus.Closed) {
     return (
