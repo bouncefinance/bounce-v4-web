@@ -10,12 +10,16 @@ import { hideBotDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialo
 import DialogBotTips from 'bounceComponents/common/DialogTips/DialogBotTips'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { ReactComponent as Close } from './svg/close.svg'
+import { LoadingButton } from '@mui/lab'
 
 const ButtonBlock = ({ poolData }: { poolData: any }) => {
   const { account } = useActiveWeb3React()
 
   const { run: claim, submitted } = useBotCreatorClaim(poolData.poolId, poolData.name, poolData.contract)
-
+  // const isCurrentChainEqualChainOfPool = useMemo(
+  //   () => chainId === poolData?.ethChainId,
+  //   [chainId, poolData?.ethChainId]
+  // )
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog({ isBot: true, dark: false })
@@ -73,25 +77,23 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
   // if (!poolData.creatorClaimed && !isCurrentChainEqualChainOfPool) {
   //   return <SwitchNetworkButton targetChain={poolData.ethChainId} />
   // }
+  console.log('poolData', poolData)
 
-  // if (poolData.status === PoolStatus.Closed && !poolData.creatorClaimed) {
-  //   return (
-  //     <IconButton
-  //       disabled={submitted.complete || submitted.submitted}
-  //       onClick={() => {
-  //         show(DialogBotTips, {
-  //           cancelBtn: 'Cancel',
-  //           againBtn: 'Again',
-  //           title: 'delete auction',
-  //           content: 'Are you sure to delete this auction? ',
-  //           onAgain: () => toClaim(false)
-  //         })
-  //       }}
-  //     >
-  //       <Close />
-  //     </IconButton>
-  //   )
-  // }
+  if (poolData.status === PoolStatus.Closed) {
+    return (
+      <LoadingButton
+        size="small"
+        variant="contained"
+        fullWidth
+        loadingPosition="start"
+        loading={submitted.submitted}
+        disabled={poolData.creatorClaimed || poolData.creatorClaimed === undefined}
+        onClick={() => toClaim(false)}
+      >
+        {poolData.creatorClaimed ? 'Claimed' : 'Claim fund raised'}
+      </LoadingButton>
+    )
+  }
 
   if (poolData.status === PoolStatus.Upcoming) {
     return (

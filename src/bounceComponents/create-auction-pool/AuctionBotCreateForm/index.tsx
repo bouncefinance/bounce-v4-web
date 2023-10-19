@@ -33,11 +33,7 @@ import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTim
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider'
-// import { useCreateBotSwapPool } from 'hooks/useCreateBotSwapPool'
 // import { useUserInfo } from 'state/users/hooks'
-// import { IS_TEST_ENV } from '../../../constants'
-// import { useNavigate } from 'react-router-dom'
-// import { routes } from 'constants/routes'
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
@@ -77,6 +73,7 @@ interface FormValues {
 }
 
 const AuctionBotCreateForm = (): JSX.Element => {
+  // const { userInfo } = useUserInfo()
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const { account, chainId } = useActiveWeb3React()
