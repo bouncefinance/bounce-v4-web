@@ -8,14 +8,14 @@ import CreationBotConfirmation from 'bounceComponents/create-auction-pool/Creati
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import FooterPc from 'components/Footer/FooterPc'
 
-export function Guide() {
+export function Create() {
   const valuesState = useValuesState()
 
   if (valuesState.tgBotActiveStep === TgBotActiveStep.GETAPITOKEN) {
     return <ConnectAPIToken />
   }
   if (valuesState.tgBotActiveStep === TgBotActiveStep.GUIDEFORM) {
-    return <AuctionBotCreateForm type="Guide" />
+    return <AuctionBotCreateForm type="Create" />
   }
   if (valuesState.tgBotActiveStep === TgBotActiveStep.COMFIRM) {
     return <CreationBotConfirmation />
@@ -27,7 +27,7 @@ const GuidePage = () => {
   return (
     <ValuesProvider>
       <HeaderTab />
-      <Guide />
+      <Create />
       <FooterPc />
     </ValuesProvider>
   )

@@ -4,17 +4,17 @@ import { routes } from 'constants/routes'
 import { useValuesDispatch, ActionType } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import ValuesProvider from 'bounceComponents/create-auction-pool/ValuesProvider'
+import { useActiveWeb3React } from 'hooks'
 import { useUserInfo } from 'state/users/hooks'
 
 const TelegramBotPage = () => {
   const navigate = useNavigate()
   const valuesDispatch = useValuesDispatch()
   const { userInfo } = useUserInfo()
+  const { account } = useActiveWeb3React()
 
   useEffect(() => {
-    console.log('index userInfo', userInfo)
-    if (!userInfo) return
-    if (!userInfo?.tg_token) {
+    if (!account || !userInfo?.tg_token) {
       valuesDispatch({
         type: ActionType.SetTgBotActiveStep,
         payload: {
@@ -32,7 +32,7 @@ const TelegramBotPage = () => {
       })
       navigate(routes.telegramBot.home)
     }
-  }, [navigate, userInfo, userInfo?.tg_token, valuesDispatch])
+  }, [account, navigate, userInfo, userInfo?.tg_token, valuesDispatch])
   return null
 }
 

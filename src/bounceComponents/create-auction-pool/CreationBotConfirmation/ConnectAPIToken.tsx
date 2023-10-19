@@ -86,12 +86,6 @@ const ConnectAPIToken = () => {
   )
 
   if (account && userInfo?.tg_token) {
-    // valuesDispatch({
-    //   type: ActionType.SetIsTgGuide,
-    //   payload: {
-    //     isTgGuide: true
-    //   }
-    // })
     valuesDispatch({
       type: ActionType.SetTgBotActiveStep,
       payload: {
@@ -177,7 +171,6 @@ const ConnectAPIToken = () => {
         initialValues={internalInitialValues}
         validationSchema={validationSchema}
         onSubmit={values => {
-          console.log('values>>>', values)
           bindApiToken(values)
         }}
       >

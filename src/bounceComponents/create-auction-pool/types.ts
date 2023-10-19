@@ -132,5 +132,4 @@ export interface AuctionPool {
   tgToken?: string
   auctionInChain: ChainId | number | undefined
   tgBotTabValue: TgBotTabValue
-  isTgGuide: boolean
 }

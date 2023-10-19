@@ -25,14 +25,10 @@ import { useCallback, useState } from 'react'
 import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
-import { useValuesDispatch, ActionType } from 'bounceComponents/create-auction-pool/ValuesProvider'
-import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { useActiveWeb3React } from 'hooks'
-import { useShowLoginModal } from 'state/users/hooks'
 import { getBotPools } from 'api/market'
 import { PoolStatusFrontend } from 'api/market/type'
-import { Params } from 'ahooks/lib/usePagination/types'
-import { usePagination } from 'ahooks'
+import { useRequest } from 'ahooks'
 import { PoolType } from 'api/pool/type'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import { FixedSwapPool } from 'api/pool/type'
@@ -160,9 +156,7 @@ const CusOutlinedInput = styled(OutlinedInput)`
 export default function Home() {
   const { userInfo } = useUserInfo()
   const navigate = useNavigate()
-  const valuesDispatch = useValuesDispatch()
   const { account } = useActiveWeb3React()
-  const showLoginModal = useShowLoginModal()
   const [tabStatusFrontend, setTabStatusFrontend] = useState(PoolStatusFrontend.LIVE)
   const [filterInputValue, setFilterInputValue] = useState('')
   console.log('userInfo', userInfo)
@@ -173,40 +167,18 @@ export default function Home() {
   }
 
   const createAuctionHandle = useCallback(() => {
-    valuesDispatch({
-      type: ActionType.SetIsTgGuide,
-      payload: {
-        isTgGuide: false
-      }
-    })
-    if (!account) {
-      return showLoginModal()
-    }
-    if (userInfo && !userInfo.tg_token) {
-      valuesDispatch({
-        type: ActionType.SetActiveStep,
-        payload: {
-          tgBotTabValue: TgBotActiveStep.GETAPITOKEN
-        }
-      })
-      navigate(routes.telegramBot.guide)
-    }
-    if (userInfo && userInfo.tg_token) {
-      valuesDispatch({
-        type: ActionType.SetActiveStep,
-        payload: {
-          tgBotTabValue: TgBotActiveStep.GUIDEFORM
-        }
-      })
-      navigate(routes.telegramBot.guide)
-    }
-  }, [account, navigate, showLoginModal, userInfo, valuesDispatch])
+    navigate(routes.telegramBot.create)
+  }, [navigate])
 
-  const { data: auctionPoolData, loading } = usePagination<any, Params>(
-    async ({ current, pageSize }) => {
+  const {
+    data: auctionPoolData,
+    loading,
+    run: runGetBotpolls
+  } = useRequest(
+    async () => {
       const resp = await getBotPools({
-        offset: (current - 1) * pageSize,
-        limit: pageSize,
+        offset: 0,
+        limit: defaultPageSize,
         CreatorUserId: userInfo?.id,
         category: PoolType.FixedSwap,
         chainId: 0,
@@ -222,7 +194,6 @@ export default function Home() {
       }
     },
     {
-      defaultPageSize: defaultPageSize,
       debounceWait: 500,
       refreshDeps: [tabStatusFrontend, filterInputValue]
     }
@@ -436,7 +407,14 @@ export default function Home() {
                               closeTime={poolData.closeAt}
                               claimAt={poolData.claimAt}
                             />
-                            {poolData.contract && <ButtonBlock poolData={poolData} />}
+                            {poolData.contract && (
+                              <ButtonBlock
+                                flushed={() => {
+                                  runGetBotpolls()
+                                }}
+                                poolData={poolData}
+                              />
+                            )}
                           </Stack>
                         </Stack>
                         <PoolProgress sx={{ marginTop: '16px' }} value={swapedPercent} poolStatus={poolData.status} />

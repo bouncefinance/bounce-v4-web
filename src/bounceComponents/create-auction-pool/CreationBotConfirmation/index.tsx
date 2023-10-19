@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 
 import {
-  showRequestApprovalDialog,
+  // showRequestApprovalDialog,
   showWaitingTxDialog,
   hideBotDialogConfirmation,
   showRequestConfirmDialog
@@ -161,7 +161,7 @@ const CreatePoolButton = () => {
   }, [createBotSwapPool, navigate, valuesDispatch])
 
   const toApprove = useCallback(async () => {
-    showRequestApprovalDialog({ isBot: true, dark: false })
+    // showRequestApprovalDialog({ isBot: true, dark: false })
     try {
       const { transactionReceipt } = await approveCallback()
       const ret = new Promise((resolve, rpt) => {
@@ -177,8 +177,7 @@ const CreatePoolButton = () => {
         })
       })
       ret
-        .then(handleFulfilled => {
-          console.log('handleFulfilled', handleFulfilled)
+        .then(() => {
           hideBotDialogConfirmation()
           toCreate()
         })
@@ -235,7 +234,6 @@ const CreatePoolButton = () => {
         disabled: true
       }
     }
-    console.log('1', approvalState)
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {

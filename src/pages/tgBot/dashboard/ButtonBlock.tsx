@@ -12,11 +12,9 @@ import DialogTips from 'bounceComponents/common/DialogTips'
 import { ReactComponent as Close } from './svg/close.svg'
 import { LoadingButton } from '@mui/lab'
 
-const ButtonBlock = ({ poolData }: { poolData: any }) => {
+const ButtonBlock = ({ poolData, flushed }: { poolData: any; flushed: () => void }) => {
   const { account } = useActiveWeb3React()
-
   const { run: claim, submitted } = useBotCreatorClaim(poolData.poolId, poolData.name, poolData.contract)
-
   const toClaim = useCallback(
     async (isCancel: boolean) => {
       showRequestConfirmDialog({ isBot: true, dark: false })
@@ -36,6 +34,7 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
         })
         ret
           .then(() => {
+            flushed()
             hideBotDialogConfirmation()
           })
           .catch()
@@ -63,7 +62,7 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
         })
       }
     },
-    [claim]
+    [claim, flushed]
   )
 
   if (!account) {

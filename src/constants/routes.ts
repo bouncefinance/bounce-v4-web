@@ -36,6 +36,7 @@ export const routes = {
   telegramBot: {
     index: '/TelegramBot',
     guide: '/TelegramBot/guide',
+    create: '/TelegramBot/create',
     home: '/TelegramBot/home'
   },
   dutchAuction: {

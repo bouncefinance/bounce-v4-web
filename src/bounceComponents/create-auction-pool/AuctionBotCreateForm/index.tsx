@@ -86,7 +86,7 @@ interface FormValues {
   poolName: string
 }
 
-const AuctionBotCreateForm = (): JSX.Element => {
+const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Element => {
   const { userInfo } = useUserInfo()
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
@@ -96,6 +96,7 @@ const AuctionBotCreateForm = (): JSX.Element => {
   const valuesState = useValuesState()
   const navigate = useNavigate()
   // const refreshUserInfoCallback = useRefreshUserInfoCallback()
+  console.log('>>>>valuesState', valuesState)
 
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
@@ -668,7 +669,32 @@ const AuctionBotCreateForm = (): JSX.Element => {
                             }}
                           ></Box>
                         </Stack>
-                        {valuesState.isTgGuide && (
+                        {/* <Grid container spacing={10}>
+                          <Grid item xs={6}>
+                            <Button
+                              sx={{
+                                width: '100%'
+                              }}
+                              type="submit"
+                              variant="outlined"
+                              onClick={() => skipTo()}
+                            >
+                              skip
+                            </Button>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Button
+                              sx={{
+                                width: '100%'
+                              }}
+                              type="submit"
+                              variant="contained"
+                            >
+                              Deploy
+                            </Button>
+                          </Grid>
+                        </Grid> */}
+                        {type === 'Guide' && (
                           <Grid container spacing={10}>
                             <Grid item xs={6}>
                               <Button
@@ -695,7 +721,7 @@ const AuctionBotCreateForm = (): JSX.Element => {
                             </Grid>
                           </Grid>
                         )}
-                        {!valuesState.isTgGuide && (
+                        {type === 'Create' && (
                           <Button type="submit" variant="contained">
                             Save
                           </Button>

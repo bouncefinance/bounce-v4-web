@@ -16,17 +16,23 @@ import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useUserInfo, useRefreshUserInfoCallback } from 'state/users/hooks'
-import { InvitationItem, BindInviteLinksParams } from 'api/market/type'
+import {
+  InvitationItem
+  // BindInviteLinksParams
+} from 'api/market/type'
 import DialogBotTips from 'bounceComponents/common/DialogTips/DialogBotTips'
 import WordEditDialogTips from 'bounceComponents/common/WordEditDialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as Edit } from './svg/edit.svg'
-import { ReactComponent as Add } from './svg/add.svg'
+// import { ReactComponent as Add } from './svg/add.svg'
 // import { ReactComponent as Del } from './svg/del.svg'
 import { ReactComponent as Bot } from './svg/bot.svg'
 import ReactMarkdown from 'react-markdown'
 import { useRequest } from 'ahooks'
-import { getInviteLinks, bindInviteLinks } from 'api/market'
+import {
+  getInviteLinks
+  // , bindInviteLinks
+} from 'api/market'
 import { LoadingButton } from '@mui/lab'
 
 const CusButton = styled(LoadingButton)`
@@ -180,7 +186,10 @@ export default function BotSetup() {
     [refreshUserInfoCallback, userInfo]
   )
 
-  const { data: invitationList, run: runGetInviteLinks } = useRequest(
+  const {
+    data: invitationList
+    // run: runGetInviteLinks
+  } = useRequest(
     async () => {
       if (!userInfo || !userInfo?.tg_token)
         return {
@@ -202,24 +211,24 @@ export default function BotSetup() {
     }
   )
 
-  const toBindInviteLinks = useCallback(
-    async (value: string) => {
-      if (!value) return
-      if (!userInfo || !userInfo.tg_token) return
-      const params: BindInviteLinksParams = {
-        botToken: userInfo.tg_token,
-        groupInviteLinks: value
-      }
-      try {
-        const res = await bindInviteLinks(params)
-        runGetInviteLinks()
-        console.log('bindInviteLinks res', res)
-      } catch (error) {
-        console.log('bindTgTokenApi error', error)
-      }
-    },
-    [runGetInviteLinks, userInfo]
-  )
+  // const toBindInviteLinks = useCallback(
+  //   async (value: string) => {
+  //     if (!value) return
+  //     if (!userInfo || !userInfo.tg_token) return
+  //     const params: BindInviteLinksParams = {
+  //       botToken: userInfo.tg_token,
+  //       groupInviteLinks: value
+  //     }
+  //     try {
+  //       const res = await bindInviteLinks(params)
+  //       runGetInviteLinks()
+  //       console.log('bindInviteLinks res', res)
+  //     } catch (error) {
+  //       console.log('bindTgTokenApi error', error)
+  //     }
+  //   },
+  //   [runGetInviteLinks, userInfo]
+  // )
 
   return (
     <TwoColumnPanel>
@@ -309,20 +318,20 @@ export default function BotSetup() {
           </Stack>
         </BotSetUpInfoItem>
         <BotSetUpInfoItem
-          title="Group invitation link"
-          iconButton={<Add />}
-          iconButtonCallBack={() => {
-            show(WordEditDialogTips, {
-              cancelBtn: 'Cancel',
-              againBtn: 'Again',
-              title: 'Add introduction',
-              content: '',
-              contentType: 'TextBox',
-              onAgain: (value: string) => {
-                toBindInviteLinks(value)
-              }
-            })
-          }}
+          title="Edit Group invitation link"
+          // iconButton={<Add />}
+          // iconButtonCallBack={() => {
+          //   show(WordEditDialogTips, {
+          //     cancelBtn: 'Cancel',
+          //     againBtn: 'Again',
+          //     title: 'Add introduction',
+          //     content: '',
+          //     contentType: 'TextBox',
+          //     onAgain: (value: string) => {
+          //       toBindInviteLinks(value)
+          //     }
+          //   })
+          // }}
         >
           <Stack spacing={12}>
             {invitationList?.list.map((invitation: InvitationItem) => (

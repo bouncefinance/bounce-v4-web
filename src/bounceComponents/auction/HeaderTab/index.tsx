@@ -47,7 +47,8 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
   }
   const botTabMap: { [key: string]: string } = {
     '/TelegramBot/home': 'Telegram bot',
-    '/TelegramBot/guide': 'Telegram bot'
+    '/TelegramBot/guide': 'Telegram bot',
+    '/TelegramBot/create': 'Telegram bot'
   }
   const tabs = [
     'All',
