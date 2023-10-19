@@ -40,8 +40,6 @@ const TabItemContainer = styled(Box)`
 `
 
 const TabItem = ({ tabValue }: { tabValue: TgBotTabValue }) => {
-  const valuesState = useValuesState()
-  console.log('valuesState', valuesState)
   if (tabValue === TgBotTabValue.AUCTION) {
     return <Dashboard />
   }

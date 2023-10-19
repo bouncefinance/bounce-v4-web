@@ -6,7 +6,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { IconButton } from '@mui/material'
 import { show } from '@ebay/nice-modal-react'
-import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
+import { hideBotDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import DialogBotTips from 'bounceComponents/common/DialogTips/DialogBotTips'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { ReactComponent as Close } from './svg/close.svg'
@@ -25,7 +25,7 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
         const ret = new Promise((resolve, rpt) => {
           showWaitingTxDialog(
             () => {
-              hideDialogConfirmation()
+              hideBotDialogConfirmation()
               rpt()
             },
             { isBot: true, dark: false }
@@ -36,13 +36,13 @@ const ButtonBlock = ({ poolData }: { poolData: any }) => {
         })
         ret
           .then(() => {
-            hideDialogConfirmation()
+            hideBotDialogConfirmation()
           })
           .catch()
       } catch (error) {
         const err: any = error
         console.error(err)
-        hideDialogConfirmation()
+        hideBotDialogConfirmation()
         show(DialogTips, {
           iconType: 'error',
           againBtn: 'Try Again',

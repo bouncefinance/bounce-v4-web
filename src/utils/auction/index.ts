@@ -111,3 +111,7 @@ export const hideDialogConfirmation = () => {
   hide(DialogConfirmation)
   hide(DialogDarkConfirmation)
 }
+export const hideBotDialogConfirmation = () => {
+  hide(DialogLightBotConfirmation)
+  hide(DialogDarkBotConfirmation)
+}

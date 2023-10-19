@@ -22,7 +22,7 @@ import { routes } from 'constants/routes'
 import {
   showRequestApprovalDialog,
   showWaitingTxDialog,
-  hideDialogConfirmation,
+  hideBotDialogConfirmation,
   showRequestConfirmDialog
 } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
@@ -74,13 +74,6 @@ const CreatePoolButton = () => {
   const valuesDispatch = useValuesDispatch()
   const navigate = useNavigate()
 
-  console.log(
-    '$',
-    values.auctionInChain && chainId === values.auctionInChain
-      ? FIXED_SWAP_BOT_ERC20_ADDRESSES[values.auctionInChain]
-      : undefined
-  )
-
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
     values.auctionInChain && chainId === values.auctionInChain
@@ -95,14 +88,12 @@ const CreatePoolButton = () => {
 
     try {
       setButtonCommitted('wait')
-      console.log('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createBotSwapPool()
-      console.log('createBotSwapPool>>>>', getPoolId, transactionReceipt, sysId)
+      const { getPoolId, transactionReceipt } = await createBotSwapPool()
       setButtonCommitted('inProgress')
       const ret: Promise<string> = new Promise((resolve, rpt) => {
         showWaitingTxDialog(
           () => {
-            hideDialogConfirmation()
+            hideBotDialogConfirmation()
             rpt()
             // handleCloseDialog()
           },
@@ -114,7 +105,7 @@ const CreatePoolButton = () => {
             resolve(poolId)
             setButtonCommitted('success')
           } else {
-            hideDialogConfirmation()
+            hideBotDialogConfirmation()
             show(DialogTips, {
               iconType: 'error',
               cancelBtn: 'Cancel',
@@ -128,13 +119,14 @@ const CreatePoolButton = () => {
 
       ret
         .then(() => {
-          hideDialogConfirmation()
+          hideBotDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
             againBtn: 'Confirm',
             title: 'Congratulations!',
             content: 'You have successfully created the auction.',
             onAgain: () => {
+              hideBotDialogConfirmation()
               valuesDispatch({
                 type: ActionType.SetTgBotTabValue,
                 payload: {
@@ -144,7 +136,7 @@ const CreatePoolButton = () => {
               navigate(routes.telegramBot.index)
             },
             onClose: () => {
-              hideDialogConfirmation()
+              hideBotDialogConfirmation()
             }
           })
         })
@@ -152,7 +144,7 @@ const CreatePoolButton = () => {
     } catch (error) {
       const err: any = error
       console.error(err)
-      hideDialogConfirmation()
+      hideBotDialogConfirmation()
       setButtonCommitted(undefined)
       show(DialogTips, {
         iconType: 'error',
@@ -175,7 +167,7 @@ const CreatePoolButton = () => {
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(
           () => {
-            hideDialogConfirmation()
+            hideBotDialogConfirmation()
             rpt()
           },
           { isBot: true, dark: false }
@@ -187,14 +179,14 @@ const CreatePoolButton = () => {
       ret
         .then(handleFulfilled => {
           console.log('handleFulfilled', handleFulfilled)
-          hideDialogConfirmation()
+          hideBotDialogConfirmation()
           toCreate()
         })
         .catch()
     } catch (error) {
       const err: any = error
       console.error('error>>>', err)
-      hideDialogConfirmation()
+      hideBotDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',
         againBtn: 'Try Again',
@@ -224,7 +216,6 @@ const CreatePoolButton = () => {
         run: () => switchNetwork(values.auctionInChain)
       }
     }
-    console.log('-------', buttonCommitted)
 
     if (buttonCommitted !== undefined) {
       if (buttonCommitted === 'success') {

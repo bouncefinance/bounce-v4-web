@@ -83,10 +83,6 @@ const AuctionBotCreateForm = (): JSX.Element => {
   const { chainInfoOpt } = useOptionDatas()
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
-  // const createBotSwapPool = useCreateBotSwapPool()
-  // const navigate = useNavigate()
-  // const { userInfo, userId } = useUserInfo()
-
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
     return ChainList.filter(item => supportIds.includes(item.id)).map(item => (

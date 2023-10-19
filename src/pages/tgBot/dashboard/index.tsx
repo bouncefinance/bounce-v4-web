@@ -30,6 +30,7 @@ import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { getBotPools } from 'api/market'
+import { PoolStatusFrontend } from 'api/market/type'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { usePagination } from 'ahooks'
 import { PoolType } from 'api/pool/type'
@@ -51,14 +52,7 @@ import NoPool from 'assets/images/noPool.png'
 import SearchIcon from '@mui/icons-material/Search'
 import ButtonBlock from './ButtonBlock'
 
-enum PoolStatusFrontend {
-  ALLSTATUS = '0',
-  LIVE = 'live',
-  CLOSE = 'finished',
-  UPCOMING = 'upcoming'
-}
-
-const defaultPageSize = 9
+const defaultPageSize = 100
 
 const DashBoardCard = styled(Box)`
   display: flex;

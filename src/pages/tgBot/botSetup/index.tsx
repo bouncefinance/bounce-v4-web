@@ -1,5 +1,13 @@
 /* eslint-disable react/no-children-prop */
-import { Box, Typography, Stack, styled, Button, IconButton, Grid } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Stack,
+  styled,
+  Button,
+  //  IconButton,
+  Grid
+} from '@mui/material'
 import BotSetUpInfoItem from '../components/BotSetUpInfoItem'
 import { useCallback } from 'react'
 import { bindTgTokenApi } from 'api/pool'
@@ -9,18 +17,17 @@ import { TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useUserInfo, useRefreshUserInfoCallback } from 'state/users/hooks'
-import { InvitationItem } from 'api/market/type'
+import { InvitationItem, BindInviteLinksParams } from 'api/market/type'
 import DialogBotTips from 'bounceComponents/common/DialogTips/DialogBotTips'
 import WordEditDialogTips from 'bounceComponents/common/WordEditDialogTips'
 import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as Edit } from './svg/edit.svg'
 import { ReactComponent as Add } from './svg/add.svg'
-import { ReactComponent as Del } from './svg/del.svg'
+// import { ReactComponent as Del } from './svg/del.svg'
 import { ReactComponent as Bot } from './svg/bot.svg'
 import ReactMarkdown from 'react-markdown'
-import { Params } from 'ahooks/lib/usePagination/types'
-import { usePagination } from 'ahooks'
-import { getInviteLinks } from 'api/market'
+import { useRequest } from 'ahooks'
+import { getInviteLinks, bindInviteLinks } from 'api/market'
 
 const CusButton = styled(Button)`
   padding: 20px 40px;
@@ -149,13 +156,9 @@ export default function BotSetup() {
   }, [valuesDispatch, navigate])
 
   const editIntroduction = useCallback(
-    async (value: any) => {
-      if (!value) {
-        return
-      }
-      if (!userInfo) {
-        return
-      }
+    async (value: string) => {
+      if (!value) return
+      if (!userInfo) return
       const params: BindTgTokenApiParams = {
         tgToken: userInfo?.tg_token,
         tgIntroduction: value
@@ -171,9 +174,17 @@ export default function BotSetup() {
     [refreshUserInfoCallback, userInfo]
   )
 
-  const { data: invitationList, loading } = usePagination<any, Params>(
-    async ({}) => {
-      const resp = await getInviteLinks()
+  const { data: invitationList, run: runGetInviteLinks } = useRequest(
+    async () => {
+      if (!userInfo || !userInfo?.tg_token)
+        return {
+          total: 0,
+          list: []
+        }
+      const params = {
+        tgToken: userInfo?.tg_token
+      }
+      const resp = await getInviteLinks(params)
       return {
         list: resp.data.list,
         total: resp.data.total
@@ -184,7 +195,25 @@ export default function BotSetup() {
       refreshDeps: []
     }
   )
-  console.log('invitationList', invitationList, loading)
+
+  const toBindInviteLinks = useCallback(
+    async (value: string) => {
+      if (!value) return
+      if (!userInfo || !userInfo.tg_token) return
+      const params: BindInviteLinksParams = {
+        botToken: userInfo.tg_token,
+        groupInviteLinks: value
+      }
+      try {
+        const res = await bindInviteLinks(params)
+        runGetInviteLinks()
+        console.log('bindInviteLinks res', res)
+      } catch (error) {
+        console.log('bindTgTokenApi error', error)
+      }
+    },
+    [runGetInviteLinks, userInfo]
+  )
 
   return (
     <TwoColumnPanel>
@@ -259,7 +288,7 @@ export default function BotSetup() {
               content: '',
               value: userInfo ? userInfo?.tgIntroduction : '',
               contentType: 'Markdown',
-              onAgain: (value: any) => {
+              onAgain: (value: string) => {
                 editIntroduction(value)
               }
             })
@@ -281,7 +310,9 @@ export default function BotSetup() {
               title: 'Add introduction',
               content: '',
               contentType: 'TextBox',
-              onAgain: () => {}
+              onAgain: (value: string) => {
+                toBindInviteLinks(value)
+              }
             })
           }}
         >
@@ -290,7 +321,7 @@ export default function BotSetup() {
               <CusTextBox key={invitation.address}>
                 <Typography component={'span'}>{invitation.address}</Typography>
                 <Stack direction={'row'} gap={8}>
-                  <IconButton
+                  {/* <IconButton
                     onClick={() => {
                       show(WordEditDialogTips, {
                         cancelBtn: 'Cancel',
@@ -316,7 +347,7 @@ export default function BotSetup() {
                     }}
                   >
                     <Del />
-                  </IconButton>
+                  </IconButton> */}
                 </Stack>
               </CusTextBox>
             ))}

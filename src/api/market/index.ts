@@ -1,5 +1,12 @@
 import { ApiInstance, BotApiInstance } from '..'
-import { ICompanyInformationParams, IInstitutionInvestorsParams, IPoolFilterParams, IPoolsParams } from './type'
+import {
+  ICompanyInformationParams,
+  IInstitutionInvestorsParams,
+  IPoolFilterParams,
+  IPoolsParams,
+  InviteLinksParams,
+  BindInviteLinksParams
+} from './type'
 
 export const getInstitutionInvestors = (body: IInstitutionInvestorsParams) => {
   return ApiInstance.post('/com/search/top_investor', body)
@@ -15,8 +22,12 @@ export const getPools = (body: IPoolsParams) => {
 export const getBotPools = (body: IPoolsParams) => {
   return BotApiInstance.post('/bot/pools', body)
 }
-export const getInviteLinks = () => {
-  return ApiInstance.post('/bot/invite_links/list', {})
+export const getInviteLinks = (body: InviteLinksParams) => {
+  return ApiInstance.post('/bot/invite_links/list', body)
+}
+
+export const bindInviteLinks = (body: BindInviteLinksParams) => {
+  return ApiInstance.post('/bot/invite_links/bind', body)
 }
 
 export const getPoolsFilter = (body: IPoolFilterParams) => {

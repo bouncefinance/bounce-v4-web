@@ -82,6 +82,7 @@ const ConnectAPIToken = () => {
     },
     [account, showLoginModal, valuesDispatch]
   )
+
   if (account && userInfo?.tg_token) {
     valuesDispatch({
       type: ActionType.SetTgBotActiveStep,

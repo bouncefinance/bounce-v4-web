@@ -14,6 +14,13 @@ export interface ICompanyInformationParams {
   startup: number
 }
 
+export enum PoolStatusFrontend {
+  ALLSTATUS = '0',
+  LIVE = 'live',
+  CLOSE = 'finished',
+  UPCOMING = 'upcoming'
+}
+
 export interface IPoolsParams {
   category: number
   chainId: number
@@ -29,6 +36,15 @@ export interface IPoolsParams {
   token0Address?: string
   tokenType?: number
   isERC721?: 1 | 2 //1:1155，2:721
+}
+
+export interface InviteLinksParams {
+  tgToken: string
+}
+
+export interface BindInviteLinksParams {
+  botToken: string
+  groupInviteLinks: string
 }
 
 export interface InvitationItem {
