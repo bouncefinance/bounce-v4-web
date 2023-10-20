@@ -365,12 +365,6 @@ export default function Home() {
                 const _t0 = poolData.token0
                 const t0 = new Currency(poolData.chainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
                 const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(t0, poolData.currentTotal0 || '0')
-                const swapedPercent = currencySwappedAmount0
-                  ? new BigNumber(currencySwappedAmount0.raw.toString())
-                      .div(poolData.amountTotal0)
-                      .times(100)
-                      .toNumber()
-                  : undefined
 
                 const t0Total = new Currency(
                   poolData.chainId,
@@ -381,6 +375,13 @@ export default function Home() {
                   _t0.smallUrl
                 )
                 const currencyAmountToken0 = CurrencyAmount.fromRawAmount(t0Total, poolData.amountTotal0 || '0')
+                const swapedPercent = currencySwappedAmount0
+                  ? new BigNumber(poolData.amountTotal0)
+                      .minus(currencySwappedAmount0.raw.toString())
+                      .div(poolData.amountTotal0)
+                      .times(100)
+                      .toNumber()
+                  : undefined
 
                 return (
                   <CusAccordion
@@ -439,7 +440,8 @@ export default function Home() {
                         <PoolProgress sx={{ marginTop: '16px' }} value={swapedPercent} poolStatus={poolData.status} />
                         <Box mt={12}>
                           <Typography color={AuctionProgressTextPrimaryColor[poolData.status]} component="span">
-                            {currencySwappedAmount0.toSignificant()} {poolData.token0.symbol}
+                            {currencyAmountToken0.subtract(currencySwappedAmount0).toSignificant()}{' '}
+                            {poolData.token0.symbol}
                           </Typography>
                           <Typography color={'#D7D6D9'} component="span">
                             &nbsp;/&nbsp;

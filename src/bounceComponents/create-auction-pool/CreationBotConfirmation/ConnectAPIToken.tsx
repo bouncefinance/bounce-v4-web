@@ -13,7 +13,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import Input from 'components/Input'
 
-const MTextField = styled(Input)`
+const CusInput = styled(Input)`
   border: 0;
 
   & input {
@@ -284,7 +284,7 @@ const ConnectAPIToken = () => {
             <Stack component={Form} direction={'row'} justifyContent={'center'} gap={'8px'}>
               <Stack width={'100%'} gap={8} direction={'row'}>
                 <FormItem sx={{ width: '100%' }} name="tgToken" required>
-                  <MTextField sx={{ marginTop: '5px' }} value={values.tgToken} />
+                  <CusInput sx={{ marginTop: '5px' }} value={values.tgToken} />
                 </FormItem>
                 <ConfirmBtn type="submit">Confirm</ConfirmBtn>
               </Stack>

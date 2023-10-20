@@ -136,6 +136,8 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
   const { tokenList: tokenList } = useTokenList(chainId, 1, debouncedFilterInputValue, false)
   const { tokenList: fundingCurrency } = useTokenList(chainId, 2, debouncedFilterInputValue, true)
+  console.log('fundingCurrency', fundingCurrency)
+
   const tokenMap = useMemo(() => {
     return _.keyBy(tokenList, 'address')
   }, [tokenList])
@@ -445,7 +447,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                                 <Box display={'flex'} alignItems="center">
                                   <TokenImage
                                     alt={tokenMap[values.tokenFromAddress]?.symbol}
-                                    src={tokenMap[values.tokenFromAddress]?.logoURI}
+                                    src={tokenMap[values.tokenFromAddress]?.smallUrl}
                                     size={32}
                                   ></TokenImage>
                                   <Box ml={10}>
@@ -487,7 +489,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                                 <Box display={'flex'} alignItems="center">
                                   <TokenImage
                                     alt={fundingCurrencyMap[values.tokenToAddress]?.symbol}
-                                    src={fundingCurrencyMap[values.tokenToAddress]?.logoURI}
+                                    src={fundingCurrencyMap[values.tokenToAddress]?.smallUrl}
                                     size={32}
                                   />
                                   <Box ml={10}>
