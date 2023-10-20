@@ -363,7 +363,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                   <>
                     <Stack mt={40}>
                       <Typography mb={12} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                        title
+                        Title
                       </Typography>
                       <FormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
                         <TextField
