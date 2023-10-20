@@ -92,7 +92,7 @@ const ButtonBlock = ({ poolData, flushed }: { poolData: any; flushed: () => void
         onClick={() => {
           show(DialogBotTips, {
             cancelBtn: 'Cancel',
-            againBtn: 'Again',
+            againBtn: 'Confirm',
             title: 'delete auction',
             content: 'Are you sure to delete this auction? ',
             onAgain: () => toClaim(true)

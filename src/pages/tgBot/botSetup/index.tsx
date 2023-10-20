@@ -283,7 +283,7 @@ export default function BotSetup() {
               onClick={() => {
                 show(DialogBotTips, {
                   cancelBtn: 'Cancel',
-                  againBtn: 'Again',
+                  againBtn: 'Confirm',
                   title: 'remove tg bot',
                   content: 'Are you sure to remove this robot connection ? ',
                   onAgain: () => removeTokenApi()
@@ -300,7 +300,7 @@ export default function BotSetup() {
           iconButtonCallBack={() => {
             show(WordEditDialogTips, {
               cancelBtn: 'Cancel',
-              againBtn: 'Again',
+              againBtn: 'Confirm',
               title: 'Edit introduction',
               content: '',
               value: userInfo ? userInfo?.tgIntroduction : '',

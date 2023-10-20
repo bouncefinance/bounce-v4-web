@@ -7,7 +7,7 @@ import CreationBotConfirmation from 'bounceComponents/create-auction-pool/Creati
 // import { useUserInfo } from 'state/users/hooks'
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import FooterPc from 'components/Footer/FooterPc'
-
+import { styled, Box } from '@mui/material'
 export function Guide() {
   const valuesState = useValuesState()
 
@@ -23,11 +23,20 @@ export function Guide() {
   return null
 }
 
+const CusContainer = styled(Box)`
+  padding: 24px 0px 60px;
+  width: 100%;
+  max-width: 1296px;
+  margin: 0 auto;
+`
+
 const GuidePage = () => {
   return (
     <ValuesProvider>
       <HeaderTab />
-      <Guide />
+      <CusContainer>
+        <Guide />
+      </CusContainer>
       <FooterPc />
     </ValuesProvider>
   )

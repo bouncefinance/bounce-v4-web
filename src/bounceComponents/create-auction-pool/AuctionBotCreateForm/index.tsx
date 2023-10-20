@@ -8,7 +8,6 @@ import {
   Button,
   TextField,
   FormControlLabel,
-  Radio,
   FormHelperText,
   Grid
   // IconButton
@@ -18,6 +17,7 @@ import {
   //  useRefreshUserInfoCallback
 } from 'state/users/hooks'
 import RadioGroupFormItem from 'bounceComponents/create-auction-pool/RadioGroupFormItem'
+import Radio from 'bounceComponents/create-auction-pool/Radio'
 // import { ReactComponent as Close } from 'assets/svg/close.svg'
 import * as Yup from 'yup'
 import { Form, Formik, Field } from 'formik'
@@ -48,26 +48,42 @@ import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider
 import { useNavigate } from 'react-router-dom'
 // import { bindTgTokenApi } from 'api/pool'
 import { routes } from 'constants/routes'
+import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
-    <Box mt={'24px'} mb={'60px'} display={'flex'} justifyContent={'center'}>
+    <Box width={'100%'} mt={24} mb={68} height={'552px'} display={'flex'} justifyContent={'center'}>
       <Box
         sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           flex: 1,
           maxWidth: '544px',
           background: 'var(--yellow, #E1F25C)',
           borderRadius: '24px 0 0 24px'
         }}
-      ></Box>
+      >
+        <TgLeft />
+      </Box>
       <Box
-        overflow={'hidden'}
         sx={{
+          width: '100%',
           borderRadius: '0 24px 24px 0',
-          background: '#fff'
+          background: '#fff',
+          padding: '56px 0px 0'
         }}
       >
-        {children}
+        <Box
+          sx={{
+            minWidth: '600px',
+            padding: '0 56px 0',
+            height: '100%',
+            overflowY: 'scroll'
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   )
@@ -96,7 +112,6 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const valuesState = useValuesState()
   const navigate = useNavigate()
   // const refreshUserInfoCallback = useRefreshUserInfoCallback()
-  console.log('>>>>valuesState', valuesState)
 
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
@@ -137,7 +152,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
         value={item.address}
       >
         <Box display={'flex'} alignItems="center">
-          <Image width="20px" src={item.logoURI || ''} />
+          <TokenImage alt={item.symbol} src={item.logoURI} size={32} />
           <Typography ml={10} fontSize={16}>
             {item.name}
           </Typography>
@@ -155,7 +170,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
         value={item.address}
       >
         <Box display={'flex'} alignItems="center">
-          <Image width="20px" src={item.logoURI || ''} />
+          <TokenImage alt={item.symbol} src={item.logoURI} size={32} />
           <Typography ml={10} fontSize={16}>
             {item.name}
           </Typography>
@@ -165,6 +180,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   }, [fundingCurrency])
 
   const validationSchema = Yup.object({
+    poolName: Yup.string().max(30, 'Pool name should be less than 30 characters').required('Pool name is required'),
     tokenFromAddress: Yup.string().required('Token is required'),
     tokenToAddress: Yup.string()
       .required('Funding Currency is required')
@@ -212,8 +228,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       .typeError('Please select a valid time')
       .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value, context) => {
         return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
-      }),
-    poolName: Yup.string().required('Pool name is required')
+      })
   })
 
   const internalInitialValues: FormValues = {
@@ -265,95 +280,303 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   // }, [navigate, refreshUserInfoCallback, valuesDispatch])
 
   return (
-    <>
-      <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
-        <TwoColumnPanel>
-          <Stack padding={56}>
-            <Stack borderRadius={20}>
-              <Box mb={32} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                <Box gap={12} display={'flex'} flexDirection={'row'} alignItems={'center'}>
-                  {/* <Box sx={{ background: 'red' }} height={40} width={40} borderRadius={'50%'}></Box> */}
-                  <Typography fontSize={16} fontWeight={500} color={'#121212'}>
-                    API token
-                  </Typography>
-                </Box>
-                <Box display={'flex'} alignItems={'center'} gap={16}>
-                  <Typography fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
-                    {userInfo?.tg_token}
-                  </Typography>
-                  {/* <IconButton>
+    <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
+      <TwoColumnPanel>
+        <Stack pb={56}>
+          <Stack borderRadius={20}>
+            <Box mb={32} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+              <Box gap={12} display={'flex'} flexDirection={'row'} alignItems={'center'}>
+                {/* <Box sx={{ background: 'red' }} height={40} width={40} borderRadius={'50%'}></Box> */}
+                <Typography fontFamily={'Public Sans'} fontSize={16} fontWeight={500} color={'#121212'}>
+                  API token
+                </Typography>
+              </Box>
+              <Box display={'flex'} alignItems={'center'} gap={16}>
+                <Typography fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
+                  {userInfo?.tg_token}
+                </Typography>
+                {/* <IconButton>
                     <Close onClick={() => removeTokenApi()} />
                   </IconButton> */}
-                </Box>
               </Box>
-            </Stack>
-            <Box
-              sx={{
-                borderRadius: '20px',
-                overflowY: 'scroll',
-                background: '#F6F6F3',
-                padding: '30px'
+            </Box>
+          </Stack>
+          <Box
+            sx={{
+              borderRadius: '20px',
+              overflowY: 'scroll',
+              background: '#F6F6F3',
+              padding: '30px'
+            }}
+          >
+            <Typography
+              fontFamily={'Public Sans'}
+              textAlign={'center'}
+              fontSize={20}
+              fontWeight={600}
+              color={'#121212'}
+            >
+              Create an auction for your telegram bot
+            </Typography>
+            <Formik
+              initialValues={internalInitialValues}
+              validationSchema={validationSchema}
+              onSubmit={values => {
+                valuesDispatch({
+                  type: ActionType.CommitBotAuctionParameters,
+                  payload: {
+                    tokenFrom: {
+                      address: values.tokenFromAddress,
+                      decimals: tokenMap[values.tokenFromAddress].decimals,
+                      symbol: tokenMap[values.tokenFromAddress].symbol,
+                      logoURI: tokenMap[values.tokenFromAddress].logoURI,
+                      chainId: tokenMap[values.tokenFromAddress].chainId
+                    },
+                    tokenTo: {
+                      address: values.tokenToAddress,
+                      decimals: fundingCurrencyMap[values.tokenToAddress].decimals,
+                      symbol: fundingCurrencyMap[values.tokenToAddress].symbol,
+                      logoURI: fundingCurrencyMap[values.tokenToAddress].logoURI,
+                      chainId: fundingCurrencyMap[values.tokenToAddress].chainId
+                    },
+                    swapRatio: values.swapRatio,
+                    poolSize: values.poolSize,
+                    allocationStatus: values.allocationStatus,
+                    allocationPerWallet: values.allocationPerWallet,
+                    participantStatus: values.participantStatus,
+                    startTime: values.startTime,
+                    endTime: values.endTime,
+                    poolName: values.poolName,
+                    auctionInChain: chainId
+                  }
+                })
+                valuesDispatch({
+                  type: ActionType.SetTgBotActiveStep,
+                  payload: {
+                    tgBotActiveStep: TgBotActiveStep.COMFIRM
+                  }
+                })
               }}
             >
-              <Typography textAlign={'center'} fontSize={20} fontWeight={600} color={'#121212'}>
-                Create an auction for your telegram bot
-              </Typography>
-              <Formik
-                initialValues={internalInitialValues}
-                validationSchema={validationSchema}
-                onSubmit={values => {
-                  valuesDispatch({
-                    type: ActionType.CommitBotAuctionParameters,
-                    payload: {
-                      tokenFrom: {
-                        address: values.tokenFromAddress,
-                        decimals: tokenMap[values.tokenFromAddress].decimals,
-                        symbol: tokenMap[values.tokenFromAddress].symbol,
-                        logoURI: tokenMap[values.tokenFromAddress].logoURI,
-                        chainId: tokenMap[values.tokenFromAddress].chainId
-                      },
-                      tokenTo: {
-                        address: values.tokenToAddress,
-                        decimals: fundingCurrencyMap[values.tokenToAddress].decimals,
-                        symbol: fundingCurrencyMap[values.tokenToAddress].symbol,
-                        logoURI: fundingCurrencyMap[values.tokenToAddress].logoURI,
-                        chainId: fundingCurrencyMap[values.tokenToAddress].chainId
-                      },
-                      swapRatio: values.swapRatio,
-                      poolSize: values.poolSize,
-                      allocationStatus: values.allocationStatus,
-                      allocationPerWallet: values.allocationPerWallet,
-                      participantStatus: values.participantStatus,
-                      startTime: values.startTime,
-                      endTime: values.endTime,
-                      poolName: values.poolName,
-                      auctionInChain: chainId
-                      // tokenFormDecimal: tokenMap[values.tokenFromAddress].decimals,
-                      // tokenToDecimal: fundingCurrencyMap[values.tokenToAddress].decimals
-                    }
-                  })
-                  // setTimeout(createBotSwapPool, 3000)
-                  valuesDispatch({
-                    type: ActionType.SetTgBotActiveStep,
-                    payload: {
-                      tgBotActiveStep: TgBotActiveStep.COMFIRM
-                    }
-                  })
-                }}
-              >
-                {({ values, handleChange }) => {
-                  return (
-                    <>
-                      <Stack mt={40}>
+              {({ values, handleChange }) => {
+                return (
+                  <>
+                    <Stack mt={40}>
+                      <Typography mb={12} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        title
+                      </Typography>
+                      <FormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
+                        <TextField
+                          placeholder="pool name"
+                          variant="outlined"
+                          onClick={() => !account && showLoginModal()}
+                          value={values.poolName}
+                          inputProps={{ readOnly: false }}
+                        />
+                      </FormItem>
+                      <Box
+                        sx={{
+                          background: '#D4D6CF',
+                          opacity: 0.7,
+                          height: '1px',
+                          width: '100%',
+                          margin: '24px 0'
+                        }}
+                      ></Box>
+                    </Stack>
+                    <FormItem error={!account}>
+                      <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        Select Chain
+                      </Typography>
+                      <Select<ChainId>
+                        value={chainId}
+                        displayEmpty
+                        onChange={event => {
+                          if (account) {
+                            switchNetwork(Number(event.target.value))
+                          } else {
+                            showLoginModal()
+                          }
+                        }}
+                        renderValue={value => {
+                          if (!value) {
+                            return <em>Not Connected</em>
+                          }
+                          return (
+                            <Box display={'flex'} alignItems="center">
+                              <Image width="32px" src={value ? ChainListMap[value]?.logo || '' : ''} />
+                              <Box ml={10}>
+                                <Typography fontSize={12} color={'var(--ps-gray-700)'}>
+                                  Select Chain
+                                </Typography>
+                                <Typography>{chainId ? ChainListMap[chainId]?.name : ''}</Typography>
+                              </Box>
+                            </Box>
+                          )
+                        }}
+                      >
+                        {menuList}
+                      </Select>
+                      {!account && <FormHelperText error={!account}>Please connect to your wallet</FormHelperText>}
+                      <Box
+                        sx={{
+                          background: '#D4D6CF',
+                          opacity: 0.7,
+                          height: '1px',
+                          width: '100%',
+                          margin: '24px 0'
+                        }}
+                      ></Box>
+                    </FormItem>
+                    <Stack component={Form} spacing={20}>
+                      <Stack>
                         <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                          title
+                          Token
                         </Typography>
-                        <FormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
+                        <FormItem error={!account} name="tokenFromAddress" required>
+                          <Select
+                            value={values.tokenFromAddress}
+                            onChange={handleChange}
+                            onClick={() => !account && showLoginModal()}
+                            name="tokenFromAddress"
+                            displayEmpty
+                            renderValue={() => {
+                              return (
+                                <Box display={'flex'} alignItems="center">
+                                  <TokenImage
+                                    alt={tokenMap[values.tokenFromAddress]?.symbol}
+                                    src={tokenMap[values.tokenFromAddress]?.logoURI}
+                                    size={32}
+                                  ></TokenImage>
+                                  <Box ml={10}>
+                                    <Typography fontSize={12} color={'var(--ps-gray-700)'}>
+                                      Select token
+                                    </Typography>
+                                    <Typography>{values ? tokenMap[values.tokenFromAddress]?.name : ''}</Typography>
+                                  </Box>
+                                </Box>
+                              )
+                            }}
+                          >
+                            {tokenMenuList}
+                          </Select>
+                        </FormItem>
+                        <Box
+                          sx={{
+                            background: '#D4D6CF',
+                            opacity: 0.7,
+                            height: '1px',
+                            width: '100%',
+                            margin: '24px 0'
+                          }}
+                        ></Box>
+                      </Stack>
+                      <Stack>
+                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          Funding Currency
+                        </Typography>
+                        <FormItem error={!account} name="tokenToAddress" required>
+                          <Select
+                            value={values.tokenToAddress}
+                            onChange={handleChange}
+                            onClick={() => !account && showLoginModal()}
+                            name="tokenToAddress"
+                            displayEmpty
+                            renderValue={() => {
+                              return (
+                                <Box display={'flex'} alignItems="center">
+                                  <TokenImage
+                                    alt={fundingCurrencyMap[values.tokenToAddress]?.symbol}
+                                    src={fundingCurrencyMap[values.tokenToAddress]?.logoURI}
+                                    size={32}
+                                  />
+                                  <Box ml={10}>
+                                    <Typography fontSize={12} color={'var(--ps-gray-700)'}>
+                                      Funding Currency
+                                    </Typography>
+                                    <Typography>
+                                      {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : ''}
+                                    </Typography>
+                                  </Box>
+                                </Box>
+                              )
+                            }}
+                          >
+                            {fundingCurrencyMenuList}
+                          </Select>
+                        </FormItem>
+                        <Box
+                          sx={{
+                            background: '#D4D6CF',
+                            opacity: 0.7,
+                            height: '1px',
+                            width: '100%',
+                            margin: '24px 0'
+                          }}
+                        ></Box>
+                      </Stack>
+                      <Stack>
+                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          Swap ratio
+                        </Typography>
+                        <Box display={'flex'}>
+                          <Box display={'flex'} alignItems={'center'} gap={5}>
+                            <Typography>1</Typography>
+                            <Typography noWrap>
+                              {tokenMap[values.tokenFromAddress] ? (
+                                tokenMap[values.tokenFromAddress]?.name
+                              ) : (
+                                <TokenImage
+                                  alt={tokenMap[values.tokenFromAddress]?.symbol}
+                                  src={tokenMap[values.tokenFromAddress]?.logoURI}
+                                  size={32}
+                                />
+                              )}
+                            </Typography>
+                            <Typography mr="5px">=</Typography>
+                          </Box>
+
+                          <FormItem sx={{ width: '100%' }} error={!account} name="swapRatio" required>
+                            <TextField
+                              variant="outlined"
+                              onClick={() => !account && showLoginModal()}
+                              value={values.swapRatio}
+                              inputProps={{ readOnly: false }}
+                              InputProps={{
+                                endAdornment: (
+                                  <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={3}>
+                                    <TokenImage
+                                      alt={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.symbol}
+                                      src={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.logoURI}
+                                      size={32}
+                                    />
+                                    {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : '-'}
+                                  </Box>
+                                )
+                              }}
+                            />
+                          </FormItem>
+                        </Box>
+                        <Box
+                          sx={{
+                            background: '#D4D6CF',
+                            opacity: 0.7,
+                            height: '1px',
+                            width: '100%',
+                            margin: '24px 0'
+                          }}
+                        ></Box>
+                      </Stack>
+                      <Stack>
+                        <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          Total Supply
+                        </Typography>
+                        <FormItem error={!account} name="poolSize">
                           <TextField
-                            placeholder="pool name"
+                            sx={{ width: '100%' }}
                             variant="outlined"
                             onClick={() => !account && showLoginModal()}
-                            value={values.poolName}
+                            value={values.poolSize}
                             inputProps={{ readOnly: false }}
                           />
                         </FormItem>
@@ -367,40 +590,27 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                           }}
                         ></Box>
                       </Stack>
-                      <FormItem error={!account}>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                          Select Chain
+
+                      <Stack>
+                        <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          Time
                         </Typography>
-                        <Select<ChainId>
-                          value={chainId}
-                          displayEmpty
-                          onChange={event => {
-                            if (account) {
-                              switchNetwork(Number(event.target.value))
-                            } else {
-                              showLoginModal()
-                            }
-                          }}
-                          renderValue={value => {
-                            if (!value) {
-                              return <em>Not Connected</em>
-                            }
-                            return (
-                              <Box display={'flex'} alignItems="center">
-                                <Image width="32px" src={value ? ChainListMap[value]?.logo || '' : ''} />
-                                <Box ml={10}>
-                                  <Typography fontSize={12} color={'var(--ps-gray-700)'}>
-                                    Select Chain
-                                  </Typography>
-                                  <Typography>{chainId ? ChainListMap[chainId]?.name : ''}</Typography>
-                                </Box>
-                              </Box>
-                            )
-                          }}
-                        >
-                          {menuList}
-                        </Select>
-                        {!account && <FormHelperText error={!account}>Please connect to your wallet</FormHelperText>}
+                        <Box display={'flex'} gap={16}>
+                          <Field
+                            component={DateTimePickerFormItem}
+                            name="startTime"
+                            disablePast
+                            maxDateTime={values.endTime}
+                            textField={{ sx: { flex: 1 } }}
+                          />
+                          <Field
+                            component={DateTimePickerFormItem}
+                            name="endTime"
+                            disablePast
+                            minDateTime={values.startTime}
+                            textField={{ sx: { flex: 1 } }}
+                          />
+                        </Box>
                         <Box
                           sx={{
                             background: '#D4D6CF',
@@ -410,266 +620,75 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             margin: '24px 0'
                           }}
                         ></Box>
-                      </FormItem>
-                      <Stack component={Form} spacing={20}>
-                        <Stack>
-                          <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                            Token
-                          </Typography>
-                          <FormItem error={!account} name="tokenFromAddress" required>
-                            <Select
-                              value={values.tokenFromAddress}
-                              onChange={handleChange}
-                              onClick={() => !account && showLoginModal()}
-                              name="tokenFromAddress"
-                              displayEmpty
-                              renderValue={() => {
-                                return (
-                                  <Box display={'flex'} alignItems="center">
-                                    <Image
-                                      width="32px"
-                                      src={
-                                        values.tokenFromAddress ? tokenMap[values.tokenFromAddress]?.logoURI || '' : ''
-                                      }
-                                    />
-                                    <Box ml={10}>
-                                      <Typography fontSize={12} color={'var(--ps-gray-700)'}>
-                                        Select token
-                                      </Typography>
-                                      <Typography>{values ? tokenMap[values.tokenFromAddress]?.name : ''}</Typography>
-                                    </Box>
-                                  </Box>
-                                )
-                              }}
-                            >
-                              {tokenMenuList}
-                            </Select>
-                          </FormItem>
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-                        <Stack>
-                          <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                            Funding Currency
-                          </Typography>
-                          <FormItem error={!account} name="tokenToAddress" required>
-                            <Select
-                              value={values.tokenToAddress}
-                              onChange={handleChange}
-                              onClick={() => !account && showLoginModal()}
-                              name="tokenToAddress"
-                              displayEmpty
-                              renderValue={() => {
-                                return (
-                                  <Box display={'flex'} alignItems="center">
-                                    <Image
-                                      width="32px"
-                                      src={
-                                        values.tokenToAddress
-                                          ? fundingCurrencyMap[values.tokenToAddress]?.logoURI || ''
-                                          : ''
-                                      }
-                                    />
-                                    <Box ml={10}>
-                                      <Typography fontSize={12} color={'var(--ps-gray-700)'}>
-                                        Funding Currency
-                                      </Typography>
-                                      <Typography>
-                                        {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : ''}
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                )
-                              }}
-                            >
-                              {fundingCurrencyMenuList}
-                            </Select>
-                          </FormItem>
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-                        <Stack>
-                          <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                            Swap ratio
-                          </Typography>
-                          <Box display={'flex'}>
-                            <Box display={'flex'} alignItems={'center'} width={'80px'} gap={5}>
-                              <Typography>1</Typography>
-                              <Typography noWrap width={'60px'}>
-                                {tokenMap[values.tokenFromAddress]?.name}
-                              </Typography>
-                              <Typography mr="5px">=</Typography>
-                            </Box>
-
-                            <FormItem sx={{ width: '100%' }} error={!account} name="swapRatio" required>
-                              <TextField
-                                variant="outlined"
-                                onClick={() => !account && showLoginModal()}
-                                value={values.swapRatio}
-                                inputProps={{ readOnly: false }}
-                                InputProps={{
-                                  endAdornment: (
-                                    <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={3}>
-                                      <TokenImage
-                                        alt={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.symbol}
-                                        src={
-                                          values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.logoURI
-                                        }
-                                        size={32}
-                                      />
-                                      {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : '-'}
-                                    </Box>
-                                  )
-                                }}
-                              />
-                            </FormItem>
-                          </Box>
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-                        <Stack>
-                          <Typography variant="h3" sx={{ fontSize: 20 }}>
-                            Total Supply
-                          </Typography>
-                          <FormItem error={!account} name="poolSize" required>
+                      </Stack>
+                      <Stack>
+                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          Allocation per wallet
+                        </Typography>
+                        <FormItem name="allocationStatus" error={!account}>
+                          <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
+                            <FormControlLabel
+                              value={AllocationStatus.NoLimits}
+                              control={<Radio disableRipple />}
+                              label="No Limits"
+                            />
+                            <FormControlLabel
+                              value={AllocationStatus.Limited}
+                              control={<Radio disableRipple />}
+                              label="Limited"
+                            />
+                          </Field>
+                        </FormItem>
+                        {values.allocationStatus === AllocationStatus.Limited && (
+                          <FormItem error={!account} name="allocationPerWallet" required>
                             <TextField
                               sx={{ width: '100%' }}
                               variant="outlined"
                               onClick={() => !account && showLoginModal()}
-                              value={values.poolSize}
+                              value={values.allocationPerWallet}
                               inputProps={{ readOnly: false }}
                             />
                           </FormItem>
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-
-                        <Stack>
-                          <Typography variant="h3" sx={{ fontSize: 20 }}>
-                            Time
-                          </Typography>
-                          <Box display={'flex'} gap={16}>
-                            <Field
-                              component={DateTimePickerFormItem}
-                              name="startTime"
-                              disablePast
-                              maxDateTime={values.endTime}
-                              textField={{ sx: { flex: 1 } }}
+                        )}
+                        <Box
+                          sx={{
+                            background: '#D4D6CF',
+                            opacity: 0.7,
+                            height: '1px',
+                            width: '100%',
+                            margin: '24px 0'
+                          }}
+                        ></Box>
+                      </Stack>
+                      <Stack>
+                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                          Participant
+                        </Typography>
+                        <FormItem name="participantStatus" error={!account}>
+                          <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
+                            <FormControlLabel
+                              value={ParticipantStatus.Public}
+                              control={<Radio disableRipple />}
+                              label="Public"
                             />
-                            <Field
-                              component={DateTimePickerFormItem}
-                              name="endTime"
-                              disablePast
-                              minDateTime={values.startTime}
-                              textField={{ sx: { flex: 1 } }}
+                            <FormControlLabel
+                              value={ParticipantStatus.Whitelist}
+                              control={<Radio disableRipple />}
+                              label="Condition"
                             />
-                          </Box>
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-                        <Stack>
-                          <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                            Allocation per wallet
-                          </Typography>
-                          <FormItem name="allocationStatus" error={!account}>
-                            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
-                              <FormControlLabel
-                                value={AllocationStatus.NoLimits}
-                                control={<Radio disableRipple />}
-                                label="No Limits"
-                              />
-                              <FormControlLabel
-                                value={AllocationStatus.Limited}
-                                control={<Radio disableRipple />}
-                                label="Limited"
-                              />
-                            </Field>
-                          </FormItem>
-                          {values.allocationStatus === AllocationStatus.Limited && (
-                            <FormItem error={!account} name="allocationPerWallet" required>
-                              <TextField
-                                sx={{ width: '100%' }}
-                                variant="outlined"
-                                onClick={() => !account && showLoginModal()}
-                                value={values.allocationPerWallet}
-                                inputProps={{ readOnly: false }}
-                              />
-                            </FormItem>
-                          )}
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-                        <Stack>
-                          <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                            Participant
-                          </Typography>
-                          <FormItem name="participantStatus" error={!account}>
-                            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
-                              <FormControlLabel
-                                value={ParticipantStatus.Public}
-                                control={<Radio disableRipple />}
-                                label="Public"
-                              />
-                              <FormControlLabel
-                                value={ParticipantStatus.Whitelist}
-                                control={<Radio disableRipple />}
-                                label="Condition"
-                              />
-                            </Field>
-                          </FormItem>
-                          <Box
-                            sx={{
-                              background: '#D4D6CF',
-                              opacity: 0.7,
-                              height: '1px',
-                              width: '100%',
-                              margin: '24px 0'
-                            }}
-                          ></Box>
-                        </Stack>
-                        {/* <Grid container spacing={10}>
+                          </Field>
+                        </FormItem>
+                        <Box
+                          sx={{
+                            background: '#D4D6CF',
+                            opacity: 0.7,
+                            height: '1px',
+                            width: '100%',
+                            margin: '24px 0'
+                          }}
+                        ></Box>
+                      </Stack>
+                      {/* <Grid container spacing={10}>
                           <Grid item xs={6}>
                             <Button
                               sx={{
@@ -694,40 +713,41 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             </Button>
                           </Grid>
                         </Grid> */}
-                        {type === 'Guide' && (
-                          <Grid container spacing={10}>
-                            <Grid item xs={6}>
-                              <Button
-                                sx={{
-                                  width: '100%'
-                                }}
-                                type="submit"
-                                variant="outlined"
-                                onClick={() => skipTo()}
-                              >
-                                skip
-                              </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <Button
-                                sx={{
-                                  width: '100%'
-                                }}
-                                type="submit"
-                                variant="contained"
-                              >
-                                Deploy
-                              </Button>
-                            </Grid>
+                      {type === 'Guide' && (
+                        <Grid container spacing={10}>
+                          <Grid item xs={6}>
+                            <Button
+                              sx={{
+                                width: '100%'
+                              }}
+                              type="submit"
+                              variant="outlined"
+                              onClick={() => skipTo()}
+                            >
+                              skip
+                            </Button>
                           </Grid>
-                        )}
-                        {type === 'Create' && (
-                          <Button type="submit" variant="contained">
-                            Save
-                          </Button>
-                        )}
+                          <Grid item xs={6}>
+                            <Button
+                              sx={{
+                                width: '100%'
+                              }}
+                              type="submit"
+                              variant="contained"
+                              color="secondary"
+                            >
+                              Deploy
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      )}
+                      {type === 'Create' && (
+                        <Button type="submit" variant="contained">
+                          Save
+                        </Button>
+                      )}
 
-                        {/* <Stack direction="row" spacing={10} justifyContent="end">
+                      {/* <Stack direction="row" spacing={10} justifyContent="end">
                           {account && userId && userInfo?.email && (userInfo?.twitterName || IS_TEST_ENV) ? (
                             <>
                               <Button type="submit" variant="contained">
@@ -760,16 +780,15 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             </Button>
                           )}
                         </Stack> */}
-                      </Stack>
-                    </>
-                  )
-                }}
-              </Formik>
-            </Box>
-          </Stack>
-        </TwoColumnPanel>
-      </LocalizationProvider>
-    </>
+                    </Stack>
+                  </>
+                )
+              }}
+            </Formik>
+          </Box>
+        </Stack>
+      </TwoColumnPanel>
+    </LocalizationProvider>
   )
 }
 
