@@ -440,7 +440,7 @@ export default function Home() {
                         <PoolProgress sx={{ marginTop: '16px' }} value={swapedPercent} poolStatus={poolData.status} />
                         <Box mt={12}>
                           <Typography color={AuctionProgressTextPrimaryColor[poolData.status]} component="span">
-                            {currencyAmountToken0.subtract(currencySwappedAmount0).toSignificant()}{' '}
+                            {currencyAmountToken0.subtract(currencySwappedAmount0).toSignificant()}
                             {poolData.token0.symbol}
                           </Typography>
                           <Typography color={'#D7D6D9'} component="span">

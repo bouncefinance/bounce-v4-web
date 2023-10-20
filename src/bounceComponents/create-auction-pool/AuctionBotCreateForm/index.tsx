@@ -9,8 +9,8 @@ import {
   TextField,
   FormControlLabel,
   FormHelperText,
-  Grid
-  // IconButton
+  Grid,
+  IconButton
 } from '@mui/material'
 import {
   useUserInfo
@@ -49,6 +49,7 @@ import { useNavigate } from 'react-router-dom'
 // import { bindTgTokenApi } from 'api/pool'
 import { routes } from 'constants/routes'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
+import { ReactComponent as Return } from './svg/return.svg'
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
@@ -154,7 +155,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
         value={item.address}
       >
         <Box display={'flex'} alignItems="center">
-          <TokenImage alt={item.symbol} src={item.logoURI} size={32} />
+          <TokenImage src={item.smallUrl ? item.smallUrl : ''} size={32} />
           <Typography ml={10} fontSize={16}>
             {item.name}
           </Typography>
@@ -172,7 +173,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
         value={item.address}
       >
         <Box display={'flex'} alignItems="center">
-          <TokenImage alt={item.symbol} src={item.logoURI} size={32} />
+          <TokenImage src={item.smallUrl ? item.smallUrl : ''} size={32} />
           <Typography ml={10} fontSize={16}>
             {item.name}
           </Typography>
@@ -246,6 +247,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
     poolName: valuesState.poolName
   }
 
+  const returnHome = useCallback(() => {
+    navigate(routes.telegramBot.home)
+  }, [navigate])
+
   const skipTo = useCallback(() => {
     valuesDispatch({
       type: ActionType.SetTgBotActiveStep,
@@ -288,7 +293,11 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
           <Stack borderRadius={20}>
             <Box mb={32} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
               <Box gap={12} display={'flex'} flexDirection={'row'} alignItems={'center'}>
-                {/* <Box sx={{ background: 'red' }} height={40} width={40} borderRadius={'50%'}></Box> */}
+                {type === 'Create' && (
+                  <IconButton onClick={() => returnHome()}>
+                    <Return />
+                  </IconButton>
+                )}
                 <Typography fontFamily={'Public Sans'} fontSize={16} fontWeight={500} color={'#121212'}>
                   API token
                 </Typography>
@@ -320,6 +329,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
             >
               Create an auction for your telegram bot
             </Typography>
+
             <Formik
               initialValues={internalInitialValues}
               validationSchema={validationSchema}
@@ -449,7 +459,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                                     alt={tokenMap[values.tokenFromAddress]?.symbol}
                                     src={tokenMap[values.tokenFromAddress]?.smallUrl}
                                     size={32}
-                                  ></TokenImage>
+                                  />
                                   <Box ml={10}>
                                     <Typography fontSize={12} color={'var(--ps-gray-700)'}>
                                       Select token
@@ -522,7 +532,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                           Swap ratio
                         </Typography>
                         <Box display={'flex'}>
-                          <Box display={'flex'} alignItems={'center'} gap={5}>
+                          <Box height={55} display={'flex'} alignItems={'center'} gap={5}>
                             <Typography>1</Typography>
                             <Typography noWrap>
                               {tokenMap[values.tokenFromAddress] ? (
@@ -530,7 +540,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                               ) : (
                                 <TokenImage
                                   alt={tokenMap[values.tokenFromAddress]?.symbol}
-                                  src={tokenMap[values.tokenFromAddress]?.logoURI}
+                                  src={tokenMap[values.tokenFromAddress]?.smallUrl}
                                   size={32}
                                 />
                               )}
@@ -548,10 +558,15 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                                 endAdornment: (
                                   <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={3}>
                                     <TokenImage
-                                      alt={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.symbol}
-                                      src={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.logoURI}
+                                      alt={fundingCurrencyMap[values.tokenToAddress]?.symbol}
+                                      src={fundingCurrencyMap[values.tokenToAddress]?.smallUrl}
                                       size={32}
                                     />
+                                    {/* <TokenImage
+                                      alt={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.symbol}
+                                      src={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.smallUrl}
+                                      size={32}
+                                    /> */}
                                     {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : '-'}
                                   </Box>
                                 )
