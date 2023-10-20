@@ -258,15 +258,6 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
     navigate(routes.telegramBot.home)
   }, [navigate])
 
-  const skipTo = useCallback(() => {
-    valuesDispatch({
-      type: ActionType.SetTgBotActiveStep,
-      payload: {
-        tgBotActiveStep: TgBotActiveStep.GETAPITOKEN
-      }
-    })
-    navigate(routes.telegramBot.home)
-  }, [navigate, valuesDispatch])
   // const removeTokenApi = useCallback(async () => {
   //   const params: BindTgTokenApiParams = {
   //     tgToken: ''
@@ -698,7 +689,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             <FormControlLabel
                               value={ParticipantStatus.Whitelist}
                               control={<Radio disableRipple />}
-                              label="Condition"
+                              label="Credentials"
                             />
                           </Field>
                         </FormItem>
@@ -746,9 +737,16 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                               }}
                               type="submit"
                               variant="outlined"
-                              onClick={() => skipTo()}
+                              onClick={() => {
+                                valuesDispatch({
+                                  type: ActionType.SetTgBotActiveStep,
+                                  payload: {
+                                    tgBotActiveStep: TgBotActiveStep.GUIDEFORM
+                                  }
+                                })
+                              }}
                             >
-                              skip
+                              Cancel
                             </Button>
                           </Grid>
                           <Grid item xs={6}>
@@ -766,7 +764,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         </Grid>
                       )}
                       {type === 'Create' && (
-                        <Button type="submit" variant="contained">
+                        <Button color="secondary" type="submit" variant="contained">
                           Save
                         </Button>
                       )}
