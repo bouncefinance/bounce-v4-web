@@ -10,7 +10,8 @@ import {
   FormControlLabel,
   FormHelperText,
   Grid,
-  IconButton
+  IconButton,
+  styled
 } from '@mui/material'
 import {
   useUserInfo
@@ -50,6 +51,12 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import { ReactComponent as Return } from './svg/return.svg'
+
+const CusFormItem = styled(FormItem)`
+  .MuiFormHelperText-root {
+    color: red;
+  }
+`
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   return (
@@ -377,7 +384,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                       <Typography mb={12} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
                         Title
                       </Typography>
-                      <FormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
+                      <CusFormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
                         <TextField
                           placeholder="pool name"
                           variant="outlined"
@@ -385,7 +392,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                           value={values.poolName}
                           inputProps={{ readOnly: false }}
                         />
-                      </FormItem>
+                      </CusFormItem>
                       <Box
                         sx={{
                           background: '#D4D6CF',
@@ -548,7 +555,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             <Typography mr="5px">=</Typography>
                           </Box>
 
-                          <FormItem sx={{ width: '100%' }} error={!account} name="swapRatio" required>
+                          <CusFormItem sx={{ width: '100%' }} error={!account} name="swapRatio" required>
                             <TextField
                               variant="outlined"
                               onClick={() => !account && showLoginModal()}
@@ -572,7 +579,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                                 )
                               }}
                             />
-                          </FormItem>
+                          </CusFormItem>
                         </Box>
                         <Box
                           sx={{
@@ -588,7 +595,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
                           Total Supply
                         </Typography>
-                        <FormItem error={!account} name="poolSize">
+                        <CusFormItem error={!account} name="poolSize">
                           <TextField
                             sx={{ width: '100%' }}
                             variant="outlined"
@@ -596,7 +603,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             value={values.poolSize}
                             inputProps={{ readOnly: false }}
                           />
-                        </FormItem>
+                        </CusFormItem>
                         <Box
                           sx={{
                             background: '#D4D6CF',
