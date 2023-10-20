@@ -28,7 +28,6 @@ const StatusBox = styled(Box)`
   align-items: center;
   gap: 10px;
   border-radius: 100px;
-  backdrop-filter: blur(2px);
 `
 export default function PoolCountDown({ status, openTime, closeTime, claimAt }: NewType) {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
@@ -48,7 +47,13 @@ export default function PoolCountDown({ status, openTime, closeTime, claimAt }: 
         background: AuctionStatusPrimaryColor[status]
       }}
     >
-      <Typography color={AuctionStatusTextPrimaryColor[status]} fontFamily={'Inter'} fontSize={12} fontWeight={400}>
+      <Typography
+        noWrap
+        color={AuctionStatusTextPrimaryColor[status]}
+        fontFamily={'Inter'}
+        fontSize={12}
+        fontWeight={400}
+      >
         {`${PoolStatus[status]} ${days}d : ${hours}h : ${minutes}m : ${seconds}s`}
       </Typography>
     </StatusBox>

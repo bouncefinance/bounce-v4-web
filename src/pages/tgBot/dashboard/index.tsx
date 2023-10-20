@@ -47,6 +47,7 @@ import { formatNumber } from 'utils/number'
 import NoPool from 'assets/images/noPool.png'
 import SearchIcon from '@mui/icons-material/Search'
 import ButtonBlock from './ButtonBlock'
+import { useOptionDatas } from 'state/configOptions/hooks'
 
 const defaultPageSize = 100
 
@@ -159,6 +160,13 @@ export default function Home() {
   const { account } = useActiveWeb3React()
   const [tabStatusFrontend, setTabStatusFrontend] = useState(PoolStatusFrontend.LIVE)
   const [filterInputValue, setFilterInputValue] = useState('')
+  const optionDatas = useOptionDatas()
+
+  const getChainName = useCallback(
+    (chain_id: number) => optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id),
+    [optionDatas.chainInfoOpt]
+  )
+
   console.log('userInfo', userInfo)
 
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -194,8 +202,9 @@ export default function Home() {
       }
     },
     {
+      pollingInterval: 30000,
       debounceWait: 500,
-      refreshDeps: [tabStatusFrontend, filterInputValue]
+      refreshDeps: [tabStatusFrontend, filterInputValue, account]
     }
   )
   // console.log('auctionPoolData', auctionPoolData)
@@ -357,7 +366,7 @@ export default function Home() {
               {auctionPoolData?.list.map((poolData: FixedSwapPool) => {
                 const _t0 = poolData.token0
                 const t0 = new Currency(poolData.chainId, _t0.address, _t0.decimals, _t0.symbol, _t0.name, _t0.smallUrl)
-                const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(t0, poolData.swappedAmount0 || '0')
+                const currencySwappedAmount0 = CurrencyAmount.fromRawAmount(t0, poolData.currentTotal0 || '0')
                 const swapedPercent = currencySwappedAmount0
                   ? new BigNumber(currencySwappedAmount0.raw.toString())
                       .div(poolData.amountTotal0)
@@ -365,9 +374,15 @@ export default function Home() {
                       .toNumber()
                   : undefined
 
-                const _t1 = poolData.token1
-                const t1 = new Currency(poolData.chainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
-                const currencyAmountToken0 = CurrencyAmount.fromRawAmount(t1, poolData.currentTotal0 || '0')
+                const t0Total = new Currency(
+                  poolData.chainId,
+                  _t0.address,
+                  _t0.decimals,
+                  _t0.symbol,
+                  _t0.name,
+                  _t0.smallUrl
+                )
+                const currencyAmountToken0 = CurrencyAmount.fromRawAmount(t0Total, poolData.amountTotal0 || '0')
 
                 return (
                   <CusAccordion
@@ -391,14 +406,20 @@ export default function Home() {
                               {poolData.name} Fixed Price Auction Poo
                             </Typography>
                           </Stack>
-                          <Stack gap={16} direction={'row'}>
+                          <Stack gap={16} direction={'row'} alignItems={'center'}>
                             <Stack gap={8} direction={'row'} alignItems={'center'}>
                               <Image
+                                src={
+                                  getChainName(poolData.chainId)?.ethChainId
+                                    ? ChainListMap?.[getChainName(poolData?.chainId)?.ethChainId as ChainId]?.logo || ''
+                                    : ''
+                                }
                                 width={16}
-                                src={poolData?.chainId ? ChainListMap?.[poolData.chainId as ChainId]?.logo || '' : ''}
+                                height={16}
+                                alt={''}
                               />
                               <Typography color={'#fff'} fontFamily={'Inter'} fontSize={14} fontWeight={400}>
-                                {poolData?.chainId ? ChainListMap?.[poolData.chainId as ChainId]?.name || '' : '-'}
+                                {getChainName(poolData.chainId)?.chainName}
                               </Typography>
                             </Stack>
                             <PoolCountDown

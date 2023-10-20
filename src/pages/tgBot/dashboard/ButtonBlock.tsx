@@ -66,7 +66,7 @@ const ButtonBlock = ({ poolData, flushed }: { poolData: any; flushed: () => void
   )
 
   if (!account) {
-    return <ConnectWalletButton />
+    return <ConnectWalletButton size="small" />
   }
 
   if (poolData.status === PoolStatus.Closed) {
