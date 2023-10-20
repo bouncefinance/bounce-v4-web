@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Tab, Tabs, styled, Box } from '@mui/material'
 import { useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { TgBotTabValue } from 'bounceComponents/create-auction-pool/types'
@@ -8,6 +8,9 @@ import BotSetup from '../botSetup'
 import ValuesProvider from 'bounceComponents/create-auction-pool/ValuesProvider'
 import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import FooterPc from 'components/Footer/FooterPc'
+import { useActiveWeb3React } from 'hooks'
+import { routes } from 'constants/routes'
+import { useNavigate } from 'react-router-dom'
 
 const CusTabs = styled(Tabs)`
   margin-top: 24px;
@@ -55,10 +58,18 @@ const TabItem = ({ tabValue }: { tabValue: TgBotTabValue }) => {
 const HomePage = () => {
   const valuesState = useValuesState()
   const [tgBotTab, setTgBotTab] = useState(valuesState.tgBotTabValue)
+  const { account } = useActiveWeb3React()
+  const navigate = useNavigate()
+
+  const unAccount = useCallback(() => {
+    if (!account) {
+      navigate(routes.telegramBot.guide)
+    }
+  }, [navigate, account])
+  unAccount()
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const handleChange = (event: React.ChangeEvent<{}>, newValue: TgBotTabValue) => {
-    console.log('newValue', newValue)
     setTgBotTab(newValue)
   }
   return (

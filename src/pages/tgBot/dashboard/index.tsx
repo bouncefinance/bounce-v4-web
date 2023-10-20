@@ -167,8 +167,6 @@ export default function Home() {
     [optionDatas.chainInfoOpt]
   )
 
-  console.log('userInfo', userInfo)
-
   // eslint-disable-next-line @typescript-eslint/ban-types
   const tabHandleChange = (event: React.ChangeEvent<{}>, newValue: PoolStatusFrontend) => {
     setTabStatusFrontend(newValue)
