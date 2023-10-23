@@ -519,7 +519,7 @@ const CreationBotConfirmation = () => {
                 })
               }}
             >
-              skip
+              cancel
             </Button>
             <CreatePoolButton />
             {/* <ConfirmationSubtitle sx={{ mt: 12 }}>Transaction Fee is 2.5%</ConfirmationSubtitle> */}

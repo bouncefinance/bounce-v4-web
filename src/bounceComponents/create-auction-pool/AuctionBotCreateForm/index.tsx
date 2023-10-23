@@ -283,6 +283,9 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   //     console.log('bindTgTokenApi error', error)
   //   }
   // }, [navigate, refreshUserInfoCallback, valuesDispatch])
+  const skipTo = useCallback(() => {
+    navigate(routes.telegramBot.home)
+  }, [navigate])
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -735,7 +738,6 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                               sx={{
                                 width: '100%'
                               }}
-                              type="submit"
                               variant="outlined"
                               onClick={() => {
                                 valuesDispatch({
@@ -744,9 +746,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                                     tgBotActiveStep: TgBotActiveStep.GUIDEFORM
                                   }
                                 })
+                                skipTo()
                               }}
                             >
-                              Cancel
+                              skip
                             </Button>
                           </Grid>
                           <Grid item xs={6}>
