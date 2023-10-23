@@ -693,12 +693,163 @@ const DeelanceProjectInfo: IProjectInfo[] = [
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 15
   {
+    keyId: 14,
+    liveTimeStamp: {
+      start: 1698066000000,
+      end: 1698411600000
+    },
+    poolTypeName: 'Fixed Swap Auction',
+    img: CreateProtocol,
+    avatar: CreateProtocolAvatar,
+    title: 'Create',
+    chainId: 1,
+    tokenName: '$CREATE',
+    whitePaperLink: 'https://createprotocol.gitbook.io/create-protocol-whitepaper/',
+    upcomingLink: '/launchpad/create_protocol',
+    liveLink: '/launchpad/create_protocol',
+    projectInfo: [
+      {
+        title: 'What is Create Protocol?',
+        info: [
+          <>
+            Create Protocol is a complete stack that provides a number of protocols that are building blocks for Web 3.0
+            applications. These protocols include: <br />
+            ⚡️A decentralized identity system that allows users to control their own data and privacy. <br />
+            ⚡️A creative object model that defines the data structure for digital assets. <br />
+            ⚡️A cDapp composer that makes it easy to create and deploy decentralized applications. <br />
+            ⚡️Deagi AI Attribution Engine that allows devs to integrate apps / learning models to the IP repository in
+            a way where IP owners/creators have the control over use of their data and its economic incentivisation.
+          </>
+        ]
+      },
+      {
+        title: 'Advantages',
+        info: [
+          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <li>
+              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
+              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
+              applications that can take advantage of the best features of each blockchain.
+            </li>
+            <li>
+              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
+              secure, reliable, and transparent platform for creators and users.
+            </li>
+            <li>
+              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
+              features, and participate in governance. This gives users more control over their assets.
+            </li>
+            <li>
+              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
+              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
+              decentralized applications.
+            </li>
+            <li>
+              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
+              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
+              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
+              create, share, and monetize content, then the Create Protocol is the platform for you.
+            </li>
+          </ul>
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            <a href="https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing">
+              https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing
+            </a>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <ul key={1}>
+            <li>
+              Investors - Ice Capital ( UAE ) - <strong> Lead investor</strong>
+            </li>
+            <li>
+              <p>
+                Cogitent Ventures ( USA ) - <strong>Co Lead</strong>
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>Snowy August Family Office - ( Miami )</li>
+                <li>Stanford AI and Web3 club angels ( USA )</li>
+                <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
+                <li>
+                  Hue Nguyen : Ex SEC USA + Official Advisor (USA)
+                  <br />
+                  Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
+                </li>
+                <li>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</li>
+                <li>Kalyan Singh : Co-founder, Lumenci ( Austin )</li>
+                <li>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</li>
+                <li>Sayantan Biswas : Co-founder, UniAcco ( London )</li>
+                <li>Aashish Jindal : Co-founder, GripInvest ( India )</li>
+                <li>Sian Elizabeth : Sian Elizabeth Wellness ( London )</li>
+                <li>Bharat Thakur : Creator - Royal Artist ( Dubai )</li>
+              </ul>
+            </li>
+            <li>
+              {/* <div>and many more.</div> */}
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>KOL - Waqar Zaka Few Degen KOLs</li>
+                <li>Media Partners - Edge of NFT</li>
+                <li>Big Brands - Binance Polygon</li>
+              </ul>
+            </li>
+          </ul>
+        ]
+      },
+      participateProjectInfo
+    ],
+    tokenMetrics: [],
+    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
+    social: [
+      <Link key={0} href="https://www.createprotocol.org/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://t.me/CreateProtocolOfficial" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/create.protocol/?hl=en"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={7} href="https://discord.com/invite/M2xcC2Cex5" target="_blank">
+        <DiscordSVG />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$CREATE' },
+      { title: 'Token Price', content: '0.0044' },
+      { title: 'Token Amount', content: '20,000,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
     keyId: 15,
     liveTimeStamp: {
-      start: 1697371200000,
-      end: 1697976000000
+      start: 1697360400000,
+      end: 1697965200000
     },
-    hideUpcomingCountdown: true,
+    // hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
     img: 'https://images-v3.bounce.finance/2e48f48ac5a9717b679ca051e8a43c8c-1697094683.png',
     pageInImg: 'https://images-v3.bounce.finance/2d282148ec8905a28b2157b7641e265a-1697122606.png',
@@ -842,6 +993,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               }
             }}
           >
+            <Typography>
+              <strong>Public Round is Subject to Change</strong>
+            </Typography>
             <a
               href="https://docs.google.com/spreadsheets/d/1_43S6DusKa_5C_AlWYsqJOCSVNesFnd73ekNG1aPLxw/edit#gid=290952973"
               target="_blank"
@@ -914,7 +1068,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       participateProjectInfo
     ],
     tokenMetrics: [],
-    desc: 'Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining, providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable, mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3 projects and help them grow their liquidity.',
+    desc: 'Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens through liquidity vaults and DeFi bonds.',
     social: [
       <Link key={0} href="https://finceptor.app/" target="_blank">
         <Web />
@@ -922,14 +1076,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       <Link key={4} href="https://finceptorapp.medium.com/" target="_blank">
         <img src={Telegram} width={40} />
       </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/create.protocol/?hl=en"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
-      </Link>,
+      // <Link
+      //   key={5}
+      //   sx={{ width: '43px !important', height: '43px !important' }}
+      //   href="https://www.instagram.com/create.protocol/?hl=en"
+      //   target="_blank"
+      // >
+      //   <InstagramSvg width={43} height={43} />
+      // </Link>,
       <Link key={6} href="https://twitter.com/FinceptorApp" target="_blank">
         <Twitter />
       </Link>,
@@ -945,150 +1099,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Price', content: '0.05 USDT' },
       { title: 'Token Amount', content: '1,000,000' },
       { title: 'Blockchain', content: 'BNB' }
-    ]
-  },
-  {
-    keyId: 14,
-    liveTimeStamp: {
-      start: 1697371200000,
-      end: 1696698000000
-    },
-    hideUpcomingCountdown: true,
-    poolTypeName: 'Fixed Swap Auction',
-    img: CreateProtocol,
-    avatar: CreateProtocolAvatar,
-    title: 'Create',
-    chainId: 1,
-    tokenName: '$CREATE',
-    whitePaperLink: 'https://createprotocol.gitbook.io/create-protocol-whitepaper/',
-    upcomingLink: '/launchpad/create_protocol',
-    liveLink: '/launchpad/create_protocol',
-    projectInfo: [
-      {
-        title: 'What is Create Protocol?',
-        info: [
-          'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.'
-        ]
-      },
-      {
-        title: 'Advantages',
-        info: [
-          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
-            <li>
-              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
-              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
-              applications that can take advantage of the best features of each blockchain.
-            </li>
-            <li>
-              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
-              secure, reliable, and transparent platform for creators and users.
-            </li>
-            <li>
-              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
-              features, and participate in governance. This gives users more control over their assets.
-            </li>
-            <li>
-              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
-              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
-              decentralized applications.
-            </li>
-            <li>
-              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
-              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
-              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
-              create, share, and monetize content, then the Create Protocol is the platform for you.
-            </li>
-          </ul>
-        ]
-      },
-      {
-        title: 'Tokenomics',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '& a': {
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            <a href="https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing">
-              https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing
-            </a>
-          </Box>
-        ]
-      },
-      {
-        title: 'Investment and Partners',
-        info: [
-          <ul key={1}>
-            <li>
-              Investors - Ice Capital ( UAE ) - <strong> Lead investor</strong>
-            </li>
-            <li>
-              <p>
-                Cogitent Ventures ( USA ) - <strong>Co Lead</strong>
-              </p>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <li>Snowy August Family Office - ( Miami )</li>
-                <li>Stanford AI and Web3 club angels ( USA )</li>
-                <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
-                <li>
-                  Hue Nguyen : Ex - SEC USA + Official Advisor (USA)
-                  <br />
-                  Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
-                </li>
-                <li>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</li>
-                <li>Kalyan Singh : Co-founder, Lumenci ( Austin )</li>
-                <li>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</li>
-                <li>Sayantan Biswas : Co-founder, UniAcco ( London )</li>
-                <li>Aashish Jindal : Co-founder, GripInvest ( India )</li>
-                <li>Sian Elizabeth : Sian Elizabeth Wellness ( London )</li>
-                <li>Bharat Thakur : Creator - Royal Artist ( Dubai )</li>
-              </ul>
-            </li>
-            <li>
-              {/* <div>and many more.</div> */}
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <li>KOL - Waqar Zaka Few Degen KOLs</li>
-                <li>Media Partners - Edge of NFT</li>
-                <li>Big Brands - Binance Polygon</li>
-              </ul>
-            </li>
-          </ul>
-        ]
-      },
-      participateProjectInfo
-    ],
-    tokenMetrics: [],
-    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
-    social: [
-      <Link key={0} href="https://www.createprotocol.org/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={4} href="https://t.me/CreateProtocolOfficial" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/create.protocol/?hl=en"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
-      </Link>,
-      <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={7} href="https://discord.com/invite/M2xcC2Cex5" target="_blank">
-        <DiscordSVG />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$CREATE' },
-      { title: 'Token Price', content: '0.0044' },
-      { title: 'Token Amount', content: '20,000,000' },
-      { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
   {

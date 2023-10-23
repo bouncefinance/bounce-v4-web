@@ -344,7 +344,7 @@ function SetFragmentReleaseTime({
   )
 
   const addOne = useCallback(() => {
-    if (releaseTimes.length <= 29) {
+    if (releaseTimes.length <= 39) {
       setFragmentReleaseTimes([...releaseTimes, { ...defaultFragmentRelease, key: Math.random() }])
     }
   }, [releaseTimes, setFragmentReleaseTimes])
