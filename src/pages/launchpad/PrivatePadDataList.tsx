@@ -840,8 +840,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$CREATE' },
-      { title: 'Token Price', content: '0.0044' },
-      { title: 'Token Amount', content: '20,000,000' },
+      { title: 'Token Price', content: '0.00069 AUCTION' },
+      { title: 'Token Amount', content: '7,200,000' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
