@@ -37,6 +37,7 @@ import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
 import CreateProtocol from './imgs/CreateProtocol.png'
+import CreateProtocolPage from './imgs/CreateProtocolPage.jpg'
 // import Finceptor from './imgs/Finceptor.png'
 import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 export interface IProjectInfo {
@@ -701,6 +702,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     poolTypeName: 'Fixed Swap Auction',
     img: CreateProtocol,
     avatar: CreateProtocolAvatar,
+    pageInImg: CreateProtocolPage,
     title: 'Create',
     chainId: 1,
     tokenName: '$CREATE',
