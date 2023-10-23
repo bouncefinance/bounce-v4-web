@@ -953,10 +953,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 14,
     liveTimeStamp: {
-      start: 1697371200000,
-      end: 1696698000000
+      start: 1698066000000,
+      end: 1698411600000
     },
-    hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
     img: CreateProtocol,
     avatar: CreateProtocolAvatar,
@@ -970,7 +969,15 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is Create Protocol?',
         info: [
-          'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.'
+          <>
+            Create Protocol is a complete stack that provides a number of protocols that are building blocks for Web 3.0
+            applications. These protocols include: <br />
+            ⚡️A decentralized identity system that allows users to control their own data and privacy. <br />
+            ⚡️A creative object model that defines the data structure for digital assets. <br />
+            ⚡️A cDapp composer that makes it easy to create and deploy decentralized applications. <br />
+            ⚡️Deagi AI Attribution Engine that allows devs to integrate apps / learning models to the IP repository in
+            a way where IP owners/creators have the control over use of their data and its economic incentivisation.
+          </>
         ]
       },
       {

@@ -2,7 +2,7 @@ import { ChainId } from 'constants/chain'
 import { useMemo } from 'react'
 
 const safeAddress: { [key in ChainId]?: string[] } = {
-  [ChainId.MAINNET]: ['0x7d60de2e7d92cb5c863bc82f8d59b37c59fc0a7a'],
+  [ChainId.MAINNET]: ['0x7d60de2e7d92cb5c863bc82f8d59b37c59fc0a7a', '0x18b9fD3f712AcbF2c1edD6C717039C3acde912D9'],
   [ChainId.OMNI_TESTNET]: ['0xB10BAe3C2750a8ABFdB4cAf4Ba4306E9e3770148', '0x59f85f769F42BA7C7BD55e246adaa4b2F88f46a7'],
   [ChainId.ZKSYNC_ERA_TESTNET]: ['0x3A518027cC1A258F63De8d259D8BE28637d415b6'],
   [ChainId.BSC]: [
