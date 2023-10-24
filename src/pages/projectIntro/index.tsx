@@ -509,7 +509,7 @@ export function InviteBtn({
 }
 
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo()
+  const { data: poolInfo, run: getPoolInfo } = usePoolInfo(item.backedId)
   const { userId } = useUserInfo()
   const isMD = useIsMDDown()
   const isSm = useBreakpoint('sm')
