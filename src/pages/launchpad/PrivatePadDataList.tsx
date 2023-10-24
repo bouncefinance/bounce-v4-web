@@ -848,6 +848,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 15,
     backedId: 18555,
     liveTimeStamp: {
