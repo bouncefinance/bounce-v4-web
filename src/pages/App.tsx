@@ -79,7 +79,7 @@ import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
-// import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
+import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
 import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
@@ -141,7 +141,7 @@ export default function App() {
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
-                {/* <PerformKYCVerification /> */}
+                <PerformKYCVerification />
                 {/* <WarningModal /> */}
                 {/* <Web3ReactManager> */}
                 <Routes>
