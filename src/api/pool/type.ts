@@ -39,6 +39,10 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Mutant English'
   }
 }
+export interface BindTgTokenApiParams {
+  tgToken: string
+  tgIntroduction?: string
+}
 
 export interface GetPoolCreationSignatureParams {
   amountTotal0: string

@@ -1,4 +1,4 @@
-import { ApiInstance } from '..'
+import { ApiInstance, BotApiInstance } from '..'
 import {
   GetPoolCreationSignatureParams,
   GetPoolCreationSignatureResponse,
@@ -10,7 +10,8 @@ import {
   GetWhitelistMerkleTreeRootResponse,
   UpdateAuctionBackgroundParams,
   GetWinnersListParams,
-  GetWinnersListResponse
+  GetWinnersListResponse,
+  BindTgTokenApiParams
 } from './type'
 
 /**
@@ -18,6 +19,20 @@ import {
  */
 export const getPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
   return ApiInstance.post<GetPoolCreationSignatureResponse>('/user/create_pool_sign', params)
+}
+
+/**
+ * Get signature for bot auction pool creation
+ */
+export const getBotPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
+  return BotApiInstance.post<GetPoolCreationSignatureResponse>('/bot/create_pool_sign', params)
+}
+
+/**
+ * bind tg token_api
+ */
+export const bindTgTokenApi = (params: BindTgTokenApiParams) => {
+  return ApiInstance.post('/user/tg_token/bind', params)
 }
 
 /**

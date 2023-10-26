@@ -700,7 +700,6 @@ const TokenLockerL2L3Form = () => {
       >
         {({ values, errors, setFieldValue, handleSubmit }) => {
           // update hook params
-          console.log('values>>>', values)
           setChainId(values.chainId)
           setTokenAddress(values.tokenAddress)
           //   const resultItem = exchangeList?.find(item => Number(item.id) === Number(values.exchangeId))
