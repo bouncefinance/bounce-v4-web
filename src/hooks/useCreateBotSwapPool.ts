@@ -160,7 +160,16 @@ export function useCreateBotSwapPool() {
 
     const amountTotal0 = CurrencyAmount.fromAmount(currencyFrom, params.poolSize)
     const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
-    console.log('currencyFrom', currencyFrom, currencyTo, params.poolSize, params.tokenFormDecimal)
+    // console.log(
+    //   'currencyFrom',
+    //   currencyFrom,
+    //   currencyTo,
+    //   params.poolSize,
+    //   params.tokenFormDecimal,
+    //   new BigNumber(params.poolSize).toString(),
+    //   params.swapRatio,
+    //   new BigNumber(params.poolSize).times(params.swapRatio).toFixed()
+    // )
 
     if (!amountTotal0 || !amountTotal1) {
       return Promise.reject('amountTotal0 or amountTotal1 error')
@@ -175,12 +184,24 @@ export function useCreateBotSwapPool() {
     if (!fixedSwapBotERC20Contract) {
       return Promise.reject('no contract')
     }
+
+    const resultAmountTotal1 = CurrencyAmount.fromAmount(
+      amountTotal1.currency,
+      new BigNumber(params.poolSize).times(params.swapRatio).toFixed()
+    )
+
+    // console.log(
+    //   'new BigNumber(amountTotal1.toExact()).times(params.swapRatio).toString()',
+    //   resultAmountTotal1?.toSignificant(),
+    //   amountTotal1.currency,
+    //   new BigNumber(params.poolSize).times(params.swapRatio).toFixed()
+    // )
+
+    // console.log('resultAmountTotal1', amountTotal1.currency, resultAmountTotal1?.toExact(), resultAmountTotal1)
+
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
-      amountTotal1: new BigNumber(amountTotal1.raw.toString())
-        .times(params.swapRatio)
-        // Prevent exponential notation
-        .toFixed(0, BigNumber.ROUND_DOWN),
+      amountTotal1: resultAmountTotal1?.raw.toString(),
       category: PoolType.FixedSwap,
       chainId: chainConfigInBackend.id,
       openAt: params.startTime,
@@ -189,12 +210,11 @@ export function useCreateBotSwapPool() {
       creator: account,
       maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyTo, params.allocationPerWallet)?.raw.toString() || '0',
       merkleroot: '',
-      name: params.poolName || 'AA',
+      name: params.poolName || 'BotPool',
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress
     }
-    console.log('signatureParams', signatureParams)
-
+    console.log('signatureParams>>>', signatureParams)
     const {
       data: { id, expiredTime, signature }
     } = await getBotPoolCreationSignature(signatureParams)

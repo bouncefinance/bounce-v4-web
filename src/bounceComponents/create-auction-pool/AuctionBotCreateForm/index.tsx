@@ -11,7 +11,8 @@ import {
   FormHelperText,
   Grid,
   IconButton,
-  styled
+  styled,
+  ButtonBase
 } from '@mui/material'
 import {
   useUserInfo
@@ -51,6 +52,9 @@ import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import { ReactComponent as Return } from './svg/return.svg'
+import { show } from '@ebay/nice-modal-react'
+import ImportWhitelistDialog from 'bounceComponents/create-auction-pool/ImportWhitelistDialog'
+import { isAddress } from 'utils'
 
 const CusFormItem = styled(FormItem)`
   .MuiFormHelperText-root {
@@ -108,6 +112,7 @@ interface FormValues {
   startTime: Moment | null
   endTime: Moment | null
   poolName: string
+  whitelist: string[]
 }
 
 const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Element => {
@@ -226,6 +231,21 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
               !context.parent.poolSize || !context.parent.swapRatio || (value || 0) <= context.parent.poolSize
           )
       }),
+    whitelist: Yup.array()
+      .of(Yup.string())
+      .test(
+        'NOT_EMPTY_ARRAY',
+        'Whitelist is required',
+        (inputArray, context) =>
+          context.parent.participantStatus !== ParticipantStatus.Whitelist ||
+          (inputArray instanceof Array && inputArray.length > 0)
+      )
+      .test('VALID_ADDRESS_ARRAY', 'Please make sure all addresses are valid', (inputArray, context) => {
+        return (
+          context.parent.participantStatus !== ParticipantStatus.Whitelist ||
+          (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
+        )
+      }),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participantStatus status'),
     startTime: Yup.date()
       .min(moment(), 'Please select a time earlier than current time')
@@ -251,12 +271,36 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
     participantStatus: valuesState.participantStatus,
     startTime: valuesState.startTime,
     endTime: valuesState.endTime,
-    poolName: valuesState.poolName
+    poolName: valuesState.poolName,
+    whitelist: valuesState.whitelist
   }
 
   const returnHome = useCallback(() => {
     navigate(routes.telegramBot.home)
   }, [navigate])
+
+  const showImportWhitelistDialog = (
+    values: FormValues,
+    setValues: (values: any, shouldValidate?: boolean) => void
+  ) => {
+    show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
+      .then(whitelist => {
+        console.log('ImportWhitelistDialog Resolved: ', whitelist)
+        valuesDispatch({
+          type: ActionType.SetWhitelist,
+          payload: {
+            whitelist
+          }
+        })
+        setValues({
+          ...values,
+          whitelist
+        })
+      })
+      .catch(err => {
+        console.log('ImportWhitelistDialog Rejected: ', err)
+      })
+  }
 
   // const removeTokenApi = useCallback(async () => {
   //   const params: BindTgTokenApiParams = {
@@ -371,7 +415,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                 })
               }}
             >
-              {({ values, handleChange }) => {
+              {({ values, handleChange, setValues, errors }) => {
                 return (
                   <>
                     <Stack mt={40}>
@@ -696,6 +740,19 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             />
                           </Field>
                         </FormItem>
+                        <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
+                        <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
+                        <ButtonBase
+                          sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
+                          disabled={values.participantStatus !== ParticipantStatus.Whitelist}
+                          onClick={() => {
+                            showImportWhitelistDialog(values, setValues)
+                          }}
+                        >
+                          {values.participantStatus === ParticipantStatus.Whitelist && (
+                            <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                          )}
+                        </ButtonBase>
                         <Box
                           sx={{
                             background: '#D4D6CF',
