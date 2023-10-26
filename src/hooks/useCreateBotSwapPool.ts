@@ -1,5 +1,5 @@
-import { getBotPoolCreationSignature } from 'api/pool'
-import { GetPoolCreationSignatureParams, PoolType } from 'api/pool/type'
+import { getBotPoolCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
+import { GetPoolCreationSignatureParams, PoolType, GetWhitelistMerkleTreeRootParams } from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useActiveWeb3React } from 'hooks'
 import { useBotFixedSwapERC20Contract } from 'hooks/useContract'
@@ -199,6 +199,20 @@ export function useCreateBotSwapPool() {
 
     // console.log('resultAmountTotal1', amountTotal1.currency, resultAmountTotal1?.toExact(), resultAmountTotal1)
 
+    let merkleroot = ''
+    console.log('1')
+
+    if (params.whitelist.length > 0) {
+      const whitelistParams: GetWhitelistMerkleTreeRootParams = {
+        addresses: params.whitelist,
+        category: PoolType.FixedSwap,
+        chainId: chainConfigInBackend.id
+      }
+      const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
+      merkleroot = data.merkleroot
+    }
+    console.log('2')
+
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
       amountTotal1: resultAmountTotal1?.raw.toString(),
@@ -209,16 +223,14 @@ export function useCreateBotSwapPool() {
       closeAt: params.endTime,
       creator: account,
       maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyTo, params.allocationPerWallet)?.raw.toString() || '0',
-      merkleroot: '',
-      name: params.poolName || 'BotPool',
+      merkleroot: merkleroot,
+      name: params.poolName,
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress
     }
-    console.log('signatureParams>>>', signatureParams)
     const {
       data: { id, expiredTime, signature }
     } = await getBotPoolCreationSignature(signatureParams)
-    console.log('getBotPoolCreationSignature', id, expiredTime, signature)
     const contractCallParams = {
       name: signatureParams.name,
       token0: signatureParams.token0,
@@ -228,7 +240,7 @@ export function useCreateBotSwapPool() {
       openAt: signatureParams.openAt,
       closeAt: signatureParams.closeAt,
       claimAt: 0,
-      whitelistRoot: NULL_BYTES,
+      whitelistRoot: merkleroot || NULL_BYTES,
       maxAmount1PerWallet: signatureParams.maxAmount1PerWallet
     }
 

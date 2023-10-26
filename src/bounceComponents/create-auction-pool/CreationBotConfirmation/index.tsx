@@ -129,6 +129,7 @@ const CreatePoolButton = () => {
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const values = useValuesState()
+  console.log('create btn values', values)
   const switchNetwork = useSwitchNetwork()
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const { currencyFrom } = useAuctionERC20Currency()
@@ -139,7 +140,6 @@ const CreatePoolButton = () => {
   )
   const valuesDispatch = useValuesDispatch()
   const navigate = useNavigate()
-
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
     values.auctionInChain && chainId === values.auctionInChain
@@ -148,7 +148,6 @@ const CreatePoolButton = () => {
     true
   )
   const createBotSwapPool = useCreateBotSwapPool()
-
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog({ isBot: true, dark: false })
 
@@ -355,6 +354,8 @@ const CreatePoolButton = () => {
 const CreationBotConfirmation = () => {
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
+  console.log('CreationBotConfirmation values', values)
+
   return (
     <TwoColumnPanel>
       <Stack mb={56}>

@@ -26,7 +26,7 @@ import { useUserInfo } from 'state/users/hooks'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 import { useActiveWeb3React } from 'hooks'
-import { getBotPools } from 'api/market'
+import { getBotPools, getBotTokens, getBotDashboard } from 'api/market'
 import { PoolStatusFrontend } from 'api/market/type'
 import { useRequest } from 'ahooks'
 import { PoolType } from 'api/pool/type'
@@ -205,6 +205,37 @@ export default function Home() {
       refreshDeps: [tabStatusFrontend, filterInputValue, account]
     }
   )
+  const { data: botTokenData, loading: botLoading } = useRequest(
+    async () => {
+      const resp = await getBotTokens()
+      return {
+        list: resp.data.list,
+        total: resp.data.total
+      }
+    },
+    {
+      pollingInterval: 30000,
+      debounceWait: 500,
+      refreshDeps: [tabStatusFrontend, filterInputValue, account]
+    }
+  )
+  console.log('botTokenData', botTokenData)
+
+  const { data: dashboardData, loading: dashboardLoading } = useRequest(
+    async () => {
+      const resp = await getBotDashboard()
+      return {
+        ...resp.data
+      }
+    },
+    {
+      pollingInterval: 30000,
+      debounceWait: 500,
+      refreshDeps: [tabStatusFrontend, filterInputValue, account]
+    }
+  )
+  console.log('BotDashboardData', dashboardData)
+
   // console.log('auctionPoolData', auctionPoolData)
   const [expanded, setExpanded] = useState<string | false>(false)
 
@@ -218,98 +249,101 @@ export default function Home() {
       <Typography fontSize={28} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
         Dashboard
       </Typography>
-      <Grid mt={40} container spacing={24}>
-        <Grid item xs={4}>
-          <DashBoardCard>
-            <DashBoardCardIconBoxs>
-              <Calendar />
-            </DashBoardCardIconBoxs>
-            <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
-              <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                Bot Daily Using
-              </Typography>
-              <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                -
-              </Typography>
-            </Stack>
-          </DashBoardCard>
+      {!botLoading && !dashboardLoading ? (
+        <Grid mt={40} container spacing={24}>
+          <Grid item xs={4}>
+            <DashBoardCard>
+              <DashBoardCardIconBoxs>
+                <Calendar />
+              </DashBoardCardIconBoxs>
+              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+                <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
+                  Bot Daily Using
+                </Typography>
+                <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+                  {botTokenData?.total}
+                </Typography>
+              </Stack>
+            </DashBoardCard>
+          </Grid>
+          <Grid item xs={4}>
+            <DashBoardCard>
+              <DashBoardCardIconBoxs>
+                <User />
+              </DashBoardCardIconBoxs>
+              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+                <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
+                  Daily Active Users
+                </Typography>
+                <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+                  {dashboardData?.dailyBidders ? dashboardData?.dailyBidders : '-'}
+                </Typography>
+              </Stack>
+            </DashBoardCard>
+          </Grid>
+          <Grid item xs={4}>
+            <DashBoardCard>
+              <DashBoardCardIconBoxs>
+                <Group />
+              </DashBoardCardIconBoxs>
+              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+                <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
+                  Total member
+                </Typography>
+                <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+                  {dashboardData?.totalMembers ? dashboardData?.totalMembers : '-'}
+                </Typography>
+              </Stack>
+            </DashBoardCard>
+          </Grid>
+          <Grid item xs={4}>
+            <DashBoardCard>
+              <DashBoardCardIconBoxs>
+                <Task />
+              </DashBoardCardIconBoxs>
+              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+                <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
+                  Total Transaction Amount
+                </Typography>
+                <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+                  {dashboardData?.totalAmount ? dashboardData?.totalAmount : '-'} USDT
+                </Typography>
+              </Stack>
+            </DashBoardCard>
+          </Grid>
+          <Grid item xs={4}>
+            <DashBoardCard>
+              <DashBoardCardIconBoxs>
+                <Auction />
+              </DashBoardCardIconBoxs>
+              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+                <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
+                  Auction Amount
+                </Typography>
+                <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+                  {dashboardData?.totalPools ? dashboardData?.totalPools : '-'} ETH
+                </Typography>
+              </Stack>
+            </DashBoardCard>
+          </Grid>
+          <Grid item xs={4}>
+            <DashBoardCard>
+              <DashBoardCardIconBoxs>
+                <AuctionGroup />
+              </DashBoardCardIconBoxs>
+              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+                <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
+                  Auction Participated Users
+                </Typography>
+                <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+                  {dashboardData?.totalBidders ? dashboardData?.totalBidders : '-'}
+                </Typography>
+              </Stack>
+            </DashBoardCard>
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <DashBoardCard>
-            <DashBoardCardIconBoxs>
-              <User />
-            </DashBoardCardIconBoxs>
-            <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
-              <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                Daily Active Users
-              </Typography>
-              <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                -
-              </Typography>
-            </Stack>
-          </DashBoardCard>
-        </Grid>
-        <Grid item xs={4}>
-          <DashBoardCard>
-            <DashBoardCardIconBoxs>
-              <Group />
-            </DashBoardCardIconBoxs>
-            <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
-              <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                Total member
-              </Typography>
-              <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                -
-              </Typography>
-            </Stack>
-          </DashBoardCard>
-        </Grid>
-        <Grid item xs={4}>
-          <DashBoardCard>
-            <DashBoardCardIconBoxs>
-              <Task />
-            </DashBoardCardIconBoxs>
-            <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
-              <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                Total Transaction Amount
-              </Typography>
-              <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                - USDT
-              </Typography>
-            </Stack>
-          </DashBoardCard>
-        </Grid>
-        <Grid item xs={4}>
-          <DashBoardCard>
-            <DashBoardCardIconBoxs>
-              <Auction />
-            </DashBoardCardIconBoxs>
-            <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
-              <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                Auction Amount
-              </Typography>
-              <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                - ETH
-              </Typography>
-            </Stack>
-          </DashBoardCard>
-        </Grid>
-        <Grid item xs={4}>
-          <DashBoardCard>
-            <DashBoardCardIconBoxs>
-              <AuctionGroup />
-            </DashBoardCardIconBoxs>
-            <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
-              <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                Auction Participated Users
-              </Typography>
-              <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                -
-              </Typography>
-            </Stack>
-          </DashBoardCard>
-        </Grid>
-      </Grid>
+      ) : null}
+
       <AcctionPoolCard mt={60}>
         <Stack width={'100%'} direction={'row'} justifyContent={'space-between'}>
           <Typography fontSize={28} fontWeight={600} fontFamily={'Public Sans'} color="#fff">
