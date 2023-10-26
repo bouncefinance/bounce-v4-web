@@ -126,7 +126,7 @@ interface FooterLinksProps {
   title: string
   links: {
     label: string
-    isExternal: boolean // 是否是外链
+    isExternal: boolean
     href: string
     isDisabled: boolean
     extraIcon: string

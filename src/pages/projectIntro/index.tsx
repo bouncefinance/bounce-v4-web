@@ -562,12 +562,12 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        minHeight: isMD ? 'unset' : '600px',
+        minHeight: isMD ? 800 : 600,
         marginTop: '-76px'
       }}
     >
       <img
-        src={item.img}
+        src={item.pageInImg || item.img}
         style={{
           position: 'absolute',
           width: '100%',
@@ -584,18 +584,19 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           position: isDark && isSm ? 'relative' : 'absolute',
           display: 'flex',
           flexDirection: 'column',
-          background: `url(${item.img})`,
+          background: `url(${item.pageInImg || item.img})`,
           top: 0,
           right: isDark && isSm ? '' : { xs: 20, sm: '40px' },
           bottom: 0,
           borderRadius: '0 0 20px 20px',
           backgroundSize: 'cover',
+          backgroundPosition: 'center',
           objectFit: 'scale-down',
           left: isDark && isSm ? '' : { xs: 20, sm: '40px' }
         }}
       >
         {!isMD && (
-          <>
+          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'flex-start'}>
             <GrayButton
               sx={{
                 background: isDark ? ProjectInfoDarkStyle.Head.ButtonBg : '',
@@ -660,7 +661,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 <Favorite collectionId={Number(poolInfo.id)} defaultCollected={poolInfo.ifCollect} />
               )}
             </Box>
-          </>
+          </Stack>
         )}
         {isMD && (
           <Box
@@ -760,7 +761,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
             flexDirection: 'column',
             borderRadius: '0 0 20px 20px',
             alignItems: 'center',
-            paddingBottom: '80px',
+            paddingBottom: isMD ? '0' : '80px',
             paddingTop: '20px',
             background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
           }}
@@ -802,7 +803,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                   {item.chainId ? ChainListMap?.[item.chainId as ChainId]?.name : ''}
                 </Typography>
               </GrayBg>
-              {isDark && (
+              {/* {isDark && (
                 <GrayBg
                   sx={{
                     background: '#20201E',
@@ -811,7 +812,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 >
                   <Typography color={ProjectInfoDarkStyle.Head.PoolTypeColor}>{item.poolTypeName}</Typography>
                 </GrayBg>
-              )}
+              )} */}
               {item.poolTypeName2 && (
                 <GrayBg
                   sx={{
@@ -898,6 +899,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
               gap={24}
               mt={51}
               alignItems={'flex-start'}
+              justifyContent={'center'}
               sx={{
                 width: '100%',
                 '@media(max-width:600px)': isDark
@@ -933,7 +935,7 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
   return (
     <Box
       className={isDark ? ' dark' : ''}
-      mt={isDark ? 0 : 120}
+      mt={isDark ? 0 : 200}
       mb={140}
       sx={{ padding: isDark ? { xs: 0, sm: 72 } : 0, '&.dark': { width: '100%', maxWidth: 1296, margin: '0 auto' } }}
     >
@@ -1090,7 +1092,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
           {Array.isArray(info[currentIdx].info) &&
             info[currentIdx].info.length > 0 &&
             info[currentIdx].info.map((item, index: number) => (
-              <Typography key={'bg' + index} variant={'body1'}>
+              <Typography style={{ width: '100%', wordWrap: 'break-word' }} key={'bg' + index} variant={'body1'}>
                 {item}
               </Typography>
             ))}

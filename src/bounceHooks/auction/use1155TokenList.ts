@@ -16,6 +16,8 @@ export function use1155TokenList(
   const { account } = useActiveWeb3React()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [list, setList] = useState<Response1155Token>({})
+  console.log('false', chainId, isERC721)
+
   useEffect(() => {
     const fun = async () => {
       try {
@@ -136,6 +138,17 @@ export function use1155TokenList(
         setIsLoading(false)
         const nftCollection: Response1155Token = {}
         if (chainId === 5 && isERC721) {
+          nftCollection['0xa3620AcffC7b0dC97875C360946b7847E619596c'] = []
+          nftCollection['0xa3620AcffC7b0dC97875C360946b7847E619596c'].push({
+            balance: '1',
+            contractAddr: '0xa3620AcffC7b0dC97875C360946b7847E619596c',
+            contractName: 'DiamondHand Necklace',
+            description: 'DiamondHand Necklace',
+            image: '',
+            name: 'DiamondHand Necklace',
+            tokenId: '0'
+          })
+
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'] = []
           nftCollection['0x88A481a42feCF5bC3BE2b3F2Cd312C3999Ca32D6'].push({
             balance: '1',
@@ -156,6 +169,42 @@ export function use1155TokenList(
             description: 'english-test',
             image: '',
             name: 'english-test',
+            tokenId: i
+          }))
+        }
+        if (chainId === 31) {
+          nftCollection['0x90D93397Bb0F3880B855Aa6288A067cF34B66Ae6'] = []
+          nftCollection['0x90D93397Bb0F3880B855Aa6288A067cF34B66Ae6'].push({
+            balance: '1',
+            contractAddr: '0x90D93397Bb0F3880B855Aa6288A067cF34B66Ae6',
+            contractName: 'test',
+            description: 'test',
+            image: '',
+            name: 'test',
+            tokenId: '0'
+          })
+          nftCollection['0x066682c54041f46e713E9a87FA5b61Ef466aa1d1'] = []
+          nftCollection['0x066682c54041f46e713E9a87FA5b61Ef466aa1d1'].push({
+            balance: '',
+            contractAddr: '0x066682c54041f46e713E9a87FA5b61Ef466aa1d1',
+            contractName: 'OFFZ',
+            description:
+              "We're excited to announce decentralized auction-as-a-service platform Bounce Finance's integration of ZetaChain's testnet. At ZetaChain, we're on a mission to offer an EVM-compatible L1 blockchain that connects everything. A key part of this goal is providing users an easy and safe way to engage in opportunities across any chain. For Bounce, the partnership brings users the ability to create and participate in diverse types of DeFi auctions from any chain — including the Bitcoin network. To make our partnership reveal fun and interesting, we're giving away an Off-White sneaker to one lucky beta-tester.",
+            image: 'https://arweave.net/phHEiIDd5x9lYifnKURzUK_qAEqq6lEF_UOR6bbqxLM"',
+            name: 'OFFZ',
+            tokenId: '0'
+          })
+        }
+        if (chainId === 29) {
+          const _tempIds = Object.keys(new Array(401).fill(''))
+          _tempIds.shift()
+          nftCollection['0xeaa8b62263cbb81dcd5fa488dcbf8abd6ce119e0'] = _tempIds.map(i => ({
+            balance: '1',
+            contractAddr: '0xeaa8b62263cbb81dcd5fa488dcbf8abd6ce119e0',
+            contractName: 'omni-test',
+            description: 'omni-test',
+            image: '',
+            name: 'omni-test',
             tokenId: i
           }))
         }

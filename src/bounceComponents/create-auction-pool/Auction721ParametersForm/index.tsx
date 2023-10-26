@@ -186,7 +186,7 @@ const Auction721ParametersForm = (): JSX.Element => {
                         startAdornment={<TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={32} />}
                       >
                         <FakeOutlinedInput
-                          disabled
+                          readOnly
                           onClick={() => {
                             if (account) {
                               showTokenDialog(auctionChainId, values, setValues)

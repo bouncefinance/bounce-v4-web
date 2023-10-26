@@ -23,12 +23,12 @@ const BannerSmallItem = styled('img')(() => ({
     opacity: 1
   }
 }))
-const PcBanenr = () => {
+const PcBanenr = ({ bannerList = [P1Img, P2Img, P3Img, P4Img, P5Img] }: { bannerList?: string[] }) => {
   const isSm = useIsSMDown()
   const [slidesPerview, setSlidesPerView] = useState(isSm ? 1 : 2.5)
   const swiper = useSwiper()
   const [swiperInstance, setSwiperInstance] = useState(swiper)
-  const bannerList = [P1Img, P2Img, P3Img, P4Img, P5Img]
+  // const bannerList = [P1Img, P2Img, P3Img, P4Img, P5Img]
   useEffect(() => {
     const setPerview = () => {
       if (isSm) return

@@ -25,11 +25,11 @@ export default function ProductCard({
       img: Icon1
     },
     {
-      text: 'Made In:  Lab-grown',
+      text: 'Made In:  Italy',
       img: Icon2
     },
     {
-      text: 'Diamonds (Carats): 19.82',
+      text: 'Diamonds (Carats): 19.21',
       img: Icon3
     },
     {

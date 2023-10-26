@@ -100,7 +100,9 @@ export const routes = {
     CreateLaunchpad: '/launchpad/create',
     MetaBloxAuction: '/launchpad/metablox',
     SolaceAuction: '/launchpad/solace',
-    CreateProtocolAuction: '/launchpad/create_protocol'
+    CreateProtocolAuction: '/launchpad/create_protocol',
+    IphoneAuctionDetail: '/rwa/iphone15',
+    FinceptorAuction: '/launchpad/finceptor'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
@@ -112,11 +114,20 @@ export const routes = {
   foundo: {
     home: '/foundo/home/index',
     detail: '/foundo/detail/index',
-    foundoDetail: '/foundo/detail',
-    foundoNfcDetail: '/foundo/nfc_detail'
+    foundoDetail: '/rwa/detail',
+    foundoNfcDetail: '/rwa/nfc_detail'
   },
   tokenToolBox: {
-    index: '/TokenToolBox'
+    index: '/TokenToolBox',
+    tokenLocker: '/TokenToolBox/TokenLocker',
+    myLock: '/TokenToolBox/TokenLocker/myLock',
+    tokenLockerInfo: '/TokenToolBox/TokenLockerInfo/:chain/:hash',
+    TokenLPLockerInfo: '/TokenToolBox/TokenLPLockerInfo/:chain/:hash',
+    disperse: '/TokenToolBox/Disperse',
+    tokenMinter: '/TokenToolBox/tokenMinter',
+    tokenMinterInfo: '/TokenToolBox/tokenMinterInfo',
+    tokenMinterList: '/TokenToolBox/tokenMinterList',
+    myDisperse: '/TokenToolBox/MyDisperse'
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'

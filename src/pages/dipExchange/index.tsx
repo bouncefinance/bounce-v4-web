@@ -70,6 +70,22 @@ const DipExchange = () => {
             closeAt: 1692979200000,
             id: 20500
           }
+        },
+        {
+          timaSteamp: 1697451600000,
+          active: 1697451600000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1697451600000,
+            closeAt: 1697637600000,
+            id: 20499
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1697451600000,
+            closeAt: 1697637600000,
+            id: 20789
+          }
         }
       ]
   // last date higt light
@@ -83,7 +99,7 @@ const DipExchange = () => {
   const setShowDataIndex = (index: number) => {
     setDataIndex(index)
   }
-  const [poolType, setPoolType] = useState<PoolIndexType>(PoolIndexType.DIP)
+  const [poolType, setPoolType] = useState<PoolIndexType>(PoolIndexType.DGT)
   const handleSetPoolType = (type: PoolIndexType) => {
     setPoolType(type)
   }

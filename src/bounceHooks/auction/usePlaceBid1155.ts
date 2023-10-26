@@ -1,5 +1,5 @@
 import { FixedSwapNFTPoolProp } from 'api/pool/type'
-import { getUserWhitelistProof } from 'api/user'
+import { getUserPermitSign, getUserWhitelistProof } from 'api/user'
 import { useActiveWeb3React } from 'hooks'
 import { useFixedSwapNftContract } from 'hooks/useContract'
 import { useCallback } from 'react'
@@ -38,22 +38,38 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
         return Promise.reject('no contract')
       }
       let proofArr: string[] = []
+      let _data: any
+      let whiteListType = true
+      let _args: any
 
       if (poolInfo.enableWhiteList) {
-        const {
-          data: { proof: rawProofStr }
-        } = await getUserWhitelistProof({
-          address: account,
-          category: poolInfo.category,
-          chainId: poolInfo.chainId,
-          poolId: String(poolInfo.poolId),
-          tokenType: getTokenType(poolInfo.category)
-        })
+        try {
+          const { data } = await getUserWhitelistProof({
+            address: account,
+            category: poolInfo.category,
+            chainId: poolInfo.chainId,
+            poolId: String(poolInfo.poolId),
+            tokenType: getTokenType(poolInfo.category)
+          })
+          _data = data
+          whiteListType = true
+          const rawProofJson = JSON.parse(_data.rawProofStr)
 
-        const rawProofJson = JSON.parse(rawProofStr)
-
-        if (Array.isArray(rawProofJson)) {
-          proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
+          if (Array.isArray(rawProofJson)) {
+            proofArr = rawProofJson.map(rawProof => `0x${rawProof}`)
+          }
+          _args = [poolInfo.poolId, bid0Amount, proofArr]
+        } catch (error) {
+          const { data } = await getUserPermitSign({
+            address: account,
+            category: poolInfo.category,
+            chainId: poolInfo.chainId,
+            poolId: String(poolInfo.poolId),
+            tokenType: getTokenType(poolInfo.category)
+          })
+          _data = data
+          whiteListType = false
+          _args = [poolInfo.poolId, bid0Amount, data.expiredTime, data.signature]
         }
       }
 
@@ -65,35 +81,64 @@ const usePlaceBid1155 = (poolInfo: FixedSwapNFTPoolProp) => {
         )
       )
 
-      const args = [poolInfo.poolId, bid0Amount, proofArr]
-
-      const estimatedGas = await fixedSwapNFTContract.estimateGas
-        .swap(...args, { value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined })
-        .catch((error: Error) => {
-          console.debug('Failed to swap', error)
-          throw error
-        })
-      return fixedSwapNFTContract
-        .swap(...args, {
-          gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined
-        })
-        .then((response: TransactionResponse) => {
-          addTransaction(response, {
-            summary: `Use ${currencyBid1Amount?.toSignificant()} ${poolInfo.token1.symbol} swap to ${
-              poolInfo.token0.symbol
-            }`,
-            userSubmitted: {
-              account,
-              action: `fixed_price_swap_1155`,
-              key: poolInfo.poolId
+      const args = _args ? _args : [poolInfo.poolId, bid0Amount, []]
+      if (whiteListType) {
+        const estimatedGas = await fixedSwapNFTContract.estimateGas
+          .swap(...args, { value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined })
+          .catch((error: Error) => {
+            console.debug('Failed to swap', error)
+            throw error
+          })
+        return fixedSwapNFTContract
+          .swap(...args, {
+            gasLimit: calculateGasMargin(estimatedGas),
+            value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined
+          })
+          .then((response: TransactionResponse) => {
+            addTransaction(response, {
+              summary: `Use ${currencyBid1Amount?.toSignificant()} ${poolInfo.token1.symbol} swap to ${
+                poolInfo.token0.symbol
+              }`,
+              userSubmitted: {
+                account,
+                action: `fixed_price_swap_1155`,
+                key: poolInfo.poolId
+              }
+            })
+            return {
+              hash: response.hash,
+              transactionReceipt: response.wait(1)
             }
           })
-          return {
-            hash: response.hash,
-            transactionReceipt: response.wait(1)
-          }
-        })
+      } else {
+        const estimatedGas = await fixedSwapNFTContract.estimateGas
+          .swapPermit(...args, { value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined })
+          .catch((error: Error) => {
+            console.debug('Failed to swap', error)
+            throw error
+          })
+        return fixedSwapNFTContract
+          .swapPermit(...args, {
+            gasLimit: calculateGasMargin(estimatedGas),
+            value: isToken1Native ? currencyBid1Amount.raw.toString() : undefined
+          })
+          .then((response: TransactionResponse) => {
+            addTransaction(response, {
+              summary: `Use ${currencyBid1Amount.toSignificant()} ${poolInfo.token1.symbol} swap to ${
+                poolInfo.token0.symbol
+              }`,
+              userSubmitted: {
+                account,
+                action: `fixed_price_swap`,
+                key: poolInfo.poolId
+              }
+            })
+            return {
+              hash: response.hash,
+              transactionReceipt: response.wait(1)
+            }
+          })
+      }
     },
     [
       account,

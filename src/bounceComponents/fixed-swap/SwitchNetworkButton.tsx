@@ -1,14 +1,14 @@
 import { Button } from '@mui/material'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
-const SwitchNetworkButton = ({ targetChain }: { targetChain: number }) => {
+const SwitchNetworkButton = ({ targetChain, style }: { targetChain: number; style?: React.CSSProperties }) => {
   const switchNetwork = useSwitchNetwork()
 
   return (
     <Button
       variant="contained"
       fullWidth
-      sx={{ mt: 24, mb: 12 }}
+      sx={{ mt: 24, mb: 12, ...style }}
       onClick={() => {
         switchNetwork(targetChain)
       }}

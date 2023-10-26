@@ -20,6 +20,14 @@ import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
 import MUTANT_ENGLISH_AUCTION_NFT_ABI from '../constants/abis/mutantEnglishAuctionNFT.json'
 import ENGLISH_AUCTION_ERC20_ABI from '../constants/abis/erc20EnglishAuction.json'
 import DUTCH_AUCTION_NFT_ABI from '../constants/abis/dutchAuction.json'
+import ToolboxERC20TimelockFactory from '../constants/abis/ToolboxERC20TimelockFactory.json'
+import ToolboxERC721TimelockFactory from '../constants/abis/ToolboxERC721TimelockFactory.json'
+import ToolboxERC20VestingFactory from '../constants/abis/ToolboxERC20VestingFactory.json'
+import DISPERSE_ABI from '../constants/abis/Disperse.json'
+import TOKEN_MINTER_ABI from '../constants/abis/ToolboxERC20Factory.json'
+import WithDrawContractABI from '../constants/abis/ToolboxDeployErc20Factory.json'
+import ToolboxDeployERC721Factory from '../constants/abis/ToolboxDeployERC721Factory.json'
+import ToolboxDeployErc20VestingFactory from '../constants/abis/ToolboxDeployErc20VestingFactory.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -27,7 +35,12 @@ import {
   FIXED_SWAP_ERC20_ADDRESSES,
   FIXED_SWAP_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_CONTRACT_ADDRESSES,
-  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES
+  MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
+  TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES,
+  DISPERSE_CONTRACT_ADDRESSES,
+  MINTER_CONTRACT_ADDRESSES,
+  TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES,
+  TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -212,4 +225,61 @@ export function useDutchAuctionContract(address?: string, queryChainId?: ChainId
   const cur = queryChainId || chainId
   const curAddress = address === '' ? undefined : address || (cur ? DUTCH_AUCTION_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, DUTCH_AUCTION_NFT_ABI, true, queryChainId)
+}
+
+// 【token locker】
+//  Cliff,normal (ToolboxERC20TimelockFactory.deployERC20Timelock)
+//  Fragment,stage (ToolboxERC20TimelockFactory.deployERC20MultiTimelock)
+// LP v2 .deployUniswapV2Timelock
+export function useToolboxERC20TimelockFactory(queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, ToolboxERC20TimelockFactory, true, cur)
+}
+// 【token locker】
+//  Linear,line ToolboxERC20VestingFactory.deployERC20Vesting
+export function useToolboxERC20TimelockLineFactory(queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, ToolboxERC20VestingFactory, true, cur)
+}
+//  LP v3 normal: ToolboxERC721TimelockFactory.deployUniswapV3Timelock
+export function useToolboxERC721TimelockFactory(queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, ToolboxERC721TimelockFactory, true, cur)
+}
+// token lock Withdraw contract
+export function useWithDrawContract(contractAddress: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(contractAddress, WithDrawContractABI, true, cur)
+}
+//  erc721 lp lock Withdraw contract
+export function useErc721WithDrawContract(contractAddress: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(contractAddress, ToolboxDeployERC721Factory, true, cur)
+}
+// token lock, linear Withdraw contract vesting erc20
+export function useWithDrawVestingContract(contractAddress: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  return useContract(contractAddress, ToolboxDeployErc20VestingFactory, true, cur)
+}
+export function useDisperseContract(queryChainId: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? DISPERSE_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, DISPERSE_ABI, true, queryChainId)
+}
+
+export function useMinterContract(queryChainId: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? MINTER_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, TOKEN_MINTER_ABI, true, queryChainId)
 }

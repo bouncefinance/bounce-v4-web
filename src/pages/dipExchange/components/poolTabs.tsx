@@ -36,7 +36,7 @@ const PoolTabs = ({
         alignItems: 'center'
       }}
     >
-      <Box
+      {/* <Box
         className={
           new Date().valueOf() >= currenData.dip.startAt && new Date().valueOf() <= currenData.dip.closeAt
             ? 'active'
@@ -81,7 +81,7 @@ const PoolTabs = ({
           {moment(currenData.dip.startAt).format('YYYY-MM-DD HH:mm:ss')} To{' '}
           {moment(currenData.dip.closeAt).format('YYYY-MM-DD HH:mm:ss')}
         </Typography>
-      </Box>
+      </Box> */}
       <Box
         className={
           new Date().valueOf() >= currenData.dgt.startAt && new Date().valueOf() <= currenData.dgt.closeAt

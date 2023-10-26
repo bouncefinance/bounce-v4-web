@@ -101,4 +101,78 @@ const PerformKYCVerification = () => {
     </>
   )
 }
-export default PerformKYCVerification
+
+const UpgradeNotice = () => {
+  const isSm = useBreakpoint('sm')
+  const { pathname } = window.location
+  const isHomeShow = useMemo(() => homeShowList.includes(pathname), [pathname])
+  const isAccountShow = useMemo(() => accountShowList.includes(pathname), [pathname])
+  const isLg = useBreakpoint('lg')
+  return (
+    <>
+      {(isHomeShow || isAccountShow) && !IS_TEST_ENV && (
+        <Box
+          mb={isSm ? 8 : 0}
+          sx={{
+            background: '#F9FCDE',
+            padding: '16px 0',
+
+            marginLeft: isAccountShow && !isLg ? 240 : 'auto',
+            '@media(max-width:1296px)': {
+              marginBottom: 24,
+              '&>div': {
+                marginLeft: 16
+              }
+            }
+          }}
+        >
+          <Stack
+            direction={'row'}
+            sx={{
+              maxWidth: '1400px',
+              margin: '0 auto',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Stack spacing={16} direction={'row'} alignItems={'center'}>
+              <GreeErrSvg />
+              <Box
+                sx={{
+                  color: '#908E96',
+                  '&>span,&': {
+                    fontFamily: 'Inter',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '150%'
+                  }
+                }}
+              >
+                <Typography sx={{ color: '#171717' }} component={'span'}>
+                  We are in the process of enhancing the dapp to improve the user experience. While this upgrade is
+                  underway, there may be temporary service interruptions. Rest assured, we will expedite the upgrade to
+                  deliver an enhanced service experience.
+                  {/* Our{' '}
+                  <a
+                    target="_blank"
+                    href={'https://twitter.com/bounce_finance'}
+                    style={{
+                      color: 'blue'
+                    }}
+                    rel="noreferrer"
+                  >
+                    @bounce_finance
+                  </a>{' '}
+                  Twitter has been hacked; please report any suspicious activity as we resolve this issue. */}
+                </Typography>
+              </Box>
+            </Stack>
+          </Stack>
+        </Box>
+      )}
+    </>
+  )
+}
+
+export default UpgradeNotice
+export { PerformKYCVerification }

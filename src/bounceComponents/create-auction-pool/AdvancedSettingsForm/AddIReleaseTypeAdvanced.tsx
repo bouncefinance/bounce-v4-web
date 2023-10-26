@@ -224,6 +224,9 @@ export const AddIReleaseTypeAdvanced = ({
       then: Yup.string().test('TEST_FRAGMENT_TOTAL', 'Release ratio must add up to 100%', (_, context) => {
         const endTime = context.parent.endTime?.valueOf() || 0
         for (const item of context.parent.fragmentReleaseTimes) {
+          if (Number(item.radio) === 0) {
+            return context.createError({ message: 'Release ratio must more than 0' })
+          }
           if (endTime && item.startAt && (item.startAt?.valueOf() || 0) < endTime) {
             return context.createError({ message: 'Please select a time later than end time' })
           }
@@ -599,7 +602,7 @@ function SetFragmentReleaseTime({
   )
 
   const addOne = useCallback(() => {
-    if (releaseTimes.length <= 29) {
+    if (releaseTimes.length <= 39) {
       setFragmentReleaseTimes([...releaseTimes, { ...defaultFragmentRelease, key: Math.random() }])
     }
   }, [releaseTimes, setFragmentReleaseTimes])

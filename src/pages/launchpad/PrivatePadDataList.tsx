@@ -27,8 +27,8 @@ import DeelanceTokenomics from './imgs/Deelance-Tokenomics.png'
 import DeelanceInvestment from './imgs/deelance-investment.jpg'
 import OpenfabricToken from './imgs/Openfabric-Token.png'
 import DeelanceRevenue from './imgs/deelance-revenue.jpeg'
-import MetaBlox from './imgs/metablox.png'
-import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
+// import MetaBlox from './imgs/metablox.png'
+// import MetaBloxAvatar from './avatar/metabloxAva.jpeg'
 import DipImg from './imgs/dip-img.png'
 import DipAvatar from './avatar/dip.jpg'
 import SolaceImg from './imgs/solace.png'
@@ -37,6 +37,8 @@ import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
 import CreateProtocol from './imgs/CreateProtocol.png'
+// import Finceptor from './imgs/Finceptor.png'
+import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -58,6 +60,7 @@ export interface IPrivatePadProp {
   hideUpcomingCountdown?: true
   poolTypeName: string
   img: string
+  pageInImg?: string
   avatar: string
   title: string
   // status: PoolStatus
@@ -79,7 +82,20 @@ export interface IPrivatePadProp {
   isFAQ?: boolean
   poolTypeName2?: string
 }
-
+const participateProjectInfo: IProjectInfo = {
+  title: 'How to Participate',
+  info: [
+    <a
+      key={1}
+      href="https://docs.bounce.finance/auction-user-guide/fixed-price-auction-guides/participate-in-a-fixed-price-auction"
+      target="_blank"
+      rel="noreferrer"
+      style={{ textDecoration: 'underline', color: 'gray' }}
+    >
+      https://docs.bounce.finance/auction-user-guide/fixed-price-auction-guides/participate-in-a-fixed-price-auction
+    </a>
+  ]
+}
 const DipProjectInfo: IProjectInfo[] = [
   {
     title: 'What is DIP Exchange?',
@@ -123,29 +139,29 @@ const DipProjectInfo: IProjectInfo[] = [
       `Overall, DIP Exchange is a promising new decentralized exchange that offers a number of features that make it a good choice for traders who are looking for a professional risk management environment and a fully decentralized governance mechanism.`
     ]
   },
-  {
-    title: 'DIP Rules',
-    info: [
-      <Stack flexDirection={'column'} gap={10} key={1}>
-        <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
-        <Typography>
-          The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
-          and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
-          on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
-          reached.
-        </Typography>
-        <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
-        <ul style={{ marginTop: 10 }}>
-          <li>Bid Asset: $USDT</li>
-          <li>Starting Price (lowest prices): Preset by DIP DAO</li>
-          <li>Highest Price: Preset by DIP DAO</li>
-          <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
-          <li>Auction Close: Within 24 hours or when token sold out.</li>
-          <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
-        </ul>
-      </Stack>
-    ]
-  },
+  // {
+  //   title: 'DIP Rules',
+  //   info: [
+  //     <Stack flexDirection={'column'} gap={10} key={1}>
+  //       <Typography sx={{ fontSize: 20, fontWeight: 800 }}>DIP ERC20 English Auction</Typography>
+  //       <Typography>
+  //         The ERC20 English Auction is a type of English auction optimized for ERC20. The creator can set the highest
+  //         and lowest prices for the auction, and the auction will start at the lowest price, gradually increasing based
+  //         on the number of auctioned tokens. The auction will not end until the sale is completed or the arrival time is
+  //         reached.
+  //       </Typography>
+  //       <Typography mt={15}>DIP ERC20 English Auction details are as follows:</Typography>
+  //       <ul style={{ marginTop: 10 }}>
+  //         <li>Bid Asset: $USDT</li>
+  //         <li>Starting Price (lowest prices): Preset by DIP DAO</li>
+  //         <li>Highest Price: Preset by DIP DAO</li>
+  //         <li>Auction Price: Current price of purchase (The earlier you participate, the lower the price)</li>
+  //         <li>Auction Close: Within 24 hours or when token sold out.</li>
+  //         <li>Distribution: Immediate after the closing of the auction, need to claim on Bounce</li>
+  //       </ul>
+  //     </Stack>
+  //   ]
+  // },
   {
     title: 'DGT Rules',
     info: [
@@ -172,136 +188,137 @@ const DipProjectInfo: IProjectInfo[] = [
         </ul>
       </Stack>
     ]
-  }
+  },
+  participateProjectInfo
 ]
 const DipTokenMetrics: IProjectInfo[] = [
+  // {
+  //   title: 'DIP Token',
+  //   info: [
+  //     <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
+  //       <Typography>
+  //         <strong>Token Name: </strong> DIP Token
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Token Ticker: </strong> DIP
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Total Supply: </strong> 1,000,000,000
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Token Release: </strong> TBA
+  //       </Typography>
+  //       <Typography>
+  //         <strong>Contract Address: </strong> TBA
+  //       </Typography>
+  //       <Typography>
+  //         DIP is the utility token and the backbone of DIP Exchange. DIP provides multiple benefits within the platform
+  //         and can only be earned through LP staking and trading participation.
+  //       </Typography>
+  //     </Box>,
+  //     <>
+  //       <strong>Benefits of DIP</strong>
+  //       <ul>
+  //         <li>Stake to earn LP tokens. 10% of protocol revenue is rewarded to DIP stakers in LP tokens.</li>
+  //         <li>Burn to get DGT tokens through weekly dutch auction process.</li>
+  //         <li>Pay discounted fees in DIP and burn (TBD by DIP DAO)</li>
+  //         <li>Collateralize and add liquidity to place trade positions (TBD by DIP DAO)</li>
+  //       </ul>
+  //     </>,
+  //     <Box key={1} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
+  //       <strong>How to earn DIP</strong>
+  //       <ul key={1}>
+  //         <li>
+  //           Provide liquidity in any of the LP tokens, rewarding the highest yield to the portion with the highest risk
+  //           (check
+  //           <a href="https://app.dip.exchange/#/earn"> https://app.dip.exchange/#/earn </a>
+  //           for further details).
+  //         </li>
+  //         <li>Participate in the referral programs and invite new traders to the platform.</li>
+  //         <li>Trade frequently and win trading competitions.</li>
+  //       </ul>
+  //     </Box>,
+  //     <>
+  //       <strong>How to earn DIP</strong>
+  //       <Box sx={{ '& .MuiTableCell-root': { color: 'white', borderDottom: 'rgb(227, 232, 237)' } }}>
+  //         <Table sx={{ maxWidth: 650 }} size="small" aria-label="a dense table">
+  //           <TableHead>
+  //             <TableRow>
+  //               <TableCell>Allocation</TableCell>
+  //               <TableCell>Amount</TableCell>
+  //               <TableCell>Percentage</TableCell>
+  //             </TableRow>
+  //           </TableHead>
+  //           <TableBody>
+  //             {[
+  //               { Allocation: 'Liquidity Providers', Amount: '350,000,000', Percentage: '35%' },
+  //               { Allocation: 'Trader Incentive', Amount: '350,000,000', Percentage: '35%' },
+  //               { Allocation: 'DIP DAO', Amount: '100,000,000', Percentage: '10%' },
+  //               { Allocation: 'Team', Amount: '190,000,000', Percentage: '19%' },
+  //               { Allocation: 'Liquidity', Amount: '10,000,000', Percentage: '1%' }
+  //             ].map(row => (
+  //               <TableRow key={row.Allocation} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+  //                 <TableCell align="left">{row.Allocation}</TableCell>
+  //                 <TableCell align="left">{row.Amount}</TableCell>
+  //                 <TableCell align="left">{row.Percentage}</TableCell>
+  //               </TableRow>
+  //             ))}
+  //           </TableBody>
+  //         </Table>
+  //       </Box>
+  //     </>,
+  //     <Box key={2} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
+  //       <strong>DIP Distribution Schedule</strong>
+  //       <ul key={1}>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-lps">Liquidity Providers </a>
+  //           Liquidity Providers are those that provide liquidity in DIP/FTM, Snr DLP, Mezz DLP and Jnr DLP. The
+  //           allocation is distributed on a daily basis across 4 years as additional incentives to the portion of trading
+  //           fees earned.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-traders">
+  //             {' '}
+  //             Trader Incentive{' '}
+  //           </a>
+  //           is budget set aside to incentivize traders who act as a counterparty to liquidity providers. Such reserves
+  //           are expected to be spent through
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/trade-mining-program">
+  //             {' '}
+  //             trade mining program
+  //           </a>
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/referral-system"> referral system </a>
+  //           and
+  //           <a href="https://dip-exchange.gitbook.io/dip/tokenomics/dip-token"> leaderboard</a>. The allocation is
+  //           unlocked across 4 years with the budget controlled by the DIP DAO.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/governance/dip-dao"> DIP DAO </a> is allocated to the
+  //           <a href="https://dip-exchange.gitbook.io/dip/governance/dao-treasury"> DAO treasury </a>, set aside to
+  //           insure the liquidity pools in the case of default. Its DIP allocation will be auctioned through
+  //           <a href="https://dip-exchange.gitbook.io/dip/tokenomics/auctions/dip-fixed-price-auction">
+  //             {' '}
+  //             DIP Fixed-Price Auction{' '}
+  //           </a>
+  //           or sold to strategic investors who wish to take vested exposure in the DIP Ecosystem. All funds collected
+  //           will be held in the DAO treasury and controlled by DGT stakers. The allocation is vested across 4 years on a
+  //           daily basis.
+  //         </li>
+  //         <li>
+  //           <a href="https://dip-exchange.gitbook.io/dip/fundamentals/core-team"> Team </a>allocation is set to
+  //           incentivise core developers and supporters. DIP tokens are vested across 4 years on a monthly basis. Only
+  //           the unlocked team allocation can be used to earn DGT.
+  //         </li>
+  //         <li>
+  //           Liquidity is a small allocation set aside which is fully unlocked to provide sufficient liquidity from day
+  //           1. The allocation will be fully unlocked and be provided as DIP/FTM LP on Spookyswap.
+  //         </li>
+  //       </ul>
+  //     </Box>
+  //   ]
+  // },
   {
-    title: 'DIP Token',
-    info: [
-      <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
-        <Typography>
-          <strong>Token Name: </strong> DIP Token
-        </Typography>
-        <Typography>
-          <strong>Token Ticker: </strong> DIP
-        </Typography>
-        <Typography>
-          <strong>Total Supply: </strong> 1,000,000,000
-        </Typography>
-        <Typography>
-          <strong>Token Release: </strong> TBA
-        </Typography>
-        <Typography>
-          <strong>Contract Address: </strong> TBA
-        </Typography>
-        <Typography>
-          DIP is the utility token and the backbone of DIP Exchange. DIP provides multiple benefits within the platform
-          and can only be earned through LP staking and trading participation.
-        </Typography>
-      </Box>,
-      <>
-        <strong>Benefits of DIP</strong>
-        <ul>
-          <li>Stake to earn LP tokens. 10% of protocol revenue is rewarded to DIP stakers in LP tokens.</li>
-          <li>Burn to get DGT tokens through weekly dutch auction process.</li>
-          <li>Pay discounted fees in DIP and burn (TBD by DIP DAO)</li>
-          <li>Collateralize and add liquidity to place trade positions (TBD by DIP DAO)</li>
-        </ul>
-      </>,
-      <Box key={1} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
-        <strong>How to earn DIP</strong>
-        <ul key={1}>
-          <li>
-            Provide liquidity in any of the LP tokens, rewarding the highest yield to the portion with the highest risk
-            (check
-            <a href="https://app.dip.exchange/#/earn"> https://app.dip.exchange/#/earn </a>
-            for further details).
-          </li>
-          <li>Participate in the referral programs and invite new traders to the platform.</li>
-          <li>Trade frequently and win trading competitions.</li>
-        </ul>
-      </Box>,
-      <>
-        <strong>How to earn DIP</strong>
-        <Box sx={{ '& .MuiTableCell-root': { color: 'white', borderDottom: 'rgb(227, 232, 237)' } }}>
-          <Table sx={{ maxWidth: 650 }} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Allocation</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Percentage</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {[
-                { Allocation: 'Liquidity Providers', Amount: '350,000,000', Percentage: '35%' },
-                { Allocation: 'Trader Incentive', Amount: '350,000,000', Percentage: '35%' },
-                { Allocation: 'DIP DAO', Amount: '100,000,000', Percentage: '10%' },
-                { Allocation: 'Team', Amount: '190,000,000', Percentage: '19%' },
-                { Allocation: 'Liquidity', Amount: '10,000,000', Percentage: '1%' }
-              ].map(row => (
-                <TableRow key={row.Allocation} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align="left">{row.Allocation}</TableCell>
-                  <TableCell align="left">{row.Amount}</TableCell>
-                  <TableCell align="left">{row.Percentage}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </>,
-      <Box key={2} sx={{ '& a': { color: 'rgba(52,109,219,1.00)' } }}>
-        <strong>DIP Distribution Schedule</strong>
-        <ul key={1}>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-lps">Liquidity Providers </a>
-            Liquidity Providers are those that provide liquidity in DIP/FTM, Snr DLP, Mezz DLP and Jnr DLP. The
-            allocation is distributed on a daily basis across 4 years as additional incentives to the portion of trading
-            fees earned.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/getting-started/how-to-start/for-traders">
-              {' '}
-              Trader Incentive{' '}
-            </a>
-            is budget set aside to incentivize traders who act as a counterparty to liquidity providers. Such reserves
-            are expected to be spent through
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/trade-mining-program">
-              {' '}
-              trade mining program
-            </a>
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/roadmap/referral-system"> referral system </a>
-            and
-            <a href="https://dip-exchange.gitbook.io/dip/tokenomics/dip-token"> leaderboard</a>. The allocation is
-            unlocked across 4 years with the budget controlled by the DIP DAO.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/governance/dip-dao"> DIP DAO </a> is allocated to the
-            <a href="https://dip-exchange.gitbook.io/dip/governance/dao-treasury"> DAO treasury </a>, set aside to
-            insure the liquidity pools in the case of default. Its DIP allocation will be auctioned through
-            <a href="https://dip-exchange.gitbook.io/dip/tokenomics/auctions/dip-fixed-price-auction">
-              {' '}
-              DIP Fixed-Price Auction{' '}
-            </a>
-            or sold to strategic investors who wish to take vested exposure in the DIP Ecosystem. All funds collected
-            will be held in the DAO treasury and controlled by DGT stakers. The allocation is vested across 4 years on a
-            daily basis.
-          </li>
-          <li>
-            <a href="https://dip-exchange.gitbook.io/dip/fundamentals/core-team"> Team </a>allocation is set to
-            incentivise core developers and supporters. DIP tokens are vested across 4 years on a monthly basis. Only
-            the unlocked team allocation can be used to earn DGT.
-          </li>
-          <li>
-            Liquidity is a small allocation set aside which is fully unlocked to provide sufficient liquidity from day
-            1. The allocation will be fully unlocked and be provided as DIP/FTM LP on Spookyswap.
-          </li>
-        </ul>
-      </Box>
-    ]
-  },
-  {
-    title: 'DGT  Token',
+    title: 'DGT Token',
     info: [
       <Box key={0} sx={{ display: 'flex', gap: 5, flexDirection: 'column' }}>
         <Typography>
@@ -389,7 +406,8 @@ const DipTokenMetrics: IProjectInfo[] = [
         </ul>
       </Box>
     ]
-  }
+  },
+  participateProjectInfo
 ]
 const SocialBg = styled(Box)`
   display: flex;
@@ -669,17 +687,22 @@ const DeelanceProjectInfo: IProjectInfo[] = [
         <img key={3} src={DeelanceInvestment} />
       </Box>
     ]
-  }
+  },
+  participateProjectInfo
 ]
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 14
+  // current privatePad max keyId is 15
   {
     keyId: 14,
     liveTimeStamp: {
+<<<<<<< HEAD
       start: 1696525200000,
       end: 1696698000000
+=======
+      start: 1698066000000,
+      end: 1698411600000
+>>>>>>> alpha
     },
-    hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
     img: CreateProtocol,
     avatar: CreateProtocolAvatar,
@@ -692,7 +715,48 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     projectInfo: [
       {
         title: 'What is Create Protocol?',
-        info: ['AI powered Web 3 Infrastructure']
+        info: [
+          <>
+            Create Protocol is a complete stack that provides a number of protocols that are building blocks for Web 3.0
+            applications. These protocols include: <br />
+            ⚡️A decentralized identity system that allows users to control their own data and privacy. <br />
+            ⚡️A creative object model that defines the data structure for digital assets. <br />
+            ⚡️A cDapp composer that makes it easy to create and deploy decentralized applications. <br />
+            ⚡️Deagi AI Attribution Engine that allows devs to integrate apps / learning models to the IP repository in
+            a way where IP owners/creators have the control over use of their data and its economic incentivisation.
+          </>
+        ]
+      },
+      {
+        title: 'Advantages',
+        info: [
+          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <li>
+              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
+              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
+              applications that can take advantage of the best features of each blockchain.
+            </li>
+            <li>
+              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
+              secure, reliable, and transparent platform for creators and users.
+            </li>
+            <li>
+              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
+              features, and participate in governance. This gives users more control over their assets.
+            </li>
+            <li>
+              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
+              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
+              decentralized applications.
+            </li>
+            <li>
+              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
+              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
+              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
+              create, share, and monetize content, then the Create Protocol is the platform for you.
+            </li>
+          </ul>
+        ]
       },
       {
         title: 'Tokenomics',
@@ -714,41 +778,47 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'Investment and Partners',
         info: [
-          <div key={1}>
-            <ul>
-              <li>
-                <p>
-                  Investors - Ice Capital (UAE) - <b> Lead investor</b>
-                </p>
-                <p>
-                  Cogitent Ventures (USA) - <b> Co Lead </b>
-                </p>
-              </li>
-            </ul>
-            <div style={{ marginTop: 20 }}>
-              <p>Snowy August Family Office - (Miami)</p>
-              <p>Stanford AI and Web3 club angels (USA)</p>
-              <p>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</p>
-              <p>Hue Nguyen : Ex- SEC USA + Official Advisor (USA)</p>
-              <p>Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )</p>
-              <p>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</p>
-              <p>Kalyan Singh : Co-founder, Lumenci ( Austin )</p>
-              <p>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</p>
-              <p>Sayantan Biswas : Co-founder, UniAcco ( London )</p>
-              <p>Aashish Jindal : Co-founder, GripInvest ( India )</p>
-              <p>Sian Elizabeth : Sian Elizabeth Wellness ( London )</p>
-              <p>Bharat Thakur : Creator - Royal Artist ( Dubai ) </p>
-              <p style={{ margin: '10px 0' }}>and many more. </p>
-              <p>KOL- Waqar Zaka Few Degen KOLs</p>
-              <p>Media Partners -Edge of NFT</p>
-              <p>Big Brands- Binance Polygon</p>
-            </div>
-          </div>
+          <ul key={1}>
+            <li>
+              Investors - Ice Capital ( UAE ) - <strong> Lead investor</strong>
+            </li>
+            <li>
+              <p>
+                Cogitent Ventures ( USA ) - <strong>Co Lead</strong>
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>Snowy August Family Office - ( Miami )</li>
+                <li>Stanford AI and Web3 club angels ( USA )</li>
+                <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
+                <li>
+                  Hue Nguyen : Ex SEC USA + Official Advisor (USA)
+                  <br />
+                  Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
+                </li>
+                <li>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</li>
+                <li>Kalyan Singh : Co-founder, Lumenci ( Austin )</li>
+                <li>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</li>
+                <li>Sayantan Biswas : Co-founder, UniAcco ( London )</li>
+                <li>Aashish Jindal : Co-founder, GripInvest ( India )</li>
+                <li>Sian Elizabeth : Sian Elizabeth Wellness ( London )</li>
+                <li>Bharat Thakur : Creator - Royal Artist ( Dubai )</li>
+              </ul>
+            </li>
+            <li>
+              {/* <div>and many more.</div> */}
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>KOL - Waqar Zaka Few Degen KOLs</li>
+                <li>Media Partners - Edge of NFT</li>
+                <li>Big Brands - Binance Polygon</li>
+              </ul>
+            </li>
+          </ul>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
-    desc: 'AI powered Web 3 Infrastructure.',
+    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
     social: [
       <Link key={0} href="https://www.createprotocol.org/" target="_blank">
         <Web />
@@ -766,6 +836,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>,
       <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
         <Twitter />
+      </Link>,
+      <Link key={7} href="https://discord.com/invite/M2xcC2Cex5" target="_blank">
+        <DiscordSVG />
       </Link>
     ],
     moreData: [
@@ -776,9 +849,267 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    keyId: 15,
+    liveTimeStamp: {
+      start: 1697360400000,
+      end: 1697965200000
+    },
+    // hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    img: 'https://images-v3.bounce.finance/2e48f48ac5a9717b679ca051e8a43c8c-1697094683.png',
+    pageInImg: 'https://images-v3.bounce.finance/2d282148ec8905a28b2157b7641e265a-1697122606.png',
+    avatar: FinceptorAvatar,
+    title: 'Finceptor',
+    chainId: 56,
+    tokenName: '$FINC',
+    whitePaperLink: 'https://docs.finceptor.app/',
+    upcomingLink: '/launchpad/finceptor',
+    liveLink: '/launchpad/finceptor',
+    projectInfo: [
+      {
+        title: 'What is Finceptor?',
+        info: [
+          <Typography key={1}>
+            Finceptor is a DeFi liquidity protocol with a launchpad plug-in, enabling unlaunched and publicly traded
+            tokens to build protocol-owned liquidity – solving DeFi 1.0’s mercenary liquidity problem. Liquidity Mining,
+            providing token incentives to retail liquidity providers (LP), is highly expensive, unsustainable,
+            mercenary, and rented. DeFi needs better liquidity management. We’re building a suite of first-in-the-market
+            liquidity products enabling projects to bootstrap and grow their protocol-owned liquidity – liquidity vaults
+            and bonds. Moreover, we also have our own launchpad plug-in strategically placed to attract top Web3
+            projects and help them grow their liquidity.
+          </Typography>,
+          <Box
+            key={2}
+            sx={{
+              '& ul li': { margin: '5px 0' },
+              '&>ul>li': { marginTop: 15 },
+              '& a': {
+                textDecoration: 'underline',
+                color: 'gray'
+              }
+            }}
+          >
+            <ul>
+              <li>
+                Product Suite
+                <ul>
+                  <li>
+                    <strong> Liquidity Vault</strong> is an on-chain initial liquidity bootstrapping tool to build
+                    protocol-owned liquidity for unlaunched tokens.
+                  </li>
+                  <li>
+                    <strong>Bond</strong> is a structured protocol-owned liquidity growth and token liquidation tool for
+                    publicly traded tokens.
+                  </li>
+                  <li>
+                    <strong>Launchpad</strong> for a strategic token launch and sales arm.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Features
+                <ul>
+                  <li>Social Allocations: Web3 Quest-based allocation distribution.</li>
+                  <li>Credit Protocol: A in-protocol $USDT based credit system powered by $FCT token.</li>
+                  <li>Liquidity 2.0: Protocol-owned liquidity via bonds.</li>
+                  <li>Social/Web2 auth ( coming ).</li>
+                </ul>
+              </li>
+              <li>
+                Highlights
+                <ul>
+                  <li>
+                    Accelerated by{' '}
+                    <a
+                      href="https://turktelekomventures.com.tr//girisimler/tt-pilot-girisimleri/finceptor/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Turk Telekom Ventures,{' '}
+                    </a>
+                    <a href="https://www.denizakvaryum.io/en/all-startups/finceptor" target="_blank" rel="noreferrer">
+                      Neohub{' '}
+                    </a>
+                    and{' '}
+                    <a
+                      href="https://www.brinc.io/blog/brinc-announces-summer-2023-cohort-for-web3-focused-accelerator-programs/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Brinc VC
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    Mainnet live with $300k total volume financed on Avalanche and BNB Chain — $250k subscribed in under
+                    120 hours and $50k subscribed in under 120 seconds (FCFS).
+                  </li>
+                  <li>+6,100 active KYC-verified users in 3 months.</li>
+                  <li>+90,000 community in 3 months.</li>
+                  <li>+250 curated KOLs with 50M reach.</li>
+                  <li>+65 affiliate referral partners.</li>
+                  <li>Battle-tested infrastructure with +10k unique testers and +100k transactions.</li>
+                  <li>
+                    Accelerated by{' '}
+                    <a href="https://www.brinc.io/blockchain/" target="_blank" rel="noreferrer">
+                      ZK Advancer S-23
+                    </a>
+                    , Brinc's Web3 accelerator backed by Animoca Brands.
+                  </li>
+                  <li>
+                    Accelerated and received financial support{' '}
+                    <a href="https://www.brinc.io/blockchain/" target="_blank" rel="noreferrer">
+                      from{' '}
+                    </a>
+                    <a
+                      href="https://www.f6s.com/polygon-hypernest-defi-accelerator-2023"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {' '}
+                      Polygon Labs Hypernest DeFi
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    Incubated by <strong> Yapı Kredi</strong>, one of Turkey's largest private banks, in partnership
+                    with Ava Labs.
+                  </li>
+                  <li>
+                    Received financial and platform grants from <strong>Alchemy WAGBI</strong>, Microsoft for Startups,
+                    Google for Web3 Startups, BNB Chain Kickstart, and Startup with Chainlink.
+                  </li>
+                  <li>Audited by Peckshield.</li>
+                  <li>Market Making by Kairon Labs.</li>
+                </ul>
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            <Typography>
+              <strong>Public Round is Subject to Change</strong>
+            </Typography>
+            <a
+              href="https://docs.google.com/spreadsheets/d/1_43S6DusKa_5C_AlWYsqJOCSVNesFnd73ekNG1aPLxw/edit#gid=290952973"
+              target="_blank"
+              rel="noreferrer"
+            >
+              https://docs.google.com/spreadsheets/d/1_43S6DusKa_5C_AlWYsqJOCSVNesFnd73ekNG1aPLxw/edit#gid=290952973
+            </a>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& ul li': { margin: '10px 0' },
+              '& a': {
+                textDecoration: 'underline',
+                color: 'gray'
+              }
+            }}
+          >
+            <ul>
+              <li>
+                {' '}
+                <strong>Investors/Cap table: </strong> Brinc VC, Evox Capital, Keiretsu Forum, Q Angels, IBSS, and
+                Hypernest DAO.
+              </li>
+              <li>
+                <strong>Strategic partners/Supporters:</strong>
+                <a href="https://twitter.com/BNBCHAIN/status/1698788021624263021?s=20" target="_blank" rel="noreferrer">
+                  {' '}
+                  BNB Chain{' '}
+                </a>
+                , Polygon, Neohub,{' '}
+                <a
+                  href="https://x.com/SpaceIDProtocol/status/1705886980146421766?s=20"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Space ID
+                </a>{' '}
+                , Chainlink Labs, Shardeum.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <Box key={1} sx={{ '& ul li': { margin: '5px 0' } }}>
+            <ul>
+              <li>
+                Peckshield:{` `}
+                <a
+                  href="https://docs.finceptor.app/fundamentals/audit"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  https://docs.finceptor.app/fundamentals/audit
+                </a>
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      participateProjectInfo
+    ],
+    tokenMetrics: [],
+    desc: 'Finceptor is a multi-chain liquidity and community growth platform for unlaunched and publicly-traded tokens through liquidity vaults and DeFi bonds.',
+    social: [
+      <Link key={0} href="https://finceptor.app/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://finceptorapp.medium.com/" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      // <Link
+      //   key={5}
+      //   sx={{ width: '43px !important', height: '43px !important' }}
+      //   href="https://www.instagram.com/create.protocol/?hl=en"
+      //   target="_blank"
+      // >
+      //   <InstagramSvg width={43} height={43} />
+      // </Link>,
+      <Link key={6} href="https://twitter.com/FinceptorApp" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={7} href="https://discord.com/invite/finceptor" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={8} href="https://finceptorapp.medium.com/" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$FINC' },
+      { title: 'Token Price', content: '0.05 USDT' },
+      { title: 'Token Amount', content: '1,000,000' },
+      { title: 'Blockchain', content: 'BNB' }
+    ]
+  },
+  {
     keyId: 13,
     liveTimeStamp: {
-      start: 1695139200000,
+      start: 1690672533200000,
       end: 0
     },
     hideUpcomingCountdown: true,
@@ -820,7 +1151,32 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'Parataxis Capital, LD capital, Prycto, StableLab, Stake capital, Julien Bouteloup (StakeDAO), Sandeep Nailwal (Polygon), Illia Polosukhin (Near), Evgeny Yurtaev (Zerion), Alex Shevchenko (Aurora), Aleksander Larsen and Jeffrey Zirlin (Axie Infinity), Seth Ginns (Coinfund), Kiril Nikolov (Nexo) — investors; Preston van Loon (Offchain Labs), Cameron Dennis (Near), Gustav Arentoft (1Inch), Arjun Kalsy (Mantle) — advisors; Ajna — partner'
         ]
-      }
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <Box key={1} sx={{ '& ul li': { margin: '5px 0' } }}>
+            <ul>
+              <li>
+                Code4rena in October; Ajna's contracts were audited by quantstamp, sherlock and code4rena
+                <ul>
+                  <li>
+                    <a
+                      href="https://github.com/ajna-finance/audits"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ textDecoration: 'underline' }}
+                    >
+                      https://github.com/ajna-finance/audits
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Solace is a DeFi protocol built on top of Ajna protocol. Solace introduces veTokenomics on a set of markets across Ajna, purposefully created to accept derivatives as collateral for borrowing ETH (or stablecoins). By implementing this integration, Solace Protocol encourages the influx of liquidity into derivatives lending markets, enabling enhanced risk ad yield strategies.',
@@ -842,67 +1198,67 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-  {
-    keyId: 12,
-    liveTimeStamp: {
-      start: 16908668000000,
-      end: 16908668000000
-    },
-    hideUpcomingCountdown: true,
-    poolTypeName: 'Fixed Swap Auction',
-    img: MetaBlox,
-    avatar: MetaBloxAvatar,
-    title: 'MetaBlox',
-    chainId: 1,
-    tokenName: '$MTBX',
-    whitePaperLink: 'https://drive.google.com/file/d/1TqN0LbGkcOomz3hT-T38InSnJZV8GRrR/view',
-    upcomingLink: '/launchpad/metablox',
-    liveLink: '/launchpad/metablox',
-    projectInfo: [
-      {
-        title: 'What is MetaBlox?',
-        info: [
-          'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
-          `MetaBlox offers access to 3,000,000 WiFi mining locations on Day 1, and aims to expand this network to 6,000,000 mining locations by 2025. As of Apr 2023, 2,500 miners was active. Metablox@ONE dapp is already the top 3 gas burners in Harmony One.
-          MetaBlox is the only web3 project that was officially listed into WiFi Standard by the WBA(Wireless Broadband Alliance), together with Cisco, Google etc. By incentivizing WiFi and Cellular with web3, MetaBlox is leading the industry transformation, making global WiFi roaming a reality.`
-        ]
-      },
-      {
-        title: 'Investment and Partners',
-        info: [
-          <Box key={1}>
-            <Typography sx={{ fontSize: 18, fontWidth: 700 }}>Seed Round:</Typography>
-            <Typography mt={10}>
-              MetaBlox has raised $3 million in funding from various prominent investors and institutions. These include
-              Synergies, Collab+Currency, SNZ, Harmony ONE, Future Life, NFT Tech, Airswift, and Slope.
-            </Typography>
-          </Box>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
-    social: [
-      <Link key={0} href="http://metablox.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={2} href="https://discord.com/invite/metablox" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={4} href="https://t.me/ChatonMetaBloxCommunity" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      <Link key={6} href="https://twitter.com/metablox" target="_blank">
-        <Twitter />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$MTBX' },
-      { title: 'Token Price', content: '0.03' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Ethereum' }
-    ]
-  },
+  // {
+  //   keyId: 12,
+  //   liveTimeStamp: {
+  //     start: 16908668000000,
+  //     end: 16908668000000
+  //   },
+  //   hideUpcomingCountdown: true,
+  //   poolTypeName: 'Fixed Swap Auction',
+  //   img: MetaBlox,
+  //   avatar: MetaBloxAvatar,
+  //   title: 'MetaBlox',
+  //   chainId: 1,
+  //   tokenName: '$MTBX',
+  //   whitePaperLink: 'https://drive.google.com/file/d/1TqN0LbGkcOomz3hT-T38InSnJZV8GRrR/view',
+  //   upcomingLink: '/launchpad/metablox',
+  //   liveLink: '/launchpad/metablox',
+  //   projectInfo: [
+  //     {
+  //       title: 'What is MetaBlox?',
+  //       info: [
+  //         'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+  //         `MetaBlox offers access to 3,000,000 WiFi mining locations on Day 1, and aims to expand this network to 6,000,000 mining locations by 2025. As of Apr 2023, 2,500 miners was active. Metablox@ONE dapp is already the top 3 gas burners in Harmony One.
+  //         MetaBlox is the only web3 project that was officially listed into WiFi Standard by the WBA(Wireless Broadband Alliance), together with Cisco, Google etc. By incentivizing WiFi and Cellular with web3, MetaBlox is leading the industry transformation, making global WiFi roaming a reality.`
+  //       ]
+  //     },
+  //     {
+  //       title: 'Investment and Partners',
+  //       info: [
+  //         <Box key={1}>
+  //           <Typography sx={{ fontSize: 18, fontWidth: 700 }}>Seed Round:</Typography>
+  //           <Typography mt={10}>
+  //             MetaBlox has raised $3 million in funding from various prominent investors and institutions. These include
+  //             Synergies, Collab+Currency, SNZ, Harmony ONE, Future Life, NFT Tech, Airswift, and Slope.
+  //           </Typography>
+  //         </Box>
+  //       ]
+  //     }
+  //   ],
+  //   tokenMetrics: [],
+  //   desc: 'MetaBlox is building an omni chain and decentralized WiFi OpenRoaming network powered by the latest telecommunications and Web3 technologies. Through the integration of Decentralized Identifiers (DID) and WiFi, users can connect to WiFi networks without the hassle of passwords or usernames. Metablox is better than Helium because it uses innovative Mining Mechanism: Proof-of-Service and Proof-of-Validation to encourage service in polulated and crowded metro areas.',
+  //   social: [
+  //     <Link key={0} href="http://metablox.io/" target="_blank">
+  //       <Web />
+  //     </Link>,
+  //     <Link key={2} href="https://discord.com/invite/metablox" target="_blank">
+  //       <DiscordSVG />
+  //     </Link>,
+  //     <Link key={4} href="https://t.me/ChatonMetaBloxCommunity" target="_blank">
+  //       <img src={Telegram} width={40} />
+  //     </Link>,
+  //     <Link key={6} href="https://twitter.com/metablox" target="_blank">
+  //       <Twitter />
+  //     </Link>
+  //   ],
+  //   moreData: [
+  //     { title: 'Token Name', content: '$MTBX' },
+  //     { title: 'Token Price', content: '0.03' },
+  //     { title: 'Token Amount', content: 'TBD' },
+  //     { title: 'Blockchain', content: 'Ethereum' }
+  //   ]
+  // },
   {
     keyId: 11,
     liveTimeStamp: {
@@ -947,20 +1303,20 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'BASE' }
     ],
     privatePrices: [
-      {
-        title: ['DIP Auction Method'],
-        value: ['ERC20 English Auction']
-      },
-      {
-        title: ['DIP Token Offered'],
-        value: 'TBD $DIP'
-      },
+      // {
+      //   title: ['DIP Auction Method'],
+      //   value: ['ERC20 English Auction']
+      // },
+      // {
+      //   title: ['DIP Token Offered'],
+      //   value: 'TBD $DIP'
+      // },
       {
         title: ['DGT Token Offered'],
         value: 'TBD $DGP'
       },
       {
-        title: ['DIP Auction Method'],
+        title: ['DGT Auction Method'],
         value: 'ERC20 Dutch Auction'
       }
     ],
@@ -1114,7 +1470,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             <a href="https://openfabric.ai/#openfabric-partners">https://openfabric.ai/#openfabric-partners</a>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Openfabric AI is a decentralized Layer 1 AI protocol for building and connecting AI applications where we have harnessed the power of blockchain, advanced cryptography, and novel infrastructure to create a new foundation for AI-Apps. In our ecosystem, everyone has quick, easy, low-cost, and hassle-free access to powerful AIs.',
@@ -1204,7 +1561,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </li>
           </ul>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'LasMeta is an AI-powered "Virtual Reality" Poker Gaming Metaverse that merges blockchain technology, Polygon Network, and Unreal Engine 5 to deliver an unmatched and free-to-play gaming experience. By leveraging the power of NFTs, utility token, and the immersive Metaverse, we are transforming the gaming landscape. LasMeta, empowers players to truly own their in-game assets, participate in vibrant player-driven economies, and shape their own destinies within a dynamic virtual world.',
@@ -1292,7 +1650,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </Typography>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
@@ -1383,7 +1742,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </Typography>
           </Box>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Typelt is the first project to introduce the "type-to-earn" concept. It is opening up a new opportunity in the Web3 world, bringing the earning aspect to this simple day-to-day activity.',
@@ -1449,7 +1809,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           '- 5 month linear vesting. (1.00% monthly)',
           '- 18 month linear vesting. (5.00% monthly).'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
@@ -1548,7 +1909,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             />
           </Link>
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [],
     desc: 'Omega is building a real-yield multi level system. With OMG and veOMG people can earn double reward USDT and ETH. Our nontradeable veOMG people can earn double reward and participate in our dao decision making. We inplemented NFT boosted staking into our ecosystem so people can boost their earnings.',
@@ -1619,7 +1981,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'The team raised a small round from angel investors and degen groups for game development and working capital.'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
@@ -1715,7 +2078,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'The team raised a small round from angel investors and degen groups for game development and working capital.'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {
@@ -1811,7 +2175,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           'The team raised a small round from angel investors and degen groups for game development and working capital.'
         ]
-      }
+      },
+      participateProjectInfo
     ],
     tokenMetrics: [
       {

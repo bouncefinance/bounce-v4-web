@@ -1,7 +1,7 @@
 import { SxProps } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { FixedSwapPoolParams } from 'bounceComponents/fixed-swap-nft/MainBlock/UserMainBlock'
-import useIsUserInWhitelist from 'bounceHooks/auction/useIsUserInWhitelist'
+import { useIsUserInAllWhitelist } from 'bounceHooks/auction/useIsUserInWhitelist'
 import { PoolType } from 'api/pool/type'
 import { Dots } from 'themes'
 import { CurrencyAmount } from 'constants/token'
@@ -27,8 +27,10 @@ const PlaceBidButton = ({
   poolInfo,
   loading
 }: PlaceBidButtonProps & FixedSwapPoolParams): JSX.Element => {
-  const { data: isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInWhitelist(
-    poolInfo,
+  const { isUserInWhitelist, loading: isCheckingWhitelist } = useIsUserInAllWhitelist(
+    poolInfo.chainId,
+    poolInfo.poolId,
+    poolInfo.enableWhiteList,
     PoolType.fixedSwapNft
   )
 

@@ -135,6 +135,7 @@ const transparentRoutes = [
   routes.thirdPart.OpenfabricAuction,
   routes.thirdPart.DeelanceAuction,
   routes.thirdPart.LasMetaAuction,
+  routes.thirdPart.CreateProtocolAuction,
   routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange,
   routes.launchpad.account.launchpadParty,
