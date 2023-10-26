@@ -61,25 +61,27 @@ const Tab = styled(Box)`
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  padding: 24px;
   gap: 10px;
-  width: 240px;
-  height: 76px;
+  width: fit-content;
+  height: fit-content;
+  padding: 8px 20px;
   background: transparent;
+  color: #959595;
 
   &.active {
-    background: #ffffff;
-    border-radius: 10px 10px 0 0;
+    background: var(--ps-yellow-1);
+    border-radius: 100px;
   }
 
   &:hover {
-    background: var(--ps-yellow-1);
-    border-radius: 10px 10px 0 0;
+    //background: var(--ps-yellow-1);
+    //border-radius: 10px 10px 0 0;
+    color: #121212;
   }
 
   &.active:hover {
-    background: #ffffff;
-    border-radius: 10px 10px 0 0;
+    background: var(--ps-yellow-1);
+    border-radius: 100px;
   }
 
   @media (max-width: 600px) {
@@ -202,6 +204,14 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           >
             {props.index}
           </H7Gray>
+        </CenterRow>,
+        <CenterRow
+          key={0}
+          onClick={() => props.navigate(url)}
+          sx={{
+            cursor: 'pointer'
+          }}
+        >
           <Avatar
             src={
               props.token0?.largeUrl
@@ -321,7 +331,7 @@ export const AuctionRankCard: React.FC = () => {
   const action = Tabs.indexOf(currentTab) + 1
   const [chainFilter, setChainFilter] = useState<number>(0)
   const navigate = useNavigate()
-  const TableHeader = isSm ? ['Auction', 'Status'] : ['Auction', 'Asset', 'Auction', 'Status']
+  const TableHeader = isSm ? ['Auction', 'Status'] : ['#', 'Auction', 'Asset', 'Auction Type', 'Status']
   const { data } = useRequest(
     async () => {
       const resp = await getPoolsFilter({
@@ -364,7 +374,14 @@ export const AuctionRankCard: React.FC = () => {
     <Row
       mr={20}
       sx={{
-        width: isSm ? 470 : 'auto'
+        display: 'flex',
+        padding: '4px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: isSm ? 470 : 'auto',
+        height: 'auto',
+        borderRadius: 100,
+        border: '1px solid #E4E4E4'
       }}
     >
       {Tabs.map((tab, idx) => (
@@ -424,7 +441,6 @@ export const AuctionRankCard: React.FC = () => {
           sx={{
             padding: '12px',
             display: 'flex',
-            background: 'white',
             overflowX: 'scroll',
             borderRadius: isSm ? 0 : '0px 30px 30px 30px',
             '&::-webkit-scrollbar': {
@@ -436,34 +452,35 @@ export const AuctionRankCard: React.FC = () => {
             header={TableHeader}
             rows={
               data
-                ? data.list?.slice(0, Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>
+                ? data.list?.map((d: any, idx: number) =>
                     AuctionRow({
                       isSm: isSm,
                       ...d,
                       index: idx + 1,
                       opt: optionDatas,
-                      navigate
+                      navigate,
+                      variant: 'gray'
                     })
                   )
                 : []
             }
           />
-          <CustomMobileTable
-            header={TableHeader}
-            rows={
-              data
-                ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>
-                    AuctionRow({
-                      isSm: isSm,
-                      ...d,
-                      index: Math.ceil(data.list.length / 2) + idx + 1,
-                      opt: optionDatas,
-                      navigate
-                    })
-                  )
-                : []
-            }
-          />
+          {/*<CustomMobileTable*/}
+          {/*  header={TableHeader}*/}
+          {/*  rows={*/}
+          {/*    data*/}
+          {/*      ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>*/}
+          {/*          AuctionRow({*/}
+          {/*            isSm: isSm,*/}
+          {/*            ...d,*/}
+          {/*            index: Math.ceil(data.list.length / 2) + idx + 1,*/}
+          {/*            opt: optionDatas,*/}
+          {/*            navigate*/}
+          {/*          })*/}
+          {/*        )*/}
+          {/*      : []*/}
+          {/*  }*/}
+          {/*/>*/}
         </Box>
       ) : data?.list && data?.list?.length === 0 ? (
         <Box

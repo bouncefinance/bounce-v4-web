@@ -35,14 +35,12 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
     <Box
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
       sx={{
+        width: isSm ? '198px' : '240px',
         display: 'flex',
-        padding: '16px',
         cursor: 'pointer',
-        width: 'fit-content',
-        gap: '20px',
         background: '#FFFFFF',
         borderRadius: '20px',
-        flexDirection: 'row',
+        flexDirection: 'column',
         [theme.breakpoints.down('md')]: {
           flexDirection: 'column',
           height: '364px',
@@ -54,17 +52,17 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
     >
       <img
         style={{
-          width: isSm ? '198px' : '150px',
-          height: isSm ? '198px' : '150px',
-          borderRadius: '14px',
+          width: isSm ? '198px' : '240px',
+          height: isSm ? '198px' : '180px',
+          borderRadius: '14px 14px 0 0',
           marginLeft: isSm ? '-2px' : 0
         }}
         src={props.img ? props.img : EmptyImg}
       />
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
-        <Box mb={16} sx={{ wordBreak: 'break-all' }}>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} padding={'16px'}>
+        <Box sx={{ wordBreak: 'break-all' }}>
           <Stack flexDirection={'row'} alignItems={'center'} gap={8}>
-            <VerifiedIcon ifKyc={props.ifKyc} />
+            {props.ifKyc && <VerifiedIcon ifKyc={props.ifKyc} />}
             <H5
               sx={{
                 width: 'calc(100% - 24px - 8px)',
@@ -79,30 +77,28 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
             </H5>
           </Stack>
 
-          <SmallText
-            sx={{
-              color: '#1B1B1B66',
-              display: '-webkit-box',
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}
-          >
-            {/* to remain space of description  */}
-            {props.desc || '\u00A0'}
-          </SmallText>
+          {/*<SmallText*/}
+          {/*  sx={{*/}
+          {/*    color: '#1B1B1B66',*/}
+          {/*    display: '-webkit-box',*/}
+          {/*    WebkitLineClamp: 1,*/}
+          {/*    WebkitBoxOrient: 'vertical',*/}
+          {/*    overflow: 'hidden',*/}
+          {/*    textOverflow: 'ellipsis'*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  /!* to remain space of description  *!/*/}
+          {/*  {props.desc || '\u00A0'}*/}
+          {/*</SmallText>*/}
         </Box>
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
-            padding: '16px 20px',
+            marginTop: '16px',
             gap: '24px',
             height: 'fit-content',
-            background: '#F6F7F3',
-            borderRadius: '6px',
             [theme.breakpoints.down('md')]: {
               gap: '12px',
               padding: '8px 12px',
@@ -111,11 +107,11 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
           }}
         >
           <Box>
-            <SmallText>Auctions Created</SmallText>
+            <SmallText sx={{ color: '#1B1B1B99' }}>Auctions Created</SmallText>
             <H5>{props.createdCount}</H5>
           </Box>
           <Box>
-            <SmallText>Participated</SmallText>
+            <SmallText sx={{ color: '#1B1B1B99' }}>Participated</SmallText>
             <H5>{props.participated}</H5>
           </Box>
         </Box>
@@ -167,7 +163,7 @@ export const ActiveUser: React.FC = () => {
   console.log('data')
   console.log(data)
 
-  const slideCardWidth = isSm ? 230 : 442
+  const slideCardWidth = isSm ? 230 : 260
   const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / slideCardWidth)
   useEffect(() => {
     const resetView = () => {

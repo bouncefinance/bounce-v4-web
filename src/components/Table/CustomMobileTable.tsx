@@ -102,7 +102,7 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
   fontSize?: string
 }>(({ variant, theme }) => ({
   height: 80,
-  borderRadius: '16px',
+  borderRadius: '12px',
   overflow: 'hidden',
   position: 'relative',
   whiteSpace: 'pre',
