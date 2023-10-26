@@ -17,7 +17,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
     },
     {
       label: 'Diamonds (Carats) ',
-      value: '19.82 Carats',
+      value: '19.21 Carats',
       img: Icon3
     },
     {
@@ -27,7 +27,7 @@ export default function FundoInfo({ animationRatio }: { animationRatio?: string 
     },
     {
       label: 'Made In',
-      value: 'Lab-grown',
+      value: 'Italy',
       img: Icon2
     },
     {

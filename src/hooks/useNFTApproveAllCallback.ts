@@ -9,7 +9,7 @@ import { useActiveWeb3React } from '.'
 import { useERC721Contract } from './useContract'
 import useModal from './useModal'
 
-function useGetApproved(contract: Contract | undefined, spender: string | undefined) {
+export function useGetApproved(contract: Contract | undefined, spender: string | undefined) {
   const { account } = useActiveWeb3React()
   const res = useSingleCallResult(account ? contract : null, 'isApprovedForAll', [account || '', spender])
   return useMemo(() => {

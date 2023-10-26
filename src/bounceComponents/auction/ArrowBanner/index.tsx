@@ -326,16 +326,16 @@ export function Banner({ banner }: { banner: BannerType }) {
         cursor: 'pointer',
         position: 'relative',
         '@media(min-width:1440px)': {
-          height: isSm ? '400px' : 'calc(100vh - 57px)'
+          height: isSm ? '400px' : '460px'
         },
         '@media(min-width:1920px)': {
-          height: isSm ? '400px' : '800px'
+          height: isSm ? '400px' : '629px'
         },
         '@media(min-width:2560px)': {
-          height: isSm ? '400px' : '1065px'
+          height: isSm ? '400px' : '857px'
         },
         '@media(min-width:3840px)': {
-          height: isSm ? '400px' : '1596px'
+          height: isSm ? '400px' : '1313px'
         }
       }}
       onClick={() => handleClick(banner.url || '')}

@@ -19,8 +19,8 @@ import { useIsSMDown } from 'themes/useTheme'
 import { useCallback, useState } from 'react'
 import CenterSeciont from '../thirdPart/foundoComponents/centerSection'
 import { useMutantEnglishAuctionPool } from 'hooks/useMutantEnglishAuctionPool'
-import ActionHistory from './foundoComponents/snippet/auctionHistory'
-import { useParams } from 'react-router-dom'
+// import ActionHistory from './foundoComponents/snippet/auctionHistory'
+// import { useParams } from 'react-router-dom'
 import Footer from 'bounceComponents/common/Footer'
 import Image from 'components/Image'
 import authenticationDefalut from 'assets/imgs/thirdPart/foundoDetail/authentication-defalut.png'
@@ -61,6 +61,8 @@ const NewTabs = styled(Tabs)(({ theme }) => ({
   }
 }))
 
+export const G_FOUNDO_ID = 18406
+
 const FoundoBidDetail = () => {
   const isSm = useIsSMDown()
   const [tabIndex, setTabIndex] = useState(0)
@@ -68,9 +70,9 @@ const FoundoBidDetail = () => {
     setTabIndex(newValue)
   }, [])
   const tabList = [
-    {
-      label: 'Auction History'
-    },
+    // {
+    //   label: 'Auction History'
+    // },
     {
       label: 'Product Description'
     },
@@ -93,12 +95,12 @@ const FoundoBidDetail = () => {
     {
       img: Icon2,
       label: 'Diamonds (Carats) ',
-      value: '8.81'
+      value: '19.21'
     },
     {
       img: Icon3,
       label: 'Material',
-      value: 'White gold'
+      value: '18k White gold'
     },
     {
       img: Icon4,
@@ -107,14 +109,13 @@ const FoundoBidDetail = () => {
     },
     {
       img: Icon5,
-      label: 'Dimension',
-      value: '40.5 cm'
+      label: 'Necklace length',
+      value: '50 cm'
     }
   ]
 
-  const { '*': sysId } = useParams()
-  const { data: poolInfo } = useMutantEnglishAuctionPool(sysId && isFinite(Number(sysId)) ? Number(sysId) : 20346)
-  console.log('🚀 ~ file: foundoBidDetail.tsx:111 ~ FoundoBidDetail ~ poolInfo:', poolInfo)
+  // const { '*': sysId } = useParams()
+  const { data: poolInfo } = useMutantEnglishAuctionPool(G_FOUNDO_ID)
   if (!poolInfo) return <></>
   return (
     <Box
@@ -150,8 +151,8 @@ const FoundoBidDetail = () => {
         ))}
       </NewTabs>
       <CenterSeciont>
-        {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />}
-        {tabIndex === 1 && (
+        {/* {tabIndex === 0 && <ActionHistory poolInfo={poolInfo} />} */}
+        {tabIndex === 0 && (
           <Stack
             direction={'row'}
             sx={{
@@ -216,7 +217,7 @@ const FoundoBidDetail = () => {
             </Box>
           </Stack>
         )}
-        {tabIndex === 2 && (
+        {tabIndex === 1 && (
           <Box sx={{ width: '100%', paddingTop: isSm ? 0 : 120 }}>
             <Typography width={320} sx={{ color: '#fff', mt: 16, fontSize: { xs: 16, sm: 36 } }}>
               Authentication
@@ -226,7 +227,7 @@ const FoundoBidDetail = () => {
             </Box>
           </Box>
         )}
-        {tabIndex === 3 && (
+        {tabIndex === 2 && (
           <Stack
             direction={'row'}
             sx={{
@@ -273,7 +274,7 @@ const FoundoBidDetail = () => {
             </Box>
           </Stack>
         )}
-        {tabIndex === 4 && (
+        {tabIndex === 3 && (
           <Stack
             direction={'row'}
             sx={{

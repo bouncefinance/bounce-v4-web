@@ -45,6 +45,11 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     '/TokenAuction': 'Token Auction',
     '/NFTAuction': 'NFT Auction'
   }
+  const botTabMap: { [key: string]: string } = {
+    '/TelegramBot/home': 'Telegram bot',
+    '/TelegramBot/guide': 'Telegram bot',
+    '/TelegramBot/create': 'Telegram bot'
+  }
   const tabs = [
     'All',
     'Private Launchpad',
@@ -52,6 +57,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     'Real World Collectibles Auction',
     'Ads Auction',
     'Token ToolBox',
+    'Telegram bot',
     'Bounce Loyalty program'
   ]
   const auctionTabs = Object.values(auctionTabMap)
@@ -59,10 +65,12 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
   const getPath = () => {
     const path = location.pathname
     if (auctionTabMap[path]) return auctionTabMap[path]
+    if (botTabMap[path]) return botTabMap[path]
     if (tabsMap[path]) return tabsMap[path]
     return 'All'
   }
   const [currentTab, setCurrentTab] = useState(getPath())
+  console.log('currentTab', currentTab)
 
   const linkTo = (route: string) => {
     switch (route) {
@@ -86,6 +94,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         break
       case 'Token ToolBox':
         navigate(routes.tokenToolBox.index)
+        break
+      case 'Telegram bot':
+        navigate(routes.telegramBot.index)
         break
       case 'Bounce Loyalty program':
         navigate(routes.loyaltyprogram.index)

@@ -298,6 +298,7 @@ const ZataShop = () => {
                 <span>
                   , developers can build true omnichain dApps from a single point of logic, and users can access all of
                   their assets, data, and liquidity in a single place, securely. <br />
+                  <br />
                   Follow ZetaChain on Twitter{' '}
                   <a
                     style={{

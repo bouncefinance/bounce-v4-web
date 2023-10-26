@@ -5,7 +5,7 @@ import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
 
-BigNumber.config({ EXPONENTIAL_AT: [-7, 40] })
+BigNumber.config({ EXPONENTIAL_AT: [-10, 40] })
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'
@@ -48,8 +48,11 @@ import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 
 import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
-import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpad'
-
+import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpadComing'
+import TelegramBot from 'pages/tgBot/index'
+import TelegramBotGuide from 'pages/tgBot/guider'
+import TelegramBotCreate from 'pages/tgBot/create'
+import TelegramBotHome from 'pages/tgBot/home'
 import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
 import FundoHome from 'pages/fundo/home'
 import FundoDetail from 'pages/fundo/detail'
@@ -72,23 +75,34 @@ import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
+import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
-import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
+// import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
 import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
 import BounceShop from './realWorldAuction/shop/bounce'
 import FoundoShop from './realWorldAuction/shop/foundo'
 import TokenToolBox from './tokenToolBox'
+import TokenLocker from './tokenToolBox/page/tokenlocker/tokenLocker'
 import Loyaltyprogram from './loyaltyprogram'
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
-import MetaBlox from './projectIntro/MetaBloxProjectInfo'
+// import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import LaunchpadDetail from './launchpad/detail'
 import Party from './launchpad/detail/party'
 import ZataShop from './realWorldAuction/shop/zeta'
+import IphoneDetail from './thirdPart/iphoneDetail'
+import Disperse from './tokenToolBox/page/disperse/disperse'
+import MyDisperse from './tokenToolBox/page/disperse/myDiperse'
+import TokenMinter from './tokenToolBox/page/tokenMinter/tokenMinter'
+import TokenInfo from './tokenToolBox/page/tokenMinter/TokenInfo'
+import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
+import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
+import MyToken from './tokenToolBox/page/tokenMinter/myToken'
+import MyLock from './tokenToolBox/page/tokenlocker/myLock'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -130,7 +144,7 @@ export default function App() {
               <BodyWrapper id="body">
                 <Popups />
                 <Polling />
-                <PerformKYCVerification />
+                {/* <PerformKYCVerification /> */}
                 {/* <WarningModal /> */}
                 {/* <Web3ReactManager> */}
                 <Routes>
@@ -207,7 +221,7 @@ export default function App() {
 
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
-                  <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} />
+                  {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
                   <Route path={routes.thirdPart.SolaceAuction} element={<SolaceProjectInfo />} />
                   <Route path={routes.thirdPart.CreateProtocolAuction} element={<CreateProtocolProjectInfo />} />
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
@@ -215,9 +229,25 @@ export default function App() {
                   <Route path={routes.launchpad.account.launchpadParty} element={<Party />} />
                   {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
+                  <Route path={routes.thirdPart.FinceptorAuction} element={<FinceptorProjectInfo />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
+                  <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
+                  <Route path={routes.tokenToolBox.myLock} element={<MyLock />} />
+                  <Route path={routes.tokenToolBox.tokenLockerInfo} element={<LockerInfo />} />
+                  <Route path={routes.tokenToolBox.TokenLPLockerInfo} element={<LockerLpInfo />} />
+                  <Route path={routes.tokenToolBox.disperse} element={<Disperse />} />
+                  <Route path={routes.tokenToolBox.myDisperse} element={<MyDisperse />} />
+                  <Route path={routes.tokenToolBox.tokenMinter} element={<TokenMinter />} />
+                  <Route path={`${routes.tokenToolBox.tokenMinterInfo}/:chain/:token`} element={<TokenInfo />} />
+                  <Route path={routes.tokenToolBox.tokenMinterList} element={<MyToken />} />
+                  <Route path={routes.telegramBot.index} element={<TelegramBot />} />
+                  <Route path={routes.telegramBot.guide} element={<TelegramBotGuide />} />
+                  <Route path={routes.telegramBot.create} element={<TelegramBotCreate />} />
+                  <Route path={routes.telegramBot.home} element={<TelegramBotHome />} />
+
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
+                  <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

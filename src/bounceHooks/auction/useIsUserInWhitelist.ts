@@ -39,7 +39,7 @@ const useIsUserInWhitelist = (poolInfo: PoolInfoProp, category: PoolType = PoolT
         poolId: String(poolInfo.poolId),
         tokenType: getTokenType(category)
       })
-
+      console.log('proof>>>', proof)
       setIsUserInWhitelist(!!proof)
     } catch (error) {
       setIsUserInWhitelist(false)

@@ -55,5 +55,27 @@ const instance = (baseuri: string) => ({
     })
   }
 })
+const botInstance = (baseuri: string) => ({
+  get<TData = any>(url: string, params: any, headers?: any): Promise<IResponse<TData>> {
+    return request(`${baseuri}${url}?${new URLSearchParams(params).toString()}`, {
+      headers: {
+        ...headers,
+        ...initSignature()
+      }
+    })
+  },
+  post<TData = any>(url: string, body: any, headers?: any): Promise<IResponse<TData>> {
+    const _headers = headers || { 'Content-Type': 'application/json' }
+
+    return request(`${baseuri}${url}`, {
+      headers: {
+        ..._headers
+      },
+      method: 'POST',
+      body: body instanceof FormData ? body : JSON.stringify(body)
+    })
+  }
+})
 
 export const ApiInstance = instance(process.env.REACT_APP_REQUEST_BASEURL || '')
+export const BotApiInstance = botInstance(process.env.REACT_APP_REQUEST_BOT_BASEURL || '')

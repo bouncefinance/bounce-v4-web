@@ -236,8 +236,8 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
       logo: OMNIUrl
     },
-    rpcUrls: ['https://testnet-1.omni.network/'],
-    blockExplorerUrls: ['https://testnet-1.explorer.omni.network/']
+    rpcUrls: ['https://testnet.omni.network/'],
+    blockExplorerUrls: ['https://testnet.explorer.omni.network/']
   },
   [ChainId.FANTOM]: {
     id: ChainId.FANTOM,
@@ -553,13 +553,15 @@ export const SUPPORTED_NETWORKS: {
   }
 }
 
-export const AllChainList: {
+export interface ChainType {
   logo: string
   symbol: string
   name: string
   id: ChainId
   hex: string
-}[] = Object.values(SUPPORTED_NETWORKS).map(item => ({
+}
+
+export const AllChainList: ChainType[] = Object.values(SUPPORTED_NETWORKS).map(item => ({
   logo: item.nativeCurrency.logo,
   symbol: item.nativeCurrency.symbol,
   name: item.chainName,

@@ -1,5 +1,6 @@
 import { Token } from 'bounceComponents/fixed-swap/type'
 import { Moment } from 'moment'
+import { ChainId } from 'constants/chain'
 
 // type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
@@ -72,6 +73,18 @@ export enum AuctionType {
   RANDOM_SELECTION = 'Random Selection'
 }
 
+export enum TgBotActiveStep {
+  GETAPITOKEN,
+  GUIDEFORM,
+  COMFIRM
+}
+
+export enum TgBotTabValue {
+  AUCTION,
+  ACCOUNT,
+  BOTSETUP
+}
+
 export interface AuctionPool {
   tokenType: TokenType
   nftTokenFrom: NFTToken
@@ -115,4 +128,8 @@ export interface AuctionPool {
   creatorRatio?: string
   prevBidderRatio?: string
   lastBidderRatio?: string
+  tgBotActiveStep?: TgBotActiveStep
+  tgToken?: string
+  auctionInChain: ChainId | number | undefined
+  tgBotTabValue: TgBotTabValue
 }
