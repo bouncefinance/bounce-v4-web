@@ -23,10 +23,11 @@ export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
   againBtn?: string
   contentType?: 'TextBox' | 'Markdown' | 'TextArea'
   value?: string
+  isBot?: boolean
 }
 
 const WordEditDialogTips = create((props: DialogProps) => {
-  const { title, onAgain, onClose, cancelBtn, againBtn, onCancel, contentType, value, ...rest } = props
+  const { title, onAgain, onClose, cancelBtn, againBtn, onCancel, contentType, value, isBot = false, ...rest } = props
   const [textValue, setTextValue] = useState(value || '')
   console.log('props', props)
 
@@ -108,7 +109,12 @@ const WordEditDialogTips = create((props: DialogProps) => {
               </Button>
             )}
             {againBtn && (
-              <Button variant="contained" sx={{ p: '20px 30px', minWidth: 132 }} onClick={handleAgain}>
+              <Button
+                color={isBot ? 'secondary' : undefined}
+                variant="contained"
+                sx={{ p: '20px 30px', minWidth: 132 }}
+                onClick={handleAgain}
+              >
                 {againBtn}
               </Button>
             )}

@@ -1,4 +1,4 @@
-import { getBotPoolCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
+import { getBotPoolCreationSignature, getTgWhitelistMerkleTreeRoot } from 'api/pool'
 import { GetPoolCreationSignatureParams, PoolType, GetWhitelistMerkleTreeRootParams } from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useActiveWeb3React } from 'hooks'
@@ -125,7 +125,7 @@ export function useCreateBotSwapPool() {
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
     const params: Params = {
-      whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
+      whitelist: values.participantStatus === ParticipantStatus.Whitelist ? [account || ''] : [],
       poolSize: values.poolSize,
       swapRatio: values.swapRatio,
       allocationPerWallet:
@@ -200,18 +200,18 @@ export function useCreateBotSwapPool() {
     // console.log('resultAmountTotal1', amountTotal1.currency, resultAmountTotal1?.toExact(), resultAmountTotal1)
 
     let merkleroot = ''
-    console.log('1')
 
     if (params.whitelist.length > 0) {
+      console.log('params.whitelist', params.whitelist)
+
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
         addresses: params.whitelist,
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend.id
       }
-      const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
+      const { data } = await getTgWhitelistMerkleTreeRoot(whitelistParams)
       merkleroot = data.merkleroot
     }
-    console.log('2')
 
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
@@ -228,6 +228,8 @@ export function useCreateBotSwapPool() {
       token0: params.tokenFromAddress,
       token1: params.tokenToAddress
     }
+    console.log('signatureParams>>>', signatureParams)
+
     const {
       data: { id, expiredTime, signature }
     } = await getBotPoolCreationSignature(signatureParams)
@@ -243,6 +245,7 @@ export function useCreateBotSwapPool() {
       whitelistRoot: merkleroot || NULL_BYTES,
       maxAmount1PerWallet: signatureParams.maxAmount1PerWallet
     }
+    console.log('contractCallParams>>>', contractCallParams)
 
     const args = [
       id,

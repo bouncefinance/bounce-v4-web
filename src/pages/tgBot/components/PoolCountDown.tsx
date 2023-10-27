@@ -28,6 +28,9 @@ const StatusBox = styled(Box)`
   align-items: center;
   gap: 10px;
   border-radius: 100px;
+  @media (max-width: 860px) {
+    padding: 2px 6px;
+  }
 `
 export default function PoolCountDown({ status, openTime, closeTime, claimAt }: NewType) {
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({

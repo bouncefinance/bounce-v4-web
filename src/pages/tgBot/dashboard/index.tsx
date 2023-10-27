@@ -10,7 +10,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  OutlinedInput
+  InputBase
 } from '@mui/material'
 import { ReactComponent as Calendar } from './svg/calendar.svg'
 import { ReactComponent as Auction } from './svg/auction.svg'
@@ -48,6 +48,7 @@ import NoPool from 'assets/images/noPool.png'
 import SearchIcon from '@mui/icons-material/Search'
 import ButtonBlock from './ButtonBlock'
 import { useOptionDatas } from 'state/configOptions/hooks'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const defaultPageSize = 100
 
@@ -61,6 +62,12 @@ const DashBoardCard = styled(Box)`
   border-radius: 20px;
   background: var(--white-100, #fff);
   box-shadow: 2px 2px 10px 0px rgba(0, 0, 0, 0.04), -2px -2px 10px 0px rgba(0, 0, 0, 0.04);
+
+  @media (max-width: 860px) {
+    height: 186px;
+    flex-direction: column;
+    padding: 16px;
+  }
 `
 const DashBoardCardIconBoxs = styled(Box)`
   display: flex;
@@ -80,6 +87,11 @@ const AcctionPoolCard = styled(Box)`
   align-self: stretch;
   border-radius: 20px;
   background: var(--grey-01, #20201e);
+
+  @media (max-width: 860px) {
+    border-radius: 0;
+    padding: 48px 0;
+  }
 `
 const CusButton = styled(Button)`
   background-color: #e1f25c;
@@ -101,6 +113,13 @@ const CusTabs = styled(Tabs)`
     letter-spacing: -0.4px;
     color: #959595;
     padding: 24px 60px;
+
+    @media (max-width: 860px) {
+      font-size: 14px;
+      padding: 12px 16px;
+      font-weight: 500;
+      letter-spacing: -0.28px;
+    }
   }
   .MuiTabs-scroller {
     border-bottom: none;
@@ -136,6 +155,9 @@ const CusAccordionSummary = styled(AccordionSummary)`
     /* padding: 16px; */
   }
   .Mui-expanded {
+    @media (max-width: 860px) {
+      margin: 16px 0;
+    }
     /* transform: translateX(-20px); */
   }
 `
@@ -145,13 +167,18 @@ const CusAccordionDetails = styled(AccordionDetails)`
   padding: 0 16px 16px;
 `
 
-const CusOutlinedInput = styled(OutlinedInput)`
+const CusOutlinedInput = styled(InputBase)`
   display: flex;
   align-items: center;
   background-color: #121212;
   color: #959595;
-  width: 400px;
   margin-bottom: 0 !important;
+  border: 0;
+  width: 400px;
+  border-radius: 10px;
+  @media (max-width: 860px) {
+    width: 100%;
+  }
 `
 
 export default function Home() {
@@ -161,6 +188,7 @@ export default function Home() {
   const [tabStatusFrontend, setTabStatusFrontend] = useState(PoolStatusFrontend.LIVE)
   const [filterInputValue, setFilterInputValue] = useState('')
   const optionDatas = useOptionDatas()
+  const isMobile = useBreakpoint('md')
 
   const getChainName = useCallback(
     (chain_id: number) => optionDatas.chainInfoOpt?.find(chainInfo => chainInfo?.['id'] === chain_id),
@@ -205,7 +233,7 @@ export default function Home() {
       refreshDeps: [tabStatusFrontend, filterInputValue, account]
     }
   )
-  const { data: botTokenData, loading: botLoading } = useRequest(
+  const { data: botTokenData } = useRequest(
     async () => {
       const resp = await getBotTokens()
       return {
@@ -221,7 +249,7 @@ export default function Home() {
   )
   console.log('botTokenData', botTokenData)
 
-  const { data: dashboardData, loading: dashboardLoading } = useRequest(
+  const { data: dashboardData } = useRequest(
     async () => {
       const resp = await getBotDashboard()
       return {
@@ -246,17 +274,18 @@ export default function Home() {
 
   return (
     <Stack>
-      <Typography fontSize={28} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-        Dashboard
-      </Typography>
-      {!botLoading && !dashboardLoading ? (
-        <Grid mt={40} container spacing={24}>
-          <Grid item xs={4}>
+      <Box paddingX={15.5}>
+        <Typography fontSize={28} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
+          Dashboard
+        </Typography>
+
+        <Grid mt={isMobile ? 0 : 40} container spacing={24}>
+          <Grid item xs={isMobile ? 6 : 4}>
             <DashBoardCard>
               <DashBoardCardIconBoxs>
                 <Calendar />
               </DashBoardCardIconBoxs>
-              <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
+              <Stack ml={isMobile ? undefined : 16} height={'100%'} justifyContent={'space-between'}>
                 <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
                   Bot Daily Using
                 </Typography>
@@ -266,7 +295,7 @@ export default function Home() {
               </Stack>
             </DashBoardCard>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 6 : 4}>
             <DashBoardCard>
               <DashBoardCardIconBoxs>
                 <User />
@@ -281,7 +310,7 @@ export default function Home() {
               </Stack>
             </DashBoardCard>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 6 : 4}>
             <DashBoardCard>
               <DashBoardCardIconBoxs>
                 <Group />
@@ -296,7 +325,7 @@ export default function Home() {
               </Stack>
             </DashBoardCard>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 6 : 4}>
             <DashBoardCard>
               <DashBoardCardIconBoxs>
                 <Task />
@@ -311,7 +340,7 @@ export default function Home() {
               </Stack>
             </DashBoardCard>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 6 : 4}>
             <DashBoardCard>
               <DashBoardCardIconBoxs>
                 <Auction />
@@ -326,7 +355,7 @@ export default function Home() {
               </Stack>
             </DashBoardCard>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={isMobile ? 6 : 4}>
             <DashBoardCard>
               <DashBoardCardIconBoxs>
                 <AuctionGroup />
@@ -342,19 +371,41 @@ export default function Home() {
             </DashBoardCard>
           </Grid>
         </Grid>
-      ) : null}
+      </Box>
 
       <AcctionPoolCard mt={60}>
-        <Stack width={'100%'} direction={'row'} justifyContent={'space-between'}>
+        <Stack
+          px={isMobile ? 16 : 0}
+          gap={isMobile ? 20 : 0}
+          width={'100%'}
+          direction={isMobile ? 'column' : 'row'}
+          justifyContent={'space-between'}
+        >
           <Typography fontSize={28} fontWeight={600} fontFamily={'Public Sans'} color="#fff">
             Fix swap Auction pool Management
           </Typography>
-          <CusButton onClick={createAuctionHandle}>
-            <Add />
-            Create an auction
-          </CusButton>
+          <Box alignSelf={isMobile ? 'flex-end' : undefined}>
+            <CusButton onClick={createAuctionHandle}>
+              <Add />
+              Create an auction
+            </CusButton>
+          </Box>
         </Stack>
-        <Stack mt={40} width={'100%'} justifyContent={'space-between'} direction={'row'}>
+        {isMobile && (
+          <CusOutlinedInput
+            value={filterInputValue}
+            onChange={event => {
+              console.log('filterInputValue: ', event.target.value)
+              setFilterInputValue(event.target.value)
+            }}
+            fullWidth
+            sx={{ mt: 20, px: 16 }}
+            startAdornment={<SearchIcon sx={{ mx: 12 }} />}
+            placeholder="Search by pool name"
+          />
+        )}
+
+        <Stack mt={24} width={'100%'} justifyContent={'space-between'} direction={'row'}>
           <CusTabs
             value={tabStatusFrontend}
             onChange={tabHandleChange}
@@ -366,17 +417,19 @@ export default function Home() {
             <Tab label="Upcoming" value={PoolStatusFrontend.UPCOMING} />
             <Tab label="Close" value={PoolStatusFrontend.CLOSE} />
           </CusTabs>
-          <CusOutlinedInput
-            value={filterInputValue}
-            onChange={event => {
-              console.log('filterInputValue: ', event.target.value)
-              setFilterInputValue(event.target.value)
-            }}
-            fullWidth
-            sx={{ mb: 30 }}
-            startAdornment={<SearchIcon sx={{ mr: 4 }} />}
-            placeholder="Search by pool name"
-          />
+          {!isMobile && (
+            <CusOutlinedInput
+              value={filterInputValue}
+              onChange={event => {
+                console.log('filterInputValue: ', event.target.value)
+                setFilterInputValue(event.target.value)
+              }}
+              fullWidth
+              sx={{ mb: 30 }}
+              startAdornment={<SearchIcon sx={{ mx: 12 }} />}
+              placeholder="Search by pool name"
+            />
+          )}
         </Stack>
         <Box
           sx={{
@@ -388,11 +441,26 @@ export default function Home() {
             gap: '16px',
             alignSelf: 'stretch',
             borderRadius: '0px 20px 20px 20px',
-            background: 'var(--black-100, #121212)'
+            background: 'var(--black-100, #121212)',
+
+            '@media(max-width:860px)': {
+              padding: '16px'
+            }
           }}
         >
           {loading ? null : auctionPoolData?.total === 0 ? (
-            <Image src={NoPool} width={'548px'} height={'360px'}></Image>
+            <>
+              <Image src={NoPool} width={isMobile ? '273px' : '548px'} height={isMobile ? '180px' : '360px'}></Image>
+              <Typography
+                mt={40}
+                fontFamily={'Public Sans'}
+                color={'#FFF'}
+                fontSize={isMobile ? 16 : 20}
+                fontWeight={600}
+              >
+                You do not have any auction now.
+              </Typography>
+            </>
           ) : (
             <Box width={'100%'}>
               {auctionPoolData?.list.map((poolData: FixedSwapPool) => {
@@ -425,8 +493,8 @@ export default function Home() {
                   >
                     <CusAccordionSummary expandIcon={<Arrow />} id="panel1bh-header">
                       <Stack width={'100%'}>
-                        <Stack direction={'row'} justifyContent={'space-between'}>
-                          <Stack gap={16} direction={'row'}>
+                        <Stack direction={isMobile ? 'column' : 'row'} justifyContent={'space-between'}>
+                          <Stack gap={isMobile ? 8 : 16} direction={isMobile ? 'column' : 'row'}>
                             <Typography
                               color={'rgba(255, 255, 255, 0.80)'}
                               fontFamily={'Public Sans'}
@@ -435,40 +503,55 @@ export default function Home() {
                             >
                               {poolData.poolId}
                             </Typography>
-                            <Typography color={'#fff'} fontFamily={'Public Sans'} fontSize={16} fontWeight={500}>
+                            <Typography
+                              color={'#fff'}
+                              fontFamily={'Public Sans'}
+                              fontSize={isMobile ? 14 : 16}
+                              fontWeight={500}
+                            >
                               {poolData.name} Fixed Price Auction Poo
                             </Typography>
                           </Stack>
-                          <Stack gap={16} direction={'row'} alignItems={'center'}>
-                            <Stack gap={8} direction={'row'} alignItems={'center'}>
-                              <Image
-                                src={
-                                  getChainName(poolData.chainId)?.ethChainId
-                                    ? ChainListMap?.[getChainName(poolData?.chainId)?.ethChainId as ChainId]?.logo || ''
-                                    : ''
-                                }
-                                width={16}
-                                height={16}
-                                alt={''}
+                          <Stack mt={isMobile ? 8 : 0} gap={16} direction={'row'} alignItems={'center'}>
+                            <Stack direction={'row'} width={'100%'} justifyContent={'space-between'}>
+                              <Stack gap={8} direction={'row'} alignItems={'center'}>
+                                <Image
+                                  src={
+                                    getChainName(poolData.chainId)?.ethChainId
+                                      ? ChainListMap?.[getChainName(poolData?.chainId)?.ethChainId as ChainId]?.logo ||
+                                        ''
+                                      : ''
+                                  }
+                                  width={16}
+                                  height={16}
+                                  alt={''}
+                                />
+                                <Typography
+                                  color={'#fff'}
+                                  fontFamily={'Inter'}
+                                  fontSize={isMobile ? 13 : 14}
+                                  fontWeight={400}
+                                >
+                                  {getChainName(poolData.chainId)?.chainName}
+                                </Typography>
+                              </Stack>
+                              <PoolCountDown
+                                status={poolData.status}
+                                openTime={poolData.openAt}
+                                closeTime={poolData.closeAt}
+                                claimAt={poolData.claimAt}
                               />
-                              <Typography color={'#fff'} fontFamily={'Inter'} fontSize={14} fontWeight={400}>
-                                {getChainName(poolData.chainId)?.chainName}
-                              </Typography>
+                              {poolData.contract && (
+                                <Box>
+                                  <ButtonBlock
+                                    flushed={() => {
+                                      runGetBotpolls()
+                                    }}
+                                    poolData={poolData}
+                                  />
+                                </Box>
+                              )}
                             </Stack>
-                            <PoolCountDown
-                              status={poolData.status}
-                              openTime={poolData.openAt}
-                              closeTime={poolData.closeAt}
-                              claimAt={poolData.claimAt}
-                            />
-                            {poolData.contract && (
-                              <ButtonBlock
-                                flushed={() => {
-                                  runGetBotpolls()
-                                }}
-                                poolData={poolData}
-                              />
-                            )}
                           </Stack>
                         </Stack>
                         <PoolProgress sx={{ marginTop: '16px' }} value={swapedPercent} poolStatus={poolData.status} />
@@ -495,17 +578,19 @@ export default function Home() {
                           background: '#626262'
                         }}
                       />
-                      <Grid mt={16} container spacing={3}>
-                        <Grid item xs={3}>
-                          <PoolInfoItem title="Token symbol">
+                      <Grid mt={16} container spacing={12}>
+                        <Grid item xs={12}>
+                          <PoolInfoItem isMobile={isMobile} title="Token symbol">
                             <Stack direction="row" spacing={6} sx={{ alignItems: 'center' }}>
                               <TokenImage src={poolData.token0.largeUrl} alt={poolData.token0.symbol} size={20} />
-                              <Typography color={'#fff'}>{poolData.token0.symbol}</Typography>
+                              <Typography fontSize={isMobile ? 13 : undefined} color={'#fff'}>
+                                {poolData.token0.symbol}
+                              </Typography>
                             </Stack>
                           </PoolInfoItem>
                         </Grid>
-                        <Grid item xs={3}>
-                          <PoolInfoItem title="Contract Address" tip="Token Contract Address.">
+                        <Grid item xs={12}>
+                          <PoolInfoItem isMobile={isMobile} title="Contract Address" tip="Token Contract Address.">
                             <Stack direction="row" gap={6} sx={{ alignItems: 'center' }}>
                               <CertifiedTokenImage
                                 address={poolData.token0.address}
@@ -513,29 +598,35 @@ export default function Home() {
                                 ethChainId={poolData.chainId}
                                 backedChainId={poolData.chainId}
                               />
-                              <Typography color={'#fff'}>{shortenAddress(poolData.token0.address)}</Typography>
+                              <Typography fontSize={isMobile ? 13 : undefined} color={'#fff'}>
+                                {shortenAddress(poolData.token0.address)}
+                              </Typography>
                               <CopyToClipboard text={poolData.token0.address}>
                                 <Copy />
                               </CopyToClipboard>
                             </Stack>
                           </PoolInfoItem>
                         </Grid>
-                        <Grid item xs={3}>
-                          <PoolInfoItem title="Fixed price ratio">
+                        <Grid item xs={12}>
+                          <PoolInfoItem isMobile={isMobile} title="Fixed price ratio">
                             <Stack direction="row" spacing={8}>
-                              <Typography color={'#fff'}>1</Typography>
+                              <Typography fontSize={isMobile ? 13 : undefined} color={'#fff'}>
+                                1
+                              </Typography>
                               <TokenImage alt={poolData.token0.symbol} src={poolData.token0.largeUrl} size={20} />
-                              <Typography color={'#fff'}>
+                              <Typography fontSize={isMobile ? 13 : undefined} color={'#fff'}>
                                 {poolData.token0.symbol} = {formatNumber(poolData.ratio, { unit: 0 })}
                               </Typography>
                               <TokenImage alt={poolData.token1.symbol} src={poolData.token1.largeUrl} size={20} />
-                              <Typography color={'#fff'}>{poolData.token1.symbol}</Typography>
+                              <Typography fontSize={isMobile ? 13 : undefined} color={'#fff'}>
+                                {poolData.token1.symbol}
+                              </Typography>
                             </Stack>
                           </PoolInfoItem>
                         </Grid>
-                        <Grid item xs={3}>
-                          <PoolInfoItem title="Price,$">
-                            <Typography color={'#fff'}>
+                        <Grid item xs={12}>
+                          <PoolInfoItem isMobile={isMobile} title="Price,$">
+                            <Typography fontSize={isMobile ? 13 : undefined} color={'#fff'}>
                               {new BigNumber(poolData.poolPrice).decimalPlaces(6, BigNumber.ROUND_DOWN).toFormat()}
                             </Typography>
                           </PoolInfoItem>

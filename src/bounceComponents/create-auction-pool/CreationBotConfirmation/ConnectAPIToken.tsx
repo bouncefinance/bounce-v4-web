@@ -17,6 +17,10 @@ import useBreakpoint from 'hooks/useBreakpoint'
 const CusInput = styled(Input)`
   border: 0;
 
+  &.MuiInputBase-root {
+    padding: 0;
+  }
+
   & input {
     border-radius: 8px;
     background: var(--grey-06, #f6f6f3);
@@ -126,6 +130,10 @@ const CusTopTip = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 21px */
+  @media (max-width: 860px) {
+    height: 140px;
+    padding: 16px 16px 40px 16px;
+  }
 `
 
 const CircleBorder = styled(Typography)`
@@ -147,6 +155,11 @@ const CircleBorder = styled(Typography)`
   line-height: 150%; /* 18px */
   letter-spacing: -0.24px;
   text-transform: capitalize;
+
+  @media (max-width: 860px) {
+    width: 24px;
+    height: 24px;
+  }
 `
 
 const DividingLine = styled(Box)`
@@ -210,7 +223,6 @@ const ConnectAPIToken = () => {
       }
     })
   }
-  console.log('isMobile', isMobile)
 
   return (
     <>
@@ -279,7 +291,7 @@ const ConnectAPIToken = () => {
               onClick={() => toBotFather()}
               color="secondary"
               variant="contained"
-              sx={{ marginTop: '20px', width: '100%' }}
+              sx={{ marginTop: '20px', width: '100%', height: 42 }}
             >
               Go to @BotFather
             </Button>
@@ -305,7 +317,7 @@ const ConnectAPIToken = () => {
             >
               {({ values }) => (
                 <Stack component={Form} direction={'row'} justifyContent={'center'} gap={'8px'}>
-                  <Stack width={'100%'} gap={8} direction={'row'}>
+                  <Stack width={'100%'} gap={8}>
                     <FormItem sx={{ width: '100%' }} name="tgToken" required>
                       <CusInput sx={{ marginTop: '5px' }} value={values.tgToken} />
                     </FormItem>

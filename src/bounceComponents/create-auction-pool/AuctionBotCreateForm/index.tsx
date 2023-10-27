@@ -11,8 +11,7 @@ import {
   FormHelperText,
   Grid,
   IconButton,
-  styled,
-  ButtonBase
+  styled
 } from '@mui/material'
 import { SetStateAction } from 'react'
 import {
@@ -54,11 +53,10 @@ import { routes } from 'constants/routes'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import { ReactComponent as Return } from './svg/return.svg'
 import { show } from '@ebay/nice-modal-react'
-import ImportWhitelistDialog from 'bounceComponents/create-auction-pool/ImportWhitelistDialog'
-import { isAddress } from 'utils'
 import TokenDialog from '../TokenDialog'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import FakeOutlinedInput from '../FakeOutlinedInput'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const CusFormItem = styled(FormItem)`
   .MuiFormHelperText-root {
@@ -67,6 +65,25 @@ const CusFormItem = styled(FormItem)`
 `
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
+  const isMobile = useBreakpoint('md')
+
+  if (isMobile) {
+    return (
+      <Box width={'100%'} padding={16} display={'flex'} justifyContent={'center'}>
+        <Box
+          sx={{
+            width: '100%',
+            borderRadius: '16px',
+            background: '#fff',
+            padding: '24px 16px'
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Box width={'100%'} mt={24} mb={68} height={'552px'} display={'flex'} justifyContent={'center'}>
       <Box
@@ -122,10 +139,10 @@ interface FormValues {
   startTime: Moment | null
   endTime: Moment | null
   poolName: string
-  whitelist: string[]
 }
 
 const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Element => {
+  const isMobile = useBreakpoint('md')
   const { userInfo } = useUserInfo()
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
@@ -175,6 +192,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const validationSchema = Yup.object({
     poolName: Yup.string().max(30, 'Pool name should be less than 30 characters').required('Pool name is required'),
     tokenFromSymbol: Yup.string().required('Token is required'),
+    tokenFromAddress: Yup.string().required('Token is required'),
     tokenToSymbol: Yup.string()
       .required('Funding Currency is required')
       .test('DIFFERENT_TOKENS', 'Please choose a different token', (_, context) => {
@@ -209,21 +227,6 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
               !context.parent.poolSize || !context.parent.swapRatio || (value || 0) <= context.parent.poolSize
           )
       }),
-    whitelist: Yup.array()
-      .of(Yup.string())
-      .test(
-        'NOT_EMPTY_ARRAY',
-        'Whitelist is required',
-        (inputArray, context) =>
-          context.parent.participantStatus !== ParticipantStatus.Whitelist ||
-          (inputArray instanceof Array && inputArray.length > 0)
-      )
-      .test('VALID_ADDRESS_ARRAY', 'Please make sure all addresses are valid', (inputArray, context) => {
-        return (
-          context.parent.participantStatus !== ParticipantStatus.Whitelist ||
-          (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
-        )
-      }),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participantStatus status'),
     startTime: Yup.date()
       .min(moment(), 'Please select a time earlier than current time')
@@ -255,36 +258,12 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
     participantStatus: valuesState.participantStatus || ParticipantStatus.Public,
     startTime: valuesState.startTime,
     endTime: valuesState.endTime,
-    poolName: valuesState.poolName,
-    whitelist: valuesState.whitelist
+    poolName: valuesState.poolName
   }
 
   const returnHome = useCallback(() => {
     navigate(routes.telegramBot.home)
   }, [navigate])
-
-  const showImportWhitelistDialog = (
-    values: FormValues,
-    setValues: (values: any, shouldValidate?: boolean) => void
-  ) => {
-    show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
-      .then(whitelist => {
-        console.log('ImportWhitelistDialog Resolved: ', whitelist)
-        valuesDispatch({
-          type: ActionType.SetWhitelist,
-          payload: {
-            whitelist
-          }
-        })
-        setValues({
-          ...values,
-          whitelist
-        })
-      })
-      .catch(err => {
-        console.log('ImportWhitelistDialog Rejected: ', err)
-      })
-  }
 
   const skipTo = useCallback(() => {
     navigate(routes.telegramBot.home)
@@ -337,8 +316,13 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       <TwoColumnPanel>
         <Stack pb={56}>
           <Stack borderRadius={20}>
-            <Box mb={32} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-              <Box gap={12} display={'flex'} flexDirection={'row'} alignItems={'center'}>
+            <Stack
+              mb={32}
+              direction={isMobile ? undefined : 'row'}
+              justifyContent={'space-between'}
+              alignItems={isMobile ? undefined : 'center'}
+            >
+              <Stack gap={12} direction={'row'} alignItems={'center'}>
                 {type === 'Create' && (
                   <IconButton onClick={() => returnHome()}>
                     <Return />
@@ -347,16 +331,16 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                 <Typography fontFamily={'Public Sans'} fontSize={16} fontWeight={500} color={'#121212'}>
                   API token
                 </Typography>
-              </Box>
+              </Stack>
               <Box display={'flex'} alignItems={'center'} gap={16}>
-                <Typography fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
+                <Typography noWrap fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
                   {userInfo?.tg_token}
                 </Typography>
                 {/* <IconButton>
                     <Close onClick={() => removeTokenApi()} />
                   </IconButton> */}
               </Box>
-            </Box>
+            </Stack>
           </Stack>
           <Box
             sx={{
@@ -369,9 +353,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
             <Typography
               fontFamily={'Public Sans'}
               textAlign={'center'}
-              fontSize={20}
+              fontSize={isMobile ? 16 : 20}
               fontWeight={600}
-              color={'#121212'}
+              color={'#20201E'}
+              letterSpacing={'-0.32px'}
             >
               Create an auction for your telegram bot
             </Typography>
@@ -380,6 +365,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
               initialValues={internalInitialValues}
               validationSchema={validationSchema}
               onSubmit={values => {
+                window.scrollTo(0, 0)
                 valuesDispatch({
                   type: ActionType.CommitBotAuctionParameters,
                   payload: {
@@ -420,7 +406,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                 return (
                   <>
                     <Stack mt={40}>
-                      <Typography mb={12} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                      <Typography mb={12} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                         Title
                       </Typography>
                       <CusFormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
@@ -443,7 +429,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                       ></Box>
                     </Stack>
                     <FormItem error={!account}>
-                      <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                      <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                         Select Chain
                       </Typography>
                       <Select<ChainId>
@@ -488,13 +474,13 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                     </FormItem>
                     <Stack component={Form} spacing={20}>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Token
                         </Typography>
                       </Stack>
                       <Stack>
                         <FormItem
-                          name="tokenFromSymbol"
+                          name="tokenFromAddress"
                           label="Select a token"
                           required
                           startAdornment={
@@ -523,7 +509,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Funding Currency
                         </Typography>
                         <FormItem
@@ -556,7 +542,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Swap ratio
                         </Typography>
                         <Box display={'flex'}>
@@ -604,8 +590,9 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                          Total Supply
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
+                          {`Auction Amount `}
+                          {tokenMap[values.tokenFromAddress] ? tokenMap[values.tokenFromAddress]?.name : '-'}
                         </Typography>
                         <CusFormItem error={!account} name="poolSize">
                           <TextField
@@ -628,10 +615,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                       </Stack>
 
                       <Stack>
-                        <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Time
                         </Typography>
-                        <Box display={'flex'} gap={16}>
+                        <Stack direction={isMobile ? 'column' : 'row'} gap={16}>
                           <Field
                             component={DateTimePickerFormItem}
                             name="startTime"
@@ -646,7 +633,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             minDateTime={values.startTime}
                             textField={{ sx: { flex: 1 } }}
                           />
-                        </Box>
+                        </Stack>
                         <Box
                           sx={{
                             background: '#D4D6CF',
@@ -658,7 +645,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Allocation per wallet
                         </Typography>
                         <CusFormItem name="allocationStatus" error={!account}>
@@ -705,7 +692,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Participant
                         </Typography>
                         <FormItem name="participantStatus" error={!account}>
@@ -723,27 +710,29 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                           </Field>
                         </FormItem>
                         <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
-                        <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
-                        <ButtonBase
-                          sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
-                          disabled={values.participantStatus !== ParticipantStatus.Whitelist}
-                          onClick={() => {
-                            showImportWhitelistDialog(values, setValues)
-                          }}
-                        >
-                          {values.participantStatus === ParticipantStatus.Whitelist && (
-                            <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
-                          )}
-                        </ButtonBase>
-                        <Box
-                          sx={{
-                            background: '#D4D6CF',
-                            opacity: 0.7,
-                            height: '1px',
-                            width: '100%',
-                            margin: '24px 0'
-                          }}
-                        ></Box>
+                        {values.participantStatus === ParticipantStatus.Whitelist ? (
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              height: '60px',
+                              width: '100%',
+                              background: '#E8E9E4',
+                              borderRadius: '8px',
+                              color: 'var(--grey-03, var(--grey-03, #959595))',
+                              leadingTrim: 'both',
+                              textEdge: 'cap',
+                              fontFamily: 'Inter',
+                              fontSize: '14px',
+                              marginBottom: '20px'
+                            }}
+                          >
+                            Group members
+                          </Box>
+                        ) : (
+                          <Box sx={{ marginBottom: '20px' }}></Box>
+                        )}
                       </Stack>
                       {/* <Grid container spacing={10}>
                           <Grid item xs={6}>
