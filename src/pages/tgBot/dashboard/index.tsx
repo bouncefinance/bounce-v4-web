@@ -347,10 +347,10 @@ export default function Home() {
               </DashBoardCardIconBoxs>
               <Stack ml={16} height={'100%'} justifyContent={'space-between'}>
                 <Typography mt={4} fontSize={16} fontWeight={500} fontFamily={'Public Sans'} color="#959595">
-                  Auction Amount
+                  Auction Pool Amount
                 </Typography>
                 <Typography mb={12} fontSize={20} fontWeight={600} fontFamily={'Public Sans'} color="#121212">
-                  {dashboardData?.totalPools ? dashboardData?.totalPools : '-'} ETH
+                  {dashboardData?.totalPools ? dashboardData?.totalPools : '-'}
                 </Typography>
               </Stack>
             </DashBoardCard>

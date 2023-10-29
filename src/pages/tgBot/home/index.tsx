@@ -97,7 +97,7 @@ const HomePage = () => {
           aria-label="disabled tabs example"
         >
           <Tab label="Auction" value={TgBotTabValue.AUCTION} />
-          <Tab label="Account" value={TgBotTabValue.ACCOUNT} />
+          {/* <Tab label="Account" value={TgBotTabValue.ACCOUNT} /> */}
           <Tab label="Bot setup" value={TgBotTabValue.BOTSETUP} />
         </CusTabs>
         <TabItemContainer>
