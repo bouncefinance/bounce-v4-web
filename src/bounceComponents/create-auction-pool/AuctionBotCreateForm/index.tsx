@@ -13,6 +13,8 @@ import {
   IconButton,
   styled
 } from '@mui/material'
+import Tooltip from 'bounceComponents/common/Tooltip'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { SetStateAction } from 'react'
 import {
   useUserInfo
@@ -36,6 +38,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useDebounce } from 'ahooks'
 import _ from 'lodash'
 import { useShowLoginModal } from 'state/users/hooks'
+import { ZERO } from 'constants/token/constants'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { AllocationStatus, ParticipantStatus, TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { ChainId, ChainList, ChainListMap } from 'constants/chain'
@@ -45,7 +48,9 @@ import { BigNumber } from 'bignumber.js'
 import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTimePickerFormItem'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
-import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useValuesDispatch, useValuesState, ActionType, useAuctionERC20Currency } from '../ValuesProvider'
+import { CurrencyAmount } from 'constants/token'
 // import { BindTgTokenApiParams } from 'api/pool/type'
 import { useNavigate } from 'react-router-dom'
 // import { bindTgTokenApi } from 'api/pool'
@@ -151,6 +156,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
   const navigate = useNavigate()
+  const { currencyFrom } = useAuctionERC20Currency()
 
   const getChainName = useCallback(
     (chain_id: number | undefined) => {
@@ -159,7 +165,9 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
     },
     [chainInfoOpt]
   )
-
+  const auctionInChainId = getChainName(chainId)
+  const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId?.ethChainId)
+  console.log('balance>>>', balance, account, currencyFrom, auctionInChainId?.id)
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
     return ChainList.filter(item => supportIds.includes(item.id)).map(item => (
@@ -211,20 +219,25 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
         then: Yup.number()
-          .integer()
           .typeError('Please input valid number')
+          .positive('Allocation per wallet must be positive')
+          .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+            const _value = new BigNumber(value || 0).toFixed()
+            return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+          })
           .required('Allocation per wallet is required')
       })
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
         then: Yup.number()
-          .integer()
           .typeError('Please input valid number')
           .test(
-            'GREATER_THAN_TOTAL_SUPPLY',
-            'Allocation per wallet cannnot be greater than total supply times swap ratio',
+            'GREATER_THAN_POOL_SIZE',
+            'Allocation per wallet cannot be greater than pool size times swap ratio',
             (value, context) =>
-              !context.parent.poolSize || !context.parent.swapRatio || (value || 0) <= context.parent.poolSize
+              !context.parent.poolSize ||
+              !context.parent.swapRatio ||
+              (value || 0) <= context.parent.poolSize * context.parent.swapRatio
           )
       }),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participantStatus status'),
@@ -239,7 +252,21 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       .typeError('Please select a valid time')
       .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value, context) => {
         return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
+      }),
+    poolSize: Yup.number()
+      .positive('Amount must be positive')
+      .typeError('Please input valid number')
+      .required('Amount is required')
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
       })
+      .test(
+        'POOL_SIZE_LESS_THAN_BALANCE',
+        'Pool size cannot be greater than your balance',
+        value =>
+          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
+      )
   })
 
   const internalInitialValues: FormValues = {
@@ -277,6 +304,17 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
     show<Token>(TokenDialog, { chainId, action: 1 })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
+        valuesDispatch({
+          type: ActionType.CommitBotAuctionParameters,
+          payload: {
+            tokenFrom: {
+              address: res.address,
+              decimals: res.decimals,
+              symbol: values.tokenFromSymbol,
+              logoURI: decodeURIComponent(res.smallUrl || '')
+            }
+          }
+        })
         setValues({
           ...values,
           tokenFromAddress: res.address,
@@ -293,9 +331,14 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const showTokenToDialog = (
     chainId: ChainId,
     values: FormValues,
-    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean) => void
+    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean, filter?: string) => void
   ) => {
-    show<Token>(TokenDialog, { enableEth: true, chainId, action: 2 })
+    show<Token>(TokenDialog, {
+      enableEth: true,
+      chainId,
+      action: 2,
+      filter: '0x0000000000000000000000000000000000000000'
+    })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
         setValues({
@@ -590,10 +633,14 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
-                          {`Auction Amount `}
-                          {tokenMap[values.tokenFromAddress] ? tokenMap[values.tokenFromAddress]?.name : '-'}
-                        </Typography>
+                        <Stack alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
+                          <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
+                            {`Auction Amount `}
+                            {values.tokenFromSymbol ? values.tokenFromSymbol : '-'}
+                          </Typography>
+                          {<Typography mb={13}>Balance: {balance?.toSignificant() || '-'}</Typography>}
+                        </Stack>
+
                         <CusFormItem error={!account} name="poolSize">
                           <TextField
                             sx={{ width: '100%' }}
@@ -692,9 +739,14 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
-                          Participant
-                        </Typography>
+                        <Stack mb={13} direction={'row'} alignItems={'center'} gap={8}>
+                          <Typography sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
+                            Participant
+                          </Typography>
+                          <Tooltip title="If this function is enabled, it will verify whether the user has joined the tg group. tgbot needs to join the group and grant administrator privileges.">
+                            <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                          </Tooltip>
+                        </Stack>
                         <FormItem name="participantStatus" error={!account}>
                           <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
                             <FormControlLabel
@@ -710,29 +762,6 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                           </Field>
                         </FormItem>
                         <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
-                        {values.participantStatus === ParticipantStatus.Whitelist ? (
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              height: '60px',
-                              width: '100%',
-                              background: '#E8E9E4',
-                              borderRadius: '8px',
-                              color: 'var(--grey-03, var(--grey-03, #959595))',
-                              leadingTrim: 'both',
-                              textEdge: 'cap',
-                              fontFamily: 'Inter',
-                              fontSize: '14px',
-                              marginBottom: '20px'
-                            }}
-                          >
-                            Group members
-                          </Box>
-                        ) : (
-                          <Box sx={{ marginBottom: '20px' }}></Box>
-                        )}
                       </Stack>
                       {/* <Grid container spacing={10}>
                           <Grid item xs={6}>

@@ -365,7 +365,7 @@ export default function BotSetup() {
             )}
 
             <CusButton
-              sx={{ width: '100%' }}
+              sx={{ width: isMobile ? '100%' : '' }}
               variant="contained"
               loadingPosition="start"
               loading={isRemoveTokening}

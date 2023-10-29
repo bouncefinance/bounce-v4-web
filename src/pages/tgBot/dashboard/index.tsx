@@ -513,7 +513,7 @@ export default function Home() {
                             </Typography>
                           </Stack>
                           <Stack mt={isMobile ? 8 : 0} gap={16} direction={'row'} alignItems={'center'}>
-                            <Stack direction={'row'} width={'100%'} justifyContent={'space-between'}>
+                            <Stack gap={8} direction={'row'} width={'100%'} justifyContent={'space-between'}>
                               <Stack gap={8} direction={'row'} alignItems={'center'}>
                                 <Image
                                   src={
@@ -535,12 +535,15 @@ export default function Home() {
                                   {getChainName(poolData.chainId)?.chainName}
                                 </Typography>
                               </Stack>
-                              <PoolCountDown
-                                status={poolData.status}
-                                openTime={poolData.openAt}
-                                closeTime={poolData.closeAt}
-                                claimAt={poolData.claimAt}
-                              />
+                              <Stack justifyContent={'center'} alignItems={'center'}>
+                                <PoolCountDown
+                                  status={poolData.status}
+                                  openTime={poolData.openAt}
+                                  closeTime={poolData.closeAt}
+                                  claimAt={poolData.claimAt}
+                                />
+                              </Stack>
+
                               {poolData.contract && (
                                 <Box>
                                   <ButtonBlock
