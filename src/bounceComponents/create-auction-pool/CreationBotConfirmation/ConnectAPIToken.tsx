@@ -12,9 +12,14 @@ import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import Input from 'components/Input'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const CusInput = styled(Input)`
   border: 0;
+
+  &.MuiInputBase-root {
+    padding: 0;
+  }
 
   & input {
     border-radius: 8px;
@@ -92,6 +97,23 @@ const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
   )
 }
 
+const MobileContainer = ({ children }: { children: JSX.Element }) => {
+  return (
+    <Box width={'100%'} padding={16} display={'flex'} justifyContent={'center'}>
+      <Box
+        sx={{
+          width: '100%',
+          borderRadius: '16px',
+          background: '#fff',
+          padding: '24px 16px'
+        }}
+      >
+        {children}
+      </Box>
+    </Box>
+  )
+}
+
 const CusTopTip = styled(Typography)`
   display: flex;
   height: 160px;
@@ -108,6 +130,10 @@ const CusTopTip = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 21px */
+  @media (max-width: 860px) {
+    height: 140px;
+    padding: 16px 16px 40px 16px;
+  }
 `
 
 const CircleBorder = styled(Typography)`
@@ -129,6 +155,11 @@ const CircleBorder = styled(Typography)`
   line-height: 150%; /* 18px */
   letter-spacing: -0.24px;
   text-transform: capitalize;
+
+  @media (max-width: 860px) {
+    width: 24px;
+    height: 24px;
+  }
 `
 
 const DividingLine = styled(Box)`
@@ -144,6 +175,7 @@ interface formValues {
 }
 
 const ConnectAPIToken = () => {
+  const isMobile = useBreakpoint('md')
   const { account } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const valuesDispatch = useValuesDispatch()
@@ -191,108 +223,215 @@ const ConnectAPIToken = () => {
       }
     })
   }
+
   return (
-    <TwoColumnPanel>
-      <Box mb={56}>
-        <Box gap={16}>
-          <Typography
-            sx={{
-              color: '#000',
-              fontFamily: `'Public Sans'`,
-              fontSize: 28,
-              fontWeight: 600
-            }}
-          >
-            What can this bot do?
-          </Typography>
-          <Typography
-            sx={{
-              color: '#626262',
-              fontFamily: `'Inter'`,
-              fontSize: 14
-            }}
-          >
-            Bounce TGBot can help you quickly send transaction tokens through telegram. It can be done in just three
-            easy steps.
-          </Typography>
-        </Box>
-        <Grid mt={32} container spacing={16}>
-          <Grid item xs={6}>
-            <CusTopTip>
-              <CircleBorder>1</CircleBorder>
-              <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
-                {`Go to `}
-                <a style={{ color: '#1B52E1' }} href="https://telegram.me/BotFather">{`@BotFather. `}</a>
-                {`Press his name to do that and then press 'Send Messege' if it's needed.`}
+    <>
+      {isMobile ? (
+        <MobileContainer>
+          <Box mb={56}>
+            <Box gap={16}>
+              <Typography
+                sx={{
+                  color: '#000',
+                  fontFamily: `'Public Sans'`,
+                  fontSize: 28,
+                  fontWeight: 600
+                }}
+              >
+                What can this bot do?
               </Typography>
-            </CusTopTip>
-          </Grid>
-          <Grid item xs={6}>
-            <CusTopTip>
-              <CircleBorder>2</CircleBorder>
-              <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
-                {`Create a new bot with him. To do this use the 'newbot' command inside @BotFather. `}
+              <Typography
+                sx={{
+                  color: '#626262',
+                  fontFamily: `'Inter'`,
+                  fontSize: 14
+                }}
+              >
+                Bounce TGBot can help you quickly send transaction tokens through telegram. It can be done in just three
+                easy steps.
               </Typography>
-            </CusTopTip>
-          </Grid>
-          <Grid item xs={6}>
-            <CusTopTip>
-              <CircleBorder>3</CircleBorder>
-              <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
-                {`Copy the API token that @BotFather will give you.`}
+            </Box>
+            <Grid mt={32} container spacing={16}>
+              <Grid item xs={12}>
+                <CusTopTip>
+                  <CircleBorder>1</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Go to `}
+                    <a style={{ color: '#1B52E1' }} href="https://telegram.me/BotFather">{`@BotFather. `}</a>
+                    {`Press his name to do that and then press 'Send Messege' if it's needed.`}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+              <Grid item xs={12}>
+                <CusTopTip>
+                  <CircleBorder>2</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Create a new bot with him. To do this use the 'newbot' command inside @BotFather. `}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+              <Grid item xs={12}>
+                <CusTopTip>
+                  <CircleBorder>3</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Copy the API token that @BotFather will give you.`}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+              <Grid item xs={12}>
+                <CusTopTip>
+                  <CircleBorder>4</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Come back to here and send the copied API token here.`}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+            </Grid>
+            <Button
+              onClick={() => toBotFather()}
+              color="secondary"
+              variant="contained"
+              sx={{ marginTop: '20px', width: '100%', height: 42 }}
+            >
+              Go to @BotFather
+            </Button>
+            <DividingLine />
+            <Typography
+              component={'p'}
+              sx={{
+                color: '#121212',
+                fontFamily: `Public Sans`,
+                fontSize: '20px',
+                lineHeight: '20px',
+                width: '100%',
+                marginBottom: '12px',
+                fontWeight: 600
+              }}
+            >{`I've got the API token`}</Typography>
+            <Formik
+              initialValues={internalInitialValues}
+              validationSchema={validationSchema}
+              onSubmit={values => {
+                bindApiToken(values)
+              }}
+            >
+              {({ values }) => (
+                <Stack component={Form} direction={'row'} justifyContent={'center'} gap={'8px'}>
+                  <Stack width={'100%'} gap={8}>
+                    <FormItem sx={{ width: '100%' }} name="tgToken" required>
+                      <CusInput sx={{ marginTop: '5px' }} value={values.tgToken} />
+                    </FormItem>
+                    <ConfirmBtn type="submit">Confirm</ConfirmBtn>
+                  </Stack>
+                </Stack>
+              )}
+            </Formik>
+          </Box>
+        </MobileContainer>
+      ) : (
+        <TwoColumnPanel>
+          <Box mb={56}>
+            <Box gap={16}>
+              <Typography
+                sx={{
+                  color: '#000',
+                  fontFamily: `'Public Sans'`,
+                  fontSize: 28,
+                  fontWeight: 600
+                }}
+              >
+                What can this bot do?
               </Typography>
-            </CusTopTip>
-          </Grid>
-          <Grid item xs={6}>
-            <CusTopTip>
-              <CircleBorder>4</CircleBorder>
-              <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
-                {`Come back to here and send the copied API token here.`}
+              <Typography
+                sx={{
+                  color: '#626262',
+                  fontFamily: `'Inter'`,
+                  fontSize: 14
+                }}
+              >
+                Bounce TGBot can help you quickly send transaction tokens through telegram. It can be done in just three
+                easy steps.
               </Typography>
-            </CusTopTip>
-          </Grid>
-        </Grid>
-        <Button
-          onClick={() => toBotFather()}
-          color="secondary"
-          variant="contained"
-          sx={{ marginTop: '20px', width: '100%' }}
-        >
-          Go to @BotFather
-        </Button>
-        <DividingLine />
-        <Typography
-          component={'p'}
-          sx={{
-            color: '#121212',
-            fontFamily: `Public Sans`,
-            fontSize: '20px',
-            lineHeight: '20px',
-            width: '100%',
-            marginBottom: '12px',
-            fontWeight: 600
-          }}
-        >{`I've got the API token`}</Typography>
-        <Formik
-          initialValues={internalInitialValues}
-          validationSchema={validationSchema}
-          onSubmit={values => {
-            bindApiToken(values)
-          }}
-        >
-          {({ values }) => (
-            <Stack component={Form} direction={'row'} justifyContent={'center'} gap={'8px'}>
-              <Stack width={'100%'} gap={8} direction={'row'}>
-                <FormItem sx={{ width: '100%' }} name="tgToken" required>
-                  <CusInput sx={{ marginTop: '5px' }} value={values.tgToken} />
-                </FormItem>
-                <ConfirmBtn type="submit">Confirm</ConfirmBtn>
-              </Stack>
-            </Stack>
-          )}
-        </Formik>
-      </Box>
-    </TwoColumnPanel>
+            </Box>
+            <Grid mt={32} container spacing={16}>
+              <Grid item xs={6}>
+                <CusTopTip>
+                  <CircleBorder>1</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Go to `}
+                    <a style={{ color: '#1B52E1' }} href="https://telegram.me/BotFather">{`@BotFather. `}</a>
+                    {`Press his name to do that and then press 'Send Messege' if it's needed.`}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+              <Grid item xs={6}>
+                <CusTopTip>
+                  <CircleBorder>2</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Create a new bot with him. To do this use the 'newbot' command inside @BotFather. `}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+              <Grid item xs={6}>
+                <CusTopTip>
+                  <CircleBorder>3</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Copy the API token that @BotFather will give you.`}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+              <Grid item xs={6}>
+                <CusTopTip>
+                  <CircleBorder>4</CircleBorder>
+                  <Typography fontWeight={400} fontFamily={'Inter'} fontSize={14} component={'span'}>
+                    {`Come back to here and send the copied API token here.`}
+                  </Typography>
+                </CusTopTip>
+              </Grid>
+            </Grid>
+            <Button
+              onClick={() => toBotFather()}
+              color="secondary"
+              variant="contained"
+              sx={{ marginTop: '20px', width: '100%' }}
+            >
+              Go to @BotFather
+            </Button>
+            <DividingLine />
+            <Typography
+              component={'p'}
+              sx={{
+                color: '#121212',
+                fontFamily: `Public Sans`,
+                fontSize: '20px',
+                lineHeight: '20px',
+                width: '100%',
+                marginBottom: '12px',
+                fontWeight: 600
+              }}
+            >{`I've got the API token`}</Typography>
+            <Formik
+              initialValues={internalInitialValues}
+              validationSchema={validationSchema}
+              onSubmit={values => {
+                bindApiToken(values)
+              }}
+            >
+              {({ values }) => (
+                <Stack component={Form} direction={'row'} justifyContent={'center'} gap={'8px'}>
+                  <Stack width={'100%'} gap={8} direction={'row'}>
+                    <FormItem sx={{ width: '100%' }} name="tgToken" required>
+                      <CusInput sx={{ marginTop: '5px' }} value={values.tgToken} />
+                    </FormItem>
+                    <ConfirmBtn type="submit">Confirm</ConfirmBtn>
+                  </Stack>
+                </Stack>
+              )}
+            </Formik>
+          </Box>
+        </TwoColumnPanel>
+      )}
+    </>
   )
 }
 

@@ -22,7 +22,6 @@ export function Guide() {
   }
   return null
 }
-
 const CusContainer = styled(Box)`
   padding: 24px 0px 60px;
   width: 100%;

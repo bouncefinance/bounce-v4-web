@@ -17,6 +17,10 @@ import FooterPc from 'components/Footer/FooterPc'
 
 const CusTabs = styled(Tabs)`
   margin-top: 24px;
+  @media (max-width: 860px) {
+    padding: 0 15.6px;
+  }
+
   .MuiTabs-scroller {
     border-bottom: 1px solid rgba(18, 18, 18, 0.1);
   }
@@ -31,6 +35,9 @@ const CusTabs = styled(Tabs)`
   }
   .MuiTabs-flexContainer {
     gap: 64px;
+    @media (max-width: 860px) {
+      gap: 24px;
+    }
   }
 `
 const ContexContainer = styled(Box)`
@@ -43,6 +50,10 @@ const TabItemContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   margin: 60px 0 42px;
+
+  @media (max-width: 860px) {
+    margin: 40px 0 76px;
+  }
 `
 
 const TabItem = ({ tabValue }: { tabValue: TgBotTabValue }) => {
@@ -86,7 +97,7 @@ const HomePage = () => {
           aria-label="disabled tabs example"
         >
           <Tab label="Auction" value={TgBotTabValue.AUCTION} />
-          <Tab label="Account" value={TgBotTabValue.ACCOUNT} />
+          {/* <Tab label="Account" value={TgBotTabValue.ACCOUNT} /> */}
           <Tab label="Bot setup" value={TgBotTabValue.BOTSETUP} />
         </CusTabs>
         <TabItemContainer>

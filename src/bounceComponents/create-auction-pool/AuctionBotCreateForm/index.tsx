@@ -11,9 +11,11 @@ import {
   FormHelperText,
   Grid,
   IconButton,
-  styled,
-  ButtonBase
+  styled
 } from '@mui/material'
+import Tooltip from 'bounceComponents/common/Tooltip'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import { SetStateAction } from 'react'
 import {
   useUserInfo
   //  useRefreshUserInfoCallback
@@ -36,6 +38,7 @@ import { useActiveWeb3React } from 'hooks'
 import { useDebounce } from 'ahooks'
 import _ from 'lodash'
 import { useShowLoginModal } from 'state/users/hooks'
+import { ZERO } from 'constants/token/constants'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { AllocationStatus, ParticipantStatus, TgBotActiveStep } from 'bounceComponents/create-auction-pool/types'
 import { ChainId, ChainList, ChainListMap } from 'constants/chain'
@@ -45,7 +48,9 @@ import { BigNumber } from 'bignumber.js'
 import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTimePickerFormItem'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
-import { useValuesDispatch, useValuesState, ActionType } from '../ValuesProvider'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useValuesDispatch, useValuesState, ActionType, useAuctionERC20Currency } from '../ValuesProvider'
+import { CurrencyAmount } from 'constants/token'
 // import { BindTgTokenApiParams } from 'api/pool/type'
 import { useNavigate } from 'react-router-dom'
 // import { bindTgTokenApi } from 'api/pool'
@@ -53,8 +58,10 @@ import { routes } from 'constants/routes'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import { ReactComponent as Return } from './svg/return.svg'
 import { show } from '@ebay/nice-modal-react'
-import ImportWhitelistDialog from 'bounceComponents/create-auction-pool/ImportWhitelistDialog'
-import { isAddress } from 'utils'
+import TokenDialog from '../TokenDialog'
+import { Token } from 'bounceComponents/fixed-swap/type'
+import FakeOutlinedInput from '../FakeOutlinedInput'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const CusFormItem = styled(FormItem)`
   .MuiFormHelperText-root {
@@ -63,6 +70,25 @@ const CusFormItem = styled(FormItem)`
 `
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
+  const isMobile = useBreakpoint('md')
+
+  if (isMobile) {
+    return (
+      <Box width={'100%'} padding={16} display={'flex'} justifyContent={'center'}>
+        <Box
+          sx={{
+            width: '100%',
+            borderRadius: '16px',
+            background: '#fff',
+            padding: '24px 16px'
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Box width={'100%'} mt={24} mb={68} height={'552px'} display={'flex'} justifyContent={'center'}>
       <Box
@@ -104,6 +130,12 @@ const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
 interface FormValues {
   tokenFromAddress: string
   tokenToAddress: string
+  tokenFromSymbol: string
+  tokenFromLogoURI?: string
+  tokenFromDecimals: string
+  tokenToSymbol: string
+  tokenToLogoURI?: string
+  tokenToDecimals: string | number
   swapRatio: string
   poolSize: string
   allocationStatus: AllocationStatus
@@ -112,10 +144,10 @@ interface FormValues {
   startTime: Moment | null
   endTime: Moment | null
   poolName: string
-  whitelist: string[]
 }
 
 const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Element => {
+  const isMobile = useBreakpoint('md')
   const { userInfo } = useUserInfo()
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
@@ -124,8 +156,18 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const valuesDispatch = useValuesDispatch()
   const valuesState = useValuesState()
   const navigate = useNavigate()
-  // const refreshUserInfoCallback = useRefreshUserInfoCallback()
+  const { currencyFrom } = useAuctionERC20Currency()
 
+  const getChainName = useCallback(
+    (chain_id: number | undefined) => {
+      if (!chain_id) return null
+      return chainInfoOpt?.find(chainInfo => chainInfo?.['ethChainId'] === chain_id)
+    },
+    [chainInfoOpt]
+  )
+  const auctionInChainId = getChainName(chainId)
+  const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId?.ethChainId)
+  console.log('balance>>>', balance, account, currencyFrom, auctionInChainId?.id)
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
     return ChainList.filter(item => supportIds.includes(item.id)).map(item => (
@@ -154,50 +196,12 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   const tokenMap = useMemo(() => {
     return _.keyBy(tokenList, 'address')
   }, [tokenList])
-  const fundingCurrencyMap = useMemo(() => {
-    return _.keyBy(fundingCurrency, 'address')
-  }, [fundingCurrency])
-  const tokenMenuList = useMemo(() => {
-    return tokenList.map(item => (
-      <MenuItem
-        sx={{
-          padding: '10px 15px'
-        }}
-        key={item.address}
-        value={item.address}
-      >
-        <Box display={'flex'} alignItems="center">
-          <TokenImage src={item.smallUrl ? item.smallUrl : ''} size={32} />
-          <Typography ml={10} fontSize={16}>
-            {item.name}
-          </Typography>
-        </Box>
-      </MenuItem>
-    ))
-  }, [tokenList])
-  const fundingCurrencyMenuList = useMemo(() => {
-    return fundingCurrency.map(item => (
-      <MenuItem
-        sx={{
-          padding: '10px 15px'
-        }}
-        key={item.address}
-        value={item.address}
-      >
-        <Box display={'flex'} alignItems="center">
-          <TokenImage src={item.smallUrl ? item.smallUrl : ''} size={32} />
-          <Typography ml={10} fontSize={16}>
-            {item.name}
-          </Typography>
-        </Box>
-      </MenuItem>
-    ))
-  }, [fundingCurrency])
 
   const validationSchema = Yup.object({
     poolName: Yup.string().max(30, 'Pool name should be less than 30 characters').required('Pool name is required'),
+    tokenFromSymbol: Yup.string().required('Token is required'),
     tokenFromAddress: Yup.string().required('Token is required'),
-    tokenToAddress: Yup.string()
+    tokenToSymbol: Yup.string()
       .required('Funding Currency is required')
       .test('DIFFERENT_TOKENS', 'Please choose a different token', (_, context) => {
         return context.parent.tokenToAddress !== context.parent.tokenFromAddress
@@ -215,36 +219,26 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
         then: Yup.number()
-          .integer()
           .typeError('Please input valid number')
+          .positive('Allocation per wallet must be positive')
+          .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+            const _value = new BigNumber(value || 0).toFixed()
+            return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+          })
           .required('Allocation per wallet is required')
       })
       .when('allocationStatus', {
         is: AllocationStatus.Limited,
         then: Yup.number()
-          .integer()
           .typeError('Please input valid number')
           .test(
-            'GREATER_THAN_TOTAL_SUPPLY',
-            'Allocation per wallet cannnot be greater than total supply times swap ratio',
+            'GREATER_THAN_POOL_SIZE',
+            'Allocation per wallet cannot be greater than pool size times swap ratio',
             (value, context) =>
-              !context.parent.poolSize || !context.parent.swapRatio || (value || 0) <= context.parent.poolSize
+              !context.parent.poolSize ||
+              !context.parent.swapRatio ||
+              (value || 0) <= context.parent.poolSize * context.parent.swapRatio
           )
-      }),
-    whitelist: Yup.array()
-      .of(Yup.string())
-      .test(
-        'NOT_EMPTY_ARRAY',
-        'Whitelist is required',
-        (inputArray, context) =>
-          context.parent.participantStatus !== ParticipantStatus.Whitelist ||
-          (inputArray instanceof Array && inputArray.length > 0)
-      )
-      .test('VALID_ADDRESS_ARRAY', 'Please make sure all addresses are valid', (inputArray, context) => {
-        return (
-          context.parent.participantStatus !== ParticipantStatus.Whitelist ||
-          (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
-        )
       }),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participantStatus status'),
     startTime: Yup.date()
@@ -258,86 +252,120 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       .typeError('Please select a valid time')
       .test('LATER_THAN_START_TIME', 'Please select a time later than start time', (value, context) => {
         return !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
+      }),
+    poolSize: Yup.number()
+      .positive('Amount must be positive')
+      .typeError('Please input valid number')
+      .required('Amount is required')
+      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+        const _value = new BigNumber(value || 0).toFixed()
+        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
       })
+      .test(
+        'POOL_SIZE_LESS_THAN_BALANCE',
+        'Pool size cannot be greater than your balance',
+        value =>
+          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
+      )
   })
 
   const internalInitialValues: FormValues = {
     tokenFromAddress: valuesState.tokenFrom.address,
+    tokenFromSymbol: valuesState.tokenFrom.symbol || '',
+    tokenFromDecimals: String(valuesState.tokenFrom.decimals || ''),
+    tokenFromLogoURI: valuesState.tokenFrom.logoURI || '',
     tokenToAddress: valuesState.tokenTo.address,
+    tokenToSymbol: valuesState.tokenTo.symbol || '',
+    tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
+    tokenToLogoURI: valuesState.tokenTo.logoURI || '',
     swapRatio: valuesState.swapRatio,
     poolSize: valuesState.poolSize,
-    allocationStatus: valuesState.allocationStatus,
+    allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
     allocationPerWallet: valuesState.allocationPerWallet,
-    participantStatus: valuesState.participantStatus,
+    participantStatus: valuesState.participantStatus || ParticipantStatus.Public,
     startTime: valuesState.startTime,
     endTime: valuesState.endTime,
-    poolName: valuesState.poolName,
-    whitelist: valuesState.whitelist
+    poolName: valuesState.poolName
   }
 
   const returnHome = useCallback(() => {
     navigate(routes.telegramBot.home)
   }, [navigate])
 
-  const showImportWhitelistDialog = (
+  const skipTo = useCallback(() => {
+    navigate(routes.telegramBot.home)
+  }, [navigate])
+
+  const showTokenDialog = (
+    chainId: ChainId,
     values: FormValues,
     setValues: (values: any, shouldValidate?: boolean) => void
   ) => {
-    show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
-      .then(whitelist => {
-        console.log('ImportWhitelistDialog Resolved: ', whitelist)
+    show<Token>(TokenDialog, { chainId, action: 1 })
+      .then(res => {
+        console.log('TokenDialog Resolved: ', res)
         valuesDispatch({
-          type: ActionType.SetWhitelist,
+          type: ActionType.CommitBotAuctionParameters,
           payload: {
-            whitelist
+            tokenFrom: {
+              address: res.address,
+              decimals: res.decimals,
+              symbol: values.tokenFromSymbol,
+              logoURI: decodeURIComponent(res.smallUrl || '')
+            }
           }
         })
         setValues({
           ...values,
-          whitelist
+          tokenFromAddress: res.address,
+          tokenFromSymbol: res.symbol,
+          tokenFromLogoURI: decodeURIComponent(res.smallUrl || ''),
+          tokenFromDecimals: res.decimals
         })
       })
       .catch(err => {
-        console.log('ImportWhitelistDialog Rejected: ', err)
+        console.log('TokenDialog Rejected: ', err)
       })
   }
 
-  // const removeTokenApi = useCallback(async () => {
-  //   const params: BindTgTokenApiParams = {
-  //     tgToken: ''
-  //   }
-  //   try {
-  //     const res = await bindTgTokenApi(params)
-  //     refreshUserInfoCallback()
-  //     console.log('bindTgTokenApi res', res)
-  //     valuesDispatch({
-  //       type: ActionType.SetTgToken,
-  //       payload: {
-  //         tgToken: ''
-  //       }
-  //     })
-  //     valuesDispatch({
-  //       type: ActionType.SetTgBotActiveStep,
-  //       payload: {
-  //         tgBotActiveStep: TgBotActiveStep.GETAPITOKEN
-  //       }
-  //     })
-  //     navigate(routes.telegramBot.guide)
-  //   } catch (error) {
-  //     console.log('bindTgTokenApi error', error)
-  //   }
-  // }, [navigate, refreshUserInfoCallback, valuesDispatch])
-  const skipTo = useCallback(() => {
-    navigate(routes.telegramBot.home)
-  }, [navigate])
+  const showTokenToDialog = (
+    chainId: ChainId,
+    values: FormValues,
+    setValues: (values: SetStateAction<FormValues>, shouldValidate?: boolean, filter?: string) => void
+  ) => {
+    show<Token>(TokenDialog, {
+      enableEth: true,
+      chainId,
+      action: 2,
+      filter: '0x0000000000000000000000000000000000000000'
+    })
+      .then(res => {
+        console.log('TokenDialog Resolved: ', res)
+        setValues({
+          ...values,
+          tokenToAddress: res.address,
+          tokenToSymbol: res.symbol?.toLocaleUpperCase() || '',
+          tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
+          tokenToDecimals: res.decimals
+        })
+      })
+      .catch(err => {
+        console.log('TokenDialog Rejected: ', err)
+      })
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <TwoColumnPanel>
         <Stack pb={56}>
           <Stack borderRadius={20}>
-            <Box mb={32} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-              <Box gap={12} display={'flex'} flexDirection={'row'} alignItems={'center'}>
+            <Stack
+              mb={32}
+              direction={isMobile ? undefined : 'row'}
+              justifyContent={'space-between'}
+              alignItems={isMobile ? undefined : 'center'}
+            >
+              <Stack gap={12} direction={'row'} alignItems={'center'}>
                 {type === 'Create' && (
                   <IconButton onClick={() => returnHome()}>
                     <Return />
@@ -346,16 +374,16 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                 <Typography fontFamily={'Public Sans'} fontSize={16} fontWeight={500} color={'#121212'}>
                   API token
                 </Typography>
-              </Box>
+              </Stack>
               <Box display={'flex'} alignItems={'center'} gap={16}>
-                <Typography fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
+                <Typography noWrap fontFamily={'Inter'} fontSize={14} fontWeight={400} color={'#121212'}>
                   {userInfo?.tg_token}
                 </Typography>
                 {/* <IconButton>
                     <Close onClick={() => removeTokenApi()} />
                   </IconButton> */}
               </Box>
-            </Box>
+            </Stack>
           </Stack>
           <Box
             sx={{
@@ -368,9 +396,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
             <Typography
               fontFamily={'Public Sans'}
               textAlign={'center'}
-              fontSize={20}
+              fontSize={isMobile ? 16 : 20}
               fontWeight={600}
-              color={'#121212'}
+              color={'#20201E'}
+              letterSpacing={'-0.32px'}
             >
               Create an auction for your telegram bot
             </Typography>
@@ -379,22 +408,23 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
               initialValues={internalInitialValues}
               validationSchema={validationSchema}
               onSubmit={values => {
+                window.scrollTo(0, 0)
                 valuesDispatch({
                   type: ActionType.CommitBotAuctionParameters,
                   payload: {
                     tokenFrom: {
                       address: values.tokenFromAddress,
-                      decimals: tokenMap[values.tokenFromAddress].decimals,
-                      symbol: tokenMap[values.tokenFromAddress].symbol,
-                      logoURI: tokenMap[values.tokenFromAddress].logoURI,
-                      chainId: tokenMap[values.tokenFromAddress].chainId
+                      decimals: values.tokenFromDecimals,
+                      symbol: values.tokenFromSymbol,
+                      logoURI: values.tokenFromLogoURI,
+                      chainId: getChainName(chainId)?.ethChainId
                     },
                     tokenTo: {
                       address: values.tokenToAddress,
-                      decimals: fundingCurrencyMap[values.tokenToAddress].decimals,
-                      symbol: fundingCurrencyMap[values.tokenToAddress].symbol,
-                      logoURI: fundingCurrencyMap[values.tokenToAddress].logoURI,
-                      chainId: fundingCurrencyMap[values.tokenToAddress].chainId
+                      decimals: values.tokenToDecimals,
+                      symbol: values.tokenToSymbol,
+                      logoURI: values.tokenToLogoURI,
+                      chainId: getChainName(chainId)?.ethChainId
                     },
                     swapRatio: values.swapRatio,
                     poolSize: values.poolSize,
@@ -415,11 +445,11 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                 })
               }}
             >
-              {({ values, handleChange, setValues, errors }) => {
+              {({ values, setValues, errors }) => {
                 return (
                   <>
                     <Stack mt={40}>
-                      <Typography mb={12} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                      <Typography mb={12} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                         Title
                       </Typography>
                       <CusFormItem sx={{ width: '100%' }} error={!account} name="poolName" required>
@@ -442,7 +472,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                       ></Box>
                     </Stack>
                     <FormItem error={!account}>
-                      <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                      <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                         Select Chain
                       </Typography>
                       <Select<ChainId>
@@ -487,36 +517,29 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                     </FormItem>
                     <Stack component={Form} spacing={20}>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Token
                         </Typography>
-                        <FormItem error={!account} name="tokenFromAddress" required>
-                          <Select
-                            value={values.tokenFromAddress}
-                            onChange={handleChange}
-                            onClick={() => !account && showLoginModal()}
-                            name="tokenFromAddress"
-                            displayEmpty
-                            renderValue={() => {
-                              return (
-                                <Box display={'flex'} alignItems="center">
-                                  <TokenImage
-                                    alt={tokenMap[values.tokenFromAddress]?.symbol}
-                                    src={tokenMap[values.tokenFromAddress]?.smallUrl}
-                                    size={32}
-                                  />
-                                  <Box ml={10}>
-                                    <Typography fontSize={12} color={'var(--ps-gray-700)'}>
-                                      Select token
-                                    </Typography>
-                                    <Typography>{values ? tokenMap[values.tokenFromAddress]?.name : ''}</Typography>
-                                  </Box>
-                                </Box>
-                              )
+                      </Stack>
+                      <Stack>
+                        <FormItem
+                          name="tokenFromAddress"
+                          label="Select a token"
+                          required
+                          startAdornment={
+                            <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={32} />
+                          }
+                        >
+                          <FakeOutlinedInput
+                            readOnly
+                            onClick={() => {
+                              if (account && chainId) {
+                                if (getChainName(chainId)) {
+                                  showTokenDialog(getChainName(chainId)?.ethChainId || 1, values, setValues)
+                                }
+                              }
                             }}
-                          >
-                            {tokenMenuList}
-                          </Select>
+                          />
                         </FormItem>
                         <Box
                           sx={{
@@ -529,38 +552,27 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Funding Currency
                         </Typography>
-                        <FormItem error={!account} name="tokenToAddress" required>
-                          <Select
-                            value={values.tokenToAddress}
-                            onChange={handleChange}
-                            onClick={() => !account && showLoginModal()}
-                            name="tokenToAddress"
-                            displayEmpty
-                            renderValue={() => {
-                              return (
-                                <Box display={'flex'} alignItems="center">
-                                  <TokenImage
-                                    alt={fundingCurrencyMap[values.tokenToAddress]?.symbol}
-                                    src={fundingCurrencyMap[values.tokenToAddress]?.smallUrl}
-                                    size={32}
-                                  />
-                                  <Box ml={10}>
-                                    <Typography fontSize={12} color={'var(--ps-gray-700)'}>
-                                      Funding Currency
-                                    </Typography>
-                                    <Typography>
-                                      {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : ''}
-                                    </Typography>
-                                  </Box>
-                                </Box>
-                              )
+                        <FormItem
+                          name="tokenToSymbol"
+                          label="Select Token"
+                          required
+                          sx={{ flex: 1 }}
+                          startAdornment={
+                            <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={32} />
+                          }
+                        >
+                          <FakeOutlinedInput
+                            // disabled
+                            readOnly
+                            onClick={() => {
+                              if (account && chainId) {
+                                showTokenToDialog(getChainName(chainId)?.ethChainId || 1, values, setValues)
+                              }
                             }}
-                          >
-                            {fundingCurrencyMenuList}
-                          </Select>
+                          />
                         </FormItem>
                         <Box
                           sx={{
@@ -573,7 +585,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Swap ratio
                         </Typography>
                         <Box display={'flex'}>
@@ -602,17 +614,8 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                               InputProps={{
                                 endAdornment: (
                                   <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={3}>
-                                    <TokenImage
-                                      alt={fundingCurrencyMap[values.tokenToAddress]?.symbol}
-                                      src={fundingCurrencyMap[values.tokenToAddress]?.smallUrl}
-                                      size={32}
-                                    />
-                                    {/* <TokenImage
-                                      alt={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.symbol}
-                                      src={values.tokenToAddress || fundingCurrencyMap[values.tokenToAddress]?.smallUrl}
-                                      size={32}
-                                    /> */}
-                                    {values.tokenToAddress ? fundingCurrencyMap[values.tokenToAddress]?.name : '-'}
+                                    <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={32} />
+                                    {values.tokenToSymbol ? values.tokenToSymbol : '-'}
                                   </Box>
                                 )
                               }}
@@ -630,9 +633,14 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                          Total Supply
-                        </Typography>
+                        <Stack alignItems={'center'} justifyContent={'space-between'} direction={'row'}>
+                          <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
+                            {`Auction Amount `}
+                            {values.tokenFromSymbol ? values.tokenFromSymbol : '-'}
+                          </Typography>
+                          {<Typography mb={13}>Balance: {balance?.toSignificant() || '-'}</Typography>}
+                        </Stack>
+
                         <CusFormItem error={!account} name="poolSize">
                           <TextField
                             sx={{ width: '100%' }}
@@ -654,10 +662,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                       </Stack>
 
                       <Stack>
-                        <Typography mb={13} variant="h3" sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Time
                         </Typography>
-                        <Box display={'flex'} gap={16}>
+                        <Stack direction={isMobile ? 'column' : 'row'} gap={16}>
                           <Field
                             component={DateTimePickerFormItem}
                             name="startTime"
@@ -672,7 +680,7 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                             minDateTime={values.startTime}
                             textField={{ sx: { flex: 1 } }}
                           />
-                        </Box>
+                        </Stack>
                         <Box
                           sx={{
                             background: '#D4D6CF',
@@ -684,10 +692,10 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
+                        <Typography mb={13} sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
                           Allocation per wallet
                         </Typography>
-                        <FormItem name="allocationStatus" error={!account}>
+                        <CusFormItem name="allocationStatus" error={!account}>
                           <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
                             <FormControlLabel
                               value={AllocationStatus.NoLimits}
@@ -700,17 +708,25 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                               label="Limited"
                             />
                           </Field>
-                        </FormItem>
+                        </CusFormItem>
                         {values.allocationStatus === AllocationStatus.Limited && (
-                          <FormItem error={!account} name="allocationPerWallet" required>
+                          <CusFormItem error={!account} name="allocationPerWallet" required>
                             <TextField
                               sx={{ width: '100%' }}
                               variant="outlined"
                               onClick={() => !account && showLoginModal()}
                               value={values.allocationPerWallet}
                               inputProps={{ readOnly: false }}
+                              InputProps={{
+                                endAdornment: (
+                                  <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={3}>
+                                    <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={32} />
+                                    {values.tokenToSymbol ? values.tokenToSymbol : '-'}
+                                  </Box>
+                                )
+                              }}
                             />
-                          </FormItem>
+                          </CusFormItem>
                         )}
                         <Box
                           sx={{
@@ -723,9 +739,14 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                         ></Box>
                       </Stack>
                       <Stack>
-                        <Typography mb={13} sx={{ fontSize: 20, fontWeight: 600, color: '#20201E' }}>
-                          Participant
-                        </Typography>
+                        <Stack mb={13} direction={'row'} alignItems={'center'} gap={8}>
+                          <Typography sx={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, color: '#20201E' }}>
+                            Participant
+                          </Typography>
+                          <Tooltip title="If this function is enabled, it will verify whether the user has joined the tg group. tgbot needs to join the group and grant administrator privileges.">
+                            <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                          </Tooltip>
+                        </Stack>
                         <FormItem name="participantStatus" error={!account}>
                           <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="participantStatus">
                             <FormControlLabel
@@ -741,27 +762,6 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
                           </Field>
                         </FormItem>
                         <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
-                        <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
-                        <ButtonBase
-                          sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
-                          disabled={values.participantStatus !== ParticipantStatus.Whitelist}
-                          onClick={() => {
-                            showImportWhitelistDialog(values, setValues)
-                          }}
-                        >
-                          {values.participantStatus === ParticipantStatus.Whitelist && (
-                            <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
-                          )}
-                        </ButtonBase>
-                        <Box
-                          sx={{
-                            background: '#D4D6CF',
-                            opacity: 0.7,
-                            height: '1px',
-                            width: '100%',
-                            margin: '24px 0'
-                          }}
-                        ></Box>
                       </Stack>
                       {/* <Grid container spacing={10}>
                           <Grid item xs={6}>

@@ -19,6 +19,13 @@ export const getPools = (body: IPoolsParams) => {
   return ApiInstance.post('/pools', body)
 }
 
+export const getBotTokens = () => {
+  return ApiInstance.get('/bot/tokens', {})
+}
+export const getBotDashboard = () => {
+  return BotApiInstance.get('/bot/pools/dashboard', {})
+}
+
 export const getBotPools = (body: IPoolsParams) => {
   return BotApiInstance.post('/bot/pools', body)
 }

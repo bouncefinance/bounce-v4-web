@@ -43,6 +43,13 @@ export const getWhitelistMerkleTreeRoot = (params: GetWhitelistMerkleTreeRootPar
 }
 
 /**
+ * Get merkle tree root of whitelist
+ */
+export const getTgWhitelistMerkleTreeRoot = (params: GetWhitelistMerkleTreeRootParams) => {
+  return BotApiInstance.post<GetWhitelistMerkleTreeRootResponse>('/bot/import_whitelist', params)
+}
+
+/**
  * Get info of single pool
  */
 export const getPoolInfo = (params: GetPoolInfoParams) => {

@@ -34,6 +34,7 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { useCreateBotSwapPool } from 'hooks/useCreateBotSwapPool'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
   switch (key) {
@@ -51,6 +52,25 @@ export const tokenReleaseTypeText = (key: IReleaseType | 1000) => {
 }
 
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
+  const isMobile = useBreakpoint('md')
+
+  if (isMobile) {
+    return (
+      <Box width={'100%'} padding={16} display={'flex'} justifyContent={'center'}>
+        <Box
+          sx={{
+            width: '100%',
+            borderRadius: '16px',
+            background: '#fff',
+            padding: '24px 16px'
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    )
+  }
+
   return (
     <Box width={'100%'} mt={24} mb={68} height={'552px'} display={'flex'} justifyContent={'center'}>
       <Box
@@ -112,16 +132,23 @@ const ConfirmationSubtitle = styled(Typography)`
   font-weight: 400;
   line-height: 140%;
   text-transform: capitalize;
+  white-space: nowrap;
+  @media (max-width: 860px) {
+    font-size: 12px;
+  }
 `
 
-const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => (
-  <Stack direction="row" justifyContent="space-between" alignItems="center" columnGap={20}>
-    {typeof title === 'string' ? <ConfirmationSubtitle>{title}</ConfirmationSubtitle> : title}
-    <Typography color={'#20201E'} fontSize={13} fontWeight={400} fontFamily={'Inter'}>
-      {children}
-    </Typography>
-  </Stack>
-)
+const ConfirmationInfoItem = ({ children, title }: { children: ReactNode; title?: ReactNode }): JSX.Element => {
+  const isMobile = useBreakpoint('md')
+  return (
+    <Stack direction="row" justifyContent="space-between" alignItems="center" columnGap={20}>
+      {typeof title === 'string' ? <ConfirmationSubtitle>{title}</ConfirmationSubtitle> : title}
+      <Typography color={'#20201E'} fontSize={isMobile ? 12 : 13} fontWeight={400} fontFamily={'Inter'}>
+        {children}
+      </Typography>
+    </Stack>
+  )
+}
 
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
 
@@ -129,6 +156,7 @@ const CreatePoolButton = () => {
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const values = useValuesState()
+  console.log('create btn values', values)
   const switchNetwork = useSwitchNetwork()
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const { currencyFrom } = useAuctionERC20Currency()
@@ -139,7 +167,6 @@ const CreatePoolButton = () => {
   )
   const valuesDispatch = useValuesDispatch()
   const navigate = useNavigate()
-
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
     values.auctionInChain && chainId === values.auctionInChain
@@ -148,7 +175,6 @@ const CreatePoolButton = () => {
     true
   )
   const createBotSwapPool = useCreateBotSwapPool()
-
   const toCreate = useCallback(async () => {
     showRequestConfirmDialog({ isBot: true, dark: false })
 
@@ -353,8 +379,11 @@ const CreatePoolButton = () => {
 }
 
 const CreationBotConfirmation = () => {
+  const isMobile = useBreakpoint('md')
   const values = useValuesState()
   const valuesDispatch = useValuesDispatch()
+  console.log('CreationBotConfirmation values', values)
+
   return (
     <TwoColumnPanel>
       <Stack mb={56}>
@@ -369,16 +398,16 @@ const CreationBotConfirmation = () => {
           Creation confirmation
         </Typography>
         <Stack
-          padding={30}
           sx={{
             borderRadius: '20px',
-            background: 'var(--grey-06, #F6F6F3)'
+            background: 'var(--grey-06, #F6F6F3)',
+            padding: isMobile ? '24px 16px' : '30px'
           }}
         >
-          <Typography fontFamily={'Public Sans'} fontSize={20} fontWeight={600}>
+          <Typography fontFamily={'Public Sans'} fontSize={isMobile ? 16 : 20} fontWeight={600}>
             {values.poolName} Fixed-price Pool
           </Typography>
-          <Stack spacing={24}>
+          <Stack spacing={isMobile ? 12 : 24}>
             <ComfirmGreenRow justifyContent={'space-between'} direction={'row'} mt={12}>
               <Typography color={'#121212'} fontFamily={'Public Sans'} fontSize={14} fontWeight={600}>
                 Chain
@@ -390,13 +419,13 @@ const CreationBotConfirmation = () => {
                   width={20}
                   height={20}
                 />
-                <Typography sx={{ ml: 4 }}>
+                <Typography fontSize={isMobile ? 13 : 12} sx={{ ml: 4 }}>
                   {values.auctionInChain ? (ChainListMap as any)[values.auctionInChain]?.name : ''}
                 </Typography>
               </Box>
             </ComfirmGreenRow>
             <ComfirmRow>
-              <Typography color={'#20201E'} fontFamily={'Public Sans'} fontSize={14} fontWeight={600}>
+              <Typography color={'#20201E'} fontFamily={'Public Sans'} fontSize={13} fontWeight={600}>
                 Token Information
               </Typography>
 
@@ -417,15 +446,18 @@ const CreationBotConfirmation = () => {
                 </ConfirmationInfoItem>
               </Stack>
             </ComfirmRow>
-            <Box
-              sx={{
-                background: '#D4D6CF',
-                opacity: 0.7,
-                height: '1px',
-                width: '100%',
-                margin: '24px 0'
-              }}
-            ></Box>
+            {!isMobile && (
+              <Box
+                sx={{
+                  background: '#D4D6CF',
+                  opacity: 0.7,
+                  height: '1px',
+                  width: '100%',
+                  margin: '24px 0'
+                }}
+              ></Box>
+            )}
+
             <ComfirmRow>
               <Typography color={'#20201E'} fontFamily={'Public Sans'} fontSize={14} fontWeight={600}>
                 Auction Parameters
@@ -458,15 +490,17 @@ const CreationBotConfirmation = () => {
                 </ConfirmationInfoItem>
               </Stack>
             </ComfirmRow>
-            <Box
-              sx={{
-                background: '#D4D6CF',
-                opacity: 0.7,
-                height: '1px',
-                width: '100%',
-                margin: '24px 0'
-              }}
-            ></Box>
+            {!isMobile && (
+              <Box
+                sx={{
+                  background: '#D4D6CF',
+                  opacity: 0.7,
+                  height: '1px',
+                  width: '100%',
+                  margin: '24px 0'
+                }}
+              ></Box>
+            )}
             <ComfirmRow>
               <Typography color={'#20201E'} fontFamily={'Public Sans'} fontSize={14} fontWeight={600}>
                 Advanced Settings
@@ -480,15 +514,17 @@ const CreationBotConfirmation = () => {
                 </ConfirmationInfoItem>
               </Stack>
             </ComfirmRow>
-            <Box
-              sx={{
-                background: '#D4D6CF',
-                opacity: 0.7,
-                height: '1px',
-                width: '100%',
-                margin: '24px 0'
-              }}
-            ></Box>
+            {!isMobile && (
+              <Box
+                sx={{
+                  background: '#D4D6CF',
+                  opacity: 0.7,
+                  height: '1px',
+                  width: '100%',
+                  margin: '24px 0'
+                }}
+              ></Box>
+            )}
             <ComfirmRow>
               <Typography color={'#20201E'} fontFamily={'Public Sans'} fontSize={14} fontWeight={600}>
                 Participant Settings
@@ -511,6 +547,7 @@ const CreationBotConfirmation = () => {
               type="submit"
               variant="outlined"
               onClick={() => {
+                window.scrollTo(0, 0)
                 valuesDispatch({
                   type: ActionType.SetTgBotActiveStep,
                   payload: {

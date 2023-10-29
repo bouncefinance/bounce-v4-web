@@ -14,12 +14,16 @@ interface PoolInfoItemProps {
   tip?: string
   children?: ReactNode
   sx?: SxProps
+  isMobile?: boolean
 }
 
-const PoolInfoItem = ({ title, tip, children, sx }: PoolInfoItemProps): JSX.Element => {
+const PoolInfoItem = ({ title, tip, children, sx, isMobile = false }: PoolInfoItemProps): JSX.Element => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false)
   return (
-    <Box gap={12} sx={{ ...sx, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <Box
+      gap={12}
+      sx={{ ...sx, display: 'flex', flexDirection: isMobile ? 'row' : 'column', justifyContent: 'space-between' }}
+    >
       <Box sx={{ display: 'flex', alignItems: 'center', color: '#908E96' }}>
         <SubTitle>{title}</SubTitle>
         {tip ? (

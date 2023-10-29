@@ -22,6 +22,7 @@ export interface TokenDialogProps {
   onClose?: () => void
   chainId: ChainId
   action: 1 | 2
+  filter: string
 }
 
 const Loading = () => {
@@ -35,7 +36,7 @@ const Loading = () => {
   )
 }
 
-const TokenDialog = create(({ enableEth, chainId, action }: TokenDialogProps) => {
+const TokenDialog = create(({ enableEth, chainId, action, filter = '' }: TokenDialogProps) => {
   const modal = useModal()
   // const chainConfig = useChainConfigInBackend('ethChainId', chainId)
 
@@ -48,7 +49,7 @@ const TokenDialog = create(({ enableEth, chainId, action }: TokenDialogProps) =>
     modal.hide()
   }
 
-  const [filterInputValue, setFilterInputValue] = useState<string>('')
+  const [filterInputValue, setFilterInputValue] = useState<string>(filter)
 
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
 

@@ -56,10 +56,9 @@ const instance = (baseuri: string) => ({
   }
 })
 const botInstance = (baseuri: string) => ({
-  get<TData = any>(url: string, params: any, headers?: any): Promise<IResponse<TData>> {
+  get<TData = any>(url: string, params: any): Promise<IResponse<TData>> {
     return request(`${baseuri}${url}?${new URLSearchParams(params).toString()}`, {
       headers: {
-        ...headers,
         ...initSignature()
       }
     })

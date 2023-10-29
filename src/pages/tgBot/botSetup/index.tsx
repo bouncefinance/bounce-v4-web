@@ -34,13 +34,63 @@ import {
   // , bindInviteLinks
 } from 'api/market'
 import { LoadingButton } from '@mui/lab'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const CusButton = styled(LoadingButton)`
   padding: 20px 40px;
 `
+// const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
+//   return (
+//     <Box mt={'24px'} mb={'60px'} display={'flex'} justifyContent={'center'}>
+//       <Box
+//         sx={{
+//           display: 'flex',
+//           alignItems: 'center',
+//           justifyContent: 'center',
+//           flex: 1,
+//           maxWidth: '544px',
+//           background: 'var(--yellow, #E1F25C)',
+//           borderRadius: '24px 0 0 24px'
+//         }}
+//       >
+//         <Bot />
+//       </Box>
+//       <Box
+//         overflow={'hidden'}
+//         sx={{
+//           borderRadius: '0 24px 24px 0',
+//           background: '#fff',
+//           padding: '56px'
+//         }}
+//       >
+//         {children}
+//       </Box>
+//     </Box>
+//   )
+// }
+
 const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
+  const isMobile = useBreakpoint('md')
+
+  if (isMobile) {
+    return (
+      <Box width={'100%'} padding={16} display={'flex'} justifyContent={'center'}>
+        <Box
+          sx={{
+            width: '100%',
+            borderRadius: '16px',
+            background: '#fff',
+            padding: '24px 16px'
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    )
+  }
+
   return (
-    <Box mt={'24px'} mb={'60px'} display={'flex'} justifyContent={'center'}>
+    <Box width={'100%'} mt={24} mb={68} height={'552px'} display={'flex'} justifyContent={'center'}>
       <Box
         sx={{
           display: 'flex',
@@ -55,14 +105,22 @@ const TwoColumnPanel = ({ children }: { children: JSX.Element }) => {
         <Bot />
       </Box>
       <Box
-        overflow={'hidden'}
         sx={{
           borderRadius: '0 24px 24px 0',
           background: '#fff',
-          padding: '56px'
+          padding: '56px 0px 0'
         }}
       >
-        {children}
+        <Box
+          sx={{
+            minWidth: '600px',
+            padding: '0 56px 0',
+            height: '100%',
+            overflowY: 'scroll'
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   )
@@ -91,6 +149,19 @@ const CusTextBox = styled(Box)`
   overflow-wrap: break-word;
 `
 
+const CusMobileTextBox = styled(Typography)`
+  padding: 16px;
+  border-radius: 6px;
+  background: var(--grey-06, #f6f6f3);
+  width: 100%;
+  word-wrap: break-word;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
+`
+
 const CusTopTip = styled(Typography)`
   display: flex;
   height: 160px;
@@ -107,6 +178,10 @@ const CusTopTip = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 21px */
+  @media (max-width: 860px) {
+    height: 140px;
+    padding: 16px 16px 40px 16px;
+  }
 `
 
 const CircleBorder = styled(Typography)`
@@ -128,9 +203,15 @@ const CircleBorder = styled(Typography)`
   line-height: 150%; /* 18px */
   letter-spacing: -0.24px;
   text-transform: capitalize;
+
+  @media (max-width: 860px) {
+    width: 24px;
+    height: 24px;
+  }
 `
 
 export default function BotSetup() {
+  const isMobile = useBreakpoint('md')
   const valuesDispatch = useValuesDispatch()
   const navigate = useNavigate()
   const { userInfo } = useUserInfo()
@@ -232,12 +313,12 @@ export default function BotSetup() {
 
   return (
     <TwoColumnPanel>
-      <Stack minWidth={679} direction={'column'}>
-        <Typography fontSize={28} fontWeight={600} component={'h2'}>
+      <Stack direction={'column'}>
+        <Typography fontSize={isMobile ? 20 : 28} fontWeight={600} component={'h2'}>
           Bot linking
         </Typography>
         <Grid maxWidth={679} my={32} container spacing={16}>
-          <Grid item xs={6}>
+          <Grid item xs={isMobile ? 12 : 6}>
             <CusTopTip>
               <CircleBorder>1</CircleBorder>
               <Typography fontSize={14} component={'span'}>
@@ -247,7 +328,7 @@ export default function BotSetup() {
               </Typography>
             </CusTopTip>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isMobile ? 12 : 6}>
             <CusTopTip>
               <CircleBorder>2</CircleBorder>
               <Typography fontSize={14} component={'span'}>
@@ -255,7 +336,7 @@ export default function BotSetup() {
               </Typography>
             </CusTopTip>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isMobile ? 12 : 6}>
             <CusTopTip>
               <CircleBorder>3</CircleBorder>
               <Typography fontSize={14} component={'span'}>
@@ -263,7 +344,7 @@ export default function BotSetup() {
               </Typography>
             </CusTopTip>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={isMobile ? 12 : 6}>
             <CusTopTip>
               <CircleBorder>4</CircleBorder>
               <Typography fontSize={14} component={'span'}>
@@ -274,9 +355,17 @@ export default function BotSetup() {
         </Grid>
 
         <BotSetUpInfoItem title="Link">
-          <Stack direction="row" spacing={6} sx={{ alignItems: 'center' }}>
-            <CusTextBox>{userInfo ? userInfo?.tg_token : ''}</CusTextBox>
+          <Stack direction={isMobile ? 'column' : 'row'} gap={8} sx={{ alignItems: 'center' }}>
+            {isMobile ? (
+              <CusMobileTextBox>
+                <Typography>{userInfo ? userInfo?.tg_token : ''}</Typography>
+              </CusMobileTextBox>
+            ) : (
+              <CusTextBox>{userInfo ? userInfo?.tg_token : ''}</CusTextBox>
+            )}
+
             <CusButton
+              sx={{ width: isMobile ? '100%' : '' }}
               variant="contained"
               loadingPosition="start"
               loading={isRemoveTokening}
@@ -304,6 +393,7 @@ export default function BotSetup() {
               title: 'Edit introduction',
               content: '',
               value: userInfo ? userInfo?.tgIntroduction : '',
+              isBot: true,
               contentType: 'TextArea',
               onAgain: (value: string) => {
                 editIntroduction(value)
@@ -312,7 +402,7 @@ export default function BotSetup() {
           }}
         >
           <Stack direction="row" spacing={6} sx={{ alignItems: 'center' }}>
-            {userInfo ? userInfo?.tgIntroduction : ''}
+            <CusTextBox>{userInfo ? userInfo?.tgIntroduction : ''}</CusTextBox>
             {/* <CusTextBox>
               <ReactMarkdown children={userInfo ? userInfo?.tgIntroduction : ''} />
             </CusTextBox> */}
