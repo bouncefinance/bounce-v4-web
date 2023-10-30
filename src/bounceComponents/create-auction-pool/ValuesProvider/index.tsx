@@ -15,9 +15,10 @@ import {
   AuctionType,
   IReleaseType,
   IReleaseData,
-  PriceSegmentType
+  PriceSegmentType,
+  TgBotActiveStep,
+  TgBotTabValue
 } from '../types'
-
 const ValuesStateContext = createContext<AuctionPool | null>(null)
 const ValuesDispatchContext = createContext<Dispatch<any> | null>(null)
 
@@ -31,7 +32,6 @@ export const useValuesState = () => {
 
 export const useAuctionERC20Currency = () => {
   const { tokenFrom, tokenTo } = useValuesState()
-
   const makeCurrency = (_token: Token) => {
     if (isAddress(_token.address) && _token.chainId && _token.decimals) {
       return new Currency(
@@ -130,7 +130,11 @@ const initialValues: AuctionPool = {
   winnerNumber: 0,
   ticketPrice: '',
   enableReverse: true,
-  maxParticipantAllowed: 0
+  maxParticipantAllowed: 0,
+  tgBotActiveStep: TgBotActiveStep.GETAPITOKEN,
+  tgToken: '',
+  auctionInChain: NETWORK_CHAIN_ID,
+  tgBotTabValue: TgBotTabValue.AUCTION
 }
 
 export enum ActionType {
@@ -145,7 +149,11 @@ export enum ActionType {
   CommitRandomSelectionAuctionParameters = 'COMMIT_RANDOM_SELECTION_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',
-  SetWhitelist = 'SET_WHITELIST'
+  SetWhitelist = 'SET_WHITELIST',
+  SetTgBotActiveStep = 'SET_TG_BOT_ACTIVE_STEP',
+  SetTgToken = 'SET_API_TOKEN',
+  CommitBotAuctionParameters = 'COMMIT_BOT_AUCTION_PARAMETERS',
+  SetTgBotTabValue = 'SET_TG_BOT_TAB_VALUE'
 }
 
 type Payload = {
@@ -201,6 +209,19 @@ type Payload = {
     activeStep: number
     completed: CompletedSteps
   }
+  [ActionType.CommitBotAuctionParameters]: {
+    tokenTo: Token
+    tokenFrom: Token
+    swapRatio: string
+    poolSize: string
+    allocationStatus: AllocationStatus
+    allocationPerWallet: string
+    participantStatus: ParticipantStatus
+    startTime: Moment
+    endTime: Moment
+    poolName: string
+    auctionInChain: ChainId | number | undefined
+  }
   [ActionType.CommitRandomSelectionAuctionParameters]: {
     tokenTo: Token
     swapRatio: string
@@ -237,6 +258,15 @@ type Payload = {
   }
   [ActionType.SetWhitelist]: {
     whitelist: string[]
+  }
+  [ActionType.SetTgBotActiveStep]: {
+    tgBotActiveStep: TgBotActiveStep
+  }
+  [ActionType.SetTgToken]: {
+    tgToken: string
+  }
+  [ActionType.SetTgBotTabValue]: {
+    tgBotTabValue: TgBotTabValue
   }
 }
 
@@ -318,6 +348,27 @@ const reducer = (state: AuctionPool, action: Actions) => {
         activeStep: state.activeStep + 1,
         completed: { ...state.completed, [state.activeStep]: true }
       }
+    case ActionType.CommitBotAuctionParameters:
+      return {
+        ...state,
+        tokenTo: {
+          ...state.tokenTo,
+          ...action.payload.tokenTo
+        },
+        tokenFrom: {
+          ...state.tokenFrom,
+          ...action.payload.tokenFrom
+        },
+        swapRatio: action.payload.swapRatio,
+        poolSize: action.payload.poolSize,
+        allocationStatus: action.payload.allocationStatus,
+        allocationPerWallet: action.payload.allocationPerWallet,
+        participantStatus: action.payload.participantStatus,
+        startTime: action.payload.startTime,
+        endTime: action.payload.endTime,
+        poolName: action.payload.poolName,
+        auctionInChain: action.payload.auctionInChain
+      }
     case ActionType.CommitRandomSelectionAuctionParameters:
       return {
         ...state,
@@ -373,6 +424,21 @@ const reducer = (state: AuctionPool, action: Actions) => {
       return {
         ...state,
         auctionType: action.payload.auctionType
+      }
+    case ActionType.SetTgBotActiveStep:
+      return {
+        ...state,
+        tgBotActiveStep: action.payload.tgBotActiveStep
+      }
+    case ActionType.SetTgToken:
+      return {
+        ...state,
+        tgToken: action.payload.tgToken
+      }
+    case ActionType.SetTgBotTabValue:
+      return {
+        ...state,
+        tgBotTabValue: action.payload.tgBotTabValue
       }
     default:
       return state

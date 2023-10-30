@@ -1,4 +1,4 @@
-import { ApiInstance } from '..'
+import { ApiInstance, BotApiInstance } from '..'
 import {
   GetPoolCreationSignatureParams,
   GetPoolCreationSignatureResponse,
@@ -10,7 +10,8 @@ import {
   GetWhitelistMerkleTreeRootResponse,
   UpdateAuctionBackgroundParams,
   GetWinnersListParams,
-  GetWinnersListResponse
+  GetWinnersListResponse,
+  BindTgTokenApiParams
 } from './type'
 
 /**
@@ -21,10 +22,31 @@ export const getPoolCreationSignature = (params: GetPoolCreationSignatureParams)
 }
 
 /**
+ * Get signature for bot auction pool creation
+ */
+export const getBotPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
+  return BotApiInstance.post<GetPoolCreationSignatureResponse>('/bot/create_pool_sign', params)
+}
+
+/**
+ * bind tg token_api
+ */
+export const bindTgTokenApi = (params: BindTgTokenApiParams) => {
+  return ApiInstance.post('/user/tg_token/bind', params)
+}
+
+/**
  * Get merkle tree root of whitelist
  */
 export const getWhitelistMerkleTreeRoot = (params: GetWhitelistMerkleTreeRootParams) => {
   return ApiInstance.post<GetWhitelistMerkleTreeRootResponse>('/user/import_whitelist', params)
+}
+
+/**
+ * Get merkle tree root of whitelist
+ */
+export const getTgWhitelistMerkleTreeRoot = (params: GetWhitelistMerkleTreeRootParams) => {
+  return BotApiInstance.post<GetWhitelistMerkleTreeRootResponse>('/bot/import_whitelist', params)
 }
 
 /**

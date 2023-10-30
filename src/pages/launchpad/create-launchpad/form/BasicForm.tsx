@@ -1,10 +1,9 @@
-import { Box, MenuItem, OutlinedInput, Select, Stack, SxProps } from '@mui/material'
+import { Box, OutlinedInput, Stack, SxProps } from '@mui/material'
 import { CardBox, BaseBox, Title, SubmitComp, FormLayout, FormUploadAdd, AddFile } from './BaseComponent'
 import { Formik } from 'formik'
 import FormItem from 'bounceComponents/common/FormItem'
 import MarkdownEditor from '../components/markdownEditor'
-import Image from 'components/Image'
-import { ChainId, ChainList } from 'constants/chain'
+import { ChainId } from 'constants/chain'
 import { Body02 } from 'components/Text'
 import { ReactComponent as BigAddIcon } from 'assets/imgs/icon/big-add.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -234,7 +233,7 @@ const BasicForm = ({
                       </FormItem>
                     }
                   />
-                  <FormLayout
+                  {/* <FormLayout
                     title1="Blockchain Platform"
                     title2="What platform is this project issued on?"
                     childForm={
@@ -284,7 +283,7 @@ const BasicForm = ({
                         </Select>
                       </FormItem>
                     }
-                  />
+                  /> */}
                   <FormLayout
                     title1="Whitepaper/Technical Documentation Link"
                     childForm={

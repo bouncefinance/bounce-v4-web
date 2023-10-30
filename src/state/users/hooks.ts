@@ -256,6 +256,9 @@ interface IUserInfoData {
   resumes: any[]
   // isVerify: number
   ifKyc: number
+  isWhitelist: 0 | 2 //0: no - 2: yes
+  tg_token: string
+  tgIntroduction: string
 }
 
 export function useUserInfo(): ICacheLoginInfo & {

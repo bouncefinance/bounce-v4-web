@@ -10,7 +10,7 @@ import { routes } from 'constants/routes'
 const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ sx, onDismiss }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
-  const { token } = useUserInfo()
+  const { token, userInfo } = useUserInfo()
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -63,15 +63,18 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
       >
         Create an auction
       </MenuItem>
-      {/* <MenuItem
-        onClick={() => {
-          navigate(`${routes.thirdPart.CreateLaunchpad}`)
-          setAnchorEl(null)
-          onDismiss && onDismiss()
-        }}
-      >
-        Create an Launchpad
-      </MenuItem> */}
+      {userInfo?.isWhitelist === 2 && (
+        <MenuItem
+          onClick={() => {
+            navigate(`${routes.thirdPart.CreateLaunchpad}`)
+            setAnchorEl(null)
+            onDismiss && onDismiss()
+          }}
+        >
+          Create an Launchpad
+        </MenuItem>
+      )}
+
       {/* <MenuItem
         onClick={() => {
           navigate(routes.idea.create)
