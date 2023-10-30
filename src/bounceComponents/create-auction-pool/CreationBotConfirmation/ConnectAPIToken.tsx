@@ -223,6 +223,7 @@ const ConnectAPIToken = () => {
       }
     })
   }
+  console.log('userInfo>>>>', userInfo)
 
   return (
     <>
