@@ -23,6 +23,7 @@ export interface TokenDialogProps {
   chainId: ChainId
   action: 1 | 2
   filter: string
+  isSearch?: boolean
 }
 
 const Loading = () => {
@@ -36,7 +37,7 @@ const Loading = () => {
   )
 }
 
-const TokenDialog = create(({ enableEth, chainId, action, filter = '' }: TokenDialogProps) => {
+const TokenDialog = create(({ enableEth, chainId, action, filter = '', isSearch = true }: TokenDialogProps) => {
   const modal = useModal()
   // const chainConfig = useChainConfigInBackend('ethChainId', chainId)
 
@@ -63,16 +64,18 @@ const TokenDialog = create(({ enableEth, chainId, action, filter = '' }: TokenDi
 
   return (
     <Dialog title="Select a token" fullWidth {...muiDialogV5(modal)} onClose={handleReject}>
-      <OutlinedInput
-        onChange={event => {
-          console.log('filterInputValue: ', event.target.value)
-          setFilterInputValue(event.target.value)
-        }}
-        fullWidth
-        sx={{ mb: 30 }}
-        startAdornment={<SearchIcon sx={{ mr: 4 }} />}
-        placeholder="Search by token name or contract address"
-      />
+      {isSearch && (
+        <OutlinedInput
+          onChange={event => {
+            console.log('filterInputValue: ', event.target.value)
+            setFilterInputValue(event.target.value)
+          }}
+          fullWidth
+          sx={{ mb: 30 }}
+          startAdornment={<SearchIcon sx={{ mr: 4 }} />}
+          placeholder="Search by token name or contract address"
+        />
+      )}
 
       {tokenList && !isGettingTokenList && !isGettingSingleToken ? (
         <VirtualizedList data={tokenList} onOk={handleResolve} onCancel={handleReject} />

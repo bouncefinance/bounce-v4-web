@@ -86,7 +86,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
 }
 
 export const FIXED_SWAP_BOT_ERC20_ADDRESSES: { [chainId in ChainId]?: string } = {
-  [ChainId.SEPOLIA]: '0xC75Cb3faC326900cEaE35613995644f539A69E49'
+  [ChainId.SEPOLIA]: '0xC75Cb3faC326900cEaE35613995644f539A69E49',
+  [ChainId.MAINNET]: '0x44c4117f2b97B5E7B0e6C3bd144894C7a1B5CF04'
 }
 
 export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {

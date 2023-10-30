@@ -337,7 +337,8 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       enableEth: true,
       chainId,
       action: 2,
-      filter: '0x0000000000000000000000000000000000000000'
+      filter: '0x0000000000000000000000000000000000000000',
+      isSearch: false
     })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)
