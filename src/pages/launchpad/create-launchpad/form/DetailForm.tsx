@@ -66,8 +66,8 @@ enum PoolState {
   'UP_CHAIN' = 3
 }
 const auctionType = [
-  { label: 'Fixed Price', value: PoolType.FixedSwap }
-  // { label: 'Random Selection', value: PoolType.Lottery },
+  { label: 'Fixed Price', value: PoolType.FixedSwap },
+  { label: 'Staking Auction', value: PoolType.STAKING_ACTION }
   // { label: 'Dutch Auction', value: PoolType.DUTCH_AUCTION },
   // { label: 'Fixed Swap NFT', value: PoolType.fixedSwapNft }
 ]
@@ -227,14 +227,16 @@ function SetFragmentReleaseTime({
 const showTokenDialog = async ({
   chainId,
   enableEth = true,
-  setFieldValue
+  setFieldValue,
+  setFormItem
 }: {
   chainId: ChainId
   enableEth?: boolean
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  setFormItem: string
 }) => {
   const res = await show<Token>(TokenDialog, { chainId, enableEth })
-  setFieldValue('Token', res)
+  setFieldValue(setFormItem, res)
 }
 const showImportWhitelistDialog = (
   values: IDetailInitValue,
@@ -312,10 +314,19 @@ const DetailForm = ({
         decimals: 18,
         symbol: ''
       },
+      StakingToken: {
+        address: '',
+        chainId: undefined,
+        decimals: 18,
+        symbol: ''
+      },
       SwapRatio: '',
+      QuotaRatio: '',
       TotalSupply: '',
       startTime: null,
       endTime: null,
+      stakingStartTime: null,
+      stakingEndTime: null,
       allocationStatus: AllocationStatus.NoLimits,
       allocationPerWallet: '',
       releaseType: IReleaseType.Cliff,
@@ -374,6 +385,10 @@ const DetailForm = ({
       if (values.allocationStatus === AllocationStatus.Limited) {
         poolParams['maxAmount1PerWallet'] = `${Number(values.allocationPerWallet)}`
       }
+      if (values.AuctionType === PoolType.STAKING_ACTION) {
+        poolParams['maxAmount1PerWallet'] = ''
+      }
+
       const releaseType = Number(values.releaseType)
       if (releaseType !== IReleaseType.Instant) {
         if (releaseType === IReleaseType.Cliff) {
@@ -416,9 +431,7 @@ const DetailForm = ({
           : IReleaseType.Cliff === poolParams.releaseType
           ? poolParams.releaseData?.[0].startAt || 0
           : poolParams.closeAt || 0),
-        console.log('poolParams')
-      console.log(poolParams)
-
+        console.log('poolParams', poolParams)
       return updateLaunchpadPool(poolParams)
     },
     { manual: true }
@@ -736,7 +749,7 @@ const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
       </BaseBox>
 
       <BaseBox>
-        <Title sx={{ color: '#20201E', fontSize: 28 }}>Launchpad Information</Title>
+        <Title sx={{ color: '#20201E', fontSize: 36 }}>Launchpad Information</Title>
         <Box my={40}>
           <Stack
             sx={{
@@ -794,6 +807,87 @@ const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
               </FormItem>
             }
           />
+          {values.AuctionType === PoolType.STAKING_ACTION && (
+            <>
+              <Title sx={{ color: '#20201E', fontSize: 28 }}>Staked Period setting</Title>
+              <FormLayout
+                title1="Staking Currency"
+                childForm={
+                  <FormItem
+                    name="StakingToken.symbol"
+                    label="Select StakingToken"
+                    firstTrigger={isStrict}
+                    required
+                    sx={{ flex: 1 }}
+                    startAdornment={
+                      <TokenImage
+                        alt={values.StakingToken && values.StakingToken.symbol}
+                        src={values.StakingToken && values.StakingToken.smallUrl}
+                        size={32}
+                      />
+                    }
+                  >
+                    <FakeOutlinedInput
+                      readOnly
+                      onClick={() =>
+                        showTokenDialog({
+                          chainId: values.ChainId as ChainId,
+                          setFieldValue,
+                          setFormItem: 'StakingToken'
+                        })
+                      }
+                    />
+                  </FormItem>
+                }
+              />
+              <FormLayout
+                title1="Quota Ratio"
+                childForm={
+                  <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between', gap: 15 }}>
+                    <Title sx={{ fontSize: 20, color: '#171717' }}>
+                      1 {!values.StakingToken?.name ? 'USDT' : values.StakingToken?.name} =
+                    </Title>
+                    <FormItem placeholder="0.00" sx={{ flex: 1 }} name="QuotaRatio" firstTrigger={isStrict}>
+                      <NumberInput
+                        value={values.QuotaRatio}
+                        onUserInput={value => setFieldValue('QuotaRatio', value)}
+                        endAdornment={
+                          <>
+                            <TokenImage alt={values.TokenName} src={values.TokenLogo} size={24} />
+                            <Typography sx={{ ml: 8 }}>{values.TokenName}</Typography>
+                          </>
+                        }
+                      />
+                    </FormItem>
+                  </Stack>
+                }
+              />
+              <Box>
+                <Title mb={13} sx={{ color: '#20201E', fontSize: 20 }}>
+                  Staking Time
+                </Title>
+                <Stack flexDirection={'row'}>
+                  <Field
+                    component={DateTimePickerFormItem}
+                    name="stakingStartTime"
+                    disablePast
+                    maxDateTime={values.stakingEndTime && values.stakingEndTime}
+                    textField={{ sx: { flex: 1 } }}
+                    firstVery={isStrict}
+                  />
+                  <Field
+                    component={DateTimePickerFormItem}
+                    name="stakingEndTime"
+                    disablePast
+                    minDateTime={values.stakingStartTime && values.stakingStartTime}
+                    textField={{ sx: { flex: 1 } }}
+                    firstVery={isStrict}
+                  />
+                </Stack>
+              </Box>
+              <Title sx={{ color: '#20201E', fontSize: 28 }}>Subscription Period</Title>
+            </>
+          )}
 
           <FormLayout
             title1="Funding Currency"
@@ -808,7 +902,9 @@ const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
               >
                 <FakeOutlinedInput
                   readOnly
-                  onClick={() => showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue })}
+                  onClick={() =>
+                    showTokenDialog({ chainId: values.ChainId as ChainId, setFieldValue, setFormItem: 'Token' })
+                  }
                 />
               </FormItem>
             }
@@ -845,8 +941,8 @@ const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
           />
 
           <Box>
-            <Title mb={13} sx={{ fontSize: 20, fontWeight: 500, color: '#000' }}>
-              Time
+            <Title mb={13} sx={{ fontSize: 20, color: '#000' }}>
+              Subscription Time
             </Title>
             <Stack flexDirection={'row'}>
               <Field
@@ -867,26 +963,33 @@ const FieldComponents = ({ isStrict }: { isStrict: boolean }) => {
               />
             </Stack>
           </Box>
-          <Box>
-            <Title sx={{ color: '#20201E', fontSize: 20 }}>Allocation per wallet</Title>
-            <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
-              <FormControlLabel value={AllocationStatus.NoLimits} control={<Radio disableRipple />} label="No Limits" />
-              <FormControlLabel value={AllocationStatus.Limited} control={<Radio disableRipple />} label="Limited" />
-            </Field>
-            {values.allocationStatus === AllocationStatus.Limited && (
-              <FormItem name="allocationPerWallet" sx={{ flex: 1 }} firstTrigger={isStrict}>
-                <OutlinedInput
-                  sx={{ mt: 10 }}
-                  endAdornment={
-                    <>
-                      <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
-                      <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
-                    </>
-                  }
+          {values.AuctionType !== PoolType.STAKING_ACTION && (
+            <Box>
+              <Title sx={{ color: '#20201E', fontSize: 20 }}>Allocation per wallet</Title>
+              <Field component={RadioGroupFormItem} row sx={{ mt: 10 }} name="allocationStatus">
+                <FormControlLabel
+                  value={AllocationStatus.NoLimits}
+                  control={<Radio disableRipple />}
+                  label="No Limits"
                 />
-              </FormItem>
-            )}
-          </Box>
+                <FormControlLabel value={AllocationStatus.Limited} control={<Radio disableRipple />} label="Limited" />
+              </Field>
+              {values.allocationStatus === AllocationStatus.Limited && (
+                <FormItem name="allocationPerWallet" sx={{ flex: 1 }} firstTrigger={isStrict}>
+                  <OutlinedInput
+                    sx={{ mt: 10 }}
+                    endAdornment={
+                      <>
+                        <TokenImage alt={values.Token.symbol} src={values.Token.smallUrl} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.Token.symbol}</Typography>
+                      </>
+                    }
+                  />
+                </FormItem>
+              )}
+            </Box>
+          )}
+
           <Box>
             <Stack flexDirection={'row'} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
               <Title sx={{ fontSize: 20, color: '#20201E' }}>Delay Unlocking Token</Title>

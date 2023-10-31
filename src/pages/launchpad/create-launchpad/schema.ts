@@ -108,9 +108,23 @@ export const poolSchema = yup.object({
     tokenToLogoURI: yup.string(),
     tokenToDecimals: yup.string()
   }),
+  StakingToken: yup.object({
+    tokenToAddress: yup.string(),
+    tokenToSymbol: yup.string(),
+    tokenToLogoURI: yup.string(),
+    tokenToDecimals: yup.string()
+  }),
   SwapRatio: yup
     .number()
     .positive('Swap ratio must be positive')
+    .typeError('Please input valid number')
+    .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+      const _value = new BigNumber(value || 0).toFixed()
+      return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+    }),
+  QuotaRatio: yup
+    .number()
+    .positive('Quota ratio must be positive')
     .typeError('Please input valid number')
     .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
       const _value = new BigNumber(value || 0).toFixed()
@@ -138,6 +152,35 @@ export const poolSchema = yup.object({
         ? true
         : !context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf()
     }),
+  stakingStartTime: yup
+    .date()
+    // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test(
+      'EARLIER_THAN_POOL_START_TIME',
+      'Please select a time earlier than staking end time',
+      (value: any, context: any) => {
+        return (
+          // context.parent.endTime &&
+          !context.parent.startTime?.valueOf() || (value?.valueOf() || 0) < context.parent.stakingEndTime?.valueOf()
+        )
+      }
+    ),
+  stakingEndTime: yup
+    .date()
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test(
+      'EARLIER_THAN_POOL_START_TIME',
+      'Please select a time earlier than pool start time',
+      (value: any, context: any) => {
+        return (
+          (context.parent.startTime && !context.parent.startTime?.valueOf()) ||
+          (value?.valueOf() || 0) < context.parent.startTime?.valueOf()
+        )
+      }
+    ),
   allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
   allocationPerWallet: yup
     .number()
@@ -297,6 +340,12 @@ export const poolStrictSchema = yup.object({
     logoURI: yup.string(),
     decimals: yup.number().required()
   }),
+  StakingToken: yup.object({
+    address: yup.string().required(),
+    symbol: yup.string().required('Staking Currency is a required field'),
+    logoURI: yup.string(),
+    decimals: yup.number().required()
+  }),
   SwapRatio: yup
     .number()
     .positive('Swap ratio must be positive')
@@ -306,7 +355,17 @@ export const poolStrictSchema = yup.object({
       return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
     })
     .required('Swap ratio is required'),
+  QuotaRatio: yup
+    .number()
+    .positive('Quota ratio must be positive')
+    .typeError('Please input valid number')
+    .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+      const _value = new BigNumber(value || 0).toFixed()
+      return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+    })
+    .required('Swap ratio is required'),
   TotalSupply: yup.number().positive('Total Supply must be positive').required('Total Supply is required'),
+  TotalStaking: yup.number().positive('Total Staking must be positive').required('Total Staking is required'),
   startTime: yup
     .date()
     // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
@@ -328,6 +387,35 @@ export const poolStrictSchema = yup.object({
         (!context.parent.startTime.valueOf() || (value?.valueOf() || 0) > context.parent.startTime.valueOf())
       )
     }),
+  stakingStartTime: yup
+    .date()
+    // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test(
+      'EARLIER_THAN_POOL_START_TIME',
+      'Please select a time earlier than staking end time',
+      (value: any, context: any) => {
+        return (
+          // context.parent.endTime &&
+          !context.parent.startTime?.valueOf() || (value?.valueOf() || 0) < context.parent.startTime?.valueOf()
+        )
+      }
+    ),
+  stakingEndTime: yup
+    .date()
+    .min(moment(), 'Please select a time earlier than current time')
+    .typeError('Please select a valid time')
+    .test(
+      'EARLIER_THAN_POOL_START_TIME',
+      'Please select a time earlier than pool start time',
+      (value: any, context: any) => {
+        return (
+          (context.parent.startTime && !context.parent.startTime?.valueOf()) ||
+          (value?.valueOf() || 0) > context.parent.startTime?.valueOf()
+        )
+      }
+    ),
   allocationStatus: yup.string().oneOf(Object.values(AllocationStatus)),
   allocationPerWallet: yup
     .number()

@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useActiveWeb3React } from 'hooks'
 
 import { IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
-
+import { PoolType } from 'api/pool/type'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { useShowLoginModal } from 'state/users/hooks'
@@ -20,6 +20,7 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { LoadingButton } from '@mui/lab'
 import { FIXED_SWAP_ERC20_ADDRESSES } from 'constants/index'
 import { useCreateLaunchpadFixedSwapPool } from 'hooks/useCreateLaunchpadFixedSwapPool'
+import { useCreateLaunchpadStakingAuctionPool } from 'hooks/useCreateLaunchpadStakingAuctionPool'
 
 import DialogDarkTips from 'bounceComponents/common/DialogTips/DialogDarkTips'
 type TypeButtonCommitted = 'wait' | 'inProgress' | 'success'
@@ -43,6 +44,12 @@ const CreatePoolButton = ({
     currencyTo: currencyTo as Currency,
     poolInfo
   })
+  const createStakingAuctionPool = useCreateLaunchpadStakingAuctionPool({
+    currencyFrom: currencyFrom as Currency,
+    currencyTo: currencyTo as Currency,
+    poolInfo
+  })
+
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
 
   const auctionPoolSizeAmount = useMemo(
@@ -59,7 +66,7 @@ const CreatePoolButton = ({
     true
   )
 
-  const toCreate = useCallback(async () => {
+  const toCreateFixedSwap = useCallback(async () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
@@ -132,7 +139,7 @@ const CreatePoolButton = ({
           typeof err === 'string'
             ? err
             : err?.data?.message || err?.error?.message || err?.message || 'Something went wrong',
-        onAgain: toCreate,
+        onAgain: toCreateFixedSwap,
         PaperProps: {
           sx: {
             '&.MuiPaper-root': {
@@ -154,6 +161,101 @@ const CreatePoolButton = ({
     }
   }, [createFixedSwapPool])
 
+  const toCreateStakingAuction = useCallback(async () => {
+    showRequestConfirmDialog()
+    try {
+      setButtonCommitted('wait')
+      const { getPoolId, transactionReceipt } = await createStakingAuctionPool()
+      setButtonCommitted('inProgress')
+
+      const ret: Promise<string> = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then((curReceipt: any) => {
+          const poolId = getPoolId(curReceipt.logs)
+          if (poolId) {
+            resolve(poolId)
+            setButtonCommitted('success')
+          } else {
+            hideDialogConfirmation()
+            show(DialogTips, {
+              iconType: 'error',
+              cancelBtn: 'Cancel',
+              title: 'Oops..',
+              content: 'The creation may have failed. Please check some parameters, such as the start time'
+            })
+            rpt()
+          }
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogDarkTips, {
+            iconType: 'success',
+            cancelBtn: 'Confirm',
+            title: 'Congratulations!',
+            content: 'Operation successful, please wait patiently for 5 to 10 minutes.',
+            // onAgain: goToPoolInfoPage
+            onCancel: () => {},
+            PaperProps: {
+              sx: {
+                '&.MuiPaper-root': {
+                  '& .MuiButtonBase-root': {
+                    backgroundColor: '#121212',
+                    color: '#fff'
+                  },
+                  backgroundColor: '#fff',
+                  '& svg path': {
+                    stroke: '#171717'
+                  },
+                  '& .MuiDialogContent-root h2': {
+                    color: '#121212'
+                  }
+                }
+              }
+            }
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      setButtonCommitted(undefined)
+      show(DialogDarkTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content:
+          typeof err === 'string'
+            ? err
+            : err?.data?.message || err?.error?.message || err?.message || 'Something went wrong',
+        onAgain: toCreateStakingAuction,
+        PaperProps: {
+          sx: {
+            '&.MuiPaper-root': {
+              '& .MuiButtonBase-root': {
+                backgroundColor: '#121212',
+                color: '#fff'
+              },
+              backgroundColor: '#fff',
+              '& svg path': {
+                stroke: '#171717'
+              },
+              '& .MuiDialogContent-root h2': {
+                color: '#121212'
+              }
+            }
+          }
+        }
+      })
+    }
+  }, [createStakingAuctionPool])
+
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
     try {
@@ -170,7 +272,7 @@ const CreatePoolButton = ({
       ret
         .then(() => {
           hideDialogConfirmation()
-          toCreate()
+          toCreateFixedSwap()
         })
         .catch()
     } catch (error) {
@@ -186,7 +288,7 @@ const CreatePoolButton = ({
         onAgain: toApprove
       })
     }
-  }, [approveCallback, toCreate])
+  }, [approveCallback, toCreateFixedSwap])
 
   const confirmBtn: {
     disabled?: boolean
@@ -244,8 +346,19 @@ const CreatePoolButton = ({
         }
       }
     }
+    if (poolInfo.category === PoolType.FixedSwap) {
+      return {
+        run: toCreateFixedSwap
+      }
+    }
+    if (poolInfo.category === PoolType.STAKING_ACTION) {
+      return {
+        run: toCreateStakingAuction
+      }
+    }
     return {
-      run: toCreate
+      text: 'This pool type is not supported',
+      disabled: true
     }
   }, [
     account,
@@ -256,10 +369,12 @@ const CreatePoolButton = ({
     buttonCommitted,
     chainId,
     currencyFrom?.symbol,
+    poolInfo.category,
     showLoginModal,
     switchNetwork,
     toApprove,
-    toCreate
+    toCreateFixedSwap,
+    toCreateStakingAuction
   ])
 
   return (

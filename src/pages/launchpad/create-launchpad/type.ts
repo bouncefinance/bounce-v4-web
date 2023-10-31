@@ -67,10 +67,14 @@ export interface IDetailInitValue {
   ContractDecimalPlaces: number
   AuctionType: PoolType
   Token: Token
+  StakingToken: Token
   SwapRatio: string
+  QuotaRatio: string
   TotalSupply: string
   startTime: Moment | null
   endTime: Moment | null
+  stakingStartTime: Moment | null
+  stakingEndTime: Moment | null
   allocationStatus: AllocationStatus
   allocationPerWallet: string
   releaseType: IReleaseType

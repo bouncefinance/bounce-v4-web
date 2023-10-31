@@ -47,7 +47,8 @@ export const poolTypeText: Record<PoolType, string> = {
   [PoolType.ENGLISH_AUCTION_NFT]: 'ENGLISH AUCTION NFT',
   [PoolType.PlayableAuction]: 'Playable Auction',
   [PoolType.MUTANT_ENGLISH_AUCTION_NFT]: 'Mutant ENGLISH AUCTION',
-  [PoolType.ENGLISH_AUCTION]: 'Erc20 English Auction'
+  [PoolType.ENGLISH_AUCTION]: 'Erc20 English Auction',
+  [PoolType.STAKING_ACTION]: 'Staking Action'
 }
 const initialValues = {
   searchText: '',
