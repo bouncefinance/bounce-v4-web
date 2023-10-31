@@ -66,6 +66,7 @@ export const AuctionConfig: {
     ],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
   },
+  [ChainId.POLYGON_MUMBAI]: {},
   [ChainId.FANTOM]: {
     [TokenType.ERC20]: [
       AuctionType.FIXED_PRICE,

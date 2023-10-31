@@ -87,44 +87,9 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
 }
 
 export const FIXED_SWAP_BOT_ERC20_ADDRESSES: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '',
   [ChainId.SEPOLIA]: '0xC75Cb3faC326900cEaE35613995644f539A69E49',
   [ChainId.BSCTEST]: '0x853C97d50604f4C5097D736b2C8B5A5aF15b3C02',
-  [ChainId.POLYGON_MUMBAI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
-  [ChainId.GÖRLI]: '',
-  [ChainId.OPTIMISM]: '',
-  [ChainId.CRONOS]: '',
-  [ChainId.BSC]: process.env.REACT_APP_BSC_FIXED_SWAP_NFT_ADDRESS || '',
-  [ChainId.OKEX]: '',
-  [ChainId.KLAYTN]: '',
-  [ChainId.BASE]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
-  [ChainId.BASE_TESTNET]: '0x194C02845d77ffCB8580D474Ca99013073C1eAb1',
-  [ChainId.GNOSIS]: '',
-  [ChainId.POLYGON]: '',
-  [ChainId.FANTOM]: '',
-  [ChainId.FANTOM_TESTNET]: '',
-  [ChainId.ZETA_CHAIN_TESTNET]: '',
-  [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8',
-  // [ChainId.ZKSYNC_ERA]: '0xf71114d8cd7Dcd89Ff689f2c3A8dd5AF3fbc75eD',
-  [ChainId.ZKSYNC_ERA]: '0x51552f0b8E57A1b2C749845d9aFb906FA4f5317A',
-  [ChainId.ZKSYNC_ERA_TESTNET]: '',
-  [ChainId.POLYGON_ZK_EVM]: '',
-  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
-  [ChainId.MOONBEAM]: '',
-  [ChainId.MOONRIVER]: '',
-  [ChainId.DOGECHAIN]: '',
-  [ChainId.KAVA]: '',
-  [ChainId.FUSION]: '',
-  [ChainId.ARBITRUM]: '',
-  [ChainId.CELO]: '',
-  [ChainId.AVALANCHE]: '',
-  [ChainId.AUROEA]: '',
-  [ChainId.HARMONY]: '',
-  [ChainId.SCROLL_ALPHA]: '',
-  [ChainId.PALM]: '',
-  [ChainId.LINEA]: '0xFCEc495B3FbB41fC8034E4d2Fd85289F549922b1',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.POLYGON_MUMBAI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1'
 }
 
 export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
