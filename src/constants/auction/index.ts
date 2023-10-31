@@ -122,6 +122,7 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.KAVA]: null,
   [ChainId.FUSION]: null,
   [ChainId.ARBITRUM]: null,
+  [ChainId.POLYGON_MUMBAI]: null,
   [ChainId.CELO]: null,
   [ChainId.AVALANCHE]: null,
   [ChainId.SEPOLIA]: null,

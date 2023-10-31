@@ -27,6 +27,7 @@ export enum ChainId {
   // FUSE = 122,
   // HECO = 128,
   POLYGON = 137,
+  POLYGON_MUMBAI = 80001,
   OMNI_TESTNET = 165,
   FANTOM = 250,
   FANTOM_TESTNET = 4002,
@@ -225,6 +226,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://rpc.ankr.com/polygon'],
     blockExplorerUrls: ['https://polygonscan.com/']
+  },
+  [ChainId.POLYGON_MUMBAI]: {
+    id: ChainId.POLYGON_MUMBAI,
+    hexChainId: numberToHex(ChainId.POLYGON_MUMBAI),
+    chainName: 'POLYGON_MUMBAI',
+    nativeCurrency: {
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18,
+      logo: 'https://polygonscan.com/images/svg/brands/poly.png'
+    },
+    rpcUrls: ['https://polygon-mumbai-bor.publicnode.com'],
+    blockExplorerUrls: ['https://mumbai.polygonscan.com/']
   },
   [ChainId.OMNI_TESTNET]: {
     id: ChainId.OMNI_TESTNET,
