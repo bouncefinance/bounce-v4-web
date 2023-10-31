@@ -8,7 +8,7 @@ import {
   Grid
 } from '@mui/material'
 import BotSetUpInfoItem from '../components/BotSetUpInfoItem'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { bindTgTokenApi } from 'api/pool'
 import { BindTgTokenApiParams } from 'api/pool/type'
 import { useValuesDispatch, ActionType } from 'bounceComponents/create-auction-pool/ValuesProvider'
@@ -218,6 +218,14 @@ export default function BotSetup() {
   const refreshUserInfoCallback = useRefreshUserInfoCallback()
   const [isRemoveTokening, setIsRemoveTokening] = useState(false)
 
+  const noTokenBack = useCallback(() => {
+    if (!userInfo?.tg_token) {
+      navigate(routes.telegramBot.index)
+    }
+  }, [navigate, userInfo?.tg_token])
+  useEffect(() => {
+    noTokenBack()
+  }, [noTokenBack])
   const removeTokenApi = useCallback(async () => {
     const params: BindTgTokenApiParams = {
       tgToken: ''
@@ -365,7 +373,7 @@ export default function BotSetup() {
             )}
 
             <CusButton
-              sx={{ width: '100%' }}
+              sx={{ width: isMobile ? '100%' : '' }}
               variant="contained"
               loadingPosition="start"
               loading={isRemoveTokening}

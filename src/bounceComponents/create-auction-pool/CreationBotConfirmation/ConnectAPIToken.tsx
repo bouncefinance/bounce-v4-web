@@ -227,6 +227,7 @@ const ConnectAPIToken = () => {
       }
     })
   }
+  console.log('userInfo>>>>', userInfo)
 
   return (
     <>
@@ -251,7 +252,7 @@ const ConnectAPIToken = () => {
                   fontSize: 14
                 }}
               >
-                Bounce TGBot can help you quickly send transaction tokens through telegram. It can be done in just three
+                Bounce TGBot can help you quickly send transaction tokens through telegram. It can be done in just four
                 easy steps.
               </Typography>
             </Box>
