@@ -13,6 +13,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import { ReactComponent as TgLeft } from 'assets/svg/tg_left.svg'
 import Input from 'components/Input'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { toast } from 'react-toastify'
 
 const CusInput = styled(Input)`
   border: 0;
@@ -205,8 +206,11 @@ const ConnectAPIToken = () => {
             tgBotActiveStep: TgBotActiveStep.GUIDEFORM
           }
         })
-      } catch (error) {
+      } catch (error: any) {
         console.log('bindTgTokenApi error', error)
+        if (error && error?.code && Number(error.code) === 10540) {
+          toast.error('This token is already in use, please use a new one')
+        }
       }
     },
     [account, refreshUserInfoCallback, showLoginModal, valuesDispatch]
