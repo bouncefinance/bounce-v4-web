@@ -13,6 +13,7 @@ import { BannerType } from '../../../api/market/type'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import HeaderTab from '../HeaderTab'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -54,13 +55,7 @@ export const SwiperSkeleton = () => {
         <Box display="flex" flexDirection="column" width="61%" maxWidth="800px" gap="24px">
           <Box display="flex" flexDirection="row" gap="4px">
             <Skeleton width="32px" height="32px" variant="circular" animation="wave" />
-            <Skeleton
-              width="107px"
-              height="32px"
-              variant="rectangular"
-              sx={{ borderRadius: '100px' }}
-              animation="wave"
-            />
+            <Skeleton width="107px" height="32px" variant="rectangular" animation="wave" />
           </Box>
           <Skeleton variant="rectangular" width="100%" height="26px" animation="wave" />
           <Skeleton variant="rectangular" width="262px" height="24px" animation="wave" />
@@ -119,77 +114,81 @@ function ArrowBanner({ type }: { type?: string }) {
     return 3000
   }, [data?.list.length])
   return (
-    <Box
-      position={'relative'}
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      sx={{
-        // maxWidth: '1296px',
-        width: '100%',
-        padding: '0 72px',
-        minHeight: isSm ? 125 : 460,
-        margin: '16px auto 0',
-        '@media(max-width:1296px)': {
-          padding: '0 16px',
-          margin: '16px auto'
-        }
-      }}
-      onMouseEnter={EnterSwiper}
-      onMouseLeave={LeaveSwiper}
-    >
-      {!isSm && (
-        <ArrowBgLeft
-          sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-          onClick={() => {
-            swiper?.slidePrev()
-          }}
-        >
-          <ArrowBackIcon />
-        </ArrowBgLeft>
-      )}
-      {!data || loading ? (
-        <SwiperSkeleton />
-      ) : (
-        <Swiper
-          speed={1200}
-          onSwiper={setSwiper}
-          spaceBetween={0}
-          slidesPerView={1}
-          loop={true}
-          effect={'creative'}
-          creativeEffect={{
-            prev: {
-              translate: [0, 0, -1]
-            },
-            next: {
-              translate: ['100%', 0, 0]
-            }
-          }}
-          modules={[EffectCreative]}
-          autoplay={{
-            delay: delay
-          }}
-          style={{
-            // maxWidth: '1296px',
-            width: '100%'
-          }}
-        >
-          {data?.list?.map((item: BannerType, index: number) => (
-            <SwiperSlide key={index}>
-              <Banner key={index} banner={item} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      )}
-      {!isSm && (
-        <ArrowBgRight
-          sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-          onClick={() => swiper?.slideNext()}
-        >
-          <ArrowForwardIcon />
-        </ArrowBgRight>
-      )}
+    <Box position={'relative'}>
+      <Box
+        position={'relative'}
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        sx={{
+          // maxWidth: '1296px',
+          width: '100%',
+          minHeight: isSm ? 125 : 460,
+          '@media(max-width:1296px)': {
+            padding: '0 16px',
+            margin: '16px auto'
+          }
+        }}
+        onMouseEnter={EnterSwiper}
+        onMouseLeave={LeaveSwiper}
+      >
+        {!isSm && (
+          <ArrowBgLeft
+            sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+            onClick={() => {
+              swiper?.slidePrev()
+            }}
+          >
+            <ArrowBackIcon />
+          </ArrowBgLeft>
+        )}
+        {!data || loading ? (
+          <SwiperSkeleton />
+        ) : (
+          <Swiper
+            speed={1200}
+            onSwiper={setSwiper}
+            spaceBetween={0}
+            slidesPerView={1}
+            loop={true}
+            effect={'creative'}
+            creativeEffect={{
+              prev: {
+                translate: [0, 0, -1]
+              },
+              next: {
+                translate: ['100%', 0, 0]
+              }
+            }}
+            modules={[EffectCreative]}
+            autoplay={{
+              delay: delay
+            }}
+            style={{
+              // maxWidth: '1296px',
+              width: '100%'
+            }}
+          >
+            {data?.list?.map((item: BannerType, index: number) => (
+              <SwiperSlide key={index}>
+                <Banner key={index} banner={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+        {!isSm && (
+          <ArrowBgRight
+            sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+            onClick={() => swiper?.slideNext()}
+          >
+            <ArrowForwardIcon />
+          </ArrowBgRight>
+        )}
+      </Box>
+      <HeaderTab
+        style={{ position: 'absolute', bottom: '20px', left: '0', zIndex: 100 }}
+        onTabChange={tab => console.log(tab)}
+      />
     </Box>
   )
 }
@@ -294,7 +293,6 @@ const Shadow = styled(Box)`
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%);
   mix-blend-mode: multiply;
   opacity: 0.8;
-  border-radius: 0 0 30px 30px;
 
   @media (max-width: 600px) {
     height: 327px;
@@ -348,7 +346,6 @@ export function Banner({ banner }: { banner: BannerType }) {
           display: 'block',
           width: '100%',
           height: '100%',
-          borderRadius: isSm ? '15px' : '30px',
           objectFit: 'cover'
         }}
       />

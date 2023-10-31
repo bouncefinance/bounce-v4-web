@@ -695,13 +695,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 14,
     liveTimeStamp: {
-<<<<<<< HEAD
-      start: 1696525200000,
-      end: 1696698000000
-=======
       start: 1698066000000,
       end: 1698411600000
->>>>>>> alpha
     },
     poolTypeName: 'Fixed Swap Auction',
     img: CreateProtocol,

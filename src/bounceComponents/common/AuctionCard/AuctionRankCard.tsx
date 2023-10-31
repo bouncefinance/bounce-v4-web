@@ -324,7 +324,7 @@ const SkeletonBox = () => {
   )
 }
 export const AuctionRankCard: React.FC = () => {
-  const Tabs = ['Trending Auctions', 'Upcoming Auctions', 'Latest Auctions']
+  const Tabs = ['Trending', 'Upcoming', 'Latest']
   const isSm = useBreakpoint('sm')
   const [currentTab, setTab] = useState(Tabs[0])
   const optionDatas = useOptionDatas()
@@ -400,99 +400,107 @@ export const AuctionRankCard: React.FC = () => {
     <Box
       sx={{
         width: '100%',
-        maxWidth: '1296px',
-        margin: '40px auto 0'
+        paddingTop: '40px',
+        background: 'white'
       }}
     >
-      <CenterRow
-        flexDirection={isSm ? 'column' : 'row'}
+      <Box
         sx={{
-          alignItems: isSm ? 'flex-start' : 'center',
-          justifyContent: isSm ? 'flex-start' : 'space-between',
-          '@media(max-width:862px)': {
-            flexWrap: 'nowrap',
-            overflowX: 'scroll',
-            overflowY: 'hidden',
-            '&::-webkit-scrollbar': { display: 'none' }
-          }
+          width: '100%',
+          maxWidth: '1296px',
+          margin: '0 auto'
         }}
       >
-        {isSm && (
+        <CenterRow
+          flexDirection={isSm ? 'column' : 'row'}
+          sx={{
+            alignItems: isSm ? 'flex-start' : 'center',
+            justifyContent: isSm ? 'flex-start' : 'space-between',
+            '@media(max-width:862px)': {
+              flexWrap: 'nowrap',
+              overflowX: 'scroll',
+              overflowY: 'hidden',
+              '&::-webkit-scrollbar': { display: 'none' }
+            }
+          }}
+        >
+          {isSm && (
+            <Box
+              sx={{
+                overflowX: 'scroll',
+                width: '100%',
+                '&::-webkit-scrollbar': { display: 'none', background: 'transparent' }
+              }}
+            >
+              {AuctionTabs}
+            </Box>
+          )}
+          {!isSm && AuctionTabs}
+          {isSm && (
+            <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0', overflowY: 'hidden' }}>
+              {ChainSelect}
+            </Box>
+          )}
+          {!isSm && ChainSelect}
+        </CenterRow>
+        {data && Array.isArray(data.list) && data.list.length > 0 ? (
           <Box
             sx={{
+              padding: '12px',
+              display: 'flex',
               overflowX: 'scroll',
-              width: '100%',
-              '&::-webkit-scrollbar': { display: 'none', background: 'transparent' }
+              borderRadius: isSm ? 0 : '0px 30px 30px 30px',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
             }}
           >
-            {AuctionTabs}
+            <CustomMobileTable
+              header={TableHeader}
+              rows={
+                data
+                  ? data.list?.map((d: any, idx: number) =>
+                      AuctionRow({
+                        isSm: isSm,
+                        ...d,
+                        index: idx + 1,
+                        opt: optionDatas,
+                        navigate,
+                        variant: 'gray'
+                      })
+                    )
+                  : []
+              }
+            />
+            {/*<CustomMobileTable*/}
+            {/*  header={TableHeader}*/}
+            {/*  rows={*/}
+            {/*    data*/}
+            {/*      ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>*/}
+            {/*          AuctionRow({*/}
+            {/*            isSm: isSm,*/}
+            {/*            ...d,*/}
+            {/*            index: Math.ceil(data.list.length / 2) + idx + 1,*/}
+            {/*            opt: optionDatas,*/}
+            {/*            navigate*/}
+            {/*          })*/}
+            {/*        )*/}
+            {/*      : []*/}
+            {/*  }*/}
+            {/*/>*/}
           </Box>
-        )}
-        {!isSm && AuctionTabs}
-        {isSm && (
-          <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0', overflowY: 'hidden' }}>
-            {ChainSelect}
+        ) : data?.list && data?.list?.length === 0 ? (
+          <Box
+            sx={{
+              background: 'white'
+            }}
+          >
+            <EmptyData />
           </Box>
+        ) : (
+          <SkeletonBox />
         )}
-        {!isSm && ChainSelect}
-      </CenterRow>
-      {data && Array.isArray(data.list) && data.list.length > 0 ? (
-        <Box
-          sx={{
-            padding: '12px',
-            display: 'flex',
-            overflowX: 'scroll',
-            borderRadius: isSm ? 0 : '0px 30px 30px 30px',
-            '&::-webkit-scrollbar': {
-              display: 'none'
-            }
-          }}
-        >
-          <CustomMobileTable
-            header={TableHeader}
-            rows={
-              data
-                ? data.list?.map((d: any, idx: number) =>
-                    AuctionRow({
-                      isSm: isSm,
-                      ...d,
-                      index: idx + 1,
-                      opt: optionDatas,
-                      navigate,
-                      variant: 'gray'
-                    })
-                  )
-                : []
-            }
-          />
-          {/*<CustomMobileTable*/}
-          {/*  header={TableHeader}*/}
-          {/*  rows={*/}
-          {/*    data*/}
-          {/*      ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>*/}
-          {/*          AuctionRow({*/}
-          {/*            isSm: isSm,*/}
-          {/*            ...d,*/}
-          {/*            index: Math.ceil(data.list.length / 2) + idx + 1,*/}
-          {/*            opt: optionDatas,*/}
-          {/*            navigate*/}
-          {/*          })*/}
-          {/*        )*/}
-          {/*      : []*/}
-          {/*  }*/}
-          {/*/>*/}
-        </Box>
-      ) : data?.list && data?.list?.length === 0 ? (
-        <Box
-          sx={{
-            background: 'white'
-          }}
-        >
-          <EmptyData />
-        </Box>
-      ) : (
-        <SkeletonBox />
-      )}
+      </Box>
     </Box>
   )
 }

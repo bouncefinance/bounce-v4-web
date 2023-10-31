@@ -5,7 +5,6 @@ import GithubIcon from 'assets/imgs/common/Github.png'
 import MediumIcon from 'assets/imgs/common/Medium.png'
 import TelegramIcon from 'assets/imgs/common/Telegram.png'
 import TwitterIcon from 'assets/imgs/common/Twitter.png'
-import FooterLogo from 'assets/imgs/common/LogoBlack.svg'
 import WhiteFooterLogo from 'assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
 import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
@@ -77,7 +76,7 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
 }
 
 export const FooterSocialLink: React.FC = () => {
-  const isDark = useContext(FooterThemeContext)
+  // const isDark = useContext(FooterThemeContext)
   return (
     <Box
       sx={{
@@ -90,10 +89,7 @@ export const FooterSocialLink: React.FC = () => {
       }}
     >
       <ExternalLink href={routes.market.index} role="link" rel="noopener noreferrer" aria-disabled={true}>
-        <img
-          src={isDark ? WhiteFooterLogo : FooterLogo}
-          style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }}
-        />
+        <img src={WhiteFooterLogo} style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }} />
       </ExternalLink>
       <SocialLinkList />
       <Box
@@ -177,7 +173,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink
                   // className={linkClass}
                   sx={{
-                    color: isDark ? FooterDarkStyle.linkTextColor : '#000000',
+                    color: isDark ? FooterDarkStyle.linkTextColor : 'white',
                     padding: 0,
                     height: 18,
                     fontFamily: `'Inter'`,
@@ -197,7 +193,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink href={item.href}>
                   <a
                     style={{
-                      color: isDark ? FooterDarkStyle.linkTextColor : '#000000',
+                      color: isDark ? FooterDarkStyle.linkTextColor : 'white',
                       padding: 0,
                       height: 18,
                       fontFamily: `'Inter'`
@@ -371,10 +367,8 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
       id={'footer'}
       style={{
         position: 'relative',
-        background: isDark ? FooterDarkStyle.layoutBackground : 'var(--ps-gray-20)',
-        borderRadius: 30,
-        width: 'calc(100% - 40px)',
-        margin: '0 auto 20px'
+        background: isDark ? FooterDarkStyle.layoutBackground : '#121212',
+        width: '100%'
       }}
     >
       <FooterThemeContext.Provider value={isDark as boolean}>
@@ -436,7 +430,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
           >
             <Typography
               sx={{
-                color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                color: isDark ? FooterDarkStyle.textColor : 'white',
                 opacity: '0.6',
                 fontFamily: `'Inter'`,
                 fontSize: 13
@@ -449,7 +443,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                 rel="noopener noreferrer"
                 target="_blank"
                 sx={{
-                  color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                  color: isDark ? FooterDarkStyle.textColor : 'white',
                   opacity: '0.6',
                   fontFamily: `'Inter'`,
                   fontSize: 13,
@@ -464,7 +458,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                 rel="noopener noreferrer"
                 target="_blank"
                 sx={{
-                  color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                  color: isDark ? FooterDarkStyle.textColor : 'white',
                   fontFamily: `'Inter'`,
                   fontSize: 13,
                   opacity: '0.6'

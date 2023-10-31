@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PopperCard from 'components/PopperCard'
+
 const StyledTab = styled(Button)(({ theme }) => ({
   padding: '8px 12px',
-  color: 'white',
+  color: '#9C9C9C',
   borderRadius: '8px',
   fontWeight: '500',
   fontSize: '16px',
@@ -16,11 +17,12 @@ const StyledTab = styled(Button)(({ theme }) => ({
   background: 'transparent',
   '&:hover': {
     border: 'none',
-    background: '#FFFFFF33'
+    color: 'white'
   },
   '&.selected': {
     background: '#E1F25C',
-    color: '#121212'
+    color: '#121212',
+    borderRadius: '100px'
   },
   [theme.breakpoints.down('sm')]: {
     fontSize: '14px',
@@ -126,11 +128,11 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
           justifyContent: 'flex-start',
           alignItems: 'center',
           padding: '6px',
-          background: '#20201E',
           backdropFilter: 'blur(4px)',
-          borderRadius: '10px',
+          borderRadius: '100px',
           overflowX: 'scroll',
           whiteSpace: 'nowrap',
+          border: '1px solid #959595',
 
           margin: isSm ? ' 8px 14px' : '',
           '&::-webkit-scrollbar': {
