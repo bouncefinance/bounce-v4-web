@@ -86,6 +86,22 @@ const DipExchange = () => {
             closeAt: 1697637600000,
             id: 20789
           }
+        },
+        {
+          timaSteamp: 1698847200000,
+          active: 1698847200000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1698847200000,
+            closeAt: 1698933600000,
+            id: 18569
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1698847200000,
+            closeAt: 1698933600000,
+            id: 18569
+          }
         }
       ]
   // last date higt light
