@@ -11,7 +11,8 @@ const safeAddress: { [key in ChainId]?: string[] } = {
     '0x009aE6fC4bfED1E5C244f92e7b6e5C6C395D64dA'
   ],
   [ChainId.ZKSYNC_ERA]: ['0x591CAdFaF2F5dBBD09580C8b74A4770A9255bF28', '0x5abF89A3702F33B930293B7B04cBfF07a9a0f6F1'],
-  [ChainId.ARBITRUM]: ['0x80b9AD5D275CfA439a8a012D01C548Bac1a6313E']
+  [ChainId.ARBITRUM]: ['0x80b9AD5D275CfA439a8a012D01C548Bac1a6313E'],
+  [ChainId.BASE]: ['0xE2986FD09A8c1d698EC50bD31F155e165C241D12']
 }
 
 export function useCertifiedTokenAddress(chainId: ChainId | undefined, address: string) {
