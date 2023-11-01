@@ -749,7 +749,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       // },
       {
         title: ['DGT Token Offered'],
-        value: 'TBD $DGP'
+        value: '$DGP'
       },
       {
         title: ['DGT Auction Method'],
