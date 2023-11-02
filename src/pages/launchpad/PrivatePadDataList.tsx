@@ -695,70 +695,6 @@ const DeelanceProjectInfo: IProjectInfo[] = [
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 15
   {
-    keyId: 11,
-    liveTimeStamp: {
-      start: 1698847200000,
-      end: 1698933600000
-    },
-    backedId: 18569,
-    hideUpcomingCountdown: true,
-    poolTypeName: 'ERC20 English Auction',
-    poolTypeName2: 'ERC20 Dutch Auction',
-    img: DipImg,
-    avatar: DipAvatar,
-    title: 'DIP Exchange',
-    chainId: 8453,
-    tokenName: '$DIP',
-    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
-    upcomingLink: '/launchpad/dip_exchange',
-    liveLink: '/launchpad/dip_exchange',
-    projectInfo: DipProjectInfo,
-    tokenMetrics: DipTokenMetrics,
-    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
-    social: [
-      <Link key={0} href="https://dip.exchange" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>,
-      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$DGT' },
-      { title: 'Auction Method', content: 'Dutch Auction' },
-      { title: 'Token Amount', content: '250,000' },
-      { title: 'Blockchain', content: 'BASE' }
-    ],
-    privatePrices: [
-      // {
-      //   title: ['DIP Auction Method'],
-      //   value: ['ERC20 English Auction']
-      // },
-      // {
-      //   title: ['DIP Token Offered'],
-      //   value: 'TBD $DIP'
-      // },
-      {
-        title: ['DGT Token Offered'],
-        value: '$DGP'
-      },
-      {
-        title: ['DGT Auction Method'],
-        value: 'ERC20 Dutch Auction'
-      }
-    ],
-    isFAQ: true
-  },
-  {
     hidden: true,
     keyId: 15,
     backedId: 18555,
@@ -1109,6 +1045,70 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Amount', content: 'TBD' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
+  },
+  {
+    keyId: 11,
+    liveTimeStamp: {
+      start: 1698847200000,
+      end: 1698933600000
+    },
+    backedId: 18569,
+    hideUpcomingCountdown: true,
+    poolTypeName: 'ERC20 English Auction',
+    poolTypeName2: 'ERC20 Dutch Auction',
+    img: DipImg,
+    avatar: DipAvatar,
+    title: 'DIP Exchange',
+    chainId: 8453,
+    tokenName: '$DIP',
+    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
+    upcomingLink: '/launchpad/dip_exchange',
+    liveLink: '/launchpad/dip_exchange',
+    projectInfo: DipProjectInfo,
+    tokenMetrics: DipTokenMetrics,
+    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
+    social: [
+      <Link key={0} href="https://dip.exchange" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$DGT' },
+      { title: 'Auction Method', content: 'Dutch Auction' },
+      { title: 'Token Amount', content: '250,000' },
+      { title: 'Blockchain', content: 'BASE' }
+    ],
+    privatePrices: [
+      // {
+      //   title: ['DIP Auction Method'],
+      //   value: ['ERC20 English Auction']
+      // },
+      // {
+      //   title: ['DIP Token Offered'],
+      //   value: 'TBD $DIP'
+      // },
+      {
+        title: ['DGT Token Offered'],
+        value: '$DGP'
+      },
+      {
+        title: ['DGT Auction Method'],
+        value: 'ERC20 Dutch Auction'
+      }
+    ],
+    isFAQ: true
   },
   // {
   //   keyId: 12,
