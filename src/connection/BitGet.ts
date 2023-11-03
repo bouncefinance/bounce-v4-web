@@ -84,7 +84,6 @@ export class BitGet extends Connector {
 
   /** {@inheritdoc Connector.connectEagerly} */
   public async connectEagerly(): Promise<void> {
-    console.log('into connectEagerly')
     const cancelActivation = this.actions.startActivation()
 
     await this.isomorphicInitialize()
