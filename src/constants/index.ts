@@ -23,7 +23,8 @@ export const SELECTABLE_ENABLE_WALLETS: ConnectionType[] = [
   ConnectionType.OKX_WALLET,
   ConnectionType.GNOSIS_SAFE,
   ConnectionType.BINANCE_WALLET,
-  ConnectionType.COINBASE_WALLET
+  ConnectionType.COINBASE_WALLET,
+  ConnectionType.BIT_GET
 ]
 
 // default allowed slippage, in bips

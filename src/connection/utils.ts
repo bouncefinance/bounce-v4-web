@@ -50,6 +50,8 @@ export const getIsCoinbaseWallet = () => Boolean(window.ethereum?.isCoinbaseWall
 
 export const getIsOkxWallet = () => Boolean(window?.okxwallet)
 
+export const getIsBitGetWallet = () => Boolean(window?.bitkeep)
+
 // https://eips.ethereum.org/EIPS/eip-1193#provider-errors
 export enum ErrorCode {
   USER_REJECTED_REQUEST = 4001,
