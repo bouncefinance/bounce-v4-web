@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Link, matchPath, useLocation, useNavigate } from 'react-router-dom'
-import { AppBar, Box, Button, IconButton, Stack, styled, Typography } from '@mui/material'
+import { AppBar, Box, Button, IconButton, Stack, Typography, styled } from '@mui/material'
 // import { ExternalLink } from 'themes/components'
 import Web3Status from './Web3Status'
 import { ShowOnMobile } from 'themes/index'
@@ -16,7 +16,7 @@ import Search from 'bounceComponents/common/Header/Search'
 import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { useUserInfo } from 'state/users/hooks'
 import { ReactComponent as UserIcon } from 'assets/svg/account/user.svg'
-import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
+// import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
 import { useHeaderBgOpacity } from 'hooks/useScroll'
 import Resources from './Resources'
 import HeaderLink from './HeaderLink'
@@ -115,7 +115,7 @@ const MainLogo = styled(Link)(({ theme }) => ({
   }
 }))
 
-const transparentRoutes = [
+export const transparentRoutes = [
   routes.market.index,
   routes.market.nftPools,
   routes.nftAuction.index,
@@ -188,10 +188,10 @@ export default function Header() {
   const navigate = useNavigate()
   const headerBgOpacity = useHeaderBgOpacity()
 
-  const isTransparentRoute = useMemo(
-    () => transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname)),
-    [pathname]
-  )
+  const isTransparentRoute = useMemo(() => {
+    // return routes.market.index.includes(pathname)
+    return transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname))
+  }, [pathname])
 
   const isWhiteLogo = useMemo(
     () => whiteLogoRoutes.includes(pathname) || whiteLogoRoutes.some(route => matchPath(route, pathname)),
@@ -210,6 +210,7 @@ export default function Header() {
     const _redirect = location.pathname + location.search
     navigate(routes.login + (_redirect ? `?redirect=${_redirect}` : ''))
   }
+
   const walletWithoutToken = isSm ? (
     <Button
       onClick={walletClick}
@@ -222,7 +223,7 @@ export default function Header() {
         width: '78px',
         height: '40px',
         background: '#E1F25C',
-        borderRadius: '6px'
+        borderRadius: '60px'
       }}
     >
       Connect
@@ -230,31 +231,53 @@ export default function Header() {
   ) : (
     <Button
       onClick={walletClick}
+      variant="contained"
       sx={{
+        fontSize: 14,
         minWidth: 212,
-        borderRadius: 8,
+        borderRadius: 60,
         padding: '0 12px',
-        border: '1px solid var(--ps-gray-20)',
+        border: '1px solid transparent',
         height: isSm ? 40 : 44,
-        backgroundColor: theme => theme.palette.background.paper,
-        '&:hover .line': {
-          borderColor: 'var(--ps-text-4)'
+        // border: '1px solid transparent',
+        background: !isTransparentRoute || headerBgOpacity >= 0.65 ? '#F6F6F3' : '#F6F6F315',
+        gap: 6,
+        color: !isTransparentRoute || headerBgOpacity >= 0.65 ? '#121212' : '#ffffff',
+        '& path': {
+          fill: 'currentcolor'
+        },
+        // '&:hover .line': {
+        //   borderColor: 'var(--ps-text-4)'
+        // }
+        '&:hover': {
+          border: '1px solid transparent',
+          background: 'var(--ps-yellow-1)'
         }
       }}
     >
       <UserIcon />
-      <Box
+      {/* <Box
         className="line"
         sx={{
           borderRight: '1px solid var(--ps-gray-20)',
           mx: 10,
           height: '100%'
         }}
-      />
-      <WalletIcon />
-      <Typography variant="h5" ml={5} sx={{ whiteSpace: 'nowrap' }}>
+      /> */}
+      {/* <WalletIcon /> */}
+      {/* <Typography
+        ml={5}
+        sx={{
+          whiteSpace: 'nowrap',
+          color
+        }}
+      > */}
+      <Typography variant="h5" color="currentcolor">
+        {' '}
         Connect wallet
       </Typography>
+
+      {/* </Typography> */}
     </Button>
   )
 
@@ -277,25 +300,49 @@ export default function Header() {
           <MainLogo id={'logo'} to={'/'}>
             <Image
               style={isWhiteLogo && !isSm ? { mixBlendMode: 'difference' } : {}}
-              src={isSm ? logoIcon : isWhiteLogo ? logoWhite : logo}
+              src={
+                isSm
+                  ? logoIcon
+                  : isTransparentRoute && headerBgOpacity < 0.65
+                  ? logoWhite
+                  : isWhiteLogo
+                  ? logoWhite
+                  : logo
+              }
               alt={'logo'}
             />
           </MainLogo>
           {!isTransparentRoute && !isSm && <HeaderLink />}
         </Box>
-        <Stack display={isSm ? 'none' : 'inherit'} direction={'row'} alignItems="center" spacing={8} flex={1}>
-          <Search />
-          <Resources />
-          <CreateBtn />
-          {token && <NetworkPopperSelect />}
-          <Web3Status />
-          {!token && walletWithoutToken}
+        <Stack
+          display={isSm ? 'none' : 'inherit'}
+          direction={'row'}
+          alignItems="center"
+          spacing={8}
+          flex={1}
+          justifyContent={'space-between'}
+        >
+          <Search opacity={isTransparentRoute ? headerBgOpacity : 1} />
+          <Stack
+            display={isSm ? 'none' : 'inherit'}
+            direction={'row'}
+            alignItems="center"
+            spacing={8}
+            flex={1}
+            justifyContent={'flex-end'}
+          >
+            <Resources opacity={isTransparentRoute ? headerBgOpacity : 1} />
+            <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} />
+            {token && <NetworkPopperSelect opacity={isTransparentRoute ? headerBgOpacity : 1} />}
+            <Web3Status opacity={isTransparentRoute ? headerBgOpacity : 1} />
+            {!token && walletWithoutToken}
+          </Stack>
         </Stack>
         <Box display={isSm ? 'inherit' : 'none'} alignItems="center" gap={{ xs: '6px', sm: '20px' }}>
           {/* <Web3Status /> */}
           <ShowOnMobile breakpoint="md">
             <Stack direction={'row'} spacing={10} display={'flex'} alignItems={'center'}>
-              {token && <NetworkPopperSelect />}
+              {token && <NetworkPopperSelect opacity={isTransparentRoute ? headerBgOpacity : 1} />}
               <Web3Status />
               {!token && walletWithoutToken}
               <IconButton

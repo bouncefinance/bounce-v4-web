@@ -11,7 +11,7 @@ import { ReactComponent as IconSVG } from 'bounceComponents/common/SearchInput/i
 import { useMemo, useState } from 'react'
 import useBreakpoint from '../../hooks/useBreakpoint'
 
-export default function NetworkPopperSelect() {
+export default function NetworkPopperSelect({ opacity = 1 }: { opacity: number }) {
   const { chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const [searchVal, setSearchVal] = useState('')
@@ -37,13 +37,16 @@ export default function NetworkPopperSelect() {
           sx={{
             width: isSm ? 58 : 62,
             fontSize: 16,
-            height: isSm ? 40 : 44
+            height: isSm ? 40 : 44,
+            borderRadius: 60,
+            background: opacity >= 0.65 ? '#F6F6F3' : '#F6F6F315'
+            // borderColor: opacity >= 0.65 ? undefined : 'transparent'
           }}
-          variant="outlined"
+          // variant="outlined"
           color="secondary"
         >
           <Image width={isSm ? 20 : 24} height={isSm ? 20 : 24} src={ChainListMap[chainId]?.logo || ''} />
-          <ExpandMoreIcon style={{ fontSize: 20 }} />
+          <ExpandMoreIcon style={{ fontSize: 20 }} sx={{ fill: opacity >= 0.65 ? undefined : '#fff' }} />
         </Button>
       }
     >
