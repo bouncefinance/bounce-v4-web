@@ -106,9 +106,17 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
   overflow: 'hidden',
   position: 'relative',
   whiteSpace: 'pre',
-  background: variant === 'outlined' ? 'transparent' : theme.palette.background.default,
+  background: '#F6F6F3',
+  '&:hover': {
+    color: '#A4D220',
+    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3',
+    '& + tr .MuiCollapse-root': {
+      backgroundColor: variant === 'outlined' ? '#E2E7F020' : 'white'
+    }
+  },
+  // background: variant === 'outlined' ? 'transparent' : 'white',
   '& + tr .MuiCollapse-root': {
-    background: variant === 'outlined' ? 'transparent' : theme.palette.background.default
+    background: variant === 'outlined' ? 'transparent' : 'white'
   },
   '& .MuiTableCell-root': {
     justifyContent: 'flex-start',
@@ -135,12 +143,6 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
       borderTopRightRadius: 16,
       borderBottomRightRadius: 16
     }
-  },
-  '&:hover': {
-    '& + tr .MuiCollapse-root': {
-      backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3'
-    },
-    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3'
   },
   [theme.breakpoints.down('sm')]: {
     height: theme.height.mobileHeader

@@ -2,9 +2,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Autoplay, EffectCreative, Pagination } from 'swiper'
 import 'swiper/swiper-bundle.css'
 import { Box, styled, Skeleton, Typography } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
+import ArrowRight from 'assets/images/arrow_right.svg'
 import { useState, useMemo } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
@@ -132,16 +131,16 @@ function ArrowBanner({ type }: { type?: string }) {
         onMouseEnter={EnterSwiper}
         onMouseLeave={LeaveSwiper}
       >
-        {!isSm && (
-          <ArrowBgLeft
-            sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-            onClick={() => {
-              swiper?.slidePrev()
-            }}
-          >
-            <ArrowBackIcon />
-          </ArrowBgLeft>
-        )}
+        {/*{!isSm && (*/}
+        {/*  <ArrowBgLeft*/}
+        {/*    sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}*/}
+        {/*    onClick={() => {*/}
+        {/*      swiper?.slidePrev()*/}
+        {/*    }}*/}
+        {/*  >*/}
+        {/*    <ArrowBackIcon />*/}
+        {/*  </ArrowBgLeft>*/}
+        {/*)}*/}
         {!data || loading ? (
           <SwiperSkeleton />
         ) : (
@@ -181,7 +180,13 @@ function ArrowBanner({ type }: { type?: string }) {
             sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
             onClick={() => swiper?.slideNext()}
           >
-            <ArrowForwardIcon />
+            <img
+              src={ArrowRight}
+              style={{
+                width: '16px',
+                height: '16px'
+              }}
+            />
           </ArrowBgRight>
         )}
       </Box>
@@ -214,17 +219,20 @@ const ArrowBg = styled(Box)`
     height: 30px;
   }
 `
-const ArrowBgLeft = styled(ArrowBg)`
-  position: absolute;
-  left: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-  @media (max-width: 600px) {
-    left: -25px;
-  }
-`
+// const ArrowBgLeft = styled(ArrowBg)`
+//  position: absolute;
+//  left: 30px;
+//  top: 50%;
+//  transform: translateY(-50%);
+//  @media (max-width: 600px) {
+//    left: -25px;
+//  }
+// `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
+  width: 48px;
+  height: 392px;
+  border-radius: 100px;
   right: 30px;
   top: 50%;
   transform: translateY(-50%);
