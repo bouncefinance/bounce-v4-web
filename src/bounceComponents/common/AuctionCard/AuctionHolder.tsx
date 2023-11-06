@@ -18,6 +18,7 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
   const navigate = useNavigate()
   return (
     <Stack
+      className="holder"
       direction="row"
       alignItems="center"
       spacing={12}

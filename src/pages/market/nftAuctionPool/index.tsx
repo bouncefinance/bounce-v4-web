@@ -138,6 +138,7 @@ const FormObserver: React.FC<IFormObserverProps> = ({ handleSubmit }) => {
 interface NFTPrams {
   nft: FixedSwapPool | NFTPoolListProp
   hiddenStatus?: boolean
+  isDark?: boolean
 }
 
 export const NFTCard = (props: NFTPrams) => {
@@ -189,7 +190,7 @@ export const NFTCard = (props: NFTPrams) => {
     <Box
       sx={{
         width: '100%',
-        background: '#fff',
+        background: props.isDark ? '#ffffff05' : '#fff',
         // border: `1px solid rgba(0, 0, 0, 0.1)`,
         boxShadow: `0px 5px 20px rgba(0, 0, 0, 0.08)`,
         borderRadius: '24px'
@@ -387,7 +388,7 @@ export const NFTCard = (props: NFTPrams) => {
             fontFamily: `'Public Sans'`,
             fontWeight: 500,
             fontSize: 16,
-            color: '#000',
+            color: props.isDark ? '#fff' : '#000',
             width: '100%',
             height: '21px',
             lineHeight: '21px',

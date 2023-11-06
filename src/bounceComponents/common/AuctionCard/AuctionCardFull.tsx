@@ -16,10 +16,12 @@ import { useNavigate } from 'react-router-dom'
 
 export default function AuctionCardFull({
   auctionPoolItem,
-  style
+  style,
+  isDark
 }: {
   auctionPoolItem: FixedSwapPool & { curPlayer?: string; maxPlayere?: string }
   style?: React.CSSProperties | undefined
+  isDark?: boolean
 }) {
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
@@ -104,7 +106,7 @@ export default function AuctionCardFull({
                     backedChainId={auctionPoolItem.chainId}
                   />
                   <span>{shortenAddress(auctionPoolItem.token0.address)}</span>
-                  <CopyToClipboard text={auctionPoolItem.token0.address} />
+                  <CopyToClipboard text={auctionPoolItem.token0.address} isDark={isDark} />
                 </Stack>
               }
             />
@@ -152,6 +154,7 @@ export default function AuctionCardFull({
         categoryName={PoolType[auctionPoolItem.category]}
         whiteList={auctionPoolItem.enableWhiteList ? 'Whitelist' : 'Public'}
         chainId={auctionPoolItem.chainId}
+        isDark={isDark}
       />
     </Box>
   )

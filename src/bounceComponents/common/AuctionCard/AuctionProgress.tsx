@@ -21,6 +21,7 @@ export const AuctionProgress: React.FC<IAuctionProgressProps> = ({
   return (
     <Stack spacing={10} sx={{ pt: 20 }}>
       <Stack
+        className="progress-text"
         direction="row"
         component={Typography}
         variant="body1"
