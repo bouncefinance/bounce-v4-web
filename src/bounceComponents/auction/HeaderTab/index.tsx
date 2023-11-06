@@ -110,7 +110,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
       sx={{
         display: 'flex',
         flexFlow: 'row nowrap',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
         // maxWidth: '1296px',

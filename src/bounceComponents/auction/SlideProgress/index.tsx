@@ -21,6 +21,7 @@ interface ISlideProgress {
   children: ReactJSXElement[]
   hideArrow?: boolean
   grayArrow?: boolean
+  swiperRef?: any
 }
 
 const ArrowBg = styled(Box)`
@@ -61,13 +62,14 @@ const ProgressGray = styled(ProgressLight)`
 
 export function SlideProgress(props: ISlideProgress) {
   const isSm = useBreakpoint('sm')
-  const { swiperStyle, children, hideArrow } = props
+  const { swiperStyle, children, hideArrow, swiperRef } = props
   const [swiper, setSwiper] = useState<SwiperCore>()
   const totalSlides = swiper?.slides ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
   return (
     <Box width={'100%'} ml={isSm ? 16 : 0}>
       <Swiper
+        ref={swiperRef}
         onSlideChange={s => {
           const endIdx = s?.realIndex ? s.realIndex + Number(s.params.slidesPerView) : Number(swiperStyle.slidesPerView)
           setCurrentIdx(endIdx > totalSlides ? totalSlides : endIdx)

@@ -146,7 +146,10 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 overflow: 'hidden',
                 textAlign: 'left',
                 textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                '&:hover': {
+                  color: '#A4D220'
+                }
               }}
             >
               {props.name}
@@ -400,7 +403,7 @@ export const AuctionRankCard: React.FC = () => {
     <Box
       sx={{
         width: '100%',
-        paddingTop: '40px',
+        paddingTop: '60px',
         background: 'white'
       }}
     >
@@ -459,7 +462,7 @@ export const AuctionRankCard: React.FC = () => {
               header={TableHeader}
               rows={
                 data
-                  ? data.list?.map((d: any, idx: number) =>
+                  ? data.list?.slice(0, 8).map((d: any, idx: number) =>
                       AuctionRow({
                         isSm: isSm,
                         ...d,

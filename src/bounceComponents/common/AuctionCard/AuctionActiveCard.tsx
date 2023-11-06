@@ -1,5 +1,5 @@
 import { Box, Container, Skeleton, Stack, styled, useTheme } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
 import { SwiperSlide } from 'swiper/react'
@@ -12,6 +12,10 @@ import useBreakpoint from '../../../hooks/useBreakpoint'
 // import { ReactComponent as VerifySvg } from 'assets/imgs/profile/verify.svg'
 import { VerifyStatus } from 'api/profile/type'
 import VerifiedIcon from '../VerifiedIcon'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { BoxSpaceBetween } from '../../../pages/tokenToolBox/page/disperse/disperse'
+import SwiperCore from 'swiper'
 
 interface IAuctionActiveCard {
   userId: number
@@ -153,6 +157,7 @@ const ActiveUserSkeletonCard = () => {
 }
 export const ActiveUser: React.FC = () => {
   const isSm = useBreakpoint('md')
+  const swiper = useRef<SwiperCore>()
   const { data } = useRequest(async () => {
     const resp = await getActiveUsers()
     return {
@@ -164,7 +169,7 @@ export const ActiveUser: React.FC = () => {
   console.log(data)
 
   const slideCardWidth = isSm ? 230 : 260
-  const [slidesPerView, setSlidesPerView] = useState<number>(window.innerWidth / slideCardWidth)
+  const [slidesPerView, setSlidesPerView] = useState<number>(1440 / slideCardWidth)
   useEffect(() => {
     const resetView = () => {
       setSlidesPerView(Math.ceil(window.innerWidth / slideCardWidth))
@@ -174,6 +179,34 @@ export const ActiveUser: React.FC = () => {
       window.removeEventListener('resize', resetView)
     }
   }, [slideCardWidth])
+  const ArrowBg = styled(Box)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 22px;
+    width: 48px;
+    height: 48px;
+    color: #12121233;
+    border-radius: 100px;
+    border: 1px solid #12121233;
+
+    &:hover {
+      background: var(--ps-yellow-1);
+      color: black;
+      cursor: pointer;
+      border: 1px solid var(--ps-yellow-1);
+    }
+
+    &.gray {
+      background: #f6f6f3;
+    }
+
+    @media (max-width: 600px) {
+      width: 30px;
+      height: 30px;
+      padding: 18px;
+    }
+  `
 
   return (
     <Box
@@ -188,40 +221,58 @@ export const ActiveUser: React.FC = () => {
           maxWidth: '1440px !important'
         }}
       >
-        <H2 mb={isSm ? 20 : 80} ml={isSm ? 16 : 0}>
-          Most active {isSm && <br />} <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
-        </H2>
+        <BoxSpaceBetween mb={isSm ? 20 : 80}>
+          <H2 ml={isSm ? 16 : 0}>
+            Most active {isSm && <br />} <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
+          </H2>
+          <Box
+            display={'flex'}
+            alignItems={'center'}
+            sx={{
+              maxWidth: 1440,
+              margin: isSm ? '8px auto 0' : '0'
+            }}
+          >
+            <ArrowBg onClick={() => swiper?.current?.slidePrev()}>
+              <ArrowBackIcon />
+            </ArrowBg>
+            <ArrowBg ml={8} mr={16} onClick={() => swiper?.current?.slideNext()}>
+              <ArrowForwardIcon />
+            </ArrowBg>
+          </Box>
+        </BoxSpaceBetween>
+        <SlideProgress
+          hideArrow
+          swiperRef={swiper}
+          swiperStyle={{
+            spaceBetween: 20,
+            slidesPerView: slidesPerView,
+            loop: isSm,
+            autoplay: isSm,
+            freeMode: true
+          }}
+        >
+          {data && data?.list && data.list.length
+            ? data?.list.map((data: any, idx: number) => (
+                <SwiperSlide key={idx}>
+                  <AuctionActiveCard
+                    userId={data.creatorUserInfo.userId}
+                    img={data.creatorUserInfo.avatar}
+                    name={data.creatorUserInfo.name}
+                    desc={data.creatorUserInfo.description}
+                    createdCount={data.totalCreated}
+                    participated={data.totalPart}
+                    ifKyc={data.creatorUserInfo.ifKyc}
+                  />
+                </SwiperSlide>
+              ))
+            : new Array(8).fill(0).map((item, index) => (
+                <SwiperSlide key={index}>
+                  <ActiveUserSkeletonCard />
+                </SwiperSlide>
+              ))}
+        </SlideProgress>
       </Container>
-      <SlideProgress
-        hideArrow={isSm}
-        swiperStyle={{
-          spaceBetween: 20,
-          slidesPerView: slidesPerView,
-          loop: isSm,
-          autoplay: isSm,
-          freeMode: true
-        }}
-      >
-        {data && data?.list && data.list.length
-          ? data?.list.map((data: any, idx: number) => (
-              <SwiperSlide key={idx}>
-                <AuctionActiveCard
-                  userId={data.creatorUserInfo.userId}
-                  img={data.creatorUserInfo.avatar}
-                  name={data.creatorUserInfo.name}
-                  desc={data.creatorUserInfo.description}
-                  createdCount={data.totalCreated}
-                  participated={data.totalPart}
-                  ifKyc={data.creatorUserInfo.ifKyc}
-                />
-              </SwiperSlide>
-            ))
-          : new Array(8).fill(0).map((item, index) => (
-              <SwiperSlide key={index}>
-                <ActiveUserSkeletonCard />
-              </SwiperSlide>
-            ))}
-      </SlideProgress>
     </Box>
   )
 }
