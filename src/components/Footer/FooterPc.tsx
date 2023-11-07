@@ -1,15 +1,16 @@
 import { Box, Container, Link as ExternalLink, SxProps, Typography, useTheme } from '@mui/material'
-import React, { useMemo, createContext, useContext } from 'react'
-import APIIcon from 'assets/imgs/common/Api.png'
-import GithubIcon from 'assets/imgs/common/Github.png'
-import MediumIcon from 'assets/imgs/common/Medium.png'
-import TelegramIcon from 'assets/imgs/common/Telegram.png'
-import TwitterIcon from 'assets/imgs/common/Twitter.png'
+import React, { createContext, useContext, useMemo } from 'react'
+import APIIcon from 'assets/socialLinksIcon/API-mini.svg'
+import GithubIcon from 'assets/socialLinksIcon/github-mini.svg'
+import MediumIcon from 'assets/socialLinksIcon/midium-mini.svg'
+import TelegramIcon from 'assets/socialLinksIcon/telegram-mini.svg'
+import TwitterIcon from 'assets/socialLinksIcon/twitter-mini.svg'
 import WhiteFooterLogo from 'assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
 import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
 import WhiteArrowSvg from 'assets/imgs/common/whiteFooterArrow.svg'
 import useBreakpoint from '../../hooks/useBreakpoint'
+import { Body04, H6 } from '../Text'
 
 const FooterDarkStyle = {
   layoutBackground: '#20201E',
@@ -51,22 +52,42 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
     ],
     []
   )
+
   return (
     <Box
       sx={{
+        width: isSm ? 'wrap-content' : '800px',
         display: 'flex',
-        flexFlow: 'row nowrap',
+        flexFlow: 'row',
         justifyContent: 'flex-start',
+        alignItems: 'center',
         marginBottom: 20,
         ...sx
       }}
     >
+      <Body04 color={'white'} mr={40} fontWeight={600}>
+        Follow us
+      </Body04>
       {Links.map((item, index) => {
         return (
           <ExternalLink key={'link' + index} target="_blank" href={item.href}>
-            <img
+            <Box
+              component="img"
               src={item.icon}
-              style={{ width: isSm ? 44 : 36, height: isSm ? 44 : 36, marginRight: isSm ? 12 : 8, cursor: 'pointer' }}
+              sx={{
+                width: isSm ? 44 : 48,
+                height: isSm ? 44 : 48,
+                marginRight: isSm ? 12 : 8,
+                cursor: 'pointer',
+                padding: '13px',
+                background: 'var(--ps-yellow-1)',
+                borderRadius: '100px',
+                '&:hover': {
+                  background: 'transparent',
+                  border: '1px solid var(--ps-yellow-1)',
+                  '.svg': { fill: 'var(--ps-yellow-1)' }
+                }
+              }}
             />
           </ExternalLink>
         )
@@ -81,10 +102,10 @@ export const FooterSocialLink: React.FC = () => {
     <Box
       sx={{
         position: 'relative',
-        width: 213,
+        width: '100%',
         display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'flex-start',
+        flexFlow: 'row',
+        justifyContent: 'space-between',
         alignItems: 'flex-start'
       }}
     >
@@ -92,28 +113,6 @@ export const FooterSocialLink: React.FC = () => {
         <img src={WhiteFooterLogo} style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }} />
       </ExternalLink>
       <SocialLinkList />
-      <Box
-        id={'123'}
-        sx={{
-          position: 'relative',
-          width: '100%'
-        }}
-      >
-        <iframe
-          // src={isDark ? '/darkCrypotoWidget.html' : '/crypotoWidget.html'}
-          src={'/crypotoWidget.html'}
-          width="100%"
-          height="230px"
-          style={{
-            border: '0 none',
-            position: 'relative',
-            top: 0,
-            left: -42,
-            width: 280,
-            overflow: 'hidden'
-          }}
-        ></iframe>
-      </Box>
     </Box>
   )
 }
@@ -134,17 +133,16 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
   const isDark = useContext(FooterThemeContext)
   return (
     <div>
-      <Typography
-        variant="h5"
+      <H6
         sx={{
           fontFamily: `'Public Sans'`,
           fontSize: 12,
           marginBottom: 24,
-          color: isDark ? FooterDarkStyle.linkTextColor : ''
+          color: isDark ? FooterDarkStyle.linkTextColor : 'white'
         }}
       >
         {title}
-      </Typography>
+      </H6>
       <ul
         style={{
           margin: 0,
@@ -387,8 +385,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             sx={{
               position: 'relative',
               display: 'flex',
-              flexFlow: isSm ? 'column' : 'row nowrap',
-              justifyContent: 'space-between',
+              flexFlow: 'column',
               alignItems: 'flex-start',
               paddingBottom: 32,
               marginBottom: 32,
@@ -405,7 +402,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             }}
           >
             <FooterSocialLink />
-            {isSm && <Box sx={{ border: '1px solid #D7D6D9', width: '100%', mb: '40px' }} />}
+            <Box sx={{ border: '0.5px solid #D7D6D9', width: '100%', mb: '40px' }} />
             <Box
               sx={{
                 display: 'flex',
