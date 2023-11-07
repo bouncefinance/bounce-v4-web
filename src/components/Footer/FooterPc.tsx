@@ -22,6 +22,7 @@ const FooterThemeContext = createContext(false)
 
 export function SocialLinkList({ sx }: { sx?: SxProps }) {
   const isSm = useBreakpoint('md')
+  const theme = useTheme()
   const Links = useMemo(
     () => [
       {
@@ -62,51 +63,87 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
         justifyContent: 'flex-start',
         alignItems: 'center',
         marginBottom: 20,
+        [theme.breakpoints.down('md')]: {
+          flexFlow: 'column',
+          alignItems: 'center'
+        },
         ...sx
       }}
     >
-      <Body04 color={'white'} mr={40} fontWeight={600}>
+      <Body04
+        color={'white'}
+        mr={40}
+        fontWeight={600}
+        sx={{
+          [theme.breakpoints.down('md')]: {
+            margin: '0 0 12px'
+          }
+        }}
+      >
         Follow us
       </Body04>
-      {Links.map((item, index) => {
-        return (
-          <ExternalLink key={'link' + index} target="_blank" href={item.href}>
-            <Box
-              component="img"
-              src={item.icon}
+      <Box
+        sx={{
+          [theme.breakpoints.down('md')]: {
+            display: 'flex',
+            gap: 12
+          }
+        }}
+      >
+        {Links.map((item, index) => {
+          return (
+            <ExternalLink
+              key={'link' + index}
+              target="_blank"
+              href={item.href}
               sx={{
-                width: isSm ? 44 : 48,
-                height: isSm ? 44 : 48,
-                marginRight: isSm ? 12 : 8,
-                cursor: 'pointer',
-                padding: '13px',
-                background: 'var(--ps-yellow-1)',
-                borderRadius: '100px',
-                '&:hover': {
-                  background: 'transparent',
-                  border: '1px solid var(--ps-yellow-1)',
-                  '.svg': { fill: 'var(--ps-yellow-1)' }
+                [theme.breakpoints.down('md')]: {
+                  flexGrow: 1
                 }
               }}
-            />
-          </ExternalLink>
-        )
-      })}
+            >
+              <Box
+                component="img"
+                src={item.icon}
+                sx={{
+                  width: isSm ? 44 : 48,
+                  height: isSm ? 44 : 48,
+                  marginRight: isSm ? 0 : 8,
+                  cursor: 'pointer',
+                  padding: '13px',
+                  background: 'var(--ps-yellow-1)',
+                  borderRadius: '100px',
+                  '&:hover': {
+                    background: 'transparent',
+                    border: '1px solid var(--ps-yellow-1)',
+                    '.svg': { fill: 'var(--ps-yellow-1)' }
+                  }
+                }}
+              />
+            </ExternalLink>
+          )
+        })}
+      </Box>
     </Box>
   )
 }
 
 export const FooterSocialLink: React.FC = () => {
   // const isDark = useContext(FooterThemeContext)
+  const isSm = useBreakpoint('sm')
+  const theme = useTheme()
   return (
     <Box
       sx={{
         position: 'relative',
         width: '100%',
         display: 'flex',
-        flexFlow: 'row',
+        flexFlow: isSm ? 'column' : 'row',
         justifyContent: 'space-between',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        [theme.breakpoints.down('md')]: {
+          alignItems: 'center'
+        }
       }}
     >
       <ExternalLink href={routes.market.index} role="link" rel="noopener noreferrer" aria-disabled={true}>
@@ -131,8 +168,17 @@ interface FooterLinksProps {
 
 export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
   const isDark = useContext(FooterThemeContext)
+  const theme = useTheme()
   return (
-    <div>
+    <Box
+      sx={{
+        [theme.breakpoints.down('md')]: {
+          flexDirection: 'column',
+          display: 'flex',
+          alignItems: 'center'
+        }
+      }}
+    >
       <H6
         sx={{
           fontFamily: `'Public Sans'`,
@@ -142,10 +188,15 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
       >
         {title}
       </H6>
-      <ul
-        style={{
+      <Box
+        sx={{
           margin: 0,
-          padding: 0
+          padding: 0,
+          [theme.breakpoints.down('md')]: {
+            flexDirection: 'column',
+            display: 'flex',
+            alignItems: 'center'
+          }
         }}
       >
         {links.map((item, index) => {
@@ -171,6 +222,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink
                   // className={linkClass}
                   sx={{
+                    textDecoration: 'none',
                     color: isDark ? FooterDarkStyle.linkTextColor : 'white',
                     padding: 0,
                     height: 18,
@@ -218,8 +270,8 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
             </li>
           )
         })}
-      </ul>
-    </div>
+      </Box>
+    </Box>
   )
 }
 export const ResourcesLinks = [
@@ -409,7 +461,10 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                 display: 'flex',
                 width: '100%',
                 flexDirection: 'row',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                [theme.breakpoints.down('md')]: {
+                  flexDirection: 'column'
+                }
               }}
             >
               <Box
@@ -427,8 +482,8 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                     border: '0 none',
                     position: 'relative',
                     top: 0,
-                    left: -42,
-                    width: 280,
+                    left: isSm ? 0 : -42,
+                    width: isSm ? '100%' : 280,
                     overflow: 'hidden'
                   }}
                 ></iframe>
@@ -438,15 +493,15 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                   display: 'flex',
                   width: isSm ? 'auto' : '800px',
                   flexFlow: isSm ? 'column' : 'row nowrap',
-                  alignItems: 'flex-start'
+                  alignItems: isSm ? 'center' : 'flex-start'
                 }}
-                gap={isSm ? 32 : 120}
+                gap={isSm ? 60 : 120}
               >
                 <Box
                   sx={{
                     display: 'flex',
                     flexFlow: 'column',
-                    alignItems: 'flex-start'
+                    alignItems: isSm ? 'center' : 'flex-start'
                   }}
                   gap={60}
                 >
