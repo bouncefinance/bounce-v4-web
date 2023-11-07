@@ -7,7 +7,7 @@ import TelegramIcon from 'assets/socialLinksIcon/telegram-mini.svg'
 import TwitterIcon from 'assets/socialLinksIcon/twitter-mini.svg'
 import WhiteFooterLogo from 'assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
-import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
+// import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
 import WhiteArrowSvg from 'assets/imgs/common/whiteFooterArrow.svg'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import { Body04, H6 } from '../Text'
@@ -136,7 +136,6 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
       <H6
         sx={{
           fontFamily: `'Public Sans'`,
-          fontSize: 12,
           marginBottom: 24,
           color: isDark ? FooterDarkStyle.linkTextColor : 'white'
         }}
@@ -161,6 +160,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
               {item.isDisabled ? (
                 <a
                   style={{
+                    textDecoration: 'none',
                     color: `${isDark ? FooterDarkStyle.linkTextColor : '#919191'}!important`,
                     fontFamily: `'Inter'`
                   }}
@@ -191,6 +191,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink href={item.href}>
                   <a
                     style={{
+                      textDecoration: 'none',
                       color: isDark ? FooterDarkStyle.linkTextColor : 'white',
                       padding: 0,
                       height: 18,
@@ -290,7 +291,7 @@ export const ResourcesLinks = [
 const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
   const isSm = useBreakpoint('sm')
   const theme = useTheme()
-  const LinksIcon = isDark ? WhiteArrowSvg : ArrowSvg
+  const LinksIcon = WhiteArrowSvg
 
   const ProductsLinks = useMemo(
     () => [
@@ -406,17 +407,57 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             <Box
               sx={{
                 display: 'flex',
-                flexFlow: isSm ? 'column' : 'row nowrap',
-                justifyContent: 'flex-end',
-                alignItems: 'flex-start'
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
               }}
-              gap={isSm ? 32 : 120}
             >
-              <FooterLinks title={'Products'} links={ProductsLinks} />
-              <FooterLinks title={'Solutions'} links={SolutionsLinks} />
-              <FooterLinks title={'Resources'} links={ResourcesLinks} />
+              <Box
+                id={'123'}
+                sx={{
+                  position: 'relative'
+                }}
+              >
+                <iframe
+                  // src={isDark ? '/darkCrypotoWidget.html' : '/crypotoWidget.html'}
+                  src={'/darkCrypotoWidget.html'}
+                  width="100%"
+                  height="230px"
+                  style={{
+                    border: '0 none',
+                    position: 'relative',
+                    top: 0,
+                    left: -42,
+                    width: 280,
+                    overflow: 'hidden'
+                  }}
+                ></iframe>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: isSm ? 'auto' : '800px',
+                  flexFlow: isSm ? 'column' : 'row nowrap',
+                  alignItems: 'flex-start'
+                }}
+                gap={isSm ? 32 : 120}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexFlow: 'column',
+                    alignItems: 'flex-start'
+                  }}
+                  gap={60}
+                >
+                  <FooterLinks title={'Products'} links={ProductsLinks} />
+                  <FooterLinks title={'Solutions'} links={SolutionsLinks} />
+                </Box>
+                <FooterLinks title={'Resources'} links={ResourcesLinks} />
+              </Box>
             </Box>
           </Box>
+          <Box sx={{ border: '0.5px solid #D7D6D9', width: '100%', mb: '40px' }} />
           <Box
             sx={{
               display: 'flex',
