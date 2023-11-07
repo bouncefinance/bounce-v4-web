@@ -87,7 +87,7 @@ const Tab = styled(Box)`
   @media (max-width: 600px) {
     padding: 12px 16px;
     height: 45px;
-    width: max-content;
+    width: -webkit-fill-available;
   }
 `
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
@@ -117,14 +117,16 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={0}
           onClick={() => props.navigate(url)}
           sx={{
-            cursor: 'pointer'
+            cursor: 'pointer',
+            marginLeft: '12px'
           }}
         >
           {/* index */}
           <H7Gray
             mr={16}
             sx={{
-              width: 16
+              width: 16,
+              color: '#121212'
             }}
           >
             {props.index}
@@ -202,7 +204,8 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           <H7Gray
             mr={14}
             sx={{
-              width: 16
+              width: 16,
+              color: '#121212'
             }}
           >
             {props.index}
@@ -334,7 +337,7 @@ export const AuctionRankCard: React.FC = () => {
   const action = Tabs.indexOf(currentTab) + 1
   const [chainFilter, setChainFilter] = useState<number>(0)
   const navigate = useNavigate()
-  const TableHeader = isSm ? ['Auction', 'Status'] : ['#', 'Auction', 'Asset', 'Auction Type', 'Status']
+  const TableHeader = isSm ? ['# Auction', 'Status'] : ['#', 'Auction', 'Asset', 'Auction Type', 'Status']
   const { data } = useRequest(
     async () => {
       const resp = await getPoolsFilter({
@@ -381,7 +384,7 @@ export const AuctionRankCard: React.FC = () => {
         padding: '4px',
         alignItems: 'center',
         justifyContent: 'center',
-        width: isSm ? 470 : 'auto',
+        width: isSm ? '100%' : 'auto',
         height: 'auto',
         borderRadius: 100,
         border: '1px solid #E4E4E4'
@@ -403,7 +406,7 @@ export const AuctionRankCard: React.FC = () => {
     <Box
       sx={{
         width: '100%',
-        paddingTop: '60px',
+        paddingTop: isSm ? '0px' : '60px',
         background: 'white'
       }}
     >
@@ -430,8 +433,9 @@ export const AuctionRankCard: React.FC = () => {
           {isSm && (
             <Box
               sx={{
-                overflowX: 'scroll',
+                overflowX: isSm ? 'unset' : 'scroll',
                 width: '100%',
+                padding: isSm ? '40px 16px 16px' : '0',
                 '&::-webkit-scrollbar': { display: 'none', background: 'transparent' }
               }}
             >

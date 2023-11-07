@@ -42,7 +42,7 @@ export function OwnerCell({ url, name }: { url?: string; name: string }) {
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
-    width: '90%'
+    width: '100%'
   },
   display: 'table',
   borderRadius: '40px',
@@ -164,9 +164,9 @@ const sortIcon = ({ className }: { className: string }) => (
   </svg>
 )
 const StyledTable = styled('table')(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: 'calc(100vw - 12px - 30px) !important'
-  }
+  // [theme.breakpoints.down('sm')]: {
+  //   width: 'calc(100vw - 12px - 30px) !important'
+  // }
 }))
 export default function CustomMobileTable({
   header,

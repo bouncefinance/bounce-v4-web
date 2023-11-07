@@ -39,7 +39,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
     <Box
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
       sx={{
-        width: isSm ? '198px' : '240px',
+        width: isSm ? '220px' : '240px',
         display: 'flex',
         cursor: 'pointer',
         background: '#FFFFFF',
@@ -49,15 +49,15 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
           flexDirection: 'column',
           height: '364px',
           boxSizing: 'border-box',
-          width: '230px',
+          width: '220px',
           gap: '16px'
         }
       }}
     >
       <img
         style={{
-          width: isSm ? '198px' : '240px',
-          height: isSm ? '198px' : '180px',
+          width: isSm ? '220px' : '240px',
+          height: isSm ? '220px' : '180px',
           borderRadius: '14px 14px 0 0',
           marginLeft: isSm ? '-2px' : 0
         }}
@@ -106,7 +106,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
             [theme.breakpoints.down('md')]: {
               gap: '12px',
               padding: '8px 12px',
-              width: '198px'
+              width: '220px'
             }
           }}
         >
@@ -140,7 +140,7 @@ const ActiveUserSkeletonCard = () => {
         borderRadius: '20px'
       }}
     >
-      <Box sx={{ width: isMd ? '198px' : '150px', height: isMd ? '198px' : '150px', borderRadius: '14px' }}>
+      <Box sx={{ width: isMd ? '220px' : '150px', height: isMd ? '220px' : '150px', borderRadius: '14px' }}>
         <Skeleton
           variant="rectangular"
           component={'div'}
@@ -168,8 +168,8 @@ export const ActiveUser: React.FC = () => {
   console.log('data')
   console.log(data)
 
-  const slideCardWidth = isSm ? 230 : 260
-  const [slidesPerView, setSlidesPerView] = useState<number>(1440 / slideCardWidth)
+  const slideCardWidth = isSm ? 220 : 260
+  const [slidesPerView, setSlidesPerView] = useState<number>((isSm ? window.innerWidth : 1440) / slideCardWidth)
   useEffect(() => {
     const resetView = () => {
       setSlidesPerView(Math.ceil(window.innerWidth / slideCardWidth))
@@ -226,7 +226,7 @@ export const ActiveUser: React.FC = () => {
             Most active {isSm && <br />} <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
           </H2>
           <Box
-            display={'flex'}
+            display={isSm ? 'none' : 'flex'}
             alignItems={'center'}
             sx={{
               maxWidth: 1440,
