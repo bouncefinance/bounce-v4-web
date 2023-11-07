@@ -116,14 +116,20 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         // maxWidth: '1296px',
         padding: { xs: 0, sm: '0 72px' },
         margin: '0 auto',
+        '@media(max-width:600px)': {
+          margin: '0',
+          justifyContent: 'flex-start',
+          overflowX: 'scroll'
+        },
         ...style
       }}
     >
       <Box
         sx={{
           width: 'max-content',
-          maxWidth: '100%',
+          // maxWidth: '100%',
           marginTop: '32px',
+          display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'flex-start',
           alignItems: 'center',
@@ -131,7 +137,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
           backdropFilter: 'blur(4px)',
           background: 'rgba(255, 255, 255, 0.15)',
           borderRadius: '100px',
-          overflowX: 'scroll',
+          // overflowX: 'scroll',
           whiteSpace: 'nowrap',
           border: '1px solid #959595',
 
@@ -141,6 +147,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
           },
           '@media(max-width:1296px)': {
             margin: '0 16px'
+          },
+          '@media(max-width:600px)': {
+            maxWidth: 'max-content'
           }
         }}
       >
