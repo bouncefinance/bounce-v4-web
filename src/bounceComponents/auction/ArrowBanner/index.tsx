@@ -122,11 +122,11 @@ function ArrowBanner({ type }: { type?: string }) {
         sx={{
           // maxWidth: '1296px',
           width: '100%',
-          minHeight: isSm ? 125 : 530,
-          '@media(max-width:1296px)': {
-            padding: '0 16px',
-            margin: '16px auto'
-          }
+          minHeight: isSm ? 125 : 530
+          // '@media(max-width:1296px)': {
+          //   padding: '0 16px',
+          //   margin: '16px auto'
+          // }
         }}
         onMouseEnter={EnterSwiper}
         onMouseLeave={LeaveSwiper}
