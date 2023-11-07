@@ -44,7 +44,7 @@ export const SwiperSkeleton = () => {
           left: '0',
           bottom: '40px',
           width: '100%',
-          padding: isSm ? '0 16px' : '0 38px 0 40px',
+          padding: '0',
           boxSizing: 'border-box',
           '& .MuiSkeleton-root': {
             backgroundColor: 'rgba(255, 255, 255, 0.4)'
@@ -113,7 +113,7 @@ function ArrowBanner({ type }: { type?: string }) {
     return 3000
   }, [data?.list.length])
   return (
-    <Box position={'relative'}>
+    <Box position={'relative'} mt={-76}>
       <Box
         position={'relative'}
         display={'flex'}
@@ -122,7 +122,7 @@ function ArrowBanner({ type }: { type?: string }) {
         sx={{
           // maxWidth: '1296px',
           width: '100%',
-          minHeight: isSm ? 125 : 460,
+          minHeight: isSm ? 125 : 530,
           '@media(max-width:1296px)': {
             padding: '0 16px',
             margin: '16px auto'
@@ -326,13 +326,13 @@ export function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: isSm ? '400px' : '460px',
+        height: isSm ? '400px' : '532px',
         // width: { sm: '328px', lg: '100%' },
         width: '100%',
         cursor: 'pointer',
         position: 'relative',
         '@media(min-width:1440px)': {
-          height: isSm ? '400px' : '460px'
+          height: isSm ? '400px' : '532px'
         },
         '@media(min-width:1920px)': {
           height: isSm ? '400px' : '629px'

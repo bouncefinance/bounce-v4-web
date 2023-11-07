@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Box } from '@mui/material'
 import HeaderSearchInput, { ISearchAllOption } from '../../SearchInput/HeaderSearchInput'
@@ -10,7 +10,7 @@ import { whiteLogoRoutes } from '../../../../components/Header'
 import { PoolType } from 'api/pool/type'
 import useBreakpoint from '../../../../hooks/useBreakpoint'
 
-const Search: React.FC = () => {
+function Search({ opacity }: { opacity?: number }) {
   const [userData, setUserData] = useState<ISearchAllOption[]>([])
   const [searchText, setSearchText] = useState<string>('')
   const [idx, setIdx] = useState(0)
@@ -72,6 +72,7 @@ const Search: React.FC = () => {
     <Box
       sx={{
         width: '100%',
+        maxWidth: 800,
         height: 44,
         mixBlendMode: whiteLogoRoutes.includes(pathname) ? 'difference' : 'unset',
         position: 'relative',
@@ -107,6 +108,7 @@ const Search: React.FC = () => {
         startIcon
         loadingText={'No result'}
         value={searchText}
+        opacity={opacity}
         idx={idx}
         onChange={(_, newValue) => {
           setSearchText(newValue)

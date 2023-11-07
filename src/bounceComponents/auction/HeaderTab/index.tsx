@@ -17,7 +17,8 @@ const StyledTab = styled(Button)(({ theme }) => ({
   background: 'transparent',
   '&:hover': {
     border: 'none',
-    color: 'white'
+    color: 'white',
+    background: 'transparent'
   },
   '&.selected': {
     background: '#E1F25C',
@@ -72,7 +73,6 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     return 'All'
   }
   const [currentTab, setCurrentTab] = useState(getPath())
-  console.log('currentTab', currentTab)
 
   const linkTo = (route: string) => {
     switch (route) {
@@ -129,6 +129,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
           alignItems: 'center',
           padding: '6px',
           backdropFilter: 'blur(4px)',
+          background: 'rgba(255, 255, 255, 0.15)',
           borderRadius: '100px',
           overflowX: 'scroll',
           whiteSpace: 'nowrap',

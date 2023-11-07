@@ -1,5 +1,5 @@
 import { useDebounce } from 'ahooks'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export function useScrollHeight() {
   const [value, setValue] = useState<number>()
@@ -21,10 +21,13 @@ export function useScrollHeight() {
 
 export function useHeaderBgOpacity() {
   const height = useScrollHeight()
-  const opacity1H = 80
-  const curH = useMemo(() => ((height || 0) > opacity1H ? opacity1H : height || 0), [height])
+  const opacity1H = 200
+  // const curH = useMemo(() => ((height || 0) > opacity1H ? opacity1H : height || 0), [height])
+  const h = height ?? 0
 
-  return useMemo(() => {
-    return curH / opacity1H
-  }, [curH])
+  return h > opacity1H ? 0.65 : h > 76 ? (h / opacity1H) * 0.65 : 0
+
+  // return useMemo(() => {
+  //   return curH / opacity1H
+  // }, [curH])
 }

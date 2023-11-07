@@ -204,17 +204,17 @@ export const ComponentOptions = {
           transition:
             'background-color 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           '&:disabled': {
-            border: '1px solid var(--ps-text-5)',
+            // border: '1px solid var(--ps-text-5)',
             background: 'var(--ps-text-5)',
             color: 'var(--ps-white)'
           },
           '&:hover': {
-            background: 'var(--ps-yellow-1)',
-            border: '1px solid var(--ps-yellow-1)'
+            background: 'var(--ps-yellow-1)'
+            // border: '1px solid var(--ps-yellow-1)'
           },
           '&:active': {
             background: 'var(--ps-yellow-1)',
-            border: '1px solid var(--ps-yellow-1)',
+            // border: '1px solid var(--ps-yellow-1)',
             color: 'var(--ps-primary)'
           }
         },
@@ -248,7 +248,7 @@ export const ComponentOptions = {
           '&:hover': {
             boxShadow: 'none',
             background: 'var(--ps-gray-900)',
-            borderColor: 'var(--ps-gray-900)',
+            borderColor: 'var(--ps-yellow-1)',
             color: 'var(--ps-white)'
           },
           '&:active': {

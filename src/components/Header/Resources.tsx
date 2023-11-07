@@ -26,17 +26,21 @@ const linkList = [
   }
 ]
 
-export default function Resources() {
+export default function Resources({ opacity }: { opacity: number }) {
   return (
     <PopperCard
       targetElement={
         <Button
           sx={{
             width: 135,
-            fontSize: 16,
-            height: 44
+            fontSize: 14,
+            height: 44,
+            borderRadius: 60,
+            // border: opacity >= 0.65 ? '1px solid var(--ps-gray-20)' : '1px solid transparent',
+            background: opacity >= 0.65 ? '#F6F6F3' : '#F6F6F315',
+            color: opacity >= 0.65 ? undefined : '#ffffff'
           }}
-          variant="outlined"
+          // variant="outlined"
           color="secondary"
         >
           Resources
