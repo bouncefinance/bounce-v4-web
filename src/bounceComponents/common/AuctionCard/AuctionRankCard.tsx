@@ -246,7 +246,10 @@ export function AuctionRow(props: any): ReactJSXElement[] {
               maxWidth: 160,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              '&:hover': {
+                color: '#A4D220'
+              }
             }}
           >
             {props.name}

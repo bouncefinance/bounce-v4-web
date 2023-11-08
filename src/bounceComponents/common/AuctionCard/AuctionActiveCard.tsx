@@ -79,7 +79,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
                 WebkitBoxOrient: 'vertical',
                 textOverflow: 'ellipsis',
                 '&:hover': {
-                  color: 'var(--ps-yellow-1)'
+                  color: '#A4D220'
                 }
               }}
             >
