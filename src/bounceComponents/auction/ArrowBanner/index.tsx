@@ -131,16 +131,23 @@ function ArrowBanner({ type }: { type?: string }) {
         onMouseEnter={EnterSwiper}
         onMouseLeave={LeaveSwiper}
       >
-        {/*{!isSm && (*/}
-        {/*  <ArrowBgLeft*/}
-        {/*    sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}*/}
-        {/*    onClick={() => {*/}
-        {/*      swiper?.slidePrev()*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    <ArrowBackIcon />*/}
-        {/*  </ArrowBgLeft>*/}
-        {/*)}*/}
+        {!isSm && (
+          <ArrowBgLeft
+            sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+            onClick={() => {
+              swiper?.slidePrev()
+            }}
+          >
+            <img
+              src={ArrowRight}
+              style={{
+                transform: 'rotate(180deg)',
+                width: '16px',
+                height: '16px'
+              }}
+            />
+          </ArrowBgLeft>
+        )}
         {!data || loading ? (
           <SwiperSkeleton />
         ) : (
@@ -205,10 +212,10 @@ const ArrowBg = styled(Box)`
   align-items: center;
   align-self: center;
   padding: 22px;
-  width: 60px;
-  height: 60px;
   background: rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
+  width: 48px;
+  height: 392px;
+  border-radius: 100px;
 
   &:hover {
     cursor: pointer;
@@ -230,9 +237,6 @@ const ArrowBg = styled(Box)`
 // `
 const ArrowBgRight = styled(ArrowBg)`
   position: absolute;
-  width: 48px;
-  height: 392px;
-  border-radius: 100px;
   right: 30px;
   top: 50%;
   transform: translateY(-50%);
@@ -240,7 +244,15 @@ const ArrowBgRight = styled(ArrowBg)`
     right: -25px;
   }
 `
-
+const ArrowBgLeft = styled(ArrowBg)`
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  @media (max-width: 600px) {
+    left: -25px;
+  }
+`
 const BannerH3 = styled(Typography)`
   font-family: 'Public Sans';
   font-style: normal;
