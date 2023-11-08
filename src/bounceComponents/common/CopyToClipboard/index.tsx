@@ -5,6 +5,7 @@ import ReactCopyToClipboard from 'react-copy-to-clipboard'
 import CopySVG from './assets/copy.svg'
 import SureSVG from './assets/sure.svg'
 import CopySVGDark from './assets/copy_dark.svg'
+import CopyHover from './assets/copy_hover.svg'
 
 export type ICopyToClipboardProps = {
   text: string
@@ -15,6 +16,8 @@ export type ICopyToClipboardProps = {
 
 const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, placement = 'top', isDark }) => {
   const [copied, setCopied] = useState<boolean>(false)
+  const normalCopy = copied ? SureSVG : isDark ? CopySVGDark : CopySVG
+  const [src, setSrc] = useState(normalCopy)
   useEffect(() => {
     if (copied) {
       setTimeout(() => {
@@ -35,7 +38,14 @@ const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, plac
             <div>{children}</div>
           ) : (
             <IconButton size="small" sx={{ background: 'none', height: 'fit-content', p: 0 }}>
-              <Image src={copied ? SureSVG : isDark ? CopySVGDark : CopySVG} width={20} height={20} alt="copied-icon" />
+              <Image
+                onMouseOver={() => setSrc(CopyHover)}
+                onMouseOut={() => setSrc(normalCopy)}
+                src={src}
+                width={20}
+                height={20}
+                alt="copied-icon"
+              />
             </IconButton>
           )}
         </Tooltip>
