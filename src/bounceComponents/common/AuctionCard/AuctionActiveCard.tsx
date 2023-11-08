@@ -51,6 +51,9 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
           boxSizing: 'border-box',
           width: '220px',
           gap: '16px'
+        },
+        '&:hover': {
+          border: '1px solid #12121233'
         }
       }}
     >
