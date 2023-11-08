@@ -369,9 +369,18 @@ export const AuctionRankCard: React.FC = () => {
         width: isSm ? '100%' : '200px',
         height: '48px',
         fontSize: isSm ? '12px' : 'inherit',
+        '&:hover': {
+          borderRadius: '100px',
+          border: '1px solid var(--ps-yellow-1)',
+          background: 'white'
+        },
         fieldset: {
           border: '1px solid #E4E4E4',
-          borderRadius: '100px'
+          borderRadius: '100px',
+          '&:hover': {
+            border: '1px solid var(--ps-yellow-1)',
+            background: 'white'
+          }
         },
         '& .css-hpln3v-MuiSelect-icon': {
           top: 'inherit'
