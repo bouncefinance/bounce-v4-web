@@ -455,7 +455,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             }}
           >
             <FooterSocialLink />
-            <Box sx={{ border: '0.5px solid #D7D6D9', width: '100%', mb: '40px' }} />
+            <Box sx={{ borderBottom: '1px solid #FFFFFF1A', width: '100%', mb: '40px' }} />
             <Box
               sx={{
                 display: 'flex',
@@ -512,7 +512,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
               </Box>
             </Box>
           </Box>
-          <Box sx={{ border: '0.5px solid #D7D6D9', width: '100%', mb: '40px' }} />
+          <Box sx={{ borderBottom: '1px solid #FFFFFF1A', width: '100%', mb: '40px' }} />
           <Box
             sx={{
               display: 'flex',
