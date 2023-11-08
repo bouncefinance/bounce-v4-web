@@ -78,10 +78,12 @@ export function SlideProgress(props: ISlideProgress) {
       <Swiper
         ref={swiperRef}
         onSlideChange={s => {
-          const endIdx = s?.realIndex ? s.realIndex + Number(s.params.slidesPerView) : Number(swiperStyle.slidesPerView)
+          const endIdx = s?.realIndex
+            ? s.realIndex + Math.ceil(Number(s.params.slidesPerView))
+            : Number(swiperStyle.slidesPerView)
           setCurrentIdx(endIdx > totalSlides ? totalSlides : endIdx)
           props.canSwipePrev(endIdx > Number(s.params.slidesPerView))
-          props.canSwipeNext(endIdx <= totalSlides)
+          props.canSwipeNext(endIdx < totalSlides)
         }}
         onSwiper={setSwiper}
         {...swiperStyle}

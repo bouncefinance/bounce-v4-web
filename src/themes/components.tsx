@@ -340,14 +340,13 @@ export const ComponentOptions = {
                 justifyContent: 'space-between',
                 color: '#121212',
                 borderRadius: 100,
-                background: 'var(--ps-yellow-1)',
+                background: '#E1F25C'
                 // '&::after': {
                 //   content: `' '`,
                 //   width: 20,
                 //   height: 20,
                 //   background: `url(${CheckedSVG}) no-repeat center`
                 // },
-                '&:hover': {}
               },
               '& .MuiMenuItem-root:hover': {
                 color: 'var(--ps-yellow-1)',

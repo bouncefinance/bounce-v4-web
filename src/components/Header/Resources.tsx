@@ -9,7 +9,10 @@ const StyledButton = styled(Button)({
   textAlign: 'left',
   fontSize: 16,
   fontWeight: 500,
-  backgroundColor: 'transparent'
+  backgroundColor: 'transparent',
+  '&:hover': {
+    borderRadius: '100px'
+  }
 })
 
 const linkList = [
@@ -29,6 +32,7 @@ const linkList = [
 export default function Resources({ opacity }: { opacity: number }) {
   return (
     <PopperCard
+      sx={{ borderRadius: 20 }}
       targetElement={
         <Button
           sx={{
@@ -38,7 +42,10 @@ export default function Resources({ opacity }: { opacity: number }) {
             borderRadius: 60,
             // border: opacity >= 0.65 ? '1px solid var(--ps-gray-20)' : '1px solid transparent',
             background: opacity >= 0.65 ? '#F6F6F3' : '#F6F6F315',
-            color: opacity >= 0.65 ? undefined : '#ffffff'
+            color: opacity >= 0.65 ? undefined : '#ffffff',
+            '&:hover': {
+              color: '#121212'
+            }
           }}
           // variant="outlined"
           color="secondary"

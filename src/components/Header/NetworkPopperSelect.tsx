@@ -31,6 +31,9 @@ export default function NetworkPopperSelect({ opacity = 1 }: { opacity: number }
 
   return (
     <PopperCard
+      sx={{
+        borderRadius: '20px'
+      }}
       closeHandler={() => setSearchVal('')}
       targetElement={
         <Button
@@ -57,7 +60,11 @@ export default function NetworkPopperSelect({ opacity = 1 }: { opacity: number }
             mb: 12,
             width: '100%',
             padding: '10px 0',
-            borderRadius: 8,
+            borderRadius: 20,
+            border: 0,
+            '& fieldset': {
+              border: 'none'
+            },
             transform: 'all 0.4s',
             backgroundColor: 'rgba(18, 18, 18, 0.06)',
             '&:active, &:hover, &:focus': {
@@ -91,7 +98,8 @@ export default function NetworkPopperSelect({ opacity = 1 }: { opacity: number }
                 sx={{
                   height: 48,
                   justifyContent: 'start',
-                  borderColor: 'var(--ps-yellow-1)'
+                  background: '#E1F25C',
+                  borderRadius: 100
                 }}
                 variant="outlined"
                 key={option.id}
@@ -103,7 +111,13 @@ export default function NetworkPopperSelect({ opacity = 1 }: { opacity: number }
                 sx={{
                   borderColor: 'transparent',
                   justifyContent: 'start',
-                  height: 48
+                  height: 48,
+                  border: 'none',
+                  '&:hover': {
+                    color: '#A4D220',
+                    border: 'none',
+                    background: 'transparent'
+                  }
                 }}
                 variant="outlined"
                 key={option.id}
