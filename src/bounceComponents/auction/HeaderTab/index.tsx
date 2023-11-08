@@ -165,7 +165,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
                   <PopperCard
                     placement="bottom-start"
                     popperSx={{
-                      top: isSm ? 0 : '6px !important'
+                      top: isSm ? 0 : '6px !important',
+                      borderRadius: 20,
+                      border: '1px solid #E4E4E4'
                     }}
                     targetElement={
                       <StyledTab

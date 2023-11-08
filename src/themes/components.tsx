@@ -72,9 +72,15 @@ export function ExternalLink({
 }
 
 const pulse = keyframes`
-  0% { transform: scale(1); }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 `
 
 export const AnimatedWrapper = styled('div')(`
@@ -311,8 +317,8 @@ export const ComponentOptions = {
           PaperProps: {
             sx: {
               marginTop: 16,
-              border: '1px solid rgba(18, 18, 18, 0.06)',
-              borderRadius: 8,
+              border: '1px solid #E4E4E4',
+              borderRadius: 20,
               maxHeight: 350,
               boxShadow: 'none',
               '&:focus': {
@@ -332,21 +338,20 @@ export const ComponentOptions = {
               padding: '6px !important',
               '& .MuiMenuItem-root.Mui-selected': {
                 justifyContent: 'space-between',
-                color: 'var(--ps-text-7)',
-                borderRadius: '8px',
+                color: '#121212',
+                borderRadius: 100,
+                background: 'var(--ps-yellow-1)',
                 // '&::after': {
                 //   content: `' '`,
                 //   width: 20,
                 //   height: 20,
                 //   background: `url(${CheckedSVG}) no-repeat center`
                 // },
-                '&:hover': {
-                  background: 'var(--ps-yellow-1)'
-                }
+                '&:hover': {}
               },
               '& .MuiMenuItem-root:hover': {
-                background: 'var(--ps-yellow-1)',
-                borderRadius: '8px'
+                color: 'var(--ps-yellow-1)',
+                background: 'transparent'
               }
             }
           }

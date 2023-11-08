@@ -368,6 +368,9 @@ export const AuctionRankCard: React.FC = () => {
       sx={{
         width: isSm ? '100%' : '200px',
         height: '48px',
+        '& .MuiPaper-root': {
+          border: 0
+        },
         fontSize: isSm ? '12px' : 'inherit',
         '&:hover': {
           borderRadius: '100px',
