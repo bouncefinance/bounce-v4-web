@@ -84,6 +84,7 @@ const enum AuctionType {
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
 }
+
 type Tuple4<TItem> = [TItem, ...TItem[]] & { length: 4 }
 
 interface PaginationParams {
@@ -123,6 +124,28 @@ const ComBtn = styled(Box)(({ theme }) => ({
     },
     '.active': {
       display: 'block'
+    }
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: 44,
+    height: 44
+  }
+}))
+const RightBtn = styled(ComBtn)(({ theme }) => ({
+  background: 'var(--ps-yellow-1)',
+  '.img': {
+    display: 'none'
+  },
+  '.active': {
+    display: 'block'
+  },
+  '&:hover': {
+    background: '#121212',
+    '.img': {
+      display: 'block'
+    },
+    '.active': {
+      display: 'none'
     }
   },
   [theme.breakpoints.down('sm')]: {
@@ -192,7 +215,7 @@ const PaginationBox = (props: PaginationParams) => {
           {index + 1}/{total}
         </Typography>
       )}
-      <ComBtn onClick={toNext}>
+      <RightBtn onClick={toNext}>
         <img
           className={'img'}
           src={rightArrayLightImg}
@@ -211,7 +234,7 @@ const PaginationBox = (props: PaginationParams) => {
             height: 16
           }}
         />
-      </ComBtn>
+      </RightBtn>
     </Box>
   )
 }
@@ -338,6 +361,7 @@ const TokenAuction: React.FC = () => {
       transform: 'translateX(-50%)'
     }
   }))
+
   function NftSkeleton() {
     return (
       <Box>
@@ -345,6 +369,7 @@ const TokenAuction: React.FC = () => {
       </Box>
     )
   }
+
   function NftLink({ nft }: { nft: any }) {
     return (
       <Link to={getAuctionPoolLink(nft.id, nft.category, nft.chainId, nft.poolId)}>
@@ -352,6 +377,7 @@ const TokenAuction: React.FC = () => {
       </Link>
     )
   }
+
   const TokenAuctionSkeleton = () => {
     return (
       <Stack spacing={18} direction={'row'} sx={{ width: 1380, overflowX: 'scroll' }}>
@@ -783,7 +809,8 @@ const TokenAuction: React.FC = () => {
                   width: '100%',
                   borderRadius: '100px',
                   padding: '16px 20px',
-                  fontWeight: 600,
+                  fontWeight: 500,
+                  fontSize: 24,
                   border: '1px solid var(--ps-yellow-1)',
                   '&:hover': { color: 'var(--ps-yellow-1)', borderColor: 'var(--ps-yellow-1)' }
                 }}
