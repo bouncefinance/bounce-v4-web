@@ -104,7 +104,7 @@ function Search({ opacity }: { opacity?: number }) {
       <HeaderSearchInput
         options={userData}
         filterOptions={(list: any) => list}
-        placeholder={'Search by Auction Name, Token Address, User Name, User ID'}
+        placeholder={'Search By Auction Name, ID, User Name, User ID'}
         startIcon
         loadingText={'No result'}
         value={searchText}
