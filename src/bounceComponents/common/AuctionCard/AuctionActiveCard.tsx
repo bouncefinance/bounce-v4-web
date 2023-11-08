@@ -158,6 +158,10 @@ const ActiveUserSkeletonCard = () => {
 export const ActiveUser: React.FC = () => {
   const isSm = useBreakpoint('md')
   const swiper = useRef<SwiperCore>()
+  const ref = useRef<any>(null)
+  const [width, setWidth] = useState<number | undefined>(undefined)
+  const [swipePrev, canSwipePrev] = useState(false)
+  const [swipeNext, canSwipeNext] = useState(true)
   const { data } = useRequest(async () => {
     const resp = await getActiveUsers()
     return {
@@ -165,11 +169,11 @@ export const ActiveUser: React.FC = () => {
       total: resp.data.total
     }
   })
-  console.log('data')
-  console.log(data)
 
   const slideCardWidth = isSm ? 220 : 260
-  const [slidesPerView, setSlidesPerView] = useState<number>((isSm ? window.innerWidth : 1440) / slideCardWidth)
+  const [slidesPerView, setSlidesPerView] = useState<number>(
+    (isSm ? window.innerWidth : width || 1440) / slideCardWidth
+  )
   useEffect(() => {
     const resetView = () => {
       setSlidesPerView(Math.ceil(window.innerWidth / slideCardWidth))
@@ -179,6 +183,23 @@ export const ActiveUser: React.FC = () => {
       window.removeEventListener('resize', resetView)
     }
   }, [slideCardWidth])
+
+  useEffect(() => {
+    // This function checks the width of the referenced element
+    const checkWidth = () => {
+      if (ref.current) {
+        setWidth(ref.current.offsetWidth)
+      }
+    }
+
+    // Call the function on mount and on window resize
+    checkWidth()
+    window.addEventListener('resize', checkWidth)
+
+    // Clean up listener when component is unmounted
+    return () => window.removeEventListener('resize', checkWidth)
+  }, [])
+
   const ArrowBg = styled(Box)`
     display: flex;
     justify-content: center;
@@ -190,15 +211,21 @@ export const ActiveUser: React.FC = () => {
     border-radius: 100px;
     border: 1px solid #12121233;
 
-    &:hover {
+    &.gray {
+      background: #f6f6f3;
+    }
+
+    &.available {
       background: var(--ps-yellow-1);
       color: black;
       cursor: pointer;
       border: 1px solid var(--ps-yellow-1);
     }
 
-    &.gray {
-      background: #f6f6f3;
+    &:hover {
+      background: #121212;
+      color: var(--ps-yellow-1);
+      cursor: pointer;
     }
 
     @media (max-width: 600px) {
@@ -217,6 +244,7 @@ export const ActiveUser: React.FC = () => {
       }}
     >
       <Container
+        ref={ref}
         sx={{
           maxWidth: '1440px !important'
         }}
@@ -233,10 +261,15 @@ export const ActiveUser: React.FC = () => {
               margin: isSm ? '8px auto 0' : '0'
             }}
           >
-            <ArrowBg onClick={() => swiper?.current?.slidePrev()}>
+            <ArrowBg className={swipePrev ? 'available' : ''} onClick={() => swiper?.current?.slidePrev()}>
               <ArrowBackIcon />
             </ArrowBg>
-            <ArrowBg ml={8} mr={16} onClick={() => swiper?.current?.slideNext()}>
+            <ArrowBg
+              className={swipeNext ? 'available' : ''}
+              ml={8}
+              mr={16}
+              onClick={() => swiper?.current?.slideNext()}
+            >
               <ArrowForwardIcon />
             </ArrowBg>
           </Box>
@@ -244,6 +277,8 @@ export const ActiveUser: React.FC = () => {
         <SlideProgress
           hideArrow
           swiperRef={swiper}
+          canSwipePrev={canSwipePrev}
+          canSwipeNext={canSwipeNext}
           swiperStyle={{
             spaceBetween: 20,
             slidesPerView: slidesPerView,

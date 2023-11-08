@@ -4,7 +4,7 @@ import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { Box, styled } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SwiperCore, { Autoplay, Pagination } from 'swiper'
 import * as React from 'react'
 // import 'swiper/modules/autoplay/autoplay.min.css'
@@ -22,6 +22,8 @@ interface ISlideProgress {
   hideArrow?: boolean
   grayArrow?: boolean
   swiperRef?: any
+  canSwipePrev?: any
+  canSwipeNext?: any
 }
 
 const ArrowBg = styled(Box)`
@@ -66,6 +68,11 @@ export function SlideProgress(props: ISlideProgress) {
   const [swiper, setSwiper] = useState<SwiperCore>()
   const totalSlides = swiper?.slides ? swiper.slides.length : 1
   const [currentIndex, setCurrentIdx] = useState(swiperStyle.slidesPerView)
+  useEffect(() => {
+    if (props.swiperRef && 'current' in props.swiperRef) {
+      props.swiperRef.current = swiper
+    }
+  }, [swiper, props.swiperRef])
   return (
     <Box width={'100%'} ml={isSm ? 16 : 0}>
       <Swiper
@@ -73,6 +80,8 @@ export function SlideProgress(props: ISlideProgress) {
         onSlideChange={s => {
           const endIdx = s?.realIndex ? s.realIndex + Number(s.params.slidesPerView) : Number(swiperStyle.slidesPerView)
           setCurrentIdx(endIdx > totalSlides ? totalSlides : endIdx)
+          props.canSwipePrev(endIdx > Number(s.params.slidesPerView))
+          props.canSwipeNext(endIdx <= totalSlides)
         }}
         onSwiper={setSwiper}
         {...swiperStyle}
