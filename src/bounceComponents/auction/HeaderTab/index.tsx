@@ -119,6 +119,10 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         '@media(max-width:600px)': {
           margin: '0',
           justifyContent: 'flex-start',
+          scrollbar: 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
           overflowX: 'scroll'
         },
         ...style

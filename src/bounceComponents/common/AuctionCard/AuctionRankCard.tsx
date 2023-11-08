@@ -3,7 +3,7 @@ import { CenterRow, Row } from '../../../components/Layout'
 import { Box, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/default-nft-cover.png'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
-import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
+import { Body01, Body02Black, H6 } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
 import { getPoolsFilter } from '../../../api/market'
@@ -63,7 +63,7 @@ const Tab = styled(Box)`
   align-items: flex-start;
   gap: 10px;
   width: fit-content;
-  height: fit-content;
+  height: 40px;
   padding: 8px 20px;
   background: transparent;
   color: #959595;
@@ -86,8 +86,21 @@ const Tab = styled(Box)`
 
   @media (max-width: 600px) {
     padding: 12px 16px;
-    height: 45px;
     width: -webkit-fill-available;
+  }
+`
+
+const TabText = styled(H6)`
+  color: #959595;
+
+  &.active {
+    color: #121212;
+  }
+
+  &:hover {
+    //background: var(--ps-yellow-1);
+    //border-radius: 10px 10px 0 0;
+    color: #121212;
   }
 `
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
@@ -122,7 +135,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           }}
         >
           {/* index */}
-          <H7Gray
+          <Body01
             mr={16}
             sx={{
               width: 16,
@@ -130,7 +143,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             }}
           >
             {props.index}
-          </H7Gray>
+          </Body01>
           <Avatar
             src={
               props.token0?.largeUrl
@@ -141,7 +154,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             }
           />
           <Box key={1}>
-            <H7
+            <Body01
               className={isSm ? 'mobile' : ''}
               sx={{
                 maxWidth: 160,
@@ -155,9 +168,9 @@ export function AuctionRow(props: any): ReactJSXElement[] {
               }}
             >
               {props.name}
-            </H7>
+            </Body01>
             <CenterRow>
-              <SmallText
+              <Body01
                 sx={{
                   cursor: 'pointer',
                   maxWidth: 88,
@@ -170,7 +183,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 key={1}
               >
                 {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-              </SmallText>
+              </Body01>
               <Box
                 sx={{
                   width: '0px',
@@ -179,7 +192,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                   border: '1px solid #959595'
                 }}
               />
-              <SmallText
+              <Body02Black
                 sx={{
                   cursor: 'pointer'
                 }}
@@ -187,7 +200,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 key={2}
               >
                 {getTextFromPoolType(props.category)}
-              </SmallText>
+              </Body02Black>
             </CenterRow>
           </Box>
         </CenterRow>,
@@ -201,7 +214,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             cursor: 'pointer'
           }}
         >
-          <H7Gray
+          <Body01
             mr={14}
             sx={{
               width: 16,
@@ -209,7 +222,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             }}
           >
             {props.index}
-          </H7Gray>
+          </Body01>
         </CenterRow>,
         <CenterRow
           key={0}
@@ -227,7 +240,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 : EmptyAvatar
             }
           />
-          <H7
+          <Body01
             className={isSm ? 'mobile' : ''}
             sx={{
               maxWidth: 160,
@@ -237,9 +250,9 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             }}
           >
             {props.name}
-          </H7>
+          </Body01>
         </CenterRow>,
-        <SmallText
+        <Body01
           sx={{
             cursor: 'pointer'
           }}
@@ -248,8 +261,8 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={1}
         >
           {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-        </SmallText>,
-        <SmallText
+        </Body01>,
+        <Body02Black
           sx={{
             cursor: 'pointer'
           }}
@@ -257,7 +270,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={2}
         >
           {getTextFromPoolType(props.category)}
-        </SmallText>,
+        </Body02Black>,
         <Status key={3} status={status} />
       ]
 }
@@ -353,11 +366,12 @@ export const AuctionRankCard: React.FC = () => {
   const ChainSelect = (
     <Select
       sx={{
-        width: '200px',
-        height: isSm ? '37px' : '38px',
+        width: isSm ? '100%' : '200px',
+        height: '48px',
         fontSize: isSm ? '12px' : 'inherit',
         fieldset: {
-          border: isSm ? '1' : 0
+          border: '1px solid #E4E4E4',
+          borderRadius: '100px'
         },
         '& .css-hpln3v-MuiSelect-icon': {
           top: 'inherit'
@@ -385,7 +399,7 @@ export const AuctionRankCard: React.FC = () => {
         alignItems: 'center',
         justifyContent: 'center',
         width: isSm ? '100%' : 'auto',
-        height: 'auto',
+        height: '48px',
         borderRadius: 100,
         border: '1px solid #E4E4E4'
       }}
@@ -397,7 +411,9 @@ export const AuctionRankCard: React.FC = () => {
           onClick={() => setTab(tab)}
           className={tab === currentTab ? 'active' : ''}
         >
-          <H5 sx={{ whiteSpace: 'nowrap' }}>{tab}</H5>
+          <TabText className={tab === currentTab ? 'active' : ''} sx={{ whiteSpace: 'nowrap' }}>
+            {tab}
+          </TabText>
         </Tab>
       ))}
     </Row>

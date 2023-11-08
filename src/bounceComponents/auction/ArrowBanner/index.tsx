@@ -304,7 +304,6 @@ const Shadow = styled(Box)`
 
   @media (max-width: 600px) {
     height: 327px;
-    border-radius: 0 0 15px 15px;
   }
 `
 
