@@ -37,7 +37,7 @@ const StatusLive = styled(Box)`
   background: #cff8d1;
   backdrop-filter: blur(2px);
   font-family: 'Inter';
-  font-size: 12px;
+  font-size: 14px;
   line-height: 140%;
   text-align: center;
   color: #20994b;
@@ -262,7 +262,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         >
           {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
         </Body01>,
-        <Body02Black
+        <Body01
           sx={{
             cursor: 'pointer'
           }}
@@ -270,7 +270,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={2}
         >
           {getTextFromPoolType(props.category)}
-        </Body02Black>,
+        </Body01>,
         <Status key={3} status={status} />
       ]
 }
