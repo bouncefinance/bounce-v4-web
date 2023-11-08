@@ -12,9 +12,10 @@ export type ICopyToClipboardProps = {
   children?: any
   placement?: TooltipProps['placement']
   isDark?: boolean
+  isHover?: boolean
 }
 
-const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, placement = 'top', isDark }) => {
+const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, placement = 'top', isDark, isHover }) => {
   const [copied, setCopied] = useState<boolean>(false)
   const normalCopy = copied ? SureSVG : isDark ? CopySVGDark : CopySVG
   const [src, setSrc] = useState(normalCopy)
@@ -25,6 +26,10 @@ const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, plac
       }, 2000)
     }
   }, [copied])
+  useEffect(() => {
+    setSrc(isHover ? CopyHover : normalCopy)
+  }, [isHover, normalCopy])
+  console.log('isHover', isHover)
   return (
     <div onClick={ev => ev.preventDefault()}>
       <ReactCopyToClipboard
@@ -38,14 +43,7 @@ const CopyToClipboard: React.FC<ICopyToClipboardProps> = ({ text, children, plac
             <div>{children}</div>
           ) : (
             <IconButton size="small" sx={{ background: 'none', height: 'fit-content', p: 0 }}>
-              <Image
-                onMouseOver={() => setSrc(CopyHover)}
-                onMouseOut={() => setSrc(normalCopy)}
-                src={src}
-                width={20}
-                height={20}
-                alt="copied-icon"
-              />
+              <Image src={src} width={20} height={20} alt="copied-icon" />
             </IconButton>
           )}
         </Tooltip>

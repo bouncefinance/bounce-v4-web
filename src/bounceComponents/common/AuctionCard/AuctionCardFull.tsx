@@ -13,6 +13,7 @@ import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import { useActiveWeb3React } from 'hooks'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function AuctionCardFull({
   auctionPoolItem,
@@ -26,11 +27,15 @@ export default function AuctionCardFull({
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
   const navigate = useNavigate()
+  const [hover, isHover] = useState(false)
   console.log(auctionPoolItem.creatorUserInfo)
+  console.log('isHover-AuctionCardFull', hover)
 
   return (
     <Box
       component={'a'}
+      onMouseEnter={() => isHover(true)}
+      onMouseLeave={() => isHover(false)}
       onClick={e => {
         navigate(
           getAuctionPoolLink(
@@ -106,7 +111,7 @@ export default function AuctionCardFull({
                     backedChainId={auctionPoolItem.chainId}
                   />
                   <span>{shortenAddress(auctionPoolItem.token0.address)}</span>
-                  <CopyToClipboard text={auctionPoolItem.token0.address} isDark={isDark} />
+                  <CopyToClipboard text={auctionPoolItem.token0.address} isDark={isDark} isHover={hover} />
                 </Stack>
               }
             />
