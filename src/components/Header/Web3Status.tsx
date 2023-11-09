@@ -89,7 +89,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
   return b.addedTime - a.addedTime
 }
 
-function Web3StatusInner() {
+function Web3StatusInner({ opacity = 1 }: { opacity: number }) {
   const { account, errorNetwork } = useActiveWeb3React()
   const isSm = useBreakpoint('sm')
   const { userInfo } = useUserInfo()
@@ -137,9 +137,10 @@ function Web3StatusInner() {
                 height: '40px',
                 minWidth: '40px',
                 padding: 0,
-                background: '#E1F25C',
-                borderRadius: '6px',
-                fontSize: 18
+                background: opacity >= 0.65 ? '#E1F25C' : '#ffffff50',
+                borderRadius: '60px',
+                fontSize: 18,
+                color: opacity >= 0.65 ? theme.palette.text.primary : '#fff'
               }}
             >
               {/* <UserSvg /> */}
@@ -153,29 +154,29 @@ function Web3StatusInner() {
               onClick={handleClick}
               sx={{
                 cursor: 'pointer',
-                borderRadius: 8,
                 padding: '0 12px',
                 minWidth: isDownSm ? 54 : 64,
-                border: '1px solid var(--ps-gray-20)',
+                // border: opacity >= 0.65 ? '1px solid var(--ps-gray-20)' : '1px solid transparent',
                 height: isDownSm ? 40 : 44,
-                backgroundColor: theme.palette.background.paper,
-                '&:hover .line': {
-                  borderColor: 'var(--ps-text-4)'
-                }
+                backgroundColor: `#F6F6F3${opacity >= 0.65 ? '' : 50}`,
+                // '&:hover .line': {
+                //   borderColor: 'var(--ps-text-4)'
+                // },
+                borderRadius: '60px!important'
               }}
             >
               <Avatar
                 sx={{ marginRight: 10, width: 24, height: 24 }}
                 src={userInfo?.avatar?.fileUrl || Web3StatusIconSvg}
               />
-              <Box
+              {/* <Box
                 className={'line'}
                 sx={{
                   borderRight: '1px solid var(--ps-gray-20)',
                   mr: 10,
                   height: '100%'
                 }}
-              />
+              /> */}
               {pending?.length ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', mr: { xs: 10, sm: 17 }, ml: { xs: 10, sm: 9 } }}>
                   <Spinner color={theme.palette.text.primary} size={isDownSm ? '10px' : '16px'} />
@@ -190,13 +191,17 @@ function Web3StatusInner() {
                   sx={{
                     lineHeight: '16px',
                     fontSize: { xs: 9, sm: 14 },
-                    color: theme.palette.text.primary
+                    color: opacity >= 0.65 ? theme.palette.text.primary : '#fff'
                   }}
                 >
                   {ENSName || shortenAddress(account)}
                 </Typography>
               )}
-              {anchorEl ? <ExpandLess /> : <ExpandMore />}
+              {anchorEl ? (
+                <ExpandLess sx={{ fill: opacity >= 0.65 ? theme.palette.text.primary : '#fff' }} />
+              ) : (
+                <ExpandMore sx={{ fill: opacity >= 0.65 ? theme.palette.text.primary : '#fff' }} />
+              )}
             </Button>
             <WalletPopper anchorEl={anchorEl} close={() => setAnchorEl(null)} />
           </Box>
@@ -219,10 +224,12 @@ function Web3StatusInner() {
   } else {
     return (
       <ActionButton
+        id="connect "
         sx={{
           width: isDownSm ? '128px' : '140px',
           height: isDownSm ? '28px' : '40px',
-          fontSize: isDownSm ? '12px' : '14px'
+          fontSize: isDownSm ? '12px' : '14px',
+          borderRadius: 60
         }}
         onClick={toggleWalletModal}
       >
@@ -232,7 +239,7 @@ function Web3StatusInner() {
   }
 }
 
-export default function Web3Status() {
+export default function Web3Status({ opacity = 1 }: { opacity?: number }) {
   // const { active, account } = useWeb3React()
   const { account } = useActiveWeb3React()
   // const contextNetwork = useWeb3React(NetworkContextName)
@@ -255,7 +262,7 @@ export default function Web3Status() {
 
   return (
     <>
-      <Web3StatusInner />
+      <Web3StatusInner opacity={opacity} />
       <WalletModal ENSName={ENSName ?? undefined} pendingTransactions={pending} confirmedTransactions={confirmed} />
     </>
   )

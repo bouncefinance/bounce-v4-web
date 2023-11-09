@@ -116,6 +116,9 @@ export const Body02 = styled(Typography)`
   line-height: 150%;
   color: #ffffff;
 `
+export const Body02Black = styled(Body02)`
+  color: var(--black-100, #121212);
+`
 
 export const Body03 = styled(Typography)`
   font-family: 'Inter';

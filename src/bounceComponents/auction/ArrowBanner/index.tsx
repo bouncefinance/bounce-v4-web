@@ -2,9 +2,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Autoplay, EffectCreative, Pagination } from 'swiper'
 import 'swiper/swiper-bundle.css'
 import { Box, styled, Skeleton, Typography } from '@mui/material'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 // import { timestampToCountdown } from '../../../utils/TimeUtil'
+import ArrowRight from 'assets/images/arrow_right.svg'
 import { useState, useMemo } from 'react'
 import { useRequest } from 'ahooks'
 import { getBanner } from '../../../api/market'
@@ -13,6 +12,7 @@ import { BannerType } from '../../../api/market/type'
 import { useNavigate } from 'react-router-dom'
 import { useCountDown } from 'ahooks'
 import useBreakpoint from '../../../hooks/useBreakpoint'
+import HeaderTab from '../HeaderTab'
 
 SwiperCore.use([Autoplay, Pagination])
 
@@ -44,7 +44,7 @@ export const SwiperSkeleton = () => {
           left: '0',
           bottom: '40px',
           width: '100%',
-          padding: isSm ? '0 16px' : '0 38px 0 40px',
+          padding: '0',
           boxSizing: 'border-box',
           '& .MuiSkeleton-root': {
             backgroundColor: 'rgba(255, 255, 255, 0.4)'
@@ -54,13 +54,7 @@ export const SwiperSkeleton = () => {
         <Box display="flex" flexDirection="column" width="61%" maxWidth="800px" gap="24px">
           <Box display="flex" flexDirection="row" gap="4px">
             <Skeleton width="32px" height="32px" variant="circular" animation="wave" />
-            <Skeleton
-              width="107px"
-              height="32px"
-              variant="rectangular"
-              sx={{ borderRadius: '100px' }}
-              animation="wave"
-            />
+            <Skeleton width="107px" height="32px" variant="rectangular" animation="wave" />
           </Box>
           <Skeleton variant="rectangular" width="100%" height="26px" animation="wave" />
           <Skeleton variant="rectangular" width="262px" height="24px" animation="wave" />
@@ -119,77 +113,94 @@ function ArrowBanner({ type }: { type?: string }) {
     return 3000
   }, [data?.list.length])
   return (
-    <Box
-      position={'relative'}
-      display={'flex'}
-      justifyContent={'center'}
-      alignItems={'center'}
-      sx={{
-        // maxWidth: '1296px',
-        width: '100%',
-        padding: '0 72px',
-        minHeight: isSm ? 125 : 460,
-        margin: '16px auto 0',
-        '@media(max-width:1296px)': {
-          padding: '0 16px',
-          margin: '16px auto'
-        }
-      }}
-      onMouseEnter={EnterSwiper}
-      onMouseLeave={LeaveSwiper}
-    >
-      {!isSm && (
-        <ArrowBgLeft
-          sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-          onClick={() => {
-            swiper?.slidePrev()
-          }}
-        >
-          <ArrowBackIcon />
-        </ArrowBgLeft>
-      )}
-      {!data || loading ? (
-        <SwiperSkeleton />
-      ) : (
-        <Swiper
-          speed={1200}
-          onSwiper={setSwiper}
-          spaceBetween={0}
-          slidesPerView={1}
-          loop={true}
-          effect={'creative'}
-          creativeEffect={{
-            prev: {
-              translate: [0, 0, -1]
-            },
-            next: {
-              translate: ['100%', 0, 0]
-            }
-          }}
-          modules={[EffectCreative]}
-          autoplay={{
-            delay: delay
-          }}
-          style={{
-            // maxWidth: '1296px',
-            width: '100%'
-          }}
-        >
-          {data?.list?.map((item: BannerType, index: number) => (
-            <SwiperSlide key={index}>
-              <Banner key={index} banner={item} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      )}
-      {!isSm && (
-        <ArrowBgRight
-          sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
-          onClick={() => swiper?.slideNext()}
-        >
-          <ArrowForwardIcon />
-        </ArrowBgRight>
-      )}
+    <Box position={'relative'} mt={-76}>
+      <Box
+        position={'relative'}
+        display={'flex'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        sx={{
+          // maxWidth: '1296px',
+          width: '100%',
+          minHeight: isSm ? 125 : 530
+          // '@media(max-width:1296px)': {
+          //   padding: '0 16px',
+          //   margin: '16px auto'
+          // }
+        }}
+        onMouseEnter={EnterSwiper}
+        onMouseLeave={LeaveSwiper}
+      >
+        {!isSm && (
+          <ArrowBgLeft
+            sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+            onClick={() => {
+              swiper?.slidePrev()
+            }}
+          >
+            <img
+              src={ArrowRight}
+              style={{
+                transform: 'rotate(180deg)',
+                width: '16px',
+                height: '16px'
+              }}
+            />
+          </ArrowBgLeft>
+        )}
+        {!data || loading ? (
+          <SwiperSkeleton />
+        ) : (
+          <Swiper
+            speed={1200}
+            onSwiper={setSwiper}
+            spaceBetween={0}
+            slidesPerView={1}
+            loop={true}
+            effect={'creative'}
+            creativeEffect={{
+              prev: {
+                translate: [0, 0, -1]
+              },
+              next: {
+                translate: ['100%', 0, 0]
+              }
+            }}
+            modules={[EffectCreative]}
+            autoplay={{
+              delay: delay
+            }}
+            style={{
+              // maxWidth: '1296px',
+              width: '100%'
+            }}
+          >
+            {data?.list?.map((item: BannerType, index: number) => (
+              <SwiperSlide key={index}>
+                <Banner key={index} banner={item} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+        {!isSm && (
+          <ArrowBgRight
+            sx={{ opacity: showSwiperIcon ? 1 : 0, transition: 'opacity .4s' }}
+            onClick={() => swiper?.slideNext()}
+          >
+            <img
+              src={ArrowRight}
+              style={{
+                width: '16px',
+                height: '16px'
+              }}
+            />
+          </ArrowBgRight>
+        )}
+      </Box>
+      <HeaderTab
+        style={{ position: 'absolute', bottom: '20px', left: '0', zIndex: 100 }}
+        onTabChange={tab => console.log(tab)}
+      />
     </Box>
   )
 }
@@ -201,10 +212,10 @@ const ArrowBg = styled(Box)`
   align-items: center;
   align-self: center;
   padding: 22px;
-  width: 60px;
-  height: 60px;
   background: rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
+  width: 48px;
+  height: 392px;
+  border-radius: 100px;
 
   &:hover {
     cursor: pointer;
@@ -213,6 +224,24 @@ const ArrowBg = styled(Box)`
   @media (max-width: 600px) {
     width: 30px;
     height: 30px;
+  }
+`
+// const ArrowBgLeft = styled(ArrowBg)`
+//  position: absolute;
+//  left: 30px;
+//  top: 50%;
+//  transform: translateY(-50%);
+//  @media (max-width: 600px) {
+//    left: -25px;
+//  }
+// `
+const ArrowBgRight = styled(ArrowBg)`
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  @media (max-width: 600px) {
+    right: -25px;
   }
 `
 const ArrowBgLeft = styled(ArrowBg)`
@@ -224,16 +253,6 @@ const ArrowBgLeft = styled(ArrowBg)`
     left: -25px;
   }
 `
-const ArrowBgRight = styled(ArrowBg)`
-  position: absolute;
-  right: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-  @media (max-width: 600px) {
-    right: -25px;
-  }
-`
-
 const BannerH3 = styled(Typography)`
   font-family: 'Public Sans';
   font-style: normal;
@@ -294,11 +313,9 @@ const Shadow = styled(Box)`
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%);
   mix-blend-mode: multiply;
   opacity: 0.8;
-  border-radius: 0 0 30px 30px;
 
   @media (max-width: 600px) {
     height: 327px;
-    border-radius: 0 0 15px 15px;
   }
 `
 
@@ -320,13 +337,13 @@ export function Banner({ banner }: { banner: BannerType }) {
     <Box
       sx={{
         display: 'flex',
-        height: isSm ? '400px' : '460px',
+        height: isSm ? '400px' : '532px',
         // width: { sm: '328px', lg: '100%' },
         width: '100%',
         cursor: 'pointer',
         position: 'relative',
         '@media(min-width:1440px)': {
-          height: isSm ? '400px' : '460px'
+          height: isSm ? '400px' : '532px'
         },
         '@media(min-width:1920px)': {
           height: isSm ? '400px' : '629px'
@@ -348,7 +365,6 @@ export function Banner({ banner }: { banner: BannerType }) {
           display: 'block',
           width: '100%',
           height: '100%',
-          borderRadius: isSm ? '15px' : '30px',
           objectFit: 'cover'
         }}
       />

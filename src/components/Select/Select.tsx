@@ -113,13 +113,14 @@ export default function Select(props: Props) {
             '& .MuiPaper-root': {
               width: width ?? 'unset',
               borderRadius: '10px',
+              backgroundColor: 'white',
               maxHeight: 400,
               mt: '10px',
-              boxShadow: theme => theme.shadows[4],
+              // boxShadow: theme => theme.shadows[4],
               transform: width ? 'translateX(-12px)!important' : 'none',
               '& li': {
                 fontSize: 16,
-                borderBottom: '1px solid rgba(0,0,0,0.1)',
+                // borderBottom: '1px solid rgba(0,0,0,0.1)',
                 display: 'flex',
                 alignItems: 'center',
                 padding: '12px 0',

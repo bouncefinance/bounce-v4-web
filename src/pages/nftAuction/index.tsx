@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import FooterPc from 'components/Footer/FooterPc'
 import TypesOfAuction from 'components/TypesOfAuction'
-import HeaderTab from 'bounceComponents/auction/HeaderTab'
 import NftListDialog from './components/listDialog'
 import { Notable1155 } from '../../bounceComponents/auction/Notable1155'
 import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
@@ -17,7 +16,6 @@ const NFTAcution: React.FC = ({}) => {
   }
   return (
     <>
-      <HeaderTab />
       <ArrowBanner type={'NFT'} />
       <TypesOfAuction handleViewAll={handleOpen} />
       <Notable1155 />

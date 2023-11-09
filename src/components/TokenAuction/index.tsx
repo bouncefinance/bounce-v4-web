@@ -17,15 +17,17 @@ import { routes } from 'constants/routes'
 import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
+import { TotalAuctionIcon, TotalValueIcon, TrendingIcon } from './assets'
 
 interface InfoBoxParams {
   title: string
   value: string
   style?: React.CSSProperties
+  logo?: React.ReactNode
 }
 
 const InfoBox = (props: InfoBoxParams) => {
-  const { title, value, style } = props
+  const { title, value, style, logo } = props
   return (
     <Box
       sx={{
@@ -37,6 +39,7 @@ const InfoBox = (props: InfoBoxParams) => {
         ...style
       }}
     >
+      {logo}
       <Typography
         sx={{
           textAlign: 'left',
@@ -46,7 +49,7 @@ const InfoBox = (props: InfoBoxParams) => {
           width: '100%',
           height: '21px',
           lineHeight: '21px',
-          color: '#626262',
+          color: '#ffffff',
           marginBottom: 12,
           letterSpacing: '-0.02em'
         }}
@@ -55,12 +58,12 @@ const InfoBox = (props: InfoBoxParams) => {
       </Typography>
       <Typography
         sx={{
-          textAlign: 'right',
+          textAlign: 'left',
           fontFamily: `'Public Sans'`,
           fontWeight: 600,
           fontSize: 14,
           lineHeight: '21px',
-          color: '#959595',
+          color: '#ffffff',
           width: '100%',
           height: '21px',
           overflow: 'hidden',
@@ -81,6 +84,7 @@ const enum AuctionType {
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
 }
+
 type Tuple4<TItem> = [TItem, ...TItem[]] & { length: 4 }
 
 interface PaginationParams {
@@ -93,15 +97,16 @@ interface PaginationParams {
 }
 
 const ComBtn = styled(Box)(({ theme }) => ({
-  width: 60,
-  height: 60,
+  width: 48,
+  height: 48,
   display: 'flex',
   flexFlow: 'row nowrap',
   justifyContent: 'center',
   alignItems: 'center',
-  borderRadius: 8,
+  borderRadius: 50,
   cursor: 'pointer',
-  background: 'var(--ps-text-3)',
+  background: 'transparent',
+  border: '1px solid var(--ps-yellow-1)',
   '.img': {
     display: 'block',
     width: 16,
@@ -119,6 +124,28 @@ const ComBtn = styled(Box)(({ theme }) => ({
     },
     '.active': {
       display: 'block'
+    }
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: 44,
+    height: 44
+  }
+}))
+const RightBtn = styled(ComBtn)(({ theme }) => ({
+  background: 'var(--ps-yellow-1)',
+  '.img': {
+    display: 'none'
+  },
+  '.active': {
+    display: 'block'
+  },
+  '&:hover': {
+    background: '#121212',
+    '.img': {
+      display: 'block'
+    },
+    '.active': {
+      display: 'none'
     }
   },
   [theme.breakpoints.down('sm')]: {
@@ -155,6 +182,8 @@ const PaginationBox = (props: PaginationParams) => {
         flexFlow: 'row nowrap',
         alignItems: isSm ? 'center' : 'inherit',
         justifyContent: 'space-between',
+        position: 'relative',
+        zIndex: 2,
         '@media(max-width:1347px)': {
           right: 20
         },
@@ -186,7 +215,7 @@ const PaginationBox = (props: PaginationParams) => {
           {index + 1}/{total}
         </Typography>
       )}
-      <ComBtn onClick={toNext}>
+      <RightBtn onClick={toNext}>
         <img
           className={'img'}
           src={rightArrayLightImg}
@@ -205,7 +234,7 @@ const PaginationBox = (props: PaginationParams) => {
             height: 16
           }}
         />
-      </ComBtn>
+      </RightBtn>
     </Box>
   )
 }
@@ -332,6 +361,7 @@ const TokenAuction: React.FC = () => {
       transform: 'translateX(-50%)'
     }
   }))
+
   function NftSkeleton() {
     return (
       <Box>
@@ -339,6 +369,7 @@ const TokenAuction: React.FC = () => {
       </Box>
     )
   }
+
   function NftLink({ nft }: { nft: any }) {
     return (
       <Link to={getAuctionPoolLink(nft.id, nft.category, nft.chainId, nft.poolId)}>
@@ -346,6 +377,7 @@ const TokenAuction: React.FC = () => {
       </Link>
     )
   }
+
   const TokenAuctionSkeleton = () => {
     return (
       <Stack spacing={18} direction={'row'} sx={{ width: 1380, overflowX: 'scroll' }}>
@@ -402,8 +434,9 @@ const TokenAuction: React.FC = () => {
       sx={{
         position: 'relative',
         width: '100%',
-        maxWidth: 1540,
-        height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1188 : 622,
+        maxWidth: '100%',
+        background: '#111111',
+        height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1288 : 682,
         margin: isSm ? '80px auto 0' : '120px auto 0'
       }}
     >
@@ -411,7 +444,7 @@ const TokenAuction: React.FC = () => {
         sx={{
           width: '100%',
           height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 865 : 622,
-          background: 'var(--ps-text-4)',
+          background: '#111111',
           borderRadius: 12
         }}
       >
@@ -497,49 +530,73 @@ const TokenAuction: React.FC = () => {
               }}
             >
               <InfoBox
-                title={'total value'}
-                value={showData.totalValue}
+                title={'Trending Token Auction'}
+                value={showData.trendingTokenAuction}
+                logo={<TrendingIcon />}
                 style={{
                   position: 'absolute',
+                  width: 220,
+                  color: '#ffffff',
                   bottom: 161,
+                  left: 0
+                }}
+              />
+              <InfoBox
+                title={'Total Value'}
+                value={showData.totalValue}
+                logo={<TotalValueIcon />}
+                style={{
+                  position: 'absolute',
+                  bottom: 80,
                   left: 0
                 }}
               />
               <InfoBox
                 title={'Total Auction'}
                 value={showData.totalAuction}
+                logo={<TotalAuctionIcon />}
                 style={{
                   position: 'absolute',
-                  bottom: 161,
-                  left: 110
-                }}
-              />
-              <InfoBox
-                title={'Trending Token Auction'}
-                value={showData.trendingTokenAuction}
-                style={{
-                  position: 'absolute',
-                  width: 220,
-                  background: 'var(--ps-yellow-1)',
                   bottom: 80,
-                  left: 0
+                  left: 150
                 }}
               />
             </Box>
           )}
+
           <Box
             sx={{
               position: 'absolute',
-              bottom: isSm ? '-80%' : '-50%',
+              bottom: isSm ? '-80%' : '-70%',
               left: '50%',
               transform: 'translateX(-50%)',
               width: 763,
-              height: 763,
-              borderRadius: '50%',
-              border: '1px solid var(--ps-yellow-1)',
-              opacity: 0.6
+              height: 763
             }}
-          ></Box>
+          >
+            <Box position="relative">
+              <Box
+                sx={{
+                  width: 763,
+                  height: 763,
+                  borderRadius: '50%',
+                  border: '1px solid var(--ps-yellow-1)',
+                  opacity: 0.6
+                }}
+              ></Box>
+              <Box
+                position="absolute"
+                sx={{
+                  top: '30%',
+                  left: 0,
+                  width: '100%',
+                  height: 100,
+                  display: 'block',
+                  background: isSm ? undefined : 'linear-gradient(0deg, rgba(17,17,17,100) 40%, rgba(17,17,17,0) 100%);'
+                }}
+              ></Box>
+            </Box>
+          </Box>
           {/* Token Auction */}
           <Box
             sx={{
@@ -638,7 +695,6 @@ const TokenAuction: React.FC = () => {
               left: 0,
               borderRadius: 30,
               margin: '0 auto',
-              background: '#fff',
               padding: isSm ? '24px 16px' : 24,
               '@media(min-width:1440px)': {
                 transform: 'translateX(-50%)',
@@ -694,7 +750,7 @@ const TokenAuction: React.FC = () => {
                         nftPoolData?.list.map((nft: any, i: number) => (
                           <Grid key={i} xs={3} item>
                             <Link to={getAuctionPoolLink(nft.id, nft.category, nft.chainId, nft.poolId)}>
-                              <NFTCard nft={nft} hiddenStatus={true} />
+                              <NFTCard nft={nft} hiddenStatus={true} isDark />
                             </Link>
                           </Grid>
                         ))}
@@ -720,7 +776,13 @@ const TokenAuction: React.FC = () => {
                       {data?.list?.map((fixedSwaptem: any, index: number) => (
                         <AuctionCardFull
                           key={index}
-                          style={{ maxWidth: 334, minWidth: 334, gap: 20, boxSizing: 'border-box' }}
+                          isDark
+                          style={{
+                            maxWidth: 334,
+                            minWidth: 334,
+                            gap: 20,
+                            boxSizing: 'border-box'
+                          }}
                           auctionPoolItem={fixedSwaptem}
                         />
                       ))}
@@ -744,8 +806,13 @@ const TokenAuction: React.FC = () => {
                 onClick={() => navigate(AuctionList[currentIndex].checkAllLink)}
                 variant="contained"
                 sx={{
-                  // background: 'var(--ps-yellow-1)',
-                  padding: '16px 20px'
+                  width: '100%',
+                  borderRadius: '100px',
+                  padding: '16px 20px',
+                  fontWeight: 500,
+                  fontSize: 24,
+                  border: '1px solid var(--ps-yellow-1)',
+                  '&:hover': { color: 'var(--ps-yellow-1)', borderColor: 'var(--ps-yellow-1)' }
                 }}
               >
                 View all auctions
