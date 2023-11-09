@@ -5,7 +5,7 @@ import { useUserInfo } from 'state/users/hooks'
 
 // if pool use the whitelist and need to binding email,and then user is lack of email,we use this hook
 // const needEmailValidPoolId = [20508] // stage
-const needEmailValidPoolId = [20519, 20562, 20698, 20764] // alpha
+const needEmailValidPoolId = [20519, 20562, 20698, 20764, 20916] // alpha
 export const useRequireWhitelistAndEmail = (): boolean => {
   const { poolId, chainShortName, sysId } = useQueryParams()
 
