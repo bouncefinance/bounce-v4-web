@@ -6,9 +6,12 @@ import { useUserInfo } from 'state/users/hooks'
 // if pool use the whitelist and need to binding email,and then user is lack of email,we use this hook
 // const needEmailValidPoolId = [20508] // stage
 const needEmailValidPoolId = [20519, 20562, 20698, 20764, 20916] // alpha
+/**
+ * sysId 20764 & /zetachainathens3/1
+ * sysId 20916 & /zetachainathens3/2
+ */
 export const useRequireWhitelistAndEmail = (): boolean => {
   const { poolId, chainShortName, sysId } = useQueryParams()
-
   const { userInfo } = useUserInfo()
   const { account } = useActiveWeb3React()
   const isZetachainathens3 = useMemo(() => {
