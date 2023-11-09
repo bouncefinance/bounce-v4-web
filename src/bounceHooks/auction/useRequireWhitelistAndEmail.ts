@@ -12,8 +12,8 @@ export const useRequireWhitelistAndEmail = (): boolean => {
   const { userInfo } = useUserInfo()
   const { account } = useActiveWeb3React()
   const isZetachainathens3 = useMemo(() => {
-    return chainShortName === 'zetachainathens3' && [1, 20916].indexOf(Number(poolId)) > -1
-  }, [chainShortName, poolId])
+    return chainShortName === 'zetachainathens3' && (Number(poolId) === 1 || [20916].indexOf(Number(sysId)) > -1)
+  }, [chainShortName, poolId, sysId])
   const isRequireWhiteListAndEmail = useMemo(() => {
     return !!(account && sysId && needEmailValidPoolId.indexOf(Number(sysId)) > -1 && !userInfo?.email)
   }, [account, sysId, userInfo?.email])
@@ -22,8 +22,8 @@ export const useRequireWhitelistAndEmail = (): boolean => {
 export const useIsSpecialPoolId = (): boolean => {
   const { poolId, chainShortName, sysId } = useQueryParams()
   const isZetachainathens3 = useMemo(() => {
-    return chainShortName === 'zetachainathens3' && [1, 20916].indexOf(Number(poolId)) > -1
-  }, [chainShortName, poolId])
+    return chainShortName === 'zetachainathens3' && (Number(poolId) === 1 || [20916].indexOf(Number(sysId)) > -1)
+  }, [chainShortName, poolId, sysId])
   const isSpecialPoolId = useMemo(() => {
     return !!(sysId && needEmailValidPoolId.indexOf(Number(sysId)) > -1)
   }, [sysId])
