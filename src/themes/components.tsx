@@ -339,6 +339,7 @@ export const ComponentOptions = {
               '& .MuiMenuItem-root.Mui-selected': {
                 justifyContent: 'space-between',
                 color: '#121212',
+                height: 48,
                 borderRadius: 100,
                 background: '#E1F25C'
                 // '&::after': {
@@ -347,6 +348,10 @@ export const ComponentOptions = {
                 //   height: 20,
                 //   background: `url(${CheckedSVG}) no-repeat center`
                 // },
+              },
+              '& .MuiMenuItem-root': {
+                color: '#121212',
+                height: 48
               },
               '& .MuiMenuItem-root:hover': {
                 color: 'var(--ps-yellow-1)',
