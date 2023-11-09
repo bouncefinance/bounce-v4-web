@@ -120,7 +120,7 @@ export const transparentRoutes = [
   routes.market.nftPools,
   routes.nftAuction.index,
   routes.tokenAuction.index,
-  routes.adsAuction.index,
+  // routes.adsAuction.index,
   // routes.realAuction.index,
   routes.launchpad.index,
   routes.launchpad.bladeDao,
