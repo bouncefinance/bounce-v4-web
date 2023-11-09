@@ -182,25 +182,27 @@ export const ActiveUser: React.FC = () => {
   )
   useEffect(() => {
     const resetView = () => {
-      setSlidesPerView(Math.ceil(window.innerWidth / slideCardWidth))
+      setSlidesPerView(Math.ceil((width || slideCardWidth) / slideCardWidth))
     }
     window.addEventListener('resize', resetView)
     return () => {
       window.removeEventListener('resize', resetView)
     }
-  }, [slideCardWidth])
+  }, [slideCardWidth, width])
 
   useEffect(() => {
     // This function checks the width of the referenced element
     const checkWidth = () => {
       if (ref.current) {
         setWidth(ref.current.offsetWidth)
+        console.log('ref', ref)
+        console.log('ref-offsetWidth', ref.current.offsetWidth)
       }
     }
 
     // Call the function on mount and on window resize
-    checkWidth()
     window.addEventListener('resize', checkWidth)
+    checkWidth()
 
     // Clean up listener when component is unmounted
     return () => window.removeEventListener('resize', checkWidth)
@@ -243,6 +245,7 @@ export const ActiveUser: React.FC = () => {
 
   return (
     <Box
+      ref={ref}
       className={'ActiveUser'}
       style={{
         width: '100%',
@@ -250,7 +253,6 @@ export const ActiveUser: React.FC = () => {
       }}
     >
       <Container
-        ref={ref}
         sx={{
           maxWidth: '1440px !important'
         }}
