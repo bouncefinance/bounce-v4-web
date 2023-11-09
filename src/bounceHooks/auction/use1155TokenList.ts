@@ -208,10 +208,10 @@ export function use1155TokenList(
           nftCollection['0x5ae7001DeeacFAd703B876afA8BC59D45b89FEF4'].push({
             balance: '',
             contractAddr: '0x5ae7001DeeacFAd703B876afA8BC59D45b89FEF4',
-            contractName: 'Zeta 1155',
-            description: 'Zeta 1155',
-            image: '',
-            name: 'Zeta 1155',
+            contractName: 'Bounce x ZetaChain x Bitget',
+            description: 'Bounce x ZetaChain x Bitget',
+            image: 'https://arweave.net/S5pCWJHNSdCJDYA7G-o4CZtjXTcg7gDHiQnwEZIhuPk',
+            name: 'B_Z_B',
             tokenId: '0'
           })
         }
