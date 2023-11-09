@@ -14,6 +14,7 @@ export const useRequireWhitelistAndEmail = (): boolean => {
   const { poolId, chainShortName, sysId } = useQueryParams()
   const { userInfo } = useUserInfo()
   const { account } = useActiveWeb3React()
+  console.log('WhitelistAndEmail >>>', poolId, chainShortName, sysId, userInfo?.email)
   const isZetachainathens3 = useMemo(() => {
     return chainShortName === 'zetachainathens3' && [1, 2].indexOf(Number(poolId)) > -1
   }, [chainShortName, poolId])
