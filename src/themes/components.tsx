@@ -341,7 +341,7 @@ export const ComponentOptions = {
                 color: '#121212',
                 height: 48,
                 borderRadius: 100,
-                background: '#A4D220'
+                background: '#E1F25C'
                 // '&::after': {
                 //   content: `' '`,
                 //   width: 20,
@@ -354,7 +354,7 @@ export const ComponentOptions = {
                 height: 48
               },
               '& .MuiMenuItem-root:hover': {
-                color: 'var(--ps-yellow-1)',
+                color: '#A4D220',
                 background: 'transparent'
               }
             }
