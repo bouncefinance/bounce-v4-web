@@ -437,7 +437,7 @@ const TokenAuction: React.FC = () => {
         maxWidth: '100%',
         background: '#111111',
         height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1288 : 682,
-        margin: isSm ? '80px auto 0' : '120px auto 0'
+        margin: '0 auto'
       }}
     >
       <Box

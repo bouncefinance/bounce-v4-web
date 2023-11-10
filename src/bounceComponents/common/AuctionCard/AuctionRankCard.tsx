@@ -3,7 +3,7 @@ import { CenterRow, Row } from '../../../components/Layout'
 import { Box, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/default-nft-cover.png'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
-import { Body01, Body02Black, H6 } from '../../../components/Text'
+import { Body01, GrayBody02, H6 } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
 import { getPoolsFilter } from '../../../api/market'
@@ -170,7 +170,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
               {props.name}
             </Body01>
             <CenterRow>
-              <Body01
+              <GrayBody02
                 sx={{
                   cursor: 'pointer',
                   maxWidth: 88,
@@ -182,25 +182,17 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 onClick={() => props.navigate(url)}
                 key={1}
               >
-                {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-              </Body01>
-              <Box
-                sx={{
-                  width: '0px',
-                  height: '8px',
-                  margin: '0 4px',
-                  border: '1px solid #959595'
-                }}
-              />
-              <Body02Black
+                {props.tokenType === BackedTokenType.TOKEN ? 'Token · ' : 'NFT · '}
+              </GrayBody02>
+              <GrayBody02
                 sx={{
                   cursor: 'pointer'
                 }}
                 onClick={() => props.navigate(url)}
                 key={2}
               >
-                {getTextFromPoolType(props.category)}
-              </Body02Black>
+                {` ${getTextFromPoolType(props.category)}`}
+              </GrayBody02>
             </CenterRow>
           </Box>
         </CenterRow>,
@@ -438,6 +430,7 @@ export const AuctionRankCard: React.FC = () => {
       sx={{
         width: '100%',
         paddingTop: isSm ? '0px' : '60px',
+        paddingBottom: isSm ? '0px' : '60px',
         background: 'white'
       }}
     >
