@@ -108,7 +108,8 @@ export const routes = {
     SolaceAuction: '/launchpad/solace',
     CreateProtocolAuction: '/launchpad/create_protocol',
     IphoneAuctionDetail: '/rwa/iphone15',
-    FinceptorAuction: '/launchpad/finceptor'
+    FinceptorAuction: '/launchpad/finceptor',
+    MultiBitBridge: '/launchpad/multi-bit'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

@@ -76,6 +76,7 @@ import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
+import MultiBitBridgeProjectInfo from './projectIntro/MultiBitBridgeProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -204,6 +205,8 @@ export default function App() {
                   <Route path={routes.thirdPart.digitalAssetsOffering} element={<DigitalAssetsOffering />} />
                   <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
                   <Route path={routes.foundo.foundoNfcDetail + '/*'} element={<FoundoNfcDetail />} />
+                  <Route path={routes.thirdPart.MultiBitBridge} element={<MultiBitBridgeProjectInfo />} />
+
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
                     element={<DigitalAssetsOffering />}
