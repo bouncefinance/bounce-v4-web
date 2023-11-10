@@ -8,6 +8,7 @@ import PopperCard from 'components/PopperCard'
 
 const StyledTab = styled(Button)(({ theme }) => ({
   padding: '8px 12px',
+  minWidth: 0,
   color: '#9C9C9C',
   borderRadius: '8px',
   fontWeight: '500',
