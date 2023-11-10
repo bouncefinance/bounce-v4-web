@@ -716,118 +716,78 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is MultiBit Bridge?',
         info: [
-          <Box
-            key={1}
-            sx={{
-              '&>ul': {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10,
-                '&>li>ul': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 10
-                }
-              }
-            }}
-          >
-            <ul>
-              <li>
-                Info
-                <ul>
-                  <li>
-                    MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20
-                    and ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens
-                    cross-chain interoperability. Our mission is simple: to foster increased liquidity and accessibility
-                    for BRC and ERC tokens in a secure and user-friendly manner.
-                  </li>
-                </ul>
-              </li>
-              <li>
-                How it all works
-                <ul>
-                  <li>
-                    MultiBit streamlines the token transfer process between Bitcoin's BRC20 and EVM networks. It begins
-                    with users transferring BRC20 tokens to a dedicated BRC20 address. Upon confirmation, these tokens
-                    are primed for minting on the EVM network. But MultiBit's uniqueness lies in its dual-sided bridge
-                    feature, enabling equally seamless transfers from EVM networks back to Bitcoin. With MultiBit,
-                    bridging and minting tokens for cross-chain transfers between Bitcoin and EVM networks is an
-                    effortless process.
-                    <div style={{ width: '100%', height: '100%' }}>
-                      <img src={MultibitContent1} style={{ width: '100%', height: '100%' }} />
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                Ecosystem
-                <ul>
-                  <li>
-                    Ordinals AMM
-                    <ul>
-                      <li>
-                        MultiBit's Ordinals Automated Market Maker (OAMM) is a decentralized exchange protocol designed
-                        specifically for trading Ordinals ($ORDI) tokens. It leverages the principles of automated
-                        market making to provide liquidity, enable seamless token swaps, and facilitate efficient price
-                        discovery for $ORDI and other paired tokens.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    Ordinals Farming
-                    <ul>
-                      <li>
-                        MultiBit offers Farming Ordinals ($ORDI), an exciting opportunity for the BRC community to earn
-                        additional $ORDI tokens by providing liquidity or staking preferred tokens in selected pools.
-                        The farming process allows participants to contribute to the liquidity of the $ORDI ecosystem
-                        while being rewarded for their contribution.
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <li>
-                      Ordinals Stablecoin
-                      <ul>
-                        <li>
-                          Ordinals Stablecoin is backed by a specific ratio of Ordinals ($ORDI) tokens held as
-                          collateral. These $ORDI tokens serve as a reserve to support the stability and value of the
-                          stablecoin. The collateralization mechanism ensures that the value of the stablecoin remains
-                          pegged to a 1:1 ratio to USDC.
-                        </li>
-                      </ul>
-                    </li>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+          <Box key={1}>
+            MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and
+            ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain
+            interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC
+            tokens in a secure and user-friendly manner.
+          </Box>
+        ]
+      },
+      {
+        title: 'How it all works',
+        info: [
+          <Box key={6}>
+            MultiBit streamlines the token transfer process between Bitcoin's BRC20 and EVM networks. It begins with
+            users transferring BRC20 tokens to a dedicated BRC20 address. Upon confirmation, these tokens are primed for
+            minting on the EVM network. But MultiBit's uniqueness lies in its dual-sided bridge feature, enabling
+            equally seamless transfers from EVM networks back to Bitcoin. With MultiBit, bridging and minting tokens for
+            cross-chain transfers between Bitcoin and EVM networks is an effortless process.
+            <div style={{ width: '100%', height: '100%', marginTop: 10 }}>
+              <img src={MultibitContent1} style={{ width: '100%', height: '100%' }} />
+            </div>
+          </Box>
+        ]
+      },
+      {
+        title: 'Ecosystem',
+        info: [
+          <Box key={7}>
+            <div>
+              <strong>Ordinals AMM</strong>
+              <ul>
+                <li>
+                  MultiBit's Ordinals Automated Market Maker (OAMM) is a decentralized exchange protocol designed
+                  specifically for trading Ordinals ($ORDI) tokens. It leverages the principles of automated market
+                  making to provide liquidity, enable seamless token swaps, and facilitate efficient price discovery for
+                  $ORDI and other paired tokens.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong style={{ marginTop: 10 }}>Ordinals Farming</strong>
+              <ul>
+                <li>
+                  MultiBit offers Farming Ordinals ($ORDI), an exciting opportunity for the BRC community to earn
+                  additional $ORDI tokens by providing liquidity or staking preferred tokens in selected pools. The
+                  farming process allows participants to contribute to the liquidity of the $ORDI ecosystem while being
+                  rewarded for their contribution.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong style={{ marginTop: 10 }}>Ordinals Stablecoin</strong>
+              <ul>
+                <li>
+                  Ordinals Stablecoin is backed by a specific ratio of Ordinals ($ORDI) tokens held as collateral. These
+                  $ORDI tokens serve as a reserve to support the stability and value of the stablecoin. The
+                  collateralization mechanism ensures that the value of the stablecoin remains pegged to a 1:1 ratio to
+                  USDC.
+                </li>
+              </ul>
+            </div>
           </Box>
         ]
       },
       {
         title: 'Tokenomics',
         info: [
-          <Box
-            key={3}
-            sx={{
-              '&>ul': {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10,
-                '&>li>ul': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 10
-                }
-              }
-            }}
-          >
-            <ul key={1}>
-              <li>Total Sale: 300,000 USDC = Initial FDV (all available at launch)</li>
-              <ul>
-                <li>90% no vesting for public sale</li>
-                <li>5% DEX liquidity and locked forever.</li>
-                <li>5% team 6 months lock then linear vesting for 2 years</li>
-              </ul>
+          <Box key={3}>
+            <Typography sx={{ textIndent: 20 }}>300,000 USDC = Initial FDV (all available at launch)</Typography>
+            <ul key={2}>
+              <li>90% no vesting for public sale</li>
+              <li>5% DEX liquidity and locked forever.</li>
+              <li>5% team 6 months lock then linear vesting for 2 years</li>
             </ul>
           </Box>
         ]
@@ -861,6 +821,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               </li>
             </ul>
           </Box>
+        ]
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <a href="https://github.com/multibit-repo/audit" key={5} target="_blank" rel="noreferrer">
+            https://github.com/multibit-repo/audit
+          </a>
         ]
       }
     ],
