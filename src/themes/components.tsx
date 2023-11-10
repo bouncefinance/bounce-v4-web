@@ -341,7 +341,7 @@ export const ComponentOptions = {
                 color: '#121212',
                 height: 48,
                 borderRadius: 100,
-                background: '#E1F25C'
+                background: '#A4D220'
                 // '&::after': {
                 //   content: `' '`,
                 //   width: 20,
