@@ -52,8 +52,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
                   ethChainId={poolInfo.ethChainId}
                   backedChainId={poolInfo.chainId}
                 />
-                <RightText>{shortenAddress(poolInfo.contract)}</RightText>
-                <CopyToClipboard text={poolInfo.contract} />
+                <RightText>{shortenAddress(poolInfo.token0.address)}</RightText>
+                <CopyToClipboard text={poolInfo.token0.address} />
               </Stack>
             </PoolInfoItem>
             <PoolInfoItem title="Token symbol">

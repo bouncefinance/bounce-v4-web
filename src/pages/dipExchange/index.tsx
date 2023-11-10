@@ -37,7 +37,24 @@ const DipExchange = () => {
   // all activities line data
   //   const poolsData: poolsDataItem[] = useMemo(() => [], [])
   const poolsData = !IS_TEST_ENV
-    ? []
+    ? [
+        {
+          timaSteamp: 1698847200000,
+          active: 1698847200000 <= new Date().valueOf(),
+          // english auction
+          dip: {
+            startAt: 1698847200000,
+            closeAt: 1698933600000,
+            id: 18569
+          },
+          // dutch aution
+          dgt: {
+            startAt: 1698847200000,
+            closeAt: 1698933600000,
+            id: 18569
+          }
+        }
+      ]
     : [
         {
           timaSteamp: 1692201600000,
