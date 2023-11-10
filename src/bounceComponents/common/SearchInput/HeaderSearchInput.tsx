@@ -41,6 +41,7 @@ export type ISearchProps = {
   loadingText?: string
   [key: string]: any
   opacity?: number
+  onFocus?: (value: boolean) => void
 }
 
 // const noFocusStyle: SxProps = {
@@ -67,6 +68,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   loadingText,
   idx,
   opacity,
+  onFocus,
   ...restProps
 }) => {
   const navigate = useNavigate()
@@ -78,9 +80,15 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   useEffect(() => {
     setSelect(selected || null)
   }, [selected])
-  const [, setFocus] = useState(false)
+  const [focus, setFocus] = useState(false)
 
   const isOverHeader = opacity === undefined || opacity >= 0.65
+
+  useEffect(() => {
+    if (onFocus) {
+      onFocus(focus)
+    }
+  }, [focus, onFocus])
 
   return (
     <Autocomplete
