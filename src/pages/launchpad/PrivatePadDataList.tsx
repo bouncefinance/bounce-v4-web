@@ -42,6 +42,7 @@ import CreateProtocolPage from './imgs/CreateProtocolPage.jpg'
 import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 import MultibitContent1 from './imgs/multibit-content1.png'
 import MultiBitAva from './imgs/multi-bit-ava.png'
+import MultibitBanner from './imgs/multibit-banner.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -704,6 +705,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     },
     hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Swap Auction',
+    pageInImg: MultibitBanner,
     img: 'https://images-v3.bounce.finance/0aa4a14f2ae496f7dd3be777d5054453-1699525289.png',
     avatar: MultiBitAva,
     title: 'MultiBit Bridge',
@@ -780,7 +782,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         ]
       },
       {
-        title: 'Tokenomics',
+        title: 'Distribution',
         info: [
           <Box key={3}>
             <Typography sx={{ textIndent: 20 }}>300,000 USDC = Initial FDV (all available at launch)</Typography>
