@@ -1,6 +1,5 @@
 import FooterPc from 'components/Footer/FooterPc'
 import TypesOfAuction from 'components/TypesOfAuction'
-import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
 import { NotableAuction } from '../../bounceComponents/auction/NotableAuction'
 import { UpcomingAuction } from '../../bounceComponents/auction/UpcomingAuction'
@@ -17,7 +16,6 @@ const TokenAuctionPage: React.FC = ({}) => {
   }
   return (
     <>
-      <HeaderTab />
       <ArrowBanner type={'Token'} />
       <TypesOfAuction handleViewAll={handleOpen} />
       <NotableAuction handleViewAll={handleOpen} />

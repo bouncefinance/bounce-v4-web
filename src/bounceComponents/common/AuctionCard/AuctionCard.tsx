@@ -1,8 +1,9 @@
-import { Card, CardHeader, Chip, Stack } from '@mui/material'
+import { Box, Card, CardHeader, Chip, Stack } from '@mui/material'
 import React from 'react'
 import Image from 'components/Image'
 import { AuctionProgress, IAuctionProgressProps } from './AuctionProgress'
-import styles from './styles'
+import stylesLight from './styles'
+import stylesDark from './stylesDark'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { PoolStatus } from 'api/pool/type'
@@ -28,6 +29,7 @@ export type IAuctionCardProps = {
   whiteList: string
   chainId: number
   style?: React.CSSProperties | undefined
+  isDark?: boolean
 }
 
 export const AuctionCard: React.FC<IAuctionCardProps> = ({
@@ -45,9 +47,11 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
   progress,
   listItems,
   style,
-  claimAt
+  claimAt,
+  isDark
 }) => {
   const chainConfigInBackend = useChainConfigInBackend('id', chainId)
+  const styles = isDark ? stylesDark : stylesLight
   const sxStyles = { ...styles[status], ...styles.card }
   return (
     <Card
@@ -62,56 +66,63 @@ export const AuctionCard: React.FC<IAuctionCardProps> = ({
         ...style
       }}
     >
-      <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
-        <Body04 className="pool-id">#{poolId}</Body04>
-        <Stack
-          direction="row"
-          spacing={6}
-          height={24}
-          alignItems={'center'}
-          sx={{ '& > div > span': { fontFamily: 'Inter', fontSize: 12 } }}
-        >
-          <PoolStatusBox
-            showCreatorClaim={showCreatorClaim}
-            showParticipantClaim={showParticipantClaim}
-            claimAt={claimAt}
-            status={status}
-            closeTime={closeAt}
-            openTime={dateStr}
+      <Box className="top">
+        <Stack direction="row" justifyContent="space-between" spacing={6} alignItems={'center'}>
+          <Body04 className="pool-id">#{poolId}</Body04>
+          <Stack
+            direction="row"
+            spacing={6}
+            height={24}
+            alignItems={'center'}
+            sx={{ '& > div > span': { fontFamily: 'Inter', fontSize: 12 } }}
+          >
+            <PoolStatusBox
+              showCreatorClaim={showCreatorClaim}
+              showParticipantClaim={showParticipantClaim}
+              claimAt={claimAt}
+              status={status}
+              closeTime={closeAt}
+              openTime={dateStr}
+            />
+          </Stack>
+        </Stack>
+        <CardHeader title={title} />
+
+        <Stack direction="row" spacing={10} sx={{ pt: isDark ? 0 : 10 }}>
+          <Chip label={categoryName} color="info" sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }} />
+          <Chip label={whiteList} color="info" sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }} />
+          <Chip
+            icon={
+              <Image
+                src={
+                  chainConfigInBackend?.ethChainId
+                    ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.logo || ''
+                    : ''
+                }
+                width={12}
+                height={12}
+                alt={chainConfigInBackend?.shortName}
+              />
+            }
+            label={
+              chainConfigInBackend?.ethChainId
+                ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.name || ''
+                : '-'
+            }
+            color="info"
+            sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }}
           />
         </Stack>
-      </Stack>
-      <CardHeader title={title} />
-      <Stack direction="row" spacing={10} sx={{ pt: 10 }}>
-        <Chip label={categoryName} color="info" sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }} />
-        <Chip label={whiteList} color="info" sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }} />
-        <Chip
-          icon={
-            <Image
-              src={
-                chainConfigInBackend?.ethChainId
-                  ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.logo || ''
-                  : ''
-              }
-              width={12}
-              height={12}
-              alt={chainConfigInBackend?.shortName}
-            />
-          }
-          label={
-            chainConfigInBackend?.ethChainId
-              ? ChainListMap?.[chainConfigInBackend.ethChainId as ChainId]?.name || ''
-              : '-'
-          }
-          color="info"
-          sx={{ fontSize: 12, height: 24, color: 'var(--ps-gray-900)' }}
-        />
-      </Stack>
-      <div>{holder}</div>
-      {progress && <AuctionProgress status={status} {...progress} />}
-      <Stack spacing={12} sx={{ pt: 20, px: 0, m: 0, whiteSpace: 'nowrap' }} component="ul">
-        {listItems}
-      </Stack>
+      </Box>
+      <Box>
+        <div>{holder}</div>
+      </Box>
+      <Box>
+        {progress && <AuctionProgress status={status} {...progress} />}
+        <Stack spacing={12} sx={{ pt: 20, px: 0, m: 0, whiteSpace: 'nowrap' }} component="ul" className="list">
+          {listItems}
+        </Stack>
+      </Box>
     </Card>
   )
 }

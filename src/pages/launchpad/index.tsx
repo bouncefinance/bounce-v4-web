@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Container, MenuItem, Select, Stack, styled } from '@mui/material'
-import HeaderTab from '../../bounceComponents/auction/HeaderTab'
+// import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
 import { H2 } from '../../components/Text'
 import { CenterColumn, CenterRow } from '../../components/Layout'
@@ -20,8 +20,8 @@ import LaunchpadList from './launchapadList'
 export const Launchpad: React.FC = () => {
   return (
     <Box>
-      <HeaderTab />
-      <Box mt={16}>
+      {/* <HeaderTab /> */}
+      <Box>
         <ArrowBanner type={'PrivateLaunchpad'} />
       </Box>
       <PrivatePad />

@@ -72,9 +72,15 @@ export function ExternalLink({
 }
 
 const pulse = keyframes`
-  0% { transform: scale(1); }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 `
 
 export const AnimatedWrapper = styled('div')(`
@@ -204,17 +210,17 @@ export const ComponentOptions = {
           transition:
             'background-color 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           '&:disabled': {
-            border: '1px solid var(--ps-text-5)',
+            // border: '1px solid var(--ps-text-5)',
             background: 'var(--ps-text-5)',
             color: 'var(--ps-white)'
           },
           '&:hover': {
-            background: 'var(--ps-yellow-1)',
-            border: '1px solid var(--ps-yellow-1)'
+            background: 'var(--ps-yellow-1)'
+            // border: '1px solid var(--ps-yellow-1)'
           },
           '&:active': {
             background: 'var(--ps-yellow-1)',
-            border: '1px solid var(--ps-yellow-1)',
+            // border: '1px solid var(--ps-yellow-1)',
             color: 'var(--ps-primary)'
           }
         },
@@ -248,7 +254,7 @@ export const ComponentOptions = {
           '&:hover': {
             boxShadow: 'none',
             background: 'var(--ps-gray-900)',
-            borderColor: 'var(--ps-gray-900)',
+            borderColor: 'var(--ps-yellow-1)',
             color: 'var(--ps-white)'
           },
           '&:active': {
@@ -311,8 +317,8 @@ export const ComponentOptions = {
           PaperProps: {
             sx: {
               marginTop: 16,
-              border: '1px solid rgba(18, 18, 18, 0.06)',
-              borderRadius: 8,
+              border: '1px solid #E4E4E4',
+              borderRadius: 20,
               maxHeight: 350,
               boxShadow: 'none',
               '&:focus': {
@@ -332,21 +338,24 @@ export const ComponentOptions = {
               padding: '6px !important',
               '& .MuiMenuItem-root.Mui-selected': {
                 justifyContent: 'space-between',
-                color: 'var(--ps-text-7)',
-                borderRadius: '8px',
+                color: '#121212',
+                height: 48,
+                borderRadius: 100,
+                background: '#E1F25C'
                 // '&::after': {
                 //   content: `' '`,
                 //   width: 20,
                 //   height: 20,
                 //   background: `url(${CheckedSVG}) no-repeat center`
                 // },
-                '&:hover': {
-                  background: 'var(--ps-yellow-1)'
-                }
+              },
+              '& .MuiMenuItem-root': {
+                color: '#121212',
+                height: 48
               },
               '& .MuiMenuItem-root:hover': {
-                background: 'var(--ps-yellow-1)',
-                borderRadius: '8px'
+                color: 'var(--ps-yellow-1)',
+                background: 'transparent'
               }
             }
           }

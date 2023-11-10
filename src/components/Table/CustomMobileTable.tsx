@@ -42,7 +42,7 @@ export function OwnerCell({ url, name }: { url?: string; name: string }) {
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
-    width: '90%'
+    width: '100%'
   },
   display: 'table',
   borderRadius: '40px',
@@ -102,13 +102,21 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
   fontSize?: string
 }>(({ variant, theme }) => ({
   height: 80,
-  borderRadius: '16px',
+  borderRadius: '12px',
   overflow: 'hidden',
   position: 'relative',
   whiteSpace: 'pre',
-  background: variant === 'outlined' ? 'transparent' : theme.palette.background.default,
+  background: '#F6F6F3',
+  '&:hover': {
+    color: '#A4D220',
+    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3',
+    '& + tr .MuiCollapse-root': {
+      backgroundColor: variant === 'outlined' ? '#E2E7F020' : 'white'
+    }
+  },
+  // background: variant === 'outlined' ? 'transparent' : 'white',
   '& + tr .MuiCollapse-root': {
-    background: variant === 'outlined' ? 'transparent' : theme.palette.background.default
+    background: variant === 'outlined' ? 'transparent' : 'white'
   },
   '& .MuiTableCell-root': {
     justifyContent: 'flex-start',
@@ -122,6 +130,7 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
       borderLeft: '1px solid',
       borderColor: variant === 'outlined' ? '#00000010' : 'transparent',
       paddingLeft: 20,
+      width: 10,
       [theme.breakpoints.down('sm')]: {
         paddingLeft: 0
       },
@@ -133,14 +142,10 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
       borderColor: variant === 'outlined' ? '#00000010' : 'transparent',
       paddingRight: '20px',
       borderTopRightRadius: 16,
+      textAlign: 'right',
+      width: '100px',
       borderBottomRightRadius: 16
     }
-  },
-  '&:hover': {
-    '& + tr .MuiCollapse-root': {
-      backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3'
-    },
-    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3'
   },
   [theme.breakpoints.down('sm')]: {
     height: theme.height.mobileHeader
@@ -162,9 +167,9 @@ const sortIcon = ({ className }: { className: string }) => (
   </svg>
 )
 const StyledTable = styled('table')(({ theme }) => ({
-  [theme.breakpoints.down('sm')]: {
-    width: 'calc(100vw - 12px - 30px) !important'
-  }
+  // [theme.breakpoints.down('sm')]: {
+  //   width: 'calc(100vw - 12px - 30px) !important'
+  // }
 }))
 export default function CustomMobileTable({
   header,

@@ -40,6 +40,8 @@ export type ISearchProps = {
   startIcon?: boolean
   loadingText?: string
   [key: string]: any
+  opacity?: number
+  onFocus?: (value: boolean) => void
 }
 
 // const noFocusStyle: SxProps = {
@@ -65,6 +67,8 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   startIcon,
   loadingText,
   idx,
+  opacity,
+  onFocus,
   ...restProps
 }) => {
   const navigate = useNavigate()
@@ -76,7 +80,15 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
   useEffect(() => {
     setSelect(selected || null)
   }, [selected])
-  const [, setFocus] = useState(false)
+  const [focus, setFocus] = useState(false)
+
+  const isOverHeader = opacity === undefined || opacity >= 0.65
+
+  useEffect(() => {
+    if (onFocus) {
+      onFocus(focus)
+    }
+  }, [focus, onFocus])
 
   return (
     <Autocomplete
@@ -109,12 +121,15 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
             placeholder={placeholder}
             sx={{
               fontSize: 13,
-              borderRadius: 8,
+              borderRadius: 60,
               height: 44,
               width: 44,
+              color: isOverHeader ? undefined : '#ffffff',
+              background: isOverHeader ? '#F6F6F3!important' : '#F6F6F315!important',
               '& fieldset': {
                 border: 'none'
-              }
+              },
+              border: 'transparent'
             }}
             onChange={ev => {
               onChange?.(ev, ev.target.value)
@@ -137,7 +152,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
                     transition: 'all 0.4s',
                     background: 'transparent',
                     '& svg path': {
-                      stroke: '#232323'
+                      stroke: isOverHeader ? '#232323' : '#ffffff'
                     },
                     '&:hover': {
                       '& svg path': {

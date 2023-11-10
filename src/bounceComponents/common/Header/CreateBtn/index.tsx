@@ -1,4 +1,4 @@
-import { Box, Button, Menu, MenuItem, SxProps, Theme } from '@mui/material'
+import { Box, Button, Menu, MenuItem, SxProps, Theme, useTheme } from '@mui/material'
 import React, { useState } from 'react'
 // import { ReactComponent as ArrowDownSVG } from 'assets/imgs/user/arrow_down.svg'
 // import { ReactComponent as ArrowUpSVG } from 'assets/imgs/user/arrow_up.svg'
@@ -7,10 +7,15 @@ import { useNavigate } from 'react-router-dom'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
 
-const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ sx, onDismiss }) => {
+const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void; opacity?: number }> = ({
+  sx,
+  onDismiss,
+  opacity = 1
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const navigate = useNavigate()
   const { token, userInfo } = useUserInfo()
+  const theme = useTheme()
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -34,9 +39,10 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
         horizontal: 'center'
       }}
       sx={{
+        borderRadius: '20px',
         mt: 4,
         '& .MuiPopover-paper': {
-          borderRadius: 8,
+          borderRadius: '20px',
           padding: '6px'
         },
         '& .MuiList-padding': {
@@ -47,7 +53,7 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
         },
         '& .MuiMenuItem-gutters': {
           padding: '10px 20px',
-          borderRadius: 8
+          borderRadius: '20px'
         },
         '& .MuiMenuItem-gutters:hover': {
           background: '#E1F25C'
@@ -55,6 +61,12 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
       }}
     >
       <MenuItem
+        sx={{
+          '&:hover': {
+            borderRadius: 100,
+            color: '#121212'
+          }
+        }}
         onClick={() => {
           navigate(`${routes.auction.createAuctionPool}`)
           setAnchorEl(null)
@@ -65,6 +77,12 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
       </MenuItem>
       {userInfo?.isWhitelist === 2 && (
         <MenuItem
+          sx={{
+            '&:hover': {
+              borderRadius: 100,
+              color: '#121212'
+            }
+          }}
           onClick={() => {
             navigate(`${routes.thirdPart.CreateLaunchpad}`)
             setAnchorEl(null)
@@ -93,12 +111,16 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void }> = ({ 
   return (
     <Box>
       <Button
-        variant="contained"
         sx={{
           width: 109,
           height: 44,
-          borderRadius: 8,
+          borderRadius: 60,
           border: 'none',
+          background: opacity >= 0.65 ? '#F6F6F3' : '#F6F6F315',
+          color: opacity >= 0.65 ? theme.palette.text.primary : '#fff',
+          '&:hover': {
+            color: '#121212'
+          },
           ...sx
         }}
         onClick={handleMenuOpen}

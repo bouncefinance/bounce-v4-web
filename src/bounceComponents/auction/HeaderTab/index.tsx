@@ -5,9 +5,10 @@ import { useNavigate } from 'react-router-dom'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PopperCard from 'components/PopperCard'
+
 const StyledTab = styled(Button)(({ theme }) => ({
   padding: '8px 12px',
-  color: 'white',
+  color: '#9C9C9C',
   borderRadius: '8px',
   fontWeight: '500',
   fontSize: '16px',
@@ -16,11 +17,13 @@ const StyledTab = styled(Button)(({ theme }) => ({
   background: 'transparent',
   '&:hover': {
     border: 'none',
-    background: '#FFFFFF33'
+    color: 'white',
+    background: 'transparent'
   },
   '&.selected': {
     background: '#E1F25C',
-    color: '#121212'
+    color: '#121212',
+    borderRadius: '100px'
   },
   [theme.breakpoints.down('sm')]: {
     fontSize: '14px',
@@ -70,7 +73,6 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     return 'All'
   }
   const [currentTab, setCurrentTab] = useState(getPath())
-  console.log('currentTab', currentTab)
 
   const linkTo = (route: string) => {
     switch (route) {
@@ -108,29 +110,40 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
       sx={{
         display: 'flex',
         flexFlow: 'row nowrap',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
         // maxWidth: '1296px',
         padding: { xs: 0, sm: '0 72px' },
         margin: '0 auto',
+        '@media(max-width:600px)': {
+          margin: '0',
+          justifyContent: 'flex-start',
+          scrollbar: 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          overflowX: 'scroll'
+        },
         ...style
       }}
     >
       <Box
         sx={{
           width: 'max-content',
-          maxWidth: '100%',
+          // maxWidth: '100%',
           marginTop: '32px',
+          display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'flex-start',
           alignItems: 'center',
           padding: '6px',
-          background: '#20201E',
           backdropFilter: 'blur(4px)',
-          borderRadius: '10px',
-          overflowX: 'scroll',
+          background: 'rgba(255, 255, 255, 0.15)',
+          borderRadius: '100px',
+          // overflowX: 'scroll',
           whiteSpace: 'nowrap',
+          border: '1px solid #959595',
 
           margin: isSm ? ' 8px 14px' : '',
           '&::-webkit-scrollbar': {
@@ -138,6 +151,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
           },
           '@media(max-width:1296px)': {
             margin: '0 16px'
+          },
+          '@media(max-width:600px)': {
+            maxWidth: 'max-content'
           }
         }}
       >
@@ -149,7 +165,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
                   <PopperCard
                     placement="bottom-start"
                     popperSx={{
-                      top: isSm ? 0 : '6px !important'
+                      top: isSm ? 0 : '6px !important',
+                      borderRadius: 20,
+                      border: '1px solid #E4E4E4'
                     }}
                     targetElement={
                       <StyledTab

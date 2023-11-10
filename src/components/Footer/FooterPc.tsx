@@ -1,16 +1,16 @@
 import { Box, Container, Link as ExternalLink, SxProps, Typography, useTheme } from '@mui/material'
-import React, { useMemo, createContext, useContext } from 'react'
-import APIIcon from 'assets/imgs/common/Api.png'
-import GithubIcon from 'assets/imgs/common/Github.png'
-import MediumIcon from 'assets/imgs/common/Medium.png'
-import TelegramIcon from 'assets/imgs/common/Telegram.png'
-import TwitterIcon from 'assets/imgs/common/Twitter.png'
-import FooterLogo from 'assets/imgs/common/LogoBlack.svg'
+import React, { createContext, useContext, useMemo } from 'react'
+import APIIcon from 'assets/socialLinksIcon/API-mini.svg'
+import GithubIcon from 'assets/socialLinksIcon/github-mini.svg'
+import MediumIcon from 'assets/socialLinksIcon/midium-mini.svg'
+import TelegramIcon from 'assets/socialLinksIcon/telegram-mini.svg'
+import TwitterIcon from 'assets/socialLinksIcon/twitter-mini.svg'
 import WhiteFooterLogo from 'assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
-import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
+// import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
 import WhiteArrowSvg from 'assets/imgs/common/whiteFooterArrow.svg'
 import useBreakpoint from '../../hooks/useBreakpoint'
+import { Body04, H6 } from '../Text'
 
 const FooterDarkStyle = {
   layoutBackground: '#20201E',
@@ -22,6 +22,7 @@ const FooterThemeContext = createContext(false)
 
 export function SocialLinkList({ sx }: { sx?: SxProps }) {
   const isSm = useBreakpoint('md')
+  const theme = useTheme()
   const Links = useMemo(
     () => [
       {
@@ -52,72 +53,103 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
     ],
     []
   )
+
   return (
     <Box
       sx={{
+        width: isSm ? 'wrap-content' : '800px',
         display: 'flex',
-        flexFlow: 'row nowrap',
+        flexFlow: 'row',
         justifyContent: 'flex-start',
+        alignItems: 'center',
         marginBottom: 20,
+        [theme.breakpoints.down('md')]: {
+          flexFlow: 'column',
+          alignItems: 'center'
+        },
         ...sx
       }}
     >
-      {Links.map((item, index) => {
-        return (
-          <ExternalLink key={'link' + index} target="_blank" href={item.href}>
-            <img
-              src={item.icon}
-              style={{ width: isSm ? 44 : 36, height: isSm ? 44 : 36, marginRight: isSm ? 12 : 8, cursor: 'pointer' }}
-            />
-          </ExternalLink>
-        )
-      })}
+      <Body04
+        color={'white'}
+        mr={40}
+        fontWeight={600}
+        sx={{
+          [theme.breakpoints.down('md')]: {
+            margin: '0 0 12px'
+          }
+        }}
+      >
+        Follow us
+      </Body04>
+      <Box
+        sx={{
+          [theme.breakpoints.down('md')]: {
+            display: 'flex',
+            gap: 12
+          }
+        }}
+      >
+        {Links.map((item, index) => {
+          return (
+            <ExternalLink
+              key={'link' + index}
+              target="_blank"
+              href={item.href}
+              sx={{
+                [theme.breakpoints.down('md')]: {
+                  flexGrow: 1
+                }
+              }}
+            >
+              <Box
+                component="img"
+                src={item.icon}
+                sx={{
+                  width: isSm ? 44 : 48,
+                  height: isSm ? 44 : 48,
+                  marginRight: isSm ? 0 : 8,
+                  cursor: 'pointer',
+                  padding: '13px',
+                  background: 'var(--ps-yellow-1)',
+                  borderRadius: '100px',
+                  '&:hover': {
+                    background: 'transparent',
+                    border: '1px solid var(--ps-yellow-1)',
+                    '.svg': { fill: 'var(--ps-yellow-1)' }
+                  }
+                }}
+              />
+            </ExternalLink>
+          )
+        })}
+      </Box>
     </Box>
   )
 }
 
 export const FooterSocialLink: React.FC = () => {
-  const isDark = useContext(FooterThemeContext)
+  // const isDark = useContext(FooterThemeContext)
+  const isSm = useBreakpoint('sm')
+  const theme = useTheme()
   return (
     <Box
       sx={{
         position: 'relative',
-        width: 213,
+        width: '100%',
         display: 'flex',
-        flexFlow: 'column nowrap',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+        flexFlow: isSm ? 'column' : 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        [theme.breakpoints.down('md')]: {
+          alignItems: 'center'
+        }
       }}
     >
       <ExternalLink href={routes.market.index} role="link" rel="noopener noreferrer" aria-disabled={true}>
-        <img
-          src={isDark ? WhiteFooterLogo : FooterLogo}
-          style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }}
-        />
+        <img src={WhiteFooterLogo} style={{ display: 'block', width: 158, height: 32, marginBottom: 24 }} />
       </ExternalLink>
       <SocialLinkList />
-      <Box
-        id={'123'}
-        sx={{
-          position: 'relative',
-          width: '100%'
-        }}
-      >
-        <iframe
-          // src={isDark ? '/darkCrypotoWidget.html' : '/crypotoWidget.html'}
-          src={'/crypotoWidget.html'}
-          width="100%"
-          height="230px"
-          style={{
-            border: '0 none',
-            position: 'relative',
-            top: 0,
-            left: -42,
-            width: 280,
-            overflow: 'hidden'
-          }}
-        ></iframe>
-      </Box>
     </Box>
   )
 }
@@ -136,23 +168,35 @@ interface FooterLinksProps {
 
 export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
   const isDark = useContext(FooterThemeContext)
+  const theme = useTheme()
   return (
-    <div>
-      <Typography
-        variant="h5"
+    <Box
+      sx={{
+        [theme.breakpoints.down('md')]: {
+          flexDirection: 'column',
+          display: 'flex',
+          alignItems: 'center'
+        }
+      }}
+    >
+      <H6
         sx={{
           fontFamily: `'Public Sans'`,
-          fontSize: 12,
           marginBottom: 24,
-          color: isDark ? FooterDarkStyle.linkTextColor : ''
+          color: isDark ? FooterDarkStyle.linkTextColor : 'white'
         }}
       >
         {title}
-      </Typography>
-      <ul
-        style={{
+      </H6>
+      <Box
+        sx={{
           margin: 0,
-          padding: 0
+          padding: 0,
+          [theme.breakpoints.down('md')]: {
+            flexDirection: 'column',
+            display: 'flex',
+            alignItems: 'center'
+          }
         }}
       >
         {links.map((item, index) => {
@@ -167,6 +211,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
               {item.isDisabled ? (
                 <a
                   style={{
+                    textDecoration: 'none',
                     color: `${isDark ? FooterDarkStyle.linkTextColor : '#919191'}!important`,
                     fontFamily: `'Inter'`
                   }}
@@ -177,7 +222,8 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink
                   // className={linkClass}
                   sx={{
-                    color: isDark ? FooterDarkStyle.linkTextColor : '#000000',
+                    textDecoration: 'none',
+                    color: isDark ? FooterDarkStyle.linkTextColor : 'white',
                     padding: 0,
                     height: 18,
                     fontFamily: `'Inter'`,
@@ -197,7 +243,8 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
                 <ExternalLink href={item.href}>
                   <a
                     style={{
-                      color: isDark ? FooterDarkStyle.linkTextColor : '#000000',
+                      textDecoration: 'none',
+                      color: isDark ? FooterDarkStyle.linkTextColor : 'white',
                       padding: 0,
                       height: 18,
                       fontFamily: `'Inter'`
@@ -223,8 +270,8 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
             </li>
           )
         })}
-      </ul>
-    </div>
+      </Box>
+    </Box>
   )
 }
 export const ResourcesLinks = [
@@ -296,7 +343,7 @@ export const ResourcesLinks = [
 const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
   const isSm = useBreakpoint('sm')
   const theme = useTheme()
-  const LinksIcon = isDark ? WhiteArrowSvg : ArrowSvg
+  const LinksIcon = WhiteArrowSvg
 
   const ProductsLinks = useMemo(
     () => [
@@ -371,10 +418,8 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
       id={'footer'}
       style={{
         position: 'relative',
-        background: isDark ? FooterDarkStyle.layoutBackground : 'var(--ps-gray-20)',
-        borderRadius: 30,
-        width: 'calc(100% - 40px)',
-        margin: '0 auto 20px'
+        background: isDark ? FooterDarkStyle.layoutBackground : '#121212',
+        width: '100%'
       }}
     >
       <FooterThemeContext.Provider value={isDark as boolean}>
@@ -393,8 +438,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             sx={{
               position: 'relative',
               display: 'flex',
-              flexFlow: isSm ? 'column' : 'row nowrap',
-              justifyContent: 'space-between',
+              flexFlow: 'column',
               alignItems: 'flex-start',
               paddingBottom: 32,
               marginBottom: 32,
@@ -411,21 +455,64 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             }}
           >
             <FooterSocialLink />
-            {isSm && <Box sx={{ border: '1px solid #D7D6D9', width: '100%', mb: '40px' }} />}
+            <Box sx={{ borderBottom: '1px solid #FFFFFF1A', width: '100%', mb: '40px' }} />
             <Box
               sx={{
                 display: 'flex',
-                flexFlow: isSm ? 'column' : 'row nowrap',
-                justifyContent: 'flex-end',
-                alignItems: 'flex-start'
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                [theme.breakpoints.down('md')]: {
+                  flexDirection: 'column'
+                }
               }}
-              gap={isSm ? 32 : 120}
             >
-              <FooterLinks title={'Products'} links={ProductsLinks} />
-              <FooterLinks title={'Solutions'} links={SolutionsLinks} />
-              <FooterLinks title={'Resources'} links={ResourcesLinks} />
+              <Box
+                id={'123'}
+                sx={{
+                  position: 'relative'
+                }}
+              >
+                <iframe
+                  // src={isDark ? '/darkCrypotoWidget.html' : '/crypotoWidget.html'}
+                  src={'/darkCrypotoWidget.html'}
+                  width="100%"
+                  height="230px"
+                  style={{
+                    border: '0 none',
+                    position: 'relative',
+                    top: 0,
+                    left: isSm ? 0 : -42,
+                    width: isSm ? '100%' : 280,
+                    overflow: 'hidden'
+                  }}
+                ></iframe>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: isSm ? 'auto' : '800px',
+                  flexFlow: isSm ? 'column' : 'row nowrap',
+                  alignItems: isSm ? 'center' : 'flex-start'
+                }}
+                gap={isSm ? 60 : 120}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexFlow: 'column',
+                    alignItems: isSm ? 'center' : 'flex-start'
+                  }}
+                  gap={60}
+                >
+                  <FooterLinks title={'Products'} links={ProductsLinks} />
+                  <FooterLinks title={'Solutions'} links={SolutionsLinks} />
+                </Box>
+                <FooterLinks title={'Resources'} links={ResourcesLinks} />
+              </Box>
             </Box>
           </Box>
+          <Box sx={{ borderBottom: '1px solid #FFFFFF1A', width: '100%', mb: '40px' }} />
           <Box
             sx={{
               display: 'flex',
@@ -436,7 +523,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
           >
             <Typography
               sx={{
-                color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                color: isDark ? FooterDarkStyle.textColor : 'white',
                 opacity: '0.6',
                 fontFamily: `'Inter'`,
                 fontSize: 13
@@ -449,7 +536,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                 rel="noopener noreferrer"
                 target="_blank"
                 sx={{
-                  color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                  color: isDark ? FooterDarkStyle.textColor : 'white',
                   opacity: '0.6',
                   fontFamily: `'Inter'`,
                   fontSize: 13,
@@ -464,7 +551,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
                 rel="noopener noreferrer"
                 target="_blank"
                 sx={{
-                  color: isDark ? FooterDarkStyle.textColor : 'var(--ps-text-3)',
+                  color: isDark ? FooterDarkStyle.textColor : 'white',
                   fontFamily: `'Inter'`,
                   fontSize: 13,
                   opacity: '0.6'

@@ -3,7 +3,7 @@ import { CenterRow, Row } from '../../../components/Layout'
 import { Box, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/default-nft-cover.png'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
-import { H5, H7, H7Gray, SmallText } from '../../../components/Text'
+import { Body01, Body02Black, H6 } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
 import { getPoolsFilter } from '../../../api/market'
@@ -37,7 +37,7 @@ const StatusLive = styled(Box)`
   background: #cff8d1;
   backdrop-filter: blur(2px);
   font-family: 'Inter';
-  font-size: 12px;
+  font-size: 14px;
   line-height: 140%;
   text-align: center;
   color: #20994b;
@@ -61,31 +61,46 @@ const Tab = styled(Box)`
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  padding: 24px;
   gap: 10px;
-  width: 240px;
-  height: 76px;
+  width: fit-content;
+  height: 40px;
+  padding: 8px 20px;
   background: transparent;
+  color: #959595;
 
   &.active {
-    background: #ffffff;
-    border-radius: 10px 10px 0 0;
+    background: var(--ps-yellow-1);
+    border-radius: 100px;
   }
 
   &:hover {
-    background: var(--ps-yellow-1);
-    border-radius: 10px 10px 0 0;
+    //background: var(--ps-yellow-1);
+    //border-radius: 10px 10px 0 0;
+    color: #121212;
   }
 
   &.active:hover {
-    background: #ffffff;
-    border-radius: 10px 10px 0 0;
+    background: var(--ps-yellow-1);
+    border-radius: 100px;
   }
 
   @media (max-width: 600px) {
     padding: 12px 16px;
-    height: 45px;
-    width: max-content;
+    width: -webkit-fill-available;
+  }
+`
+
+const TabText = styled(H6)`
+  color: #959595;
+
+  &.active {
+    color: #121212;
+  }
+
+  &:hover {
+    //background: var(--ps-yellow-1);
+    //border-radius: 10px 10px 0 0;
+    color: #121212;
   }
 `
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
@@ -115,18 +130,20 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={0}
           onClick={() => props.navigate(url)}
           sx={{
-            cursor: 'pointer'
+            cursor: 'pointer',
+            marginLeft: '12px'
           }}
         >
           {/* index */}
-          <H7Gray
+          <Body01
             mr={16}
             sx={{
-              width: 16
+              width: 16,
+              color: '#121212'
             }}
           >
             {props.index}
-          </H7Gray>
+          </Body01>
           <Avatar
             src={
               props.token0?.largeUrl
@@ -137,20 +154,23 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             }
           />
           <Box key={1}>
-            <H7
+            <Body01
               className={isSm ? 'mobile' : ''}
               sx={{
                 maxWidth: 160,
                 overflow: 'hidden',
                 textAlign: 'left',
                 textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                '&:hover': {
+                  color: '#A4D220'
+                }
               }}
             >
               {props.name}
-            </H7>
+            </Body01>
             <CenterRow>
-              <SmallText
+              <Body01
                 sx={{
                   cursor: 'pointer',
                   maxWidth: 88,
@@ -163,7 +183,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 key={1}
               >
                 {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-              </SmallText>
+              </Body01>
               <Box
                 sx={{
                   width: '0px',
@@ -172,7 +192,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                   border: '1px solid #959595'
                 }}
               />
-              <SmallText
+              <Body02Black
                 sx={{
                   cursor: 'pointer'
                 }}
@@ -180,7 +200,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 key={2}
               >
                 {getTextFromPoolType(props.category)}
-              </SmallText>
+              </Body02Black>
             </CenterRow>
           </Box>
         </CenterRow>,
@@ -194,14 +214,23 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             cursor: 'pointer'
           }}
         >
-          <H7Gray
+          <Body01
             mr={14}
             sx={{
-              width: 16
+              width: 16,
+              color: '#121212'
             }}
           >
             {props.index}
-          </H7Gray>
+          </Body01>
+        </CenterRow>,
+        <CenterRow
+          key={0}
+          onClick={() => props.navigate(url)}
+          sx={{
+            cursor: 'pointer'
+          }}
+        >
           <Avatar
             src={
               props.token0?.largeUrl
@@ -211,19 +240,22 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 : EmptyAvatar
             }
           />
-          <H7
+          <Body01
             className={isSm ? 'mobile' : ''}
             sx={{
               maxWidth: 160,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              '&:hover': {
+                color: '#A4D220'
+              }
             }}
           >
             {props.name}
-          </H7>
+          </Body01>
         </CenterRow>,
-        <SmallText
+        <Body01
           sx={{
             cursor: 'pointer'
           }}
@@ -232,8 +264,8 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={1}
         >
           {props.tokenType === BackedTokenType.TOKEN ? 'Token' : 'NFT'}
-        </SmallText>,
-        <SmallText
+        </Body01>,
+        <Body01
           sx={{
             cursor: 'pointer'
           }}
@@ -241,7 +273,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={2}
         >
           {getTextFromPoolType(props.category)}
-        </SmallText>,
+        </Body01>,
         <Status key={3} status={status} />
       ]
 }
@@ -314,14 +346,14 @@ const SkeletonBox = () => {
   )
 }
 export const AuctionRankCard: React.FC = () => {
-  const Tabs = ['Trending Auctions', 'Upcoming Auctions', 'Latest Auctions']
+  const Tabs = ['Trending', 'Upcoming', 'Latest']
   const isSm = useBreakpoint('sm')
   const [currentTab, setTab] = useState(Tabs[0])
   const optionDatas = useOptionDatas()
   const action = Tabs.indexOf(currentTab) + 1
   const [chainFilter, setChainFilter] = useState<number>(0)
   const navigate = useNavigate()
-  const TableHeader = isSm ? ['Auction', 'Status'] : ['Auction', 'Asset', 'Auction', 'Status']
+  const TableHeader = isSm ? ['# Auction', 'Status'] : ['#', 'Auction', 'Asset', 'Auction Type', 'Status']
   const { data } = useRequest(
     async () => {
       const resp = await getPoolsFilter({
@@ -337,11 +369,24 @@ export const AuctionRankCard: React.FC = () => {
   const ChainSelect = (
     <Select
       sx={{
-        width: '200px',
-        height: isSm ? '37px' : '38px',
+        width: isSm ? '100%' : '200px',
+        height: '48px',
+        '& .MuiPaper-root': {
+          border: 0
+        },
         fontSize: isSm ? '12px' : 'inherit',
+        '&:hover': {
+          borderRadius: '100px',
+          border: '1px solid var(--ps-yellow-1)',
+          background: 'white'
+        },
         fieldset: {
-          border: isSm ? '1' : 0
+          border: '1px solid #E4E4E4',
+          borderRadius: '100px',
+          '&:hover': {
+            border: '1px solid var(--ps-yellow-1)',
+            background: 'white'
+          }
         },
         '& .css-hpln3v-MuiSelect-icon': {
           top: 'inherit'
@@ -364,7 +409,14 @@ export const AuctionRankCard: React.FC = () => {
     <Row
       mr={20}
       sx={{
-        width: isSm ? 470 : 'auto'
+        display: 'flex',
+        padding: '4px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: isSm ? '100%' : 'auto',
+        height: '48px',
+        borderRadius: 100,
+        border: '1px solid #E4E4E4'
       }}
     >
       {Tabs.map((tab, idx) => (
@@ -374,7 +426,9 @@ export const AuctionRankCard: React.FC = () => {
           onClick={() => setTab(tab)}
           className={tab === currentTab ? 'active' : ''}
         >
-          <H5 sx={{ whiteSpace: 'nowrap' }}>{tab}</H5>
+          <TabText className={tab === currentTab ? 'active' : ''} sx={{ whiteSpace: 'nowrap' }}>
+            {tab}
+          </TabText>
         </Tab>
       ))}
     </Row>
@@ -383,99 +437,108 @@ export const AuctionRankCard: React.FC = () => {
     <Box
       sx={{
         width: '100%',
-        maxWidth: '1296px',
-        margin: '40px auto 0'
+        paddingTop: isSm ? '0px' : '60px',
+        background: 'white'
       }}
     >
-      <CenterRow
-        flexDirection={isSm ? 'column' : 'row'}
+      <Box
         sx={{
-          alignItems: isSm ? 'flex-start' : 'center',
-          justifyContent: isSm ? 'flex-start' : 'space-between',
-          '@media(max-width:862px)': {
-            flexWrap: 'nowrap',
-            overflowX: 'scroll',
-            overflowY: 'hidden',
-            '&::-webkit-scrollbar': { display: 'none' }
-          }
+          width: '100%',
+          maxWidth: '1296px',
+          margin: '0 auto'
         }}
       >
-        {isSm && (
+        <CenterRow
+          flexDirection={isSm ? 'column' : 'row'}
+          sx={{
+            alignItems: isSm ? 'flex-start' : 'center',
+            justifyContent: isSm ? 'flex-start' : 'space-between',
+            '@media(max-width:862px)': {
+              flexWrap: 'nowrap',
+              overflowX: 'scroll',
+              overflowY: 'hidden',
+              '&::-webkit-scrollbar': { display: 'none' }
+            }
+          }}
+        >
+          {isSm && (
+            <Box
+              sx={{
+                overflowX: isSm ? 'unset' : 'scroll',
+                width: '100%',
+                padding: isSm ? '40px 16px 16px' : '0',
+                '&::-webkit-scrollbar': { display: 'none', background: 'transparent' }
+              }}
+            >
+              {AuctionTabs}
+            </Box>
+          )}
+          {!isSm && AuctionTabs}
+          {isSm && (
+            <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0', overflowY: 'hidden' }}>
+              {ChainSelect}
+            </Box>
+          )}
+          {!isSm && ChainSelect}
+        </CenterRow>
+        {data && Array.isArray(data.list) && data.list.length > 0 ? (
           <Box
             sx={{
+              padding: '12px',
+              display: 'flex',
               overflowX: 'scroll',
-              width: '100%',
-              '&::-webkit-scrollbar': { display: 'none', background: 'transparent' }
+              borderRadius: isSm ? 0 : '0px 30px 30px 30px',
+              '&::-webkit-scrollbar': {
+                display: 'none'
+              }
             }}
           >
-            {AuctionTabs}
+            <CustomMobileTable
+              header={TableHeader}
+              rows={
+                data
+                  ? data.list?.slice(0, 8).map((d: any, idx: number) =>
+                      AuctionRow({
+                        isSm: isSm,
+                        ...d,
+                        index: idx + 1,
+                        opt: optionDatas,
+                        navigate,
+                        variant: 'gray'
+                      })
+                    )
+                  : []
+              }
+            />
+            {/*<CustomMobileTable*/}
+            {/*  header={TableHeader}*/}
+            {/*  rows={*/}
+            {/*    data*/}
+            {/*      ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>*/}
+            {/*          AuctionRow({*/}
+            {/*            isSm: isSm,*/}
+            {/*            ...d,*/}
+            {/*            index: Math.ceil(data.list.length / 2) + idx + 1,*/}
+            {/*            opt: optionDatas,*/}
+            {/*            navigate*/}
+            {/*          })*/}
+            {/*        )*/}
+            {/*      : []*/}
+            {/*  }*/}
+            {/*/>*/}
           </Box>
-        )}
-        {!isSm && AuctionTabs}
-        {isSm && (
-          <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0', overflowY: 'hidden' }}>
-            {ChainSelect}
+        ) : data?.list && data?.list?.length === 0 ? (
+          <Box
+            sx={{
+              background: 'white'
+            }}
+          >
+            <EmptyData />
           </Box>
+        ) : (
+          <SkeletonBox />
         )}
-        {!isSm && ChainSelect}
-      </CenterRow>
-      {data && Array.isArray(data.list) && data.list.length > 0 ? (
-        <Box
-          sx={{
-            padding: '12px',
-            display: 'flex',
-            background: 'white',
-            overflowX: 'scroll',
-            borderRadius: isSm ? 0 : '0px 30px 30px 30px',
-            '&::-webkit-scrollbar': {
-              display: 'none'
-            }
-          }}
-        >
-          <CustomMobileTable
-            header={TableHeader}
-            rows={
-              data
-                ? data.list?.slice(0, Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>
-                    AuctionRow({
-                      isSm: isSm,
-                      ...d,
-                      index: idx + 1,
-                      opt: optionDatas,
-                      navigate
-                    })
-                  )
-                : []
-            }
-          />
-          <CustomMobileTable
-            header={TableHeader}
-            rows={
-              data
-                ? data.list?.slice(Math.ceil(data.list.length / 2))?.map((d: any, idx: number) =>
-                    AuctionRow({
-                      isSm: isSm,
-                      ...d,
-                      index: Math.ceil(data.list.length / 2) + idx + 1,
-                      opt: optionDatas,
-                      navigate
-                    })
-                  )
-                : []
-            }
-          />
-        </Box>
-      ) : data?.list && data?.list?.length === 0 ? (
-        <Box
-          sx={{
-            background: 'white'
-          }}
-        >
-          <EmptyData />
-        </Box>
-      ) : (
-        <SkeletonBox />
-      )}
+      </Box>
     </Box>
   )
 }

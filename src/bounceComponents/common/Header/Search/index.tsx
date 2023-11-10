@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Box } from '@mui/material'
 import HeaderSearchInput, { ISearchAllOption } from '../../SearchInput/HeaderSearchInput'
@@ -10,13 +10,14 @@ import { whiteLogoRoutes } from '../../../../components/Header'
 import { PoolType } from 'api/pool/type'
 import useBreakpoint from '../../../../hooks/useBreakpoint'
 
-const Search: React.FC = () => {
+function Search({ opacity }: { opacity?: number }) {
   const [userData, setUserData] = useState<ISearchAllOption[]>([])
   const [searchText, setSearchText] = useState<string>('')
   const [idx, setIdx] = useState(0)
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const isSm = useBreakpoint('sm')
+  const [hint, setHint] = useState('Search By Auction Name, ID, User Name, User ID')
 
   useEffect(() => {
     if (searchText.trim().length < 2) return
@@ -72,6 +73,7 @@ const Search: React.FC = () => {
     <Box
       sx={{
         width: '100%',
+        maxWidth: 800,
         height: 44,
         mixBlendMode: whiteLogoRoutes.includes(pathname) ? 'difference' : 'unset',
         position: 'relative',
@@ -103,11 +105,15 @@ const Search: React.FC = () => {
       <HeaderSearchInput
         options={userData}
         filterOptions={(list: any) => list}
-        placeholder={'Search by Auction Name, Token Address, User Name, User ID'}
+        placeholder={hint}
         startIcon
         loadingText={'No result'}
         value={searchText}
+        opacity={opacity}
         idx={idx}
+        onFocus={focus => {
+          setHint(focus ? '' : 'Search By Auction Name, ID, User Name, User ID')
+        }}
         onChange={(_, newValue) => {
           setSearchText(newValue)
         }}

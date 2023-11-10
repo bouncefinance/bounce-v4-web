@@ -13,22 +13,29 @@ import { formatNumber } from 'utils/number'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import { useActiveWeb3React } from 'hooks'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 export default function AuctionCardFull({
   auctionPoolItem,
-  style
+  style,
+  isDark
 }: {
   auctionPoolItem: FixedSwapPool & { curPlayer?: string; maxPlayere?: string }
   style?: React.CSSProperties | undefined
+  isDark?: boolean
 }) {
   const optionDatas = useOptionDatas()
   const { account } = useActiveWeb3React()
   const navigate = useNavigate()
+  const [hover, isHover] = useState(false)
   console.log(auctionPoolItem.creatorUserInfo)
+  console.log('isHover-AuctionCardFull', hover)
 
   return (
     <Box
       component={'a'}
+      onMouseEnter={() => isHover(true)}
+      onMouseLeave={() => isHover(false)}
       onClick={e => {
         navigate(
           getAuctionPoolLink(
@@ -104,7 +111,7 @@ export default function AuctionCardFull({
                     backedChainId={auctionPoolItem.chainId}
                   />
                   <span>{shortenAddress(auctionPoolItem.token0.address)}</span>
-                  <CopyToClipboard text={auctionPoolItem.token0.address} />
+                  <CopyToClipboard text={auctionPoolItem.token0.address} isDark={isDark} isHover={hover} />
                 </Stack>
               }
             />
@@ -152,6 +159,7 @@ export default function AuctionCardFull({
         categoryName={PoolType[auctionPoolItem.category]}
         whiteList={auctionPoolItem.enableWhiteList ? 'Whitelist' : 'Public'}
         chainId={auctionPoolItem.chainId}
+        isDark={isDark}
       />
     </Box>
   )
