@@ -8,6 +8,7 @@ import PopperCard from 'components/PopperCard'
 
 const StyledTab = styled(Button)(({ theme }) => ({
   padding: '8px 12px',
+  minWidth: 0,
   color: '#9C9C9C',
   borderRadius: '8px',
   fontWeight: '500',
@@ -164,7 +165,11 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
                 <Box sx={{ width: 'max-content !important', display: 'inline-flex' }}>
                   <PopperCard
                     placement="bottom-start"
+                    sx={{
+                      borderRadius: 20
+                    }}
                     popperSx={{
+                      width: isSm ? 196 : 'inherit',
                       top: isSm ? 0 : '6px !important',
                       borderRadius: 20,
                       border: '1px solid #E4E4E4'
@@ -185,6 +190,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
                         <StyledTab
                           sx={{
                             color: '#121212 !important',
+                            borderRadius: isSm ? '20px' : 'unset',
                             border: isSm ? '1px solid #E1F25C' : 'none',
                             '&:hover': {
                               background: '#E1F25C !important'

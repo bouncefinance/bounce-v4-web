@@ -354,7 +354,7 @@ export const ComponentOptions = {
                 height: 48
               },
               '& .MuiMenuItem-root:hover': {
-                color: 'var(--ps-yellow-1)',
+                color: '#A4D220',
                 background: 'transparent'
               }
             }

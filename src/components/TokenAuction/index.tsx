@@ -437,7 +437,7 @@ const TokenAuction: React.FC = () => {
         maxWidth: '100%',
         background: '#111111',
         height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1288 : 682,
-        margin: isSm ? '80px auto 0' : '120px auto 0'
+        margin: '0 auto'
       }}
     >
       <Box
@@ -793,8 +793,9 @@ const TokenAuction: React.FC = () => {
             </Box>
             <Box
               sx={{
-                width: '100%',
+                width: isSm ? 'calc(100% - 32px)' : '100%',
                 display: 'flex',
+                marginLeft: isSm ? '-16px' : 'unset',
                 flexFlow: 'row nowrap',
                 justifyContent: 'center',
                 '@media(max-width:1440px)': {
@@ -806,7 +807,7 @@ const TokenAuction: React.FC = () => {
                 onClick={() => navigate(AuctionList[currentIndex].checkAllLink)}
                 variant="contained"
                 sx={{
-                  width: '100%',
+                  width: isSm ? 'calc(100% - 32px)' : '100%',
                   borderRadius: '100px',
                   padding: '16px 20px',
                   fontWeight: 500,
