@@ -103,6 +103,7 @@ import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
 import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
 import MyToken from './tokenToolBox/page/tokenMinter/myToken'
 import MyLock from './tokenToolBox/page/tokenlocker/myLock'
+import useBreakpoint from '../hooks/useBreakpoint'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -125,6 +126,7 @@ const UnSupportedMobileRouter = () => {
 
 export default function App() {
   const { pathname } = useLocation()
+  const isSm = useBreakpoint('sm')
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
@@ -141,7 +143,7 @@ export default function App() {
               <ToastContainer />
               {/* <Questions /> */}
               <UnSupportedMobileRouter />
-              <BodyWrapper id="body">
+              <BodyWrapper id="body" mt={isSm ? -51 : 'inherit'}>
                 <Popups />
                 <Polling />
                 {/* <PerformKYCVerification /> */}
