@@ -852,7 +852,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Name', content: '$MUBI' },
       { title: 'Token Price', content: '0.00033 USDT' },
       { title: 'Token Amount', content: '328878879' },
-      { title: 'Blockchain', content: 'Etherevm' }
+      { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
   {
