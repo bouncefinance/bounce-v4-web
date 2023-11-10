@@ -468,7 +468,7 @@ export const AuctionRankCard: React.FC = () => {
           )}
           {!isSm && AuctionTabs}
           {isSm && (
-            <Box width={'100%'} sx={{ background: 'white', padding: '12px 12px 0', overflowY: 'hidden' }}>
+            <Box width={'100%'} sx={{ background: 'white', padding: '0 16px', overflowY: 'hidden' }}>
               {ChainSelect}
             </Box>
           )}
