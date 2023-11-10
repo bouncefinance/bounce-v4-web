@@ -130,6 +130,7 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
       borderLeft: '1px solid',
       borderColor: variant === 'outlined' ? '#00000010' : 'transparent',
       paddingLeft: 20,
+      width: 10,
       [theme.breakpoints.down('sm')]: {
         paddingLeft: 0
       },
@@ -141,6 +142,8 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
       borderColor: variant === 'outlined' ? '#00000010' : 'transparent',
       paddingRight: '20px',
       borderTopRightRadius: 16,
+      textAlign: 'right',
+      width: '100px',
       borderBottomRightRadius: 16
     }
   },
