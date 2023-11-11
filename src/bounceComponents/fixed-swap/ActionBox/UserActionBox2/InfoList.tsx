@@ -29,7 +29,7 @@ const InfoList = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; getP
             <Typography>1</Typography>
             <TokenImage alt={poolInfo.token0.symbol} src={poolInfo.token0.largeUrl} size={20} />
             <Typography>
-              {poolInfo.token0.symbol} = {formatNumber(poolInfo.ratio, { unit: 0 })}
+              {poolInfo.token0.symbol} = {formatNumber(poolInfo.ratio, { unit: 0, decimalPlaces: 18 })}
             </Typography>
             <TokenImage alt={poolInfo.token1.symbol} src={poolInfo.token1.largeUrl} size={20} />
             <Typography>{poolInfo.token1.symbol}</Typography>
