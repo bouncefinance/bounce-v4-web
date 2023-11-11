@@ -712,8 +712,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: '$MUBI',
     whitePaperLink: '',
-    upcomingLink: '/launchpad/multi-bit',
-    liveLink: '/launchpad/multi-bit',
+    upcomingLink: '/launchpad/multibit',
+    liveLink: '/launchpad/multibit',
     projectInfo: [
       {
         title: 'What is MultiBit Bridge?',
