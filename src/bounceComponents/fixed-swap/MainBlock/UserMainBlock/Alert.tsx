@@ -4,15 +4,17 @@ import AuctionClosedAlert from '../../Alerts/AuctionClosedAlert'
 import NotEligibleAlert from '../../Alerts/NotEligibleAlert'
 import { FixedSwapPoolProp, PoolStatus } from 'api/pool/type'
 import useIsUserJoinedPool from 'bounceHooks/auction/useIsUserJoinedPool'
+import { useIgnoreWhitelistPool } from 'hooks/useIgnoreWhitelistPool'
 
 const Alert = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const isUserJoinedPool = useIsUserJoinedPool(poolInfo)
+  const isIgnoreWhitelistPool = useIgnoreWhitelistPool(poolInfo.enableWhiteList, poolInfo.contract, poolInfo.poolId)
 
   if (poolInfo.whitelistData?.loading) {
     return null
   }
 
-  if (!poolInfo.whitelistData?.isUserInWhitelist) {
+  if (!poolInfo.whitelistData?.isUserInWhitelist && !isIgnoreWhitelistPool) {
     return <NotEligibleAlert />
   }
 
