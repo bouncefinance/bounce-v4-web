@@ -785,7 +785,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         title: 'Distribution',
         info: [
           <Box key={3}>
-            <Typography sx={{ textIndent: 20 }}>300,000 USDC = Initial FDV (all available at launch)</Typography>
+            <Typography sx={{ textIndent: 20 }}>400,000 USDC = Initial FDV (all available at launch)</Typography>
             <ul key={2}>
               <li>90% no vesting for public sale</li>
               <li>5% DEX liquidity and locked forever.</li>
