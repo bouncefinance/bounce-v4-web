@@ -62,10 +62,10 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     swapRatio: Yup.number()
       .positive('Swap ratio must be positive')
       .typeError('Please input valid number')
-      .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-        const _value = new BigNumber(value || 0).toFixed()
-        return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-      })
+      // .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+      //   const _value = new BigNumber(value || 0).toFixed()
+      //   return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+      // })
       .required('Swap ratio is required'),
     poolSize: Yup.number()
       .positive('Amount must be positive')
