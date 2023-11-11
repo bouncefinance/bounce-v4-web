@@ -138,6 +138,7 @@ export const transparentRoutes = [
   routes.thirdPart.CreateProtocolAuction,
   routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange,
+  routes.thirdPart.MultiBitBridge,
   routes.launchpad.account.launchpadParty,
   routes.launchpad.account.launchpadDetail,
   routes.foundo.foundoDetail + '/*'
