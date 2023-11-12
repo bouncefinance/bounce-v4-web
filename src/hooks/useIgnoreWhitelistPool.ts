@@ -8,6 +8,10 @@ const list = [
   {
     poolId: '191',
     address: '0x73282A63F0e3D7e9604575420F777361ecA3C86A'
+  },
+  {
+    poolId: '41',
+    address: '0x9e2C12D9240BF267fbeBD510d47Ac3AbD4D9d9ee'
   }
 ]
 
