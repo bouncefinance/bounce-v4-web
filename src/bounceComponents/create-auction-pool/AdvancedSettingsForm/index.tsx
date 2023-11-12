@@ -26,8 +26,8 @@ import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { isAddress } from 'utils'
 // import { ChainId } from 'constants/chain'
-import { useMemo } from 'react'
-import { useQueryParams } from 'hooks/useQueryParams'
+// import { useMemo } from 'react'
+// import { useQueryParams } from 'hooks/useQueryParams'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 interface MyFormValues {
@@ -51,8 +51,8 @@ export const AdvancedSettingsForm = ({
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
   // const auctionInChain = useAuctionInChain()
-  const { launchPad } = useQueryParams()
-  const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
+  // const { launchPad } = useQueryParams()
+  // const isLaunchPad = useMemo(() => true, [])
   const isSm = useBreakpoint('sm')
   const initialValues: MyFormValues = {
     poolName: valuesState.poolName,
@@ -233,7 +233,7 @@ export const AdvancedSettingsForm = ({
                         </Tooltip>
                       </Stack>
 
-                      {isLaunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                      <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>

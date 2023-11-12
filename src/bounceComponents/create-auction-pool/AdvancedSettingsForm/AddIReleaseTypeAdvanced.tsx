@@ -72,6 +72,7 @@ export const AddIReleaseTypeAdvanced = ({
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
   const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
+  console.log('🚀 ~ file: AddIReleaseTypeAdvanced.tsx:75 ~ isLaunchPad:', isLaunchPad)
   const resetEndTime = useCallback((startTime: Moment | null, endTime: Moment | null, stage: string | undefined) => {
     if (!startTime || !endTime || !stage) return moment(null)
     const duration = endTime.valueOf() - startTime.valueOf()
@@ -498,7 +499,7 @@ export const AddIReleaseTypeAdvanced = ({
                         </Tooltip>
                       </Stack>
 
-                      {isLaunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                      <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
