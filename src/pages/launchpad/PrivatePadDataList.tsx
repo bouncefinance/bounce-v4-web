@@ -786,10 +786,11 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         title: 'Distribution',
         info: [
           <Box key={3}>
-            <Typography sx={{ textIndent: 20 }}>400,000 USDC = Initial FDV (all available at launch)</Typography>
+            <Typography sx={{ textIndent: 20 }}>$400,000 USDC = Initial FDV (all available at launch)</Typography>
             <ul key={2}>
-              <li>90% no vesting for public sale</li>
-              <li>5% DEX liquidity and locked forever.</li>
+              <li>KOL Whitelist Sale (Same Price as Public Sale): 11.25%</li>
+              <li>Public Sale: 78.75%</li>
+              <li>5% DEX liquidity locked forever</li>
               <li>5% team 6 months lock then linear vesting for 2 years</li>
             </ul>
           </Box>
@@ -801,24 +802,24 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           <Box key={3}>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <li>
-                November 2023: Token Generation Event (TGE): Mutibit launches its native token through a TGE event,
+                November 2023: Token Generation Event (TGE): Multibit launches its native token through a TGE event,
                 providing users with opportunities for participation and token acquisition.
               </li>
               <li>
-                Q4 2023: Expanded Token Support: Mutibit adds support for a wide range of BRC20 and ERC20 tokens,
+                Q4 2023: Expanded Token Support: Multibit adds support for a wide range of BRC20 and ERC20 tokens,
                 expanding its offering to allow users to bridge and interact with an increasing number of tokens.
               </li>
               <li>
-                Q1 2024: Enhanced User Interface and Experience: Mutibit focuses on improving its interface, making it
+                Q1 2024: Enhanced User Interface and Experience: Multibit focuses on improving its interface, making it
                 more intuitive and user-friendly to enhance the overall experience for users.
               </li>
               <li>
-                Q1 2024: Integration with Additional DeFi Protocols: Mutibit integrates with more DeFi protocols,
+                Q1 2024: Integration with Additional DeFi Protocols: Multibit integrates with more DeFi protocols,
                 enabling users to leverage their bridged tokens for activities such as lending, borrowing, yield
                 farming, and decentralized exchanges.
               </li>
               <li>
-                Q1-Q2 2024: Partnerships and Collaborations: Mutibit forms partnerships and collaborations with other
+                Q1-Q2 2024: Partnerships and Collaborations: Multibit forms partnerships and collaborations with other
                 blockchain projects, exchanges, and DeFi platforms to expand its reach, increase liquidity options, and
                 foster interoperability.
               </li>
