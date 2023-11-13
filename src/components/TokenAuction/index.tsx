@@ -176,7 +176,7 @@ const PaginationBox = (props: PaginationParams) => {
     <Box
       sx={{
         padding: isSm ? 16 : 'inherit',
-        width: isSm ? '100%' : 128,
+        width: isSm ? '100%' : 104,
         height: 60,
         display: 'flex',
         flexFlow: 'row nowrap',
@@ -497,7 +497,7 @@ const TokenAuction: React.FC = () => {
               sx={{
                 position: 'absolute',
                 right: 0,
-                bottom: 172,
+                bottom: 110,
                 textAlign: 'right',
                 fontFamily: `'Inter'`,
                 fontWeight: 400,

@@ -190,7 +190,7 @@ export const NFTCard = (props: NFTPrams) => {
     <Box
       sx={{
         width: '100%',
-        background: props.isDark ? '#ffffff05' : '#fff',
+        background: props.isDark ? '#ffffff05' : '#20201E',
         // border: `1px solid rgba(0, 0, 0, 0.1)`,
         boxShadow: `0px 5px 20px rgba(0, 0, 0, 0.08)`,
         borderRadius: '24px'
