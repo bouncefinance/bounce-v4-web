@@ -11,7 +11,7 @@ const needEmailValidPoolId = [20519, 20562, 20698, 20764, 20916, 20917, 20918, 2
  * sysId 20916 & /zetachainathens3/2
  * sysId 20917 & /zetachainathens3/3
  * sysId 20918 & /zetachainathens3/4
- * sysId 20930 & /zetachainathens3/5
+ * sysId 20930 & /zetachainathens3/5 the new
  */
 export const useRequireWhitelistAndEmail = (): boolean => {
   const { poolId, chainShortName, sysId } = useQueryParams()
