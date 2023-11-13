@@ -223,7 +223,11 @@ export default function Header() {
         padding: '0px 12px',
         width: '78px',
         height: '40px',
-        background: '#E1F25C',
+        background: !isTransparentRoute || headerBgOpacity >= 0.65 ? 'white' : '#FFFFFF26',
+        color: !isTransparentRoute || headerBgOpacity >= 0.65 ? '#121212' : '#ffffff',
+        '& path': {
+          fill: 'currentcolor'
+        },
         borderRadius: '60px'
       }}
     >
