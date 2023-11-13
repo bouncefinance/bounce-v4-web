@@ -132,13 +132,14 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
       <Box
         sx={{
           width: 'max-content',
+          height: 48,
           // maxWidth: '100%',
           marginTop: '32px',
           display: 'flex',
           flexFlow: 'row nowrap',
           justifyContent: 'flex-start',
           alignItems: 'center',
-          padding: '6px',
+          padding: '4px',
           backdropFilter: 'blur(4px)',
           background: 'rgba(255, 255, 255, 0.15)',
           borderRadius: '100px',

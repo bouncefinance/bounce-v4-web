@@ -3,7 +3,7 @@ import { CenterRow, Row } from '../../../components/Layout'
 import { Box, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/default-nft-cover.png'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
-import { Body01, GrayBody02, H6 } from '../../../components/Text'
+import { Body01, H6, SmallTextGray } from '../../../components/Text'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
 import { useRequest } from 'ahooks'
 import { getPoolsFilter } from '../../../api/market'
@@ -85,7 +85,7 @@ const Tab = styled(Box)`
   }
 
   @media (max-width: 600px) {
-    padding: 12px 16px;
+    padding: 8px 16px;
     width: -webkit-fill-available;
   }
 `
@@ -101,6 +101,12 @@ const TabText = styled(H6)`
     //background: var(--ps-yellow-1);
     //border-radius: 10px 10px 0 0;
     color: #121212;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+    line-height: 21px;
+    padding: 0;
   }
 `
 const Status: React.FC<{ status: StatusE }> = ({ status }) => {
@@ -136,7 +142,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         >
           {/* index */}
           <Body01
-            mr={16}
+            mr={8}
             sx={{
               width: 16,
               color: '#121212'
@@ -161,16 +167,13 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 overflow: 'hidden',
                 textAlign: 'left',
                 textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                '&:hover': {
-                  color: '#A4D220'
-                }
+                whiteSpace: 'nowrap'
               }}
             >
               {props.name}
             </Body01>
             <CenterRow>
-              <GrayBody02
+              <SmallTextGray
                 sx={{
                   cursor: 'pointer',
                   maxWidth: 88,
@@ -183,16 +186,10 @@ export function AuctionRow(props: any): ReactJSXElement[] {
                 key={1}
               >
                 {props.tokenType === BackedTokenType.TOKEN ? 'Token · ' : 'NFT · '}
-              </GrayBody02>
-              <GrayBody02
-                sx={{
-                  cursor: 'pointer'
-                }}
-                onClick={() => props.navigate(url)}
-                key={2}
-              >
+              </SmallTextGray>
+              <SmallTextGray onClick={() => props.navigate(url)} key={2}>
                 {` ${getTextFromPoolType(props.category)}`}
-              </GrayBody02>
+              </SmallTextGray>
             </CenterRow>
           </Box>
         </CenterRow>,
@@ -365,7 +362,8 @@ export const AuctionRankCard: React.FC = () => {
         '& .MuiPaper-root': {
           border: 0
         },
-        fontSize: isSm ? '12px' : 'inherit',
+        fontSize: isSm ? '14px' : 'inherit',
+        padding: isSm ? '0 10px' : 'inherit',
         '&:hover': {
           borderRadius: '100px',
           border: '1px solid var(--ps-yellow-1)',
@@ -479,6 +477,7 @@ export const AuctionRankCard: React.FC = () => {
               marginTop: '12px',
               display: 'flex',
               overflowX: 'scroll',
+              justifyContent: 'center',
               borderRadius: isSm ? 0 : '0px 30px 30px 30px',
               '&::-webkit-scrollbar': {
                 display: 'none'

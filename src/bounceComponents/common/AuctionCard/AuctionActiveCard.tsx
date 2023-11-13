@@ -41,6 +41,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
       sx={{
         width: isSm ? '220px' : '240px',
+        height: isSm ? '286px' : '300px',
         display: 'flex',
         cursor: 'pointer',
         background: '#FFFFFF',
