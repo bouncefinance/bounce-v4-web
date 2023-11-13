@@ -35,7 +35,7 @@ const ChartDialog = ({
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: 28,
             fontWeight: 600,
             color: '#121212'

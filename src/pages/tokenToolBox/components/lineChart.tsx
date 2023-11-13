@@ -188,7 +188,7 @@ const LineChartSection = ({ lockInfo, lockToken }: { lockInfo: LockInfo; lockTok
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: 14,
             color: '#121212'

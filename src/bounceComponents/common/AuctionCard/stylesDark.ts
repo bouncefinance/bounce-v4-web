@@ -34,7 +34,7 @@ export default {
         width: '100%',
         color: '#E1F25C',
         '> span': {
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 500,
           fontSize: 16,
           overflow: 'hidden',

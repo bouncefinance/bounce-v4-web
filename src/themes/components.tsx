@@ -142,7 +142,7 @@ export const ComponentOptions = {
               transition: '0.3s'
             },
             '& .PSans': {
-              fontFamily: 'Public Sans'
+              fontFamily: 'Inter'
             }
           },
           body: {
@@ -206,6 +206,7 @@ export const ComponentOptions = {
         root: {
           textTransform: 'none',
           fontSize: 14,
+          fontFamily: `'Inter'`,
           lineHeight: '20px',
           transition:
             'background-color 400ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
@@ -440,6 +441,13 @@ export const ComponentOptions = {
             width: 32,
             margin: '0 12px'
           }
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontFamily: `'Inter'`
         }
       }
     }

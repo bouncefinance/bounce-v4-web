@@ -103,7 +103,7 @@ const ActionHistory = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp
               fontSize: isSm ? 20 : 28,
               fontWeight: 600,
               color: '#fff',
-              fontFamily: 'Public Sans'
+              fontFamily: 'Inter'
             }}
           >
             {poolInfo.status === PoolStatus.Upcoming

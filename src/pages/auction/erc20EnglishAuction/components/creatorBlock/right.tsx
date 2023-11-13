@@ -80,7 +80,7 @@ const Right = () => {
         >
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: isMd ? 16 : 20,
               color: '#000'
@@ -115,7 +115,7 @@ const Right = () => {
                       flexFlow: 'row nowrap',
                       justifyContent: 'flex-start',
                       alignItems: 'center',
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Inter'`,
                       fontWeight: 'bold',
                       fontSize: '16px'
                     }}
@@ -146,7 +146,7 @@ const Right = () => {
                       flexFlow: 'row nowrap',
                       justifyContent: 'flex-start',
                       alignItems: 'center',
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Inter'`,
                       fontWeight: 'bold',
                       fontSize: '16px'
                     }}
@@ -194,7 +194,7 @@ const Right = () => {
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontWeight: 'bold',
                     fontSize: '16px'
                   }}
@@ -231,7 +231,7 @@ const Right = () => {
                     flexFlow: 'row nowrap',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontWeight: 'bold',
                     fontSize: '16px'
                   }}
@@ -269,7 +269,7 @@ const Right = () => {
                       flexFlow: 'row nowrap',
                       justifyContent: 'flex-start',
                       alignItems: 'center',
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Inter'`,
                       fontWeight: 'bold',
                       fontSize: '16px'
                     }}
@@ -345,7 +345,7 @@ const Right = () => {
         >
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               color: '#fff',
               fontSize: '14px',
               fontWeight: 600

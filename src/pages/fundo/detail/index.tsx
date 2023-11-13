@@ -26,7 +26,7 @@ const BackBtn = () => {
         alignSelf: 'flex-start',
         alignItems: 'center',
         color: '#fff',
-        fontFamily: `'Public Sans'`,
+        fontFamily: `'Inter'`,
         fontWeight: 500,
         fontSize: '16px',
         cursor: 'pointer',

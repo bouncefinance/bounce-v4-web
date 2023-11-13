@@ -27,7 +27,7 @@ export default function MyAccount() {
           <Typography
             variant="h3"
             fontSize={isSm ? 22 : 36}
-            sx={{ paddingLeft: isSm ? '18px' : 0, fontFamily: 'Public Sans', fontWeight: 600 }}
+            sx={{ paddingLeft: isSm ? '18px' : 0, fontFamily: 'Inter', fontWeight: 600 }}
           >
             My Account
           </Typography>

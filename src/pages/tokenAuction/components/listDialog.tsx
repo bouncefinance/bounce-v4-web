@@ -89,7 +89,7 @@ const DialogTitle = (props: TitleProps) => {
         sx={{
           textAlign: 'center',
           lineHeight: '28px',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontSize: isSm ? 20 : 28,
           fontWeight: 600
         }}

@@ -371,7 +371,7 @@ const LineChartSection = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp 
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: 14,
             color: '#fff'

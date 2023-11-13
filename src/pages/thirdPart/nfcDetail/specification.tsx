@@ -63,7 +63,7 @@ const NfcDetail = ({ setPageStep }: { setPageStep?: (arg: PageStep) => void }) =
         <Box>
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: 24,
               fontWeight: 600,
               lineHeight: '33px',
@@ -97,7 +97,7 @@ const NfcDetail = ({ setPageStep }: { setPageStep?: (arg: PageStep) => void }) =
         <Box>
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: 24,
               fontWeight: 600,
               lineHeight: '33px',

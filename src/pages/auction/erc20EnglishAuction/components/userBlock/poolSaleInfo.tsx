@@ -30,7 +30,7 @@ export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolPr
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: 20,
             color: '#000'
@@ -58,7 +58,7 @@ export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolPr
                   flexFlow: 'row nowrap',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontWeight: 'bold',
                   fontSize: '16px'
                 }}
@@ -89,7 +89,7 @@ export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolPr
                   flexFlow: 'row nowrap',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontWeight: 'bold',
                   fontSize: '16px'
                 }}
@@ -136,7 +136,7 @@ export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolPr
                   flexFlow: 'row nowrap',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontWeight: 'bold',
                   fontSize: '16px'
                 }}
@@ -173,7 +173,7 @@ export function PoolSaleInfo({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolPr
                   flexFlow: 'row nowrap',
                   justifyContent: 'flex-start',
                   alignItems: 'center',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontWeight: 'bold',
                   fontSize: '16px'
                 }}

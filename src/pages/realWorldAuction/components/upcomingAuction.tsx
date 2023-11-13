@@ -24,7 +24,7 @@ const UpcomingAuction = () => {
     >
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: isSm ? '22px' : '36px',
           width: '100%',

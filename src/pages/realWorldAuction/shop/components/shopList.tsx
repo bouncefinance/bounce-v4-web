@@ -182,7 +182,7 @@ const ShopList = () => {
           textStyle={{
             width: '100%',
             textAlign: 'center',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             mixBlendMode: isMd ? 'unset' : 'difference',
             position: 'absolute',
             fontSize: isMd ? 22 : 36,
@@ -344,7 +344,7 @@ const ShopList = () => {
           textStyle={{
             width: '100%',
             textAlign: 'center',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             position: 'absolute',
             fontSize: isMd ? 22 : 36,
             color: isMd ? '#fff' : '#121212',
@@ -486,7 +486,7 @@ const ShopList = () => {
           textStyle={{
             width: '100%',
             textAlign: 'center',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             position: 'absolute',
             fontSize: isMd ? 22 : 36,
             color: isMd ? '#fff' : '#121212',

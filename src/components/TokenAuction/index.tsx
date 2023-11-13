@@ -43,7 +43,7 @@ const InfoBox = (props: InfoBoxParams) => {
       <Typography
         sx={{
           textAlign: 'left',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: 14,
           width: '100%',
@@ -59,7 +59,7 @@ const InfoBox = (props: InfoBoxParams) => {
       <Typography
         sx={{
           textAlign: 'left',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: 14,
           lineHeight: '21px',
@@ -464,7 +464,7 @@ const TokenAuction: React.FC = () => {
           <Typography
             sx={{
               textAlign: 'left',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 700,
               fontSize: isSm ? 24 : 44,
               width: '100%',
@@ -481,7 +481,7 @@ const TokenAuction: React.FC = () => {
               textAlign: 'left',
               width: '100%',
               maxWidth: 420,
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 400,
               fontSize: isSm ? 14 : 16,
               lineHeight: '21px',

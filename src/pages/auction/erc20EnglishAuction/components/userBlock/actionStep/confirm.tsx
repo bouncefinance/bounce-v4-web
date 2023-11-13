@@ -132,7 +132,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: 20,
             color: '#000'
@@ -150,7 +150,7 @@ const Confirm = ({ onConfirm, poolInfo, amount }: CheckProps) => {
         <Typography
           variant="h5"
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: '14px',
             fontWeight: 600,
             color: '#D7D6D9',

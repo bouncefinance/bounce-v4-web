@@ -167,7 +167,7 @@ const Tab = styled(Stack)({
   }
 })
 const TabTitle1 = styled(Typography)({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontSize: '16px',
   fontStyle: 'normal',
   fontWeight: 500,

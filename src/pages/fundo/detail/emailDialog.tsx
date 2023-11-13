@@ -164,7 +164,7 @@ export default function EmailDialog({ handleClose }: { handleClose?: () => void 
             <Typography
               sx={{
                 width: isSm ? '100%' : '50%',
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontWeight: 600,
                 fontSize: isSm ? '16px' : '20px',
                 letterSpacing: '-0.02em',

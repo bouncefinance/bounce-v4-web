@@ -84,7 +84,7 @@ const StageLine = ({
           >
             <Typography
               sx={{
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontSize: 12,
                 fontWeight: 400,
                 color: item.active ? '#fff' : '#959595'
@@ -94,7 +94,7 @@ const StageLine = ({
             </Typography>
             <Typography
               sx={{
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontSize: 12,
                 fontWeight: 400,
                 color: '#959595'
@@ -105,7 +105,7 @@ const StageLine = ({
             </Typography>
             <Typography
               sx={{
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontSize: 14,
                 fontWeight: 600,
                 color: item.active ? '#fff' : '#959595'

@@ -70,7 +70,7 @@ export default function MyTokenOrNFT({ backedTokenType }: { backedTokenType: Bac
                           ...styles.menu,
                           ...(curTab === item ? styles.menuActive : ({} as any)),
                           padding: isSm ? '12px 16px 36px' : '16px 32px 40px',
-                          fontFamily: 'Public Sans'
+                          fontFamily: 'Inter'
                         }}
                       >
                         {item}

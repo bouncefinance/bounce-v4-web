@@ -249,7 +249,7 @@ const HomeBtn = () => {
   )
 }
 const SansTitle = styled(Typography)({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontSize: '14px',
   fontStyle: 'normal',
   fontWeight: 600,

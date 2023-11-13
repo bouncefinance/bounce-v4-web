@@ -110,7 +110,7 @@ export default function MyDisperse() {
                           sx={{
                             height: '37px',
                             lineHeight: '37px',
-                            fontFamily: `'Public Sans'`,
+                            fontFamily: `'Inter'`,
                             fontSize: 14,
                             fontWeight: 600,
                             letterSpacing: '-0.28px',

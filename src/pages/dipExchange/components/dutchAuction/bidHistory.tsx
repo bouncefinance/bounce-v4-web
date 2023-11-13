@@ -36,7 +36,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
     >
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           color: '#fff',
           fontSize: '14px',
           fontWeight: 600

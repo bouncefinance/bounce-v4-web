@@ -15,7 +15,7 @@ const TabsItem = styled(Box)(({ theme }) => ({
   borderRadius: '20px 20px 0 0 ',
   background: 'transparent',
   color: 'var(--ps-text-2)',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontSize: '20px',
   fontWeight: 600,
   cursor: 'pointer',

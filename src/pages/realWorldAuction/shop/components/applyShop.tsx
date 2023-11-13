@@ -99,7 +99,7 @@ const ApplyShop = () => {
               marginRight: '10px',
               color: '#121212',
               fontSize: isMd ? '14px' : '16px',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500
             }}
           >

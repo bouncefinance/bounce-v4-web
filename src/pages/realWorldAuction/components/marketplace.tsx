@@ -18,7 +18,7 @@ export const ComBtn = styled(Box)(() => ({
   color: '#121212',
   cursor: 'pointer',
   borderRadius: '6px',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontSize: '14px',
   fontWeight: 600
 }))
@@ -93,7 +93,7 @@ const Marketplace = ({
     >
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           width: '700px',
           fontWeight: 600,
           fontSize: '36px',
@@ -137,7 +137,7 @@ const Marketplace = ({
             >
               <Typography
                 sx={{
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontSize: '28px',
                   color: '#B5E529'
                 }}

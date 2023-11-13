@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(() => ({
     backgroundColor: '#000'
   },
   td: {
-    fontFamily: `'Public Sans'`,
+    fontFamily: `'Inter'`,
     color: '#fff',
     fontSize: '14px',
     borderBottom: `1px solid rgba(255, 255, 255, 0.2)`,
@@ -66,7 +66,7 @@ const WinnerList = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp })
       <Typography
         variant="h2"
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: 20,
           width: '100%',

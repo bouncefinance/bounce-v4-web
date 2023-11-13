@@ -240,7 +240,7 @@ const BidDialog = ({ handleClose, submitCallback }: { handleClose: () => void; s
         >
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 700,
               fontSize: 18,
               color: '#fff',

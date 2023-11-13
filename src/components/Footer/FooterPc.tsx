@@ -167,7 +167,7 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
     >
       <H6
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           marginBottom: 24,
           color: isDark ? FooterDarkStyle.linkTextColor : 'white'
         }}

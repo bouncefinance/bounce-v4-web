@@ -91,7 +91,7 @@ const TimeStageLine = ({ stageData }: { stageData: StageParams[] }) => {
               >
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontSize: 12,
                     fontWeight: 400,
                     color: item.released ? '#D7D6D9' : '#959595'
@@ -101,7 +101,7 @@ const TimeStageLine = ({ stageData }: { stageData: StageParams[] }) => {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontSize: 12,
                     fontWeight: 400,
                     color: item.released ? '#D7D6D9' : '#959595'
@@ -112,7 +112,7 @@ const TimeStageLine = ({ stageData }: { stageData: StageParams[] }) => {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontSize: 14,
                     fontWeight: 600,
                     color: item.released ? '#D7D6D9' : '#959595'
