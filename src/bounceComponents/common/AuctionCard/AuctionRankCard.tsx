@@ -249,9 +249,10 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         </CenterRow>,
         <Body01
           sx={{
-            cursor: 'pointer'
+            cursor: 'pointer',
+            width: 130
           }}
-          maxWidth={164}
+          maxWidth={300}
           onClick={() => props.navigate(url)}
           key={1}
         >
