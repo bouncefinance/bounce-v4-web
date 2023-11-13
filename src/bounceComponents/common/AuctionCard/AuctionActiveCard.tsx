@@ -35,6 +35,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
   const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
   const theme = useTheme()
+  console.log('ifkey', props.ifKyc)
   return (
     <Box
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
@@ -43,7 +44,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         display: 'flex',
         cursor: 'pointer',
         background: '#FFFFFF',
-        borderRadius: '20px',
+        borderRadius: '12px',
         flexDirection: 'column',
         [theme.breakpoints.down('md')]: {
           flexDirection: 'column',
@@ -61,15 +62,15 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         style={{
           width: isSm ? '220px' : '240px',
           height: isSm ? '220px' : '180px',
-          borderRadius: '20px 20px 0 0',
+          borderRadius: '12px 12px 0 0',
           marginLeft: isSm ? '-2px' : 0
         }}
         src={props.img ? props.img : EmptyImg}
       />
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} padding={'16px'}>
         <Box sx={{ wordBreak: 'break-all' }}>
-          <Stack flexDirection={'row'} alignItems={'center'} gap={8}>
-            {props.ifKyc && <VerifiedIcon ifKyc={props.ifKyc} />}
+          <Stack flexDirection={'row'} alignItems={'center'}>
+            {props.ifKyc === VerifyStatus.Verified && <VerifiedIcon sx={{ mr: 8 }} ifKyc={props.ifKyc} />}
             <H5
               sx={{
                 width: 'calc(100% - 24px - 8px)',
