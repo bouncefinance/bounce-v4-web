@@ -495,6 +495,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
             </Box>
           </Box>
           {/* police area */}
+          <Box sx={{ borderBottom: '1px solid #FFFFFF1A', width: '100%', mb: '40px' }} />
           <Box
             sx={{
               display: 'flex',
