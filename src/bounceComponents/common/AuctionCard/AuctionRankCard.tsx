@@ -207,6 +207,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           }}
         >
           <Body01
+            className={'hover-highlight'}
             mr={14}
             sx={{
               width: 16,
@@ -233,15 +234,12 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             }
           />
           <Body01
-            className={isSm ? 'mobile' : ''}
+            className={isSm ? 'mobile' : 'hover-highlight'}
             sx={{
               maxWidth: 160,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              '&:hover': {
-                color: '#A4D220'
-              }
+              whiteSpace: 'nowrap'
             }}
           >
             {props.name}

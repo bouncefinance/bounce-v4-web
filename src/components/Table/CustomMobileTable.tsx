@@ -106,12 +106,15 @@ const StyledTableRow = styled(TableRow, { shouldForwardProp: () => true })<{
   overflow: 'hidden',
   position: 'relative',
   whiteSpace: 'pre',
-  background: '#F6F6F3',
+  background: '#FAFAFA',
   '&:hover': {
     color: '#A4D220',
-    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#F6F6F3',
+    backgroundColor: variant === 'outlined' ? '#E2E7F020' : '#FAFAFA',
     '& + tr .MuiCollapse-root': {
       backgroundColor: variant === 'outlined' ? '#E2E7F020' : 'white'
+    },
+    '& .hover-highlight': {
+      color: '#A4D220'
     }
   },
   // background: variant === 'outlined' ? 'transparent' : 'white',
