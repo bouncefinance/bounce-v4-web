@@ -178,7 +178,7 @@ export const ActiveUser: React.FC = () => {
 
   const slideCardWidth = isSm ? 220 : 260
   const [slidesPerView, setSlidesPerView] = useState<number>(
-    (isSm ? window.innerWidth : width || 1440) / slideCardWidth
+    (isSm ? window.innerWidth : width || 1296) / slideCardWidth
   )
   useEffect(() => {
     const resetView = () => {
@@ -254,7 +254,7 @@ export const ActiveUser: React.FC = () => {
     >
       <Container
         sx={{
-          maxWidth: '1440px !important'
+          maxWidth: '1296px !important'
         }}
       >
         <BoxSpaceBetween mb={isSm ? 20 : 80}>
@@ -265,7 +265,7 @@ export const ActiveUser: React.FC = () => {
             display={isSm ? 'none' : 'flex'}
             alignItems={'center'}
             sx={{
-              maxWidth: 1440,
+              maxWidth: 1296,
               margin: isSm ? '8px auto 0' : '0'
             }}
           >

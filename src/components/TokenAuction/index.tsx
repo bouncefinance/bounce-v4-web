@@ -692,17 +692,11 @@ const TokenAuction: React.FC = () => {
               width: 1440,
               minHeight: 496,
               top: 622,
-              left: 0,
               borderRadius: 30,
               margin: '0 auto',
-              padding: isSm ? '24px 16px' : 24,
-              '@media(min-width:1440px)': {
-                transform: 'translateX(-50%)',
-                left: '50%'
-              },
-              '@media(max-width:1440px)': {
-                width: '100%'
-              }
+              padding: isSm ? '24px 16px' : 0,
+              transform: 'translateX(-50%)',
+              left: '50%'
             }}
           >
             <Box
@@ -764,9 +758,10 @@ const TokenAuction: React.FC = () => {
                     <TokenAuctionSkeleton />
                   ) : (
                     <Stack
-                      spacing={isSm ? 8 : 18}
+                      spacing={isSm ? 8 : 24}
                       direction={'row'}
                       sx={{
+                        maxWidth: isSm ? '100%' : 1296,
                         overflowX: 'scroll',
                         '&::-webkit-scrollbar': {
                           display: 'none'
@@ -778,8 +773,8 @@ const TokenAuction: React.FC = () => {
                           key={index}
                           isDark
                           style={{
-                            maxWidth: 334,
-                            minWidth: 334,
+                            maxWidth: 306,
+                            minWidth: 306,
                             gap: 20,
                             boxSizing: 'border-box'
                           }}
@@ -793,6 +788,7 @@ const TokenAuction: React.FC = () => {
             </Box>
             <Box
               sx={{
+                maxWidth: isSm ? '100%' : 1296,
                 width: isSm ? 'calc(100% - 32px)' : '100%',
                 display: 'flex',
                 marginLeft: isSm ? '-16px' : 'unset',

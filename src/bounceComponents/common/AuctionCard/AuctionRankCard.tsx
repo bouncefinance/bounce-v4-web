@@ -476,7 +476,7 @@ export const AuctionRankCard: React.FC = () => {
         {data && Array.isArray(data.list) && data.list.length > 0 ? (
           <Box
             sx={{
-              padding: '12px',
+              marginTop: '12px',
               display: 'flex',
               overflowX: 'scroll',
               borderRadius: isSm ? 0 : '0px 30px 30px 30px',
