@@ -21,6 +21,9 @@ export const NftCard = (props: NftCardParams) => {
     if (props.nft.ethChainId === ChainId.ZETA_CHAIN_TESTNET && props.nft.poolId === '1') {
       return 'https://arweave.net/phHEiIDd5x9lYifnKURzUK_qAEqq6lEF_UOR6bbqxLM'
     }
+    if (props.nft.ethChainId === ChainId.ZETA_CHAIN_TESTNET && props.nft.poolId === '6') {
+      return 'https://arweave.net/S5pCWJHNSdCJDYA7G-o4CZtjXTcg7gDHiQnwEZIhuPk'
+    }
     return undefined
   }, [props.nft.ethChainId, props.nft.poolId])
 

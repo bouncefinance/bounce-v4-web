@@ -169,7 +169,7 @@ const sortIcon = ({ className }: { className: string }) => (
     />
   </svg>
 )
-const StyledTable = styled('table')(({ theme }) => ({
+const StyledTable = styled('table')(({}) => ({
   // [theme.breakpoints.down('md')]: {
   //   width: 'calc(100vw - 32px) !important'
   // }
