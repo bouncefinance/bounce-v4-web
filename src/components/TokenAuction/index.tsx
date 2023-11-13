@@ -436,7 +436,12 @@ const TokenAuction: React.FC = () => {
         width: '100%',
         maxWidth: '100%',
         background: '#111111',
-        height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1288 : 682,
+        height:
+          showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction
+            ? isSm
+              ? 1200
+              : 1288
+            : 682,
         margin: '0 auto'
       }}
     >
@@ -470,7 +475,7 @@ const TokenAuction: React.FC = () => {
               width: '100%',
               lineHeight: '32px',
               color: 'var(--ps-yellow-1)',
-              marginBottom: 30,
+              marginBottom: 20,
               letterSpacing: '-0.02em'
             }}
           >
@@ -486,7 +491,7 @@ const TokenAuction: React.FC = () => {
               fontSize: isSm ? 14 : 16,
               lineHeight: '21px',
               color: 'var(--ps-primary)',
-              marginBottom: 30,
+              marginBottom: 20,
               letterSpacing: '-0.02em'
             }}
           >
@@ -603,7 +608,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               width: 763,
               height: 622,
-              top: 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[0]}deg)`,
               transformOrigin: 'bottom center',
@@ -619,7 +624,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               width: 763,
               height: 622,
-              top: 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[1]}deg)`,
               transformOrigin: 'bottom center',
@@ -635,7 +640,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               width: 763,
               height: 622,
-              top: 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[2]}deg)`,
               transformOrigin: 'bottom center',
@@ -651,7 +656,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               width: 763,
               height: 622,
-              top: 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[3]}deg)`,
               transformOrigin: 'bottom center',
@@ -691,18 +696,24 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               minHeight: 496,
               maxWidth: 1296,
-              top: 622,
+              top: isSm ? 600 : 622,
+              left: 0,
               borderRadius: 30,
               margin: '0 auto',
               padding: isSm ? '24px 16px' : 0,
-              transform: 'translateX(-50%)',
-              left: '50%'
+              '@media(min-width:1440px)': {
+                transform: 'translateX(-50%)',
+                left: '50%'
+              },
+              '@media(max-width:1440px)': {
+                width: '100%'
+              }
             }}
           >
             <Box
               sx={{
-                minHeight: 368,
-                marginBottom: 24
+                minHeight: isSm ? 300 : 368,
+                marginBottom: isSm ? 0 : 24
               }}
             >
               {showData.title === AuctionType.NFTAuction && (
@@ -791,7 +802,6 @@ const TokenAuction: React.FC = () => {
                 maxWidth: isSm ? '100%' : 1296,
                 width: isSm ? 'calc(100% - 32px)' : '100%',
                 display: 'flex',
-                marginLeft: isSm ? '-16px' : 'unset',
                 flexFlow: 'row nowrap',
                 justifyContent: 'center',
                 '@media(max-width:1440px)': {

@@ -49,10 +49,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
         flexDirection: 'column',
         [theme.breakpoints.down('md')]: {
           flexDirection: 'column',
-          height: '364px',
-          boxSizing: 'border-box',
-          width: '220px',
-          gap: '16px'
+          boxSizing: 'border-box'
         },
         '&:hover': {
           border: '1px solid #12121233'
@@ -61,14 +58,14 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
     >
       <img
         style={{
-          width: isSm ? '220px' : '240px',
-          height: isSm ? '220px' : '180px',
+          width: '100%',
+          height: isSm ? '180px' : '180px',
           borderRadius: '12px 12px 0 0',
           marginLeft: isSm ? '-2px' : 0
         }}
         src={props.img ? props.img : EmptyImg}
       />
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} padding={'16px'}>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} padding={isSm ? 12 : '16px'}>
         <Box sx={{ wordBreak: 'break-all' }}>
           <Stack flexDirection={'row'} alignItems={'center'}>
             {props.ifKyc === VerifyStatus.Verified && <VerifiedIcon sx={{ mr: 8 }} ifKyc={props.ifKyc} />}
@@ -80,6 +77,9 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
                 WebkitLineClamp: 1,
                 WebkitBoxOrient: 'vertical',
                 textOverflow: 'ellipsis',
+                [theme.breakpoints.down('md')]: {
+                  fontSize: 16
+                },
                 '&:hover': {
                   color: '#A4D220'
                 }
@@ -108,12 +108,11 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
-            marginTop: '16px',
+            marginTop: isSm ? 12 : '16px',
             gap: '24px',
             height: 'fit-content',
             [theme.breakpoints.down('md')]: {
               gap: '12px',
-              padding: '8px 12px',
               width: '220px'
             }
           }}
@@ -142,7 +141,7 @@ const ActiveUserSkeletonCard = () => {
         flexDirection: isMd ? 'column' : 'row',
         cursor: 'pointer',
         width: isMd ? 230 : 'fit-content',
-        height: isMd ? 364 : 'auto',
+        height: isMd ? 300 : 'auto',
         gap: '20px',
         background: '#FFFFFF',
         borderRadius: '20px'
@@ -251,7 +250,7 @@ export const ActiveUser: React.FC = () => {
       className={'ActiveUser'}
       style={{
         width: '100%',
-        padding: isSm ? '22px 0 116px' : '100px 0 140px'
+        padding: isSm ? '22px 0 80px' : '100px 0 140px'
       }}
     >
       <Container
