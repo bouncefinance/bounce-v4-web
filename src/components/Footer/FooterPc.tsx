@@ -60,7 +60,7 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
         width: 'wrap-content',
         display: 'flex',
         flexFlow: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: isSm ? 'center' : 'flex-start',
         alignItems: 'center',
         marginBottom: 20,
         [theme.breakpoints.down('md')]: {
@@ -423,7 +423,7 @@ const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {
               position: 'relative',
               display: 'flex',
               flexFlow: isSm ? 'column' : 'row',
-              alignItems: 'flex-start',
+              alignItems: isSm ? 'center' : 'flex-start',
               justifyContent: 'space-between',
               width: '100%',
               paddingBottom: 32,
