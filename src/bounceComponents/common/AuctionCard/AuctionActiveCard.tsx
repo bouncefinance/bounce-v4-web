@@ -166,7 +166,6 @@ export const ActiveUser: React.FC = () => {
   const isSm = useBreakpoint('md')
   const swiper = useRef<SwiperCore>()
   const ref = useRef<any>(null)
-  const [width, setWidth] = useState<number | undefined>(undefined)
   const [swipePrev, canSwipePrev] = useState(false)
   const [swipeNext, canSwipeNext] = useState(true)
   const { data } = useRequest(async () => {
@@ -178,24 +177,13 @@ export const ActiveUser: React.FC = () => {
   })
 
   const slideCardWidth = isSm ? 220 : 260
-  const [slidesPerView, setSlidesPerView] = useState<number>(
-    (isSm ? window.innerWidth : width || 1296) / slideCardWidth
-  )
-  useEffect(() => {
-    const resetView = () => {
-      setSlidesPerView(Math.ceil((width || slideCardWidth) / slideCardWidth))
-    }
-    window.addEventListener('resize', resetView)
-    return () => {
-      window.removeEventListener('resize', resetView)
-    }
-  }, [slideCardWidth, width])
+  const [slidesPerView, setSlidesPerView] = useState<number>((ref?.current?.offsetWidth || 1296) / slideCardWidth)
 
   useEffect(() => {
     // This function checks the width of the referenced element
     const checkWidth = () => {
       if (ref.current) {
-        setWidth(ref.current.offsetWidth)
+        setSlidesPerView(ref.current.offsetWidth / slideCardWidth)
         console.log('ref', ref)
         console.log('ref-offsetWidth', ref.current.offsetWidth)
       }
@@ -207,7 +195,7 @@ export const ActiveUser: React.FC = () => {
 
     // Clean up listener when component is unmounted
     return () => window.removeEventListener('resize', checkWidth)
-  }, [])
+  }, [slideCardWidth])
 
   const ArrowBg = styled(Box)`
     display: flex;
@@ -246,7 +234,6 @@ export const ActiveUser: React.FC = () => {
 
   return (
     <Box
-      ref={ref}
       className={'ActiveUser'}
       style={{
         width: '100%',
@@ -283,39 +270,41 @@ export const ActiveUser: React.FC = () => {
             </ArrowBg>
           </Box>
         </BoxSpaceBetween>
-        <SlideProgress
-          hideArrow
-          swiperRef={swiper}
-          canSwipePrev={canSwipePrev}
-          canSwipeNext={canSwipeNext}
-          swiperStyle={{
-            spaceBetween: 20,
-            slidesPerView: slidesPerView,
-            loop: isSm,
-            autoplay: isSm,
-            freeMode: true
-          }}
-        >
-          {data && data?.list && data.list.length
-            ? data?.list.map((data: any, idx: number) => (
-                <SwiperSlide key={idx}>
-                  <AuctionActiveCard
-                    userId={data.creatorUserInfo.userId}
-                    img={data.creatorUserInfo.avatar}
-                    name={data.creatorUserInfo.name}
-                    desc={data.creatorUserInfo.description}
-                    createdCount={data.totalCreated}
-                    participated={data.totalPart}
-                    ifKyc={data.creatorUserInfo.ifKyc}
-                  />
-                </SwiperSlide>
-              ))
-            : new Array(8).fill(0).map((item, index) => (
-                <SwiperSlide key={index}>
-                  <ActiveUserSkeletonCard />
-                </SwiperSlide>
-              ))}
-        </SlideProgress>
+        <Box ref={ref}>
+          <SlideProgress
+            hideArrow
+            swiperRef={swiper}
+            canSwipePrev={canSwipePrev}
+            canSwipeNext={canSwipeNext}
+            swiperStyle={{
+              spaceBetween: 20,
+              slidesPerView: slidesPerView,
+              loop: isSm,
+              autoplay: isSm,
+              freeMode: true
+            }}
+          >
+            {data && data?.list && data.list.length
+              ? data?.list.map((data: any, idx: number) => (
+                  <SwiperSlide key={idx}>
+                    <AuctionActiveCard
+                      userId={data.creatorUserInfo.userId}
+                      img={data.creatorUserInfo.avatar}
+                      name={data.creatorUserInfo.name}
+                      desc={data.creatorUserInfo.description}
+                      createdCount={data.totalCreated}
+                      participated={data.totalPart}
+                      ifKyc={data.creatorUserInfo.ifKyc}
+                    />
+                  </SwiperSlide>
+                ))
+              : new Array(8).fill(0).map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <ActiveUserSkeletonCard />
+                  </SwiperSlide>
+                ))}
+          </SlideProgress>
+        </Box>
       </Container>
     </Box>
   )
