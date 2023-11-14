@@ -701,11 +701,11 @@ const TokenAuction: React.FC = () => {
               borderRadius: 30,
               margin: '0 auto',
               padding: isSm ? '24px 16px' : 0,
-              '@media(min-width:1440px)': {
+              '@media(max-width:1440px)': {
                 transform: 'translateX(-50%)',
                 left: '50%'
               },
-              '@media(max-width:1440px)': {
+              '@media(max-width:600px)': {
                 width: '100%'
               }
             }}
