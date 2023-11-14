@@ -607,7 +607,7 @@ const TokenAuction: React.FC = () => {
             sx={{
               position: 'absolute',
               width: 763,
-              height: 622,
+              height: isSm ? 600 : 622,
               top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[0]}deg)`,
@@ -623,7 +623,7 @@ const TokenAuction: React.FC = () => {
             sx={{
               position: 'absolute',
               width: 763,
-              height: 622,
+              height: isSm ? 600 : 622,
               top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[1]}deg)`,
@@ -695,7 +695,7 @@ const TokenAuction: React.FC = () => {
             sx={{
               position: 'absolute',
               minHeight: 496,
-              maxWidth: 1296,
+              width: 1296,
               top: isSm ? 600 : 622,
               left: 0,
               borderRadius: 30,
@@ -802,6 +802,7 @@ const TokenAuction: React.FC = () => {
                 maxWidth: isSm ? '100%' : 1296,
                 width: isSm ? 'calc(100% - 32px)' : '100%',
                 display: 'flex',
+                marginTop: isSm ? '24px' : 'unset',
                 flexFlow: 'row nowrap',
                 justifyContent: 'center',
                 '@media(max-width:1440px)': {
