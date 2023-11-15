@@ -698,168 +698,6 @@ const DeelanceProjectInfo: IProjectInfo[] = [
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 15
   {
-    backedId: 18578,
-    keyId: 16,
-    liveTimeStamp: {
-      start: 1699761600000,
-      end: 1700028000000
-    },
-    hideUpcomingCountdown: true,
-    poolTypeName: 'Fixed Swap Auction',
-    pageInImg: MultibitBanner,
-    img: 'https://images-v3.bounce.finance/0aa4a14f2ae496f7dd3be777d5054453-1699525289.png',
-    avatar: MultiBitAva,
-    title: 'MultiBit Bridge',
-    chainId: 1,
-    tokenName: '$MUBI',
-    whitePaperLink: '',
-    upcomingLink: '/launchpad/multibit',
-    liveLink: '/launchpad/multibit',
-    projectInfo: [
-      {
-        title: 'What is MultiBit Bridge?',
-        info: [
-          <Box key={1}>
-            MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and
-            ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain
-            interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC
-            tokens in a secure and user-friendly manner.
-          </Box>
-        ]
-      },
-      {
-        title: 'How it all works',
-        info: [
-          <Box key={6}>
-            MultiBit streamlines the token transfer process between Bitcoin's BRC20 and EVM networks. It begins with
-            users transferring BRC20 tokens to a dedicated BRC20 address. Upon confirmation, these tokens are primed for
-            minting on the EVM network. But MultiBit's uniqueness lies in its dual-sided bridge feature, enabling
-            equally seamless transfers from EVM networks back to Bitcoin. With MultiBit, bridging and minting tokens for
-            cross-chain transfers between Bitcoin and EVM networks is an effortless process.
-            <div style={{ width: '100%', height: '100%', marginTop: 10 }}>
-              <img src={MultibitContent1} style={{ width: '100%', height: '100%' }} />
-            </div>
-          </Box>
-        ]
-      },
-      {
-        title: 'Ecosystem',
-        info: [
-          <Box key={7}>
-            <div>
-              <strong>Ordinals AMM</strong>
-              <ul>
-                <li>
-                  MultiBit's Ordinals Automated Market Maker (OAMM) is a decentralized exchange protocol designed
-                  specifically for trading Ordinals ($ORDI) tokens. It leverages the principles of automated market
-                  making to provide liquidity, enable seamless token swaps, and facilitate efficient price discovery for
-                  $ORDI and other paired tokens.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <strong style={{ marginTop: 10 }}>Ordinals Farming</strong>
-              <ul>
-                <li>
-                  MultiBit offers Farming Ordinals ($ORDI), an exciting opportunity for the BRC community to earn
-                  additional $ORDI tokens by providing liquidity or staking preferred tokens in selected pools. The
-                  farming process allows participants to contribute to the liquidity of the $ORDI ecosystem while being
-                  rewarded for their contribution.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <strong style={{ marginTop: 10 }}>Ordinals Stablecoin</strong>
-              <ul>
-                <li>
-                  Ordinals Stablecoin is backed by a specific ratio of Ordinals ($ORDI) tokens held as collateral. These
-                  $ORDI tokens serve as a reserve to support the stability and value of the stablecoin. The
-                  collateralization mechanism ensures that the value of the stablecoin remains pegged to a 1:1 ratio to
-                  USDC.
-                </li>
-              </ul>
-            </div>
-          </Box>
-        ]
-      },
-      {
-        title: 'Distribution',
-        info: [
-          <Box key={3}>
-            <Typography sx={{ textIndent: 20 }}>$400,000 USDC = Initial FDV (all available at launch)</Typography>
-            <ul key={2}>
-              <li>KOL Whitelist Sale (Same Price as Public Sale): 11.25%</li>
-              <li>Public Sale: 78.75%</li>
-              <li>5% DEX liquidity locked forever</li>
-              <li>5% team 6 months lock then linear vesting for 2 years</li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'Roadmap',
-        info: [
-          <Box key={3}>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <li>
-                November 2023: Token Generation Event (TGE): Multibit launches its native token through a TGE event,
-                providing users with opportunities for participation and token acquisition.
-              </li>
-              <li>
-                Q4 2023: Expanded Token Support: Multibit adds support for a wide range of BRC20 and ERC20 tokens,
-                expanding its offering to allow users to bridge and interact with an increasing number of tokens.
-              </li>
-              <li>
-                Q1 2024: Enhanced User Interface and Experience: Multibit focuses on improving its interface, making it
-                more intuitive and user-friendly to enhance the overall experience for users.
-              </li>
-              <li>
-                Q1 2024: Integration with Additional DeFi Protocols: Multibit integrates with more DeFi protocols,
-                enabling users to leverage their bridged tokens for activities such as lending, borrowing, yield
-                farming, and decentralized exchanges.
-              </li>
-              <li>
-                Q1-Q2 2024: Partnerships and Collaborations: Multibit forms partnerships and collaborations with other
-                blockchain projects, exchanges, and DeFi platforms to expand its reach, increase liquidity options, and
-                foster interoperability.
-              </li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'Contract Audit',
-        info: [
-          <a href="https://github.com/multibit-repo/audit" key={5} target="_blank" rel="noreferrer">
-            https://github.com/multibit-repo/audit
-          </a>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC tokens in a secure and user-friendly manner.',
-    social: [
-      <Link key={0} href="https://multibit.exchange/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={4} href="https://t.me/multibitprotocol" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      <Link key={6} href="https://twitter.com/Multibit_Bridge" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={8} href="https://medium.com/@Multibit_Bridge" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$MUBI' },
-      { title: 'Token Price', content: '0.00000022709 ETH' },
-      { title: 'Token Amount', content: '387500000' },
-      { title: 'Blockchain', content: 'Ethereum' }
-    ]
-  },
-  {
     hidden: true,
     keyId: 15,
     backedId: 18555,
@@ -1208,6 +1046,168 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Token Name', content: '$SGT' },
       { title: 'Token Price', content: 'TBD' },
       { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    backedId: 18578,
+    keyId: 16,
+    liveTimeStamp: {
+      start: 1699761600000,
+      end: 1700028000000
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    pageInImg: MultibitBanner,
+    img: 'https://images-v3.bounce.finance/0aa4a14f2ae496f7dd3be777d5054453-1699525289.png',
+    avatar: MultiBitAva,
+    title: 'MultiBit Bridge',
+    chainId: 1,
+    tokenName: '$MUBI',
+    whitePaperLink: '',
+    upcomingLink: '/launchpad/multibit',
+    liveLink: '/launchpad/multibit',
+    projectInfo: [
+      {
+        title: 'What is MultiBit Bridge?',
+        info: [
+          <Box key={1}>
+            MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and
+            ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain
+            interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC
+            tokens in a secure and user-friendly manner.
+          </Box>
+        ]
+      },
+      {
+        title: 'How it all works',
+        info: [
+          <Box key={6}>
+            MultiBit streamlines the token transfer process between Bitcoin's BRC20 and EVM networks. It begins with
+            users transferring BRC20 tokens to a dedicated BRC20 address. Upon confirmation, these tokens are primed for
+            minting on the EVM network. But MultiBit's uniqueness lies in its dual-sided bridge feature, enabling
+            equally seamless transfers from EVM networks back to Bitcoin. With MultiBit, bridging and minting tokens for
+            cross-chain transfers between Bitcoin and EVM networks is an effortless process.
+            <div style={{ width: '100%', height: '100%', marginTop: 10 }}>
+              <img src={MultibitContent1} style={{ width: '100%', height: '100%' }} />
+            </div>
+          </Box>
+        ]
+      },
+      {
+        title: 'Ecosystem',
+        info: [
+          <Box key={7}>
+            <div>
+              <strong>Ordinals AMM</strong>
+              <ul>
+                <li>
+                  MultiBit's Ordinals Automated Market Maker (OAMM) is a decentralized exchange protocol designed
+                  specifically for trading Ordinals ($ORDI) tokens. It leverages the principles of automated market
+                  making to provide liquidity, enable seamless token swaps, and facilitate efficient price discovery for
+                  $ORDI and other paired tokens.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong style={{ marginTop: 10 }}>Ordinals Farming</strong>
+              <ul>
+                <li>
+                  MultiBit offers Farming Ordinals ($ORDI), an exciting opportunity for the BRC community to earn
+                  additional $ORDI tokens by providing liquidity or staking preferred tokens in selected pools. The
+                  farming process allows participants to contribute to the liquidity of the $ORDI ecosystem while being
+                  rewarded for their contribution.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong style={{ marginTop: 10 }}>Ordinals Stablecoin</strong>
+              <ul>
+                <li>
+                  Ordinals Stablecoin is backed by a specific ratio of Ordinals ($ORDI) tokens held as collateral. These
+                  $ORDI tokens serve as a reserve to support the stability and value of the stablecoin. The
+                  collateralization mechanism ensures that the value of the stablecoin remains pegged to a 1:1 ratio to
+                  USDC.
+                </li>
+              </ul>
+            </div>
+          </Box>
+        ]
+      },
+      {
+        title: 'Distribution',
+        info: [
+          <Box key={3}>
+            <Typography sx={{ textIndent: 20 }}>$400,000 USDC = Initial FDV (all available at launch)</Typography>
+            <ul key={2}>
+              <li>KOL Whitelist Sale (Same Price as Public Sale): 11.25%</li>
+              <li>Public Sale: 78.75%</li>
+              <li>5% DEX liquidity locked forever</li>
+              <li>5% team 6 months lock then linear vesting for 2 years</li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Roadmap',
+        info: [
+          <Box key={3}>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <li>
+                November 2023: Token Generation Event (TGE): Multibit launches its native token through a TGE event,
+                providing users with opportunities for participation and token acquisition.
+              </li>
+              <li>
+                Q4 2023: Expanded Token Support: Multibit adds support for a wide range of BRC20 and ERC20 tokens,
+                expanding its offering to allow users to bridge and interact with an increasing number of tokens.
+              </li>
+              <li>
+                Q1 2024: Enhanced User Interface and Experience: Multibit focuses on improving its interface, making it
+                more intuitive and user-friendly to enhance the overall experience for users.
+              </li>
+              <li>
+                Q1 2024: Integration with Additional DeFi Protocols: Multibit integrates with more DeFi protocols,
+                enabling users to leverage their bridged tokens for activities such as lending, borrowing, yield
+                farming, and decentralized exchanges.
+              </li>
+              <li>
+                Q1-Q2 2024: Partnerships and Collaborations: Multibit forms partnerships and collaborations with other
+                blockchain projects, exchanges, and DeFi platforms to expand its reach, increase liquidity options, and
+                foster interoperability.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <a href="https://github.com/multibit-repo/audit" key={5} target="_blank" rel="noreferrer">
+            https://github.com/multibit-repo/audit
+          </a>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC tokens in a secure and user-friendly manner.',
+    social: [
+      <Link key={0} href="https://multibit.exchange/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://t.me/multibitprotocol" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/Multibit_Bridge" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@Multibit_Bridge" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$MUBI' },
+      { title: 'Token Price', content: '0.00000022709 ETH' },
+      { title: 'Token Amount', content: '387500000' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
