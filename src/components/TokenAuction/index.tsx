@@ -697,16 +697,15 @@ const TokenAuction: React.FC = () => {
               minHeight: 496,
               width: 1296,
               top: isSm ? 600 : 622,
-              left: 0,
               borderRadius: 30,
               margin: '0 auto',
               padding: isSm ? '24px 16px' : 0,
-              '@media(max-width:1440px)': {
-                transform: 'translateX(-50%)',
-                left: '50%'
-              },
+              transform: 'translateX(-50%)',
+              left: '50%',
               '@media(max-width:600px)': {
-                width: '100%'
+                left: 0,
+                width: '100%',
+                transform: 'none'
               }
             }}
           >
