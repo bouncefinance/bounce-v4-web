@@ -51,6 +51,7 @@ export interface IPrivatePricesInfo {
 
 export interface IPrivatePadProp {
   hidden?: true
+  backedId?: number
   keyId: number
   liveTimeStamp: {
     start: number
