@@ -78,7 +78,7 @@ export function SlideProgress(props: ISlideProgress) {
       <Swiper
         ref={swiperRef}
         style={{
-          height: isSm ? '286px' : '302px'
+          height: isSm ? '286px' : '362px'
         }}
         onSlideChange={s => {
           const endIdx = s?.realIndex
