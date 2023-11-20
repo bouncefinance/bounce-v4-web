@@ -1,4 +1,10 @@
+import { Steps } from './Step'
+
 const Page = () => {
-  return <div>coin</div>
+  return (
+    <div>
+      <Steps />
+    </div>
+  )
 }
 export default Page
