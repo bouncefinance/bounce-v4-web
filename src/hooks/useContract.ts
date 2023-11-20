@@ -29,6 +29,7 @@ import TOKEN_MINTER_ABI from '../constants/abis/ToolboxERC20Factory.json'
 import WithDrawContractABI from '../constants/abis/ToolboxDeployErc20Factory.json'
 import ToolboxDeployERC721Factory from '../constants/abis/ToolboxDeployERC721Factory.json'
 import ToolboxDeployErc20VestingFactory from '../constants/abis/ToolboxDeployErc20VestingFactory.json'
+import LAUNCHPAD_COIN_ABI from '../constants/abis/launchpad-coin.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -42,7 +43,8 @@ import {
   DISPERSE_CONTRACT_ADDRESSES,
   MINTER_CONTRACT_ADDRESSES,
   TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES,
-  TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES
+  TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES,
+  LAUNCHPAD_COIN_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -290,4 +292,10 @@ export function useMinterContract(queryChainId: ChainId) {
   const cur = queryChainId || chainId
   const curAddress = cur ? MINTER_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, TOKEN_MINTER_ABI, true, queryChainId)
+}
+export function useLaunchpadCoinContract(queryChainId: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress = cur ? LAUNCHPAD_COIN_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, LAUNCHPAD_COIN_ABI, true, queryChainId)
 }
