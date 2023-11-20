@@ -364,6 +364,7 @@ export const ComponentOptions = {
       },
       styleOverrides: {
         root: {
+          fontFamily: `'Inter'`,
           borderRadius: 8,
           background: 'var(--ps-white)',
           border: 0,
