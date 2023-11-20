@@ -239,7 +239,6 @@ export default function Header() {
       variant="contained"
       sx={{
         fontSize: 14,
-        minWidth: 212,
         borderRadius: 60,
         padding: '0 12px',
         border: '1px solid transparent',
