@@ -76,6 +76,7 @@ import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
+import LaunchpadCoin from 'pages/launchpadCoin'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
 
@@ -220,6 +221,7 @@ export default function App() {
                   <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuctionWhitelist} element={<DeelanceWhitelistProjectInfo />} />
+                  <Route path={routes.thirdPart.launchpadCoin} element={<LaunchpadCoin />} />
 
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
