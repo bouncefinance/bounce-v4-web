@@ -293,7 +293,7 @@ export function useMinterContract(queryChainId: ChainId) {
   const curAddress = cur ? MINTER_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, TOKEN_MINTER_ABI, true, queryChainId)
 }
-export function useLaunchpadCoinContract(queryChainId: ChainId) {
+export function useLaunchpadCoinContract(queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   const curAddress = cur ? LAUNCHPAD_COIN_CONTRACT_ADDRESSES[cur] : undefined
