@@ -109,7 +109,7 @@ export const routes = {
     CreateProtocolAuction: '/launchpad/create_protocol',
     IphoneAuctionDetail: '/rwa/iphone15',
     FinceptorAuction: '/launchpad/finceptor',
-    launchpadCoin: '/launchpad/cion'
+    launchpadCoin: '/launchpad/coin'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
