@@ -218,7 +218,8 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           key={0}
           onClick={() => props.navigate(url)}
           sx={{
-            cursor: 'pointer'
+            cursor: 'pointer',
+            width: 300
           }}
         >
           <Avatar
@@ -245,7 +246,7 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         <Body01
           sx={{
             cursor: 'pointer',
-            width: 130
+            width: 300
           }}
           maxWidth={300}
           onClick={() => props.navigate(url)}
@@ -255,7 +256,8 @@ export function AuctionRow(props: any): ReactJSXElement[] {
         </Body01>,
         <Body01
           sx={{
-            cursor: 'pointer'
+            cursor: 'pointer',
+            width: 300
           }}
           onClick={() => props.navigate(url)}
           key={2}
