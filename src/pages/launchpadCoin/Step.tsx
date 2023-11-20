@@ -7,7 +7,7 @@ import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
 
-const StepperStyle = styled(Stepper)(() => ({
+const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
   },
@@ -39,10 +39,18 @@ const StepperStyle = styled(Stepper)(() => ({
         fill: '#121212'
       }
     }
+  },
+  [theme.breakpoints.down('md')]: {
+    '.MuiStepLabel-iconContainer': {
+      svg: {
+        width: 24,
+        height: 24
+      }
+    }
   }
 }))
 
-const StepLabelStyle = styled(StepLabel)(() => ({
+const StepLabelStyle = styled(StepLabel)(({ theme }) => ({
   '.MuiStepLabel-labelContainer': {
     display: 'grid',
     gap: 4,
@@ -61,19 +69,38 @@ const StepLabelStyle = styled(StepLabel)(() => ({
     fontWeight: 600,
     color: '#959595',
     lineHeight: '21px'
+  },
+  [theme.breakpoints.down('md')]: {
+    '.MuiStepLabel-labelContainer': {
+      paddingLeft: '8px'
+    },
+    '.MuiStepLabel-label': {
+      fontSize: '18px',
+      letterSpacing: '0'
+    },
+    '.MuiTypography-root': {
+      fontSize: 13
+    }
   }
 }))
 
-const StepContentStyle = styled(StepContent)(() => ({
+const StepContentStyle = styled(StepContent)(({ theme }) => ({
   paddingLeft: 40,
-  marginLeft: '16px'
+  marginLeft: '16px',
+  [theme.breakpoints.down('md')]: {
+    paddingLeft: 16
+  }
 }))
 
-const CardLabelStyle = styled(Typography)(() => ({
+const CardLabelStyle = styled(Typography)(({ theme }) => ({
   color: '#000',
   fontSize: '20px',
   fontWeight: '600',
-  letterSpacing: '-0.4px'
+  letterSpacing: '-0.4px',
+  [theme.breakpoints.down('md')]: {
+    fontSize: '18px',
+    letterSpacing: '0'
+  }
 }))
 
 const CardContentStyle = styled(Typography)(() => ({
@@ -83,7 +110,7 @@ const CardContentStyle = styled(Typography)(() => ({
   fontWeight: '400'
 }))
 
-const StakeButton = styled(Button)(() => ({
+const StakeButton = styled(Button)(({ theme }) => ({
   height: 52,
   width: 424,
   padding: '20px 0',
@@ -98,15 +125,25 @@ const StakeButton = styled(Button)(() => ({
   ':hover': {
     background: '#000',
     opacity: 0.6
+  },
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    height: '42px'
   }
 }))
 
-const BoldTextStyle = styled(Typography)(() => ({
+const BoldTextStyle = styled(Typography)(({ theme }) => ({
   color: '#121212',
   fontSize: '36px',
   fontWeight: '600',
   letterSpacing: '-0.72px',
-  lineHeight: '30px'
+  lineHeight: '30px',
+  [theme.breakpoints.down('md')]: {
+    fontSize: '28px',
+    letterSpacing: '0',
+    lineHeight: 'normal',
+    width: 'auto'
+  }
 }))
 
 const CardContentTitleStyle = styled(Typography)(() => ({
@@ -117,17 +154,26 @@ const CardContentTitleStyle = styled(Typography)(() => ({
   letterSpacing: '-0.28px'
 }))
 
-const CardContentBoldTextStyle = styled(Typography)(() => ({
+const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
   color: '#F6F6F3',
   fontSize: '36px',
   fontWeight: '600',
   letterSpacing: '-0.72px',
-  lineHeight: '26px'
+  lineHeight: '26px',
+  [theme.breakpoints.down('md')]: {
+    fontSize: '28px',
+    letterSpacing: '0',
+    lineHeight: 'normal'
+  }
 }))
 
 export function Steps() {
   return (
-    <Stack spacing={40} padding={'20px 72px'} sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', marginTop: 80 }}>
+    <Stack
+      spacing={{ xs: 30, md: 40 }}
+      padding={{ xs: '0 16px', md: '20px 72px' }}
+      sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', marginTop: { xs: 50, md: 80 } }}
+    >
       <Box
         sx={{
           width: '100%',
@@ -139,13 +185,14 @@ export function Steps() {
         <BoldTextStyle>Subscription Timeline</BoldTextStyle>
         <Button
           sx={{
-            padding: '12px 24px',
+            padding: { xs: '8px 30px', md: '12px 24px' },
             color: '#171717',
-            fontSize: '14px',
+            fontSize: { xs: '12px', md: '14px' },
             fontWeight: '400',
             borderRadius: '100px',
             border: ' 1px solid #20201E',
-            height: 34
+            height: 34,
+            whiteSpace: { xs: 'nowrap' }
           }}
         >
           My private launchpad
@@ -203,8 +250,8 @@ function VerticalLinearStepper() {
 
 function Step1({ handleNext }: { handleNext: () => void }) {
   return (
-    <Stack spacing={24} mt={24}>
-      <Stack direction={'row'} spacing={16} height={24}>
+    <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
         <Typography
           sx={{
             color: '#959595',
@@ -233,10 +280,10 @@ function Step1({ handleNext }: { handleNext: () => void }) {
       </Stack>
       <Box
         sx={{
-          width: 1000,
+          width: { xs: '100%', md: 1000 },
           borderRadius: '24px',
           background: '#fff',
-          display: 'flex'
+          display: { xs: 'grid', md: 'flex' }
         }}
       >
         <Box
@@ -245,23 +292,23 @@ function Step1({ handleNext }: { handleNext: () => void }) {
           }}
         >
           <Stack
-            spacing={40}
+            spacing={{ xs: 30, md: 40 }}
             sx={{
-              width: '500px',
-              padding: '24px 30px',
+              width: { xs: '100%', md: '500px' },
+              padding: { xs: 16, md: '24px 30px' },
               borderRadius: '20px',
               background: '#F6F6F3',
-              height: 376
+              height: { xs: 'auto', md: 376 }
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-                gap: 16
+                display: { xs: 'grid', md: 'flex' },
+                gap: { xs: 8, md: 16 }
               }}
             >
               <StakeTokensSvg />
-              <Stack spacing={4} maxWidth={350}>
+              <Stack spacing={4} maxWidth={{ xs: 'auto', md: 350 }}>
                 <CardLabelStyle
                   sx={{
                     b: {
@@ -278,7 +325,7 @@ function Step1({ handleNext }: { handleNext: () => void }) {
                 </CardContentStyle>
               </Stack>
             </Box>
-            <Stack spacing={30}>
+            <Stack spacing={{ xs: 20, md: 30 }}>
               <Stack spacing={8}>
                 <CardContentStyle>Total Stake</CardContentStyle>
                 <CardLabelStyle>0.00 BNB</CardLabelStyle>
@@ -292,12 +339,12 @@ function Step1({ handleNext }: { handleNext: () => void }) {
         </Box>
 
         <Stack
-          spacing={50}
+          spacing={{ xs: 30, md: 50 }}
           sx={{
-            padding: '40px 30px'
+            padding: { xs: '24px', md: '40px 30px' }
           }}
         >
-          <Stack spacing={30}>
+          <Stack spacing={{ xs: 20, md: 30 }}>
             <Stack spacing={12}>
               <BoldTextStyle>0.00 GMT</BoldTextStyle>
               <Typography
@@ -347,10 +394,10 @@ function Step2({ handleNext }: { handleNext: () => void }) {
 
       <Box
         sx={{
-          width: 1000,
+          width: { xs: '100%', md: 1000 },
           borderRadius: '24px',
           background: '#fff',
-          display: 'flex'
+          display: { xs: 'grid', md: 'flex' }
         }}
       >
         <Box
@@ -359,10 +406,10 @@ function Step2({ handleNext }: { handleNext: () => void }) {
           }}
         >
           <Stack
-            spacing={30}
+            spacing={{ xs: 20, md: 30 }}
             sx={{
-              width: '500px',
-              padding: '24px 30px',
+              width: { xs: '100%', md: 500 },
+              padding: { xs: 16, md: '24px 30px' },
               borderRadius: '20px',
               background: '#20201E',
               height: 306
@@ -399,13 +446,13 @@ function Step2({ handleNext }: { handleNext: () => void }) {
         </Box>
 
         <Stack
-          spacing={40}
+          spacing={{ xs: 30, md: 40 }}
           sx={{
-            padding: '40px 30px'
+            padding: { xs: '24px', md: '40px 30px' }
           }}
         >
-          <Stack spacing={30}>
-            <Stack spacing={16}>
+          <Stack spacing={{ xs: 20, md: 30 }}>
+            <Stack spacing={{ xs: 8, md: 16 }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -419,7 +466,7 @@ function Step2({ handleNext }: { handleNext: () => void }) {
 
               <BoldTextStyle>0.01489908 BNB</BoldTextStyle>
             </Stack>
-            <Stack spacing={16}>
+            <Stack spacing={{ xs: 8, md: 16 }}>
               <Box
                 sx={{
                   display: 'flex',
