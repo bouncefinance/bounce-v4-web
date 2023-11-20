@@ -127,7 +127,7 @@ const CardContentBoldTextStyle = styled(Typography)(() => ({
 
 export function Steps() {
   return (
-    <Stack spacing={40} padding={'0 72px'}>
+    <Stack spacing={40} padding={'20px 72px'} sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', marginTop: 80 }}>
       <Box
         sx={{
           width: '100%',
