@@ -110,8 +110,8 @@ const MainLogo = styled(Link)(({ theme }) => ({
     cursor: 'pointer'
   },
   [theme.breakpoints.down('sm')]: {
-    '& img': { width: 'auto', height: '22px' },
-    marginBottom: -10
+    height: 22,
+    '& img': { width: 'auto', height: '22px' }
   }
 }))
 
