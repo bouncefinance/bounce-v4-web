@@ -33,9 +33,8 @@ const InfoBox = (props: InfoBoxParams) => {
       sx={{
         background: 'var(--ps-text-3)',
         borderRadius: 20,
-        width: 110,
-        height: 81,
-        padding: 12,
+        width: 188,
+        height: 98,
         ...style
       }}
     >
@@ -48,9 +47,10 @@ const InfoBox = (props: InfoBoxParams) => {
           fontSize: 14,
           width: '100%',
           height: '21px',
-          lineHeight: '21px',
+          lineHeight: '22px',
           color: '#ffffff',
-          marginBottom: 12,
+          marginTop: 12,
+          marginBottom: 4,
           letterSpacing: '-0.02em'
         }}
       >
@@ -61,11 +61,11 @@ const InfoBox = (props: InfoBoxParams) => {
           textAlign: 'left',
           fontFamily: `'Inter'`,
           fontWeight: 600,
-          fontSize: 14,
+          fontSize: 18,
           lineHeight: '21px',
           color: '#ffffff',
           width: '100%',
-          height: '21px',
+          height: '27px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
@@ -542,6 +542,7 @@ const TokenAuction: React.FC = () => {
                   position: 'absolute',
                   width: 220,
                   color: '#ffffff',
+                  marginBottom: 30,
                   bottom: 161,
                   left: 0
                 }}
@@ -552,7 +553,7 @@ const TokenAuction: React.FC = () => {
                 logo={<TotalValueIcon />}
                 style={{
                   position: 'absolute',
-                  bottom: 80,
+                  bottom: 48,
                   left: 0
                 }}
               />
@@ -562,8 +563,8 @@ const TokenAuction: React.FC = () => {
                 logo={<TotalAuctionIcon />}
                 style={{
                   position: 'absolute',
-                  bottom: 80,
-                  left: 150
+                  bottom: 48,
+                  left: 220
                 }}
               />
             </Box>
