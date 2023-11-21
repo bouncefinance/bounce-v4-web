@@ -24,6 +24,7 @@ import { useToken } from 'state/wallet/hooks'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
+import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -244,7 +245,8 @@ function VerticalLinearStepper({
   }, [coinInfo])
   const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
   useEffect(() => {
-    setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
+    // setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
+    setActiveStep(1)
   }, [curStatus])
 
   const steps = [
@@ -627,7 +629,27 @@ function Step1({
     </>
   )
 }
-
+const NotInvolvedContainer = styled(Box)`
+  display: flex;
+  width: 420px;
+  padding: 30px;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  flex-shrink: 0;
+  align-self: stretch;
+  background: #fff;
+`
+const NotInvolvedTitle = styled(Typography)`
+  color: #121212;
+  text-align: center;
+  font-family: Public Sans;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%; /* 24px */
+  letter-spacing: -0.32px;
+`
 function Step2({
   status,
   coinInfo,
@@ -644,16 +666,43 @@ function Step2({
     if (!token1 || !coinInfo?.token1Amount) return undefined
     return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
   }, [coinInfo?.token1Amount, token1])
-  console.log()
-  const claimToken = async () => {
+
+  const claimToken1 = useCallback(async () => {
     if (!contract) return
+    showWaitingTxDialog(() => {
+      hideDialogConfirmation()
+    })
     try {
       const res = await contract.claimToken1([poolId])
-      console.log('res123456', res)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        res.wait().then((curReceipt: any) => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+        })
+        .catch()
     } catch (error) {
-      console.log('res123456', error)
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: claimToken1
+      })
     }
-  }
+  }, [contract])
+
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -668,102 +717,120 @@ function Step2({
         The allocation calculation is complete. We will deduct the corresponding BNB from your account based on your
         final GMT allocation, which will be transferred to your spot account along with your remaining BNB.
       </Typography>
-
-      <Box
-        sx={{
-          width: { xs: '100%', md: 1000 },
-          borderRadius: '24px',
-          background: '#fff',
-          display: { xs: 'grid', md: 'flex' }
-        }}
-      >
+      {coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.eq(0) && status === TStep.FINAL_TOKEN_DISTRIBUTION && (
+        <NotInvolvedContainer>
+          <FailSVG />
+          <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
+        </NotInvolvedContainer>
+      )}
+      {coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && status === TStep.FINAL_TOKEN_DISTRIBUTION && (
         <Box
           sx={{
-            padding: 16
+            width: { xs: '100%', md: 1000 },
+            borderRadius: '24px',
+            background: '#fff',
+            display: { xs: 'grid', md: 'flex' }
           }}
         >
-          <Stack
-            spacing={{ xs: 20, md: 30 }}
+          <Box
             sx={{
-              width: { xs: '100%', md: 500 },
-              padding: { xs: 16, md: '24px 30px' },
-              borderRadius: '20px',
-              background: '#20201E',
-              height: 306
+              padding: 16
             }}
           >
-            <Stack spacing={16}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 6,
-                  alignItems: 'center'
-                }}
-              >
-                <BnBTokenSvg />
-                <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
-              </Box>
-              <CardContentBoldTextStyle>
-                {token1TotalAmount?.toSignificant() || '--'} {token1?.symbol || '--'}
-              </CardContentBoldTextStyle>
-            </Stack>
+            <Stack
+              spacing={{ xs: 20, md: 30 }}
+              sx={{
+                width: { xs: '100%', md: 500 },
+                padding: { xs: 16, md: '24px 30px' },
+                borderRadius: '20px',
+                background: '#20201E',
+                height: 306
+              }}
+            >
+              <Stack spacing={16}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <BnBTokenSvg />
+                  <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
+                </Box>
+                <CardContentBoldTextStyle>
+                  {token1TotalAmount?.toSignificant() || '--'} {token1?.symbol || '--'}
+                </CardContentBoldTextStyle>
+              </Stack>
 
-            <Stack spacing={16}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 6,
-                  alignItems: 'center'
-                }}
-              >
-                <UserSvg />
-                <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
-              </Box>
-              <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
+              <Stack spacing={16}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <UserSvg />
+                  <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
+                </Box>
+                <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
+              </Stack>
+            </Stack>
+          </Box>
+
+          <Stack
+            spacing={{ xs: 30, md: 40 }}
+            sx={{
+              width: '100%',
+              padding: { xs: '24px', md: '40px 30px' }
+            }}
+          >
+            <Stack spacing={{ xs: 20, md: 30 }}>
+              <Stack spacing={{ xs: 8, md: 16 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <CheckSvg />
+                  <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
+                </Box>
+                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                  <BoldTextStyle style={{ fontSize: 20 }}>20.00 B2B / 0 B2B</BoldTextStyle>
+                  <StakeButton style={{ width: 150 }} onClick={() => claimToken1()}>
+                    Lock countdown
+                  </StakeButton>
+                </Stack>
+              </Stack>
+              <Stack spacing={{ xs: 8, md: 16 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <WonderSvg />
+                  <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
+                </Box>
+                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                  <BoldTextStyle style={{ fontSize: 20 }}>0.06 BNB / 20.00 BNB</BoldTextStyle>
+                  <StakeButton
+                    style={{ width: 150 }}
+                    disabled={coinInfo.myToken1Claimed || !coinInfo.finalAllocation?.myUnSwappedAmount1.gt(0)}
+                    onClick={() => claimToken1()}
+                  >
+                    Claim
+                  </StakeButton>
+                </Stack>
+              </Stack>
             </Stack>
           </Stack>
         </Box>
-
-        <Stack
-          spacing={{ xs: 30, md: 40 }}
-          sx={{
-            padding: { xs: '24px', md: '40px 30px' }
-          }}
-        >
-          <Stack spacing={{ xs: 20, md: 30 }}>
-            <Stack spacing={{ xs: 8, md: 16 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 6,
-                  alignItems: 'center'
-                }}
-              >
-                <CheckSvg />
-                <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
-              </Box>
-
-              <BoldTextStyle>20.00 B2B / 0 B2B</BoldTextStyle>
-            </Stack>
-            <Stack spacing={{ xs: 8, md: 16 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 6,
-                  alignItems: 'center'
-                }}
-              >
-                <WonderSvg />
-                <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
-              </Box>
-              <BoldTextStyle>0.06 BNB / 20.00 BNB</BoldTextStyle>
-            </Stack>
-          </Stack>
-          <StakeButton onClick={() => claimToken()}>
-            claim token1 <AddSvg />
-          </StakeButton>
-        </Stack>
-      </Box>
+      )}
     </Stack>
   )
 }

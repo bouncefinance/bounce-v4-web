@@ -16,13 +16,18 @@ type PoolInfoType = {
   token0: string
   token1: string
 }
-
+type FinalAllocationType = {
+  mySwappedAmount0: BigNumber
+  myUnSwappedAmount1: BigNumber
+}
 export type CoinResultType = {
   poolInfo?: PoolInfoType
   token1Amount?: BigNumber
   totalParticipants?: BigNumber
   myToken1Amount?: BigNumber
   swappedtoken0?: BigNumber
+  myToken1Claimed?: boolean
+  finalAllocation?: FinalAllocationType
 }
 export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId])
@@ -30,6 +35,9 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   const totalParticipants = useSingleCallResult(contract, 'participantCount')
   const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId])
   const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId])
+  const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId])
+  const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account])
+  console.log('finalAllocation', finalAllocation)
 
   const coinInfo = useMemo<CoinResultType | undefined>(() => {
     const result: CoinResultType = {}
@@ -59,8 +67,25 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
     if (swappedtoken0.result) {
       result.swappedtoken0 = swappedtoken0.result[0]
     }
+    if (myToken1Claimed.result) {
+      result.myToken1Claimed = myToken1Claimed.result[0]
+    }
+    if (finalAllocation.result) {
+      result.finalAllocation = {
+        mySwappedAmount0: finalAllocation.result[0],
+        myUnSwappedAmount1: finalAllocation.result[1]
+      } as FinalAllocationType
+    }
     return result
-  }, [myTotalStake.result, poolInfo.result, swappedtoken0.result, totalParticipants.result, totalStake.result])
+  }, [
+    finalAllocation.result,
+    myToken1Claimed.result,
+    myTotalStake.result,
+    poolInfo.result,
+    swappedtoken0.result,
+    totalParticipants.result,
+    totalStake.result
+  ])
 
   return coinInfo
 }
