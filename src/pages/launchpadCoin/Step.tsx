@@ -15,6 +15,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import useTokenList from 'bounceHooks/auction/useTokenList'
 import { Currency } from 'constants/token'
 import { ChainId } from 'constants/chain'
+import { showCoinInputDialog } from 'utils/auction'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -314,6 +315,10 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
 
   const showLoginModal = useShowLoginModal()
 
+  const handleClickStake = useCallback(() => {
+    if (!token1Balance) return
+    showCoinInputDialog({ token1Balance })
+  }, [token1Balance])
   const isBalanceInsufficient = useMemo(() => {
     if (!token1Balance) return true
     return !token1Balance.greaterThan('0')
@@ -335,7 +340,7 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
     }
     if (status === TStep.SUBSCRIPTION_PERIOD) {
       return (
-        <StakeButton>
+        <StakeButton onClick={() => handleClickStake()}>
           Stake <AddSvg />
         </StakeButton>
       )
@@ -345,7 +350,7 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
         Stake <AddSvg />
       </StakeButton>
     )
-  }, [account, isBalanceInsufficient, showLoginModal, status])
+  }, [account, handleClickStake, isBalanceInsufficient, showLoginModal, status])
 
   console.log('coinInfo', coinInfo)
   return (
