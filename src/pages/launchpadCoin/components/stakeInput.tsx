@@ -41,18 +41,20 @@ const StakeInput = ({
 }: {
   value: string
   onChange: (v: string) => void
-  token1Balance: CurrencyAmount
+  token1Balance: CurrencyAmount | undefined
 }) => {
   return (
     <StakeInputStyle
       value={value}
-      onUserInput={value => onChange(value)}
+      onUserInput={value => {
+        onChange(value)
+      }}
       endAdornment={
         <Stack flexDirection={'row'} alignItems={'center'}>
           <MaxButtonStyle>
             <ButtonTitle>Max</ButtonTitle>
           </MaxButtonStyle>
-          <TokenNameTitle>{token1Balance.currency.symbol}</TokenNameTitle>
+          <TokenNameTitle>{token1Balance?.currency.symbol}</TokenNameTitle>
         </Stack>
       }
     />

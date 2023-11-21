@@ -9,7 +9,7 @@ import {
   IconButton,
   Button
 } from '@mui/material'
-import { create, NiceModalHocProps, useModal } from '@ebay/nice-modal-react'
+import { NiceModalHocProps } from '@ebay/nice-modal-react'
 
 import { ReactComponent as CloseSVG } from '../DialogConfirmation/assets/close.svg'
 import styled from '@emotion/styled'
@@ -17,8 +17,11 @@ import { CurrencyAmount } from 'constants/token'
 import StakeInput from 'pages/launchpadCoin/components/stakeInput'
 
 export interface DialogProps extends MuiDialogProps {
-  token1Balance: CurrencyAmount
-  onClose?: () => void
+  token1Balance: CurrencyAmount | undefined
+  amount: string
+  handleSetAmount: (v: string) => void
+  onClose: () => void
+  open: boolean
 }
 const GrayTitle = styled(Typography)`
   color: #626262;
@@ -77,13 +80,12 @@ const CancelBtnStyle = styled(Button)`
     background: #fff;
   }
 `
-const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = create((props: DialogProps) => {
-  const { token1Balance, onClose, ...rest } = props
-  const modal = useModal()
+const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
+  const { token1Balance, amount, handleSetAmount, onClose, open, ...rest } = props
 
   return (
     <MuiDialog
-      onClose={() => (onClose ? onClose() : modal.hide())}
+      onClose={() => onClose()}
       sx={{
         '& .MuiDialog-paper': {
           width: 480,
@@ -92,13 +94,14 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = create((props
           pr: 40
         }
       }}
-      {...Object.assign(rest, { open: modal.visible })}
+      open={open}
+      {...Object.assign(rest)}
     >
       <IconButton
         color="primary"
         aria-label="dialog-close"
         sx={{ position: 'absolute', right: 12, top: 12 }}
-        onClick={() => (onClose ? onClose() : modal.hide())}
+        onClick={() => onClose()}
       >
         <CloseSVG />
       </IconButton>
@@ -117,10 +120,16 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = create((props
             <Stack flexDirection={'row'} justifyContent={'space-between'}>
               <GrayTitle>Amount</GrayTitle>
               <BalanceTitle>
-                Available: {token1Balance.toSignificant()} {token1Balance.currency.symbol}
+                Available: {token1Balance?.toSignificant()} {token1Balance?.currency.symbol}
               </BalanceTitle>
             </Stack>
-            <StakeInput value="" onChange={() => {}} token1Balance={token1Balance} />
+            <StakeInput
+              value={amount}
+              onChange={v => {
+                handleSetAmount(v)
+              }}
+              token1Balance={token1Balance}
+            />
           </Stack>
           <Stack mt={48} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <GrayTitle>Maximum stake amount</GrayTitle>
@@ -129,11 +138,13 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = create((props
         </>
       </DialogContent>
       <Stack flexDirection={'row'} alignItems={'center'} gap={12} mb={40}>
-        <CancelBtnStyle style={{ flex: 1 }}>Cancel</CancelBtnStyle>
+        <CancelBtnStyle style={{ flex: 1 }} onClick={() => onClose()}>
+          Cancel
+        </CancelBtnStyle>
         <ConfirmBtnStyle sx={{ flex: 2 }}>Confirm</ConfirmBtnStyle>
       </Stack>
     </MuiDialog>
   )
-})
+}
 
 export default CoinInputDialog

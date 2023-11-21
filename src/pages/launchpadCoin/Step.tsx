@@ -13,9 +13,9 @@ import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import useTokenList from 'bounceHooks/auction/useTokenList'
-import { Currency } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
-import { showCoinInputDialog } from 'utils/auction'
+import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -268,7 +268,8 @@ function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefi
 
 function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType | undefined }) {
   const { account, chainId } = useActiveWeb3React()
-
+  const [amount, setAmount] = useState('')
+  const [openDialog, setOpenDialog] = useState(false)
   const tokenList = useTokenList(chainId, 1)
 
   const token1Currency = useMemo(() => {
@@ -314,10 +315,13 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
   }, [coinInfo, days, hours, minutes])
 
   const showLoginModal = useShowLoginModal()
+  const handleSetAmount = (v: string) => {
+    setAmount(v)
+  }
 
   const handleClickStake = useCallback(() => {
     if (!token1Balance) return
-    showCoinInputDialog({ token1Balance })
+    setOpenDialog(true)
   }, [token1Balance])
   const isBalanceInsufficient = useMemo(() => {
     if (!token1Balance) return true
@@ -354,138 +358,148 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
 
   console.log('coinInfo', coinInfo)
   return (
-    <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
-        <Typography
-          sx={{
-            color: '#959595',
-            fontFamily: 'Inter',
-            lineHeight: '24px'
-          }}
-          variant="body1"
-        >
-          {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until staked end:'}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            color: '#4F4F4F',
-            fontFamily: 'Inter',
-            lineHeight: '24px',
-            b: {
-              color: '#2663FF',
-              fontSize: 20,
-              fontWeight: '400'
-            }
-          }}
-        >
-          {renderCountDown}
-        </Typography>
-      </Stack>
-      <Box
-        sx={{
-          width: { xs: '100%', md: 1000 },
-          borderRadius: '24px',
-          background: '#fff',
-          display: { xs: 'grid', md: 'flex' }
-        }}
-      >
-        <Box
-          sx={{
-            padding: 16
-          }}
-        >
-          <Stack
-            spacing={{ xs: 30, md: 40 }}
+    <>
+      <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
+          <Typography
             sx={{
-              width: { xs: '100%', md: '500px' },
-              padding: { xs: 16, md: '24px 30px' },
-              borderRadius: '20px',
-              background: '#F6F6F3',
-              height: { xs: 'auto', md: 376 }
+              color: '#959595',
+              fontFamily: 'Inter',
+              lineHeight: '24px'
+            }}
+            variant="body1"
+          >
+            {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until staked end:'}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: '#4F4F4F',
+              fontFamily: 'Inter',
+              lineHeight: '24px',
+              b: {
+                color: '#2663FF',
+                fontSize: 20,
+                fontWeight: '400'
+              }
             }}
           >
-            <Box
-              sx={{
-                display: { xs: 'grid', md: 'flex' },
-                gap: { xs: 8, md: 16 }
-              }}
-            >
-              <StakeTokensSvg />
-              <Stack spacing={4} maxWidth={{ xs: 'auto', md: 350 }}>
-                <CardLabelStyle
-                  sx={{
-                    b: {
-                      color: '#2B51DA',
-                      fontSize: '20px',
-                      fontWeight: '600'
-                    }
-                  }}
-                >
-                  Hiley Golbel Coin <b>x</b> BNB pool
-                </CardLabelStyle>
-                <CardContentStyle>
-                  Stake BNB tokens to earn Commitable amount for participating in Hiley Golbel Coin launchpad
-                </CardContentStyle>
-              </Stack>
-            </Box>
-            <Stack spacing={{ xs: 20, md: 30 }}>
-              <Stack spacing={8}>
-                <CardContentStyle>Total Stake</CardContentStyle>
-                <CardLabelStyle>
-                  {coinInfo?.token1Amount ? coinInfo?.token1Amount.toString() : '--'} {token1Currency?.symbol}
-                </CardLabelStyle>
-              </Stack>
-              <Stack spacing={8}>
-                <CardContentStyle>Participants</CardContentStyle>
-                <CardLabelStyle>
-                  {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
-                </CardLabelStyle>
-              </Stack>
-            </Stack>
-          </Stack>
-        </Box>
-
-        <Stack
-          spacing={{ xs: 30, md: 50 }}
+            {renderCountDown}
+          </Typography>
+        </Stack>
+        <Box
           sx={{
-            padding: { xs: '24px', md: '40px 30px' }
+            width: { xs: '100%', md: 1000 },
+            borderRadius: '24px',
+            background: '#fff',
+            display: { xs: 'grid', md: 'flex' }
           }}
         >
-          <Stack spacing={{ xs: 20, md: 30 }}>
-            <Stack spacing={12}>
-              <BoldTextStyle>0.00 GMT</BoldTextStyle>
-              <Typography
+          <Box
+            sx={{
+              padding: 16
+            }}
+          >
+            <Stack
+              spacing={{ xs: 30, md: 40 }}
+              sx={{
+                width: { xs: '100%', md: '500px' },
+                padding: { xs: 16, md: '24px 30px' },
+                borderRadius: '20px',
+                background: '#F6F6F3',
+                height: { xs: 'auto', md: 376 }
+              }}
+            >
+              <Box
                 sx={{
-                  color: '#959595',
-                  fontSize: '16px',
-                  lineHeight: '12px'
+                  display: { xs: 'grid', md: 'flex' },
+                  gap: { xs: 8, md: 16 }
                 }}
-                variant="body1"
               >
-                Committable amount earned
-              </Typography>
+                <StakeTokensSvg />
+                <Stack spacing={4} maxWidth={{ xs: 'auto', md: 350 }}>
+                  <CardLabelStyle
+                    sx={{
+                      b: {
+                        color: '#2B51DA',
+                        fontSize: '20px',
+                        fontWeight: '600'
+                      }
+                    }}
+                  >
+                    Hiley Golbel Coin <b>x</b> BNB pool
+                  </CardLabelStyle>
+                  <CardContentStyle>
+                    Stake BNB tokens to earn Commitable amount for participating in Hiley Golbel Coin launchpad
+                  </CardContentStyle>
+                </Stack>
+              </Box>
+              <Stack spacing={{ xs: 20, md: 30 }}>
+                <Stack spacing={8}>
+                  <CardContentStyle>Total Stake</CardContentStyle>
+                  <CardLabelStyle>
+                    {coinInfo?.token1Amount ? coinInfo?.token1Amount.toString() : '--'} {token1Currency?.symbol}
+                  </CardLabelStyle>
+                </Stack>
+                <Stack spacing={8}>
+                  <CardContentStyle>Participants</CardContentStyle>
+                  <CardLabelStyle>
+                    {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
+                  </CardLabelStyle>
+                </Stack>
+              </Stack>
             </Stack>
-            <Stack spacing={8}>
-              <CardContentStyle>My Stake</CardContentStyle>
-              <CardLabelStyle>
-                {coinInfo?.myToken1Amount?.toString() || '--'} {token1Currency?.symbol}
-              </CardLabelStyle>
+          </Box>
+
+          <Stack
+            spacing={{ xs: 30, md: 50 }}
+            sx={{
+              padding: { xs: '24px', md: '40px 30px' }
+            }}
+          >
+            <Stack spacing={{ xs: 20, md: 30 }}>
+              <Stack spacing={12}>
+                <BoldTextStyle>0.00 GMT</BoldTextStyle>
+                <Typography
+                  sx={{
+                    color: '#959595',
+                    fontSize: '16px',
+                    lineHeight: '12px'
+                  }}
+                  variant="body1"
+                >
+                  Committable amount earned
+                </Typography>
+              </Stack>
+              <Stack spacing={8}>
+                <CardContentStyle>My Stake</CardContentStyle>
+                <CardLabelStyle>
+                  {coinInfo?.myToken1Amount?.toString() || '--'} {token1Currency?.symbol}
+                </CardLabelStyle>
+              </Stack>
+              <Stack spacing={8}>
+                <CardContentStyle>My Pool Share</CardContentStyle>
+                <CardLabelStyle>
+                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo?.token1Amount?.toString()) > 0
+                    ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).toString()
+                    : '0'}
+                  %
+                </CardLabelStyle>
+              </Stack>
             </Stack>
-            <Stack spacing={8}>
-              <CardContentStyle>My Pool Share</CardContentStyle>
-              <CardLabelStyle>
-                {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo?.token1Amount?.toString()) > 0
-                  ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).toString()
-                  : '0'}
-                %
-              </CardLabelStyle>
-            </Stack>
+            {actionBtn}
           </Stack>
-          {actionBtn}
-        </Stack>
-      </Box>
-    </Stack>
+        </Box>
+      </Stack>
+      <CoinInputDialog
+        id={'1'}
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        token1Balance={token1Balance as CurrencyAmount}
+        amount={amount}
+        handleSetAmount={handleSetAmount}
+      />
+    </>
   )
 }
 

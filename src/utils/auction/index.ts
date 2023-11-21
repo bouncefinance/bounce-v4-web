@@ -5,8 +5,7 @@ import DialogConfirmation from 'bounceComponents/common/DialogConfirmation'
 import DialogDarkConfirmation from 'bounceComponents/common/DialogConfirmation/DialogDarkConfirmation'
 import DialogLightBotConfirmation from 'bounceComponents/common/DialogConfirmation/DialogLightBotConfirmation'
 import DialogDarkBotConfirmation from 'bounceComponents/common/DialogConfirmation/DialogDarkBotConfirmation'
-import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
-import { CurrencyAmount } from 'constants/token'
+
 export const getToken0AmountFromToken1Amount = (token1Amount: string, ratio: string | number) => {
   return new BigNumber(token1Amount).times(new BigNumber(ratio))
 }
@@ -107,9 +106,7 @@ export const showWaitingTxDialog = (onClose?: () => void, config?: { dark: boole
     subTitle: 'Bot is engaging with blockchain transaction, please wait patiently for on-chain transaction settlement.'
   })
 }
-export const showCoinInputDialog = (config: { token1Balance: CurrencyAmount }) => {
-  show(CoinInputDialog, config)
-}
+
 export const hideDialogConfirmation = () => {
   hide(DialogConfirmation)
   hide(DialogDarkConfirmation)
