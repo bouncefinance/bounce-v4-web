@@ -9,6 +9,8 @@ import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black
 import { CoinResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import dayjs from 'dayjs'
 import { useCountDown } from 'ahooks'
+import { useActiveWeb3React } from 'hooks'
+import { useShowLoginModal } from 'state/users/hooks'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -213,10 +215,10 @@ const nowDate = () => new Date().getTime()
 function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefined }) {
   const curStatus = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) return TStep.COMING_SOON
-    if (nowDate() < coinInfo.poolInfo.openAt * 100) {
+    if (nowDate() < coinInfo.poolInfo.openAt * 1000) {
       return TStep.COMING_SOON
     }
-    if (nowDate() >= coinInfo.poolInfo.openAt * 100 && nowDate() < coinInfo.poolInfo.closeAt * 100) {
+    if (nowDate() >= coinInfo.poolInfo.openAt * 1000 && nowDate() < coinInfo.poolInfo.closeAt * 1000) {
       return TStep.SUBSCRIPTION_PERIOD
     }
     return TStep.FINAL_TOKEN_DISTRIBUTION
@@ -237,9 +239,9 @@ function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefi
     (index: number) => {
       if (!coinInfo || !coinInfo.poolInfo) return '--'
       if (index === 0) {
-        return dayjs(coinInfo.poolInfo.openAt * 100).format('YYYY-MM-DD HH:MM')
+        return dayjs(coinInfo.poolInfo.openAt * 1000).format('YYYY-MM-DD HH:MM')
       }
-      return dayjs(coinInfo.poolInfo.closeAt * 100).format('YYYY-MM-DD HH:MM')
+      return dayjs(coinInfo.poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:MM')
     },
     [coinInfo]
   )
@@ -260,20 +262,21 @@ function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefi
 }
 
 function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType | undefined }) {
+  const { account } = useActiveWeb3React()
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
       return undefined
     }
     if (status === TStep.COMING_SOON) {
-      return coinInfo.poolInfo.openAt * 100
+      return coinInfo.poolInfo.openAt * 1000
     }
-    return coinInfo.poolInfo.closeAt * 100
+    return coinInfo.poolInfo.closeAt * 1000
   }, [coinInfo, status])
 
+  // 倒计时比实际的要慢一点
   const [, formattedRes] = useCountDown({
     targetDate: curTime
   })
-  console.log('curTime', curTime, formattedRes)
   const { days, hours, minutes } = formattedRes
   const renderCountDown = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -289,6 +292,31 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
       </>
     )
   }, [coinInfo, days, hours, minutes])
+  const showLoginModal = useShowLoginModal()
+  const actionBtn = useMemo(() => {
+    if (!account) {
+      return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
+    }
+    if (status === TStep.COMING_SOON) {
+      return (
+        <StakeButton disabled>
+          Stake <AddSvg />
+        </StakeButton>
+      )
+    }
+    if (status === TStep.SUBSCRIPTION_PERIOD) {
+      return (
+        <StakeButton>
+          Stake <AddSvg />
+        </StakeButton>
+      )
+    }
+    return (
+      <StakeButton disabled>
+        Stake <AddSvg />
+      </StakeButton>
+    )
+  }, [account, showLoginModal, status])
   return (
     <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
@@ -407,9 +435,7 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
               <CardLabelStyle>0%</CardLabelStyle>
             </Stack>
           </Stack>
-          <StakeButton>
-            Stake <AddSvg />
-          </StakeButton>
+          {actionBtn}
         </Stack>
       </Box>
     </Stack>
