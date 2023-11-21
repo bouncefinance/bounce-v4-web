@@ -44,8 +44,9 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   return coinInfo
 }
 export const useCoinToken0 = () => {
-  const token1 = SEPOLIA_TOKEN_LIST[1]
-  const token1Currency = new Currency(token1.chainId as any, token1.address, token1.decimals, token1.symbol)
-  const token1Amount = CurrencyAmount.fromAmount(token1Currency, 200000)
-  return token1Amount
+  const token0 = SEPOLIA_TOKEN_LIST[1]
+  const token1 = SEPOLIA_TOKEN_LIST[2]
+  const token0Currency = new Currency(token0.chainId as any, token0.address, token0.decimals, token0.symbol)
+  const token0Amount = CurrencyAmount.fromAmount(token0Currency, 200000)
+  return { token0Amount, token1 }
 }

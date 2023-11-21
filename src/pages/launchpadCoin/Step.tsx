@@ -11,6 +11,10 @@ import dayjs from 'dayjs'
 import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import useTokenList from 'bounceHooks/auction/useTokenList'
+import { Currency } from 'constants/token'
+import { ChainId } from 'constants/chain'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -262,7 +266,22 @@ function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefi
 }
 
 function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType | undefined }) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+
+  const tokenList = useTokenList(chainId, 1)
+
+  const token1Currency = useMemo(() => {
+    if (!tokenList || !coinInfo || !coinInfo.poolInfo) return undefined
+    const token1 = tokenList.tokenList.find(
+      i => i.address.toLocaleLowerCase() === coinInfo.poolInfo?.token1.toLocaleLowerCase()
+    )
+    if (!token1) return undefined
+    const currency = new Currency(token1.chainId as ChainId, token1.address, token1.decimals, token1.symbol)
+    return currency
+  }, [coinInfo, tokenList])
+
+  const token1Balance = useCurrencyBalance(account, token1Currency, chainId)
+
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
       return undefined
@@ -292,10 +311,20 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
       </>
     )
   }, [coinInfo, days, hours, minutes])
+
   const showLoginModal = useShowLoginModal()
+
+  const isBalanceInsufficient = useMemo(() => {
+    if (!token1Balance) return true
+    return !token1Balance.greaterThan('0')
+  }, [token1Balance])
+
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
+    }
+    if (isBalanceInsufficient) {
+      return <StakeButton disabled>Insufficient balance</StakeButton>
     }
     if (status === TStep.COMING_SOON) {
       return (
@@ -316,7 +345,8 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
         Stake <AddSvg />
       </StakeButton>
     )
-  }, [account, showLoginModal, status])
+  }, [account, isBalanceInsufficient, showLoginModal, status])
+
   return (
     <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
