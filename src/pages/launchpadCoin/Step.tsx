@@ -1,12 +1,14 @@
 import { Box, Button, Stack, Typography, Stepper, StepLabel, StepContent, Step, styled } from '@mui/material'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
 import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
 import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
 import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
-
+import { CoinResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import dayjs from 'dayjs'
+import { useCountDown } from 'ahooks'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -167,7 +169,7 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
   }
 }))
 
-export function Steps() {
+export function Steps({ coinInfo }: { coinInfo: CoinResultType | undefined }) {
   return (
     <Stack
       spacing={{ xs: 30, md: 40 }}
@@ -198,49 +200,58 @@ export function Steps() {
           My private launchpad
         </Button>
       </Box>
-      <VerticalLinearStepper />
+      <VerticalLinearStepper coinInfo={coinInfo} />
     </Stack>
   )
 }
-
-function VerticalLinearStepper() {
-  const [activeStep, setActiveStep] = useState(0)
-
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1)
-  }
-
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1)
-  }
+enum TStep {
+  'COMING_SOON' = -1,
+  'SUBSCRIPTION_PERIOD',
+  'FINAL_TOKEN_DISTRIBUTION'
+}
+const nowDate = () => new Date().getTime()
+function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefined }) {
+  const curStatus = useMemo(() => {
+    if (!coinInfo || !coinInfo.poolInfo) return TStep.COMING_SOON
+    if (nowDate() < coinInfo.poolInfo.openAt * 100) {
+      return TStep.COMING_SOON
+    }
+    if (nowDate() >= coinInfo.poolInfo.openAt * 100 && nowDate() < coinInfo.poolInfo.closeAt * 100) {
+      return TStep.SUBSCRIPTION_PERIOD
+    }
+    return TStep.FINAL_TOKEN_DISTRIBUTION
+  }, [coinInfo])
+  const [activeStep] = useState(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
 
   const steps = [
     {
       label: 'Subscription Period',
-      content: <Step1 handleNext={handleNext} />
+      content: <Step1 status={curStatus} coinInfo={coinInfo} />
     },
     {
       label: 'Final Token Distribution',
-      content: <Step2 handleNext={handleNext} />
+      content: <Step2 />
     }
   ]
-
+  const renderTime = useCallback(
+    (index: number) => {
+      if (!coinInfo || !coinInfo.poolInfo) return '--'
+      if (index === 0) {
+        return dayjs(coinInfo.poolInfo.openAt * 100).format('YYYY-MM-DD HH:MM')
+      }
+      return dayjs(coinInfo.poolInfo.closeAt * 100).format('YYYY-MM-DD HH:MM')
+    },
+    [coinInfo]
+  )
   return (
     <Box>
       <StepperStyle activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>
-            <StepLabelStyle optional={<Typography variant="caption">2022-02-17 11:00</Typography>}>
+            <StepLabelStyle optional={<Typography variant="caption">{renderTime(index)}</Typography>}>
               {step.label}
             </StepLabelStyle>
-            <StepContentStyle>
-              {index !== 0 && (
-                <Button onClick={handleBack} variant="contained">
-                  Back
-                </Button>
-              )}
-              {step?.content}
-            </StepContentStyle>
+            <StepContentStyle>{step?.content}</StepContentStyle>
           </Step>
         ))}
       </StepperStyle>
@@ -248,7 +259,36 @@ function VerticalLinearStepper() {
   )
 }
 
-function Step1({ handleNext }: { handleNext: () => void }) {
+function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType | undefined }) {
+  const curTime = useMemo(() => {
+    if (!coinInfo || !coinInfo.poolInfo) {
+      return undefined
+    }
+    if (status === TStep.COMING_SOON) {
+      return coinInfo.poolInfo.openAt * 100
+    }
+    return coinInfo.poolInfo.closeAt * 100
+  }, [coinInfo, status])
+
+  const [, formattedRes] = useCountDown({
+    targetDate: curTime
+  })
+  console.log('curTime', curTime, formattedRes)
+  const { days, hours, minutes } = formattedRes
+  const renderCountDown = useMemo(() => {
+    if (!coinInfo || !coinInfo.poolInfo) {
+      return (
+        <>
+          <b>--</b> Days <b>--</b> Hours <b>--</b> Mins
+        </>
+      )
+    }
+    return (
+      <>
+        <b>{days}</b> Days <b>{hours}</b> Hours <b>{minutes}</b> Mins
+      </>
+    )
+  }, [coinInfo, days, hours, minutes])
   return (
     <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
@@ -260,7 +300,7 @@ function Step1({ handleNext }: { handleNext: () => void }) {
           }}
           variant="body1"
         >
-          Time left until staked start:
+          {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until staked end:'}
         </Typography>
         <Typography
           variant="body1"
@@ -275,7 +315,7 @@ function Step1({ handleNext }: { handleNext: () => void }) {
             }
           }}
         >
-          <b>0</b> Days <b>1</b> Hours <b>17</b> Mins
+          {renderCountDown}
         </Typography>
       </Stack>
       <Box
@@ -367,7 +407,7 @@ function Step1({ handleNext }: { handleNext: () => void }) {
               <CardLabelStyle>0%</CardLabelStyle>
             </Stack>
           </Stack>
-          <StakeButton onClick={handleNext}>
+          <StakeButton>
             Stake <AddSvg />
           </StakeButton>
         </Stack>
@@ -376,7 +416,7 @@ function Step1({ handleNext }: { handleNext: () => void }) {
   )
 }
 
-function Step2({ handleNext }: { handleNext: () => void }) {
+function Step2() {
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -480,7 +520,7 @@ function Step2({ handleNext }: { handleNext: () => void }) {
               <BoldTextStyle>592.6442 GMT</BoldTextStyle>
             </Stack>
           </Stack>
-          <StakeButton onClick={handleNext}>
+          <StakeButton>
             Stake <AddSvg />
           </StakeButton>
         </Stack>
