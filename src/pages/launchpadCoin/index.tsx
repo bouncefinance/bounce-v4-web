@@ -19,16 +19,16 @@ const Page = () => {
     token0,
     LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
   )
-  const coinInfo = useGetLaunchpadCoinInfo(contract, 3, account)
+  const coinInfo = useGetLaunchpadCoinInfo(contract, 6, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
     BigInt(1000000000000000000),
     BigInt(1000000000000000000),
-    1700548500,
-    1700569200,
-    1700570400,
+    1700584620,
+    1700586000,
+    1700586300,
     300
   ]
 
@@ -46,7 +46,7 @@ const Page = () => {
       <div style={{ background: '#f5f5f1' }}>
         <Steps coinInfo={coinInfo} contract={contract} />
       </div>
-      {/* <button onClick={() => createPool()}>create</button> */}
+      <button onClick={() => createPool()}>create</button>
       <Tabs item={PrivatePadCoinData} />
       <FooterPc />
     </>

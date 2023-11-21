@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography, Stepper, StepLabel, StepContent, Step, styled } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
 import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
 import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
@@ -180,7 +180,7 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
     lineHeight: 'normal'
   }
 }))
-
+const poolId = 6
 export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undefined; contract: Contract | null }) {
   return (
     <Stack
@@ -239,7 +239,10 @@ function VerticalLinearStepper({
     }
     return TStep.FINAL_TOKEN_DISTRIBUTION
   }, [coinInfo])
-  const [activeStep] = useState(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
+  const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
+  useEffect(() => {
+    setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
+  }, [curStatus])
 
   const steps = [
     {
@@ -300,7 +303,6 @@ function Step1({
     const currency = new Currency(token1.chainId as ChainId, token1.address, token1.decimals, token1.symbol)
     return currency
   }, [coinInfo, tokenList])
-  console.log('token1Currency', token1Currency)
 
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Currency) return undefined
@@ -352,7 +354,7 @@ function Step1({
     setOpenDialog(true)
   }, [token1Balance])
   const isBalanceInsufficient = useMemo(() => {
-    if (!token1Balance) return true
+    if (!token1Balance) return false
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
 
@@ -390,7 +392,7 @@ function Step1({
     if (approvalState !== ApprovalState.APPROVED) {
       await approve()
     }
-    const params = [3, token1CurrencyAmount.raw.toString()]
+    const params = [poolId, token1CurrencyAmount.raw.toString()]
     try {
       const res = await contract.commit(...params)
       console.log('res4567', res)
@@ -520,6 +522,7 @@ function Step1({
                   Committable amount earned
                 </Typography>
               </Stack>
+
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
                 <CardLabelStyle>
@@ -532,7 +535,7 @@ function Step1({
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
                 <CardLabelStyle>
-                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount
+                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo.token1Amount) > 0
                     ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).mul(100).toString()
                     : '0'}
                   %
@@ -543,7 +546,9 @@ function Step1({
           </Stack>
         </Box>
       </Stack>
+
       <CoinInputDialog
+        token1={token1CurrencyAmount}
         id={'1'}
         open={openDialog}
         onClose={() => setOpenDialog(false)}
@@ -576,7 +581,7 @@ function Step2({
   const claimToken = async () => {
     if (!contract) return
     try {
-      const res = await contract.claimToken1([3])
+      const res = await contract.claimToken1([poolId])
       console.log('res123456', res)
     } catch (error) {
       console.log('res123456', error)

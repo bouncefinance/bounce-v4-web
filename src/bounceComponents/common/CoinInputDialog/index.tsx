@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   Dialog as MuiDialog,
   DialogContent,
@@ -23,6 +23,7 @@ export interface DialogProps extends MuiDialogProps {
   onClose: () => void
   open: boolean
   confirm: () => void
+  token1: CurrencyAmount | undefined
 }
 const GrayTitle = styled(Typography)`
   color: #626262;
@@ -82,8 +83,35 @@ const CancelBtnStyle = styled(Button)`
   }
 `
 const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
-  const { token1Balance, amount, handleSetAmount, onClose, open, confirm, ...rest } = props
-
+  const { token1Balance, amount, handleSetAmount, onClose, open, confirm, token1, ...rest } = props
+  const confirmBtn = useMemo(() => {
+    if (!amount) {
+      return (
+        <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
+          Confirm
+        </ConfirmBtnStyle>
+      )
+    }
+    if (token1 && token1Balance && token1.greaterThan(token1Balance)) {
+      return (
+        <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
+          Insufficient Balance
+        </ConfirmBtnStyle>
+      )
+    }
+    if (token1 && token1Balance && open && !token1.greaterThan(token1Balance)) {
+      return (
+        <ConfirmBtnStyle sx={{ flex: 2 }} onClick={() => confirm()}>
+          Confirm
+        </ConfirmBtnStyle>
+      )
+    }
+    return (
+      <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
+        Confirm
+      </ConfirmBtnStyle>
+    )
+  }, [amount, confirm, open, token1, token1Balance])
   return (
     <MuiDialog
       onClose={() => onClose()}
@@ -142,9 +170,7 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         <CancelBtnStyle style={{ flex: 1 }} onClick={() => onClose()}>
           Cancel
         </CancelBtnStyle>
-        <ConfirmBtnStyle sx={{ flex: 2 }} onClick={() => confirm()}>
-          Confirm
-        </ConfirmBtnStyle>
+        {confirmBtn}
       </Stack>
     </MuiDialog>
   )

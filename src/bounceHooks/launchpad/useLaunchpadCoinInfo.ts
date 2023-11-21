@@ -30,7 +30,6 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   const totalParticipants = useSingleCallResult(contract, 'participantCount')
   const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId])
   const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId])
-  console.log('swappedtoken0', swappedtoken0)
 
   const coinInfo = useMemo<CoinResultType | undefined>(() => {
     const result: CoinResultType = {}

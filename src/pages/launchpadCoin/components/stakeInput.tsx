@@ -43,6 +43,10 @@ const StakeInput = ({
   onChange: (v: string) => void
   token1Balance: CurrencyAmount | undefined
 }) => {
+  const handleMax = () => {
+    if (!token1Balance) return
+    onChange(token1Balance.toExact())
+  }
   return (
     <StakeInputStyle
       value={value}
@@ -51,7 +55,7 @@ const StakeInput = ({
       }}
       endAdornment={
         <Stack flexDirection={'row'} alignItems={'center'}>
-          <MaxButtonStyle>
+          <MaxButtonStyle onClick={() => handleMax()}>
             <ButtonTitle>Max</ButtonTitle>
           </MaxButtonStyle>
           <TokenNameTitle>{token1Balance?.currency.symbol}</TokenNameTitle>
