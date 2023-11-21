@@ -22,6 +22,7 @@ export interface DialogProps extends MuiDialogProps {
   handleSetAmount: (v: string) => void
   onClose: () => void
   open: boolean
+  confirm: () => void
 }
 const GrayTitle = styled(Typography)`
   color: #626262;
@@ -81,7 +82,7 @@ const CancelBtnStyle = styled(Button)`
   }
 `
 const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
-  const { token1Balance, amount, handleSetAmount, onClose, open, ...rest } = props
+  const { token1Balance, amount, handleSetAmount, onClose, open, confirm, ...rest } = props
 
   return (
     <MuiDialog
@@ -141,7 +142,9 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         <CancelBtnStyle style={{ flex: 1 }} onClick={() => onClose()}>
           Cancel
         </CancelBtnStyle>
-        <ConfirmBtnStyle sx={{ flex: 2 }}>Confirm</ConfirmBtnStyle>
+        <ConfirmBtnStyle sx={{ flex: 2 }} onClick={() => confirm()}>
+          Confirm
+        </ConfirmBtnStyle>
       </Stack>
     </MuiDialog>
   )

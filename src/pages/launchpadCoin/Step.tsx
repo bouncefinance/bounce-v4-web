@@ -16,6 +16,11 @@ import useTokenList from 'bounceHooks/auction/useTokenList'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
+import { useApproveCallback } from 'hooks/useApproveCallback'
+import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
+import { ApprovalState } from 'hooks/useTokenTimelock'
+import { Contract } from '@ethersproject/contracts'
+import { useToken } from 'state/wallet/hooks'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -176,7 +181,7 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
   }
 }))
 
-export function Steps({ coinInfo }: { coinInfo: CoinResultType | undefined }) {
+export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undefined; contract: Contract | null }) {
   return (
     <Stack
       spacing={{ xs: 30, md: 40 }}
@@ -207,7 +212,7 @@ export function Steps({ coinInfo }: { coinInfo: CoinResultType | undefined }) {
           My private launchpad
         </Button>
       </Box>
-      <VerticalLinearStepper coinInfo={coinInfo} />
+      <VerticalLinearStepper coinInfo={coinInfo} contract={contract} />
     </Stack>
   )
 }
@@ -217,7 +222,13 @@ enum TStep {
   'FINAL_TOKEN_DISTRIBUTION'
 }
 const nowDate = () => new Date().getTime()
-function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefined }) {
+function VerticalLinearStepper({
+  coinInfo,
+  contract
+}: {
+  coinInfo: CoinResultType | undefined
+  contract: Contract | null
+}) {
   const curStatus = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) return TStep.COMING_SOON
     if (nowDate() < coinInfo.poolInfo.openAt * 1000) {
@@ -233,11 +244,11 @@ function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefi
   const steps = [
     {
       label: 'Subscription Period',
-      content: <Step1 status={curStatus} coinInfo={coinInfo} />
+      content: <Step1 status={curStatus} coinInfo={coinInfo} contract={contract} />
     },
     {
       label: 'Final Token Distribution',
-      content: <Step2 />
+      content: <Step2 status={curStatus} coinInfo={coinInfo} contract={contract} />
     }
   ]
   const renderTime = useCallback(
@@ -266,12 +277,20 @@ function VerticalLinearStepper({ coinInfo }: { coinInfo: CoinResultType | undefi
   )
 }
 
-function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType | undefined }) {
+function Step1({
+  status,
+  coinInfo,
+  contract
+}: {
+  status: TStep
+  coinInfo: CoinResultType | undefined
+  contract: Contract | null
+}) {
   const { account, chainId } = useActiveWeb3React()
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
   const tokenList = useTokenList(chainId, 1)
-
+  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', chainId)
   const token1Currency = useMemo(() => {
     if (!tokenList || !coinInfo || !coinInfo.poolInfo) return undefined
     const token1 = tokenList.tokenList.find(
@@ -281,7 +300,16 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
     const currency = new Currency(token1.chainId as ChainId, token1.address, token1.decimals, token1.symbol)
     return currency
   }, [coinInfo, tokenList])
+  console.log('token1Currency', token1Currency)
 
+  const token1CurrencyAmount = useMemo(() => {
+    if (!token1Currency) return undefined
+    return CurrencyAmount.fromAmount(token1Currency, amount)
+  }, [amount, token1Currency])
+  const [approvalState, approve] = useApproveCallback(
+    token1CurrencyAmount,
+    LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
+  )
   const token1Balance = useCurrencyBalance(account, token1Currency, chainId)
 
   const curTime = useMemo(() => {
@@ -356,7 +384,21 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
     )
   }, [account, handleClickStake, isBalanceInsufficient, showLoginModal, status])
 
-  console.log('coinInfo', coinInfo)
+  const confirm = useCallback(async () => {
+    if (!contract || !token1CurrencyAmount) return
+
+    if (approvalState !== ApprovalState.APPROVED) {
+      await approve()
+    }
+    const params = [3, token1CurrencyAmount.raw.toString()]
+    try {
+      const res = await contract.commit(...params)
+      console.log('res4567', res)
+    } catch (error) {
+      console.log('res4567', error, approvalState)
+    }
+  }, [approvalState, approve, contract, token1CurrencyAmount])
+
   return (
     <>
       <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
@@ -438,7 +480,10 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
                 <Stack spacing={8}>
                   <CardContentStyle>Total Stake</CardContentStyle>
                   <CardLabelStyle>
-                    {coinInfo?.token1Amount ? coinInfo?.token1Amount.toString() : '--'} {token1Currency?.symbol}
+                    {coinInfo?.token1Amount && token1Currency
+                      ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
+                      : '--'}{' '}
+                    {token1Currency?.symbol}
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -450,7 +495,6 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
               </Stack>
             </Stack>
           </Box>
-
           <Stack
             spacing={{ xs: 30, md: 50 }}
             sx={{
@@ -459,7 +503,12 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
           >
             <Stack spacing={{ xs: 20, md: 30 }}>
               <Stack spacing={12}>
-                <BoldTextStyle>0.00 GMT</BoldTextStyle>
+                <BoldTextStyle>
+                  {token0 && coinInfo?.swappedtoken0
+                    ? CurrencyAmount.fromRawAmount(token0, coinInfo?.swappedtoken0?.toString()).toSignificant()
+                    : '--'}{' '}
+                  {token0?.symbol || '--'}
+                </BoldTextStyle>
                 <Typography
                   sx={{
                     color: '#959595',
@@ -474,14 +523,17 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
                 <CardLabelStyle>
-                  {coinInfo?.myToken1Amount?.toString() || '--'} {token1Currency?.symbol}
+                  {coinInfo?.myToken1Amount && token1Currency
+                    ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount.toString()).toSignificant()
+                    : '--'}{' '}
+                  {token1Currency?.symbol}
                 </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
                 <CardLabelStyle>
-                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo?.token1Amount?.toString()) > 0
-                    ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).toString()
+                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount
+                    ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).mul(100).toString()
                     : '0'}
                   %
                 </CardLabelStyle>
@@ -498,12 +550,38 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
         token1Balance={token1Balance as CurrencyAmount}
         amount={amount}
         handleSetAmount={handleSetAmount}
+        confirm={confirm}
       />
     </>
   )
 }
 
-function Step2() {
+function Step2({
+  status,
+  coinInfo,
+  contract
+}: {
+  status: TStep
+  coinInfo: CoinResultType | undefined
+  contract: Contract | null
+}) {
+  console.log('status', status)
+
+  const token1 = useToken(coinInfo?.poolInfo?.token1 || '')
+  const token1TotalAmount = useMemo(() => {
+    if (!token1 || !coinInfo?.token1Amount) return undefined
+    return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
+  }, [coinInfo?.token1Amount, token1])
+  console.log()
+  const claimToken = async () => {
+    if (!contract) return
+    try {
+      const res = await contract.claimToken1([3])
+      console.log('res123456', res)
+    } catch (error) {
+      console.log('res123456', error)
+    }
+  }
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -553,7 +631,9 @@ function Step2() {
                 <BnBTokenSvg />
                 <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
               </Box>
-              <CardContentBoldTextStyle>8,742,450.4131 BNB</CardContentBoldTextStyle>
+              <CardContentBoldTextStyle>
+                {token1TotalAmount?.toSignificant() || '--'} {token1?.symbol || '--'}
+              </CardContentBoldTextStyle>
             </Stack>
 
             <Stack spacing={16}>
@@ -567,7 +647,7 @@ function Step2() {
                 <UserSvg />
                 <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
               </Box>
-              <CardContentBoldTextStyle>592.6442</CardContentBoldTextStyle>
+              <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
             </Stack>
           </Stack>
         </Box>
@@ -588,10 +668,10 @@ function Step2() {
                 }}
               >
                 <CheckSvg />
-                <CardContentTitleStyle>Deducted</CardContentTitleStyle>
+                <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
               </Box>
 
-              <BoldTextStyle>0.01489908 BNB</BoldTextStyle>
+              <BoldTextStyle>20.00 B2B / 0 B2B</BoldTextStyle>
             </Stack>
             <Stack spacing={{ xs: 8, md: 16 }}>
               <Box
@@ -602,13 +682,13 @@ function Step2() {
                 }}
               >
                 <WonderSvg />
-                <CardContentTitleStyle>Your final allocation</CardContentTitleStyle>
+                <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
               </Box>
-              <BoldTextStyle>592.6442 GMT</BoldTextStyle>
+              <BoldTextStyle>0.06 BNB / 20.00 BNB</BoldTextStyle>
             </Stack>
           </Stack>
-          <StakeButton>
-            Stake <AddSvg />
+          <StakeButton onClick={() => claimToken()}>
+            claim token1 <AddSvg />
           </StakeButton>
         </Stack>
       </Box>
