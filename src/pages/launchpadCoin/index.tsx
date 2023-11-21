@@ -12,15 +12,14 @@ import { useActiveWeb3React } from 'hooks'
 
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 const Page = () => {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const contract = useLaunchpadCoinContract()
   const { token0Amount: token0, token1 } = useCoinToken0()
   const [approvalState, approveCallback] = useApproveCallback(
     token0,
     LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
   )
-  const coinInfo = useGetLaunchpadCoinInfo(contract, 3)
-  console.log('coinInfo', coinInfo)
+  const coinInfo = useGetLaunchpadCoinInfo(contract, 3, account)
 
   const params: any = [
     token0?.currency.address,

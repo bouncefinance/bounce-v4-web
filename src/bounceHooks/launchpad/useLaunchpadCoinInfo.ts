@@ -16,11 +16,20 @@ type PoolInfoType = {
   token0: string
   token1: string
 }
+
 export type CoinResultType = {
   poolInfo?: PoolInfoType
+  token1Amount?: BigNumber
+  totalParticipants?: BigNumber
+  myToken1Amount?: BigNumber
 }
-export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number) => {
+export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId])
+  const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId])
+  const totalParticipants = useSingleCallResult(contract, 'participantCount')
+  const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId])
+  console.log('myTzotalStake', myTotalStake)
+
   const coinInfo = useMemo<CoinResultType | undefined>(() => {
     const result: CoinResultType = {}
     if (poolInfo.result) {
@@ -37,9 +46,17 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
       }
       result.poolInfo = _poolInfo
     }
-
+    if (totalStake.result) {
+      result.token1Amount = totalStake.result[0]
+    }
+    if (totalParticipants.result) {
+      result.totalParticipants = totalParticipants.result[0]
+    }
+    if (myTotalStake.result) {
+      result.myToken1Amount = myTotalStake.result[0]
+    }
     return result
-  }, [poolInfo.result])
+  }, [myTotalStake.result, poolInfo.result, totalParticipants.result, totalStake.result])
 
   return coinInfo
 }

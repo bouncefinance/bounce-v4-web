@@ -347,6 +347,7 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
     )
   }, [account, isBalanceInsufficient, showLoginModal, status])
 
+  console.log('coinInfo', coinInfo)
   return (
     <Stack spacing={{ xs: 16, md: 24 }} mt={{ xs: 16, md: 24 }}>
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 8, md: 16 }} height={{ xs: 'auto', md: 24 }}>
@@ -426,11 +427,15 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
             <Stack spacing={{ xs: 20, md: 30 }}>
               <Stack spacing={8}>
                 <CardContentStyle>Total Stake</CardContentStyle>
-                <CardLabelStyle>0.00 BNB</CardLabelStyle>
+                <CardLabelStyle>
+                  {coinInfo?.token1Amount ? coinInfo?.token1Amount.toString() : '--'} {token1Currency?.symbol}
+                </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>Participants</CardContentStyle>
-                <CardLabelStyle>1</CardLabelStyle>
+                <CardLabelStyle>
+                  {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
+                </CardLabelStyle>
               </Stack>
             </Stack>
           </Stack>
@@ -458,11 +463,18 @@ function Step1({ status, coinInfo }: { status: TStep; coinInfo: CoinResultType |
             </Stack>
             <Stack spacing={8}>
               <CardContentStyle>My Stake</CardContentStyle>
-              <CardLabelStyle>0.00 BNB</CardLabelStyle>
+              <CardLabelStyle>
+                {coinInfo?.myToken1Amount?.toString() || '--'} {token1Currency?.symbol}
+              </CardLabelStyle>
             </Stack>
             <Stack spacing={8}>
               <CardContentStyle>My Pool Share</CardContentStyle>
-              <CardLabelStyle>0%</CardLabelStyle>
+              <CardLabelStyle>
+                {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo?.token1Amount?.toString()) > 0
+                  ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).toString()
+                  : '0'}
+                %
+              </CardLabelStyle>
             </Stack>
           </Stack>
           {actionBtn}
