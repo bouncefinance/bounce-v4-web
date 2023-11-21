@@ -149,7 +149,14 @@ const StakeButton = styled(Button)(({ theme }) => ({
     height: '42px'
   }
 }))
-
+const CountdownBtnStyle = styled(StakeButton)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  gap: 0;
+`
 const BoldTextStyle = styled(Typography)(({ theme }) => ({
   color: '#121212',
   fontSize: '36px',
@@ -659,14 +666,49 @@ function Step2({
   coinInfo: CoinResultType | undefined
   contract: Contract | null
 }) {
-  console.log('status', status)
-
   const token1 = useToken(coinInfo?.poolInfo?.token1 || '')
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
     return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
   }, [coinInfo?.token1Amount, token1])
-
+  const [, formattedRes] = useCountDown({
+    targetDate: coinInfo?.poolInfo?.releaseAt ? coinInfo?.poolInfo?.releaseAt * 1000 : 0
+  })
+  const claimToken0 = useCallback(async () => {
+    if (!contract) return
+    showWaitingTxDialog(() => {
+      hideDialogConfirmation()
+    })
+    try {
+      const res = await contract.claimToken0([poolId])
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        res.wait().then((curReceipt: any) => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: claimToken1
+      })
+    }
+  }, [contract])
   const claimToken1 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
@@ -702,7 +744,24 @@ function Step2({
       })
     }
   }, [contract])
-
+  const canClaimToken0 = useMemo(() => {
+    if (!coinInfo) return false
+    const now = nowDate()
+    if (coinInfo.poolInfo && Number(now) > coinInfo.poolInfo.releaseAt * 1000) {
+      return (
+        coinInfo.claimedToken0 &&
+        coinInfo.finalAllocation?.mySwappedAmount0
+          .mul(
+            Number(now) > coinInfo.poolInfo.releaseAt * 1000 + coinInfo.poolInfo.releaseDuration * 1000
+              ? 1
+              : (Number(now) - coinInfo.poolInfo.releaseAt * 1000) / (coinInfo.poolInfo.releaseDuration * 1000)
+          )
+          .sub(coinInfo.claimedToken0)
+          .gt(0)
+      )
+    }
+    return false
+  }, [coinInfo])
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -800,9 +859,18 @@ function Step2({
                 </Box>
                 <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                   <BoldTextStyle style={{ fontSize: 20 }}>20.00 B2B / 0 B2B</BoldTextStyle>
-                  <StakeButton style={{ width: 150 }} onClick={() => claimToken1()}>
-                    Lock countdown
-                  </StakeButton>
+                  {coinInfo.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
+                    <CountdownBtnStyle style={{ width: 150 }}>
+                      Lock countdown
+                      <Typography>
+                        {formattedRes.days}d {formattedRes.hours}h
+                      </Typography>
+                    </CountdownBtnStyle>
+                  ) : (
+                    <CountdownBtnStyle style={{ width: 150 }} disabled={!canClaimToken0} onClick={() => claimToken0()}>
+                      Claim
+                    </CountdownBtnStyle>
+                  )}
                 </Stack>
               </Stack>
               <Stack spacing={{ xs: 8, md: 16 }}>

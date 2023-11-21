@@ -28,6 +28,7 @@ export type CoinResultType = {
   swappedtoken0?: BigNumber
   myToken1Claimed?: boolean
   finalAllocation?: FinalAllocationType
+  claimedToken0?: BigNumber
 }
 export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId])
@@ -37,7 +38,7 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId])
   const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId])
   const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account])
-  console.log('finalAllocation', finalAllocation)
+  const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId])
 
   const coinInfo = useMemo<CoinResultType | undefined>(() => {
     const result: CoinResultType = {}
@@ -76,8 +77,12 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
         myUnSwappedAmount1: finalAllocation.result[1]
       } as FinalAllocationType
     }
+    if (claimedToken0.result) {
+      result.claimedToken0 = claimedToken0.result[0]
+    }
     return result
   }, [
+    claimedToken0.result,
     finalAllocation.result,
     myToken1Claimed.result,
     myTotalStake.result,
