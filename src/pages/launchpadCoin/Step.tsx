@@ -21,6 +21,9 @@ import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ApprovalState } from 'hooks/useTokenTimelock'
 import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
+import { show } from '@ebay/nice-modal-react'
+import DialogTips from 'bounceComponents/common/DialogTips'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -180,7 +183,7 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
     lineHeight: 'normal'
   }
 }))
-const poolId = 6
+const poolId = 8
 export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undefined; contract: Contract | null }) {
   return (
     <Stack
@@ -385,21 +388,85 @@ function Step1({
       </StakeButton>
     )
   }, [account, handleClickStake, isBalanceInsufficient, showLoginModal, status])
-
+  const handleClose = () => {
+    setOpenDialog(false)
+  }
+  const toApprove = useCallback(async () => {
+    showRequestApprovalDialog()
+    try {
+      const { transactionReceipt } = await approve()
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        transactionReceipt.then(curReceipt => {
+          resolve(curReceipt)
+        })
+      })
+      await ret
+      hideDialogConfirmation()
+    } catch (error) {
+      const err: any = error
+      console.error('err123', err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: toApprove
+      })
+    }
+  }, [approve])
+  const toCommit = useCallback(async () => {
+    if (!token1CurrencyAmount || !contract) return
+    showWaitingTxDialog(() => {
+      hideDialogConfirmation()
+    })
+    try {
+      const params = [poolId, token1CurrencyAmount.raw.toString()]
+      const res = await contract.commit(...params)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        res.wait().then((curReceipt: any) => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          handleClose()
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      console.error(err)
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: approvalState !== ApprovalState.APPROVED ? toApprove : toCommit
+      })
+    }
+  }, [approvalState, contract, toApprove, token1CurrencyAmount])
   const confirm = useCallback(async () => {
     if (!contract || !token1CurrencyAmount) return
-
+    const isNoApprove = false
     if (approvalState !== ApprovalState.APPROVED) {
-      await approve()
+      await toApprove()
     }
-    const params = [poolId, token1CurrencyAmount.raw.toString()]
-    try {
-      const res = await contract.commit(...params)
-      console.log('res4567', res)
-    } catch (error) {
-      console.log('res4567', error, approvalState)
+    if (!isNoApprove) {
+      await toCommit()
     }
-  }, [approvalState, approve, contract, token1CurrencyAmount])
+  }, [approvalState, contract, toApprove, toCommit, token1CurrencyAmount])
 
   return (
     <>
@@ -551,7 +618,7 @@ function Step1({
         token1={token1CurrencyAmount}
         id={'1'}
         open={openDialog}
-        onClose={() => setOpenDialog(false)}
+        onClose={() => handleClose()}
         token1Balance={token1Balance as CurrencyAmount}
         amount={amount}
         handleSetAmount={handleSetAmount}

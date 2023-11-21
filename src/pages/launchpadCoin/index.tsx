@@ -19,16 +19,16 @@ const Page = () => {
     token0,
     LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
   )
-  const coinInfo = useGetLaunchpadCoinInfo(contract, 6, account)
+  const coinInfo = useGetLaunchpadCoinInfo(contract, 8, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
     BigInt(1000000000000000000),
     BigInt(1000000000000000000),
-    1700584620,
-    1700586000,
-    1700586300,
+    1700588160,
+    1700589600,
+    1700589900,
     300
   ]
 

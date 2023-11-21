@@ -84,6 +84,10 @@ const CancelBtnStyle = styled(Button)`
 `
 const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
   const { token1Balance, amount, handleSetAmount, onClose, open, confirm, token1, ...rest } = props
+  const handleClose = () => {
+    onClose()
+    handleSetAmount('')
+  }
   const confirmBtn = useMemo(() => {
     if (!amount) {
       return (
@@ -114,7 +118,7 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
   }, [amount, confirm, open, token1, token1Balance])
   return (
     <MuiDialog
-      onClose={() => onClose()}
+      onClose={() => handleClose()}
       sx={{
         '& .MuiDialog-paper': {
           width: 480,
@@ -130,7 +134,7 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         color="primary"
         aria-label="dialog-close"
         sx={{ position: 'absolute', right: 12, top: 12 }}
-        onClick={() => onClose()}
+        onClick={() => handleClose()}
       >
         <CloseSVG />
       </IconButton>
@@ -167,7 +171,7 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         </>
       </DialogContent>
       <Stack flexDirection={'row'} alignItems={'center'} gap={12} mb={40}>
-        <CancelBtnStyle style={{ flex: 1 }} onClick={() => onClose()}>
+        <CancelBtnStyle style={{ flex: 1 }} onClick={() => handleClose()}>
           Cancel
         </CancelBtnStyle>
         {confirmBtn}
