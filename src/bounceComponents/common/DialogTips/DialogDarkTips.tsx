@@ -7,7 +7,8 @@ import {
   DialogTitle,
   DialogProps as MuiDialogProps,
   Button,
-  Box
+  Box,
+  SxProps
 } from '@mui/material'
 import { create, register, useModal } from '@ebay/nice-modal-react'
 import Image from 'components/Image'
@@ -21,6 +22,27 @@ export interface DialogProps extends Omit<MuiDialogProps, 'open'> {
   title?: string
   cancelBtn?: string
   againBtn?: string
+}
+export const DialogTipsWhiteTheme: SxProps = {
+  '&.MuiPaper-root': {
+    borderRadius: 20,
+    '& .MuiButtonBase-root': {
+      backgroundColor: '#121212',
+      color: '#fff'
+    },
+    backgroundColor: '#fff',
+    '& svg path': {
+      stroke: '#171717'
+    },
+    '& .MuiDialogContent-root h2': {
+      color: '#121212'
+    },
+    '& .MuiDialogContent-root .MuiStack-root .MuiButtonBase-root:first-child': {
+      border: '1px solid  #121212',
+      background: '#FFF',
+      color: '#121212'
+    }
+  }
 }
 const DialogTips = create((props: DialogProps) => {
   const { content, title, onAgain, onClose, cancelBtn, againBtn, onCancel, iconType, ...rest } = props

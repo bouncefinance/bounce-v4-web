@@ -23,9 +23,10 @@ import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
-import DialogTips from 'bounceComponents/common/DialogTips'
+
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
+import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -442,7 +443,10 @@ function Step1({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toApprove
+        onAgain: toApprove,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
   }, [approve])
@@ -466,6 +470,15 @@ function Step1({
       ret
         .then(() => {
           hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Save',
+            title: 'Success! ',
+            content: `You have successfully stake  ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            }
+          })
           handleClose()
         })
         .catch()
@@ -479,10 +492,13 @@ function Step1({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: approvalState !== ApprovalState.APPROVED ? toApprove : toCommit
+        onAgain: approvalState !== ApprovalState.APPROVED ? toApprove : toCommit,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
-  }, [approvalState, contract, toApprove, token1CurrencyAmount])
+  }, [approvalState, contract, poolId, toApprove, token1Currency?.symbol, token1CurrencyAmount])
   const confirm = useCallback(async () => {
     if (!contract || !token1CurrencyAmount) return
     const isNoApprove = false
@@ -730,6 +746,22 @@ function Step2({
       ret
         .then(() => {
           hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Save',
+            title: 'Success!',
+            content: `You have successfully claim ${
+              token0 &&
+              coinInfo?.finalAllocation?.mySwappedAmount0 &&
+              coinInfo.claimedToken0 &&
+              CurrencyAmount.fromRawAmount(token0, coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
+                .subtract(CurrencyAmount.fromRawAmount(token0, coinInfo.claimedToken0.toString()))
+                .toSignificant()
+            } ${token1?.symbol}`,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            }
+          })
         })
         .catch()
     } catch (error) {
@@ -742,10 +774,13 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken0
+        onAgain: claimToken0,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
-  }, [contract, poolId])
+  }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, contract, poolId, token0, token1?.symbol])
   const claimToken1 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
@@ -765,6 +800,23 @@ function Step2({
       ret
         .then(() => {
           hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            cancelBtn: 'Save',
+            title: 'Success! ',
+            content: `You have successfully claim ${
+              token1 &&
+              coinInfo?.finalAllocation?.myUnSwappedAmount1 &&
+              CurrencyAmount.fromRawAmount(
+                token1,
+                coinInfo.finalAllocation?.myUnSwappedAmount1.toString()
+              ).toSignificant()
+            } ${token1?.symbol}`,
+            onAgain: claimToken1,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            }
+          })
         })
         .catch()
     } catch (error) {
@@ -777,10 +829,13 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken1
+        onAgain: claimToken1,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
-  }, [contract, poolId])
+  }, [coinInfo?.finalAllocation?.myUnSwappedAmount1, contract, poolId, token1])
   const canClaimToken0 = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) return false
     if (coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')) return false
