@@ -31,14 +31,14 @@ export type CoinResultType = {
   claimedToken0?: BigNumber
 }
 export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const poolInfo = useSingleCallResult(contract, 'pools', [poolId])
-  const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId])
-  const totalParticipants = useSingleCallResult(contract, 'participantCount')
-  const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId])
-  const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId])
-  const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId])
-  const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account])
-  const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId])
+  const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, 11155111)
+  const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, 11155111)
+  const totalParticipants = useSingleCallResult(contract, 'participantCount', undefined, undefined, 11155111)
+  const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId], undefined, 11155111)
+  const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId], undefined, 11155111)
+  const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId], undefined, 11155111)
+  const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account], undefined, 11155111)
+  const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId], undefined, 11155111)
 
   const coinInfo = useMemo<CoinResultType | undefined>(() => {
     const result: CoinResultType = {}

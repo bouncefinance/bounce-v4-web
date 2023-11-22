@@ -13,7 +13,7 @@ import { useActiveWeb3React } from 'hooks'
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 const Page = () => {
   const { chainId, account } = useActiveWeb3React()
-  const contract = useLaunchpadCoinContract()
+  const contract = useLaunchpadCoinContract(11155111)
   const { token0Amount: token0, token1 } = useCoinToken0()
   const [approvalState, approveCallback] = useApproveCallback(
     token0,
