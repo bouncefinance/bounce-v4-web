@@ -861,6 +861,8 @@ function Step2({
   }, [coinInfo])
 
   const showLoginModal = useShowLoginModal()
+  console.log('coinInfo123', coinInfo)
+
   return (
     <Stack spacing={24} mt={24}>
       <Typography
