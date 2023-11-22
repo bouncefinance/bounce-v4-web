@@ -191,7 +191,7 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
     lineHeight: 'normal'
   }
 }))
-const poolId = 8
+const poolId = 10
 export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undefined; contract: Contract | null }) {
   return (
     <Stack
@@ -252,8 +252,7 @@ function VerticalLinearStepper({
   }, [coinInfo])
   const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
   useEffect(() => {
-    // setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
-    setActiveStep(1)
+    setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
   }, [curStatus])
 
   const steps = [
@@ -476,6 +475,7 @@ function Step1({
       await toCommit()
     }
   }, [approvalState, contract, toApprove, toCommit, token1CurrencyAmount])
+  console.log('coinInfo', coinInfo)
 
   return (
     <>
@@ -582,8 +582,11 @@ function Step1({
             <Stack spacing={{ xs: 20, md: 30 }}>
               <Stack spacing={12}>
                 <BoldTextStyle>
-                  {token0 && coinInfo?.swappedtoken0
-                    ? CurrencyAmount.fromRawAmount(token0, coinInfo?.swappedtoken0?.toString()).toSignificant()
+                  {token0 && coinInfo?.finalAllocation?.mySwappedAmount0
+                    ? CurrencyAmount.fromRawAmount(
+                        token0,
+                        coinInfo?.finalAllocation?.mySwappedAmount0.toString()
+                      ).toSignificant()
                     : '--'}{' '}
                   {token0?.symbol || '--'}
                 </BoldTextStyle>
@@ -611,8 +614,14 @@ function Step1({
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
                 <CardLabelStyle>
-                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo.token1Amount) > 0
-                    ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).mul(100).toString()
+                  {token1Currency &&
+                  coinInfo?.myToken1Amount &&
+                  coinInfo?.token1Amount &&
+                  Number(coinInfo.token1Amount) > 0
+                    ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount?.toString() || '0')
+                        .divide(CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount?.toString() || '0'))
+                        .multiply('100')
+                        ?.toSignificant(token1Currency.decimals)
                     : '0'}
                   %
                 </CardLabelStyle>
@@ -666,6 +675,7 @@ function Step2({
   coinInfo: CoinResultType | undefined
   contract: Contract | null
 }) {
+  console.log('coinInfo123456', coinInfo)
   const token1 = useToken(coinInfo?.poolInfo?.token1 || '')
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
@@ -705,7 +715,7 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken1
+        onAgain: claimToken0
       })
     }
   }, [contract])
