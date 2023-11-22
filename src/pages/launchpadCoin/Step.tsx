@@ -482,7 +482,6 @@ function Step1({
       await toCommit()
     }
   }, [approvalState, contract, toApprove, toCommit, token1CurrencyAmount])
-  console.log('coinInfo', coinInfo)
 
   return (
     <>
@@ -682,7 +681,6 @@ function Step2({
   coinInfo: CoinResultType | undefined
   contract: Contract | null
 }) {
-  console.log('coinInfo123456', coinInfo)
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     if (!account) {
@@ -788,8 +786,8 @@ function Step2({
     }
     return false
   }, [coinInfo])
-  console.log('canClaimToken0', coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
 
+  const showLoginModal = useShowLoginModal()
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -804,12 +802,15 @@ function Step2({
         The allocation calculation is complete. We will deduct the corresponding BNB from your account based on your
         final GMT allocation, which will be transferred to your spot account along with your remaining BNB.
       </Typography>
-      {coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.eq(0) && status === TStep.FINAL_TOKEN_DISTRIBUTION && (
-        <NotInvolvedContainer>
-          <FailSVG />
-          <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
-        </NotInvolvedContainer>
-      )}
+      {account &&
+        coinInfo?.myToken1Amount &&
+        coinInfo?.myToken1Amount.eq(0) &&
+        status === TStep.FINAL_TOKEN_DISTRIBUTION && (
+          <NotInvolvedContainer>
+            <FailSVG />
+            <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
+          </NotInvolvedContainer>
+        )}
       {(!account || (coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && coinInfo)) &&
         status === TStep.FINAL_TOKEN_DISTRIBUTION && (
           <Box
@@ -967,6 +968,7 @@ function Step2({
                       Claim
                     </StakeButton>
                   </Stack>
+                  {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
                 </Stack>
               </Stack>
             </Stack>

@@ -46,7 +46,7 @@ const Page = () => {
       <div style={{ background: '#f5f5f1' }}>
         <Steps coinInfo={coinInfo} contract={contract} />
       </div>
-      <button onClick={() => createPool()}>create</button>
+      {/* <button onClick={() => createPool()}>create</button> */}
       <Tabs item={PrivatePadCoinData} />
       <FooterPc />
     </>
