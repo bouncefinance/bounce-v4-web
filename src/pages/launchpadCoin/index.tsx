@@ -11,6 +11,7 @@ import { useCoinToken0, useGetLaunchpadCoinInfo } from 'bounceHooks/launchpad/us
 import { useActiveWeb3React } from 'hooks'
 
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
+const poolId = 17
 const Page = () => {
   const { chainId, account } = useActiveWeb3React()
   const contract = useLaunchpadCoinContract(11155111)
@@ -19,16 +20,16 @@ const Page = () => {
     token0,
     LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
   )
-  const coinInfo = useGetLaunchpadCoinInfo(contract, 10, account)
+  const coinInfo = useGetLaunchpadCoinInfo(contract, poolId, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
-    BigInt(10000000),
-    BigInt(1000000000000000000),
-    1700621340,
-    1700622600,
-    1700622900,
+    BigInt(100000000),
+    BigInt(10000000000000000000),
+    1700640494,
+    1700640674,
+    1700640794,
     300
   ]
 
@@ -44,7 +45,7 @@ const Page = () => {
     <>
       <ProjectHead item={PrivatePadCoinData} />
       <div style={{ background: '#f5f5f1' }}>
-        <Steps coinInfo={coinInfo} contract={contract} />
+        <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
       </div>
       {/* <button onClick={() => createPool()}>create</button> */}
       <Tabs item={PrivatePadCoinData} />

@@ -25,6 +25,7 @@ import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog 
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
+import BigNumber from 'bignumber.js'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -191,8 +192,16 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
     lineHeight: 'normal'
   }
 }))
-const poolId = 10
-export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undefined; contract: Contract | null }) {
+
+export function Steps({
+  coinInfo,
+  contract,
+  poolId
+}: {
+  coinInfo: CoinResultType | undefined
+  contract: Contract | null
+  poolId: number
+}) {
   return (
     <Stack
       spacing={{ xs: 30, md: 40 }}
@@ -223,7 +232,7 @@ export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undef
           My private launchpad
         </Button>
       </Box>
-      <VerticalLinearStepper coinInfo={coinInfo} contract={contract} />
+      <VerticalLinearStepper poolId={poolId} coinInfo={coinInfo} contract={contract} />
     </Stack>
   )
 }
@@ -235,10 +244,12 @@ enum TStep {
 const nowDate = () => new Date().getTime()
 function VerticalLinearStepper({
   coinInfo,
-  contract
+  contract,
+  poolId
 }: {
   coinInfo: CoinResultType | undefined
   contract: Contract | null
+  poolId: number
 }) {
   const curStatus = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) return TStep.COMING_SOON
@@ -259,29 +270,27 @@ function VerticalLinearStepper({
   const steps = [
     {
       label: 'Subscription Period',
-      content: <Step1 status={curStatus} coinInfo={coinInfo} contract={contract} />
+      content: <Step1 status={curStatus} coinInfo={coinInfo} contract={contract} poolId={poolId} />
     },
     {
       label: 'Final Token Distribution',
-      content: <Step2 status={curStatus} coinInfo={coinInfo} contract={contract} />
+      content: <Step2 status={curStatus} coinInfo={coinInfo} contract={contract} poolId={poolId} />
     }
   ]
-  const renderTime = useCallback(
-    (index: number) => {
-      if (!coinInfo || !coinInfo.poolInfo) return '--'
-      if (index === 0) {
-        return dayjs(coinInfo.poolInfo.openAt * 1000).format('YYYY-MM-DD HH:MM')
-      }
-      return dayjs(coinInfo.poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:MM')
-    },
-    [coinInfo]
-  )
+
+  const renderTime = useMemo(() => {
+    if (!coinInfo || !coinInfo.poolInfo) return ['--', '--']
+    return [
+      dayjs(coinInfo.poolInfo.openAt * 1000).format('YYYY-MM-DD HH:mm'),
+      dayjs(coinInfo.poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:mm')
+    ]
+  }, [coinInfo])
   return (
     <Box>
       <StepperStyle activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>
-            <StepLabelStyle optional={<Typography variant="caption">{renderTime(index)}</Typography>}>
+            <StepLabelStyle optional={<Typography variant="caption">{coinInfo && renderTime[index]}</Typography>}>
               {step.label}
             </StepLabelStyle>
             <StepContentStyle>{step?.content}</StepContentStyle>
@@ -295,11 +304,13 @@ function VerticalLinearStepper({
 function Step1({
   status,
   coinInfo,
-  contract
+  contract,
+  poolId
 }: {
   status: TStep
   coinInfo: CoinResultType | undefined
   contract: Contract | null
+  poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
@@ -627,7 +638,7 @@ function Step1({
                     ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount?.toString() || '0')
                         .divide(CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount?.toString() || '0'))
                         .multiply('100')
-                        ?.toSignificant(token1Currency.decimals)
+                        .toFixed(2)
                     : '0'}
                   %
                 </CardLabelStyle>
@@ -675,11 +686,13 @@ const NotInvolvedTitle = styled(Typography)`
 function Step2({
   status,
   coinInfo,
-  contract
+  contract,
+  poolId
 }: {
   status: TStep
   coinInfo: CoinResultType | undefined
   contract: Contract | null
+  poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
@@ -697,6 +710,7 @@ function Step2({
   const [, formattedRes] = useCountDown({
     targetDate: coinInfo?.poolInfo?.releaseAt ? coinInfo?.poolInfo?.releaseAt * 1000 : 0
   })
+
   const claimToken0 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
@@ -731,7 +745,7 @@ function Step2({
         onAgain: claimToken0
       })
     }
-  }, [contract])
+  }, [contract, poolId])
   const claimToken1 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
@@ -766,23 +780,27 @@ function Step2({
         onAgain: claimToken1
       })
     }
-  }, [contract])
+  }, [contract, poolId])
   const canClaimToken0 = useMemo(() => {
-    if (!coinInfo) return false
+    if (!coinInfo || !coinInfo.poolInfo) return false
     if (coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')) return false
     const now = nowDate()
+
     if (coinInfo.poolInfo && Number(now) > coinInfo.poolInfo.releaseAt * 1000) {
-      return (
-        coinInfo.claimedToken0 &&
-        coinInfo.finalAllocation?.mySwappedAmount0
-          .mul(
-            Number(now) > coinInfo.poolInfo.releaseAt * 1000 + coinInfo.poolInfo.releaseDuration * 1000
-              ? 1
-              : (Number(now) - coinInfo.poolInfo.releaseAt * 1000) / (coinInfo.poolInfo.releaseDuration * 1000)
-          )
-          .sub(coinInfo.claimedToken0)
-          .gt(0)
-      )
+      const flag =
+        (coinInfo.claimedToken0 &&
+          coinInfo.finalAllocation?.mySwappedAmount0 &&
+          coinInfo.claimedToken0 &&
+          new BigNumber(coinInfo.finalAllocation?.mySwappedAmount0.toString())
+            .times(
+              Number(now) > coinInfo.poolInfo.releaseAt * 1000 + coinInfo.poolInfo.releaseDuration * 1000
+                ? 1
+                : (Number(now) - coinInfo.poolInfo.releaseAt * 1000) / (coinInfo.poolInfo.releaseDuration * 1000)
+            )
+            .minus(coinInfo.claimedToken0.toString())
+            .gt(0)) ||
+        false
+      return flag
     }
     return false
   }, [coinInfo])
