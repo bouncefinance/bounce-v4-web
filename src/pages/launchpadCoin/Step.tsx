@@ -265,7 +265,6 @@ function VerticalLinearStepper({
   const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
   useEffect(() => {
     setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
-    // setActiveStep(0)
   }, [curStatus])
 
   const steps = [
@@ -416,6 +415,7 @@ function Step1({
     )
   }, [account, handleClickStake, isBalanceInsufficient, showLoginModal, status])
   const handleClose = () => {
+    setAmount('')
     setOpenDialog(false)
   }
   const toApprove = useCallback(async () => {
@@ -472,14 +472,16 @@ function Step1({
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            againBtn: 'Save',
+            cancelBtn: 'Save',
             title: 'Success! ',
             content: `You have successfully stake  ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
             PaperProps: {
               sx: DialogTipsWhiteTheme
+            },
+            onCancel: () => {
+              handleClose()
             }
           })
-          handleClose()
         })
         .catch()
     } catch (error) {
@@ -501,13 +503,10 @@ function Step1({
   }, [approvalState, contract, poolId, toApprove, token1Currency?.symbol, token1CurrencyAmount])
   const confirm = useCallback(async () => {
     if (!contract || !token1CurrencyAmount) return
-    const isNoApprove = false
     if (approvalState !== ApprovalState.APPROVED) {
       await toApprove()
     }
-    if (!isNoApprove) {
-      await toCommit()
-    }
+    await toCommit()
   }, [approvalState, contract, toApprove, toCommit, token1CurrencyAmount])
 
   return (
