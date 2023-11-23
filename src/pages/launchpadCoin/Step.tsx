@@ -501,13 +501,6 @@ function Step1({
       })
     }
   }, [approvalState, contract, poolId, toApprove, token1Currency?.symbol, token1CurrencyAmount])
-  const confirm = useCallback(async () => {
-    if (!contract || !token1CurrencyAmount) return
-    if (approvalState !== ApprovalState.APPROVED) {
-      await toApprove()
-    }
-    await toCommit()
-  }, [approvalState, contract, toApprove, toCommit, token1CurrencyAmount])
 
   return (
     <>
@@ -672,7 +665,10 @@ function Step1({
         token1Balance={token1Balance as CurrencyAmount}
         amount={amount}
         handleSetAmount={handleSetAmount}
-        confirm={confirm}
+        confirm={toCommit}
+        toApprove={toApprove}
+        approvalState={approvalState}
+        showLoginModal={showLoginModal}
       />
     </>
   )

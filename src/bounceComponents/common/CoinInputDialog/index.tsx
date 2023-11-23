@@ -15,6 +15,8 @@ import { ReactComponent as CloseSVG } from '../DialogConfirmation/assets/close.s
 import styled from '@emotion/styled'
 import { CurrencyAmount } from 'constants/token'
 import StakeInput from 'pages/launchpadCoin/components/stakeInput'
+import { ApprovalState } from 'hooks/useApproveCallback'
+import { useActiveWeb3React } from 'hooks'
 
 export interface DialogProps extends MuiDialogProps {
   token1Balance: CurrencyAmount | undefined
@@ -24,6 +26,9 @@ export interface DialogProps extends MuiDialogProps {
   open: boolean
   confirm: () => void
   token1: CurrencyAmount | undefined
+  toApprove: () => void
+  approvalState: ApprovalState
+  showLoginModal: () => void
 }
 const GrayTitle = styled(Typography)`
   color: #626262;
@@ -83,13 +88,33 @@ const CancelBtnStyle = styled(Button)`
   }
 `
 const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
-  const { token1Balance, amount, handleSetAmount, onClose, open, confirm, token1, ...rest } = props
+  const {
+    token1Balance,
+    amount,
+    handleSetAmount,
+    onClose,
+    open,
+    confirm,
+    token1,
+    approvalState,
+    showLoginModal,
+    toApprove,
+    ...rest
+  } = props
+  const { account } = useActiveWeb3React()
   const handleClose = () => {
     onClose()
     handleSetAmount('')
   }
   const confirmBtn = useMemo(() => {
-    if (!amount) {
+    if (!account) {
+      return (
+        <ConfirmBtnStyle onClick={() => showLoginModal()} sx={{ flex: 2 }}>
+          Connect Wallet
+        </ConfirmBtnStyle>
+      )
+    }
+    if (!amount || !Number(amount)) {
       return (
         <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
           Confirm
@@ -100,6 +125,13 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
       return (
         <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
           Insufficient Balance
+        </ConfirmBtnStyle>
+      )
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      return (
+        <ConfirmBtnStyle onClick={() => toApprove()} sx={{ flex: 2 }}>
+          Approve
         </ConfirmBtnStyle>
       )
     }
@@ -115,7 +147,7 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         Confirm
       </ConfirmBtnStyle>
     )
-  }, [amount, confirm, open, token1, token1Balance])
+  }, [account, amount, approvalState, confirm, open, showLoginModal, toApprove, token1, token1Balance])
   return (
     <MuiDialog
       onClose={() => handleClose()}
