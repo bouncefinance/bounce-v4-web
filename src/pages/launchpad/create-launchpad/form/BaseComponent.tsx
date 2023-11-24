@@ -35,7 +35,7 @@ export const BaseBox = styled(Box)({
   }
 })
 export const Title = styled(Typography)({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontSize: '20px',
   fontStyle: 'normal',
   fontWeight: 600,
@@ -184,7 +184,7 @@ export const SubmitComp = ({
       </Box>
       <Typography
         sx={{
-          fontFamily: 'Public Sans',
+          fontFamily: 'Inter',
           fontSize: 14,
           fontWidth: 600,
           color: '#959595',

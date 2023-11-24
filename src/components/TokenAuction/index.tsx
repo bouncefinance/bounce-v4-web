@@ -33,9 +33,8 @@ const InfoBox = (props: InfoBoxParams) => {
       sx={{
         background: 'var(--ps-text-3)',
         borderRadius: 20,
-        width: 110,
-        height: 81,
-        padding: 12,
+        width: 188,
+        height: 98,
         ...style
       }}
     >
@@ -43,14 +42,15 @@ const InfoBox = (props: InfoBoxParams) => {
       <Typography
         sx={{
           textAlign: 'left',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: 14,
           width: '100%',
           height: '21px',
-          lineHeight: '21px',
+          lineHeight: '22px',
           color: '#ffffff',
-          marginBottom: 12,
+          marginTop: 12,
+          marginBottom: 4,
           letterSpacing: '-0.02em'
         }}
       >
@@ -59,13 +59,13 @@ const InfoBox = (props: InfoBoxParams) => {
       <Typography
         sx={{
           textAlign: 'left',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
-          fontSize: 14,
+          fontSize: 18,
           lineHeight: '21px',
           color: '#ffffff',
           width: '100%',
-          height: '21px',
+          height: '27px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
@@ -176,7 +176,7 @@ const PaginationBox = (props: PaginationParams) => {
     <Box
       sx={{
         padding: isSm ? 16 : 'inherit',
-        width: isSm ? '100%' : 128,
+        width: isSm ? '100%' : 104,
         height: 60,
         display: 'flex',
         flexFlow: 'row nowrap',
@@ -436,7 +436,12 @@ const TokenAuction: React.FC = () => {
         width: '100%',
         maxWidth: '100%',
         background: '#111111',
-        height: showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 1288 : 682,
+        height:
+          showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction
+            ? isSm
+              ? 1200
+              : 1288
+            : 682,
         margin: '0 auto'
       }}
     >
@@ -464,13 +469,13 @@ const TokenAuction: React.FC = () => {
           <Typography
             sx={{
               textAlign: 'left',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 700,
               fontSize: isSm ? 24 : 44,
               width: '100%',
               lineHeight: '32px',
               color: 'var(--ps-yellow-1)',
-              marginBottom: 30,
+              marginBottom: 20,
               letterSpacing: '-0.02em'
             }}
           >
@@ -481,12 +486,12 @@ const TokenAuction: React.FC = () => {
               textAlign: 'left',
               width: '100%',
               maxWidth: 420,
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 400,
               fontSize: isSm ? 14 : 16,
               lineHeight: '21px',
               color: 'var(--ps-primary)',
-              marginBottom: 30,
+              marginBottom: 20,
               letterSpacing: '-0.02em'
             }}
           >
@@ -497,7 +502,7 @@ const TokenAuction: React.FC = () => {
               sx={{
                 position: 'absolute',
                 right: 0,
-                bottom: 172,
+                bottom: 110,
                 textAlign: 'right',
                 fontFamily: `'Inter'`,
                 fontWeight: 400,
@@ -537,6 +542,7 @@ const TokenAuction: React.FC = () => {
                   position: 'absolute',
                   width: 220,
                   color: '#ffffff',
+                  marginBottom: 30,
                   bottom: 161,
                   left: 0
                 }}
@@ -547,7 +553,7 @@ const TokenAuction: React.FC = () => {
                 logo={<TotalValueIcon />}
                 style={{
                   position: 'absolute',
-                  bottom: 80,
+                  bottom: 48,
                   left: 0
                 }}
               />
@@ -557,8 +563,8 @@ const TokenAuction: React.FC = () => {
                 logo={<TotalAuctionIcon />}
                 style={{
                   position: 'absolute',
-                  bottom: 80,
-                  left: 150
+                  bottom: 48,
+                  left: 220
                 }}
               />
             </Box>
@@ -602,8 +608,8 @@ const TokenAuction: React.FC = () => {
             sx={{
               position: 'absolute',
               width: 763,
-              height: 622,
-              top: 622,
+              height: isSm ? 600 : 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[0]}deg)`,
               transformOrigin: 'bottom center',
@@ -618,8 +624,8 @@ const TokenAuction: React.FC = () => {
             sx={{
               position: 'absolute',
               width: 763,
-              height: 622,
-              top: 622,
+              height: isSm ? 600 : 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[1]}deg)`,
               transformOrigin: 'bottom center',
@@ -635,7 +641,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               width: 763,
               height: 622,
-              top: 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[2]}deg)`,
               transformOrigin: 'bottom center',
@@ -651,7 +657,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               width: 763,
               height: 622,
-              top: 622,
+              top: isSm ? 600 : 622,
               left: '50%',
               transform: `translateX(-50%) translateY(-100%) rotateZ(${rotateRatioList[3]}deg)`,
               transformOrigin: 'bottom center',
@@ -689,26 +695,25 @@ const TokenAuction: React.FC = () => {
           <Box
             sx={{
               position: 'absolute',
-              width: 1440,
               minHeight: 496,
-              top: 622,
-              left: 0,
+              width: 1296,
+              top: isSm ? 600 : 622,
               borderRadius: 30,
               margin: '0 auto',
-              padding: isSm ? '24px 16px' : 24,
-              '@media(min-width:1440px)': {
-                transform: 'translateX(-50%)',
-                left: '50%'
-              },
-              '@media(max-width:1440px)': {
-                width: '100%'
+              padding: isSm ? '24px 16px' : 0,
+              transform: 'translateX(-50%)',
+              left: '50%',
+              '@media(max-width:600px)': {
+                left: 0,
+                width: '100%',
+                transform: 'none'
               }
             }}
           >
             <Box
               sx={{
-                minHeight: 368,
-                marginBottom: 24
+                minHeight: isSm ? 300 : 368,
+                marginBottom: isSm ? 0 : 24
               }}
             >
               {showData.title === AuctionType.NFTAuction && (
@@ -764,9 +769,10 @@ const TokenAuction: React.FC = () => {
                     <TokenAuctionSkeleton />
                   ) : (
                     <Stack
-                      spacing={isSm ? 8 : 18}
+                      spacing={isSm ? 8 : 24}
                       direction={'row'}
                       sx={{
+                        maxWidth: isSm ? '100%' : 1296,
                         overflowX: 'scroll',
                         '&::-webkit-scrollbar': {
                           display: 'none'
@@ -778,8 +784,8 @@ const TokenAuction: React.FC = () => {
                           key={index}
                           isDark
                           style={{
-                            maxWidth: 334,
-                            minWidth: 334,
+                            maxWidth: 306,
+                            minWidth: 306,
                             gap: 20,
                             boxSizing: 'border-box'
                           }}
@@ -793,9 +799,10 @@ const TokenAuction: React.FC = () => {
             </Box>
             <Box
               sx={{
+                maxWidth: isSm ? '100%' : 1296,
                 width: isSm ? 'calc(100% - 32px)' : '100%',
                 display: 'flex',
-                marginLeft: isSm ? '-16px' : 'unset',
+                marginTop: isSm ? '24px' : 'unset',
                 flexFlow: 'row nowrap',
                 justifyContent: 'center',
                 '@media(max-width:1440px)': {

@@ -156,7 +156,7 @@ export function Common({
               color="#B5E629"
               sx={{
                 width: 'max-content',
-                fontFamily: 'Public Sans',
+                fontFamily: 'Inter',
                 background: 'rgba(18, 18, 18, 0.5)',
                 backdropFilter: 'blur(5px)',
                 borderRadius: '100px'
@@ -170,7 +170,7 @@ export function Common({
               padding="5px 14px"
               color="#B5E629"
               sx={{
-                fontFamily: 'Public Sans',
+                fontFamily: 'Inter',
                 background: 'rgba(18, 18, 18, 0.5)',
                 backdropFilter: 'blur(5px)',
                 borderRadius: '100px'

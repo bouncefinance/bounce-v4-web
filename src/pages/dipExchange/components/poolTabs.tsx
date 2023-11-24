@@ -63,7 +63,7 @@ const PoolTabs = ({
         <Typography
           sx={{
             color: poolType === PoolIndexType.DIP ? '#4F5FFC' : '#626262',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: isMd ? 16 : 20,
             fontWeight: 600
           }}
@@ -109,7 +109,7 @@ const PoolTabs = ({
         <Typography
           sx={{
             color: poolType === PoolIndexType.DGT ? '#4F5FFC' : '#626262',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: isMd ? 16 : 20,
             fontWeight: 600
           }}

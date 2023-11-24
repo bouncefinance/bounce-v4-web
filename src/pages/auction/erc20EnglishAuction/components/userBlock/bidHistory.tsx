@@ -32,7 +32,7 @@ const UserBidHistory = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp })
     >
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           color: '#fff',
           fontSize: '14px',
           fontWeight: 600

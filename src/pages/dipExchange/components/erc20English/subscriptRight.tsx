@@ -103,7 +103,7 @@ const SubscriptRight = ({
       <Typography
         sx={{
           color: '#D7D6D9',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontSize: 16,
           fontWeight: 600
         }}
@@ -117,7 +117,7 @@ const SubscriptRight = ({
           <Typography
             sx={{
               color: '#2B51DA',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: '16px',
               fontWeight: 600
             }}
@@ -131,7 +131,7 @@ const SubscriptRight = ({
           <Typography
             sx={{
               color: '#2B51DA',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: '16px',
               fontWeight: 600
             }}

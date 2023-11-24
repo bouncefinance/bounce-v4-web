@@ -50,7 +50,7 @@ export default function Four() {
                     fontWeight: 100,
                     fontSize: isSm ? '56px' : '200px',
                     textAlign: 'center',
-                    fontFamily: 'Public Sans',
+                    fontFamily: 'Inter',
                     fontStyle: 'italic',
                     lineHeight: isSm ? '40px' : '145px',
                     color: 'rgba(255, 255, 255, 0.8)',
@@ -93,7 +93,7 @@ export default function Four() {
                     fontWeight: 600,
                     fontSize: isSm ? '56px' : '200px',
                     textAlign: 'center',
-                    fontFamily: 'Public Sans',
+                    fontFamily: 'Inter',
                     fontStyle: 'italic',
                     lineHeight: isSm ? '40px' : '145px',
                     color: 'rgba(255, 255, 255, 0.8)',
@@ -108,7 +108,7 @@ export default function Four() {
         )}
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             width: isSm ? '280px' : '950px',
             margin: '0 auto',
             fontWeight: 600,

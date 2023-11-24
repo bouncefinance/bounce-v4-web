@@ -25,13 +25,13 @@ export const RowLabel = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   '.label': {
     color: 'var(--ps-text-2)',
-    fontFamily: `'Public Sans'`,
+    fontFamily: `'Inter'`,
     fontWeight: 500,
     fontSize: 16
   },
   '.value': {
     color: 'var(--ps-text-5)',
-    fontFamily: `'Public Sans'`,
+    fontFamily: `'Inter'`,
     fontWeight: 500,
     fontSize: 16
   },
@@ -46,7 +46,7 @@ export const RowLabel = styled(Box)(({ theme }) => ({
 }))
 
 const CounterText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontStyle: 'italic',
   fontWeight: 100,
   color: 'var(--ps-text-5)',
@@ -60,7 +60,7 @@ const CounterText = styled(Typography)(({ theme }) => ({
 
 const LiveStr = styled(Typography)(({ theme }) => ({
   display: 'inline-block',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontWeight: 600,
   fontSize: 28,
   color: 'var(--ps-green-1)',
@@ -170,7 +170,7 @@ const CreatorBidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolP
         {poolStatus === PoolStatus.Closed && (
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: isSm ? 20 : 28,
               color: '#FD3333'

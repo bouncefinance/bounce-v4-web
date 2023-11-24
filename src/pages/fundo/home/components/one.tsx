@@ -33,7 +33,7 @@ export default function One({ animationRatio, step }: { animationRatio: string; 
         <Typography
           sx={{
             width: '100%',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontStyle: 'italic',
             fontWeight: 100,
             fontSize: '130px',
@@ -49,7 +49,7 @@ export default function One({ animationRatio, step }: { animationRatio: string; 
         <Typography
           sx={{
             width: '100%',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: '130px',
             letterSpacing: `0.06em`,

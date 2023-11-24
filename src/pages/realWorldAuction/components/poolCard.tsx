@@ -77,7 +77,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
         <Typography
           sx={{
             width: '100%',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 500,
             fontSize: 16,
             color: '#000',
@@ -116,7 +116,7 @@ const PoolCard = ({ item }: { item: BannerType }) => {
             component={'span'}
             sx={{
               flex: 1,
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: 20,
               color: 'var(--ps-text-3)',

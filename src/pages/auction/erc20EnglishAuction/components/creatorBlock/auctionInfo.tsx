@@ -12,7 +12,7 @@ import moment from 'moment'
 import { useErc20EnglishAuctionPoolInfo } from '../../ValuesProvider'
 import PoolInfoItem from 'pages/auction/dutchAuction/components/poolInfoItem'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
-  <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
+  <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Inter'`, fontSize: '14px', fontWeight: 600 }}>
     {children}
   </Typography>
 )

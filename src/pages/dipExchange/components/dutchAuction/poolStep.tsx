@@ -76,7 +76,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               <Typography
                 sx={{
                   color: '#D7D6D9',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontSize: 14,
                   fontWeight: 600
                 }}

@@ -116,7 +116,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
               >
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontSize: 12,
                     fontWeight: 400,
                     color: item.active ? '#D7D6D9' : '#626262'
@@ -126,7 +126,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontSize: 12,
                     fontWeight: 400,
                     color: item.active ? '#D7D6D9' : '#626262'
@@ -137,7 +137,7 @@ const TimeStageLine = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                 </Typography>
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontSize: 14,
                     fontWeight: 600,
                     color: item.active ? '#D7D6D9' : '#626262'

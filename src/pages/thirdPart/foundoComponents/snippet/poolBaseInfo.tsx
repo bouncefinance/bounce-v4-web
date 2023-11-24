@@ -16,7 +16,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
     >
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: isSm ? 20 : 36,
           color: '#fff',
@@ -28,7 +28,7 @@ const PoolBaseInfo = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp 
       </Typography>
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: 14,
           color: 'var(--ps-text-2)',

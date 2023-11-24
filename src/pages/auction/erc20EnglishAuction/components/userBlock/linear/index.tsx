@@ -125,7 +125,7 @@ const Linear = () => {
               >
                 <Typography
                   sx={{
-                    fontFamily: `'Public Sans'`,
+                    fontFamily: `'Inter'`,
                     fontWeight: 600,
                     fontSize: 20,
                     color: '#000'
@@ -153,7 +153,7 @@ const Linear = () => {
                           flexFlow: 'row nowrap',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
-                          fontFamily: `'Public Sans'`,
+                          fontFamily: `'Inter'`,
                           fontWeight: 'bold',
                           fontSize: '16px'
                         }}
@@ -174,7 +174,7 @@ const Linear = () => {
                           flexFlow: 'row nowrap',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
-                          fontFamily: `'Public Sans'`,
+                          fontFamily: `'Inter'`,
                           fontWeight: 'bold',
                           fontSize: '16px'
                         }}
@@ -195,7 +195,7 @@ const Linear = () => {
                           flexFlow: 'row nowrap',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
-                          fontFamily: `'Public Sans'`,
+                          fontFamily: `'Inter'`,
                           fontWeight: 'bold',
                           fontSize: '16px'
                         }}
@@ -234,7 +234,7 @@ const Linear = () => {
                           flexFlow: 'row nowrap',
                           justifyContent: 'flex-start',
                           alignItems: 'center',
-                          fontFamily: `'Public Sans'`,
+                          fontFamily: `'Inter'`,
                           fontWeight: 'bold',
                           fontSize: '16px'
                         }}

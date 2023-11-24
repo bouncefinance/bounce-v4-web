@@ -122,7 +122,7 @@ const TokenList = () => {
               leadingTrim: 'both',
               textEdge: 'cap',
               fontVariantNumeric: 'lining-nums proportional-nums',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: 36,
               fontWeight: 600,
               lineHeight: '46px',
@@ -224,7 +224,7 @@ const TokenList = () => {
                           sx={{
                             height: '37px',
                             lineHeight: '37px',
-                            fontFamily: `'Public Sans'`,
+                            fontFamily: `'Inter'`,
                             fontSize: 14,
                             fontWeight: 600,
                             letterSpacing: '-0.28px',
@@ -243,7 +243,7 @@ const TokenList = () => {
                           sx={{
                             height: '37px',
                             lineHeight: '37px',
-                            fontFamily: `'Public Sans'`,
+                            fontFamily: `'Inter'`,
                             fontSize: 14,
                             fontWeight: 600,
                             letterSpacing: '-0.28px',

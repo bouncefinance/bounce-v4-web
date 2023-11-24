@@ -55,7 +55,7 @@ const WhiteText = styled(Typography)(({ theme }) => ({
 }))
 
 const CounterText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontStyle: 'italic',
   fontWeight: 100,
   color: 'var(--ps-text-5)',
@@ -98,7 +98,7 @@ export function DataView(props: DataViewParam) {
 
 const LiveStr = styled(Typography)(({ theme }) => ({
   display: 'inline-block',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontWeight: 600,
   fontSize: 28,
   color: 'var(--ps-green-1)',
@@ -219,7 +219,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
         {poolStatus === PoolStatus.Closed && (
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: isSm ? 20 : 28,
               color: '#FD3333'
@@ -236,7 +236,7 @@ const BidAction = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp }) 
         {poolStatus === PoolStatus.Live && poolInfo.enableWhiteList && !poolInfo.whitelistData?.isUserInWhitelist && (
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: isSm ? 20 : 28,
               color: '#FD3333'
@@ -645,7 +645,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
                   <BidIconSvg />
                   <Typography
                     sx={{
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Inter'`,
                       fontStyle: 'italic',
                       fontWeight: 100,
                       fontSize: { xs: 18, md: 20 },
@@ -693,7 +693,7 @@ export function LiveSection({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoo
               <BidIconSvg />
               <Typography
                 sx={{
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontStyle: 'italic',
                   fontWeight: 100,
                   fontSize: { xs: 18, md: 20 },

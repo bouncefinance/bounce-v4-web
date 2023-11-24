@@ -134,7 +134,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
             sx={{
               fontSize: '13px',
               color: '#fff',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600
             }}
           >
@@ -169,7 +169,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
           )}
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               lineHeight: '28px',
               fontSize: 12,
@@ -186,7 +186,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
             lineHeight: '22px',
             fontSize: '22px',
             color: '#fff',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -214,7 +214,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
               height: '21px',
               fontSize: '14px',
               color: '#D7D6D9',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500
             }}
           >
@@ -225,7 +225,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
               height: '21px',
               fontSize: '14px',
               color: '#D7D6D9',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500
             }}
           >
@@ -236,7 +236,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
               height: '21px',
               fontSize: '14px',
               color: '#D7D6D9',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500
             }}
           >
@@ -247,7 +247,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
               height: '21px',
               fontSize: '14px',
               color: '#D7D6D9',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500
             }}
           >
@@ -258,7 +258,7 @@ const BannerAuctionCard = ({ banner }: { banner: BannerType }) => {
               height: '21px',
               fontSize: '14px',
               color: '#D7D6D9',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500
             }}
           >

@@ -44,7 +44,7 @@ const Header = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp | unde
         />
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 500,
             fontSize: isSm ? 14 : 16,
             color: '#fff'
@@ -64,7 +64,7 @@ const Header = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp | unde
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 500,
             fontSize: isSm ? 14 : 16,
             color: '#fff',
@@ -98,7 +98,7 @@ const Header = ({ poolInfo }: { poolInfo: MutantEnglishAuctionNFTPoolProp | unde
           />
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 500,
               fontSize: isSm ? '14px' : 16,
               color: '#fff'

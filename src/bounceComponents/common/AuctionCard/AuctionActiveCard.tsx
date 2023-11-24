@@ -4,6 +4,7 @@ import { H2, H5, SmallText } from '../../../components/Text'
 import { SlideProgress } from '../../auction/SlideProgress'
 import { SwiperSlide } from 'swiper/react'
 import EmptyImg from 'assets/imgs/auction/empty-avatar.svg'
+import EmptyImgPC from 'assets/images/default_avatar.png'
 import { useRequest } from 'ahooks'
 import { getActiveUsers } from '../../../api/market'
 import { useNavigate } from 'react-router-dom'
@@ -35,22 +36,21 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
   const isSm = useBreakpoint('sm')
   const navigate = useNavigate()
   const theme = useTheme()
+  console.log('ifkey', props.ifKyc)
   return (
     <Box
       onClick={() => navigate(routes.profile.summary + `?id=${props.userId}`)}
       sx={{
         width: isSm ? '220px' : '240px',
+        height: isSm ? '286px' : '360px',
         display: 'flex',
         cursor: 'pointer',
         background: '#FFFFFF',
-        borderRadius: '20px',
+        borderRadius: '12px',
         flexDirection: 'column',
         [theme.breakpoints.down('md')]: {
           flexDirection: 'column',
-          height: '364px',
-          boxSizing: 'border-box',
-          width: '220px',
-          gap: '16px'
+          boxSizing: 'border-box'
         },
         '&:hover': {
           border: '1px solid #12121233'
@@ -59,17 +59,18 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
     >
       <img
         style={{
-          width: isSm ? '220px' : '240px',
-          height: isSm ? '220px' : '180px',
-          borderRadius: '20px 20px 0 0',
-          marginLeft: isSm ? '-2px' : 0
+          width: '100%',
+          height: isSm ? '180px' : '240px',
+          borderRadius: '12px 12px 0 0',
+          marginLeft: isSm ? '-2px' : 0,
+          objectFit: 'cover'
         }}
-        src={props.img ? props.img : EmptyImg}
+        src={props.img ? props.img : isSm ? EmptyImg : EmptyImgPC}
       />
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} padding={'16px'}>
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} padding={isSm ? 12 : '16px'}>
         <Box sx={{ wordBreak: 'break-all' }}>
-          <Stack flexDirection={'row'} alignItems={'center'} gap={8}>
-            {props.ifKyc && <VerifiedIcon ifKyc={props.ifKyc} />}
+          <Stack flexDirection={'row'} alignItems={'center'}>
+            {props.ifKyc === VerifyStatus.Verified && <VerifiedIcon sx={{ mr: 8 }} ifKyc={props.ifKyc} />}
             <H5
               sx={{
                 width: 'calc(100% - 24px - 8px)',
@@ -78,6 +79,9 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
                 WebkitLineClamp: 1,
                 WebkitBoxOrient: 'vertical',
                 textOverflow: 'ellipsis',
+                [theme.breakpoints.down('md')]: {
+                  fontSize: 16
+                },
                 '&:hover': {
                   color: '#A4D220'
                 }
@@ -106,12 +110,11 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'flex-start',
-            marginTop: '16px',
+            marginTop: isSm ? 12 : '16px',
             gap: '24px',
             height: 'fit-content',
             [theme.breakpoints.down('md')]: {
               gap: '12px',
-              padding: '8px 12px',
               width: '220px'
             }
           }}
@@ -140,7 +143,7 @@ const ActiveUserSkeletonCard = () => {
         flexDirection: isMd ? 'column' : 'row',
         cursor: 'pointer',
         width: isMd ? 230 : 'fit-content',
-        height: isMd ? 364 : 'auto',
+        height: isMd ? 300 : 'auto',
         gap: '20px',
         background: '#FFFFFF',
         borderRadius: '20px'
@@ -165,7 +168,6 @@ export const ActiveUser: React.FC = () => {
   const isSm = useBreakpoint('md')
   const swiper = useRef<SwiperCore>()
   const ref = useRef<any>(null)
-  const [width, setWidth] = useState<number | undefined>(undefined)
   const [swipePrev, canSwipePrev] = useState(false)
   const [swipeNext, canSwipeNext] = useState(true)
   const { data } = useRequest(async () => {
@@ -177,24 +179,13 @@ export const ActiveUser: React.FC = () => {
   })
 
   const slideCardWidth = isSm ? 220 : 260
-  const [slidesPerView, setSlidesPerView] = useState<number>(
-    (isSm ? window.innerWidth : width || 1440) / slideCardWidth
-  )
-  useEffect(() => {
-    const resetView = () => {
-      setSlidesPerView(Math.ceil((width || slideCardWidth) / slideCardWidth))
-    }
-    window.addEventListener('resize', resetView)
-    return () => {
-      window.removeEventListener('resize', resetView)
-    }
-  }, [slideCardWidth, width])
+  const [slidesPerView, setSlidesPerView] = useState<number>((ref?.current?.offsetWidth || 1296) / slideCardWidth)
 
   useEffect(() => {
     // This function checks the width of the referenced element
     const checkWidth = () => {
       if (ref.current) {
-        setWidth(ref.current.offsetWidth)
+        setSlidesPerView(ref.current.offsetWidth / slideCardWidth)
         console.log('ref', ref)
         console.log('ref-offsetWidth', ref.current.offsetWidth)
       }
@@ -206,7 +197,7 @@ export const ActiveUser: React.FC = () => {
 
     // Clean up listener when component is unmounted
     return () => window.removeEventListener('resize', checkWidth)
-  }, [])
+  }, [slideCardWidth])
 
   const ArrowBg = styled(Box)`
     display: flex;
@@ -245,16 +236,15 @@ export const ActiveUser: React.FC = () => {
 
   return (
     <Box
-      ref={ref}
       className={'ActiveUser'}
       style={{
         width: '100%',
-        padding: isSm ? '22px 0 116px' : '100px 0 140px'
+        padding: isSm ? '22px 0 80px' : '100px 0 140px'
       }}
     >
       <Container
         sx={{
-          maxWidth: '1440px !important'
+          maxWidth: '1296px !important'
         }}
       >
         <BoxSpaceBetween mb={isSm ? 20 : 80}>
@@ -265,7 +255,7 @@ export const ActiveUser: React.FC = () => {
             display={isSm ? 'none' : 'flex'}
             alignItems={'center'}
             sx={{
-              maxWidth: 1440,
+              maxWidth: 1296,
               margin: isSm ? '8px auto 0' : '0'
             }}
           >
@@ -282,39 +272,41 @@ export const ActiveUser: React.FC = () => {
             </ArrowBg>
           </Box>
         </BoxSpaceBetween>
-        <SlideProgress
-          hideArrow
-          swiperRef={swiper}
-          canSwipePrev={canSwipePrev}
-          canSwipeNext={canSwipeNext}
-          swiperStyle={{
-            spaceBetween: 20,
-            slidesPerView: slidesPerView,
-            loop: isSm,
-            autoplay: isSm,
-            freeMode: true
-          }}
-        >
-          {data && data?.list && data.list.length
-            ? data?.list.map((data: any, idx: number) => (
-                <SwiperSlide key={idx}>
-                  <AuctionActiveCard
-                    userId={data.creatorUserInfo.userId}
-                    img={data.creatorUserInfo.avatar}
-                    name={data.creatorUserInfo.name}
-                    desc={data.creatorUserInfo.description}
-                    createdCount={data.totalCreated}
-                    participated={data.totalPart}
-                    ifKyc={data.creatorUserInfo.ifKyc}
-                  />
-                </SwiperSlide>
-              ))
-            : new Array(8).fill(0).map((item, index) => (
-                <SwiperSlide key={index}>
-                  <ActiveUserSkeletonCard />
-                </SwiperSlide>
-              ))}
-        </SlideProgress>
+        <Box ref={ref}>
+          <SlideProgress
+            hideArrow
+            swiperRef={swiper}
+            canSwipePrev={canSwipePrev}
+            canSwipeNext={canSwipeNext}
+            swiperStyle={{
+              spaceBetween: 20,
+              slidesPerView: slidesPerView,
+              loop: isSm,
+              autoplay: isSm,
+              freeMode: true
+            }}
+          >
+            {data && data?.list && data.list.length
+              ? data?.list.map((data: any, idx: number) => (
+                  <SwiperSlide key={idx}>
+                    <AuctionActiveCard
+                      userId={data.creatorUserInfo.userId}
+                      img={data.creatorUserInfo.avatar}
+                      name={data.creatorUserInfo.name}
+                      desc={data.creatorUserInfo.description}
+                      createdCount={data.totalCreated}
+                      participated={data.totalPart}
+                      ifKyc={data.creatorUserInfo.ifKyc}
+                    />
+                  </SwiperSlide>
+                ))
+              : new Array(8).fill(0).map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <ActiveUserSkeletonCard />
+                  </SwiperSlide>
+                ))}
+          </SlideProgress>
+        </Box>
       </Container>
     </Box>
   )

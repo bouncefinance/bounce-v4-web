@@ -45,7 +45,7 @@ const TopThreeWinner = ({ list, poolInfo }: { list: PoolHistory[]; poolInfo: Mut
             sx={{
               width: '100%',
               color: '#fff',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: 36,
               lineHeight: '26px',
@@ -68,7 +68,7 @@ const TopThreeWinner = ({ list, poolInfo }: { list: PoolHistory[]; poolInfo: Mut
             sx={{
               width: '100%',
               color: '#fff',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: 14,
               lineHeight: '21px',

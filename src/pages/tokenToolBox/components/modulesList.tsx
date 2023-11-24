@@ -84,7 +84,7 @@ const ModulesList = () => {
                 sx={{
                   color: '#000',
                   textAlign: 'center',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontSize: '20px',
                   fontWeight: 600,
                   lineHeight: '28px',

@@ -17,7 +17,7 @@ export default function BackButton() {
         alignSelf: 'flex-start',
         alignItems: 'center',
         color: '#121212',
-        fontFamily: `'Public Sans'`,
+        fontFamily: `'Inter'`,
         fontWeight: 500,
         fontSize: '16px',
         cursor: 'pointer',

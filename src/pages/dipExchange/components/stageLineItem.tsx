@@ -89,7 +89,7 @@ const StageLineItem = ({ index, item, activeIndex }: { activeIndex: number; inde
       </Typography>
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontSize: 16,
           fontWeight: 500,
           color: active ? '#4F5FFC' : '#626262',

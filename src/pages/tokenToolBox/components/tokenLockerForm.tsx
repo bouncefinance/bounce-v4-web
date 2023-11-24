@@ -107,7 +107,7 @@ export const AddBtn = styled(Button)(() => ({
   background: '#121212',
   color: '#fff',
   '.text': {
-    fontFamily: `'Public Sans'`,
+    fontFamily: `'Inter'`,
     fontSize: 16,
     fontWeight: 500,
     lineHeight: '24px',
@@ -1253,7 +1253,7 @@ export const FormLayout = ({
   )
 }
 const Title = styled(Typography)({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontSize: '28px',
   fontWeight: 600,
   lineHeight: '28px',

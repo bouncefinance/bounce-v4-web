@@ -16,7 +16,7 @@ export default {
     padding: '0px 48px'
   },
   menu: {
-    fontFamily: 'Public Sans',
+    fontFamily: 'Inter',
     fontWeight: 500,
     paddingBottom: 9,
     color: 'rgba(23, 23, 23, 0.5)'

@@ -204,14 +204,14 @@ export function use1155TokenList(
             tokenId: '0'
           })
 
-          nftCollection['0x5ae7001DeeacFAd703B876afA8BC59D45b89FEF4'] = []
-          nftCollection['0x5ae7001DeeacFAd703B876afA8BC59D45b89FEF4'].push({
+          nftCollection['0xbb0A8C485Bc54Ad7b693C7957FE696E76d3ff6f1'] = []
+          nftCollection['0xbb0A8C485Bc54Ad7b693C7957FE696E76d3ff6f1'].push({
             balance: '',
-            contractAddr: '0x5ae7001DeeacFAd703B876afA8BC59D45b89FEF4',
-            contractName: 'Bounce x ZetaChain x Bitget',
+            contractAddr: '0xbb0A8C485Bc54Ad7b693C7957FE696E76d3ff6f1',
+            contractName: 'BZB',
             description: 'Bounce x ZetaChain x Bitget',
             image: 'https://arweave.net/S5pCWJHNSdCJDYA7G-o4CZtjXTcg7gDHiQnwEZIhuPk',
-            name: 'B_Z_B',
+            name: 'BZB',
             tokenId: '0'
           })
         }

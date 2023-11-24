@@ -13,7 +13,7 @@ import { useState, useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import moment from 'moment'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
-  <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
+  <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Inter'`, fontSize: '14px', fontWeight: 600 }}>
     {children}
   </Typography>
 )

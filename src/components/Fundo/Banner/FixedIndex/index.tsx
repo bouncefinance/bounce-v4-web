@@ -23,7 +23,7 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
       <Typography
         sx={{
           fontWeight: 600,
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontSize: isSm ? '22px' : '34px',
           marginBottom: isSm ? '10px' : '38px',
           color: 'var(--ps-text-5)',
@@ -68,7 +68,7 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
           sx={{
             width: '100%',
             textAlign: 'center',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 500,
             fontSize: '16px',
             color: '#fff'
@@ -79,7 +79,7 @@ export default function FixedIndex({ style }: { style?: React.CSSProperties }) {
         <Typography
           sx={{
             width: '100%',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             textAlign: 'center',
             fontWeight: 400,
             fontSize: '12px',

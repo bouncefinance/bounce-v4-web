@@ -233,7 +233,7 @@ const ConnectAPIToken = () => {
               <Typography
                 sx={{
                   color: '#000',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontSize: 28,
                   fontWeight: 600
                 }}
@@ -335,7 +335,7 @@ const ConnectAPIToken = () => {
               <Typography
                 sx={{
                   color: '#000',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontSize: 28,
                   fontWeight: 600
                 }}
