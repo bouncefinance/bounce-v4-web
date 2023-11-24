@@ -17,6 +17,7 @@ import { CurrencyAmount } from 'constants/token'
 import StakeInput from 'pages/launchpadCoin/components/stakeInput'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useActiveWeb3React } from 'hooks'
+import { ChainId } from 'constants/chain'
 
 export interface DialogProps extends MuiDialogProps {
   token1Balance: CurrencyAmount | undefined
@@ -29,6 +30,7 @@ export interface DialogProps extends MuiDialogProps {
   toApprove: () => void
   approvalState: ApprovalState
   showLoginModal: () => void
+  switchNetwork: () => void
 }
 const GrayTitle = styled(Typography)`
   color: #626262;
@@ -99,9 +101,10 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
     approvalState,
     showLoginModal,
     toApprove,
+    switchNetwork,
     ...rest
   } = props
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const handleClose = () => {
     onClose()
     handleSetAmount('')
@@ -111,6 +114,13 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
       return (
         <ConfirmBtnStyle onClick={() => showLoginModal()} sx={{ flex: 2 }}>
           Connect Wallet
+        </ConfirmBtnStyle>
+      )
+    }
+    if (chainId !== ChainId.SEPOLIA) {
+      return (
+        <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
+          Switch network
         </ConfirmBtnStyle>
       )
     }
@@ -147,7 +157,19 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         Confirm
       </ConfirmBtnStyle>
     )
-  }, [account, amount, approvalState, confirm, open, showLoginModal, toApprove, token1, token1Balance])
+  }, [
+    account,
+    amount,
+    approvalState,
+    chainId,
+    confirm,
+    open,
+    showLoginModal,
+    switchNetwork,
+    toApprove,
+    token1,
+    token1Balance
+  ])
   return (
     <MuiDialog
       onClose={() => handleClose()}

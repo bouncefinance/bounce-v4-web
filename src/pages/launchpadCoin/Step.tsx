@@ -27,6 +27,7 @@ import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -313,6 +314,7 @@ function Step1({
   poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
+  const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
     if (!account) {
       return 11155111
@@ -386,10 +388,15 @@ function Step1({
     if (!token1Balance) return false
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
-
+  const _switchNetwork = () => {
+    switchNetwork(ChainId.SEPOLIA)
+  }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
+    }
+    if (chainId !== ChainId.SEPOLIA) {
+      return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     }
     if (isBalanceInsufficient) {
       return <StakeButton disabled>Insufficient balance</StakeButton>
@@ -413,7 +420,8 @@ function Step1({
         Stake <AddSvg />
       </StakeButton>
     )
-  }, [account, handleClickStake, isBalanceInsufficient, showLoginModal, status])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, chainId, handleClickStake, isBalanceInsufficient, showLoginModal, status])
   const handleClose = () => {
     setAmount('')
     setOpenDialog(false)
@@ -669,6 +677,7 @@ function Step1({
         toApprove={toApprove}
         approvalState={approvalState}
         showLoginModal={showLoginModal}
+        switchNetwork={_switchNetwork}
       />
     </>
   )
@@ -854,9 +863,11 @@ function Step2({
     }
     return false
   }, [coinInfo])
-
+  const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
-  console.log('coinInfo123', coinInfo)
+  const _switchNetwork = () => {
+    switchNetwork(ChainId.SEPOLIA)
+  }
 
   return (
     <Stack spacing={24} mt={24}>
@@ -1042,6 +1053,9 @@ function Step2({
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
+                  {account && chainId !== ChainId.SEPOLIA && (
+                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
+                  )}
                 </Stack>
               </Stack>
             </Stack>
