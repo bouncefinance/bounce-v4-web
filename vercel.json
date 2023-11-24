@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel.*/ https://*.youtube.com https://api.smooch.io/ https://*.crypto.com/ https://static.zdassets.com/ https://*.crypto.com/ https://ipinfo.io http://*.bounce.finance/ http://bounce.finance/ https://www.googletagmanager.com https://www.google-analytics.com; frame-src 'self' https://*.sumsub.com/ https://*.youtube.com; child-src 'self' https://*.sumsub.com/ https://*.youtube.com; frame-ancestors 'self' https://*.sumsub.com/ https://*.youtube.com;"
+          "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel.*/ https://*.youtube.com https://api.smooch.io/ https://static.zdassets.com/ https://*.crypto.com/ https://ipinfo.io http://*.bounce.finance/ http://bounce.finance/ https://www.googletagmanager.com https://www.google-analytics.com; frame-src 'self' https://*.sumsub.com/ https://*.youtube.com; child-src 'self' https://*.sumsub.com/ https://*.youtube.com; frame-ancestors 'self' https://*.sumsub.com/ https://*.youtube.com;"
         },
         {
           "key": "X-Frame-Options",
