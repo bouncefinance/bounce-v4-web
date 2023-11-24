@@ -12,8 +12,7 @@ import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import useTokenList from 'bounceHooks/auction/useTokenList'
-import { Currency, CurrencyAmount } from 'constants/token'
+import { CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 import { useApproveCallback } from 'hooks/useApproveCallback'
@@ -316,33 +315,20 @@ function Step1({
   const { account, chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
-    if (!account) {
-      return 11155111
-    }
-    return chainId
-  }, [account, chainId])
+    // if (!account) {
+    return ChainId.SEPOLIA
+    // }
+    // return chainId
+  }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
-  const tokenList = useTokenList(_chainId, 1)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1Currency = useMemo(() => {
-    if (!tokenList || !coinInfo || !coinInfo.poolInfo) return undefined
-    const token1 = tokenList.tokenList.find(
-      i => i.address.toLocaleLowerCase() === coinInfo.poolInfo?.token1.toLocaleLowerCase()
-    )
-    if (!token1) return undefined
-    const currency = new Currency(token1.chainId as ChainId, token1.address, token1.decimals, token1.symbol)
-    return currency
-  }, [coinInfo, tokenList])
-
+  const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
   }, [amount, token1Currency])
-  const [approvalState, approve] = useApproveCallback(
-    token1CurrencyAmount,
-    LAUNCHPAD_COIN_CONTRACT_ADDRESSES[_chainId || 11155111]
-  )
+  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[_chainId])
   const token1Balance = useCurrencyBalance(account, token1Currency, _chainId)
 
   const curTime = useMemo(() => {
