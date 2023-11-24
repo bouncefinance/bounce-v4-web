@@ -873,15 +873,18 @@ function Step2({
         final GMT allocation, which will be transferred to your spot account along with your remaining BNB.
       </Typography>
       {account &&
-        coinInfo?.myToken1Amount &&
-        coinInfo?.myToken1Amount.eq(0) &&
-        status === TStep.FINAL_TOKEN_DISTRIBUTION && (
+        coinInfo?.myToken1Amount?.eq(0) &&
+        status === TStep.FINAL_TOKEN_DISTRIBUTION &&
+        account !== coinInfo.poolInfo?.creator && (
           <NotInvolvedContainer>
             <FailSVG />
             <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
           </NotInvolvedContainer>
         )}
-      {(!account || (coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && coinInfo)) &&
+
+      {(!account ||
+        coinInfo?.poolInfo?.creator === account ||
+        (coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && coinInfo)) &&
         status === TStep.FINAL_TOKEN_DISTRIBUTION && (
           <Box
             sx={{
