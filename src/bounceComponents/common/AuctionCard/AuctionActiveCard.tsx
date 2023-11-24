@@ -62,7 +62,8 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
           width: '100%',
           height: isSm ? '180px' : '240px',
           borderRadius: '12px 12px 0 0',
-          marginLeft: isSm ? '-2px' : 0
+          marginLeft: isSm ? '-2px' : 0,
+          objectFit: 'cover'
         }}
         src={props.img ? props.img : isSm ? EmptyImg : EmptyImgPC}
       />
