@@ -863,6 +863,27 @@ function Step2({
     }
     return false
   }, [coinInfo])
+
+  const claimableToken0Amount = useMemo(() => {
+    if (!coinInfo?.poolInfo || !coinInfo?.claimedToken0 || !coinInfo?.finalAllocation?.mySwappedAmount0) {
+      return undefined
+    }
+    const now = nowDate()
+    if (coinInfo.poolInfo && Number(now) > coinInfo.poolInfo.releaseAt * 1000) {
+      return (
+        coinInfo.claimedToken0 &&
+        new BigNumber(coinInfo.finalAllocation.mySwappedAmount0.toString())
+          .times(
+            Number(now) > coinInfo.poolInfo.releaseAt * 1000 + coinInfo.poolInfo.releaseDuration * 1000
+              ? 1
+              : (Number(now) - coinInfo.poolInfo.releaseAt * 1000) / (coinInfo.poolInfo.releaseDuration * 1000)
+          )
+          .minus(new BigNumber(coinInfo.claimedToken0.toString()))
+      )
+    }
+    return undefined
+  }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, coinInfo?.poolInfo])
+
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
@@ -983,11 +1004,14 @@ function Step2({
                             ).toSignificant()) ||
                           '0'}{' '}
                       {token0?.symbol} /{' '}
-                      {coinInfo?.claimedToken0 && token0 && coinInfo?.finalAllocation?.mySwappedAmount0
-                        ? CurrencyAmount.fromRawAmount(token0, coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
-                            .subtract(CurrencyAmount.fromRawAmount(token0, coinInfo.claimedToken0.toString()))
-                            .toSignificant()
-                        : '0'}{' '}
+                      {claimableToken0Amount && token0 && claimableToken0Amount.gt('0')
+                        ? CurrencyAmount.fromAmount(
+                            token0,
+                            new BigNumber(claimableToken0Amount.toString())
+                              .div(new BigNumber('10').pow(token0.decimals))
+                              .toString()
+                          )?.toSignificant()
+                        : '0'}
                       {token0?.symbol}
                     </BoldTextStyle>
                     {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
