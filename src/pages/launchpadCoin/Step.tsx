@@ -595,6 +595,16 @@ function Step1({
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
+                <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Sale Price</CardContentStyle>
+                    <CardLabelStyle>$ 0.00477</CardLabelStyle>
+                  </Stack>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Total Commit BSSB</CardContentStyle>
+                    <CardLabelStyle>6,300,000</CardLabelStyle>
+                  </Stack>
+                </Stack>
                 <Stack spacing={8}>
                   <CardContentStyle>Total Stake</CardContentStyle>
                   <CardLabelStyle>
