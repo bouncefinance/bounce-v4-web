@@ -12,7 +12,7 @@ import { useActiveWeb3React } from 'hooks'
 
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
-const poolId = 30
+const poolId = 32
 const Page = () => {
   const { account } = useActiveWeb3React()
   const chainId = ChainId.SEPOLIA
@@ -24,12 +24,12 @@ const Page = () => {
   const params: any = [
     token0?.currency.address,
     token1.address,
-    BigInt(100000000),
-    BigInt(10000000000000000000),
-    1700822941,
-    1700823121,
-    1700823181,
-    600
+    BigInt(6300000),
+    BigInt(30000),
+    1701067800,
+    1701069600,
+    1701069600,
+    60
   ]
 
   const createPool = async () => {
