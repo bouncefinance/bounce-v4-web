@@ -698,21 +698,20 @@ const DeelanceProjectInfo: IProjectInfo[] = [
   participateProjectInfo
 ]
 export const PrivatePadCoinData: IPrivatePadProp = {
-  keyId: 9999,
-  backedId: 20929,
+  keyId: 18,
   liveTimeStamp: {
     start: 1701230400000,
     end: 1701316800000
   },
-  poolTypeName: 'Fixed Price Auction',
+  poolTypeName: 'Staking Auction',
   img: 'https://images-v3.bounce.finance/a01d5ff09f6faebd837acf62beaa9e29-1701055097.png',
-  avatar: CreateProtocolAvatar,
+  avatar: BitStableLogo,
   title: 'BitStable',
   chainId: 1,
   tokenName: '$BSSB',
   whitePaperLink: 'https://docs.bitstable.finance/',
-  upcomingLink: '/launchpad/bitstable',
-  liveLink: '/launchpad/bitstable',
+  upcomingLink: '/launchpad/bitstable-staking',
+  liveLink: '/launchpad/bitstable-staking',
   projectInfo: [
     {
       title: 'What is BitStable?',
@@ -842,7 +841,7 @@ export const PrivatePadCoinData: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'Hiley Golbel Coin and text and the coin.',
+  desc: 'The BitStable Protocol is the platform through which anyone, anywhere can generate the DAII stablecoin against bitcoin ecosystem collateral assets.',
   social: [
     <Link key={0} href="https://bitstable.finance/" target="_blank">
       <Web />
@@ -850,173 +849,15 @@ export const PrivatePadCoinData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$BSSB' },
-    // { title: 'Token Price', content: '0.0044' },
-    { title: 'Token Amount', content: '10,500,000' },
+    // { title: 'Token Price', content: '0.0000233 ETH' },
+    { title: 'Token Amount', content: '6,300,000' },
     { title: 'Blockchain', content: 'Ethereum' }
+    // { title: 'Staking assets', content: '$AUCTION' }
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 16
-  {
-    keyId: 18,
-    liveTimeStamp: {
-      start: 1701230400000,
-      end: 1701316800000
-    },
-    poolTypeName: 'Staking Auction',
-    img: 'https://images-v3.bounce.finance/a01d5ff09f6faebd837acf62beaa9e29-1701055097.png',
-    avatar: BitStableLogo,
-    title: 'BitStable',
-    chainId: 1,
-    tokenName: '$BSSB',
-    whitePaperLink: 'https://docs.bitstable.finance/',
-    upcomingLink: '/launchpad/bitstable-auction',
-    liveLink: '/launchpad/bitstable-auction',
-    projectInfo: [
-      {
-        title: 'What is BitStable?',
-        info: [
-          <>
-            The BitStable Protocol is the platform through which anyone, anywhere can generate the DAII stablecoin
-            against bitcoin ecosystem collateral assets.
-          </>
-        ]
-      },
-      {
-        title: 'How does BitStable work?',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 10,
-              '&>div>em': { fontSize: 16 },
-              '& em': {
-                fontWeight: 600
-              }
-            }}
-          >
-            <Box>
-              <em>BSSB Staking Rewards Explained</em>
-              <ul>
-                <li>
-                  <em>Staking Process: </em>Users stake DAII (a BRC20 token) to earn BSSB rewards.
-                </li>
-                <li>
-                  <em>Reward Structure:</em>A fixed daily reward of 0.1% is distributed for 365 days, based on the
-                  weight of each stake. Using BSSB can increase the weight of your staked DAII.
-                </li>
-              </ul>
-            </Box>
-            <Box>
-              <em>Bridging and Token Conversion with MultiBit</em>
-              <ul>
-                <li>
-                  <em>DAII on Different Blockchains: </em> DAII minted on the Bitcoin blockchain can be converted to an
-                  ERC20 token on Ethereum.
-                </li>
-                <li>
-                  <em>Token Swapping:</em>DAII can be exchanged at a 1:1 ratio with stablecoins like USDC or USDT on the
-                  Ethereum network.
-                </li>
-                <li>
-                  <em>Partnership with MultiBit Bridge:</em>This enables cross-chain transfers between Bitcoin, Ethereum
-                  Virtual Machine (EVM) compatible networks, and other Layer 1 blockchains.
-                </li>
-                <li>
-                  <em>Redemption Process:</em>To retrieve collateral or USDT on Ethereum, users must redeem DAII on the
-                  BitStable platform, balancing out the original transaction.
-                </li>
-              </ul>
-            </Box>
-            <Box>
-              <em>Overcollateralization and Liquidation Mechanics</em>
-              <ul>
-                <li>
-                  <em>Safe Overcollateralization Rate: </em> The BSSB protocol establishes a high overcollateralization
-                  rate to reduce liquidation risks, assuming a 50% ratio. This implies you receive DAII equal to 50% of
-                  your collateral's value.
-                </li>
-                <li>
-                  <em>Liquidation Plan:</em>Despite the high overcollateralization rate, a liquidation strategy is in
-                  place for safety, with the 'Health factor' serving as a reference metric.
-                </li>
-              </ul>
-            </Box>
-            <Box>
-              <em>Stake and Liquidation Formula Example with ORDI</em>
-              <ul>
-                <li>
-                  <em>Calculating Overcollateralization for ORDI: </em> With an 80% ratio, the maximum DAII you can
-                  receive is 20% of the 'ORDI's value.
-                </li>
-                <li>
-                  <em>Health Factor Formula: </em>Health factor = [1 - (DAII value built / (ORDI quantity x Price)) +
-                  0.2] x 100.
-                </li>
-                <li>
-                  <em>Example Calculations:</em>
-                  <ul>
-                    <li>
-                      If 1 ORDI = 100 USDT, staking it gets you 20 DAII. The Health factor is then calculated as 100.
-                    </li>
-                    <li>For building 10 DAII, the Health factor increases to 110.</li>
-                    <li>If the ORDI price drops to 50 USDT, the Health factor decreases to 80.</li>
-                    <li>
-                      A drop in ORDI price to 20 USDT brings the Health factor down to 20, triggering liquidation.
-                    </li>
-                  </ul>
-                  <img style={{ width: '100%', maxWidth: 600, margin: '0 auto', marginTop: 20 }} src={BitStableInfo} />
-                </li>
-              </ul>
-            </Box>
-          </Box>
-        ]
-      },
-      {
-        title: 'Tokenomics',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              ' &>ul': {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10
-              }
-            }}
-          >
-            <ul>
-              <li>Total Supply of $BSSB: 21,000,000</li>
-              <li>Public Sale: 50% on Bounce Finance</li>
-              <li>Total raise on public sale: 500, 000 USDC</li>
-              <li>Team: 5% (6 month lock and linear vesting for 15 months)</li>
-              <li>Airdrop: 3.5%</li>
-              <li>Staking Rewards: 36.5%</li>
-              <li>LP: 5% (locked indefinitely)</li>
-              <li>Total Supply of DAII: 1,000,000,000</li>
-              <li>FDV=1,000,000$ USDC</li>
-            </ul>
-          </Box>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'The BitStable Protocol is the platform through which anyone, anywhere can generate the DAII stablecoin against bitcoin ecosystem collateral assets.',
-    social: [
-      <Link key={0} href="https://bitstable.finance/" target="_blank">
-        <Web />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$BSSB' },
-      // { title: 'Token Price', content: '0.0000233 ETH' },
-      { title: 'Token Amount', content: '6,300,000' },
-      { title: 'Blockchain', content: 'Ethereum' }
-      // { title: 'Staking assets', content: '$AUCTION' }
-    ]
-  },
+  PrivatePadCoinData,
   {
     keyId: 17,
     liveTimeStamp: {

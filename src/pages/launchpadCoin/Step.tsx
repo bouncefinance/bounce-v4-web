@@ -359,21 +359,21 @@ function Step1({
   const [, formattedRes] = useCountDown({
     targetDate: curTime
   })
-  const { days, hours, minutes } = formattedRes
+  const { days, hours, minutes, seconds } = formattedRes
   const renderCountDown = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
       return (
         <>
-          <b>--</b> Days <b>--</b> Hours <b>--</b> Mins
+          <b>--</b> Days <b>--</b> Hours <b>--</b> Mins <b>--</b> Secs
         </>
       )
     }
     return (
       <>
-        <b>{days}</b> Days <b>{hours}</b> Hours <b>{minutes}</b> Mins
+        <b>{days}</b> Days <b>{hours}</b> Hours <b>{minutes}</b> Mins <b>{seconds}</b> Secs
       </>
     )
-  }, [coinInfo, days, hours, minutes])
+  }, [coinInfo, days, hours, minutes, seconds])
 
   const showLoginModal = useShowLoginModal()
   const handleSetAmount = (v: string) => {
@@ -727,8 +727,16 @@ function Step2({
     }
     return chainId
   }, [account, chainId])
-  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
+  const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const token0 = useMemo(() => {
+    if (!_token0) return undefined
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BSSB', 'BSSB')
+  }, [_token0])
+  const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
+  const token1 = useMemo(() => {
+    if (!_token1) return undefined
+    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'Auction', 'Auction')
+  }, [_token1])
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
     return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
@@ -907,8 +915,8 @@ function Step2({
         }}
         variant="body1"
       >
-        The allocation calculation is complete. We will deduct the corresponding BNB from your account based on your
-        final GMT allocation, which will be transferred to your spot account along with your remaining BNB.
+        The allocation calculation is complete. We will deduct the corresponding $Auction from your account based on
+        your final $BSSB allocation, which will be transferred to your spot account along with your remaining $Auction.
       </Typography>
       {account &&
         coinInfo?.myToken1Amount?.eq(0) &&
@@ -1023,7 +1031,7 @@ function Step2({
                               .div(new BigNumber('10').pow(token0.decimals))
                               .toString()
                           )?.toSignificant()
-                        : '0'}
+                        : '0'}{' '}
                       {token0?.symbol}
                     </BoldTextStyle>
                     {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (

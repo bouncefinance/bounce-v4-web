@@ -227,7 +227,7 @@ export default function App() {
                   <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuctionWhitelist} element={<DeelanceWhitelistProjectInfo />} />
-                  <Route path={routes.thirdPart.launchpadCoin} element={<LaunchpadCoin />} />
+                  <Route path={routes.thirdPart.BitStable} element={<LaunchpadCoin />} />
                   <Route path={routes.thirdPart.launchpadCoin2} element={<LaunchpadCoin2 />} />
                   <Route path={routes.thirdPart.BitStableAuction} element={<BitStableProjectInfoAuction />} />
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
