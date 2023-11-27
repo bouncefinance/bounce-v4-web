@@ -11,25 +11,25 @@ import { useCoinToken0, useGetLaunchpadCoinInfo } from 'bounceHooks/launchpad/us
 import { useActiveWeb3React } from 'hooks'
 
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
+import { ChainId } from 'constants/chain'
+const poolId = 30
 const Page = () => {
-  const { chainId, account } = useActiveWeb3React()
-  const contract = useLaunchpadCoinContract()
+  const { account } = useActiveWeb3React()
+  const chainId = ChainId.SEPOLIA
+  const contract = useLaunchpadCoinContract(chainId)
   const { token0Amount: token0, token1 } = useCoinToken0()
-  const [approvalState, approveCallback] = useApproveCallback(
-    token0,
-    LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
-  )
-  const coinInfo = useGetLaunchpadCoinInfo(contract, 8, account)
+  const [approvalState, approveCallback] = useApproveCallback(token0, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId])
+  const coinInfo = useGetLaunchpadCoinInfo(contract, poolId, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
-    BigInt(1000000000000000000),
-    BigInt(1000000000000000000),
-    1700588160,
-    1700589600,
-    1700589900,
-    300
+    BigInt(100000000),
+    BigInt(10000000000000000000),
+    1700822941,
+    1700823121,
+    1700823181,
+    600
   ]
 
   const createPool = async () => {
@@ -44,9 +44,9 @@ const Page = () => {
     <>
       <ProjectHead item={PrivatePadCoinData} />
       <div style={{ background: '#f5f5f1' }}>
-        <Steps coinInfo={coinInfo} contract={contract} />
+        <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
       </div>
-      <button onClick={() => createPool()}>create</button>
+      {/* <button onClick={() => createPool()}>create</button> */}
       <Tabs item={PrivatePadCoinData} />
       <FooterPc />
     </>

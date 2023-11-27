@@ -5,6 +5,7 @@ import { Currency } from 'constants/token/currency'
 import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
 import { useMemo } from 'react'
 import { BigNumber } from 'ethers'
+import { ChainId } from 'constants/chain'
 type PoolInfoType = {
   amountTotal0: BigNumber
   amountTotal1: BigNumber
@@ -31,14 +32,15 @@ export type CoinResultType = {
   claimedToken0?: BigNumber
 }
 export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const poolInfo = useSingleCallResult(contract, 'pools', [poolId])
-  const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId])
-  const totalParticipants = useSingleCallResult(contract, 'participantCount')
-  const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId])
-  const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId])
-  const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId])
-  const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account])
-  const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId])
+  const chainId = ChainId.SEPOLIA
+  const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
+  const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, chainId)
+  const totalParticipants = useSingleCallResult(contract, 'participantCount', undefined, undefined, chainId)
+  const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId], undefined, chainId)
+  const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId], undefined, chainId)
+  const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId], undefined, chainId)
+  const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account], undefined, chainId)
+  const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId], undefined, chainId)
 
   const coinInfo = useMemo<CoinResultType | undefined>(() => {
     const result: CoinResultType = {}

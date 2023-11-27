@@ -12,8 +12,7 @@ import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import useTokenList from 'bounceHooks/auction/useTokenList'
-import { Currency, CurrencyAmount } from 'constants/token'
+import { CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 import { useApproveCallback } from 'hooks/useApproveCallback'
@@ -23,8 +22,11 @@ import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
-import DialogTips from 'bounceComponents/common/DialogTips'
+
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
+import BigNumber from 'bignumber.js'
+import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -191,8 +193,16 @@ const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
     lineHeight: 'normal'
   }
 }))
-const poolId = 8
-export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undefined; contract: Contract | null }) {
+
+export function Steps({
+  coinInfo,
+  contract,
+  poolId
+}: {
+  coinInfo: CoinResultType | undefined
+  contract: Contract | null
+  poolId: number
+}) {
   return (
     <Stack
       spacing={{ xs: 30, md: 40 }}
@@ -223,7 +233,7 @@ export function Steps({ coinInfo, contract }: { coinInfo: CoinResultType | undef
           My private launchpad
         </Button>
       </Box>
-      <VerticalLinearStepper coinInfo={coinInfo} contract={contract} />
+      <VerticalLinearStepper poolId={poolId} coinInfo={coinInfo} contract={contract} />
     </Stack>
   )
 }
@@ -235,10 +245,12 @@ enum TStep {
 const nowDate = () => new Date().getTime()
 function VerticalLinearStepper({
   coinInfo,
-  contract
+  contract,
+  poolId
 }: {
   coinInfo: CoinResultType | undefined
   contract: Contract | null
+  poolId: number
 }) {
   const curStatus = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) return TStep.COMING_SOON
@@ -252,36 +264,33 @@ function VerticalLinearStepper({
   }, [coinInfo])
   const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
   useEffect(() => {
-    // setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
-    setActiveStep(1)
+    setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
   }, [curStatus])
 
   const steps = [
     {
       label: 'Subscription Period',
-      content: <Step1 status={curStatus} coinInfo={coinInfo} contract={contract} />
+      content: <Step1 status={curStatus} coinInfo={coinInfo} contract={contract} poolId={poolId} />
     },
     {
       label: 'Final Token Distribution',
-      content: <Step2 status={curStatus} coinInfo={coinInfo} contract={contract} />
+      content: <Step2 status={curStatus} coinInfo={coinInfo} contract={contract} poolId={poolId} />
     }
   ]
-  const renderTime = useCallback(
-    (index: number) => {
-      if (!coinInfo || !coinInfo.poolInfo) return '--'
-      if (index === 0) {
-        return dayjs(coinInfo.poolInfo.openAt * 1000).format('YYYY-MM-DD HH:MM')
-      }
-      return dayjs(coinInfo.poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:MM')
-    },
-    [coinInfo]
-  )
+
+  const renderTime = useMemo(() => {
+    if (!coinInfo || !coinInfo.poolInfo) return ['--', '--']
+    return [
+      dayjs(coinInfo.poolInfo.openAt * 1000).format('YYYY-MM-DD HH:mm'),
+      dayjs(coinInfo.poolInfo.closeAt * 1000).format('YYYY-MM-DD HH:mm')
+    ]
+  }, [coinInfo])
   return (
     <Box>
       <StepperStyle activeStep={activeStep} orientation="vertical">
         {steps.map((step, index) => (
           <Step key={step.label}>
-            <StepLabelStyle optional={<Typography variant="caption">{renderTime(index)}</Typography>}>
+            <StepLabelStyle optional={<Typography variant="caption">{coinInfo && renderTime[index]}</Typography>}>
               {step.label}
             </StepLabelStyle>
             <StepContentStyle>{step?.content}</StepContentStyle>
@@ -295,36 +304,32 @@ function VerticalLinearStepper({
 function Step1({
   status,
   coinInfo,
-  contract
+  contract,
+  poolId
 }: {
   status: TStep
   coinInfo: CoinResultType | undefined
   contract: Contract | null
+  poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
+  const switchNetwork = useSwitchNetwork()
+  const _chainId = useMemo(() => {
+    // if (!account) {
+    return ChainId.SEPOLIA
+    // }
+    // return chainId
+  }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
-  const tokenList = useTokenList(chainId, 1)
-  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', chainId)
-  const token1Currency = useMemo(() => {
-    if (!tokenList || !coinInfo || !coinInfo.poolInfo) return undefined
-    const token1 = tokenList.tokenList.find(
-      i => i.address.toLocaleLowerCase() === coinInfo.poolInfo?.token1.toLocaleLowerCase()
-    )
-    if (!token1) return undefined
-    const currency = new Currency(token1.chainId as ChainId, token1.address, token1.decimals, token1.symbol)
-    return currency
-  }, [coinInfo, tokenList])
-
+  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
   }, [amount, token1Currency])
-  const [approvalState, approve] = useApproveCallback(
-    token1CurrencyAmount,
-    LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId || 11155111]
-  )
-  const token1Balance = useCurrencyBalance(account, token1Currency, chainId)
+  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[_chainId])
+  const token1Balance = useCurrencyBalance(account, token1Currency, _chainId)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -369,10 +374,15 @@ function Step1({
     if (!token1Balance) return false
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
-
+  const _switchNetwork = () => {
+    switchNetwork(ChainId.SEPOLIA)
+  }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
+    }
+    if (chainId !== ChainId.SEPOLIA) {
+      return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     }
     if (isBalanceInsufficient) {
       return <StakeButton disabled>Insufficient balance</StakeButton>
@@ -396,8 +406,10 @@ function Step1({
         Stake <AddSvg />
       </StakeButton>
     )
-  }, [account, handleClickStake, isBalanceInsufficient, showLoginModal, status])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, chainId, handleClickStake, isBalanceInsufficient, showLoginModal, status])
   const handleClose = () => {
+    setAmount('')
     setOpenDialog(false)
   }
   const toApprove = useCallback(async () => {
@@ -425,7 +437,10 @@ function Step1({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toApprove
+        onAgain: toApprove,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
   }, [approve])
@@ -449,7 +464,18 @@ function Step1({
       ret
         .then(() => {
           hideDialogConfirmation()
-          handleClose()
+          show(DialogTips, {
+            iconType: 'success',
+            cancelBtn: 'Save',
+            title: 'Success! ',
+            content: `You have successfully stake  ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            },
+            onCancel: () => {
+              handleClose()
+            }
+          })
         })
         .catch()
     } catch (error) {
@@ -462,20 +488,13 @@ function Step1({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: approvalState !== ApprovalState.APPROVED ? toApprove : toCommit
+        onAgain: approvalState !== ApprovalState.APPROVED ? toApprove : toCommit,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
-  }, [approvalState, contract, toApprove, token1CurrencyAmount])
-  const confirm = useCallback(async () => {
-    if (!contract || !token1CurrencyAmount) return
-    const isNoApprove = false
-    if (approvalState !== ApprovalState.APPROVED) {
-      await toApprove()
-    }
-    if (!isNoApprove) {
-      await toCommit()
-    }
-  }, [approvalState, contract, toApprove, toCommit, token1CurrencyAmount])
+  }, [approvalState, contract, poolId, toApprove, token1Currency?.symbol, token1CurrencyAmount])
 
   return (
     <>
@@ -582,9 +601,12 @@ function Step1({
             <Stack spacing={{ xs: 20, md: 30 }}>
               <Stack spacing={12}>
                 <BoldTextStyle>
-                  {token0 && coinInfo?.swappedtoken0
-                    ? CurrencyAmount.fromRawAmount(token0, coinInfo?.swappedtoken0?.toString()).toSignificant()
-                    : '--'}{' '}
+                  {token0 && coinInfo?.finalAllocation?.mySwappedAmount0
+                    ? CurrencyAmount.fromRawAmount(
+                        token0,
+                        coinInfo?.finalAllocation?.mySwappedAmount0.toString()
+                      ).toSignificant()
+                    : '0'}{' '}
                   {token0?.symbol || '--'}
                 </BoldTextStyle>
                 <Typography
@@ -604,15 +626,21 @@ function Step1({
                 <CardLabelStyle>
                   {coinInfo?.myToken1Amount && token1Currency
                     ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount.toString()).toSignificant()
-                    : '--'}{' '}
+                    : '0'}{' '}
                   {token1Currency?.symbol}
                 </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
                 <CardLabelStyle>
-                  {coinInfo?.myToken1Amount && coinInfo?.token1Amount && Number(coinInfo.token1Amount) > 0
-                    ? coinInfo.myToken1Amount.div(coinInfo.token1Amount).mul(100).toString()
+                  {token1Currency &&
+                  coinInfo?.myToken1Amount &&
+                  coinInfo?.token1Amount &&
+                  Number(coinInfo.token1Amount) > 0
+                    ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount?.toString() || '0')
+                        .divide(CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount?.toString() || '0'))
+                        .multiply('100')
+                        .toFixed(2)
                     : '0'}
                   %
                 </CardLabelStyle>
@@ -631,7 +659,11 @@ function Step1({
         token1Balance={token1Balance as CurrencyAmount}
         amount={amount}
         handleSetAmount={handleSetAmount}
-        confirm={confirm}
+        confirm={toCommit}
+        toApprove={toApprove}
+        approvalState={approvalState}
+        showLoginModal={showLoginModal}
+        switchNetwork={_switchNetwork}
       />
     </>
   )
@@ -660,13 +692,23 @@ const NotInvolvedTitle = styled(Typography)`
 function Step2({
   status,
   coinInfo,
-  contract
+  contract,
+  poolId
 }: {
   status: TStep
   coinInfo: CoinResultType | undefined
   contract: Contract | null
+  poolId: number
 }) {
-  const token1 = useToken(coinInfo?.poolInfo?.token1 || '')
+  const { account, chainId } = useActiveWeb3React()
+  const _chainId = useMemo(() => {
+    if (!account) {
+      return 11155111
+    }
+    return chainId
+  }, [account, chainId])
+  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
     return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
@@ -674,6 +716,7 @@ function Step2({
   const [, formattedRes] = useCountDown({
     targetDate: coinInfo?.poolInfo?.releaseAt ? coinInfo?.poolInfo?.releaseAt * 1000 : 0
   })
+
   const claimToken0 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
@@ -693,6 +736,22 @@ function Step2({
       ret
         .then(() => {
           hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            againBtn: 'Save',
+            title: 'Success!',
+            content: `You have successfully claim ${
+              token0 &&
+              coinInfo?.finalAllocation?.mySwappedAmount0 &&
+              coinInfo.claimedToken0 &&
+              CurrencyAmount.fromRawAmount(token0, coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
+                .subtract(CurrencyAmount.fromRawAmount(token0, coinInfo.claimedToken0.toString()))
+                .toSignificant()
+            } ${token1?.symbol}`,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            }
+          })
         })
         .catch()
     } catch (error) {
@@ -705,10 +764,13 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken1
+        onAgain: claimToken0,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
-  }, [contract])
+  }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, contract, poolId, token0, token1?.symbol])
   const claimToken1 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
@@ -728,6 +790,23 @@ function Step2({
       ret
         .then(() => {
           hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            cancelBtn: 'Save',
+            title: 'Success! ',
+            content: `You have successfully claim ${
+              token1 &&
+              coinInfo?.finalAllocation?.myUnSwappedAmount1 &&
+              CurrencyAmount.fromRawAmount(
+                token1,
+                coinInfo.finalAllocation?.myUnSwappedAmount1.toString()
+              ).toSignificant()
+            } ${token1?.symbol}`,
+            onAgain: claimToken1,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            }
+          })
         })
         .catch()
     } catch (error) {
@@ -740,28 +819,63 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken1
+        onAgain: claimToken1,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
       })
     }
-  }, [contract])
+  }, [coinInfo?.finalAllocation?.myUnSwappedAmount1, contract, poolId, token1])
   const canClaimToken0 = useMemo(() => {
-    if (!coinInfo) return false
+    if (!coinInfo || !coinInfo.poolInfo) return false
+    if (coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')) return false
+    const now = nowDate()
+
+    if (coinInfo.poolInfo && Number(now) > coinInfo.poolInfo.releaseAt * 1000) {
+      const flag =
+        (coinInfo.claimedToken0 &&
+          coinInfo.finalAllocation?.mySwappedAmount0 &&
+          coinInfo.claimedToken0 &&
+          new BigNumber(coinInfo.finalAllocation?.mySwappedAmount0.toString())
+            .times(
+              Number(now) > coinInfo.poolInfo.releaseAt * 1000 + coinInfo.poolInfo.releaseDuration * 1000
+                ? 1
+                : (Number(now) - coinInfo.poolInfo.releaseAt * 1000) / (coinInfo.poolInfo.releaseDuration * 1000)
+            )
+            .minus(coinInfo.claimedToken0.toString())
+            .gt(0)) ||
+        false
+      return flag
+    }
+    return false
+  }, [coinInfo])
+
+  const claimableToken0Amount = useMemo(() => {
+    if (!coinInfo?.poolInfo || !coinInfo?.claimedToken0 || !coinInfo?.finalAllocation?.mySwappedAmount0) {
+      return undefined
+    }
     const now = nowDate()
     if (coinInfo.poolInfo && Number(now) > coinInfo.poolInfo.releaseAt * 1000) {
       return (
         coinInfo.claimedToken0 &&
-        coinInfo.finalAllocation?.mySwappedAmount0
-          .mul(
+        new BigNumber(coinInfo.finalAllocation.mySwappedAmount0.toString())
+          .times(
             Number(now) > coinInfo.poolInfo.releaseAt * 1000 + coinInfo.poolInfo.releaseDuration * 1000
               ? 1
               : (Number(now) - coinInfo.poolInfo.releaseAt * 1000) / (coinInfo.poolInfo.releaseDuration * 1000)
           )
-          .sub(coinInfo.claimedToken0)
-          .gt(0)
+          .minus(new BigNumber(coinInfo.claimedToken0.toString()))
       )
     }
-    return false
-  }, [coinInfo])
+    return undefined
+  }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, coinInfo?.poolInfo])
+
+  const switchNetwork = useSwitchNetwork()
+  const showLoginModal = useShowLoginModal()
+  const _switchNetwork = () => {
+    switchNetwork(ChainId.SEPOLIA)
+  }
+
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -776,129 +890,187 @@ function Step2({
         The allocation calculation is complete. We will deduct the corresponding BNB from your account based on your
         final GMT allocation, which will be transferred to your spot account along with your remaining BNB.
       </Typography>
-      {coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.eq(0) && status === TStep.FINAL_TOKEN_DISTRIBUTION && (
-        <NotInvolvedContainer>
-          <FailSVG />
-          <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
-        </NotInvolvedContainer>
-      )}
-      {coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && status === TStep.FINAL_TOKEN_DISTRIBUTION && (
-        <Box
-          sx={{
-            width: { xs: '100%', md: 1000 },
-            borderRadius: '24px',
-            background: '#fff',
-            display: { xs: 'grid', md: 'flex' }
-          }}
-        >
+      {account &&
+        coinInfo?.myToken1Amount?.eq(0) &&
+        status === TStep.FINAL_TOKEN_DISTRIBUTION &&
+        account !== coinInfo.poolInfo?.creator && (
+          <NotInvolvedContainer>
+            <FailSVG />
+            <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
+          </NotInvolvedContainer>
+        )}
+
+      {(!account ||
+        coinInfo?.poolInfo?.creator === account ||
+        (coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && coinInfo)) &&
+        status === TStep.FINAL_TOKEN_DISTRIBUTION && (
           <Box
             sx={{
-              padding: 16
+              width: { xs: '100%', md: 1000 },
+              borderRadius: '24px',
+              background: '#fff',
+              display: { xs: 'grid', md: 'flex' }
             }}
           >
-            <Stack
-              spacing={{ xs: 20, md: 30 }}
+            <Box
               sx={{
-                width: { xs: '100%', md: 500 },
-                padding: { xs: 16, md: '24px 30px' },
-                borderRadius: '20px',
-                background: '#20201E',
-                height: 306
+                padding: 16
               }}
             >
-              <Stack spacing={16}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 6,
-                    alignItems: 'center'
-                  }}
-                >
-                  <BnBTokenSvg />
-                  <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
-                </Box>
-                <CardContentBoldTextStyle>
-                  {token1TotalAmount?.toSignificant() || '--'} {token1?.symbol || '--'}
-                </CardContentBoldTextStyle>
-              </Stack>
+              <Stack
+                spacing={{ xs: 20, md: 30 }}
+                sx={{
+                  width: { xs: '100%', md: 500 },
+                  padding: { xs: 16, md: '24px 30px' },
+                  borderRadius: '20px',
+                  background: '#20201E',
+                  height: 306
+                }}
+              >
+                <Stack spacing={16}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 6,
+                      alignItems: 'center'
+                    }}
+                  >
+                    <BnBTokenSvg />
+                    <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
+                  </Box>
+                  <CardContentBoldTextStyle>
+                    {token1TotalAmount?.toSignificant() || '0'} {token1?.symbol}
+                  </CardContentBoldTextStyle>
+                </Stack>
 
-              <Stack spacing={16}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 6,
-                    alignItems: 'center'
-                  }}
-                >
-                  <UserSvg />
-                  <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
-                </Box>
-                <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
+                <Stack spacing={16}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 6,
+                      alignItems: 'center'
+                    }}
+                  >
+                    <UserSvg />
+                    <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
+                  </Box>
+                  <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
+                </Stack>
               </Stack>
-            </Stack>
-          </Box>
+            </Box>
 
-          <Stack
-            spacing={{ xs: 30, md: 40 }}
-            sx={{
-              width: '100%',
-              padding: { xs: '24px', md: '40px 30px' }
-            }}
-          >
-            <Stack spacing={{ xs: 20, md: 30 }}>
-              <Stack spacing={{ xs: 8, md: 16 }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 6,
-                    alignItems: 'center'
-                  }}
-                >
-                  <CheckSvg />
-                  <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
-                </Box>
-                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                  <BoldTextStyle style={{ fontSize: 20 }}>20.00 B2B / 0 B2B</BoldTextStyle>
-                  {coinInfo.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
-                    <CountdownBtnStyle style={{ width: 150 }}>
-                      Lock countdown
-                      <Typography>
-                        {formattedRes.days}d {formattedRes.hours}h
-                      </Typography>
-                    </CountdownBtnStyle>
-                  ) : (
-                    <CountdownBtnStyle style={{ width: 150 }} disabled={!canClaimToken0} onClick={() => claimToken0()}>
+            <Stack
+              spacing={{ xs: 30, md: 40 }}
+              sx={{
+                width: '100%',
+                padding: { xs: '24px', md: '40px 30px' }
+              }}
+            >
+              <Stack spacing={{ xs: 20, md: 30 }}>
+                <Stack spacing={{ xs: 8, md: 16 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 6,
+                      alignItems: 'center'
+                    }}
+                  >
+                    <CheckSvg />
+                    <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
+                  </Box>
+                  <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                    <BoldTextStyle style={{ fontSize: 20 }}>
+                      {coinInfo?.finalAllocation?.mySwappedAmount0 && coinInfo?.finalAllocation?.mySwappedAmount0.eq(0)
+                        ? '0'
+                        : (token0 &&
+                            coinInfo?.finalAllocation?.mySwappedAmount0 &&
+                            CurrencyAmount.fromRawAmount(
+                              token0,
+                              coinInfo?.finalAllocation?.mySwappedAmount0?.toString()
+                            ).toSignificant()) ||
+                          '0'}{' '}
+                      {token0?.symbol} /{' '}
+                      {claimableToken0Amount && token0 && claimableToken0Amount.gt('0')
+                        ? CurrencyAmount.fromAmount(
+                            token0,
+                            new BigNumber(claimableToken0Amount.toString())
+                              .div(new BigNumber('10').pow(token0.decimals))
+                              .toString()
+                          )?.toSignificant()
+                        : '0'}
+                      {token0?.symbol}
+                    </BoldTextStyle>
+                    {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
+                      <CountdownBtnStyle style={{ width: 150 }}>
+                        Lock countdown
+                        <Typography>
+                          {formattedRes.days}d {formattedRes.hours}h
+                        </Typography>
+                      </CountdownBtnStyle>
+                    ) : (
+                      <CountdownBtnStyle
+                        style={{ width: 150 }}
+                        disabled={!canClaimToken0}
+                        onClick={() => claimToken0()}
+                      >
+                        Claim
+                      </CountdownBtnStyle>
+                    )}
+                  </Stack>
+                </Stack>
+                <Stack spacing={{ xs: 8, md: 16 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 6,
+                      alignItems: 'center'
+                    }}
+                  >
+                    <WonderSvg />
+                    <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
+                  </Box>
+
+                  <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                    <BoldTextStyle style={{ fontSize: 20 }}>
+                      {coinInfo?.myToken1Amount && token1 && coinInfo.myToken1Amount.eq('0')
+                        ? '0'
+                        : (token1 &&
+                            coinInfo?.myToken1Amount &&
+                            CurrencyAmount.fromRawAmount(
+                              token1,
+                              coinInfo?.myToken1Amount.toString()
+                            ).toSignificant()) ||
+                          '0'}{' '}
+                      {token1 && token1.symbol} /{' '}
+                      {coinInfo?.finalAllocation?.myUnSwappedAmount1 && token1 && coinInfo.myToken1Claimed
+                        ? '0'
+                        : (token1 &&
+                            coinInfo?.finalAllocation?.myUnSwappedAmount1 &&
+                            CurrencyAmount.fromRawAmount(
+                              token1,
+                              coinInfo.finalAllocation?.myUnSwappedAmount1.toString()
+                            ).toSignificant()) ||
+                          '0'}{' '}
+                      {token1 && token1.symbol}
+                    </BoldTextStyle>
+
+                    <StakeButton
+                      style={{ width: 150 }}
+                      disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
+                      onClick={() => claimToken1()}
+                    >
                       Claim
-                    </CountdownBtnStyle>
+                    </StakeButton>
+                  </Stack>
+                  {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
+                  {account && chainId !== ChainId.SEPOLIA && (
+                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )}
                 </Stack>
               </Stack>
-              <Stack spacing={{ xs: 8, md: 16 }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 6,
-                    alignItems: 'center'
-                  }}
-                >
-                  <WonderSvg />
-                  <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
-                </Box>
-                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                  <BoldTextStyle style={{ fontSize: 20 }}>0.06 BNB / 20.00 BNB</BoldTextStyle>
-                  <StakeButton
-                    style={{ width: 150 }}
-                    disabled={coinInfo.myToken1Claimed || !coinInfo.finalAllocation?.myUnSwappedAmount1.gt(0)}
-                    onClick={() => claimToken1()}
-                  >
-                    Claim
-                  </StakeButton>
-                </Stack>
-              </Stack>
             </Stack>
-          </Stack>
-        </Box>
-      )}
+          </Box>
+        )}
     </Stack>
   )
 }
