@@ -1,8 +1,8 @@
 import { Box, Button, Stack, Typography, Stepper, StepLabel, StepContent, Step, styled } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
-import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
-import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
+// import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
+// import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
 import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
@@ -12,7 +12,7 @@ import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 import { useApproveCallback } from 'hooks/useApproveCallback'
@@ -322,8 +322,22 @@ function Step1({
   }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
-  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
+  const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const token0 = useMemo(() => {
+    if (!_token0) return undefined
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BSSB', 'BSSB')
+  }, [_token0])
+  const _token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
+  const token1Currency = useMemo(() => {
+    if (!_token1Currency) return undefined
+    return new Currency(
+      _token1Currency.chainId,
+      _token1Currency.address,
+      _token1Currency.decimals,
+      'Auction',
+      'Auction'
+    )
+  }, [_token1Currency])
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
@@ -555,7 +569,13 @@ function Step1({
                   gap: { xs: 8, md: 16 }
                 }}
               >
-                <StakeTokensSvg />
+                {/* <StakeTokensSvg /> */}
+                <img
+                  src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
+                  width={60}
+                  height={60}
+                  style={{ borderRadius: '50%' }}
+                />
                 <Stack spacing={4} maxWidth={{ xs: 'auto', md: 350 }}>
                   <CardLabelStyle
                     sx={{
@@ -566,10 +586,10 @@ function Step1({
                       }
                     }}
                   >
-                    Hiley Golbel Coin <b>x</b> BNB pool
+                    BitStable <b>x</b> Auction Pool
                   </CardLabelStyle>
                   <CardContentStyle>
-                    Stake BNB tokens to earn Commitable amount for participating in Hiley Golbel Coin launchpad
+                    Stake Auction to earn Committable amount for participating in BitStable Coin launchpad
                   </CardContentStyle>
                 </Stack>
               </Box>
@@ -935,7 +955,13 @@ function Step2({
                       alignItems: 'center'
                     }}
                   >
-                    <BnBTokenSvg />
+                    {/* <BnBTokenSvg /> */}
+                    <img
+                      src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
+                      width={17}
+                      height={17}
+                      style={{ borderRadius: '50%' }}
+                    />
                     <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
                   </Box>
                   <CardContentBoldTextStyle>

@@ -100,6 +100,6 @@ export const useCoinToken0 = () => {
   const token0 = SEPOLIA_TOKEN_LIST[3]
   const token1 = SEPOLIA_TOKEN_LIST[2]
   const token0Currency = new Currency(token0.chainId as any, token0.address, token0.decimals, token0.symbol)
-  const token0Amount = CurrencyAmount.fromAmount(token0Currency, 200000)
+  const token0Amount = CurrencyAmount.fromAmount(token0Currency, '6300000000000000000000000')
   return { token0Amount, token1 }
 }

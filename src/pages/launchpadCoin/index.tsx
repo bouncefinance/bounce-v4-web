@@ -12,24 +12,25 @@ import { useActiveWeb3React } from 'hooks'
 
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
-const poolId = 32
+const poolId = 34
 const Page = () => {
   const { account } = useActiveWeb3React()
   const chainId = ChainId.SEPOLIA
   const contract = useLaunchpadCoinContract(chainId)
   const { token0Amount: token0, token1 } = useCoinToken0()
+  console.log('🚀 ~ file: index.tsx:21 ~ Page ~ token0:', token0)
   const [approvalState, approveCallback] = useApproveCallback(token0, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId])
   const coinInfo = useGetLaunchpadCoinInfo(contract, poolId, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
-    BigInt(6300000),
-    BigInt(30000),
-    1701067800,
-    1701069600,
-    1701069600,
-    60
+    '6300000000000000000000000',
+    '30000000000000000000000',
+    1701069900,
+    1701071100,
+    1701071100,
+    1
   ]
 
   const createPool = async () => {
@@ -38,7 +39,7 @@ const Page = () => {
     }
     await contract?.create(params)
   }
-  console.log('createPool', createPool)
+  console.log('createPool', createPool, approvalState)
 
   return (
     <>
