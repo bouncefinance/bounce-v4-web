@@ -1003,7 +1003,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'Hiley Golbel Coin and text and the coin.',
+    desc: 'The BitStable Protocol is the platform through which anyone, anywhere can generate the DAII stablecoin against bitcoin ecosystem collateral assets.',
     social: [
       <Link key={0} href="https://bitstable.finance/" target="_blank">
         <Web />
