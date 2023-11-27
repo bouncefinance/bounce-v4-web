@@ -110,7 +110,8 @@ export const routes = {
     IphoneAuctionDetail: '/rwa/iphone15',
     FinceptorAuction: '/launchpad/finceptor',
     launchpadCoin: '/launchpad/coin',
-    MultiBitBridge: '/launchpad/multibit'
+    MultiBitBridge: '/launchpad/multibit',
+    BitStable: '/launchpad/bitstable'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

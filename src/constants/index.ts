@@ -576,5 +576,6 @@ export const LAUNCHPAD_COIN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }

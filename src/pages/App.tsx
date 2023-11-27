@@ -72,6 +72,7 @@ import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
 import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
 import CreateLaunchpad from './launchpad/create-launchpad'
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
+import BitStableProjectInfo from './projectIntro/BitStableProjectInfo'
 import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
@@ -237,7 +238,7 @@ export default function App() {
                   {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.thirdPart.FinceptorAuction} element={<FinceptorProjectInfo />} />
-
+                  <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfo />} />
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
                   <Route path={routes.tokenToolBox.myLock} element={<MyLock />} />
