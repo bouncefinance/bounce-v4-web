@@ -218,7 +218,7 @@ export function Steps({
         }}
       >
         <BoldTextStyle>Subscription Timeline</BoldTextStyle>
-        <Button
+        {/* <Button
           sx={{
             padding: { xs: '8px 30px', md: '12px 24px' },
             color: '#171717',
@@ -231,7 +231,8 @@ export function Steps({
           }}
         >
           My private launchpad
-        </Button>
+        </Button> */}
+        <></>
       </Box>
       <VerticalLinearStepper poolId={poolId} coinInfo={coinInfo} contract={contract} />
     </Stack>

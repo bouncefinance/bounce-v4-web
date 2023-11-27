@@ -141,7 +141,9 @@ export const transparentRoutes = [
   routes.thirdPart.MultiBitBridge,
   routes.launchpad.account.launchpadParty,
   routes.launchpad.account.launchpadDetail,
-  routes.foundo.foundoDetail + '/*'
+  routes.foundo.foundoDetail + '/*',
+  routes.thirdPart.BitStable,
+  routes.thirdPart.BitStableAuction
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
