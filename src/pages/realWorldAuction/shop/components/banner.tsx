@@ -378,7 +378,7 @@ export function Banner({ banner }: { banner: BannerType }) {
             marginRight: '10px',
             color: '#121212',
             fontSize: isSm ? '14px' : '16px',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 500
           }}
         >

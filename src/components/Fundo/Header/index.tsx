@@ -9,7 +9,7 @@ import MenuAddIcon from 'components/Fundo/assets/img/mobile/add.svg'
 import MenuDecIcon from 'components/Fundo/assets/img/mobile/dec.svg'
 import { useState } from 'react'
 const LinkItem = styled(Typography)(() => ({
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontWeight: 600,
   fontSize: 14,
   color: '#D7D6D9',

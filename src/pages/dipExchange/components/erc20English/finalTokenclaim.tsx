@@ -52,7 +52,7 @@ const LabelItem = ({ label, value, iconUrl, labelStyle, valueStyle, style }: Lab
       <Typography
         sx={{
           color: '#D7D6D9',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontSize: '16px',
           fontWeight: 500,
           letterSpacing: '-0.32px',
@@ -87,7 +87,7 @@ const FinalTokenclaim = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }
         <Typography
           sx={{
             color: '#D7D6D9',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: '16px',
             fontWeight: 500,
             textAlign: isMd ? 'center' : 'left'

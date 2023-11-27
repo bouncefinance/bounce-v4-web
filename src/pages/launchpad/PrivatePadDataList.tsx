@@ -37,8 +37,12 @@ import CreateProtocolAvatar from './imgs/Create_Protocol_na.jpg'
 import { ChainId } from 'constants/chain'
 import { routes } from 'constants/routes'
 import CreateProtocol from './imgs/CreateProtocol.png'
+import CreateProtocolPage from './imgs/CreateProtocolPage.jpg'
 // import Finceptor from './imgs/Finceptor.png'
 import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
+import MultibitContent1 from './imgs/multibit-content1.png'
+import MultiBitAva from './imgs/multi-bit-ava.png'
+import MultibitBanner from './imgs/multibit-banner.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -846,158 +850,9 @@ export const PrivatePadCoinData: IPrivatePadProp = {
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 15
   {
-    keyId: 14,
-    liveTimeStamp: {
-      start: 1698066000000,
-      end: 1698411600000
-    },
-    poolTypeName: 'Fixed Swap Auction',
-    img: CreateProtocol,
-    avatar: CreateProtocolAvatar,
-    title: 'Create',
-    chainId: 1,
-    tokenName: '$CREATE',
-    whitePaperLink: 'https://createprotocol.gitbook.io/create-protocol-whitepaper/',
-    upcomingLink: '/launchpad/create_protocol',
-    liveLink: '/launchpad/create_protocol',
-    projectInfo: [
-      {
-        title: 'What is Create Protocol?',
-        info: [
-          <>
-            Create Protocol is a complete stack that provides a number of protocols that are building blocks for Web 3.0
-            applications. These protocols include: <br />
-            ⚡️A decentralized identity system that allows users to control their own data and privacy. <br />
-            ⚡️A creative object model that defines the data structure for digital assets. <br />
-            ⚡️A cDapp composer that makes it easy to create and deploy decentralized applications. <br />
-            ⚡️Deagi AI Attribution Engine that allows devs to integrate apps / learning models to the IP repository in
-            a way where IP owners/creators have the control over use of their data and its economic incentivisation.
-          </>
-        ]
-      },
-      {
-        title: 'Advantages',
-        info: [
-          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
-            <li>
-              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
-              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
-              applications that can take advantage of the best features of each blockchain.
-            </li>
-            <li>
-              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
-              secure, reliable, and transparent platform for creators and users.
-            </li>
-            <li>
-              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
-              features, and participate in governance. This gives users more control over their assets.
-            </li>
-            <li>
-              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
-              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
-              decentralized applications.
-            </li>
-            <li>
-              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
-              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
-              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
-              create, share, and monetize content, then the Create Protocol is the platform for you.
-            </li>
-          </ul>
-        ]
-      },
-      {
-        title: 'Tokenomics',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '& a': {
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            <a href="https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing">
-              https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing
-            </a>
-          </Box>
-        ]
-      },
-      {
-        title: 'Investment and Partners',
-        info: [
-          <ul key={1}>
-            <li>
-              Investors - Ice Capital ( UAE ) - <strong> Lead investor</strong>
-            </li>
-            <li>
-              <p>
-                Cogitent Ventures ( USA ) - <strong>Co Lead</strong>
-              </p>
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <li>Snowy August Family Office - ( Miami )</li>
-                <li>Stanford AI and Web3 club angels ( USA )</li>
-                <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
-                <li>
-                  Hue Nguyen : Ex SEC USA + Official Advisor (USA)
-                  <br />
-                  Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
-                </li>
-                <li>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</li>
-                <li>Kalyan Singh : Co-founder, Lumenci ( Austin )</li>
-                <li>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</li>
-                <li>Sayantan Biswas : Co-founder, UniAcco ( London )</li>
-                <li>Aashish Jindal : Co-founder, GripInvest ( India )</li>
-                <li>Sian Elizabeth : Sian Elizabeth Wellness ( London )</li>
-                <li>Bharat Thakur : Creator - Royal Artist ( Dubai )</li>
-              </ul>
-            </li>
-            <li>
-              {/* <div>and many more.</div> */}
-              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <li>KOL - Waqar Zaka Few Degen KOLs</li>
-                <li>Media Partners - Edge of NFT</li>
-                <li>Big Brands - Binance Polygon</li>
-              </ul>
-            </li>
-          </ul>
-        ]
-      },
-      participateProjectInfo
-    ],
-    tokenMetrics: [],
-    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
-    social: [
-      <Link key={0} href="https://www.createprotocol.org/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={4} href="https://t.me/CreateProtocolOfficial" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      <Link
-        key={5}
-        sx={{ width: '43px !important', height: '43px !important' }}
-        href="https://www.instagram.com/create.protocol/?hl=en"
-        target="_blank"
-      >
-        <InstagramSvg width={43} height={43} />
-      </Link>,
-      <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={7} href="https://discord.com/invite/M2xcC2Cex5" target="_blank">
-        <DiscordSVG />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$CREATE' },
-      { title: 'Token Price', content: '0.0044' },
-      { title: 'Token Amount', content: '20,000,000' },
-      { title: 'Blockchain', content: 'Ethereum' }
-    ]
-  },
-  {
+    hidden: true,
     keyId: 15,
+    backedId: 18555,
     liveTimeStamp: {
       start: 1697360400000,
       end: 1697965200000
@@ -1346,6 +1201,232 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
+  {
+    backedId: 18578,
+    keyId: 16,
+    liveTimeStamp: {
+      start: 1699761600000,
+      end: 1700028000000
+    },
+    hideUpcomingCountdown: true,
+    poolTypeName: 'Fixed Swap Auction',
+    pageInImg: MultibitBanner,
+    img: 'https://images-v3.bounce.finance/0aa4a14f2ae496f7dd3be777d5054453-1699525289.png',
+    avatar: MultiBitAva,
+    title: 'MultiBit Bridge',
+    chainId: 1,
+    tokenName: '$MUBI',
+    whitePaperLink: '',
+    upcomingLink: '/launchpad/multibit',
+    liveLink: '/launchpad/multibit',
+    projectInfo: [
+      {
+        title: 'What is MultiBit Bridge?',
+        info: [
+          <Box key={1}>
+            MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and
+            ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain
+            interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC
+            tokens in a secure and user-friendly manner.
+          </Box>
+        ]
+      },
+      {
+        title: 'How it all works',
+        info: [
+          <Box key={6}>
+            MultiBit streamlines the token transfer process between Bitcoin's BRC20 and EVM networks. It begins with
+            users transferring BRC20 tokens to a dedicated BRC20 address. Upon confirmation, these tokens are primed for
+            minting on the EVM network. But MultiBit's uniqueness lies in its dual-sided bridge feature, enabling
+            equally seamless transfers from EVM networks back to Bitcoin. With MultiBit, bridging and minting tokens for
+            cross-chain transfers between Bitcoin and EVM networks is an effortless process.
+            <div style={{ width: '100%', height: '100%', marginTop: 10 }}>
+              <img src={MultibitContent1} style={{ width: '100%', height: '100%' }} />
+            </div>
+          </Box>
+        ]
+      },
+      {
+        title: 'Ecosystem',
+        info: [
+          <Box key={7}>
+            <div>
+              <strong>Ordinals AMM</strong>
+              <ul>
+                <li>
+                  MultiBit's Ordinals Automated Market Maker (OAMM) is a decentralized exchange protocol designed
+                  specifically for trading Ordinals ($ORDI) tokens. It leverages the principles of automated market
+                  making to provide liquidity, enable seamless token swaps, and facilitate efficient price discovery for
+                  $ORDI and other paired tokens.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong style={{ marginTop: 10 }}>Ordinals Farming</strong>
+              <ul>
+                <li>
+                  MultiBit offers Farming Ordinals ($ORDI), an exciting opportunity for the BRC community to earn
+                  additional $ORDI tokens by providing liquidity or staking preferred tokens in selected pools. The
+                  farming process allows participants to contribute to the liquidity of the $ORDI ecosystem while being
+                  rewarded for their contribution.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <strong style={{ marginTop: 10 }}>Ordinals Stablecoin</strong>
+              <ul>
+                <li>
+                  Ordinals Stablecoin is backed by a specific ratio of Ordinals ($ORDI) tokens held as collateral. These
+                  $ORDI tokens serve as a reserve to support the stability and value of the stablecoin. The
+                  collateralization mechanism ensures that the value of the stablecoin remains pegged to a 1:1 ratio to
+                  USDC.
+                </li>
+              </ul>
+            </div>
+          </Box>
+        ]
+      },
+      {
+        title: 'Distribution',
+        info: [
+          <Box key={3}>
+            <Typography sx={{ textIndent: 20 }}>$400,000 USDC = Initial FDV (all available at launch)</Typography>
+            <ul key={2}>
+              <li>KOL Whitelist Sale (Same Price as Public Sale): 11.25%</li>
+              <li>Public Sale: 78.75%</li>
+              <li>5% DEX liquidity locked forever</li>
+              <li>5% team 6 months lock then linear vesting for 2 years</li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Roadmap',
+        info: [
+          <Box key={3}>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <li>
+                November 2023: Token Generation Event (TGE): Multibit launches its native token through a TGE event,
+                providing users with opportunities for participation and token acquisition.
+              </li>
+              <li>
+                Q4 2023: Expanded Token Support: Multibit adds support for a wide range of BRC20 and ERC20 tokens,
+                expanding its offering to allow users to bridge and interact with an increasing number of tokens.
+              </li>
+              <li>
+                Q1 2024: Enhanced User Interface and Experience: Multibit focuses on improving its interface, making it
+                more intuitive and user-friendly to enhance the overall experience for users.
+              </li>
+              <li>
+                Q1 2024: Integration with Additional DeFi Protocols: Multibit integrates with more DeFi protocols,
+                enabling users to leverage their bridged tokens for activities such as lending, borrowing, yield
+                farming, and decentralized exchanges.
+              </li>
+              <li>
+                Q1-Q2 2024: Partnerships and Collaborations: Multibit forms partnerships and collaborations with other
+                blockchain projects, exchanges, and DeFi platforms to expand its reach, increase liquidity options, and
+                foster interoperability.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Contract Audit',
+        info: [
+          <a href="https://github.com/multibit-repo/audit" key={5} target="_blank" rel="noreferrer">
+            https://github.com/multibit-repo/audit
+          </a>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'MultiBit is the first-ever dual-sided bridge designed for easy cross-network transfers between BRC20 and ERC20 tokens. Through promoting unmatched liquidity for these tokens, MultiBit heightens cross-chain interoperability. Our mission is simple: to foster increased liquidity and accessibility for BRC and ERC tokens in a secure and user-friendly manner.',
+    social: [
+      <Link key={0} href="https://multibit.exchange/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://t.me/multibitprotocol" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/Multibit_Bridge" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@Multibit_Bridge" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$MUBI' },
+      { title: 'Token Price', content: '0.00000022709 ETH' },
+      { title: 'Token Amount', content: '387500000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 11,
+    liveTimeStamp: {
+      start: 1698847200000,
+      end: 1698933600000
+    },
+    backedId: 18569,
+    hideUpcomingCountdown: true,
+    poolTypeName: 'ERC20 English Auction',
+    poolTypeName2: 'ERC20 Dutch Auction',
+    img: DipImg,
+    avatar: DipAvatar,
+    title: 'DIP Exchange',
+    chainId: 8453,
+    tokenName: '$DIP',
+    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
+    upcomingLink: '/launchpad/dip_exchange',
+    liveLink: '/launchpad/dip_exchange',
+    projectInfo: DipProjectInfo,
+    tokenMetrics: DipTokenMetrics,
+    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
+    social: [
+      <Link key={0} href="https://dip.exchange" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>,
+      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$DGT' },
+      { title: 'Auction Method', content: 'Dutch Auction' },
+      { title: 'Token Amount', content: '250,000' },
+      { title: 'Blockchain', content: 'BASE' }
+    ],
+    privatePrices: [
+      // {
+      //   title: ['DIP Auction Method'],
+      //   value: ['ERC20 English Auction']
+      // },
+      // {
+      //   title: ['DIP Token Offered'],
+      //   value: 'TBD $DIP'
+      // },
+      {
+        title: ['DGT Token Offered'],
+        value: '$DGP'
+      },
+      {
+        title: ['DGT Auction Method'],
+        value: 'ERC20 Dutch Auction'
+      }
+    ],
+    isFAQ: true
+  },
   // {
   //   keyId: 12,
   //   liveTimeStamp: {
@@ -1407,71 +1488,163 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   //     { title: 'Blockchain', content: 'Ethereum' }
   //   ]
   // },
+
   {
-    keyId: 11,
+    keyId: 14,
+    backedId: 18567,
     liveTimeStamp: {
-      start: 1690672533200000,
-      end: 1690932433400000
+      start: 1698066000000,
+      end: 1698411600000
     },
-    hideUpcomingCountdown: true,
-    poolTypeName: 'ERC20 English Auction',
-    poolTypeName2: 'ERC20 Dutch Auction',
-    img: DipImg,
-    avatar: DipAvatar,
-    title: 'DIP Exchange',
-    chainId: 8453,
-    tokenName: '$DIP',
-    whitePaperLink: 'https://app.gitbook.com/o/nRZfswQcmwpKWJZsyU7w/home',
-    upcomingLink: '/launchpad/dip_exchange',
-    liveLink: '/launchpad/dip_exchange',
-    projectInfo: DipProjectInfo,
-    tokenMetrics: DipTokenMetrics,
-    desc: 'DIP Exchange is a decentralized perpetual exchange that aims to be the go-to platform for traders looking for a professional risk management environment and a fully decentralized governance mechanism.',
+    poolTypeName: 'Fixed Swap Auction',
+    img: CreateProtocol,
+    avatar: CreateProtocolAvatar,
+    pageInImg: CreateProtocolPage,
+    title: 'Create',
+    chainId: 1,
+    tokenName: '$CREATE',
+    whitePaperLink: 'https://createprotocol.gitbook.io/create-protocol-whitepaper/',
+    upcomingLink: '/launchpad/create_protocol',
+    liveLink: '/launchpad/create_protocol',
+    projectInfo: [
+      {
+        title: 'What is Create Protocol?',
+        info: [
+          <>
+            Create Protocol is a complete stack that provides a number of protocols that are building blocks for Web 3.0
+            applications. These protocols include: <br />
+            ⚡️A decentralized identity system that allows users to control their own data and privacy. <br />
+            ⚡️A creative object model that defines the data structure for digital assets. <br />
+            ⚡️A cDapp composer that makes it easy to create and deploy decentralized applications. <br />
+            ⚡️Deagi AI Attribution Engine that allows devs to integrate apps / learning models to the IP repository in
+            a way where IP owners/creators have the control over use of their data and its economic incentivisation.
+          </>
+        ]
+      },
+      {
+        title: 'Advantages',
+        info: [
+          <ul key={1} style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+            <li>
+              Chain agnostic interoperability: The Create Protocol allows applications to communicate with each other,
+              regardless of the blockchain they are running on. This makes it possible to build truly cross-chain
+              applications that can take advantage of the best features of each blockchain.
+            </li>
+            <li>
+              Decentralized AI infrastructure: The Create Protocol uses decentralized AI technology to provide a more
+              secure, reliable, and transparent platform for creators and users.
+            </li>
+            <li>
+              Independent token: The $CREATE token is an independent token that can be used to pay for services, access
+              features, and participate in governance. This gives users more control over their assets.
+            </li>
+            <li>
+              Building blocks for Web 3.0 applications: The Create Protocol provides a number of protocols that are
+              building blocks for Web 3.0 applications. This makes it easier for developers to build and deploy
+              decentralized applications.
+            </li>
+            <li>
+              The Create Protocol is the future of Web 3.0. It is the platform that will make it possible for creators
+              and users to truly own their data and assets, and to build and use applications that are secure, reliable,
+              and transparent.If you are a creator or a user who is looking for a more decentralized and secure way to
+              create, share, and monetize content, then the Create Protocol is the platform for you.
+            </li>
+          </ul>
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              '& a': {
+                textDecoration: 'underline'
+              }
+            }}
+          >
+            <a href="https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing">
+              https://drive.google.com/drive/folders/1Llx30IcVzp2W0sEyY7MMDbsurM0cR2yE?usp=sharing
+            </a>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <ul key={1}>
+            <li>
+              Investors - Ice Capital ( UAE ) - <strong> Lead investor</strong>
+            </li>
+            <li>
+              <p>
+                Cogitent Ventures ( USA ) - <strong>Co Lead</strong>
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>Snowy August Family Office - ( Miami )</li>
+                <li>Stanford AI and Web3 club angels ( USA )</li>
+                <li>Lalit Mangal CEO, Airmeet, previous startup acquired @ $200 mn ( India )</li>
+                <li>
+                  Hue Nguyen : Ex SEC USA + Official Advisor (USA)
+                  <br />
+                  Waqar Zaka : Blockchain Influencer, 5 million + followers ( Asia )
+                </li>
+                <li>Grant Gunderson : Draper’s Associate + Official Advisor ( San Fransisco )</li>
+                <li>Kalyan Singh : Co-founder, Lumenci ( Austin )</li>
+                <li>Abhimanyu Lamba : International Growth Lead, Canva ( Australia )</li>
+                <li>Sayantan Biswas : Co-founder, UniAcco ( London )</li>
+                <li>Aashish Jindal : Co-founder, GripInvest ( India )</li>
+                <li>Sian Elizabeth : Sian Elizabeth Wellness ( London )</li>
+                <li>Bharat Thakur : Creator - Royal Artist ( Dubai )</li>
+              </ul>
+            </li>
+            <li>
+              {/* <div>and many more.</div> */}
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <li>KOL - Waqar Zaka Few Degen KOLs</li>
+                <li>Media Partners - Edge of NFT</li>
+                <li>Big Brands - Binance Polygon</li>
+              </ul>
+            </li>
+          </ul>
+        ]
+      },
+      participateProjectInfo
+    ],
+    tokenMetrics: [],
+    desc: 'The Create Protocol is an AI-based Web 3.0 infrastructure designed to harness the true power of digital assets. It provides chain agnostic interoperability across Web 2.0 and Web 3.0, making it easier for developers and users to build and use applications that are secure, reliable, and transparent.',
     social: [
-      <Link key={0} href="https://dip.exchange" target="_blank">
+      <Link key={0} href="https://www.createprotocol.org/" target="_blank">
         <Web />
       </Link>,
-      <Link key={1} href="https://twitter.com/DIP_Exchange" target="_blank">
+      <Link key={4} href="https://t.me/CreateProtocolOfficial" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link
+        key={5}
+        sx={{ width: '43px !important', height: '43px !important' }}
+        href="https://www.instagram.com/create.protocol/?hl=en"
+        target="_blank"
+      >
+        <InstagramSvg width={43} height={43} />
+      </Link>,
+      <Link key={6} href="https://twitter.com/CreateProtocol" target="_blank">
         <Twitter />
       </Link>,
-      <Link key={2} href="https://discord.gg/dip-exchange" target="_blank">
+      <Link key={7} href="https://discord.com/invite/M2xcC2Cex5" target="_blank">
         <DiscordSVG />
-      </Link>,
-      <Link key={3} href="https://medium.com/dip-exchange" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>,
-      <Link key={4} href="https://t.me/dip_exchange" target="_blank">
-        <img src={Telegram} width={40} />
       </Link>
     ],
     moreData: [
-      { title: 'Token Name', content: '$DIP $DGT' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'BASE' }
-    ],
-    privatePrices: [
-      // {
-      //   title: ['DIP Auction Method'],
-      //   value: ['ERC20 English Auction']
-      // },
-      // {
-      //   title: ['DIP Token Offered'],
-      //   value: 'TBD $DIP'
-      // },
-      {
-        title: ['DGT Token Offered'],
-        value: 'TBD $DGP'
-      },
-      {
-        title: ['DGT Auction Method'],
-        value: 'ERC20 Dutch Auction'
-      }
-    ],
-    isFAQ: true
+      { title: 'Token Name', content: '$CREATE' },
+      { title: 'Token Price', content: '0.00069 AUCTION' },
+      { title: 'Token Amount', content: '7,200,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
   },
   {
     keyId: 9,
+    backedId: 18317,
     liveTimeStamp: {
       start: 1689436800000,
       end: 1689609600000
@@ -1514,6 +1687,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   },
   {
     keyId: 10,
+    backedId: 18329,
     liveTimeStamp: {
       start: 1689436800000,
       end: 1689609600000

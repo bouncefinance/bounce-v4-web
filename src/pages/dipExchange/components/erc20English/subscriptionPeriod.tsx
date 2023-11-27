@@ -9,7 +9,7 @@ import { useIsMDDown } from 'themes/useTheme'
 const SpanCom = styled('span')(({ theme }) => ({
   display: 'inline-block',
   color: '#4F5FFC',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontSize: 20,
   fontWeight: 600,
   margin: '0 10px 0 16px',

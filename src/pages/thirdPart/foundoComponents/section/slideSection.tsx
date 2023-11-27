@@ -24,7 +24,7 @@ const SlideSection = ({ title, children }: { title: string; children?: React.Rea
       <Typography
         sx={{
           width: '100%',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: isSm ? 16 : 20,
           color: '#fff',

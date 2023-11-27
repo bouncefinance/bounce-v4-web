@@ -121,6 +121,7 @@ const HeaderSearchInput: React.FC<ISearchProps> = ({
             placeholder={placeholder}
             sx={{
               fontSize: 13,
+              fontFamily: `'Inter'`,
               borderRadius: 60,
               height: 44,
               width: 44,

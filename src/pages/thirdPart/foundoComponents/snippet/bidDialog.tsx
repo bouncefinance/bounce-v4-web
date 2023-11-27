@@ -71,7 +71,7 @@ export const PlaceBidBtn = styled(LoadingButton)({
   backgroundColor: 'transparent',
   borderRadius: '100px',
   height: '56px',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontStyle: 'italic',
   fontWeight: 100,
   fontSize: 20,
@@ -133,7 +133,7 @@ export function ProcessLine(props: { ratio: number }) {
                   : 'translate3D(-30%, 0, 0)',
               color: 'rgba(255, 255, 255, 0.8)',
               fontSize: '14px',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600
             }}
           >
@@ -285,7 +285,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
         >
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: 20,
               color: '#fff',
@@ -336,7 +336,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
             />
             <Typography
               sx={{
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontWeight: 600,
                 fontSize: isSm ? 13 : 14,
                 color: '#fff',
@@ -408,7 +408,7 @@ const BidDialog = ({ handleClose }: { handleClose: () => void }) => {
             <Typography
               sx={{
                 color: '#fff',
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontSize: 12
               }}
               mb={'12px'}

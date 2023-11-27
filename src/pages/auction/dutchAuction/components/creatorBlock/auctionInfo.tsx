@@ -13,7 +13,7 @@ import { useState, useMemo } from 'react'
 import { DutchAuctionPoolProp } from 'api/pool/type'
 import moment from 'moment'
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
-  <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Public Sans'`, fontSize: '14px', fontWeight: 600 }}>
+  <Typography sx={{ mb: 10, color: '#fff', fontFamily: `'Inter'`, fontSize: '14px', fontWeight: 600 }}>
     {children}
   </Typography>
 )
@@ -52,8 +52,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }): JSX.Element 
                   ethChainId={poolInfo.ethChainId}
                   backedChainId={poolInfo.chainId}
                 />
-                <RightText>{shortenAddress(poolInfo.contract)}</RightText>
-                <CopyToClipboard text={poolInfo.contract} />
+                <RightText>{shortenAddress(poolInfo.token0.address)}</RightText>
+                <CopyToClipboard text={poolInfo.token0.address} />
               </Stack>
             </PoolInfoItem>
             <PoolInfoItem title="Token symbol">

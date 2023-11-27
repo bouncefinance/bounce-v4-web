@@ -37,7 +37,7 @@ const CollectBox = styled(Box)(() => ({
       display: 'inline-block'
     },
     '.num': {
-      fontFamily: `'Public Sans'`,
+      fontFamily: `'Inter'`,
       fontWeight: 600,
       fontSize: '14px',
       letterSpacing: '-0.02em',

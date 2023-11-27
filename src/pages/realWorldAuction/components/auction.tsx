@@ -580,7 +580,7 @@ const AuctionContent = () => {
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             width: isSm ? '100%' : '700px',
             fontWeight: 600,
             fontSize: isSm ? '20px' : '28px',

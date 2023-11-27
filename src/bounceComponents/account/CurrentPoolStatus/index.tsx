@@ -69,7 +69,7 @@ export default function CurrentPoolStatus({ backedTokenType }: { backedTokenType
                     ...styles.menu,
                     ...(curQueryType === item ? styles.menuActive : ({} as any)),
                     padding: isSm ? '12px 16px 36px' : '16px 32px 40px',
-                    fontFamily: 'Public Sans'
+                    fontFamily: 'Inter'
                   }}
                 >
                   {StatusText[item]}

@@ -1,7 +1,7 @@
 import { styled, Typography } from '@mui/material'
 
 export const H2 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
   font-size: 44px;
@@ -15,7 +15,7 @@ export const H2 = styled(Typography)`
   }
 `
 export const H3 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 36px;
@@ -28,7 +28,7 @@ export const H3Black = styled(H3)`
   color: #121212;
 `
 export const H4 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 28px;
@@ -42,7 +42,7 @@ export const H4 = styled(Typography)`
   }
 `
 export const H5 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -55,7 +55,7 @@ export const H5 = styled(Typography)`
   }
 `
 export const H6 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
@@ -64,7 +64,7 @@ export const H6 = styled(Typography)`
   color: #121212;
 `
 export const H7 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 14px;

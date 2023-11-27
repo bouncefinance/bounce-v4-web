@@ -61,7 +61,7 @@ const MobileFilterDialog = ({
         >
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: '20px',
               fontWeight: 600,
               color: '#B5E529'

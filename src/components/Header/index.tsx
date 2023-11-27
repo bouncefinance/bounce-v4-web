@@ -110,8 +110,8 @@ const MainLogo = styled(Link)(({ theme }) => ({
     cursor: 'pointer'
   },
   [theme.breakpoints.down('sm')]: {
-    '& img': { width: 'auto', height: '22px' },
-    marginBottom: -10
+    height: 22,
+    '& img': { width: 'auto', height: '22px' }
   }
 }))
 
@@ -138,6 +138,7 @@ export const transparentRoutes = [
   routes.thirdPart.CreateProtocolAuction,
   routes.thirdPart.MetaBloxAuction,
   routes.thirdPart.DipExchange,
+  routes.thirdPart.MultiBitBridge,
   routes.launchpad.account.launchpadParty,
   routes.launchpad.account.launchpadDetail,
   routes.foundo.foundoDetail + '/*'
@@ -222,7 +223,11 @@ export default function Header() {
         padding: '0px 12px',
         width: '78px',
         height: '40px',
-        background: '#E1F25C',
+        background: !isTransparentRoute || headerBgOpacity >= 0.65 ? 'white' : '#FFFFFF26',
+        color: !isTransparentRoute || headerBgOpacity >= 0.65 ? '#121212' : '#ffffff',
+        '& path': {
+          fill: 'currentcolor'
+        },
         borderRadius: '60px'
       }}
     >
@@ -234,7 +239,6 @@ export default function Header() {
       variant="contained"
       sx={{
         fontSize: 14,
-        minWidth: 212,
         borderRadius: 60,
         padding: '0 12px',
         border: '1px solid transparent',

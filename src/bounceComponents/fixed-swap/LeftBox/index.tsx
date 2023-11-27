@@ -12,6 +12,7 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import { addTokenToWallet } from 'utils/addTokenToWallet'
 import { useActiveWeb3React } from 'hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
+import { useIgnoreWhitelistPool } from 'hooks/useIgnoreWhitelistPool'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -24,6 +25,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
   const swapedPercent = poolInfo?.currencySwappedAmount0
     ? new BigNumber(poolInfo.currencySwappedAmount0.raw.toString()).div(poolInfo.amountTotal0).times(100).toNumber()
     : undefined
+  const isIgnoreWhitelistPool = useIgnoreWhitelistPool(poolInfo.enableWhiteList, poolInfo.contract, poolInfo.poolId)
 
   return (
     <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
@@ -72,7 +74,9 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
           <Title>Auction Information</Title>
 
           <PoolInfoItem title="Auction Type">Fixed-Price</PoolInfoItem>
-          <PoolInfoItem title="Participant">{poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}</PoolInfoItem>
+          <PoolInfoItem title="Participant">
+            {poolInfo.enableWhiteList && !isIgnoreWhitelistPool ? 'Whitelist' : 'Public'}
+          </PoolInfoItem>
           <PoolInfoItem title="Allocation per Wallet">
             {poolInfo.currencyMaxAmount1PerWallet.greaterThan('0')
               ? poolInfo.currencyMaxAmount1PerWallet.toSignificant() + ' ' + poolInfo.token1.symbol

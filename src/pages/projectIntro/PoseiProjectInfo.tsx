@@ -59,7 +59,7 @@ function UserBlock() {
     >
       {/* <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: 36,
           marginBottom: 44

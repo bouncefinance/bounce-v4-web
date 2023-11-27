@@ -10,14 +10,23 @@ import UNIWALLET_ICON from 'assets/walletIcon/uniswap-wallet-icon.png'
 import WALLET_CONNECT_ICON from 'assets/walletIcon/walletConnectIcon.svg'
 import OkxIcon_ICON from 'assets/walletIcon/okxIcon.png'
 import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
+import BitGet_ICON from 'assets/walletIcon/bg-wallet-small-icon.svg'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
 import { Connection, ConnectionType } from './types'
-import { getInjection, getIsCoinbaseWallet, getIsInjected, getIsMetaMaskWallet, getIsOkxWallet } from './utils'
+import {
+  getInjection,
+  getIsBitGetWallet,
+  getIsCoinbaseWallet,
+  getIsInjected,
+  getIsMetaMaskWallet,
+  getIsOkxWallet
+} from './utils'
 import { UniwalletConnect as UniwalletWCV2Connect, WalletConnectV2 } from './WalletConnectV2'
 import { ChainId } from 'constants/chain'
 import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 import { BinanceWallet } from 'web3-react-binance-wallet'
+import { BitGet } from './BitGet'
 
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`)
@@ -45,6 +54,16 @@ const getShouldAdvertiseMetaMask = () =>
 const getIsGenericInjector = () => getIsInjected() && !getIsMetaMaskWallet() && !getIsCoinbaseWallet()
 
 const [web3Injected, web3InjectedHooks] = initializeConnector<MetaMask>(actions => new MetaMask({ actions, onError }))
+const [bitKeepInjected, bitKeepInjectedHooks] = initializeConnector<BitGet>(
+  actions =>
+    new BitGet({
+      actions,
+      options: {
+        mustBeBitKeep: true
+      },
+      onError
+    })
+)
 
 const injectedConnection: Connection = {
   getName: () => getInjection().name,
@@ -184,6 +203,22 @@ const binanceWalletConnection: Connection = {
   shouldDisplay: () => true
 }
 
+export const bitGetConnection: Connection = {
+  getName: () => 'Bitget Wallet',
+  connector: bitKeepInjected,
+  hooks: bitKeepInjectedHooks,
+  type: ConnectionType.BIT_GET,
+  shouldDisplay: () => true,
+  getIcon: () => BitGet_ICON,
+  overrideActivate: () => {
+    if (!getIsBitGetWallet()) {
+      window.open('https://www.bitget.com')
+      return true
+    }
+    return false
+  }
+}
+
 export function getConnections() {
   return [
     injectedConnection,
@@ -193,7 +228,8 @@ export function getConnections() {
     binanceWalletConnection,
     uniwalletWCV2ConnectConnection,
     gnosisSafeConnection,
-    networkConnection
+    networkConnection,
+    bitGetConnection
   ]
 }
 
@@ -222,6 +258,8 @@ export function getConnection(c: Connector | ConnectionType) {
         return binanceWalletConnection
       case ConnectionType.OKX_WALLET:
         return OKXWalletConnection
+      case ConnectionType.BIT_GET:
+        return bitGetConnection
     }
   }
 }

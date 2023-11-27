@@ -174,7 +174,7 @@ const AuctionItem = (props: AuctionItemParams) => {
           </Typography>
           <Typography
             sx={{
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontWeight: 600,
               fontSize: 20,
               color: 'var(--ps-text-3)',
@@ -434,7 +434,7 @@ const TypesOfAuction: React.FC<Notable1155Props> = ({ handleViewAll }) => {
         <Typography
           sx={{
             color: 'var(--ps-yellow-1)',
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: [22, 36],
             lineHeight: '26px',

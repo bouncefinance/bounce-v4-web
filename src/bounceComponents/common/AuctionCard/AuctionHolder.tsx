@@ -32,8 +32,8 @@ export const AuctionHolder: React.FC<IAuctionHolderProps> = ({ avatar, descripti
         py: 6,
         mt: 20,
         bgcolor: 'var(--ps-gray-50)',
-        borderRadius: 12,
-        '&:hover': { bgcolor: 'var(--ps-gray-200)' }
+        borderRadius: 12
+        // '&:hover': { bgcolor: 'var(--ps-gray-200)' }
       }}
     >
       <Avatar src={avatar || DefaultAvatarSVG} sx={{ width: 52, height: 52 }} />

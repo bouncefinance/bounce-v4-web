@@ -185,7 +185,7 @@ const upcomingCard = ({ isSm }: { isSm?: boolean }) => {
       </Box>
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 500,
           fontSize: isSm ? '14px' : '16px',
           marginBottom: '12px',

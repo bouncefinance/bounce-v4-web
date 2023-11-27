@@ -38,7 +38,7 @@ const OthersDetail = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: 16,
             fontWeight: 500,
             color: '#E1F25C'

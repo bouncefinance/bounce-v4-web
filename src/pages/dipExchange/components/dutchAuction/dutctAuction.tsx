@@ -29,7 +29,7 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
           <Typography
             sx={{
               color: '#D7D6D9',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: 20,
               fontWeight: 600
             }}
@@ -96,7 +96,7 @@ const DutchAuction = ({ index, poolsData }: { index: number; poolsData: PoolsDat
       <Typography
         sx={{
           color: '#D7D6D9',
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontSize: 20,
           fontWeight: 600
         }}

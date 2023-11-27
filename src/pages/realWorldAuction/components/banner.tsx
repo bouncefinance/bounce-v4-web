@@ -94,7 +94,7 @@ export const SwiperSkeleton = () => {
 }
 
 const BannerH3 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 36px;
@@ -242,7 +242,7 @@ export function Banner({ banner }: { banner: BannerType }) {
               sx={{
                 fontSize: '14px',
                 color: '#fff',
-                fontFamily: `'Public Sans'`,
+                fontFamily: `'Inter'`,
                 fontWeight: 600
               }}
             >
@@ -327,7 +327,7 @@ export function Banner({ banner }: { banner: BannerType }) {
         )}
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             lineHeight: '32px',
             fontSize: 14,

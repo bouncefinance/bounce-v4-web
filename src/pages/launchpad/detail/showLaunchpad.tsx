@@ -228,7 +228,7 @@ const NoPoolInfo = () => {
         <Typography
           sx={{
             color: '#000',
-            fontFamily: 'Public Sans',
+            fontFamily: 'Inter',
             fontSize: '28px',
             fontStyle: 'normal',
             fontWeight: 600,

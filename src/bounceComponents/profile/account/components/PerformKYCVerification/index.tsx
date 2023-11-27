@@ -174,5 +174,5 @@ const UpgradeNotice = () => {
   )
 }
 
-export default UpgradeNotice
-export { PerformKYCVerification }
+export default PerformKYCVerification
+export { UpgradeNotice }

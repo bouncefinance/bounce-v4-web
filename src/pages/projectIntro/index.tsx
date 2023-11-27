@@ -159,7 +159,7 @@ const HeadPriceTitle = styled(Typography)({
   textTransform: 'capitalize'
 })
 const HeadPriceContext = styled(Typography)({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontSize: 16,
   lineHeight: '140%',
   letterSpacing: '-0.32px',
@@ -267,7 +267,7 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: 28,
             textAlign: 'left',
@@ -352,7 +352,7 @@ export const InviteListDialog = ({ handleClose }: { handleClose: () => void }) =
                   <Typography
                     component={'span'}
                     sx={{
-                      fontFamily: `'Public Sans'`,
+                      fontFamily: `'Inter'`,
                       fontWeight: 600,
                       fontSize: 14,
                       color: item.isValid ? 'var(--ps-green-1)' : '#FFC700'
@@ -510,8 +510,6 @@ export function InviteBtn({
 
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo(item.backedId)
-  console.log('poolInfo123', poolInfo)
-
   const { userId } = useUserInfo()
   const isMD = useIsMDDown()
   const isSm = useBreakpoint('sm')
@@ -699,7 +697,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 sx={{
                   flex: 1,
                   fontSize: 14,
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   wordBreak: 'break-all',
                   letterSpacing: '-0.28px'
                 }}

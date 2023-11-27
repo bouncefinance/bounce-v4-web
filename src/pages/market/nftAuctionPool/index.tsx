@@ -63,7 +63,7 @@ const StyledChainSpan = styled(Box)({
 })
 
 const PriceTypography = styled(Typography)({
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontWeight: 500,
   height: '21px',
   lineHeight: '21px',
@@ -190,7 +190,7 @@ export const NFTCard = (props: NFTPrams) => {
     <Box
       sx={{
         width: '100%',
-        background: props.isDark ? '#ffffff05' : '#fff',
+        background: props.isDark ? '#ffffff05' : '#20201E',
         // border: `1px solid rgba(0, 0, 0, 0.1)`,
         boxShadow: `0px 5px 20px rgba(0, 0, 0, 0.08)`,
         borderRadius: '24px'
@@ -385,7 +385,7 @@ export const NFTCard = (props: NFTPrams) => {
       <Box m={'16px 12px 22px'}>
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 500,
             fontSize: 16,
             color: props.isDark ? '#fff' : '#000',

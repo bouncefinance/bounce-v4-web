@@ -30,7 +30,7 @@ const PoolCard = styled(Box)({
   marginTop: 32,
   marginBottom: 24,
   '& .poolTitle': {
-    fontFamily: 'Public Sans',
+    fontFamily: 'Inter',
     fontStyle: 'normal',
     fontWeight: 600,
     fontSize: 16,

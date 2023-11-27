@@ -126,7 +126,7 @@ export default function AccountPrivateLaunchpad() {
                   ...tabStyles.menu,
                   ...(item === curTab ? tabStyles.menuActive : ({} as any)),
                   padding: '16px 32px 12px 32px',
-                  fontFamily: 'Public Sans',
+                  fontFamily: 'Inter',
                   borderRadius: '12px 12px 0px 0px'
                 }}
                 key={index}
@@ -217,7 +217,7 @@ export const RoundedBox = styled(Box)({
 })
 export const SansTitle = styled(Typography)({
   color: '#121212',
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontStyle: 'normal',
   fontWeight: 500,
   lineHeight: '150%',

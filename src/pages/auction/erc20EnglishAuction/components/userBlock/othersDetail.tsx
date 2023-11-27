@@ -37,7 +37,7 @@ const OthersDetail = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) =
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: 16,
             fontWeight: 500,
             color: '#E1F25C'

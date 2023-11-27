@@ -47,7 +47,7 @@ export const TipsBox = ({
     <Typography
       variant="body1"
       sx={{
-        fontFamily: `'Public Sans'`,
+        fontFamily: `'Inter'`,
         fontSize: '14px',
         color: '#959595',
         fontWeight: 600

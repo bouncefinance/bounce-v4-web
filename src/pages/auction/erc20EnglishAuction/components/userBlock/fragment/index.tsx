@@ -16,6 +16,7 @@ import OneTime from '../delay'
 import { useActiveWeb3React } from 'hooks'
 import ConnectWalletButton from 'bounceComponents/fixed-swap/ActionBox/CreatorActionBox/ConnectWalletButton'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
+
 const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
   const isMd = useIsMDDown()
   const { account, chainId } = useActiveWeb3React()
@@ -112,7 +113,7 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
             >
               <Typography
                 sx={{
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontWeight: 600,
                   fontSize: 20,
                   color: '#000'
@@ -140,7 +141,7 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                         flexFlow: 'row nowrap',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        fontFamily: `'Public Sans'`,
+                        fontFamily: `'Inter'`,
                         fontWeight: 'bold',
                         fontSize: '16px'
                       }}
@@ -182,7 +183,7 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                         flexFlow: 'row nowrap',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        fontFamily: `'Public Sans'`,
+                        fontFamily: `'Inter'`,
                         fontWeight: 'bold',
                         fontSize: '16px'
                       }}
@@ -201,7 +202,7 @@ const Fragment = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
                         flexFlow: 'row nowrap',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        fontFamily: `'Public Sans'`,
+                        fontFamily: `'Inter'`,
                         fontWeight: 'bold',
                         fontSize: '16px'
                       }}

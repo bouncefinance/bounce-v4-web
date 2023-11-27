@@ -30,6 +30,7 @@ interface Window {
     networkVersion?: number
     _chainId?: number
   }
+  bitkeep: any
   // eslint-disable-next-line @typescript-eslint/ban-types
   web3?: {
     isMetaMask?: false

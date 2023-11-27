@@ -78,7 +78,7 @@ const PoolStep = ({ poolInfo }: { poolInfo: Erc20EnglishAuctionPoolProp }) => {
               <Typography
                 sx={{
                   color: '#D7D6D9',
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontSize: isMd ? 13 : 14,
                   fontWeight: 600
                 }}

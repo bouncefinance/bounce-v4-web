@@ -17,7 +17,8 @@ function Search({ opacity }: { opacity?: number }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const isSm = useBreakpoint('sm')
-  const [hint, setHint] = useState('Search By Auction Name, ID, User Name, User ID')
+  const hintStr = 'Search By Auction Name, ID, User Name, User ID'
+  const [hint, setHint] = useState(hintStr)
 
   useEffect(() => {
     if (searchText.trim().length < 2) return
@@ -112,7 +113,7 @@ function Search({ opacity }: { opacity?: number }) {
         opacity={opacity}
         idx={idx}
         onFocus={focus => {
-          setHint(focus ? '' : 'Search By Auction Name, ID, User Name, User ID')
+          setHint(focus ? '' : hintStr)
         }}
         onChange={(_, newValue) => {
           setSearchText(newValue)

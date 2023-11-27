@@ -62,6 +62,7 @@ import TokenDialog from '../TokenDialog'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { FIXED_SWAP_BOT_ERC20_ADDRESSES } from '../../../constants'
 
 const CusFormItem = styled(FormItem)`
   .MuiFormHelperText-root {
@@ -170,22 +171,24 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
   console.log('balance>>>', balance, account, currencyFrom, auctionInChainId?.id)
   const menuList = useMemo(() => {
     const supportIds = chainInfoOpt?.map(i => i.ethChainId) || []
-    return ChainList.filter(item => supportIds.includes(item.id)).map(item => (
-      <MenuItem
-        sx={{
-          padding: '10px 15px'
-        }}
-        key={item.id}
-        value={item.id}
-      >
-        <Box display={'flex'} alignItems="center">
-          <Image width="20px" src={item.logo} />
-          <Typography ml={10} fontSize={16}>
-            {item.name}
-          </Typography>
-        </Box>
-      </MenuItem>
-    ))
+    return ChainList.filter(item => supportIds.includes(item.id) && FIXED_SWAP_BOT_ERC20_ADDRESSES?.[item.id]).map(
+      item => (
+        <MenuItem
+          sx={{
+            padding: '10px 15px'
+          }}
+          key={item.id}
+          value={item.id}
+        >
+          <Box display={'flex'} alignItems="center">
+            <Image width="20px" src={item.logo} />
+            <Typography ml={10} fontSize={16}>
+              {item.name}
+            </Typography>
+          </Box>
+        </MenuItem>
+      )
+    )
   }, [chainInfoOpt])
   const [filterInputValue] = useState<string>('')
   const debouncedFilterInputValue = useDebounce(filterInputValue, { wait: 400 })
@@ -337,7 +340,8 @@ const AuctionBotCreateForm = ({ type }: { type: 'Guide' | 'Create' }): JSX.Eleme
       enableEth: true,
       chainId,
       action: 2,
-      filter: '0x0000000000000000000000000000000000000000'
+      filter: '0x0000000000000000000000000000000000000000',
+      isSearch: false
     })
       .then(res => {
         console.log('TokenDialog Resolved: ', res)

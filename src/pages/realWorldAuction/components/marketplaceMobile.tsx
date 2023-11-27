@@ -12,7 +12,7 @@ export const ComBtn = styled(Box)(() => ({
   color: '#121212',
   cursor: 'pointer',
   borderRadius: '6px',
-  fontFamily: `'Public Sans'`,
+  fontFamily: `'Inter'`,
   fontSize: '14px',
   fontWeight: 600
 }))
@@ -57,7 +57,7 @@ const MarketplaceMobile = ({
     >
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           width: '100%',
           fontWeight: 600,
           fontSize: '22px',

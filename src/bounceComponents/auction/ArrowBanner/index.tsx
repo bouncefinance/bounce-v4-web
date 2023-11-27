@@ -254,7 +254,7 @@ const ArrowBgLeft = styled(ArrowBg)`
   }
 `
 const BannerH3 = styled(Typography)`
-  font-family: 'Public Sans';
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 600;
   font-size: 36px;

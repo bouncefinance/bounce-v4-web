@@ -19,11 +19,9 @@ const Alert = ({ poolInfo }: { poolInfo: FixedSwapNFTPoolProp }) => {
   )
   console.log('isUserInWhitelist, isCheckingWhitelist>>>', isUserInWhitelist, isCheckingWhitelist)
   const isUserJoinedPool = useIsUserJoined1155Pool(poolInfo)
-
   if (isCheckingWhitelist) {
     return null
   }
-
   if (typeof isUserInWhitelist !== 'undefined' && !isUserInWhitelist) {
     return <NotEligibleAlert />
   }

@@ -35,7 +35,7 @@ const ChainType = styled(Box)(({ theme }) => ({
   borderRadius: '100px',
   padding: '0 14px',
   '.text': {
-    fontFamily: `'Public Sans'`,
+    fontFamily: `'Inter'`,
     fontWeight: 600,
     fontSize: '14px',
     textAlign: 'center',
@@ -194,7 +194,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: isMd ? 13 : '14px',
             color: '#E1F25C'
@@ -225,7 +225,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
       </Box>
       <Typography
         sx={{
-          fontFamily: `'Public Sans'`,
+          fontFamily: `'Inter'`,
           fontWeight: 600,
           fontSize: isMd ? 16 : '20px',
           color: '#fff'
@@ -272,7 +272,7 @@ const PoolInfo = (props: ICreatorInfoCardProps) => {
         <Typography
           sx={{
             flex: 1,
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: isMd ? 16 : '20px',
             color: '#E1F25C',

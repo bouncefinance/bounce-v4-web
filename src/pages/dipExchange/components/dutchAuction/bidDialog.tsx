@@ -76,7 +76,7 @@ const ChartDialog = ({
       >
         <Typography
           sx={{
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontSize: 28,
             fontWeight: 600,
             color: '#121212',
@@ -103,7 +103,7 @@ const ChartDialog = ({
           <Typography
             sx={{
               color: '#121212',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: '14px',
               fontWeight: 600
             }}
@@ -125,7 +125,7 @@ const ChartDialog = ({
           <Typography
             sx={{
               color: '#121212',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: '14px',
               fontWeight: 600
             }}
@@ -147,7 +147,7 @@ const ChartDialog = ({
           <Typography
             sx={{
               color: '#121212',
-              fontFamily: `'Public Sans'`,
+              fontFamily: `'Inter'`,
               fontSize: '12px',
               fontWeight: 400
             }}

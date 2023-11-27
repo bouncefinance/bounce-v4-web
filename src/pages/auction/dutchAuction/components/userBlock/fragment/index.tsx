@@ -110,7 +110,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
             >
               <Typography
                 sx={{
-                  fontFamily: `'Public Sans'`,
+                  fontFamily: `'Inter'`,
                   fontWeight: 600,
                   fontSize: 20,
                   color: '#000'
@@ -142,7 +142,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                         flexFlow: 'row nowrap',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        fontFamily: `'Public Sans'`,
+                        fontFamily: `'Inter'`,
                         fontWeight: 'bold',
                         fontSize: '16px'
                       }}
@@ -184,7 +184,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                         flexFlow: 'row nowrap',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        fontFamily: `'Public Sans'`,
+                        fontFamily: `'Inter'`,
                         fontWeight: 'bold',
                         fontSize: '16px'
                       }}
@@ -203,7 +203,7 @@ const Fragment = ({ poolInfo }: { poolInfo: DutchAuctionPoolProp }) => {
                         flexFlow: 'row nowrap',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        fontFamily: `'Public Sans'`,
+                        fontFamily: `'Inter'`,
                         fontWeight: 'bold',
                         fontSize: '16px'
                       }}

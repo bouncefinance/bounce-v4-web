@@ -459,7 +459,7 @@ const ContainerBox = styled(Box)({
   }
 })
 const Title = styled(Typography)({
-  fontFamily: 'Public Sans',
+  fontFamily: 'Inter',
   fontSize: '28px',
   fontStyle: 'normal',
   fontWeight: 600,

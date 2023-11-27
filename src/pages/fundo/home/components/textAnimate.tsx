@@ -33,7 +33,7 @@ export default function TextAnimate({ animationRatio, step }: { animationRatio?:
           component={'span'}
           sx={{
             transform: transformStr,
-            fontFamily: `'Public Sans'`,
+            fontFamily: `'Inter'`,
             fontWeight: 600,
             fontSize: '300px',
             height: '217px',
