@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
+import { useIsBidDisabled } from './ActionBlock'
 
 export interface PlaceBidButtonProps {
   bidAmount: string
@@ -20,6 +21,7 @@ export interface PlaceBidButtonProps {
 
 const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidButtonProps): JSX.Element => {
   const fixedSwapERC20Contract = useFixedSwapERC20Contract(poolInfo.currentBounceContractAddress)
+  const isBidDisabled = useIsBidDisabled(poolInfo)
 
   // console.log('>>>>>> isUserInWhitelist: ', isUserInWhitelist)
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyAmountTotal1.currency, bidAmount)
@@ -90,7 +92,9 @@ const PlaceBidButton = ({ bidAmount, sx, onClick, loading, poolInfo }: PlaceBidB
       sx={{ ...sx }}
       loadingPosition="start"
       loading={loading}
-      disabled={!bidAmount || !poolInfo.whitelistData?.isUserInWhitelist || poolInfo.whitelistData?.loading}
+      disabled={
+        !bidAmount || !poolInfo.whitelistData?.isUserInWhitelist || poolInfo.whitelistData?.loading || isBidDisabled
+      }
       onClick={onClick}
     >
       {loading ? (

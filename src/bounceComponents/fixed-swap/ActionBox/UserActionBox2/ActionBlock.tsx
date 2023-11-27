@@ -22,6 +22,11 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { BigNumber } from 'bignumber.js'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
+import { IS_TEST_ENV } from '../../../../constants'
+
+export const useIsBidDisabled = (poolInfo: FixedSwapPoolProp) => {
+  return useMemo(() => !IS_TEST_ENV && poolInfo.id === 18578, [poolInfo.id])
+}
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -314,6 +319,7 @@ const ActionBlock = ({ poolInfo, getPoolInfo }: { poolInfo: FixedSwapPoolProp; g
       setRegretAmount('')
     }
   }, [action])
+
   return (
     <Box sx={{ mt: 32 }}>
       {(action === 'GO_TO_CHECK' || action === 'FIRST_BID' || action === 'MORE_BID') && (
