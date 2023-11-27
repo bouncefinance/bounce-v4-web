@@ -110,6 +110,7 @@ export const routes = {
     IphoneAuctionDetail: '/rwa/iphone15',
     FinceptorAuction: '/launchpad/finceptor',
     launchpadCoin: '/launchpad/coin',
+    launchpadCoin2: '/launchpad/coin2',
     MultiBitBridge: '/launchpad/multibit',
     BitStable: '/launchpad/bitstable',
     BitStableAuction: '/launchpad/bitstable-auction'
