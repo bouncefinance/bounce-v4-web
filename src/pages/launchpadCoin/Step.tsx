@@ -766,7 +766,7 @@ function Step2({
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            againBtn: 'Save',
+            againBtn: 'Close',
             title: 'Success!',
             content: `You have successfully claim ${
               token0 &&
@@ -1047,7 +1047,9 @@ function Step2({
                         disabled={!canClaimToken0}
                         onClick={() => claimToken0()}
                       >
-                        Claim
+                        {coinInfo && coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')
+                          ? 'Claimed'
+                          : 'Claim'}
                       </CountdownBtnStyle>
                     )}
                   </Stack>
@@ -1093,7 +1095,7 @@ function Step2({
                       disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
                       onClick={() => claimToken1()}
                     >
-                      Claim
+                      {coinInfo?.myToken1Claimed ? 'Claimed' : 'Claim'}
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
