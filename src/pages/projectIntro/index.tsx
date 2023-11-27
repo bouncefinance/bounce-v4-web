@@ -563,7 +563,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
         display: 'flex',
         flexDirection: 'column',
         minHeight: isMD ? 800 : 600,
-        marginTop: '-76px'
+        marginTop: { md: '-76px' }
       }}
     >
       <img

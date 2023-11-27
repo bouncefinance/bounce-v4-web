@@ -53,7 +53,8 @@ export enum ChainId {
   SCROLL_ALPHA = 534353,
   AUROEA = 1313161554,
   HARMONY = 1666600000,
-  PALM = 11297108109
+  PALM = 11297108109,
+  CORE_CHAIN_TESTNET = 1115
 }
 
 export const NETWORK_CHAIN_ID: ChainId = process.env.REACT_APP_CHAIN_ID
@@ -550,6 +551,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://scroll-alphanet.public.blastapi.io'],
     blockExplorerUrls: ['https://blockscout.scroll.io']
+  },
+  [ChainId.CORE_CHAIN_TESTNET]: {
+    id: ChainId.CORE_CHAIN_TESTNET,
+    hexChainId: numberToHex(ChainId.CORE_CHAIN_TESTNET),
+    chainName: 'Core Chain TestNet',
+    nativeCurrency: {
+      name: 'tCORE',
+      symbol: 'tCORE',
+      decimals: 18,
+      logo: 'https://scan.test.btcs.network/images/icon.png'
+    },
+    rpcUrls: ['https://rpc.test.btcs.network/'],
+    blockExplorerUrls: ['https://scan.test.btcs.network/']
   }
 }
 

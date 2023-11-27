@@ -83,7 +83,8 @@ export const FIXED_SWAP_ERC20_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.SCROLL_ALPHA]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
-  [ChainId.LINEA_GORLI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1'
+  [ChainId.LINEA_GORLI]: '0x94aCe08a344efa23Ac118AA94A66A8D699E8a1A1',
+  [ChainId.CORE_CHAIN_TESTNET]: '0x73282A63F0e3D7e9604575420F777361ecA3C86A'
 }
 
 export const FIXED_SWAP_BOT_ERC20_ADDRESSES: { [chainId in ChainId]?: string } = {
@@ -128,7 +129,8 @@ export const FIXED_SWAP_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0xFCEc495B3FbB41fC8034E4d2Fd85289F549922b1',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: '0xB0a2bf3da942E780ACBa86D14Efe0774D7096ec8'
 }
 // REACT_APP_RANDOM_SELECTION_ADDRESS
 export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -167,7 +169,8 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 
 export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -206,7 +209,8 @@ export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.LINEA_GORLI]: '',
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.ZETA_CHAIN_TESTNET]: '',
-  [ChainId.LINEA]: ''
+  [ChainId.LINEA]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 
 export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -245,7 +249,8 @@ export const ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0x41939809dB201c8531D082f95Fc5BEc187Fe2803',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: '0x01E36E11721b259fb3afa13A238c56Bfd6F2Ef67'
 }
 
 export const MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: Record<ChainId, string> = {
@@ -284,7 +289,8 @@ export const MUTANT_ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES: Record<ChainId, stri
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: '0x853C97d50604f4C5097D736b2C8B5A5aF15b3C02'
 }
 
 export const DUTCH_AUCTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -323,7 +329,8 @@ export const DUTCH_AUCTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } 
   [ChainId.LINEA_GORLI]: '',
   [ChainId.LINEA]: '0x194C02845d77ffCB8580D474Ca99013073C1eAb1',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: '0x853C97d50604f4C5097D736b2C8B5A5aF15b3C02'
+  [ChainId.ROLLUX]: '0x853C97d50604f4C5097D736b2C8B5A5aF15b3C02',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 
 export const defaultPoolVersionRoute: 1 | 2 = 2
@@ -365,7 +372,8 @@ export const DISPERSE_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.LINEA_GORLI]: '',
   [ChainId.LINEA]: '0xFBd7014699Ccf47107a90CCC1147e214dAf71e8E',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: ''
+  [ChainId.ROLLUX]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 
 // ToolboxERC20Factory
@@ -405,7 +413,8 @@ export const MINTER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.LINEA_GORLI]: '',
   [ChainId.LINEA]: '0xC7F6Ed92aEd2b70892FF978cd93b887E206B9e72',
   [ChainId.OMNI_TESTNET]: '',
-  [ChainId.ROLLUX]: ''
+  [ChainId.ROLLUX]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 // 【token locker】
 //  Cliff,normal (ToolboxERC20TimelockFactory.deployERC20Timelock)
@@ -447,7 +456,8 @@ export const TOOL_BOX_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: s
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0x5b5E07c8c05489CD0D2227AfA816478cD039c624',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 // 【token locker】
 //  Linear,line ToolboxERC20VestingFactory.deployERC20Vesting
@@ -487,7 +497,8 @@ export const TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES: { [chainId in Chai
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0xAd161CDAFD56450BC8624F74163A47aF58BC2C82',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 //  LP v3 normal: ToolboxERC721TimelockFactory.deployUniswapV3Timelock
 export const TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
@@ -526,5 +537,45 @@ export const TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES: { [chainId in 
   [ChainId.SCROLL_ALPHA]: '',
   [ChainId.PALM]: '',
   [ChainId.LINEA]: '0x374e3E20B8666eC488cb4066DbD997d0124C5996',
-  [ChainId.LINEA_GORLI]: ''
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
+}
+export const LAUNCHPAD_COIN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0x6d5028881fd559f2c6b8D1D0f32522fbAC92d991',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.BASE]: '',
+  [ChainId.BASE_TESTNET]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
 }
