@@ -111,7 +111,8 @@ export const routes = {
     FinceptorAuction: '/launchpad/finceptor',
     launchpadCoin: '/launchpad/coin',
     MultiBitBridge: '/launchpad/multibit',
-    BitStable: '/launchpad/bitstable'
+    BitStable: '/launchpad/bitstable',
+    BitStableAuction: '/launchpad/bitstable-auction'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

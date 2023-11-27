@@ -4,7 +4,7 @@ import FooterPc from '../../components/Footer/FooterPc'
 import { ProjectHead, Tabs } from './index'
 
 export default function ProjectInfo() {
-  const item = PrivatePadDataList.find(i => i.keyId === 17) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 18) as IPrivatePadProp
 
   return (
     <Box>
