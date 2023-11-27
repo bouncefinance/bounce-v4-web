@@ -1011,7 +1011,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$BSSB' },
-      { title: 'Token Price', content: '0.0000233 ETH' },
+      // { title: 'Token Price', content: '0.0000233 ETH' },
       { title: 'Token Amount', content: '6,300,000' },
       { title: 'Blockchain', content: 'Ethereum' }
       // { title: 'Staking assets', content: '$AUCTION' }
