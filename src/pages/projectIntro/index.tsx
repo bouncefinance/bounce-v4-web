@@ -696,7 +696,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 variant={'h5'}
                 sx={{
                   flex: 1,
-                  fontSize: 14,
+                  fontSize: 12,
                   fontFamily: `'Inter'`,
                   wordBreak: 'break-all',
                   letterSpacing: '-0.28px'

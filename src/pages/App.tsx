@@ -73,7 +73,7 @@ import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjec
 import CreateLaunchpad from './launchpad/create-launchpad'
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
 import BitStableProjectInfo from './projectIntro/BitStableProjectInfo'
-import BitStableProjectInfoAuction from './projectIntro/BitStableProjectInfoAuction'
+// import BitStableProjectInfoAuction from './projectIntro/BitStableProjectInfoAuction'
 import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
@@ -227,7 +227,7 @@ export default function App() {
                   <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuctionWhitelist} element={<DeelanceWhitelistProjectInfo />} />
-                  <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfoAuction />} />
+                  {/* <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfoAuction />} /> */}
                   <Route path={routes.thirdPart.launchpadCoin2} element={<LaunchpadCoin2 />} />
                   <Route path={routes.thirdPart.BitStableAuction} element={<LaunchpadCoin />} />
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />

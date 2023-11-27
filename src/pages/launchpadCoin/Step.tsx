@@ -335,8 +335,8 @@ function Step1({
       _token1Currency.chainId,
       _token1Currency.address,
       _token1Currency.decimals,
-      'Auction',
-      'Auction'
+      'AUCTION',
+      'AUCTION'
     )
   }, [_token1Currency])
   const token1CurrencyAmount = useMemo(() => {
@@ -590,7 +590,7 @@ function Step1({
                     BitStable <b>x</b> Auction Pool
                   </CardLabelStyle>
                   <CardContentStyle>
-                    Stake Auction to earn Committable amount for participating in BitStable Coin launchpad
+                    Stake $AUCTION to earn committable amount for participating in $BSSB launchpad
                   </CardContentStyle>
                 </Stack>
               </Box>
@@ -611,7 +611,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 30,000 Auction
+                    {token1Currency?.symbol} / 30,000 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -648,7 +648,7 @@ function Step1({
                   }}
                   variant="body1"
                 >
-                  Committable amount earned
+                  Committable Amount Earned
                 </Typography>
               </Stack>
 
@@ -746,7 +746,7 @@ function Step2({
   const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
   const token1 = useMemo(() => {
     if (!_token1) return undefined
-    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'Auction', 'Auction')
+    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'AUCTION', 'AUCTION')
   }, [_token1])
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
@@ -926,8 +926,8 @@ function Step2({
         }}
         variant="body1"
       >
-        The allocation calculation is complete. We will deduct the corresponding $Auction from your account based on
-        your final $BSSB allocation, which will be transferred to your spot account along with your remaining $Auction.
+        The allocation calculation is complete. We will deduct the corresponding $AUCTION from your account based on
+        your final $BSSB allocation, which will be transferred to your spot account along with your remaining $AUCTION.
       </Typography>
       {account &&
         coinInfo?.myToken1Amount?.eq(0) &&
@@ -935,7 +935,7 @@ function Step2({
         account !== coinInfo.poolInfo?.creator && (
           <NotInvolvedContainer>
             <FailSVG />
-            <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
+            <NotInvolvedTitle>You did not stake any $AUCTION for this session.</NotInvolvedTitle>
           </NotInvolvedContainer>
         )}
 
