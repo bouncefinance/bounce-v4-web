@@ -958,6 +958,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ]
   },
   {
+    hidden: true,
     keyId: 13,
     liveTimeStamp: {
       start: 1690672533200000,
