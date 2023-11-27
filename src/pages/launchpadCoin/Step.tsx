@@ -480,7 +480,7 @@ function Step1({
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            cancelBtn: 'Save',
+            cancelBtn: 'Close',
             title: 'Success! ',
             content: `You have successfully stake  ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
             PaperProps: {
@@ -600,7 +600,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol}
+                    {token1Currency?.symbol} / 30,000 Auction
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
