@@ -509,6 +509,7 @@ export function InviteBtn({
 }
 
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
+  console.log('🚀 ~ file: index.tsx:512 ~ ProjectHead ~ item:', item)
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo(item.backedId)
   const { userId } = useUserInfo()
   const isMD = useIsMDDown()
@@ -770,7 +771,11 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           <Typography mt={16} variant={'h1'} sx={{ color: 'white' }}>
             {item.title}
           </Typography>
-          <Typography mt={14} variant={'body1'} sx={{ color: 'white', maxWidth: '800px', textAlign: 'center' }}>
+          <Typography
+            mt={14}
+            variant={'body1'}
+            sx={{ color: 'white', maxWidth: '800px', textAlign: 'center', padding: '0 10px' }}
+          >
             {item.desc}
           </Typography>
           <Row mt={32} alignItems={'center'} gap={16} flexWrap={'wrap'} justifyContent={'center'}>
@@ -904,7 +909,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
                 width: '100%',
                 '@media(max-width:600px)': isDark
                   ? { flexWrap: 'nowrap', padding: '0 20px', flexDirection: 'column', alignItems: 'flex-start' }
-                  : {}
+                  : { paddingBottom: '10px' }
               }}
             >
               <>

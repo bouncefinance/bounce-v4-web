@@ -12,7 +12,7 @@ import { useActiveWeb3React } from 'hooks'
 
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
-const poolId = 37
+const poolId = 38
 const Page = () => {
   const { account } = useActiveWeb3React()
   const chainId = ChainId.SEPOLIA
@@ -27,9 +27,9 @@ const Page = () => {
     token1.address,
     '6300000000000000000000000',
     '30000000000000000000000',
-    1701075600,
-    1701082800,
-    1701082800,
+    1701084900,
+    1701085200,
+    1701085200,
     1
   ]
 
