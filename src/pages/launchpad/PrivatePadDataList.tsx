@@ -858,14 +858,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 16
   {
     keyId: 16,
-    backedId: 20929,
     liveTimeStamp: {
       start: 1701230400000,
       end: 1701316800000
     },
     poolTypeName: 'Fixed Price Auction',
     img: 'https://images-v3.bounce.finance/a01d5ff09f6faebd837acf62beaa9e29-1701055097.png',
-    avatar: '',
+    avatar:
+      'https://3577258652-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F69uJe6Fem7wCjeKvQrrz%2Ficon%2FFJQXRnl7nslsiu7mQERv%2FB.svg?alt=media&token=fd83a0ff-9311-4592-9306-499e21cf027d',
     title: 'BitStable',
     chainId: 1,
     tokenName: '$BSSB',
@@ -1011,7 +1011,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     ],
     moreData: [
       { title: 'Token Name', content: '$BSSB' },
-      // { title: 'Token Price', content: '0.0044' },
+      { title: 'Token Price', content: 'TBD' },
       { title: 'Token Amount', content: '10,500,000' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
