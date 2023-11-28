@@ -600,7 +600,7 @@ function Step1({
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>$ 0.00477</CardLabelStyle>
+                    <CardLabelStyle>$ 0.005</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
                     <CardContentStyle>Total Commit BSSB</CardContentStyle>
