@@ -483,7 +483,7 @@ function Step1({
             iconType: 'success',
             cancelBtn: 'Close',
             title: 'Success! ',
-            content: `You have successfully stake  ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
+            content: `You have successfully staked ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
             PaperProps: {
               sx: DialogTipsWhiteTheme
             },
@@ -523,7 +523,7 @@ function Step1({
             }}
             variant="body1"
           >
-            {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until staked end:'}
+            {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until subscription ends:'}
           </Typography>
           <Typography
             variant="body1"
@@ -648,7 +648,7 @@ function Step1({
                   }}
                   variant="body1"
                 >
-                  Committable Amount Earned
+                  My Estimated Allocation
                 </Typography>
               </Stack>
 
@@ -1021,7 +1021,7 @@ function Step2({
                     }}
                   >
                     <CheckSvg />
-                    <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
+                    <CardContentTitleStyle>Your Final Allocation/Total Supply</CardContentTitleStyle>
                   </Box>
                   <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                     <BoldTextStyle style={{ fontSize: 20 }}>
@@ -1074,7 +1074,7 @@ function Step2({
                     }}
                   >
                     <WonderSvg />
-                    <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
+                    <CardContentTitleStyle>Total Amount Staked / Remaining Balance</CardContentTitleStyle>
                   </Box>
 
                   <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>

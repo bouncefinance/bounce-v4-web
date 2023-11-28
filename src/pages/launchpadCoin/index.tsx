@@ -2,23 +2,21 @@ import { ProjectHead, Tabs } from 'pages/projectIntro'
 import { Steps } from './Step'
 import { PrivatePadCoinData } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
-
 import { useApproveCallback } from 'hooks/useApproveCallback'
 import { useLaunchpadCoinContract } from 'hooks/useContract'
 import { ApprovalState } from 'hooks/useTokenTimelock'
 // import { useEffect } from 'react'
 import { useCoinToken0, useGetLaunchpadCoinInfo } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { useActiveWeb3React } from 'hooks'
-
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
-const poolId = 38
+const poolId = 39
 const Page = () => {
   const { account } = useActiveWeb3React()
   const chainId = ChainId.SEPOLIA
+  // const chainId = ChainId.MAINNET
   const contract = useLaunchpadCoinContract(chainId)
   const { token0Amount: token0, token1 } = useCoinToken0()
-  console.log('🚀 ~ file: index.tsx:21 ~ Page ~ token0:', token0)
   const [approvalState, approveCallback] = useApproveCallback(token0, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId])
   const coinInfo = useGetLaunchpadCoinInfo(contract, poolId, account)
 
@@ -27,9 +25,9 @@ const Page = () => {
     token1.address,
     '6300000000000000000000000',
     '30000000000000000000000',
-    1701084900,
-    1701085200,
-    1701085200,
+    1701137700,
+    1701138000,
+    1701138000,
     1
   ]
 
