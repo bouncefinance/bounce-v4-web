@@ -1,6 +1,5 @@
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { Contract } from '@ethersproject/contracts'
-import { SEPOLIA_TOKEN_LIST } from 'constants/auction'
 import { Currency } from 'constants/token/currency'
 import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
 import { useMemo } from 'react'
@@ -97,9 +96,10 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   return coinInfo
 }
 export const useCoinToken0 = () => {
-  const token0 = SEPOLIA_TOKEN_LIST[3]
-  const token1 = SEPOLIA_TOKEN_LIST[2]
-  const token0Currency = new Currency(token0.chainId as any, token0.address, token0.decimals, token0.symbol)
-  const token0Amount = CurrencyAmount.fromAmount(token0Currency, '6300000000000000000000000')
+  const token0 = new Currency(ChainId.SEPOLIA, '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E', 18, 'AUCTION', 'AUCTION')
+  // const token0 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'AUCTION', 'AUCTION')
+  // const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'BSSB', 'BSSB')
+  const token1 = new Currency(ChainId.SEPOLIA, '0xc390E699b38F14dB884C635bbf843f7B135113ad', 18, 'BSSB', 'BSSB')
+  const token0Amount = CurrencyAmount.fromAmount(token0, '6300000000000000000000000')
   return { token0Amount, token1 }
 }

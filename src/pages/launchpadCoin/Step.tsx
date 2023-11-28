@@ -523,7 +523,9 @@ function Step1({
             }}
             variant="body1"
           >
-            {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until subscription ends:'}
+            {status === TStep.COMING_SOON
+              ? 'Time left until subscription starts:'
+              : 'Time left until subscription ends:'}
           </Typography>
           <Typography
             variant="body1"

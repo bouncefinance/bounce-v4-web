@@ -79,7 +79,7 @@ import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
 import LaunchpadCoin from 'pages/launchpadCoin'
-import LaunchpadCoin2 from 'pages/launchpadCoin/index2'
+
 import MultiBitBridgeProjectInfo from './projectIntro/MultiBitBridgeProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
@@ -228,7 +228,6 @@ export default function App() {
                   <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuctionWhitelist} element={<DeelanceWhitelistProjectInfo />} />
                   {/* <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfoAuction />} /> */}
-                  <Route path={routes.thirdPart.launchpadCoin2} element={<LaunchpadCoin2 />} />
                   <Route path={routes.thirdPart.BitStableAuction} element={<LaunchpadCoin />} />
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
