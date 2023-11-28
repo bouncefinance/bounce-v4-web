@@ -294,7 +294,7 @@ export function useMinterContract(queryChainId: ChainId) {
   return useContract(curAddress, TOKEN_MINTER_ABI, true, queryChainId)
 }
 export function useLaunchpadCoinContract(queryChainId?: ChainId) {
-  const chainId = ChainId.SEPOLIA
+  const chainId = ChainId.MAINNET
   const cur = queryChainId || chainId
   const curAddress = cur ? LAUNCHPAD_COIN_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, LAUNCHPAD_COIN_ABI, true, queryChainId)

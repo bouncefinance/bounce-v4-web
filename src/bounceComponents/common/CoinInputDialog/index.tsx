@@ -49,15 +49,15 @@ const BalanceTitle = styled(Typography)`
   line-height: 150%; /* 24px */
   letter-spacing: -0.32px;
 `
-const BlueTitle = styled(Typography)`
-  color: #2b51da;
-  font-family: Public Sans;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 24px */
-  letter-spacing: -0.32px;
-`
+// const BlueTitle = styled(Typography)`
+//   color: #2b51da;
+//   font-family: Public Sans;
+//   font-size: 16px;
+//   font-style: normal;
+//   font-weight: 500;
+//   line-height: 150%; /* 24px */
+//   letter-spacing: -0.32px;
+// `
 const ConfirmBtnStyle = styled(Button)`
   width: 100%;
   border-radius: 8px;
@@ -218,10 +218,10 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
               token1Balance={token1Balance}
             />
           </Stack>
-          <Stack mt={48} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          {/* <Stack mt={48} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <GrayTitle>Maximum stake amount</GrayTitle>
             <BlueTitle>100,000,000 BNB</BlueTitle>
-          </Stack>
+          </Stack> */}
         </>
       </DialogContent>
       <Stack flexDirection={'row'} alignItems={'center'} gap={12} mb={40}>

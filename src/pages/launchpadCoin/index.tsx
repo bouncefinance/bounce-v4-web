@@ -2,20 +2,18 @@ import { ProjectHead, Tabs } from 'pages/projectIntro'
 import { Steps } from './Step'
 import { PrivatePadCoinData } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
-
 import { useApproveCallback } from 'hooks/useApproveCallback'
 import { useLaunchpadCoinContract } from 'hooks/useContract'
 import { ApprovalState } from 'hooks/useTokenTimelock'
 // import { useEffect } from 'react'
 import { useCoinToken0, useGetLaunchpadCoinInfo } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { useActiveWeb3React } from 'hooks'
-
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
-const poolId = 30
+const poolId = 0
 const Page = () => {
   const { account } = useActiveWeb3React()
-  const chainId = ChainId.SEPOLIA
+  const chainId = ChainId.MAINNET
   const contract = useLaunchpadCoinContract(chainId)
   const { token0Amount: token0, token1 } = useCoinToken0()
   const [approvalState, approveCallback] = useApproveCallback(token0, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId])
@@ -24,12 +22,12 @@ const Page = () => {
   const params: any = [
     token0?.currency.address,
     token1.address,
-    BigInt(100000000),
-    BigInt(10000000000000000000),
-    1700822941,
-    1700823121,
-    1700823181,
-    600
+    '6300000000000000000000000',
+    '31580000000000000000000',
+    1701230400,
+    1701316800,
+    1701316800,
+    1
   ]
 
   const createPool = async () => {
@@ -38,7 +36,7 @@ const Page = () => {
     }
     await contract?.create(params)
   }
-  console.log('createPool', createPool)
+  console.log('createPool', createPool, approvalState)
 
   return (
     <>

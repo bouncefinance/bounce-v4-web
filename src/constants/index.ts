@@ -541,7 +541,7 @@ export const TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES: { [chainId in 
   [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 export const LAUNCHPAD_COIN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0x60441641328185EdAf2Cb4CCe583f52993eb7f94',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',

@@ -1,6 +1,5 @@
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { Contract } from '@ethersproject/contracts'
-import { SEPOLIA_TOKEN_LIST } from 'constants/auction'
 import { Currency } from 'constants/token/currency'
 import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
 import { useMemo } from 'react'
@@ -32,7 +31,7 @@ export type CoinResultType = {
   claimedToken0?: BigNumber
 }
 export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const chainId = ChainId.SEPOLIA
+  const chainId = ChainId.MAINNET
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
   const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', undefined, undefined, chainId)
@@ -97,9 +96,8 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   return coinInfo
 }
 export const useCoinToken0 = () => {
-  const token0 = SEPOLIA_TOKEN_LIST[1]
-  const token1 = SEPOLIA_TOKEN_LIST[2]
-  const token0Currency = new Currency(token0.chainId as any, token0.address, token0.decimals, token0.symbol)
-  const token0Amount = CurrencyAmount.fromAmount(token0Currency, 200000)
+  const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'AUCTION', 'AUCTION')
+  const token0 = new Currency(ChainId.MAINNET, '0xda31D0d1Bc934fC34F7189E38A413ca0A5e8b44F', 18, 'BSSB', 'BSSB')
+  const token0Amount = CurrencyAmount.fromAmount(token0, '6300000000000000000000000')
   return { token0Amount, token1 }
 }

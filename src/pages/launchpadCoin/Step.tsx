@@ -1,8 +1,8 @@
 import { Box, Button, Stack, Typography, Stepper, StepLabel, StepContent, Step, styled } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
-import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
-import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
+// import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
+// import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
 import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
@@ -12,7 +12,7 @@ import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 import { useApproveCallback } from 'hooks/useApproveCallback'
@@ -218,7 +218,7 @@ export function Steps({
         }}
       >
         <BoldTextStyle>Subscription Timeline</BoldTextStyle>
-        <Button
+        {/* <Button
           sx={{
             padding: { xs: '8px 30px', md: '12px 24px' },
             color: '#171717',
@@ -231,7 +231,8 @@ export function Steps({
           }}
         >
           My private launchpad
-        </Button>
+        </Button> */}
+        <></>
       </Box>
       <VerticalLinearStepper poolId={poolId} coinInfo={coinInfo} contract={contract} />
     </Stack>
@@ -316,7 +317,7 @@ function Step1({
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
     // if (!account) {
-    return ChainId.SEPOLIA
+    return ChainId.MAINNET
     // }
     // return chainId
   }, [])
@@ -324,6 +325,7 @@ function Step1({
   const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
+
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
@@ -345,21 +347,21 @@ function Step1({
   const [, formattedRes] = useCountDown({
     targetDate: curTime
   })
-  const { days, hours, minutes } = formattedRes
+  const { days, hours, minutes, seconds } = formattedRes
   const renderCountDown = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
       return (
         <>
-          <b>--</b> Days <b>--</b> Hours <b>--</b> Mins
+          <b>--</b> Days <b>--</b> Hours <b>--</b> Mins <b>--</b> Secs
         </>
       )
     }
     return (
       <>
-        <b>{days}</b> Days <b>{hours}</b> Hours <b>{minutes}</b> Mins
+        <b>{days}</b> Days <b>{hours}</b> Hours <b>{minutes}</b> Mins <b>{seconds}</b> Secs
       </>
     )
-  }, [coinInfo, days, hours, minutes])
+  }, [coinInfo, days, hours, minutes, seconds])
 
   const showLoginModal = useShowLoginModal()
   const handleSetAmount = (v: string) => {
@@ -375,13 +377,13 @@ function Step1({
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
   const _switchNetwork = () => {
-    switchNetwork(ChainId.SEPOLIA)
+    switchNetwork(ChainId.MAINNET)
   }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
     }
-    if (chainId !== ChainId.SEPOLIA) {
+    if (chainId !== ChainId.MAINNET) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     }
     if (isBalanceInsufficient) {
@@ -466,9 +468,9 @@ function Step1({
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            cancelBtn: 'Save',
+            cancelBtn: 'Close',
             title: 'Success! ',
-            content: `You have successfully stake  ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
+            content: `You have successfully staked ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
             PaperProps: {
               sx: DialogTipsWhiteTheme
             },
@@ -508,7 +510,9 @@ function Step1({
             }}
             variant="body1"
           >
-            {status === TStep.COMING_SOON ? 'Time left until staked start:' : 'Time left until staked end:'}
+            {status === TStep.COMING_SOON
+              ? 'Time left until subscription starts:'
+              : 'Time left until subscription ends:'}
           </Typography>
           <Typography
             variant="body1"
@@ -555,7 +559,13 @@ function Step1({
                   gap: { xs: 8, md: 16 }
                 }}
               >
-                <StakeTokensSvg />
+                {/* <StakeTokensSvg /> */}
+                <img
+                  src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
+                  width={60}
+                  height={60}
+                  style={{ borderRadius: '50%' }}
+                />
                 <Stack spacing={4} maxWidth={{ xs: 'auto', md: 350 }}>
                   <CardLabelStyle
                     sx={{
@@ -566,21 +576,31 @@ function Step1({
                       }
                     }}
                   >
-                    Hiley Golbel Coin <b>x</b> BNB pool
+                    BitStable <b>x</b> Auction Pool
                   </CardLabelStyle>
                   <CardContentStyle>
-                    Stake BNB tokens to earn Commitable amount for participating in Hiley Golbel Coin launchpad
+                    Stake $AUCTION to earn committable amount for participating in $BSSB launchpad
                   </CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
+                <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Sale Price</CardContentStyle>
+                    <CardLabelStyle>0.005 AUCTION</CardLabelStyle>
+                  </Stack>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Total Commit BSSB</CardContentStyle>
+                    <CardLabelStyle>6,300,000</CardLabelStyle>
+                  </Stack>
+                </Stack>
                 <Stack spacing={8}>
                   <CardContentStyle>Total Stake</CardContentStyle>
                   <CardLabelStyle>
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol}
+                    {token1Currency?.symbol} / 31,580 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -617,7 +637,7 @@ function Step1({
                   }}
                   variant="body1"
                 >
-                  Committable amount earned
+                  My Estimated Allocation
                 </Typography>
               </Stack>
 
@@ -703,12 +723,20 @@ function Step2({
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     if (!account) {
-      return 11155111
+      return 1
     }
     return chainId
   }, [account, chainId])
-  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
+  const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const token0 = useMemo(() => {
+    if (!_token0) return undefined
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BSSB', 'BSSB')
+  }, [_token0])
+  const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
+  const token1 = useMemo(() => {
+    if (!_token1) return undefined
+    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'AUCTION', 'AUCTION')
+  }, [_token1])
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
     return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
@@ -738,7 +766,7 @@ function Step2({
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            againBtn: 'Save',
+            againBtn: 'Close',
             title: 'Success!',
             content: `You have successfully claim ${
               token0 &&
@@ -873,7 +901,7 @@ function Step2({
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
-    switchNetwork(ChainId.SEPOLIA)
+    switchNetwork(ChainId.MAINNET)
   }
 
   return (
@@ -887,8 +915,8 @@ function Step2({
         }}
         variant="body1"
       >
-        The allocation calculation is complete. We will deduct the corresponding BNB from your account based on your
-        final GMT allocation, which will be transferred to your spot account along with your remaining BNB.
+        The allocation calculation is complete. We will deduct the corresponding $AUCTION from your account based on
+        your final $BSSB allocation, which will be transferred to your spot account along with your remaining $AUCTION.
       </Typography>
       {account &&
         coinInfo?.myToken1Amount?.eq(0) &&
@@ -896,7 +924,7 @@ function Step2({
         account !== coinInfo.poolInfo?.creator && (
           <NotInvolvedContainer>
             <FailSVG />
-            <NotInvolvedTitle>You did not stake any BNB for this session.</NotInvolvedTitle>
+            <NotInvolvedTitle>You did not stake any $AUCTION for this session.</NotInvolvedTitle>
           </NotInvolvedContainer>
         )}
 
@@ -935,7 +963,13 @@ function Step2({
                       alignItems: 'center'
                     }}
                   >
-                    <BnBTokenSvg />
+                    {/* <BnBTokenSvg /> */}
+                    <img
+                      src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
+                      width={17}
+                      height={17}
+                      style={{ borderRadius: '50%' }}
+                    />
                     <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
                   </Box>
                   <CardContentBoldTextStyle>
@@ -976,7 +1010,7 @@ function Step2({
                     }}
                   >
                     <CheckSvg />
-                    <CardContentTitleStyle>Your Final Allocation/Available</CardContentTitleStyle>
+                    <CardContentTitleStyle>Your Final Allocation/Total Supply</CardContentTitleStyle>
                   </Box>
                   <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                     <BoldTextStyle style={{ fontSize: 20 }}>
@@ -997,7 +1031,7 @@ function Step2({
                               .div(new BigNumber('10').pow(token0.decimals))
                               .toString()
                           )?.toSignificant()
-                        : '0'}
+                        : '0'}{' '}
                       {token0?.symbol}
                     </BoldTextStyle>
                     {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
@@ -1013,7 +1047,9 @@ function Step2({
                         disabled={!canClaimToken0}
                         onClick={() => claimToken0()}
                       >
-                        Claim
+                        {coinInfo && coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')
+                          ? 'Claimed'
+                          : 'Claim'}
                       </CountdownBtnStyle>
                     )}
                   </Stack>
@@ -1027,7 +1063,7 @@ function Step2({
                     }}
                   >
                     <WonderSvg />
-                    <CardContentTitleStyle>Total Staked / Exceeded token</CardContentTitleStyle>
+                    <CardContentTitleStyle>Total Amount Staked / Remaining Balance</CardContentTitleStyle>
                   </Box>
 
                   <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -1059,11 +1095,11 @@ function Step2({
                       disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
                       onClick={() => claimToken1()}
                     >
-                      Claim
+                      {coinInfo?.myToken1Claimed ? 'Claimed' : 'Claim'}
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {account && chainId !== ChainId.SEPOLIA && (
+                  {account && chainId !== ChainId.MAINNET && (
                     <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )}
                 </Stack>
