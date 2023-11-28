@@ -827,14 +827,14 @@ export const PrivatePadCoinData: IPrivatePadProp = {
         >
           <ul>
             <li>Total Supply of $BSSB: 21,000,000</li>
-            <li>Public Sale: 50% on Bounce Finance</li>
-            <li>Total raise on public sale: 500, 000 USDC</li>
-            <li>Team: 5% (6 month lock and linear vesting for 15 months)</li>
+            <li>Token Launch: 50% of Total Supply on Bounce Finance</li>
+            <li>Total Raise Through Token Launch: 500,000 USDC</li>
+            <li>Team Allocation: 5% (6-month lock and linear vesting for 15 months)</li>
             <li>Airdrop: 3.5%</li>
             <li>Staking Rewards: 36.5%</li>
             <li>LP: 5% (locked indefinitely)</li>
             <li>Total Supply of DAII: 1,000,000,000</li>
-            <li>FDV=1,000,000$ USDC</li>
+            <li>FDV=1,000,000 USDC</li>
           </ul>
         </Box>
       ]
@@ -990,14 +990,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           >
             <ul>
               <li>Total Supply of $BSSB: 21,000,000</li>
-              <li>Public Sale: 50% on Bounce Finance</li>
-              <li>Total raise on public sale: 500, 000 USDC</li>
-              <li>Team: 5% (6 month lock and linear vesting for 15 months)</li>
+              <li>Token Launch: 50% of Total Supply on Bounce Finance</li>
+              <li>Total Raise Through Token Launch: 500,000 USDC</li>
+              <li>Team Allocation: 5% (6-month lock and linear vesting for 15 months)</li>
               <li>Airdrop: 3.5%</li>
               <li>Staking Rewards: 36.5%</li>
               <li>LP: 5% (locked indefinitely)</li>
               <li>Total Supply of DAII: 1,000,000,000</li>
-              <li>FDV=1,000,000$ USDC</li>
+              <li>FDV=1,000,000 USDC</li>
             </ul>
           </Box>
         ]
