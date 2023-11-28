@@ -12,6 +12,10 @@ const list = [
   {
     poolId: '41',
     address: '0x9e2C12D9240BF267fbeBD510d47Ac3AbD4D9d9ee'
+  },
+  {
+    poolId: '42',
+    address: '0x9e2C12D9240BF267fbeBD510d47Ac3AbD4D9d9ee'
   }
 ]
 

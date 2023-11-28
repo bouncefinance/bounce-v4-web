@@ -10,11 +10,10 @@ import { useCoinToken0, useGetLaunchpadCoinInfo } from 'bounceHooks/launchpad/us
 import { useActiveWeb3React } from 'hooks'
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
-const poolId = 42
+const poolId = 0
 const Page = () => {
   const { account } = useActiveWeb3React()
-  const chainId = ChainId.SEPOLIA
-  // const chainId = ChainId.MAINNET
+  const chainId = ChainId.MAINNET
   const contract = useLaunchpadCoinContract(chainId)
   const { token0Amount: token0, token1 } = useCoinToken0()
   const [approvalState, approveCallback] = useApproveCallback(token0, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[chainId])
@@ -24,10 +23,10 @@ const Page = () => {
     token0?.currency.address,
     token1.address,
     '6300000000000000000000000',
-    '30000000000000000000000',
-    1701142800,
-    1701146400,
-    1701146400,
+    '31580000000000000000000',
+    1701230400,
+    1701316800,
+    1701316800,
     1
   ]
 

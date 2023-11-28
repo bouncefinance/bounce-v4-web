@@ -317,28 +317,15 @@ function Step1({
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
     // if (!account) {
-    return ChainId.SEPOLIA
+    return ChainId.MAINNET
     // }
     // return chainId
   }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
-  const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token0 = useMemo(() => {
-    if (!_token0) return undefined
-    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BSSB', 'BSSB')
-  }, [_token0])
-  const _token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
-  const token1Currency = useMemo(() => {
-    if (!_token1Currency) return undefined
-    return new Currency(
-      _token1Currency.chainId,
-      _token1Currency.address,
-      _token1Currency.decimals,
-      'AUCTION',
-      'AUCTION'
-    )
-  }, [_token1Currency])
+  const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
+
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
@@ -390,13 +377,13 @@ function Step1({
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
   const _switchNetwork = () => {
-    switchNetwork(ChainId.SEPOLIA)
+    switchNetwork(ChainId.MAINNET)
   }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
     }
-    if (chainId !== ChainId.SEPOLIA) {
+    if (chainId !== ChainId.MAINNET) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     }
     if (isBalanceInsufficient) {
@@ -600,7 +587,7 @@ function Step1({
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>$ 0.005</CardLabelStyle>
+                    <CardLabelStyle>0.005 AUCTION</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
                     <CardContentStyle>Total Commit BSSB</CardContentStyle>
@@ -613,7 +600,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 30,000 AUCTION
+                    {token1Currency?.symbol} / 31,580 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -736,7 +723,7 @@ function Step2({
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     if (!account) {
-      return 11155111
+      return 1
     }
     return chainId
   }, [account, chainId])
@@ -914,7 +901,7 @@ function Step2({
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
-    switchNetwork(ChainId.SEPOLIA)
+    switchNetwork(ChainId.MAINNET)
   }
 
   return (
@@ -1112,7 +1099,7 @@ function Step2({
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {account && chainId !== ChainId.SEPOLIA && (
+                  {account && chainId !== ChainId.MAINNET && (
                     <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )}
                 </Stack>

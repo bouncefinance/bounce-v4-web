@@ -31,7 +31,7 @@ export type CoinResultType = {
   claimedToken0?: BigNumber
 }
 export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const chainId = ChainId.SEPOLIA
+  const chainId = ChainId.MAINNET
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
   const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', undefined, undefined, chainId)
@@ -96,10 +96,8 @@ export const useGetLaunchpadCoinInfo = (contract: Contract | null, poolId: numbe
   return coinInfo
 }
 export const useCoinToken0 = () => {
-  const token0 = new Currency(ChainId.SEPOLIA, '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E', 18, 'AUCTION', 'AUCTION')
-  // const token0 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'AUCTION', 'AUCTION')
-  // const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'BSSB', 'BSSB')
-  const token1 = new Currency(ChainId.SEPOLIA, '0xc390E699b38F14dB884C635bbf843f7B135113ad', 18, 'BSSB', 'BSSB')
+  const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'AUCTION', 'AUCTION')
+  const token0 = new Currency(ChainId.MAINNET, '0xda31D0d1Bc934fC34F7189E38A413ca0A5e8b44F', 18, 'BSSB', 'BSSB')
   const token0Amount = CurrencyAmount.fromAmount(token0, '6300000000000000000000000')
   return { token0Amount, token1 }
 }
