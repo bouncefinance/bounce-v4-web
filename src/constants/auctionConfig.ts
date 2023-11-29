@@ -152,5 +152,10 @@ export const AuctionConfig: {
   },
   [ChainId.SCROLL_ALPHA]: {
     [TokenType.ERC20]: [AuctionType.FIXED_PRICE]
+  },
+  [ChainId.CORE_CHAIN_TESTNET]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION, AuctionType.MUTANT_ENGLISH],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
   }
 }

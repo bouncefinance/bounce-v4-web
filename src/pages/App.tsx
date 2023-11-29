@@ -72,10 +72,14 @@ import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
 import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
 import CreateLaunchpad from './launchpad/create-launchpad'
 import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
+import BitStableProjectInfo from './projectIntro/BitStableProjectInfo'
+// import BitStableProjectInfoAuction from './projectIntro/BitStableProjectInfoAuction'
 import DipExchange from './dipExchange'
 import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
 import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
 import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
+import LaunchpadCoin from 'pages/launchpadCoin'
+
 import MultiBitBridgeProjectInfo from './projectIntro/MultiBitBridgeProjectInfo'
 // import { Equilibria } from './game/equilibria'
 // import { Rank } from './launchpad/rank'
@@ -223,7 +227,8 @@ export default function App() {
                   <Route path={routes.thirdPart.OpenfabricAuction} element={<OpenfabricProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuction} element={<DeelanceProjectInfo />} />
                   <Route path={routes.thirdPart.DeelanceAuctionWhitelist} element={<DeelanceWhitelistProjectInfo />} />
-
+                  {/* <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfoAuction />} /> */}
+                  <Route path={routes.thirdPart.BitStableAuction} element={<LaunchpadCoin />} />
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
@@ -235,7 +240,7 @@ export default function App() {
                   {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.thirdPart.FinceptorAuction} element={<FinceptorProjectInfo />} />
-
+                  <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfo />} />
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
                   <Route path={routes.tokenToolBox.myLock} element={<MyLock />} />

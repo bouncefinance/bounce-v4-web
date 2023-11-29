@@ -130,5 +130,6 @@ export const TOKEN_LIST_API: Record<ChainId, string | null> = {
   [ChainId.SCROLL_ALPHA]: null,
   [ChainId.PALM]: null,
   [ChainId.LINEA]: null,
-  [ChainId.LINEA_GORLI]: null
+  [ChainId.LINEA_GORLI]: null,
+  [ChainId.CORE_CHAIN_TESTNET]: null
 }

@@ -96,7 +96,8 @@ export const getUserWhitelistProof = async (params: GetUserWhitelistProofParams)
 }
 
 export const getUserPermitSign = async (params: GetUserWhitelistProofParams) => {
-  return ApiInstance.post<GetUserPermitSignResponse>('/user/permit/sign', params)
+  // return ApiInstance.post<GetUserPermitSignResponse>('/user/permit/sign', params)
+  return ApiInstance.post<GetUserPermitSignResponse>('/user/launchpad/sign', params)
 }
 
 export const getUserActivities = async (params: IPaginationParams) => {
