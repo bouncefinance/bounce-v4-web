@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CenterRow, Row } from '../../../components/Layout'
-import { Box, Grid, MenuItem, Select, Skeleton, styled } from '@mui/material'
+import { Box, Grid, MenuItem, Select, Skeleton, Stack, styled } from '@mui/material'
 import EmptyAvatar from 'assets/imgs/auction/default-nft-cover.png'
 import EmptyToken from 'assets/imgs/auction/token-default.svg'
 import { Body01, H6, SmallTextGray } from '../../../components/Text'
@@ -193,7 +193,23 @@ export function AuctionRow(props: any): ReactJSXElement[] {
             </CenterRow>
           </Box>
         </CenterRow>,
-        <Status key={3} status={status} />
+        <Stack width={'100%'} key={3} gap={2} justifyContent={'flex-end'}>
+          {props.isVerified && (
+            <span
+              style={{
+                width: 'fit-content',
+                color: '#FD3333',
+                fontSize: 10,
+                background: '#F9E3DA',
+                borderRadius: '100px',
+                padding: '4px 6px'
+              }}
+            >
+              {props.isVerified}
+            </span>
+          )}
+          <Status status={status} />
+        </Stack>
       ]
     : [
         <CenterRow
@@ -234,19 +250,32 @@ export function AuctionRow(props: any): ReactJSXElement[] {
           <Body01
             className={isSm ? 'mobile' : 'hover-highlight'}
             sx={{
-              maxWidth: 160,
+              maxWidth: 360,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap'
             }}
           >
-            {props.name}
+            {props.name}{' '}
+            {props.isVerified && (
+              <span
+                style={{
+                  color: '#FD3333',
+                  fontSize: 14,
+                  background: '#F9E3DA',
+                  borderRadius: '100px',
+                  padding: '4px 12px'
+                }}
+              >
+                {props.isVerified}
+              </span>
+            )}
           </Body01>
         </CenterRow>,
         <Body01
           sx={{
             cursor: 'pointer',
-            width: 300
+            width: 160
           }}
           maxWidth={300}
           onClick={() => props.navigate(url)}
@@ -494,6 +523,7 @@ export const AuctionRankCard: React.FC = () => {
                       AuctionRow({
                         isSm: isSm,
                         ...d,
+                        isVerified: d.isFake === 1 ? 'Unofficial' : '',
                         index: idx + 1,
                         opt: optionDatas,
                         navigate,
