@@ -8,7 +8,7 @@ import { ShowOnMobile } from 'themes/index'
 import Image from 'components/Image'
 import logo from '../../assets/svg/logo.svg'
 import logoWhite from '../../assets/svg/logo-white.svg'
-import logoIcon from '../../assets/svg/logo-icon.svg'
+import logoIconWhite from '../../assets/svg/logoIconWhite.svg'
 import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkPopperSelect from './NetworkPopperSelect'
@@ -254,6 +254,10 @@ export default function Header() {
         //   borderColor: 'var(--ps-text-4)'
         // }
         '&:hover': {
+          color: '#121212',
+          '& path': {
+            fill: '#121212'
+          },
           border: '1px solid transparent',
           background: 'var(--ps-yellow-1)'
         }
@@ -276,7 +280,7 @@ export default function Header() {
           color
         }}
       > */}
-      <Typography variant="h5" color="currentcolor">
+      <Typography id={'connect'} variant="h5" color="currentcolor">
         {' '}
         Connect wallet
       </Typography>
@@ -306,7 +310,7 @@ export default function Header() {
               style={isWhiteLogo && !isSm ? { mixBlendMode: 'difference' } : {}}
               src={
                 isSm
-                  ? logoIcon
+                  ? logoIconWhite
                   : isTransparentRoute && headerBgOpacity < 0.65
                   ? logoWhite
                   : isWhiteLogo
@@ -361,7 +365,7 @@ export default function Header() {
                   setMobileMenuOpen(open => !open)
                 }}
               >
-                <MenuIcon sx={{ color: 'black' }} />
+                <MenuIcon sx={{ color: 'white' }} />
               </IconButton>
             </Stack>
           </ShowOnMobile>
