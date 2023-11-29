@@ -578,9 +578,7 @@ function Step1({
                   >
                     BitStable <b>x</b> Auction Pool
                   </CardLabelStyle>
-                  <CardContentStyle>
-                    Stake $AUCTION to earn committable amount for participating in $BSSB launchpad
-                  </CardContentStyle>
+                  <CardContentStyle>Stake $AUCTION to earn proportional $BSSB allocation</CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
@@ -590,12 +588,12 @@ function Step1({
                     <CardLabelStyle>0.005 AUCTION</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
-                    <CardContentStyle>Total Commit BSSB</CardContentStyle>
+                    <CardContentStyle>Total Supply of BSSB</CardContentStyle>
                     <CardLabelStyle>6,300,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
-                  <CardContentStyle>Total Stake</CardContentStyle>
+                  <CardContentStyle>Total Committed Amount / Total Raise</CardContentStyle>
                   <CardLabelStyle>
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
