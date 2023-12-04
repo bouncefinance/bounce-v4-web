@@ -262,6 +262,14 @@ export const FooterLinks: React.FC<FooterLinksProps> = ({ title, links }) => {
 }
 export const ResourcesLinks = [
   {
+    label: 'Bounce Quanto',
+    isExternal: true,
+    href: 'https://quanto.bounce.finance',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
+  },
+  {
     label: 'Document',
     isExternal: true,
     href: 'https://docs.bounce.finance/welcome-to-bounce-docs/welcome',
