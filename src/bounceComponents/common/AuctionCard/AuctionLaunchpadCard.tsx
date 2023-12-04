@@ -5,7 +5,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { useRequest } from 'ahooks'
 import { searchLaunchpad } from 'api/user'
 import { IAuctionTypeMap, IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
-import { useMemo } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import Image from 'components/Image'
 import { ChainId, ChainListMap } from 'constants/chain'
 import TokenImage from '../TokenImage'
@@ -16,6 +16,11 @@ import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { Row } from 'components/Layout'
 import { useToken } from 'state/wallet/hooks'
 import { useNavigate } from 'react-router-dom'
+import useBreakpoint from 'hooks/useBreakpoint'
+import { SlideProgress } from 'bounceComponents/auction/SlideProgress'
+import SwiperCore from 'swiper'
+import { SwiperSlide } from 'swiper/react'
+import DefaultImg from 'assets/imgs/auction/default-img.jpg'
 const Title = styled(Typography)`
   color: #121212;
   leading-trim: both;
@@ -61,6 +66,7 @@ const LaunchpadHead = styled(Box)`
   height: 100%;
   max-height: 250px;
   overflow: hidden;
+  border-radius: 24px 24px 0 0;
 `
 const LaunchpadHeadContent = styled(Box)`
   display: flex;
@@ -73,13 +79,17 @@ const LaunchpadHeadContent = styled(Box)`
   width: 100%;
   height: 100%;
 `
-const LaunchpadContent = styled(Box)`
-  display: flex;
-  height: 240px;
-  padding: 16px 24px 24px 24px;
-  align-items: flex-start;
-  gap: 60px;
-`
+const LaunchpadContent = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  padding: ' 16px 24px 24px 24px',
+  alignItems: 'flex-start',
+  gap: 60,
+  [theme.breakpoints.down('sm')]: {
+    padding: '12px 16px 16px 16px',
+    gap: 24
+  }
+}))
+
 const LaunchpadProjectTitle = styled(Typography)`
   color: #20201e;
   leading-trim: both;
@@ -131,7 +141,7 @@ const LaunchpadContainer = styled(Box)({
   borderRadius: 24,
   background: '#fff',
   cursor: 'pointer',
-  overflow: 'hidden',
+  // overflow: 'hidden',
   '& .img': {
     transform: 'scale(1)',
     transition: 'all 1s'
@@ -160,7 +170,6 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
   const navigate = useNavigate()
   const optionDatas = useOptionDatas()
   const link = useMemo(() => `/account/launchpad/${poolData.id}?party=${baseData.id}`, [baseData.id, poolData.id])
-  console.log('data', poolData, baseData, link)
   const curChain = useMemo(() => {
     const chainInfo = optionDatas.chainInfoOpt?.find(item => item.id === poolData.chainId)
     return chainInfo
@@ -175,22 +184,29 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
     if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
     return ChainPoolStatus.Closed
   }, [openAt, closeAt])
+  const isSm = useBreakpoint('sm')
 
   return (
     <LaunchpadContainer onClick={() => navigate(link)}>
       <LaunchpadHead>
         <Image
           style={{ width: '100%', height: '100%', maxHeight: 250, borderRadius: '24px 24px 0 0', objectFit: 'cover' }}
-          src={poolData.picture1}
+          src={poolData.picture1 || DefaultImg}
           className="img"
         />
-        <LaunchpadHeadContent>
+        <LaunchpadHeadContent
+          style={{
+            flexDirection: isSm ? 'column' : 'row',
+            padding: isSm ? '12px 16px' : '16px 24px',
+            boxSizing: 'border-box'
+          }}
+        >
           <Stack flexDirection={'row'} gap={4}>
             <RoundedBox>
               <TokenImage src={ChainListMap[poolData.chainId as ChainId]?.logo} size={12} />
               <SansTitle sx={{ color: '#FFF' }}>{curChain?.chainName}</SansTitle>
             </RoundedBox>
-            <RoundedBox sx={{ color: '#B5E529', fontSize: 12 }}>
+            <RoundedBox sx={{ color: '#E1F25C', fontSize: 12 }}>
               {Object.assign({}, IAuctionTypeMap)[poolData.category]}
             </RoundedBox>
           </Stack>
@@ -205,11 +221,14 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
           )}
         </LaunchpadHeadContent>
       </LaunchpadHead>
-      <LaunchpadContent>
+      <LaunchpadContent flexDirection={isSm ? 'column' : 'row'}>
         <Stack gap={16} flex={1}>
           <Stack flexDirection={'row'} gap={12}>
-            <Image style={{ width: 32, height: 32, borderRadius: 32 }} src={baseData.projectLogo} />
-            <LaunchpadProjectTitle>{baseData.projectName}</LaunchpadProjectTitle>
+            <Image
+              style={{ width: isSm ? 24 : 32, height: isSm ? 24 : 32, borderRadius: isSm ? 24 : 32 }}
+              src={baseData.projectLogo}
+            />
+            <LaunchpadProjectTitle fontSize={isSm ? 16 : 22}>{baseData.projectName}</LaunchpadProjectTitle>
           </Stack>
           <LaunchpadDescription
             sx={{
@@ -237,7 +256,7 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
               ))}
           </Row>
         </Stack>
-        <Stack flex={1} gap={8}>
+        <Stack sx={{ width: '100%' }} flex={1} gap={8}>
           <LaunchpadLabelContainer>
             <LaunchpadLabelTitle>Token Name</LaunchpadLabelTitle>
             <LaunchpadLabelTitle className="w">{token0?.name || token0?.symbol}</LaunchpadLabelTitle>
@@ -266,28 +285,61 @@ const AuctionLaunchpadCard = () => {
     }
   })
 
+  const isSm = useBreakpoint('sm')
+  const ref = useRef<any>(null)
+  const swiper = useRef<SwiperCore>()
+  const [swipePrev, canSwipePrev] = useState(false)
+  const [swipeNext, canSwipeNext] = useState(true)
+  console.log('data7777', data)
+
   return (
-    <Box sx={{ padding: '100px 72px 120px', background: '#F6F6F3' }}>
+    <Box sx={{ padding: isSm ? '60px 16px 80px 16px' : '100px 72px 120px', background: '#F6F6F3' }}>
       <Container
         sx={{
           maxWidth: '1296px !important'
         }}
       >
         <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Title>Private launchpad</Title>
-          <Stack flexDirection={'row'} gap={8}>
-            <ArrowBg className="gray">
+          <Title style={{ fontSize: isSm ? 24 : 44 }}>Private launchpad</Title>
+          <Stack flexDirection={'row'} gap={8} style={{ display: isSm ? 'none' : 'flex' }}>
+            <ArrowBg className={swipePrev ? 'black' : 'gray'} onClick={() => swiper?.current?.slidePrev()}>
               <ArrowBackIcon />
             </ArrowBg>
-            <ArrowBg className="black">
+            <ArrowBg className={swipeNext ? 'black' : 'gray'} onClick={() => swiper?.current?.slideNext()}>
               <ArrowForwardIcon />
             </ArrowBg>
           </Stack>
         </Stack>
-        <Box mt={60}>
-          {data && data.list.length > 0 && (
-            <LaunchpadCardItem poolData={data.list[0].poolInfo} baseData={data.list[0].basicInfo} />
-          )}
+        <Box ref={ref} mt={isSm ? 40 : 60}>
+          <SlideProgress
+            hideArrow
+            swiperRef={swiper}
+            canSwipePrev={canSwipePrev}
+            canSwipeNext={canSwipeNext}
+            swiperStyle={{
+              style: { height: 500 },
+              spaceBetween: 20,
+              slidesPerView: isSm ? 1 : 2,
+              loop: isSm,
+              autoplay: isSm,
+              freeMode: true
+            }}
+          >
+            {data && data.list.length > 0
+              ? data.list.map(i => (
+                  <SwiperSlide key={i.poolInfo.poolId}>
+                    <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
+                  </SwiperSlide>
+                ))
+              : []}
+          </SlideProgress>
+          {data && data.list.length > 0
+            ? data.list.map(i => (
+                <SwiperSlide key={i.poolInfo.poolId}>
+                  <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
+                </SwiperSlide>
+              ))
+            : []}
         </Box>
       </Container>
     </Box>
