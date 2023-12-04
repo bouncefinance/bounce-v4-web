@@ -40,6 +40,7 @@ import {
 
 import { ApiInstance } from 'api'
 import { IBasicInfoParams, IPoolInfoParams } from 'pages/launchpad/create-launchpad/type'
+import { IS_TEST_ENV } from '../../constants'
 
 export const getConfig = async () => {
   return ApiInstance.get<IConfigResponse>('/com/cfg/opt_data', {})
@@ -97,7 +98,7 @@ export const getUserWhitelistProof = async (params: GetUserWhitelistProofParams)
 
 export const getUserPermitSign = async (params: GetUserWhitelistProofParams) => {
   // return ApiInstance.post<GetUserPermitSignResponse>('/user/permit/sign', params)
-  return ApiInstance.post<GetUserPermitSignResponse>('/user/boubssb/sssign', params)
+  return ApiInstance.post<GetUserPermitSignResponse>(IS_TEST_ENV ? '/user/permit/sign' : '/user/launchpad/sign', params)
 }
 
 export const getUserActivities = async (params: IPaginationParams) => {

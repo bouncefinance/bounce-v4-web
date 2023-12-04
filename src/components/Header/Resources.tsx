@@ -16,6 +16,7 @@ const StyledButton = styled(Button)({
 })
 
 const linkList = [
+  { label: 'Bounce Quanto', href: 'https://quanto.bounce.finance' },
   { label: 'Document', href: 'https://docs.bounce.finance/welcome-to-bounce-docs/welcome' },
   { label: 'Help Center', href: 'https://www.bounce.finance/FAQ' },
   { label: 'Bounce Token', href: 'https://token.bounce.finance/staking' },
