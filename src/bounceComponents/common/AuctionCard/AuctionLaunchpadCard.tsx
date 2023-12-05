@@ -311,8 +311,7 @@ const AuctionLaunchpadCard = () => {
   const ref = useRef<any>(null)
   const swiper = useRef<SwiperCore>()
   const [swipePrev, canSwipePrev] = useState(false)
-  const [swipeNext, canSwipeNext] = useState(true)
-  console.log('data7777', data)
+  const [swipeNext, canSwipeNext] = useState(data?.list?.length && data.list.length > 2)
 
   return (
     <Box sx={{ padding: isSm ? '60px 16px 80px 16px' : '100px 72px 120px', background: '#F6F6F3' }}>
