@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Box, Container, Typography, Stack, Link, Button } from '@mui/material'
+import { Box, Container, Typography, Stack, Link, Button, Skeleton } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { useRequest } from 'ahooks'
@@ -291,6 +291,14 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
     </LaunchpadContainer>
   )
 }
+const ItemSkeleton = () => {
+  const isSm = useBreakpoint('sm')
+  return (
+    <Stack sx={{ width: '100%', height: isSm ? 590 : '100%', overflow: 'hidden', borderRadius: 24 }}>
+      <Skeleton variant="rectangular" width={'100%'} height={'100%'} />
+    </Stack>
+  )
+}
 const AuctionLaunchpadCard = () => {
   const { data } = useRequest(async () => {
     const res = await searchLaunchpad({})
@@ -346,7 +354,14 @@ const AuctionLaunchpadCard = () => {
                     <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
                   </SwiperSlide>
                 ))
-              : []}
+              : [
+                  <SwiperSlide key={1}>
+                    <ItemSkeleton />
+                  </SwiperSlide>,
+                  <SwiperSlide key={2}>
+                    <ItemSkeleton />
+                  </SwiperSlide>
+                ]}
           </SlideProgress>
         </Box>
       </Container>
