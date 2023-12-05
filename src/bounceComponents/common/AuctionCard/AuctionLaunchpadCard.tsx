@@ -190,7 +190,13 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
     <LaunchpadContainer onClick={() => navigate(link)}>
       <LaunchpadHead>
         <Image
-          style={{ width: '100%', height: '100%', maxHeight: 250, borderRadius: '24px 24px 0 0', objectFit: 'cover' }}
+          style={{
+            width: '100%',
+            height: isSm ? 220 : 250,
+            maxHeight: 250,
+            borderRadius: '24px 24px 0 0',
+            objectFit: 'cover'
+          }}
           src={poolData.picture1 || DefaultImg}
           className="img"
         />
@@ -317,11 +323,11 @@ const AuctionLaunchpadCard = () => {
             canSwipePrev={canSwipePrev}
             canSwipeNext={canSwipeNext}
             swiperStyle={{
-              style: { height: 500 },
+              style: { height: isSm ? '100%' : 500 },
               spaceBetween: 20,
-              slidesPerView: isSm ? 1 : 2,
+              slidesPerView: isSm ? 1.2 : 2,
               loop: isSm,
-              autoplay: isSm,
+              // autoplay: isSm,
               freeMode: true
             }}
           >
@@ -333,13 +339,6 @@ const AuctionLaunchpadCard = () => {
                 ))
               : []}
           </SlideProgress>
-          {data && data.list.length > 0
-            ? data.list.map(i => (
-                <SwiperSlide key={i.poolInfo.poolId}>
-                  <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
-                </SwiperSlide>
-              ))
-            : []}
         </Box>
       </Container>
     </Box>
