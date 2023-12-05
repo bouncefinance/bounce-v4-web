@@ -162,10 +162,11 @@ const MoreButton = styled(Button)`
   align-items: center;
   gap: 6px;
   border-radius: 100px;
-  background: #121212;
-  color: #fff;
+  background: #e1f25c;
+  color: #121212;
   &:hover {
-    color: #121212;
+    color: #fff;
+    background: #121212;
   }
 `
 const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; baseData: IBasicInfoParams }) => {
@@ -177,8 +178,9 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
     return chainInfo
   }, [optionDatas.chainInfoOpt, poolData.chainId])
   const { openAt, closeAt } = poolData
-  const token0 = useToken(poolData.token0 || '', curChain?.ethChainId || undefined)
-  const token1 = useToken(poolData.token1 || '', curChain?.ethChainId || undefined)
+  const token0 = useToken(poolData.token0 || '', curChain?.ethChainId || ChainId.SEPOLIA)
+
+  const token1 = useToken(poolData.token1 || '', curChain?.ethChainId || ChainId.SEPOLIA)
   const status = useMemo(() => {
     const cur = new Date().valueOf() / 1000
     if (!openAt || !closeAt) return ChainPoolStatus.Upcoming
@@ -270,24 +272,26 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
         <Stack sx={{ width: '100%' }} flex={1} gap={8}>
           <LaunchpadLabelContainer>
             <LaunchpadLabelTitle>Token Name</LaunchpadLabelTitle>
-            <LaunchpadLabelTitle className="w">{token0?.name || token0?.symbol}</LaunchpadLabelTitle>
+            <LaunchpadLabelTitle className="w">
+              {(token0?.name || token0?.symbol)?.toLocaleUpperCase()}
+            </LaunchpadLabelTitle>
           </LaunchpadLabelContainer>
           <LaunchpadLabelContainer>
             <LaunchpadLabelTitle>Token Price</LaunchpadLabelTitle>
             <LaunchpadLabelTitle className="w">
-              {poolData.ratio} {token1?.name || token1?.symbol}
+              {poolData.ratio} {(token1?.name || token1?.symbol)?.toLocaleUpperCase()}
             </LaunchpadLabelTitle>
           </LaunchpadLabelContainer>
-          <LaunchpadLabelContainer className="last">
-            <LaunchpadLabelTitle>Token Name</LaunchpadLabelTitle>
-            <LaunchpadLabelTitle className="w">{poolData.token0Name}</LaunchpadLabelTitle>
+          <LaunchpadLabelContainer>
+            <LaunchpadLabelTitle>Blockchain</LaunchpadLabelTitle>
+            <LaunchpadLabelTitle className="w">{curChain?.chainName}</LaunchpadLabelTitle>
           </LaunchpadLabelContainer>
-          <MoreButton
-            onClick={() => navigate('/launchpad')}
-            style={{ background: isSm ? '#E1F25C' : '', color: isSm ? '#121212' : '' }}
-          >
-            View more
-          </MoreButton>
+          <LaunchpadLabelContainer>
+            <LaunchpadLabelTitle>Amount</LaunchpadLabelTitle>
+            <LaunchpadLabelTitle className="w">{poolData.totalAmount0}</LaunchpadLabelTitle>
+          </LaunchpadLabelContainer>
+
+          <MoreButton onClick={() => navigate('/launchpad')}>View more</MoreButton>
         </Stack>
       </LaunchpadContent>
     </LaunchpadContainer>
@@ -355,9 +359,11 @@ const AuctionLaunchpadCard = () => {
           >
             {data && data.list.length > 0
               ? data.list.map(i => (
-                  <SwiperSlide key={i.poolInfo.poolId}>
-                    <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
-                  </SwiperSlide>
+                  <>
+                    <SwiperSlide key={i.poolInfo.poolId}>
+                      <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
+                    </SwiperSlide>
+                  </>
                 ))
               : [
                   <SwiperSlide key={1}>
