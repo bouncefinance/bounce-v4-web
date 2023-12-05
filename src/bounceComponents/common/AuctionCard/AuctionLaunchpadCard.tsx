@@ -243,7 +243,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
             {data.social}
           </Row>
         </Stack>
-        <Stack sx={{ maxWidth: 234, flex: 1 }} gap={8}>
+        <Stack sx={{ maxWidth: 234, flex: 1, width: '100%' }} gap={8}>
           {data.moreData.map(i => (
             <LaunchpadLabelContainer key={i.title}>
               <LaunchpadLabelTitle>{i.title}</LaunchpadLabelTitle>
