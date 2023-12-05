@@ -5,7 +5,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { useRequest } from 'ahooks'
 import { searchLaunchpad } from 'api/user'
 import { IAuctionTypeMap, IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'components/Image'
 import { ChainId, ChainListMap } from 'constants/chain'
 import TokenImage from '../TokenImage'
@@ -311,8 +311,12 @@ const AuctionLaunchpadCard = () => {
   const ref = useRef<any>(null)
   const swiper = useRef<SwiperCore>()
   const [swipePrev, canSwipePrev] = useState(false)
-  const [swipeNext, canSwipeNext] = useState(data?.list?.length && data.list.length > 2)
-
+  const [swipeNext, canSwipeNext] = useState(false)
+  useEffect(() => {
+    if (data?.list?.length && data.list.length > 2 && !swipeNext) {
+      canSwipeNext(true)
+    }
+  }, [data?.list.length, swipeNext])
   return (
     <Box sx={{ padding: isSm ? '60px 16px 80px 16px' : '100px 72px 120px', background: '#F6F6F3' }}>
       <Container
