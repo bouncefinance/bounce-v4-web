@@ -1,5 +1,4 @@
-import styled from '@emotion/styled'
-import { Box, Container, Typography, Stack, Link, Button, Skeleton } from '@mui/material'
+import { Box, Container, Typography, Stack, Link, Button, Skeleton, styled } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { useRequest } from 'ahooks'
@@ -135,7 +134,7 @@ const LaunchpadLabelTitle = styled(Typography)`
     line-height: 150%;
   }
 `
-const LaunchpadContainer = styled(Box)({
+const LaunchpadContainer = styled(Box)(({ theme }) => ({
   width: '100%',
   maxWidth: 680,
   borderRadius: 24,
@@ -150,8 +149,11 @@ const LaunchpadContainer = styled(Box)({
     '& .img': {
       transform: 'scale(1.2)'
     }
+  },
+  [theme.breakpoints.up('sm')]: {
+    minWidth: 450
   }
-})
+}))
 const MoreButton = styled(Button)`
   width: max-content;
   display: flex;
