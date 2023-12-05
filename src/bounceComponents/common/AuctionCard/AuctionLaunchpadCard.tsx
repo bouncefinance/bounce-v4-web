@@ -79,15 +79,15 @@ const LaunchpadHeadContent = styled(Box)`
   width: 100%;
   height: 100%;
 `
-const LaunchpadContent = styled(Box)(({ theme }) => ({
+const LaunchpadContent = styled(Box)(({}) => ({
   display: 'flex',
   padding: ' 16px 24px 24px 24px',
   alignItems: 'flex-start',
-  gap: 60,
-  [theme.breakpoints.down('sm')]: {
-    padding: '12px 16px 16px 16px',
-    gap: 24
-  }
+  gap: 60
+  // [theme.breakpoints.down('sm')]: {
+  //   padding: '12px 16px 16px 16px',
+  //   gap: 24
+  // }
 }))
 
 const LaunchpadProjectTitle = styled(Typography)`
@@ -227,7 +227,10 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
           )}
         </LaunchpadHeadContent>
       </LaunchpadHead>
-      <LaunchpadContent flexDirection={isSm ? 'column' : 'row'}>
+      <LaunchpadContent
+        style={{ padding: isSm ? '12px 16px 16px 16px' : '16px 24px 24px 24px', gap: isSm ? 24 : 60 }}
+        flexDirection={isSm ? 'column' : 'row'}
+      >
         <Stack gap={16} flex={1}>
           <Stack flexDirection={'row'} gap={12}>
             <Image
@@ -277,7 +280,12 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
             <LaunchpadLabelTitle>Token Name</LaunchpadLabelTitle>
             <LaunchpadLabelTitle className="w">{poolData.token0Name}</LaunchpadLabelTitle>
           </LaunchpadLabelContainer>
-          <MoreButton onClick={() => navigate('/launchpad')}>View more</MoreButton>
+          <MoreButton
+            onClick={() => navigate('/launchpad')}
+            style={{ background: isSm ? '#E1F25C' : '', color: isSm ? '#121212' : '' }}
+          >
+            View more
+          </MoreButton>
         </Stack>
       </LaunchpadContent>
     </LaunchpadContainer>
@@ -332,15 +340,13 @@ const AuctionLaunchpadCard = () => {
               pagination: isSm
             }}
           >
-            <>
-              {data && data.list.length > 0
-                ? data.list.map(i => (
-                    <SwiperSlide key={i.poolInfo.poolId}>
-                      <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
-                    </SwiperSlide>
-                  ))
-                : []}
-            </>
+            {data && data.list.length > 0
+              ? data.list.map(i => (
+                  <SwiperSlide key={i.poolInfo.poolId}>
+                    <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
+                  </SwiperSlide>
+                ))
+              : []}
           </SlideProgress>
         </Box>
       </Container>
