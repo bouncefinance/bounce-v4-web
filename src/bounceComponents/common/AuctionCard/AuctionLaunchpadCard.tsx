@@ -127,6 +127,7 @@ const LaunchpadLabelTitle = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   line-height: 140%; /* 19.6px */
+  white-space: nowrap;
   &.w {
     font-weight: 500;
     line-height: 150%;
@@ -219,7 +220,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
         style={{ padding: isSm ? '12px 16px 16px 16px' : '16px 24px 24px 24px', gap: isSm ? 24 : 60 }}
         flexDirection={isSm ? 'column' : 'row'}
       >
-        <Stack gap={16} flex={1}>
+        <Stack gap={16} sx={{ maxWidth: 234, flex: 1 }}>
           <Stack flexDirection={'row'} gap={12}>
             <Image
               style={{ width: isSm ? 24 : 32, height: isSm ? 24 : 32, borderRadius: isSm ? 24 : 32 }}
@@ -238,11 +239,11 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
           >
             {data.desc}
           </LaunchpadDescription>
-          <Row mt={10} gap={6}>
+          <Row mt={10} gap={6} sx={{ overflow: 'hidden' }}>
             {data.social}
           </Row>
         </Stack>
-        <Stack sx={{ width: '100%' }} flex={1} gap={8}>
+        <Stack sx={{ maxWidth: 234, flex: 1 }} gap={8}>
           {data.moreData.map(i => (
             <LaunchpadLabelContainer key={i.title}>
               <LaunchpadLabelTitle>{i.title}</LaunchpadLabelTitle>
