@@ -27,6 +27,7 @@ import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 import { BinanceWallet } from 'web3-react-binance-wallet'
 import { BitGet } from './BitGet'
+import { toast } from 'react-toastify'
 
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`)
@@ -176,6 +177,10 @@ const OKXWalletConnection: Connection = {
   shouldDisplay: () => true,
   overrideActivate: () => {
     if (!getIsOkxWallet()) {
+      if (isMobile) {
+        toast('Please open in OKX Wallet')
+        return true
+      }
       window.open('https://www.okx.com/download')
       return true
     }
