@@ -323,21 +323,24 @@ const AuctionLaunchpadCard = () => {
             canSwipePrev={canSwipePrev}
             canSwipeNext={canSwipeNext}
             swiperStyle={{
-              style: { height: isSm ? '100%' : 500 },
+              style: { height: isSm ? '100%' : 500, paddingBottom: isSm ? 50 : 0 },
               spaceBetween: 20,
               slidesPerView: isSm ? 1.2 : 2,
               loop: isSm,
               // autoplay: isSm,
-              freeMode: true
+              freeMode: true,
+              pagination: isSm
             }}
           >
-            {data && data.list.length > 0
-              ? data.list.map(i => (
-                  <SwiperSlide key={i.poolInfo.poolId}>
-                    <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
-                  </SwiperSlide>
-                ))
-              : []}
+            <>
+              {data && data.list.length > 0
+                ? data.list.map(i => (
+                    <SwiperSlide key={i.poolInfo.poolId}>
+                      <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
+                    </SwiperSlide>
+                  ))
+                : []}
+            </>
           </SlideProgress>
         </Box>
       </Container>
