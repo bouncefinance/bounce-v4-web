@@ -5,6 +5,7 @@ import { AuctionRankCard } from '../../bounceComponents/common/AuctionCard/Aucti
 import { ActiveUser } from '../../bounceComponents/common/AuctionCard/AuctionActiveCard'
 import TokenAuction from '../../components/TokenAuction'
 import AuctionLaunchpadCard from '../../bounceComponents/common/AuctionCard/AuctionLaunchpadCard'
+import AuctionToolBoxCard from '../../bounceComponents/common/AuctionCard/AuctionToolBoxCard'
 const Market: React.FC = ({}) => {
   return (
     <>
@@ -12,6 +13,7 @@ const Market: React.FC = ({}) => {
       <AuctionLaunchpadCard />
       <AuctionRankCard />
       <TokenAuction />
+      <AuctionToolBoxCard />
       <ActiveUser />
       <FooterPc />
     </>

@@ -33,7 +33,7 @@ const Title = styled(Typography)`
   line-height: 130%; /* 57.2px */
   letter-spacing: -0.88px;
 `
-const ArrowBg = styled(Box)`
+export const ArrowBg = styled(Box)`
   display: flex;
   width: 48px;
   height: 48px;
