@@ -1,25 +1,23 @@
-import { Box, Container, Typography, Stack, Link, Button, Skeleton, styled } from '@mui/material'
+import { Box, Container, Typography, Stack, Button, styled } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import { useRequest } from 'ahooks'
-import { searchLaunchpad } from 'api/user'
-import { IAuctionTypeMap, IBasicInfoParams, IPoolInfoParams, PoolStatus } from 'pages/launchpad/create-launchpad/type'
-import { useEffect, useMemo, useRef, useState } from 'react'
+
+import { useMemo, useRef, useState } from 'react'
 import Image from 'components/Image'
-import { ChainId, ChainListMap } from 'constants/chain'
-import TokenImage from '../TokenImage'
-import { RoundedBox, SansTitle, socialMap } from 'pages/account/AccountPrivateLaunchpad'
-import { useOptionDatas } from 'state/configOptions/hooks'
+
+import { RoundedBox } from 'pages/account/AccountPrivateLaunchpad'
+
 import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 import { Row } from 'components/Layout'
-import { useToken } from 'state/wallet/hooks'
+
 import { useNavigate } from 'react-router-dom'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { SlideProgress } from 'bounceComponents/auction/SlideProgress'
 import SwiperCore from 'swiper'
 import { SwiperSlide } from 'swiper/react'
 import DefaultImg from 'assets/imgs/auction/default-img.jpg'
+import { IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
 const Title = styled(Typography)`
   color: #121212;
   leading-trim: both;
@@ -169,20 +167,12 @@ const MoreButton = styled(Button)`
     background: #121212;
   }
 `
-const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; baseData: IBasicInfoParams }) => {
+const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
   const navigate = useNavigate()
-  const optionDatas = useOptionDatas()
-  const link = useMemo(() => `/account/launchpad/${poolData.id}?party=${baseData.id}`, [baseData.id, poolData.id])
-  const curChain = useMemo(() => {
-    const chainInfo = optionDatas.chainInfoOpt?.find(item => item.id === poolData.chainId)
-    return chainInfo
-  }, [optionDatas.chainInfoOpt, poolData.chainId])
-  const { openAt, closeAt } = poolData
-  const token0 = useToken(poolData.token0 || '', curChain?.ethChainId || ChainId.SEPOLIA)
-
-  const token1 = useToken(poolData.token1 || '', curChain?.ethChainId || ChainId.SEPOLIA)
+  const link = data.liveLink || data.upcomingLink || ''
+  const [openAt, closeAt] = [data.liveTimeStamp.start, data.liveTimeStamp.end]
   const status = useMemo(() => {
-    const cur = new Date().valueOf() / 1000
+    const cur = new Date().valueOf()
     if (!openAt || !closeAt) return ChainPoolStatus.Upcoming
     if (cur < openAt) return ChainPoolStatus.Upcoming
     if (cur >= openAt && cur <= closeAt) return ChainPoolStatus.Live
@@ -201,7 +191,7 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
             borderRadius: '24px 24px 0 0',
             objectFit: 'cover'
           }}
-          src={poolData.picture1 || DefaultImg}
+          src={data.img || DefaultImg}
           className="img"
         />
         <LaunchpadHeadContent
@@ -212,23 +202,17 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
           }}
         >
           <Stack flexDirection={'row'} gap={4}>
-            <RoundedBox>
-              <TokenImage src={ChainListMap[poolData.chainId as ChainId]?.logo} size={12} />
-              <SansTitle sx={{ color: '#FFF' }}>{curChain?.chainName}</SansTitle>
-            </RoundedBox>
-            <RoundedBox sx={{ color: '#E1F25C', fontSize: 12 }}>
-              {Object.assign({}, IAuctionTypeMap)[poolData.category]}
-            </RoundedBox>
+            <RoundedBox sx={{ color: '#E1F25C', fontSize: 12 }}>{data.poolTypeName}</RoundedBox>
           </Stack>
-          {poolData.status === PoolStatus.On_Chain && (
-            <PoolStatusBox
-              style={{ width: 'max-content', height: 'max-content' }}
-              status={status}
-              claimAt={poolData.claimAt || 0}
-              closeTime={poolData.closeAt as number}
-              openTime={poolData.openAt as number}
-            />
-          )}
+
+          <PoolStatusBox
+            style={{ width: 'max-content', height: 'max-content' }}
+            status={status}
+            claimAt={0}
+            closeTime={closeAt / 1000}
+            openTime={openAt / 1000}
+            hideUpcomingCountdown={!closeAt}
+          />
         </LaunchpadHeadContent>
       </LaunchpadHead>
       <LaunchpadContent
@@ -239,9 +223,9 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
           <Stack flexDirection={'row'} gap={12}>
             <Image
               style={{ width: isSm ? 24 : 32, height: isSm ? 24 : 32, borderRadius: isSm ? 24 : 32 }}
-              src={baseData.projectLogo}
+              src={data.avatar}
             />
-            <LaunchpadProjectTitle fontSize={isSm ? 16 : 22}>{baseData.projectName}</LaunchpadProjectTitle>
+            <LaunchpadProjectTitle fontSize={isSm ? 16 : 22}>{data.title}</LaunchpadProjectTitle>
           </Stack>
           <LaunchpadDescription
             sx={{
@@ -252,77 +236,40 @@ const LaunchpadCardItem = ({ poolData, baseData }: { poolData: IPoolInfoParams; 
               textOverflow: 'ellipsis'
             }}
           >
-            {baseData.description}
+            {data.desc}
           </LaunchpadDescription>
           <Row mt={10} gap={6}>
-            {baseData?.community
-              .filter(item => !!item.communityLink)
-              .map((item, index) => (
-                <Link
-                  sx={{ width: 24, height: 24 }}
-                  key={item.communityName + index}
-                  href={item.communityLink}
-                  target="_blank"
-                >
-                  <Image width={'100%'} height={'100%'} src={socialMap[item.communityName]} />
-                </Link>
-              ))}
+            {data.social}
           </Row>
         </Stack>
         <Stack sx={{ width: '100%' }} flex={1} gap={8}>
-          <LaunchpadLabelContainer>
-            <LaunchpadLabelTitle>Token Name</LaunchpadLabelTitle>
-            <LaunchpadLabelTitle className="w">
-              {(token0?.name || token0?.symbol)?.toLocaleUpperCase()}
-            </LaunchpadLabelTitle>
-          </LaunchpadLabelContainer>
-          <LaunchpadLabelContainer>
-            <LaunchpadLabelTitle>Token Price</LaunchpadLabelTitle>
-            <LaunchpadLabelTitle className="w">
-              {poolData.ratio} {(token1?.name || token1?.symbol)?.toLocaleUpperCase()}
-            </LaunchpadLabelTitle>
-          </LaunchpadLabelContainer>
-          <LaunchpadLabelContainer>
-            <LaunchpadLabelTitle>Blockchain</LaunchpadLabelTitle>
-            <LaunchpadLabelTitle className="w">{curChain?.chainName}</LaunchpadLabelTitle>
-          </LaunchpadLabelContainer>
-          <LaunchpadLabelContainer>
-            <LaunchpadLabelTitle>Amount</LaunchpadLabelTitle>
-            <LaunchpadLabelTitle className="w">{poolData.totalAmount0}</LaunchpadLabelTitle>
-          </LaunchpadLabelContainer>
-
+          {data.moreData.map(i => (
+            <LaunchpadLabelContainer key={i.title}>
+              <LaunchpadLabelTitle>{i.title}</LaunchpadLabelTitle>
+              <LaunchpadLabelTitle className="w">{i.content}</LaunchpadLabelTitle>
+            </LaunchpadLabelContainer>
+          ))}
           <MoreButton onClick={() => navigate('/launchpad')}>View more</MoreButton>
         </Stack>
       </LaunchpadContent>
     </LaunchpadContainer>
   )
 }
-const ItemSkeleton = () => {
-  const isSm = useBreakpoint('sm')
-  return (
-    <Stack sx={{ width: '100%', height: isSm ? 590 : '100%', overflow: 'hidden', borderRadius: 24 }}>
-      <Skeleton variant="rectangular" width={'100%'} height={'100%'} />
-    </Stack>
-  )
-}
+// const ItemSkeleton = () => {
+//   const isSm = useBreakpoint('sm')
+//   return (
+//     <Stack sx={{ width: '100%', height: isSm ? 590 : '100%', overflow: 'hidden', borderRadius: 24 }}>
+//       <Skeleton variant="rectangular" width={'100%'} height={'100%'} />
+//     </Stack>
+//   )
+// }
 const AuctionLaunchpadCard = () => {
-  const { data } = useRequest(async () => {
-    const res = await searchLaunchpad({})
-    return {
-      list: res.data.list
-    }
-  })
-
   const isSm = useBreakpoint('sm')
   const ref = useRef<any>(null)
   const swiper = useRef<SwiperCore>()
   const [swipePrev, canSwipePrev] = useState(false)
-  const [swipeNext, canSwipeNext] = useState(false)
-  useEffect(() => {
-    if (data?.list?.length && data.list.length > 2 && !swipeNext) {
-      canSwipeNext(true)
-    }
-  }, [data?.list.length, swipeNext])
+  const [swipeNext, canSwipeNext] = useState(true)
+
   return (
     <Box sx={{ padding: isSm ? '60px 16px 80px 16px' : '100px 72px 120px', background: '#F6F6F3' }}>
       <Container
@@ -357,22 +304,13 @@ const AuctionLaunchpadCard = () => {
               pagination: isSm
             }}
           >
-            {data && data.list.length > 0
-              ? data.list.map(i => (
-                  <>
-                    <SwiperSlide key={i.poolInfo.poolId}>
-                      <LaunchpadCardItem poolData={i.poolInfo} baseData={i.basicInfo} />
-                    </SwiperSlide>
-                  </>
-                ))
-              : [
-                  <SwiperSlide key={1}>
-                    <ItemSkeleton />
-                  </SwiperSlide>,
-                  <SwiperSlide key={2}>
-                    <ItemSkeleton />
-                  </SwiperSlide>
-                ]}
+            {PrivatePadDataList.filter(t => !t.hidden).map(i => (
+              <>
+                <SwiperSlide key={i.keyId}>
+                  <LaunchpadCardItem data={i} />
+                </SwiperSlide>
+              </>
+            ))}
           </SlideProgress>
         </Box>
       </Container>
