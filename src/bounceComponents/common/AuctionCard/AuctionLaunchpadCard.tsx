@@ -311,7 +311,7 @@ const AuctionLaunchpadCard = () => {
             swiperStyle={{
               style: { height: isSm ? '100%' : 500, paddingBottom: isSm ? 50 : 0 },
               spaceBetween: 30,
-              slidesPerView: isSm ? 1.2 : 1.9,
+              slidesPerView: isSm ? 1.2 : 1.95,
               loop: isSm,
               // autoplay: isSm,
               freeMode: true,
