@@ -253,7 +253,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
         <Stack
           flexDirection={'column'}
           justifyContent={'space-between'}
-          sx={{ [theme.breakpoints.up('sm')]: { flex: 1 }, height: isSm ? 192 : 184, width: '100%' }}
+          sx={{ [theme.breakpoints.up('sm')]: { flex: 1 }, height: isSm ? 192 : 210, width: '100%' }}
         >
           <Stack gap={8}>
             {data.moreData.map(i => (
@@ -302,7 +302,7 @@ const AuctionLaunchpadCard = () => {
             </ArrowBg>
           </Stack>
         </Stack>
-        <Box ref={ref} mt={isSm ? 40 : 60}>
+        <Box ref={ref} mt={isSm ? 40 : 60} ml={'-16px'}>
           <SlideProgress
             hideArrow
             swiperRef={swiper}

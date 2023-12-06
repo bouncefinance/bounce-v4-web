@@ -75,7 +75,7 @@ const ContentTitle = styled(Typography)`
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 60px;
-  &.link {
+  & .link {
     color: #1b52e1;
   }
 `
@@ -106,7 +106,11 @@ const AuctionBotDoCard = () => {
                   <CircleTitle>1</CircleTitle>
                 </Circle>
                 <ContentTitle>
-                  Go to <span className="link">@BotFather</span>.{' '}
+                  Go to{' '}
+                  <a href="https://telegram.me/BotFather" target="_blank" rel="noreferrer" className="link">
+                    @BotFather
+                  </a>
+                  .{' '}
                   {`Press his name to do that and then press 'Send
                   Messege' if it's needed.`}
                 </ContentTitle>

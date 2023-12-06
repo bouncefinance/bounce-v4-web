@@ -166,7 +166,7 @@ const AuctionToolBoxCard = () => {
         <Title>
           Token <span style={{ color: '#A4D220' }}>ToolBox</span>
         </Title>
-        <Box ref={ref} mt={isSm ? 40 : 60}>
+        <Box ref={ref} mt={isSm ? 40 : 60} ml={'-16px'}>
           <SlideProgress
             hideArrow
             swiperRef={swiper}
@@ -174,8 +174,8 @@ const AuctionToolBoxCard = () => {
             canSwipeNext={() => {}}
             swiperStyle={{
               style: { paddingBottom: isSm ? 50 : 0 },
-              spaceBetween: isSm ? 16 : 20,
-              slidesPerView: isSm ? 1.8 : 5,
+              spaceBetween: isSm ? 25 : 20,
+              slidesPerView: isSm ? 1.7 : 5,
               freeMode: true,
               pagination: isSm
             }}

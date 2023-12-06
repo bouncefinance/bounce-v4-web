@@ -441,6 +441,8 @@ const TokenAuction: React.FC = () => {
             ? isSm
               ? 1450
               : 1288
+            : isSm
+            ? 850
             : 650,
         margin: '0 auto'
       }}
