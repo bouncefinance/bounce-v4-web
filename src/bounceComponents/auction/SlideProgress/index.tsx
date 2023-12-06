@@ -68,8 +68,8 @@ const SwiperStyle = styled(Swiper)(() => ({
     height: 10,
     border: '1px solid  rgba(18, 18, 18, 0.60)',
     borderRadius: 10,
-    background: '#fff',
-    margin: '0 12px !important'
+    background: '#fff'
+    // margin: '0 12px !important'
   },
   '& .swiper-pagination>.swiper-pagination-bullet-active': {
     background: 'rgba(18, 18, 18, 0.60)'

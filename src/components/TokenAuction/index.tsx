@@ -79,7 +79,7 @@ const InfoBox = (props: InfoBoxParams) => {
 }
 
 const enum AuctionType {
-  TokenAuction = 'Token Auction',
+  TokenAuction = 'Permissionless Auction',
   NFTAuction = 'NFT Auction',
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
@@ -518,57 +518,57 @@ const TokenAuction: React.FC = () => {
               {`${currentIndex + 1} / ${AuctionList.length}`}
             </Typography>
           )}
-          {!isSm && (
-            <Box
-              sx={{
-                '@media(max-width:1360px)': {
-                  '&>div:nth-child(1)': {
-                    left: 20
-                  },
-                  '&>div:nth-child(2)': {
-                    left: 130
-                  },
-                  '&>div:nth-child(3)': {
-                    left: 20
-                  }
+          {/* {!isSm && ( */}
+          <Box
+            sx={{
+              '@media(max-width:1360px)': {
+                '&>div:nth-child(1)': {
+                  left: 20
+                },
+                '&>div:nth-child(2)': {
+                  left: 130
+                },
+                '&>div:nth-child(3)': {
+                  left: 20
                 }
+              }
+            }}
+          >
+            <InfoBox
+              title={'Trending Token Auction'}
+              value={showData.trendingTokenAuction}
+              logo={<TrendingIcon />}
+              style={{
+                position: 'absolute',
+                width: 220,
+                color: '#ffffff',
+                marginBottom: 30,
+                bottom: 161,
+                left: 0
               }}
-            >
-              <InfoBox
-                title={'Trending Token Auction'}
-                value={showData.trendingTokenAuction}
-                logo={<TrendingIcon />}
-                style={{
-                  position: 'absolute',
-                  width: 220,
-                  color: '#ffffff',
-                  marginBottom: 30,
-                  bottom: 161,
-                  left: 0
-                }}
-              />
-              <InfoBox
-                title={'Total Value'}
-                value={showData.totalValue}
-                logo={<TotalValueIcon />}
-                style={{
-                  position: 'absolute',
-                  bottom: 48,
-                  left: 0
-                }}
-              />
-              <InfoBox
-                title={'Total Auction'}
-                value={showData.totalAuction}
-                logo={<TotalAuctionIcon />}
-                style={{
-                  position: 'absolute',
-                  bottom: 48,
-                  left: 220
-                }}
-              />
-            </Box>
-          )}
+            />
+            <InfoBox
+              title={'Total Value'}
+              value={showData.totalValue}
+              logo={<TotalValueIcon />}
+              style={{
+                position: 'absolute',
+                bottom: 48,
+                left: 0
+              }}
+            />
+            <InfoBox
+              title={'Total Auction'}
+              value={showData.totalAuction}
+              logo={<TotalAuctionIcon />}
+              style={{
+                position: 'absolute',
+                bottom: 48,
+                left: 220
+              }}
+            />
+          </Box>
+          {/* )} */}
 
           <Box
             sx={{

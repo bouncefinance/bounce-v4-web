@@ -1,11 +1,11 @@
-import { Box, Container, Typography, Stack, Button, styled } from '@mui/material'
+import { Box, Container, Typography, Stack, Button, styled, useTheme } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 import { useMemo, useRef, useState } from 'react'
 import Image from 'components/Image'
 
-import { RoundedBox } from 'pages/account/AccountPrivateLaunchpad'
+import { RoundedBox, SansTitle } from 'pages/account/AccountPrivateLaunchpad'
 
 import { PoolStatus as ChainPoolStatus } from 'api/pool/type'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
@@ -18,6 +18,8 @@ import SwiperCore from 'swiper'
 import { SwiperSlide } from 'swiper/react'
 import DefaultImg from 'assets/imgs/auction/default-img.jpg'
 import { IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
+import TokenImage from '../TokenImage'
+import { SUPPORTED_NETWORKS } from 'constants/chain'
 const Title = styled(Typography)`
   color: #121212;
   leading-trim: both;
@@ -116,6 +118,7 @@ const LaunchpadLabelContainer = styled(Box)`
   align-items: center;
   padding-bottom: 8px;
   border-bottom: 1px solid #e8e9e4;
+  /* height: 144px; */
   &.last {
     border-bottom: none;
   }
@@ -180,7 +183,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
     return ChainPoolStatus.Closed
   }, [openAt, closeAt])
   const isSm = useBreakpoint('sm')
-
+  const theme = useTheme()
   return (
     <LaunchpadContainer onClick={() => navigate(link)}>
       <LaunchpadHead>
@@ -203,6 +206,10 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
           }}
         >
           <Stack flexDirection={'row'} gap={4}>
+            <RoundedBox>
+              <TokenImage src={SUPPORTED_NETWORKS[data.chainId].nativeCurrency.logo} size={13} />
+              <SansTitle sx={{ color: '#FFF' }}>{SUPPORTED_NETWORKS[data.chainId].chainName}</SansTitle>
+            </RoundedBox>
             <RoundedBox sx={{ color: '#E1F25C', fontSize: 12 }}>{data.poolTypeName}</RoundedBox>
           </Stack>
 
@@ -220,7 +227,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
         style={{ padding: isSm ? '12px 16px 16px 16px' : '16px 24px 24px 24px', gap: isSm ? 24 : 60 }}
         flexDirection={isSm ? 'column' : 'row'}
       >
-        <Stack gap={16} sx={{ maxWidth: 234, flex: 1 }}>
+        <Stack gap={16} sx={{ flex: 1 }}>
           <Stack flexDirection={'row'} gap={12}>
             <Image
               style={{ width: isSm ? 24 : 32, height: isSm ? 24 : 32, borderRadius: isSm ? 24 : 32 }}
@@ -243,13 +250,19 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
             {data.social}
           </Row>
         </Stack>
-        <Stack sx={{ maxWidth: 234, flex: 1, width: '100%' }} gap={8}>
-          {data.moreData.map(i => (
-            <LaunchpadLabelContainer key={i.title}>
-              <LaunchpadLabelTitle>{i.title}</LaunchpadLabelTitle>
-              <LaunchpadLabelTitle className="w">{i.content}</LaunchpadLabelTitle>
-            </LaunchpadLabelContainer>
-          ))}
+        <Stack
+          flexDirection={'column'}
+          justifyContent={'space-between'}
+          sx={{ [theme.breakpoints.up('sm')]: { flex: 1 }, height: isSm ? 192 : 184, width: '100%' }}
+        >
+          <Stack gap={8}>
+            {data.moreData.map(i => (
+              <LaunchpadLabelContainer key={i.title}>
+                <LaunchpadLabelTitle>{i.title}</LaunchpadLabelTitle>
+                <LaunchpadLabelTitle className="w">{i.content}</LaunchpadLabelTitle>
+              </LaunchpadLabelContainer>
+            ))}
+          </Stack>
           <MoreButton onClick={() => navigate('/launchpad')}>View more</MoreButton>
         </Stack>
       </LaunchpadContent>
@@ -297,21 +310,23 @@ const AuctionLaunchpadCard = () => {
             canSwipeNext={canSwipeNext}
             swiperStyle={{
               style: { height: isSm ? '100%' : 500, paddingBottom: isSm ? 50 : 0 },
-              spaceBetween: 20,
-              slidesPerView: isSm ? 1.2 : 2,
+              spaceBetween: 30,
+              slidesPerView: isSm ? 1.2 : 1.9,
               loop: isSm,
               // autoplay: isSm,
               freeMode: true,
               pagination: isSm
             }}
           >
-            {PrivatePadDataList.filter(t => !t.hidden).map(i => (
-              <>
-                <SwiperSlide key={i.keyId}>
-                  <LaunchpadCardItem data={i} />
-                </SwiperSlide>
-              </>
-            ))}
+            {PrivatePadDataList.filter(t => !t.hidden)
+              .slice(0, 6)
+              .map(i => (
+                <>
+                  <SwiperSlide key={i.keyId}>
+                    <LaunchpadCardItem data={i} />
+                  </SwiperSlide>
+                </>
+              ))}
           </SlideProgress>
         </Box>
       </Container>

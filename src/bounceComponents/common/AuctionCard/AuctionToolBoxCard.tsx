@@ -174,8 +174,8 @@ const AuctionToolBoxCard = () => {
             canSwipeNext={() => {}}
             swiperStyle={{
               style: { paddingBottom: isSm ? 50 : 0 },
-              spaceBetween: 20,
-              slidesPerView: isSm ? 1.5 : 5,
+              spaceBetween: isSm ? 16 : 20,
+              slidesPerView: isSm ? 1.8 : 5,
               freeMode: true,
               pagination: isSm
             }}
