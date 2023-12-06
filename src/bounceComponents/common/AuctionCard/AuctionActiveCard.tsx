@@ -279,11 +279,13 @@ export const ActiveUser: React.FC = () => {
             canSwipePrev={canSwipePrev}
             canSwipeNext={canSwipeNext}
             swiperStyle={{
+              style: { paddingBottom: isSm ? 50 : '' },
               spaceBetween: 20,
               slidesPerView: slidesPerView,
               loop: isSm,
               autoplay: isSm,
-              freeMode: true
+              freeMode: true,
+              pagination: isSm
             }}
           >
             {data && data?.list && data.list.length
