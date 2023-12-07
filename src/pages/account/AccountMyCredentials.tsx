@@ -71,7 +71,7 @@ export default function AccountMyCredentials() {
                 <Box height={32}>
                   <Chip
                     sx={{
-                      width: 84,
+                      width: 'fit-content',
                       height: '100%'
                     }}
                     label={countries.getName(userInfo.location, 'en')}
@@ -94,7 +94,12 @@ export default function AccountMyCredentials() {
             </Stack>
           </Box>
           <Box mt={40} mb={30}>
-            <Stack direction={'row'} sx={{}}>
+            <Stack
+              direction={'row'}
+              sx={{
+                borderBottom: '1px solid #e4e4e4'
+              }}
+            >
               <Stack
                 direction="row"
                 alignItems="center"
@@ -111,8 +116,8 @@ export default function AccountMyCredentials() {
                       onClick={() => setCurTab(item)}
                       key={item}
                       sx={{
-                        borderBottom: curTab === item ? '2px solid #121212' : 'none',
-                        padding: isSm ? '12px 16px 36px' : '16px 32px 40px',
+                        borderBottom: curTab === item ? '2px solid #121212' : '2px solid transparent',
+                        padding: isSm ? '12px 16px 16px' : '16px 32px 20px',
                         fontFamily: 'Inter',
                         cursor: 'pointer',
                         color: curTab === item ? '#121212' : '#959595'
@@ -129,7 +134,6 @@ export default function AccountMyCredentials() {
               sx={{
                 background: '#fff',
                 borderRadius: '20px',
-                mt: -24,
                 position: 'relative'
               }}
             >

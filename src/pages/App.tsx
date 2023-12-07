@@ -109,6 +109,7 @@ import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
 import MyToken from './tokenToolBox/page/tokenMinter/myToken'
 import MyLock from './tokenToolBox/page/tokenlocker/myLock'
 import useBreakpoint from '../hooks/useBreakpoint'
+import CreatePreAuctionPage from './preAuction/create-pre-auction'
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -271,6 +272,7 @@ export default function App() {
                   {/* <Route path={routes.game.equilibriaIndex} element={<Equilibria />} /> */}
                   {/* <Route path={routes.game.equilibriaDetail} element={<Equilibria />} /> */}
                   {/* <Route path={routes.game.bladeDaoPoolDetail} element={<Game />} /> */}
+                  <Route path={routes.preAuction.createNewPreAuciton} element={<CreatePreAuctionPage />} />
                   <Route path={routes.okxActivity} element={<OkxActivity />} />
                   <Route path="*" element={<Navigate to={routes.market.index} replace />} />
                   <Route path="/" element={<Navigate to={routes.market.index} replace />} />

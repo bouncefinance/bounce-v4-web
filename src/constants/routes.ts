@@ -142,5 +142,8 @@ export const routes = {
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'
+  },
+  preAuction: {
+    createNewPreAuciton: '/create-pre-auction'
   }
 }

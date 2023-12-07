@@ -1,72 +1,18 @@
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import { Box } from '@mui/material'
-import { searchPoolAndUser } from 'api/optionsData'
-import DefaultAvaSVG from 'assets/imgs/components/defaultAva.svg'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { routes } from 'constants/routes'
+import { Box, IconButton, OutlinedInput } from '@mui/material'
+import { useLocation } from 'react-router-dom'
 import { whiteLogoRoutes } from '../../../../components/Header'
-import { PoolType } from 'api/pool/type'
-import HeaderSearchInput, { ISearchAllOption } from 'bounceComponents/common/SearchInput/HeaderSearchInput'
+import { ReactComponent as IconSVG } from './icon.svg'
 
-function Search({ opacity }: { opacity?: number }) {
-  const [userData, setUserData] = useState<ISearchAllOption[]>([])
-  const [searchText, setSearchText] = useState<string>('')
-  const [idx, setIdx] = useState(0)
-  const navigate = useNavigate()
+function Search({
+  searchText,
+  setSearchText,
+  placeholder = 'Search'
+}: {
+  searchText: string
+  setSearchText: (text: string) => void
+  placeholder: string
+}) {
   const { pathname } = useLocation()
-  const hintStr = 'Search'
-  const [hint, setHint] = useState(hintStr)
-
-  useEffect(() => {
-    if (searchText.trim().length < 2) return
-    searchPoolAndUser({
-      limit: 100,
-      offset: 0,
-      value: searchText
-    }).then(res => {
-      const { code, data } = res
-      if (code !== 200) {
-        toast.error('search error')
-      }
-      setIdx(data?.pools.length)
-      const temp = data?.users?.map((v: { name: any; avatar: any }) => {
-        return {
-          type: 'User',
-          values: {
-            label: v?.name,
-            icon: v?.avatar || DefaultAvaSVG,
-            value: v
-          }
-        }
-      })
-      const pool = data?.pools?.map(
-        (pl: {
-          name: string
-          poolId: string | number
-          chainId: number
-          tokenType: string
-          category: PoolType
-          token0: any
-        }) => {
-          return {
-            type: 'Auction',
-            values: {
-              name: pl?.name,
-              poolId: pl?.poolId,
-              chainId: pl?.chainId,
-              tokenType: pl?.tokenType,
-              category: pl?.category,
-              token0: pl?.token0,
-              value: pl
-            }
-          }
-        }
-      )
-      const obj: ISearchAllOption[] = [...pool, ...temp]
-      setUserData(obj)
-    })
-  }, [searchText])
 
   return (
     <Box
@@ -97,25 +43,53 @@ function Search({ opacity }: { opacity?: number }) {
         }
       }}
     >
-      <HeaderSearchInput
-        options={userData}
-        filterOptions={(list: any) => list}
-        placeholder={hint}
-        startIcon
-        loadingText={'No result'}
+      <OutlinedInput
+        className="OInput"
         value={searchText}
-        opacity={opacity}
-        idx={idx}
-        onFocus={focus => {
-          setHint(focus ? '' : hintStr)
+        onFocus={() => {}}
+        onBlur={() => {}}
+        placeholder={placeholder}
+        sx={{
+          fontSize: 13,
+          fontFamily: `'Inter'`,
+          borderRadius: 60,
+          height: 44,
+          width: 44,
+          color: '#959595',
+          background: '#F6F6F315!important',
+          '& fieldset': {
+            border: 'none'
+          },
+          '& input:focus': {
+            caretColor: '#000'
+          }
         }}
-        onChange={(_, newValue) => {
-          setSearchText(newValue)
+        onChange={ev => {
+          setSearchText(ev.target.value)
         }}
-        onSelect={(_, newVal) => {
-          setSearchText('')
-          return navigate(`${routes.profile.summary}?id=${newVal?.values.value?.userId}`)
-        }}
+        startAdornment={
+          <IconButton
+            sx={{
+              width: 44,
+              height: 44,
+              borderRadius: 8,
+              transition: 'all 0.4s',
+              background: 'transparent',
+              '& svg path': {
+                stroke: '#959595'
+              },
+              '&:hover': {
+                '& svg path': {}
+              }
+            }}
+            onClick={() => {
+              // handleSearch()
+            }}
+          >
+            <IconSVG />
+          </IconButton>
+        }
+        endAdornment={<></>}
       />
     </Box>
   )

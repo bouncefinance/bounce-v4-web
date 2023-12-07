@@ -35,7 +35,7 @@ import ChainSelect from 'bounceComponents/common/ChainSelect'
 import EmptyData from 'bounceComponents/common/EmptyData'
 import { PoolEventTypography } from 'bounceComponents/fixed-swap/ActionHistory'
 
-const StyledTableCell = styled(TableCell)(() => ({
+export const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     color: '#908E96',
     paddingTop: '4px',
@@ -46,7 +46,7 @@ const StyledTableCell = styled(TableCell)(() => ({
   }
 }))
 
-const StyledTableRow = styled(TableRow)(() => ({
+export const StyledTableRow = styled(TableRow)(() => ({
   '&:nth-of-type(even)': {
     backgroundColor: '#fff',
 
