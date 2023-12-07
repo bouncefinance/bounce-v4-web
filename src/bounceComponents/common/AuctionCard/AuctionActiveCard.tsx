@@ -53,7 +53,8 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
           boxSizing: 'border-box'
         },
         '&:hover': {
-          border: '1px solid #12121233'
+          border: '1px solid #12121233',
+          boxSizing: 'border-box'
         }
       }}
     >
@@ -74,6 +75,7 @@ const AuctionActiveCard: React.FC<IAuctionActiveCard> = props => {
             <H5
               sx={{
                 width: 'calc(100% - 24px - 8px)',
+                height: 28,
                 overflow: 'hidden',
                 display: '-webkit-box',
                 WebkitLineClamp: 1,
@@ -206,25 +208,28 @@ export const ActiveUser: React.FC = () => {
     padding: 22px;
     width: 48px;
     height: 48px;
-    color: #12121233;
+    /* color: #12121233; */
     border-radius: 100px;
-    border: 1px solid #12121233;
-
+    /* border: 1px solid #12121233; */
+    cursor: pointer;
     &.gray {
-      background: #f6f6f3;
+      border: 1px solid #959595;
+      color: #959595;
+      background: #fff;
+      opacity: 0.3;
     }
 
     &.available {
-      background: var(--ps-yellow-1);
-      color: black;
-      cursor: pointer;
-      border: 1px solid var(--ps-yellow-1);
+      border: 1px solid #20201e;
+      background: #20201e;
+      color: #fff;
     }
 
-    &:hover {
-      background: #121212;
-      color: var(--ps-yellow-1);
-      cursor: pointer;
+    &.available:hover {
+      border: 1px solid #20201e;
+      background: #fff;
+      color: #20201e;
+      opacity: 0.8;
     }
 
     @media (max-width: 600px) {
@@ -248,7 +253,7 @@ export const ActiveUser: React.FC = () => {
         }}
       >
         <BoxSpaceBetween mb={isSm ? 20 : 80}>
-          <H2 ml={isSm ? 16 : 0}>
+          <H2 ml={isSm ? 16 : 0} style={{ fontWeight: 500, fontFamily: 'Inter' }}>
             Most active {isSm && <br />} <YellowSpan>auctioneers</YellowSpan> and <YellowSpan>bidders</YellowSpan>
           </H2>
           <Box
@@ -259,11 +264,11 @@ export const ActiveUser: React.FC = () => {
               margin: isSm ? '8px auto 0' : '0'
             }}
           >
-            <ArrowBg className={swipePrev ? 'available' : ''} onClick={() => swiper?.current?.slidePrev()}>
+            <ArrowBg className={swipePrev ? 'available' : 'gray'} onClick={() => swiper?.current?.slidePrev()}>
               <ArrowBackIcon />
             </ArrowBg>
             <ArrowBg
-              className={swipeNext ? 'available' : ''}
+              className={swipeNext ? 'available' : 'gray'}
               ml={8}
               mr={16}
               onClick={() => swiper?.current?.slideNext()}
@@ -279,11 +284,13 @@ export const ActiveUser: React.FC = () => {
             canSwipePrev={canSwipePrev}
             canSwipeNext={canSwipeNext}
             swiperStyle={{
+              style: { paddingBottom: isSm ? 50 : '' },
               spaceBetween: 20,
               slidesPerView: slidesPerView,
               loop: isSm,
               autoplay: isSm,
-              freeMode: true
+              freeMode: true,
+              pagination: isSm
             }}
           >
             {data && data?.list && data.list.length
