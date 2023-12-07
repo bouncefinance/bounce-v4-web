@@ -302,7 +302,7 @@ const AuctionLaunchpadCard = () => {
             </ArrowBg>
           </Stack>
         </Stack>
-        <Box ref={ref} mt={isSm ? 40 : 60} ml={'-16px'}>
+        <Box ref={ref} mt={isSm ? 40 : 60} ml={'-16px'} width={isSm ? 'auto' : 1312}>
           <SlideProgress
             hideArrow
             swiperRef={swiper}
@@ -311,7 +311,7 @@ const AuctionLaunchpadCard = () => {
             swiperStyle={{
               style: { height: isSm ? '100%' : 500, paddingBottom: isSm ? 50 : 0 },
               spaceBetween: 30,
-              slidesPerView: isSm ? 1.2 : 1.95,
+              slidesPerView: isSm ? 1.2 : 2,
               loop: isSm,
               // autoplay: isSm,
               freeMode: true,
