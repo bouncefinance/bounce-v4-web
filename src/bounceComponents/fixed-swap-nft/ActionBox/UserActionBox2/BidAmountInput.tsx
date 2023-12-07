@@ -42,7 +42,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
     }
 
     const minimum = BigNumber.minimum(
-      new BigNumber(userToken1Balance.toFixed(18)).div(poolInfo.ratio).integerValue(),
+      new BigNumber(userToken1Balance.toExact()).div(poolInfo.ratio).integerValue(),
       availableAmount0,
       poolInfo.amountTotal0,
       leftAllocationToken0
@@ -59,7 +59,7 @@ const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputPro
       }
       const result = Math.round(Number(value)) + ''
       const minimum = BigNumber.minimum(
-        new BigNumber(userToken1Balance.toFixed(18)).div(poolInfo.ratio).integerValue(),
+        new BigNumber(userToken1Balance.toExact()).div(poolInfo.ratio).integerValue(),
         availableAmount0,
         leftAllocationToken0,
         new BigNumber(result)
