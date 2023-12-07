@@ -471,8 +471,8 @@ const TokenAuction: React.FC = () => {
           <Typography
             sx={{
               textAlign: 'left',
-              fontFamily: `'Inter'`,
-              fontWeight: 700,
+              fontFamily: 'Inter',
+              fontWeight: 500,
               fontSize: isSm ? 24 : 44,
               width: '100%',
               lineHeight: '32px',

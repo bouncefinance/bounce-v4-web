@@ -45,17 +45,17 @@ export const ArrowBg = styled(Box)`
     border: 1px solid #959595;
     color: #959595;
     background: #fff;
+    opacity: 0.3;
   }
   &.black {
     border: 1px solid #20201e;
     background: #20201e;
     color: #fff;
   }
-  &.black:hover,
-  &.gray:hover {
+  &.black:hover {
     border: 1px solid #20201e;
-    background: #20201e;
-    color: #fff;
+    background: #fff;
+    color: #20201e;
     opacity: 0.8;
   }
 `

@@ -213,7 +213,8 @@ export const RoundedBox = styled(Box)({
   gap: 6,
   padding: '2px 9px',
   background: 'rgba(18, 18, 18, 0.60)',
-  borderRadius: 62
+  borderRadius: 62,
+  fontFamily: 'Inter'
 })
 export const SansTitle = styled(Typography)({
   color: '#121212',

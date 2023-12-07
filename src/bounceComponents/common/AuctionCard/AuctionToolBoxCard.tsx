@@ -9,7 +9,7 @@ import Image from 'components/Image'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { ArrowBg } from './AuctionLaunchpadCard'
 import { routes } from 'constants/routes'
-import P1 from 'assets/imgs/toolBox/p4.png'
+import P1 from 'assets/imgs/toolBox/p5.png'
 import P2 from 'assets/imgs/toolBox/p7.png'
 import P3 from 'assets/imgs/toolBox/p8.png'
 import { useNavigate } from 'react-router-dom'
@@ -140,7 +140,7 @@ const ToolBoxItemCard = ({ data }: { data: ModulesConfigParams }) => {
       <Box
         sx={{ maxWidth: '100%', maxHeight: '100%', width: 'max-content', height: 'max-content', overflow: 'hidden' }}
       >
-        <Image className="img" src={data.logoImg} style={{ width: '100%', height: '100%' }} />
+        <Image className="img" src={data.logoImg} style={{ width: '100%', height: '100%', objectFit: 'none' }} />
       </Box>
       <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'} sx={{ width: '100%' }}>
         <ItemBottomTitle>{data.btnTitle}</ItemBottomTitle>
