@@ -53,7 +53,7 @@ export default function AccountLayout({ children, bgColor }: { children: JSX.Ele
           route: routes.account.myAccount
         },
         {
-          name: 'My Credentials',
+          name: 'My Pre-Auction Activity',
           svg: <CredentialsIcon />,
           route: routes.account.myCredentials
         }
