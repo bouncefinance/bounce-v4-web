@@ -79,7 +79,7 @@ const InfoBox = (props: InfoBoxParams) => {
 }
 
 const enum AuctionType {
-  TokenAuction = 'Token Auction',
+  TokenAuction = 'Permissionless Auction',
   NFTAuction = 'NFT Auction',
   AdSpaceAuction = 'Ad Space Auction',
   RealWorldCollectibleAuction = 'Real-World Collectible Auction'
@@ -439,9 +439,11 @@ const TokenAuction: React.FC = () => {
         height:
           showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction
             ? isSm
-              ? 1200
+              ? 1450
               : 1288
-            : 682,
+            : isSm
+            ? 850
+            : 650,
         margin: '0 auto'
       }}
     >
@@ -667,6 +669,85 @@ const TokenAuction: React.FC = () => {
           >
             <AuctionImg src={AuctionList[3].auctionImg} alt="" />
           </Box>
+          {!isSm && (
+            <PaginationBox
+              rotateRatioList={rotateRatioList}
+              index={currentIndex}
+              total={AuctionList.length}
+              setCurrent={setCurrentIndex}
+              setRotateRatioList={setRotateRatioList}
+              style={
+                isSm
+                  ? {
+                      position: 'absolute',
+                      bottom: '30px',
+                      left: '50%',
+                      transform: 'translateX(-50%)'
+                    }
+                  : {
+                      position: 'absolute',
+                      bottom: 80,
+                      right: 0
+                    }
+              }
+            />
+          )}
+        </Box>
+      </Box>
+      {isSm && (
+        <>
+          <Box
+            sx={{
+              '@media(max-width:1360px)': {
+                '&>div:nth-child(1)': {
+                  left: 20
+                },
+                '&>div:nth-child(2)': {
+                  left: 130
+                },
+                '&>div:nth-child(3)': {
+                  left: 20
+                }
+              },
+              width: '100%',
+              padding: '0 16px',
+              position: 'absolute',
+              left: 0,
+              bottom:
+                showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction ? 710 : 145,
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr'
+            }}
+          >
+            <InfoBox
+              title={'Trending Token Auction'}
+              value={showData.trendingTokenAuction}
+              logo={<TrendingIcon />}
+              style={{
+                width: 220,
+                color: '#ffffff',
+                marginBottom: 30,
+                gridColumn: '1 /span 2',
+                background: 'transparent'
+              }}
+            />
+            <InfoBox
+              title={'Total Value'}
+              value={showData.totalValue}
+              logo={<TotalValueIcon />}
+              style={{
+                background: 'transparent'
+              }}
+            />
+            <InfoBox
+              title={'Total Auction'}
+              value={showData.totalAuction}
+              logo={<TotalAuctionIcon />}
+              style={{
+                background: 'transparent'
+              }}
+            />
+          </Box>
           <PaginationBox
             rotateRatioList={rotateRatioList}
             index={currentIndex}
@@ -677,7 +758,10 @@ const TokenAuction: React.FC = () => {
               isSm
                 ? {
                     position: 'absolute',
-                    bottom: '30px',
+                    bottom:
+                      showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction
+                        ? 605
+                        : 40,
                     left: '50%',
                     transform: 'translateX(-50%)'
                   }
@@ -688,8 +772,8 @@ const TokenAuction: React.FC = () => {
                   }
             }
           />
-        </Box>
-      </Box>
+        </>
+      )}
       {(showData.title === AuctionType.NFTAuction || showData.title === AuctionType.TokenAuction) && (
         <>
           <Box
@@ -697,7 +781,7 @@ const TokenAuction: React.FC = () => {
               position: 'absolute',
               minHeight: 496,
               width: 1296,
-              top: isSm ? 600 : 622,
+              top: isSm ? 870 : 622,
               borderRadius: 30,
               margin: '0 auto',
               padding: isSm ? '24px 16px' : 0,

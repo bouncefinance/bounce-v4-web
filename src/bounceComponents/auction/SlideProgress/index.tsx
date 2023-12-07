@@ -61,7 +61,20 @@ const ProgressLight = styled(Box)`
 const ProgressGray = styled(ProgressLight)`
   background: rgba(18, 18, 18, 0.06);
 `
-
+const SwiperStyle = styled(Swiper)(() => ({
+  // pagination list style
+  '& .swiper-pagination>span': {
+    width: 10,
+    height: 10,
+    border: '1px solid  rgba(18, 18, 18, 0.60)',
+    borderRadius: 10,
+    background: '#fff'
+    // margin: '0 12px !important'
+  },
+  '& .swiper-pagination>.swiper-pagination-bullet-active': {
+    background: 'rgba(18, 18, 18, 0.60)'
+  }
+}))
 export function SlideProgress(props: ISlideProgress) {
   const isSm = useBreakpoint('sm')
   const { swiperStyle, children, hideArrow, swiperRef } = props
@@ -75,7 +88,7 @@ export function SlideProgress(props: ISlideProgress) {
   }, [swiper, props.swiperRef])
   return (
     <Box width={'100%'} ml={isSm ? 16 : 0}>
-      <Swiper
+      <SwiperStyle
         ref={swiperRef}
         style={{
           height: isSm ? '286px' : '362px'
@@ -92,7 +105,7 @@ export function SlideProgress(props: ISlideProgress) {
         {...swiperStyle}
       >
         {children}
-      </Swiper>
+      </SwiperStyle>
       <Box
         display={hideArrow ? 'none' : 'flex'}
         alignItems={'center'}
