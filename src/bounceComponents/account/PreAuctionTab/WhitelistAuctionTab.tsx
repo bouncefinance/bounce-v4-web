@@ -4,7 +4,7 @@ import Search from './Search'
 import { PoolStatus } from 'api/pool/type'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
-import { usePagination } from 'ahooks'
+import { usePagination, useRequest } from 'ahooks'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { GetAddressActivitiesRes } from 'api/account/types'
 import { getAddressActivities } from 'api/account'
@@ -19,17 +19,23 @@ import moment from 'moment'
 import { ReactComponent as IconEdit } from './edit.svg'
 import { ReactComponent as IconDelete } from './delete.svg'
 import { ReactComponent as AddSvg } from 'assets/imgs/user/add.svg'
-import { routes } from 'constants/routes'
-import { useNavigate } from 'react-router-dom'
+import { show } from '@ebay/nice-modal-react'
+import CreateWhitelistDialog from './Modals/CreateDialog'
 
 export default function WhitelistAuctionTab() {
   const theme = useTheme()
   const { account } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
   const [curChain] = useState(0)
-  const navigate = useNavigate()
   const [curPoolType] = useState<PoolStatus | 0>(0)
   const [searchText, setSearchText] = useState<string>('')
+
+  const { runAsync: deleteItem } = useRequest(
+    async () => {
+      alert('delete item')
+    },
+    { manual: true }
+  )
 
   const { pagination, data, loading } = usePagination<IAuctionPoolsItems<GetAddressActivitiesRes>, Params>(
     async ({ current, pageSize }) => {
@@ -78,6 +84,10 @@ export default function WhitelistAuctionTab() {
     pagination.changeCurrent(p)
   }
 
+  const showCreateDialog = () => {
+    show(CreateWhitelistDialog, { whitelist: [] })
+  }
+
   return (
     <Box>
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} mt={20}>
@@ -94,7 +104,7 @@ export default function WhitelistAuctionTab() {
               color: '#121212'
             }
           }}
-          onClick={() => navigate(routes.preAuction.createNewPreAuciton)}
+          onClick={showCreateDialog}
           startIcon={<AddSvg />}
         >
           Create whitelist
@@ -142,7 +152,7 @@ export default function WhitelistAuctionTab() {
                       }}
                     >
                       <IconEdit onClick={() => {}} />
-                      <IconDelete onClick={() => {}} />
+                      <IconDelete onClick={deleteItem} />
                     </Box>
                   </StyledTableCell>
                 </StyledTableRow>

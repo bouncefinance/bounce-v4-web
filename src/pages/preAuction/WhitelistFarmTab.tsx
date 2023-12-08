@@ -1,71 +1,33 @@
-import {
-  Box,
-  Button,
-  Pagination,
-  Stack,
-  Tab,
-  Table,
-  TableBody,
-  TableContainer,
-  Tabs,
-  Typography,
-  styled,
-  useTheme
-} from '@mui/material'
-import Image from 'components/Image'
-import { ReactComponent as AddSvg } from 'assets/imgs/user/add.svg'
-import { useEffect, useState } from 'react'
-import Search from './Search'
-import ChainSelect from 'bounceComponents/common/ChainSelect'
-import { PoolStatus } from 'api/pool/type'
-import StatusSelect from './StatusSelect'
-import { BounceAnime } from 'bounceComponents/common/BounceAnime'
-import { useActiveWeb3React } from 'hooks'
+import { Box, Pagination, Stack, Table, TableBody, TableContainer, Typography } from '@mui/material'
 import { usePagination } from 'ahooks'
-import { IAuctionPoolsItems } from 'api/profile/type'
-import { GetAddressActivitiesRes } from 'api/account/types'
 import { getAddressActivities } from 'api/account'
-import { getLabelById } from 'utils'
-import { Currency, CurrencyAmount } from 'constants/token'
-import { ZERO_ADDRESS } from '../../../constants'
-import EmptyData from 'bounceComponents/common/EmptyData'
-import { StyledTableCell, StyledTableRow } from '../AuctionAddressTab/ActivitiesTab'
+import { GetAddressActivitiesRes } from 'api/account/types'
+import { PoolStatus } from 'api/pool/type'
+import { IAuctionPoolsItems } from 'api/profile/type'
+import StatusSelect from 'bounceComponents/account/PreAuctionTab/StatusSelect'
+import ChainSelect from 'bounceComponents/common/ChainSelect'
+import { ZERO_ADDRESS } from '../../constants'
+import { CurrencyAmount, Currency } from 'constants/token'
+import { useActiveWeb3React } from 'hooks'
+import { useEffect, useState } from 'react'
 import { Params } from 'ahooks/lib/usePagination/types'
+import { getLabelById } from 'utils'
+import Image from 'components/Image'
 import { useOptionDatas } from 'state/configOptions/hooks'
-import DefaultAvatar from 'assets/images/default_avatar.png'
+import EmptyData from 'bounceComponents/common/EmptyData'
+import { StyledTableCell, StyledTableRow } from 'bounceComponents/account/AuctionAddressTab/ActivitiesTab'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
+import DefaultAvatar from 'assets/images/default_avatar.png'
 import { useNavigate } from 'react-router-dom'
 import { routes } from 'constants/routes'
 
-const CustomTab = styled(Box)({
-  '& .MuiTabs-root': {
-    border: '1px solid #E4E4E4',
-    borderRadius: '100px',
-    padding: '4px',
-    '.MuiTabs-indicator': {
-      display: 'none'
-    },
-    button: {
-      textTransform: 'none'
-    },
-    '& .Mui-selected': {
-      color: '#121212',
-      background: '#E1F25C',
-      borderRadius: '100px'
-    }
-  }
-})
-
-export default function PreAuctionActivityTab() {
-  const theme = useTheme()
+export default function WhitelistFarmTab() {
   const { account } = useActiveWeb3React()
-  const optionDatas = useOptionDatas()
   const navigate = useNavigate()
+  const optionDatas = useOptionDatas()
   const [curChain, setCurChain] = useState(0)
-  const [curTab, setCurTab] = useState(0)
   const [curPoolType, setCurPoolType] = useState<PoolStatus | 0>(0)
-  const [searchText, setSearchText] = useState<string>('')
-
   const { pagination, data, loading } = usePagination<IAuctionPoolsItems<GetAddressActivitiesRes>, Params>(
     async ({ current, pageSize }) => {
       if (!account)
@@ -99,7 +61,7 @@ export default function PreAuctionActivityTab() {
     {
       defaultPageSize: 10,
       ready: !!account,
-      refreshDeps: [account, curChain, curPoolType, searchText],
+      refreshDeps: [account, curChain, curPoolType],
       debounceWait: 100
     }
   )
@@ -114,35 +76,12 @@ export default function PreAuctionActivityTab() {
   }
 
   return (
-    <Box>
-      <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <CustomTab>
-          <Tabs onChange={(_e, val) => setCurTab(val)} value={curTab}>
-            <Tab label="Participated" />
-            <Tab label="Created" />
-          </Tabs>
-        </CustomTab>
-        <Button
-          sx={{
-            width: 297,
-            height: 48,
-            borderRadius: 50,
-            border: 'none',
-            background: '#F6F6F3',
-            color: theme.palette.text.primary,
-            '&:hover': {
-              color: '#121212'
-            }
-          }}
-          onClick={() => navigate(routes.preAuction.createNewPreAuction)}
-          startIcon={<AddSvg />}
-        >
-          Create new Pre-Auction Activity
-        </Button>
-      </Stack>
-      <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} mt={20}>
-        <Search searchText={searchText} setSearchText={setSearchText} placeholder="Search" />
-        <Stack direction={'row'} spacing={20}>
+    <Stack sx={{}}>
+      <Stack direction={'row'} spacing={20} justifyContent={'space-between'} alignItems={'center'}>
+        <Typography fontSize={44} fontWeight={500} color={'#121212'}>
+          Pre Auction Activity
+        </Typography>
+        <Stack direction={'row'} alignItems={'center'} spacing={20}>
           <ChainSelect curChain={curChain} setCurChain={v => setCurChain(v || 0)} />
           <StatusSelect curPoolType={curPoolType} setCurPoolType={t => setCurPoolType(t)} />
         </Stack>
@@ -163,10 +102,14 @@ export default function PreAuctionActivityTab() {
             >
               {data.list.map(record => (
                 <StyledTableRow
+                  onClick={() => {
+                    navigate(routes.preAuction.activityDetail)
+                  }}
                   key={record.id}
                   sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
+                    cursor: 'pointer',
                     '&:last-child td, &:last-child th': { border: 0 },
                     background: '#121212 !important',
                     borderRadius: '16px !important',
@@ -221,6 +164,6 @@ export default function PreAuctionActivityTab() {
       ) : (
         <EmptyData />
       )}
-    </Box>
+    </Stack>
   )
 }

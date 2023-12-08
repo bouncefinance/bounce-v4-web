@@ -43,6 +43,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     '/ads-auction': 'Ads Auction',
     '/launchpad': 'Private Launchpad',
     '/TokenToolBox': 'Token ToolBox',
+    '/preAuctionActivity': 'Pre Auction Activity',
     '/Loyaltyprogram': 'Bounce Loyalty program'
   }
   const auctionTabMap: { [key: string]: string } = {
@@ -59,6 +60,7 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
     'Private Launchpad',
     'Auction',
     'Real World Collectibles Auction',
+    'Pre Auction Activity',
     'Ads Auction',
     'Token ToolBox',
     'Telegram bot',
@@ -103,6 +105,9 @@ const HeaderTab: React.FC<{ onTabChange?: (currentTab: string) => void; style?: 
         break
       case 'Bounce Loyalty program':
         navigate(routes.loyaltyprogram.index)
+        break
+      case 'Pre Auction Activity':
+        navigate(routes.preAuction.index)
         break
     }
   }
