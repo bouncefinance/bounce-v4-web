@@ -113,7 +113,12 @@ export const routes = {
     launchpadCoin2: '/launchpad/coin2',
     MultiBitBridge: '/launchpad/multibit',
     BitStable: '/launchpad/bitstable',
-    BitStableAuction: '/launchpad/bitstable-staking'
+    BitStableAuction: '/launchpad/bitstable-staking',
+    Did: {
+      index: '/launchpad/did',
+      stake: '/launchpad/did-stake',
+      dll: '/launchpad/did-dll'
+    }
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
