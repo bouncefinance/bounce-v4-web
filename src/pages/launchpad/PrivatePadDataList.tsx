@@ -877,12 +877,13 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is DID?',
         info: [
-          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+          `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
+In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
         ]
       }
     ],
     tokenMetrics: [],
-    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
+    desc: 'ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs.',
     social: [
       <Link key={0} href="https://godid.io/" target="_blank">
         <Web />
@@ -919,12 +920,13 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is DID?',
         info: [
-          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+          `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
+In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
         ]
       }
     ],
     tokenMetrics: [],
-    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
+    desc: 'ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs.',
     social: [
       <Link key={0} href="https://godid.io/" target="_blank">
         <Web />
@@ -959,12 +961,13 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       {
         title: 'What is DID?',
         info: [
-          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+          `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
+In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
         ]
       }
     ],
     tokenMetrics: [],
-    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
+    desc: 'ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs.',
     social: [
       <Link key={0} href="https://godid.io/" target="_blank">
         <Web />

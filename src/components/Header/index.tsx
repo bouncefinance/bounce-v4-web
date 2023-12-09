@@ -143,7 +143,10 @@ export const transparentRoutes = [
   routes.launchpad.account.launchpadDetail,
   routes.foundo.foundoDetail + '/*',
   routes.thirdPart.BitStable,
-  routes.thirdPart.BitStableAuction
+  routes.thirdPart.BitStableAuction,
+  routes.thirdPart.Did.index,
+  routes.thirdPart.Did.stake,
+  routes.thirdPart.Did.dll
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
