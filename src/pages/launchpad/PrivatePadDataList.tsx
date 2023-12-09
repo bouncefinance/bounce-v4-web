@@ -867,7 +867,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     poolTypeName: 'Staking Auction',
     img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
     avatar: DIDNa,
-    title: 'DID',
+    title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
@@ -894,7 +894,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     moreData: [
       { title: 'Token Name', content: '$BDID' },
       // { title: 'Token Price', content: '0.000118 AUCTION' },
-      { title: 'Token Amount', content: '431,000,000' },
+      { title: 'Token Amount', content: '172,400,000' },
       { title: 'Blockchain', content: 'Ethereum' }
       // { title: 'Raise Auction Amount', content: '23530' }
     ]
@@ -909,7 +909,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     poolTypeName: 'Random Selection Auction',
     img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
     avatar: DIDNa,
-    title: 'DID',
+    title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
@@ -936,7 +936,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     moreData: [
       { title: 'Token Name', content: '$BDID' },
       { title: 'Ticket Price', content: '58.82 AUCTION / Ticket' },
-      { title: 'Token Amount / Ticket', content: '999.92' },
+      { title: 'Token Amount / Ticket', content: '431,000' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
@@ -949,7 +949,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     poolTypeName: 'Random Selection Auction',
     img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
     avatar: DIDNa,
-    title: 'DID',
+    title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
@@ -976,7 +976,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     moreData: [
       { title: 'Token Name', content: '$BDID' },
       { title: 'Ticket Price', content: '1000 DAII / Ticket' },
-      { title: 'Token Amount / Ticket', content: '399,968' },
+      { title: 'Token Amount / Ticket', content: '431,000' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
