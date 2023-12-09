@@ -857,11 +857,52 @@ export const PrivatePadCoinData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 18
+  // current privatePad max keyId is 21
+  {
+    keyId: 19,
+    liveTimeStamp: {
+      start: 1702612800000,
+      end: 1734220800000
+    },
+    poolTypeName: 'Staking Auction',
+    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+    avatar: DIDNa,
+    title: 'DID',
+    chainId: 1,
+    tokenName: '$TBD',
+    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    upcomingLink: '/launchpad/did-stake',
+    liveLink: '/launchpad/did-stake',
+    projectInfo: [
+      {
+        title: 'What is DID?',
+        info: [
+          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
+    social: [
+      <Link key={0} href="https://godid.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$TBD' },
+      { title: 'Token Price', content: '0.000118 AUCTION' },
+      { title: 'Token Amount', content: '431,000,000' },
+      { title: 'Blockchain', content: 'Ethereum' },
+      { title: 'Raise Auction Amount', content: '23530' }
+    ]
+  },
   {
     keyId: 21,
     liveTimeStamp: {
-      start: 1702598400000,
+      start: 1702612800000,
       end: 1734220800000
     },
     poolTypeName: 'Random Selection Auction',
@@ -873,7 +914,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
     upcomingLink: '/launchpad/did-dll',
     liveLink: '/launchpad/did-dll',
-    projectInfo: [],
+    projectInfo: [
+      {
+        title: 'What is DID?',
+        info: [
+          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+        ]
+      }
+    ],
     tokenMetrics: [],
     desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
     social: [
@@ -894,7 +942,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 20,
     liveTimeStamp: {
-      start: 1702598400000,
+      start: 1702612800000,
       end: 1734220800000
     },
     poolTypeName: 'Random Selection Auction',
@@ -906,7 +954,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
     upcomingLink: '/launchpad/did',
     liveLink: '/launchpad/did',
-    projectInfo: [],
+    projectInfo: [
+      {
+        title: 'What is DID?',
+        info: [
+          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+        ]
+      }
+    ],
     tokenMetrics: [],
     desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
     social: [
@@ -924,40 +979,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-  {
-    keyId: 19,
-    liveTimeStamp: {
-      start: 1702598400000,
-      end: 1734220800000
-    },
-    poolTypeName: 'Staking Auction',
-    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
-    avatar: BitStableLogo,
-    title: 'DID',
-    chainId: 1,
-    tokenName: '$TBD',
-    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    upcomingLink: '/launchpad/did-stake',
-    liveLink: '/launchpad/did-stake',
-    projectInfo: [],
-    tokenMetrics: [],
-    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
-    social: [
-      <Link key={0} href="https://godid.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
-        <Twitter />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$TBD' },
-      { title: 'Token Price', content: '0.000118 AUCTION' },
-      { title: 'Token Amount', content: '431,000,000' },
-      { title: 'Blockchain', content: 'Ethereum' },
-      { title: 'Raise Auction Amount', content: '23530' }
-    ]
-  },
+
   PrivatePadCoinData,
   {
     keyId: 17,

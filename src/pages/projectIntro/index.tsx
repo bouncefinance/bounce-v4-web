@@ -1065,7 +1065,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
         spacing={10}
         sx={{ marginBottom: { xs: '10px', sm: '0' }, width: isDark ? { xs: '100%', sm: '360px' } : '360px' }}
       >
-        {info.length &&
+        {info.length > 0 &&
           info.map((i, idx) => (
             <ProjectInfoSubtitle
               sx={{
@@ -1086,7 +1086,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
             </ProjectInfoSubtitle>
           ))}
       </Stack>
-      {info.length && !isDark && (
+      {info.length > 0 && !isDark && (
         <ProjectContentBg
           sx={{
             width: { sm: '100%', md: 912 },
@@ -1103,7 +1103,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
             ))}
         </ProjectContentBg>
       )}
-      {info.length && isDark && (
+      {info.length > 0 && isDark && (
         <ProjectContentBgDark
           sx={{ width: { sm: '100%', md: 912 }, padding: { xs: '40px 20px 60px', sm: '60px 40px 80px' } }}
         >
