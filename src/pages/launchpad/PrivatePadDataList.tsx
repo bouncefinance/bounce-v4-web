@@ -869,7 +869,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     avatar: DIDNa,
     title: 'DID',
     chainId: 1,
-    tokenName: '$TBD',
+    tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
     upcomingLink: '/launchpad/did-stake',
     liveLink: '/launchpad/did-stake',
@@ -892,53 +892,14 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>
     ],
     moreData: [
-      { title: 'Token Name', content: '$TBD' },
+      { title: 'Token Name', content: '$BDID' },
       { title: 'Token Price', content: '0.000118 AUCTION' },
       { title: 'Token Amount', content: '431,000,000' },
-      { title: 'Blockchain', content: 'Ethereum' },
-      { title: 'Raise Auction Amount', content: '23530' }
-    ]
-  },
-  {
-    keyId: 21,
-    liveTimeStamp: {
-      start: 1702612800000,
-      end: 1734220800000
-    },
-    poolTypeName: 'Random Selection Auction',
-    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
-    avatar: DIDNa,
-    title: 'DID',
-    chainId: 1,
-    tokenName: '$TBD',
-    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    upcomingLink: '/launchpad/did-dll',
-    liveLink: '/launchpad/did-dll',
-    projectInfo: [
-      {
-        title: 'What is DID?',
-        info: [
-          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
-    social: [
-      <Link key={0} href="https://godid.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
-        <Twitter />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$TBD' },
-      { title: 'Token Price', content: '1000 DAII' },
-      { title: 'Token Amount', content: '431,000' },
       { title: 'Blockchain', content: 'Ethereum' }
+      // { title: 'Raise Auction Amount', content: '23530' }
     ]
   },
+
   {
     keyId: 20,
     liveTimeStamp: {
@@ -950,7 +911,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     avatar: DIDNa,
     title: 'DID',
     chainId: 1,
-    tokenName: '$TBD',
+    tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
     upcomingLink: '/launchpad/did',
     liveLink: '/launchpad/did',
@@ -973,13 +934,52 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       </Link>
     ],
     moreData: [
-      { title: 'Token Name', content: '$TBD' },
+      { title: 'Token Name', content: '$BDID' },
       { title: 'Token Price', content: '58.82 AUCTION' },
       { title: 'Token Amount', content: '999.92' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-
+  {
+    keyId: 21,
+    liveTimeStamp: {
+      start: 1702612800000,
+      end: 1734220800000
+    },
+    poolTypeName: 'Random Selection Auction',
+    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+    avatar: DIDNa,
+    title: 'DID',
+    chainId: 1,
+    tokenName: '$BDID',
+    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    upcomingLink: '/launchpad/did-dll',
+    liveLink: '/launchpad/did-dll',
+    projectInfo: [
+      {
+        title: 'What is DID?',
+        info: [
+          'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.'
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'GoDID is an all-in-one DID(Decentralized Idendity) marketplace aggregator with lower fees & diversified features, we are currently supporting ENS, Space ID, & Bitcoin Ordinals DIDs.',
+    social: [
+      <Link key={0} href="https://godid.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+        <Twitter />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$BDID' },
+      { title: 'Token Price', content: '1000 DAII' },
+      { title: 'Token Amount', content: '399,968' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   PrivatePadCoinData,
   {
     keyId: 17,
