@@ -46,6 +46,7 @@ import MultibitBanner from './imgs/multibit-banner.png'
 import BitStableInfo from './imgs/BitStable-info.png'
 import BitStableLogo from './imgs/Bitstabe-logo.png'
 import DIDNa from './imgs/did-na.png'
+import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -871,14 +872,22 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    upcomingLink: '/launchpad/did-stake',
-    liveLink: '/launchpad/did-stake',
+    upcomingLink: '/launchpad/godid-staking-auction',
+    liveLink: '/launchpad/godid-staking-auction',
     projectInfo: [
       {
         title: 'What is DID?',
         info: [
           `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
 In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box key={1} sx={{ width: '100%', height: '100%' }}>
+            <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
         ]
       }
     ],
@@ -888,8 +897,14 @@ In the future, the platform will actively develop financial derivatives for the 
       <Link key={0} href="https://godid.io/" target="_blank">
         <Web />
       </Link>,
+      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+        <DiscordSVG />
+      </Link>,
       <Link key={6} href="https://twitter.com/godid_io" target="_blank">
         <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@godid" target="_blank">
+        <img src={Medium} width={40} />
       </Link>
     ],
     moreData: [
@@ -914,14 +929,22 @@ In the future, the platform will actively develop financial derivatives for the 
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    upcomingLink: '/launchpad/did',
-    liveLink: '/launchpad/did',
+    upcomingLink: '/launchpad/godid-rs-auction',
+    liveLink: '/launchpad/godid-rs-auction',
     projectInfo: [
       {
         title: 'What is DID?',
         info: [
           `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
 In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box key={1} sx={{ width: '100%', height: '100%' }}>
+            <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
         ]
       }
     ],
@@ -931,8 +954,14 @@ In the future, the platform will actively develop financial derivatives for the 
       <Link key={0} href="https://godid.io/" target="_blank">
         <Web />
       </Link>,
+      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+        <DiscordSVG />
+      </Link>,
       <Link key={6} href="https://twitter.com/godid_io" target="_blank">
         <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@godid" target="_blank">
+        <img src={Medium} width={40} />
       </Link>
     ],
     moreData: [
@@ -955,14 +984,22 @@ In the future, the platform will actively develop financial derivatives for the 
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    upcomingLink: '/launchpad/did-dll',
-    liveLink: '/launchpad/did-dll',
+    upcomingLink: '/launchpad/godid-rs-daii',
+    liveLink: '/launchpad/godid-rs-daii',
     projectInfo: [
       {
         title: 'What is DID?',
         info: [
           `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
 In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box key={1} sx={{ width: '100%', height: '100%' }}>
+            <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
         ]
       }
     ],
@@ -972,8 +1009,14 @@ In the future, the platform will actively develop financial derivatives for the 
       <Link key={0} href="https://godid.io/" target="_blank">
         <Web />
       </Link>,
+      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+        <DiscordSVG />
+      </Link>,
       <Link key={6} href="https://twitter.com/godid_io" target="_blank">
         <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@godid" target="_blank">
+        <img src={Medium} width={40} />
       </Link>
     ],
     moreData: [

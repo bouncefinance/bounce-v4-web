@@ -115,9 +115,9 @@ export const routes = {
     BitStable: '/launchpad/bitstable',
     BitStableAuction: '/launchpad/bitstable-staking',
     Did: {
-      index: '/launchpad/did',
-      stake: '/launchpad/did-stake',
-      dll: '/launchpad/did-dll'
+      index: '/launchpad/godid-rs-auction',
+      stake: '/launchpad/godid-staking-auction',
+      dll: '/launchpad/godid-rs-daii'
     }
   },
   game: {
