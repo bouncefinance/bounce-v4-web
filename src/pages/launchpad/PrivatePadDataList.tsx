@@ -45,6 +45,8 @@ import MultiBitAva from './imgs/multi-bit-ava.png'
 import MultibitBanner from './imgs/multibit-banner.png'
 import BitStableInfo from './imgs/BitStable-info.png'
 import BitStableLogo from './imgs/Bitstabe-logo.png'
+import DIDNa from './imgs/did-na.png'
+import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -856,7 +858,234 @@ export const PrivatePadCoinData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 16
+  // current privatePad max keyId is 21
+  {
+    keyId: 19,
+    liveTimeStamp: {
+      start: 1702612800000,
+      end: 1734220800000
+    },
+    poolTypeName: 'Staking Auction',
+    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+    avatar: DIDNa,
+    title: 'GoDID',
+    chainId: 1,
+    tokenName: '$BDID',
+    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    upcomingLink: '/launchpad/godid-staking-auction',
+    liveLink: '/launchpad/godid-staking-auction',
+    projectInfo: [
+      {
+        title: 'What is GoDID?',
+        info: [
+          `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
+In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box key={1} sx={{ width: '100%', height: '100%' }}>
+            <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
+              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs.',
+    social: [
+      <Link key={0} href="https://godid.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@godid" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$BDID' },
+      // { title: 'Token Price', content: '0.000118 AUCTION' },
+      { title: 'Token Amount', content: '172,400,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+      // { title: 'Raise Auction Amount', content: '23530' }
+    ]
+  },
+
+  {
+    keyId: 20,
+    liveTimeStamp: {
+      start: 1702612800000,
+      end: 1734220800000
+    },
+    poolTypeName: 'Random Selection Auction',
+    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+    avatar: DIDNa,
+    title: 'GoDID',
+    chainId: 1,
+    tokenName: '$BDID',
+    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    upcomingLink: '/launchpad/godid-rs-auction',
+    liveLink: '/launchpad/godid-rs-auction',
+    projectInfo: [
+      {
+        title: 'What is GoDID?',
+        info: [
+          `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
+In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box key={1} sx={{ width: '100%', height: '100%' }}>
+            <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
+              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs.',
+    social: [
+      <Link key={0} href="https://godid.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@godid" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$BDID' },
+      { title: 'Ticket Price', content: '58.82 AUCTION / Ticket' },
+      { title: 'Token Amount / Ticket', content: '431,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 21,
+    liveTimeStamp: {
+      start: 1702612800000,
+      end: 1734220800000
+    },
+    poolTypeName: 'Random Selection Auction',
+    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+    avatar: DIDNa,
+    title: 'GoDID',
+    chainId: 1,
+    tokenName: '$BDID',
+    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    upcomingLink: '/launchpad/godid-rs-daii',
+    liveLink: '/launchpad/godid-rs-daii',
+    projectInfo: [
+      {
+        title: 'What is GoDID?',
+        info: [
+          `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
+In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box key={1} sx={{ width: '100%', height: '100%' }}>
+            <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
+              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs.',
+    social: [
+      <Link key={0} href="https://godid.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={8} href="https://medium.com/@godid" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$BDID' },
+      { title: 'Ticket Price', content: '1000 DAII / Ticket' },
+      { title: 'Token Amount / Ticket', content: '431,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   PrivatePadCoinData,
   {
     keyId: 17,

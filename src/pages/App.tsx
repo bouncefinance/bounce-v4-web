@@ -110,6 +110,9 @@ import MyToken from './tokenToolBox/page/tokenMinter/myToken'
 import MyLock from './tokenToolBox/page/tokenlocker/myLock'
 import useBreakpoint from '../hooks/useBreakpoint'
 
+import DidStakeProjectInfo from './projectIntro/DidStakeProjectInfo'
+import DidProjectInfo from './projectIntro/DidProjectInfo'
+import DidDllProjectInfo from './projectIntro/DidDllProjectInfo'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -241,6 +244,10 @@ export default function App() {
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.thirdPart.FinceptorAuction} element={<FinceptorProjectInfo />} />
                   <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfo />} />
+                  <Route path={routes.thirdPart.Did.stake} element={<DidStakeProjectInfo />} />
+                  <Route path={routes.thirdPart.Did.index} element={<DidProjectInfo />} />
+                  <Route path={routes.thirdPart.Did.dll} element={<DidDllProjectInfo />} />
+
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
                   <Route path={routes.tokenToolBox.myLock} element={<MyLock />} />
