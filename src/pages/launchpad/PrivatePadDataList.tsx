@@ -876,7 +876,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     liveLink: '/launchpad/godid-staking-auction',
     projectInfo: [
       {
-        title: 'What is DID?',
+        title: 'What is GoDID?',
         info: [
           `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
 In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
@@ -887,6 +887,26 @@ In the future, the platform will actively develop financial derivatives for the 
         info: [
           <Box key={1} sx={{ width: '100%', height: '100%' }}>
             <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
+              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
           </Box>
         ]
       }
@@ -933,7 +953,7 @@ In the future, the platform will actively develop financial derivatives for the 
     liveLink: '/launchpad/godid-rs-auction',
     projectInfo: [
       {
-        title: 'What is DID?',
+        title: 'What is GoDID?',
         info: [
           `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
 In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
@@ -944,6 +964,26 @@ In the future, the platform will actively develop financial derivatives for the 
         info: [
           <Box key={1} sx={{ width: '100%', height: '100%' }}>
             <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
+              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
           </Box>
         ]
       }
@@ -988,7 +1028,7 @@ In the future, the platform will actively develop financial derivatives for the 
     liveLink: '/launchpad/godid-rs-daii',
     projectInfo: [
       {
-        title: 'What is DID?',
+        title: 'What is GoDID?',
         info: [
           `ord.godid.io is a platform that focuses on the registration, transaction, and management of Ordinals DIDs. It currently supports all mainstream DIDs in the Ordinals ecosystem, such as .sats, .bitmap, .btc, and more. The platform is committed to becoming the most practical and affordable platform in the Ordinals DIDs ecosystem.
 In the future, the platform will actively develop financial derivatives for the Ordinals DIDs ecosystem to ensure better circulation and higher value of DIDs. Additionally, the platform is also committed to breaking down the barriers between different DID protocols on BTC L2 to better connect and link various DIDs in the ecosystem.`
@@ -999,6 +1039,26 @@ In the future, the platform will actively develop financial derivatives for the 
         info: [
           <Box key={1} sx={{ width: '100%', height: '100%' }}>
             <img style={{ width: '100%', height: '100%' }} src={GoDIDTokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
+              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
           </Box>
         ]
       }
