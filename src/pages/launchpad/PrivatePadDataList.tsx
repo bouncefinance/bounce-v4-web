@@ -48,7 +48,7 @@ import BitStableLogo from './imgs/Bitstabe-logo.png'
 import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.png'
-import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar.jpg'
+import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
