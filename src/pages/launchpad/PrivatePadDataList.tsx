@@ -860,6 +860,7 @@ export const PrivatePadCoinData: IPrivatePadProp = {
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 21
   {
+    hidden: true,
     keyId: 19,
     liveTimeStamp: {
       start: 1702612800000,
@@ -937,6 +938,7 @@ In the future, the platform will actively develop financial derivatives for the 
   },
 
   {
+    hidden: true,
     keyId: 20,
     liveTimeStamp: {
       start: 1702612800000,
@@ -1012,6 +1014,7 @@ In the future, the platform will actively develop financial derivatives for the 
     ]
   },
   {
+    hidden: true,
     keyId: 21,
     liveTimeStamp: {
       start: 1702612800000,
