@@ -241,12 +241,13 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
               WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
+              height: isSm ? 63 : 'auto'
             }}
           >
             {data.desc}
           </LaunchpadDescription>
-          <Row mt={10} gap={6} sx={{ overflow: 'hidden' }}>
+          <Row mt={10} gap={6} sx={{ overflow: 'hidden', height: isSm ? 46 : 'auto' }}>
             {data.social}
           </Row>
         </Stack>
