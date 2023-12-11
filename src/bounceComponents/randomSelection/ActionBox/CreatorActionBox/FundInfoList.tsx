@@ -14,8 +14,8 @@ const TX_FEE_RATIO = 0.025
 const FundInfoList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const formatedChargedFee = poolInfo.curPlayer
     ? formatNumber(new BigNumber(poolInfo.curPlayer).times(poolInfo.maxAmount1PerWallet).times(TX_FEE_RATIO), {
-        unit: 18,
-        decimalPlaces: poolInfo.token0.decimals
+        unit: poolInfo.token1.decimals,
+        decimalPlaces: poolInfo.token1.decimals
       })
     : 0
   return (
