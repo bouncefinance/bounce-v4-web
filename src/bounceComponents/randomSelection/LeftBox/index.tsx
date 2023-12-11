@@ -31,8 +31,8 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
 
   const ticketPrice = poolInfo.maxAmount1PerWallet
     ? formatNumber(poolInfo.maxAmount1PerWallet, {
-        unit: poolInfo.token0.decimals,
-        decimalPlaces: poolInfo.token0.decimals
+        unit: poolInfo.token1.decimals,
+        decimalPlaces: poolInfo.token1.decimals
       })
     : undefined
   const singleShare = poolInfo.totalShare
