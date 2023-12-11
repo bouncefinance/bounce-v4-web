@@ -47,6 +47,7 @@ import BitStableInfo from './imgs/BitStable-info.png'
 import BitStableLogo from './imgs/Bitstabe-logo.png'
 import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
+import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -858,7 +859,7 @@ export const PrivatePadCoinData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 21
+  // current privatePad max keyId is 23
   {
     keyId: 19,
     liveTimeStamp: {
@@ -924,24 +925,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                 ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
                 identities.
               </li>
-              <li>
-                As it looks toward the future,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
-                aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the
-                connectivity and synergy among different DIDs in the ecosystem. This approach underlines{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
-                identities.
-              </li>
             </ul>
           </Box>
         ]
@@ -954,26 +937,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       //     </Box>
       //   ]
       // },
-      {
-        title: 'RoadMap',
-        info: [
-          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
-            <ul>
-              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
-              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
-              <li>
-                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
-                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
-              </li>
-              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
-              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
-              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
-              <li>2024Q4——R&D of DID’s underlying protocols</li>
-              <li>2025 ——Interoperability and application of all major chains</li>
-            </ul>
-          </Box>
-        ]
-      },
+
       {
         title: 'Token Distribution',
         info: [
@@ -1000,6 +964,24 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               <li>Liquidity: 10%</li>
               <li>50-day Airdrop Mining (MUBI, BSSB, AUCTION, WBTC): 5%</li>
               <li>GoDID team (6-month lock followed by 12-month linear vesting ): 5%</li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
             </ul>
           </Box>
         ]
@@ -1094,24 +1076,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                 ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
                 identities.
               </li>
-              <li>
-                As it looks toward the future,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
-                aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the
-                connectivity and synergy among different DIDs in the ecosystem. This approach underlines{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
-                identities.
-              </li>
             </ul>
           </Box>
         ]
@@ -1124,26 +1088,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       //     </Box>
       //   ]
       // },
-      {
-        title: 'RoadMap',
-        info: [
-          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
-            <ul>
-              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
-              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
-              <li>
-                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
-                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
-              </li>
-              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
-              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
-              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
-              <li>2024Q4——R&D of DID’s underlying protocols</li>
-              <li>2025 ——Interoperability and application of all major chains</li>
-            </ul>
-          </Box>
-        ]
-      },
+
       {
         title: 'Token Distribution',
         info: [
@@ -1170,6 +1115,24 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               <li>Liquidity: 10%</li>
               <li>50-day Airdrop Mining (MUBI, BSSB, AUCTION, WBTC): 5%</li>
               <li>GoDID team (6-month lock followed by 12-month linear vesting ): 5%</li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
             </ul>
           </Box>
         ]
@@ -1263,24 +1226,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                 ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
                 identities.
               </li>
-              <li>
-                As it looks toward the future,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
-                aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the
-                connectivity and synergy among different DIDs in the ecosystem. This approach underlines{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
-                identities.
-              </li>
             </ul>
           </Box>
         ]
@@ -1293,26 +1238,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       //     </Box>
       //   ]
       // },
-      {
-        title: 'RoadMap',
-        info: [
-          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
-            <ul>
-              <li>2023Q2——Ideology & market research of Ordinals DIDs</li>
-              <li>2023Q3——Lunch the registration & transaction module(v1.0) of Ordinals DIDs</li>
-              <li>
-                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
-                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
-              </li>
-              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
-              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
-              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
-              <li>2024Q4——R&D of DID’s underlying protocols</li>
-              <li>2025 ——Interoperability and application of all major chains</li>
-            </ul>
-          </Box>
-        ]
-      },
+
       {
         title: 'Token Distribution',
         info: [
@@ -1342,6 +1268,24 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             </ul>
           </Box>
         ]
+      },
+      {
+        title: 'RoadMap',
+        info: [
+          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+            <ul>
+              <li>
+                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
+                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
+              </li>
+              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+              <li>2024Q4——R&D of DID’s underlying protocols</li>
+              <li>2025 ——Interoperability and application of all major chains</li>
+            </ul>
+          </Box>
+        ]
       }
     ],
     tokenMetrics: [],
@@ -1367,7 +1311,140 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-
+  {
+    keyId: 22,
+    liveTimeStamp: {
+      start: 1703462400000,
+      end: 0
+    },
+    poolTypeName: 'Staking Auction',
+    img: AiMeetsBtcImg,
+    avatar: AiMeetsBtcImg,
+    title: 'AI meets Bitcoin',
+    chainId: 1,
+    tokenName: 'TBD',
+    // whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    // upcomingLink: '/launchpad/godid-rs-auction',
+    // liveLink: '/launchpad/godid-rs-auction',
+    projectInfo: [
+      { title: 'What is AI meets Bitcoin?', info: ['AI meets Bitcoin'] },
+      {
+        title: 'Artist',
+        info: [
+          <Box key={1}>
+            <ul>
+              <li>
+                RedruM is an AI artist who creates Surrealist artworks between dreams and nightmares, with a style he
+                describes as 'Red Mythological Weirdism' with elements of Caravaggio, Tiziano and even Francis Bacon
+                weaved in.
+              </li>
+              <li>
+                Charles is a French AI-Classicism NFT artist. Charles has had the opportunity to expose his work at the
+                MoCa Gallery as well as the IHAM art gallery in Paris. His work was also sold in the first french
+                physical NFT auction.
+              </li>
+              <li>
+                Gene Kogan is an artist and programmer with interests in generative art, collective intelligence,
+                autonomous systems, and computer science. He was one of the three Day 1 AI artists on braindrops with
+                his brainloops collection and is considered to be one of the OGs when it comes to AI art.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'What’s Random Selection Auction',
+        info: [
+          <Box key={2}>
+            <ul>
+              <li>
+                A random selection auction is a type of auction where, instead of the highest bid winning the auction,
+                the winning bid is determined randomly, like a lottery. This type of auction is typically used in
+                situations where the item being sold is highly desirable and there are many bidders who are willing to
+                pay a high price for it.
+              </li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'AI meets Bitcoin ',
+    social: [],
+    moreData: [
+      { title: 'Token Name', content: 'TBD' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
+  {
+    keyId: 23,
+    liveTimeStamp: {
+      start: 1703462400000,
+      end: 0
+    },
+    poolTypeName: 'Random Selection Auction',
+    img: AiMeetsBtcImg,
+    avatar: AiMeetsBtcImg,
+    title: 'AI meets Bitcoin',
+    chainId: 1,
+    tokenName: 'TBD',
+    // whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    // upcomingLink: '/launchpad/godid-rs-auction',
+    // liveLink: '/launchpad/godid-rs-auction',
+    projectInfo: [
+      { title: 'What is AI meets Bitcoin?', info: ['AI meets Bitcoin'] },
+      {
+        title: 'Artist',
+        info: [
+          <Box key={1}>
+            <ul>
+              <li>
+                RedruM is an AI artist who creates Surrealist artworks between dreams and nightmares, with a style he
+                describes as 'Red Mythological Weirdism' with elements of Caravaggio, Tiziano and even Francis Bacon
+                weaved in.
+              </li>
+              <li>
+                Charles is a French AI-Classicism NFT artist. Charles has had the opportunity to expose his work at the
+                MoCa Gallery as well as the IHAM art gallery in Paris. His work was also sold in the first french
+                physical NFT auction.
+              </li>
+              <li>
+                Gene Kogan is an artist and programmer with interests in generative art, collective intelligence,
+                autonomous systems, and computer science. He was one of the three Day 1 AI artists on braindrops with
+                his brainloops collection and is considered to be one of the OGs when it comes to AI art.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'What’s Random Selection Auction',
+        info: [
+          <Box key={2}>
+            <ul>
+              <li>
+                A random selection auction is a type of auction where, instead of the highest bid winning the auction,
+                the winning bid is determined randomly, like a lottery. This type of auction is typically used in
+                situations where the item being sold is highly desirable and there are many bidders who are willing to
+                pay a high price for it.
+              </li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'AI meets Bitcoin ',
+    social: [],
+    moreData: [
+      { title: 'Token Name', content: 'TBD' },
+      { title: 'Token Price', content: 'TBD' },
+      { title: 'Token Amount', content: 'TBD' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   PrivatePadCoinData,
   {
     keyId: 17,
