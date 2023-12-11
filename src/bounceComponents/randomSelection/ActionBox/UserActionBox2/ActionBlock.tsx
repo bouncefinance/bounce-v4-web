@@ -114,8 +114,18 @@ const ActionBlock = ({
     decimalPlaces: 6,
     shouldSplitByComma: false
   })
+  const ratio = useMemo(() => {
+    if (Number(poolInfo.ratio)) {
+      return poolInfo.ratio
+    }
+    return new BigNumber(poolInfo.currencyAmountTotal0.toSignificant())
+      .div(Number(poolInfo.totalShare))
+      .div(poolInfo.currencyMaxAmount1PerWallet?.toSignificant())
+      .toString()
+  }, [poolInfo.currencyAmountTotal0, poolInfo.currencyMaxAmount1PerWallet, poolInfo.ratio, poolInfo.totalShare])
 
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
+  console.log('poolInfo', ratio)
 
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
   const toBid = useCallback(async () => {
@@ -141,7 +151,7 @@ const ActionBlock = ({
             againBtn: 'Close',
             title: 'Congratulations!',
             content: `You have successfully bid ${formatNumber(
-              new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(poolInfo.ratio),
+              new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(ratio),
               {
                 unit: 0
               }
@@ -161,7 +171,7 @@ const ActionBlock = ({
         onAgain: toBid
       })
     }
-  }, [bid, currencyBidAmount, poolInfo.ratio, poolInfo.token0.symbol, slicedBidAmount])
+  }, [bid, currencyBidAmount, poolInfo.token0.symbol, ratio, slicedBidAmount])
 
   const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
 
