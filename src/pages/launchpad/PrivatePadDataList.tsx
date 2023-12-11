@@ -860,7 +860,7 @@ export const PrivatePadCoinData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 23
+  // current privatePad max keyId is 22
   {
     keyId: 19,
     liveTimeStamp: {
@@ -873,7 +873,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
-    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
     upcomingLink: '/launchpad/godid-staking-auction',
     liveLink: '/launchpad/godid-staking-auction',
     projectInfo: [
@@ -1024,7 +1024,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
-    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
     upcomingLink: '/launchpad/godid-staking-daii',
     liveLink: '/launchpad/godid-staking-daii',
     projectInfo: [
@@ -1174,7 +1174,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
-    whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
+    whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
     upcomingLink: '/launchpad/godid-rs-auction',
     liveLink: '/launchpad/godid-rs-auction',
     projectInfo: [
@@ -1312,75 +1312,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
+
   {
     keyId: 22,
-    liveTimeStamp: {
-      start: 1703462400000,
-      end: 0
-    },
-    poolTypeName: 'Staking Auction',
-    img: AiMeetsBtcImg,
-    avatar: AiMeetsBtsAvatar,
-    title: 'AI meets Bitcoin',
-    chainId: 1,
-    tokenName: 'TBD',
-    // whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    // upcomingLink: '/launchpad/godid-rs-auction',
-    // liveLink: '/launchpad/godid-rs-auction',
-    projectInfo: [
-      { title: 'What is AI meets Bitcoin?', info: ['AI meets Bitcoin'] },
-      {
-        title: 'Artist',
-        info: [
-          <Box key={1}>
-            <ul>
-              <li>
-                RedruM is an AI artist who creates Surrealist artworks between dreams and nightmares, with a style he
-                describes as 'Red Mythological Weirdism' with elements of Caravaggio, Tiziano and even Francis Bacon
-                weaved in.
-              </li>
-              <li>
-                Charles is a French AI-Classicism NFT artist. Charles has had the opportunity to expose his work at the
-                MoCa Gallery as well as the IHAM art gallery in Paris. His work was also sold in the first french
-                physical NFT auction.
-              </li>
-              <li>
-                Gene Kogan is an artist and programmer with interests in generative art, collective intelligence,
-                autonomous systems, and computer science. He was one of the three Day 1 AI artists on braindrops with
-                his brainloops collection and is considered to be one of the OGs when it comes to AI art.
-              </li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'What’s Random Selection Auction',
-        info: [
-          <Box key={2}>
-            <ul>
-              <li>
-                A random selection auction is a type of auction where, instead of the highest bid winning the auction,
-                the winning bid is determined randomly, like a lottery. This type of auction is typically used in
-                situations where the item being sold is highly desirable and there are many bidders who are willing to
-                pay a high price for it.
-              </li>
-            </ul>
-          </Box>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: '',
-    social: [],
-    moreData: [
-      // { title: 'Token Name', content: 'TBD' },
-      { title: 'NFT Price', content: 'TBD' },
-      { title: 'NFT Amount', content: 'TBD' },
-      { title: 'Blockchain', content: 'Ethereum' }
-    ]
-  },
-  {
-    keyId: 23,
     liveTimeStamp: {
       start: 1703462400000,
       end: 0
