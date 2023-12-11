@@ -117,7 +117,7 @@ export const routes = {
     Did: {
       index: '/launchpad/godid-rs-auction',
       stake: '/launchpad/godid-staking-auction',
-      dll: '/launchpad/godid-rs-daii'
+      dll: '/launchpad/godid-staking-daii'
     }
   },
   game: {
