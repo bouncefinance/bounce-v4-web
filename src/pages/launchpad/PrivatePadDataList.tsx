@@ -48,6 +48,7 @@ import BitStableLogo from './imgs/Bitstabe-logo.png'
 import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.png'
+import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar.jpg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -1319,7 +1320,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     },
     poolTypeName: 'Staking Auction',
     img: AiMeetsBtcImg,
-    avatar: AiMeetsBtcImg,
+    avatar: AiMeetsBtsAvatar,
     title: 'AI meets Bitcoin',
     chainId: 1,
     tokenName: 'TBD',
@@ -1369,12 +1370,12 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'AI meets Bitcoin ',
+    desc: '',
     social: [],
     moreData: [
-      { title: 'Token Name', content: 'TBD' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
+      // { title: 'Token Name', content: 'TBD' },
+      { title: 'NFT Price', content: 'TBD' },
+      { title: 'NFT Amount', content: 'TBD' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
@@ -1386,7 +1387,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     },
     poolTypeName: 'Random Selection Auction',
     img: AiMeetsBtcImg,
-    avatar: AiMeetsBtcImg,
+    avatar: AiMeetsBtsAvatar,
     title: 'AI meets Bitcoin',
     chainId: 1,
     tokenName: 'TBD',
@@ -1436,12 +1437,12 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       }
     ],
     tokenMetrics: [],
-    desc: 'AI meets Bitcoin ',
+    desc: '',
     social: [],
     moreData: [
-      { title: 'Token Name', content: 'TBD' },
-      { title: 'Token Price', content: 'TBD' },
-      { title: 'Token Amount', content: 'TBD' },
+      // { title: 'Token Name', content: 'TBD' },
+      { title: 'NFT Price', content: 'TBD' },
+      { title: 'NFT Amount', content: 'TBD' },
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
