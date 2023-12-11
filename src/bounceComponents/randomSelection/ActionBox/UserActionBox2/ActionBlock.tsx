@@ -111,12 +111,13 @@ const ActionBlock = ({
   }, [poolInfo])
   const betAmound = formatNumber(poolInfo.maxAmount1PerWallet, {
     unit: poolInfo.token1.decimals,
-    decimalPlaces: 6
+    decimalPlaces: 6,
+    shouldSplitByComma: false
   })
+
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
 
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
-
   const toBid = useCallback(async () => {
     if (!slicedBidAmount || !currencyBidAmount) return
     showRequestConfirmDialog()
