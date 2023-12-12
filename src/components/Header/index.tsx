@@ -13,7 +13,7 @@ import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkPopperSelect from './NetworkPopperSelect'
 import Search from 'bounceComponents/common/Header/Search'
-// import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
+import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { useUserInfo } from 'state/users/hooks'
 import { ReactComponent as UserIcon } from 'assets/svg/account/user.svg'
 // import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
@@ -22,6 +22,7 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
+import { IS_TEST_ENV } from 'constants'
 
 interface TabContent {
   title: string
@@ -345,7 +346,7 @@ export default function Header() {
             justifyContent={'flex-end'}
           >
             <Resources opacity={isTransparentRoute ? headerBgOpacity : 1} />
-            {/* <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} /> */}
+            {IS_TEST_ENV && <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} />}
             {token && <NetworkPopperSelect opacity={isTransparentRoute ? headerBgOpacity : 1} />}
             <Web3Status opacity={isTransparentRoute ? headerBgOpacity : 1} />
             {!token && walletWithoutToken}
