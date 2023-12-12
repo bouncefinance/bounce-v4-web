@@ -1,7 +1,7 @@
 import { Box, Container, Stack } from '@mui/material'
 
 import CreatorMainBlock from 'bounceComponents/randomSelection/MainBlock/CreatorMainBlock'
-import CreatorInfoCard from 'bounceComponents/randomSelection/CreatorInfoCard'
+// import CreatorInfoCard from 'bounceComponents/randomSelection/CreatorInfoCard'
 import AuctionWinnerList from 'bounceComponents/randomSelection/AuctionWinnerList'
 import UserMainBlock from 'bounceComponents/randomSelection/MainBlock/UserMainBlock'
 import useRandomSelectionPoolInfo from 'bounceHooks/auction/useRandomSelectionPoolInfo'
@@ -46,14 +46,6 @@ const DidPool = ({ backedId }: { backedId?: number }) => {
             )}
             {poolInfo.status === PoolStatus.Closed && isWinnerSeedDone && <AuctionWinnerList poolInfo={poolInfo} />}
           </Stack>
-          {isMobile && (
-            <CreatorInfoCard
-              poolInfo={poolInfo}
-              creator={poolInfo.creator}
-              getPoolInfo={getPoolInfo}
-              creatorUserInfo={poolInfo.creatorUserInfo}
-            />
-          )}
         </Box>
       </Box>
     </Container>

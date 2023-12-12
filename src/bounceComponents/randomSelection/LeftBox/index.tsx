@@ -111,7 +111,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
               <Typography component="span">&nbsp;/ {poolInfo.maxPlayere}</Typography>
             </Box>
           </PoolInfoItem>
-          <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status} />
+          <PoolProgress value={swapedPercent || 0} sx={{ mt: 12 }} poolStatus={poolInfo.status} />
         </Box>
       </Stack>
     </Box>
