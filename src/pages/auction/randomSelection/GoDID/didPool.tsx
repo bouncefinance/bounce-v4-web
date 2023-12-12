@@ -38,15 +38,6 @@ const DidPool = ({ backedId }: { backedId?: number }) => {
     <Container maxWidth="lg">
       <Box sx={{ mt: 60 }}>
         <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
-          {/* {!isMobile && (
-            <CreatorInfoCard
-              poolInfo={poolInfo}
-              creator={poolInfo.creator}
-              getPoolInfo={getPoolInfo}
-              creatorUserInfo={poolInfo.creatorUserInfo}
-            />
-          )} */}
-
           <Stack sx={{ flex: 1 }} spacing={20}>
             {account === poolInfo.creator ? (
               <CreatorMainBlock poolInfo={poolInfo} getPoolInfo={getPoolInfo} />

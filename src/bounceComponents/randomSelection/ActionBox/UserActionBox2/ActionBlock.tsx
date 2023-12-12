@@ -125,7 +125,6 @@ const ActionBlock = ({
   }, [poolInfo.currencyAmountTotal0, poolInfo.currencyMaxAmount1PerWallet, poolInfo.ratio, poolInfo.totalShare])
 
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
-  console.log('poolInfo', ratio)
 
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
   const toBid = useCallback(async () => {
@@ -150,12 +149,13 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully bid ${formatNumber(
-              new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(ratio),
-              {
-                unit: 0
-              }
-            )} ${poolInfo.token0.symbol}`
+            content: `You have successfully bid ${
+              Number(ratio)
+                ? formatNumber(new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(ratio), {
+                    unit: 0
+                  })
+                : singleShare
+            } ${poolInfo.token0.symbol}`
           })
         })
         .catch()
