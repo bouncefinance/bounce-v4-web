@@ -1319,6 +1319,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1703462400000,
       end: 0
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Random Selection Auction',
     img: AiMeetsBtcImg,
     avatar: AiMeetsBtsAvatar,
