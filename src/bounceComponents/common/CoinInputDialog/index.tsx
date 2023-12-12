@@ -117,7 +117,7 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         </ConfirmBtnStyle>
       )
     }
-    if (chainId !== ChainId.SEPOLIA) {
+    if (chainId !== ChainId.MAINNET) {
       return (
         <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
           Switch network

@@ -47,7 +47,7 @@ import BitStableInfo from './imgs/BitStable-info.png'
 import BitStableLogo from './imgs/Bitstabe-logo.png'
 import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
-import AiMeetsBtcImg from './imgs/ai-meets-btc.png'
+import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 export interface IProjectInfo {
   title: string
@@ -864,8 +864,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 19,
     liveTimeStamp: {
-      start: 1702612800000,
-      end: 1734220800000
+      start: 1702645200000,
+      end: 1702818000000
     },
     poolTypeName: 'Staking Auction',
     img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
@@ -1015,8 +1015,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 21,
     liveTimeStamp: {
-      start: 1702612800000,
-      end: 1734220800000
+      start: 1702645200000,
+      end: 1702818000000
     },
     poolTypeName: 'Staking Auction',
     img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
@@ -1165,8 +1165,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 20,
     liveTimeStamp: {
-      start: 1702612800000,
-      end: 1734220800000
+      start: 1702645200000,
+      end: 1702818000000
     },
     poolTypeName: 'Random Selection Auction',
     img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
@@ -1319,6 +1319,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1703462400000,
       end: 0
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Random Selection Auction',
     img: AiMeetsBtcImg,
     avatar: AiMeetsBtsAvatar,
