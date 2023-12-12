@@ -22,7 +22,7 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
-import { IS_TEST_ENV } from 'constants'
+import { IS_TEST_ENV } from '../../constants'
 
 interface TabContent {
   title: string
