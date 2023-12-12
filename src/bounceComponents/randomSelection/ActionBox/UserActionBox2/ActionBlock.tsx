@@ -171,7 +171,7 @@ const ActionBlock = ({
         onAgain: toBid
       })
     }
-  }, [bid, currencyBidAmount, poolInfo.token0.symbol, ratio, slicedBidAmount])
+  }, [bid, currencyBidAmount, poolInfo.token0.symbol, ratio, singleShare, slicedBidAmount])
 
   const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
 
