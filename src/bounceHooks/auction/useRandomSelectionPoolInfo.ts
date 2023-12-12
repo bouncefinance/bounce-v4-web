@@ -6,8 +6,8 @@ import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { useBackedPoolInfo } from './usePoolInfo'
 
-const useRandomSelectionPoolInfo = () => {
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.Lottery)
+const useRandomSelectionPoolInfo = (backedId?: number) => {
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.Lottery, backedId)
 
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()

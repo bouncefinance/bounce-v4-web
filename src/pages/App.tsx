@@ -113,6 +113,7 @@ import useBreakpoint from '../hooks/useBreakpoint'
 import DidStakeProjectInfo from './projectIntro/DidStakeProjectInfo'
 import DidProjectInfo from './projectIntro/DidProjectInfo'
 import DidDllProjectInfo from './projectIntro/DidDllProjectInfo'
+import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -247,6 +248,7 @@ export default function App() {
                   <Route path={routes.thirdPart.Did.stake} element={<DidStakeProjectInfo />} />
                   <Route path={routes.thirdPart.Did.index} element={<DidProjectInfo />} />
                   <Route path={routes.thirdPart.Did.dll} element={<DidDllProjectInfo />} />
+                  <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
