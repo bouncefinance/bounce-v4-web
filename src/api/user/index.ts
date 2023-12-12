@@ -96,6 +96,10 @@ export const getUserWhitelistProof = async (params: GetUserWhitelistProofParams)
   return ApiInstance.post<GetUserWhitelistProofResponse>('/user/whitelist', params)
 }
 
+export const getUserRandomIsWinterProof = async (params: GetUserWhitelistProofParams) => {
+  return ApiInstance.post<GetUserWhitelistProofResponse>('/user/winner', params)
+}
+
 export const getUserPermitSign = async (params: GetUserWhitelistProofParams) => {
   // return ApiInstance.post<GetUserPermitSignResponse>('/user/permit/sign', params)
   return ApiInstance.post<GetUserPermitSignResponse>(IS_TEST_ENV ? '/user/permit/sign' : '/user/launchpad/sign', params)
