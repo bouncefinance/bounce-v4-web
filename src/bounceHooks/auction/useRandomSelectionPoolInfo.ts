@@ -18,6 +18,7 @@ const useRandomSelectionPoolInfo = () => {
     undefined,
     poolInfo?.ethChainId
   ).result
+  const curPoolInfo = useSingleCallResult(randomSelectionERC20Contract, 'pools', [poolInfo?.poolId || ''])
   // console.log('myClaimedRes---', myClaimedRes?.[0], poolInfo?.participant.claimed)
   // !TOTD contract data
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
@@ -50,9 +51,10 @@ const useRandomSelectionPoolInfo = () => {
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
-      currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0)
+      currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0),
+      curPlayer: curPoolInfo.result?.curPlayer || 0
     }
-  }, [myClaimedRes, poolInfo])
+  }, [curPoolInfo.result?.curPlayer, myClaimedRes, poolInfo])
 
   return {
     loading,
