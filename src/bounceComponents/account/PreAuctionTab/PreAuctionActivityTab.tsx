@@ -14,6 +14,7 @@ import {
 } from '@mui/material'
 import Image from 'components/Image'
 import { ReactComponent as AddSvg } from 'assets/imgs/user/add.svg'
+import { ReactComponent as DeleteSvg } from './yellow-delete.svg'
 import { useEffect, useState } from 'react'
 import Search from './Search'
 import ChainSelect from 'bounceComponents/common/ChainSelect'
@@ -21,7 +22,7 @@ import { PoolStatus } from 'api/pool/type'
 import StatusSelect from './StatusSelect'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
-import { usePagination } from 'ahooks'
+import { usePagination, useRequest } from 'ahooks'
 import { IAuctionPoolsItems } from 'api/profile/type'
 import { GetAddressActivitiesRes } from 'api/account/types'
 import { getAddressActivities } from 'api/account'
@@ -34,8 +35,11 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import { useOptionDatas } from 'state/configOptions/hooks'
 import DefaultAvatar from 'assets/images/default_avatar.png'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
-import { useNavigate } from 'react-router-dom'
-import { routes } from 'constants/routes'
+import { show } from '@ebay/nice-modal-react'
+import CreateCredentialListDialog from './Modals/CreateCredentialListDialog'
+import DeleteCredentialListDialog from './Modals/DeleteCredentialListDialog'
+import { toast } from 'react-toastify'
+import { verifyCode } from 'api/user'
 
 const CustomTab = styled(Box)({
   '& .MuiTabs-root': {
@@ -55,12 +59,97 @@ const CustomTab = styled(Box)({
     }
   }
 })
+function StyledTableContainer({ item, index }: { item: any; index: number }) {
+  console.log('🚀 ~ file: PreAuctionActivityTab.tsx:60 ~ StyledTableContainer ~ item:', item, index)
+  const [isHover, setIsHover] = useState(false)
+  const { run: deleteCredential } = useRequest(async (email: string) => verifyCode({ email, codeType: 1 }), {
+    manual: true,
+    onSuccess: response => {
+      const { code } = response
+      if (code !== 200) {
+        return toast.error('Please wait a minute and try again')
+      } else {
+        return toast.success('Delete successfully')
+      }
+    }
+  })
+  const showDeleteDialog = () => {
+    show(DeleteCredentialListDialog, {
+      handleConfirm: deleteCredential
+    })
+  }
+  return (
+    <Stack
+      sx={{ position: 'relative', cursor: 'pointer' }}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseMove={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+    >
+      <StyledTableRow
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          '&:last-child td, &:last-child th': { border: 0 },
+          background: '#121212 !important',
+          borderRadius: '16px !important',
+          padding: '16px 24px',
+          opacity: isHover ? 0.8 : 1
+        }}
+      >
+        <StyledTableCell sx={{ paddingLeft: '0 !important' }}>
+          <PoolStatusBox
+            showParticipantClaim={false}
+            status={PoolStatus.Live}
+            claimAt={1703908800}
+            openTime={1703900800}
+            closeTime={1703908800}
+          />
+          <Typography
+            sx={{
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: 20,
+              marginTop: 20
+            }}
+          >
+            Bounce x Bitcoin
+          </Typography>
+          <Typography
+            sx={{
+              color: '#959595',
+              fontSize: 12
+            }}
+          >
+            400 participants
+          </Typography>
+        </StyledTableCell>
+        <StyledTableCell sx={{ '& img': { width: 150, height: 150, borderRadius: '50%' }, padding: '0 !important' }}>
+          <Image src={DefaultAvatar} />
+        </StyledTableCell>
+        <Stack
+          sx={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            zIndex: 10,
+            top: 'calc(100% - 22px)',
+            left: 'calc(100% - 22px)',
+            transform: 'translate(-50%, -50%)',
+            display: isHover ? 'block' : 'none'
+          }}
+        >
+          <DeleteSvg onClick={showDeleteDialog} />
+        </Stack>
+      </StyledTableRow>
+    </Stack>
+  )
+}
 
 export default function PreAuctionActivityTab() {
   const theme = useTheme()
   const { account } = useActiveWeb3React()
   const optionDatas = useOptionDatas()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [curChain, setCurChain] = useState(0)
   const [curTab, setCurTab] = useState(0)
   const [curPoolType, setCurPoolType] = useState<PoolStatus | 0>(0)
@@ -113,6 +202,10 @@ export default function PreAuctionActivityTab() {
     pagination.changeCurrent(p)
   }
 
+  const showDialog = () => {
+    show(CreateCredentialListDialog, { whitelist: [] })
+  }
+
   return (
     <Box>
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -134,7 +227,7 @@ export default function PreAuctionActivityTab() {
               color: '#121212'
             }
           }}
-          onClick={() => navigate(routes.preAuction.createNewPreAuction)}
+          onClick={showDialog}
           startIcon={<AddSvg />}
         >
           Create new Pre-Auction Activity
@@ -161,51 +254,10 @@ export default function PreAuctionActivityTab() {
                 gap: '24px'
               }}
             >
-              {data.list.map(record => (
-                <StyledTableRow
-                  key={record.id}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    '&:last-child td, &:last-child th': { border: 0 },
-                    background: '#121212 !important',
-                    borderRadius: '16px !important',
-                    padding: '16px 24px'
-                  }}
-                >
-                  <StyledTableCell sx={{ paddingLeft: '0 !important' }}>
-                    <PoolStatusBox
-                      showParticipantClaim={false}
-                      status={PoolStatus.Live}
-                      claimAt={1703908800}
-                      openTime={1703900800}
-                      closeTime={1703908800}
-                    />
-                    <Typography
-                      sx={{
-                        color: '#fff',
-                        fontWeight: 600,
-                        fontSize: 20,
-                        marginTop: 20
-                      }}
-                    >
-                      Bounce x Bitcoin
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: '#959595',
-                        fontSize: 12
-                      }}
-                    >
-                      400 participants
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell
-                    sx={{ '& img': { width: 150, height: 150, borderRadius: '50%' }, padding: '0 !important' }}
-                  >
-                    <Image src={DefaultAvatar} />
-                  </StyledTableCell>
-                </StyledTableRow>
+              {data.list.map((record, index) => (
+                <Stack key={record.id}>
+                  <StyledTableContainer item={record} index={index}></StyledTableContainer>
+                </Stack>
               ))}
             </TableBody>
           </Table>

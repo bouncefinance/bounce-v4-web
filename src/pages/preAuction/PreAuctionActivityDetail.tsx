@@ -17,6 +17,7 @@ import HeadImg from 'assets/imgs/thirdPart/foundoDetail/head.png'
 import { useState } from 'react'
 import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary'
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp'
+import { ReactComponent as IconClose } from './close.svg'
 // import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
@@ -37,24 +38,58 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 
 export default function PreAuctionActivityDetail() {
   // const { data: poolInfo } = usePoolInfo()
-  const list = [
-    {
-      name: 'Users with 200 loyalty points in Season 3 of Galxe Community Space',
-      eligible: 0,
-      type: 'EVM_ADDRESS',
-      details:
-        'Users that have collected 200 loyalty points in Season 3 of the Galxe Community Space.\n\nThis credential is updated every Monday, at 2 PM UTC.',
-      id: 339656727046299648
-    },
-    {
-      name: 'GalxeDAO - Tweet Retweeters - Tweet 1717070586923323770',
-      eligible: 0,
-      type: 'TWITTER',
-      details: "GalxeDAO's [Tweet](https://twitter.com/GalxeDAO/status/1717070586923323770) retweeters",
-      id: 33965672704629964
-    }
-  ]
-  const [open, setOpen] = useState(Array.from({ length: list.length }, () => false))
+  const list = {
+    participants: [
+      {
+        id: 0,
+        name: 'user0',
+        avatar: HeadImg
+      },
+      {
+        id: 1,
+        name: 'user1',
+        avatar: HeadImg
+      },
+      {
+        id: 2,
+        name: 'user2',
+        avatar: HeadImg
+      },
+      {
+        id: 3,
+        name: 'user3',
+        avatar: HeadImg
+      },
+      {
+        id: 4,
+        name: 'user4',
+        avatar: HeadImg
+      },
+      {
+        id: 5,
+        name: 'user5',
+        avatar: HeadImg
+      }
+    ],
+    activities: [
+      {
+        name: 'Users with 200 loyalty points in Season 3 of Galxe Community Space',
+        eligible: 0,
+        type: 'EVM_ADDRESS',
+        details:
+          'Users that have collected 200 loyalty points in Season 3 of the Galxe Community Space.\n\nThis credential is updated every Monday, at 2 PM UTC.',
+        id: 339656727046299648
+      },
+      {
+        name: 'GalxeDAO - Tweet Retweeters - Tweet 1717070586923323770',
+        eligible: 0,
+        type: 'TWITTER',
+        details: "GalxeDAO's [Tweet](https://twitter.com/GalxeDAO/status/1717070586923323770) retweeters",
+        id: 33965672704629964
+      }
+    ]
+  }
+  const [open, setOpen] = useState(Array.from({ length: list.activities.length }, () => false))
   const [drawOpen, setDrawOpen] = useState(false)
   const theme = useTheme()
   const poolInfo: any = {}
@@ -110,7 +145,7 @@ export default function PreAuctionActivityDetail() {
                 Have All below credentials
               </Typography>
             </Stack>
-            {list.map((item, index) => (
+            {list.activities.map((item, index) => (
               <Stack
                 mb={10}
                 key={item.id}
@@ -199,16 +234,9 @@ export default function PreAuctionActivityDetail() {
             </Stack>
             <Stack mt={30} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
               <AvatarGroup max={11}>
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
-                <Avatar alt="Remy Sharp" src={HeadImg} />
+                {list.participants.map(avatar => (
+                  <Avatar key={avatar.id} alt="Remy Sharp" src={avatar.avatar} />
+                ))}
               </AvatarGroup>
               <Button
                 sx={{
@@ -228,7 +256,60 @@ export default function PreAuctionActivityDetail() {
               </Button>
             </Stack>
             <Drawer anchor={'bottom'} open={drawOpen} onClose={() => setDrawOpen(false)}>
-              1
+              <Stack
+                sx={{
+                  position: 'relative',
+                  background: '#20201E',
+                  padding: '56px 120px 30px',
+                  '& p': {
+                    color: '#E1F25C',
+                    paddingBottom: 20,
+                    fontSize: 28,
+                    fontWeight: 600,
+                    borderBottom: '1px solid #FFFFFF1A'
+                  },
+                  '& svg': {
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    right: 20,
+                    top: 20
+                  }
+                }}
+              >
+                <Typography>Participants</Typography>
+                <IconClose onClick={() => setDrawOpen(false)} />
+              </Stack>
+              <Stack
+                direction={'row'}
+                display={'grid'}
+                justifyContent={'flex-start'}
+                gridTemplateColumns={'1fr 1fr 1fr 1fr'}
+                spacing={20}
+                sx={{
+                  background: '#20201E'
+                }}
+              >
+                {list.participants.map(avatar => (
+                  <Stack
+                    width={'100%'}
+                    key={avatar.id}
+                    direction={'row'}
+                    justifyContent={'flex-start'}
+                    spacing={20}
+                    py={16}
+                    pl={120}
+                    alignItems={'center'}
+                    sx={{
+                      marginLeft: '0 !important'
+                    }}
+                  >
+                    <Avatar alt="Remy Sharp" src={avatar.avatar} />
+                    <Typography fontSize={16} color={'#fff'}>
+                      {avatar.name}
+                    </Typography>
+                  </Stack>
+                ))}
+              </Stack>
             </Drawer>
           </Stack>
         </Stack>

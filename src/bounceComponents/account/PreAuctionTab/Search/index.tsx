@@ -6,11 +6,15 @@ import { ReactComponent as IconSVG } from './icon.svg'
 function Search({
   searchText,
   setSearchText,
-  placeholder = 'Search'
+  placeholder = 'Search',
+  borderRadius,
+  maxWidth
 }: {
   searchText: string
   setSearchText: (text: string) => void
   placeholder: string
+  borderRadius?: string
+  maxWidth?: string
 }) {
   const { pathname } = useLocation()
 
@@ -18,9 +22,9 @@ function Search({
     <Box
       sx={{
         width: '100%',
-        maxWidth: 400,
+        maxWidth: maxWidth ?? 400,
         height: 46,
-        borderRadius: '100px',
+        borderRadius: borderRadius ?? '100px',
         border: '1px solid #E6E6E6',
         mixBlendMode: whiteLogoRoutes.includes(pathname) ? 'difference' : 'unset',
         position: 'relative',
