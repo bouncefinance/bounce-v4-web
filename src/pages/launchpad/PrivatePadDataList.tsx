@@ -873,7 +873,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
-    whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
+    whitePaperLink: 'https://docsend.com/view/scmyn8e5frxtzumf',
     upcomingLink: '/launchpad/godid-staking-auction',
     liveLink: '/launchpad/godid-staking-auction',
     projectInfo: [
@@ -1052,7 +1052,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
-    whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
+    whitePaperLink: 'https://docsend.com/view/scmyn8e5frxtzumf',
     upcomingLink: '/launchpad/godid-staking-daii',
     liveLink: '/launchpad/godid-staking-daii',
     projectInfo: [
@@ -1230,7 +1230,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'GoDID',
     chainId: 1,
     tokenName: '$BDID',
-    whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
+    whitePaperLink: 'https://docsend.com/view/scmyn8e5frxtzumf',
     upcomingLink: '/launchpad/godid-rs-auction',
     liveLink: '/launchpad/godid-rs-auction',
     projectInfo: [
