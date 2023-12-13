@@ -5,8 +5,7 @@ import { useCallback } from 'react'
 import { useTransactionAdder, useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
-import { useRequest } from 'ahooks'
-import { getUserRandomIsWinterProof } from 'api/user'
+import { getUserRandomFailedProof, getUserRandomIsWinterProof } from 'api/user'
 
 const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
   const { account } = useActiveWeb3React()
@@ -15,26 +14,6 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
   const submitted = useUserHasSubmittedRecords(account || undefined, 'random_selection_user_claim', poolInfo.poolId)
 
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo.contract)
-
-  const { data: proof } = useRequest(
-    async () => {
-      if (!account || !poolInfo.poolId || !poolInfo.chainId) return ''
-      try {
-        const resp = await getUserRandomIsWinterProof({
-          address: account,
-          category: PoolType.Lottery,
-          chainId: poolInfo.chainId,
-          poolId: poolInfo.poolId
-        })
-        return JSON.parse(resp.data.proof)
-      } catch (error) {
-        return ''
-      }
-    },
-    {
-      refreshDeps: [account, poolInfo.poolId, poolInfo.chainId]
-    }
-  )
 
   const run = useCallback(async (): Promise<{
     hash: string
@@ -47,32 +26,68 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
       return Promise.reject('no contract')
     }
 
-    const args = [poolInfo.poolId, proof]
-    const func = isWinner ? 'userClaim' : 'otherClaim'
+    if (!poolInfo.totalShare || !poolInfo.curPlayer) {
+      return Promise.reject('error')
+    }
+
+    let args: any[] = [poolInfo.poolId, []]
+
+    if (isWinner) {
+      if (Number(poolInfo.curPlayer) > Number(poolInfo.totalShare)) {
+        const userRandomIsWinterProof = await getUserRandomIsWinterProof({
+          address: account,
+          category: PoolType.Lottery,
+          chainId: poolInfo.chainId,
+          poolId: poolInfo.poolId,
+          tokenType: 1
+        })
+        args = [poolInfo.poolId, JSON.parse(userRandomIsWinterProof.data.proof)]
+        console.log('🚀 ~ file: useRandomSelectionUserClaim.ts:45 ~ run ~ args:', args)
+      }
+    } else {
+      const userRandomFailedProof = await getUserRandomFailedProof({
+        address: account,
+        category: PoolType.Lottery,
+        chainId: poolInfo.chainId,
+        poolId: poolInfo.poolId,
+        tokenType: 1
+      })
+      args = [poolInfo.poolId, userRandomFailedProof.data.expireTime, userRandomFailedProof.data.signature]
+    }
+
+    const func = isWinner ? 'winnerClaim' : 'otherClaim'
 
     const estimatedGas = await randomSelectionERC20Contract.estimateGas[func](...args).catch((error: Error) => {
       console.debug('Failed to claim', error)
       throw error
     })
-    return randomSelectionERC20Contract
-      .userClaim(...args, {
-        gasLimit: calculateGasMargin(estimatedGas)
-      })
-      .then((response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: `Claim token ${poolInfo.token1.symbol}`,
-          userSubmitted: {
-            account,
-            action: `random_selection_user_claim`,
-            key: poolInfo.poolId
-          }
-        })
-        return {
-          hash: response.hash,
-          transactionReceipt: response.wait(1)
+    return randomSelectionERC20Contract[func](...args, {
+      gasLimit: calculateGasMargin(estimatedGas)
+    }).then((response: TransactionResponse) => {
+      addTransaction(response, {
+        summary: `Claim token ${poolInfo.token1.symbol}`,
+        userSubmitted: {
+          account,
+          action: `random_selection_user_claim`,
+          key: poolInfo.poolId
         }
       })
-  }, [account, randomSelectionERC20Contract, poolInfo.poolId, poolInfo.token1.symbol, proof, isWinner, addTransaction])
+      return {
+        hash: response.hash,
+        transactionReceipt: response.wait(1)
+      }
+    })
+  }, [
+    account,
+    randomSelectionERC20Contract,
+    poolInfo.totalShare,
+    poolInfo.curPlayer,
+    poolInfo.poolId,
+    poolInfo.chainId,
+    poolInfo.token1.symbol,
+    isWinner,
+    addTransaction
+  ])
 
   return { run, submitted }
 }

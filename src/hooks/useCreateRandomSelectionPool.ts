@@ -269,6 +269,7 @@ export function useIsWinnerSeedDone(poolId: number | string, contract: string, c
   // const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
   // const args = [Number(poolId)]
   // const res = useSingleCallResult(randomSelectionERC20Contract, 'winnerMerkleRoot', args)
+  // console.log('🚀 ~ file: useCreateRandomSelectionPool.ts:272 ~ useIsWinnerSeedDone ~ res:', res)
 
   // return useMemo(() => {
   //   const { result } = res
