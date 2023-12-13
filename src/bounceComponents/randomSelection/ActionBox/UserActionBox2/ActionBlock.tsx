@@ -105,6 +105,7 @@ const ActionBlock = ({
     poolInfo.poolId,
     account || undefined,
     poolInfo.contract,
+    isWinnerSeedDone || false,
     poolInfo.ethChainId
   )
   useEffect(() => {
@@ -211,7 +212,7 @@ const ActionBlock = ({
     }
   }, [regret])
 
-  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo, isWinner)
 
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()

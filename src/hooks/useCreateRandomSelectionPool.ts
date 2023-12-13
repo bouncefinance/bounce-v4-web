@@ -1,10 +1,10 @@
-import { getPoolCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
+import { getPoolCreationSignature, getWhitelistMerkleTreeRoot, getWinnersList } from 'api/pool'
 import { GetPoolCreationSignatureParams, GetWhitelistMerkleTreeRootParams, PoolType } from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import { NULL_BYTES, ZERO_ADDRESS } from '../constants'
+import { NULL_BYTES } from '../constants'
 import { useActiveWeb3React } from 'hooks'
 import { useRandomSelectionERC20Contract } from 'hooks/useContract'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { useAuctionERC20Currency, useValuesState } from 'bounceComponents/create-auction-pool/ValuesProvider'
 import { CurrencyAmount } from 'constants/token'
 import { BigNumber } from 'bignumber.js'
@@ -219,6 +219,7 @@ export function useIsWinnerForRandomSelectionPool(
   poolId: string | number,
   address: string | undefined,
   contract: string,
+  isWinnerSeedDone: boolean,
   chainId?: ChainId
 ): { isWinner: boolean } {
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
@@ -226,7 +227,7 @@ export function useIsWinnerForRandomSelectionPool(
   const backedChainId = useGetBackedChainIdByChain(chainId)
   const { data: proof } = useRequest(
     async () => {
-      if (!address || !poolId || !backedChainId) return ''
+      if (!address || !poolId || !backedChainId || !isWinnerSeedDone) return ''
       try {
         const resp = await getUserRandomIsWinterProof({
           address,
@@ -240,13 +241,13 @@ export function useIsWinnerForRandomSelectionPool(
       }
     },
     {
-      refreshDeps: [backedChainId, address, poolId]
+      refreshDeps: [backedChainId, address, poolId, isWinnerSeedDone]
     }
   )
 
-  const args = [Number(poolId), address, proof || []]
+  const args = [Number(poolId), address, proof]
   const { result } = useSingleCallResult(proof ? randomSelectionERC20Contract : null, 'isWinner', args)
-  const isWinner = Array.isArray(result) && result[0]
+  const isWinner = result?.[0]
   return {
     isWinner: !!isWinner
   }
@@ -265,14 +266,35 @@ export function useIsJoinedRandomSelectionPool(
 }
 // winnerSeed more than 0 means winners list is ready
 export function useIsWinnerSeedDone(poolId: number | string, contract: string, chainId?: ChainId) {
-  const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
-  const args = [Number(poolId)]
-  const res = useSingleCallResult(randomSelectionERC20Contract, 'winnerMerkleRoot', args)
+  // const randomSelectionERC20Contract = useRandomSelectionERC20Contract(contract, chainId)
+  // const args = [Number(poolId)]
+  // const res = useSingleCallResult(randomSelectionERC20Contract, 'winnerMerkleRoot', args)
 
-  return useMemo(() => {
-    const { result } = res
-    // load winners list if isWinnerSeedDone is more that 0
-    const ret = result?.[0].toString()
-    return ret && ret !== ZERO_ADDRESS
-  }, [res])
+  // return useMemo(() => {
+  //   const { result } = res
+  //   // load winners list if isWinnerSeedDone is more that 0
+  //   const ret = result?.[0].toString()
+  //   return ret && ret !== ZERO_ADDRESS
+  // }, [res])
+
+  const backedChainId = useGetBackedChainIdByChain(chainId)
+
+  const { data } = useRequest(
+    async () => {
+      if (!backedChainId || !contract) return
+      const resp = await getWinnersList({
+        offset: 0,
+        limit: 10,
+        poolId: poolId.toString(),
+        chainId: backedChainId
+      })
+      return resp.data.total
+    },
+    {
+      refreshDeps: [backedChainId, contract],
+      retryInterval: 20000
+    }
+  )
+
+  return !!data
 }
