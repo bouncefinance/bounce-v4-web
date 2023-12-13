@@ -8,7 +8,7 @@ import { TransactionResponse, TransactionReceipt } from '@ethersproject/provider
 import { useRequest } from 'ahooks'
 import { getUserRandomIsWinterProof } from 'api/user'
 
-const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
+const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
@@ -47,9 +47,10 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
       return Promise.reject('no contract')
     }
 
-    const args = [poolInfo.poolId, proof || []]
+    const args = [poolInfo.poolId, proof]
+    const func = isWinner ? 'userClaim' : 'otherClaim'
 
-    const estimatedGas = await randomSelectionERC20Contract.estimateGas.userClaim(...args).catch((error: Error) => {
+    const estimatedGas = await randomSelectionERC20Contract.estimateGas[func](...args).catch((error: Error) => {
       console.debug('Failed to claim', error)
       throw error
     })
@@ -71,7 +72,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp) => {
           transactionReceipt: response.wait(1)
         }
       })
-  }, [account, randomSelectionERC20Contract, poolInfo.poolId, poolInfo.token1.symbol, proof, addTransaction])
+  }, [account, randomSelectionERC20Contract, poolInfo.poolId, poolInfo.token1.symbol, proof, isWinner, addTransaction])
 
   return { run, submitted }
 }
