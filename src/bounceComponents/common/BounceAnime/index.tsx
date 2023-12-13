@@ -1,16 +1,16 @@
 import { Box } from '@mui/material'
 import React from 'react'
-import Lottie from 'react-lottie'
+import Lottie from 'lottie-react'
 import bounce_loading from './bounce-loading.json'
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: bounce_loading,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
-  }
-}
+// const defaultOptions = {
+//   loop: true,
+//   autoplay: true,
+//   animationData: bounce_loading,
+//   rendererSettings: {
+//     preserveAspectRatio: 'xMidYMid slice'
+//   }
+// }
 
 export const BounceAnime: React.FC = () => {
   return (
@@ -23,7 +23,8 @@ export const BounceAnime: React.FC = () => {
         margin: '0 auto'
       }}
     >
-      <Lottie classwidth={200} height={200} options={defaultOptions} />
+      {/* <Lottie classwidth={200} height={200} options={defaultOptions} /> */}
+      <Lottie animationData={bounce_loading} loop={true} autoplay={true} style={{ width: 200, height: 200 }} />
     </Box>
   )
 }
