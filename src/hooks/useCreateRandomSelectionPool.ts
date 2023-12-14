@@ -293,6 +293,8 @@ export function useIsWinnerSeedDone(poolId: number | string, contract: string, c
     },
     {
       refreshDeps: [backedChainId, contract],
+      refreshOnWindowFocus: true,
+      pollingInterval: 20000,
       retryInterval: 20000
     }
   )

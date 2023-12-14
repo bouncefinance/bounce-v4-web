@@ -168,7 +168,7 @@ export interface GetUserWhitelistProofResponse {
 }
 
 export interface GetUserRandomFailedResponse {
-  expireTime: number
+  expiredTime: number
   signature: string
 }
 

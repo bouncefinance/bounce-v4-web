@@ -52,7 +52,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
         poolId: poolInfo.poolId,
         tokenType: 1
       })
-      args = [poolInfo.poolId, userRandomFailedProof.data.expireTime, userRandomFailedProof.data.signature]
+      args = [poolInfo.poolId, userRandomFailedProof.data.expiredTime, userRandomFailedProof.data.signature]
     }
 
     const func = isWinner ? 'winnerClaim' : 'otherClaim'
