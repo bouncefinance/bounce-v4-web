@@ -17,7 +17,7 @@ const UpcomingCard = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const handleZoom = () => {
     if (isSm) {
       const w = window.innerWidth
-      setZoomNum((w - 47) / 444)
+      setZoomNum((w - 55) / 444)
     } else {
       setZoomNum(1)
     }
