@@ -266,7 +266,7 @@ const ActionBlock = ({
       return
     }
     setAction(getInitialAction(isJoined, isUserClaimed, poolInfo?.status, poolInfo?.claimAt))
-  }, [isCurrentChainEqualChainOfPool, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
+  }, [isCurrentChainEqualChainOfPool, isWinnerSeedDone, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
 
   return (
     <Box sx={{ mt: 32 }}>
