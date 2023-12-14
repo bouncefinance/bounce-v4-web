@@ -1233,8 +1233,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
-    upcomingLink: '/launchpad/godid-rs-auction',
-    liveLink: '/launchpad/godid-rs-auction',
+    upcomingLink: routes.thirdPart.Did.pool,
+    liveLink: routes.thirdPart.Did.pool,
     projectInfo: [
       {
         title: 'What is GoDID?',
