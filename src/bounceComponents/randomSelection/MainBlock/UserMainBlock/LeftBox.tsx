@@ -5,7 +5,7 @@ import TokenImage from 'bounceComponents/common/TokenImage'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 // import { formatNumber } from 'utils/number'
 
-import PoolProgress from 'bounceComponents/common/PoolProgress'
+// import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import { shortenAddress } from 'utils'
 import { FixedSwapPoolProp } from 'api/pool/type'
@@ -23,13 +23,15 @@ const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   </Typography>
 )
 
+const boxSx = { borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }
+
 const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
   const { chainId } = useActiveWeb3React()
   const isMobile = useBreakpoint('md')
-  const swapedPercent =
-    poolInfo?.curPlayer && poolInfo?.maxPlayere
-      ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
-      : undefined
+  // const swapedPercent =
+  //   poolInfo?.curPlayer && poolInfo?.maxPlayere
+  //     ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
+  //     : undefined
 
   const ticketPrice = poolInfo.maxAmount1PerWallet
     ? formatNumber(poolInfo.maxAmount1PerWallet, {
@@ -43,24 +45,13 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
       })
     : undefined
   return (
-    <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', px: 16, py: 36, flex: 1, height: 'fit-content' }}>
-      <Box
-        sx={{
-          display: isMobile ? 'block' : 'flex',
-          flexFlow: 'row nowrap',
-          gap: '39px'
-        }}
-      >
-        <Box
-          sx={{
-            width: isMobile ? '100%' : '50%',
-            flex: 1
-          }}
-        >
+    <Box>
+      <Stack spacing={24}>
+        <Box sx={boxSx}>
           <Title>Token Information</Title>
           <PoolInfoItem
             sx={{
-              marginBottom: '12px'
+              marginBottom: '6px'
             }}
             title="Contract address"
             tip="Token Contract Address."
@@ -81,7 +72,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
 
           <PoolInfoItem
             sx={{
-              marginBottom: '12px'
+              marginBottom: '6px'
             }}
             title="Token symbol"
           >
@@ -105,56 +96,52 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
             </Button>
           )}
         </Box>
-        <Box
-          sx={{
-            width: isMobile ? '100%' : '50%',
-            pt: isMobile ? '20px' : '',
-            flex: 1
-          }}
-        >
+        <Box sx={boxSx}>
           <Title>Auction Information</Title>
-          <PoolInfoItem
-            // sx={{
-            //   marginBottom: '12px'
-            // }}
-            title="Auction type"
-          >
-            Random Selection
-          </PoolInfoItem>
-          <PoolInfoItem
-            // sx={{
-            //   marginBottom: '12px'
-            // }}
-            title="Participant"
-          >
-            {poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}
-          </PoolInfoItem>
-          <PoolInfoItem title="Number of winners">{poolInfo.totalShare}</PoolInfoItem>
-          <PoolInfoItem title="Token per ticket">{`${singleShare} ${poolInfo.token0.symbol}`}</PoolInfoItem>
-          <PoolInfoItem title="Total amount of token">
-            {`${
-              poolInfo.amountTotal0
-                ? formatNumber(new BigNumber(poolInfo.amountTotal0).toString(), {
-                    unit: poolInfo.token0.decimals,
-                    decimalPlaces: poolInfo.token0.decimals
-                  })
-                : undefined
-            } ${poolInfo.token0.symbol}`}
-          </PoolInfoItem>
-          <PoolInfoItem title="Ticket Price">{`${ticketPrice} ${poolInfo.token1.symbol}`}</PoolInfoItem>
+          <Stack spacing={6}>
+            <PoolInfoItem
+              // sx={{
+              //   marginBottom: '12px'
+              // }}
+              title="Auction type"
+            >
+              Random Selection
+            </PoolInfoItem>
+            <PoolInfoItem
+              // sx={{
+              //   marginBottom: '12px'
+              // }}
+              title="Participant"
+            >
+              {poolInfo.enableWhiteList ? 'Whitelist' : 'Public'}
+            </PoolInfoItem>
+            <PoolInfoItem title="Number of winners">{poolInfo.totalShare}</PoolInfoItem>
+            <PoolInfoItem title="Token per ticket">{`${singleShare} ${poolInfo.token0.symbol}`}</PoolInfoItem>
+            <PoolInfoItem title="Total amount of token">
+              {`${
+                poolInfo.amountTotal0
+                  ? formatNumber(new BigNumber(poolInfo.amountTotal0).toString(), {
+                      unit: poolInfo.token0.decimals,
+                      decimalPlaces: poolInfo.token0.decimals
+                    })
+                  : undefined
+              } ${poolInfo.token0.symbol}`}
+            </PoolInfoItem>
+            <PoolInfoItem title="Ticket Price">{`${ticketPrice} ${poolInfo.token1.symbol}`}</PoolInfoItem>
+            <Box>
+              <PoolInfoItem title="Progress">
+                <Box>
+                  <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[poolInfo.status] }}>
+                    {poolInfo.curPlayer}
+                  </Typography>
+                  <Typography component="span">&nbsp;/ {poolInfo.maxPlayere}</Typography>
+                </Box>
+              </PoolInfoItem>
+              {/* <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status} /> */}
+            </Box>
+          </Stack>
         </Box>
-      </Box>
-      <Box>
-        <PoolInfoItem title="Progress">
-          <Box>
-            <Typography component="span" sx={{ color: AuctionProgressPrimaryColor[poolInfo.status] }}>
-              {poolInfo.curPlayer}
-            </Typography>
-            <Typography component="span">&nbsp;/ {poolInfo.maxPlayere}</Typography>
-          </Box>
-        </PoolInfoItem>
-        <PoolProgress value={swapedPercent} sx={{ mt: 12 }} poolStatus={poolInfo.status} />
-      </Box>
+      </Stack>
     </Box>
   )
 }

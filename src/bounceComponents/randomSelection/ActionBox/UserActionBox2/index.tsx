@@ -23,8 +23,22 @@ const UserActionBox2 = ({
     poolInfo.ethChainId
   )
   return (
-    <Box sx={{ width: '100%', maxWidth: '444px', margin: '0 auto', flex: 1, pt: 28 }}>
-      <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} isJoined={isJoined} isWinnerSeedDone={!!isWinnerSeedDone} />
+    <Box
+      sx={{
+        width: '100%',
+        maxWidth: '476px',
+        margin: '0 auto',
+        flex: 1
+      }}
+    >
+      <Box sx={{ borderRadius: 20, bgcolor: '#F5F5F5', padding: '24px' }}>
+        <Header
+          poolInfo={poolInfo}
+          getPoolInfo={getPoolInfo}
+          isJoined={isJoined}
+          isWinnerSeedDone={!!isWinnerSeedDone}
+        />
+      </Box>
       {poolInfo.contract && (
         <ActionBlock
           poolInfo={poolInfo}
