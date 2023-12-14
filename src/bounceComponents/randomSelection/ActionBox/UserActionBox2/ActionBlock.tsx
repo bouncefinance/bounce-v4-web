@@ -142,16 +142,20 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully bid ${
-              Number(poolInfo.ratio)
-                ? formatNumber(
-                    new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(poolInfo.ratio),
-                    {
-                      unit: 0
-                    }
-                  )
-                : singleShare
-            } ${poolInfo.token0.symbol}`
+            content: `You have successfully purchased a ticket with ${currencyBidAmount.toSignificant()} ${
+              poolInfo.token1.symbol
+            }.`
+            // content: `You have successfully bid ${
+            //   Number(poolInfo.ratio)
+            //     ? formatNumber(
+            //         new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(poolInfo.ratio),
+            //         {
+            //           unit: 0
+            //         }
+            //       )
+
+            //     : singleShare
+            // } ${poolInfo.token0.symbol}`
           })
         })
         .catch()
@@ -167,7 +171,7 @@ const ActionBlock = ({
         onAgain: toBid
       })
     }
-  }, [bid, currencyBidAmount, poolInfo, singleShare, slicedBidAmount])
+  }, [bid, currencyBidAmount, poolInfo, slicedBidAmount])
 
   const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
 
