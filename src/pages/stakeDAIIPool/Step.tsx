@@ -402,7 +402,7 @@ function Step1({
                       }
                     }}
                   >
-                    GoDID <b>x</b> Daii Pool
+                    GoDID <b>x</b> DAII Pool
                   </CardLabelStyle>
                   <CardContentStyle>Stake $DAII to earn proportional $BDID allocation</CardContentStyle>
                 </Stack>

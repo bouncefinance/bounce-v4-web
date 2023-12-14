@@ -407,7 +407,7 @@ function Step1({
                       }
                     }}
                   >
-                    GoDID <b>x</b> Auction Pool
+                    GoDID <b>x</b> AUCTION Pool
                   </CardLabelStyle>
                   <CardContentStyle>Stake $AUCTION to earn proportional $BDID allocation</CardContentStyle>
                 </Stack>
