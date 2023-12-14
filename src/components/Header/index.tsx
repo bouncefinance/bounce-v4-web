@@ -147,7 +147,8 @@ export const transparentRoutes = [
   routes.thirdPart.BitStableAuction,
   routes.thirdPart.Did.index,
   routes.thirdPart.Did.stake,
-  routes.thirdPart.Did.dll
+  routes.thirdPart.Did.dll,
+  routes.thirdPart.Did.pool
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]

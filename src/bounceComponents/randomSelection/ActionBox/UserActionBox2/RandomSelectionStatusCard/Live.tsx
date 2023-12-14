@@ -20,7 +20,7 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
   const swapedPercent =
     poolInfo?.curPlayer && poolInfo.maxPlayere
       ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
-      : undefined
+      : 0
   interface NoJoinedCardParam {
     isJoined: boolean
   }
