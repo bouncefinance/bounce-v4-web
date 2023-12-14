@@ -388,7 +388,7 @@ const ClosedCard = ({
               margin: '27px 0 24px'
             }}
           >
-            Sorry! No winner has been selected yet. Please wait.
+            No winner has been selected yet. Please wait.
           </Typography>
         </Box>
       </>
