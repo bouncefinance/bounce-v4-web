@@ -8,8 +8,30 @@ import { formatNumber } from 'utils/number'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import { useEffect, useState } from 'react'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const UpcomingCard = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
+  const [zoomNum, setZoomNum] = useState(1)
+  const isSm = useBreakpoint('sm')
+  const handleZoom = () => {
+    if (isSm) {
+      const w = window.innerWidth
+      setZoomNum((w - 47) / 444)
+    } else {
+      setZoomNum(1)
+    }
+  }
+
+  useEffect(() => {
+    handleZoom()
+    window.addEventListener('resize', handleZoom)
+    return () => {
+      window.removeEventListener('resize', handleZoom)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const singleShare = poolInfo.totalShare
     ? formatNumber(new BigNumber(poolInfo.amountTotal0).div(poolInfo.totalShare).toString(), {
         unit: poolInfo.token0.decimals,
@@ -23,7 +45,15 @@ const UpcomingCard = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   return (
     <>
       <Box
-        sx={{ width: 444, height: 216, display: 'flex', flexFlow: 'row nowrap', overflow: 'hidden', marginBottom: 30 }}
+        sx={{
+          width: 444,
+          height: 216,
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          overflow: 'hidden',
+          margin: '0 auto 30px',
+          zoom: zoomNum
+        }}
       >
         <Box
           sx={{

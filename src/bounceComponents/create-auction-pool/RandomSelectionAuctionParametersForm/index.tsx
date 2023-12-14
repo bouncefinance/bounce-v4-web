@@ -63,12 +63,13 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
       })
       .required('Swap ratio is required'),
     winnerNumber: Yup.number()
+      .max(2000, 'Number Of Winners cannot exceed 2000')
       .integer('Number of Winners must be an integer')
       .positive('Number of Winners must be positive')
       .typeError('Please input valid number')
       .required('Number of winners is required'),
     maxParticipantAllowed: Yup.number()
-      .max(10000, 'max participant allowed must be less than or equal to 10000')
+      .max(36000, 'max participant allowed must be less than or equal to 36000')
       .test(
         'MORE_THAN_WINNERS',
         'max participant allowed must be more than or equal to number of winners',
@@ -297,9 +298,9 @@ const RandomSelectionAuctionParametersForm = (): JSX.Element => {
               <Box>
                 <Stack direction="row" spacing={8} sx={{ mb: 20 }}>
                   <Typography variant="h3" sx={{ fontSize: 16 }}>
-                    Max Participant Allowed (Max 10,000)
+                    Max Participant Allowed (Max 36,000)
                   </Typography>
-                  <Tooltip title="The maximum nubmer is 10.000 participants and must more than nunber of winners ">
+                  <Tooltip title="The maximum nubmer is 36,000 participants and must more than nunber of winners ">
                     <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                   </Tooltip>
                 </Stack>

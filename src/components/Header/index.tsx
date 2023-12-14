@@ -13,7 +13,7 @@ import { routes } from 'constants/routes'
 import MobileMenu from './MobileMenu'
 import NetworkPopperSelect from './NetworkPopperSelect'
 import Search from 'bounceComponents/common/Header/Search'
-// import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
+import CreateBtn from 'bounceComponents/common/Header/CreateBtn'
 import { useUserInfo } from 'state/users/hooks'
 import { ReactComponent as UserIcon } from 'assets/svg/account/user.svg'
 // import { ReactComponent as WalletIcon } from 'assets/svg/account/wallet.svg'
@@ -146,7 +146,8 @@ export const transparentRoutes = [
   routes.thirdPart.BitStableAuction,
   routes.thirdPart.Did.index,
   routes.thirdPart.Did.stake,
-  routes.thirdPart.Did.dll
+  routes.thirdPart.Did.dll,
+  routes.thirdPart.Did.pool
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -285,7 +286,7 @@ export default function Header() {
           color
         }}
       > */}
-      <Typography id={'connect'} variant="h5" color="currentcolor">
+      <Typography id={'connect'} variant="h5" color="currentcolor" sx={{ whiteSpace: 'nowrap' }}>
         {' '}
         Connect wallet
       </Typography>
@@ -345,7 +346,7 @@ export default function Header() {
             justifyContent={'flex-end'}
           >
             <Resources opacity={isTransparentRoute ? headerBgOpacity : 1} />
-            {/* <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} /> */}
+            <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} />
             {token && <NetworkPopperSelect opacity={isTransparentRoute ? headerBgOpacity : 1} />}
             <Web3Status opacity={isTransparentRoute ? headerBgOpacity : 1} />
             {!token && walletWithoutToken}

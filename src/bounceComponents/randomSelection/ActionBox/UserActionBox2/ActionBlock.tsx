@@ -96,6 +96,7 @@ const ActionBlock = ({
         decimalPlaces: poolInfo.token0.decimals
       })
     : undefined
+
   const slicedBidAmount = formatNumber(poolInfo.maxAmount1PerWallet, {
     unit: poolInfo.token1.decimals,
     decimalPlaces: poolInfo.token1.decimals
@@ -104,6 +105,7 @@ const ActionBlock = ({
     poolInfo.poolId,
     account || undefined,
     poolInfo.contract,
+    isWinnerSeedDone || false,
     poolInfo.ethChainId
   )
   useEffect(() => {
@@ -114,18 +116,8 @@ const ActionBlock = ({
     decimalPlaces: 6,
     shouldSplitByComma: false
   })
-  const ratio = useMemo(() => {
-    if (Number(poolInfo.ratio)) {
-      return poolInfo.ratio
-    }
-    return new BigNumber(poolInfo.currencyAmountTotal0.toSignificant())
-      .div(Number(poolInfo.totalShare))
-      .div(poolInfo.currencyMaxAmount1PerWallet?.toSignificant())
-      .toString()
-  }, [poolInfo.currencyAmountTotal0, poolInfo.currencyMaxAmount1PerWallet, poolInfo.ratio, poolInfo.totalShare])
 
   const currencyBidAmount = CurrencyAmount.fromAmount(poolInfo.currencyMaxAmount1PerWallet.currency, betAmound)
-  console.log('poolInfo', ratio)
 
   const { run: bid, submitted: placeBidSubmitted } = useRandomSelectionPlaceBid(poolInfo)
   const toBid = useCallback(async () => {
@@ -150,12 +142,20 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully bid ${formatNumber(
-              new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(ratio),
-              {
-                unit: 0
-              }
-            )} ${poolInfo.token0.symbol}`
+            content: `You have successfully purchased a ticket with ${currencyBidAmount.toSignificant()} ${
+              poolInfo.token1.symbol
+            }.`
+            // content: `You have successfully bid ${
+            //   Number(poolInfo.ratio)
+            //     ? formatNumber(
+            //         new BigNumber(currencyBidAmount.toSignificant(64, { groupSeparator: '' })).div(poolInfo.ratio),
+            //         {
+            //           unit: 0
+            //         }
+            //       )
+
+            //     : singleShare
+            // } ${poolInfo.token0.symbol}`
           })
         })
         .catch()
@@ -171,7 +171,7 @@ const ActionBlock = ({
         onAgain: toBid
       })
     }
-  }, [bid, currencyBidAmount, poolInfo.token0.symbol, ratio, slicedBidAmount])
+  }, [bid, currencyBidAmount, poolInfo, slicedBidAmount])
 
   const { run: regret, submitted: regretBidSubmitted } = useRegretBid(poolInfo)
 
@@ -216,7 +216,7 @@ const ActionBlock = ({
     }
   }, [regret])
 
-  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo)
+  const { run: claim, submitted: claimBidSubmitted } = useUserClaim(poolInfo, isWinner)
 
   const toClaim = useCallback(async () => {
     showRequestConfirmDialog()
@@ -239,9 +239,9 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed ${isWinner ? singleShare : slicedBidAmount} ${
-              isWinner ? poolInfo.token0.symbol : poolInfo.token1.symbol
-            }`
+            content: `You have successfully ${isWinner ? 'swapped' : 'claimed'} ${
+              isWinner ? singleShare : slicedBidAmount
+            } ${isWinner ? poolInfo.token0.symbol : poolInfo.token1.symbol}`
           })
         })
         .catch()
@@ -266,7 +266,7 @@ const ActionBlock = ({
       return
     }
     setAction(getInitialAction(isJoined, isUserClaimed, poolInfo?.status, poolInfo?.claimAt))
-  }, [isCurrentChainEqualChainOfPool, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
+  }, [isCurrentChainEqualChainOfPool, isWinnerSeedDone, isJoined, isUserClaimed, poolInfo?.claimAt, poolInfo?.status])
 
   return (
     <Box sx={{ mt: 32 }}>

@@ -859,365 +859,367 @@ export const PrivatePadCoinData: IPrivatePadProp = {
     // { title: 'Staking assets', content: '$AUCTION' }
   ]
 }
+export const PrivateStakeAuctionData: IPrivatePadProp = {
+  keyId: 19,
+  liveTimeStamp: {
+    start: 1702645200000,
+    end: 1702818000000
+  },
+  poolTypeName: 'Staking Auction',
+  img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+  avatar: DIDNa,
+  title: 'GoDID',
+  chainId: 1,
+  tokenName: '$BDID',
+  whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
+  upcomingLink: '/launchpad/godid-staking-auction',
+  liveLink: '/launchpad/godid-staking-auction',
+  projectInfo: [
+    {
+      title: 'What is GoDID?',
+      info: [
+        <Box
+          key={1}
+          sx={{
+            '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
+            '&>ul>li>a': {
+              color: 'gray',
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          <ul>
+            <li>
+              GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID
+              and Bitcoin Ordinals DIDs. It offers the most user-friendly and cost-effective ENS platform with diverse
+              features, including the ENS module built using OpenSea’s Seaport contract. This module supports the full
+              ENS lifecycle, encompassing search, registration, trading, and management.
+            </li>
+            <li>
+              GoDID enhances the ENS user experience with various tools and leaderboards, such as Bid by Category,
+              Premium Sniper, and cross-market listings. A standout feature is its comprehensive categorization system,
+              featuring 144 distinct categories, which greatly facilitates user inquiries and trading activities. This
+              focus on variety and practicality positions GoDID as a versatile and valuable resource in the
+              decentralized identity market.
+            </li>
+          </ul>
+        </Box>
+      ]
+    },
+    {
+      title: 'What is BDID?',
+      info: [
+        <Box
+          key={1}
+          sx={{
+            '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
+            '&>ul>li>a': {
+              color: 'gray',
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          <ul>
+            <li>
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>
+              , incubated by{' '}
+              <a href="https://godid.io/" target="_blank" rel="noreferrer">
+                godid.io
+              </a>{' '}
+              , specializes in the registration, transaction, and management of Ordinals Decentralized Identifiers
+              (DIDs). The platform is uniquely positioned to support a wide array of mainstream DIDs within the Ordinals
+              ecosystem, such as .sats, .bitmap, .btc, among others.{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              is dedicated to carving out a niche as the most proficient and specialized platform in the Ordinals DIDs
+              arena.
+            </li>
+            <li>
+              As it looks toward the future,{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
+              aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the connectivity
+              and synergy among different DIDs in the ecosystem. This approach underlines{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
+              identities.
+            </li>
+          </ul>
+        </Box>
+      ]
+    },
+    {
+      title: 'What are Ordinals DIDs?',
+      info: [
+        'Ordinals DIDs, similar yet distinct from ENS, are human-readable Decentralized Identifiers (DIDs) created using the Ordinals protocol on the Bitcoin blockchain. This protocol allows anyone to inscribe DIDs with a variety of suffixes like .sats, .bitmap, .btc, .x, .bitter, and .unisat. Setting them apart from ENS, Ordinals DIDs are fully decentralized, lacking centralized gatekeepers and not relying on smart contracts. Their records are permanently stored on the Bitcoin blockchain, underscoring their decentralized nature. This innovation presents a unique approach in the digital identity space, leveraging the robustness and security of the Bitcoin network.'
+      ]
+    },
+    {
+      title: 'Token Distribution',
+      info: [
+        <Box
+          key={4}
+          sx={{
+            '& ul': {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10
+            }
+          }}
+        >
+          <Typography sx={{ fontSize: 16, fontWeight: 600 }}>Total Supply: 500,000,000 $BDID</Typography>
+          <ul>
+            <li>
+              $BDID Token Launch On Bounce: 80%
+              <ul>
+                <li>40% Auction Stake</li>
+                <li>20% Auction Random Selection</li>
+                <li>20% DAII Stake</li>
+              </ul>
+            </li>
+            <li>Liquidity: 10%</li>
+            <li>50-day Airdrop Mining (MUBI, BSSB, AUCTION, WBTC): 5%</li>
+            <li>GoDID team (6-month lock followed by 12-month linear vesting ): 5%</li>
+          </ul>
+        </Box>
+      ]
+    },
+    {
+      title: 'RoadMap',
+      info: [
+        <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+          <ul>
+            <li>
+              2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like Categorizations,
+              bulk Reg & Transaction; IDO & Token Airdrop
+            </li>
+            <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+            <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+            <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+            <li>2024Q4——R&D of DID’s underlying protocols</li>
+            <li>2025 ——Interoperability and application of all major chains</li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID and Bitcoin Ordinals DIDs.',
+  social: [
+    <Link key={0} href="https://godid.io/" target="_blank">
+      <Web />
+    </Link>,
+    <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+      <DiscordSVG />
+    </Link>,
+    <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+      <Twitter />
+    </Link>,
+    <Link key={8} href="https://medium.com/@godid" target="_blank">
+      <img src={Medium} width={40} />
+    </Link>
+  ],
+  moreData: [
+    { title: 'Token Name', content: '$BDID' },
+    { title: 'Token Price', content: '0.00009375 AUCTION' },
+    { title: 'Token Amount', content: '200,000,000' },
+    { title: 'Blockchain', content: 'Ethereum' }
+    // { title: 'Raise Auction Amount', content: '23530' }
+  ]
+}
+export const PrivateStakeDaiiData: IPrivatePadProp = {
+  keyId: 21,
+  liveTimeStamp: {
+    start: 1702645200000,
+    end: 1702818000000
+  },
+  poolTypeName: 'Staking Auction',
+  img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
+  avatar: DIDNa,
+  title: 'GoDID',
+  chainId: 1,
+  tokenName: '$BDID',
+  whitePaperLink: 'https://drive.google.com/file/d/1Iu3kLNxi97KkOqP1wz2-i2N_HBV0LRgn/view',
+  upcomingLink: '/launchpad/godid-staking-daii',
+  liveLink: '/launchpad/godid-staking-daii',
+  projectInfo: [
+    {
+      title: 'What is GoDID?',
+      info: [
+        <Box
+          key={1}
+          sx={{
+            '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
+            '&>ul>li>a': {
+              color: 'gray',
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          <ul>
+            <li>
+              GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID
+              and Bitcoin Ordinals DIDs. It offers the most user-friendly and cost-effective ENS platform with diverse
+              features, including the ENS module built using OpenSea’s Seaport contract. This module supports the full
+              ENS lifecycle, encompassing search, registration, trading, and management.
+            </li>
+            <li>
+              GoDID enhances the ENS user experience with various tools and leaderboards, such as Bid by Category,
+              Premium Sniper, and cross-market listings. A standout feature is its comprehensive categorization system,
+              featuring 144 distinct categories, which greatly facilitates user inquiries and trading activities. This
+              focus on variety and practicality positions GoDID as a versatile and valuable resource in the
+              decentralized identity market.
+            </li>
+          </ul>
+        </Box>
+      ]
+    },
+    {
+      title: 'What is BDID?',
+      info: [
+        <Box
+          key={1}
+          sx={{
+            '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
+            '&>ul>li>a': {
+              color: 'gray',
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          <ul>
+            <li>
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>
+              , incubated by{' '}
+              <a href="https://godid.io/" target="_blank" rel="noreferrer">
+                godid.io
+              </a>{' '}
+              , specializes in the registration, transaction, and management of Ordinals Decentralized Identifiers
+              (DIDs). The platform is uniquely positioned to support a wide array of mainstream DIDs within the Ordinals
+              ecosystem, such as .sats, .bitmap, .btc, among others.{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              is dedicated to carving out a niche as the most proficient and specialized platform in the Ordinals DIDs
+              arena.
+            </li>
+            <li>
+              As it looks toward the future,{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
+              aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the connectivity
+              and synergy among different DIDs in the ecosystem. This approach underlines{' '}
+              <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
+                Bdid.io
+              </a>{' '}
+              ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
+              identities.
+            </li>
+          </ul>
+        </Box>
+      ]
+    },
+    {
+      title: 'What are Ordinals DIDs?',
+      info: [
+        'Ordinals DIDs, similar yet distinct from ENS, are human-readable Decentralized Identifiers (DIDs) created using the Ordinals protocol on the Bitcoin blockchain. This protocol allows anyone to inscribe DIDs with a variety of suffixes like .sats, .bitmap, .btc, .x, .bitter, and .unisat. Setting them apart from ENS, Ordinals DIDs are fully decentralized, lacking centralized gatekeepers and not relying on smart contracts. Their records are permanently stored on the Bitcoin blockchain, underscoring their decentralized nature. This innovation presents a unique approach in the digital identity space, leveraging the robustness and security of the Bitcoin network.'
+      ]
+    },
+    {
+      title: 'Token Distribution',
+      info: [
+        <Box
+          key={4}
+          sx={{
+            '& ul': {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10
+            }
+          }}
+        >
+          <Typography sx={{ fontSize: 16, fontWeight: 600 }}>Total Supply: 500,000,000 $BDID</Typography>
+          <ul>
+            <li>
+              $BDID Token Launch On Bounce: 80%
+              <ul>
+                <li>40% Auction Stake</li>
+                <li>20% Auction Random Selection</li>
+                <li>20% DAII Stake</li>
+              </ul>
+            </li>
+            <li>Liquidity: 10%</li>
+            <li>50-day Airdrop Mining (MUBI, BSSB, AUCTION, WBTC): 5%</li>
+            <li>GoDID team (6-month lock followed by 12-month linear vesting ): 5%</li>
+          </ul>
+        </Box>
+      ]
+    },
+    {
+      title: 'RoadMap',
+      info: [
+        <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
+          <ul>
+            <li>
+              2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like Categorizations,
+              bulk Reg & Transaction; IDO & Token Airdrop
+            </li>
+            <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
+            <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
+            <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
+            <li>2024Q4——R&D of DID’s underlying protocols</li>
+            <li>2025 ——Interoperability and application of all major chains</li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID and Bitcoin Ordinals DIDs.',
+  social: [
+    <Link key={0} href="https://godid.io/" target="_blank">
+      <Web />
+    </Link>,
+    <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
+      <DiscordSVG />
+    </Link>,
+    <Link key={6} href="https://twitter.com/godid_io" target="_blank">
+      <Twitter />
+    </Link>,
+    <Link key={8} href="https://medium.com/@godid" target="_blank">
+      <img src={Medium} width={40} />
+    </Link>
+  ],
+  moreData: [
+    { title: 'Token Name', content: '$BDID' },
+    { title: 'Ticket Price', content: '0.0015 DAII / Ticket' },
+    { title: 'Token Amount / Ticket', content: '100,000,000' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ]
+}
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 22
-  {
-    keyId: 19,
-    liveTimeStamp: {
-      start: 1702645200000,
-      end: 1702818000000
-    },
-    poolTypeName: 'Staking Auction',
-    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
-    avatar: DIDNa,
-    title: 'GoDID',
-    chainId: 1,
-    tokenName: '$BDID',
-    whitePaperLink: 'https://docsend.com/view/scmyn8e5frxtzumf',
-    upcomingLink: '/launchpad/godid-staking-auction',
-    liveLink: '/launchpad/godid-staking-auction',
-    projectInfo: [
-      {
-        title: 'What is GoDID?',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
-              '&>ul>li>a': {
-                color: 'gray',
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            <ul>
-              <li>
-                GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID
-                and Bitcoin Ordinals DIDs. It offers the most user-friendly and cost-effective ENS platform with diverse
-                features, including the ENS module built using OpenSea’s Seaport contract. This module supports the full
-                ENS lifecycle, encompassing search, registration, trading, and management.
-              </li>
-              <li>
-                GoDID enhances the ENS user experience with various tools and leaderboards, such as Bid by Category,
-                Premium Sniper, and cross-market listings. A standout feature is its comprehensive categorization
-                system, featuring 144 distinct categories, which greatly facilitates user inquiries and trading
-                activities. This focus on variety and practicality positions GoDID as a versatile and valuable resource
-                in the decentralized identity market.
-              </li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'What is BDID?',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
-              '&>ul>li>a': {
-                color: 'gray',
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            <ul>
-              <li>
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>
-                , incubated by{' '}
-                <a href="https://godid.io/" target="_blank" rel="noreferrer">
-                  godid.io
-                </a>{' '}
-                , specializes in the registration, transaction, and management of Ordinals Decentralized Identifiers
-                (DIDs). The platform is uniquely positioned to support a wide array of mainstream DIDs within the
-                Ordinals ecosystem, such as .sats, .bitmap, .btc, among others.{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is dedicated to carving out a niche as the most proficient and specialized platform in the Ordinals DIDs
-                arena.
-              </li>
-              <li>
-                As it looks toward the future,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
-                aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the
-                connectivity and synergy among different DIDs in the ecosystem. This approach underlines{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
-                identities.
-              </li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'What are Ordinals DIDs?',
-        info: [
-          'Ordinals DIDs, similar yet distinct from ENS, are human-readable Decentralized Identifiers (DIDs) created using the Ordinals protocol on the Bitcoin blockchain. This protocol allows anyone to inscribe DIDs with a variety of suffixes like .sats, .bitmap, .btc, .x, .bitter, and .unisat. Setting them apart from ENS, Ordinals DIDs are fully decentralized, lacking centralized gatekeepers and not relying on smart contracts. Their records are permanently stored on the Bitcoin blockchain, underscoring their decentralized nature. This innovation presents a unique approach in the digital identity space, leveraging the robustness and security of the Bitcoin network.'
-        ]
-      },
-      {
-        title: 'Token Distribution',
-        info: [
-          <Box
-            key={4}
-            sx={{
-              '& ul': {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10
-              }
-            }}
-          >
-            <Typography sx={{ fontSize: 16, fontWeight: 600 }}>Total Supply: 500,000,000 $BDID</Typography>
-            <ul>
-              <li>
-                $BDID Token Launch On Bounce: 80%
-                <ul>
-                  <li>40% Auction Stake</li>
-                  <li>20% Auction Random Selection</li>
-                  <li>20% DAII Stake</li>
-                </ul>
-              </li>
-              <li>Liquidity: 10%</li>
-              <li>50-day Airdrop Mining (MUBI, BSSB, AUCTION, WBTC): 5%</li>
-              <li>GoDID team (6-month lock followed by 12-month linear vesting ): 5%</li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'RoadMap',
-        info: [
-          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
-            <ul>
-              <li>
-                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
-                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
-              </li>
-              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
-              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
-              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
-              <li>2024Q4——R&D of DID’s underlying protocols</li>
-              <li>2025 ——Interoperability and application of all major chains</li>
-            </ul>
-          </Box>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID and Bitcoin Ordinals DIDs.',
-    social: [
-      <Link key={0} href="https://godid.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={8} href="https://medium.com/@godid" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$BDID' },
-      { title: 'Token Price', content: '0.00009375 AUCTION' },
-      { title: 'Token Amount', content: '200,000,000' },
-      { title: 'Blockchain', content: 'Ethereum' }
-      // { title: 'Raise Auction Amount', content: '23530' }
-    ]
-  },
-  {
-    keyId: 21,
-    liveTimeStamp: {
-      start: 1702645200000,
-      end: 1702818000000
-    },
-    poolTypeName: 'Staking Auction',
-    img: 'https://images-v3.bounce.finance/c704c4ef57b056a70039fe952a22bbd4-1702019109.png',
-    avatar: DIDNa,
-    title: 'GoDID',
-    chainId: 1,
-    tokenName: '$BDID',
-    whitePaperLink: 'https://docsend.com/view/scmyn8e5frxtzumf',
-    upcomingLink: '/launchpad/godid-staking-daii',
-    liveLink: '/launchpad/godid-staking-daii',
-    projectInfo: [
-      {
-        title: 'What is GoDID?',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
-              '&>ul>li>a': {
-                color: 'gray',
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            <ul>
-              <li>
-                GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID
-                and Bitcoin Ordinals DIDs. It offers the most user-friendly and cost-effective ENS platform with diverse
-                features, including the ENS module built using OpenSea’s Seaport contract. This module supports the full
-                ENS lifecycle, encompassing search, registration, trading, and management.
-              </li>
-              <li>
-                GoDID enhances the ENS user experience with various tools and leaderboards, such as Bid by Category,
-                Premium Sniper, and cross-market listings. A standout feature is its comprehensive categorization
-                system, featuring 144 distinct categories, which greatly facilitates user inquiries and trading
-                activities. This focus on variety and practicality positions GoDID as a versatile and valuable resource
-                in the decentralized identity market.
-              </li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'What is BDID?',
-        info: [
-          <Box
-            key={1}
-            sx={{
-              '&>ul': { display: 'flex', flexDirection: 'column', gap: 10 },
-              '&>ul>li>a': {
-                color: 'gray',
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            <ul>
-              <li>
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>
-                , incubated by{' '}
-                <a href="https://godid.io/" target="_blank" rel="noreferrer">
-                  godid.io
-                </a>{' '}
-                , specializes in the registration, transaction, and management of Ordinals Decentralized Identifiers
-                (DIDs). The platform is uniquely positioned to support a wide array of mainstream DIDs within the
-                Ordinals ecosystem, such as .sats, .bitmap, .btc, among others.{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is dedicated to carving out a niche as the most proficient and specialized platform in the Ordinals DIDs
-                arena.
-              </li>
-              <li>
-                As it looks toward the future,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                plans to lead the development of innovative derivatives for the Ordinals DIDs ecosystem. This initiative
-                aims to boost the circulation and value of Ordinals DIDs. Moreover,{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                is committed to bridging the gaps between various DID protocols on BTC Layer 2, enhancing the
-                connectivity and synergy among different DIDs in the ecosystem. This approach underlines{' '}
-                <a href="https://bdid.io/en/marketplace/inscription" target="_blank" rel="noreferrer">
-                  Bdid.io
-                </a>{' '}
-                ’s ambition to be at the forefront of innovation and integration in the field of decentralized digital
-                identities.
-              </li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'What are Ordinals DIDs?',
-        info: [
-          'Ordinals DIDs, similar yet distinct from ENS, are human-readable Decentralized Identifiers (DIDs) created using the Ordinals protocol on the Bitcoin blockchain. This protocol allows anyone to inscribe DIDs with a variety of suffixes like .sats, .bitmap, .btc, .x, .bitter, and .unisat. Setting them apart from ENS, Ordinals DIDs are fully decentralized, lacking centralized gatekeepers and not relying on smart contracts. Their records are permanently stored on the Bitcoin blockchain, underscoring their decentralized nature. This innovation presents a unique approach in the digital identity space, leveraging the robustness and security of the Bitcoin network.'
-        ]
-      },
-      {
-        title: 'Token Distribution',
-        info: [
-          <Box
-            key={4}
-            sx={{
-              '& ul': {
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10
-              }
-            }}
-          >
-            <Typography sx={{ fontSize: 16, fontWeight: 600 }}>Total Supply: 500,000,000 $BDID</Typography>
-            <ul>
-              <li>
-                $BDID Token Launch On Bounce: 80%
-                <ul>
-                  <li>40% Auction Stake</li>
-                  <li>20% Auction Random Selection</li>
-                  <li>20% DAII Stake</li>
-                </ul>
-              </li>
-              <li>Liquidity: 10%</li>
-              <li>50-day Airdrop Mining (MUBI, BSSB, AUCTION, WBTC): 5%</li>
-              <li>GoDID team (6-month lock followed by 12-month linear vesting ): 5%</li>
-            </ul>
-          </Box>
-        ]
-      },
-      {
-        title: 'RoadMap',
-        info: [
-          <Box key={1} sx={{ '&>ul>li': { marginTop: 10 } }}>
-            <ul>
-              <li>
-                2023Q4——Update of Ordinals DIDs Marketplace(v2.0) with multiple optimized functions like
-                Categorizations, bulk Reg & Transaction; IDO & Token Airdrop
-              </li>
-              <li>2024Q1——Development of DID management system & DID airdrop management tools, and etc</li>
-              <li>2024Q2——Development of multi-protocol DIDs management system on BTC L2, E.G. realm, etc</li>
-              <li>2024Q3——Cross-chain of DIDs, cross-protocol resolution and multi-ecological Dapps compatibility</li>
-              <li>2024Q4——R&D of DID’s underlying protocols</li>
-              <li>2025 ——Interoperability and application of all major chains</li>
-            </ul>
-          </Box>
-        ]
-      }
-    ],
-    tokenMetrics: [],
-    desc: 'GoDID is a marketplace aggregator for decentralized identities(DIDs) that currently serves ENS, Space ID and Bitcoin Ordinals DIDs.',
-    social: [
-      <Link key={0} href="https://godid.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={2} href="https://discord.com/invite/C7HXkuxtPE" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={6} href="https://twitter.com/godid_io" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={8} href="https://medium.com/@godid" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>
-    ],
-    moreData: [
-      { title: 'Token Name', content: '$BDID' },
-      { title: 'Token Price', content: '0.0015 DAII ' },
-      { title: 'Token Amount ', content: '100,000,000' },
-      { title: 'Blockchain', content: 'Ethereum' }
-    ]
-  },
+  PrivateStakeAuctionData,
+  PrivateStakeDaiiData,
   {
     keyId: 20,
     liveTimeStamp: {
@@ -1231,8 +1233,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: '$BDID',
     whitePaperLink: 'https://docsend.com/view/scmyn8e5frxtzumf',
-    upcomingLink: '/launchpad/godid-rs-auction',
-    liveLink: '/launchpad/godid-rs-auction',
+    upcomingLink: routes.thirdPart.Did.pool,
+    liveLink: routes.thirdPart.Did.pool,
     projectInfo: [
       {
         title: 'What is GoDID?',
@@ -1396,7 +1398,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-
   {
     keyId: 22,
     liveTimeStamp: {

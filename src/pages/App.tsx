@@ -109,10 +109,9 @@ import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
 import MyToken from './tokenToolBox/page/tokenMinter/myToken'
 import MyLock from './tokenToolBox/page/tokenlocker/myLock'
 import useBreakpoint from '../hooks/useBreakpoint'
-
-import DidStakeProjectInfo from './projectIntro/DidStakeProjectInfo'
-import DidProjectInfo from './projectIntro/DidProjectInfo'
-import DidDllProjectInfo from './projectIntro/DidDllProjectInfo'
+import DidStakeAuctionPool from './stakeAuctionPool'
+import DidStakeDaiiPool from './stakeDAIIPool'
+import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -244,9 +243,9 @@ export default function App() {
                   <Route path={routes.thirdPart.CreateLaunchpad} element={<CreateLaunchpad />} />
                   <Route path={routes.thirdPart.FinceptorAuction} element={<FinceptorProjectInfo />} />
                   <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfo />} />
-                  <Route path={routes.thirdPart.Did.stake} element={<DidStakeProjectInfo />} />
-                  <Route path={routes.thirdPart.Did.index} element={<DidProjectInfo />} />
-                  <Route path={routes.thirdPart.Did.dll} element={<DidDllProjectInfo />} />
+                  <Route path={routes.thirdPart.Did.stake} element={<DidStakeAuctionPool />} />
+                  <Route path={routes.thirdPart.Did.dll} element={<DidStakeDaiiPool />} />
+                  <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
