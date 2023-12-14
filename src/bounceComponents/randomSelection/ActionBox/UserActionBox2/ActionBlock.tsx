@@ -239,9 +239,9 @@ const ActionBlock = ({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Congratulations!',
-            content: `You have successfully claimed ${isWinner ? singleShare : slicedBidAmount} ${
-              isWinner ? poolInfo.token0.symbol : poolInfo.token1.symbol
-            }`
+            content: `You have successfully ${isWinner ? 'swapped' : 'claimed'} ${
+              isWinner ? singleShare : slicedBidAmount
+            } ${isWinner ? poolInfo.token0.symbol : poolInfo.token1.symbol}`
           })
         })
         .catch()
