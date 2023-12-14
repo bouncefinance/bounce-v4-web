@@ -7,7 +7,8 @@ import { ChainId } from 'constants/chain'
 import { CoinResultType, FinalAllocationType, PoolInfoType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 
 export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const chainId = ChainId.MAINNET
+  // const chainId = ChainId.MAINNET
+  const chainId = ChainId.SEPOLIA
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
   const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', [poolId], undefined, chainId)
@@ -72,8 +73,11 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   return coinInfo
 }
 export const useTokenInfo = () => {
-  const token0 = new Currency(ChainId.MAINNET, '0xda31D0d1Bc934fC34F7189E38A413ca0A5e8b44F', 18, 'BDID', 'BDID')
-  const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'AUCTION', 'AUCTION')
-  const token0Amount = CurrencyAmount.fromAmount(token0, '200000000000000000000000000')
+  // const token0 = new Currency(ChainId.MAINNET, '0xda31D0d1Bc934fC34F7189E38A413ca0A5e8b44F', 18, 'BDID', 'BDID')
+  const token0 = new Currency(ChainId.SEPOLIA, '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E', 6, 'BDID', 'BDID')
+  // const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'AUCTION', 'AUCTION')
+  const token1 = new Currency(ChainId.SEPOLIA, '0xc390E699b38F14dB884C635bbf843f7B135113ad', 18, 'AUCTION', 'AUCTION')
+  // const token0Amount = CurrencyAmount.fromAmount(token0, '200000000000000000000000000')
+  const token0Amount = CurrencyAmount.fromAmount(token0, '200000000000000')
   return { token0Amount, token1 }
 }

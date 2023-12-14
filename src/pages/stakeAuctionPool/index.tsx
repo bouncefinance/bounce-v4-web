@@ -13,7 +13,8 @@ import { useGetStakingAuctionInfo, useTokenInfo } from './useStakingInfo'
 const Page = () => {
   const poolId = 0
   const { account } = useActiveWeb3React()
-  const chainId = ChainId.MAINNET
+  // const chainId = ChainId.MAINNET
+  const chainId = ChainId.SEPOLIA
   const contract = useStakeTokenContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
   const [approvalState, approveCallback] = useApproveCallback(token0, STAKE_TOKEN_CONTRACT_ADDRESSES[chainId])
@@ -22,11 +23,11 @@ const Page = () => {
   const params: any = [
     token0?.currency.address,
     token1.address,
-    '200000000000000000000',
-    '31580000000000000000000',
-    1702440300,
-    1702441500,
-    1702441500,
+    '200000000000000',
+    '18750000000000000000000',
+    1702543800,
+    1702545600,
+    1702545600,
     1
   ]
 
@@ -44,7 +45,7 @@ const Page = () => {
       <div style={{ background: '#f5f5f1' }}>
         <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
       </div>
-      <button onClick={() => createPool()}>create</button>
+      {/* <button onClick={() => createPool()}>create</button> */}
       <Tabs item={PrivateStakeAuctionData} />
       <FooterPc />
     </>

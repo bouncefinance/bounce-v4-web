@@ -302,7 +302,8 @@ export function useLaunchpadCoinContract(queryChainId?: ChainId) {
 }
 
 export function useStakeTokenContract(queryChainId?: ChainId) {
-  const cur = queryChainId || ChainId.MAINNET
+  // const cur = queryChainId || ChainId.MAINNET
+  const cur = queryChainId || ChainId.SEPOLIA
   const curAddress = cur ? STAKE_TOKEN_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, STAKE_TOKEN_ABI, true, queryChainId)
 }
