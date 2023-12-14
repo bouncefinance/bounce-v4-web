@@ -23,7 +23,14 @@ const UpcomingCard = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   return (
     <>
       <Box
-        sx={{ width: 444, height: 216, display: 'flex', flexFlow: 'row nowrap', overflow: 'hidden', marginBottom: 30 }}
+        sx={{
+          width: 444,
+          height: 216,
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          overflow: 'hidden',
+          margin: '0 auto 30px'
+        }}
       >
         <Box
           sx={{

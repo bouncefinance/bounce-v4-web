@@ -4,7 +4,7 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import Logo from 'assets/imgs/randomSelection/logoGray.png'
 import TypeIcon from 'assets/imgs/randomSelection/typeIconGray.png'
 import WarningIcon from 'assets/imgs/randomSelection/warning.png'
-import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
+import NotWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
 import WinIcon from 'assets/imgs/randomSelection/Win.png'
 
 import BigNumber from 'bignumber.js'
@@ -63,7 +63,7 @@ const ClosedCard = ({
                 display: 'flex',
                 flexFlow: 'row nowrap',
                 overflow: 'hidden',
-                marginBottom: 30
+                margin: '0 auto 30px'
               }}
             >
               <Box
@@ -377,7 +377,7 @@ const ClosedCard = ({
             alignItems: 'center'
           }}
         >
-          <Image src={NotWinIcon} width={200} height={250} />
+          <Image src={NotWinIcon} height={250} />
           <Typography
             sx={{
               color: '#171717',
@@ -388,7 +388,7 @@ const ClosedCard = ({
               margin: '27px 0 24px'
             }}
           >
-            No winner has been selected yet. Please wait.
+            The Random Selection is being drawn. Please wait patiently.
           </Typography>
         </Box>
       </>

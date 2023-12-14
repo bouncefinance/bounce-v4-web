@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/material'
 
 import CreatorMainBlock from 'bounceComponents/randomSelection/MainBlock/CreatorMainBlock'
 // import CreatorInfoCard from 'bounceComponents/randomSelection/CreatorInfoCard'
@@ -35,7 +35,12 @@ const DidPool = ({ backedId }: { backedId?: number }) => {
   }
 
   return (
-    <Container maxWidth="lg">
+    <Box
+      sx={{
+        maxWidth: 1100,
+        margin: 'auto'
+      }}
+    >
       <Box sx={{ mt: 60 }}>
         <Box sx={{ mt: 40, display: isMobile ? 'block' : 'flex', columnGap: 20 }}>
           <Stack sx={{ flex: 1 }} spacing={20}>
@@ -48,7 +53,7 @@ const DidPool = ({ backedId }: { backedId?: number }) => {
           </Stack>
         </Box>
       </Box>
-    </Container>
+    </Box>
   )
 }
 

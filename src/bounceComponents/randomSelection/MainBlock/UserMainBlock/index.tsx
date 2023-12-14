@@ -15,12 +15,21 @@ const UserMainBlock = ({
 }): JSX.Element => {
   return (
     <Box
-      sx={{ borderRadius: 20, px: 24, py: 20, bgcolor: '#fff', display: 'flex', flexDirection: 'column', rowGap: 12 }}
+      sx={{
+        borderRadius: 20,
+        padding: { xs: 20, md: 48 },
+        bgcolor: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: 12
+      }}
     >
       <Alert poolInfo={poolInfo} />
-      <LeftBox poolInfo={poolInfo} />
-      {/* <UserActionBox /> */}
-      <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} isWinnerSeedDone={isWinnerSeedDone} />
+      <Box display={'grid'} sx={{ gridTemplateColumns: { xs: '100%', md: '44% 1fr' } }} gap={20} mt={20}>
+        <LeftBox poolInfo={poolInfo} />
+        {/* <UserActionBox /> */}
+        <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} isWinnerSeedDone={isWinnerSeedDone} />
+      </Box>
     </Box>
   )
 }
