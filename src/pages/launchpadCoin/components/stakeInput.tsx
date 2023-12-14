@@ -2,13 +2,13 @@ import styled from '@emotion/styled'
 import { Button, Stack, Typography } from '@mui/material'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { CurrencyAmount } from 'constants/token'
-const StakeInputStyle = styled(NumberInput)`
+export const StakeInputStyle = styled(NumberInput)`
   border-radius: 8px;
   &.MuiInputBase-root {
     background: #f6f6f3;
   }
 `
-const TokenNameTitle = styled(Typography)`
+export const TokenNameTitle = styled(Typography)`
   color: #959595;
   /* D/H5 */
   font-family: Public Sans;
@@ -18,13 +18,13 @@ const TokenNameTitle = styled(Typography)`
   line-height: 150%; /* 24px */
   letter-spacing: -0.32px;
 `
-const MaxButtonStyle = styled(Button)`
+export const MaxButtonStyle = styled(Button)`
   height: max-content;
   &:hover {
     background-color: transparent;
   }
 `
-const ButtonTitle = styled(Typography)`
+export const ButtonTitle = styled(Typography)`
   color: #2b51da;
   /* D/body01 */
   font-family: Inter;
