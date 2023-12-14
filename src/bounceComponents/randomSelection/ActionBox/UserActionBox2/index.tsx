@@ -24,7 +24,7 @@ const UserActionBox2 = ({
   )
   return (
     <Box sx={{ width: '100%', maxWidth: '444px', margin: '0 auto', flex: 1, pt: 28 }}>
-      <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} isJoined={isJoined} />
+      <Header poolInfo={poolInfo} getPoolInfo={getPoolInfo} isJoined={isJoined} isWinnerSeedDone={!!isWinnerSeedDone} />
       {poolInfo.contract && (
         <ActionBlock
           poolInfo={poolInfo}
