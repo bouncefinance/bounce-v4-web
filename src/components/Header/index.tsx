@@ -22,7 +22,6 @@ import Resources from './Resources'
 import HeaderLink from './HeaderLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import MenuIcon from '@mui/icons-material/Menu'
-import { IS_TEST_ENV } from '../../constants'
 
 interface TabContent {
   title: string
@@ -347,7 +346,7 @@ export default function Header() {
             justifyContent={'flex-end'}
           >
             <Resources opacity={isTransparentRoute ? headerBgOpacity : 1} />
-            {IS_TEST_ENV && <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} />}
+            <CreateBtn opacity={isTransparentRoute ? headerBgOpacity : 1} />
             {token && <NetworkPopperSelect opacity={isTransparentRoute ? headerBgOpacity : 1} />}
             <Web3Status opacity={isTransparentRoute ? headerBgOpacity : 1} />
             {!token && walletWithoutToken}

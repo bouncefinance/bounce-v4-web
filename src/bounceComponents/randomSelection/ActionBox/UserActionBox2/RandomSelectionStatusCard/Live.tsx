@@ -56,7 +56,7 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
             display: 'flex',
             flexFlow: 'row nowrap',
             overflow: 'visible',
-            marginBottom: 30,
+            margin: '0 auto 30px',
             zoom: zoomNum
           }}
         >
