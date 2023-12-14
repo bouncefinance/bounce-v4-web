@@ -4,7 +4,8 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import Logo from 'assets/imgs/randomSelection/logoGray.png'
 import TypeIcon from 'assets/imgs/randomSelection/typeIconGray.png'
 import WarningIcon from 'assets/imgs/randomSelection/warning.png'
-import NotWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
+import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
+import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import WinIcon from 'assets/imgs/randomSelection/Win.png'
 
 import BigNumber from 'bignumber.js'
@@ -377,7 +378,7 @@ const ClosedCard = ({
             alignItems: 'center'
           }}
         >
-          <Image src={NotWinIcon} height={250} />
+          <Image src={PendingWinIcon} height={250} />
           <Typography
             sx={{
               color: '#171717',
