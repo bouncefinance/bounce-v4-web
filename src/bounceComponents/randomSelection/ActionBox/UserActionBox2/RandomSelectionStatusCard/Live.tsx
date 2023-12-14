@@ -9,6 +9,8 @@ import { formatNumber } from 'utils/number'
 import PoolProgress from 'bounceComponents/common/PoolProgress'
 import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import useBreakpoint from 'hooks/useBreakpoint'
+import { useEffect, useState } from 'react'
 
 const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoined: boolean }) => {
   const singleShare = poolInfo.totalShare
@@ -20,12 +22,31 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
   const swapedPercent =
     poolInfo?.curPlayer && poolInfo.maxPlayere
       ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
-      : undefined
+      : 0
   interface NoJoinedCardParam {
     isJoined: boolean
   }
   const NoJoinedCard = (props: NoJoinedCardParam) => {
     const { isJoined } = props
+    const [zoomNum, setZoomNum] = useState(1)
+    const isSm = useBreakpoint('sm')
+    const handleZoom = () => {
+      if (isSm) {
+        const w = window.innerWidth
+        setZoomNum((w - 47) / 444)
+      } else {
+        setZoomNum(1)
+      }
+    }
+
+    useEffect(() => {
+      handleZoom()
+      window.addEventListener('resize', handleZoom)
+      return () => {
+        window.removeEventListener('resize', handleZoom)
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
       <>
         <Box
@@ -35,7 +56,8 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
             display: 'flex',
             flexFlow: 'row nowrap',
             overflow: 'visible',
-            marginBottom: 30
+            marginBottom: 30,
+            zoom: zoomNum
           }}
         >
           <Box

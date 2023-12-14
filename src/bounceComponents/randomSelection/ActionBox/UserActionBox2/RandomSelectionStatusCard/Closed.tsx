@@ -366,6 +366,34 @@ const ClosedCard = ({
       </Box>
     )
   }
+  const JoinedNotSelectWin = () => {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
+          }}
+        >
+          <Image src={NotWinIcon} width={200} height={250} />
+          <Typography
+            sx={{
+              color: '#171717',
+              fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+              fontWeight: 500,
+              fontSize: 22,
+              textAlign: 'center',
+              margin: '27px 0 24px'
+            }}
+          >
+            No winner has been selected yet. Please wait.
+          </Typography>
+        </Box>
+      </>
+    )
+  }
   const JoinedButNotWin = () => {
     return (
       <>
@@ -425,8 +453,9 @@ const ClosedCard = ({
   return (
     <>
       {action === 'POOL_CLOSED_AND_NOT_JOINED' && <NoJoinedCard />}
-      {isJoined && !isWinner && <JoinedButNotWin />}
-      {isJoined && isWinner && <JoinedAndWin />}
+      {isJoined && !isWinnerSeedDone && <JoinedNotSelectWin />}
+      {isJoined && isWinnerSeedDone && !isWinner && <JoinedButNotWin />}
+      {isJoined && isWinnerSeedDone && isWinner && <JoinedAndWin />}
       <Box
         sx={{
           marginBottom: '30px'

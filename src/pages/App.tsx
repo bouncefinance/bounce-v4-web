@@ -111,7 +111,7 @@ import MyLock from './tokenToolBox/page/tokenlocker/myLock'
 import useBreakpoint from '../hooks/useBreakpoint'
 import DidStakeAuctionPool from './stakeAuctionPool'
 import DidProjectInfo from './projectIntro/DidProjectInfo'
-import DidStakeDllPool from './stakeDAIIPool'
+import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -245,7 +245,7 @@ export default function App() {
                   <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfo />} />
                   <Route path={routes.thirdPart.Did.stake} element={<DidStakeAuctionPool />} />
                   <Route path={routes.thirdPart.Did.index} element={<DidProjectInfo />} />
-                  <Route path={routes.thirdPart.Did.dll} element={<DidStakeDllPool />} />
+                  <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />

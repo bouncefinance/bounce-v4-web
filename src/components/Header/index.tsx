@@ -147,7 +147,8 @@ export const transparentRoutes = [
   routes.thirdPart.BitStableAuction,
   routes.thirdPart.Did.index,
   routes.thirdPart.Did.stake,
-  routes.thirdPart.Did.dll
+  routes.thirdPart.Did.dll,
+  routes.thirdPart.Did.pool
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -286,7 +287,7 @@ export default function Header() {
           color
         }}
       > */}
-      <Typography id={'connect'} variant="h5" color="currentcolor">
+      <Typography id={'connect'} variant="h5" color="currentcolor" sx={{ whiteSpace: 'nowrap' }}>
         {' '}
         Connect wallet
       </Typography>

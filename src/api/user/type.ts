@@ -167,6 +167,11 @@ export interface GetUserWhitelistProofResponse {
   proof: string
 }
 
+export interface GetUserRandomFailedResponse {
+  expiredTime: number
+  signature: string
+}
+
 export interface GetUserPermitSignResponse {
   expiredTime: number
   signature: string
