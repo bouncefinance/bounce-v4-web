@@ -287,7 +287,7 @@ export default function Header() {
           color
         }}
       > */}
-      <Typography id={'connect'} variant="h5" color="currentcolor">
+      <Typography id={'connect'} variant="h5" color="currentcolor" sx={{ whiteSpace: 'nowrap' }}>
         {' '}
         Connect wallet
       </Typography>
