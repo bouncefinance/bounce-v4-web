@@ -22,11 +22,11 @@ const Page = () => {
   const params: any = [
     token0?.currency.address,
     token1.address,
-    '6300000000000000000000000',
-    '31580000000000000000000',
-    1701230400,
-    1701316800,
-    1701316800,
+    '100000000000000000000000000',
+    '150000000000000000000000',
+    1702645200,
+    1702818000,
+    1702818000,
     1
   ]
 
@@ -44,6 +44,7 @@ const Page = () => {
       <div style={{ background: '#f5f5f1' }}>
         <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
       </div>
+      {/* <button onClick={() => createPool()}>create</button> */}
       <Tabs item={PrivateStakeDaiiData} />
       <FooterPc />
     </>

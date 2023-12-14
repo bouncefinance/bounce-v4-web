@@ -71,8 +71,8 @@ export const useGetStakingDaiiInfo = (contract: Contract | null, poolId: number,
   return coinInfo
 }
 export const useTokenInfo = () => {
-  const token0 = new Currency(ChainId.MAINNET, '0xda31D0d1Bc934fC34F7189E38A413ca0A5e8b44F', 18, 'BDID', 'BDID')
-  const token1 = new Currency(ChainId.MAINNET, '0xA9B1Eb5908CfC3cdf91F9B8B3a74108598009096', 18, 'DAII', 'DAII')
+  const token0 = new Currency(ChainId.MAINNET, '0x5016878159e84daDB05bB04135F3eAc339ae201f', 18, 'BDID', 'BDID')
+  const token1 = new Currency(ChainId.MAINNET, '0x1981E32C2154936741aB6541a737b87C68F13cE1', 18, 'DAII', 'DAII')
   const token0Amount = CurrencyAmount.fromAmount(token0, '100000000000000000000000000')
   return { token0Amount, token1 }
 }

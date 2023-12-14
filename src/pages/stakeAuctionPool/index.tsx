@@ -11,23 +11,24 @@ import { Steps } from './Step'
 import { useGetStakingAuctionInfo, useTokenInfo } from './useStakingInfo'
 
 const Page = () => {
-  const poolId = 0
+  const poolId = 1
   const { account } = useActiveWeb3React()
   const chainId = ChainId.MAINNET
   // const chainId = ChainId.SEPOLIA
   const contract = useStakeTokenContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
   const [approvalState, approveCallback] = useApproveCallback(token0, STAKE_TOKEN_CONTRACT_ADDRESSES[chainId])
+  console.log('🚀 ~ file: index.tsx:21 ~ Page ~ approvalState:', approvalState)
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
-    '200000000000000',
+    '200000000000000000000000000',
     '18750000000000000000000',
-    1702543800,
-    1702545600,
-    1702545600,
+    1702645200,
+    1702818000,
+    1702818000,
     1
   ]
 
