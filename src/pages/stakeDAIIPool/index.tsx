@@ -11,7 +11,7 @@ import { Steps } from './Step'
 import { useGetStakingDaiiInfo, useTokenInfo } from './useStakingInfo'
 
 const Page = () => {
-  const poolId = 1
+  const poolId = 2
   const { account } = useActiveWeb3React()
   const chainId = ChainId.MAINNET
   const contract = useStakeTokenContract(chainId)

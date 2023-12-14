@@ -13,8 +13,8 @@ import { useGetStakingAuctionInfo, useTokenInfo } from './useStakingInfo'
 const Page = () => {
   const poolId = 0
   const { account } = useActiveWeb3React()
-  // const chainId = ChainId.MAINNET
-  const chainId = ChainId.SEPOLIA
+  const chainId = ChainId.MAINNET
+  // const chainId = ChainId.SEPOLIA
   const contract = useStakeTokenContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
   const [approvalState, approveCallback] = useApproveCallback(token0, STAKE_TOKEN_CONTRACT_ADDRESSES[chainId])
