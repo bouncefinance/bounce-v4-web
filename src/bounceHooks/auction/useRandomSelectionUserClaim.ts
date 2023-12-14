@@ -42,7 +42,6 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
           tokenType: 1
         })
         args = [poolInfo.poolId, JSON.parse(userRandomIsWinterProof.data.proof)]
-        console.log('🚀 ~ file: useRandomSelectionUserClaim.ts:45 ~ run ~ args:', args)
       }
     } else {
       const userRandomFailedProof = await getUserRandomFailedProof({
@@ -65,7 +64,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
       gasLimit: calculateGasMargin(estimatedGas)
     }).then((response: TransactionResponse) => {
       addTransaction(response, {
-        summary: `Claim token ${poolInfo.token1.symbol}`,
+        summary: `Claim token ${isWinner ? poolInfo.token0.symbol : poolInfo.token1.symbol}`,
         userSubmitted: {
           account,
           action: `random_selection_user_claim`,
