@@ -83,6 +83,7 @@ const useUserClaim = (poolInfo: FixedSwapPoolProp, isWinner: boolean) => {
     poolInfo.curPlayer,
     poolInfo.poolId,
     poolInfo.chainId,
+    poolInfo.token0.symbol,
     poolInfo.token1.symbol,
     isWinner,
     addTransaction
