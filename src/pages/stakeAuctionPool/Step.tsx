@@ -147,8 +147,8 @@ function Step1({
   const { account, chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
-    // return ChainId.MAINNET
-    return ChainId.SEPOLIA
+    return ChainId.MAINNET
+    // return ChainId.SEPOLIA
   }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
@@ -205,19 +205,19 @@ function Step1({
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
   const _switchNetwork = () => {
-    // switchNetwork(ChainId.MAINNET)
-    switchNetwork(ChainId.SEPOLIA)
+    switchNetwork(ChainId.MAINNET)
+    // switchNetwork(ChainId.SEPOLIA)
   }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
     }
-    // if (chainId !== ChainId.MAINNET) {
-    //   return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
-    // }
-    if (chainId !== ChainId.SEPOLIA) {
+    if (chainId !== ChainId.MAINNET) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     }
+    // if (chainId !== ChainId.SEPOLIA) {
+    //   return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
+    // }
     if (isBalanceInsufficient) {
       return <StakeButton disabled>Insufficient balance</StakeButton>
     }
@@ -531,8 +531,8 @@ function Step2({
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     if (!account) {
-      // return 1
-      return 11155111
+      return 1
+      // return 11155111
     }
     return chainId
   }, [account, chainId])
@@ -710,8 +710,8 @@ function Step2({
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
-    // switchNetwork(ChainId.MAINNET)
-    switchNetwork(ChainId.SEPOLIA)
+    switchNetwork(ChainId.MAINNET)
+    // switchNetwork(ChainId.SEPOLIA)
   }
 
   return (
@@ -908,12 +908,12 @@ function Step2({
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {/* {account && chainId !== ChainId.MAINNET && (
-                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
-                  )} */}
-                  {account && chainId !== ChainId.SEPOLIA && (
+                  {account && chainId !== ChainId.MAINNET && (
                     <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )}
+                  {/* {account && chainId !== ChainId.SEPOLIA && (
+                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
+                  )} */}
                 </Stack>
               </Stack>
             </Stack>

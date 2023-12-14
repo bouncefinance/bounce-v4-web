@@ -581,7 +581,7 @@ export const LAUNCHPAD_COIN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string }
 }
 
 export const STAKE_TOKEN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '0x60441641328185EdAf2Cb4CCe583f52993eb7f94',
+  [ChainId.MAINNET]: '0x7405d574D576Ec90936D26388F479D9B5fA9dEEc',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
