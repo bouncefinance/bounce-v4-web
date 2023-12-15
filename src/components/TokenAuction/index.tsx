@@ -18,6 +18,8 @@ import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
 import useBreakpoint from '../../hooks/useBreakpoint'
 import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull'
 import { TotalAuctionIcon, TotalValueIcon, TrendingIcon } from './assets'
+import { IS_TEST_ENV } from '../../constants'
+import { homeNftList, homeTokenList } from 'data/homeDataList'
 
 interface InfoBoxParams {
   title: string
@@ -259,6 +261,12 @@ const TokenAuction: React.FC = () => {
       tokenType: 2, // erc20:1, nft:2
       token0Address: ''
     })
+    if (!IS_TEST_ENV) {
+      return {
+        list: homeNftList,
+        total: 49
+      }
+    }
     return {
       list: resp.data.fixedSwapNftList.list,
       total: resp.data.fixedSwapNftList.total
@@ -284,6 +292,12 @@ const TokenAuction: React.FC = () => {
       poolName: '',
       token0Address: ''
     })
+    if (!IS_TEST_ENV) {
+      return {
+        list: homeTokenList,
+        total: 49
+      }
+    }
     return {
       list: resp.data.fixedSwapList.list,
       total: resp.data.fixedSwapList.total
