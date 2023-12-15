@@ -11,7 +11,13 @@ export const TypographyComponent = {
   h6: { fontSize: 12, lineHeight: 15 / 12, fontFamily: '"Sharp Grotesk DB Cyr Medium 22"' },
   // caption: { fontSize: 12, lineHeight: 32 / 24, fontFamily: '"Sharp Grotesk DB Cyr Medium 22"' },
   body1: { fontSize: 14, lineHeight: 20 / 14, fontFamily: `"Sharp Grotesk DB Cyr Book 20"` },
-  body2: { fontSize: 12, lineHeight: 15 / 12, fontFamily: `"Sharp Grotesk DB Cyr Book 20"` }
+  body2: { fontSize: 12, lineHeight: 15 / 12, fontFamily: `"Sharp Grotesk DB Cyr Book 20"` },
+  lotteryh1: { fontSize: 36, lineHeight: 46 / 36, fontFamily: '"Cormorant SC"' },
+  lotteryh2: { fontSize: 22, lineHeight: 28 / 22, fontFamily: '"Cormorant SC"' },
+  lotteryh3: { fontSize: 18, lineHeight: 26 / 18, fontFamily: '"Cormorant SC"' },
+  lotteryh4: { fontSize: 16, lineHeight: 24 / 16, fontFamily: '"Cormorant SC"' },
+  lotteryh5: { fontSize: 14, lineHeight: 22 / 14, fontFamily: '"Cormorant SC"' },
+  lotteryh6: { fontSize: 12, lineHeight: 15 / 12, fontFamily: '"Cormorant SC"' }
 } as TypographyOptions
 
 export default TypographyComponent

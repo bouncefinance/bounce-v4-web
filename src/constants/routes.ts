@@ -30,6 +30,9 @@ export const routes = {
   nftAuction: {
     index: '/NFTAuction'
   },
+  nftLottery: {
+    index: '/NFTLottery'
+  },
   tokenAuction: {
     index: '/TokenAuction'
   },

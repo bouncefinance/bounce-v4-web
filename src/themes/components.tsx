@@ -166,7 +166,6 @@ export const ComponentOptions = {
       }
     },
     ...inputOptions,
-
     MuiContainer: {
       defaultProps: {
         maxWidth: 'xl',
@@ -449,6 +448,16 @@ export const ComponentOptions = {
       styleOverrides: {
         root: {
           fontFamily: `'Inter'`
+        }
+      },
+      defaultProps: {
+        variantMapping: {
+          lotteryh1: 'h1',
+          lotteryh2: 'h2',
+          lotteryh3: 'h3',
+          lotteryh4: 'h4',
+          lotteryh5: 'h5',
+          lotteryh6: 'h6'
         }
       }
     }

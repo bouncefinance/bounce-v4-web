@@ -112,6 +112,7 @@ import useBreakpoint from '../hooks/useBreakpoint'
 import DidStakeAuctionPool from './stakeAuctionPool'
 import DidStakeDaiiPool from './stakeDAIIPool'
 import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
+import NftLottery from './nftLottery'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -264,6 +265,9 @@ export default function App() {
 
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
+
+                  <Route path={routes.nftLottery.index} element={<NftLottery />} />
+
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}
