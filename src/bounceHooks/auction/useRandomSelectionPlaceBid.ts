@@ -68,7 +68,10 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
+            // summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
+            summary: `You have successfully purchased a ticket with ${bidAmount.toSignificant()} ${
+              poolInfo.token1.symbol
+            }.`,
             userSubmitted: {
               account,
               action: `random_selection_swap`,
@@ -89,7 +92,6 @@ const useRandomSelectionPlaceBid = (poolInfo: FixedSwapPoolProp) => {
       poolInfo.category,
       poolInfo.chainId,
       poolInfo.token1.symbol,
-      poolInfo.token0.symbol,
       isToken1Native,
       addTransaction
     ]

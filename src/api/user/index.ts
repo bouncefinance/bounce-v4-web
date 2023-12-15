@@ -35,7 +35,8 @@ import {
   SearchTokenListParams,
   GetUserLaunchpadInfo,
   IUserLaunchpadInfo,
-  ILaunchpadList
+  ILaunchpadList,
+  GetUserRandomFailedResponse
 } from './type'
 
 import { ApiInstance } from 'api'
@@ -94,6 +95,14 @@ export const bindAddress = async (params: IBindAddressParams) => {
 
 export const getUserWhitelistProof = async (params: GetUserWhitelistProofParams) => {
   return ApiInstance.post<GetUserWhitelistProofResponse>('/user/whitelist', params)
+}
+
+export const getUserRandomIsWinterProof = async (params: GetUserWhitelistProofParams) => {
+  return ApiInstance.post<GetUserWhitelistProofResponse>('/user/winner', params)
+}
+
+export const getUserRandomFailedProof = async (params: GetUserWhitelistProofParams) => {
+  return ApiInstance.post<GetUserRandomFailedResponse>('/user/lottery_failed', params)
 }
 
 export const getUserPermitSign = async (params: GetUserWhitelistProofParams) => {

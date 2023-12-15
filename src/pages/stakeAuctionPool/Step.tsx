@@ -1,8 +1,6 @@
-import { Box, Button, Stack, Typography, Stepper, StepLabel, StepContent, Step, styled } from '@mui/material'
+import { Box, Stack, Typography, Step } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
-// import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
-// import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
 import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
@@ -14,9 +12,8 @@ import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
-import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 import { useApproveCallback } from 'hooks/useApproveCallback'
-import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
+import { STAKE_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ApprovalState } from 'hooks/useTokenTimelock'
 import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
@@ -26,172 +23,21 @@ import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
-export const StepperStyle = styled(Stepper)(({ theme }) => ({
-  '.MuiStepConnector-root': {
-    marginLeft: '16px'
-  },
-  '.MuiStepLabel-root': {
-    padding: 0
-  },
-  '.MuiStepLabel-iconContainer': {
-    padding: 0,
-    svg: {
-      width: 32,
-      height: 32,
-      color: '#D7D6D9',
-      '.MuiStepIcon-text': {
-        fill: '#fff'
-      }
-    }
-  },
-  '.Mui-completed': {
-    svg: {
-      path: {
-        fill: '#000'
-      }
-    }
-  },
-  '.Mui-active': {
-    svg: {
-      color: '#E1F25C',
-      '.MuiStepIcon-text': {
-        fill: '#121212'
-      }
-    }
-  },
-  [theme.breakpoints.down('md')]: {
-    '.MuiStepLabel-iconContainer': {
-      svg: {
-        width: 24,
-        height: 24
-      }
-    }
-  }
-}))
-
-export const StepLabelStyle = styled(StepLabel)(({ theme }) => ({
-  '.MuiStepLabel-labelContainer': {
-    display: 'grid',
-    gap: 4,
-    paddingLeft: '24px'
-  },
-  '.MuiStepLabel-label': {
-    color: '#121212 !important',
-    fontSize: '20px',
-    fontWeight: '600 !important',
-    lineHeight: '140%',
-    letterSpacing: '-0.4px'
-  },
-
-  '.MuiTypography-root': {
-    fontSize: 14,
-    fontWeight: 600,
-    color: '#959595',
-    lineHeight: '21px'
-  },
-  [theme.breakpoints.down('md')]: {
-    '.MuiStepLabel-labelContainer': {
-      paddingLeft: '8px'
-    },
-    '.MuiStepLabel-label': {
-      fontSize: '18px',
-      letterSpacing: '0'
-    },
-    '.MuiTypography-root': {
-      fontSize: 13
-    }
-  }
-}))
-
-export const StepContentStyle = styled(StepContent)(({ theme }) => ({
-  paddingLeft: 40,
-  marginLeft: '16px',
-  [theme.breakpoints.down('md')]: {
-    paddingLeft: 16
-  }
-}))
-
-export const CardLabelStyle = styled(Typography)(({ theme }) => ({
-  color: '#000',
-  fontSize: '20px',
-  fontWeight: '600',
-  letterSpacing: '-0.4px',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '18px',
-    letterSpacing: '0'
-  }
-}))
-
-export const CardContentStyle = styled(Typography)(() => ({
-  color: '#959595',
-  fontFamily: 'Inter',
-  fontSize: '13px',
-  fontWeight: '400'
-}))
-
-export const StakeButton = styled(Button)(({ theme }) => ({
-  height: 52,
-  width: 424,
-  padding: '20px 0',
-  display: 'flex',
-  gap: 10,
-  borderRadius: '8px',
-  background: '#121212',
-  color: '#fff',
-  svg: {
-    path: { color: '#fff' }
-  },
-  ':hover': {
-    background: '#000',
-    opacity: 0.6
-  },
-  [theme.breakpoints.down('md')]: {
-    width: '100%',
-    height: '42px'
-  }
-}))
-export const CountdownBtnStyle = styled(StakeButton)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  gap: 0;
-`
-export const BoldTextStyle = styled(Typography)(({ theme }) => ({
-  color: '#121212',
-  fontSize: '36px',
-  fontWeight: '600',
-  letterSpacing: '-0.72px',
-  lineHeight: '30px',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '28px',
-    letterSpacing: '0',
-    lineHeight: 'normal',
-    width: 'auto'
-  }
-}))
-
-export const CardContentTitleStyle = styled(Typography)(() => ({
-  color: '#959595',
-  fontSize: '14px',
-  fontWeight: '600',
-  lineHeight: '21px',
-  letterSpacing: '-0.28px'
-}))
-
-export const CardContentBoldTextStyle = styled(Typography)(({ theme }) => ({
-  color: '#F6F6F3',
-  fontSize: '36px',
-  fontWeight: '600',
-  letterSpacing: '-0.72px',
-  lineHeight: '26px',
-  [theme.breakpoints.down('md')]: {
-    fontSize: '28px',
-    letterSpacing: '0',
-    lineHeight: 'normal'
-  }
-}))
+import StakeAuctionInputDialog from 'bounceComponents/common/StakeAuctionInputDialog'
+import {
+  BoldTextStyle,
+  CardContentBoldTextStyle,
+  CardContentStyle,
+  CardContentTitleStyle,
+  CardLabelStyle,
+  CountdownBtnStyle,
+  NotInvolvedContainer,
+  NotInvolvedTitle,
+  StakeButton,
+  StepContentStyle,
+  StepLabelStyle,
+  StepperStyle
+} from 'pages/launchpadCoin/Step'
 
 export function Steps({
   coinInfo,
@@ -217,20 +63,6 @@ export function Steps({
         }}
       >
         <BoldTextStyle>Subscription Timeline</BoldTextStyle>
-        {/* <Button
-          sx={{
-            padding: { xs: '8px 30px', md: '12px 24px' },
-            color: '#171717',
-            fontSize: { xs: '12px', md: '14px' },
-            fontWeight: '400',
-            borderRadius: '100px',
-            border: ' 1px solid #20201E',
-            height: 34,
-            whiteSpace: { xs: 'nowrap' }
-          }}
-        >
-          My private launchpad
-        </Button> */}
         <></>
       </Box>
       <VerticalLinearStepper poolId={poolId} coinInfo={coinInfo} contract={contract} />
@@ -315,10 +147,8 @@ function Step1({
   const { account, chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
-    // if (!account) {
     return ChainId.MAINNET
-    // }
-    // return chainId
+    // return ChainId.SEPOLIA
   }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
@@ -329,7 +159,7 @@ function Step1({
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
   }, [amount, token1Currency])
-  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[_chainId])
+  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, STAKE_TOKEN_CONTRACT_ADDRESSES[_chainId])
   const token1Balance = useCurrencyBalance(account, token1Currency, _chainId)
 
   const curTime = useMemo(() => {
@@ -342,7 +172,6 @@ function Step1({
     return coinInfo.poolInfo.closeAt * 1000
   }, [coinInfo, status])
 
-  // 倒计时比实际的要慢一点
   const [, formattedRes] = useCountDown({
     targetDate: curTime
   })
@@ -377,6 +206,7 @@ function Step1({
   }, [token1Balance])
   const _switchNetwork = () => {
     switchNetwork(ChainId.MAINNET)
+    // switchNetwork(ChainId.SEPOLIA)
   }
   const actionBtn = useMemo(() => {
     if (!account) {
@@ -385,6 +215,9 @@ function Step1({
     if (chainId !== ChainId.MAINNET) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     }
+    // if (chainId !== ChainId.SEPOLIA) {
+    //   return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
+    // }
     if (isBalanceInsufficient) {
       return <StakeButton disabled>Insufficient balance</StakeButton>
     }
@@ -558,7 +391,6 @@ function Step1({
                   gap: { xs: 8, md: 16 }
                 }}
               >
-                {/* <StakeTokensSvg /> */}
                 <img
                   src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
                   width={60}
@@ -575,20 +407,20 @@ function Step1({
                       }
                     }}
                   >
-                    BitStable <b>x</b> Auction Pool
+                    GoDID <b>x</b> Auction Pool
                   </CardLabelStyle>
-                  <CardContentStyle>Stake $AUCTION to earn proportional $BSSB allocation</CardContentStyle>
+                  <CardContentStyle>Stake $AUCTION to earn proportional $BDID allocation</CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>0.005 AUCTION</CardLabelStyle>
+                    <CardLabelStyle>0.00009375 AUCTION</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
-                    <CardContentStyle>Total Supply of BSSB</CardContentStyle>
-                    <CardLabelStyle>6,300,000</CardLabelStyle>
+                    <CardContentStyle>Total Supply of BDID</CardContentStyle>
+                    <CardLabelStyle>200,000,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
@@ -597,7 +429,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 31,580 AUCTION
+                    {token1Currency?.symbol} / 18,750 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -667,10 +499,9 @@ function Step1({
           </Stack>
         </Box>
       </Stack>
-
-      <CoinInputDialog
+      <StakeAuctionInputDialog
         token1={token1CurrencyAmount}
-        id={'1'}
+        id={'2'}
         open={openDialog}
         onClose={() => handleClose()}
         token1Balance={token1Balance as CurrencyAmount}
@@ -685,27 +516,7 @@ function Step1({
     </>
   )
 }
-export const NotInvolvedContainer = styled(Box)`
-  display: flex;
-  width: 420px;
-  padding: 30px;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-  flex-shrink: 0;
-  align-self: stretch;
-  background: #fff;
-`
-export const NotInvolvedTitle = styled(Typography)`
-  color: #121212;
-  text-align: center;
-  font-family: Public Sans;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 24px */
-  letter-spacing: -0.32px;
-`
+
 function Step2({
   status,
   coinInfo,
@@ -721,13 +532,14 @@ function Step2({
   const _chainId = useMemo(() => {
     if (!account) {
       return 1
+      // return 11155111
     }
     return chainId
   }, [account, chainId])
   const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
-    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BSSB', 'BSSB')
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BDID', 'BDID')
   }, [_token0])
   const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
   const token1 = useMemo(() => {
@@ -899,6 +711,7 @@ function Step2({
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
     switchNetwork(ChainId.MAINNET)
+    // switchNetwork(ChainId.SEPOLIA)
   }
 
   return (
@@ -913,7 +726,7 @@ function Step2({
         variant="body1"
       >
         The allocation calculation is complete. We will deduct the corresponding $AUCTION from your account based on
-        your final $BSSB allocation, which will be transferred to your spot account along with your remaining $AUCTION.
+        your final $BDID allocation, which will be transferred to your spot account along with your remaining $AUCTION.
       </Typography>
       {account &&
         coinInfo?.myToken1Amount?.eq(0) &&
@@ -960,7 +773,6 @@ function Step2({
                       alignItems: 'center'
                     }}
                   >
-                    {/* <BnBTokenSvg /> */}
                     <img
                       src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
                       width={17}
@@ -1099,6 +911,9 @@ function Step2({
                   {account && chainId !== ChainId.MAINNET && (
                     <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )}
+                  {/* {account && chainId !== ChainId.SEPOLIA && (
+                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
+                  )} */}
                 </Stack>
               </Stack>
             </Stack>

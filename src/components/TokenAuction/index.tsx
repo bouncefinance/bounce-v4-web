@@ -471,8 +471,8 @@ const TokenAuction: React.FC = () => {
           <Typography
             sx={{
               textAlign: 'left',
-              fontFamily: `'Inter'`,
-              fontWeight: 700,
+              fontFamily: 'Inter',
+              fontWeight: 500,
               fontSize: isSm ? 24 : 44,
               width: '100%',
               lineHeight: '32px',
@@ -828,7 +828,16 @@ const TokenAuction: React.FC = () => {
                         }
                       }}
                     >
-                      <Stack gap={18} direction={'row'} sx={{ minWidth: 1440, '&>a': { flex: 1 } }}>
+                      <Stack
+                        gap={18}
+                        direction={'row'}
+                        sx={{
+                          // minWidth: 1440,
+                          '&>a': { flex: 1 },
+                          display: 'grid',
+                          gridTemplateColumns: '306px 306px 306px 306px'
+                        }}
+                      >
                         {optionDatas?.chainInfoOpt &&
                           nftPoolData?.list.map((nft: any, i: number) => <NftLink nft={nft} key={i} />)}
                       </Stack>

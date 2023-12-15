@@ -6,8 +6,8 @@ import { useRandomSelectionERC20Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { useBackedPoolInfo } from './usePoolInfo'
 
-const useRandomSelectionPoolInfo = () => {
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.Lottery)
+const useRandomSelectionPoolInfo = (backedId?: number) => {
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.Lottery, backedId)
 
   const randomSelectionERC20Contract = useRandomSelectionERC20Contract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
@@ -18,6 +18,7 @@ const useRandomSelectionPoolInfo = () => {
     undefined,
     poolInfo?.ethChainId
   ).result
+  const playerCount = useSingleCallResult(randomSelectionERC20Contract, 'getPlayerCount', [poolInfo?.poolId])
   // console.log('myClaimedRes---', myClaimedRes?.[0], poolInfo?.participant.claimed)
   // !TOTD contract data
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
@@ -50,9 +51,10 @@ const useRandomSelectionPoolInfo = () => {
       currencyAmountTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0),
       currencyAmountTotal1: CurrencyAmount.fromRawAmount(t1, poolInfo.amountTotal1),
       currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
-      currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0)
+      currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.currentTotal0),
+      curPlayer: playerCount.result?.[0].toString() || 0
     }
-  }, [myClaimedRes, poolInfo])
+  }, [playerCount.result, myClaimedRes, poolInfo])
 
   return {
     loading,

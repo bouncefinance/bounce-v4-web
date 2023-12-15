@@ -4,6 +4,7 @@ import { FixedSwapPoolProp } from 'api/pool/type'
 import Logo from 'assets/imgs/randomSelection/logoGray.png'
 import TypeIcon from 'assets/imgs/randomSelection/typeIconGray.png'
 import WarningIcon from 'assets/imgs/randomSelection/warning.png'
+import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
 import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import WinIcon from 'assets/imgs/randomSelection/Win.png'
 
@@ -63,7 +64,7 @@ const ClosedCard = ({
                 display: 'flex',
                 flexFlow: 'row nowrap',
                 overflow: 'hidden',
-                marginBottom: 30
+                margin: '0 auto 30px'
               }}
             >
               <Box
@@ -366,6 +367,34 @@ const ClosedCard = ({
       </Box>
     )
   }
+  const JoinedNotSelectWin = () => {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center'
+          }}
+        >
+          <Image src={PendingWinIcon} height={250} />
+          <Typography
+            sx={{
+              color: '#171717',
+              fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+              fontWeight: 500,
+              fontSize: 22,
+              textAlign: 'center',
+              margin: '27px 0 24px'
+            }}
+          >
+            The Random Selection is being drawn. Please wait patiently.
+          </Typography>
+        </Box>
+      </>
+    )
+  }
   const JoinedButNotWin = () => {
     return (
       <>
@@ -425,8 +454,9 @@ const ClosedCard = ({
   return (
     <>
       {action === 'POOL_CLOSED_AND_NOT_JOINED' && <NoJoinedCard />}
-      {isJoined && !isWinner && <JoinedButNotWin />}
-      {isJoined && isWinner && <JoinedAndWin />}
+      {isJoined && !isWinnerSeedDone && <JoinedNotSelectWin />}
+      {isJoined && isWinnerSeedDone && !isWinner && <JoinedButNotWin />}
+      {isJoined && isWinnerSeedDone && isWinner && <JoinedAndWin />}
       <Box
         sx={{
           marginBottom: '30px'

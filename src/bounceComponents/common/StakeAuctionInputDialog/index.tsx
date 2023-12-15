@@ -1,86 +1,14 @@
 import React, { useMemo } from 'react'
-import {
-  Dialog as MuiDialog,
-  DialogContent,
-  Stack,
-  Typography,
-  DialogTitle,
-  DialogProps as MuiDialogProps,
-  IconButton,
-  Button
-} from '@mui/material'
+import { Dialog as MuiDialog, DialogContent, Stack, Typography, DialogTitle, IconButton } from '@mui/material'
 import { NiceModalHocProps } from '@ebay/nice-modal-react'
 import { ReactComponent as CloseSVG } from '../DialogConfirmation/assets/close.svg'
-import styled from '@emotion/styled'
-import { CurrencyAmount } from 'constants/token'
 import StakeInput from 'pages/launchpadCoin/components/stakeInput'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useActiveWeb3React } from 'hooks'
 import { ChainId } from 'constants/chain'
+import { BalanceTitle, CancelBtnStyle, ConfirmBtnStyle, DialogProps, GrayTitle } from '../CoinInputDialog'
 
-export interface DialogProps extends MuiDialogProps {
-  token1Balance: CurrencyAmount | undefined
-  amount: string
-  handleSetAmount: (v: string) => void
-  onClose: () => void
-  open: boolean
-  confirm: () => void
-  token1: CurrencyAmount | undefined
-  toApprove: () => void
-  approvalState: ApprovalState
-  showLoginModal: () => void
-  switchNetwork: () => void
-}
-export const GrayTitle = styled(Typography)`
-  color: #626262;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-`
-export const BalanceTitle = styled(Typography)`
-  color: #121212;
-  font-family: Public Sans;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 150%; /* 24px */
-  letter-spacing: -0.32px;
-`
-
-export const ConfirmBtnStyle = styled(Button)`
-  width: 100%;
-  border-radius: 8px;
-  background: #121212;
-  color: #fff;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-  &:hover {
-    background: #121212;
-    opacity: 0.9;
-  }
-`
-export const CancelBtnStyle = styled(Button)`
-  border-radius: 8px;
-  border: 1px solid #121212;
-  background: #fff;
-  color: #121212;
-  leading-trim: both;
-  text-edge: cap;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-  &:hover {
-    background: #fff;
-  }
-`
-const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
+const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
   const {
     token1Balance,
     amount,
@@ -115,6 +43,13 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
         </ConfirmBtnStyle>
       )
     }
+    // if (chainId !== ChainId.SEPOLIA) {
+    //   return (
+    //     <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
+    //       Switch network
+    //     </ConfirmBtnStyle>
+    //   )
+    // }
     if (!amount || !Number(amount)) {
       return (
         <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
@@ -209,10 +144,6 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
               token1Balance={token1Balance}
             />
           </Stack>
-          {/* <Stack mt={48} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <GrayTitle>Maximum stake amount</GrayTitle>
-            <BlueTitle>100,000,000 BNB</BlueTitle>
-          </Stack> */}
         </>
       </DialogContent>
       <Stack flexDirection={'row'} alignItems={'center'} gap={12} mb={40}>
@@ -225,4 +156,4 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
   )
 }
 
-export default CoinInputDialog
+export default StakeAuctionInputDialog

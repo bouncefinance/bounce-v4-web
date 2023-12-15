@@ -31,7 +31,7 @@ export interface DialogProps extends MuiDialogProps {
   showLoginModal: () => void
   switchNetwork: () => void
 }
-export const GrayTitle = styled(Typography)`
+const GrayTitle = styled(Typography)`
   color: #626262;
   font-family: Inter;
   font-size: 16px;
@@ -39,7 +39,7 @@ export const GrayTitle = styled(Typography)`
   font-weight: 400;
   line-height: 150%; /* 24px */
 `
-export const BalanceTitle = styled(Typography)`
+const BalanceTitle = styled(Typography)`
   color: #121212;
   font-family: Public Sans;
   font-size: 16px;
@@ -49,7 +49,7 @@ export const BalanceTitle = styled(Typography)`
   letter-spacing: -0.32px;
 `
 
-export const ConfirmBtnStyle = styled(Button)`
+const ConfirmBtnStyle = styled(Button)`
   width: 100%;
   border-radius: 8px;
   background: #121212;
@@ -64,7 +64,7 @@ export const ConfirmBtnStyle = styled(Button)`
     opacity: 0.9;
   }
 `
-export const CancelBtnStyle = styled(Button)`
+const CancelBtnStyle = styled(Button)`
   border-radius: 8px;
   border: 1px solid #121212;
   background: #fff;
@@ -80,7 +80,7 @@ export const CancelBtnStyle = styled(Button)`
     background: #fff;
   }
 `
-const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
+const StakeDaiiInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
   const {
     token1Balance,
     amount,
@@ -209,10 +209,6 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
               token1Balance={token1Balance}
             />
           </Stack>
-          {/* <Stack mt={48} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <GrayTitle>Maximum stake amount</GrayTitle>
-            <BlueTitle>100,000,000 BNB</BlueTitle>
-          </Stack> */}
         </>
       </DialogContent>
       <Stack flexDirection={'row'} alignItems={'center'} gap={12} mb={40}>
@@ -225,4 +221,4 @@ const CoinInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: Dialo
   )
 }
 
-export default CoinInputDialog
+export default StakeDaiiInputDialog

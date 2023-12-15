@@ -45,17 +45,17 @@ export const ArrowBg = styled(Box)`
     border: 1px solid #959595;
     color: #959595;
     background: #fff;
+    opacity: 0.3;
   }
   &.black {
     border: 1px solid #20201e;
     background: #20201e;
     color: #fff;
   }
-  &.black:hover,
-  &.gray:hover {
+  &.black:hover {
     border: 1px solid #20201e;
-    background: #20201e;
-    color: #fff;
+    background: #fff;
+    color: #20201e;
     opacity: 0.8;
   }
 `
@@ -241,12 +241,13 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
               WebkitLineClamp: 3,
               WebkitBoxOrient: 'vertical',
               overflow: 'hidden',
-              textOverflow: 'ellipsis'
+              textOverflow: 'ellipsis',
+              height: isSm ? 63 : 'auto'
             }}
           >
             {data.desc}
           </LaunchpadDescription>
-          <Row mt={10} gap={6} sx={{ overflow: 'hidden' }}>
+          <Row mt={10} gap={6} sx={{ overflow: 'hidden', height: isSm ? 46 : 'auto' }}>
             {data.social}
           </Row>
         </Stack>
@@ -302,7 +303,7 @@ const AuctionLaunchpadCard = () => {
             </ArrowBg>
           </Stack>
         </Stack>
-        <Box ref={ref} mt={isSm ? 40 : 60} ml={'-16px'}>
+        <Box ref={ref} mt={isSm ? 40 : 60} ml={'-16px'} width={isSm ? 'auto' : 1312}>
           <SlideProgress
             hideArrow
             swiperRef={swiper}
@@ -311,7 +312,7 @@ const AuctionLaunchpadCard = () => {
             swiperStyle={{
               style: { height: isSm ? '100%' : 500, paddingBottom: isSm ? 50 : 0 },
               spaceBetween: 30,
-              slidesPerView: isSm ? 1.2 : 1.95,
+              slidesPerView: isSm ? 1.2 : 2,
               loop: isSm,
               // autoplay: isSm,
               freeMode: true,
