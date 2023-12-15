@@ -4,7 +4,7 @@ const NftLottery = () => {
   return (
     <Box>
       Nft Lottery
-      <Typography variant="lotteryh1"></Typography>
+      <Typography variant="lotteryh1">aAAAA</Typography>
       <SectionA />
     </Box>
   )
