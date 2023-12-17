@@ -12,7 +12,7 @@ import {
   Pagination
 } from '@mui/material'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import moment from 'moment'
+// import moment from 'moment'
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import NoData from 'bounceComponents/common/NoData'
@@ -121,7 +121,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
                   <StyledTableCell>Amount</StyledTableCell>
                   <StyledTableCell>Price</StyledTableCell>
                   <StyledTableCell>Address</StyledTableCell>
-                  <StyledTableCell>Date</StyledTableCell>
+                  {/* <StyledTableCell>Date</StyledTableCell> */}
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -133,8 +133,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
                           color: '#F53030',
                           fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                           fontWeight: 400,
-                          fontSize: '12px',
-                          textAlign: 'center'
+                          fontSize: '12px'
                         }}
                       >
                         Win
@@ -148,7 +147,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
                         <CopyToClipboard text={record} />
                       </Box>
                     </StyledTableCell>
-                    <StyledTableCell>{moment(poolInfo.closeAt * 1000).format('Y/M/D hh:mm')}</StyledTableCell>
+                    {/* <StyledTableCell>{moment(poolInfo.closeAt * 1000).format('Y/M/D HH:mm')}</StyledTableCell> */}
                   </StyledTableRow>
                 ))}
               </TableBody>
