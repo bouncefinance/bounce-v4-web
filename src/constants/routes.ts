@@ -114,6 +114,7 @@ export const routes = {
     MultiBitBridge: '/launchpad/multibit',
     BitStable: '/launchpad/bitstable',
     BitStableAuction: '/launchpad/bitstable-staking',
+    Port3: '/launchpad/port3',
     Did: {
       index: '/launchpad/godid-rs-auction',
       stake: '/launchpad/godid-staking-auction',

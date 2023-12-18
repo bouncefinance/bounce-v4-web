@@ -49,6 +49,7 @@ import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
+import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -1465,12 +1466,174 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
 }
 
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 22
+  // current privatePad max keyId is 23
+
   AiMeetsBtcRandomData,
+  {
+    keyId: 23,
+    liveTimeStamp: {
+      start: 1732852800000,
+      end: 0
+    },
+    poolTypeName: 'Fixed Price Auction',
+    img: '',
+    avatar: '',
+    title: 'Port3 Network',
+    chainId: 1,
+    tokenName: '$PORT3',
+    whitePaperLink: 'https://docsend.com/view/rb64i7ejgbs6ufpn',
+    upcomingLink: '/launchpad/port3',
+    liveLink: '/launchpad/port3',
+    projectInfo: [
+      {
+        title: 'What is Port3 Network?',
+        info: [
+          <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+            <ul>
+              <li>
+                Port3 Network is a bridge between Web2 and Web3, led by Jump Crypto and Kucoin Ventures, with other
+                investors including dozens of top tier institutions including EMURGO, Momentum6, SNZ, Adaverse and Gate
+                Labs. Port3 Network is building a protocol to aggregate and standardize off-chain and on-chain data to
+                build a universally accessible and powerful Social Data Layer that can be widely applied to various
+                DApps. The founders of the team come from Bangkok, Zurich, Paris, Moscow, South Africa and Bucharest.
+                Has worked for well-known companies and institutions such as Apple, UBS, JP Morgan, and Tencent.
+              </li>
+              <li>
+                Currently we support 19 L1s and almost all EVMs. The total number of users exceeds 1.7M. It has more
+                than 4,200 partners including BNB Chain, Trader Joe, Conflux, etc. Received incubation from Binance Labs
+                and BNB Chain and held the first Zero 2 Hero Hackathon with BNB Chain. Received grants and other support
+                from BNB Chain, MASK, Aptos and other institutions.
+              </li>
+              <li>
+                The main products that Port3 Network has completed so far are SoQuest and BQL. SoQuest is a task
+                platform with DAU more than 30k. Leverage the rewards provided by cooperated projects to allow users to
+                voluntarily provide their profiles across different platforms of Web2 and Web3, and provide our users
+                with special benefits through user preferences and intents, including higher select rates in public
+                sales, airdrop rewards from high-quality projects, and priority purchase of co-branded NFTs rights etc.
+              </li>
+              <li>
+                Another major and latest product, BQL, as a Natural Language Processed On-Chain Workflow Executor,
+                provides the possibility of intent-centeric protocols and infrastructure (Intent-Centric Layer) an open
+                approach. Users do not need to search for cumbersome interactive tutorials but can perform complex
+                on-chain interactions with one click. Even instructions edited in natural language can be compiled into
+                standard paradigms of on-chain workflows and can be executed by EVM-compatible contracts. Currently BQL
+                trading volume exceeded 120mln. Extensive support for other alt-chains will also be applied in the
+                future.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Tokenomics',
+        info: [
+          <Box
+            key={1}
+            sx={{ a: { textDecoration: 'underline', color: 'gray' }, img: { width: '100%', height: '100%' } }}
+          >
+            <a href="https://docsend.com/view/rb64i7ejgbs6ufpn" target="_blank" rel="noreferrer">
+              https://docsend.com/view/rb64i7ejgbs6ufpn
+            </a>
+            <Typography my={5}>On page 18</Typography>
+            <img src={PORT3Tokenomics} />
+          </Box>
+        ]
+      },
+      {
+        title: 'Advantages of the Project',
+        info: [
+          <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+            <ul>
+              <li>
+                Explain the unique selling points and advantages of your project compared to others in the market.
+              </li>
+              <li>
+                The first ever Web3 social data layer & natural language processing on-chain workflow executor, it’s a
+                risk free trading tool without the permission of private key needed nor custody. Port3 has yet exceeded
+                1.7M users as well as over 140mil in trading volume.
+              </li>
+            </ul>
+          </Box>
+        ]
+      },
+      {
+        title: 'Investment and Partners',
+        info: [
+          <Box
+            key={1}
+            sx={{
+              ul: { display: 'flex', flexDirection: 'column', gap: 10 },
+              a: { textDecoration: 'underline', color: 'gray' }
+            }}
+          >
+            <ul>
+              <li>
+                <Typography>cap table:</Typography>
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0
+                </a>
+              </li>
+              <li>
+                <Typography>KOL, media partners & big brands:</Typography>
+                <a
+                  href="https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing
+                </a>
+              </li>
+            </ul>
+          </Box>
+        ]
+      }
+    ],
+    tokenMetrics: [],
+    desc: 'Port3 Network is a bridge between Web2 and Web3, led by Jump Crypto and Kucoin Ventures, with other investors including dozens of top tier institutions including EMURGO, Momentum6, SNZ, Adaverse and Gate Labs.',
+    social: [
+      <Link key={0} href="https://port3.io/" target="_blank">
+        <Web />
+      </Link>,
+      <Link key={4} href="https://t.me/port3network" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      <Link key={5} href="https://t.me/Port3_Network" target="_blank">
+        <img src={Telegram} width={40} />
+      </Link>,
+      // <Link
+      //   key={5}
+      //   sx={{ width: '43px !important', height: '43px !important' }}
+      //   href="https://www.instagram.com/create.protocol/?hl=en"
+      //   target="_blank"
+      // >
+      //   <InstagramSvg width={43} height={43} />
+      // </Link>,
+      <Link key={6} href="https://twitter.com/Port3Network" target="_blank">
+        <Twitter />
+      </Link>,
+      <Link key={7} href="https://discord.com/invite/JV5gT5cGCk" target="_blank">
+        <DiscordSVG />
+      </Link>,
+      <Link key={8} href="https://medium.com/@Port3" target="_blank">
+        <img src={Medium} width={40} />
+      </Link>
+    ],
+    moreData: [
+      { title: 'Token Name', content: '$PORT3' },
+      { title: 'Token Price', content: '0.05 USDT' },
+      { title: 'Token Amount', content: '4,000,000' },
+      { title: 'Blockchain', content: 'Ethereum' }
+    ]
+  },
   PrivateStakeAuctionData,
   PrivateStakeDaiiData,
   PrivateRandomGodidData,
   PrivatePadCoinData,
+
   {
     keyId: 17,
     backedId: 18606,
