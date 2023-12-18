@@ -3,7 +3,7 @@ import WordListImg from 'assets/imgs/nftLottery/card/wrod-list.png'
 import { ReactComponent as LineSvg } from 'assets/imgs/nftLottery/card/line.svg'
 const Container = styled(Box)`
   width: 358px;
-  height: 100%;
+  height: 412px;
   background: #0f0f0f;
   padding: 14px 36px 16px 16px;
   position: relative;
