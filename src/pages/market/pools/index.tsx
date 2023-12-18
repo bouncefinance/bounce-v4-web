@@ -41,6 +41,7 @@ import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull
 export const poolTypeText: Record<PoolType, string> = {
   [PoolType.FixedSwap]: 'Fixed Price',
   [PoolType.Lottery]: 'Lottery',
+  [PoolType.LOTTERY_NFT]: 'Lottery NFT',
   [PoolType.DUTCH_AUCTION]: 'Dutch Auction',
   [PoolType.SealedBid]: 'Sealed Bid',
   [PoolType.fixedSwapNft]: 'Fixed Swap NFT',
