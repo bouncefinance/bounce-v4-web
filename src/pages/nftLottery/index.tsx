@@ -1,8 +1,8 @@
-import { Box, Typography, useTheme } from '@mui/material'
-import SectionA from './sections/sectionA'
+import { Box, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import BannerStep1 from './sections/banner/step1'
+import BannerStep2 from './sections/banner/step2'
 import { useScrollHeight } from 'hooks/useScroll'
 import BannerStep from './components/banner/bannerStep'
 export enum AnimateStep {
@@ -20,8 +20,10 @@ const NftLottery = () => {
   const [stopScroll, setStopscroll] = useState(true)
   const [animate0Ratio, setAnimate0Ratio] = useState<string>('0')
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
+  const [animate2Ratio, setAnimate2Ratio] = useState<string>('0')
   const [animate0Step, setAnimate0Step] = useState(AnimateStep.default) // banner step 1
   const [animate1Step, setAnimate1Step] = useState(AnimateStep.default) // banner step
+  const [animate2Step, setAnimate2Step] = useState(AnimateStep.default) // banner step 2
   const resizeWinH = () => {
     setWinHeight(window.innerHeight)
   }
@@ -38,6 +40,7 @@ const NftLottery = () => {
     }, 3000)
     setAnimate0Step(AnimateStep.enter)
     setAnimate1Step(AnimateStep.enter)
+    setAnimate2Step(AnimateStep.default)
     document.body.addEventListener('resize', resizeWinH)
     return () => {
       document.body.removeEventListener('resize', resizeWinH)
@@ -50,8 +53,8 @@ const NftLottery = () => {
       if (windowScrollTop) {
         // banner
         const animate0Range = [0, winH / 2]
+        const animate1Range = [winH / 2, winH]
         if (80 >= windowScrollTop) {
-          console.log('reload')
           setAnimate0Step(AnimateStep.enter)
           setAnimate1Step(AnimateStep.enter)
         } else if (80 < windowScrollTop && windowScrollTop <= animate0Range[1]) {
@@ -61,9 +64,13 @@ const NftLottery = () => {
           } else {
             setAnimate1Step(AnimateStep.enter)
           }
-          console.log('leave')
           setAnimate0Step(AnimateStep.leave) // TODO leave when step 2 is leaving
           setAnimate1Ratio('100')
+        } else if (animate1Range[0] < windowScrollTop && windowScrollTop <= animate1Range[1]) {
+          setAnimate2Step(AnimateStep.enter)
+          setAnimate2Ratio(
+            BigNumber((windowScrollTop - animate1Range[0]) / (animate1Range[1] - animate1Range[0])).toFixed(2)
+          )
         }
       }
     }
@@ -82,10 +89,9 @@ const NftLottery = () => {
         }}
       >
         <BannerStep1 ratio={animate0Ratio} step={animate0Step} />
+        <BannerStep2 ratio={animate2Ratio} step={animate2Step} />
         <BannerStep ratio={animate1Ratio} step={animate1Step} />
       </Box>
-      <Typography variant="lotteryh1">aAAAA</Typography>
-      <SectionA />
       <TokenInformation />
       <PoolDetail />
     </>

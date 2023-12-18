@@ -4,8 +4,6 @@ import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
 import P1Img from 'assets/imgs/nftLottery/p1.png'
 import P2Img from 'assets/imgs/nftLottery/p2.png'
-import Bg1Svg from 'assets/imgs/nftLottery/bg1.svg'
-import Bg2Svg from 'assets/imgs/nftLottery/bg2.svg'
 import Image from 'components/Image'
 
 const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
@@ -30,19 +28,11 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       },
       img1: {
         transition: 'all 0s',
-        transform: 'translate3D(-275px, 100vh, 0)'
+        transform: 'translate3D(-100vw, -50%, 0)'
       },
       img2: {
         transition: 'all 0s',
-        transform: 'translate3D(-275px, -100vh, 0)'
-      },
-      bg1: {
-        transition: 'all 0s',
-        transform: 'translate3D(-445px, 100vh, 0)'
-      },
-      bg2: {
-        transition: 'all 0s',
-        transform: 'translate3D(-235px, 100vh, 0)'
+        transform: 'translate3D(100vw, -50%, 0)'
       }
     }
     switch (step) {
@@ -68,19 +58,11 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           },
           img1: {
             transition: 'all 0.6s',
-            transform: 'translate3D(-275px, 200px, 0)'
+            transform: 'translate3D(-275px, -50%, 0)'
           },
           img2: {
             transition: 'all 0.6s',
-            transform: 'translate3D(-275px, 0, 0)'
-          },
-          bg1: {
-            transition: 'all 0s',
-            transform: 'translate3D(-445px, 0, 0)'
-          },
-          bg2: {
-            transition: 'all 0s',
-            transform: 'translate3D(-235px, 0, 0)'
+            transform: 'translate3D(275px, -50%, 0)'
           }
         }
       case AnimateStep.leave:
@@ -103,19 +85,11 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           },
           img1: {
             transition: 'all 0.6s',
-            transform: `translate3D(-275px, calc(200px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(calc(-275px - ${2000 * Number(ratio)}px), -50%, 0)`
           },
           img2: {
             transition: 'all 0.6s',
-            transform: `translate3D(-275px, calc(200px - ${2000 * Number(ratio)}px), 0)`
-          },
-          bg1: {
-            transition: 'all 0s',
-            transform: `translate3D(-445px, -${2000 * Number(ratio)}px, 0)`
-          },
-          bg2: {
-            transition: 'all 0s',
-            transform: `translate3D(-235px, -${2000 * Number(ratio)}px, 0)`
+            transform: `translate3D(calc(275px - ${2000 * Number(ratio)}px), -50%, 0)`
           }
         }
       default:
@@ -129,26 +103,6 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         height: '100vh'
       }}
     >
-      <Image
-        style={{
-          position: 'fixed',
-          top: '0',
-          left: '50%',
-          ...styleConfig.bg1
-        }}
-        src={Bg1Svg}
-        alt=""
-      />
-      <Image
-        style={{
-          position: 'fixed',
-          top: '0',
-          right: '50%',
-          ...styleConfig.bg2
-        }}
-        src={Bg2Svg}
-        alt=""
-      />
       <Typography
         sx={{
           width: '100%',
@@ -164,7 +118,7 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         }}
         variant="lotteryh1"
       >
-        NFT AUCTION
+        START FROM
       </Typography>
       <Typography
         sx={{
@@ -181,40 +135,27 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         }}
         variant="lotteryh1"
       >
-        AI MEETS
+        DEC 19
       </Typography>
       <Typography
         sx={{
           width: '100%',
+          maxwidth: 800,
           position: 'fixed',
           top: '50%',
-          left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 100 : 200,
-          fontWeight: 500,
+          left: '50%',
+          color: '#4C483A',
+          fontSize: isSm ? 14 : 20,
+          fontWeight: 400,
           textAlign: 'center',
           zIndex: '1',
           ...styleConfig.p3
         }}
         variant="lotteryh1"
       >
-        BITCOIN
-      </Typography>
-      <Typography
-        sx={{
-          width: '100%',
-          position: 'fixed',
-          top: '50%',
-          left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 16 : 18,
-          fontWeight: 700,
-          textAlign: 'center',
-          zIndex: '1',
-          ...styleConfig.p4
-        }}
-      >
-        ETHEREUM{ratio}
+        Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and
+        transparent environment for the auction process. The use of blockchain technology also allows for the automatic
+        execution of the auction rules and the issuance of tokens to the winning bidders.
       </Typography>
       <Image
         style={{
