@@ -11,6 +11,8 @@ export enum AnimateStep {
   'moving' = 2,
   'leave' = 3
 }
+import TokenInformation from './sections/tokenInformation'
+import PoolDetail from './sections/poolDetail'
 const NftLottery = () => {
   const theme = useTheme()
   const windowScrollTop = useScrollHeight()
@@ -84,6 +86,8 @@ const NftLottery = () => {
       </Box>
       <Typography variant="lotteryh1">aAAAA</Typography>
       <SectionA />
+      <TokenInformation />
+      <PoolDetail />
     </>
   )
 }
