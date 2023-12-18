@@ -16,6 +16,7 @@ import ERC1155_ABI from '../constants/abis/erc1155.json'
 import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
 import FIXED_SWAP_ABI_BOT from '../constants/abis/fixedSwap_bot.json'
 import RANDOM_SELECTION_ABI from '../constants/abis/randomSelection.json'
+import RANDOM_SELECTION_NFT_ABI from '../constants/abis/randomSelectionNFT.json'
 import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
 import ENGLISH_AUCTION_NFT_ABI from '../constants/abis/englishAuctionNFT.json'
 import MUTANT_ENGLISH_AUCTION_NFT_ABI from '../constants/abis/mutantEnglishAuctionNFT.json'
@@ -306,4 +307,12 @@ export function useStakeTokenContract(queryChainId?: ChainId) {
   const cur = queryChainId || ChainId.SEPOLIA
   const curAddress = cur ? STAKE_TOKEN_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, STAKE_TOKEN_ABI, true, queryChainId)
+}
+
+export function useRandomSelectionNFTContract(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress =
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, RANDOM_SELECTION_NFT_ABI, true, queryChainId)
 }
