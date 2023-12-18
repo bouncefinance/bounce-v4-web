@@ -1,0 +1,88 @@
+import { Box, Stack } from '@mui/material'
+import { AnimateStep } from 'pages/nftLottery'
+import { useIsSMDown } from 'themes/useTheme'
+import { useMemo } from 'react'
+const BannerStep = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
+  const isSm = useIsSMDown()
+  const styleConfig = useMemo(() => {
+    const styleObj = {
+      line: {
+        transition: 'all 0s',
+        transform: 'translate3D(-50%, 100vh, 0)'
+      },
+      yellowLine: {
+        top: 0
+      }
+    }
+    switch (step) {
+      case AnimateStep.default:
+        return styleObj
+      case AnimateStep.enter:
+        return {
+          line: {
+            transition: 'all 0.6s',
+            transform: `translate3D(-50%, ${isSm ? 100 : 200}px, 0)`
+          },
+          yellowLine: {
+            top: 0
+          }
+        }
+      case AnimateStep.moving:
+        return {
+          line: {
+            transition: 'all 0.6s',
+            transform: `translate3D(-50%, ${isSm ? 100 : 200}px, 0)`
+          },
+          yellowLine: {
+            top: '50%'
+          }
+        }
+      case AnimateStep.leave:
+        return {
+          line: {
+            transition: 'all 0.6s',
+            transform: `translate3D(0, calc(${isSm ? 100 : 200}px - ${2000 * Number(ratio)}px), 0)`
+          },
+          yellowLine: {
+            top: '50%'
+          }
+        }
+      default:
+        return styleObj
+    }
+  }, [isSm, ratio, step])
+  return (
+    <Stack
+      sx={{
+        width: '3px',
+        height: isSm ? '100px' : '184px',
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        ...styleConfig.line
+      }}
+      justifyContent={'center'}
+      alignItems={'center'}
+    >
+      <Box
+        sx={{
+          width: '1px',
+          height: '100%',
+          background: '#A7A299'
+        }}
+      ></Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '0',
+          width: '3px',
+          height: '50%',
+          background: '#C3A16D',
+          transition: 'all 0.6s',
+          ...styleConfig.yellowLine
+        }}
+      ></Box>
+    </Stack>
+  )
+}
+export default BannerStep
