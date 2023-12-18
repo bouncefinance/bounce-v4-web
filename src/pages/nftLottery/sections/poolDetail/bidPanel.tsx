@@ -1,5 +1,6 @@
 import { Box, styled } from '@mui/material'
 import PoolProgress from 'pages/nftLottery/components/poolDetail/poolProgress'
+import BidBtnBox from './bidBtnBox'
 
 const Container = styled(Box)`
   width: 100%;
@@ -11,6 +12,7 @@ const BidPanel = () => {
   return (
     <Container>
       <PoolProgress />
+      <BidBtnBox />
     </Container>
   )
 }

@@ -1,5 +1,5 @@
-import { Box, LinearProgress, Stack, Typography, styled } from '@mui/material'
-import { ReactComponent as DefaultAvatar } from 'assets/imgs/nftLottery/default-ava.svg'
+import { Avatar, AvatarGroup, LinearProgress, Stack, Typography, styled } from '@mui/material'
+import DefaultAvatar from 'assets/imgs/nftLottery/default-ava.svg'
 const Title1 = styled(Typography)`
   color: #474543;
   /* D/H4 */
@@ -25,31 +25,26 @@ const Title2 = styled(Typography)`
   letter-spacing: -0.56px;
   text-transform: capitalize;
 `
-const AvatarStyle = styled(Box)`
-  position: absolute;
+const AvatarStyle = styled(Avatar)`
   width: 54px;
   height: 54px;
   border-radius: 54px;
   border: 2.25px solid #fff;
-  &.offset {
-    left: -10px;
-  }
 `
 const AvatarList = () => {
   const len = [1, 1, 1, 1, 1]
   return (
     <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
-      {len.map(i => (
-        <AvatarStyle key={i} className={i > 0 ? 'offset' : ''}>
-          <DefaultAvatar />
-        </AvatarStyle>
-      ))}
+      <AvatarGroup max={5}>
+        {len.map(i => (
+          <AvatarStyle key={i} alt="DefaultAvatar" src={DefaultAvatar} />
+        ))}
+      </AvatarGroup>
     </Stack>
   )
 }
 
 const PoolProgress = () => {
-  const player = 2000
   return (
     <Stack gap={20}>
       <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -57,12 +52,24 @@ const PoolProgress = () => {
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
           <AvatarList />
           <Stack flexDirection={'row'} alignItems={'center'}>
-            <Title2>{player}</Title2>
+            <Title2>2050</Title2>
             <Title1>/ 20,000</Title1>
           </Stack>
         </Stack>
       </Stack>
-      <LinearProgress variant="determinate" value={player} />
+      <LinearProgress
+        sx={{
+          '&.MuiLinearProgress-root': {
+            background: '#D9D9D9'
+          },
+          '& .MuiLinearProgress-bar': {
+            background: '#76BA1E'
+          }
+        }}
+        color="success"
+        variant="determinate"
+        value={(2050 / 20000) * 100}
+      />
     </Stack>
   )
 }
