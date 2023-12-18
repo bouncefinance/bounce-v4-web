@@ -431,6 +431,7 @@ export interface GetWinnersListParams {
   offset: number
   chainId: number
   poolId: string
+  category?: PoolType
 }
 
 export type PoolEvent = 'Swapped' | 'CreatorClaimed' | 'Reversed' | 'Bid' | 'Bet'

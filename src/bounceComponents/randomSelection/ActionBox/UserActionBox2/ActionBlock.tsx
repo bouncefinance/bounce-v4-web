@@ -20,7 +20,7 @@ import { BigNumber } from 'bignumber.js'
 import Upcoming from './RandomSelectionStatusCard/Upcoming'
 import Closed from './RandomSelectionStatusCard/Closed'
 import LiveCard from './RandomSelectionStatusCard/Live'
-import { useIsWinnerForRandomSelectionPool } from 'hooks/useCreateRandomSelectionPool'
+import { useIsWinnerForRandomSelectionPool } from 'hooks/useRandomSelectionPool'
 
 export type UserAction =
   | 'GO_TO_CHECK'
@@ -106,6 +106,7 @@ const ActionBlock = ({
     account || undefined,
     poolInfo.contract,
     isWinnerSeedDone || false,
+    poolInfo.category,
     poolInfo.ethChainId
   )
   useEffect(() => {

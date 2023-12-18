@@ -22,7 +22,6 @@ import { Params } from 'ahooks/lib/usePagination/types'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { ReactComponent as SearchSVG } from 'assets/imgs/companies/search.svg'
 import FormItem from 'bounceComponents/common/FormItem'
-import { PoolType } from 'api/pool/type'
 import { getLabelById } from 'utils'
 import NoData from 'bounceComponents/common/NoData'
 import TokenDialog from 'bounceComponents/create-auction-pool/TokenDialog'
@@ -38,17 +37,17 @@ import AuctionCardFull from 'bounceComponents/common/AuctionCard/AuctionCardFull
 // import { ReactComponent as CloseSVG } from 'assets/imgs/auction/close.svg'
 // export type IPoolsProps = {}
 
-export const poolTypeText: Record<PoolType, string> = {
-  [PoolType.FixedSwap]: 'Fixed Price',
-  [PoolType.Lottery]: 'Lottery',
-  [PoolType.DUTCH_AUCTION]: 'Dutch Auction',
-  [PoolType.SealedBid]: 'Sealed Bid',
-  [PoolType.fixedSwapNft]: 'Fixed Swap NFT',
-  [PoolType.ENGLISH_AUCTION_NFT]: 'ENGLISH AUCTION NFT',
-  [PoolType.PlayableAuction]: 'Playable Auction',
-  [PoolType.MUTANT_ENGLISH_AUCTION_NFT]: 'Mutant ENGLISH AUCTION',
-  [PoolType.ENGLISH_AUCTION]: 'Erc20 English Auction'
-}
+// export const poolTypeText: Record<PoolType, string> = {
+//   [PoolType.FixedSwap]: 'Fixed Price',
+//   [PoolType.Lottery]: 'Lottery',
+//   [PoolType.DUTCH_AUCTION]: 'Dutch Auction',
+//   [PoolType.SealedBid]: 'Sealed Bid',
+//   [PoolType.fixedSwapNft]: 'Fixed Swap NFT',
+//   [PoolType.ENGLISH_AUCTION_NFT]: 'ENGLISH AUCTION NFT',
+//   [PoolType.PlayableAuction]: 'Playable Auction',
+//   [PoolType.MUTANT_ENGLISH_AUCTION_NFT]: 'Mutant ENGLISH AUCTION',
+//   [PoolType.ENGLISH_AUCTION]: 'Erc20 English Auction'
+// }
 const initialValues = {
   searchText: '',
   searchType: 0,
