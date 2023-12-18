@@ -14,6 +14,7 @@ export enum PoolType {
   ENGLISH_AUCTION_NFT = 6,
   ENGLISH_AUCTION = 8,
   MUTANT_ENGLISH_AUCTION_NFT = 9,
+  LOTTERY_NFT = 10,
   'PlayableAuction' = 100
 }
 
@@ -37,6 +38,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'English Auction'
     case PoolType.MUTANT_ENGLISH_AUCTION_NFT:
       return 'Mutant English'
+    case PoolType.LOTTERY_NFT:
+      return 'Lottery NFT'
   }
 }
 export interface BindTgTokenApiParams {
