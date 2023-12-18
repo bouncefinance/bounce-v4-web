@@ -1,5 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material'
 import SectionA from './sections/sectionA'
+import ArtistsList from './sections/ArtistsList'
+import ArtistsInformation from './sections/ArtistsInformation'
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import BannerStep1 from './sections/banner/step1'
@@ -88,6 +90,8 @@ const NftLottery = () => {
       <SectionA />
       <TokenInformation />
       <PoolDetail />
+      <ArtistsList></ArtistsList>
+      <ArtistsInformation></ArtistsInformation>
     </>
   )
 }
