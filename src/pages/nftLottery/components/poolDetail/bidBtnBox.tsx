@@ -68,8 +68,20 @@ const PurchaseBtn = ({ goCheck }: { goCheck: () => void }) => (
 )
 
 const CloseBtn = () => <BaseBtnStyle>Auction closed</BaseBtnStyle>
+const DrawedBtn = () => (
+  <>
+    <BaseBtnStyle>You are in the draw...</BaseBtnStyle>
+    <TipTitle mt={24}>If you failed, you can get fund back later</TipTitle>
+  </>
+)
+const SoldOutBtn = () => (
+  <>
+    <BaseBtnStyle>Sold Out</BaseBtnStyle>
+    <TipTitle mt={24}>Sorry, you are too late... </TipTitle>
+  </>
+)
 const BidBtnBox = ({ goCheck }: IProps) => {
-  console.log('PurchaseBtn', PurchaseBtn, UpcomingBtn, CloseBtn)
+  console.log('PurchaseBtn', PurchaseBtn, UpcomingBtn, CloseBtn, DrawedBtn, SoldOutBtn)
 
   return (
     <Stack flexDirection={'column'} justifyContent={'center'} alignItems={'center'} mt={80}>
