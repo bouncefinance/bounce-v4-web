@@ -2,8 +2,8 @@ import { Box, Typography } from '@mui/material'
 import { AnimateStep } from '../../index'
 import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
-import P1Img from 'assets/imgs/nftLottery/p1.png'
-import P2Img from 'assets/imgs/nftLottery/p2.png'
+import P1Img from 'assets/imgs/nftLottery/p7.png'
+import P2Img from 'assets/imgs/nftLottery/p6.png'
 import Image from 'components/Image'
 
 const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
@@ -20,11 +20,7 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       },
       p3: {
         transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
-      },
-      p4: {
-        transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
+        transform: 'translate3D(-50%, 100vh, 0)'
       },
       img1: {
         transition: 'all 0s',
@@ -50,19 +46,15 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           },
           p3: {
             transition: 'all 0.6s',
-            transform: 'translate3D(0, -90px, 0)'
-          },
-          p4: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(0, 130px, 0)'
+            transform: 'translate3D(-50%, -20px, 0)'
           },
           img1: {
             transition: 'all 0.6s',
-            transform: 'translate3D(-275px, -50%, 0)'
+            transform: 'translate3D(-631px, -50%, 0)'
           },
           img2: {
             transition: 'all 0.6s',
-            transform: 'translate3D(275px, -50%, 0)'
+            transform: 'translate3D(558px, -50%, 0)'
           }
         }
       case AnimateStep.leave:
@@ -77,19 +69,15 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           },
           p3: {
             transition: 'all 0.6s',
-            transform: `translate3D(0, calc(-90px - ${2000 * Number(ratio)}px), 0)`
-          },
-          p4: {
-            transition: 'all 0.6s',
-            transform: `translate3D(0, calc(130px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(-50%, calc(-20px - ${2000 * Number(ratio)}px), 0)`
           },
           img1: {
             transition: 'all 0.6s',
-            transform: `translate3D(calc(-275px - ${2000 * Number(ratio)}px), -50%, 0)`
+            transform: `translate3D(calc(-631px - ${2000 * Number(ratio)}px), -50%, 0)`
           },
           img2: {
             transition: 'all 0.6s',
-            transform: `translate3D(calc(275px - ${2000 * Number(ratio)}px), -50%, 0)`
+            transform: `translate3D(calc(558px + ${2000 * Number(ratio)}px), -50%, 0)`
           }
         }
       default:
@@ -140,18 +128,19 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       <Typography
         sx={{
           width: '100%',
-          maxwidth: 800,
+          maxWidth: 800,
           position: 'fixed',
           top: '50%',
           left: '50%',
+          wordBreak: 'break-all',
           color: '#4C483A',
           fontSize: isSm ? 14 : 20,
           fontWeight: 400,
           textAlign: 'center',
+          fontFamily: `'Inter'`,
           zIndex: '1',
           ...styleConfig.p3
         }}
-        variant="lotteryh1"
       >
         Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and
         transparent environment for the auction process. The use of blockchain technology also allows for the automatic
@@ -161,8 +150,8 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         style={{
           position: 'fixed',
           top: '50%',
-          width: 184,
-          height: 237,
+          width: 173,
+          height: 142,
           right: '50%',
           ...styleConfig.img1
         }}
@@ -172,9 +161,9 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       <Image
         style={{
           position: 'fixed',
-          top: '0',
-          width: 424,
-          height: 251,
+          top: '50%',
+          width: 177,
+          height: 117,
           left: '50%',
           ...styleConfig.img2
         }}
