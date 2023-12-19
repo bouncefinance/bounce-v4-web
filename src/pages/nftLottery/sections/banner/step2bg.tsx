@@ -1,24 +1,14 @@
-import { Box, Stack } from '@mui/material'
+import { Box } from '@mui/material'
 import { AnimateStep } from '../../index'
 import { useMemo } from 'react'
 import Image from 'components/Image'
-import cSvg from 'assets/imgs/nftLottery/banner/c.svg'
-import oSvg from 'assets/imgs/nftLottery/banner/o.svg'
-import mSvg from 'assets/imgs/nftLottery/banner/m.svg'
-import iSvg from 'assets/imgs/nftLottery/banner/i.svg'
-import nSvg from 'assets/imgs/nftLottery/banner/n.svg'
-import gSvg from 'assets/imgs/nftLottery/banner/g.svg'
-import sSvg from 'assets/imgs/nftLottery/banner/s.svg'
+import fontSvg from 'assets/imgs/nftLottery/banner/font.svg'
 const BannerStep2bg = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
   const styleConfig = useMemo(() => {
     const styleObj = {
       p1: {
         transition: 'all 0s',
-        transform: 'translate3D(-100vw, 0, 0)'
-      },
-      p2: {
-        transition: 'all 0s',
-        transform: 'translate3D(100vw, 0, 0)'
+        transform: 'translate3D(-100vw, -50%, 0)'
       }
     }
     switch (step) {
@@ -28,22 +18,14 @@ const BannerStep2bg = ({ ratio, step }: { ratio: string; step: AnimateStep }) =>
         return {
           p1: {
             transition: 'all 0.6s',
-            transform: 'translate3D(-50%, 0, 0)'
-          },
-          p2: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-50%, 0, 0)'
+            transform: 'translate3D(-50%, -50%, 0)'
           }
         }
       case AnimateStep.leave:
         return {
           p1: {
             transition: 'all 0.6s',
-            transform: `translate3D(calc(-50% - ${100 * Number(ratio)}vw), 0, 0)`
-          },
-          p2: {
-            transition: 'all 0.6s',
-            transform: `translate3D(calc(-50% + ${100 * Number(ratio)}vw), 0, 0)`
+            transform: `translate3D(calc(-50% - ${100 * Number(ratio)}vw), -50%, 0)`
           }
         }
       default:
@@ -58,44 +40,16 @@ const BannerStep2bg = ({ ratio, step }: { ratio: string; step: AnimateStep }) =>
         height: '100vh'
       }}
     >
-      <Stack
-        direction={'row'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        sx={{
-          position: 'absolute',
-          bottom: '50%',
-          left: '50%',
-          flexWrap: 'nowrap',
-          ...styleConfig.p1
-        }}
-        gap={'27px'}
-      >
-        <Image src={cSvg} />
-        <Image src={oSvg} />
-        <Image src={mSvg} />
-        <Image src={iSvg} />
-        <Image src={nSvg} />
-        <Image src={gSvg} />
-      </Stack>
-      <Stack
-        direction={'row'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        sx={{
+      <Image
+        style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           flexWrap: 'nowrap',
-          ...styleConfig.p2
+          ...styleConfig.p1
         }}
-        gap={'27px'}
-      >
-        <Image src={sSvg} />
-        <Image src={oSvg} />
-        <Image src={oSvg} />
-        <Image src={nSvg} />
-      </Stack>
+        src={fontSvg}
+      />
     </Box>
   )
 }
