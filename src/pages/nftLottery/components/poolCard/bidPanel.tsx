@@ -1,5 +1,5 @@
 import { Box, styled } from '@mui/material'
-import PoolProgress from 'pages/nftLottery/components/poolDetail/poolProgress'
+import PoolProgress from 'pages/nftLottery/components/poolCard/poolProgress'
 import BidBtnBox from './bidBtnBox'
 import { useState } from 'react'
 import CheckBox from './checkBox'
