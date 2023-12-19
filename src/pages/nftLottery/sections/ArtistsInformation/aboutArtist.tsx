@@ -3,8 +3,8 @@ import { Box, Typography } from '@mui/material'
 import artist_img from 'assets/images/artist_img.png'
 import artist2_img from 'assets/images/artist2_img.png'
 import artist3_img from 'assets/images/artist3_img.png'
-import Title from '../../components/ArtistsInformation/Title'
-import AboutTab from '../../components/ArtistsInformation/AboutTab'
+import Title from '../../components/artistsInformation/Title'
+import AboutTab from '../../components/artistsInformation/AboutTab'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 const AboutArtist = () => {

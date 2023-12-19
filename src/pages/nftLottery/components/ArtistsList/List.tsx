@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Typography, styled } from '@mui/material'
-// import Image from 'components/Image'
+import Image from 'components/Image'
 
 const StyledBox = styled(Box)(() => ({
   display: 'flex',
@@ -12,7 +12,7 @@ const StyledBox = styled(Box)(() => ({
   }
 }))
 
-export default function Card({
+export default function ArtistsList({
   children,
   name,
   idx,
@@ -51,7 +51,6 @@ export default function Card({
           textTransform={'uppercase'}
           color={'#C3A16D'}
           zIndex={9}
-          sx={{}}
         >
           {name}
         </Typography>
@@ -93,6 +92,77 @@ export default function Card({
           }}
         ></Box>
       </StyledBox>
+    </a>
+  )
+}
+
+export function ArtistsListApp({
+  children,
+  name,
+  idx,
+  href,
+  url,
+  rotate
+}: {
+  idx: number
+  url?: string
+  children?: React.ReactNode
+  name?: string
+  href?: string
+  rotate?: string
+}) {
+  return (
+    <a href={href} style={{ cursor: 'pointer' }}>
+      <Box position={'relative'}>
+        <Box display={'flex'} alignItems={'center'} gap={5}>
+          <Typography
+            variant="lotteryh1"
+            color={'var(--AI-grey-02, #474543)'}
+            fontSize={56}
+            fontWeight={500}
+            lineHeight={'90%'}
+            textTransform={'uppercase'}
+            sx={{
+              transform: 'rotate(15.01deg)'
+            }}
+          >
+            {idx + 1}
+          </Typography>
+          <Typography
+            variant="lotteryh2"
+            paddingTop={10}
+            fontSize={28}
+            fontWeight={500}
+            lineHeight={'90%'}
+            textTransform={'uppercase'}
+            color={'#C3A16D'}
+            zIndex={9}
+          >
+            {name}
+          </Typography>
+        </Box>
+
+        <Typography
+          marginTop={12}
+          fontSize={17}
+          fontWeight={400}
+          lineHeight={'140%'}
+          color={'var(--ai-white-70, rgba(255, 255, 255, 0.70))'}
+        >
+          {children}
+        </Typography>
+        <Image
+          src={url ? url : ''}
+          style={{
+            width: '70px',
+            position: 'absolute',
+            top: '0',
+            right: '0',
+            transform: `translate(20%,-45%) ${rotate}`,
+            zIndex: '10'
+          }}
+        ></Image>
+      </Box>
     </a>
   )
 }

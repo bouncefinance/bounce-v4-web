@@ -1,8 +1,12 @@
 import { Box, Typography } from '@mui/material'
 import artist_1 from 'assets/images/artist_1.png'
-import List from '../../components/ArtistsList/List'
+import artist_2 from 'assets/images/artist_2.png'
+import artist_3 from 'assets/images/artist_3.png'
+import List, { ArtistsListApp } from '../../components/artistsList/List'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const DemoComponent = () => {
+  const isSm = useBreakpoint('sm')
   const msgList = [
     {
       name: 'CHARLES',
@@ -15,21 +19,21 @@ const DemoComponent = () => {
       name: 'REDRUM',
       value:
         'Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.',
-      imgSrc: artist_1,
+      imgSrc: artist_2,
       rotate: 'rotate(-10deg)'
     },
     {
       name: '0009',
       value:
         'Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.',
-      imgSrc: artist_1,
+      imgSrc: artist_3,
       rotate: 'rotate(15deg)'
     }
   ]
   return (
     <Box
       bgcolor={'var(--AI-brown-bg, #37342E)'}
-      padding={'120px 72px 160px'}
+      padding={isSm ? '64px 16px' : '120px 72px 160px'}
       display={'flex'}
       alignItems={'center'}
       justifyContent={'center'}
@@ -37,22 +41,32 @@ const DemoComponent = () => {
       <Box width={1440}>
         <Typography
           variant="lotteryh1"
-          fontSize={200}
+          fontSize={isSm ? 50 : 200}
           lineHeight={'90%'}
           fontWeight={500}
           color={'var(--AI-dark-02, #BBB4A8)'}
-          paddingLeft={10}
-          marginBottom={140}
+          paddingLeft={isSm ? 0 : 10}
+          marginBottom={isSm ? 40 : 140}
         >
           ARTISTS
         </Typography>
-        <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={40}>
-          {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
-            <List key={idx} idx={idx} length={msgList.length} name={name} url={imgSrc} rotate={rotate}>
-              {value}
-            </List>
-          ))}
-        </Box>
+        {isSm ? (
+          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={48}>
+            {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
+              <ArtistsListApp key={idx} idx={idx} name={name} url={imgSrc} rotate={rotate}>
+                {value}
+              </ArtistsListApp>
+            ))}
+          </Box>
+        ) : (
+          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={40}>
+            {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
+              <List key={idx} idx={idx} length={msgList.length} name={name} url={imgSrc} rotate={rotate}>
+                {value}
+              </List>
+            ))}
+          </Box>
+        )}
       </Box>
     </Box>
   )

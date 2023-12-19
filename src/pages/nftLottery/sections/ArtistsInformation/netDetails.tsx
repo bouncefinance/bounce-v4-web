@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import Title from '../../components/ArtistsInformation/Title'
-import Text from '../../components/ArtistsInformation/Text'
+import Title from '../../components/artistsInformation/Title'
+import Text from '../../components/artistsInformation/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
 
 interface Deatail {
@@ -37,7 +37,7 @@ export const DeatailList: List[] = [
 const NetDetails = () => {
   const isSm = useBreakpoint('sm')
   return (
-    <Box>
+    <Box marginBottom={isSm ? '24px' : '0'}>
       {!isSm && <Title text="NFT DETAILS"></Title>}
       <Typography
         variant="lotteryh2"
