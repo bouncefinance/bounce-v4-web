@@ -37,16 +37,20 @@ const poolTitles = [
 const UpcomingTitle = () => <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
 
 const LiveTitle = () => (
-  <>
+  <div style={{ height: 90 }}>
     <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
     <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'} gap={10} mt={20}>
       <GreenCircleSvg />
       <PoolTitleStyle sx={{ fontWeight: 700, fontSize: 18, color: '#76BA1E' }}>LIVE NOW</PoolTitleStyle>
     </Stack>
-  </>
+  </div>
 )
 
-const WaitTitle = () => <PoolTitleStyle className="wait">{poolTitles[1]}</PoolTitleStyle>
+const WaitTitle = () => (
+  <PoolTitleStyle className="wait" mb={-64}>
+    Waiting for the <br /> lottery draw...
+  </PoolTitleStyle>
+)
 
 const WinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[2]}</PoolTitleStyle>
 
@@ -56,7 +60,7 @@ export const PoolHeadTitle = () => {
 
   return (
     <Container>
-      <UpcomingTitle />
+      <WaitTitle />
     </Container>
   )
 }
