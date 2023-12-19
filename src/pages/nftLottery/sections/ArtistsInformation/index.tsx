@@ -6,7 +6,7 @@ import NetDetails from './netDetails'
 import RealWorldAirdrop from './realWorldAirdrop'
 import AboutArtist from './aboutArtist'
 import useBreakpoint from 'hooks/useBreakpoint'
-import { ReactComponent as ArrowDownSvg } from 'assets/svg/arrow_down.svg'
+import { ReactComponent as ArrowDownSvg } from 'assets/imgs/nftLottery/arrow_down.svg'
 
 interface TabContent {
   title: string

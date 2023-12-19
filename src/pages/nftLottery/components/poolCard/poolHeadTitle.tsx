@@ -60,7 +60,7 @@ export const PoolHeadTitle = () => {
 
   return (
     <Container>
-      <WaitTitle />
+      <WinnerTitle />
     </Container>
   )
 }

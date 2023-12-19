@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material'
-import artist_1 from 'assets/images/artist_1.png'
-import artist_2 from 'assets/images/artist_2.png'
-import artist_3 from 'assets/images/artist_3.png'
+import artist_1 from 'assets/imgs/nftLottery/artist_1.png'
+import artist_2 from 'assets/imgs/nftLottery/artist_2.png'
+import artist_3 from 'assets/imgs/nftLottery/artist_3.png'
 import List, { ArtistsListApp } from '../../components/artistsList/List'
 import useBreakpoint from 'hooks/useBreakpoint'
 

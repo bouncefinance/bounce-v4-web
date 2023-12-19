@@ -1,6 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
-import TokenInfoImg from 'assets/imgs/nftLottery/token-info.png'
+import ImgCard from '../../components/tokenInformation/imgCard'
 const SectionBody = styled(Box)`
   width: 100%;
   background: #eeece6;
@@ -127,36 +127,7 @@ const LeftContent = () => {
 const RightContent = () => {
   return (
     <Stack mt={26} gap={29} sx={{ width: 'max-content', maxWidth: 320 }}>
-      <Box sx={{ borderRadius: '17.299px', background: '#0F0F0F', padding: '17.3px' }}>
-        <img src={TokenInfoImg} />
-        <Box mt={20}>
-          <Typography
-            sx={{
-              color: '#FFF',
-              fontFamily: 'Helvetica',
-              fontSize: 24,
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: '140%'
-            }}
-          >
-            AI Meets Bitcoin
-          </Typography>
-          <Typography
-            mt={8}
-            sx={{
-              color: 'rgba(255, 255, 255, 0.70)',
-              fontFamily: 'Helvetica',
-              fontSize: 16,
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: '140%'
-            }}
-          >
-            Unrevealed
-          </Typography>
-        </Box>
-      </Box>
+      <ImgCard />
       <RevealBtn>
         <span>Reveal on Jan 13</span>
       </RevealBtn>
