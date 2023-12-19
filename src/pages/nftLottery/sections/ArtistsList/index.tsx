@@ -38,7 +38,7 @@ const DemoComponent = () => {
       alignItems={'center'}
       justifyContent={'center'}
     >
-      <Box width={1440}>
+      <Box width={isSm ? '100%' : 1440}>
         <Typography
           variant="lotteryh1"
           fontSize={isSm ? 50 : 200}
