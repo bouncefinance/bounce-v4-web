@@ -3,10 +3,10 @@ import Info from './components/info'
 import ManBox from './components/manBox'
 import Barcode from './components/barcode'
 
-const LiveCard = () => {
+const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
   return (
-    <Box width={1076} height={412} sx={{ margin: '0 auto', overflow: 'hidden' }}>
-      <Stack flexDirection={'row'}>
+    <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: 64, overflow: 'hidden' }}>
+      <Stack flexDirection={'row'} sx={{ zoom: isZoom ? 0.7 : 1 }}>
         <Info />
         <ManBox />
         <Barcode />

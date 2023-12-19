@@ -28,15 +28,33 @@ const ArtistsInformation = () => {
   const isSm = useBreakpoint('sm')
   const [tabIndex, setTabNumber] = React.useState(0)
   const [accordionIndex, setAccordion] = React.useState<number | undefined>()
+  const [accordionLastId, setAccordionLastId] = React.useState<string>('')
   const handleAccordion = useCallback(
     (idx: number) => {
+      const accordionLastDom = document.getElementById(accordionLastId)
+      const accordionDom = document.getElementById(`accordion${idx}`)
+      const height = accordionDom?.firstElementChild?.clientHeight
       if (accordionIndex !== idx) {
         setAccordion(idx)
+        setAccordionLastId(`accordion${idx}`)
+        if (accordionDom) {
+          accordionDom.style.overflow = 'visible'
+          accordionDom.style.height = `${height}px`
+        }
+        if (accordionLastDom) {
+          accordionLastDom.style.overflow = 'hidden'
+          accordionLastDom.style.height = `0px`
+        }
       } else {
         setAccordion(undefined)
+        if (accordionDom) {
+          accordionDom.style.overflow = 'hidden'
+          accordionDom.style.height = `0px`
+          setAccordionLastId('')
+        }
       }
     },
-    [accordionIndex]
+    [accordionIndex, accordionLastId]
   )
 
   return (
@@ -94,7 +112,7 @@ const ArtistsInformation = () => {
                 <ArrowDownSvg style={{ transform: accordionIndex === idx ? 'rotate(180deg)' : 'rotate(0deg)' }} />
               </Box>
               {/* 隐藏内容 */}
-              <Box display={idx === accordionIndex ? 'block' : 'none'}>
+              <Box id={'accordion' + idx} style={{ overflow: 'hidden', height: '0', transition: '0.5s' }}>
                 {idx === 0 && <ProjectInformation></ProjectInformation>}
                 {idx === 1 && <NetDetails></NetDetails>}
                 {idx === 2 && <RealWorldAirdrop></RealWorldAirdrop>}
