@@ -1,5 +1,6 @@
 import { Box } from '@mui/material'
 import BeforeOpenLottery from './beforeOpenLottery'
+import AfterOpenLottery from './afterOpenLottery'
 
 const PoolDetail = () => {
   return (
@@ -9,7 +10,8 @@ const PoolDetail = () => {
         padding: '120px 0'
       }}
     >
-      <BeforeOpenLottery />
+      {false && <BeforeOpenLottery />}
+      <AfterOpenLottery />
     </Box>
   )
 }

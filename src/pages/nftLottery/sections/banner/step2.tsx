@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { AnimateStep } from '../../index'
 import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
@@ -60,24 +60,24 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       case AnimateStep.leave:
         return {
           p1: {
-            transition: 'all 0.6s',
-            transform: `translate3D(0, calc(-250px - ${2000 * Number(ratio)}px), 0)`
+            transition: 'all 1.2s',
+            transform: `translate3D(0, calc(-250px - ${100 * Number(ratio)}vh), 0)`
           },
           p2: {
-            transition: 'all 0.6s',
-            transform: `translate3D(0, calc(-250px - ${2000 * Number(ratio)}px), 0)`
+            transition: 'all 1.2s',
+            transform: `translate3D(0, calc(-250px - ${100 * Number(ratio)}vh), 0)`
           },
           p3: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, calc(-20px - ${2000 * Number(ratio)}px), 0)`
+            transition: 'all 1.2s',
+            transform: `translate3D(-50%, calc(-20px - ${100 * Number(ratio)}vh), 0)`
           },
           img1: {
-            transition: 'all 0.6s',
-            transform: `translate3D(calc(-631px - ${2000 * Number(ratio)}px), -50%, 0)`
+            transition: 'all 1.2s',
+            transform: `translate3D(calc(-631px - ${100 * Number(ratio)}vh), -50%, 0)`
           },
           img2: {
-            transition: 'all 0.6s',
-            transform: `translate3D(calc(558px + ${2000 * Number(ratio)}px), -50%, 0)`
+            transition: 'all 1.2s',
+            transform: `translate3D(calc(558px + ${100 * Number(ratio)}vh), -50%, 0)`
           }
         }
       default:
@@ -108,23 +108,59 @@ const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       >
         START FROM
       </Typography>
-      <Typography
+      <Stack
+        justifyContent={'center'}
+        alignItems={'center'}
+        direction={'row'}
         sx={{
           width: '100%',
           position: 'fixed',
           top: '50%',
           left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 100 : 200,
-          fontWeight: 500,
-          textAlign: 'center',
           zIndex: '1',
           ...styleConfig.p2
         }}
-        variant="lotteryh1"
       >
-        DEC 19
-      </Typography>
+        <Typography
+          variant="lotteryh1"
+          sx={{
+            display: 'inline-block',
+            color: '#C3A16D',
+            fontSize: isSm ? 100 : 200,
+            fontWeight: 500,
+            textAlign: 'center'
+          }}
+        >
+          DEC
+        </Typography>
+        <Typography
+          variant="lotteryh1"
+          sx={{
+            display: 'inline-block',
+            color: '#C3A16D',
+            fontSize: isSm ? 100 : 200,
+            fontWeight: 500,
+            textAlign: 'center',
+            transform: 'translateY(0px)'
+          }}
+        >
+          1
+        </Typography>
+        <Typography
+          variant="lotteryh1"
+          sx={{
+            display: 'inline-block',
+            color: '#C3A16D',
+            fontSize: isSm ? 100 : 200,
+            fontWeight: 500,
+            textAlign: 'center',
+            transform: 'translateY(-30px)'
+          }}
+        >
+          9
+        </Typography>
+      </Stack>
+
       <Typography
         sx={{
           width: '100%',
