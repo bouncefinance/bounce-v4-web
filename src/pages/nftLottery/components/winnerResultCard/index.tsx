@@ -38,7 +38,7 @@ const WinnerBox = styled(Box)(
 )
 const ClaimTokenBtn = () => <BaseBtnStyle>Claim Token Back</BaseBtnStyle>
 const WinnerResultCard = () => {
-  const isWinner = false
+  const isWinner = true
   return (
     <Container>
       <Box sx={{ position: 'relative', top: 115 }}>

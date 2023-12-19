@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import TokenInfoImg from 'assets/imgs/nftLottery/token-info.png'
 const ImgCard = () => {
   return (
-    <Box sx={{ borderRadius: '17.299px', background: '#0F0F0F', padding: '17.3px' }}>
+    <Box sx={{ width: 'max-content', borderRadius: '17.299px', background: '#0F0F0F', padding: '17.3px' }}>
       <img src={TokenInfoImg} />
       <Box mt={20}>
         <Typography
