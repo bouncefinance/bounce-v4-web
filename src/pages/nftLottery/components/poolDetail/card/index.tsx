@@ -1,10 +1,6 @@
 import { Box } from '@mui/material'
-import LiveCard from './liveCard'
+
 const Card = () => {
-  return (
-    <Box mt={64}>
-      <LiveCard />
-    </Box>
-  )
+  return <Box mt={64}></Box>
 }
 export default Card
