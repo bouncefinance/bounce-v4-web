@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import Image from 'components/Image'
-import box_bg from 'assets/images/box_bg.png'
+import box_bg from 'assets/imgs/nftLottery/box_bg.png'
 import Title from '../../components/artistsInformation/Title'
 import Text from '../../components/artistsInformation/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
