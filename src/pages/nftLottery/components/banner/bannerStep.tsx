@@ -2,7 +2,7 @@ import { Box, Stack } from '@mui/material'
 import { AnimateStep } from 'pages/nftLottery'
 import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
-const BannerStep = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
+const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
   const isSm = useIsSMDown()
   const styleConfig = useMemo(() => {
     const styleObj = {
@@ -85,4 +85,4 @@ const BannerStep = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
     </Stack>
   )
 }
-export default BannerStep
+export default BannerStepLine

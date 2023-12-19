@@ -3,6 +3,7 @@ import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
 import TokenInfoImg from 'assets/imgs/nftLottery/token-info.png'
 const SectionBody = styled(Box)`
   width: 100%;
+  background: #eeece6;
   @media (max-width: 1440px) {
     padding: 0 20px;
   }

@@ -3,7 +3,12 @@ import BeforeOpenLottery from './beforeOpenLottery'
 
 const PoolDetail = () => {
   return (
-    <Box mt={120} mb={120}>
+    <Box
+      sx={{
+        background: '#eeece6',
+        padding: '120px 0'
+      }}
+    >
       <BeforeOpenLottery />
     </Box>
   )
