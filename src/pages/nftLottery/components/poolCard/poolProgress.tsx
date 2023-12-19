@@ -36,8 +36,8 @@ const AvatarList = () => {
   return (
     <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
       <AvatarGroup max={5}>
-        {len.map(i => (
-          <AvatarStyle key={i} alt="DefaultAvatar" src={DefaultAvatar} />
+        {len.map((i, d) => (
+          <AvatarStyle key={i + d} alt="DefaultAvatar" src={DefaultAvatar} />
         ))}
       </AvatarGroup>
     </Stack>
