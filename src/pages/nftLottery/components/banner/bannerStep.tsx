@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material'
-import { AnimateStep } from 'pages/nftLottery'
+import { AnimateStep } from 'pages/nftLottery/sections/banner'
 import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
 const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {

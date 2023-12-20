@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { AnimateStep } from '../../index'
+import { AnimateStep } from './index'
 import { useIsSMDown } from 'themes/useTheme'
 import { useEffect, useMemo, useState } from 'react'
 import P1Img from 'assets/imgs/nftLottery/p1.png'
@@ -20,19 +20,19 @@ const BannerStep1 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
     const styleObj = {
       p1: {
         transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
+        transform: 'translate3D(0, 0, 0)'
       },
       p2: {
         transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
+        transform: 'translate3D(0, 0, 0)'
       },
       p3: {
         transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
+        transform: 'translate3D(0, 0, 0)'
       },
       p4: {
         transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
+        transform: 'translate3D(0, 0, 0)'
       },
       img1: {
         transition: 'all 0s',
@@ -61,6 +61,10 @@ const BannerStep1 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       bg2: {
         transition: 'all 0s',
         transform: 'translate3D(-235px, 100vh, 0)'
+      },
+      common: {
+        transition: 'all 0.6s',
+        transform: 'translate3D(0, 100vh, 0)'
       }
     }
     switch (step) {
@@ -111,25 +115,29 @@ const BannerStep1 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           bg2: {
             transition: 'all 0.6s',
             transform: 'translate3D(-235px, 0, 0)'
+          },
+          common: {
+            transition: 'all 0.6s',
+            transform: 'translate3D(0, 0, 0)'
           }
         }
       case AnimateStep.leave:
         return {
           p1: {
             transition: 'all 0.6s',
-            transform: `translate3D(0, calc(-250px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(0, calc(-250px), 0)`
           },
           p2: {
             transition: 'all 0.6s',
-            transform: `translate3D(0, calc(-250px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(0, calc(-250px), 0)`
           },
           p3: {
             transition: 'all 0.6s',
-            transform: `translate3D(0, calc(-90px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(0, calc(-90px), 0)`
           },
           p4: {
             transition: 'all 0.6s',
-            transform: `translate3D(0, calc(130px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(0, calc(130px), 0)`
           },
           img1: {
             transition: 'all 0.6s',
@@ -158,6 +166,10 @@ const BannerStep1 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           bg2: {
             transition: 'all 0.6s',
             transform: `translate3D(-235px, -${2000 * Number(ratio)}px, 0)`
+          },
+          common: {
+            transition: 'all 0.6s',
+            transform: 'translate3D(0, -100vh, 0)'
           }
         }
       default:
@@ -230,73 +242,84 @@ const BannerStep1 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         src={Bg2Svg}
         alt=""
       />
-      <Typography
+      <Box
         sx={{
-          width: '100%',
           position: 'fixed',
-          top: '50%',
-          left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 16 : 32,
-          fontWeight: 700,
-          textAlign: 'center',
-          zIndex: '1',
-          ...styleConfig.p1
-        }}
-        variant="lotteryh1"
-      >
-        NFT AUCTION
-      </Typography>
-      <Typography
-        sx={{
-          width: '100%',
-          position: 'fixed',
-          top: '50%',
-          left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 100 : 200,
-          fontWeight: 500,
-          textAlign: 'center',
-          zIndex: '1',
-          ...styleConfig.p2
-        }}
-        variant="lotteryh1"
-      >
-        AI MEETS
-      </Typography>
-      <Typography
-        sx={{
-          width: '100%',
-          position: 'fixed',
-          top: '50%',
-          left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 100 : 200,
-          fontWeight: 500,
-          textAlign: 'center',
-          zIndex: '1',
-          ...styleConfig.p3
-        }}
-        variant="lotteryh1"
-      >
-        BITCOIN
-      </Typography>
-      <Typography
-        sx={{
-          width: '100%',
-          position: 'fixed',
-          top: '50%',
-          left: '0',
-          color: '#C3A16D',
-          fontSize: isSm ? 16 : 18,
-          fontWeight: 700,
-          textAlign: 'center',
-          zIndex: '1',
-          ...styleConfig.p4
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          ...styleConfig.common
         }}
       >
-        ETHEREUM
-      </Typography>
+        <Typography
+          sx={{
+            width: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '0',
+            color: '#C3A16D',
+            fontSize: isSm ? 16 : 32,
+            fontWeight: 700,
+            textAlign: 'center',
+            zIndex: '1',
+            ...styleConfig.p1
+          }}
+          variant="lotteryh1"
+        >
+          NFT AUCTION
+        </Typography>
+        <Typography
+          sx={{
+            width: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '0',
+            color: '#C3A16D',
+            fontSize: isSm ? 100 : 200,
+            fontWeight: 500,
+            textAlign: 'center',
+            zIndex: '1',
+            ...styleConfig.p2
+          }}
+          variant="lotteryh1"
+        >
+          AI MEETS
+        </Typography>
+        <Typography
+          sx={{
+            width: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '0',
+            color: '#C3A16D',
+            fontSize: isSm ? 100 : 200,
+            fontWeight: 500,
+            textAlign: 'center',
+            zIndex: '1',
+            ...styleConfig.p3
+          }}
+          variant="lotteryh1"
+        >
+          BITCOIN
+        </Typography>
+        <Typography
+          sx={{
+            width: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '0',
+            color: '#C3A16D',
+            fontSize: isSm ? 16 : 18,
+            fontWeight: 700,
+            textAlign: 'center',
+            zIndex: '1',
+            ...styleConfig.p4
+          }}
+        >
+          ETHEREUM
+        </Typography>
+      </Box>
       <Image
         style={{
           position: 'fixed',
