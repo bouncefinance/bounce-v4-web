@@ -931,7 +931,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
   )
 }
 
-export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
+export function Tabs({ item, isDark, hideTitle }: { item: IPrivatePadProp; isDark?: boolean; hideTitle?: boolean }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = isDark ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
   const [tab, setTab] = useState(tabs[0])
@@ -964,7 +964,8 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
                 '&:hover': {
                   cursor: 'pointer',
                   color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
-                }
+                },
+                display: hideTitle ? 'none' : 'block'
               }}
               key={'projectHead' + i}
               onClick={() => tabs.length > 1 && setTab(t)}

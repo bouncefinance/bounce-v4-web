@@ -121,7 +121,9 @@ export const routes = {
       stakeTest: '/test/pool',
       dll: '/launchpad/godid-staking-daii',
       pool: '/auction/godid-random-selection'
-    }
+    },
+    AmmxAuction: '/launchpad/ammx-auction',
+    AmmxDaii: '/launchpad/ammx-daii'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

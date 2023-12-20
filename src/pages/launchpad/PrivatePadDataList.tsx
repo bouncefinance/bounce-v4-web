@@ -50,6 +50,7 @@ import DIDNa from './imgs/did-na.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
+import LadderImg from './imgs/ladder.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -59,7 +60,10 @@ export interface IPrivatePricesInfo {
   title: string | string[]
   value: (string | JSX.Element)[] | (string | JSX.Element)
 }
-
+export interface IOtherProject {
+  title: string
+  tabList: IProjectInfo[]
+}
 export interface IPrivatePadProp {
   hidden?: true
   backedId?: number
@@ -93,6 +97,7 @@ export interface IPrivatePadProp {
   privatePrices?: IPrivatePricesInfo[]
   isFAQ?: boolean
   poolTypeName2?: string
+  otherProject?: IOtherProject[]
 }
 const participateProjectInfo: IProjectInfo = {
   title: 'How to Participate',
@@ -1464,12 +1469,428 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
-
+const LadderBitswapData1: IPrivatePadProp = {
+  keyId: 25,
+  liveTimeStamp: {
+    start: 1703390400000,
+    end: 1703649600000
+  },
+  poolTypeName: 'Staking Auction',
+  img: LadderImg,
+  avatar: LadderImg,
+  title: 'One Stone Two Birds (AMMX)',
+  chainId: 1,
+  tokenName: '$AMMX',
+  whitePaperLink: '',
+  upcomingLink: routes.thirdPart.AmmxAuction,
+  liveLink: routes.thirdPart.AmmxAuction,
+  projectInfo: [
+    {
+      title: 'What is AMMMS',
+      info: [
+        'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.'
+      ]
+    },
+    {
+      title: 'Tokenomics',
+      info: [
+        <Box key={1}>
+          <ul>
+            <li>Total supply: 2.1 Billion</li>
+          </ul>
+          <Typography>Token Allocation:</Typography>
+          <ul>
+            <li>Public sale on Bounce: (50%)</li>
+            <li>
+              Liquidity Mining on Bitswap & Ladder (38%)
+              <ul>
+                <li>Airdrop Farming: 1.5% </li>
+                <li>
+                  Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX
+                  can be used to boost the weight farming rate.
+                </li>
+              </ul>
+            </li>
+            <li>Initial liquidity for AMMX pool: (7%)</li>
+            <li>Team: (5%, locked for 6 months and linear vesting for 15 months)</li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
+  social: [],
+  moreData: [
+    { title: 'Token Name', content: '$AMMX' },
+    { title: 'Token Price', content: '-- AUCTION' },
+    { title: 'Token Amount', content: '525,000,000' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  otherProject: [
+    {
+      title: 'Bitswap',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Bitswap</Typography>
+              <Typography mt={40}>
+                Bitswap is at the forefront of cross-chain exchange, offering a seamless trading experience for BRC20
+                assets across diverse blockchains. As the premier liquidity hub for Bitcoin layer2s, we enable
+                effortless and secure cross-chain transactions. Our platform is dedicated to providing users with easy
+                access to the vast Bitcoin ecosystem, enhancing their trading journey with unparalleled convenience and
+                efficiency.
+              </Typography>
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://bitswap.site/home" target="_blank" rel="noreferrer">
+                    https://bitswap.site/home
+                  </a>
+                </li>
+                <li>
+                  Twitter:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://twitter.com/Bitswap_BTC
+                  </a>
+                </li>
+                <li>
+                  Telegram:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://t.me/BitSwap_BTC
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Ladder',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Ladder</Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a range of standards including ERC-721, ERC-1155, ERC-3525, and ERC-20.
+                </Typography>
+                <Typography>
+                  Our platform enables users to seamlessly transition in and out of NFT trades, eliminating the need for
+                  a counterparty purchase order.
+                </Typography>
+                <Typography>
+                  Focused on channeling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality within the Bitcoin Ecosystem.
+                </Typography>
+              </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://ladder.top/" target="_blank" rel="noreferrer">
+                    https://ladder.top/
+                  </a>
+                </li>
+                <li>
+                  Linktree: {` `}
+                  <a href="https://link3.to/ladder" target="_blank" rel="noreferrer">
+                    https://link3.to/ladder
+                  </a>
+                </li>
+                <li>
+                  Twitter: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Discord: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Telegram: {` `}
+                  <a href="https://t.me/LadderAMM" target="_blank" rel="noreferrer">
+                    https://t.me/LadderAMM
+                  </a>
+                </li>
+                <li>
+                  Medium: {` `}
+                  <a href="https://medium.com/@ladder_top " target="_blank" rel="noreferrer">
+                    https://medium.com/@ladder_top
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    }
+  ]
+}
+const LadderBitswapData2: IPrivatePadProp = {
+  keyId: 24,
+  liveTimeStamp: {
+    start: 1703390400000,
+    end: 1703649600000
+  },
+  poolTypeName: 'Staking Auction',
+  img: LadderImg,
+  avatar: LadderImg,
+  title: 'One Stone Two Birds (AMMX)',
+  chainId: 1,
+  tokenName: '$AMMX',
+  whitePaperLink: '',
+  upcomingLink: routes.thirdPart.AmmxDaii,
+  liveLink: routes.thirdPart.AmmxDaii,
+  projectInfo: [
+    {
+      title: 'What is AMMMS',
+      info: [
+        'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.'
+      ]
+    },
+    {
+      title: 'Tokenomics',
+      info: [
+        <Box key={1}>
+          <ul>
+            <li>Total supply: 2.1 Billion</li>
+          </ul>
+          <Typography>Token Allocation:</Typography>
+          <ul>
+            <li>Public sale on Bounce: (50%)</li>
+            <li>
+              Liquidity Mining on Bitswap & Ladder (38%)
+              <ul>
+                <li>Airdrop Farming: 1.5% </li>
+                <li>
+                  Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX
+                  can be used to boost the weight farming rate.
+                </li>
+              </ul>
+            </li>
+            <li>Initial liquidity for AMMX pool: (7%)</li>
+            <li>Team: (5%, locked for 6 months and linear vesting for 15 months)</li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
+  social: [],
+  moreData: [
+    { title: 'Token Name', content: '$AMMX' },
+    { title: 'Token Price', content: '-- DAII' },
+    { title: 'Token Amount', content: '525,000,000' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  otherProject: [
+    {
+      title: 'Bitswap',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Bitswap</Typography>
+              <Typography mt={40}>
+                Bitswap is at the forefront of cross-chain exchange, offering a seamless trading experience for BRC20
+                assets across diverse blockchains. As the premier liquidity hub for Bitcoin layer2s, we enable
+                effortless and secure cross-chain transactions. Our platform is dedicated to providing users with easy
+                access to the vast Bitcoin ecosystem, enhancing their trading journey with unparalleled convenience and
+                efficiency.
+              </Typography>
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://bitswap.site/home" target="_blank" rel="noreferrer">
+                    https://bitswap.site/home
+                  </a>
+                </li>
+                <li>
+                  Twitter:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://twitter.com/Bitswap_BTC
+                  </a>
+                </li>
+                <li>
+                  Telegram:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://t.me/BitSwap_BTC
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Ladder',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Ladder</Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a range of standards including ERC-721, ERC-1155, ERC-3525, and ERC-20.
+                </Typography>
+                <Typography>
+                  Our platform enables users to seamlessly transition in and out of NFT trades, eliminating the need for
+                  a counterparty purchase order.
+                </Typography>
+                <Typography>
+                  Focused on channeling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality within the Bitcoin Ecosystem.
+                </Typography>
+              </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://ladder.top/" target="_blank" rel="noreferrer">
+                    https://ladder.top/
+                  </a>
+                </li>
+                <li>
+                  Linktree: {` `}
+                  <a href="https://link3.to/ladder" target="_blank" rel="noreferrer">
+                    https://link3.to/ladder
+                  </a>
+                </li>
+                <li>
+                  Twitter: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Discord: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Telegram: {` `}
+                  <a href="https://t.me/LadderAMM" target="_blank" rel="noreferrer">
+                    https://t.me/LadderAMM
+                  </a>
+                </li>
+                <li>
+                  Medium: {` `}
+                  <a href="https://medium.com/@ladder_top " target="_blank" rel="noreferrer">
+                    https://medium.com/@ladder_top
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    }
+  ]
+}
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 23
-
+  // current privatePad max keyId is 24
+  LadderBitswapData1,
+  LadderBitswapData2,
   AiMeetsBtcRandomData,
+
   {
+    hidden: true,
     keyId: 23,
     liveTimeStamp: {
       start: 1732852800000,
