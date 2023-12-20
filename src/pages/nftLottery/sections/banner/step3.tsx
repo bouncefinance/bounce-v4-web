@@ -4,7 +4,7 @@ import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
 import CardImg from 'assets/imgs/nftLottery/banner/card.png'
 import QrcodeImg from 'assets/imgs/nftLottery/banner/qrcode.png'
-
+import { ReactComponent as XSvg } from 'assets/imgs/nftLottery/banner/x.svg'
 import Image from 'components/Image'
 
 const CardItem = styled(Box)(() => ({
@@ -68,6 +68,37 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           >
             NFT
           </Typography>
+          <Stack
+            sx={{
+              position: 'absolute',
+              bottom: 30,
+              width: '100%'
+            }}
+            direction={'row'}
+            gap={'5px'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <Typography
+              variant="lotteryh1"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.70)',
+                fontSize: 14
+              }}
+            >
+              AI
+            </Typography>
+            <XSvg />
+            <Typography
+              variant="lotteryh1"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.70)',
+                fontSize: 14
+              }}
+            >
+              BICOIN
+            </Typography>
+          </Stack>
         </Stack>
       </CardItem>
     )

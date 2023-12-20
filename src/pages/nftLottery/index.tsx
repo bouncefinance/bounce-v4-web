@@ -4,12 +4,18 @@ import ArtistsInformation from './sections/artistsInformation'
 import TokenInformation from './sections/tokenInformation'
 import PoolDetail from './sections/poolDetail'
 import FooterPc from 'components/Footer/FooterPc'
+import useBreakpoint from 'hooks/useBreakpoint'
 const NftLottery = () => {
+  const isSm = useBreakpoint('sm')
   return (
     <>
       <Banner />
-      <TokenInformation />
-      <PoolDetail />
+      {!isSm && (
+        <>
+          <TokenInformation />
+          <PoolDetail />
+        </>
+      )}
       <ArtistsList />
       <ArtistsInformation />
       <FooterPc isDark={false} />
