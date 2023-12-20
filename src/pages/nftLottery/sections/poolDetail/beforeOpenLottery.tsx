@@ -3,8 +3,10 @@ import { PoolHeadTitle } from '../../components/poolCard/poolHeadTitle'
 import BidPanel from 'pages/nftLottery/components/poolCard/bidPanel'
 import { useState } from 'react'
 import ClosedTip from 'pages/nftLottery/components/poolCard/closedTip'
-
+import MobileLiveCard from 'pages/nftLottery/components/poolCard/card/mobileLiveCard'
+import useBreakpoint from 'hooks/useBreakpoint'
 const BeforeOpenLottery = () => {
+  const isSm = useBreakpoint('sm')
   const [isZoom, setIsZoom] = useState(false)
   const setZoomHandle = () => {
     setIsZoom(true)
@@ -12,7 +14,8 @@ const BeforeOpenLottery = () => {
   return (
     <div>
       <PoolHeadTitle />
-      <LiveCard isZoom={isZoom} />
+      {!isSm && <LiveCard isZoom={isZoom} />}
+      {isSm && <MobileLiveCard />}
       <ClosedTip />
       <BidPanel setZoom={setZoomHandle} />
     </div>

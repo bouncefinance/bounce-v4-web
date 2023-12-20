@@ -1,11 +1,15 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
 import ImgCard from '../../components/tokenInformation/imgCard'
+import useBreakpoint from 'hooks/useBreakpoint'
 const SectionBody = styled(Box)`
   width: 100%;
   background: #eeece6;
   @media (max-width: 1440px) {
     padding: 0 20px;
+  }
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    padding: 0 16px;
   }
 `
 
@@ -20,7 +24,23 @@ const Container = styled(Box)`
   border-radius: 32px;
   background: #e1dfd4;
   padding: 33px 90px;
+
+  ${({ theme }) => theme.breakpoints.down('lg')} {
+    padding: 20px;
+    justify-content: space-around;
+  }
+  ${({ theme }) => theme.breakpoints.down('md')} {
+    gap: 30px;
+    align-items: center;
+  }
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
 `
+
 const InfoTitle = styled(Typography)`
   color: #4c483a;
   font-variant-numeric: lining-nums proportional-nums;
@@ -30,6 +50,9 @@ const InfoTitle = styled(Typography)`
   font-weight: 700;
   line-height: 90%; /* 28.8px */
   text-transform: uppercase;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 18px;
+  }
 `
 
 const LabelTitle1 = styled(Typography)`
@@ -51,6 +74,9 @@ const LabelTitle2 = styled(Typography)`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.32px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 14px;
+  }
 `
 const LabelBottomTitle = styled(Typography)`
   color: #4c483a;
@@ -61,6 +87,9 @@ const LabelBottomTitle = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   line-height: 140%; /* 25.2px */
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 15px;
+  }
 `
 const RevealBtn = styled(Box)`
   display: flex;
@@ -88,14 +117,26 @@ const MiddleLine = styled(Box)`
   width: 1px;
   height: 525px;
   background: #bbb4a8;
+  ${({ theme }) => theme.breakpoints.down('lg')} {
+    display: none;
+  }
 `
-
+const LeftContentStyle = styled(Box)`
+  width: max-content;
+  max-width: 468px;
+  margin-top: 47px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    width: 100%;
+    margin-top: 0px;
+  }
+`
 const InfoLabel = ({ title, content, icon }: { title: string; content: string; icon?: JSX.Element }) => {
+  const isSm = useBreakpoint('sm')
   return (
     <Stack
       flexDirection={'row'}
       justifyContent={'space-between'}
-      sx={{ paddingBottom: 16, borderBottom: '1px solid #A4A79F' }}
+      sx={{ paddingBottom: isSm ? 12 : 16, borderBottom: '1px solid #A4A79F' }}
     >
       <LabelTitle1>{title}</LabelTitle1>
       <Stack flexDirection={'row'} gap={4} alignItems={'center'}>
@@ -106,27 +147,31 @@ const InfoLabel = ({ title, content, icon }: { title: string; content: string; i
   )
 }
 const LeftContent = () => {
+  const isSm = useBreakpoint('sm')
   return (
-    <Box mt={47} sx={{ width: 'max-content', maxWidth: 468 }}>
+    <LeftContentStyle>
       <Stack gap={40}>
         <InfoTitle>Token Information</InfoTitle>
         <Stack gap={16}>
           <InfoLabel title="Contract address" content="0xCc39...780E6f" icon={<TickGreen />} />
           <InfoLabel title="Token Type" content="ERC721" />
         </Stack>
-        <InfoTitle>Auction Information</InfoTitle>
+        <InfoTitle mt={isSm ? 24 : 'auto'}>Auction Information</InfoTitle>
         <Stack gap={16}>
           <InfoLabel title="Auction type" content="Random Selection" />
           <InfoLabel title="Participant" content="Public" />
         </Stack>
-        <LabelBottomTitle>Before the NFT is revealed, you can trade it on the market</LabelBottomTitle>
+        <LabelBottomTitle mt={isSm ? 24 : 'auto'}>
+          Before the NFT is revealed, you can trade it on the market
+        </LabelBottomTitle>
       </Stack>
-    </Box>
+    </LeftContentStyle>
   )
 }
 const RightContent = () => {
+  const isSm = useBreakpoint('sm')
   return (
-    <Stack mt={26} gap={29} sx={{ width: 'max-content', maxWidth: 320 }}>
+    <Stack mt={26} alignItems={'center'} gap={29} sx={{ width: isSm ? '100%' : 'max-content', maxWidth: 320 }}>
       <ImgCard />
       <RevealBtn>
         <span>Reveal on Jan 13</span>

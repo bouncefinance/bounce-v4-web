@@ -1,6 +1,8 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import WordListImg from 'assets/imgs/nftLottery/card/wrod-list.png'
+import WordListImg from 'assets/imgs/nftLottery/card/word-list.png'
+import WordList2Img from 'assets/imgs/nftLottery/card/word-list-2.png'
 import { ReactComponent as LineSvg } from 'assets/imgs/nftLottery/card/line.svg'
+import Line2Svg from 'assets/imgs/nftLottery/card/line2.svg'
 const Container = styled(Box)`
   width: 358px;
   height: 412px;
@@ -12,7 +14,7 @@ const WhiteCard = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 9px;
-  width: 155px;
+  /* width: 155px; */
   padding: 12px 7px;
   border-radius: 2px;
   background: #fff;
@@ -25,6 +27,9 @@ const Title1 = styled(Typography)`
   font-style: normal;
   font-weight: 700;
   line-height: 140%; /* 19.6px */
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 12px;
+  }
 `
 const PriceTitle = styled(Typography)`
   color: #f00;
@@ -38,6 +43,9 @@ const PriceTitle = styled(Typography)`
   font-weight: 700;
   line-height: 90%; /* 39.6px */
   text-transform: uppercase;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 30px;
+  }
 `
 const NumberTitle = styled(Typography)`
   color: #4c483a;
@@ -51,11 +59,12 @@ const NumberTitle = styled(Typography)`
   font-weight: 700;
   line-height: 90%; /* 39.6px */
   text-transform: uppercase;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 30px;
+  }
 `
 const LineBox = styled(Box)`
   position: absolute;
-  top: 0;
-  right: 2px;
 `
 const Info = () => {
   return (
@@ -90,10 +99,54 @@ const Info = () => {
           </WhiteCard>
         </Stack>
       </Stack>
-      <LineBox>
+      <LineBox sx={{ top: 0, right: 2 }}>
         <LineSvg />
       </LineBox>
     </Container>
+  )
+}
+export const MobileInfo = () => {
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        background: '#0F0F0F',
+        position: 'relative'
+      }}
+    >
+      <Box p="10px">
+        <Box>
+          <img src={WordList2Img} style={{ display: 'block', margin: '0 auto' }} />
+        </Box>
+        <Box mt={15} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <WhiteCard style={{ gap: 0, paddingTop: 5, paddingLeft: 4 }}>
+            <Title1>Random</Title1>
+            <Title1>Selection</Title1>
+          </WhiteCard>
+
+          <WhiteCard>
+            <Title1>Number of winners</Title1>
+            <NumberTitle>450</NumberTitle>
+          </WhiteCard>
+
+          <WhiteCard>
+            <Title1>Ticket price</Title1>
+            <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
+              <PriceTitle>10</PriceTitle>
+              <Title1 sx={{ color: '#F00' }}>AUCTION</Title1>
+            </Stack>
+          </WhiteCard>
+
+          <WhiteCard>
+            <Title1>NFT per Ticket</Title1>
+            <NumberTitle>1</NumberTitle>
+          </WhiteCard>
+        </Box>
+      </Box>
+      <LineBox style={{ bottom: -3, width: '100%' }}>
+        <img style={{ width: '100%' }} src={Line2Svg} />
+      </LineBox>
+    </Box>
   )
 }
 export default Info

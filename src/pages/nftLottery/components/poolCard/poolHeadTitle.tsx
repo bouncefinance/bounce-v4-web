@@ -26,6 +26,12 @@ const PoolTitleStyle = styled(Typography)`
   &.close {
     color: #f00;
   }
+  ${({ theme }) => theme.breakpoints.down('md')} {
+    font-size: 50px;
+  }
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 28px;
+  }
 `
 
 const poolTitles = [
@@ -61,7 +67,7 @@ export const PoolHeadTitle = () => {
 
   return (
     <Container>
-      <WinnerTitle />
+      <UpcomingTitle />
     </Container>
   )
 }
