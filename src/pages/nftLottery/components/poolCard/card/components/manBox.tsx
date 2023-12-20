@@ -1,5 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import ManImg from 'assets/imgs/nftLottery/card/man.png'
+import Man2Img from 'assets/imgs/nftLottery/card/man2.png'
 const Container = styled(Box)`
   width: 523px;
   height: 412px;
@@ -17,6 +18,9 @@ const Title1 = styled(Typography)`
   font-weight: 700;
   line-height: 90%; /* 16.2px */
   text-transform: uppercase;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 16px;
+  }
 `
 const Title2 = styled(Typography)`
   color: #f00;
@@ -30,6 +34,9 @@ const Title2 = styled(Typography)`
   font-weight: 500;
   line-height: 90%; /* 90px */
   text-transform: uppercase;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 40px;
+  }
 `
 const TextBox = styled(Box)`
   position: absolute;
@@ -38,6 +45,12 @@ const TextBox = styled(Box)`
   transform: translateX(-50%);
   width: 100%;
   padding: 120px 0px 169px 0px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    padding: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 `
 const Joined = () => {
   return (
@@ -66,6 +79,16 @@ const ManBox = () => {
         <Joined />
       </TextBox>
     </Container>
+  )
+}
+export const MobileManBox = () => {
+  return (
+    <Box sx={{ position: 'relative' }}>
+      <img src={Man2Img} style={{ width: '100%', verticalAlign: 'middle' }} />
+      <TextBox>
+        <Joined />
+      </TextBox>
+    </Box>
   )
 }
 export default ManBox
