@@ -52,7 +52,7 @@ import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
 import LadderImg from './imgs/ladder.png'
 import BitSwapImage1 from './imgs/BitSwap-image1.png'
-import LadderImg1 from './imgs/ladder-img1.svg'
+import LadderImg1 from './imgs/ladder-img1.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -1480,7 +1480,7 @@ const LadderBitswapData1: IPrivatePadProp = {
   poolTypeName: 'Staking Auction',
   img: LadderImg,
   avatar: LadderImg,
-  title: 'One Stone Two Birds (AMMX)',
+  title: 'Two Birds, One Stone ($AMMX)',
   chainId: 1,
   tokenName: '$AMMX',
   whitePaperLink: '',
@@ -1491,8 +1491,8 @@ const LadderBitswapData1: IPrivatePadProp = {
       title: 'What is AMMX',
       info: [
         <Typography fontSize={16} key={1}>
-          AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue
-          towards repurchasing AMMX.
+          AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee
+          income to buy back AMMX.
         </Typography>
       ]
     },
@@ -1511,7 +1511,7 @@ const LadderBitswapData1: IPrivatePadProp = {
             </li>
             <li>FDV: $2,000,000</li>
             <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
-            <li>Airdrop Farming: 1.5% on Ladder and Bitswap, last for 30 days</li>
+            <li>Airdrop Farming: 1.5% on Ladder and BitSwap, last for 30 days</li>
             <li>
               Liquidity Mining Pool: 7%
               <ul>
@@ -1536,7 +1536,7 @@ const LadderBitswapData1: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
+  desc: 'AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee income to buy back AMMX.',
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
@@ -1546,7 +1546,7 @@ const LadderBitswapData1: IPrivatePadProp = {
   ],
   otherProject: [
     {
-      title: 'Bitswap',
+      title: 'BitSwap',
       tabList: [
         {
           title: 'Introduction',
@@ -1769,7 +1769,7 @@ const LadderBitswapData2: IPrivatePadProp = {
   poolTypeName: 'Staking Auction',
   img: LadderImg,
   avatar: LadderImg,
-  title: 'One Stone Two Birds (AMMX)',
+  title: 'Two Birds, One Stone ($AMMX)',
   chainId: 1,
   tokenName: '$AMMX',
   whitePaperLink: '',
@@ -1780,8 +1780,8 @@ const LadderBitswapData2: IPrivatePadProp = {
       title: 'What is AMMX',
       info: [
         <Typography fontSize={16} key={1}>
-          AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue
-          towards repurchasing AMMX.
+          AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee
+          income to buy back AMMX.
         </Typography>
       ]
     },
@@ -1800,7 +1800,7 @@ const LadderBitswapData2: IPrivatePadProp = {
             </li>
             <li>FDV: $2,000,000</li>
             <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
-            <li>Airdrop Farming: 1.5% on Ladder and Bitswap, last for 30 days</li>
+            <li>Airdrop Farming: 1.5% on Ladder and BitSwap, last for 30 days</li>
             <li>
               Liquidity Mining Pool: 7%
               <ul>
@@ -1825,7 +1825,7 @@ const LadderBitswapData2: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
+  desc: 'AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee income to buy back AMMX.',
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
@@ -1835,7 +1835,7 @@ const LadderBitswapData2: IPrivatePadProp = {
   ],
   otherProject: [
     {
-      title: 'Bitswap',
+      title: 'BitSwap',
       tabList: [
         {
           title: 'Introduction',
