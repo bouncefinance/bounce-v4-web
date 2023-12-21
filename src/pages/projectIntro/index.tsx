@@ -768,7 +768,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           }}
         >
           {<img src={item.avatar} style={{ width: 60, height: 60, borderRadius: 6 }} />}
-          <Typography mt={16} variant={'h1'} sx={{ color: 'white' }}>
+          <Typography mt={16} variant={'h1'} sx={{ color: 'white' }} textAlign={'center'}>
             {item.title}
           </Typography>
           <Typography

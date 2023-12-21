@@ -119,14 +119,15 @@ const CardSwitch = ({ tab, renderEl, level }: ISwitchTab & { level: Level }) => 
   const isMd = useBreakpoint('md')
   return (
     <Stack gap={isMd ? 0 : 24} sx={{ width: '100%' }}>
-      <TabBtnContainer className={level}>
-        {tab.map((i, d) => (
-          <TabBtnStyle key={i} onClick={() => setCurTab(d)} className={`${level} ${curTab === d ? 'active' : ''}`}>
-            <BtnTitle className="text">{i}</BtnTitle>
-          </TabBtnStyle>
-        ))}
-      </TabBtnContainer>
-
+      <Box sx={{ overflow: 'scroll', '&::-webkit-scrollbar': { display: 'none' } }}>
+        <TabBtnContainer className={level}>
+          {tab.map((i, d) => (
+            <TabBtnStyle key={i} onClick={() => setCurTab(d)} className={`${level} ${curTab === d ? 'active' : ''}`}>
+              <BtnTitle className="text">{i}</BtnTitle>
+            </TabBtnStyle>
+          ))}
+        </TabBtnContainer>
+      </Box>
       {renderEl[curTab]}
     </Stack>
   )
