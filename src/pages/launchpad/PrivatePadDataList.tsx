@@ -1488,7 +1488,7 @@ const LadderBitswapData1: IPrivatePadProp = {
   liveLink: routes.thirdPart.AmmxAuction,
   projectInfo: [
     {
-      title: 'What is AMMM',
+      title: 'What is AMMX',
       info: [
         <Typography fontSize={16} key={1}>
           AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue
@@ -1777,7 +1777,7 @@ const LadderBitswapData2: IPrivatePadProp = {
   liveLink: routes.thirdPart.AmmxDaii,
   projectInfo: [
     {
-      title: 'What is AMMM',
+      title: 'What is AMMX',
       info: [
         <Typography fontSize={16} key={1}>
           AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue

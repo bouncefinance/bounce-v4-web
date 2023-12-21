@@ -1091,7 +1091,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
         <ProjectContentBg
           sx={{
             width: { sm: '100%', md: 912 },
-            padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' }
+            padding: { xs: '40px 20px 60px', sm: '40px' }
           }}
         >
           <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
