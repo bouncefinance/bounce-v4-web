@@ -103,7 +103,6 @@ const TabBtnContainer = styled(Box)`
   flex-direction: row;
   gap: 10px;
   width: max-content;
-  overflow: scroll;
   ${({ theme }) => theme.breakpoints.down('md')} {
     &.first {
       background: transparent;
