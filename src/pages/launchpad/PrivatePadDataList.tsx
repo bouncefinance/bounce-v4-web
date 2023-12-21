@@ -1676,23 +1676,48 @@ const AmmxAuctionData: IPrivatePadProp = {
         {
           title: 'How does Ladder work?',
           info: [
-            <Stack key={1} flexDirection={'column'} gap={10}>
+            <Stack
+              key={1}
+              flexDirection={'column'}
+              gap={10}
+              sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}
+            >
               <Box>
-                <Typography sx={{ fontSize: 18, fontWeight: 600 }}>
-                  Unlock the <br /> true potential of NFTs
+                <Typography sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of directly trading between themselves. If you're familiar with a decentralized exchange like
+                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
+                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
+                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
-                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
-                  instead of trading peer-to-peer. One can think of it as the Uniswap for NFTs, with a profound GameFi
-                  focus.
+                  Here's how it works:
                 </Typography>
-                <Typography mt={10} sx={{ fontSize: 16 }}>
-                  Ladder AMM is a hybrid AMM combining fungible and non-fungible tokens. Unlike a traditional AMM where
-                  paired assets are all ERC-20, Ladder AMM supports non-fungible asset like ERC-721 & ERC-1155 as the
-                  pair option.
-                </Typography>
+                <ul>
+                  <li>
+                    Liquidity providers deposit NFTs and/or ETH (or an ERC20 token) into liquidity pools and specify a
+                    starting price.
+                  </li>
+                  <li>
+                    Users can then buy NFTs from or sell NFTs into these pools. Every time an item is bought or sold,
+                    the price to buy or sell another item changes for the pool based on its bonding curve.
+                  </li>
+                  <li>At any time, liquidity providers can withdraw assets from the pool.</li>
+                  <li>
+                    First Cross-chain NFT swap for BTC ecosystem.
+                    <Typography mt={10}>
+                      By integrating with Multibit and BitStable, Ladder could support cross-chain swap in these steps:
+                    </Typography>
+                    <Typography
+                      mt={10}
+                    >{`Ordinals <–> Bridged Ordinals: Ladder integrates Multibit bridge’s innovation and allows users to freely convert between bridged Ordinals and BTC ecosystem Ordinals seamlessly.`}</Typography>
+                    <Typography
+                      mt={10}
+                    >{`DAII <–> Bridged BRC20: DAII stands as the premier and largest stablecoin within the BTC ecosystem. Furthermore, BitSwap, a key ecosystem partner, ensures optimal liquidity for DAII across various chains. Users can conveniently invest in BTC Ordinals with reduced transaction fees on Ladder Protocol by engaging in swaps between the DAII and Bridged Ordinals assets, thereby securing enhanced returns.`}</Typography>
+                  </li>
+                </ul>
               </Box>
-              <Box>
+              <Box mt={10}>
                 <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
               </Box>
             </Stack>
@@ -1965,23 +1990,48 @@ const AmmxDaiiData: IPrivatePadProp = {
         {
           title: 'How does Ladder work?',
           info: [
-            <Stack key={1} flexDirection={'column'} gap={10}>
+            <Stack
+              key={1}
+              flexDirection={'column'}
+              gap={10}
+              sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}
+            >
               <Box>
-                <Typography sx={{ fontSize: 18, fontWeight: 600 }}>
-                  Unlock the <br /> true potential of NFTs
+                <Typography sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of directly trading between themselves. If you're familiar with a decentralized exchange like
+                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
+                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
+                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
-                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
-                  instead of trading peer-to-peer. One can think of it as the Uniswap for NFTs, with a profound GameFi
-                  focus.
+                  Here's how it works:
                 </Typography>
-                <Typography mt={10} sx={{ fontSize: 16 }}>
-                  Ladder AMM is a hybrid AMM combining fungible and non-fungible tokens. Unlike a traditional AMM where
-                  paired assets are all ERC-20, Ladder AMM supports non-fungible asset like ERC-721 & ERC-1155 as the
-                  pair option.
-                </Typography>
+                <ul>
+                  <li>
+                    Liquidity providers deposit NFTs and/or ETH (or an ERC20 token) into liquidity pools and specify a
+                    starting price.
+                  </li>
+                  <li>
+                    Users can then buy NFTs from or sell NFTs into these pools. Every time an item is bought or sold,
+                    the price to buy or sell another item changes for the pool based on its bonding curve.
+                  </li>
+                  <li>At any time, liquidity providers can withdraw assets from the pool.</li>
+                  <li>
+                    First Cross-chain NFT swap for BTC ecosystem.
+                    <Typography mt={10}>
+                      By integrating with Multibit and BitStable, Ladder could support cross-chain swap in these steps:
+                    </Typography>
+                    <Typography
+                      mt={10}
+                    >{`Ordinals <–> Bridged Ordinals: Ladder integrates Multibit bridge’s innovation and allows users to freely convert between bridged Ordinals and BTC ecosystem Ordinals seamlessly.`}</Typography>
+                    <Typography
+                      mt={10}
+                    >{`DAII <–> Bridged BRC20: DAII stands as the premier and largest stablecoin within the BTC ecosystem. Furthermore, BitSwap, a key ecosystem partner, ensures optimal liquidity for DAII across various chains. Users can conveniently invest in BTC Ordinals with reduced transaction fees on Ladder Protocol by engaging in swaps between the DAII and Bridged Ordinals assets, thereby securing enhanced returns.`}</Typography>
+                  </li>
+                </ul>
               </Box>
-              <Box>
+              <Box mt={10}>
                 <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
               </Box>
             </Stack>
@@ -2254,23 +2304,48 @@ const AmmxRandomData: IPrivatePadProp = {
         {
           title: 'How does Ladder work?',
           info: [
-            <Stack key={1} flexDirection={'column'} gap={10}>
+            <Stack
+              key={1}
+              flexDirection={'column'}
+              gap={10}
+              sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}
+            >
               <Box>
-                <Typography sx={{ fontSize: 18, fontWeight: 600 }}>
-                  Unlock the <br /> true potential of NFTs
+                <Typography sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of directly trading between themselves. If you're familiar with a decentralized exchange like
+                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
+                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
+                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
-                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
-                  instead of trading peer-to-peer. One can think of it as the Uniswap for NFTs, with a profound GameFi
-                  focus.
+                  Here's how it works:
                 </Typography>
-                <Typography mt={10} sx={{ fontSize: 16 }}>
-                  Ladder AMM is a hybrid AMM combining fungible and non-fungible tokens. Unlike a traditional AMM where
-                  paired assets are all ERC-20, Ladder AMM supports non-fungible asset like ERC-721 & ERC-1155 as the
-                  pair option.
-                </Typography>
+                <ul>
+                  <li>
+                    Liquidity providers deposit NFTs and/or ETH (or an ERC20 token) into liquidity pools and specify a
+                    starting price.
+                  </li>
+                  <li>
+                    Users can then buy NFTs from or sell NFTs into these pools. Every time an item is bought or sold,
+                    the price to buy or sell another item changes for the pool based on its bonding curve.
+                  </li>
+                  <li>At any time, liquidity providers can withdraw assets from the pool.</li>
+                  <li>
+                    First Cross-chain NFT swap for BTC ecosystem.
+                    <Typography mt={10}>
+                      By integrating with Multibit and BitStable, Ladder could support cross-chain swap in these steps:
+                    </Typography>
+                    <Typography
+                      mt={10}
+                    >{`Ordinals <–> Bridged Ordinals: Ladder integrates Multibit bridge’s innovation and allows users to freely convert between bridged Ordinals and BTC ecosystem Ordinals seamlessly.`}</Typography>
+                    <Typography
+                      mt={10}
+                    >{`DAII <–> Bridged BRC20: DAII stands as the premier and largest stablecoin within the BTC ecosystem. Furthermore, BitSwap, a key ecosystem partner, ensures optimal liquidity for DAII across various chains. Users can conveniently invest in BTC Ordinals with reduced transaction fees on Ladder Protocol by engaging in swaps between the DAII and Bridged Ordinals assets, thereby securing enhanced returns.`}</Typography>
+                  </li>
+                </ul>
               </Box>
-              <Box>
+              <Box mt={10}>
                 <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
               </Box>
             </Stack>
