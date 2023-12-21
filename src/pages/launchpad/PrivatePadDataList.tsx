@@ -1924,7 +1924,7 @@ const AmmxDaiiData: IPrivatePadProp = {
           title: 'Introduction',
           info: [
             <Box key={1}>
-              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
               <Typography mt={40}>
                 BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
                 trading experience for BRC20 assets across diverse blockchains
@@ -2114,8 +2114,8 @@ const AmmxRandomData: IPrivatePadProp = {
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
-    { title: 'Token Price', content: '-- MUBI' },
-    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Ticket Price', content: '-- MUBI / Ticket' },
+    { title: 'Token Amount / Ticket', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   otherProject: [
@@ -2209,7 +2209,7 @@ const AmmxRandomData: IPrivatePadProp = {
           title: 'Introduction',
           info: [
             <Box key={1}>
-              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
               <Typography mt={40}>
                 BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
                 trading experience for BRC20 assets across diverse blockchains

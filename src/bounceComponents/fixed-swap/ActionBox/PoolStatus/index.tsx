@@ -66,7 +66,13 @@ const PoolStatusBox = ({
             Upcoming
           </Typography>
           {countdown > 0 && !hideUpcomingCountdown && (
-            <Typography fontSize={12} color="var(--ps-gray-600)" variant="body1" component="span">
+            <Typography
+              sx={{ whiteSpace: 'nowrap' }}
+              fontSize={12}
+              color="var(--ps-gray-600)"
+              variant="body1"
+              component="span"
+            >
               &nbsp;{days}d : {hours}h : {minutes}m
             </Typography>
           )}
