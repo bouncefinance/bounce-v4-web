@@ -1024,7 +1024,7 @@ const ProjectContentBg = styled(Box)`
   align-items: flex-start;
   gap: 40px;
   width: 912px;
-  min-height: 446px;
+  min-height: 300px;
   background: #f6f7f3;
   border-radius: 30px;
 `
@@ -1035,7 +1035,7 @@ const ProjectContentBgDark = styled(Box)({
   gap: 40,
   width: '100%',
   maxWidth: 912,
-  minHeight: 446,
+  minHeight: 300,
   background: '#121219',
   borderRadius: 6,
   color: 'white'

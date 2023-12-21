@@ -26,7 +26,7 @@ const ItemCardStyle = styled(Box)`
 `
 const InfoBoxStyle = styled(Box)`
   width: 100%;
-  padding: 80px 40px 120px 40px;
+  padding: 40px;
   border-radius: 30px;
   background: var(--grey-06, #f6f6f3);
   min-height: 500px;

@@ -1536,7 +1536,7 @@ const LadderBitswapData1: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'Ladder is channelling liquidity to where it matters most. Originally a disruptive NFT AMM with a focus on GameFi, Ladder is pushing the boundaries by creating the first-ever cross-chain NFT swap for the Bitcoin ecosystem.',
+  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
@@ -1825,7 +1825,7 @@ const LadderBitswapData2: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'Ladder is channelling liquidity to where it matters most. Originally a disruptive NFT AMM with a focus on GameFi, Ladder is pushing the boundaries by creating the first-ever cross-chain NFT swap for the Bitcoin ecosystem. ',
+  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
