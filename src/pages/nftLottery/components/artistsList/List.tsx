@@ -3,11 +3,9 @@ import { Box, Typography, styled } from '@mui/material'
 import Image from 'components/Image'
 
 const StyledBox = styled(Box)(() => ({
-  display: 'flex',
-  paddingBottom: '30px',
   position: 'relative',
-  opacity: '0.3',
-  '&:hover ': {
+  '&:hover :nth-child(3) div': {
+    width: '100%',
     opacity: '1'
   }
 }))
@@ -32,53 +30,67 @@ export default function ArtistsList({
   return (
     <a href={href} style={{ cursor: 'pointer' }}>
       <StyledBox
-        gap={124}
-        borderBottom={idx !== length - 1 ? '1px solid #737373' : 'none'}
         sx={{
-          '&:hover div': {
-            transition: '1s',
+          '&:hover #imgBox': {
             transform: `translate(-100%,-40%) ${rotate} scale(0.9)`,
             opacity: '1'
           }
         }}
       >
-        <Typography
-          variant="lotteryh2"
-          width={469}
-          fontSize={100}
-          fontWeight={500}
-          lineHeight={'90%'}
-          textTransform={'uppercase'}
-          color={'#C3A16D'}
-          zIndex={9}
-        >
-          {name}
-        </Typography>
-        <Typography
-          flex={1}
-          fontSize={20}
-          fontWeight={400}
-          lineHeight={'140%'}
-          color={'var(--ai-white-70, rgba(255, 255, 255, 0.70))'}
-        >
-          {children}
-        </Typography>
-        <Typography
-          variant="lotteryh1"
-          position={'absolute'}
-          top={0}
-          color={'var(--AI-grey-02, #474543)'}
-          fontSize={240}
-          fontWeight={500}
-          lineHeight={'90%'}
-          textTransform={'uppercase'}
+        {/* 文字内容 */}
+        <Box
+          display={'flex'}
+          marginBottom={30}
+          gap={124}
+          position={'relative'}
           sx={{
-            transform: 'translateY(-35%) rotate(15.01deg)'
+            opacity: '0.3',
+            '&:hover ': {
+              opacity: '1'
+            }
           }}
         >
-          {idx + 1}
-        </Typography>
+          <Typography
+            variant="lotteryh2"
+            width={469}
+            fontSize={100}
+            fontWeight={500}
+            lineHeight={'90%'}
+            textTransform={'uppercase'}
+            color={'#C3A16D'}
+            zIndex={9}
+          >
+            {name}
+          </Typography>
+          <Typography
+            flex={1}
+            fontSize={20}
+            fontWeight={400}
+            lineHeight={'140%'}
+            color={'var(--ai-white-70, rgba(255, 255, 255, 0.70))'}
+          >
+            {children}
+          </Typography>
+          {/* 数字 */}
+          <Typography
+            variant="lotteryh1"
+            position={'absolute'}
+            top={0}
+            color={'var(--AI-grey-02, #474543)'}
+            fontSize={240}
+            fontWeight={500}
+            lineHeight={'90%'}
+            textTransform={'uppercase'}
+            sx={{
+              transform: 'translateY(-35%) rotate(15.01deg)'
+            }}
+          >
+            {idx + 1}
+          </Typography>
+        </Box>
+        {/* 图片 */}
         <Box
+          id={'imgBox'}
           sx={{
             width: '190px',
             height: '287px',
@@ -88,9 +100,26 @@ export default function ArtistsList({
             left: '40%',
             transform: 'translate(-100%,-40%) scale(0.5)',
             zIndex: '10',
-            opacity: '0'
+            opacity: '0',
+            transition: '1s'
           }}
         ></Box>
+        {/* 线 */}
+        {idx + 1 < length ? (
+          <Box width={'100%'} height={'1px'} position={'relative'}>
+            <Box width={'100%'} height={'1px'} bgcolor={'#737373'}></Box>
+            <Box
+              width={0}
+              height={'1px'}
+              bgcolor={'#fff'}
+              position={'absolute'}
+              top={0}
+              left={0}
+              zIndex={1}
+              sx={{ transition: '1s' }}
+            ></Box>
+          </Box>
+        ) : null}
       </StyledBox>
     </a>
   )

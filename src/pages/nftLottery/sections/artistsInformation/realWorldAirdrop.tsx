@@ -27,7 +27,7 @@ const RealWorldAirdrop = () => {
             fontWeight={700}
             marginBottom={isSm ? 16 : 24}
           >
-            REAL WORLD AIRDROP 实物奖励空投细则
+            REAL WORLD AIRDROP
           </Typography>
           <Text>
             The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and
