@@ -149,7 +149,8 @@ export const transparentRoutes = [
   routes.thirdPart.Did.dll,
   routes.thirdPart.Did.pool,
   routes.thirdPart.AmmxAuction,
-  routes.thirdPart.AmmxDaii
+  routes.thirdPart.AmmxDaii,
+  routes.thirdPart.AmmxRandom
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]

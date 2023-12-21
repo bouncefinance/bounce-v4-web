@@ -115,6 +115,7 @@ import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
 import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
 import AmmxAuctionProjectInfo from './projectIntro/AmmxAuctionProjectInfo'
 import AmmxDaiiProjectInfo from './projectIntro/AmmxDaiiProjectInfo'
+import AmmxRandomProjectInfo from './projectIntro/AmmxRandomProjectInfo'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -219,6 +220,7 @@ export default function App() {
                   <Route path={routes.thirdPart.MultiBitBridge} element={<MultiBitBridgeProjectInfo />} />
                   <Route path={routes.thirdPart.AmmxAuction} element={<AmmxAuctionProjectInfo />} />
                   <Route path={routes.thirdPart.AmmxDaii} element={<AmmxDaiiProjectInfo />} />
+                  <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomProjectInfo />} />
 
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}

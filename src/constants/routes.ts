@@ -123,7 +123,8 @@ export const routes = {
       pool: '/auction/godid-random-selection'
     },
     AmmxAuction: '/launchpad/ammx-auction',
-    AmmxDaii: '/launchpad/ammx-daii'
+    AmmxDaii: '/launchpad/ammx-daii',
+    AmmxRandom: '/launchpad/ammx-random'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
