@@ -50,6 +50,9 @@ import DIDNa from './imgs/did-na.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
+import LadderImg from './imgs/ladder.png'
+import BitSwapImage1 from './imgs/BitSwap-image1.png'
+import LadderImg1 from './imgs/ladder-img1.png'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -59,7 +62,10 @@ export interface IPrivatePricesInfo {
   title: string | string[]
   value: (string | JSX.Element)[] | (string | JSX.Element)
 }
-
+export interface IOtherProject {
+  title: string
+  tabList: IProjectInfo[]
+}
 export interface IPrivatePadProp {
   hidden?: true
   backedId?: number
@@ -93,6 +99,7 @@ export interface IPrivatePadProp {
   privatePrices?: IPrivatePricesInfo[]
   isFAQ?: boolean
   poolTypeName2?: string
+  otherProject?: IOtherProject[]
 }
 const participateProjectInfo: IProjectInfo = {
   title: 'How to Participate',
@@ -1464,12 +1471,957 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
+const AmmxAuctionData: IPrivatePadProp = {
+  keyId: 25,
+  liveTimeStamp: {
+    start: 1703390400000,
+    end: 1703649600000
+  },
+  poolTypeName: 'Staking Auction',
+  img: LadderImg,
+  avatar: LadderImg,
+  title: 'Two Birds, One Stone ($AMMX)',
+  chainId: 1,
+  tokenName: '$AMMX',
+  whitePaperLink: '',
+  upcomingLink: routes.thirdPart.AmmxAuction,
+  liveLink: routes.thirdPart.AmmxAuction,
+  projectInfo: [
+    {
+      title: 'What is AMMX',
+      info: [
+        <Typography fontSize={16} key={1}>
+          AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee
+          income to buy back AMMX.
+        </Typography>
+      ]
+    },
+    {
+      title: 'Tokenomics',
+      info: [
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
+          <ul>
+            <li>Total Supply: 2.1 Billion</li>
 
+            <li>
+              Public Sale: 50% of Total Supply on Bounce Finance
+              <ul>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500,000 value of $Auction</li>
+              </ul>
+            </li>
+            <li>FDV: $2,000,000</li>
+            <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
+            <li>Airdrop Farming: 1.5% on Ladder and BitSwap, last for 30 days</li>
+            <li>
+              Liquidity Mining Pool: 7%
+              <ul>
+                <li>3.5% in Uniswap V3, AMMX-ETH</li>
+                <li>3.5% in BitSwap, AMMX-DAII</li>
+              </ul>
+            </li>
+            <li>
+              Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX can
+              be used to boost the weight farming rate.
+              <ul>
+                <li>AMMX-DAII</li>
+                <li>AUCTION-DAII</li>
+                <li>USDT-DAII</li>
+                <li>BSSB-DAII</li>
+                <li>MUBI-DAII</li>
+              </ul>
+            </li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee income to buy back AMMX.',
+  social: [],
+  moreData: [
+    { title: 'Token Name', content: '$AMMX' },
+    { title: 'Token Price', content: '-- AUCTION' },
+    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  otherProject: [
+    {
+      title: 'BitSwap',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
+              <Typography mt={40}>
+                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
+                trading experience for BRC20 assets across diverse blockchains
+              </Typography>
+              <Typography mt={15}>
+                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
+                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
+                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
+                journey with unparalleled convenience and efficiency.
+              </Typography>
+            </Box>
+          ]
+        },
+        {
+          title: 'How does BitSwap work?',
+          info: [
+            <Box key={1} sx={{ ol: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <Typography sx={{ fontSize: 16 }}>
+                By integrating with Multibit and BitStable, BitSwap could support cross-chain swap in three steps:
+              </Typography>
+              <ol>
+                <li>{`ERC20 <–> DAII: users can swap any ERC20 token (ETH/USDT/etc..) to DAII on BitSwap. DAII is the first and largest original stablecoin in Bitcoin Ecosystem and BitSwap provides the best liquidity for DAII among multi-chains.`}</li>
+                <li>{`DAII <–> bridged BRC20: BitSwap introduces DAII As A Service (DAAS) and fosters enhanced liquidity pairing DAII with other BRC20 assets. Users can swap DAII with any bridged BRC20 tokens on BitSwap. `}</li>
+                <li>{`bridged BRC20 <–> BRC20: BitSwap integrates Multibit bridge’s innovation and enables users to transfer bridged BRC20 to Bitcoin seamlessly.`}</li>
+              </ol>
+              <Typography sx={{ fontSize: 16 }}>
+                Bitcoin will provide full access and functionalities for the three steps above, and will integrate three
+                steps into one-click trading in the near future.
+              </Typography>
+              <img style={{ width: '100%', marginTop: 10 }} src={BitSwapImage1} />
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://bitswap.site/home" target="_blank" rel="noreferrer">
+                    https://bitswap.site/home
+                  </a>
+                </li>
+                <li>
+                  Twitter:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://twitter.com/Bitswap_BTC
+                  </a>
+                </li>
+                <li>
+                  Telegram:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://t.me/BitSwap_BTC
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Ladder',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a wide range of standards including ERC-721, ERC-1155, ERC-3525, ERC-20, as well as
+                  bridged BRC-20 tokens. Our platform enables users to seamlessly enter NFT trades (via liquidity
+                  pools), eliminating the need for a peer-to-peer counterparty.
+                </Typography>
+
+                <Typography>
+                  Focused on channelling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality for the Bitcoin ecosystem.
+                </Typography>
+              </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Advantages',
+          info: [
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, fontSize: 16 } }}>
+              <ul>
+                <li>Instant liquidity: no need to list and wait for a buyer</li>
+                <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
+                <li>Minimal slippage: negligible difference between the sell price set and the actual selling price</li>
+                <li>
+                  Convenient user journey: Ladder allows users to trade Ordinals in a similar way to ERC20 NFTs,
+                  allowing more retail users to enter the Bitcoin ecosystem
+                </li>
+                <li>
+                  Bringing liquidity to the Bitcoin ecosystem: Ladder is creating liquidity pools for the leading
+                  Ordinals collections making the whole ecosystem more efficient for all the participants
+                </li>
+              </ul>
+            </Box>
+          ]
+        },
+        {
+          title: 'How does Ladder work?',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'column'}
+              gap={10}
+              sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}
+            >
+              <Box>
+                <Typography sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of directly trading between themselves. If you're familiar with a decentralized exchange like
+                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
+                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
+                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                </Typography>
+                <Typography mt={40} sx={{ fontSize: 16 }}>
+                  Here's how it works:
+                </Typography>
+                <ul>
+                  <li>
+                    Liquidity providers deposit NFTs and/or ETH (or an ERC20 token) into liquidity pools and specify a
+                    starting price.
+                  </li>
+                  <li>
+                    Users can then buy NFTs from or sell NFTs into these pools. Every time an item is bought or sold,
+                    the price to buy or sell another item changes for the pool based on its bonding curve.
+                  </li>
+                  <li>At any time, liquidity providers can withdraw assets from the pool.</li>
+                  <li>
+                    First Cross-chain NFT swap for BTC ecosystem.
+                    <Typography mt={10}>
+                      By integrating with Multibit and BitStable, Ladder could support cross-chain swap in these steps:
+                    </Typography>
+                    <Typography
+                      mt={10}
+                    >{`Ordinals <–> Bridged Ordinals: Ladder integrates Multibit bridge’s innovation and allows users to freely convert between bridged Ordinals and BTC ecosystem Ordinals seamlessly.`}</Typography>
+                    <Typography
+                      mt={10}
+                    >{`DAII <–> Bridged BRC20: DAII stands as the premier and largest stablecoin within the BTC ecosystem. Furthermore, BitSwap, a key ecosystem partner, ensures optimal liquidity for DAII across various chains. Users can conveniently invest in BTC Ordinals with reduced transaction fees on Ladder Protocol by engaging in swaps between the DAII and Bridged Ordinals assets, thereby securing enhanced returns.`}</Typography>
+                  </li>
+                </ul>
+              </Box>
+              <Box mt={10}>
+                <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
+              </Box>
+            </Stack>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://ladder.top/" target="_blank" rel="noreferrer">
+                    https://ladder.top/
+                  </a>
+                </li>
+                <li>
+                  Linktree: {` `}
+                  <a href="https://link3.to/ladder" target="_blank" rel="noreferrer">
+                    https://link3.to/ladder
+                  </a>
+                </li>
+                <li>
+                  Twitter: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Discord: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Telegram: {` `}
+                  <a href="https://t.me/LadderAMM" target="_blank" rel="noreferrer">
+                    https://t.me/LadderAMM
+                  </a>
+                </li>
+                <li>
+                  Medium: {` `}
+                  <a href="https://medium.com/@ladder_top " target="_blank" rel="noreferrer">
+                    https://medium.com/@ladder_top
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    }
+  ]
+}
+const AmmxDaiiData: IPrivatePadProp = {
+  keyId: 24,
+  liveTimeStamp: {
+    start: 1703390400000,
+    end: 1703649600000
+  },
+  poolTypeName: 'Staking Auction',
+  img: LadderImg,
+  avatar: LadderImg,
+  title: 'Two Birds, One Stone ($AMMX)',
+  chainId: 1,
+  tokenName: '$AMMX',
+  whitePaperLink: '',
+  upcomingLink: routes.thirdPart.AmmxDaii,
+  liveLink: routes.thirdPart.AmmxDaii,
+  projectInfo: [
+    {
+      title: 'What is AMMX',
+      info: [
+        <Typography fontSize={16} key={1}>
+          AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee
+          income to buy back AMMX.
+        </Typography>
+      ]
+    },
+    {
+      title: 'Tokenomics',
+      info: [
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
+          <ul>
+            <li>Total Supply: 2.1 Billion</li>
+
+            <li>
+              Public Sale: 50% of Total Supply on Bounce Finance
+              <ul>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500,000 value of $Auction</li>
+              </ul>
+            </li>
+            <li>FDV: $2,000,000</li>
+            <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
+            <li>Airdrop Farming: 1.5% on Ladder and BitSwap, last for 30 days</li>
+            <li>
+              Liquidity Mining Pool: 7%
+              <ul>
+                <li>3.5% in Uniswap V3, AMMX-ETH</li>
+                <li>3.5% in BitSwap, AMMX-DAII</li>
+              </ul>
+            </li>
+            <li>
+              Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX can
+              be used to boost the weight farming rate.
+              <ul>
+                <li>AMMX-DAII</li>
+                <li>AUCTION-DAII</li>
+                <li>USDT-DAII</li>
+                <li>BSSB-DAII</li>
+                <li>MUBI-DAII</li>
+              </ul>
+            </li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee income to buy back AMMX.',
+  social: [],
+  moreData: [
+    { title: 'Token Name', content: '$AMMX' },
+    { title: 'Token Price', content: '-- DAII' },
+    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  otherProject: [
+    {
+      title: 'BitSwap',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
+              <Typography mt={40}>
+                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
+                trading experience for BRC20 assets across diverse blockchains
+              </Typography>
+              <Typography mt={15}>
+                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
+                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
+                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
+                journey with unparalleled convenience and efficiency.
+              </Typography>
+            </Box>
+          ]
+        },
+        {
+          title: 'How does BitSwap work?',
+          info: [
+            <Box key={1} sx={{ ol: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <Typography sx={{ fontSize: 16 }}>
+                By integrating with Multibit and BitStable, BitSwap could support cross-chain swap in three steps:
+              </Typography>
+              <ol>
+                <li>{`ERC20 <–> DAII: users can swap any ERC20 token (ETH/USDT/etc..) to DAII on BitSwap. DAII is the first and largest original stablecoin in Bitcoin Ecosystem and BitSwap provides the best liquidity for DAII among multi-chains.`}</li>
+                <li>{`DAII <–> bridged BRC20: BitSwap introduces DAII As A Service (DAAS) and fosters enhanced liquidity pairing DAII with other BRC20 assets. Users can swap DAII with any bridged BRC20 tokens on BitSwap. `}</li>
+                <li>{`bridged BRC20 <–> BRC20: BitSwap integrates Multibit bridge’s innovation and enables users to transfer bridged BRC20 to Bitcoin seamlessly.`}</li>
+              </ol>
+              <Typography sx={{ fontSize: 16 }}>
+                Bitcoin will provide full access and functionalities for the three steps above, and will integrate three
+                steps into one-click trading in the near future.
+              </Typography>
+              <img style={{ width: '100%', marginTop: 10 }} src={BitSwapImage1} />
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://bitswap.site/home" target="_blank" rel="noreferrer">
+                    https://bitswap.site/home
+                  </a>
+                </li>
+                <li>
+                  Twitter:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://twitter.com/Bitswap_BTC
+                  </a>
+                </li>
+                <li>
+                  Telegram:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://t.me/BitSwap_BTC
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Ladder',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a wide range of standards including ERC-721, ERC-1155, ERC-3525, ERC-20, as well as
+                  bridged BRC-20 tokens. Our platform enables users to seamlessly enter NFT trades (via liquidity
+                  pools), eliminating the need for a peer-to-peer counterparty.
+                </Typography>
+
+                <Typography>
+                  Focused on channelling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality for the Bitcoin ecosystem.
+                </Typography>
+              </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Advantages',
+          info: [
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, fontSize: 16 } }}>
+              <ul>
+                <li>Instant liquidity: no need to list and wait for a buyer</li>
+                <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
+                <li>Minimal slippage: negligible difference between the sell price set and the actual selling price</li>
+                <li>
+                  Convenient user journey: Ladder allows users to trade Ordinals in a similar way to ERC20 NFTs,
+                  allowing more retail users to enter the Bitcoin ecosystem
+                </li>
+                <li>
+                  Bringing liquidity to the Bitcoin ecosystem: Ladder is creating liquidity pools for the leading
+                  Ordinals collections making the whole ecosystem more efficient for all the participants
+                </li>
+              </ul>
+            </Box>
+          ]
+        },
+        {
+          title: 'How does Ladder work?',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'column'}
+              gap={10}
+              sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}
+            >
+              <Box>
+                <Typography sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of directly trading between themselves. If you're familiar with a decentralized exchange like
+                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
+                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
+                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                </Typography>
+                <Typography mt={40} sx={{ fontSize: 16 }}>
+                  Here's how it works:
+                </Typography>
+                <ul>
+                  <li>
+                    Liquidity providers deposit NFTs and/or ETH (or an ERC20 token) into liquidity pools and specify a
+                    starting price.
+                  </li>
+                  <li>
+                    Users can then buy NFTs from or sell NFTs into these pools. Every time an item is bought or sold,
+                    the price to buy or sell another item changes for the pool based on its bonding curve.
+                  </li>
+                  <li>At any time, liquidity providers can withdraw assets from the pool.</li>
+                  <li>
+                    First Cross-chain NFT swap for BTC ecosystem.
+                    <Typography mt={10}>
+                      By integrating with Multibit and BitStable, Ladder could support cross-chain swap in these steps:
+                    </Typography>
+                    <Typography
+                      mt={10}
+                    >{`Ordinals <–> Bridged Ordinals: Ladder integrates Multibit bridge’s innovation and allows users to freely convert between bridged Ordinals and BTC ecosystem Ordinals seamlessly.`}</Typography>
+                    <Typography
+                      mt={10}
+                    >{`DAII <–> Bridged BRC20: DAII stands as the premier and largest stablecoin within the BTC ecosystem. Furthermore, BitSwap, a key ecosystem partner, ensures optimal liquidity for DAII across various chains. Users can conveniently invest in BTC Ordinals with reduced transaction fees on Ladder Protocol by engaging in swaps between the DAII and Bridged Ordinals assets, thereby securing enhanced returns.`}</Typography>
+                  </li>
+                </ul>
+              </Box>
+              <Box mt={10}>
+                <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
+              </Box>
+            </Stack>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://ladder.top/" target="_blank" rel="noreferrer">
+                    https://ladder.top/
+                  </a>
+                </li>
+                <li>
+                  Linktree: {` `}
+                  <a href="https://link3.to/ladder" target="_blank" rel="noreferrer">
+                    https://link3.to/ladder
+                  </a>
+                </li>
+                <li>
+                  Twitter: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Discord: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Telegram: {` `}
+                  <a href="https://t.me/LadderAMM" target="_blank" rel="noreferrer">
+                    https://t.me/LadderAMM
+                  </a>
+                </li>
+                <li>
+                  Medium: {` `}
+                  <a href="https://medium.com/@ladder_top " target="_blank" rel="noreferrer">
+                    https://medium.com/@ladder_top
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    }
+  ]
+}
+const AmmxRandomData: IPrivatePadProp = {
+  keyId: 26,
+  liveTimeStamp: {
+    start: 1703390400000,
+    end: 1703649600000
+  },
+  poolTypeName: 'Random Selection Auction',
+  img: LadderImg,
+  avatar: LadderImg,
+  title: 'Two Birds, One Stone ($AMMX)',
+  chainId: 1,
+  tokenName: '$AMMX',
+  whitePaperLink: '',
+  upcomingLink: routes.thirdPart.AmmxRandom,
+  liveLink: routes.thirdPart.AmmxRandom,
+  projectInfo: [
+    {
+      title: 'What is AMMX',
+      info: [
+        <Typography fontSize={16} key={1}>
+          AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee
+          income to buy back AMMX.
+        </Typography>
+      ]
+    },
+    {
+      title: 'Tokenomics',
+      info: [
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
+          <ul>
+            <li>Total Supply: 2.1 Billion</li>
+
+            <li>
+              Public Sale: 50% of Total Supply on Bounce Finance
+              <ul>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500,000 value of $Auction</li>
+              </ul>
+            </li>
+            <li>FDV: $2,000,000</li>
+            <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
+            <li>Airdrop Farming: 1.5% on Ladder and BitSwap, last for 30 days</li>
+            <li>
+              Liquidity Mining Pool: 7%
+              <ul>
+                <li>3.5% in Uniswap V3, AMMX-ETH</li>
+                <li>3.5% in BitSwap, AMMX-DAII</li>
+              </ul>
+            </li>
+            <li>
+              Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX can
+              be used to boost the weight farming rate.
+              <ul>
+                <li>AMMX-DAII</li>
+                <li>AUCTION-DAII</li>
+                <li>USDT-DAII</li>
+                <li>BSSB-DAII</li>
+                <li>MUBI-DAII</li>
+              </ul>
+            </li>
+          </ul>
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'AMMX serves as the ecosystem token of BitSwap and Ladder, with these protocols dedicating 50% of their fee income to buy back AMMX.',
+  social: [],
+  moreData: [
+    { title: 'Token Name', content: '$AMMX' },
+    { title: 'Ticket Price', content: '-- MUBI / Ticket' },
+    { title: 'Token Amount / Ticket', content: 'TBD' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  otherProject: [
+    {
+      title: 'BitSwap',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
+              <Typography mt={40}>
+                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
+                trading experience for BRC20 assets across diverse blockchains
+              </Typography>
+              <Typography mt={15}>
+                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
+                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
+                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
+                journey with unparalleled convenience and efficiency.
+              </Typography>
+            </Box>
+          ]
+        },
+        {
+          title: 'How does BitSwap work?',
+          info: [
+            <Box key={1} sx={{ ol: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <Typography sx={{ fontSize: 16 }}>
+                By integrating with Multibit and BitStable, BitSwap could support cross-chain swap in three steps:
+              </Typography>
+              <ol>
+                <li>{`ERC20 <–> DAII: users can swap any ERC20 token (ETH/USDT/etc..) to DAII on BitSwap. DAII is the first and largest original stablecoin in Bitcoin Ecosystem and BitSwap provides the best liquidity for DAII among multi-chains.`}</li>
+                <li>{`DAII <–> bridged BRC20: BitSwap introduces DAII As A Service (DAAS) and fosters enhanced liquidity pairing DAII with other BRC20 assets. Users can swap DAII with any bridged BRC20 tokens on BitSwap. `}</li>
+                <li>{`bridged BRC20 <–> BRC20: BitSwap integrates Multibit bridge’s innovation and enables users to transfer bridged BRC20 to Bitcoin seamlessly.`}</li>
+              </ol>
+              <Typography sx={{ fontSize: 16 }}>
+                Bitcoin will provide full access and functionalities for the three steps above, and will integrate three
+                steps into one-click trading in the near future.
+              </Typography>
+              <img style={{ width: '100%', marginTop: 10 }} src={BitSwapImage1} />
+            </Box>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://bitswap.site/home" target="_blank" rel="noreferrer">
+                    https://bitswap.site/home
+                  </a>
+                </li>
+                <li>
+                  Twitter:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://twitter.com/Bitswap_BTC
+                  </a>
+                </li>
+                <li>
+                  Telegram:{` `}
+                  <a href="https://t.me/BitSwap_BTC" target="_blank" rel="noreferrer">
+                    https://t.me/BitSwap_BTC
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    },
+    {
+      title: 'Ladder',
+      tabList: [
+        {
+          title: 'Introduction',
+          info: [
+            <Box key={1}>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a wide range of standards including ERC-721, ERC-1155, ERC-3525, ERC-20, as well as
+                  bridged BRC-20 tokens. Our platform enables users to seamlessly enter NFT trades (via liquidity
+                  pools), eliminating the need for a peer-to-peer counterparty.
+                </Typography>
+
+                <Typography>
+                  Focused on channelling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality for the Bitcoin ecosystem.
+                </Typography>
+              </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Advantages',
+          info: [
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, fontSize: 16 } }}>
+              <ul>
+                <li>Instant liquidity: no need to list and wait for a buyer</li>
+                <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
+                <li>Minimal slippage: negligible difference between the sell price set and the actual selling price</li>
+                <li>
+                  Convenient user journey: Ladder allows users to trade Ordinals in a similar way to ERC20 NFTs,
+                  allowing more retail users to enter the Bitcoin ecosystem
+                </li>
+                <li>
+                  Bringing liquidity to the Bitcoin ecosystem: Ladder is creating liquidity pools for the leading
+                  Ordinals collections making the whole ecosystem more efficient for all the participants
+                </li>
+              </ul>
+            </Box>
+          ]
+        },
+        {
+          title: 'How does Ladder work?',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'column'}
+              gap={10}
+              sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}
+            >
+              <Box>
+                <Typography sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of directly trading between themselves. If you're familiar with a decentralized exchange like
+                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
+                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
+                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                </Typography>
+                <Typography mt={40} sx={{ fontSize: 16 }}>
+                  Here's how it works:
+                </Typography>
+                <ul>
+                  <li>
+                    Liquidity providers deposit NFTs and/or ETH (or an ERC20 token) into liquidity pools and specify a
+                    starting price.
+                  </li>
+                  <li>
+                    Users can then buy NFTs from or sell NFTs into these pools. Every time an item is bought or sold,
+                    the price to buy or sell another item changes for the pool based on its bonding curve.
+                  </li>
+                  <li>At any time, liquidity providers can withdraw assets from the pool.</li>
+                  <li>
+                    First Cross-chain NFT swap for BTC ecosystem.
+                    <Typography mt={10}>
+                      By integrating with Multibit and BitStable, Ladder could support cross-chain swap in these steps:
+                    </Typography>
+                    <Typography
+                      mt={10}
+                    >{`Ordinals <–> Bridged Ordinals: Ladder integrates Multibit bridge’s innovation and allows users to freely convert between bridged Ordinals and BTC ecosystem Ordinals seamlessly.`}</Typography>
+                    <Typography
+                      mt={10}
+                    >{`DAII <–> Bridged BRC20: DAII stands as the premier and largest stablecoin within the BTC ecosystem. Furthermore, BitSwap, a key ecosystem partner, ensures optimal liquidity for DAII across various chains. Users can conveniently invest in BTC Ordinals with reduced transaction fees on Ladder Protocol by engaging in swaps between the DAII and Bridged Ordinals assets, thereby securing enhanced returns.`}</Typography>
+                  </li>
+                </ul>
+              </Box>
+              <Box mt={10}>
+                <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
+              </Box>
+            </Stack>
+          ]
+        },
+        {
+          title: 'Social Links',
+          info: [
+            <Stack
+              key={1}
+              flexDirection={'row'}
+              gap={10}
+              sx={{
+                ul: {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 10
+                },
+                a: { color: 'gray', textDecoration: 'underline', fontSize: 16 },
+                li: { fontSize: 16 }
+              }}
+            >
+              <ul>
+                <li>
+                  Website: {` `}
+                  <a href="https://ladder.top/" target="_blank" rel="noreferrer">
+                    https://ladder.top/
+                  </a>
+                </li>
+                <li>
+                  Linktree: {` `}
+                  <a href="https://link3.to/ladder" target="_blank" rel="noreferrer">
+                    https://link3.to/ladder
+                  </a>
+                </li>
+                <li>
+                  Twitter: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Discord: {` `}
+                  <a href="https://twitter.com/Ladder_NFT" target="_blank" rel="noreferrer">
+                    https://twitter.com/Ladder_NFT
+                  </a>
+                </li>
+                <li>
+                  Telegram: {` `}
+                  <a href="https://t.me/LadderAMM" target="_blank" rel="noreferrer">
+                    https://t.me/LadderAMM
+                  </a>
+                </li>
+                <li>
+                  Medium: {` `}
+                  <a href="https://medium.com/@ladder_top " target="_blank" rel="noreferrer">
+                    https://medium.com/@ladder_top
+                  </a>
+                </li>
+              </ul>
+            </Stack>
+          ]
+        }
+      ]
+    }
+  ]
+}
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 23
-
+  // current privatePad max keyId is 26
+  AmmxAuctionData,
+  AmmxDaiiData,
+  AmmxRandomData,
   AiMeetsBtcRandomData,
+
   {
+    hidden: true,
     keyId: 23,
     liveTimeStamp: {
       start: 1732852800000,

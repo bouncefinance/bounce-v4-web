@@ -768,7 +768,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
           }}
         >
           {<img src={item.avatar} style={{ width: 60, height: 60, borderRadius: 6 }} />}
-          <Typography mt={16} variant={'h1'} sx={{ color: 'white' }}>
+          <Typography mt={16} variant={'h1'} sx={{ color: 'white' }} textAlign={'center'}>
             {item.title}
           </Typography>
           <Typography
@@ -931,7 +931,7 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
   )
 }
 
-export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
+export function Tabs({ item, isDark, hideTitle }: { item: IPrivatePadProp; isDark?: boolean; hideTitle?: boolean }) {
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = isDark ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
   const [tab, setTab] = useState(tabs[0])
@@ -964,7 +964,8 @@ export function Tabs({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean
                 '&:hover': {
                   cursor: 'pointer',
                   color: `${isDark ? ProjectInfoDarkStyle.Tabs.TabColor : '#121212'} !important`
-                }
+                },
+                display: hideTitle ? 'none' : 'block'
               }}
               key={'projectHead' + i}
               onClick={() => tabs.length > 1 && setTab(t)}
@@ -1023,7 +1024,7 @@ const ProjectContentBg = styled(Box)`
   align-items: flex-start;
   gap: 40px;
   width: 912px;
-  min-height: 446px;
+  min-height: 300px;
   background: #f6f7f3;
   border-radius: 30px;
 `
@@ -1034,7 +1035,7 @@ const ProjectContentBgDark = styled(Box)({
   gap: 40,
   width: '100%',
   maxWidth: 912,
-  minHeight: 446,
+  minHeight: 300,
   background: '#121219',
   borderRadius: 6,
   color: 'white'
@@ -1090,7 +1091,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
         <ProjectContentBg
           sx={{
             width: { sm: '100%', md: 912 },
-            padding: { xs: '40px 20px 60px', sm: '80px 40px 120px' }
+            padding: { xs: '40px 20px 60px', sm: '40px' }
           }}
         >
           <Typography variant={'h2'}>{info[currentIdx].title}</Typography>
