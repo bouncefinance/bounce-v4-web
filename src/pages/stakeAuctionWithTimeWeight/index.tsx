@@ -16,7 +16,7 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { useCallback } from 'react'
 
 const Page = () => {
-  const poolId = 4
+  const poolId = 7
   const { account } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
   const chainId = ChainId.SEPOLIA
@@ -31,14 +31,14 @@ const Page = () => {
     token1.address,
     '20000000000',
     '100000000000000000000000',
-    1703141100,
-    1703142300,
-    1703142300,
+    1703148000,
+    1703148600,
+    1703148600,
     1
   ]
 
   const toClaim = useCallback(async () => {
-    if (!account || !contract) return
+    if (!account || !contract || !coinInfo) return
     showWaitingTxDialog(() => {
       hideDialogConfirmation()
     })
@@ -61,7 +61,10 @@ const Page = () => {
             iconType: 'success',
             cancelBtn: 'Close',
             title: 'Success! ',
-            content: `You have successfully claimed `,
+            content:
+              nowTime() < Number(coinInfo.poolInfo?.openAt) * 1000
+                ? `You have successfully cancelled`
+                : 'You have successfully claimed',
             PaperProps: {
               sx: DialogTipsWhiteTheme
             }
@@ -83,7 +86,7 @@ const Page = () => {
         }
       })
     }
-  }, [account, contract])
+  }, [account, coinInfo, contract])
 
   const createPool = async () => {
     // if (approvalState !== ApprovalState.APPROVED) {
@@ -113,6 +116,15 @@ const Page = () => {
               Creator Claim
             </StakeButton>
           )}
+        {coinInfo?.poolInfo && nowTime() < Number(coinInfo.poolInfo.openAt) * 1000 && (
+          <StakeButton
+            sx={{ margin: '20px auto' }}
+            onClick={toClaim}
+            disabled={account === undefined || coinInfo?.poolInfo?.creator !== account || coinInfo.creatorClaimed}
+          >
+            Creator Cancel
+          </StakeButton>
+        )}
       </div>
       <Tabs item={PrivateStakeAuctionData} />
       <FooterPc />

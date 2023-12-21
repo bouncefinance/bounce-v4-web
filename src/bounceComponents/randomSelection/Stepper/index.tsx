@@ -11,10 +11,10 @@ const StepperStyle = styled(Stepper)(() => ({
     width: '100% !important'
   },
   '.Mui-completed': {
-    color: '#2663FF'
+    color: '#2663FF !important'
   },
   '.Mui-active': {
-    color: '#2663FF',
+    color: '#2663FF !important',
     '& text': {
       fill: '#fff'
     }
