@@ -16,6 +16,7 @@ const Container = styled(Box)`
 `
 const ItemCardStyle = styled(Box)`
   width: 100%;
+  height: max-content;
   padding: 20px 48px;
   background: #fff;
   border-radius: 24px 24px 0px 0px;
