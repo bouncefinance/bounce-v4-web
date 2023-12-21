@@ -1925,16 +1925,20 @@ const AmmxDaiiData: IPrivatePadProp = {
           info: [
             <Box key={1}>
               <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
-              <Typography mt={40}>
-                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
-                trading experience for BRC20 assets across diverse blockchains
-              </Typography>
-              <Typography mt={15}>
-                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
-                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
-                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
-                journey with unparalleled convenience and efficiency.
-              </Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a wide range of standards including ERC-721, ERC-1155, ERC-3525, ERC-20, as well as
+                  bridged BRC-20 tokens. Our platform enables users to seamlessly enter NFT trades (via liquidity
+                  pools), eliminating the need for a peer-to-peer counterparty.
+                </Typography>
+
+                <Typography>
+                  Focused on channelling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality for the Bitcoin ecosystem.
+                </Typography>
+              </Stack>
             </Box>
           ]
         },
@@ -2210,16 +2214,20 @@ const AmmxRandomData: IPrivatePadProp = {
           info: [
             <Box key={1}>
               <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
-              <Typography mt={40}>
-                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
-                trading experience for BRC20 assets across diverse blockchains
-              </Typography>
-              <Typography mt={15}>
-                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
-                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
-                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
-                journey with unparalleled convenience and efficiency.
-              </Typography>
+              <Stack gap={15} mt={40}>
+                <Typography>
+                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
+                  NFTs, supporting a wide range of standards including ERC-721, ERC-1155, ERC-3525, ERC-20, as well as
+                  bridged BRC-20 tokens. Our platform enables users to seamlessly enter NFT trades (via liquidity
+                  pools), eliminating the need for a peer-to-peer counterparty.
+                </Typography>
+
+                <Typography>
+                  Focused on channelling liquidity where it's most needed, Ladder has established a leading position as
+                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
+                  functionality for the Bitcoin ecosystem.
+                </Typography>
+              </Stack>
             </Box>
           ]
         },
