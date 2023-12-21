@@ -13,7 +13,6 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import { useApproveCallback } from 'hooks/useApproveCallback'
-import { STAKE_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ApprovalState } from 'hooks/useTokenTimelock'
 import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
@@ -38,6 +37,7 @@ import {
   StepLabelStyle,
   StepperStyle
 } from 'pages/launchpadCoin/Step'
+import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from '../../constants'
 
 export function Steps({
   coinInfo,
@@ -147,8 +147,8 @@ function Step1({
   const { account, chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
-    return ChainId.MAINNET
-    // return ChainId.SEPOLIA
+    // return ChainId.MAINNET
+    return ChainId.SEPOLIA
   }, [])
   const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
@@ -159,7 +159,10 @@ function Step1({
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
   }, [amount, token1Currency])
-  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, STAKE_TOKEN_CONTRACT_ADDRESSES[_chainId])
+  const [approvalState, approve] = useApproveCallback(
+    token1CurrencyAmount,
+    STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[_chainId]
+  )
   const token1Balance = useCurrencyBalance(account, token1Currency, _chainId)
 
   const curTime = useMemo(() => {
@@ -205,19 +208,19 @@ function Step1({
     return !token1Balance.greaterThan('0')
   }, [token1Balance])
   const _switchNetwork = () => {
-    switchNetwork(ChainId.MAINNET)
-    // switchNetwork(ChainId.SEPOLIA)
+    // switchNetwork(ChainId.MAINNET)
+    switchNetwork(ChainId.SEPOLIA)
   }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
     }
-    if (chainId !== ChainId.MAINNET) {
-      return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
-    }
-    // if (chainId !== ChainId.SEPOLIA) {
+    // if (chainId !== ChainId.MAINNET) {
     //   return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
     // }
+    if (chainId !== ChainId.SEPOLIA) {
+      return <StakeButton onClick={() => _switchNetwork()}>Switch network</StakeButton>
+    }
     if (isBalanceInsufficient) {
       return <StakeButton disabled>Insufficient balance</StakeButton>
     }
@@ -416,11 +419,11 @@ function Step1({
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>0.00009375 AUCTION</CardLabelStyle>
+                    <CardLabelStyle>5 Token1</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
-                    <CardContentStyle>Total Supply of BDID</CardContentStyle>
-                    <CardLabelStyle>200,000,000</CardLabelStyle>
+                    <CardContentStyle>Total Supply of Token0</CardContentStyle>
+                    <CardLabelStyle>20,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
@@ -429,7 +432,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 18,750 AUCTION
+                    {token1Currency?.symbol} / 100,000 Token1
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -531,20 +534,20 @@ function Step2({
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     if (!account) {
-      return 1
-      // return 11155111
+      // return 1
+      return 11155111
     }
     return chainId
   }, [account, chainId])
   const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
-    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BDID', 'BDID')
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'Token0', 'Token0')
   }, [_token0])
   const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
   const token1 = useMemo(() => {
     if (!_token1) return undefined
-    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'AUCTION', 'AUCTION')
+    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'Token1', 'Token1')
   }, [_token1])
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
@@ -710,8 +713,8 @@ function Step2({
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
-    switchNetwork(ChainId.MAINNET)
-    // switchNetwork(ChainId.SEPOLIA)
+    // switchNetwork(ChainId.MAINNET)
+    switchNetwork(ChainId.SEPOLIA)
   }
 
   return (
@@ -908,12 +911,12 @@ function Step2({
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {account && chainId !== ChainId.MAINNET && (
-                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
-                  )}
-                  {/* {account && chainId !== ChainId.SEPOLIA && (
+                  {/* {account && chainId !== ChainId.MAINNET && (
                     <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )} */}
+                  {account && chainId !== ChainId.SEPOLIA && (
+                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
+                  )}
                 </Stack>
               </Stack>
             </Stack>

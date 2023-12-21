@@ -36,20 +36,20 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
         </ConfirmBtnStyle>
       )
     }
-    if (chainId !== ChainId.MAINNET) {
-      return (
-        <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
-          Switch network
-        </ConfirmBtnStyle>
-      )
-    }
-    // if (chainId !== ChainId.SEPOLIA) {
+    // if (chainId !== ChainId.MAINNET) {
     //   return (
     //     <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
     //       Switch network
     //     </ConfirmBtnStyle>
     //   )
     // }
+    if (chainId !== ChainId.SEPOLIA) {
+      return (
+        <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
+          Switch network
+        </ConfirmBtnStyle>
+      )
+    }
     if (!amount || !Number(amount)) {
       return (
         <ConfirmBtnStyle disabled sx={{ flex: 2 }}>

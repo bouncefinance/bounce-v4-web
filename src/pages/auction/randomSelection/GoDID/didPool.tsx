@@ -1,5 +1,4 @@
 import { Box, Stack } from '@mui/material'
-
 import CreatorMainBlock from 'bounceComponents/randomSelection/MainBlock/CreatorMainBlock'
 // import CreatorInfoCard from 'bounceComponents/randomSelection/CreatorInfoCard'
 import AuctionWinnerList from 'bounceComponents/randomSelection/AuctionWinnerList'

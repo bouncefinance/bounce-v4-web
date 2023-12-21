@@ -31,6 +31,7 @@ import ToolboxDeployERC721Factory from '../constants/abis/ToolboxDeployERC721Fac
 import ToolboxDeployErc20VestingFactory from '../constants/abis/ToolboxDeployErc20VestingFactory.json'
 import LAUNCHPAD_COIN_ABI from '../constants/abis/launchpad-coin.json'
 import STAKE_TOKEN_ABI from '../constants/abis/stake-token.json'
+import STAKE_TOKEN_WITH_TIME_ABI from '../constants/abis/stake-token-with-time-weight.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -46,7 +47,8 @@ import {
   TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES,
   TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES,
   LAUNCHPAD_COIN_CONTRACT_ADDRESSES,
-  STAKE_TOKEN_CONTRACT_ADDRESSES
+  STAKE_TOKEN_CONTRACT_ADDRESSES,
+  STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -302,8 +304,13 @@ export function useLaunchpadCoinContract(queryChainId?: ChainId) {
 }
 
 export function useStakeTokenContract(queryChainId?: ChainId) {
-  // const cur = queryChainId || ChainId.MAINNET
-  const cur = queryChainId || ChainId.SEPOLIA
+  const cur = queryChainId || ChainId.MAINNET
   const curAddress = cur ? STAKE_TOKEN_CONTRACT_ADDRESSES[cur] : undefined
   return useContract(curAddress, STAKE_TOKEN_ABI, true, queryChainId)
+}
+
+export function useStakeTokenWithTimeWeightContract(queryChainId?: ChainId) {
+  const cur = queryChainId || ChainId.MAINNET
+  const curAddress = cur ? STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[cur] : undefined
+  return useContract(curAddress, STAKE_TOKEN_WITH_TIME_ABI, true, queryChainId)
 }
