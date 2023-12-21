@@ -8,6 +8,18 @@ interface CheckProps {
 const FormControlLabelStyle = styled(FormControlLabel)`
   &.MuiFormControlLabel-root {
     width: max-content;
+    ${({ theme }) => theme.breakpoints.down('sm')} {
+      width: 100%;
+      align-items: start;
+      gap: 5px;
+      margin-top: 16px;
+    }
+  }
+
+  & .MuiCheckbox-root {
+    padding: 0px;
+    padding-left: 10px;
+    padding-top: 3px;
   }
   &.MuiFormControlLabel-root .MuiTypography-root {
     color: #20201e;
@@ -23,6 +35,9 @@ const FormControlLabelStyle = styled(FormControlLabel)`
     color: #76ba1e !important;
     border-radius: 6px;
   }
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 17px;
+  }
 `
 const Title = styled(Typography)`
   color: #20201e;
@@ -33,6 +48,19 @@ const Title = styled(Typography)`
   font-style: normal;
   font-weight: 400;
   line-height: 140%; /* 25.2px */
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 17px;
+  }
+`
+const CheckboxStyle = styled(Checkbox)`
+  color: #8f9288;
+  & .MuiSvgIcon-root {
+    border-radius: 6px;
+    font-size: 20px;
+  }
+  &.Mui-checked {
+    color: var(--AI-green, #76ba1e);
+  }
 `
 const CheckBox = ({ onConfirm }: CheckProps) => {
   const [confirmationState, setConfirmationState] = useState({
@@ -58,20 +86,20 @@ const CheckBox = ({ onConfirm }: CheckProps) => {
         <FormControlLabelStyle
           checked={notice1}
           name="notice1"
-          control={<Checkbox defaultChecked />}
+          control={<CheckboxStyle defaultChecked />}
           onChange={handleChange}
           label="I researched the creator"
         />
         <FormControlLabelStyle
           checked={notice2}
-          control={<Checkbox />}
+          control={<CheckboxStyle />}
           onChange={handleChange}
           name="notice2"
           label="I checked the token and contract address to make sure it is not fake token"
         />
         <FormControlLabelStyle
           checked={notice3}
-          control={<Checkbox />}
+          control={<CheckboxStyle />}
           onChange={handleChange}
           name="notice3"
           label="I checked the price"

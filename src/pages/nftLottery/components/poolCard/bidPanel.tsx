@@ -12,6 +12,9 @@ const Container = styled(Box)`
   max-width: 1076px;
   margin: 0 auto;
   margin-top: 40px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    padding: 0 16px;
+  }
 `
 const BidPanel = ({ setZoom }: IProps) => {
   const [action, setAction] = useState<ActionStatus>('FIRST')

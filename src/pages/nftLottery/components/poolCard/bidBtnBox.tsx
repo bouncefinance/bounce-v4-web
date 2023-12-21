@@ -1,4 +1,5 @@
 import { Button, Stack, Typography, styled } from '@mui/material'
+import useBreakpoint from 'hooks/useBreakpoint'
 interface IProps {
   goCheck: () => void
 }
@@ -49,6 +50,9 @@ const TipTitle = styled(Typography)`
   font-weight: 500;
   line-height: 150%; /* 24px */
   letter-spacing: -0.32px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 14px;
+  }
 `
 const UpcomingBtn = () => (
   <>
@@ -81,10 +85,11 @@ const SoldOutBtn = () => (
   </>
 )
 const BidBtnBox = ({ goCheck }: IProps) => {
+  const isSm = useBreakpoint('sm')
   console.log('PurchaseBtn', PurchaseBtn, UpcomingBtn, CloseBtn, DrawedBtn, SoldOutBtn)
 
   return (
-    <Stack flexDirection={'column'} justifyContent={'center'} alignItems={'center'} mt={80}>
+    <Stack flexDirection={'column'} justifyContent={'center'} alignItems={'center'} mt={isSm ? 40 : 80}>
       <PurchaseBtn goCheck={goCheck} />
     </Stack>
   )
