@@ -2421,15 +2421,15 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   AiMeetsBtcRandomData,
 
   {
-    hidden: true,
+    // hidden: true,
     keyId: 23,
     liveTimeStamp: {
       start: 1732852800000,
       end: 0
     },
     poolTypeName: 'Fixed Price Auction',
-    img: '',
-    avatar: '',
+    img: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
+    avatar: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
     title: 'Port3 Network',
     chainId: 1,
     tokenName: '$PORT3',
