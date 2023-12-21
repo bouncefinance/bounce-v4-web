@@ -1501,19 +1501,19 @@ const LadderBitswapData1: IPrivatePadProp = {
       info: [
         <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
           <ul>
-            <li>total supply: 2.1 Billion</li>
-            <li>ticker AMMX</li>
+            <li>Total Supply: 2.1 Billion</li>
+
             <li>
-              public sale: 50% of Total Supply on Bounce Finance
+              Public Sale: 50% of Total Supply on Bounce Finance
               <ul>
-                <li>Total Raise Through Token Launch: 500,000 DAII + $500k value of Auction</li>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500,000 value of $Auction</li>
               </ul>
             </li>
             <li>FDV: $2,000,000</li>
             <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
-            <li>Airdrop: 1.5%</li>
+            <li>Airdrop Farming: 1.5% on Ladder and Bitswap, last for 30 days</li>
             <li>
-              LP: 7%
+              Liquidity Mining Pool: 7%
               <ul>
                 <li>3.5% in Uniswap V3, AMMX-ETH</li>
                 <li>3.5% in BitSwap, AMMX-DAII</li>
@@ -1790,19 +1790,19 @@ const LadderBitswapData2: IPrivatePadProp = {
       info: [
         <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
           <ul>
-            <li>total supply: 2.1 Billion</li>
-            <li>ticker AMMX</li>
+            <li>Total Supply: 2.1 Billion</li>
+
             <li>
-              public sale: 50% of Total Supply on Bounce Finance
+              Public Sale: 50% of Total Supply on Bounce Finance
               <ul>
-                <li>Total Raise Through Token Launch: 500,000 DAII + $500k value of Auction</li>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500,000 value of $Auction</li>
               </ul>
             </li>
             <li>FDV: $2,000,000</li>
             <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
-            <li>Airdrop: 1.5%</li>
+            <li>Airdrop Farming: 1.5% on Ladder and Bitswap, last for 30 days</li>
             <li>
-              LP: 7%
+              Liquidity Mining Pool: 7%
               <ul>
                 <li>3.5% in Uniswap V3, AMMX-ETH</li>
                 <li>3.5% in BitSwap, AMMX-DAII</li>
