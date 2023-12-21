@@ -4,7 +4,7 @@ import Image from 'components/Image'
 
 const StyledBox = styled(Box)(() => ({
   position: 'relative',
-  '&:hover :nth-child(2) div': {
+  '&:hover :nth-child(3) div': {
     width: '100%',
     opacity: '1'
   }
@@ -31,8 +31,7 @@ export default function ArtistsList({
     <a href={href} style={{ cursor: 'pointer' }}>
       <StyledBox
         sx={{
-          '&:hover div:nth-child(3)': {
-            transition: '1s',
+          '&:hover #imgBox': {
             transform: `translate(-100%,-40%) ${rotate} scale(0.9)`,
             opacity: '1'
           }
@@ -89,6 +88,22 @@ export default function ArtistsList({
             {idx + 1}
           </Typography>
         </Box>
+        {/* 图片 */}
+        <Box
+          id={'imgBox'}
+          sx={{
+            width: '190px',
+            height: '287px',
+            background: `url(${url})`,
+            position: 'absolute',
+            top: '0',
+            left: '40%',
+            transform: 'translate(-100%,-40%) scale(0.5)',
+            zIndex: '10',
+            opacity: '0',
+            transition: '1s'
+          }}
+        ></Box>
         {/* 线 */}
         {idx + 1 < length ? (
           <Box width={'100%'} height={'1px'} position={'relative'}>
@@ -105,21 +120,6 @@ export default function ArtistsList({
             ></Box>
           </Box>
         ) : null}
-
-        {/* 图片 */}
-        <Box
-          sx={{
-            width: '190px',
-            height: '287px',
-            background: `url(${url})`,
-            position: 'absolute',
-            top: '0',
-            left: '40%',
-            transform: 'translate(-100%,-40%) scale(0.5)',
-            zIndex: '10',
-            opacity: '0'
-          }}
-        ></Box>
       </StyledBox>
     </a>
   )
