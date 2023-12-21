@@ -6,10 +6,11 @@ import { ReactComponent as Tick } from 'assets/imgs/nftLottery/tick.svg'
 import dayjs from 'dayjs'
 
 // 进度条
-function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeList: any[]; isSm: boolean }) {
+function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeList: number[]; isSm: boolean }) {
+  const stepName = ['PARTICIPATION', 'LOTTERY DRAWING', 'ANNOUNCEMENT OF WINNERS']
   return isSm ? (
     <Box>
-      {timeList.map(({ name, time }, index) => (
+      {timeList.map((time, index) => (
         <Box key={index} display={'flex'} gap={16}>
           {/* 进度 */}
           <Box width={30} display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -42,7 +43,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
               fontWeight={700}
               color={activeStep > index ? 'var(--black-100, #121212)' : 'var(--gray-03, var(--gray-03, #959595))'}
             >
-              {name}
+              {stepName[index]}
             </Typography>
             <Typography
               marginTop={3}
@@ -59,7 +60,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
     </Box>
   ) : (
     <Box display={'flex'} alignItems={'flex-end'}>
-      {timeList.map(({ name, time }, index) => (
+      {timeList.map((time, index) => (
         <Box key={index}>
           {/* 文字 */}
           <Typography
@@ -69,7 +70,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
             fontWeight={700}
             color={activeStep > index ? 'var(--black-100, #121212)' : 'var(--gray-03, var(--gray-03, #959595))'}
           >
-            {name}
+            {stepName[index]}
           </Typography>
           <Typography
             margin={'3px 0 16px'}
@@ -113,7 +114,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
 /* 
 status:抽奖状态
 startTime:状态持续时间
-timeList:各阶段名称及时间
+timeList:各阶段名时间
 */
 export default function Countdown({
   status,
@@ -122,15 +123,11 @@ export default function Countdown({
 }: {
   status: PoolStatus
   startTime: number
-  timeList?: any[]
+  timeList?: number[]
 }) {
   const isSm = useBreakpoint('sm')
   if (!timeList) {
-    timeList = [
-      { name: 'PARTICIPATION', time: 170312760 },
-      { name: 'LOTTERY DRAWING', time: 170312760 },
-      { name: 'ANNOUNCEMENT OF WINNERS', time: 170312760 }
-    ]
+    timeList = [170312760, 170312760, 170312760]
   }
   const [countdown, { hours, minutes, seconds }] = useCountDown({
     targetDate: startTime * 1000
