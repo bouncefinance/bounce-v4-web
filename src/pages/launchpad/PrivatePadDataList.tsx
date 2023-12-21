@@ -2114,7 +2114,7 @@ const AmmxRandomData: IPrivatePadProp = {
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
-    { title: 'Token Price', content: '-- RANDOM' },
+    { title: 'Token Price', content: '-- MUBI' },
     { title: 'Token Amount', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
