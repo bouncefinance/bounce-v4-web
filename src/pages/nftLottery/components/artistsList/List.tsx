@@ -4,7 +4,10 @@ import Image from 'components/Image'
 
 const StyledBox = styled(Box)(() => ({
   position: 'relative',
-  '&:hover :nth-child(3) div': {
+  '&:hover #textBox': {
+    opacity: '1'
+  },
+  '&:hover #moveLine': {
     width: '100%',
     opacity: '1'
   }
@@ -39,15 +42,14 @@ export default function ArtistsList({
       >
         {/* 文字内容 */}
         <Box
+          id={'textBox'}
           display={'flex'}
           marginBottom={30}
           gap={124}
           position={'relative'}
           sx={{
-            opacity: '0.3',
-            '&:hover ': {
-              opacity: '1'
-            }
+            transition: '1s',
+            opacity: '0.3'
           }}
         >
           <Typography
@@ -101,7 +103,7 @@ export default function ArtistsList({
             transform: 'translate(-100%,-40%) scale(0.5)',
             zIndex: '10',
             opacity: '0',
-            transition: '1s'
+            transition: '1.5s'
           }}
         ></Box>
         {/* 线 */}
@@ -109,6 +111,7 @@ export default function ArtistsList({
           <Box width={'100%'} height={'1px'} position={'relative'}>
             <Box width={'100%'} height={'1px'} bgcolor={'#737373'}></Box>
             <Box
+              id={'moveLine'}
               width={0}
               height={'1px'}
               bgcolor={'#fff'}

@@ -4,6 +4,7 @@ import artist_2 from 'assets/imgs/nftLottery/artist_2.png'
 import artist_3 from 'assets/imgs/nftLottery/artist_3.png'
 import List, { ArtistsListApp } from '../../components/artistsList/List'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { WithAnimation } from 'components/WithAnimation'
 
 const DemoComponent = () => {
   const isSm = useBreakpoint('sm')
@@ -39,31 +40,37 @@ const DemoComponent = () => {
       justifyContent={'center'}
     >
       <Box width={isSm ? '100%' : 1440}>
-        <Typography
-          variant="lotteryh1"
-          fontSize={isSm ? 50 : 200}
-          lineHeight={'90%'}
-          fontWeight={500}
-          color={'var(--AI-dark-02, #BBB4A8)'}
-          paddingLeft={isSm ? 0 : 10}
-          marginBottom={isSm ? 40 : 140}
-        >
-          ARTISTS
-        </Typography>
+        <WithAnimation>
+          <Typography
+            variant="lotteryh1"
+            fontSize={isSm ? 50 : 200}
+            lineHeight={'90%'}
+            fontWeight={500}
+            color={'var(--AI-dark-02, #BBB4A8)'}
+            paddingLeft={isSm ? 0 : 10}
+            marginBottom={isSm ? 40 : 140}
+          >
+            ARTISTS
+          </Typography>
+        </WithAnimation>
         {isSm ? (
           <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={48}>
             {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
-              <ArtistsListApp key={idx} idx={idx} name={name} url={imgSrc} rotate={rotate}>
-                {value}
-              </ArtistsListApp>
+              <WithAnimation key={idx}>
+                <ArtistsListApp idx={idx} name={name} url={imgSrc} rotate={rotate}>
+                  {value}
+                </ArtistsListApp>
+              </WithAnimation>
             ))}
           </Box>
         ) : (
           <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={40}>
             {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
-              <List key={idx} idx={idx} length={msgList.length} name={name} url={imgSrc} rotate={rotate}>
-                {value}
-              </List>
+              <WithAnimation key={idx}>
+                <List key={idx} idx={idx} length={msgList.length} name={name} url={imgSrc} rotate={rotate}>
+                  {value}
+                </List>
+              </WithAnimation>
             ))}
           </Box>
         )}
