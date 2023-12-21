@@ -1,5 +1,5 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import { AnimateStep } from './index'
+import { AnimateStep } from '../../sections/banner/index'
 import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
 import CardImg from 'assets/imgs/nftLottery/banner/card.png'

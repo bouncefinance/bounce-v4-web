@@ -5,8 +5,8 @@ import BannerStep1 from '../step1'
 import BannerStep2 from '../step2'
 import BannerStep3 from '../step3'
 import BannerStep2bg from '../step2bg'
-import BannerStepLine from '../../../components/banner/bannerStep'
-import { AnimateStep } from '..'
+import BannerStepLine from '../bannerStep'
+import { AnimateStep } from '../../../sections/banner'
 
 const PcBanner = () => {
   const theme = useTheme()

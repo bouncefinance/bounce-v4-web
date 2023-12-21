@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import P1Img from 'assets/imgs/nftLottery/p7.png'
 import P2Img from 'assets/imgs/nftLottery/p6.png'
 import Image from 'components/Image'
-import { AnimateStep } from './index'
+import { AnimateStep } from '../../sections/banner/index'
 
 const BannerStep2 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
   const isSm = useIsSMDown()

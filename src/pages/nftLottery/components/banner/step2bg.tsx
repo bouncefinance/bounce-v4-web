@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { AnimateStep } from './index'
+import { AnimateStep } from '../../sections/banner/index'
 import { useMemo } from 'react'
 import Image from 'components/Image'
 import fontSvg from 'assets/imgs/nftLottery/banner/font.svg'

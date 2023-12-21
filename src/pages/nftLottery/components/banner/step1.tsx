@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { AnimateStep } from './index'
+import { AnimateStep } from '../../sections/banner/index'
 import { useIsSMDown } from 'themes/useTheme'
 import { useEffect, useMemo, useState } from 'react'
 import P1Img from 'assets/imgs/nftLottery/p1.png'

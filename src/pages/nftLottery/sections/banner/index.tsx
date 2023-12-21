@@ -1,6 +1,6 @@
 import useBreakpoint from 'hooks/useBreakpoint'
-import PcBanner from './pc'
-import MobileBanner from './mobile'
+import PcBanner from '../../components/banner/pc'
+import MobileBanner from '../../components/banner/mobile'
 export enum AnimateStep {
   'default' = 0,
   'enter' = 1,
