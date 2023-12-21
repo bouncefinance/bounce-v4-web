@@ -30,10 +30,15 @@ const InfoBoxStyle = styled(Box)`
   border-radius: 30px;
   background: var(--grey-06, #f6f6f3);
   min-height: 500px;
+
   ${({ theme }) => theme.breakpoints.down('md')} {
     padding: 24px;
     min-height: 200px;
     border-radius: 16px;
+  }
+  & p,
+  & a {
+    font-size: 16px;
   }
 `
 const BtnTitle = styled(Typography)`

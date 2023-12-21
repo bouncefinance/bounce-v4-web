@@ -51,6 +51,8 @@ import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
 import LadderImg from './imgs/ladder.png'
+import BitSwapImage1 from './imgs/BitSwap-image1.png'
+import LadderImg1 from './imgs/ladder-img1.svg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -1547,6 +1549,26 @@ const LadderBitswapData1: IPrivatePadProp = {
           ]
         },
         {
+          title: 'How does BitSwap work?',
+          info: [
+            <Box key={1} sx={{ ol: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <Typography sx={{ fontSize: 16 }}>
+                By integrating with Multibit and BitStable, BitSwap could support cross-chain swap in three steps:
+              </Typography>
+              <ol>
+                <li>{`ERC20 <–> DAII: users can swap any ERC20 token (ETH/USDT/etc..) to DAII on BitSwap. DAII is the first and largest original stablecoin in Bitcoin Ecosystem and BitSwap provides the best liquidity for DAII among multi-chains.`}</li>
+                <li>{`DAII <–> bridged BRC20: BitSwap introduces DAII As A Service (DAAS) and fosters enhanced liquidity pairing DAII with other BRC20 assets. Users can swap DAII with any bridged BRC20 tokens on BitSwap. `}</li>
+                <li>{`bridged BRC20 <–> BRC20: BitSwap integrates Multibit bridge’s innovation and enables users to transfer bridged BRC20 to Bitcoin seamlessly.`}</li>
+              </ol>
+              <Typography sx={{ fontSize: 16 }}>
+                Bitcoin will provide full access and functionalities for the three steps above, and will integrate three
+                steps into one-click trading in the near future.
+              </Typography>
+              <img style={{ width: '100%', marginTop: 10 }} src={BitSwapImage1} />
+            </Box>
+          ]
+        },
+        {
           title: 'Social Links',
           info: [
             <Stack
@@ -1612,6 +1634,31 @@ const LadderBitswapData1: IPrivatePadProp = {
                 </Typography>
               </Stack>
             </Box>
+          ]
+        },
+        {
+          title: 'How does Ladder work?',
+          info: [
+            <Stack key={1} flexDirection={'column'} gap={10}>
+              <Box>
+                <Typography sx={{ fontSize: 18, fontWeight: 600 }}>
+                  Unlock the <br /> true potential of NFTs
+                </Typography>
+                <Typography mt={40} sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of trading peer-to-peer. One can think of it as the Uniswap for NFTs, with a profound GameFi
+                  focus.
+                </Typography>
+                <Typography mt={10} sx={{ fontSize: 16 }}>
+                  Ladder AMM is a hybrid AMM combining fungible and non-fungible tokens. Unlike a traditional AMM where
+                  paired assets are all ERC-20, Ladder AMM supports non-fungible asset like ERC-721 & ERC-1155 as the
+                  pair option.
+                </Typography>
+              </Box>
+              <Box>
+                <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
+              </Box>
+            </Stack>
           ]
         },
         {
@@ -1754,6 +1801,26 @@ const LadderBitswapData2: IPrivatePadProp = {
           ]
         },
         {
+          title: 'How does BitSwap work?',
+          info: [
+            <Box key={1} sx={{ ol: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <Typography sx={{ fontSize: 16 }}>
+                By integrating with Multibit and BitStable, BitSwap could support cross-chain swap in three steps:
+              </Typography>
+              <ol>
+                <li>{`ERC20 <–> DAII: users can swap any ERC20 token (ETH/USDT/etc..) to DAII on BitSwap. DAII is the first and largest original stablecoin in Bitcoin Ecosystem and BitSwap provides the best liquidity for DAII among multi-chains.`}</li>
+                <li>{`DAII <–> bridged BRC20: BitSwap introduces DAII As A Service (DAAS) and fosters enhanced liquidity pairing DAII with other BRC20 assets. Users can swap DAII with any bridged BRC20 tokens on BitSwap. `}</li>
+                <li>{`bridged BRC20 <–> BRC20: BitSwap integrates Multibit bridge’s innovation and enables users to transfer bridged BRC20 to Bitcoin seamlessly.`}</li>
+              </ol>
+              <Typography sx={{ fontSize: 16 }}>
+                Bitcoin will provide full access and functionalities for the three steps above, and will integrate three
+                steps into one-click trading in the near future.
+              </Typography>
+              <img style={{ width: '100%', marginTop: 10 }} src={BitSwapImage1} />
+            </Box>
+          ]
+        },
+        {
           title: 'Social Links',
           info: [
             <Stack
@@ -1819,6 +1886,31 @@ const LadderBitswapData2: IPrivatePadProp = {
                 </Typography>
               </Stack>
             </Box>
+          ]
+        },
+        {
+          title: 'How does Ladder work?',
+          info: [
+            <Stack key={1} flexDirection={'column'} gap={10}>
+              <Box>
+                <Typography sx={{ fontSize: 18, fontWeight: 600 }}>
+                  Unlock the <br /> true potential of NFTs
+                </Typography>
+                <Typography mt={40} sx={{ fontSize: 16 }}>
+                  Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
+                  instead of trading peer-to-peer. One can think of it as the Uniswap for NFTs, with a profound GameFi
+                  focus.
+                </Typography>
+                <Typography mt={10} sx={{ fontSize: 16 }}>
+                  Ladder AMM is a hybrid AMM combining fungible and non-fungible tokens. Unlike a traditional AMM where
+                  paired assets are all ERC-20, Ladder AMM supports non-fungible asset like ERC-721 & ERC-1155 as the
+                  pair option.
+                </Typography>
+              </Box>
+              <Box>
+                <img style={{ width: '100%', margin: '0 auto' }} src={LadderImg1} />
+              </Box>
+            </Stack>
           ]
         },
         {

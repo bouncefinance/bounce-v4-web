@@ -5,7 +5,7 @@ import { ProjectHead, Tabs } from './index'
 import OtherProjectTab from './components/otherProjectTab'
 
 export default function ProjectInfo() {
-  const item = PrivatePadDataList.find(i => i.keyId === 24) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 25) as IPrivatePadProp
 
   return (
     <Box>
