@@ -4,6 +4,7 @@ import QrcodeImg from 'assets/imgs/nftLottery/banner/qrcode.png'
 import FontBg from 'assets/imgs/nftLottery/banner/font.svg'
 import { ReactComponent as XSvg } from 'assets/imgs/nftLottery/banner/x.svg'
 import Image from 'components/Image'
+import { WithAnimation } from 'components/WithAnimation'
 
 const CardItem = styled(Box)(() => ({
   position: 'relative',
@@ -250,51 +251,55 @@ const Cards = () => {
         }}
         src={QrcodeImg}
       />
-      <MainCard
-        sx={{
-          position: 'absolute',
-          top: 81,
-          left: '50%',
-          zIndex: '3',
-          ...styleConfig.card1
-        }}
-      />
-      <SubCard
-        sx={{
-          position: 'absolute',
-          top: 85,
-          left: '51%',
-          zIndex: '2',
-          ...styleConfig.card2
-        }}
-      />
-      <SubCard
-        sx={{
-          position: 'absolute',
-          top: 90,
-          left: '52%',
-          zIndex: '1',
-          ...styleConfig.card3
-        }}
-      />
-      <SubCard
-        sx={{
-          position: 'absolute',
-          top: 85,
-          right: '51%',
-          zIndex: '2',
-          ...styleConfig.card4
-        }}
-      />
-      <SubCard
-        sx={{
-          position: 'absolute',
-          top: 90,
-          right: '52%',
-          zIndex: '1',
-          ...styleConfig.card5
-        }}
-      />
+      <WithAnimation rootMargin="-30% 0% -30% 0%">
+        <>
+          <MainCard
+            sx={{
+              position: 'absolute',
+              top: 81,
+              left: '50%',
+              zIndex: '3',
+              ...styleConfig.card1
+            }}
+          />
+          <SubCard
+            sx={{
+              position: 'absolute',
+              top: 85,
+              left: '51%',
+              zIndex: '2',
+              ...styleConfig.card2
+            }}
+          />
+          <SubCard
+            sx={{
+              position: 'absolute',
+              top: 90,
+              left: '52%',
+              zIndex: '1',
+              ...styleConfig.card3
+            }}
+          />
+          <SubCard
+            sx={{
+              position: 'absolute',
+              top: 85,
+              right: '51%',
+              zIndex: '2',
+              ...styleConfig.card4
+            }}
+          />
+          <SubCard
+            sx={{
+              position: 'absolute',
+              top: 90,
+              right: '52%',
+              zIndex: '1',
+              ...styleConfig.card5
+            }}
+          />
+        </>
+      </WithAnimation>
     </Box>
   )
 }

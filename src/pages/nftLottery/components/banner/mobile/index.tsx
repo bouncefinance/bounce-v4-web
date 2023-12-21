@@ -224,9 +224,7 @@ const PcBanner = () => {
           </Typography>
         </Box>
       </WithAnimation>
-      <WithAnimation rootMargin="-30% 0% -30% 0%">
-        <Cards />
-      </WithAnimation>
+      <Cards />
     </Box>
   )
 }
