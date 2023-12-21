@@ -1686,9 +1686,10 @@ const AmmxAuctionData: IPrivatePadProp = {
                 <Typography sx={{ fontSize: 16 }}>
                   Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
                   instead of directly trading between themselves. If you're familiar with a decentralized exchange like
-                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
-                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
-                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                  Uniswap, Ladder employs a similar concept but for NFTs. <br />
+                  Now, with the collaboration with Multibit Bridge, Ladder has extended support for users to engage in
+                  Ordinals in the BTC ecosystem. This significantly reduces the barriers for users to enjoy the
+                  prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
                   Here's how it works:
@@ -2000,9 +2001,10 @@ const AmmxDaiiData: IPrivatePadProp = {
                 <Typography sx={{ fontSize: 16 }}>
                   Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
                   instead of directly trading between themselves. If you're familiar with a decentralized exchange like
-                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
-                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
-                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                  Uniswap, Ladder employs a similar concept but for NFTs.
+                  <br /> Now, with the collaboration with Multibit Bridge, Ladder has extended support for users to
+                  engage in Ordinals in the BTC ecosystem. This significantly reduces the barriers for users to enjoy
+                  the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
                   Here's how it works:
@@ -2314,9 +2316,9 @@ const AmmxRandomData: IPrivatePadProp = {
                 <Typography sx={{ fontSize: 16 }}>
                   Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
                   instead of directly trading between themselves. If you're familiar with a decentralized exchange like
-                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
-                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
-                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                  Uniswap, Ladder employs a similar concept but for NFTs. <br /> Now, with the collaboration with
+                  Multibit Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem.
+                  This significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
                   Here's how it works:
