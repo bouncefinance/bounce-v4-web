@@ -1536,7 +1536,7 @@ const LadderBitswapData1: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
+  desc: 'Ladder is channelling liquidity to where it matters most. Originally a disruptive NFT AMM with a focus on GameFi, Ladder is pushing the boundaries by creating the first-ever cross-chain NFT swap for the Bitcoin ecosystem.',
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
@@ -1552,13 +1552,16 @@ const LadderBitswapData1: IPrivatePadProp = {
           title: 'Introduction',
           info: [
             <Box key={1}>
-              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Bitswap</Typography>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
               <Typography mt={40}>
-                Bitswap is at the forefront of cross-chain exchange, offering a seamless trading experience for BRC20
-                assets across diverse blockchains. As the premier liquidity hub for Bitcoin layer2s, we enable
-                effortless and secure cross-chain transactions. Our platform is dedicated to providing users with easy
-                access to the vast Bitcoin ecosystem, enhancing their trading journey with unparalleled convenience and
-                efficiency.
+                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
+                trading experience for BRC20 assets across diverse blockchains
+              </Typography>
+              <Typography mt={15}>
+                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
+                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
+                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
+                journey with unparalleled convenience and efficiency.
               </Typography>
             </Box>
           ]
@@ -1632,7 +1635,7 @@ const LadderBitswapData1: IPrivatePadProp = {
           title: 'Introduction',
           info: [
             <Box key={1}>
-              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Ladder</Typography>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is Ladder Protocol?</Typography>
               <Stack gap={15} mt={40}>
                 <Typography>
                   Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
@@ -1653,7 +1656,7 @@ const LadderBitswapData1: IPrivatePadProp = {
         {
           title: 'Advantages',
           info: [
-            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, fontSize: 16 } }}>
               <ul>
                 <li>Instant liquidity: no need to list and wait for a buyer</li>
                 <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
@@ -1822,7 +1825,7 @@ const LadderBitswapData2: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: 'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.',
+  desc: 'Ladder is channelling liquidity to where it matters most. Originally a disruptive NFT AMM with a focus on GameFi, Ladder is pushing the boundaries by creating the first-ever cross-chain NFT swap for the Bitcoin ecosystem. ',
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
@@ -1838,13 +1841,16 @@ const LadderBitswapData2: IPrivatePadProp = {
           title: 'Introduction',
           info: [
             <Box key={1}>
-              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Bitswap</Typography>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
               <Typography mt={40}>
-                Bitswap is at the forefront of cross-chain exchange, offering a seamless trading experience for BRC20
-                assets across diverse blockchains. As the premier liquidity hub for Bitcoin layer2s, we enable
-                effortless and secure cross-chain transactions. Our platform is dedicated to providing users with easy
-                access to the vast Bitcoin ecosystem, enhancing their trading journey with unparalleled convenience and
-                efficiency.
+                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
+                trading experience for BRC20 assets across diverse blockchains
+              </Typography>
+              <Typography mt={15}>
+                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
+                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
+                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
+                journey with unparalleled convenience and efficiency.
               </Typography>
             </Box>
           ]
@@ -1918,29 +1924,24 @@ const LadderBitswapData2: IPrivatePadProp = {
           title: 'Introduction',
           info: [
             <Box key={1}>
-              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>Ladder</Typography>
-              <Stack gap={15} mt={40}>
-                <Typography>
-                  Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
-                  NFTs, supporting a range of standards including ERC-721, ERC-1155, ERC-3525, and ERC-20.
-                </Typography>
-                <Typography>
-                  Our platform enables users to seamlessly transition in and out of NFT trades, eliminating the need for
-                  a counterparty purchase order.
-                </Typography>
-                <Typography>
-                  Focused on channeling liquidity where it's most needed, Ladder has established a leading position as
-                  the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
-                  functionality within the Bitcoin Ecosystem.
-                </Typography>
-              </Stack>
+              <Typography sx={{ fontSize: 36, fontWeight: 600 }}>What is BitSwap?</Typography>
+              <Typography mt={40}>
+                BitSwap Protocol is the first cross-chain swap for BRC20 and Bitcoin Ecosystem, offering a seamless
+                trading experience for BRC20 assets across diverse blockchains
+              </Typography>
+              <Typography mt={15}>
+                As the premier liquidity hub for the Bitcoin ecosystem, we enable effortless and secure cross-chain
+                transactions through collaboration with Multibit Bridge and DAII stablecoin. Our platform is dedicated
+                to providing multi-chain users with easy access to the vast Bitcoin ecosystem, enhancing their trading
+                journey with unparalleled convenience and efficiency.
+              </Typography>
             </Box>
           ]
         },
         {
           title: 'Advantages',
           info: [
-            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, fontSize: 16 } }}>
               <ul>
                 <li>Instant liquidity: no need to list and wait for a buyer</li>
                 <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
