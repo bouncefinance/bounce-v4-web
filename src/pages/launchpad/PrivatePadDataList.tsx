@@ -1488,33 +1488,48 @@ const LadderBitswapData1: IPrivatePadProp = {
   liveLink: routes.thirdPart.AmmxAuction,
   projectInfo: [
     {
-      title: 'What is AMMMS',
+      title: 'What is AMMM',
       info: [
-        'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.'
+        <Typography fontSize={16} key={1}>
+          AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue
+          towards repurchasing AMMX.
+        </Typography>
       ]
     },
     {
       title: 'Tokenomics',
       info: [
-        <Box key={1}>
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
           <ul>
-            <li>Total supply: 2.1 Billion</li>
-          </ul>
-          <Typography>Token Allocation:</Typography>
-          <ul>
-            <li>Public sale on Bounce: (50%)</li>
+            <li>total supply: 2.1 Billion</li>
+            <li>ticker AMMX</li>
             <li>
-              Liquidity Mining on Bitswap & Ladder (38%)
+              public sale: 50% of Total Supply on Bounce Finance
               <ul>
-                <li>Airdrop Farming: 1.5% </li>
-                <li>
-                  Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX
-                  can be used to boost the weight farming rate.
-                </li>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500k value of Auction</li>
               </ul>
             </li>
-            <li>Initial liquidity for AMMX pool: (7%)</li>
-            <li>Team: (5%, locked for 6 months and linear vesting for 15 months)</li>
+            <li>FDV: $2,000,000</li>
+            <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
+            <li>Airdrop: 1.5%</li>
+            <li>
+              LP: 7%
+              <ul>
+                <li>3.5% in Uniswap V3, AMMX-ETH</li>
+                <li>3.5% in BitSwap, AMMX-DAII</li>
+              </ul>
+            </li>
+            <li>
+              Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX can
+              be used to boost the weight farming rate.
+              <ul>
+                <li>AMMX-DAII</li>
+                <li>AUCTION-DAII</li>
+                <li>USDT-DAII</li>
+                <li>BSSB-DAII</li>
+                <li>MUBI-DAII</li>
+              </ul>
+            </li>
           </ul>
         </Box>
       ]
@@ -1526,7 +1541,7 @@ const LadderBitswapData1: IPrivatePadProp = {
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
     { title: 'Token Price', content: '-- AUCTION' },
-    { title: 'Token Amount', content: '525,000,000' },
+    { title: 'Token Amount', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   otherProject: [
@@ -1621,18 +1636,37 @@ const LadderBitswapData1: IPrivatePadProp = {
               <Stack gap={15} mt={40}>
                 <Typography>
                   Ladder is a decentralized automated market maker (AMM) protocol that offers instant liquidity for
-                  NFTs, supporting a range of standards including ERC-721, ERC-1155, ERC-3525, and ERC-20.
+                  NFTs, supporting a wide range of standards including ERC-721, ERC-1155, ERC-3525, ERC-20, as well as
+                  bridged BRC-20 tokens. Our platform enables users to seamlessly enter NFT trades (via liquidity
+                  pools), eliminating the need for a peer-to-peer counterparty.
                 </Typography>
+
                 <Typography>
-                  Our platform enables users to seamlessly transition in and out of NFT trades, eliminating the need for
-                  a counterparty purchase order.
-                </Typography>
-                <Typography>
-                  Focused on channeling liquidity where it's most needed, Ladder has established a leading position as
+                  Focused on channelling liquidity where it's most needed, Ladder has established a leading position as
                   the go-to NFT AMM for GameFi assets. Now, we're at the forefront of innovating cross-chain NFT swap
-                  functionality within the Bitcoin Ecosystem.
+                  functionality for the Bitcoin ecosystem.
                 </Typography>
               </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Advantages',
+          info: [
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <ul>
+                <li>Instant liquidity: no need to list and wait for a buyer</li>
+                <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
+                <li>Minimal slippage: negligible difference between the sell price set and the actual selling price</li>
+                <li>
+                  Convenient user journey: Ladder allows users to trade Ordinals in a similar way to ERC20 NFTs,
+                  allowing more retail users to enter the Bitcoin ecosystem
+                </li>
+                <li>
+                  Bringing liquidity to the Bitcoin ecosystem: Ladder is creating liquidity pools for the leading
+                  Ordinals collections making the whole ecosystem more efficient for all the participants
+                </li>
+              </ul>
             </Box>
           ]
         },
@@ -1740,33 +1774,48 @@ const LadderBitswapData2: IPrivatePadProp = {
   liveLink: routes.thirdPart.AmmxDaii,
   projectInfo: [
     {
-      title: 'What is AMMMS',
+      title: 'What is AMMM',
       info: [
-        'AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue towards repurchasing AMMX.'
+        <Typography fontSize={16} key={1}>
+          AMMX serves as the ecosystem token for Bitswap and Ladder; these protocols allocate 50% of their fee revenue
+          towards repurchasing AMMX.
+        </Typography>
       ]
     },
     {
       title: 'Tokenomics',
       info: [
-        <Box key={1}>
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10, mt: 10 }, fontSize: 16 }}>
           <ul>
-            <li>Total supply: 2.1 Billion</li>
-          </ul>
-          <Typography>Token Allocation:</Typography>
-          <ul>
-            <li>Public sale on Bounce: (50%)</li>
+            <li>total supply: 2.1 Billion</li>
+            <li>ticker AMMX</li>
             <li>
-              Liquidity Mining on Bitswap & Ladder (38%)
+              public sale: 50% of Total Supply on Bounce Finance
               <ul>
-                <li>Airdrop Farming: 1.5% </li>
-                <li>
-                  Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX
-                  can be used to boost the weight farming rate.
-                </li>
+                <li>Total Raise Through Token Launch: 500,000 DAII + $500k value of Auction</li>
               </ul>
             </li>
-            <li>Initial liquidity for AMMX pool: (7%)</li>
-            <li>Team: (5%, locked for 6 months and linear vesting for 15 months)</li>
+            <li>FDV: $2,000,000</li>
+            <li>Team: 5% (locked for 6 months and linear vesting for 15 months)</li>
+            <li>Airdrop: 1.5%</li>
+            <li>
+              LP: 7%
+              <ul>
+                <li>3.5% in Uniswap V3, AMMX-ETH</li>
+                <li>3.5% in BitSwap, AMMX-DAII</li>
+              </ul>
+            </li>
+            <li>
+              Liquidity Mining: 36.5%, 0.1% daily for 365 days will be distributed daily dependent on weights. AMMX can
+              be used to boost the weight farming rate.
+              <ul>
+                <li>AMMX-DAII</li>
+                <li>AUCTION-DAII</li>
+                <li>USDT-DAII</li>
+                <li>BSSB-DAII</li>
+                <li>MUBI-DAII</li>
+              </ul>
+            </li>
           </ul>
         </Box>
       ]
@@ -1778,7 +1827,7 @@ const LadderBitswapData2: IPrivatePadProp = {
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
     { title: 'Token Price', content: '-- DAII' },
-    { title: 'Token Amount', content: '525,000,000' },
+    { title: 'Token Amount', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   otherProject: [
@@ -1885,6 +1934,26 @@ const LadderBitswapData2: IPrivatePadProp = {
                   functionality within the Bitcoin Ecosystem.
                 </Typography>
               </Stack>
+            </Box>
+          ]
+        },
+        {
+          title: 'Advantages',
+          info: [
+            <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+              <ul>
+                <li>Instant liquidity: no need to list and wait for a buyer</li>
+                <li>Low commissions: Up to 95% lower than traditional NFT marketplaces.</li>
+                <li>Minimal slippage: negligible difference between the sell price set and the actual selling price</li>
+                <li>
+                  Convenient user journey: Ladder allows users to trade Ordinals in a similar way to ERC20 NFTs,
+                  allowing more retail users to enter the Bitcoin ecosystem
+                </li>
+                <li>
+                  Bringing liquidity to the Bitcoin ecosystem: Ladder is creating liquidity pools for the leading
+                  Ordinals collections making the whole ecosystem more efficient for all the participants
+                </li>
+              </ul>
             </Box>
           ]
         },
