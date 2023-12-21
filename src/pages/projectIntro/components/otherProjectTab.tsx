@@ -60,6 +60,7 @@ const TabBtnStyle = styled(Button)`
   padding: 16px 20px;
   border-radius: 8px;
   box-sizing: border-box;
+  border: 1px solid transparent;
   &.second.active {
     background: #e1f25c;
     & > .text {
@@ -120,7 +121,14 @@ const CardSwitch = ({ tab, renderEl, level }: ISwitchTab & { level: Level }) => 
   const isMd = useBreakpoint('md')
   return (
     <Stack gap={isMd ? 0 : 24} sx={{ width: '100%' }}>
-      <Box sx={{ overflow: 'scroll', '&::-webkit-scrollbar': { display: 'none' } }}>
+      <Box
+        sx={{
+          overflow: 'auto',
+          '&::-webkit-scrollbar': { display: 'none' },
+          scrollbarWidth: 'none',
+          '-ms-overflow-style': 'none'
+        }}
+      >
         <TabBtnContainer className={level}>
           {tab.map((i, d) => (
             <TabBtnStyle key={i} onClick={() => setCurTab(d)} className={`${level} ${curTab === d ? 'active' : ''}`}>
