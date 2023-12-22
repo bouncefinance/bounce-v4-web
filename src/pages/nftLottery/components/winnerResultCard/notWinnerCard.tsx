@@ -1,7 +1,8 @@
 import { styled, Box } from '@mui/material'
-import Info from '../poolCard/card/components/info'
+import Info, { MobileRotateInfo } from '../poolCard/card/components/info'
 import { ReactComponent as Cross1 } from 'assets/imgs/nftLottery/cross1.svg'
 import { ReactComponent as Cross2 } from 'assets/imgs/nftLottery/cross2.svg'
+import useBreakpoint from 'hooks/useBreakpoint'
 const Container = styled(Box)`
   position: relative;
   /* left: -70px; */
@@ -28,10 +29,12 @@ const CrossBox = () => {
   )
 }
 const NotWinnerCard = () => {
+  const isSm = useBreakpoint('sm')
   return (
     <Container>
       <LeftCard>
-        <Info />
+        {!isSm && <Info />}
+        {isSm && <MobileRotateInfo />}
       </LeftCard>
       <RightCard>
         <CrossBox />

@@ -1,6 +1,7 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import WordListImg from 'assets/imgs/nftLottery/card/word-list.png'
 import WordList2Img from 'assets/imgs/nftLottery/card/word-list-2.png'
+import WordList3Img from 'assets/imgs/nftLottery/card/word-list-3.svg'
 import { ReactComponent as LineSvg } from 'assets/imgs/nftLottery/card/line.svg'
 import Line2Svg from 'assets/imgs/nftLottery/card/line2.svg'
 const Container = styled(Box)`
@@ -155,6 +156,22 @@ export const MobileInfo = () => {
       <LineBox style={{ bottom: -3, width: '100%' }}>
         <img style={{ width: '100%' }} src={Line2Svg} />
       </LineBox>
+    </Box>
+  )
+}
+export const MobileRotateInfo = () => {
+  return (
+    <Box
+      sx={{
+        width: 150,
+        height: 173,
+        background: '#000',
+        boxShadow: '4.2px -6.72px 10.08px 0px rgba(64, 63, 60, 0.10)',
+        transform: 'rotate(-16.428deg)',
+        position: 'relative'
+      }}
+    >
+      <img src={WordList3Img} style={{ transform: 'rotate(16.428deg)', position: 'absolute', left: -16 }} />
     </Box>
   )
 }
