@@ -2503,6 +2503,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1732852800000,
       end: 0
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Price Auction',
     img: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
     avatar: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
@@ -2559,10 +2560,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             key={1}
             sx={{ a: { textDecoration: 'underline', color: 'gray' }, img: { width: '100%', height: '100%' } }}
           >
-            <a href="https://docsend.com/view/rb64i7ejgbs6ufpn" target="_blank" rel="noreferrer">
-              https://docsend.com/view/rb64i7ejgbs6ufpn
-            </a>
-            <Typography my={5}>On page 18</Typography>
             <img src={PORT3Tokenomics} />
           </Box>
         ]
