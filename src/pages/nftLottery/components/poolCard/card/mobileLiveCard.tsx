@@ -7,8 +7,10 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
   const [zoom, setZoom] = useState(1)
   const setZoomHandle = () => {
     const w = window.innerWidth
-    const z = (w - 66) / 294
-    setZoom(z)
+    if (w <= 360) {
+      const z = (w - 66) / 294
+      setZoom(z)
+    }
   }
   useEffect(() => {
     setZoomHandle()

@@ -12,8 +12,8 @@ const PoolDetail = () => {
         padding: isMd ? '48px 0' : '120px 0'
       }}
     >
-      {false && <BeforeOpenLottery />}
-      {true && <AfterOpenLottery />}
+      {true && <BeforeOpenLottery />}
+      {false && <AfterOpenLottery />}
     </Box>
   )
 }

@@ -2,6 +2,7 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
 import ImgCard from '../../components/tokenInformation/imgCard'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { WithAnimation } from 'components/WithAnimation'
 const SectionBody = styled(Box)`
   width: 100%;
   background: #eeece6;
@@ -182,11 +183,13 @@ const RightContent = () => {
 const TokenInformation = () => {
   return (
     <SectionBody>
-      <Container>
-        <LeftContent />
-        <MiddleLine />
-        <RightContent />
-      </Container>
+      <WithAnimation>
+        <Container>
+          <LeftContent />
+          <MiddleLine />
+          <RightContent />
+        </Container>
+      </WithAnimation>
     </SectionBody>
   )
 }
