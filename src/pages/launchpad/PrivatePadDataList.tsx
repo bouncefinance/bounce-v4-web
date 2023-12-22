@@ -2571,9 +2571,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
             <ul>
-              <li>
+              {/* <li>
                 Explain the unique selling points and advantages of your project compared to others in the market.
-              </li>
+              </li> */}
               <li>
                 The first ever Web3 social data layer & natural language processing on-chain workflow executor, it’s a
                 risk free trading tool without the permission of private key needed nor custody. Port3 has yet exceeded
@@ -2601,12 +2601,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               </li>
               <li>
                 <Typography sx={{ fontSize: 16 }}>KOL, media partners & big brands:</Typography>
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing
+                <a href="https://soquest.xyz/spaces" target="_blank" rel="noreferrer">
+                  https://soquest.xyz/spaces
                 </a>
               </li>
             </ul>
