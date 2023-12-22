@@ -35,7 +35,7 @@ export default function ArtistsList({
       <StyledBox
         sx={{
           '&:hover #imgBox': {
-            transform: `translate(-100%,-40%) ${rotate} scale(0.9)`,
+            transform: `translate(0,-40%) ${rotate} scale(0.9)`,
             opacity: '1'
           }
         }}
@@ -99,8 +99,8 @@ export default function ArtistsList({
             background: `url(${url})`,
             position: 'absolute',
             top: '0',
-            left: '40%',
-            transform: 'translate(-100%,-40%) scale(0.5)',
+            left: '370px',
+            transform: 'translate(0,-40%) scale(0.5)',
             zIndex: '10',
             opacity: '0',
             transition: '1.5s'

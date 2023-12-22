@@ -19,7 +19,7 @@ export default function AboutTab({ value, name, imgSrc }: { value?: string; name
         {name}
       </Typography>
       <Text style={{ margin: isSm ? '16px 0' : '16px 0 24px' }}>{value}</Text>
-      <Image src={imgSrc ? imgSrc : ''} width={isSm ? 328 : 600} />
+      <Image src={imgSrc ? imgSrc : ''} width={isSm ? '100%' : 600} />
     </Box>
   )
 }

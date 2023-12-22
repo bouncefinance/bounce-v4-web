@@ -62,14 +62,18 @@ const RealWorldAirdrop = () => {
           </Box>
         </Box>
         <Box padding={isSm ? '8px 38.4px' : '10px 24px'} sx={{ cursor: 'pointer' }}>
-          <Box padding={isSm ? '12.8px 12.8px 19.2px' : '16px 16px 24px'} bgcolor={'#0F0F0F'} borderRadius={16}>
-            <Image src={box_bg} width={225} height={225} />
+          <Box
+            padding={isSm ? '12.8px 12.8px 19.2px' : '16px 16px 24px'}
+            bgcolor={'#0F0F0F'}
+            borderRadius={isSm ? '12.8px' : 16}
+          >
+            <Image src={box_bg} width={isSm ? '100%' : 225} />
             <Typography
               fontSize={18}
               lineHeight={'140%'}
               fontWeight={400}
               color={'var(--AI-white, #FFF)'}
-              margin={'16px 0 8px'}
+              margin={isSm ? '12.8px 0 6.4px' : '16px 0 8px'}
             >
               Mysterious BlindBox
             </Typography>

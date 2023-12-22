@@ -127,7 +127,7 @@ export default function Countdown({
 }) {
   const isSm = useBreakpoint('sm')
   if (!timeList) {
-    timeList = [170312760, 170312760, 170312760]
+    timeList = [1703127600, 1703127600, 1703127600]
   }
   const [countdown, { hours, minutes, seconds }] = useCountDown({
     targetDate: startTime * 1000
