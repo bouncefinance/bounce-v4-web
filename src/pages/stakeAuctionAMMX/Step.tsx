@@ -38,6 +38,7 @@ import {
   StepperStyle
 } from 'pages/launchpadCoin/Step'
 import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from '../../constants'
+import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
 
 export function Steps({
   coinInfo,
@@ -410,20 +411,20 @@ function Step1({
                       }
                     }}
                   >
-                    GoDID <b>x</b> AUCTION Pool
+                    BitSwap <b>x</b> Ladder Pool
                   </CardLabelStyle>
-                  <CardContentStyle>Stake $AUCTION to earn proportional $BDID allocation</CardContentStyle>
+                  <CardContentStyle>Stake $AUCTION to earn proportional $AMMX allocation</CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>5 Token1</CardLabelStyle>
+                    <CardLabelStyle>10 AUCTION</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
-                    <CardContentStyle>Total Supply of Token0</CardContentStyle>
-                    <CardLabelStyle>20,000</CardLabelStyle>
+                    <CardContentStyle>Total Supply of AMMX</CardContentStyle>
+                    <CardLabelStyle>10,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
@@ -432,7 +433,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 100,000 Token1
+                    {token1Currency?.symbol} / 100,000 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -542,13 +543,17 @@ function Step2({
   const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
-    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'Token0', 'Token0')
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'AMMX', 'AMMX')
   }, [_token0])
   const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
   const token1 = useMemo(() => {
     if (!_token1) return undefined
-    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'Token1', 'Token1')
+    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'AUCTION', 'AUCTION')
   }, [_token1])
+  const token0TotalAmount = useMemo(() => {
+    if (!token0 || !coinInfo?.poolInfo?.amountTotal0) return undefined
+    return CurrencyAmount.fromRawAmount(token0, coinInfo?.poolInfo?.amountTotal0.toString())
+  }, [coinInfo?.poolInfo?.amountTotal0, token0])
   const token1TotalAmount = useMemo(() => {
     if (!token1 || !coinInfo?.token1Amount) return undefined
     return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
@@ -580,7 +585,7 @@ function Step2({
             iconType: 'success',
             againBtn: 'Close',
             title: 'Success!',
-            content: `You have successfully claim ${
+            content: `You have successfully claimed ${
               token0 &&
               coinInfo?.finalAllocation?.mySwappedAmount0 &&
               coinInfo.claimedToken0 &&
@@ -596,7 +601,6 @@ function Step2({
         .catch()
     } catch (error) {
       const err: any = error
-      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',
@@ -632,9 +636,9 @@ function Step2({
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            cancelBtn: 'Save',
+            cancelBtn: 'Close',
             title: 'Success! ',
-            content: `You have successfully claim ${
+            content: `You have successfully claimed ${
               token1 &&
               coinInfo?.finalAllocation?.myUnSwappedAmount1 &&
               CurrencyAmount.fromRawAmount(
@@ -651,7 +655,6 @@ function Step2({
         .catch()
     } catch (error) {
       const err: any = error
-      console.error(err)
       hideDialogConfirmation()
       show(DialogTips, {
         iconType: 'error',
@@ -729,7 +732,7 @@ function Step2({
         variant="body1"
       >
         The allocation calculation is complete. We will deduct the corresponding $AUCTION from your account based on
-        your final $BDID allocation, which will be transferred to your spot account along with your remaining $AUCTION.
+        your final $AMMX allocation, which will be transferred to your spot account along with your remaining $AUCTION.
       </Typography>
       {account &&
         coinInfo?.myToken1Amount?.eq(0) &&
@@ -786,6 +789,22 @@ function Step2({
                   </Box>
                   <CardContentBoldTextStyle>
                     {token1TotalAmount?.toSignificant() || '0'} {token1?.symbol}
+                  </CardContentBoldTextStyle>
+                </Stack>
+
+                <Stack spacing={16}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 6,
+                      alignItems: 'center'
+                    }}
+                  >
+                    <img src={TokenIcon} width={17} height={17} style={{ borderRadius: '50%' }} />
+                    <CardContentTitleStyle>Token Amount</CardContentTitleStyle>
+                  </Box>
+                  <CardContentBoldTextStyle>
+                    {token0TotalAmount?.toSignificant() || '0'} {token0?.symbol}
                   </CardContentBoldTextStyle>
                 </Stack>
 
@@ -915,7 +934,7 @@ function Step2({
                     <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
                   )} */}
                   {account && chainId !== ChainId.SEPOLIA && (
-                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
+                    <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
                   )}
                 </Stack>
               </Stack>

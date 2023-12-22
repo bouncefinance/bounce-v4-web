@@ -1471,7 +1471,7 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
-const AmmxAuctionData: IPrivatePadProp = {
+export const AmmxAuctionData: IPrivatePadProp = {
   keyId: 25,
   liveTimeStamp: {
     start: 1703390400000,
@@ -1785,7 +1785,7 @@ const AmmxAuctionData: IPrivatePadProp = {
     }
   ]
 }
-const AmmxDaiiData: IPrivatePadProp = {
+export const AmmxDaiiData: IPrivatePadProp = {
   keyId: 24,
   liveTimeStamp: {
     start: 1703390400000,

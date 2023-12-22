@@ -1,5 +1,5 @@
 import { ProjectHead, Tabs } from 'pages/projectIntro'
-import { PrivateStakeAuctionData } from 'pages/launchpad/PrivatePadDataList'
+import { AmmxDaiiData } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
 import { useApproveCallback } from 'hooks/useApproveCallback'
 import { useStakeTokenWithTimeWeightContract } from 'hooks/useContract'
@@ -16,7 +16,7 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { useCallback } from 'react'
 
 const Page = () => {
-  const poolId = 7
+  const poolId = 8
   const { account } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
   const chainId = ChainId.SEPOLIA
@@ -31,9 +31,9 @@ const Page = () => {
     token1.address,
     '20000000000',
     '100000000000000000000000',
-    1703148000,
-    1703148600,
-    1703148600,
+    1703153400,
+    1703154000,
+    1703154000,
     1
   ]
 
@@ -98,15 +98,14 @@ const Page = () => {
 
   return (
     <>
-      <ProjectHead item={PrivateStakeAuctionData} />
+      <ProjectHead item={AmmxDaiiData} />
       <div style={{ background: '#f5f5f1' }}>
         <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
       </div>
-      <StakeButton sx={{ margin: '20px 80px' }} onClick={() => createPool()}>
-        Create Pool
-      </StakeButton>
       <div style={{ width: '100%' }}>
         {coinInfo?.poolInfo &&
+          account &&
+          account === coinInfo.poolInfo.creator &&
           nowTime() > Number(coinInfo.poolInfo.releaseAt) * 1000 + Number(coinInfo.poolInfo.releaseDuration) * 1000 && (
             <StakeButton
               sx={{ margin: '20px auto' }}
@@ -116,17 +115,20 @@ const Page = () => {
               Creator Claim
             </StakeButton>
           )}
-        {coinInfo?.poolInfo && nowTime() < Number(coinInfo.poolInfo.openAt) * 1000 && (
-          <StakeButton
-            sx={{ margin: '20px auto' }}
-            onClick={toClaim}
-            disabled={account === undefined || coinInfo?.poolInfo?.creator !== account || coinInfo.creatorClaimed}
-          >
-            Creator Cancel
-          </StakeButton>
-        )}
+        {coinInfo?.poolInfo &&
+          account &&
+          account === coinInfo.poolInfo.creator &&
+          nowTime() < Number(coinInfo.poolInfo.openAt) * 1000 && (
+            <StakeButton
+              sx={{ margin: '20px auto' }}
+              onClick={toClaim}
+              disabled={account === undefined || coinInfo?.poolInfo?.creator !== account || coinInfo.creatorClaimed}
+            >
+              Creator Cancel
+            </StakeButton>
+          )}
       </div>
-      <Tabs item={PrivateStakeAuctionData} />
+      <Tabs item={AmmxDaiiData} />
       <FooterPc />
     </>
   )

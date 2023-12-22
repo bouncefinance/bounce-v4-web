@@ -123,9 +123,9 @@ export const routes = {
       dll: '/launchpad/godid-staking-daii',
       pool: '/auction/godid-random-selection'
     },
-    AmmxAuction: '/launchpad/ammx-auction',
-    AmmxDaii: '/launchpad/ammx-daii',
-    AmmxRandom: '/launchpad/ammx-random'
+    AmmxAuction: '/launchpad/ammx-staking-auction',
+    AmmxDaii: '/launchpad/ammx-staking-daii',
+    AmmxRandom: '/launchpad/ammx-random-selection'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

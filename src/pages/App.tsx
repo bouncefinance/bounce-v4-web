@@ -112,12 +112,10 @@ import useBreakpoint from '../hooks/useBreakpoint'
 import DidStakeAuctionPool from './stakeAuctionPool'
 import DidStakeDaiiPool from './stakeDAIIPool'
 import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
-import TestStakeWithTimeWeightPool from './stakeAuctionWithTimeWeight'
-
 import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
-import AmmxAuctionProjectInfo from './projectIntro/AmmxAuctionProjectInfo'
-import AmmxDaiiProjectInfo from './projectIntro/AmmxDaiiProjectInfo'
-import AmmxRandomProjectInfo from './projectIntro/AmmxRandomProjectInfo'
+import AmmxStakeAuctionPool from './stakeAuctionAMMX'
+import AmmxStakeDaiiPool from './stakeDaiiAMMX'
+import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -220,9 +218,9 @@ export default function App() {
                   <Route path={routes.foundo.foundoDetail + '/*'} element={<FoundoDetail />} />
                   <Route path={routes.foundo.foundoNfcDetail + '/*'} element={<FoundoNfcDetail />} />
                   <Route path={routes.thirdPart.MultiBitBridge} element={<MultiBitBridgeProjectInfo />} />
-                  <Route path={routes.thirdPart.AmmxAuction} element={<AmmxAuctionProjectInfo />} />
-                  <Route path={routes.thirdPart.AmmxDaii} element={<AmmxDaiiProjectInfo />} />
-                  <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomProjectInfo />} />
+                  <Route path={routes.thirdPart.AmmxAuction} element={<AmmxStakeAuctionPool />} />
+                  <Route path={routes.thirdPart.AmmxDaii} element={<AmmxStakeDaiiPool />} />
+                  <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomSelection />} />
 
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
@@ -256,7 +254,6 @@ export default function App() {
                   <Route path={routes.thirdPart.Did.dll} element={<DidStakeDaiiPool />} />
                   <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
                   <Route path={routes.thirdPart.Port3} element={<Port3ProjectInfo />} />
-                  <Route path={routes.thirdPart.StakeWithTimeWeight} element={<TestStakeWithTimeWeightPool />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
