@@ -1,5 +1,18 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Box, Link, styled, Stack, Typography, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
+import {
+  Box,
+  Link,
+  styled,
+  Stack,
+  Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableContainer,
+  Paper
+} from '@mui/material'
 import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
 import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitter.svg'
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
@@ -561,6 +574,67 @@ const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
     </Typography>
   ))
   return elArr
+}
+
+const Port3CapTable = () => {
+  const tableData = [
+    ['Kucoin (Lead)', 'EMURGO', 'DWF labs', '', 'Binance Labs'],
+    ['Jump Crypto (Lead)', 'Adaverse', '', '', 'Aptos'],
+    ['Galxe', 'metatech', '', '', 'MASK network'],
+    ['Ankr', 'GALAXY REALM', '', '', 'Opside'],
+    ['Mirror World', 'Automata Network', '', 'Huobi venture', 'Iotex'],
+    ['Gametaverse', 'CSP DAO', '', 'PHD Capital', 'SpaceID'],
+    ['Cogitent', 'gate labs', '', '', ''],
+    ['Paramita Venture', 'evo invest', '', 'Zonff partners', ''],
+    ['ViaBTC', 'bbs finance', '', 'Pontem', ''],
+    ['Cryptonite', '', '', 'G20', ''],
+    ['Lapin.digital', '', '', '', ''],
+    ['Winkrypto', '', '', '', ''],
+    ['block infinity', '', '', '', ''],
+    ['Momentum6', '', '', '', ''],
+    ['SNZ', '', '', '', '']
+  ]
+  return (
+    <Box mt={20}>
+      <TableContainer component={Paper} sx={{ minWidth: 650 }}>
+        <Table aria-label="simple table" stickyHeader>
+          <TableHead>
+            <TableRow
+              sx={{
+                '& .MuiTableCell-root': {
+                  fontSize: 14,
+                  fontWeight: 500,
+                  padding: 8
+                }
+              }}
+            >
+              <TableCell>Invested 1st round</TableCell>
+              <TableCell>Invested 2nd round</TableCell>
+              <TableCell>Invested 3rd round</TableCell>
+              <TableCell>Commitments</TableCell>
+              <TableCell>Grants</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tableData.map((arr, index) => (
+              <TableRow
+                key={index}
+                sx={{
+                  '& .MuiTableCell-root': {
+                    padding: 8
+                  }
+                }}
+              >
+                {arr.map((text, i) => (
+                  <TableCell key={i}>{text}</TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  )
 }
 const DeelanceProjectInfo: IProjectInfo[] = [
   {
@@ -2520,7 +2594,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           >
             <ul>
               <li>
-                <Typography>cap table:</Typography>
+                <Typography sx={{ fontSize: 16 }}>cap table:</Typography>
                 <a
                   href="https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0"
                   target="_blank"
@@ -2528,9 +2602,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
                 >
                   https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0
                 </a>
+                <Port3CapTable />
               </li>
               <li>
-                <Typography>KOL, media partners & big brands:</Typography>
+                <Typography sx={{ fontSize: 16 }}>KOL, media partners & big brands:</Typography>
                 <a
                   href="https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing"
                   target="_blank"
