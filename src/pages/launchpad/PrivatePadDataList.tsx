@@ -1551,7 +1551,7 @@ const AmmxAuctionData: IPrivatePadProp = {
   keyId: 25,
   liveTimeStamp: {
     start: 1703390400000,
-    end: 1703649600000
+    end: 1703736000000
   },
   poolTypeName: 'Staking Auction',
   img: LadderImg,
@@ -1866,7 +1866,7 @@ const AmmxDaiiData: IPrivatePadProp = {
   keyId: 24,
   liveTimeStamp: {
     start: 1703390400000,
-    end: 1703649600000
+    end: 1703736000000
   },
   poolTypeName: 'Staking Auction',
   img: LadderImg,
@@ -2181,7 +2181,7 @@ const AmmxRandomData: IPrivatePadProp = {
   keyId: 26,
   liveTimeStamp: {
     start: 1703390400000,
-    end: 1703649600000
+    end: 1703736000000
   },
   poolTypeName: 'Random Selection Auction',
   img: LadderImg,
