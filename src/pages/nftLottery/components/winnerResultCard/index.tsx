@@ -1,9 +1,11 @@
-import { Box, Stack, styled } from '@mui/material'
+import { Box, Stack, Theme, styled, useTheme } from '@mui/material'
 import { PoolHeadTitle } from '../poolCard/poolHeadTitle'
 import WinnerCard from './winnerCard'
 import NotWinnerCard from './notWinnerCard'
 import Bg1Svg from 'assets/imgs/nftLottery/winner-bg1.svg'
+import Bg1SvgMobile from 'assets/imgs/nftLottery/winner-bg1-mobile.svg'
 import Bg2Svg from 'assets/imgs/nftLottery/winner-bg2.png'
+import Bg2SvgMobile from 'assets/imgs/nftLottery/winner-bg2-mobile.png'
 import { ReactComponent as ShowSvg } from 'assets/imgs/nftLottery/shadow.svg'
 import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 const Container = styled(Box)`
@@ -15,9 +17,14 @@ const Container = styled(Box)`
   background: url(${Bg1Svg});
   background-repeat: no-repeat;
   background-position: center;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    background: url(${Bg1SvgMobile});
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 `
 const WinnerBox = styled(Box)(
-  ({ isWinner }: { isWinner: boolean }) => `  
+  ({ isWinner, theme }: { isWinner: boolean; theme: Theme }) => `  
     width:100%;
     max-width: 1044px;
     height: 865px;
@@ -30,6 +37,10 @@ const WinnerBox = styled(Box)(
           `
         : ''
     }
+   ${theme.breakpoints.down('sm')}{
+            background: url(${Bg2SvgMobile}) lightgray -20px 0px / 103.544% 100% no-repeat;
+            mix-blend-mode: darken;
+   }
     display: flex;
     justify-content: end;
     align-items: center;
@@ -38,6 +49,7 @@ const WinnerBox = styled(Box)(
 )
 const ClaimTokenBtn = () => <BaseBtnStyle>Claim Token Back</BaseBtnStyle>
 const WinnerResultCard = () => {
+  const theme = useTheme()
   const isWinner = true
   return (
     <Container>
@@ -45,7 +57,7 @@ const WinnerResultCard = () => {
         <PoolHeadTitle />
       </Box>
       <Box sx={{ position: 'relative', top: 40 }}>
-        <WinnerBox isWinner={isWinner}>
+        <WinnerBox isWinner={isWinner} theme={theme}>
           {/* animation container */}
           <div>
             {isWinner && <WinnerCard />}

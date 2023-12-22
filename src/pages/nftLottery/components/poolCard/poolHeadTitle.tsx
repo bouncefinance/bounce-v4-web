@@ -47,7 +47,7 @@ const LiveTitle = () => (
     <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
     <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'} gap={10} mt={20}>
       <GreenCircleSvg />
-      <PoolTitleStyle sx={{ fontWeight: 700, fontSize: 18, color: '#76BA1E' }}>LIVE NOW</PoolTitleStyle>
+      <PoolTitleStyle sx={{ fontWeight: 700, fontSize: { sm: 16, xs: 18 }, color: '#76BA1E' }}>LIVE NOW</PoolTitleStyle>
     </Stack>
   </div>
 )
@@ -66,7 +66,7 @@ export const PoolHeadTitle = () => {
 
   return (
     <Container>
-      <UpcomingTitle />
+      <LiveTitle />
     </Container>
   )
 }
