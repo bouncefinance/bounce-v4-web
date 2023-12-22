@@ -596,8 +596,8 @@ const Port3CapTable = () => {
   ]
   return (
     <Box mt={20}>
-      <TableContainer component={Paper} sx={{ minWidth: 650 }}>
-        <Table aria-label="simple table" stickyHeader>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow
               sx={{
@@ -2589,7 +2589,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             key={1}
             sx={{
               ul: { display: 'flex', flexDirection: 'column', gap: 10 },
-              a: { textDecoration: 'underline', color: 'gray' }
+              a: { textDecoration: 'underline', color: 'gray', wordBreak: 'break-all' }
             }}
           >
             <ul>
