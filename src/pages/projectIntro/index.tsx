@@ -1027,6 +1027,10 @@ const ProjectContentBg = styled(Box)`
   min-height: 300px;
   background: #f6f7f3;
   border-radius: 30px;
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 const ProjectContentBgDark = styled(Box)({
   display: 'flex',
