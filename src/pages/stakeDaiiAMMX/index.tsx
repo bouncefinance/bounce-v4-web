@@ -18,8 +18,7 @@ import { useCallback } from 'react'
 const Page = () => {
   const poolId = 8
   const { account } = useActiveWeb3React()
-  // const chainId = ChainId.MAINNET
-  const chainId = ChainId.SEPOLIA
+  const chainId = ChainId.MAINNET
   const nowTime = () => new Date().getTime()
   const contract = useStakeTokenWithTimeWeightContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
@@ -31,9 +30,9 @@ const Page = () => {
     token1.address,
     '20000000000',
     '100000000000000000000000',
-    1703153400,
-    1703154000,
-    1703154000,
+    1703390400,
+    1703649600,
+    1703649600,
     1
   ]
 
