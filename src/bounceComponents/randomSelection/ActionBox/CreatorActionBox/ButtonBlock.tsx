@@ -14,6 +14,7 @@ import { TX_FEE_RATIO } from 'bounceHooks/auction/useCreatorClaimTxFee'
 import SwitchNetworkButton from 'bounceComponents/fixed-swap/SwitchNetworkButton'
 
 const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
+  console.log('🚀 ~ file: ButtonBlock.tsx:17 ~ ButtonBlock ~ poolInfo:', poolInfo)
   const { account, chainId } = useActiveWeb3React()
   const isCurrentChainEqualChainOfPool = useMemo(() => chainId === poolInfo.ethChainId, [chainId, poolInfo.ethChainId])
 
@@ -127,13 +128,13 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
       <LoadingButton
         variant="outlined"
         fullWidth
+        disabled={poolInfo.creatorClaimed}
         loadingPosition="start"
-        disabled={true}
         sx={{ mt: 24, mb: 12 }}
         loading={submitted.complete || submitted.submitted}
         onClick={() => toClaim(true)}
       >
-        Claim tokens only after pool is closed
+        Cancel and claim back tokens
       </LoadingButton>
     )
   }

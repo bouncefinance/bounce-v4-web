@@ -3,6 +3,7 @@ import LeftBox from './LeftBox'
 import UserActionBox2 from '../../ActionBox/UserActionBox2'
 import Alert from './Alert'
 import { FixedSwapPoolProp } from 'api/pool/type'
+import PoolStepper from 'bounceComponents/randomSelection/Stepper'
 
 const UserMainBlock = ({
   poolInfo,
@@ -30,6 +31,7 @@ const UserMainBlock = ({
         {/* <UserActionBox /> */}
         <UserActionBox2 poolInfo={poolInfo} getPoolInfo={getPoolInfo} isWinnerSeedDone={isWinnerSeedDone} />
       </Box>
+      <PoolStepper poolInfo={poolInfo} />
     </Box>
   )
 }

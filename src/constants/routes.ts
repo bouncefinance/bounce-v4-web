@@ -115,6 +115,7 @@ export const routes = {
     BitStable: '/launchpad/bitstable',
     BitStableAuction: '/launchpad/bitstable-staking',
     Port3: '/launchpad/port3',
+    StakeWithTimeWeight: '/launchpad/stake',
     Did: {
       index: '/launchpad/godid-rs-auction',
       stake: '/launchpad/godid-staking-auction',

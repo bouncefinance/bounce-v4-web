@@ -112,6 +112,8 @@ import useBreakpoint from '../hooks/useBreakpoint'
 import DidStakeAuctionPool from './stakeAuctionPool'
 import DidStakeDaiiPool from './stakeDAIIPool'
 import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
+import TestStakeWithTimeWeightPool from './stakeAuctionWithTimeWeight'
+
 import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
 import AmmxAuctionProjectInfo from './projectIntro/AmmxAuctionProjectInfo'
 import AmmxDaiiProjectInfo from './projectIntro/AmmxDaiiProjectInfo'
@@ -254,6 +256,7 @@ export default function App() {
                   <Route path={routes.thirdPart.Did.dll} element={<DidStakeDaiiPool />} />
                   <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
                   <Route path={routes.thirdPart.Port3} element={<Port3ProjectInfo />} />
+                  <Route path={routes.thirdPart.StakeWithTimeWeight} element={<TestStakeWithTimeWeightPool />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />

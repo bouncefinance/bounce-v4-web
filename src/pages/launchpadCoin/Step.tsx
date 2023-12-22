@@ -772,7 +772,7 @@ function Step2({
               CurrencyAmount.fromRawAmount(token0, coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
                 .subtract(CurrencyAmount.fromRawAmount(token0, coinInfo.claimedToken0.toString()))
                 .toSignificant()
-            } ${token1?.symbol}`,
+            } ${token0?.symbol}`,
             PaperProps: {
               sx: DialogTipsWhiteTheme
             }
@@ -795,7 +795,7 @@ function Step2({
         }
       })
     }
-  }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, contract, poolId, token0, token1?.symbol])
+  }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, contract, poolId, token0])
   const claimToken1 = useCallback(async () => {
     if (!contract) return
     showWaitingTxDialog(() => {
