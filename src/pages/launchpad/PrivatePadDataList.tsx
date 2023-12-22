@@ -63,6 +63,8 @@ import DIDNa from './imgs/did-na.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
+import port3Investment from './imgs/port3Investment.jpg'
+import Port3Logo from './imgs/port3Logo.png'
 import LadderImg from './imgs/ladder.png'
 import BitSwapImage1 from './imgs/BitSwap-image1.png'
 import LadderImg1 from './imgs/ladder-img1.png'
@@ -576,7 +578,7 @@ const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
   return elArr
 }
 
-const Port3CapTable = () => {
+export const Port3CapTable = () => {
   const tableData = [
     ['Kucoin (Lead)', 'EMURGO', 'DWF labs', '', 'Binance Labs'],
     ['Jump Crypto (Lead)', 'Adaverse', '', '', 'Aptos'],
@@ -2506,7 +2508,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Price Auction',
     img: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
-    avatar: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
+    avatar: Port3Logo,
     title: 'Port3 Network',
     chainId: 1,
     tokenName: '$PORT3',
@@ -2587,14 +2589,15 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           <Box
             key={1}
             sx={{
-              ul: { display: 'flex', flexDirection: 'column', gap: 10 },
+              ul: { display: 'flex', flexDirection: 'column', gap: 10, padding: 20 },
               a: { textDecoration: 'underline', color: 'gray', wordBreak: 'break-all' }
             }}
           >
             <ul>
               <li>
                 <Typography sx={{ fontSize: 16 }}>investment:</Typography>
-                <Port3CapTable />
+                {/* <Port3CapTable /> */}
+                <img src={port3Investment} alt="" width="100%" />
               </li>
               <li>
                 <Typography sx={{ fontSize: 16 }}>KOL, media partners & big brands:</Typography>
