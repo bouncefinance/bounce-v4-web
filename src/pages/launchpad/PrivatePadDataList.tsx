@@ -2593,14 +2593,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           >
             <ul>
               <li>
-                <Typography sx={{ fontSize: 16 }}>cap table:</Typography>
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0
-                </a>
+                <Typography sx={{ fontSize: 16 }}>investment:</Typography>
                 <Port3CapTable />
               </li>
               <li>
