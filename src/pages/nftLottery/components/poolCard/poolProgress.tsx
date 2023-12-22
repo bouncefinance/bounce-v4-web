@@ -1,5 +1,7 @@
 import { Avatar, AvatarGroup, LinearProgress, Stack, Typography, styled } from '@mui/material'
 import DefaultAvatar from 'assets/imgs/nftLottery/default-ava.svg'
+import useBreakpoint from 'hooks/useBreakpoint'
+import { useMemo } from 'react'
 const Title1 = styled(Typography)`
   color: #474543;
   /* D/H4 */
@@ -9,6 +11,9 @@ const Title1 = styled(Typography)`
   font-weight: 600;
   line-height: 140%; /* 28px */
   letter-spacing: -0.4px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 16px;
+  }
 `
 const Title2 = styled(Typography)`
   color: #76ba1e;
@@ -24,18 +29,32 @@ const Title2 = styled(Typography)`
   line-height: 130%; /* 36.4px */
   letter-spacing: -0.56px;
   text-transform: capitalize;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    font-size: 20px;
+  }
 `
 const AvatarStyle = styled(Avatar)`
   width: 54px;
   height: 54px;
   border-radius: 54px;
   border: 2.25px solid #fff;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    width: 30px;
+    height: 30px;
+  }
 `
 const AvatarList = () => {
-  const len = [1, 1, 1, 1, 1]
+  const isSm = useBreakpoint('sm')
+  const len = useMemo(() => {
+    if (isSm) {
+      return [1, 1, 1]
+    }
+    return [1, 1, 1, 1, 1]
+  }, [isSm])
+
   return (
     <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
-      <AvatarGroup max={5}>
+      <AvatarGroup>
         {len.map((i, d) => (
           <AvatarStyle key={i + d} alt="DefaultAvatar" src={DefaultAvatar} />
         ))}
@@ -45,21 +64,28 @@ const AvatarList = () => {
 }
 
 const PoolProgress = () => {
+  const isSm = useBreakpoint('sm')
   return (
-    <Stack gap={20}>
-      <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+    <Stack gap={isSm ? 16 : 20}>
+      <Stack
+        flexDirection={isSm ? 'column' : 'row'}
+        justifyContent={'space-between'}
+        alignItems={isSm ? 'start' : 'center'}
+        gap={isSm ? 8 : 0}
+      >
         <Title1>Participant</Title1>
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
           <AvatarList />
           <Stack flexDirection={'row'} alignItems={'center'}>
-            <Title2>2050</Title2>
-            <Title1>/ 20,000</Title1>
+            <Title2>2050 </Title2>
+            <Title1>{` `}/ 20,000</Title1>
           </Stack>
         </Stack>
       </Stack>
       <LinearProgress
         sx={{
           '&.MuiLinearProgress-root': {
+            height: 8,
             background: '#D9D9D9'
           },
           '& .MuiLinearProgress-bar': {

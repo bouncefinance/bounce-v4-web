@@ -111,8 +111,17 @@ export const MobileInfo = () => {
       sx={{
         width: '100%',
         background: '#0F0F0F',
-        position: 'relative'
+        position: 'relative',
+        '&.rotate1': {
+          transform: ' rotate(-13deg)',
+          zIndex: 1
+        },
+        '&.rotate2': {
+          zIndex: 1,
+          transform: 'translateX(16px) rotate(-3deg)'
+        }
       }}
+      // className="rotate1 rotate2"
     >
       <Box p="10px">
         <Box>
