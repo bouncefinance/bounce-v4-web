@@ -1,9 +1,8 @@
 import { ProjectHead, Tabs } from 'pages/projectIntro'
-import { AmmxDaiiData } from 'pages/launchpad/PrivatePadDataList'
+import { AmmxDaiiData, IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { useApproveCallback } from 'hooks/useApproveCallback'
 import { useStakeTokenWithTimeWeightContract } from 'hooks/useContract'
-// import { ApprovalState } from 'hooks/useTokenTimelock'
 import { useActiveWeb3React } from 'hooks'
 import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
@@ -14,25 +13,24 @@ import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/Dialog
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { useCallback } from 'react'
+import OtherProjectTab from 'pages/projectIntro/components/otherProjectTab'
 
 const Page = () => {
-  const poolId = 5
+  const poolId = 2
+  const item = PrivatePadDataList.find(i => i.keyId === 24) as IPrivatePadProp
   const { account } = useActiveWeb3React()
   const chainId = ChainId.MAINNET
   const nowTime = () => new Date().getTime()
   const contract = useStakeTokenWithTimeWeightContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
-  const [approvalState, approveCallback] = useApproveCallback(
-    token0,
-    STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[chainId]
-  )
+  const [approvalState] = useApproveCallback(token0, STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[chainId])
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account)
 
   const params: any = [
     token0?.currency.address,
     token1.address,
     '472500000000000000000000000',
-    '12857000000000000000000',
+    '450000000000000000000000',
     1703390400,
     1703736000,
     1703736000,
@@ -91,9 +89,9 @@ const Page = () => {
   }, [account, coinInfo, contract])
 
   const createPool = async () => {
-    if (approvalState !== ApprovalState.APPROVED) {
-      await approveCallback()
-    }
+    // if (approvalState !== ApprovalState.APPROVED) {
+    //   await approveCallback()
+    // }
     await contract?.create(params)
   }
   console.log('createPool', createPool, approvalState)
@@ -104,6 +102,9 @@ const Page = () => {
       <div style={{ background: '#f5f5f1' }}>
         <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
       </div>
+      {/* <StakeButton sx={{ margin: '20px 80px' }} onClick={() => createPool()}>
+        Create Pool
+      </StakeButton> */}
       <div style={{ width: '100%' }}>
         {coinInfo?.poolInfo &&
           account &&
@@ -130,7 +131,8 @@ const Page = () => {
             </StakeButton>
           )}
       </div>
-      <Tabs item={AmmxDaiiData} />
+      <Tabs item={AmmxDaiiData} hideTitle />
+      {item.otherProject && <OtherProjectTab item={item} />}
       <FooterPc />
     </>
   )

@@ -1616,8 +1616,8 @@ export const AmmxAuctionData: IPrivatePadProp = {
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
-    { title: 'Token Price', content: '-- AUCTION' },
-    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Token Price', content: '0.00002721 AUCTION' },
+    { title: 'Token Amount', content: '472,500,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   otherProject: [
@@ -1931,8 +1931,8 @@ export const AmmxDaiiData: IPrivatePadProp = {
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
-    { title: 'Token Price', content: '-- DAII' },
-    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Token Price', content: '0.00095 DAII' },
+    { title: 'Token Amount', content: '472,500,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   otherProject: [
@@ -2179,6 +2179,7 @@ export const AmmxDaiiData: IPrivatePadProp = {
 }
 const AmmxRandomData: IPrivatePadProp = {
   keyId: 26,
+  backedId: 18685,
   liveTimeStamp: {
     start: 1703390400000,
     end: 1703736000000
@@ -2246,8 +2247,8 @@ const AmmxRandomData: IPrivatePadProp = {
   social: [],
   moreData: [
     { title: 'Token Name', content: '$AMMX' },
-    { title: 'Ticket Price', content: '-- MUBI / Ticket' },
-    { title: 'Token Amount / Ticket', content: 'TBD' },
+    { title: 'Ticket Price', content: '2,173 MUBI / Ticket' },
+    { title: 'Token Amount / Ticket', content: '525,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   otherProject: [
