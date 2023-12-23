@@ -218,7 +218,7 @@ function Step1({
       return <StakeButton onClick={() => _switchNetwork()}>Switch Network</StakeButton>
     }
     if (isBalanceInsufficient) {
-      return <StakeButton disabled>Insufficient balance</StakeButton>
+      return <StakeButton disabled>Insufficient Balance</StakeButton>
     }
     if (status === TStep.COMING_SOON) {
       return (
@@ -498,7 +498,7 @@ function Step1({
       </Stack>
       <StakeAuctionInputDialog
         token1={token1CurrencyAmount}
-        id={'2'}
+        id={'4'}
         open={openDialog}
         onClose={() => handleClose()}
         token1Balance={token1Balance as CurrencyAmount}
@@ -924,7 +924,7 @@ function Step2({
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
                   {account && chainId !== ChainId.MAINNET && (
-                    <StakeButton onClick={_switchNetwork}>Switch network</StakeButton>
+                    <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
                   )}
                 </Stack>
               </Stack>

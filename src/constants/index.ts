@@ -621,7 +621,7 @@ export const STAKE_TOKEN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = 
 }
 
 export const STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0xA5135203DD1D5E5a80eD7e8cffe8Cd45f73CB43D',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',

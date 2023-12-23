@@ -114,6 +114,7 @@ import DidStakeDaiiPool from './stakeDAIIPool'
 import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
 import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
 import AmmxStakeAuctionPool from './stakeAuctionAMMX'
+import AmmxStakeAuctionPoolTest from './stakeAuctionAMMXTest'
 import AmmxStakeDaiiPool from './stakeDaiiAMMX'
 import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
 const GlobalHooks = () => {
@@ -219,6 +220,7 @@ export default function App() {
                   <Route path={routes.foundo.foundoNfcDetail + '/*'} element={<FoundoNfcDetail />} />
                   <Route path={routes.thirdPart.MultiBitBridge} element={<MultiBitBridgeProjectInfo />} />
                   <Route path={routes.thirdPart.AmmxAuction} element={<AmmxStakeAuctionPool />} />
+                  <Route path={routes.thirdPart.AmmxAuctionTest} element={<AmmxStakeAuctionPoolTest />} />
                   <Route path={routes.thirdPart.AmmxDaii} element={<AmmxStakeDaiiPool />} />
                   <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomSelection />} />
 

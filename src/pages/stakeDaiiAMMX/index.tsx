@@ -1,7 +1,7 @@
 import { ProjectHead, Tabs } from 'pages/projectIntro'
 import { AmmxDaiiData } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
-import { useApproveCallback } from 'hooks/useApproveCallback'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useStakeTokenWithTimeWeightContract } from 'hooks/useContract'
 // import { ApprovalState } from 'hooks/useTokenTimelock'
 import { useActiveWeb3React } from 'hooks'
@@ -16,13 +16,16 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { useCallback } from 'react'
 
 const Page = () => {
-  const poolId = 8
+  const poolId = 5
   const { account } = useActiveWeb3React()
   const chainId = ChainId.MAINNET
   const nowTime = () => new Date().getTime()
   const contract = useStakeTokenWithTimeWeightContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
-  const [approvalState] = useApproveCallback(token0, STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[chainId])
+  const [approvalState, approveCallback] = useApproveCallback(
+    token0,
+    STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[chainId]
+  )
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account)
 
   const params: any = [
@@ -31,8 +34,8 @@ const Page = () => {
     '472500000000000000000000000',
     '12857000000000000000000',
     1703390400,
-    1703649600,
-    1703649600,
+    1703736000,
+    1703736000,
     1
   ]
 
@@ -88,9 +91,9 @@ const Page = () => {
   }, [account, coinInfo, contract])
 
   const createPool = async () => {
-    // if (approvalState !== ApprovalState.APPROVED) {
-    //   await approveCallback()
-    // }
+    if (approvalState !== ApprovalState.APPROVED) {
+      await approveCallback()
+    }
     await contract?.create(params)
   }
   console.log('createPool', createPool, approvalState)
