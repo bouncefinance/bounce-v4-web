@@ -78,6 +78,6 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
 export const useTokenInfo = () => {
   const token0 = new Currency(ChainId.MAINNET, '0x5016878159e84daDB05bB04135F3eAc339ae201f', 18, 'AMMX', 'AMMX')
   const token1 = new Currency(ChainId.MAINNET, '0x1981E32C2154936741aB6541a737b87C68F13cE1', 18, 'DAII', 'DAII')
-  const token0Amount = CurrencyAmount.fromAmount(token0, '10000000000000000000000')
+  const token0Amount = CurrencyAmount.fromAmount(token0, '472500000000000000000000000')
   return { token0Amount, token1 }
 }

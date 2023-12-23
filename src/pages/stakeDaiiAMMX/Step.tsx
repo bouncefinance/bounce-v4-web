@@ -413,11 +413,11 @@ function Step1({
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>5 DAII</CardLabelStyle>
+                    <CardLabelStyle>0.00095 DAII</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
                     <CardContentStyle>Total Supply of AMMX</CardContentStyle>
-                    <CardLabelStyle>20,000</CardLabelStyle>
+                    <CardLabelStyle>472,500,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
@@ -426,7 +426,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 100,000 DAII
+                    {token1Currency?.symbol} / 450,000 DAII
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
