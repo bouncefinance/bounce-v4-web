@@ -63,6 +63,8 @@ import DIDNa from './imgs/did-na.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
 import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
+import port3Investment from './imgs/port3Investment.jpg'
+import Port3Logo from './imgs/port3Logo.png'
 import LadderImg from './imgs/ladder.png'
 import BitSwapImage1 from './imgs/BitSwap-image1.png'
 import LadderImg1 from './imgs/ladder-img1.png'
@@ -576,7 +578,7 @@ const renderProjectInfo = (obj: { [key: string]: any }): JSX.Element[] => {
   return elArr
 }
 
-const Port3CapTable = () => {
+export const Port3CapTable = () => {
   const tableData = [
     ['Kucoin (Lead)', 'EMURGO', 'DWF labs', '', 'Binance Labs'],
     ['Jump Crypto (Lead)', 'Adaverse', '', '', 'Aptos'],
@@ -1549,7 +1551,7 @@ export const AmmxAuctionData: IPrivatePadProp = {
   keyId: 25,
   liveTimeStamp: {
     start: 1703390400000,
-    end: 1703649600000
+    end: 1703736000000
   },
   poolTypeName: 'Staking Auction',
   img: LadderImg,
@@ -1760,9 +1762,10 @@ export const AmmxAuctionData: IPrivatePadProp = {
                 <Typography sx={{ fontSize: 16 }}>
                   Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
                   instead of directly trading between themselves. If you're familiar with a decentralized exchange like
-                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
-                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
-                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                  Uniswap, Ladder employs a similar concept but for NFTs. <br />
+                  Now, with the collaboration with Multibit Bridge, Ladder has extended support for users to engage in
+                  Ordinals in the BTC ecosystem. This significantly reduces the barriers for users to enjoy the
+                  prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
                   Here's how it works:
@@ -1863,7 +1866,7 @@ export const AmmxDaiiData: IPrivatePadProp = {
   keyId: 24,
   liveTimeStamp: {
     start: 1703390400000,
-    end: 1703649600000
+    end: 1703736000000
   },
   poolTypeName: 'Staking Auction',
   img: LadderImg,
@@ -2074,9 +2077,10 @@ export const AmmxDaiiData: IPrivatePadProp = {
                 <Typography sx={{ fontSize: 16 }}>
                   Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
                   instead of directly trading between themselves. If you're familiar with a decentralized exchange like
-                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
-                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
-                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                  Uniswap, Ladder employs a similar concept but for NFTs.
+                  <br /> Now, with the collaboration with Multibit Bridge, Ladder has extended support for users to
+                  engage in Ordinals in the BTC ecosystem. This significantly reduces the barriers for users to enjoy
+                  the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
                   Here's how it works:
@@ -2177,7 +2181,7 @@ const AmmxRandomData: IPrivatePadProp = {
   keyId: 26,
   liveTimeStamp: {
     start: 1703390400000,
-    end: 1703649600000
+    end: 1703736000000
   },
   poolTypeName: 'Random Selection Auction',
   img: LadderImg,
@@ -2388,9 +2392,9 @@ const AmmxRandomData: IPrivatePadProp = {
                 <Typography sx={{ fontSize: 16 }}>
                   Ladder is an AMM protocol for NFTs, which means that users buy from or sell into liquidity pools
                   instead of directly trading between themselves. If you're familiar with a decentralized exchange like
-                  Uniswap, Ladder employs a similar concept but for NFTs. Now, with the collaboration with Multibit
-                  Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem. This
-                  significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
+                  Uniswap, Ladder employs a similar concept but for NFTs. <br /> Now, with the collaboration with
+                  Multibit Bridge, Ladder has extended support for users to engage in Ordinals in the BTC ecosystem.
+                  This significantly reduces the barriers for users to enjoy the prosperous development of BTC Ordinals.
                 </Typography>
                 <Typography mt={40} sx={{ fontSize: 16 }}>
                   Here's how it works:
@@ -2501,9 +2505,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       start: 1732852800000,
       end: 0
     },
+    hideUpcomingCountdown: true,
     poolTypeName: 'Fixed Price Auction',
     img: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
-    avatar: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
+    avatar: Port3Logo,
     title: 'Port3 Network',
     chainId: 1,
     tokenName: '$PORT3',
@@ -2557,10 +2562,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
             key={1}
             sx={{ a: { textDecoration: 'underline', color: 'gray' }, img: { width: '100%', height: '100%' } }}
           >
-            <a href="https://docsend.com/view/rb64i7ejgbs6ufpn" target="_blank" rel="noreferrer">
-              https://docsend.com/view/rb64i7ejgbs6ufpn
-            </a>
-            <Typography my={5}>On page 18</Typography>
             <img src={PORT3Tokenomics} />
           </Box>
         ]
@@ -2570,9 +2571,9 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
         info: [
           <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
             <ul>
-              <li>
+              {/* <li>
                 Explain the unique selling points and advantages of your project compared to others in the market.
-              </li>
+              </li> */}
               <li>
                 The first ever Web3 social data layer & natural language processing on-chain workflow executor, it’s a
                 risk free trading tool without the permission of private key needed nor custody. Port3 has yet exceeded
@@ -2588,30 +2589,20 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
           <Box
             key={1}
             sx={{
-              ul: { display: 'flex', flexDirection: 'column', gap: 10 },
+              ul: { display: 'flex', flexDirection: 'column', gap: 10, padding: 20 },
               a: { textDecoration: 'underline', color: 'gray', wordBreak: 'break-all' }
             }}
           >
             <ul>
               <li>
-                <Typography sx={{ fontSize: 16 }}>cap table:</Typography>
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  https://docs.google.com/spreadsheets/d/1sXsuYAtw509kL7MvLiks0OoL1b9kRd3htNa6GC_14FY/edit#gid=0
-                </a>
-                <Port3CapTable />
+                <Typography sx={{ fontSize: 16 }}>investment:</Typography>
+                {/* <Port3CapTable /> */}
+                <img src={port3Investment} alt="" width="100%" />
               </li>
               <li>
                 <Typography sx={{ fontSize: 16 }}>KOL, media partners & big brands:</Typography>
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  https://docs.google.com/spreadsheets/d/1vnMVF_yPdeP5KWABpEbaL8Q0Q0Z2dUmzPgQLCnZpOC8/edit?usp=sharing
+                <a href="https://soquest.xyz/spaces" target="_blank" rel="noreferrer">
+                  https://soquest.xyz/spaces
                 </a>
               </li>
             </ul>

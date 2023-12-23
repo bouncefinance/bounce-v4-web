@@ -1075,6 +1075,7 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
             <ProjectInfoSubtitle
               sx={{
                 width: isDark ? { xs: 'auto' } : '360px',
+                border: '1px solid transparent',
                 background: isDark ? ProjectInfoDarkStyle.Tabs.InfoList.BoxBg : '',
                 '&:hover,&.select': {
                   border: isDark ? '1px solid' : '',
