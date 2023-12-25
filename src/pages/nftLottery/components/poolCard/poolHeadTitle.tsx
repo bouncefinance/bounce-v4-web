@@ -66,7 +66,7 @@ export const PoolHeadTitle = () => {
 
   return (
     <Container>
-      <LiveTitle />
+      <WinnerTitle />
     </Container>
   )
 }

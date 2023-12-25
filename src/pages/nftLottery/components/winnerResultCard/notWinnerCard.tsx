@@ -10,6 +10,7 @@ const Container = styled(Box)`
 const LeftCard = styled(Box)`
   position: relative;
   /* transform: rotate(-15deg); */
+  transform: rotate(-16.428deg);
 `
 const RightCard = styled(Box)`
   position: absolute;

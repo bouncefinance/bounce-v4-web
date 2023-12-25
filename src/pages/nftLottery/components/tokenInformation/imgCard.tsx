@@ -43,7 +43,47 @@ export const WinnerMobileCard = () => {
     </Box>
   )
 }
-
+export const WinnerImgCard = () => {
+  return (
+    <Box
+      sx={{
+        width: 'max-content',
+        borderRadius: '19.028px',
+        background: '#0F0F0F',
+        padding: '19.027px'
+      }}
+    >
+      <img src={TokenInfoImg} style={{ width: '313.946px', height: '313.946px' }} />
+      <Box mt={22.305}>
+        <Typography
+          sx={{
+            color: '#FFF',
+            fontFamily: 'Helvetica',
+            fontSize: 24,
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '140%'
+          }}
+        >
+          AI Meets Bitcoin
+        </Typography>
+        <Typography
+          mt={8.8}
+          sx={{
+            color: 'rgba(255, 255, 255, 0.70)',
+            fontFamily: 'Helvetica',
+            fontSize: 16,
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '140%'
+          }}
+        >
+          Unrevealed
+        </Typography>
+      </Box>
+    </Box>
+  )
+}
 const ImgCard = () => {
   const isSm = useBreakpoint('sm')
   return (

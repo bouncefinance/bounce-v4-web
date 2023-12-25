@@ -1,6 +1,6 @@
 import { Box, Stack, styled } from '@mui/material'
 import Info, { MobileRotateInfo } from '../poolCard/card/components/info'
-import ImgCard, { WinnerMobileCard } from '../tokenInformation/imgCard'
+import { WinnerImgCard, WinnerMobileCard } from '../tokenInformation/imgCard'
 import p1 from 'assets/imgs/nftLottery/winner-bg3.png'
 import p2 from 'assets/imgs/nftLottery/winner-bg4.png'
 import p2Mobile from 'assets/imgs/nftLottery/winner-bg4-mobile.svg'
@@ -13,11 +13,19 @@ const Container = styled(Box)`
 const LeftCard = styled(Box)`
   z-index: 3;
   position: relative;
-  /* transform: rotate(-16deg) translate(34px, 7px); */
+  transform: rotate(-16.428deg);
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    top: 27px;
+    left: 10px;
+  }
 `
 const RightCard = styled(Box)`
   position: relative;
   z-index: 2;
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    left: -26px;
+  }
+
   & > img {
     position: absolute;
     top: 0;
@@ -42,7 +50,7 @@ const PCCard = () => {
         </LeftCard>
         <RightCard>
           <img src={p1} />
-          <ImgCard />
+          <WinnerImgCard />
         </RightCard>
       </Stack>
       <BottomCard>

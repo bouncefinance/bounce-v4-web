@@ -184,7 +184,7 @@ export const MobileRotateInfo = () => {
         height: 173,
         background: '#000',
         boxShadow: '4.2px -6.72px 10.08px 0px rgba(64, 63, 60, 0.10)',
-        transform: 'rotate(-16.428deg)',
+        // transform: 'rotate(-16.428deg)',
         position: 'relative'
       }}
     >

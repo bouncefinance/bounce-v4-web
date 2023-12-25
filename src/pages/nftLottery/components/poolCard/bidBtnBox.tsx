@@ -21,6 +21,9 @@ export const BaseBtnStyle = styled(Button)`
     background: #e1f25c;
     color: #0f0f0f;
   }
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    height: 48px;
+  }
 `
 const UpcomingBtnStyle = styled(BaseBtnStyle)`
   display: flex;
