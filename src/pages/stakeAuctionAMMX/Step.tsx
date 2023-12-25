@@ -428,7 +428,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 12857 AUCTION
+                    {token1Currency?.symbol} / 12,857 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>

@@ -21,8 +21,12 @@ const StepperStyle = styled(Stepper)(() => ({
   },
   '.MuiStepConnector-line': {
     borderTopWidth: '4px',
-    borderColor: '#2663FF'
-  }
+    borderColor: 'rgba(0,0,0,0.38)'
+  },
+  '.MuiStepConnector-root.Mui-active .MuiStepConnector-line,.MuiStepConnector-root.Mui-completed .MuiStepConnector-line ':
+    {
+      borderColor: '#2663FF'
+    }
 }))
 
 const PoolStepper = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => {
@@ -31,7 +35,7 @@ const PoolStepper = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element
   const steps = Array.from({ length: 4 }).map(() => ({ label: '', time: '' }))
   const textList = [
     {
-      label: 'Participation',
+      label: 'Participation Round',
       time: poolInfo.openAt * 1000
     },
     {

@@ -33,7 +33,7 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
     const handleZoom = () => {
       if (isSm) {
         const w = window.innerWidth
-        setZoomNum((w - 55) / 444)
+        setZoomNum((w - 40) / 444)
       } else {
         setZoomNum(1)
       }
@@ -56,8 +56,10 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
             display: 'flex',
             flexFlow: 'row nowrap',
             overflow: 'visible',
-            margin: '0 auto 30px',
-            zoom: zoomNum
+            margin: isSm ? '0 auto' : '0 auto 30px',
+            // zoom: zoomNum
+            transform: `scale(${zoomNum})`,
+            transformOrigin: '0 0'
           }}
         >
           <Box

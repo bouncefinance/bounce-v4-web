@@ -17,7 +17,7 @@ const UpcomingCard = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   const handleZoom = () => {
     if (isSm) {
       const w = window.innerWidth
-      setZoomNum((w - 55) / 444)
+      setZoomNum((w - 40) / 444)
     } else {
       setZoomNum(1)
     }
@@ -51,8 +51,10 @@ const UpcomingCard = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
           display: 'flex',
           flexFlow: 'row nowrap',
           overflow: 'hidden',
-          margin: '0 auto 30px',
-          zoom: zoomNum
+          margin: isSm ? '0 auto' : '0 auto 30px',
+          // zoom: zoomNum,
+          transform: `scale(${zoomNum})`,
+          transformOrigin: '0 0'
         }}
       >
         <Box
