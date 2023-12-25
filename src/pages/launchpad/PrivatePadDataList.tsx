@@ -1482,7 +1482,7 @@ const PrivateRandomGodidData = {
 const AiMeetsBtcRandomData: IPrivatePadProp = {
   keyId: 22,
   liveTimeStamp: {
-    start: 1703462400000,
+    start: 1703822400000,
     end: 0
   },
   hideUpcomingCountdown: true,
