@@ -23,10 +23,71 @@ const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
       window.removeEventListener('resize', setZoomHandle)
     }
   }, [setZoomHandle])
+
+  if (false) {
+    /* Already participated */
+    return (
+      <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
+        <Stack flexDirection={'row'} sx={{ zoom: isZoom ? 0.7 : zoom }}>
+          <Box sx={{ transform: 'rotate(-10.428deg)', zIndex: 3, position: 'relative', top: 11, left: 27 }}>
+            <Info />
+          </Box>
+          <ManBox />
+          <Barcode />
+        </Stack>
+      </Box>
+    )
+  } else if (false) {
+    // close and not have partner
+    return (
+      <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
+        <Stack
+          flexDirection={'row'}
+          sx={{
+            zoom: isZoom ? 0.7 : zoom,
+            transform: 'rotate(-6deg)',
+            paddingBottom: 22,
+            position: 'relative',
+            top: 22
+          }}
+        >
+          <Box>
+            <Info />
+          </Box>
+          <ManBox />
+          <Barcode />
+        </Stack>
+      </Box>
+    )
+  } else if (false) {
+    // close and  have partner
+    return (
+      <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
+        <Stack
+          flexDirection={'row'}
+          sx={{
+            zoom: isZoom ? 0.7 : zoom,
+            transform: 'rotate(-6deg)',
+            paddingBottom: 22,
+            position: 'relative',
+            top: 22
+          }}
+        >
+          <Box sx={{ transform: 'rotate(-10.428deg)', zIndex: 3, position: 'relative', top: 11, left: 27 }}>
+            <Info />
+          </Box>
+          <ManBox />
+          <Barcode />
+        </Stack>
+      </Box>
+    )
+  }
   return (
-    <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64, overflow: 'hidden' }}>
+    <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
       <Stack flexDirection={'row'} sx={{ zoom: isZoom ? 0.7 : zoom }}>
-        <Info />
+        <Box>
+          <Info />
+        </Box>
         <ManBox />
         <Barcode />
       </Stack>

@@ -1,6 +1,7 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import WordListImg from 'assets/imgs/nftLottery/card/word-list.png'
 import WordList2Img from 'assets/imgs/nftLottery/card/word-list-2.png'
+import WordList3Img from 'assets/imgs/nftLottery/card/word-list-3.svg'
 import { ReactComponent as LineSvg } from 'assets/imgs/nftLottery/card/line.svg'
 import Line2Svg from 'assets/imgs/nftLottery/card/line2.svg'
 const Container = styled(Box)`
@@ -14,10 +15,19 @@ const WhiteCard = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 9px;
-  /* width: 155px; */
+
   padding: 12px 7px;
   border-radius: 2px;
   background: #fff;
+  &.small {
+    gap: 2px;
+    padding-left: 4.52px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    width: 155px;
+  }
 `
 const Title1 = styled(Typography)`
   color: #4c483a;
@@ -29,6 +39,9 @@ const Title1 = styled(Typography)`
   line-height: 140%; /* 19.6px */
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 12px;
+  }
+  &.small {
+    font-size: 5.88px;
   }
 `
 const PriceTitle = styled(Typography)`
@@ -46,6 +59,9 @@ const PriceTitle = styled(Typography)`
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 30px;
   }
+  &.small {
+    font-size: 18.48px;
+  }
 `
 const NumberTitle = styled(Typography)`
   color: #4c483a;
@@ -61,6 +77,9 @@ const NumberTitle = styled(Typography)`
   text-transform: uppercase;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 30px;
+  }
+  &.small {
+    font-size: 18.48px;
   }
 `
 const LineBox = styled(Box)`
@@ -154,6 +173,53 @@ export const MobileInfo = () => {
       </Box>
       <LineBox style={{ bottom: -3, width: '100%' }}>
         <img style={{ width: '100%' }} src={Line2Svg} />
+      </LineBox>
+    </Box>
+  )
+}
+export const MobileRotateInfo = () => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        width: 150,
+        height: 173,
+        background: '#000',
+        boxShadow: '4.2px -6.72px 10.08px 0px rgba(64, 63, 60, 0.10)',
+        // transform: 'rotate(-16.428deg)',
+        position: 'relative'
+      }}
+    >
+      <img src={WordList3Img} style={{ transform: 'rotate(16.428deg)', position: 'absolute', left: -16 }} />
+      <Stack sx={{ position: 'absolute', right: 16, top: 0, height: '100%' }} justifyContent={'center'} gap={3}>
+        <WhiteCard style={{ gap: 0, paddingLeft: 3.73, paddingTop: 2, paddingBottom: 5 }}>
+          <Title1 className="small">Random</Title1>
+          <Title1 className="small">Selection</Title1>
+        </WhiteCard>
+
+        <WhiteCard className="small">
+          <Title1 className="small">Ticket price</Title1>
+          <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
+            <PriceTitle className="small">10</PriceTitle>
+            <Title1 className="small" sx={{ color: '#F00' }}>
+              AUCTION
+            </Title1>
+          </Stack>
+        </WhiteCard>
+
+        <WhiteCard className="small">
+          <Title1 className="small">Number of winners</Title1>
+          <NumberTitle className="small">450</NumberTitle>
+        </WhiteCard>
+
+        <WhiteCard className="small">
+          <Title1 className="small">NFT per Ticket</Title1>
+          <NumberTitle className="small">1</NumberTitle>
+        </WhiteCard>
+      </Stack>
+      <LineBox sx={{ top: 0, right: 2, height: '100%', overflow: 'hidden' }}>
+        <LineSvg />
       </LineBox>
     </Box>
   )

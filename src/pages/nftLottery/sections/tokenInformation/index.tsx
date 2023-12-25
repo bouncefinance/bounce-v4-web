@@ -4,6 +4,7 @@ import ImgCard from '../../components/tokenInformation/imgCard'
 import useBreakpoint from 'hooks/useBreakpoint'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
 
+import { WithAnimation } from 'components/WithAnimation'
 const SectionBody = styled(Box)`
   width: 100%;
   background: url(${BgImg}) repeat;
@@ -184,11 +185,13 @@ const RightContent = () => {
 const TokenInformation = () => {
   return (
     <SectionBody>
-      <Container>
-        <LeftContent />
-        <MiddleLine />
-        <RightContent />
-      </Container>
+      <WithAnimation>
+        <Container>
+          <LeftContent />
+          <MiddleLine />
+          <RightContent />
+        </Container>
+      </WithAnimation>
     </SectionBody>
   )
 }

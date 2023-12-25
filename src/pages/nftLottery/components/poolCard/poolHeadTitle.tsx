@@ -36,12 +36,13 @@ const PoolTitleStyle = styled(Typography)`
 const poolTitles = [
   'Join The Pool',
   'Waiting for the lottery draw...',
+  'LOTTERY COMPLETED',
   'You are a Winner',
   'Sorry! You are not selected as a winner'
 ]
 
 const UpcomingTitle = () => <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
-
+const NotInvolvedTitle = () => <PoolTitleStyle className="live">{poolTitles[2]}</PoolTitleStyle>
 const LiveTitle = () => (
   <div style={{ height: 90 }}>
     <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
@@ -62,11 +63,11 @@ const WinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[2]}</Poo
 
 const NotWinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[3]}</PoolTitleStyle>
 export const PoolHeadTitle = () => {
-  console.log('LiveTitle', LiveTitle, WaitTitle, WinnerTitle, NotWinnerTitle, UpcomingTitle)
+  console.log('LiveTitle', LiveTitle, WaitTitle, WinnerTitle, NotWinnerTitle, UpcomingTitle, NotInvolvedTitle)
 
   return (
     <Container>
-      <LiveTitle />
+      <WaitTitle />
     </Container>
   )
 }
