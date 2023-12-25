@@ -19,6 +19,12 @@ const WhiteCard = styled(Box)`
   padding: 12px 7px;
   border-radius: 2px;
   background: #fff;
+  &.small {
+    gap: 2px;
+    padding-left: 4.52px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
 `
 const Title1 = styled(Typography)`
   color: #4c483a;
@@ -30,6 +36,9 @@ const Title1 = styled(Typography)`
   line-height: 140%; /* 19.6px */
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 12px;
+  }
+  &.small {
+    font-size: 5.88px;
   }
 `
 const PriceTitle = styled(Typography)`
@@ -47,6 +56,9 @@ const PriceTitle = styled(Typography)`
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 30px;
   }
+  &.small {
+    font-size: 18.48px;
+  }
 `
 const NumberTitle = styled(Typography)`
   color: #4c483a;
@@ -62,6 +74,9 @@ const NumberTitle = styled(Typography)`
   text-transform: uppercase;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 30px;
+  }
+  &.small {
+    font-size: 18.48px;
   }
 `
 const LineBox = styled(Box)`
@@ -163,6 +178,8 @@ export const MobileRotateInfo = () => {
   return (
     <Box
       sx={{
+        display: 'flex',
+        flexDirection: 'row',
         width: 150,
         height: 173,
         background: '#000',
@@ -172,6 +189,35 @@ export const MobileRotateInfo = () => {
       }}
     >
       <img src={WordList3Img} style={{ transform: 'rotate(16.428deg)', position: 'absolute', left: -16 }} />
+      <Stack sx={{ position: 'absolute', right: 16, top: 0, height: '100%' }} justifyContent={'center'} gap={3}>
+        <WhiteCard style={{ gap: 0, paddingLeft: 3.73, paddingTop: 2, paddingBottom: 5 }}>
+          <Title1 className="small">Random</Title1>
+          <Title1 className="small">Selection</Title1>
+        </WhiteCard>
+
+        <WhiteCard className="small">
+          <Title1 className="small">Ticket price</Title1>
+          <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
+            <PriceTitle className="small">10</PriceTitle>
+            <Title1 className="small" sx={{ color: '#F00' }}>
+              AUCTION
+            </Title1>
+          </Stack>
+        </WhiteCard>
+
+        <WhiteCard className="small">
+          <Title1 className="small">Number of winners</Title1>
+          <NumberTitle className="small">450</NumberTitle>
+        </WhiteCard>
+
+        <WhiteCard className="small">
+          <Title1 className="small">NFT per Ticket</Title1>
+          <NumberTitle className="small">1</NumberTitle>
+        </WhiteCard>
+      </Stack>
+      <LineBox sx={{ top: 0, right: 2, height: '100%', overflow: 'hidden' }}>
+        <LineSvg />
+      </LineBox>
     </Box>
   )
 }

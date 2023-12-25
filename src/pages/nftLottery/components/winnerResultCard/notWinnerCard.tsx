@@ -15,10 +15,15 @@ const RightCard = styled(Box)`
   position: absolute;
   top: 38px;
   right: 160px;
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    top: 30px;
+    right: 64px;
+  }
 `
 const CrossBox = () => {
+  const isSm = useBreakpoint('sm')
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative', zoom: isSm ? 0.33 : 1 }}>
       <Box sx={{ position: 'absolute', left: -14 }}>
         <Cross1 />
       </Box>
@@ -28,18 +33,35 @@ const CrossBox = () => {
     </Box>
   )
 }
-const NotWinnerCard = () => {
-  const isSm = useBreakpoint('sm')
+const PCCard = () => {
   return (
     <Container>
       <LeftCard>
-        {!isSm && <Info />}
-        {isSm && <MobileRotateInfo />}
+        <Info />
       </LeftCard>
       <RightCard>
         <CrossBox />
       </RightCard>
     </Container>
   )
+}
+const MobileCard = () => {
+  return (
+    <Container>
+      <LeftCard>
+        <MobileRotateInfo />
+      </LeftCard>
+      <RightCard>
+        <CrossBox />
+      </RightCard>
+    </Container>
+  )
+}
+const NotWinnerCard = () => {
+  const isSm = useBreakpoint('sm')
+  if (isSm) {
+    return <MobileCard />
+  }
+  return <PCCard />
 }
 export default NotWinnerCard
