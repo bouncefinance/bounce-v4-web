@@ -436,7 +436,7 @@ const CreationRandomSelectionConfirmation = () => {
 
                 <ConfirmationInfoItem title="Delay Unlocking Token">
                   <Typography>
-                    {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM:DD:Y HH:mm') : 'No'}
+                    {values.delayUnlockingTime ? values.delayUnlockingTime.format('MM.DD.Y HH:mm') : 'No'}
                   </Typography>
                 </ConfirmationInfoItem>
               </Stack>
