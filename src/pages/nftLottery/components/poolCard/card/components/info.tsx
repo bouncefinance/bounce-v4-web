@@ -15,7 +15,7 @@ const WhiteCard = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 9px;
-  /* width: 155px; */
+
   padding: 12px 7px;
   border-radius: 2px;
   background: #fff;
@@ -24,6 +24,9 @@ const WhiteCard = styled(Box)`
     padding-left: 4.52px;
     padding-top: 5px;
     padding-bottom: 5px;
+  }
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    width: 155px;
   }
 `
 const Title1 = styled(Typography)`
