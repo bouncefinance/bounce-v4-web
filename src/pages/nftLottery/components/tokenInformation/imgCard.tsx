@@ -95,7 +95,7 @@ const ImgCard = () => {
         padding: isSm ? 12 : '17.3px'
       }}
     >
-      <img src={TokenInfoImg} style={{ width: isSm ? 200 : '100%' }} />
+      <img src={TokenInfoImg} style={{ width: isSm ? 200 : '285px' }} />
       <Box mt={isSm ? 14 : 20}>
         <Typography
           sx={{

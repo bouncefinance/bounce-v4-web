@@ -10,6 +10,7 @@ import { ReactComponent as ShowSvg } from 'assets/imgs/nftLottery/shadow.svg'
 import { ReactComponent as ShowMobileSvg } from 'assets/imgs/nftLottery/shadow-mobile.svg'
 import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { WithAnimation } from 'components/WithAnimation'
 const Container = styled(Box)`
   position: relative;
   width: 100%;
@@ -91,12 +92,16 @@ const WinnerResultCard = () => {
       <Box
         sx={{ position: 'absolute', top: isSm ? 67 : 114, left: '50%', transform: 'translateX(-50%)', width: '100%' }}
       >
-        <PoolHeadTitle />
+        <WithAnimation>
+          <PoolHeadTitle />
+        </WithAnimation>
       </Box>
       <WinnerBg isWinner={isWinner} theme={theme}>
         <WinnerBox isWinner={isWinner} theme={theme}>
-          {isWinner && <WinnerCard />}
-          {!isWinner && <NotWinnerCard />}
+          <WithAnimation>
+            {isWinner && <WinnerCard />}
+            {!isWinner && <NotWinnerCard />}
+          </WithAnimation>
         </WinnerBox>
       </WinnerBg>
       <Stack
