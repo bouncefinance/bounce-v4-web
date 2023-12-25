@@ -6,18 +6,29 @@ import P4Img from 'assets/imgs/nftLottery/p4.png'
 import P5Img from 'assets/imgs/nftLottery/p5.png'
 import Image from 'components/Image'
 import Cards from './cards'
+import NftcardImg from 'assets/imgs/nftLottery/banner/nftcard.png'
+import NftshadowImg from 'assets/imgs/nftLottery/banner/nftshadow.png'
 import { WithAnimation } from 'components/WithAnimation'
-const PcBanner = () => {
+import { useWithAnimationStyles } from '../pc'
+import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
+
+const MobileBanner = () => {
+  const styleTrans = useWithAnimationStyles()
   return (
     <Box
       sx={{
         width: '100vw',
         minHeight: '100vh',
         overflowX: 'hidden',
-        background: '#eeece6'
+        background: `url(${BgImg}) repeat`
       }}
     >
-      <WithAnimation rootMargin="0%">
+      <WithAnimation
+        rootMargin="0%"
+        defaultAnimation={false}
+        className={styleTrans.awaitInView}
+        addClassInView={styleTrans.inView}
+      >
         <Box
           sx={{
             position: 'relative',
@@ -109,6 +120,29 @@ const PcBanner = () => {
             }}
             src={P5Img}
             alt=""
+          />
+          <Image
+            src={NftcardImg}
+            style={{
+              position: 'absolute',
+              top: 281,
+              width: 33,
+              height: 57,
+              left: '50%',
+              zIndex: 2,
+              transform: 'translate3D(calc(-50% + 32px), 0, 0)'
+            }}
+          />
+          <Image
+            src={NftshadowImg}
+            style={{
+              position: 'absolute',
+              top: 340,
+              width: 35,
+              height: 20,
+              left: '50%',
+              transform: 'translate3D(calc(-50% + 30px), 0, 0)'
+            }}
           />
           <Stack
             direction={'column'}
@@ -228,4 +262,4 @@ const PcBanner = () => {
     </Box>
   )
 }
-export default PcBanner
+export default MobileBanner

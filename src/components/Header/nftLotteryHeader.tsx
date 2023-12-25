@@ -51,10 +51,10 @@ export const Tabs: Tab[] = [
   { title: 'Token', link: 'https://token.bounce.finance/staking' }
 ]
 
-const StyledAppBar = styled(AppBar)<{ isTransparent?: boolean }>(({ theme, isTransparent }) => ({
+const StyledAppBar = styled(AppBar)<{ isTransparent?: boolean }>(({ theme }) => ({
   position: 'fixed',
   height: theme.height.header,
-  backgroundColor: isTransparent ? 'transparent' : theme.palette.background.paper,
+  backgroundColor: 'transparent',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -147,11 +147,9 @@ export const transparentRoutes = [
   routes.thirdPart.Did.index,
   routes.thirdPart.Did.stake,
   routes.thirdPart.Did.dll,
-  routes.thirdPart.Did.pool,
-  routes.nftLottery.index
+  routes.thirdPart.Did.pool
+  //   routes.nftLottery.index
 ]
-
-// const transparentRoutesWithParams = [routes.launchpad.projectInfo]
 
 export const whiteLogoRoutes = [
   routes.launchpad.bladeDao,
@@ -173,15 +171,6 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const isSm = useBreakpoint('sm')
   const location = useLocation()
-  // const routesWithoutParams = transparentRoutesWithParams.map(r => {
-  //   const pattern = /^(\/[^/:]+\/[^/:]+)/
-  //   const match = r.match(pattern)
-  //   if (match) {
-  //     return match[1]
-  //   } else {
-  //     return ''
-  //   }
-  // })
   const handleMobileMenuDismiss = useCallback(() => {
     setMobileMenuOpen(false)
   }, [])
@@ -198,9 +187,6 @@ export default function Header() {
 
   const isTransparentRoute = useMemo(() => {
     // return routes.market.index.includes(pathname)
-    if (pathname === '/nftlottery') {
-      return false
-    }
     return transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname))
   }, [pathname])
 
@@ -210,12 +196,9 @@ export default function Header() {
   )
 
   const headerBg = useMemo(() => {
-    if (pathname === '/nftlottery') {
-      return { backgroundColor: 'transparent !important' }
-    }
     if (!isTransparentRoute) return {}
     return { backgroundColor: `rgba(255,255,255,${headerBgOpacity})` }
-  }, [headerBgOpacity, isTransparentRoute, pathname])
+  }, [headerBgOpacity, isTransparentRoute])
 
   const walletClick = () => {
     if (location.pathname === routes.login) {
@@ -263,9 +246,6 @@ export default function Header() {
         '& path': {
           fill: 'currentcolor'
         },
-        // '&:hover .line': {
-        //   borderColor: 'var(--ps-text-4)'
-        // }
         '&:hover': {
           color: '#121212',
           '& path': {
@@ -277,28 +257,10 @@ export default function Header() {
       }}
     >
       <UserIcon />
-      {/* <Box
-        className="line"
-        sx={{
-          borderRight: '1px solid var(--ps-gray-20)',
-          mx: 10,
-          height: '100%'
-        }}
-      /> */}
-      {/* <WalletIcon /> */}
-      {/* <Typography
-        ml={5}
-        sx={{
-          whiteSpace: 'nowrap',
-          color
-        }}
-      > */}
       <Typography id={'connect'} variant="h5" color="currentcolor" sx={{ whiteSpace: 'nowrap' }}>
         {' '}
         Connect wallet
       </Typography>
-
-      {/* </Typography> */}
     </Button>
   )
 
@@ -311,7 +273,6 @@ export default function Header() {
       <MobileMenu isOpen={mobileMenuOpen} onDismiss={handleMobileMenuDismiss} />
       <Filler />
       <StyledAppBar
-        isTransparent={isTransparentRoute}
         sx={{
           display: 'flex',
           ...headerBg

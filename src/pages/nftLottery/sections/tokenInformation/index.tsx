@@ -2,9 +2,11 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
 import ImgCard from '../../components/tokenInformation/imgCard'
 import useBreakpoint from 'hooks/useBreakpoint'
+import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
+
 const SectionBody = styled(Box)`
   width: 100%;
-  background: #eeece6;
+  background: url(${BgImg}) repeat;
   @media (max-width: 1440px) {
     padding: 0 20px;
   }

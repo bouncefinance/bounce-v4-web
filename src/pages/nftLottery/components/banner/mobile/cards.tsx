@@ -1,5 +1,6 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import CardImg from 'assets/imgs/nftLottery/banner/card.png'
+import CardRealImg from 'assets/imgs/nftLottery/banner/card-real.png'
 import QrcodeImg from 'assets/imgs/nftLottery/banner/qrcode.png'
 import FontBg from 'assets/imgs/nftLottery/banner/font.svg'
 import { ReactComponent as XSvg } from 'assets/imgs/nftLottery/banner/x.svg'
@@ -105,7 +106,7 @@ const Cards = () => {
       </CardItem>
     )
   }
-  const SubCard = ({ sx }: { sx: React.CSSProperties }) => {
+  const SubCard = ({ sx, src }: { sx: React.CSSProperties; src: string }) => {
     return (
       <CardItem
         sx={{
@@ -113,7 +114,7 @@ const Cards = () => {
         }}
       >
         <Image
-          src={CardImg}
+          src={src}
           style={{
             width: '100%',
             height: '100%',
@@ -126,25 +127,30 @@ const Cards = () => {
   }
   const styleConfig = {
     card1: {
+      zoom: 1.2,
       transition: 'all 0.6s',
       transform: 'translate3D(-50%, 0, 0)'
     },
     card2: {
+      zoom: 1.2,
       transition: 'all 0s',
       transformOrigin: 'center bottom',
       transform: `translate3D(calc(-50% + 30px), calc(8px), 0) rotateZ(12deg)`
     },
     card3: {
+      zoom: 1.2,
       transition: 'all 0s',
       transformOrigin: 'center bottom',
       transform: `translate3D(calc(-50% + 45px), calc(12px), 0) rotateZ(20deg)`
     },
     card4: {
+      zoom: 1.2,
       transition: 'all 0s',
       transformOrigin: 'center bottom',
       transform: `translate3D(calc(50% - 30px), calc(8px), 0) rotateZ(-12deg)`
     },
     card5: {
+      zoom: 1.2,
       transition: 'all 0s',
       transformOrigin: 'center bottom',
       transform: `translate3D(calc(50% - 45px), calc(12px), 0) rotateZ(-20deg)`
@@ -155,7 +161,7 @@ const Cards = () => {
       sx={{
         position: 'relative',
         width: '100%',
-        height: 580,
+        height: 650,
         overflow: 'hidden',
         background: `url(${FontBg}) no-repeat top center / auto 100%`,
         paddingBottom: 48
@@ -166,8 +172,8 @@ const Cards = () => {
           position: 'absolute',
           top: 30,
           left: '50%',
-          width: 145,
-          height: 145,
+          width: 200,
+          height: 200,
           borderRadius: '50%',
           border: '1px solid #000',
           transform: `translate3D(-50%, 0, 0)`
@@ -200,7 +206,7 @@ const Cards = () => {
           left: 20,
           lineHeight: '44px',
           textAlign: 'center',
-          fontSize: 32,
+          fontSize: 16,
           fontWeight: 700,
           cursor: 'pointer',
           color: '#8B6D3F'
@@ -216,7 +222,7 @@ const Cards = () => {
           right: 20,
           lineHeight: '44px',
           textAlign: 'center',
-          fontSize: 32,
+          fontSize: 16,
           fontWeight: 700,
           cursor: 'pointer',
           color: '#8B6D3F'
@@ -263,6 +269,7 @@ const Cards = () => {
             }}
           />
           <SubCard
+            src={CardRealImg}
             sx={{
               position: 'absolute',
               top: 85,
@@ -272,28 +279,31 @@ const Cards = () => {
             }}
           />
           <SubCard
+            src={CardRealImg}
             sx={{
               position: 'absolute',
               top: 90,
-              left: '52%',
+              left: '50%',
               zIndex: '1',
               ...styleConfig.card3
             }}
           />
           <SubCard
+            src={CardImg}
             sx={{
               position: 'absolute',
               top: 85,
-              right: '51%',
+              right: '50%',
               zIndex: '2',
               ...styleConfig.card4
             }}
           />
           <SubCard
+            src={CardImg}
             sx={{
               position: 'absolute',
               top: 90,
-              right: '52%',
+              right: '50%',
               zIndex: '1',
               ...styleConfig.card5
             }}
