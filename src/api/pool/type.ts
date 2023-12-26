@@ -106,6 +106,22 @@ export enum PoolStatus {
   'Cancelled' = 5
 }
 
+export enum RandomPoolStatus {
+  'Upcoming' = 1,
+  'Live' = 2,
+  'OpenSeed' = 3,
+  'Waiting' = 4,
+  'Closed' = 5
+}
+
+export interface RandomSelectionNFTResultProps {
+  poolStatus: RandomPoolStatus
+  isUserClaimed: boolean | undefined
+  isUserJoined: boolean
+  isWinnerSeedDone: boolean
+  isUserWinner: boolean
+}
+
 export interface GetPoolInfoParams {
   category?: PoolType
   chainId?: number

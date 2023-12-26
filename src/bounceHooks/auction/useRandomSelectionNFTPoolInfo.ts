@@ -1,10 +1,17 @@
-import { PoolType, RandomSelectionNFTProps } from 'api/pool/type'
+import { PoolType, RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import { Currency } from 'constants/token'
 import { useActiveWeb3React } from 'hooks'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useRandomSelectionNFTContract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { useBackedPoolInfo } from './usePoolInfo'
+import {
+  useIsJoinedRandomSelectionPool,
+  useIsWinnerForRandomSelectionPool,
+  useIsWinnerSeedDone
+} from 'hooks/useRandomSelectionPool'
+import { useRequest } from 'ahooks'
+import { getCurrentTimeStamp } from 'utils'
 
 const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_NFT, backedId)
@@ -59,6 +66,59 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     run: getPoolInfo,
     data
   }
+}
+
+export const useGetRandomSelectionNFTPoolStatus = (
+  poolInfo: RandomSelectionNFTProps
+): RandomSelectionNFTResultProps => {
+  const { account } = useActiveWeb3React()
+  const { participant, claimAt, openAt, closeAt } = poolInfo
+  const isJoined = useIsJoinedRandomSelectionPool(poolInfo.poolId, account, poolInfo.contract, poolInfo.ethChainId)
+  const isWinnerSeedDone = useIsWinnerSeedDone(
+    poolInfo.poolId,
+    poolInfo.contract,
+    PoolType.LOTTERY_NFT,
+    poolInfo.ethChainId
+  )
+  const { isWinner } = useIsWinnerForRandomSelectionPool(
+    poolInfo.poolId,
+    account,
+    poolInfo.contract,
+    isWinnerSeedDone,
+    PoolType.LOTTERY_NFT,
+    poolInfo.ethChainId
+  )
+  const { claimed } = participant
+  const { data } = useRequest(
+    async () => {
+      const now = getCurrentTimeStamp()
+      if (now < openAt) {
+        return RandomPoolStatus.Upcoming
+      }
+      if (now > openAt && now < closeAt) {
+        return RandomPoolStatus.Live
+      }
+      if (now > closeAt && now < claimAt) {
+        return isWinnerSeedDone ? RandomPoolStatus.OpenSeed : RandomPoolStatus.Waiting
+      }
+      if (!isWinnerSeedDone) return RandomPoolStatus.Waiting
+      return RandomPoolStatus.Closed
+    },
+    {
+      pollingInterval: 2000,
+      refreshDeps: [claimAt, openAt, closeAt, isWinnerSeedDone]
+    }
+  )
+  return useMemo(
+    () => ({
+      poolStatus: data || RandomPoolStatus.Upcoming,
+      isUserClaimed: claimed,
+      isUserJoined: isJoined,
+      isWinnerSeedDone,
+      isUserWinner: isWinner
+    }),
+    [claimed, data, isJoined, isWinner, isWinnerSeedDone]
+  )
 }
 
 export default useRandomSelectionNFTPoolInfo

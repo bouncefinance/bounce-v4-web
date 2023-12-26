@@ -6,8 +6,10 @@ import PoolDetail from './sections/poolDetail'
 import FooterPc from 'components/Footer/FooterPc'
 import Goback from './components/banner/goBack'
 import { useEffect } from 'react'
+import useRandomSelectionNFTPoolInfo from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 
 const NftLottery = () => {
+  const { data: poolInfo } = useRandomSelectionNFTPoolInfo()
   useEffect(() => {
     document.getElementById('body')?.setAttribute('style', 'padding-top: 0;')
     return () => {
@@ -18,7 +20,7 @@ const NftLottery = () => {
     <>
       <Banner />
       <TokenInformation />
-      <PoolDetail />
+      {poolInfo && <PoolDetail poolInfo={poolInfo} />}
       <ArtistsList />
       <ArtistsInformation />
       <FooterPc isDark={false} />
