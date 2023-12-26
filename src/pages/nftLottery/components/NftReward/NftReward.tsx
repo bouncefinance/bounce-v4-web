@@ -1,7 +1,8 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import ImgCard from '../tokenInformation/imgCard'
+import ImgCard, { NftSmallImgCard } from '../tokenInformation/imgCard'
 import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useMemo } from 'react'
 const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
@@ -66,6 +67,11 @@ const NftContainer = styled(Box)`
   &::-webkit-scrollbar {
     display: none;
   }
+  &.small {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
   /* @media (min-width: 1224px) {
     justify-content: flex-start;
   } */
@@ -77,6 +83,27 @@ const NftContainer = styled(Box)`
 `
 const NftReward = () => {
   const isSm = useBreakpoint('sm')
+  const length = 2
+  const nftList = useMemo(() => {
+    if (isSm && length > 1) {
+      return (
+        <>
+          <NftSmallImgCard />
+          <NftSmallImgCard />
+          <NftSmallImgCard />
+          {/* <NftSmallImgCard /> */}
+        </>
+      )
+    }
+    return (
+      <>
+        <ImgCard />
+        <ImgCard />
+        <ImgCard />
+        <ImgCard />
+      </>
+    )
+  }, [isSm])
   return (
     <Container>
       <Body>
@@ -84,17 +111,11 @@ const NftReward = () => {
           <Title1>YOUR NFT</Title1>
           <Title2>( Before the NFT is revealed, you can trade it on the market )</Title2>
         </Stack>
-        <NftContainer>
-          <ImgCard />
-          <ImgCard />
-          <ImgCard />
-          <ImgCard />
-          {/* <ImgCard />
-          <ImgCard />
-          <ImgCard /> */}
+        <NftContainer className={length > 1 && isSm ? 'small' : ''}>
+          {nftList}
           {/* <Title2>You don’t have any NFT</Title2> */}
         </NftContainer>
-        <Stack justifyContent={'center'} alignItems={'center'} mt={isSm ? 24 : 0}>
+        <Stack justifyContent={'center'} alignItems={'center'} mt={isSm ? 24 : 0} mb={isSm ? 8 : 0}>
           <BaseBtnStyle disabled> Extract NFT</BaseBtnStyle>
         </Stack>
       </Body>

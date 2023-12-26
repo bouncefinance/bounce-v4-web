@@ -84,6 +84,50 @@ export const WinnerImgCard = () => {
     </Box>
   )
 }
+
+export const NftSmallImgCard = () => {
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        minWidth: 140,
+        borderRadius: 8,
+        background: '#0F0F0F',
+        padding: 7.568
+      }}
+    >
+      <img src={TokenInfoImg} style={{ width: '100%', height: '100%', border: 8 }} />
+      <Box mt={8.871}>
+        <Typography
+          sx={{
+            color: '#FFF',
+            fontFamily: 'Helvetica',
+            fontSize: 12,
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '140%'
+          }}
+        >
+          AI Meets Bitcoin
+        </Typography>
+        <Typography
+          mt={3.5}
+          sx={{
+            color: 'rgba(255, 255, 255, 0.70)',
+            fontFamily: 'Helvetica',
+            fontSize: 12,
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '140%'
+          }}
+        >
+          Unrevealed
+        </Typography>
+      </Box>
+    </Box>
+  )
+}
+
 const ImgCard = () => {
   const isSm = useBreakpoint('sm')
   return (
