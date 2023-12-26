@@ -7,12 +7,7 @@ import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRando
 import { styled } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useRandomNFTBetCallback, useRandomNFTUserClaim } from 'bounceHooks/auction/useRandomNFTAuctionCallback'
-import {
-  hideDialogConfirmation,
-  showRequestApprovalDialog,
-  showRequestConfirmDialog,
-  showWaitingTxDialog
-} from 'utils/auction'
+import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -100,91 +95,21 @@ const BidButtonBlock = ({ poolInfo }: BidButtonBlockProps) => {
     }
   }, [approveCallback])
 
-  const { run: bid, submitted: placeBidSubmitted } = useRandomNFTBetCallback(poolInfo)
+  const { runWithModal: bid, submitted: placeBidSubmitted } = useRandomNFTBetCallback(poolInfo)
   const toBid = useCallback(async () => {
     if (!currencySlicedBidAmount || !account) return
-    showRequestConfirmDialog()
-    try {
-      const { transactionResult } = await bid(currencySlicedBidAmount)
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
-        transactionResult.then(curReceipt => {
-          resolve(curReceipt)
-        })
-      })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-          show(DialogTips, {
-            iconType: 'success',
-            againBtn: 'Close',
-            title: 'Congratulations!',
-            content: `You have successfully purchased a ticket with ${currencySlicedBidAmount.toSignificant()} ${
-              poolInfo.token1.symbol
-            }.`
-          })
-        })
-        .catch()
-    } catch (error) {
-      const err: any = error
-      hideDialogConfirmation()
-      show(DialogTips, {
-        iconType: 'error',
-        againBtn: 'Try Again',
-        cancelBtn: 'Cancel',
-        title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toBid
-      })
-    }
-  }, [account, bid, currencySlicedBidAmount, poolInfo.token1.symbol])
+    bid(currencySlicedBidAmount)
+  }, [account, bid, currencySlicedBidAmount])
 
-  const { run: userClaim, submitted: placeUserSubmitted } = useRandomNFTUserClaim(
+  const { runWithModal: userClaim, submitted: placeUserSubmitted } = useRandomNFTUserClaim(
     poolInfo,
     isUserWinner,
     poolInfo.contract
   )
   const toClaim = useCallback(async () => {
     if (!account) return
-    showRequestConfirmDialog()
-    try {
-      const { transactionResult } = await userClaim()
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
-        transactionResult.then(curReceipt => {
-          resolve(curReceipt)
-        })
-      })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-          show(DialogTips, {
-            iconType: 'success',
-            againBtn: 'Close',
-            title: 'Congratulations!',
-            content: `You have successfully claimed.`
-          })
-        })
-        .catch()
-    } catch (error) {
-      const err: any = error
-      hideDialogConfirmation()
-      show(DialogTips, {
-        iconType: 'error',
-        againBtn: 'Try Again',
-        cancelBtn: 'Cancel',
-        title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toBid
-      })
-    }
-  }, [account, toBid, userClaim])
+    userClaim()
+  }, [account, userClaim])
 
   if (poolStatus === RandomPoolStatus.Upcoming) {
     return <UpcomingBtn poolInfo={poolInfo} />

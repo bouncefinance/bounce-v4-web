@@ -5,7 +5,6 @@ import { CurrencyAmount } from 'constants/token'
 import { calculateGasMargin } from 'utils'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
-
 import { getUserRandomFailedProof, getUserRandomIsWinterProof, getUserWhitelistProof } from 'api/user'
 import { useRandomSelectionNFTContract } from 'hooks/useContract'
 import { useUserHasSubmittedRecords } from 'state/transactions/hooks'
@@ -51,7 +50,7 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
     })
   }, [account, addTransaction, randomContract, name, poolId])
 
-  const runWithModal = useTransactionModalWrapper(run)
+  const runWithModal = useTransactionModalWrapper(run, 'You have successfully claimed.')
 
   return { submitted, run, runWithModal }
 }
@@ -132,7 +131,7 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
     addTransaction
   ])
 
-  const runWithModal = useTransactionModalWrapper(run)
+  const runWithModal = useTransactionModalWrapper(run, 'You have successfully claimed.')
 
   return { run, submitted, runWithModal }
 }
@@ -214,7 +213,10 @@ export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
       addTransaction
     ]
   )
-  const runWithModal = useTransactionModalWrapper(run)
+  const runWithModal = useTransactionModalWrapper(
+    run,
+    `You have successfully purchased a ticket with ${poolInfo.maxAmount1PerWallet} ${poolInfo.token1.symbol}.`
+  )
 
   return { run, submitted, runWithModal }
 }

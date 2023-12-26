@@ -8,9 +8,10 @@ import Bg2Svg from 'assets/imgs/nftLottery/winner-bg2.png'
 import Bg2SvgMobile from 'assets/imgs/nftLottery/winner-bg2-mobile.png'
 import { ReactComponent as ShowSvg } from 'assets/imgs/nftLottery/shadow.svg'
 import { ReactComponent as ShowMobileSvg } from 'assets/imgs/nftLottery/shadow-mobile.svg'
-import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
+import BidButtonBlock from '../poolCard/bidButtonBlock'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 const Container = styled(Box)`
   position: relative;
   width: 100%;
@@ -82,8 +83,7 @@ ${
 `
 )
 
-const ClaimTokenBtn = () => <BaseBtnStyle>Claim Token Back</BaseBtnStyle>
-const WinnerResultCard = () => {
+const WinnerResultCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const theme = useTheme()
   const isWinner = false
   const isSm = useBreakpoint('sm')
@@ -135,7 +135,7 @@ const WinnerResultCard = () => {
           {/* {!isSm && <img src={ShowSvg} />} */}
           {!isSm && <ShowSvg />}
         </Box>
-        <ClaimTokenBtn />
+        <BidButtonBlock poolInfo={poolInfo} />
       </Stack>
     </Container>
   )
