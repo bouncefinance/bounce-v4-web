@@ -12903,7 +12903,7 @@ rc@^1.0.1, rc@^1.1.6:
 
 react-animated-numbers@^0.17.1:
   version "0.17.1"
-  resolved "https://registry.npmmirror.com/react-animated-numbers/-/react-animated-numbers-0.17.1.tgz#290d1a00503544622dcd04fdfee782339e784823"
+  resolved "https://registry.yarnpkg.com/react-animated-numbers/-/react-animated-numbers-0.17.1.tgz#290d1a00503544622dcd04fdfee782339e784823"
   integrity sha512-3YcmDFXir8uHciIJcVvIsjkvlN3cE8riMQGacvECBTOL4ELHv+kyz2HaBrK1F0aGU9/QlRev8+Tc1yrn8pZMUA==
   dependencies:
     "@react-spring/web" "^9.4.5"
