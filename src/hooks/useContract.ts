@@ -47,7 +47,8 @@ import {
   TOOL_BOX_LINEAR_TOKEN_LOCKER_CONTRACT_ADDRESSES,
   TOOL_BOX_LINEAR_TOKEN_721_LOCKER_CONTRACT_ADDRESSES,
   LAUNCHPAD_COIN_CONTRACT_ADDRESSES,
-  STAKE_TOKEN_CONTRACT_ADDRESSES
+  STAKE_TOKEN_CONTRACT_ADDRESSES,
+  RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -313,6 +314,6 @@ export function useRandomSelectionNFTContract(address?: string, queryChainId?: C
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   const curAddress =
-    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined)
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, RANDOM_SELECTION_NFT_ABI, true, queryChainId)
 }

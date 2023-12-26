@@ -1,6 +1,6 @@
 import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
@@ -216,6 +216,27 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   releaseType?: IReleaseType | undefined
   enableReverses?: boolean
   releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
+
+export interface RandomSelectionNFTProps extends FixedSwapPool {
+  currencyAmountTotal1?: CurrencyAmount
+  currencySwappedTotal1?: CurrencyAmount
+  ethChainId: ChainId
+  mintContractAddress: string
+  participant: {
+    isJoined?: boolean
+    address?: string
+    claimed?: boolean
+  }
+  userTokenAmount: Currency
+  totalShare: string | number
+  maxPlayere: string | number
+  curPlayer: string | number
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined
