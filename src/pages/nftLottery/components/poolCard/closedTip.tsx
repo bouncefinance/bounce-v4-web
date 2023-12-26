@@ -6,7 +6,7 @@ const Container = styled(Box)`
   max-width: 673px;
   margin: 0 auto;
   position: relative;
-  margin-top: 20px;
+  margin-top: 37px;
 `
 const Title = styled(Typography)`
   color: var(--AI-red, #f00);

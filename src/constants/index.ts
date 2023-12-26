@@ -173,6 +173,46 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 
+export const RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xc9C747CCe579959e53Ba4cb5615d8783d4753450',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '0x6B142c939e686f24E8De46f9D5669EFEEa2250D7',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.BASE]: '',
+  [ChainId.BASE_TESTNET]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '0xAd161CDAFD56450BC8624F74163A47aF58BC2C82',
+  [ChainId.FANTOM]: '0x87d811661BB10Af6D236b5458Eeb2f4614723FB8',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '0x92f742a243904818e9167725eC3B7b992f8eeB2E',
+  [ChainId.SEPOLIA]: process.env.REACT_APP_RANDOM_SELECTION_ADDRESS || '',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
+}
+
 export const ENGLISH_AUCTION_ERC20_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0x0B0A73Dae5c6b5c3B5C2BAC0d9FFef65E07d3fD8',
   [ChainId.GÖRLI]: '',

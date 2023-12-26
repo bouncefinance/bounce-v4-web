@@ -1,11 +1,13 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import { AnimateStep } from '../../sections/banner/index'
 import { useIsSMDown } from 'themes/useTheme'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CardImg from 'assets/imgs/nftLottery/banner/card.png'
+import CardRealImg from 'assets/imgs/nftLottery/banner/card-real.png'
 import QrcodeImg from 'assets/imgs/nftLottery/banner/qrcode.png'
 import { ReactComponent as XSvg } from 'assets/imgs/nftLottery/banner/x.svg'
 import Image from 'components/Image'
+import { useInView } from 'react-intersection-observer'
+import classNames from 'classnames'
 
 const CardItem = styled(Box)(() => ({
   position: 'relative',
@@ -20,14 +22,89 @@ const CardItem = styled(Box)(() => ({
   cursor: 'pointer',
   overflow: 'hidden'
 }))
-const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
+const CardBlock = styled(Box)(() => ({
+  position: 'relative',
+  width: '100%',
+  height: '945px',
+  '.cardItemRight': {
+    transform: `translate3D(-50%, -50%, 0)`,
+    transformOrigin: 'center bottom',
+    animationTimingFunction: 'ease-in-out'
+  },
+  '.cardItemLeft': {
+    transform: `translate3D(50%, -50%, 0)`,
+    transformOrigin: 'center bottom',
+    animationTimingFunction: 'ease-in-out'
+  },
+  '.cardItem2': {
+    animation: `cardItem2animation 1s linear 0s forwards`
+  },
+
+  '.cardItem3': {
+    animation: `cardItem3animation 1s linear 0s forwards`
+  },
+  '.cardItem4': {
+    animation: `cardItem4animation 1s linear 0s forwards`
+  },
+  '.cardItem5': {
+    animation: `cardItem5animation 1s linear 0s forwards`
+  },
+  '@keyframes cardItem2animation': {
+    '0%': {
+      transform: `translate3D(calc(-50% ), calc(-50%), 0) rotateZ(0deg)`
+    },
+    '100%': {
+      transform: `translate3D(calc(-50% + 50px), calc(-50% + 15px), 0) rotateZ(20deg)`
+    }
+  },
+  '@keyframes cardItem3animation': {
+    '0%': {
+      transform: `translate3D(calc(-50% ), calc(-50%), 0) rotateZ(0deg)`
+    },
+    '100%': {
+      transform: `translate3D(calc(-50% + 75px), calc(-50% + 25px), 0) rotateZ(25deg)`
+    }
+  },
+  '@keyframes cardItem4animation': {
+    '0%': {
+      transform: `translate3D(50%, -50%, 0) rotateZ(0deg)`
+    },
+    '100%': {
+      transform: `translate3D(calc(50% - 50px), calc(-50% + 15px), 0) rotateZ(-20deg)`
+    }
+  },
+  '@keyframes cardItem5animation': {
+    '0%': {
+      transform: `translate3D(50%, -50%, 0) rotateZ(0deg)`
+    },
+    '100%': {
+      transform: `translate3D(calc(50% - 75px), calc(-50% + 35px), 0) rotateZ(-25deg)`
+    }
+  }
+}))
+const BannerStep3 = () => {
   const isSm = useIsSMDown()
-  const MainCard = ({ sx }: { sx: React.CSSProperties }) => {
+  const [onceAnimate, setOnceAnimate] = useState(false)
+  const { ref, inView } = useInView({
+    rootMargin: '-40% 0% -15% 0%',
+    triggerOnce: true,
+    delay: 250
+  })
+  useEffect(() => {
+    if (inView && !onceAnimate) {
+      console.log('!! 进入')
+      setOnceAnimate(true)
+    }
+    return () => {}
+  }, [inView, onceAnimate])
+  const MainCard = ({ sx, className }: { sx: React.CSSProperties; className?: string }) => {
     return (
       <CardItem
         sx={{
+          transition: 'all 3s',
           ...sx
         }}
+        className={className}
       >
         <Stack
           justifyContent={'center'}
@@ -52,7 +129,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
             }}
             variant="lotteryh1"
           >
-            UNREVEALED
+            UNREVEALED{onceAnimate ? '111' : '222'}
           </Typography>
           <Typography
             sx={{
@@ -103,15 +180,16 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
       </CardItem>
     )
   }
-  const SubCard = ({ sx }: { sx: React.CSSProperties }) => {
+  const SubCard = ({ sx, className, src }: { sx: React.CSSProperties; className?: string; src: string }) => {
     return (
       <CardItem
         sx={{
           ...sx
         }}
+        className={className}
       >
         <Image
-          src={CardImg}
+          src={src}
           style={{
             width: '100%',
             height: '100%',
@@ -123,208 +201,67 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
     )
   }
   const styleConfig = useMemo(() => {
-    const styleObj = {
-      card1: {
-        transition: 'all 0s',
-        transform: 'translate3D(-50%, 0, 0)'
-      },
-      card2: {
-        transition: 'all 0s',
-        transform: 'translate3D(-50%, 0, 0)'
-      },
-      card3: {
-        transition: 'all 0s',
-        transform: 'translate3D(-50%, 0, 0)'
-      },
-      card4: {
-        transition: 'all 0s',
-        transform: 'translate3D(50%, 0, 0)'
-      },
-      card5: {
-        transition: 'all 0s',
-        transform: 'translate3D(50%, 0, 0)'
-      },
-      common: {
-        transition: 'all 0s',
-        transform: 'translate3D(0, 100vh, 0)'
-      },
-      t1: {
-        transition: 'all 0s',
-        transform: 'translate3D(-100vw, -50%, 0)'
-      },
-      t2: {
-        transition: 'all 0s',
-        transform: 'translate3D(100vw, -50%, 0)'
-      },
-      t3: {
-        transition: 'all 0s',
-        transform: 'translate3D(-50%, 100vh, 0)'
+    if (inView) {
+      return {
+        common: {
+          opacity: '1',
+          transition: 'all 0.3s',
+          transform: `translate3D(0, 0, 0)`
+        },
+        t1: {
+          transition: 'all 0.6s',
+          transform: 'translate3D(-433px, -50%, 0)'
+        },
+        t2: {
+          transition: 'all 0.6s',
+          transform: 'translate3D(433px, -50%, 0)'
+        },
+        t3: {
+          transition: 'all 0.6s',
+          transform: 'translate3D(-50%, calc(-50% + 380px), 0)'
+        }
+      }
+    } else {
+      return {
+        common: {
+          transition: 'all 0s',
+          opacity: '0',
+          transform: 'translate3D(0, 50px, 0)'
+        },
+        t1: {
+          transition: 'all 0s',
+          transform: 'translate3D(-433px, calc(-50% + 50px), 0)'
+        },
+        t2: {
+          transition: 'all 0s',
+          transform: 'translate3D(433px, calc(-50% + 50px), 0)'
+        },
+        t3: {
+          transition: 'all 0s',
+          transform: 'translate3D(-50%, calc(-50% + 430px), 0)'
+        }
       }
     }
-    switch (step) {
-      case AnimateStep.default:
-        return styleObj
-      case AnimateStep.enter:
-        return {
-          normal: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, -50%, 0)`
-          },
-          card1: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, -50%, 0)`
-          },
-          card2: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, -50%, 0)`
-          },
-          card3: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, -50%, 0)`
-          },
-          card4: {
-            transition: 'all 0.6s',
-            transform: `translate3D(50%, -50%, 0)`
-          },
-          card5: {
-            transition: 'all 0.6s',
-            transform: `translate3D(50%, -50%, 0)`
-          },
-          common: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(0, 0, 0)'
-          },
-          t1: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-433px, -50%, 0)'
-          },
-          t2: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(433px, -50%, 0)'
-          },
-          t3: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-50%, calc(-50% + 380px), 0)'
-          }
-        }
-      case AnimateStep.moving:
-        return {
-          card1: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, -50%, 0)`
-          },
-          card2: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(-50% + ${50 * Number(ratio)}px), calc(-50% + ${
-              15 * Number(ratio)
-            }px), 0) rotateZ(calc(${20 * Number(ratio)}deg))`
-          },
-          card3: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(-50% + ${75 * Number(ratio)}px), calc(-50% + ${
-              35 * Number(ratio)
-            }px), 0) rotateZ(calc(${25 * Number(ratio)}deg))`
-          },
-          card4: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(50% - ${50 * Number(ratio)}px), calc(-50% + ${
-              15 * Number(ratio)
-            }px), 0) rotateZ(calc(-${20 * Number(ratio)}deg))`
-          },
-          card5: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(50% - ${75 * Number(ratio)}px), calc(-50% + ${
-              35 * Number(ratio)
-            }px), 0) rotateZ(calc(-${25 * Number(ratio)}deg))`
-          },
-          common: {
-            transition: 'all 0.6s',
-            transform: `translate3D(0, 0, 0)`
-          },
-          t1: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-433px, -50%, 0)'
-          },
-          t2: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(433px, -50%, 0)'
-          },
-          t3: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-50%, calc(-50% + 380px), 0)'
-          }
-        }
-      case AnimateStep.leave:
-        return {
-          card1: {
-            transition: 'all 0.6s',
-            transform: `translate3D(-50%, calc(-50%), 0)`
-          },
-          card2: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(-50% + 50px), calc(-50% + 15px), 0) rotateZ(20deg)`
-          },
-          card3: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(-50% + 75px), calc(-50% + 25px), 0) rotateZ(25deg)`
-          },
-          card4: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(50% - 50px), calc(-50% + 15px), 0) rotateZ(-20deg)`
-          },
-          card5: {
-            transition: 'all 0.6s',
-            transformOrigin: 'center bottom',
-            transform: `translate3D(calc(50% - 75px), calc(-50% + 35px), 0) rotateZ(-25deg)`
-          },
-          common: {
-            transition: 'all 0.3s',
-            transform: `translate3D(0, calc(-${100 * Number(ratio)}vh), 0)`
-          },
-          t1: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-433px, -50%, 0)'
-          },
-          t2: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(433px, -50%, 0)'
-          },
-          t3: {
-            transition: 'all 0.6s',
-            transform: 'translate3D(-50%, calc(-50% + 380px), 0)'
-          }
-        }
-      default:
-        return styleObj
-    }
-  }, [step, ratio])
+  }, [inView])
   return (
-    <Box
+    <CardBlock
       sx={{
+        position: 'relative',
         width: '100%',
-        height: '100vh'
+        height: '945px'
       }}
     >
       <Box
         sx={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
+          position: 'relative',
+          width: '100%',
+          height: '100%',
           ...styleConfig.common
         }}
       >
         <Box
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             width: 383,
@@ -336,7 +273,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         ></Box>
         <Box
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             width: 91,
@@ -356,7 +293,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         <Typography
           variant="lotteryh1"
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             transform: 'translate3D(calc(-50% - 200px), calc(-50% - 287px), 0)',
@@ -373,7 +310,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         <Typography
           variant="lotteryh1"
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             transform: 'translate3D(calc(-50% + 200px), calc(-50% - 287px), 0)',
@@ -388,9 +325,10 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           ERC
         </Typography>
         <Typography
+          ref={ref}
           variant="lotteryh1"
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             right: '50%',
             lineHeight: '44px',
@@ -407,7 +345,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         <Typography
           variant="lotteryh1"
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             lineHeight: '44px',
@@ -424,7 +362,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         <Typography
           variant="lotteryh1"
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             lineHeight: '44px',
@@ -440,7 +378,7 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
         </Typography>
         <Image
           style={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             width: 205,
@@ -448,53 +386,72 @@ const BannerStep3 = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
           }}
           src={QrcodeImg}
         />
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%'
+        }}
+      >
         <MainCard
           sx={{
-            position: 'fixed',
+            position: 'absolute',
             top: '50%',
             left: '50%',
             zIndex: '3',
-            ...styleConfig.card1
+            transition: 'all 3s'
           }}
+          className={'cardItemRight'}
         />
         <SubCard
+          src={CardRealImg}
+          key={'subcard' + 0}
           sx={{
-            position: 'fixed',
-            top: '51%',
-            left: '51%',
-            zIndex: '2',
-            ...styleConfig.card2
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            zIndex: '2'
           }}
+          className={classNames({ cardItemRight: true, cardItem2: onceAnimate })}
         />
         <SubCard
+          src={CardRealImg}
+          key={'subcard' + 1}
           sx={{
-            position: 'fixed',
-            top: '52%',
-            left: '52%',
-            zIndex: '1',
-            ...styleConfig.card3
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            zIndex: '1'
           }}
+          className={classNames({ cardItemRight: true, cardItem3: onceAnimate })}
         />
         <SubCard
+          src={CardImg}
+          key={'subcard' + 2}
           sx={{
-            position: 'fixed',
-            top: '51%',
-            right: '51%',
-            zIndex: '2',
-            ...styleConfig.card4
+            position: 'absolute',
+            top: '50%',
+            right: '50%',
+            zIndex: '2'
           }}
+          className={classNames({ cardItemLeft: true, cardItem4: onceAnimate })}
         />
         <SubCard
+          src={CardImg}
+          key={'subcard' + 3}
           sx={{
-            position: 'fixed',
-            top: '52%',
-            right: '52%',
-            zIndex: '1',
-            ...styleConfig.card5
+            position: 'absolute',
+            top: '50%',
+            right: '50%',
+            zIndex: '1'
           }}
+          className={classNames({ cardItemLeft: true, cardItem5: onceAnimate })}
         />
       </Box>
-    </Box>
+    </CardBlock>
   )
 }
 export default BannerStep3

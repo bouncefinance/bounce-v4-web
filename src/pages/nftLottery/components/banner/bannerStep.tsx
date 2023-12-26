@@ -1,9 +1,7 @@
 import { Box, Stack } from '@mui/material'
 import { AnimateStep } from 'pages/nftLottery/sections/banner'
-import { useIsSMDown } from 'themes/useTheme'
 import { useMemo } from 'react'
 const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) => {
-  const isSm = useIsSMDown()
   const styleConfig = useMemo(() => {
     const styleObj = {
       line: {
@@ -21,7 +19,7 @@ const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) =
         return {
           line: {
             transition: 'all 0.6s',
-            transform: `translate3D(-50%, ${isSm ? 100 : 200}px, 0)`
+            transform: `translate3D(-50%, ${250}px, 0)`
           },
           yellowLine: {
             top: 0
@@ -31,7 +29,7 @@ const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) =
         return {
           line: {
             transition: 'all 0.6s',
-            transform: `translate3D(-50%, ${isSm ? 100 : 200}px, 0)`
+            transform: `translate3D(-50%, ${250}px, 0)`
           },
           yellowLine: {
             top: '50%'
@@ -41,7 +39,7 @@ const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) =
         return {
           line: {
             transition: 'all 0.6s',
-            transform: `translate3D(0, calc(${isSm ? 100 : 200}px - ${2000 * Number(ratio)}px), 0)`
+            transform: `translate3D(-50%, calc(${250}px - ${2000 * Number(ratio)}px), 0)`
           },
           yellowLine: {
             top: '50%'
@@ -50,12 +48,12 @@ const BannerStepLine = ({ ratio, step }: { ratio: string; step: AnimateStep }) =
       default:
         return styleObj
     }
-  }, [isSm, ratio, step])
+  }, [ratio, step])
   return (
     <Stack
       sx={{
         width: '3px',
-        height: isSm ? '100px' : '184px',
+        height: '184px',
         position: 'fixed',
         top: '50%',
         left: '50%',

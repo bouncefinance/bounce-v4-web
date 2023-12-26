@@ -1,8 +1,10 @@
 import { Box, Stack, styled } from '@mui/material'
-import Info from '../poolCard/card/components/info'
-import ImgCard from '../tokenInformation/imgCard'
+import Info, { MobileRotateInfo } from '../poolCard/card/components/info'
+import { WinnerImgCard, WinnerMobileCard } from '../tokenInformation/imgCard'
 import p1 from 'assets/imgs/nftLottery/winner-bg3.png'
 import p2 from 'assets/imgs/nftLottery/winner-bg4.png'
+import p2Mobile from 'assets/imgs/nftLottery/winner-bg4-mobile.svg'
+import useBreakpoint from 'hooks/useBreakpoint'
 const Container = styled(Box)`
   /* position: relative;
   top: 118px;
@@ -11,11 +13,19 @@ const Container = styled(Box)`
 const LeftCard = styled(Box)`
   z-index: 3;
   position: relative;
-  /* transform: rotate(-16deg) translate(34px, 7px); */
+  transform: rotate(-16.428deg);
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    top: 27px;
+    left: 10px;
+  }
 `
 const RightCard = styled(Box)`
   position: relative;
   z-index: 2;
+  ${({ theme }) => theme.breakpoints.up('sm')} {
+    left: -26px;
+  }
+
   & > img {
     position: absolute;
     top: 0;
@@ -31,7 +41,7 @@ const BottomCard = styled(Box)`
     transform: translate(-50%, -60%);
   }
 `
-const WinnerCard = () => {
+const PCCard = () => {
   return (
     <Container>
       <Stack flexDirection={'row'}>
@@ -40,7 +50,7 @@ const WinnerCard = () => {
         </LeftCard>
         <RightCard>
           <img src={p1} />
-          <ImgCard />
+          <WinnerImgCard />
         </RightCard>
       </Stack>
       <BottomCard>
@@ -48,6 +58,31 @@ const WinnerCard = () => {
       </BottomCard>
     </Container>
   )
+}
+const MobileCard = () => {
+  return (
+    <Container>
+      <Stack flexDirection={'row'}>
+        <LeftCard sx={{ left: 19, bottom: -10 }}>
+          <MobileRotateInfo />
+        </LeftCard>
+        <RightCard>
+          <img src={p1} style={{ zoom: 0.41 }} />
+          <WinnerMobileCard />
+        </RightCard>
+      </Stack>
+      <BottomCard>
+        <img src={p2Mobile} style={{ transform: 'translate(-33%, -60%)' }} />
+      </BottomCard>
+    </Container>
+  )
+}
+const WinnerCard = () => {
+  const isSm = useBreakpoint('sm')
+  if (isSm) {
+    return <MobileCard />
+  }
+  return <PCCard />
 }
 
 export default WinnerCard

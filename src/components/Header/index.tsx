@@ -198,6 +198,9 @@ export default function Header() {
 
   const isTransparentRoute = useMemo(() => {
     // return routes.market.index.includes(pathname)
+    if (pathname === '/nftlottery') {
+      return false
+    }
     return transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname))
   }, [pathname])
 
@@ -207,9 +210,12 @@ export default function Header() {
   )
 
   const headerBg = useMemo(() => {
+    if (pathname === '/nftlottery') {
+      return { backgroundColor: 'transparent !important' }
+    }
     if (!isTransparentRoute) return {}
     return { backgroundColor: `rgba(255,255,255,${headerBgOpacity})` }
-  }, [headerBgOpacity, isTransparentRoute])
+  }, [headerBgOpacity, isTransparentRoute, pathname])
 
   const walletClick = () => {
     if (location.pathname === routes.login) {
