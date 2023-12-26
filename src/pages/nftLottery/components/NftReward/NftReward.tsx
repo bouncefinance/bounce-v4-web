@@ -3,6 +3,7 @@ import ImgCard, { NftSmallImgCard } from '../tokenInformation/imgCard'
 import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
+import { WithAnimation } from 'components/WithAnimation'
 const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
@@ -107,14 +108,18 @@ const NftReward = () => {
   return (
     <Container>
       <Body>
-        <Stack flexDirection={isSm ? 'column' : 'row'} gap={16}>
-          <Title1>YOUR NFT</Title1>
-          <Title2>( Before the NFT is revealed, you can trade it on the market )</Title2>
-        </Stack>
-        <NftContainer className={length > 1 && isSm ? 'small' : ''}>
-          {nftList}
-          {/* <Title2>You don’t have any NFT</Title2> */}
-        </NftContainer>
+        <WithAnimation>
+          <Stack flexDirection={isSm ? 'column' : 'row'} gap={16}>
+            <Title1>YOUR NFT</Title1>
+            <Title2>( Before the NFT is revealed, you can trade it on the market )</Title2>
+          </Stack>
+        </WithAnimation>
+        <WithAnimation>
+          <NftContainer className={length > 1 && isSm ? 'small' : ''}>
+            {nftList}
+            {/* <Title2>You don’t have any NFT</Title2> */}
+          </NftContainer>
+        </WithAnimation>
         <Stack justifyContent={'center'} alignItems={'center'} mt={isSm ? 24 : 0} mb={isSm ? 8 : 0}>
           <BaseBtnStyle disabled> Extract NFT</BaseBtnStyle>
         </Stack>

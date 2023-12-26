@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import { WithAnimation } from 'components/WithAnimation'
 
 const Container = styled(Box)`
   width: 100%;
@@ -105,7 +106,9 @@ const AuctionWinnerList = () => {
   return (
     <Container>
       <Body>
-        <Title mb={32}>Winner list</Title>
+        <WithAnimation>
+          <Title mb={32}>Winner list</Title>
+        </WithAnimation>
         <>
           <TableContainer sx={{ mt: 20, maxHeight: 440 }}>
             <TableStyle stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>
