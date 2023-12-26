@@ -9,7 +9,7 @@ import dayjs from 'dayjs'
 function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeList: number[]; isSm: boolean }) {
   const stepName = ['PARTICIPATION', 'LOTTERY DRAWING', 'ANNOUNCEMENT OF WINNERS']
   return isSm ? (
-    <Box>
+    <Box width={'100%'}>
       {timeList.map((time, index) => (
         <Box key={index} display={'flex'} gap={16}>
           <Box width={30} display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -35,7 +35,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
             <Typography
               variant="lotteryh1"
               fontSize={activeStep > index ? 18 : 16}
-              lineHeight={'90%'}
+              lineHeight={'130%'}
               fontWeight={700}
               color={activeStep > index ? 'var(--black-100, #121212)' : 'var(--gray-03, var(--gray-03, #959595))'}
             >
@@ -120,7 +120,7 @@ export default function Countdown({
     targetDate: startTime * 1000
   })
   return (
-    <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+    <Box display={'flex'} flexDirection={'column'} alignItems={'center'} padding={isSm ? '0 16px' : '0'}>
       <Typography
         variant="lotteryh1"
         fontSize={isSm ? 18 : 32}
@@ -153,13 +153,7 @@ export default function Countdown({
               {days ? days + 'D : ' : null}
               {hours}H : {minutes}M : {seconds}S
             </Typography>
-            {/* <AnimatedNumber
-              days={days}
-              hours={hours}
-              minutes={minutes}
-              seconds={seconds}
-              fontSize={isSm ? 50 : 100}
-            ></AnimatedNumber> */}
+            {/* <AnimatedNumber hours={hours} minutes={minutes} seconds={seconds} fontSize={isSm ? 50 : 100} /> */}
           </Box>
         ) : (
           <Typography
@@ -180,16 +174,14 @@ export default function Countdown({
       />
       <Typography
         maxWidth={isSm ? 328 : 800}
-        marginTop={isSm ? 48 : 120}
+        margin={isSm ? '48px 0' : '120px 0'}
         fontSize={isSm ? 17 : 20}
         lineHeight={'140%'}
         fontWeight={400}
         color={'var(--AI-dark-02, #4C483A)'}
         textAlign={'center'}
       >
-        Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and
-        transparent environment for the auction process. The use of blockchain technology also allows for the automatic
-        execution of the auction rules and the issuance of tokens to the winning bidders.
+        {`Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.`}
       </Typography>
     </Box>
   )

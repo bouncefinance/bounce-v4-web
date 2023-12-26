@@ -38,7 +38,7 @@ const NetDetails = () => {
   const isSm = useBreakpoint('sm')
   return (
     <Box marginBottom={isSm ? '24px' : '0'}>
-      {!isSm && <Title text="NFT DETAILS"></Title>}
+      {!isSm && <Title text="NFT DETAILS" />}
       <Typography
         variant="lotteryh2"
         color={'var(--AI-dark-02, #4C483A)'}

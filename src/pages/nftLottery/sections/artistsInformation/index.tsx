@@ -120,10 +120,10 @@ const ArtistsInformation = () => {
                   <ArrowDownSvg style={{ transform: accordionIndex === idx ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                 </Box>
                 <Box id={'accordion' + idx} style={{ overflow: 'hidden', height: '0', transition: '0.5s' }}>
-                  {idx === 0 && <ProjectInformation></ProjectInformation>}
-                  {idx === 1 && <NetDetails></NetDetails>}
-                  {idx === 2 && <RealWorldAirdrop></RealWorldAirdrop>}
-                  {idx === 3 && <AboutArtist></AboutArtist>}
+                  {idx === 0 && <ProjectInformation />}
+                  {idx === 1 && <NetDetails />}
+                  {idx === 2 && <RealWorldAirdrop />}
+                  {idx === 3 && <AboutArtist />}
                 </Box>
               </Box>
             ))}
@@ -190,10 +190,10 @@ const ArtistsInformation = () => {
             className={pcArtistWithAnimationStyles().tabItem}
           >
             <Box flex={1}>
-              {tabIndex === 0 && <ProjectInformation></ProjectInformation>}
-              {tabIndex === 1 && <NetDetails></NetDetails>}
-              {tabIndex === 2 && <RealWorldAirdrop></RealWorldAirdrop>}
-              {tabIndex === 3 && <AboutArtist></AboutArtist>}
+              {tabIndex === 0 && <ProjectInformation />}
+              {tabIndex === 1 && <NetDetails />}
+              {tabIndex === 2 && <RealWorldAirdrop />}
+              {tabIndex === 3 && <AboutArtist />}
             </Box>
           </WithAnimation>
         </Box>

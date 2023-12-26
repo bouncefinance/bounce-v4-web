@@ -32,7 +32,7 @@ const AboutArtist = () => {
   const [tabIndex, setTabNumber] = React.useState(0)
   return (
     <Box>
-      {!isSm && <Title text="ABOUT ARTIST"></Title>}
+      {!isSm && <Title text="ABOUT ARTIST" />}
       {!isSm ? (
         <Box maxWidth={800} marginTop={40}>
           {/* tab */}
@@ -62,13 +62,13 @@ const AboutArtist = () => {
           {/* tabMsg */}
           {msgList.map(
             ({ name, value, imgSrc }, idx) =>
-              idx === tabIndex && <AboutTab key={idx} name={name} value={value} imgSrc={imgSrc}></AboutTab>
+              idx === tabIndex && <AboutTab key={idx} name={name} value={value} imgSrc={imgSrc} />
           )}
         </Box>
       ) : (
         <Box>
           {msgList.map(({ name, value, imgSrc }, idx) => (
-            <AboutTab key={idx} name={name} value={value} imgSrc={imgSrc}></AboutTab>
+            <AboutTab key={idx} name={name} value={value} imgSrc={imgSrc} />
           ))}
         </Box>
       )}
