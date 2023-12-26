@@ -14,7 +14,7 @@ export enum PoolType {
   ENGLISH_AUCTION_NFT = 6,
   ENGLISH_AUCTION = 8,
   MUTANT_ENGLISH_AUCTION_NFT = 9,
-  LOTTERY_NFT = 10,
+  LOTTERY_NFT = 7,
   'PlayableAuction' = 100
 }
 
