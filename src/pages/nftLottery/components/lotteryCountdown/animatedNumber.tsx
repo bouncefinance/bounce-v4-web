@@ -8,7 +8,7 @@ export default function animatedNumber({
   seconds,
   fontSize
 }: {
-  days: number
+  days?: number
   hours: number
   minutes: number
   seconds: number

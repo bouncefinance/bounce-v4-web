@@ -7,7 +7,7 @@ const ProjectInformation = () => {
   const isSm = useBreakpoint('sm')
   return (
     <Box marginBottom={isSm ? '24px' : '0'}>
-      {!isSm && <Title text="PROJECT INFORMATION"></Title>}
+      {!isSm && <Title text="PROJECT INFORMATION" />}
       <Typography
         variant="lotteryh3"
         maxWidth={isSm ? 328 : 800}

@@ -9,7 +9,7 @@ const RealWorldAirdrop = () => {
   const isSm = useBreakpoint('sm')
   return (
     <Box marginBottom={isSm ? '24px' : '0'}>
-      {!isSm && <Title text="REAL WORLD AIRDROP"></Title>}
+      {!isSm && <Title text="REAL WORLD AIRDROP" />}
       <Box
         display={'flex'}
         gap={isSm ? 16 : 40}

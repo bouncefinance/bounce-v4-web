@@ -6,6 +6,7 @@ import P4Img from 'assets/imgs/nftLottery/p4.png'
 import P5Img from 'assets/imgs/nftLottery/p5.png'
 import Image from 'components/Image'
 import Cards from './cards'
+import LotteryCountdown from '../../lotteryCountdown'
 import NftcardImg from 'assets/imgs/nftLottery/banner/nftcard.png'
 import NftshadowImg from 'assets/imgs/nftLottery/banner/nftshadow.png'
 import { WithAnimation } from 'components/WithAnimation'
@@ -257,6 +258,9 @@ const MobileBanner = () => {
             {`Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.`}
           </Typography>
         </Box>
+        <LotteryCountdown status={1} startTime={1703840034} />
+        <LotteryCountdown status={2} startTime={1703840034} />
+        <LotteryCountdown status={4} startTime={1703494434} />
       </WithAnimation>
       <Cards />
     </Box>

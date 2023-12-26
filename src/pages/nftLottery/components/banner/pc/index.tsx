@@ -6,6 +6,7 @@ import BannerStepLine from '../bannerStep'
 import { AnimateStep } from '../../../sections/banner'
 import makeStyles from '@mui/styles/makeStyles'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
+import LotteryCountdown from '../../lotteryCountdown'
 export const useWithAnimationStyles = makeStyles(() => ({
   awaitInView: {
     width: '100%',
@@ -96,6 +97,9 @@ const PcBanner = () => {
       <BannerStep1 />
       <BannerStep2 />
       <BannerStepLine ratio={animate1Ratio} step={animate1Step} />
+      <LotteryCountdown status={1} startTime={1703840034} />
+      <LotteryCountdown status={2} startTime={1703840034} />
+      <LotteryCountdown status={4} startTime={1703494434} />
     </Box>
   )
 }
