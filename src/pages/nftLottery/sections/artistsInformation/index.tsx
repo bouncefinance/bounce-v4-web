@@ -81,7 +81,6 @@ const ArtistsInformation = () => {
           >
             {Tabs.map(({ title, index }, idx) => (
               <Box key={idx}>
-                {/* 下拉list */}
                 <Box
                   sx={{
                     display: 'flex',
@@ -120,7 +119,6 @@ const ArtistsInformation = () => {
                   </Box>
                   <ArrowDownSvg style={{ transform: accordionIndex === idx ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                 </Box>
-                {/* 隐藏内容 */}
                 <Box id={'accordion' + idx} style={{ overflow: 'hidden', height: '0', transition: '0.5s' }}>
                   {idx === 0 && <ProjectInformation></ProjectInformation>}
                   {idx === 1 && <NetDetails></NetDetails>}
@@ -133,7 +131,6 @@ const ArtistsInformation = () => {
         </WithAnimation>
       ) : (
         <Box width={1440} display={'flex'} gap={64}>
-          {/* tab切换 */}
           <WithAnimation
             defaultAnimation={false}
             addClassInView={pcArtistWithAnimationStyles().tabInView}
@@ -187,8 +184,6 @@ const ArtistsInformation = () => {
               ))}
             </Box>
           </WithAnimation>
-
-          {/* tab切换项 */}
           <WithAnimation
             defaultAnimation={false}
             addClassInView={pcArtistWithAnimationStyles().tabItemInView}

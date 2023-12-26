@@ -40,7 +40,6 @@ export default function ArtistsList({
           }
         }}
       >
-        {/* 文字内容 */}
         <Box
           id={'textBox'}
           display={'flex'}
@@ -73,7 +72,6 @@ export default function ArtistsList({
           >
             {children}
           </Typography>
-          {/* 数字 */}
           <Typography
             variant="lotteryh1"
             position={'absolute'}
@@ -90,7 +88,6 @@ export default function ArtistsList({
             {idx + 1}
           </Typography>
         </Box>
-        {/* 图片 */}
         <Box
           id={'imgBox'}
           sx={{
@@ -106,7 +103,6 @@ export default function ArtistsList({
             transition: '1.5s'
           }}
         ></Box>
-        {/* 线 */}
         {idx + 1 < length ? (
           <Box width={'100%'} height={'1px'} position={'relative'}>
             <Box width={'100%'} height={'1px'} bgcolor={'#737373'}></Box>
