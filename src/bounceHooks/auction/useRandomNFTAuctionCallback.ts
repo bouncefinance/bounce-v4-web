@@ -1,4 +1,4 @@
-import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
+import { PoolType, RandomSelectionNFTProps } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { CurrencyAmount } from 'constants/token'
@@ -11,6 +11,7 @@ import { useRandomSelectionNFTContract } from 'hooks/useContract'
 import { useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import getTokenType from 'utils/getTokenType'
 import { ZERO_ADDRESS } from '../../constants'
+import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 
 export function useRandomNFTCreatorClaim(poolId: number | string, name: string, contract?: string) {
   const { account } = useActiveWeb3React()
@@ -21,10 +22,7 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
 
   const submitted = useUserHasSubmittedRecords(account || undefined, funcName + '_random_nft', poolId)
 
-  const run = useCallback(async (): Promise<{
-    hash: string
-    transactionResult: Promise<void>
-  }> => {
+  const run = useCallback(async () => {
     if (!account) {
       return Promise.reject('no account')
     }
@@ -49,22 +47,16 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
           key: poolId
         }
       })
-      return {
-        hash: response.hash,
-        transactionResult: response.wait(1).then(receipt => {
-          if (receipt.status === 1) {
-            Promise.resolve()
-          }
-          Promise.reject('The transaction seems to have failed')
-        })
-      }
+      return response
     })
   }, [account, addTransaction, randomContract, name, poolId])
 
-  return { submitted, run }
+  const runWithModal = useTransactionModalWrapper(run)
+
+  return { submitted, run, runWithModal }
 }
 
-export function useRandomNFTUserClaim(poolInfo: FixedSwapPoolProp, isWinner: boolean, contract?: string) {
+export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinner: boolean, contract?: string) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
@@ -72,10 +64,7 @@ export function useRandomNFTUserClaim(poolInfo: FixedSwapPoolProp, isWinner: boo
 
   const randomContract = useRandomSelectionNFTContract(contract)
 
-  const run = useCallback(async (): Promise<{
-    hash: string
-    transactionResult: Promise<void>
-  }> => {
+  const run = useCallback(async () => {
     if (!account) {
       return Promise.reject('no account')
     }
@@ -128,15 +117,7 @@ export function useRandomNFTUserClaim(poolInfo: FixedSwapPoolProp, isWinner: boo
           key: poolInfo.poolId
         }
       })
-      return {
-        hash: response.hash,
-        transactionResult: response.wait(1).then(receipt => {
-          if (receipt.status === 1) {
-            Promise.resolve()
-          }
-          Promise.reject('The transaction seems to have failed')
-        })
-      }
+      return response
     })
   }, [
     account,
@@ -150,10 +131,13 @@ export function useRandomNFTUserClaim(poolInfo: FixedSwapPoolProp, isWinner: boo
     isWinner,
     addTransaction
   ])
-  return { run, submitted }
+
+  const runWithModal = useTransactionModalWrapper(run)
+
+  return { run, submitted, runWithModal }
 }
 
-export function useRandomNFTBetCallback(poolInfo: FixedSwapPoolProp) {
+export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
@@ -164,12 +148,7 @@ export function useRandomNFTBetCallback(poolInfo: FixedSwapPoolProp) {
   const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
 
   const run = useCallback(
-    async (
-      bidAmount: CurrencyAmount
-    ): Promise<{
-      hash: string
-      transactionResult: Promise<void>
-    }> => {
+    async (bidAmount: CurrencyAmount) => {
       if (!account) {
         return Promise.reject('no account')
       }
@@ -220,15 +199,7 @@ export function useRandomNFTBetCallback(poolInfo: FixedSwapPoolProp) {
               key: poolInfo.poolId
             }
           })
-          return {
-            hash: response.hash,
-            transactionResult: response.wait(1).then(receipt => {
-              if (receipt.status === 1) {
-                Promise.resolve()
-              }
-              Promise.reject('The transaction seems to have failed')
-            })
-          }
+          return response
         })
     },
     [
@@ -243,6 +214,7 @@ export function useRandomNFTBetCallback(poolInfo: FixedSwapPoolProp) {
       addTransaction
     ]
   )
+  const runWithModal = useTransactionModalWrapper(run)
 
-  return { run, submitted }
+  return { run, submitted, runWithModal }
 }

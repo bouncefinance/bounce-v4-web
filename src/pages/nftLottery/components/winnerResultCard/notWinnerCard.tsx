@@ -3,6 +3,7 @@ import Info, { MobileRotateInfo } from '../poolCard/card/components/info'
 import { ReactComponent as Cross1 } from 'assets/imgs/nftLottery/cross1.svg'
 import { ReactComponent as Cross2 } from 'assets/imgs/nftLottery/cross2.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 const Container = styled(Box)`
   position: relative;
   /* left: -70px; */
@@ -34,35 +35,20 @@ const CrossBox = () => {
     </Box>
   )
 }
-const PCCard = () => {
-  return (
-    <Container>
-      <LeftCard>
-        <Info />
-      </LeftCard>
-      <RightCard>
-        <CrossBox />
-      </RightCard>
-    </Container>
-  )
-}
-const MobileCard = () => {
-  return (
-    <Container>
-      <LeftCard>
-        <MobileRotateInfo />
-      </LeftCard>
-      <RightCard>
-        <CrossBox />
-      </RightCard>
-    </Container>
-  )
-}
-const NotWinnerCard = () => {
+
+const NotWinnerCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const isSm = useBreakpoint('sm')
-  if (isSm) {
-    return <MobileCard />
-  }
-  return <PCCard />
+
+  return (
+    <Container>
+      <LeftCard>
+        {isSm && <MobileRotateInfo poolInfo={poolInfo} />}
+        {!isSm && <Info poolInfo={poolInfo} />}
+      </LeftCard>
+      <RightCard>
+        <CrossBox />
+      </RightCard>
+    </Container>
+  )
 }
 export default NotWinnerCard

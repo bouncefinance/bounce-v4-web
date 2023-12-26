@@ -1,5 +1,7 @@
 import { Box, Stack, styled, Typography } from '@mui/material'
+import { RandomPoolStatus, RandomSelectionNFTResultProps } from 'api/pool/type'
 import { ReactComponent as GreenCircleSvg } from 'assets/imgs/nftLottery/poolHead/green-circle.svg'
+import { useMemo } from 'react'
 const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
@@ -62,12 +64,29 @@ const WaitTitle = () => (
 const WinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[2]}</PoolTitleStyle>
 
 const NotWinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[3]}</PoolTitleStyle>
-export const PoolHeadTitle = () => {
-  console.log('LiveTitle', LiveTitle, WaitTitle, WinnerTitle, NotWinnerTitle, UpcomingTitle, NotInvolvedTitle)
 
-  return (
-    <Container>
-      <WaitTitle />
-    </Container>
-  )
+export const PoolHeadTitle = ({ allStatus }: { allStatus: RandomSelectionNFTResultProps }) => {
+  const { poolStatus, isUserJoined, isUserWinner } = allStatus
+  const curTitle = useMemo(() => {
+    if (poolStatus === RandomPoolStatus.Upcoming) {
+      return <UpcomingTitle />
+    }
+    if (poolStatus === RandomPoolStatus.Live) {
+      return <LiveTitle />
+    }
+    if (poolStatus === RandomPoolStatus.Closed && isUserJoined) {
+      return <WaitTitle />
+    }
+    if (poolStatus === RandomPoolStatus.Closed && !isUserJoined) {
+      return <NotInvolvedTitle />
+    }
+    if (isUserWinner) {
+      return <WinnerTitle />
+    }
+    if (!isUserWinner) {
+      return <NotWinnerTitle />
+    }
+    return <></>
+  }, [isUserJoined, isUserWinner, poolStatus])
+  return <Container>{curTitle}</Container>
 }

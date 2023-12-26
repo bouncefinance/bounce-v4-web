@@ -3,7 +3,16 @@ import { MobileInfo } from './components/info'
 import { MobileManBox } from './components/manBox'
 import { MobileBarcode } from './components/barcode'
 import { useEffect, useState } from 'react'
-const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
+const MobileLiveCard = ({
+  isZoom,
+  poolInfo,
+  allStatus
+}: {
+  isZoom: boolean
+  poolInfo: RandomSelectionNFTProps
+  allStatus: RandomSelectionNFTResultProps
+}) => {
   const [zoom, setZoom] = useState(1)
   const setZoomHandle = () => {
     const w = window.innerWidth
@@ -19,8 +28,13 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
       window.removeEventListener('resize', setZoomHandle)
     }
   }, [])
+  const packMobileInfo = <MobileInfo poolInfo={poolInfo} />
+  const packMobileManBox = <MobileManBox poolInfo={poolInfo} allStatus={allStatus} />
   // Already participated or max number
-  if (false) {
+  if (
+    (allStatus.isUserJoined && allStatus.poolStatus === RandomPoolStatus.Live) ||
+    (allStatus.poolStatus === RandomPoolStatus.Live && poolInfo.curPlayer === poolInfo.maxPlayere)
+  ) {
     return (
       <Box sx={{ padding: '0 33px' }}>
         <Box
@@ -31,11 +45,11 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
           }}
         >
           <Box sx={{ transform: 'rotate(-12deg)', zIndex: 3, position: 'relative', top: 1, left: 1 }}>
-            <MobileInfo />
+            {packMobileInfo}
           </Box>
 
           {/* <div style={{ transform: 'translateX(-15px) rotate(7deg)', position: 'relative', zIndex: 0 }}> */}
-          <MobileManBox />
+          {packMobileManBox}
           <MobileBarcode />
           {/* </div> */}
         </Box>
@@ -43,7 +57,7 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
     )
   }
   // close and No participants
-  else if (false) {
+  else if (allStatus.poolStatus === RandomPoolStatus.Closed && !poolInfo.curPlayer) {
     return (
       <Box sx={{ padding: '0 33px', mt: 90 }}>
         <Box
@@ -54,13 +68,13 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
             transform: 'rotate(5deg)'
           }}
         >
-          <MobileInfo />
-          <MobileManBox />
+          {packMobileInfo}
+          {packMobileManBox}
           <MobileBarcode />
         </Box>
       </Box>
     )
-  } else if (true) {
+  } else if (allStatus.poolStatus === RandomPoolStatus.Closed) {
     return (
       <Box sx={{ padding: '0 33px', mt: 90 }}>
         <Box
@@ -71,10 +85,10 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
           }}
         >
           <Box sx={{ position: 'relative', right: -20, top: 5, transform: 'rotate(-4.64deg)', zIndex: 3 }}>
-            <MobileInfo />
+            {packMobileInfo}
           </Box>
           <Box sx={{ position: 'relative', left: -12, top: 0, transform: 'rotate(7.64deg)', zIndex: 2 }}>
-            <MobileManBox />
+            {packMobileManBox}
             <MobileBarcode />
           </Box>
         </Box>
@@ -92,9 +106,9 @@ const MobileLiveCard = ({ isZoom }: { isZoom: boolean }) => {
         }}
         // className={'rotate'}
       >
-        <MobileInfo />
+        {packMobileInfo}
         <div style={{ transform: 'translateX(-15px) rotate(7deg)', position: 'relative', zIndex: 0 }}>
-          <MobileManBox />
+          {packMobileManBox}
           <MobileBarcode />
         </div>
       </Box>

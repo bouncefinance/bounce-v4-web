@@ -1,4 +1,6 @@
 import { Button, Stack, Typography, styled } from '@mui/material'
+import { useCountDown } from 'ahooks'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 import useBreakpoint from 'hooks/useBreakpoint'
 interface IProps {
   goCheck: () => void
@@ -43,7 +45,7 @@ const Title = styled(Typography)`
   font-weight: 400;
   line-height: 150%; /* 24px */
 `
-const TipTitle = styled(Typography)`
+export const TipTitle = styled(Typography)`
   color: #171717;
 
   /* D/H5 */
@@ -57,15 +59,24 @@ const TipTitle = styled(Typography)`
     font-size: 14px;
   }
 `
-const UpcomingBtn = () => (
-  <>
-    <UpcomingBtnStyle className="dis">
-      <Title>Place a Bid</Title>
-      <Title>0d : 32h : 12m : 10s</Title>
-    </UpcomingBtnStyle>
-    <TipTitle mt={24}>Haven’t start yet</TipTitle>
-  </>
-)
+export function UpcomingBtn({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) {
+  const [countdown, { days, hours, minutes, seconds }] = useCountDown({
+    targetDate: poolInfo.openAt * 1000
+  })
+  return (
+    <>
+      <UpcomingBtnStyle className="dis">
+        <Title>Place a Bid</Title>
+        {countdown > 0 ? (
+          <Title>
+            {days}d : {hours}h : {minutes}m : {seconds}s
+          </Title>
+        ) : null}
+      </UpcomingBtnStyle>
+      <TipTitle mt={24}>Haven’t start yet</TipTitle>
+    </>
+  )
+}
 
 const PurchaseBtn = ({ goCheck }: { goCheck: () => void }) => (
   <>
@@ -74,22 +85,16 @@ const PurchaseBtn = ({ goCheck }: { goCheck: () => void }) => (
   </>
 )
 
-const CloseBtn = () => <BaseBtnStyle>Auction closed</BaseBtnStyle>
-const DrawedBtn = () => (
+export const CloseBtn = () => <BaseBtnStyle className="dis">Auction closed</BaseBtnStyle>
+export const DrawedBtn = () => (
   <>
-    <BaseBtnStyle>You are in the draw...</BaseBtnStyle>
+    <BaseBtnStyle className="dis">You are in the draw...</BaseBtnStyle>
     <TipTitle mt={24}>If you failed, you can get fund back later</TipTitle>
   </>
 )
-const SoldOutBtn = () => (
-  <>
-    <BaseBtnStyle>Sold Out</BaseBtnStyle>
-    <TipTitle mt={24}>Sorry, you are too late... </TipTitle>
-  </>
-)
+
 const BidBtnBox = ({ goCheck }: IProps) => {
   const isSm = useBreakpoint('sm')
-  console.log('PurchaseBtn', PurchaseBtn, UpcomingBtn, CloseBtn, DrawedBtn, SoldOutBtn)
 
   return (
     <Stack flexDirection={'column'} justifyContent={'center'} alignItems={'center'} mt={isSm ? 40 : 80}>

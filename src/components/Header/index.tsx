@@ -198,7 +198,7 @@ export default function Header() {
 
   const isTransparentRoute = useMemo(() => {
     // return routes.market.index.includes(pathname)
-    if (pathname === '/nftlottery') {
+    if (pathname.toLocaleLowerCase() === '/nftlottery') {
       return false
     }
     return transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname))
@@ -210,7 +210,7 @@ export default function Header() {
   )
 
   const headerBg = useMemo(() => {
-    if (pathname === '/nftlottery') {
+    if (pathname.toLocaleLowerCase() === '/nftlottery') {
       return { backgroundColor: 'transparent !important' }
     }
     if (!isTransparentRoute) return {}
