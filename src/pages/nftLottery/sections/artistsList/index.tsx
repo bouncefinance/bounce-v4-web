@@ -5,6 +5,7 @@ import artist_3 from 'assets/imgs/nftLottery/artist_3.png'
 import List, { ArtistsListApp } from '../../components/artistsList/List'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
+// import LotteryCountdown from '../../components/lotteryCountdown'
 
 const DemoComponent = () => {
   const isSm = useBreakpoint('sm')
@@ -54,7 +55,7 @@ const DemoComponent = () => {
           </Typography>
         </WithAnimation>
         {isSm ? (
-          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={48}>
+          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={55}>
             {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
               <WithAnimation key={idx}>
                 <ArtistsListApp idx={idx} name={name} url={imgSrc} rotate={rotate}>
