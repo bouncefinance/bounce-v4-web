@@ -6,7 +6,8 @@ import ClosedTip from 'pages/nftLottery/components/poolCard/closedTip'
 import MobileLiveCard from 'pages/nftLottery/components/poolCard/card/mobileLiveCard'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
-const BeforeOpenLottery = () => {
+import { RandomSelectionNFTProps } from 'api/pool/type'
+const BeforeOpenLottery = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const isSm = useBreakpoint('sm')
   const [isZoom, setIsZoom] = useState(false)
   const setZoomHandle = () => {
@@ -22,7 +23,7 @@ const BeforeOpenLottery = () => {
         {isSm && <MobileLiveCard isZoom={isZoom} />}
       </WithAnimation>
       <ClosedTip />
-      <BidPanel setZoom={setZoomHandle} />
+      <BidPanel setZoom={setZoomHandle} poolInfo={poolInfo} />
     </div>
   )
 }

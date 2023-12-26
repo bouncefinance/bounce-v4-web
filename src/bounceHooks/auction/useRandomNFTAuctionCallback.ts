@@ -1,4 +1,4 @@
-import { FixedSwapPoolProp, PoolType } from 'api/pool/type'
+import { PoolType, RandomSelectionNFTProps } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { CurrencyAmount } from 'constants/token'
@@ -64,7 +64,7 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
   return { submitted, run }
 }
 
-export function useRandomNFTUserClaim(poolInfo: FixedSwapPoolProp, isWinner: boolean, contract?: string) {
+export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinner: boolean, contract?: string) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
@@ -153,7 +153,7 @@ export function useRandomNFTUserClaim(poolInfo: FixedSwapPoolProp, isWinner: boo
   return { run, submitted }
 }
 
-export function useRandomNFTBetCallback(poolInfo: FixedSwapPoolProp) {
+export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
