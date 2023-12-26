@@ -4,8 +4,17 @@ import ManBox from './components/manBox'
 import Barcode from './components/barcode'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useCallback, useEffect, useState } from 'react'
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 
-const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
+const LiveCard = ({
+  isZoom,
+  poolInfo,
+  allStatus
+}: {
+  isZoom: boolean
+  poolInfo: RandomSelectionNFTProps
+  allStatus: RandomSelectionNFTResultProps
+}) => {
   const isMd = useBreakpoint('md')
   const isSm = useBreakpoint('sm')
   const [zoom, setZoom] = useState(1)
@@ -23,21 +32,23 @@ const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
       window.removeEventListener('resize', setZoomHandle)
     }
   }, [setZoomHandle])
-
-  if (false) {
+  const { poolStatus, isUserJoined } = allStatus
+  const packInfo = <Info poolInfo={poolInfo} />
+  const packManBox = <ManBox poolInfo={poolInfo} allStatus={allStatus} />
+  if (poolStatus === RandomPoolStatus.Live && isUserJoined) {
     /* Already participated */
     return (
       <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
         <Stack flexDirection={'row'} sx={{ zoom: isZoom ? 0.7 : zoom }}>
           <Box sx={{ transform: 'rotate(-10.428deg)', zIndex: 3, position: 'relative', top: 11, left: 27 }}>
-            <Info />
+            {packInfo}
           </Box>
-          <ManBox />
+          {packManBox}
           <Barcode />
         </Stack>
       </Box>
     )
-  } else if (false) {
+  } else if (poolStatus === RandomPoolStatus.Closed && !poolInfo.curPlayer) {
     // close and not have partner
     return (
       <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
@@ -51,15 +62,13 @@ const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
             top: 22
           }}
         >
-          <Box>
-            <Info />
-          </Box>
-          <ManBox />
+          <Box>{packInfo}</Box>
+          {packManBox}
           <Barcode />
         </Stack>
       </Box>
     )
-  } else if (false) {
+  } else if (poolStatus === RandomPoolStatus.Closed && isUserJoined) {
     // close and  have partner
     return (
       <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
@@ -74,9 +83,9 @@ const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
           }}
         >
           <Box sx={{ transform: 'rotate(-10.428deg)', zIndex: 3, position: 'relative', top: 11, left: 27 }}>
-            <Info />
+            {packInfo}
           </Box>
-          <ManBox />
+          {packManBox}
           <Barcode />
         </Stack>
       </Box>
@@ -85,10 +94,8 @@ const LiveCard = ({ isZoom }: { isZoom: boolean }) => {
   return (
     <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
       <Stack flexDirection={'row'} sx={{ zoom: isZoom ? 0.7 : zoom }}>
-        <Box>
-          <Info />
-        </Box>
-        <ManBox />
+        <Box>{packInfo}</Box>
+        {packManBox}
         <Barcode />
       </Stack>
     </Box>

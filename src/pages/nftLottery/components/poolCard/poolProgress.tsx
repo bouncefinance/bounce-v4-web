@@ -1,5 +1,11 @@
 import { Avatar, AvatarGroup, LinearProgress, Stack, Typography, styled } from '@mui/material'
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import DefaultAvatar from 'assets/imgs/nftLottery/default-ava.svg'
+import UserAvatar2 from 'assets/imgs/nftLottery/user-avatar2.svg'
+import UserAvatar3 from 'assets/imgs/nftLottery/user-avatar3.svg'
+import UserAvatar4 from 'assets/imgs/nftLottery/user-avatar4.svg'
+import UserAvatar5 from 'assets/imgs/nftLottery/user-avatar5.svg'
+
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
 const Title1 = styled(Typography)`
@@ -43,14 +49,16 @@ const AvatarStyle = styled(Avatar)`
     height: 30px;
   }
 `
-const AvatarList = () => {
+const avatarList = [DefaultAvatar, UserAvatar2, UserAvatar3, UserAvatar4, UserAvatar5]
+const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
   const isSm = useBreakpoint('sm')
   const len = useMemo(() => {
-    if (isSm) {
+    const list = avatarList.splice(0, curPlayer)
+    if (isSm && list.length > 3) {
       return [1, 1, 1]
     }
     return [1, 1, 1, 1, 1]
-  }, [isSm])
+  }, [curPlayer, isSm])
 
   return (
     <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
@@ -63,7 +71,13 @@ const AvatarList = () => {
   )
 }
 
-const PoolProgress = () => {
+const PoolProgress = ({
+  allStatus,
+  poolInfo
+}: {
+  allStatus: RandomSelectionNFTResultProps
+  poolInfo: RandomSelectionNFTProps
+}) => {
   const isSm = useBreakpoint('sm')
   return (
     <Stack gap={isSm ? 16 : 20}>
@@ -73,12 +87,14 @@ const PoolProgress = () => {
         alignItems={isSm ? 'start' : 'center'}
         gap={isSm ? 8 : 0}
       >
-        <Title1>Participant</Title1>
+        <Title1>{allStatus.poolStatus === RandomPoolStatus.Upcoming ? 'Number of entries' : 'Participant'} </Title1>
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
-          <AvatarList />
+          {allStatus.poolStatus !== RandomPoolStatus.Upcoming && <AvatarList curPlayer={Number(poolInfo.curPlayer)} />}
           <Stack flexDirection={'row'} alignItems={'center'}>
-            <Title2>2050 </Title2>
-            <Title1>{` `}/ 20,000</Title1>
+            <Title2>{poolInfo.curPlayer}</Title2>
+            <Title1>
+              {` `}/ {poolInfo.maxPlayere}
+            </Title1>
           </Stack>
         </Stack>
       </Stack>
@@ -94,7 +110,7 @@ const PoolProgress = () => {
         }}
         color="success"
         variant="determinate"
-        value={(2050 / 20000) * 100}
+        value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
       />
     </Stack>
   )

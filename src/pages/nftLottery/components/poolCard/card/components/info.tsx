@@ -4,6 +4,7 @@ import WordList2Img from 'assets/imgs/nftLottery/card/word-list-2.png'
 import WordList3Img from 'assets/imgs/nftLottery/card/word-list-3.svg'
 import { ReactComponent as LineSvg } from 'assets/imgs/nftLottery/card/line.svg'
 import Line2Svg from 'assets/imgs/nftLottery/card/line2.svg'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 const Container = styled(Box)`
   width: 358px;
   height: 412px;
@@ -85,7 +86,7 @@ const NumberTitle = styled(Typography)`
 const LineBox = styled(Box)`
   position: absolute;
 `
-const Info = () => {
+const Info = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   return (
     <Container>
       <Stack flexDirection={'row'} width={'100%'} gap={16}>
@@ -109,7 +110,7 @@ const Info = () => {
 
           <WhiteCard>
             <Title1>Number of winners</Title1>
-            <NumberTitle>450</NumberTitle>
+            <NumberTitle>{poolInfo.totalShare}</NumberTitle>
           </WhiteCard>
 
           <WhiteCard>
@@ -124,7 +125,7 @@ const Info = () => {
     </Container>
   )
 }
-export const MobileInfo = () => {
+export const MobileInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   return (
     <Box
       sx={{
@@ -154,7 +155,7 @@ export const MobileInfo = () => {
 
           <WhiteCard>
             <Title1>Number of winners</Title1>
-            <NumberTitle>450</NumberTitle>
+            <NumberTitle>{poolInfo.totalShare}</NumberTitle>
           </WhiteCard>
 
           <WhiteCard>
@@ -177,7 +178,7 @@ export const MobileInfo = () => {
     </Box>
   )
 }
-export const MobileRotateInfo = () => {
+export const MobileRotateInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   return (
     <Box
       sx={{
@@ -210,7 +211,7 @@ export const MobileRotateInfo = () => {
 
         <WhiteCard className="small">
           <Title1 className="small">Number of winners</Title1>
-          <NumberTitle className="small">450</NumberTitle>
+          <NumberTitle className="small">{poolInfo.totalShare}</NumberTitle>
         </WhiteCard>
 
         <WhiteCard className="small">
