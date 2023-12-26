@@ -5,6 +5,7 @@ import p1 from 'assets/imgs/nftLottery/winner-bg3.png'
 import p2 from 'assets/imgs/nftLottery/winner-bg4.png'
 import p2Mobile from 'assets/imgs/nftLottery/winner-bg4-mobile.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 const Container = styled(Box)`
   /* position: relative;
   top: 118px;
@@ -41,12 +42,12 @@ const BottomCard = styled(Box)`
     transform: translate(-50%, -60%);
   }
 `
-const PCCard = () => {
+const PCCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   return (
     <Container>
       <Stack flexDirection={'row'}>
         <LeftCard>
-          <Info />
+          <Info poolInfo={poolInfo} />
         </LeftCard>
         <RightCard>
           <img src={p1} />
@@ -59,12 +60,12 @@ const PCCard = () => {
     </Container>
   )
 }
-const MobileCard = () => {
+const MobileCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   return (
     <Container>
       <Stack flexDirection={'row'}>
         <LeftCard sx={{ left: 19, bottom: -10 }}>
-          <MobileRotateInfo />
+          <MobileRotateInfo poolInfo={poolInfo} />
         </LeftCard>
         <RightCard>
           <img src={p1} style={{ zoom: 0.41 }} />
@@ -77,12 +78,12 @@ const MobileCard = () => {
     </Container>
   )
 }
-const WinnerCard = () => {
+const WinnerCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const isSm = useBreakpoint('sm')
   if (isSm) {
-    return <MobileCard />
+    return <MobileCard poolInfo={poolInfo} />
   }
-  return <PCCard />
+  return <PCCard poolInfo={poolInfo} />
 }
 
 export default WinnerCard

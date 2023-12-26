@@ -6,8 +6,13 @@ import ClosedTip from 'pages/nftLottery/components/poolCard/closedTip'
 import MobileLiveCard from 'pages/nftLottery/components/poolCard/card/mobileLiveCard'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
-import { RandomSelectionNFTProps } from 'api/pool/type'
-const BeforeOpenLottery = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
+interface IProps {
+  allStatus: RandomSelectionNFTResultProps
+  poolInfo: RandomSelectionNFTProps
+}
+
+const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
   const isSm = useBreakpoint('sm')
   const [isZoom, setIsZoom] = useState(false)
   const setZoomHandle = () => {
@@ -16,14 +21,16 @@ const BeforeOpenLottery = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
   return (
     <div>
       <WithAnimation>
-        <PoolHeadTitle />
+        <PoolHeadTitle allStatus={allStatus} />
       </WithAnimation>
       <WithAnimation>
-        {!isSm && <LiveCard isZoom={isZoom} />}
-        {isSm && <MobileLiveCard isZoom={isZoom} />}
+        {!isSm && <LiveCard isZoom={isZoom} poolInfo={poolInfo} allStatus={allStatus} />}
+        {isSm && <MobileLiveCard isZoom={isZoom} poolInfo={poolInfo} allStatus={allStatus} />}
       </WithAnimation>
-      <ClosedTip />
-      <BidPanel setZoom={setZoomHandle} poolInfo={poolInfo} />
+
+      {allStatus.poolStatus === RandomPoolStatus.Closed && <ClosedTip />}
+
+      <BidPanel setZoom={setZoomHandle} poolInfo={poolInfo} allStatus={allStatus} />
     </div>
   )
 }

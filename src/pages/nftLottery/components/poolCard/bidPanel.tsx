@@ -3,12 +3,13 @@ import PoolProgress from 'pages/nftLottery/components/poolCard/poolProgress'
 import BidBtnBox from './bidBtnBox'
 import { useEffect, useState } from 'react'
 import CheckBox from './checkBox'
-import { RandomSelectionNFTProps } from 'api/pool/type'
+import { RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import BidButtonBlock from './bidButtonBlock'
 import { useActiveWeb3React } from 'hooks'
 import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 interface IProps {
   setZoom: () => void
+  allStatus: RandomSelectionNFTResultProps
   poolInfo: RandomSelectionNFTProps
 }
 export type ActionStatus = 'FIRST' | 'GO_TO_CHECK' | 'BID'
@@ -21,7 +22,7 @@ const Container = styled(Box)`
     padding: 0 16px;
   }
 `
-const BidPanel = ({ setZoom, poolInfo }: IProps) => {
+const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   const [action, setAction] = useState<ActionStatus>('FIRST')
   const { account } = useActiveWeb3React()
   const { isUserJoined } = useGetRandomSelectionNFTPoolStatus(poolInfo)
@@ -41,7 +42,7 @@ const BidPanel = ({ setZoom, poolInfo }: IProps) => {
     <Container>
       {action === 'FIRST' && (
         <>
-          <PoolProgress />
+          <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />
           <BidBtnBox goCheck={goCheckHandle} />
         </>
       )}

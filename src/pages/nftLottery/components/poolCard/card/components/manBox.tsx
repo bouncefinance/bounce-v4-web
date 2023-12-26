@@ -1,6 +1,8 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import ManImg from 'assets/imgs/nftLottery/card/man.png'
 import Man2Img from 'assets/imgs/nftLottery/card/man2.png'
+import { useMemo } from 'react'
 const Container = styled(Box)`
   width: 523px;
   height: 412px;
@@ -68,26 +70,51 @@ const SoldOut = () => {
     </Stack>
   )
 }
-
-const ManBox = () => {
-  console.log('SoldOut', SoldOut, Joined)
+const useCurTitle = (poolInfo: RandomSelectionNFTProps, allStatus: RandomSelectionNFTResultProps) => {
+  return useMemo(() => {
+    if (
+      (allStatus.poolStatus === RandomPoolStatus.Live || allStatus.poolStatus === RandomPoolStatus.Closed) &&
+      allStatus.isUserJoined
+    ) {
+      return <Joined />
+    }
+    if (allStatus.poolStatus === RandomPoolStatus.Live && poolInfo.maxPlayere === poolInfo.curPlayer) {
+      return <SoldOut />
+    }
+    return <></>
+  }, [allStatus.isUserJoined, allStatus.poolStatus, poolInfo.curPlayer, poolInfo.maxPlayere])
+}
+const ManBox = ({
+  poolInfo,
+  allStatus
+}: {
+  poolInfo: RandomSelectionNFTProps
+  allStatus: RandomSelectionNFTResultProps
+}) => {
+  const curTitle = useCurTitle(poolInfo, allStatus)
 
   return (
     <Container>
       <img src={ManImg} />
       <TextBox>
+        {curTitle}
         <Joined />
       </TextBox>
     </Container>
   )
 }
-export const MobileManBox = () => {
+export const MobileManBox = ({
+  poolInfo,
+  allStatus
+}: {
+  poolInfo: RandomSelectionNFTProps
+  allStatus: RandomSelectionNFTResultProps
+}) => {
+  const curTitle = useCurTitle(poolInfo, allStatus)
   return (
     <Box sx={{ position: 'relative' }}>
       <img src={Man2Img} style={{ width: '100%', verticalAlign: 'middle' }} />
-      <TextBox>
-        <Joined />
-      </TextBox>
+      <TextBox>{curTitle}</TextBox>
     </Box>
   )
 }

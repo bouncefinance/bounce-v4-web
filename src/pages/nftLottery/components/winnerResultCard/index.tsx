@@ -11,7 +11,7 @@ import { ReactComponent as ShowMobileSvg } from 'assets/imgs/nftLottery/shadow-m
 import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
 import BidButtonBlock from '../poolCard/bidButtonBlock'
-import { RandomSelectionNFTProps } from 'api/pool/type'
+import { RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 const Container = styled(Box)`
   position: relative;
   width: 100%;
@@ -83,9 +83,15 @@ ${
 `
 )
 
-const WinnerResultCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+const WinnerResultCard = ({
+  allStatus,
+  poolInfo
+}: {
+  allStatus: RandomSelectionNFTResultProps
+  poolInfo: RandomSelectionNFTProps
+}) => {
   const theme = useTheme()
-  const isWinner = false
+  const isWinner = allStatus.isUserWinner
   const isSm = useBreakpoint('sm')
   return (
     <Container>
@@ -93,14 +99,14 @@ const WinnerResultCard = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) =
         sx={{ position: 'absolute', top: isSm ? 67 : 114, left: '50%', transform: 'translateX(-50%)', width: '100%' }}
       >
         <WithAnimation>
-          <PoolHeadTitle />
+          <PoolHeadTitle allStatus={allStatus} />
         </WithAnimation>
       </Box>
       <WinnerBg isWinner={isWinner} theme={theme}>
         <WinnerBox isWinner={isWinner} theme={theme}>
           <WithAnimation>
-            {isWinner && <WinnerCard />}
-            {!isWinner && <NotWinnerCard />}
+            {isWinner && <WinnerCard poolInfo={poolInfo} />}
+            {!isWinner && <NotWinnerCard poolInfo={poolInfo} />}
           </WithAnimation>
         </WinnerBox>
       </WinnerBg>

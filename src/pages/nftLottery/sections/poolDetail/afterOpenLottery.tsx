@@ -1,11 +1,16 @@
 import WinnerResultCard from '../../components/winnerResultCard'
 import NftReward from '../../components/NftReward/NftReward'
 import AuctionWinnerList from 'pages/nftLottery/components/winnerList/winnerList'
-import { RandomSelectionNFTProps } from 'api/pool/type'
-const AfterOpenLottery = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+import { RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
+interface IProps {
+  allStatus: RandomSelectionNFTResultProps
+  poolInfo: RandomSelectionNFTProps
+}
+
+const AfterOpenLottery = ({ allStatus, poolInfo }: IProps) => {
   return (
     <div>
-      <WinnerResultCard poolInfo={poolInfo} />
+      <WinnerResultCard allStatus={allStatus} poolInfo={poolInfo} />
       <NftReward />
       <AuctionWinnerList />
     </div>
