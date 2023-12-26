@@ -113,6 +113,7 @@ import DidStakeAuctionPool from './stakeAuctionPool'
 import DidStakeDaiiPool from './stakeDAIIPool'
 import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
 import NftLottery from './nftLottery'
+import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -168,6 +169,7 @@ export default function App() {
                   <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
                   <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                   <Route path={routes.auction.dutchAuction} element={<DutchAuctionPoolId />} />
+                  <Route path={routes.auction.createNftLotteryPool} element={<CreateNFTLotteryPool />} />
                   <Route path={routes.auction.v2.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                   <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                   <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
