@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useCountDown } from 'ahooks'
 // import AnimatedNumber from './animatedNumber'
-import { PoolStatus } from 'api/pool/type'
+import { RandomPoolStatus } from 'api/pool/type'
 import { ReactComponent as Tick } from 'assets/imgs/nftLottery/tick.svg'
 import dayjs from 'dayjs'
 
@@ -108,8 +108,8 @@ export default function Countdown({
   startTime,
   timeList
 }: {
-  status: PoolStatus
-  startTime: number
+  status: RandomPoolStatus
+  startTime?: number
   timeList?: number[]
 }) {
   const isSm = useBreakpoint('sm')
@@ -117,7 +117,7 @@ export default function Countdown({
     timeList = [1703127600, 1703127600, 1703127600]
   }
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate: startTime * 1000
+    targetDate: startTime ? startTime * 1000 : 0
   })
   return (
     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} padding={isSm ? '0 16px' : '0'}>
@@ -140,8 +140,8 @@ export default function Countdown({
               fontWeight={500}
               textAlign={'center'}
             >
-              {status === PoolStatus.Upcoming && 'UPCOMING IN'}
-              {status === PoolStatus.Live && 'LIVE'}
+              {status === RandomPoolStatus.Upcoming && 'UPCOMING IN'}
+              {status === RandomPoolStatus.Live && 'LIVE'}
             </Typography>
             <Typography
               variant="lotteryh1"
@@ -163,12 +163,12 @@ export default function Countdown({
             fontWeight={500}
             color={'var(--AI-red, #F00)'}
           >
-            {status === PoolStatus.Closed ? 'CLOSED' : null}
+            {status === RandomPoolStatus.Closed ? 'CLOSED' : null}
           </Typography>
         )}
       </Box>
       <StepperBox
-        activeStep={status === PoolStatus.Upcoming ? 1 : status === PoolStatus.Live ? 2 : 3}
+        activeStep={status === RandomPoolStatus.Upcoming ? 1 : status === RandomPoolStatus.Live ? 2 : 3}
         timeList={timeList}
         isSm={isSm}
       />

@@ -7,6 +7,8 @@ import { AnimateStep } from '../../../sections/banner'
 import makeStyles from '@mui/styles/makeStyles'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
 import LotteryCountdown from '../../lotteryCountdown'
+import { RandomSelectionNFTProps } from 'api/pool/type'
+import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 export const useWithAnimationStyles = makeStyles(() => ({
   awaitInView: {
     width: '100%',
@@ -24,8 +26,9 @@ export const useWithAnimationStyles = makeStyles(() => ({
     }
   }
 }))
-const PcBanner = () => {
+const PcBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const theme = useTheme()
+  const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const [winH, setWinHeight] = useState<number>(window.innerHeight)
   const [stopScroll, setStopscroll] = useState(true)
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
@@ -34,6 +37,7 @@ const PcBanner = () => {
   const resizeWinH = () => {
     setWinHeight(window.innerHeight > 1000 ? 1000 : window.innerHeight)
   }
+
   useEffect(() => {
     // lock page scroll 3 seconds
     stopScroll && document.body.setAttribute('style', 'width:100%;height:100%;overflowY:hidden;')
@@ -97,9 +101,7 @@ const PcBanner = () => {
       <BannerStep1 />
       <BannerStep2 />
       <BannerStepLine ratio={animate1Ratio} step={animate1Step} />
-      <LotteryCountdown status={1} startTime={1703840034} />
-      <LotteryCountdown status={2} startTime={1703840034} />
-      <LotteryCountdown status={4} startTime={1703494434} />
+      <LotteryCountdown status={poolStatus} timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]} />
     </Box>
   )
 }

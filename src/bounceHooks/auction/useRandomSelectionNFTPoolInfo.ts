@@ -46,7 +46,7 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
         claimed: myClaimedRes?.[0] || poolInfo.participant.claimed
       },
       mintContractAddress: poolsInfo?.mintContract,
-      totalShare: poolsInfo?.nShares,
+      totalShare: poolsInfo?.nShare,
       maxPlayere: poolsInfo?.maxPlayer,
       curPlayer: playerCount.result?.[0].toString() || 0,
       creatorClaimed: creatorClaimRes?.result?.[0] || false
@@ -55,7 +55,7 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     poolInfo,
     myClaimedRes,
     poolsInfo?.mintContract,
-    poolsInfo?.nShares,
+    poolsInfo?.nShare,
     poolsInfo?.maxPlayer,
     playerCount.result,
     creatorClaimRes?.result

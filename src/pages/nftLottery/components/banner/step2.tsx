@@ -97,7 +97,7 @@ const BannerStep2 = () => {
               width: '100%',
               maxWidth: 800,
               margin: '0 auto',
-              wordBreak: 'break-all',
+              wordBreak: 'break-word',
               color: '#4C483A',
               fontSize: isSm ? 14 : 20,
               fontWeight: 400,

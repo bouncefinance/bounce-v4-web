@@ -12,8 +12,12 @@ import NftshadowImg from 'assets/imgs/nftLottery/banner/nftshadow.png'
 import { WithAnimation } from 'components/WithAnimation'
 import { useWithAnimationStyles } from '../pc'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
+import { RandomSelectionNFTProps } from 'api/pool/type'
+import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 
-const MobileBanner = () => {
+const MobileBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+  const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
+
   const styleTrans = useWithAnimationStyles()
   return (
     <Box
@@ -258,9 +262,7 @@ const MobileBanner = () => {
             {`Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.`}
           </Typography>
         </Box>
-        <LotteryCountdown status={1} startTime={1703840034} />
-        <LotteryCountdown status={2} startTime={1703840034} />
-        <LotteryCountdown status={4} startTime={1703494434} />
+        <LotteryCountdown status={poolStatus} timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]} />
       </WithAnimation>
       <Cards />
     </Box>
