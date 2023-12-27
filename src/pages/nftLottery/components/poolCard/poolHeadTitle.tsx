@@ -59,13 +59,14 @@ const NotWinnerTitle = () => <PoolTitleStyle className="close">Sorry! You are no
 
 export const PoolHeadTitle = ({
   allStatus,
-  isZoom
+  isZoom,
+  allNotInvolved
 }: {
   allStatus: RandomSelectionNFTResultProps
   isZoom?: boolean
+  allNotInvolved?: boolean
 }) => {
   const { poolStatus, isUserJoined, isUserWinner, isWinnerSeedDone } = allStatus
-  console.log('isUserJoined', isUserJoined, poolStatus)
 
   const curTitle = useMemo(() => {
     if (poolStatus === RandomPoolStatus.Upcoming || isZoom) {
@@ -74,7 +75,7 @@ export const PoolHeadTitle = ({
     if (poolStatus === RandomPoolStatus.Live) {
       return <LiveTitle />
     }
-    if (poolStatus === RandomPoolStatus.Waiting && isUserJoined) {
+    if (poolStatus === RandomPoolStatus.Waiting && (isUserJoined || allNotInvolved)) {
       return <WaitTitle />
     }
     if (poolStatus === RandomPoolStatus.Waiting && !isUserJoined) {
@@ -90,6 +91,6 @@ export const PoolHeadTitle = ({
     }
 
     return <></>
-  }, [isUserJoined, isUserWinner, isWinnerSeedDone, isZoom, poolStatus])
+  }, [allNotInvolved, isUserJoined, isUserWinner, isWinnerSeedDone, isZoom, poolStatus])
   return <Container>{curTitle}</Container>
 }

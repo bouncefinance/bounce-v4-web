@@ -1,7 +1,7 @@
 import LiveCard from 'pages/nftLottery/components/poolCard/card/liveCard'
 import { PoolHeadTitle } from '../../components/poolCard/poolHeadTitle'
 import BidPanel from 'pages/nftLottery/components/poolCard/bidPanel'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import ClosedTip from 'pages/nftLottery/components/poolCard/closedTip'
 import MobileLiveCard from 'pages/nftLottery/components/poolCard/card/mobileLiveCard'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -18,10 +18,13 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
   const setZoomHandle = () => {
     setIsZoom(true)
   }
+  const allNotInvolved = useMemo(() => {
+    return !poolInfo.curPlayer && allStatus.poolStatus === RandomPoolStatus.Waiting
+  }, [allStatus.poolStatus, poolInfo.curPlayer])
   return (
     <div>
       <WithAnimation>
-        <PoolHeadTitle allStatus={allStatus} isZoom={isZoom} />
+        <PoolHeadTitle allStatus={allStatus} isZoom={isZoom} allNotInvolved={allNotInvolved} />
       </WithAnimation>
       <WithAnimation>
         {!isSm && <LiveCard isZoom={isZoom} poolInfo={poolInfo} allStatus={allStatus} />}
