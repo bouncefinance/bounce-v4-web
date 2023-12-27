@@ -13,19 +13,19 @@ const AboutArtist = () => {
     {
       name: 'CHARLES',
       value:
-        'Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.',
+        'Charles is a French AI-Classicism NFT artist. Charles has had the opportunity to expose his work at the MoCa Gallery as well as the IHAM art gallery in Paris. His work was also sold in the first french physical NFT auction.',
       imgSrc: artist_img
     },
     {
       name: 'REDRUM',
       value:
-        'Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.',
+        "RedruM is an AI artist who creates Surrealist artworks between dreams and nightmares, with a style he describes as 'Red Mythological Weirdism' with elements of Caravaggio, Tiziano and even Francis Bacon weaved in.",
       imgSrc: artist2_img
     },
     {
-      name: '0009',
+      name: 'Gene Kogan',
       value:
-        'Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.',
+        'Gene Kogan is an artist and programmer with interests in generative art, collective intelligence, autonomous systems, and computer science. He was one of the three Day 1 AI artists on braindrops with his brainloops collection and is considered to be one of the OGs when it comes to AI art.',
       imgSrc: artist3_img
     }
   ]
