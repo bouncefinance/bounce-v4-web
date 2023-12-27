@@ -19,7 +19,7 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
     setIsZoom(true)
   }
   const allNotInvolved = useMemo(() => {
-    return !poolInfo.curPlayer && allStatus.poolStatus === RandomPoolStatus.Waiting
+    return !Number(poolInfo.curPlayer) && allStatus.poolStatus === RandomPoolStatus.Waiting
   }, [allStatus.poolStatus, poolInfo.curPlayer])
   return (
     <div>
