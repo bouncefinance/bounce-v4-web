@@ -96,10 +96,7 @@ const ManBox = ({
   return (
     <Container>
       <img src={ManImg} />
-      <TextBox>
-        {curTitle}
-        <Joined />
-      </TextBox>
+      <TextBox>{curTitle}</TextBox>
     </Container>
   )
 }

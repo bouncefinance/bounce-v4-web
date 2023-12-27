@@ -18,6 +18,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 interface BidButtonBlockProps {
   poolInfo: RandomSelectionNFTProps
+  otherBtns?: JSX.Element
 }
 
 export const BidButton = styled(LoadingButton)(({ theme }) => ({
@@ -44,7 +45,7 @@ export const BidButton = styled(LoadingButton)(({ theme }) => ({
   }
 }))
 
-const BidButtonBlock = ({ poolInfo }: BidButtonBlockProps) => {
+const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
@@ -160,7 +161,9 @@ const BidButtonBlock = ({ poolInfo }: BidButtonBlockProps) => {
       </BidButton>
     )
   }
-
+  if (otherBtns) {
+    return otherBtns
+  }
   if (approvalState !== ApprovalState.APPROVED) {
     if (approvalState === ApprovalState.PENDING) {
       return (

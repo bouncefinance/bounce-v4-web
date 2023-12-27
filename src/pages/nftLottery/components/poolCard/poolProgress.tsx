@@ -55,9 +55,9 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
   const len = useMemo(() => {
     const list = avatarList.splice(0, curPlayer)
     if (isSm && list.length > 3) {
-      return [1, 1, 1]
+      return list.slice(0, 3)
     }
-    return [1, 1, 1, 1, 1]
+    return list
   }, [curPlayer, isSm])
 
   return (

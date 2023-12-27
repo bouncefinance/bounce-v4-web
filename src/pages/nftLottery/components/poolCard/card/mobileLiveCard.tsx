@@ -107,7 +107,7 @@ const MobileLiveCard = ({
         // className={'rotate'}
       >
         {packMobileInfo}
-        <div style={{ transform: 'translateX(-15px) rotate(7deg)', position: 'relative', zIndex: 0 }}>
+        <div style={{ position: 'relative', zIndex: 0 }}>
           {packMobileManBox}
           <MobileBarcode />
         </div>

@@ -92,7 +92,6 @@ const BannerStep3 = () => {
   })
   useEffect(() => {
     if (inView && !onceAnimate) {
-      console.log('!! 进入')
       setOnceAnimate(true)
     }
     return () => {}
