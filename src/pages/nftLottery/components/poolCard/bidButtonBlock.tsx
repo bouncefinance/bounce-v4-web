@@ -148,7 +148,9 @@ const BidButtonBlock = ({ poolInfo }: BidButtonBlockProps) => {
         <BidButton variant="contained" fullWidth disabled>
           Sold Out
         </BidButton>
-        <TipTitle mt={24}>Sorry, you are too late... </TipTitle>
+        <TipTitle mt={24} align="center">
+          Sorry, you are too late...{' '}
+        </TipTitle>
       </>
     )
   }

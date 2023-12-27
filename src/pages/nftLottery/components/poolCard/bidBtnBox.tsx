@@ -7,6 +7,8 @@ interface IProps {
 }
 export const BaseBtnStyle = styled(Button)`
   width: 100%;
+  display: flex;
+  justify-content: center;
   max-width: 534px;
   margin: 0 auto;
   padding: 20px;
@@ -91,7 +93,9 @@ export const CloseBtn = () => <BaseBtnStyle className="dis">Auction closed</Base
 export const DrawedBtn = () => (
   <>
     <BaseBtnStyle className="dis">You are in the draw...</BaseBtnStyle>
-    <TipTitle mt={24}>If you failed, you can get fund back later</TipTitle>
+    <TipTitle mt={24} align="center">
+      If you failed, you can get fund back later
+    </TipTitle>
   </>
 )
 
