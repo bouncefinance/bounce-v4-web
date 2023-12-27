@@ -12,7 +12,7 @@ import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { Dots } from 'themes'
-import { CloseBtn, DrawedBtn, TipTitle, UpcomingBtn } from './bidBtnBox'
+import { CloseBtn, DrawedBtn, TipTitle } from './bidBtnBox'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
@@ -21,6 +21,8 @@ interface BidButtonBlockProps {
 }
 
 export const BidButton = styled(LoadingButton)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
   width: '100%',
   maxWidth: 534,
   margin: '0 auto',
@@ -111,13 +113,13 @@ const BidButtonBlock = ({ poolInfo }: BidButtonBlockProps) => {
     userClaim()
   }, [account, userClaim])
 
-  if (poolStatus === RandomPoolStatus.Upcoming) {
-    return <UpcomingBtn poolInfo={poolInfo} />
-  }
+  // if (poolStatus === RandomPoolStatus.Upcoming) {
+  //   return <UpcomingBtn poolInfo={poolInfo} />
+  // }
 
   if (!account) {
     return (
-      <BidButton variant="contained" fullWidth sx={{ my: 12 }} onClick={showLoginModal}>
+      <BidButton variant="contained" fullWidth sx={{ my: 12, mx: 'auto' }} onClick={showLoginModal}>
         Connect Wallet
       </BidButton>
     )

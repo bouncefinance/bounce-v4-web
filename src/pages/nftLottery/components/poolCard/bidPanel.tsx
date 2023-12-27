@@ -1,9 +1,9 @@
 import { Box, styled } from '@mui/material'
 import PoolProgress from 'pages/nftLottery/components/poolCard/poolProgress'
-import BidBtnBox from './bidBtnBox'
+import BidBtnBox, { UpcomingBtn } from './bidBtnBox'
 import { useEffect, useState } from 'react'
 import CheckBox from './checkBox'
-import { RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import BidButtonBlock from './bidButtonBlock'
 import { useActiveWeb3React } from 'hooks'
 import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
@@ -25,7 +25,7 @@ const Container = styled(Box)`
 const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   const [action, setAction] = useState<ActionStatus>('FIRST')
   const { account } = useActiveWeb3React()
-  const { isUserJoined } = useGetRandomSelectionNFTPoolStatus(poolInfo)
+  const { isUserJoined, poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const goCheckHandle = () => {
     setAction('GO_TO_CHECK')
     setZoom()
@@ -40,14 +40,15 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   }, [account, isUserJoined])
   return (
     <Container>
-      {action === 'FIRST' && (
+      {poolStatus === RandomPoolStatus.Upcoming && <UpcomingBtn poolInfo={poolInfo} />}
+      {poolStatus === RandomPoolStatus.Live && action === 'FIRST' && (
         <>
           <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />
           <BidBtnBox goCheck={goCheckHandle} />
         </>
       )}
-      {action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
-      {action === 'BID' && <BidButtonBlock poolInfo={poolInfo} />}
+      {poolStatus === RandomPoolStatus.Live && action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
+      {poolStatus === RandomPoolStatus.Live && action === 'BID' && <BidButtonBlock poolInfo={poolInfo} />}
     </Container>
   )
 }

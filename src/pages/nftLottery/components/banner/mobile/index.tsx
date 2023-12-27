@@ -246,7 +246,7 @@ const MobileBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
             mb={16}
             variant="lotteryh1"
           >
-            DEC 19
+            JAN 01
           </Typography>
           <Typography
             sx={{

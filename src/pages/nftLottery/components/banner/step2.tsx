@@ -62,7 +62,7 @@ const BannerStep2 = () => {
                 textAlign: 'center'
               }}
             >
-              DEC
+              JAN
             </Typography>
             <Typography
               variant="lotteryh1"
@@ -75,7 +75,7 @@ const BannerStep2 = () => {
                 textAlign: 'center'
               }}
             >
-              1
+              0
             </Typography>
             <Typography
               variant="lotteryh1"
@@ -89,7 +89,7 @@ const BannerStep2 = () => {
                 transform: 'translateY(-30px)'
               }}
             >
-              9
+              1
             </Typography>
           </Stack>
           <Typography
