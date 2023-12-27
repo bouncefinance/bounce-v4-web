@@ -40,26 +40,28 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   }, [account, isUserJoined])
 
   const otherBtns = useMemo(() => {
-    if ((poolStatus === RandomPoolStatus.Live && action === 'FIRST') || poolStatus === RandomPoolStatus.Closed) {
+    if (poolStatus === RandomPoolStatus.Live && action === 'FIRST') {
       return { otherBtns: <BidBtnBox goCheck={goCheckHandle} /> }
     }
     return {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [action, poolStatus])
 
+  useEffect(() => {
+    setAction('FIRST')
+  }, [account])
   return (
     <Container>
       {action !== 'GO_TO_CHECK' && <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />}
 
-      {poolStatus === RandomPoolStatus.Upcoming && <UpcomingBtn poolInfo={poolInfo} />}
-
       {poolStatus === RandomPoolStatus.Live && action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
 
-      {poolStatus === RandomPoolStatus.Live && action !== 'GO_TO_CHECK' && (
-        <Box sx={{ marginTop: { sm: 40, md: 80 } }}>
-          <BidButtonBlock poolInfo={poolInfo} {...otherBtns} />
-        </Box>
-      )}
+      <Box sx={{ marginTop: { xs: 40, md: 80 } }}>
+        {poolStatus === RandomPoolStatus.Upcoming && <UpcomingBtn poolInfo={poolInfo} />}
+
+        {(poolStatus === RandomPoolStatus.Live || poolStatus == RandomPoolStatus.Waiting) &&
+          action !== 'GO_TO_CHECK' && <BidButtonBlock poolInfo={poolInfo} {...otherBtns} />}
+      </Box>
     </Container>
   )
 }

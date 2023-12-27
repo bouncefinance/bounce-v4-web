@@ -57,7 +57,7 @@ const MobileLiveCard = ({
     )
   }
   // close and No participants
-  else if (allStatus.poolStatus === RandomPoolStatus.Closed && !poolInfo.curPlayer) {
+  else if (allStatus.poolStatus === RandomPoolStatus.Waiting && !poolInfo.curPlayer) {
     return (
       <Box sx={{ padding: '0 33px', mt: 90 }}>
         <Box
@@ -74,7 +74,7 @@ const MobileLiveCard = ({
         </Box>
       </Box>
     )
-  } else if (allStatus.poolStatus === RandomPoolStatus.Closed) {
+  } else if (allStatus.poolStatus === RandomPoolStatus.Waiting) {
     return (
       <Box sx={{ padding: '0 33px', mt: 90 }}>
         <Box

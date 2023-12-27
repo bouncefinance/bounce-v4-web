@@ -64,7 +64,7 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
     <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
       <AvatarGroup>
         {len.map((i, d) => (
-          <AvatarStyle key={i + d} alt="DefaultAvatar" src={DefaultAvatar} />
+          <AvatarStyle key={i + d} alt="DefaultAvatar" src={i} />
         ))}
       </AvatarGroup>
     </Stack>
@@ -79,6 +79,8 @@ const PoolProgress = ({
   poolInfo: RandomSelectionNFTProps
 }) => {
   const isSm = useBreakpoint('sm')
+  console.log('allStatus.poolStatus !== RandomPoolStatus.Upcoming', allStatus.poolStatus !== RandomPoolStatus.Upcoming)
+
   return (
     <Stack gap={isSm ? 16 : 20}>
       <Stack

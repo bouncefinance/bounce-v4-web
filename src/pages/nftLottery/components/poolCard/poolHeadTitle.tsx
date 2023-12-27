@@ -35,19 +35,11 @@ const PoolTitleStyle = styled(Typography)`
   }
 `
 
-const poolTitles = [
-  'Join The Pool',
-  'Waiting for the lottery draw...',
-  'LOTTERY COMPLETED',
-  'You are a Winner',
-  'Sorry! You are not selected as a winner'
-]
-
-const UpcomingTitle = () => <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
-const NotInvolvedTitle = () => <PoolTitleStyle className="live">{poolTitles[2]}</PoolTitleStyle>
+const UpcomingTitle = () => <PoolTitleStyle className="live">Join The Pool</PoolTitleStyle>
+const NotInvolvedTitle = () => <PoolTitleStyle className="live">LOTTERY COMPLETED</PoolTitleStyle>
 const LiveTitle = () => (
   <div style={{ height: 90 }}>
-    <PoolTitleStyle className="live">{poolTitles[0]}</PoolTitleStyle>
+    <PoolTitleStyle className="live">Join The Pool</PoolTitleStyle>
     <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'} gap={10} mt={20}>
       <GreenCircleSvg />
       <PoolTitleStyle sx={{ fontWeight: 700, fontSize: { sm: 16, xs: 18 }, color: '#76BA1E' }}>LIVE NOW</PoolTitleStyle>
@@ -61,12 +53,14 @@ const WaitTitle = () => (
   </PoolTitleStyle>
 )
 
-const WinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[2]}</PoolTitleStyle>
+const WinnerTitle = () => <PoolTitleStyle className="close">You are a Winner</PoolTitleStyle>
 
-const NotWinnerTitle = () => <PoolTitleStyle className="close">{poolTitles[3]}</PoolTitleStyle>
+const NotWinnerTitle = () => <PoolTitleStyle className="close">Sorry! You are not selected as a winner</PoolTitleStyle>
 
 export const PoolHeadTitle = ({ allStatus }: { allStatus: RandomSelectionNFTResultProps }) => {
-  const { poolStatus, isUserJoined, isUserWinner } = allStatus
+  const { poolStatus, isUserJoined, isUserWinner, isWinnerSeedDone } = allStatus
+  console.log('isUserJoined', isUserJoined, poolStatus)
+
   const curTitle = useMemo(() => {
     if (poolStatus === RandomPoolStatus.Upcoming) {
       return <UpcomingTitle />
@@ -74,19 +68,22 @@ export const PoolHeadTitle = ({ allStatus }: { allStatus: RandomSelectionNFTResu
     if (poolStatus === RandomPoolStatus.Live) {
       return <LiveTitle />
     }
-    if (poolStatus === RandomPoolStatus.Closed && isUserJoined) {
+    if (poolStatus === RandomPoolStatus.Waiting && isUserJoined) {
       return <WaitTitle />
     }
-    if (poolStatus === RandomPoolStatus.Closed && !isUserJoined) {
+    if (poolStatus === RandomPoolStatus.Waiting && !isUserJoined) {
       return <NotInvolvedTitle />
     }
-    if (isUserWinner) {
-      return <WinnerTitle />
+    if (isWinnerSeedDone || poolStatus === RandomPoolStatus.Closed) {
+      if (isUserWinner) {
+        return <WinnerTitle />
+      }
+      if (!isUserWinner) {
+        return <NotWinnerTitle />
+      }
     }
-    if (!isUserWinner) {
-      return <NotWinnerTitle />
-    }
+
     return <></>
-  }, [isUserJoined, isUserWinner, poolStatus])
+  }, [isUserJoined, isUserWinner, isWinnerSeedDone, poolStatus])
   return <Container>{curTitle}</Container>
 }

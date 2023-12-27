@@ -73,7 +73,7 @@ const SoldOut = () => {
 const useCurTitle = (poolInfo: RandomSelectionNFTProps, allStatus: RandomSelectionNFTResultProps) => {
   return useMemo(() => {
     if (
-      (allStatus.poolStatus === RandomPoolStatus.Live || allStatus.poolStatus === RandomPoolStatus.Closed) &&
+      (allStatus.poolStatus === RandomPoolStatus.Live || allStatus.poolStatus === RandomPoolStatus.Waiting) &&
       allStatus.isUserJoined
     ) {
       return <Joined />

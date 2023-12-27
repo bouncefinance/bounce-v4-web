@@ -48,7 +48,7 @@ const LiveCard = ({
         </Stack>
       </Box>
     )
-  } else if (poolStatus === RandomPoolStatus.Closed && !poolInfo.curPlayer) {
+  } else if (poolStatus === RandomPoolStatus.Waiting && !poolInfo.curPlayer) {
     // close and not have partner
     return (
       <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>
@@ -68,7 +68,7 @@ const LiveCard = ({
         </Stack>
       </Box>
     )
-  } else if (poolStatus === RandomPoolStatus.Closed && isUserJoined) {
+  } else if (poolStatus === RandomPoolStatus.Waiting && isUserJoined) {
     // close and  have partner
     return (
       <Box sx={{ width: 'max-content', margin: '0 auto', marginTop: isMd ? 24 : 64 }}>

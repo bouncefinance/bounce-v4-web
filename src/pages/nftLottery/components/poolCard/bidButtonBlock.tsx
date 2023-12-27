@@ -163,7 +163,8 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
       </BidButton>
     )
   }
-  if (otherBtns) {
+
+  if (!!otherBtns) {
     return otherBtns
   }
   if (approvalState !== ApprovalState.APPROVED) {
@@ -201,7 +202,8 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
       return <DrawedBtn />
     }
   }
-  if (RandomPoolStatus.Closed === poolStatus) {
+
+  if (RandomPoolStatus.Waiting === poolStatus) {
     if (!isUserJoined) {
       return <CloseBtn />
     } else {
