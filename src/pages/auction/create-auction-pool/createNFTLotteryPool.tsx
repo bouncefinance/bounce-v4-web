@@ -161,10 +161,10 @@ const CreateNFTLotteryPool = () => {
               <FormItem name={'token1'} label="token1 address">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'amountTotal0'} label="token0 number">
+              <FormItem name={'amountTotal0'} label="nft number">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'amount1PerWallet'} label="token1 number">
+              <FormItem name={'amount1PerWallet'} label="token1 perWallet number">
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <FormItem name={'openAt'} label="openAt">
@@ -186,12 +186,17 @@ const CreateNFTLotteryPool = () => {
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <Stack flexDirection={'row'} gap={20}>
-                <Button sx={{ flex: 1 }} onClick={() => changeValue(_values)}>
-                  Save
-                </Button>
-                <Button type="submit" sx={{ flex: 1 }}>
-                  Submit
-                </Button>
+                {_values !== values && (
+                  <Button sx={{ flex: 1 }} onClick={() => changeValue(_values)}>
+                    Save
+                  </Button>
+                )}
+
+                {_values === values && (
+                  <Button type="submit" sx={{ flex: 1 }}>
+                    Submit
+                  </Button>
+                )}
               </Stack>
             </Box>
           )
