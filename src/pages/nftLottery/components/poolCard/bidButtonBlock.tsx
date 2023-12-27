@@ -167,7 +167,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
   if (!!otherBtns) {
     return otherBtns
   }
-  if (approvalState !== ApprovalState.APPROVED) {
+  if (approvalState !== ApprovalState.APPROVED && !isUserJoined) {
     if (approvalState === ApprovalState.PENDING) {
       return (
         <BidButton loadingPosition="start" variant="contained" fullWidth loading>

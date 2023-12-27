@@ -1,6 +1,6 @@
 import { Box, styled } from '@mui/material'
 import PoolProgress from 'pages/nftLottery/components/poolCard/poolProgress'
-import BidBtnBox, { UpcomingBtn } from './bidBtnBox'
+import BidBtnBox, { CloseBtn, UpcomingBtn } from './bidBtnBox'
 import { useEffect, useMemo, useState } from 'react'
 import CheckBox from './checkBox'
 import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
@@ -59,8 +59,11 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
       <Box sx={{ marginTop: { xs: 40, md: 80 } }}>
         {poolStatus === RandomPoolStatus.Upcoming && <UpcomingBtn poolInfo={poolInfo} />}
 
-        {(poolStatus === RandomPoolStatus.Live || poolStatus == RandomPoolStatus.Waiting) &&
-          action !== 'GO_TO_CHECK' && <BidButtonBlock poolInfo={poolInfo} {...otherBtns} />}
+        {poolStatus === RandomPoolStatus.Live && action !== 'GO_TO_CHECK' && (
+          <BidButtonBlock poolInfo={poolInfo} {...otherBtns} />
+        )}
+
+        {poolStatus === RandomPoolStatus.Waiting && <CloseBtn />}
       </Box>
     </Container>
   )

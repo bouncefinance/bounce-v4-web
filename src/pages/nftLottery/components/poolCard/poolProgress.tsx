@@ -49,8 +49,9 @@ const AvatarStyle = styled(Avatar)`
     height: 30px;
   }
 `
-const avatarList = [DefaultAvatar, UserAvatar2, UserAvatar3, UserAvatar4, UserAvatar5]
+
 const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
+  const avatarList = [DefaultAvatar, UserAvatar2, UserAvatar3, UserAvatar4, UserAvatar5]
   const isSm = useBreakpoint('sm')
   const len = useMemo(() => {
     const list = avatarList.splice(0, curPlayer)
@@ -58,6 +59,7 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
       return list.slice(0, 3)
     }
     return list
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [curPlayer, isSm])
 
   return (

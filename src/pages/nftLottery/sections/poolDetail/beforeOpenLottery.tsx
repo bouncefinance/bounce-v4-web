@@ -21,7 +21,7 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
   return (
     <div>
       <WithAnimation>
-        <PoolHeadTitle allStatus={allStatus} />
+        <PoolHeadTitle allStatus={allStatus} isZoom={isZoom} />
       </WithAnimation>
       <WithAnimation>
         {!isSm && <LiveCard isZoom={isZoom} poolInfo={poolInfo} allStatus={allStatus} />}
