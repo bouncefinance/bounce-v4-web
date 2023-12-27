@@ -73,7 +73,9 @@ export function UpcomingBtn({ poolInfo }: { poolInfo: RandomSelectionNFTProps })
           </Title>
         ) : null}
       </UpcomingBtnStyle>
-      <TipTitle mt={24}>Haven’t start yet</TipTitle>
+      <TipTitle mt={24} align="center">
+        Haven’t start yet
+      </TipTitle>
     </>
   )
 }
