@@ -14,11 +14,25 @@ import { useWithAnimationStyles } from '../pc'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
 import { RandomSelectionNFTProps } from 'api/pool/type'
 import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
+import { useEffect, useState } from 'react'
 
 const MobileBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
-
+  const now = () => new Date().getTime()
+  const [startTime, setStartTime] = useState<number>(0)
   const styleTrans = useWithAnimationStyles()
+
+  useEffect(() => {
+    if (now() < poolInfo.openAt * 1000) {
+      setStartTime(poolInfo.openAt)
+    }
+    if (now() > poolInfo.openAt * 1000 && now() < poolInfo.closeAt * 1000) {
+      setStartTime(poolInfo.closeAt)
+    }
+    if (now() > poolInfo.claimAt * 1000) {
+      setStartTime(poolInfo.claimAt)
+    }
+  }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
   return (
     <Box
       sx={{
@@ -262,7 +276,11 @@ const MobileBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
             {`Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.`}
           </Typography>
         </Box>
-        <LotteryCountdown status={poolStatus} timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]} />
+        <LotteryCountdown
+          status={poolStatus}
+          startTime={startTime}
+          timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]}
+        />
       </WithAnimation>
       <Cards />
     </Box>
