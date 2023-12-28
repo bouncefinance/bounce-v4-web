@@ -94,10 +94,9 @@ const PoolProgress = ({
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
           {allStatus.poolStatus !== RandomPoolStatus.Upcoming && <AvatarList curPlayer={Number(poolInfo.curPlayer)} />}
           <Stack flexDirection={'row'} alignItems={'center'}>
-            <Title2>{poolInfo.curPlayer}</Title2>
-            <Title1>
-              {` `}/ {poolInfo.maxPlayere}
-            </Title1>
+            <Title2>{poolInfo.curPlayer} </Title2>
+            <span style={{ padding: '0 5px 0 10px' }}>/</span>
+            <Title1>{poolInfo.maxPlayere}</Title1>
           </Stack>
         </Stack>
       </Stack>

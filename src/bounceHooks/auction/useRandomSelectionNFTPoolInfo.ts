@@ -14,7 +14,7 @@ import { useRequest } from 'ahooks'
 import { getCurrentTimeStamp } from 'utils'
 
 const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
-  const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID') || 21167 //21178
+  const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID') || 21187
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_NFT, Number(_backedId))
 
   const contract = useRandomSelectionNFTContract(poolInfo?.contract || '', poolInfo?.ethChainId)
@@ -26,9 +26,21 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     undefined,
     poolInfo?.ethChainId
   ).result
-  const playerCount = useSingleCallResult(contract, 'getPlayerCount', [poolInfo?.poolId])
-  const creatorClaimRes = useSingleCallResult(contract, 'creatorClaimed', [poolInfo?.poolId])
-  const poolsInfo = useSingleCallResult(contract, 'pools', [poolInfo?.poolId]).result
+  const playerCount = useSingleCallResult(
+    contract,
+    'getPlayerCount',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  )
+  const creatorClaimRes = useSingleCallResult(
+    contract,
+    'creatorClaimed',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  )
+  const poolsInfo = useSingleCallResult(contract, 'pools', [poolInfo?.poolId], undefined, poolInfo?.ethChainId).result
 
   const data: RandomSelectionNFTProps | undefined = useMemo(() => {
     if (!poolInfo) return undefined
