@@ -14,7 +14,8 @@ import { useRequest } from 'ahooks'
 import { getCurrentTimeStamp } from 'utils'
 
 const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_NFT, backedId || 21164) //21161
+  const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID') || 21167
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_NFT, Number(_backedId))
 
   const contract = useRandomSelectionNFTContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()

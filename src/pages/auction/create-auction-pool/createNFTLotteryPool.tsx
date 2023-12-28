@@ -100,7 +100,8 @@ const useCreatePool = () => {
       try {
         console.log('pool id', id, arg)
         await contract.createV2(...arg)
-        alert(id)
+        localStorage.setItem('NFT_RANDOM_POOL_ID', JSON.stringify(id))
+        // alert(id)
       } catch (error) {
         console.error(error)
       }
