@@ -132,7 +132,7 @@ export default function Countdown({
       </Typography>
       <Box margin={isSm ? '8px 0 48px' : '32px 0 80px'}>
         {countdown ? (
-          <Box color={status === 1 ? '#C3A16D' : 'var(--AI-green, #76BA1E)'}>
+          <Box color={status === RandomPoolStatus.Upcoming ? '#C3A16D' : 'var(--AI-green, #76BA1E)'}>
             <Typography
               variant="lotteryh1"
               fontSize={isSm ? 50 : 100}
@@ -163,7 +163,7 @@ export default function Countdown({
             fontWeight={500}
             color={'var(--AI-red, #F00)'}
           >
-            {status === RandomPoolStatus.Closed ? 'CLOSED' : null}
+            CLOSED
           </Typography>
         )}
       </Box>
