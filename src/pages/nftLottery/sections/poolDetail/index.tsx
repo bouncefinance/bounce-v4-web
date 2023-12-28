@@ -14,7 +14,7 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
     <Box
       sx={{
         background: `url(${BgImg}) repeat`,
-        padding: isMd ? '48px 0' : '20px 0'
+        padding: isMd ? '48px 0' : '120px 0'
       }}
     >
       {isWinnerSeedDone ? (
