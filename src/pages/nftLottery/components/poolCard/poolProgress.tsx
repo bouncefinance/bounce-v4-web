@@ -81,7 +81,6 @@ const PoolProgress = ({
   poolInfo: RandomSelectionNFTProps
 }) => {
   const isSm = useBreakpoint('sm')
-  console.log('allStatus.poolStatus !== RandomPoolStatus.Upcoming', allStatus.poolStatus !== RandomPoolStatus.Upcoming)
 
   return (
     <Stack gap={isSm ? 16 : 20}>

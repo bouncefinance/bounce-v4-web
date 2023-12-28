@@ -16,7 +16,7 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
   const isSm = useBreakpoint('sm')
   const [isZoom, setIsZoom] = useState(false)
   const setZoomHandle = () => {
-    setIsZoom(true)
+    setIsZoom(!isZoom)
   }
   const allNotInvolved = useMemo(() => {
     return !Number(poolInfo.curPlayer) && allStatus.poolStatus === RandomPoolStatus.Waiting

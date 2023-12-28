@@ -128,6 +128,7 @@ const Info = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   )
 }
 export const MobileInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+  const token1 = CurrencyAmount.fromRawAmount(poolInfo.userTokenAmount, poolInfo.maxAmount1PerWallet)
   return (
     <Box
       sx={{
@@ -163,8 +164,8 @@ export const MobileInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
           <WhiteCard>
             <Title1>Ticket price</Title1>
             <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
-              <PriceTitle>10</PriceTitle>
-              <Title1 sx={{ color: '#F00' }}>AUCTION</Title1>
+              <PriceTitle>{token1?.toSignificant()}</PriceTitle>
+              <Title1 sx={{ color: '#F00' }}>{token1.currency.symbol}</Title1>
             </Stack>
           </WhiteCard>
 
@@ -181,6 +182,7 @@ export const MobileInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
   )
 }
 export const MobileRotateInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+  const token1 = CurrencyAmount.fromRawAmount(poolInfo.userTokenAmount, poolInfo.maxAmount1PerWallet)
   return (
     <Box
       sx={{
@@ -204,9 +206,9 @@ export const MobileRotateInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTPro
         <WhiteCard className="small">
           <Title1 className="small">Ticket price</Title1>
           <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
-            <PriceTitle className="small">10</PriceTitle>
+            <PriceTitle className="small">{token1?.toSignificant()}</PriceTitle>
             <Title1 className="small" sx={{ color: '#F00' }}>
-              AUCTION
+              {token1.currency.symbol}
             </Title1>
           </Stack>
         </WhiteCard>

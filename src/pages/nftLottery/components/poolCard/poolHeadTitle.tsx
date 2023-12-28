@@ -36,7 +36,7 @@ const PoolTitleStyle = styled(Typography)`
 `
 
 const UpcomingTitle = () => <PoolTitleStyle className="live">Join The Pool</PoolTitleStyle>
-const NotInvolvedTitle = () => <PoolTitleStyle className="live">LOTTERY COMPLETED</PoolTitleStyle>
+const NotInvolvedTitle = () => <PoolTitleStyle className="await">LOTTERY COMPLETED</PoolTitleStyle>
 const LiveTitle = () => (
   <div style={{ height: 90 }}>
     <PoolTitleStyle className="live">Join The Pool</PoolTitleStyle>
@@ -48,7 +48,7 @@ const LiveTitle = () => (
 )
 
 const WaitTitle = () => (
-  <PoolTitleStyle className="wait" mb={-64}>
+  <PoolTitleStyle className="await" mb={-64}>
     Waiting for the <br /> lottery draw...
   </PoolTitleStyle>
 )
