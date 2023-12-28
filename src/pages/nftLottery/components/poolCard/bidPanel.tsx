@@ -37,6 +37,10 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   const { account } = useActiveWeb3React()
   const { isUserJoined, poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const theme = useTheme()
+
+  const isSoldOut = useMemo(() => {
+    return `${poolInfo.curPlayer}` === `${poolInfo.maxPlayere}`
+  }, [poolInfo.curPlayer, poolInfo.maxPlayere])
   const goCheckHandle = () => {
     setAction('GO_TO_CHECK')
     setZoom()
@@ -52,7 +56,7 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   }, [account, isUserJoined])
 
   const otherBtns = useMemo(() => {
-    if (poolStatus === RandomPoolStatus.Live && action === 'FIRST') {
+    if (poolStatus === RandomPoolStatus.Live && action === 'FIRST' && !isSoldOut) {
       return { otherBtns: <BidBtnBox goCheck={goCheckHandle} /> }
     }
     return {}

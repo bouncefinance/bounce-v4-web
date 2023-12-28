@@ -61,10 +61,9 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
     return userBalance.lessThan(currencySlicedBidAmount)
   }, [currencySlicedBidAmount, userBalance])
 
-  const isLimitExceeded = useMemo(
-    () => poolInfo.curPlayer === poolInfo.maxPlayere,
-    [poolInfo.curPlayer, poolInfo.maxPlayere]
-  )
+  const isLimitExceeded = useMemo(() => {
+    return `${poolInfo.curPlayer}` === `${poolInfo.maxPlayere}`
+  }, [poolInfo.curPlayer, poolInfo.maxPlayere])
   const [approvalState, approveCallback] = useApproveCallback(currencySlicedBidAmount, poolInfo.contract)
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -142,7 +141,9 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
       </>
     )
   }
-
+  if (poolStatus === RandomPoolStatus.Live && isUserJoined) {
+    return <DrawedBtn />
+  }
   if (isLimitExceeded) {
     return (
       <>
@@ -197,9 +198,6 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
           Purchase
         </BidButton>
       )
-    }
-    if (isUserJoined) {
-      return <DrawedBtn />
     }
   }
 
