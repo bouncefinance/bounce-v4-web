@@ -129,7 +129,7 @@ const useToCreate = (body: IParam, creator: string) => {
     if (!token0CurrencyAmount || !token1CurrencyAmount || !chainConfigInBackend) return
     const _body = {
       ...body,
-      amountTotal0: token0CurrencyAmount.raw.toString(),
+      // amountTotal0: token0CurrencyAmount.raw.toString(),
       amount1PerWallet: token1CurrencyAmount.raw.toString()
     } as IParam
     create({ body: _body, creator, optId: chainConfigInBackend.id })

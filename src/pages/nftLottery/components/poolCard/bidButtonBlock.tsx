@@ -144,7 +144,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
   if (poolStatus === RandomPoolStatus.Live && isUserJoined) {
     return <DrawedBtn />
   }
-  if (isLimitExceeded) {
+  if (poolStatus === RandomPoolStatus.Live && isLimitExceeded) {
     return (
       <>
         <BidButton variant="contained" fullWidth disabled>
@@ -218,7 +218,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
     }
     return <DrawedBtn />
   }
-  if (RandomPoolStatus.OpenSeed === poolStatus) {
+  if (RandomPoolStatus.Closed === poolStatus) {
     if (!isUserJoined) {
       return (
         <>
