@@ -112,6 +112,7 @@ export default function Countdown({
   startTime?: number
   timeList?: number[]
 }) {
+  const now = () => new Date().getTime()
   const isSm = useBreakpoint('sm')
   if (!timeList) {
     timeList = [1703127600, 1703127600, 1703127600]
@@ -119,6 +120,18 @@ export default function Countdown({
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: startTime ? startTime * 1000 : 0
   })
+  const handleActiveStep = (timeList: number[]) => {
+    if (now() < timeList[0] * 1000 || (now() > timeList[0] * 1000 && now() < timeList[1] * 1000)) {
+      return 1
+    }
+    if (now() > timeList[1] * 1000 && now() < timeList[2] * 1000) {
+      return 2
+    }
+    if (now() > timeList[2] * 1000) {
+      return 3
+    }
+    return 0
+  }
   return (
     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} padding={isSm ? '0 16px' : '0'}>
       <Typography
@@ -167,11 +180,7 @@ export default function Countdown({
           </Typography>
         )}
       </Box>
-      <StepperBox
-        activeStep={status === RandomPoolStatus.Upcoming ? 1 : status === RandomPoolStatus.Live ? 2 : 3}
-        timeList={timeList}
-        isSm={isSm}
-      />
+      <StepperBox activeStep={handleActiveStep(timeList)} timeList={timeList} isSm={isSm} />
       <Typography
         maxWidth={isSm ? 328 : 800}
         margin={isSm ? '48px 0' : '120px 0'}
