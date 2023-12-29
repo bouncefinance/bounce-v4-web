@@ -234,7 +234,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus }: BidButtonBlockProps)
               lineHeight: '140%'
             }}
           >
-            You have successfully extracted your {allStatus.isUserWinner ? 'NFT' : 'Token'} NFT. See you next time!
+            You have successfully extracted your {allStatus.isUserWinner ? 'NFT' : 'Token'}. See you next time!
           </Typography>
         </Stack>
       )

@@ -38,7 +38,7 @@ const WinnerBg = styled(Box)(
     ${
       isWinner
         ? `
-            position: relative;
+            position: absolute;
             top: 146px;
             width: 1044px;
             height: 865px;

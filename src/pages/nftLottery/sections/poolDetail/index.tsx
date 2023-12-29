@@ -5,6 +5,8 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
 import { RandomSelectionNFTProps } from 'api/pool/type'
 import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
+import NftReward from 'pages/nftLottery/components/NftReward/NftReward'
+import AuctionWinnerList from 'pages/nftLottery/components/winnerList/winnerList'
 const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const allStatus = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const { isWinnerSeedDone } = allStatus
@@ -21,6 +23,12 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         <AfterOpenLottery allStatus={allStatus} poolInfo={poolInfo} />
       ) : (
         <BeforeOpenLottery poolInfo={poolInfo} allStatus={allStatus} />
+      )}
+      {allStatus.isWinnerSeedDone && (
+        <>
+          <NftReward />
+          <AuctionWinnerList poolInfo={poolInfo} />
+        </>
       )}
     </Box>
   )
