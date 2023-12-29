@@ -67,7 +67,10 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
     setAction('FIRST')
   }, [account])
   return (
-    <Container theme={theme} hideMt={poolStatus === RandomPoolStatus.Waiting || action === 'GO_TO_CHECK'}>
+    <Container
+      theme={theme}
+      hideMt={poolStatus === RandomPoolStatus.Waiting || action === 'GO_TO_CHECK' || !allStatus.isUserJoined}
+    >
       {action !== 'GO_TO_CHECK' && <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />}
 
       {poolStatus === RandomPoolStatus.Live && action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
