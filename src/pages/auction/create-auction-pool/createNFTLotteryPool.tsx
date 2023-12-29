@@ -134,7 +134,7 @@ const useToCreate = (body: IParam, creator: string) => {
 }
 
 const CreateNFTLotteryPool = () => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [values, setValues] = useState(initParams)
   const create = useToCreate(values, account || '')
   const changeValue = (values: IParam) => {
@@ -143,7 +143,7 @@ const CreateNFTLotteryPool = () => {
   const onSubmit = () => {
     create()
   }
-
+  const token1 = useToken(values.token1, chainId)
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
@@ -191,7 +191,7 @@ const CreateNFTLotteryPool = () => {
                 )}
 
                 {_values === values && (
-                  <Button type="submit" sx={{ flex: 1 }}>
+                  <Button disabled={!token1} type="submit" sx={{ flex: 1 }}>
                     Submit
                   </Button>
                 )}
