@@ -2494,11 +2494,6 @@ const AmmxRandomData: IPrivatePadProp = {
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 26
-  AmmxAuctionData,
-  AmmxDaiiData,
-  AmmxRandomData,
-  AiMeetsBtcRandomData,
-
   {
     // hidden: true,
     keyId: 23,
@@ -2648,6 +2643,10 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
+  AiMeetsBtcRandomData,
+  AmmxAuctionData,
+  AmmxDaiiData,
+  AmmxRandomData,
   PrivateStakeAuctionData,
   PrivateStakeDaiiData,
   PrivateRandomGodidData,
