@@ -38,7 +38,7 @@ const initParams: IParam = {
   claimAt: 1703735978,
   maxPlayer: 15,
   nShare: 10,
-  mintContract: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
+  mintContract: '',
   whitelistRoot: ''
 }
 
@@ -129,6 +129,7 @@ const useToCreate = (body: IParam, creator: string) => {
     if (!token0CurrencyAmount || !token1CurrencyAmount || !chainConfigInBackend) return
     const _body = {
       ...body,
+      mintContract: body.token0,
       // amountTotal0: token0CurrencyAmount.raw.toString(),
       amount1PerWallet: token1CurrencyAmount.raw.toString()
     } as IParam

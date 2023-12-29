@@ -38,13 +38,19 @@ const PoolTitleStyle = styled(Typography)`
 const UpcomingTitle = () => <PoolTitleStyle className="live">Join The Pool</PoolTitleStyle>
 const NotInvolvedTitle = () => <PoolTitleStyle className="wait">LOTTERY COMPLETED</PoolTitleStyle>
 const LiveTitle = () => (
-  <div style={{ height: 90 }}>
+  <Box sx={{ height: { xs: 67, md: 90 } }}>
     <PoolTitleStyle className="live">Join The Pool</PoolTitleStyle>
-    <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'center'} gap={10} mt={20}>
+    <Stack
+      flexDirection={'row'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      gap={10}
+      sx={{ mt: { xs: 12, md: 20 } }}
+    >
       <GreenCircleSvg />
       <PoolTitleStyle sx={{ fontWeight: 700, fontSize: { sm: 16, xs: 18 }, color: '#76BA1E' }}>LIVE NOW</PoolTitleStyle>
     </Stack>
-  </div>
+  </Box>
 )
 
 const WaitTitle = () => (

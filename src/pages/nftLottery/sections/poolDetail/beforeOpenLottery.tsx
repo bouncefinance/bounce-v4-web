@@ -31,8 +31,9 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
         {isSm && <MobileLiveCard isZoom={isZoom} poolInfo={poolInfo} allStatus={allStatus} />}
       </WithAnimation>
 
-      {allStatus.poolStatus === RandomPoolStatus.Waiting ||
-        (allStatus.poolStatus === RandomPoolStatus.Closed && <ClosedTip />)}
+      {(allStatus.poolStatus === RandomPoolStatus.Waiting || allStatus.poolStatus === RandomPoolStatus.Closed) && (
+        <ClosedTip />
+      )}
 
       <BidPanel setZoom={setZoomHandle} poolInfo={poolInfo} allStatus={allStatus} />
     </div>

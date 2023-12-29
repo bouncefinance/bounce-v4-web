@@ -148,7 +148,7 @@ const WinnerResultCard = ({
           {/* {!isSm && <img src={ShowSvg} />} */}
           {!isSm && <ShowSvg />}
         </Box>
-        <BidButtonBlock poolInfo={poolInfo} />
+        <BidButtonBlock allStatus={allStatus} poolInfo={poolInfo} />
       </Stack>
     </Container>
   )

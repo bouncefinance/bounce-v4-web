@@ -29,6 +29,7 @@ const Container = styled(Box)(
   }
   ${theme.breakpoints.down('sm')} {
     padding: 0 16px;
+    margin-top: 32px;
   }
 `
 )
@@ -66,11 +67,9 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   useEffect(() => {
     setAction('FIRST')
   }, [account])
+
   return (
-    <Container
-      theme={theme}
-      hideMt={poolStatus === RandomPoolStatus.Waiting || action === 'GO_TO_CHECK' || !allStatus.isUserJoined}
-    >
+    <Container theme={theme} hideMt={poolStatus === RandomPoolStatus.Waiting || action === 'GO_TO_CHECK'}>
       {action !== 'GO_TO_CHECK' && <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />}
 
       {poolStatus === RandomPoolStatus.Live && action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
@@ -79,7 +78,7 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
         {poolStatus === RandomPoolStatus.Upcoming && <UpcomingBtn poolInfo={poolInfo} />}
 
         {poolStatus === RandomPoolStatus.Live && action !== 'GO_TO_CHECK' && (
-          <BidButtonBlock poolInfo={poolInfo} {...otherBtns} />
+          <BidButtonBlock poolInfo={poolInfo} {...otherBtns} allStatus={allStatus} />
         )}
 
         {(poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed) && <CloseBtn />}
