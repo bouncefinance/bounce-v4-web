@@ -84,7 +84,7 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
           category: PoolType.LOTTERY_NFT,
           chainId: poolInfo.chainId,
           poolId: poolInfo.poolId,
-          tokenType: 2
+          tokenType: 1
         })
         args = [poolInfo.poolId, JSON.parse(userRandomIsWinterProof.data.proof)]
       }
@@ -94,7 +94,7 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
         category: PoolType.LOTTERY_NFT,
         chainId: poolInfo.chainId,
         poolId: poolInfo.poolId,
-        tokenType: 2
+        tokenType: 1
       })
       args = [poolInfo.poolId, userRandomFailedProof.data.expiredTime, userRandomFailedProof.data.signature]
     }

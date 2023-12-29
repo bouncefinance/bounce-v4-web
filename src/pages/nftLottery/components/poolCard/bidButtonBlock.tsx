@@ -2,9 +2,9 @@ import { CurrencyAmount } from 'constants/token'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback, useMemo } from 'react'
 import { useCurrencyBalance } from 'state/wallet/hooks'
-import { RandomPoolStatus, RandomSelectionNFTProps } from 'api/pool/type'
+import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
-import { styled } from '@mui/material'
+import { Stack, Typography, styled } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { useRandomNFTBetCallback, useRandomNFTUserClaim } from 'bounceHooks/auction/useRandomNFTAuctionCallback'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
@@ -15,10 +15,11 @@ import { Dots } from 'themes'
 import { CloseBtn, DrawedBtn, TipTitle } from './bidBtnBox'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
-
+import { ReactComponent as CircleExclamationSvg } from 'assets/imgs/nftLottery/circle-exclamation.svg'
 interface BidButtonBlockProps {
   poolInfo: RandomSelectionNFTProps
   otherBtns?: JSX.Element
+  allStatus: RandomSelectionNFTResultProps
 }
 
 export const BidButton = styled(LoadingButton)(({ theme }) => ({
@@ -45,7 +46,7 @@ export const BidButton = styled(LoadingButton)(({ theme }) => ({
   }
 }))
 
-const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
+const BidButtonBlock = ({ poolInfo, otherBtns, allStatus }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
@@ -144,7 +145,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
   if (poolStatus === RandomPoolStatus.Live && isUserJoined) {
     return <DrawedBtn />
   }
-  if (isLimitExceeded) {
+  if (poolStatus === RandomPoolStatus.Live && isLimitExceeded) {
     return (
       <>
         <BidButton variant="contained" fullWidth disabled>
@@ -218,28 +219,31 @@ const BidButtonBlock = ({ poolInfo, otherBtns }: BidButtonBlockProps) => {
     }
     return <DrawedBtn />
   }
-  if (RandomPoolStatus.OpenSeed === poolStatus) {
-    if (!isUserJoined) {
+  if (RandomPoolStatus.Closed === poolStatus) {
+    if (poolInfo.participant.claimed) {
       return (
-        <>
-          <CloseBtn />
-          <TipTitle mt={24}>Sorry, you are too late... </TipTitle>
-        </>
+        <Stack flexDirection={'row'} gap={12} alignItems={'center'} sx={{ width: 'fit-content', margin: ' 0 auto' }}>
+          <CircleExclamationSvg />
+          <Typography
+            sx={{
+              color: '#171717',
+              fontFamily: 'Inter',
+              fontSize: { xs: 15, md: 18 },
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '140%'
+            }}
+          >
+            You have successfully extracted your {allStatus.isUserWinner ? 'NFT' : 'Token'}. See you next time!
+          </Typography>
+        </Stack>
       )
     } else {
-      if (poolInfo.participant.claimed) {
-        return (
-          <BidButton sx={{ mt: 24 }} className="dis">
-            Claimed
-          </BidButton>
-        )
-      } else {
-        return (
-          <BidButton sx={{ mt: 24 }} onClick={toClaim} loading={placeUserSubmitted.submitted}>
-            Claim
-          </BidButton>
-        )
-      }
+      return (
+        <BidButton sx={{ mt: 24 }} onClick={toClaim} loading={placeUserSubmitted.submitted}>
+          Claim
+        </BidButton>
+      )
     }
   }
   return null

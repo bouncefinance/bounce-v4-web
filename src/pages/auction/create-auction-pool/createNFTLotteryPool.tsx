@@ -29,7 +29,7 @@ interface IParam {
 
 const initParams: IParam = {
   name: 'test',
-  token0: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
+  token0: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
   token1: '0xc390E699b38F14dB884C635bbf843f7B135113ad',
   amountTotal0: '10',
   amount1PerWallet: '20',
@@ -38,7 +38,7 @@ const initParams: IParam = {
   claimAt: 1703735978,
   maxPlayer: 15,
   nShare: 10,
-  mintContract: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
+  mintContract: '',
   whitelistRoot: ''
 }
 
@@ -113,31 +113,28 @@ const useToCreate = (body: IParam, creator: string) => {
   const create = useCreatePool()
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
-  const token0 = useToken(body.token0, chainId)
+
   const token1 = useToken(body.token1, chainId)
-  const [token0CurrencyAmount, token1CurrencyAmount] = useMemo(() => {
-    if (!token0 || !token1 || !body.amountTotal0 || !body.amount1PerWallet) {
-      return []
+  const token1CurrencyAmount = useMemo(() => {
+    if (!token1 || !body.amountTotal0 || !body.amount1PerWallet) {
+      return null
     }
-    return [
-      CurrencyAmount.fromAmount(token0, body.amountTotal0),
-      CurrencyAmount.fromAmount(token1, body.amount1PerWallet)
-    ]
-  }, [body.amount1PerWallet, body.amountTotal0, token0, token1])
+    return CurrencyAmount.fromAmount(token1, body.amount1PerWallet)
+  }, [body.amount1PerWallet, body.amountTotal0, token1])
 
   return useCallback(() => {
-    if (!token0CurrencyAmount || !token1CurrencyAmount || !chainConfigInBackend) return
+    if (!token1CurrencyAmount || !chainConfigInBackend) return
     const _body = {
       ...body,
-      amountTotal0: token0CurrencyAmount.raw.toString(),
+      mintContract: body.token0,
       amount1PerWallet: token1CurrencyAmount.raw.toString()
     } as IParam
     create({ body: _body, creator, optId: chainConfigInBackend.id })
-  }, [body, chainConfigInBackend, create, creator, token0CurrencyAmount, token1CurrencyAmount])
+  }, [body, chainConfigInBackend, create, creator, token1CurrencyAmount])
 }
 
 const CreateNFTLotteryPool = () => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [values, setValues] = useState(initParams)
   const create = useToCreate(values, account || '')
   const changeValue = (values: IParam) => {
@@ -146,7 +143,7 @@ const CreateNFTLotteryPool = () => {
   const onSubmit = () => {
     create()
   }
-
+  const token1 = useToken(values.token1, chainId)
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
@@ -156,9 +153,9 @@ const CreateNFTLotteryPool = () => {
               <FormItem name={'name'} label="pool name">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'token0'} label="token0 address">
+              {/* <FormItem name={'token0'} label="token0 address">
                 <OutlinedInput placeholder={''} />
-              </FormItem>
+              </FormItem> */}
               <FormItem name={'token1'} label="token1 address">
                 <OutlinedInput placeholder={''} />
               </FormItem>
@@ -194,7 +191,7 @@ const CreateNFTLotteryPool = () => {
                 )}
 
                 {_values === values && (
-                  <Button type="submit" sx={{ flex: 1 }}>
+                  <Button disabled={!token1} type="submit" sx={{ flex: 1 }}>
                     Submit
                   </Button>
                 )}

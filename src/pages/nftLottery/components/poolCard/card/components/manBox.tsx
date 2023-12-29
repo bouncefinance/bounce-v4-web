@@ -78,7 +78,7 @@ const useCurTitle = (poolInfo: RandomSelectionNFTProps, allStatus: RandomSelecti
     ) {
       return <Joined />
     }
-    if (allStatus.poolStatus === RandomPoolStatus.Live && poolInfo.maxPlayere === poolInfo.curPlayer) {
+    if (allStatus.poolStatus === RandomPoolStatus.Live && `${poolInfo.maxPlayere}` === `${poolInfo.curPlayer}`) {
       return <SoldOut />
     }
     return <></>

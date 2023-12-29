@@ -1,5 +1,6 @@
 import {
   Box,
+  Pagination,
   styled,
   Table,
   TableBody,
@@ -10,9 +11,20 @@ import {
   TableRow,
   Typography
 } from '@mui/material'
+import { usePagination } from 'ahooks'
+import { Params } from 'ahooks/lib/usePagination/types'
+import { getWinnersList } from 'api/pool'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import NoData from 'bounceComponents/common/NoData'
+import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { WithAnimation } from 'components/WithAnimation'
+import { useActiveWeb3React } from 'hooks'
+// import moment from 'moment'
+import { useCallback, useEffect } from 'react'
+import { shortenAddress } from 'utils'
+import { formatNumber } from 'utils/number'
 
 const Container = styled(Box)`
   width: 100%;
@@ -102,531 +114,137 @@ const Title = styled(Typography)`
     font-size: 18px;
   }
 `
-const AuctionWinnerList = () => {
+const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+  const { chainId } = useActiveWeb3React()
+  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
+
+  const betAmound = formatNumber(poolInfo.maxAmount1PerWallet, {
+    unit: poolInfo.token1.decimals,
+    decimalPlaces: 6
+  })
+  const defaultIdeaPageSize = 8
+  const {
+    pagination: poolsPagination,
+    data: winnersData,
+    loading,
+    run
+  } = usePagination<any, Params>(
+    async ({ current, pageSize, chainId, poolId }) => {
+      if (!chainId && chainId !== 0) {
+        return Promise.reject(new Error('No ChainId'))
+      }
+      let resp: any
+      try {
+        resp = await getWinnersList({
+          offset: (current - 1) * pageSize,
+          limit: pageSize,
+          poolId,
+          chainId: chainConfigInBackend?.id || 0,
+          category: 7
+        })
+      } catch (error) {
+        console.log('error', error)
+      }
+
+      //   if (category === 1) {
+      return {
+        list: resp.data.list,
+        total: resp.data.total
+      }
+    },
+    {
+      pollingInterval: 20000,
+      defaultPageSize: defaultIdeaPageSize,
+      debounceWait: 500
+    }
+  )
+  const handlePageChange = (_: any, p: number) => {
+    poolsPagination.changeCurrent(p)
+  }
+  const handleSubmit = useCallback(() => {
+    run({
+      current: 1,
+      pageSize: defaultIdeaPageSize,
+      poolId: poolInfo?.poolId,
+      chainId: chainConfigInBackend?.id || 0,
+      category: 7
+    })
+  }, [chainConfigInBackend?.id, poolInfo?.poolId, run])
+  useEffect(() => {
+    handleSubmit()
+  }, [handleSubmit])
   return (
     <Container>
       <Body>
         <WithAnimation>
           <Title mb={32}>Winner list</Title>
         </WithAnimation>
-        <>
-          <TableContainer sx={{ mt: 20, maxHeight: 440 }}>
-            <TableStyle stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>
-              <TableHeadStyle>
-                <StyledTableRow>
-                  <StyledTableCell>Event</StyledTableCell>
-                  <StyledTableCell>Amount</StyledTableCell>
-                  <StyledTableCell>Price</StyledTableCell>
-                  <StyledTableCell>Token#</StyledTableCell>
-                  <StyledTableCell>Address</StyledTableCell>
-                  <StyledTableCell>Date</StyledTableCell>
-                </StyledTableRow>
-              </TableHeadStyle>
-              <TableBody>
-                <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-                <StyledTableRow key={2} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <StyledTableCell>
-                    <Typography
-                      style={{
-                        color: '#F53030',
-                        fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                        fontWeight: 400,
-                        fontSize: '12px'
-                        // textAlign: 'center'
-                      }}
-                    >
-                      Win
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>1 Ticket</StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>1 Ticket</Typography>
-                      <CopyToClipboard text={'record'} />
-                    </Box>
-                  </StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                  <StyledTableCell>11</StyledTableCell>
-                </StyledTableRow>
-              </TableBody>
-            </TableStyle>
-          </TableContainer>
-        </>
+        {winnersData && winnersData?.list && winnersData?.list.length > 0 && !loading ? (
+          <>
+            <TableContainer sx={{ mt: 20, maxHeight: 440 }}>
+              <TableStyle stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>
+                <TableHeadStyle>
+                  <StyledTableRow>
+                    <StyledTableCell width="25%">Event</StyledTableCell>
+                    <StyledTableCell width="25%">Amount</StyledTableCell>
+                    <StyledTableCell width="25%">Price</StyledTableCell>
+                    {/* <StyledTableCell>Token#</StyledTableCell> */}
+                    <StyledTableCell width="25%">Address</StyledTableCell>
+                    {/* <StyledTableCell>Date</StyledTableCell> */}
+                  </StyledTableRow>
+                </TableHeadStyle>
+                <TableBody>
+                  {winnersData.list.map((record: any) => (
+                    <StyledTableRow key={1} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <StyledTableCell>
+                        <Typography
+                          style={{
+                            color: '#F53030',
+                            fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+                            fontWeight: 400,
+                            fontSize: '12px'
+                            // textAlign: 'center'
+                          }}
+                        >
+                          Win
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell>1 Ticket</StyledTableCell>
+                      <StyledTableCell>{`${betAmound} ${poolInfo.token1.symbol}`}</StyledTableCell>
+                      {/* <StyledTableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography>1 Ticket</Typography>
+                          <CopyToClipboard text={'record'} />
+                        </Box>
+                      </StyledTableCell> */}
+                      <StyledTableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Typography>{shortenAddress(record)}</Typography>
+                          <CopyToClipboard text={record} />
+                        </Box>
+                      </StyledTableCell>
+                      {/* <StyledTableCell>{moment(poolInfo.closeAt * 1000).format('Y/M/D hh:mm')}</StyledTableCell> */}
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </TableStyle>
+            </TableContainer>
+
+            {winnersData?.total >= defaultIdeaPageSize && (
+              <Box mt={58} display={'flex'} justifyContent={'center'}>
+                <Pagination
+                  onChange={handlePageChange}
+                  count={Math.ceil(winnersData?.total / defaultIdeaPageSize) || 0}
+                  // variant="outlined"
+                />
+              </Box>
+            )}
+          </>
+        ) : (
+          <Box sx={{ width: '100%' }}>
+            <NoData />
+          </Box>
+        )}
       </Body>
     </Container>
   )

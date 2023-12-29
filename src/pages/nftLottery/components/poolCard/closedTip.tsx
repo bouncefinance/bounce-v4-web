@@ -1,6 +1,8 @@
 import { styled, Box, Typography } from '@mui/material'
 import { ReactComponent as ShowSvg } from 'assets/imgs/nftLottery/shadow.svg'
+import { ReactComponent as ShowMobileSvg } from 'assets/imgs/nftLottery/shadow-mobile.svg'
 import { ReactComponent as RedCircle } from 'assets/imgs/nftLottery/red-circle.svg'
+import useBreakpoint from 'hooks/useBreakpoint'
 const Container = styled(Box)`
   width: 100%;
   max-width: 673px;
@@ -32,6 +34,7 @@ const TextBox = styled(Box)`
   transform: translateX(-50%);
 `
 const ClosedTip = () => {
+  const isSm = useBreakpoint('sm')
   return (
     <Container>
       <TextBox>
@@ -39,7 +42,8 @@ const ClosedTip = () => {
         <Title>Auction CLOSED</Title>
       </TextBox>
       <SvgBox>
-        <ShowSvg />
+        {!isSm && <ShowSvg />}
+        {isSm && <ShowMobileSvg />}
       </SvgBox>
     </Container>
   )

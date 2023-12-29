@@ -9,7 +9,7 @@ const MobileLiveCard = ({
   poolInfo,
   allStatus
 }: {
-  isZoom: boolean
+  isZoom?: boolean
   poolInfo: RandomSelectionNFTProps
   allStatus: RandomSelectionNFTResultProps
 }) => {
@@ -36,7 +36,7 @@ const MobileLiveCard = ({
     (allStatus.poolStatus === RandomPoolStatus.Live && poolInfo.curPlayer === poolInfo.maxPlayere)
   ) {
     return (
-      <Box sx={{ padding: '0 33px' }}>
+      <Box sx={{ padding: '0 33px', mt: 20 }}>
         <Box
           sx={{
             width: 294,

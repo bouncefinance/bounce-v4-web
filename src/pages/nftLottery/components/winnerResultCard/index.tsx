@@ -12,29 +12,33 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
 import BidButtonBlock from '../poolCard/bidButtonBlock'
 import { RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
-const Container = styled(Box)`
-  position: relative;
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  height: 1168px;
-  background: url(${Bg1Svg});
-  background-repeat: no-repeat;
-  background-position: center;
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    background: url(${Bg1SvgMobile});
+
+const Container = styled(Box)(
+  ({ isUserJoined, theme }: { isUserJoined: boolean; theme: Theme }) => `
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    height: 1168px;
+    ${isUserJoined ? `background: url(${Bg1Svg});` : ''}
+    
     background-repeat: no-repeat;
     background-position: center;
-    height: 570px;
-  }
+    ${theme.breakpoints.down('sm')} {
+      ${isUserJoined ? `background: url(${Bg1SvgMobile});` : ''}
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 570px;
+    }
 `
+)
 const WinnerBg = styled(Box)(
   ({ isWinner, theme }: { isWinner: boolean; theme: Theme }) => `  
     
     ${
       isWinner
         ? `
-            position: relative;
+            position: absolute;
             top: 146px;
             width: 1044px;
             height: 865px;
@@ -93,15 +97,17 @@ const WinnerResultCard = ({
   const theme = useTheme()
   const isWinner = allStatus.isUserWinner
   const isSm = useBreakpoint('sm')
+
   return (
-    <Container>
+    <Container isUserJoined={allStatus.isUserJoined} theme={theme}>
       <Box
-        sx={{ position: 'absolute', top: isSm ? 67 : 114, left: '50%', transform: 'translateX(-50%)', width: '100%' }}
+        sx={{ position: 'relative', top: isSm ? 67 : 114, left: '50%', transform: 'translateX(-50%)', width: '100%' }}
       >
         <WithAnimation>
           <PoolHeadTitle allStatus={allStatus} />
         </WithAnimation>
       </Box>
+
       <WinnerBg isWinner={isWinner} theme={theme}>
         <WinnerBox isWinner={isWinner} theme={theme}>
           <WithAnimation>
@@ -110,6 +116,7 @@ const WinnerResultCard = ({
           </WithAnimation>
         </WinnerBox>
       </WinnerBg>
+
       <Stack
         px={isSm ? 20 : 0}
         gap={isWinner ? (isSm ? 35 : 18) : 55}
@@ -141,7 +148,7 @@ const WinnerResultCard = ({
           {/* {!isSm && <img src={ShowSvg} />} */}
           {!isSm && <ShowSvg />}
         </Box>
-        <BidButtonBlock poolInfo={poolInfo} />
+        <BidButtonBlock allStatus={allStatus} poolInfo={poolInfo} />
       </Stack>
     </Container>
   )
