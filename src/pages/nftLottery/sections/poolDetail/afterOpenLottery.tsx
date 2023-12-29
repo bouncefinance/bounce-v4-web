@@ -12,7 +12,7 @@ const AfterOpenLottery = ({ allStatus, poolInfo }: IProps) => {
     <div>
       <WinnerResultCard allStatus={allStatus} poolInfo={poolInfo} />
       <NftReward />
-      <AuctionWinnerList />
+      <AuctionWinnerList poolInfo={poolInfo} />
     </div>
   )
 }
