@@ -21,7 +21,7 @@ import NoData from 'bounceComponents/common/NoData'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { WithAnimation } from 'components/WithAnimation'
 import { useActiveWeb3React } from 'hooks'
-import moment from 'moment'
+// import moment from 'moment'
 import { useCallback, useEffect } from 'react'
 import { shortenAddress } from 'utils'
 import { formatNumber } from 'utils/number'
@@ -185,12 +185,12 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
               <TableStyle stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>
                 <TableHeadStyle>
                   <StyledTableRow>
-                    <StyledTableCell>Event</StyledTableCell>
-                    <StyledTableCell>Amount</StyledTableCell>
-                    <StyledTableCell>Price</StyledTableCell>
-                    <StyledTableCell>Token#</StyledTableCell>
-                    <StyledTableCell>Address</StyledTableCell>
-                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell width="25%">Event</StyledTableCell>
+                    <StyledTableCell width="25%">Amount</StyledTableCell>
+                    <StyledTableCell width="25%">Price</StyledTableCell>
+                    {/* <StyledTableCell>Token#</StyledTableCell> */}
+                    <StyledTableCell width="25%">Address</StyledTableCell>
+                    {/* <StyledTableCell>Date</StyledTableCell> */}
                   </StyledTableRow>
                 </TableHeadStyle>
                 <TableBody>
@@ -211,19 +211,19 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
                       </StyledTableCell>
                       <StyledTableCell>1 Ticket</StyledTableCell>
                       <StyledTableCell>{`${betAmound} ${poolInfo.token1.symbol}`}</StyledTableCell>
-                      <StyledTableCell>
+                      {/* <StyledTableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Typography>1 Ticket</Typography>
                           <CopyToClipboard text={'record'} />
                         </Box>
-                      </StyledTableCell>
+                      </StyledTableCell> */}
                       <StyledTableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Typography>{shortenAddress(record)}</Typography>
                           <CopyToClipboard text={record} />
                         </Box>
                       </StyledTableCell>
-                      <StyledTableCell>{moment(poolInfo.closeAt * 1000).format('Y/M/D hh:mm')}</StyledTableCell>
+                      {/* <StyledTableCell>{moment(poolInfo.closeAt * 1000).format('Y/M/D hh:mm')}</StyledTableCell> */}
                     </StyledTableRow>
                   ))}
                 </TableBody>

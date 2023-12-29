@@ -79,7 +79,7 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
           <BidButtonBlock poolInfo={poolInfo} {...otherBtns} />
         )}
 
-        {poolStatus === RandomPoolStatus.Waiting && <CloseBtn />}
+        {(poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed) && <CloseBtn />}
       </Box>
     </Container>
   )

@@ -11,7 +11,7 @@ const LiveCard = ({
   poolInfo,
   allStatus
 }: {
-  isZoom: boolean
+  isZoom?: boolean
   poolInfo: RandomSelectionNFTProps
   allStatus: RandomSelectionNFTResultProps
 }) => {

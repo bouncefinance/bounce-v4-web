@@ -78,7 +78,7 @@ export const PoolHeadTitle = ({
     if (poolStatus === RandomPoolStatus.Waiting && (isUserJoined || allNotInvolved)) {
       return <WaitTitle />
     }
-    if (poolStatus === RandomPoolStatus.Waiting && !isUserJoined) {
+    if (!isUserJoined) {
       return <NotInvolvedTitle />
     }
     if (isWinnerSeedDone || poolStatus === RandomPoolStatus.Closed) {

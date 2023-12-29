@@ -17,7 +17,7 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         padding: isMd ? '48px 0' : '120px 0'
       }}
     >
-      {isWinnerSeedDone ? (
+      {isWinnerSeedDone && allStatus.isUserJoined ? (
         <AfterOpenLottery allStatus={allStatus} poolInfo={poolInfo} />
       ) : (
         <BeforeOpenLottery poolInfo={poolInfo} allStatus={allStatus} />
