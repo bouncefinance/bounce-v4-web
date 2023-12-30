@@ -14,7 +14,8 @@ import { useRequest } from 'ahooks'
 import { getCurrentTimeStamp } from 'utils'
 
 const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
-  const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID')
+  // const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID')
+  const _backedId = backedId
   const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_NFT, Number(_backedId))
 
   const contract = useRandomSelectionNFTContract(poolInfo?.contract || '', poolInfo?.ethChainId)

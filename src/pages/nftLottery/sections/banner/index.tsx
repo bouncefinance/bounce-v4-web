@@ -1,18 +1,18 @@
 import useBreakpoint from 'hooks/useBreakpoint'
 import PcBanner from '../../components/banner/pc'
 import MobileBanner from '../../components/banner/mobile'
-import { RandomSelectionNFTProps } from 'api/pool/type'
+// import { RandomSelectionNFTProps } from 'api/pool/type'
 export enum AnimateStep {
   'default' = 0,
   'enter' = 1,
   'moving' = 2,
   'leave' = 3
 }
-const Banner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+const Banner = () => {
   const isSm = useBreakpoint('md')
   if (isSm) {
-    return <MobileBanner poolInfo={poolInfo} />
+    return <MobileBanner />
   }
-  return <PcBanner poolInfo={poolInfo} />
+  return <PcBanner />
 }
 export default Banner

@@ -10,7 +10,6 @@ import useRandomSelectionNFTPoolInfo from 'bounceHooks/auction/useRandomSelectio
 
 const NftLottery = () => {
   const { data: poolInfo } = useRandomSelectionNFTPoolInfo()
-  console.log('🚀 ~ file: index.tsx:13 ~ NftLottery ~ poolInfo:', poolInfo)
   useEffect(() => {
     document.getElementById('body')?.setAttribute('style', 'padding-top: 0;')
     return () => {
@@ -19,7 +18,7 @@ const NftLottery = () => {
   }, [])
   return (
     <>
-      {poolInfo && <Banner poolInfo={poolInfo} />}
+      <Banner />
       <TokenInformation />
       {poolInfo && <PoolDetail poolInfo={poolInfo} />}
       <ArtistsList />

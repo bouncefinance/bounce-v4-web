@@ -1401,7 +1401,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   {
     keyId: 22,
     liveTimeStamp: {
-      start: 1703462400000,
+      start: 1705118400000,
       end: 0
     },
     hideUpcomingCountdown: true,
@@ -1412,8 +1412,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     chainId: 1,
     tokenName: 'TBD',
     // whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
-    // upcomingLink: '/launchpad/godid-rs-auction',
-    // liveLink: '/launchpad/godid-rs-auction',
+    upcomingLink: '/launchpad/ai-random',
+    liveLink: '/launchpad/ai-random',
     projectInfo: [
       { title: 'What is AI meets Bitcoin?', info: ['AI meets Bitcoin'] },
       {

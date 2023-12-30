@@ -32,7 +32,7 @@ export const routes = {
     index: '/NFTAuction'
   },
   nftLottery: {
-    index: '/NFTLottery'
+    index: '/launchpad/ai-random'
   },
   tokenAuction: {
     index: '/TokenAuction'

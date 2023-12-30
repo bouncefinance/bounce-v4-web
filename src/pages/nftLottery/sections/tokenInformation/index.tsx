@@ -1,5 +1,5 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
+// import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
 import ImgCard from '../../components/tokenInformation/imgCard'
 import useBreakpoint from 'hooks/useBreakpoint'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
@@ -156,7 +156,8 @@ const LeftContent = () => {
       <Stack gap={40}>
         <InfoTitle>Token Information</InfoTitle>
         <Stack gap={16}>
-          <InfoLabel title="Contract address" content="0xCc39...780E6f" icon={<TickGreen />} />
+          {/* <InfoLabel title="Contract address" content="TBD" icon={<TickGreen />} /> */}
+          <InfoLabel title="Contract address" content="TBD" />
           <InfoLabel title="Token Type" content="ERC721" />
         </Stack>
         <InfoTitle mt={isSm ? 24 : 'auto'}>Auction Information</InfoTitle>
@@ -177,7 +178,8 @@ const RightContent = () => {
     <Stack mt={26} alignItems={'center'} gap={29} sx={{ width: isSm ? '100%' : 'max-content', maxWidth: 320 }}>
       <ImgCard />
       <RevealBtn>
-        <span>Reveal on Jan 13</span>
+        {/* <span>Reveal on Jan 13</span> */}
+        <span>Reveal on TBD</span>
       </RevealBtn>
     </Stack>
   )

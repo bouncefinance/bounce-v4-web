@@ -62,7 +62,7 @@ const BannerStep2 = () => {
                 textAlign: 'center'
               }}
             >
-              JAN
+              TBD
             </Typography>
             <Typography
               variant="lotteryh1"
@@ -74,9 +74,7 @@ const BannerStep2 = () => {
                 lineHeight: '160px',
                 textAlign: 'center'
               }}
-            >
-              0
-            </Typography>
+            ></Typography>
             <Typography
               variant="lotteryh1"
               sx={{
@@ -88,9 +86,7 @@ const BannerStep2 = () => {
                 lineHeight: '160px',
                 transform: 'translateY(-30px)'
               }}
-            >
-              1
-            </Typography>
+            ></Typography>
           </Stack>
           <Typography
             sx={{
