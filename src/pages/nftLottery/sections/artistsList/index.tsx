@@ -11,25 +11,25 @@ const DemoComponent = () => {
   const isSm = useBreakpoint('sm')
   const msgList = [
     {
-      name: 'CHARLES',
+      name: 'CHARLESAI',
       value:
-        'Charles is a French AI-Classicism NFT artist. Charles has had the opportunity to expose his work at the MoCa Gallery as well as the IHAM art gallery in Paris. His work was also sold in the first french physical NFT auction.',
+        'A French doctor turned renowned NFT artist. Since 2021 Charlesai has been featured at MoCa Gallery, IHAM in Paris, and Art Basel Miami. His AI-infused landscapes have graced the first French physical NFT auction and Europe’s first AI art exhibit. He’s been interviewed by BFMTV, published in Beaux Arts 2022, and his work is used in top art schools globally. ',
       imgSrc: artist_1,
       rotate: 'rotate(13deg)'
     },
     {
-      name: 'REDRUM',
+      name: '0009',
       value:
-        "RedruM is an AI artist who creates Surrealist artworks between dreams and nightmares, with a style he describes as 'Red Mythological Weirdism' with elements of Caravaggio, Tiziano and even Francis Bacon weaved in.",
-      imgSrc: artist_2,
-      rotate: 'rotate(-10deg)'
-    },
-    {
-      name: 'Gene Kogan',
-      value:
-        'Gene Kogan is an artist and programmer with interests in generative art, collective intelligence, autonomous systems, and computer science. He was one of the three Day 1 AI artists on braindrops with his brainloops collection and is considered to be one of the OGs when it comes to AI art.',
+        'Chris Maestas, American artist/designer with roots in LA’s graffiti and skateboarding scene. His work, influenced by 90s subcultures, blends traditional methods with AI-assisted art. Exhibited at Art Basel, NY Times Square, and La Biennale di Venezia, Chris is a trendsetter in automotive design and a prominent figure in the Web3 art world. ',
       imgSrc: artist_3,
       rotate: 'rotate(15deg)'
+    },
+    {
+      name: 'REDRUM',
+      value:
+        'Italian digital artist mastering AI to craft vivid art. Since June 2022, his journey has blended surrealism, storytelling, and paradoxical worlds inspired by film, music, and myth. Featured in global exhibits from LA to Hong Kong, his unique ‘redrum’ perspective captivates collectors and fans alike, transcending language barriers with each creation.',
+      imgSrc: artist_2,
+      rotate: 'rotate(-10deg)'
     }
   ]
   return (

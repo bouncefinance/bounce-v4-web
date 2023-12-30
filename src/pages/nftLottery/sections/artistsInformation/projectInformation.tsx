@@ -26,23 +26,24 @@ const ProjectInformation = () => {
         }}
       >
         <Text>
-          The “AI Meets Bitcoin” project marks a groundbreaking fusion of artificial intelligence and Bitcoin ecosystem,
-          introducing an innovative dimension for digital art. This initiative leverages advanced AI technology to
-          create unique artworks, which are then inscribed as Bitcoin Ordinals, embodying the synergy of AI creativity
-          and Bitcoin’s potential.
+          The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450
+          exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a
+          pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks
+          gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their
+          endurance and legacy.
         </Text>
         <Text style={{ margin: isSm ? '20px 0' : '40px 0' }}>
-          The integration of AI and Bitcoin in this manner opens up a new realm of possibilities for art creation and
-          distribution. Artists and creators are empowered to explore new frontiers in creativity, harnessing AI
-          technology to expand their artistic horizons. The resulting digital artworks, each with a unique identity and
-          narrative, are permanently etched onto the Bitcoin network, ensuring their longevity.
+          This “AI Meets Bitcoin” NFT collection will be auctioned on Bounce via Random Selection, featuring an
+          innovative twist in the auction mechanism called “Burning Man” — Each participant can join this auction by
+          burning $50 worth of any of these tokens: $AUCTION, $MUBI, $BSSB, $DAII, $BDID, $AMMX. Our smart contract will
+          then randomly select winners to receive the NFTs.
         </Text>
-        <Text>
+        {/* <Text>
           This innovative “AI Meets Bitcoin” ordinals collection will be auctioned on Bounce, a prominent decentralized
           platform in the Bitcoin ecosystem. Bounce is known for its onchain auction services, making it an ideal venue
           for presenting these unique AI-generated Bitcoin Ordinals to a global audience of collectors and art
           enthusiasts. The auctioning aspect of this project adds an exciting layer of engagement and accessibility.
-        </Text>
+        </Text> */}
       </Box>
     </Box>
   )

@@ -40,7 +40,7 @@ const BannerStep2 = () => {
             }}
             variant="lotteryh1"
           >
-            START FROM
+            The First-Ever AI-Generated NFT Collection on Bitcoin
           </Typography>
           <Stack
             justifyContent={'center'}
@@ -51,7 +51,7 @@ const BannerStep2 = () => {
             }}
             mb={40}
           >
-            <Typography
+            {/* <Typography
               variant="lotteryh1"
               sx={{
                 display: 'inline-block',
@@ -63,30 +63,7 @@ const BannerStep2 = () => {
               }}
             >
               TBD
-            </Typography>
-            <Typography
-              variant="lotteryh1"
-              sx={{
-                display: 'inline-block',
-                color: '#C3A16D',
-                fontSize: isSm ? 100 : 200,
-                fontWeight: 500,
-                lineHeight: '160px',
-                textAlign: 'center'
-              }}
-            ></Typography>
-            <Typography
-              variant="lotteryh1"
-              sx={{
-                display: 'inline-block',
-                color: '#C3A16D',
-                fontSize: isSm ? 100 : 200,
-                fontWeight: 500,
-                textAlign: 'center',
-                lineHeight: '160px',
-                transform: 'translateY(-30px)'
-              }}
-            ></Typography>
+            </Typography> */}
           </Stack>
           <Typography
             sx={{
@@ -102,9 +79,11 @@ const BannerStep2 = () => {
               zIndex: '1'
             }}
           >
-            Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure
-            and transparent environment for the auction process. The use of blockchain technology also allows for the
-            automatic execution of the auction rules and the issuance of tokens to the winning bidders.
+            The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450
+            exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents
+            a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks
+            gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their
+            endurance and legacy.
           </Typography>
           <MosaicImg
             style={{
