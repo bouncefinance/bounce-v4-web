@@ -8,7 +8,6 @@ const Goback = () => {
     navigate(-1)
   }
   const isSm = useBreakpoint('sm')
-  if (isSm) return <></>
   return (
     <Stack
       direction={'row'}
@@ -16,8 +15,8 @@ const Goback = () => {
       alignItems={'center'}
       sx={{
         position: 'fixed',
-        top: 100,
-        left: 80,
+        top: isSm ? 80 : 100,
+        left: isSm ? 20 : 80,
         cursor: 'pointer',
         borderRadius: 8,
         background: 'rgba(255, 255, 255, 0.20)',

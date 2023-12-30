@@ -20,13 +20,13 @@ const AboutArtist = () => {
       name: '0009',
       value:
         'Chris Maestas, American artist/designer with roots in LA’s graffiti and skateboarding scene. His work, influenced by 90s subcultures, blends traditional methods with AI-assisted art. Exhibited at Art Basel, NY Times Square, and La Biennale di Venezia, Chris is a trendsetter in automotive design and a prominent figure in the Web3 art world. ',
-      imgSrc: artist2_img
+      imgSrc: artist3_img
     },
     {
       name: 'RedruM',
       value:
         'Italian digital artist mastering AI to craft vivid art. Since June 2022, his journey has blended surrealism, storytelling, and paradoxical worlds inspired by film, music, and myth. Featured in global exhibits from LA to Hong Kong, his unique ‘redrum’ perspective captivates collectors and fans alike, transcending language barriers with each creation.',
-      imgSrc: artist3_img
+      imgSrc: artist2_img
     }
   ]
   const [tabIndex, setTabNumber] = React.useState(0)
