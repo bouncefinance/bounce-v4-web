@@ -7,6 +7,7 @@ import MobileLiveCard from 'pages/nftLottery/components/poolCard/card/mobileLive
 import useBreakpoint from 'hooks/useBreakpoint'
 import { WithAnimation } from 'components/WithAnimation'
 import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
+import { Box } from '@mui/material'
 interface IProps {
   allStatus: RandomSelectionNFTResultProps
   poolInfo: RandomSelectionNFTProps
@@ -22,7 +23,7 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
     return !Number(poolInfo.curPlayer) && allStatus.poolStatus === RandomPoolStatus.Waiting
   }, [allStatus.poolStatus, poolInfo.curPlayer])
   return (
-    <div>
+    <Box sx={{ mb: { xs: 48, md: 120 } }}>
       <WithAnimation>
         <PoolHeadTitle allStatus={allStatus} isZoom={isZoom} allNotInvolved={allNotInvolved} />
       </WithAnimation>
@@ -36,7 +37,7 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
       )}
 
       <BidPanel setZoom={setZoomHandle} poolInfo={poolInfo} allStatus={allStatus} />
-    </div>
+    </Box>
   )
 }
 export default BeforeOpenLottery

@@ -43,7 +43,7 @@ export default function ArtistsList({
         <Box
           id={'textBox'}
           display={'flex'}
-          marginBottom={30}
+          marginBottom={60}
           gap={124}
           position={'relative'}
           sx={{

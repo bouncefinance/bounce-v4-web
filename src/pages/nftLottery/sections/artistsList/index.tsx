@@ -65,7 +65,7 @@ const DemoComponent = () => {
             ))}
           </Box>
         ) : (
-          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={40}>
+          <Box display={'flex'} flexDirection={'column'} alignItems={'flex-end'} gap={60}>
             {msgList.map(({ name, value, imgSrc, rotate }, idx) => (
               <WithAnimation key={idx}>
                 <List key={idx} idx={idx} length={msgList.length} name={name} url={imgSrc} rotate={rotate}>
