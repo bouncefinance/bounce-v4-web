@@ -117,6 +117,8 @@ import AmmxStakeAuctionPool from './stakeAuctionAMMX'
 import AmmxStakeAuctionPoolTest from './stakeAuctionAMMXTest'
 import AmmxStakeDaiiPool from './stakeDaiiAMMX'
 import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
+import NftLottery from './nftLottery'
+import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -172,6 +174,7 @@ export default function App() {
                   <Route path={routes.auction.randomSelection} element={<RandomSelectionPricePoolId />} />
                   <Route path={routes.auction.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                   <Route path={routes.auction.dutchAuction} element={<DutchAuctionPoolId />} />
+                  <Route path={routes.auction.createNftLotteryPool} element={<CreateNFTLotteryPool />} />
                   <Route path={routes.auction.v2.erc20EnglishAuction} element={<ERC20EnglishAuctionPoolId />} />
                   <Route path={routes.auction.v2.dutchAuction} element={<DutchAuctionPoolId />} />
                   <Route path={routes.auction.v2.fixedPrice} element={<AuctionFixedPricePoolId />} />
@@ -274,6 +277,9 @@ export default function App() {
 
                   <Route path={routes.loyaltyprogram.index} element={<Loyaltyprogram />} />
                   <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
+
+                  <Route path={routes.nftLottery.index} element={<NftLottery />} />
+
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

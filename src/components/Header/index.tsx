@@ -151,7 +151,8 @@ export const transparentRoutes = [
   routes.thirdPart.AmmxAuction,
   routes.thirdPart.AmmxDaii,
   routes.thirdPart.AmmxRandom,
-  routes.thirdPart.Port3
+  routes.thirdPart.Port3,
+  routes.nftLottery.index
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -201,6 +202,9 @@ export default function Header() {
 
   const isTransparentRoute = useMemo(() => {
     // return routes.market.index.includes(pathname)
+    if (pathname.toLocaleLowerCase() === '/nftlottery') {
+      return false
+    }
     return transparentRoutes.includes(pathname) || transparentRoutes.some(route => matchPath(route, pathname))
   }, [pathname])
 
@@ -210,9 +214,12 @@ export default function Header() {
   )
 
   const headerBg = useMemo(() => {
+    if (pathname.toLocaleLowerCase() === '/nftlottery') {
+      return { backgroundColor: 'transparent !important' }
+    }
     if (!isTransparentRoute) return {}
     return { backgroundColor: `rgba(255,255,255,${headerBgOpacity})` }
-  }, [headerBgOpacity, isTransparentRoute])
+  }, [headerBgOpacity, isTransparentRoute, pathname])
 
   const walletClick = () => {
     if (location.pathname === routes.login) {

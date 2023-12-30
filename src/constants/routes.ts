@@ -8,6 +8,7 @@ export const routes = {
     randomSelection: '/auction/random-selection/:chainShortName/:poolId',
     dutchAuction: '/auction/dutch-auction/:chainShortName/:poolId',
     erc20EnglishAuction: '/auction/erc20-english-auction/:chainShortName/:poolId',
+    createNftLotteryPool: '/auction/create-NftLottery-pool',
     // mutantEnglishAuction: '/auction/mutant-english-auction/:chainShortName/:poolId',
     v2: {
       fixedSwapNft: '/auction/fixed-swap-1155/:sysId',
@@ -29,6 +30,9 @@ export const routes = {
   },
   nftAuction: {
     index: '/NFTAuction'
+  },
+  nftLottery: {
+    index: '/launchpad/ai-random'
   },
   tokenAuction: {
     index: '/TokenAuction'

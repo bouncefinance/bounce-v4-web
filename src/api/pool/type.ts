@@ -1,6 +1,6 @@
 import { VerifyStatus } from 'api/profile/type'
 import { ChainId } from 'constants/chain'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
@@ -14,6 +14,7 @@ export enum PoolType {
   ENGLISH_AUCTION_NFT = 6,
   ENGLISH_AUCTION = 8,
   MUTANT_ENGLISH_AUCTION_NFT = 9,
+  LOTTERY_NFT = 7,
   'PlayableAuction' = 100
 }
 
@@ -37,6 +38,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'English Auction'
     case PoolType.MUTANT_ENGLISH_AUCTION_NFT:
       return 'Mutant English'
+    case PoolType.LOTTERY_NFT:
+      return 'Lottery NFT'
   }
 }
 export interface BindTgTokenApiParams {
@@ -101,6 +104,22 @@ export enum PoolStatus {
   'Finish' = 3,
   'Closed' = 4,
   'Cancelled' = 5
+}
+
+export enum RandomPoolStatus {
+  'Upcoming' = 1,
+  'Live' = 2,
+  'OpenSeed' = 3,
+  'Waiting' = 4,
+  'Closed' = 5
+}
+
+export interface RandomSelectionNFTResultProps {
+  poolStatus: RandomPoolStatus
+  isUserClaimed: boolean | undefined
+  isUserJoined: boolean
+  isWinnerSeedDone: boolean
+  isUserWinner: boolean
 }
 
 export interface GetPoolInfoParams {
@@ -213,6 +232,27 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
   releaseType?: IReleaseType | undefined
   enableReverses?: boolean
   releaseData?: { startAt: number; endAt: number | undefined; ratio: string | undefined }[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
+
+export interface RandomSelectionNFTProps extends FixedSwapPool {
+  currencyAmountTotal1?: CurrencyAmount
+  currencySwappedTotal1?: CurrencyAmount
+  ethChainId: ChainId
+  mintContractAddress: string
+  participant: {
+    isJoined?: boolean
+    address?: string
+    claimed?: boolean
+  }
+  userTokenAmount: Currency
+  totalShare: string | number
+  maxPlayere: string | number
+  curPlayer: string | number
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined
@@ -428,6 +468,7 @@ export interface GetWinnersListParams {
   offset: number
   chainId: number
   poolId: string
+  category?: PoolType
 }
 
 export type PoolEvent = 'Swapped' | 'CreatorClaimed' | 'Reversed' | 'Bid' | 'Bet'

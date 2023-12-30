@@ -8,7 +8,7 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
-import { useIsWinnerSeedDone } from 'hooks/useCreateRandomSelectionPool'
+import { useIsWinnerSeedDone } from 'hooks/useRandomSelectionPool'
 import { PoolStatus } from 'api/pool/type'
 import useBreakpoint from '../../../../hooks/useBreakpoint'
 const DidPool = ({ backedId }: { backedId?: number }) => {
@@ -20,6 +20,7 @@ const DidPool = ({ backedId }: { backedId?: number }) => {
   const isWinnerSeedDone = useIsWinnerSeedDone(
     poolInfo?.poolId ? Number(poolInfo?.poolId) : '',
     poolInfo?.contract || '',
+    poolInfo?.category,
     poolInfo?.ethChainId
   )
   if (isBlock) {

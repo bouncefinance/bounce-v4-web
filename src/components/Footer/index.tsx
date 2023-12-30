@@ -7,7 +7,6 @@ import { ExternalLink } from 'themes/components'
 
 export default function Footer() {
   const theme = useTheme()
-
   return (
     <HideOnMobile>
       <footer

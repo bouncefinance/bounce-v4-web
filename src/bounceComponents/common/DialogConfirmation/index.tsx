@@ -11,18 +11,18 @@ import {
   IconButton
 } from '@mui/material'
 import { create, NiceModalHocProps, useModal } from '@ebay/nice-modal-react'
-import Lottie from 'react-lottie'
+import Lottie from 'lottie-react'
 import bounce_loading from '../BounceAnime/bounce-loading.json'
 import { ReactComponent as CloseSVG } from './assets/close.svg'
 
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: bounce_loading,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
-  }
-}
+// const defaultOptions = {
+//   loop: true,
+//   autoplay: true,
+//   animationData: bounce_loading,
+//   rendererSettings: {
+//     preserveAspectRatio: 'xMidYMid slice'
+//   }
+// }
 
 export interface DialogProps extends MuiDialogProps {
   title: string
@@ -78,7 +78,7 @@ const DialogConfirmation: React.FC<DialogProps & NiceModalHocProps> = create((pr
               margin: '0 auto'
             }}
           >
-            <Lottie classwidth={200} height={200} options={defaultOptions} />
+            <Lottie animationData={bounce_loading} loop={true} autoplay={true} style={{ width: 200, height: 200 }} />
           </Box>
           <Button variant="contained" disabled>
             Awaiting...
