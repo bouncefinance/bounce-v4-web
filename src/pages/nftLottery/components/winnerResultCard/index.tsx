@@ -44,7 +44,7 @@ const WinnerBg = styled(Box)(
             height: 865px;
             left: 50%;
             transform: translateX(-50%);
-            background: url(${Bg2Svg})  lightgray -20px 0px / 103.544% 100% no-repeat;
+            background: url(${Bg2Svg}) transparent -20px 0px / 103.544% 100% no-repeat;
             mix-blend-mode: darken;
             ${theme.breakpoints.down('sm')}{
               width:360px;
