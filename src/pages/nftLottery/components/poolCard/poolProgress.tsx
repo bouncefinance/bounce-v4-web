@@ -1,10 +1,10 @@
 import { Avatar, AvatarGroup, LinearProgress, Stack, Typography, styled } from '@mui/material'
 import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import DefaultAvatar from 'assets/imgs/nftLottery/default-ava.svg'
-import UserAvatar2 from 'assets/imgs/nftLottery/user-avatar2.svg'
+import UserAvatar2 from 'assets/imgs/nftLottery/user-avatar2.png'
 import UserAvatar3 from 'assets/imgs/nftLottery/user-avatar3.svg'
-import UserAvatar4 from 'assets/imgs/nftLottery/user-avatar4.svg'
-import UserAvatar5 from 'assets/imgs/nftLottery/user-avatar5.svg'
+import UserAvatar4 from 'assets/imgs/nftLottery/user-avatar4.png'
+import UserAvatar5 from 'assets/imgs/nftLottery/user-avatar5.png'
 
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
