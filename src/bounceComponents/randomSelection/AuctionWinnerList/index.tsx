@@ -24,7 +24,7 @@ import { getWinnersList } from 'api/pool/index'
 import { shortenAddress } from 'utils'
 import { FixedSwapPoolProp } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
     color: '#908E96',
@@ -56,6 +56,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 }))
 
 const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
+  const [curPage, setCurPage] = useState<number>(1)
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 
@@ -94,15 +95,16 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   )
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
+    setCurPage(p)
   }
   const handleSubmit = useCallback(() => {
     run({
-      current: 1,
+      current: curPage,
       pageSize: 12,
       poolId: poolInfo?.poolId,
       chainId: chainConfigInBackend?.id || 0
     })
-  }, [chainConfigInBackend?.id, poolInfo?.poolId, run])
+  }, [chainConfigInBackend?.id, curPage, poolInfo?.poolId, run])
   useEffect(() => {
     handleSubmit()
   }, [handleSubmit])
@@ -156,6 +158,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
           {winnersData?.total >= defaultIdeaPageSize && (
             <Box mt={58} display={'flex'} justifyContent={'center'}>
               <Pagination
+                page={curPage}
                 onChange={handlePageChange}
                 count={Math.ceil(winnersData?.total / defaultIdeaPageSize) || 0}
                 // variant="outlined"

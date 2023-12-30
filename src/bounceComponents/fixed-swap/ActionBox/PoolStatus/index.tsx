@@ -93,8 +93,8 @@ const PoolStatusBox = ({
             Live
           </Typography>
           {countdown > 0 && (
-            <Typography variant="body1" color="#259C4A" component="span">
-              &nbsp;{days}d : {hours}h : {minutes}m : {seconds}s
+            <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }} color="#259C4A" component="span">
+              &nbsp;{days}d : {hours}h : {minutes}m : {seconds}
             </Typography>
           )}
         </Box>
