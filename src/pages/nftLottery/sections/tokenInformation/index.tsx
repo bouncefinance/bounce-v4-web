@@ -5,6 +5,7 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
 import { WithAnimation } from 'components/WithAnimation'
 import ChartInfo from './chartInfo'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 const SectionBody = styled(Box)`
   width: 100%;
   background: url(${BgImg}) repeat;
@@ -153,7 +154,7 @@ const InfoLabel = ({ title, content, icon }: { title: string; content: string; i
   )
 }
 
-const LeftContent = () => {
+const LeftContent = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const isSm = useBreakpoint('sm')
   return (
     <LeftContentStyle>
@@ -171,7 +172,7 @@ const LeftContent = () => {
         </Stack>
       </Stack>
       <Box mt={isSm ? 24 : 46}>
-        <ChartInfo />
+        <ChartInfo poolInfo={poolInfo} />
       </Box>
     </LeftContentStyle>
   )
@@ -195,12 +196,12 @@ const RightContent = () => {
   )
 }
 
-const TokenInformation = () => {
+const TokenInformation = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   return (
     <SectionBody>
       <WithAnimation>
         <Container>
-          <LeftContent />
+          <LeftContent poolInfo={poolInfo} />
           <MiddleLine />
           <RightContent />
         </Container>

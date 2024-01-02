@@ -1,4 +1,5 @@
 import { Box, Typography, styled, Stack } from '@mui/material'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import Icon2 from 'assets/imgs/nftLottery/tokenInformation/token-icon2.svg'
 import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
@@ -74,10 +75,18 @@ const bidTokenList = [
     color: '#614C1F'
   }
 ]
-const BidTokenPanel = ({ selectFn, selectIndex }: { selectFn: (i: number) => void; selectIndex: number | null }) => {
+const BidTokenPanel = ({
+  selectFn,
+  selectIndex,
+  poolInfo
+}: {
+  selectFn: (i: number) => void
+  selectIndex: number | null
+  poolInfo: RandomSelectionNFTProps
+}) => {
   return (
     <Stack gap={8} flexDirection={'row'} justifyContent={'center'} flexWrap={'wrap'}>
-      {bidTokenList.map((i, d) => (
+      {bidTokenList.slice(0, poolInfo.tokensAddress.length).map((i, d) => (
         <TokenBg key={i.name} className={d === selectIndex ? 'select' : ''} onClick={() => selectFn(d)}>
           <P1>{i.price}</P1>
           <img src={i.icon} style={{ width: 20, height: 20 }} />

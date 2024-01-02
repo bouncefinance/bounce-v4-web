@@ -86,7 +86,7 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
       }
     >
       {action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live && (
-        <BidTokenPanel selectIndex={bidToken} selectFn={setBidTokenHandle} />
+        <BidTokenPanel selectIndex={bidToken} selectFn={setBidTokenHandle} poolInfo={poolInfo} />
       )}
 
       {action !== 'GO_TO_CHECK' && !(action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live) && (

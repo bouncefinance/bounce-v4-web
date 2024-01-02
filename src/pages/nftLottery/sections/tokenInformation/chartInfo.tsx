@@ -7,6 +7,7 @@ import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
 import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { RandomSelectionNFTProps } from 'api/pool/type'
 const InfoP1 = styled(Typography)`
   color: var(--AI-dark-02, #4c483a);
   font-variant-numeric: lining-nums proportional-nums;
@@ -69,79 +70,83 @@ const Circle = styled(Box)`
   height: 10px;
   border-radius: 10px;
 `
-const tokenInfoList = [
-  {
-    price: 10,
-    name: 'AUCTION',
-    icon: Icon1,
-    color: '#CCC496'
-  },
-  {
-    price: 20,
-    name: 'MUBI',
-    icon: Icon2,
-    color: '#DBAC48'
-  },
-  {
-    price: 20,
-    name: 'DAII',
-    icon: Icon3,
-    color: '#AB883C'
-  },
-  {
-    price: 20,
-    name: 'BSSB',
-    icon: Icon4,
-    color: '#9E9871'
-  },
-  {
-    price: 20,
-    name: 'AMMX',
-    icon: Icon5,
-    color: '#614C1F'
-  }
-]
-const option: EChartsOption = {
-  tooltip: {
-    trigger: 'item'
-  },
-  legend: {
-    orient: 'vertical',
-    top: 'center',
-    right: '0%',
-    show: false
-  },
-  series: [
+
+const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo.burnedTokens[0].toString())
+  const isSm = useBreakpoint('sm')
+  const tokenInfoList = [
     {
-      name: 'Invest Tokens/Lottery',
-      type: 'pie',
-      radius: ['50%', '95%'],
-      avoidLabelOverlap: false,
-      label: {
-        show: true,
-        position: 'inside',
-        formatter: '{d}',
-        color: '#fff',
-        fontFamily: 'Public Sans',
-        fontWeight: 400,
-        lineHeight: 1.5
-      },
-      labelLine: {
-        show: false
-      },
-      data: [
-        { value: 25, name: 'AUCTION', itemStyle: { color: '#CCC496' } },
-        { value: 12, name: 'DAII', itemStyle: { color: '#AB883C' } },
-        { value: 13, name: 'AMMX', itemStyle: { color: '#614C1F' } },
-        { value: 25, name: 'MUBI', itemStyle: { color: '#DBAC48' } },
-        { value: 25, name: 'BSSB', itemStyle: { color: '#9E9871' } }
-      ]
+      price: 10,
+      name: 'AUCTION',
+      icon: Icon1,
+      color: '#CCC496'
+    },
+    {
+      price: 20,
+      name: 'MUBI',
+      icon: Icon2,
+      color: '#DBAC48'
+    },
+    {
+      price: 20,
+      name: 'DAII',
+      icon: Icon3,
+      color: '#AB883C'
+    },
+    {
+      price: 20,
+      name: 'BSSB',
+      icon: Icon4,
+      color: '#9E9871'
+    },
+    {
+      price: 20,
+      name: 'AMMX',
+      icon: Icon5,
+      color: '#614C1F'
     }
   ]
-}
-
-const ChartInfo = () => {
-  const isSm = useBreakpoint('sm')
+  const datas = [
+    { value: 25, name: 'AUCTION', itemStyle: { color: '#CCC496' } },
+    { value: 12, name: 'DAII', itemStyle: { color: '#AB883C' } },
+    { value: 13, name: 'AMMX', itemStyle: { color: '#614C1F' } },
+    { value: 25, name: 'MUBI', itemStyle: { color: '#DBAC48' } },
+    { value: 25, name: 'BSSB', itemStyle: { color: '#9E9871' } }
+  ]
+  const option: EChartsOption = {
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      orient: 'vertical',
+      top: 'center',
+      right: '0%',
+      show: false
+    },
+    series: [
+      {
+        name: 'Invest Tokens/Lottery',
+        type: 'pie',
+        radius: ['50%', '95%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{d}',
+          color: '#fff',
+          fontFamily: 'Public Sans',
+          fontWeight: 400,
+          lineHeight: 1.5
+        },
+        labelLine: {
+          show: false
+        },
+        data: datas
+          .slice(0, poolInfo.burnedTokens.length)
+          .map((item, index) => (item.value = Number(poolInfo.burnedTokens[index])))
+      }
+    ]
+  }
   return (
     <Box>
       {!isSm && (
@@ -152,7 +157,7 @@ const ChartInfo = () => {
             </InfoP1>
             <Box mt={16}>
               <Stack flexDirection={'row'} flexWrap={'wrap'} gap={10} sx={{ width: 370 }}>
-                {tokenInfoList.map(i => (
+                {tokenInfoList.slice(0, poolInfo.burnedTokens.length).map(i => (
                   <TokenBg key={i.name}>
                     <InfoP2>{i.price}</InfoP2>
                     <img src={i.icon} style={{ width: 20, height: 20 }} />
@@ -176,7 +181,7 @@ const ChartInfo = () => {
             flexDirection={isSm ? 'row' : 'column'}
             flexWrap={'wrap'}
           >
-            {tokenInfoList.map(i => (
+            {tokenInfoList.slice(0, poolInfo.burnedTokens.length).map(i => (
               <Stack key={i.name} flexDirection={'row'} alignItems={'center'}>
                 <Circle sx={{ background: i.color }} />
                 <InfoP3 ml={12} mr={4}>

@@ -53,13 +53,16 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
-  const idx = 0
   const { poolStatus, isUserJoined, isUserWinner } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
-  const userBalance = useCurrencyBalance(account || undefined, poolInfo?.token1Currency[idx])
+  const userBalance = useCurrencyBalance(account || undefined, poolInfo?.token1Currency[selectTokenIndex ?? 0])
   const currencySlicedBidAmount = useMemo(
-    () => CurrencyAmount.fromRawAmount(poolInfo.token1Currency[idx], poolInfo.betTokenAmount[idx]),
-    [poolInfo.betTokenAmount, poolInfo.token1Currency]
+    () =>
+      CurrencyAmount.fromRawAmount(
+        poolInfo.token1Currency[selectTokenIndex ?? 0],
+        poolInfo.betTokenAmount[selectTokenIndex ?? 0]
+      ),
+    [poolInfo.betTokenAmount, poolInfo.token1Currency, selectTokenIndex]
   )
   const isBalanceInsufficient = useMemo(() => {
     if (!userBalance || !currencySlicedBidAmount) return true
@@ -118,10 +121,6 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
     userClaim()
   }, [account, userClaim])
 
-  // if (poolStatus === RandomPoolStatus.Upcoming) {
-  //   return <UpcomingBtn poolInfo={poolInfo} />
-  // }
-
   if (!account) {
     return (
       <BidButton variant="contained" fullWidth sx={{ my: 12, mx: 'auto' }} onClick={showLoginModal}>
@@ -164,7 +163,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
   if (typeof selectTokenIndex !== 'number' && allStatus.poolStatus === RandomPoolStatus.Live && action === 'BID') {
     return (
       <BidButton loadingPosition="start" variant="contained" fullWidth disabled>
-        Select to bid token
+        Select token to bid
       </BidButton>
     )
   }
@@ -184,7 +183,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
     if (approvalState === ApprovalState.PENDING) {
       return (
         <BidButton loadingPosition="start" variant="contained" fullWidth loading>
-          Approving {poolInfo.token1?.symbol}
+          Approving {poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol}
         </BidButton>
       )
     }
@@ -198,7 +197,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
     if (approvalState === ApprovalState.NOT_APPROVED) {
       return (
         <BidButton variant="contained" onClick={toApprove} fullWidth>
-          Approve use of {poolInfo.token1?.symbol}
+          Approve use of {poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol}
         </BidButton>
       )
     }

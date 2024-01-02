@@ -19,7 +19,7 @@ const NftLottery = () => {
   return (
     <>
       <Banner />
-      <TokenInformation />
+      {poolInfo && <TokenInformation poolInfo={poolInfo} />}
       {poolInfo && <PoolDetail poolInfo={poolInfo} />}
       <ArtistsList />
       <ArtistsInformation />
