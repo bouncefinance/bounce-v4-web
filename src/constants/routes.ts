@@ -128,7 +128,7 @@ export const routes = {
       pool: '/auction/godid-random-selection'
     },
     AmmxAuction: '/launchpad/ammx-auction',
-    AmmxAuctionTest: '/launchpad/test/stake',
+    AuctionTest: '/launchpad/test/stake',
     AmmxDaii: '/launchpad/ammx-daii',
     AmmxRandom: '/launchpad/ammx-random'
   },

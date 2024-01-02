@@ -2,9 +2,9 @@ import { ProjectHead, Tabs } from 'pages/projectIntro'
 import { AmmxAuctionData } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
 import { useApproveCallback } from 'hooks/useApproveCallback'
-import { useStakeTokenWithTimeWeightContract } from 'hooks/useContract'
+import { useStakeMultiTokensContract } from 'hooks/useContract'
 import { useActiveWeb3React } from 'hooks'
-import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from 'constants/index'
+import { STAKE_MULTI_TOKENS_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
 import { Steps } from './Step'
 import { useGetStakingAuctionInfo, useTokenInfo } from './useStakingInfo'
@@ -17,11 +17,12 @@ import { useCallback } from 'react'
 const Page = () => {
   const poolId = 0
   const { account } = useActiveWeb3React()
-  const chainId = ChainId.MAINNET
+  // const chainId = ChainId.MAINNET
+  const chainId = ChainId.SEPOLIA
   const nowTime = () => new Date().getTime()
-  const contract = useStakeTokenWithTimeWeightContract(chainId)
+  const contract = useStakeMultiTokensContract(chainId)
   const { token0Amount: token0, token1 } = useTokenInfo()
-  const [approvalState] = useApproveCallback(token0, STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[chainId])
+  const [approvalState] = useApproveCallback(token0, STAKE_MULTI_TOKENS_CONTRACT_ADDRESSES[chainId])
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account)
 
   const params: any = [
