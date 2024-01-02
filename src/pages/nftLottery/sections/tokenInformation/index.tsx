@@ -177,7 +177,7 @@ const LeftContent = () => {
 const RightContent = () => {
   const isSm = useBreakpoint('sm')
   return (
-    <Stack mt={26} alignItems={'center'} gap={29} sx={{ width: isSm ? '100%' : 'max-content', maxWidth: 320 }}>
+    <Stack mt={26} alignItems={'center'} spacing={29} sx={{ width: isSm ? '100%' : 'max-content', maxWidth: 320 }}>
       <ImgCard />
       <RevealBtn>
         {/* <span>Reveal on Jan 13</span> */}
