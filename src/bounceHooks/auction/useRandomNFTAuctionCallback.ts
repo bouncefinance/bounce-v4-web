@@ -137,12 +137,13 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
 }
 
 export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
+  const idx = 0
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const submitted = useUserHasSubmittedRecords(account || undefined, 'random_NFT_bet', poolInfo.poolId)
   const randomContract = useRandomSelectionNFTContract(poolInfo.contract)
   const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
-  const userTokenAmount = CurrencyAmount.fromRawAmount(poolInfo.userTokenAmount, poolInfo.maxAmount1PerWallet)
+  const userTokenAmount = CurrencyAmount.fromRawAmount(poolInfo.token1Currency[idx], poolInfo.betTokenAmount[idx])
   const run = useCallback(
     async (bidAmount: CurrencyAmount) => {
       if (!account) {

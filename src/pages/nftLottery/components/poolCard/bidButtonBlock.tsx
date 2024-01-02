@@ -47,15 +47,17 @@ export const BidButton = styled(LoadingButton)(({ theme }) => ({
 }))
 
 const BidButtonBlock = ({ poolInfo, otherBtns, allStatus }: BidButtonBlockProps) => {
+  console.log('🚀 ~ file: bidButtonBlock.tsx:50 ~ BidButtonBlock ~ poolInfo:', poolInfo)
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
+  const idx = 0
   const { poolStatus, isUserJoined, isUserWinner } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
-  const userBalance = useCurrencyBalance(account || undefined, poolInfo.userTokenAmount)
+  const userBalance = useCurrencyBalance(account || undefined, poolInfo?.token1Currency[idx])
   const currencySlicedBidAmount = useMemo(
-    () => CurrencyAmount.fromRawAmount(poolInfo.userTokenAmount, poolInfo.maxAmount1PerWallet),
-    [poolInfo.maxAmount1PerWallet, poolInfo.userTokenAmount]
+    () => CurrencyAmount.fromRawAmount(poolInfo.token1Currency[idx], poolInfo.betTokenAmount[idx]),
+    [poolInfo.betTokenAmount, poolInfo.token1Currency]
   )
   const isBalanceInsufficient = useMemo(() => {
     if (!userBalance || !currencySlicedBidAmount) return true

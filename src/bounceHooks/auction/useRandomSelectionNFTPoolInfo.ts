@@ -1,8 +1,7 @@
 import { PoolType, RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
-import { Currency } from 'constants/token'
 import { useActiveWeb3React } from 'hooks'
 import { useSingleCallResult } from 'state/multicall/hooks'
-import { useRandomSelectionNFTContract } from 'hooks/useContract'
+import { useRandomSelectionNFTBurningContract } from 'hooks/useContract'
 import { useMemo } from 'react'
 import { useBackedPoolInfo } from './usePoolInfo'
 import {
@@ -12,13 +11,12 @@ import {
 } from 'hooks/useRandomSelectionPool'
 import { useRequest } from 'ahooks'
 import { getCurrentTimeStamp } from 'utils'
+import { useTokens } from 'state/wallet/hooks'
 
 const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
-  // const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID')
-  const _backedId = backedId
-  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_NFT, Number(_backedId))
-
-  const contract = useRandomSelectionNFTContract(poolInfo?.contract || '', poolInfo?.ethChainId)
+  const _backedId = backedId || localStorage.getItem('NFT_RANDOM_POOL_ID')
+  const { data: poolInfo, run: getPoolInfo, loading } = useBackedPoolInfo(PoolType.LOTTERY_BURNING, Number(_backedId))
+  const contract = useRandomSelectionNFTBurningContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const { account } = useActiveWeb3React()
   const myClaimedRes = useSingleCallResult(
     contract,
@@ -41,16 +39,22 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     undefined,
     poolInfo?.ethChainId
   )
+  const tokensInfo = useSingleCallResult(
+    contract,
+    'getBetInfo',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
   const poolsInfo = useSingleCallResult(contract, 'pools', [poolInfo?.poolId], undefined, poolInfo?.ethChainId).result
+  const token1Currency = useTokens(tokensInfo?.[0] ?? [], poolInfo?.ethChainId)
 
   const data: RandomSelectionNFTProps | undefined = useMemo(() => {
-    if (!poolInfo) return undefined
-    const _t1 = poolInfo.token1
-    const t1 = new Currency(poolInfo.ethChainId, _t1.address, _t1.decimals, _t1.symbol, _t1.name, _t1.smallUrl)
+    if (!poolInfo || !token1Currency) return undefined
 
     return {
       ...poolInfo,
-      userTokenAmount: t1,
       token1: {
         ...poolInfo.token1,
         symbol: poolInfo.token1.symbol.toUpperCase()
@@ -62,6 +66,10 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
       mintContractAddress: poolsInfo?.mintContract,
       totalShare: poolsInfo?.nShare,
       maxPlayere: poolsInfo?.maxPlayer,
+      burnedTokens: tokensInfo?.[2],
+      tokensAddress: tokensInfo?.[0],
+      betTokenAmount: tokensInfo?.[1],
+      token1Currency: token1Currency,
       curPlayer: playerCount.result?.[0].toString() || 0,
       creatorClaimed: creatorClaimRes?.result?.[0] || false
     }
@@ -71,6 +79,8 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     poolsInfo?.mintContract,
     poolsInfo?.nShare,
     poolsInfo?.maxPlayer,
+    tokensInfo,
+    token1Currency,
     playerCount.result,
     creatorClaimRes?.result
   ])
@@ -91,7 +101,7 @@ export const useGetRandomSelectionNFTPoolStatus = (
   const isWinnerSeedDone = useIsWinnerSeedDone(
     poolInfo.poolId,
     poolInfo.contract,
-    PoolType.LOTTERY_NFT,
+    PoolType.LOTTERY_BURNING,
     poolInfo.ethChainId
   )
   const { isWinner } = useIsWinnerForRandomSelectionPool(
@@ -99,7 +109,7 @@ export const useGetRandomSelectionNFTPoolStatus = (
     account,
     poolInfo.contract,
     isWinnerSeedDone,
-    PoolType.LOTTERY_NFT,
+    PoolType.LOTTERY_BURNING,
     poolInfo.ethChainId
   )
   const { claimed } = participant

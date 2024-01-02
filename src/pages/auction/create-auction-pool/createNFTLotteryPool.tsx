@@ -15,7 +15,7 @@ import { useToken } from 'state/wallet/hooks'
 interface IParam {
   name: string
   token0: string
-  token1: string[]
+  token1s: string[]
   amountTotal0: string
   amount1PerWallets: string[]
   openAt: number
@@ -30,7 +30,7 @@ interface IParam {
 const initParams: IParam = {
   name: 'test',
   token0: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
-  token1: ['0xc390E699b38F14dB884C635bbf843f7B135113ad', '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'],
+  token1s: ['0xc390E699b38F14dB884C635bbf843f7B135113ad', '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'],
   amountTotal0: '10',
   amount1PerWallets: ['20', '10'],
   openAt: 1703735918,
@@ -68,20 +68,19 @@ const useCreatePool = () => {
       merkleroot = merkleroot || NULL_BYTES
 
       const signatureParams = {
-        amountMin1: body.amount1PerWallets,
+        amountMin1: '',
         amountTotal0: body.amountTotal0,
         category: PoolType.LOTTERY_BURNING,
         chainId: optId,
         claimAt: body.claimAt,
         closeAt: body.closeAt,
         creator: creator,
-        maxAmount1PerWallet: body.amount1PerWallets,
+        maxAmount1PerWallet: '',
         merkleroot: '',
         maxPlayer: body.maxPlayer,
         name: body.name,
         openAt: body.openAt,
         token0: body.token0,
-        token1: body.token1,
         totalShare: body.nShare,
         releaseType: IReleaseType.Cliff,
         releaseData: [
@@ -113,8 +112,8 @@ const useToCreate = (body: IParam, creator: string) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 
-  const token1Arr0 = useToken(body.token1[0], chainId)
-  const token1Arr1 = useToken(body.token1[1], chainId)
+  const token1Arr0 = useToken(body.token1s[0], chainId)
+  const token1Arr1 = useToken(body.token1s[1], chainId)
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Arr0 || !token1Arr1 || !body.amountTotal0 || !body.amount1PerWallets) {
       return null
@@ -146,8 +145,8 @@ const CreateNFTLotteryPool = () => {
   const onSubmit = () => {
     create()
   }
-  const token1Arr0 = useToken(values.token1[0], chainId)
-  const token1Arr1 = useToken(values.token1[1], chainId)
+  const token1Arr0 = useToken(values.token1s[0], chainId)
+  const token1Arr1 = useToken(values.token1s[1], chainId)
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
@@ -160,7 +159,7 @@ const CreateNFTLotteryPool = () => {
               {/* <FormItem name={'token0'} label="token0 address">
                 <OutlinedInput placeholder={''} />
               </FormItem> */}
-              <FormItem name={'token1'} label="token1 address">
+              <FormItem name={'token1s'} label="token1 address">
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <FormItem name={'amountTotal0'} label="nft number">

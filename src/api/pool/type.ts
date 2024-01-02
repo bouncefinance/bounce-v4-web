@@ -4,6 +4,7 @@ import { Currency, CurrencyAmount } from 'constants/token'
 import { Post } from '../type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
+import { BigintIsh } from 'constants/token/constants'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -58,16 +59,15 @@ export interface GetPoolBurningCreationSignatureParams {
   claimAt: number
   closeAt: number
   creator: string
-  maxAmount1PerWallet?: string[]
+  maxAmount1PerWallet?: string
   merkleroot: string
   name: string
   openAt: number
   token0: string
-  token1: string[]
   tokenId?: string
   tokenIds?: string[]
   amountMinIncr1?: string
-  amountMin1?: string[]
+  amountMin1?: string
   amountMax1?: string
   amountStart1?: string
   amountEnd1?: string
@@ -286,10 +286,14 @@ export interface RandomSelectionNFTProps extends FixedSwapPool {
     address?: string
     claimed?: boolean
   }
-  userTokenAmount: Currency
+  userTokenAmount?: Currency
+  token1Currency: any[]
   totalShare: string | number
   maxPlayere: string | number
   curPlayer: string | number
+  burnedTokens: number[]
+  tokensAddress: string[]
+  betTokenAmount: BigintIsh[]
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined
