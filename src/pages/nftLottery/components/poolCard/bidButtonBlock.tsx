@@ -16,10 +16,13 @@ import { CloseBtn, DrawedBtn, TipTitle } from './bidBtnBox'
 import { useShowLoginModal } from 'state/users/hooks'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { ReactComponent as CircleExclamationSvg } from 'assets/imgs/nftLottery/circle-exclamation.svg'
+import { ActionStatus } from './bidPanel'
 interface BidButtonBlockProps {
   poolInfo: RandomSelectionNFTProps
   otherBtns?: JSX.Element
   allStatus: RandomSelectionNFTResultProps
+  selectTokenIndex?: number | null
+  action?: ActionStatus
 }
 
 export const BidButton = styled(LoadingButton)(({ theme }) => ({
@@ -46,7 +49,7 @@ export const BidButton = styled(LoadingButton)(({ theme }) => ({
   }
 }))
 
-const BidButtonBlock = ({ poolInfo, otherBtns, allStatus }: BidButtonBlockProps) => {
+const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, action }: BidButtonBlockProps) => {
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
@@ -157,7 +160,13 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus }: BidButtonBlockProps)
       </>
     )
   }
-
+  if (typeof selectTokenIndex !== 'number' && allStatus.poolStatus === RandomPoolStatus.Live && action === 'BID') {
+    return (
+      <BidButton loadingPosition="start" variant="contained" fullWidth disabled>
+        Select to bid token
+      </BidButton>
+    )
+  }
   if (isBalanceInsufficient) {
     return (
       <BidButton variant="contained" fullWidth disabled>
@@ -169,6 +178,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus }: BidButtonBlockProps)
   if (!!otherBtns) {
     return otherBtns
   }
+
   if (approvalState !== ApprovalState.APPROVED && !isUserJoined) {
     if (approvalState === ApprovalState.PENDING) {
       return (

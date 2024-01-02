@@ -16,7 +16,11 @@ interface IProps {
 const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
   const isSm = useBreakpoint('sm')
   const [isZoom, setIsZoom] = useState(false)
-  const setZoomHandle = () => {
+  const setZoomHandle = (zoom?: boolean) => {
+    if (typeof zoom === 'boolean') {
+      setIsZoom(zoom)
+      return
+    }
     setIsZoom(!isZoom)
   }
   const allNotInvolved = useMemo(() => {
