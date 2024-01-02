@@ -15,6 +15,7 @@ export enum PoolType {
   ENGLISH_AUCTION = 8,
   MUTANT_ENGLISH_AUCTION_NFT = 9,
   LOTTERY_NFT = 7,
+  LOTTERY_BURNING = 10,
   'PlayableAuction' = 100
 }
 
@@ -40,11 +41,47 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Mutant English'
     case PoolType.LOTTERY_NFT:
       return 'Lottery NFT'
+    case PoolType.LOTTERY_BURNING:
+      return 'Lottery Burning'
   }
 }
 export interface BindTgTokenApiParams {
   tgToken: string
   tgIntroduction?: string
+}
+
+export interface GetPoolBurningCreationSignatureParams {
+  amountTotal0: string
+  amountTotal1?: string
+  category: PoolType
+  chainId: number
+  claimAt: number
+  closeAt: number
+  creator: string
+  maxAmount1PerWallet?: string[]
+  merkleroot: string
+  name: string
+  openAt: number
+  token0: string
+  token1: string[]
+  tokenId?: string
+  tokenIds?: string[]
+  amountMinIncr1?: string
+  amountMin1?: string[]
+  amountMax1?: string
+  amountStart1?: string
+  amountEnd1?: string
+  times?: number
+  fragments?: string
+  is721?: boolean
+  maxPlayer?: number
+  totalShare?: string | number
+  nShare?: string | number
+  releaseType?: IReleaseType
+  releaseData?: {
+    startAt: number | string
+    endAtOrRatio: number | string
+  }[]
 }
 
 export interface GetPoolCreationSignatureParams {
