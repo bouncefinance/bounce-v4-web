@@ -2515,7 +2515,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'Port3 Network',
     chainId: 1,
     tokenName: '$PORT3',
-    whitePaperLink: 'https://docsend.com/view/rb64i7ejgbs6ufpn',
+    whitePaperLink: 'https://port3.notion.site/What-is-Port3-Network-c24968b117c54dcebb246c7ef6d9dcb5',
     upcomingLink: '/launchpad/port3',
     liveLink: '/launchpad/port3',
     projectInfo: [
@@ -2604,8 +2604,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               </li>
               <li>
                 <Typography sx={{ fontSize: 16 }}>KOL, media partners & big brands:</Typography>
-                <a href="https://soquest.xyz/spaces" target="_blank" rel="noreferrer">
-                  https://soquest.xyz/spaces
+                <a href="https://soquest.xyz/space" target="_blank" rel="noreferrer">
+                  https://soquest.xyz/space
                 </a>
               </li>
             </ul>
