@@ -3,8 +3,8 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import ImgCard from '../../components/tokenInformation/imgCard'
 import useBreakpoint from 'hooks/useBreakpoint'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
-
 import { WithAnimation } from 'components/WithAnimation'
+import ChartInfo from './chartInfo'
 const SectionBody = styled(Box)`
   width: 100%;
   background: url(${BgImg}) repeat;
@@ -121,7 +121,7 @@ const RevealBtn = styled(Box)`
 `
 const MiddleLine = styled(Box)`
   width: 1px;
-  height: 525px;
+  /* height: 525px; */
   background: #bbb4a8;
   ${({ theme }) => theme.breakpoints.down('lg')} {
     display: none;
@@ -152,6 +152,7 @@ const InfoLabel = ({ title, content, icon }: { title: string; content: string; i
     </Stack>
   )
 }
+
 const LeftContent = () => {
   const isSm = useBreakpoint('sm')
   return (
@@ -168,10 +169,10 @@ const LeftContent = () => {
           <InfoLabel title="Auction type" content="Random Selection" />
           <InfoLabel title="Participant" content="Public" />
         </Stack>
-        <LabelBottomTitle mt={isSm ? 32 : 'auto'}>
-          Before the NFT is revealed, you can trade it on the market
-        </LabelBottomTitle>
       </Stack>
+      <Box mt={46}>
+        <ChartInfo />
+      </Box>
     </LeftContentStyle>
   )
 }
@@ -189,9 +190,11 @@ const RightContent = () => {
         {/* <span>Reveal on Jan 13</span> */}
         <span>Reveal on TBD</span>
       </RevealBtn>
+      <LabelBottomTitle>Before the NFT is revealed, you can trade it on the market</LabelBottomTitle>
     </Stack>
   )
 }
+
 const TokenInformation = () => {
   return (
     <SectionBody>
