@@ -43,6 +43,7 @@ const Container = styled(Box)`
     justify-content: center;
     align-items: center;
     padding: 24px 16px 40px;
+    gap: 40px;
   }
 `
 
@@ -155,19 +156,19 @@ const LeftContent = () => {
   const isSm = useBreakpoint('sm')
   return (
     <LeftContentStyle>
-      <Stack gap={40}>
+      <Stack gap={isSm ? 0 : 40}>
         <InfoTitle>Token Information</InfoTitle>
-        <Stack gap={16}>
+        <Stack gap={16} mt={isSm ? 16 : 0}>
           {/* <InfoLabel title="Contract address" content="TBD" icon={<TickGreen />} /> */}
           <InfoLabel title="Contract address" content="TBD" />
           <InfoLabel title="Token Type" content="ERC721" />
         </Stack>
         <InfoTitle mt={isSm ? 24 : 'auto'}>Auction Information</InfoTitle>
-        <Stack gap={16}>
+        <Stack gap={16} mt={isSm ? 16 : 0}>
           <InfoLabel title="Auction type" content="Random Selection" />
           <InfoLabel title="Participant" content="Public" />
         </Stack>
-        <LabelBottomTitle mt={isSm ? 24 : 'auto'}>
+        <LabelBottomTitle mt={isSm ? 32 : 'auto'}>
           Before the NFT is revealed, you can trade it on the market
         </LabelBottomTitle>
       </Stack>
@@ -177,7 +178,12 @@ const LeftContent = () => {
 const RightContent = () => {
   const isSm = useBreakpoint('sm')
   return (
-    <Stack mt={26} alignItems={'center'} gap={29} sx={{ width: isSm ? '100%' : 'max-content', maxWidth: 320 }}>
+    <Stack
+      mt={isSm ? 0 : 26}
+      alignItems={'center'}
+      gap={isSm ? 24 : 29}
+      sx={{ width: isSm ? '100%' : 'max-content', maxWidth: 320 }}
+    >
       <ImgCard />
       <RevealBtn>
         {/* <span>Reveal on Jan 13</span> */}
