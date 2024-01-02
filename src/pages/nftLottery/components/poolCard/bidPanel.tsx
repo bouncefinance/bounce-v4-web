@@ -7,8 +7,9 @@ import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProp
 import BidButtonBlock from './bidButtonBlock'
 import { useActiveWeb3React } from 'hooks'
 import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
+import BidTokenPanel from './bidTokenPanel'
 interface IProps {
-  setZoom: () => void
+  setZoom: (b?: boolean) => void
   allStatus: RandomSelectionNFTResultProps
   poolInfo: RandomSelectionNFTProps
 }
@@ -33,8 +34,10 @@ const Container = styled(Box)(
   }
 `
 )
+
 const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   const [action, setAction] = useState<ActionStatus>('FIRST')
+  const [bidToken, setBidToken] = useState<null | number>(null)
   const { account } = useActiveWeb3React()
   const { isUserJoined, poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const theme = useTheme()
@@ -50,12 +53,19 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
     setAction('BID')
     setZoom()
   }
+  const setBidTokenHandle = (i: number) => {
+    setBidToken(i)
+  }
   useEffect(() => {
     if (account && isUserJoined) {
       setAction('BID')
     }
   }, [account, isUserJoined])
-
+  useEffect(() => {
+    if (action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live) {
+      setZoom(true)
+    }
+  }, [action, allStatus.poolStatus, setZoom])
   const otherBtns = useMemo(() => {
     if (poolStatus === RandomPoolStatus.Live && action === 'FIRST' && !isSoldOut) {
       return { otherBtns: <BidBtnBox goCheck={goCheckHandle} /> }
@@ -75,7 +85,13 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
         poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed || action === 'GO_TO_CHECK'
       }
     >
-      {action !== 'GO_TO_CHECK' && <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />}
+      {action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live && (
+        <BidTokenPanel selectIndex={bidToken} selectFn={setBidTokenHandle} />
+      )}
+
+      {action !== 'GO_TO_CHECK' && !(action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live) && (
+        <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />
+      )}
 
       {poolStatus === RandomPoolStatus.Live && action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
 
@@ -83,7 +99,13 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
         {poolStatus === RandomPoolStatus.Upcoming && <UpcomingBtn poolInfo={poolInfo} />}
 
         {poolStatus === RandomPoolStatus.Live && action !== 'GO_TO_CHECK' && (
-          <BidButtonBlock poolInfo={poolInfo} {...otherBtns} allStatus={allStatus} />
+          <BidButtonBlock
+            poolInfo={poolInfo}
+            {...otherBtns}
+            allStatus={allStatus}
+            action={action}
+            selectTokenIndex={bidToken}
+          />
         )}
 
         {(poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed) && <CloseBtn />}

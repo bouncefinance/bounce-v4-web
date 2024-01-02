@@ -6,6 +6,7 @@ import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
 import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
 import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import { EChartsOption } from 'echarts/types/dist/echarts'
+import useBreakpoint from 'hooks/useBreakpoint'
 const InfoP1 = styled(Typography)`
   color: var(--AI-dark-02, #4c483a);
   font-variant-numeric: lining-nums proportional-nums;
@@ -38,12 +39,23 @@ const InfoP3 = styled(Typography)`
   font-weight: 700;
   line-height: 140%; /* 22.4px */
 `
+const InfoP4 = styled('span')`
+  color: var(--AI-dark-01, var(--AI-black-02, #3d3a32));
+
+  /* D/H4 */
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 28px */
+  letter-spacing: -0.4px;
+`
 const TokenBg = styled(Box)`
   display: flex;
   padding: 12px 10px;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: 7px;
   border-radius: 8px;
   background: #efebe6;
 `
@@ -103,7 +115,7 @@ const option: EChartsOption = {
     {
       name: 'Invest Tokens/Lottery',
       type: 'pie',
-      radius: ['44%', '84%'],
+      radius: ['50%', '95%'],
       avoidLabelOverlap: false,
       label: {
         show: true,
@@ -129,28 +141,41 @@ const option: EChartsOption = {
 }
 
 const ChartInfo = () => {
+  const isSm = useBreakpoint('sm')
   return (
     <Box>
-      <Box>
-        <InfoP1>1 Lottery = </InfoP1>
-        <Box mt={16}>
-          <Stack flexDirection={'row'} flexWrap={'wrap'} gap={7} sx={{ width: 370 }}>
-            {tokenInfoList.map(i => (
-              <TokenBg key={i.name}>
-                <InfoP2>{i.price}</InfoP2>
-                <img src={i.icon} style={{ width: 20, height: 20 }} />
-                <InfoP2>{i.name}</InfoP2>
-              </TokenBg>
-            ))}
-          </Stack>
-        </Box>
-      </Box>
-      <Line mt={32} mb={48} />
-      <Box>
+      {!isSm && (
+        <>
+          <Box>
+            <InfoP1>
+              1 Lottery <InfoP4> = </InfoP4>
+            </InfoP1>
+            <Box mt={16}>
+              <Stack flexDirection={'row'} flexWrap={'wrap'} gap={10} sx={{ width: 370 }}>
+                {tokenInfoList.map(i => (
+                  <TokenBg key={i.name}>
+                    <InfoP2>{i.price}</InfoP2>
+                    <img src={i.icon} style={{ width: 20, height: 20 }} />
+                    <InfoP2>{i.name}</InfoP2>
+                  </TokenBg>
+                ))}
+              </Stack>
+            </Box>
+          </Box>
+          <Line mt={32} mb={48} />
+        </>
+      )}
+      <Box mb={isSm ? 0 : 57}>
         <InfoP1>Invest Tokens/Lottery </InfoP1>
-        <Stack flexDirection={'row'} gap={64} alignItems={'center'} mt={40}>
+        <Stack flexDirection={isSm ? 'column' : 'row'} gap={isSm ? 24 : 64} alignItems={'center'} mt={40}>
           <DonutChart option={option} size={{ width: 252, height: 252 }} />
-          <Stack gap={20} height={'fit-content'}>
+          <Stack
+            gap={20}
+            height={'fit-content'}
+            width={'100%'}
+            flexDirection={isSm ? 'row' : 'column'}
+            flexWrap={'wrap'}
+          >
             {tokenInfoList.map(i => (
               <Stack key={i.name} flexDirection={'row'} alignItems={'center'}>
                 <Circle sx={{ background: i.color }} />

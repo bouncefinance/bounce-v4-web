@@ -170,7 +170,7 @@ const LeftContent = () => {
           <InfoLabel title="Participant" content="Public" />
         </Stack>
       </Stack>
-      <Box mt={46}>
+      <Box mt={isSm ? 24 : 46}>
         <ChartInfo />
       </Box>
     </LeftContentStyle>
