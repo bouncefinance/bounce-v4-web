@@ -1,23 +1,23 @@
 import { Box, Button, OutlinedInput, Stack } from '@mui/material'
-import { getPoolCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
+import { getPoolBurningCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
 import { GetWhitelistMerkleTreeRootParams, PoolType } from 'api/pool/type'
 import FormItem from 'bounceComponents/common/FormItem'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
-import { NULL_BYTES, RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES } from 'constants/index'
+import { NULL_BYTES, RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES } from 'constants/index'
 import { CurrencyAmount } from 'constants/token'
 import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
-import { useRandomSelectionNFTContract } from 'hooks/useContract'
+import { useRandomSelectionNFTBurningContract } from 'hooks/useContract'
 import { useCallback, useMemo, useState } from 'react'
 import { useToken } from 'state/wallet/hooks'
 
 interface IParam {
   name: string
   token0: string
-  token1: string
+  token1: string[]
   amountTotal0: string
-  amount1PerWallet: string
+  amount1PerWallets: string[]
   openAt: number
   closeAt: number
   claimAt: number
@@ -30,9 +30,9 @@ interface IParam {
 const initParams: IParam = {
   name: 'test',
   token0: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
-  token1: '0xc390E699b38F14dB884C635bbf843f7B135113ad',
+  token1: ['0xc390E699b38F14dB884C635bbf843f7B135113ad', '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'],
   amountTotal0: '10',
-  amount1PerWallet: '20',
+  amount1PerWallets: ['20', '10'],
   openAt: 1703735918,
   closeAt: 1703735978,
   claimAt: 1703735978,
@@ -44,8 +44,8 @@ const initParams: IParam = {
 
 const useCreatePool = () => {
   const { chainId } = useActiveWeb3React()
-  const contractAddress = RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES[chainId || 5]
-  const contract = useRandomSelectionNFTContract(contractAddress, chainId || 5)
+  const contractAddress = RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES[chainId || 5]
+  const contract = useRandomSelectionNFTBurningContract(contractAddress, chainId || 5)
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || 5)
 
   return useCallback(
@@ -59,7 +59,7 @@ const useCreatePool = () => {
       if (body.whitelistRoot && body.whitelistRoot.split(',').length > 0) {
         const whitelistParams: GetWhitelistMerkleTreeRootParams = {
           addresses: body.whitelistRoot.split(','),
-          category: PoolType.LOTTERY_NFT,
+          category: PoolType.LOTTERY_BURNING,
           chainId: chainConfigInBackend.id
         }
         const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
@@ -68,14 +68,14 @@ const useCreatePool = () => {
       merkleroot = merkleroot || NULL_BYTES
 
       const signatureParams = {
-        amountMin1: body.amount1PerWallet,
+        amountMin1: body.amount1PerWallets,
         amountTotal0: body.amountTotal0,
-        category: PoolType.LOTTERY_NFT,
+        category: PoolType.LOTTERY_BURNING,
         chainId: optId,
         claimAt: body.claimAt,
         closeAt: body.closeAt,
         creator: creator,
-        maxAmount1PerWallet: body.amount1PerWallet,
+        maxAmount1PerWallet: body.amount1PerWallets,
         merkleroot: '',
         maxPlayer: body.maxPlayer,
         name: body.name,
@@ -94,14 +94,13 @@ const useCreatePool = () => {
 
       const {
         data: { id, expiredTime, signature }
-      } = await getPoolCreationSignature(signatureParams)
+      } = await getPoolBurningCreationSignature(signatureParams)
       const _body = { ...body, whitelistRoot: merkleroot }
       const arg = [id, _body, false, expiredTime, signature]
       try {
         console.log('pool id', id, arg)
         await contract.createV2(...arg)
         localStorage.setItem('NFT_RANDOM_POOL_ID', JSON.stringify(id))
-        // alert(id)
       } catch (error) {
         console.error(error)
       }
@@ -114,20 +113,24 @@ const useToCreate = (body: IParam, creator: string) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 
-  const token1 = useToken(body.token1, chainId)
+  const token1Arr0 = useToken(body.token1[0], chainId)
+  const token1Arr1 = useToken(body.token1[1], chainId)
   const token1CurrencyAmount = useMemo(() => {
-    if (!token1 || !body.amountTotal0 || !body.amount1PerWallet) {
+    if (!token1Arr0 || !token1Arr1 || !body.amountTotal0 || !body.amount1PerWallets) {
       return null
     }
-    return CurrencyAmount.fromAmount(token1, body.amount1PerWallet)
-  }, [body.amount1PerWallet, body.amountTotal0, token1])
+    return [
+      CurrencyAmount.fromAmount(token1Arr0, body.amount1PerWallets[0]),
+      CurrencyAmount.fromAmount(token1Arr1, body.amount1PerWallets[1])
+    ]
+  }, [body.amount1PerWallets, body.amountTotal0, token1Arr0, token1Arr1])
 
   return useCallback(() => {
-    if (!token1CurrencyAmount || !chainConfigInBackend) return
+    if (!token1CurrencyAmount?.[0] || !token1CurrencyAmount?.[1] || !chainConfigInBackend) return
     const _body = {
       ...body,
       mintContract: body.token0,
-      amount1PerWallet: token1CurrencyAmount.raw.toString()
+      amount1PerWallet: [token1CurrencyAmount?.[0].raw.toString(), token1CurrencyAmount?.[1].raw.toString()]
     } as IParam
     create({ body: _body, creator, optId: chainConfigInBackend.id })
   }, [body, chainConfigInBackend, create, creator, token1CurrencyAmount])
@@ -143,7 +146,8 @@ const CreateNFTLotteryPool = () => {
   const onSubmit = () => {
     create()
   }
-  const token1 = useToken(values.token1, chainId)
+  const token1Arr0 = useToken(values.token1[0], chainId)
+  const token1Arr1 = useToken(values.token1[1], chainId)
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
@@ -162,7 +166,7 @@ const CreateNFTLotteryPool = () => {
               <FormItem name={'amountTotal0'} label="nft number">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'amount1PerWallet'} label="token1 perWallet number">
+              <FormItem name={'amount1PerWallets'} label="token1 perWallet number">
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <FormItem name={'openAt'} label="openAt">
@@ -189,9 +193,8 @@ const CreateNFTLotteryPool = () => {
                     Save
                   </Button>
                 )}
-
                 {_values === values && (
-                  <Button disabled={!token1} type="submit" sx={{ flex: 1 }}>
+                  <Button disabled={!token1Arr0 || !token1Arr1} type="submit" sx={{ flex: 1 }}>
                     Submit
                   </Button>
                 )}

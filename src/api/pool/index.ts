@@ -11,13 +11,21 @@ import {
   UpdateAuctionBackgroundParams,
   GetWinnersListParams,
   GetWinnersListResponse,
-  BindTgTokenApiParams
+  BindTgTokenApiParams,
+  GetPoolBurningCreationSignatureParams
 } from './type'
 
 /**
  * Get signature for auction pool creation
  */
 export const getPoolCreationSignature = (params: GetPoolCreationSignatureParams) => {
+  return ApiInstance.post<GetPoolCreationSignatureResponse>('/user/create_pool_sign', params)
+}
+
+/**
+ * Get signature for nft burning pool creation
+ */
+export const getPoolBurningCreationSignature = (params: GetPoolBurningCreationSignatureParams) => {
   return ApiInstance.post<GetPoolCreationSignatureResponse>('/user/create_pool_sign', params)
 }
 
