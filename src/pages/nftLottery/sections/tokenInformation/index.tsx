@@ -9,13 +9,13 @@ import { RandomSelectionNFTProps } from 'api/pool/type'
 const SectionBody = styled(Box)`
   width: 100%;
   background: url(${BgImg}) repeat;
-  margin-bottom: 120px;
+  padding-bottom: 120px;
   @media (max-width: 1440px) {
     padding: 0 20px;
   }
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding: 0 16px;
-    margin-bottom: 48px;
+    padding-bottom: 48px;
   }
 `
 

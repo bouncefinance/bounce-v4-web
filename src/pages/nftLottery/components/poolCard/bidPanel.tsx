@@ -47,11 +47,11 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   }, [poolInfo.curPlayer, poolInfo.maxPlayere])
   const goCheckHandle = () => {
     setAction('GO_TO_CHECK')
-    setZoom()
+    setZoom(true)
   }
   const bidHandle = () => {
     setAction('BID')
-    setZoom()
+    setZoom(true)
   }
   const setBidTokenHandle = (i: number) => {
     setBidToken(i)
@@ -66,9 +66,11 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
   }, [account, isUserJoined])
   useEffect(() => {
     if (action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live) {
-      setZoom(true)
+      if (allStatus.isUserJoined) {
+        setZoom(false)
+      }
     }
-  }, [action, allStatus.poolStatus, setZoom])
+  }, [action, allStatus.isUserJoined, allStatus.poolStatus, setZoom])
   const otherBtns = useMemo(() => {
     if (poolStatus === RandomPoolStatus.Live && action === 'FIRST' && !isSoldOut) {
       return { otherBtns: <BidBtnBox goCheck={goCheckHandle} /> }
@@ -88,12 +90,10 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
         poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed || action === 'GO_TO_CHECK'
       }
     >
-      {action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live && (
+      {action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live && !allStatus.isUserJoined ? (
         <BidTokenPanel selectIndex={bidToken} selectFn={setBidTokenHandle} poolInfo={poolInfo} />
-      )}
-
-      {action !== 'GO_TO_CHECK' && !(action === 'BID' && allStatus.poolStatus === RandomPoolStatus.Live) && (
-        <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />
+      ) : (
+        action !== 'GO_TO_CHECK' && <PoolProgress allStatus={allStatus} poolInfo={poolInfo} />
       )}
 
       {poolStatus === RandomPoolStatus.Live && action === 'GO_TO_CHECK' && <CheckBox onConfirm={bidHandle} />}
