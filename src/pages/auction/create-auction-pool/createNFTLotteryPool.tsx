@@ -10,7 +10,7 @@ import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
 import { useRandomSelectionNFTBurningContract } from 'hooks/useContract'
 import { useCallback, useMemo, useState } from 'react'
-import { useToken } from 'state/wallet/hooks'
+import { useTokens } from 'state/wallet/hooks'
 
 interface IParam {
   name: string
@@ -30,9 +30,21 @@ interface IParam {
 const initParams: IParam = {
   name: 'test',
   token0: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
-  token1s: ['0xc390E699b38F14dB884C635bbf843f7B135113ad', '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'],
+  token1s: [
+    '0xc390E699b38F14dB884C635bbf843f7B135113ad',
+    '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
+    '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E',
+    '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7',
+    '0x1F072FD6DeE1ABD06CD97eBbADB0E0c4027E252d'
+  ],
   amountTotal0: '10',
-  amount1PerWallets: ['20000000000000000000', '10000000000000000000'],
+  amount1PerWallets: [
+    '20000000000000000000',
+    '10000000',
+    '10000000000000000000',
+    '10000000000000000000',
+    '10000000000000000000'
+  ],
   openAt: 1703735918,
   closeAt: 1703735978,
   claimAt: 1703735978,
@@ -112,24 +124,50 @@ const useToCreate = (body: IParam, creator: string) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 
-  const token1Arr0 = useToken(body.token1s[0], chainId)
-  const token1Arr1 = useToken(body.token1s[1], chainId)
+  const token1Arr = useTokens(body.token1s, chainId)
+
   const token1CurrencyAmount = useMemo(() => {
-    if (!token1Arr0 || !token1Arr1 || !body.amountTotal0 || !body.amount1PerWallets) {
+    if (
+      !token1Arr ||
+      !token1Arr[0] ||
+      !token1Arr[1] ||
+      !token1Arr[2] ||
+      !token1Arr[3] ||
+      !token1Arr[4] ||
+      !body.amountTotal0 ||
+      !body.amount1PerWallets
+    ) {
       return null
     }
     return [
-      CurrencyAmount.fromAmount(token1Arr0, body.amount1PerWallets[0]),
-      CurrencyAmount.fromAmount(token1Arr1, body.amount1PerWallets[1])
+      CurrencyAmount.fromAmount(token1Arr[0], body.amount1PerWallets[0]),
+      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[1]),
+      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[2]),
+      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[3]),
+      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[4])
     ]
-  }, [body.amount1PerWallets, body.amountTotal0, token1Arr0, token1Arr1])
+  }, [body.amount1PerWallets, body.amountTotal0, token1Arr])
 
   return useCallback(() => {
-    if (!token1CurrencyAmount?.[0] || !token1CurrencyAmount?.[1] || !chainConfigInBackend) return
+    if (
+      !token1CurrencyAmount?.[0] ||
+      !token1CurrencyAmount?.[1] ||
+      !token1CurrencyAmount?.[2] ||
+      !token1CurrencyAmount?.[3] ||
+      !token1CurrencyAmount?.[4] ||
+      !chainConfigInBackend
+    )
+      return
     const _body = {
       ...body,
       mintContract: body.token0,
-      amount1PerWallet: [token1CurrencyAmount?.[0].raw.toString(), token1CurrencyAmount?.[1].raw.toString()]
+      amount1PerWallet: [
+        token1CurrencyAmount?.[0].raw.toString(),
+        token1CurrencyAmount?.[1].raw.toString(),
+        token1CurrencyAmount?.[2].raw.toString(),
+        token1CurrencyAmount?.[3].raw.toString(),
+        token1CurrencyAmount?.[4].raw.toString()
+      ]
     } as IParam
     create({ body: _body, creator, optId: chainConfigInBackend.id })
   }, [body, chainConfigInBackend, create, creator, token1CurrencyAmount])
@@ -145,8 +183,7 @@ const CreateNFTLotteryPool = () => {
   const onSubmit = () => {
     create()
   }
-  const token1Arr0 = useToken(values.token1s[0], chainId)
-  const token1Arr1 = useToken(values.token1s[1], chainId)
+  const token1Arr = useTokens(values.token1s, chainId)
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
@@ -193,7 +230,7 @@ const CreateNFTLotteryPool = () => {
                   </Button>
                 )}
                 {_values === values && (
-                  <Button disabled={!token1Arr0 || !token1Arr1} type="submit" sx={{ flex: 1 }}>
+                  <Button disabled={!token1Arr} type="submit" sx={{ flex: 1 }}>
                     Submit
                   </Button>
                 )}

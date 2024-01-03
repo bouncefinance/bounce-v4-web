@@ -6,33 +6,33 @@ import P4Img from 'assets/imgs/nftLottery/p4.png'
 import P5Img from 'assets/imgs/nftLottery/p5.png'
 import Image from 'components/Image'
 import Cards from './cards'
-// import LotteryCountdown from '../../lotteryCountdown'
+import LotteryCountdown from '../../lotteryCountdown'
 import NftcardImg from 'assets/imgs/nftLottery/banner/nftcard.png'
 import NftshadowImg from 'assets/imgs/nftLottery/banner/nftshadow.png'
 import { WithAnimation } from 'components/WithAnimation'
 import { useWithAnimationStyles } from '../pc'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
-// import { RandomSelectionNFTProps } from 'api/pool/type'
-// import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
-// import { useState } from 'react'
+import { RandomSelectionNFTProps } from 'api/pool/type'
+import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
+import { useEffect, useState } from 'react'
 
-const MobileBanner = () => {
-  // const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
-  // const now = () => new Date().getTime()
-  // const [startTime, setStartTime] = useState<number>(0)
+const MobileBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+  const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
+  const now = () => new Date().getTime()
+  const [startTime, setStartTime] = useState<number>(0)
   const styleTrans = useWithAnimationStyles()
 
-  // useEffect(() => {
-  //   if (now() < poolInfo.openAt * 1000) {
-  //     setStartTime(poolInfo.openAt)
-  //   }
-  //   if (now() > poolInfo.openAt * 1000 && now() < poolInfo.closeAt * 1000) {
-  //     setStartTime(poolInfo.closeAt)
-  //   }
-  //   if (now() > poolInfo.claimAt * 1000) {
-  //     setStartTime(poolInfo.claimAt)
-  //   }
-  // }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
+  useEffect(() => {
+    if (now() < poolInfo.openAt * 1000) {
+      setStartTime(poolInfo.openAt)
+    }
+    if (now() > poolInfo.openAt * 1000 && now() < poolInfo.closeAt * 1000) {
+      setStartTime(poolInfo.closeAt)
+    }
+    if (now() > poolInfo.claimAt * 1000) {
+      setStartTime(poolInfo.claimAt)
+    }
+  }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
   return (
     <Box
       sx={{
@@ -263,11 +263,11 @@ const MobileBanner = () => {
             {`The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`}
           </Typography>
         </Box>
-        {/* <LotteryCountdown
+        <LotteryCountdown
           status={poolStatus}
           startTime={startTime}
           timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]}
-        /> */}
+        />
       </WithAnimation>
       <Cards />
     </Box>

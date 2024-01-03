@@ -6,9 +6,9 @@ import BannerStepLine from '../bannerStep'
 import { AnimateStep } from '../../../sections/banner'
 import makeStyles from '@mui/styles/makeStyles'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
-// import LotteryCountdown from '../../lotteryCountdown'
-// import { RandomSelectionNFTProps } from 'api/pool/type'
-// import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
+import LotteryCountdown from '../../lotteryCountdown'
+import { RandomSelectionNFTProps } from 'api/pool/type'
+import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 export const useWithAnimationStyles = makeStyles(() => ({
   awaitInView: {
     width: '100%',
@@ -26,30 +26,30 @@ export const useWithAnimationStyles = makeStyles(() => ({
     }
   }
 }))
-const PcBanner = () => {
+const PcBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const theme = useTheme()
-  // const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
+  const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const [winH, setWinHeight] = useState<number>(window.innerHeight)
   const [stopScroll, setStopscroll] = useState(true)
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
   const [animate1Step, setAnimate1Step] = useState(AnimateStep.default) // banner step line
-  // const now = () => new Date().getTime()
-  // const [startTime, setStartTime] = useState<number>(0)
+  const now = () => new Date().getTime()
+  const [startTime, setStartTime] = useState<number>(0)
   const resizeWinH = () => {
     setWinHeight(window.innerHeight > 1000 ? 1000 : window.innerHeight)
   }
 
-  // useEffect(() => {
-  //   if (now() < poolInfo.openAt * 1000) {
-  //     setStartTime(poolInfo.openAt)
-  //   }
-  //   if (now() > poolInfo.openAt * 1000 && now() < poolInfo.closeAt * 1000) {
-  //     setStartTime(poolInfo.closeAt)
-  //   }
-  //   if (now() > poolInfo.claimAt * 1000) {
-  //     setStartTime(poolInfo.claimAt)
-  //   }
-  // }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
+  useEffect(() => {
+    if (now() < poolInfo.openAt * 1000) {
+      setStartTime(poolInfo.openAt)
+    }
+    if (now() > poolInfo.openAt * 1000 && now() < poolInfo.closeAt * 1000) {
+      setStartTime(poolInfo.closeAt)
+    }
+    if (now() > poolInfo.claimAt * 1000) {
+      setStartTime(poolInfo.claimAt)
+    }
+  }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
 
   useEffect(() => {
     // lock page scroll 3 seconds
@@ -114,11 +114,11 @@ const PcBanner = () => {
       <BannerStep1 />
       <BannerStep2 />
       <BannerStepLine ratio={animate1Ratio} step={animate1Step} />
-      {/* <LotteryCountdown
+      <LotteryCountdown
         status={poolStatus}
         startTime={startTime}
         timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]}
-      /> */}
+      />
     </Box>
   )
 }

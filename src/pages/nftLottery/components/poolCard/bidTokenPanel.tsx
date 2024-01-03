@@ -1,10 +1,6 @@
 import { Box, Typography, styled, Stack } from '@mui/material'
 import { RandomSelectionNFTProps } from 'api/pool/type'
-import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
-import Icon2 from 'assets/imgs/nftLottery/tokenInformation/token-icon2.svg'
-import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
-import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
-import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
+import { tokenInfoList } from 'pages/nftLottery/sections/tokenInformation/chartInfo'
 
 const TokenBg = styled(Box)(
   ({ theme }) => `
@@ -43,38 +39,7 @@ const P1 = styled(Typography)(
 
 `
 )
-const bidTokenList = [
-  {
-    price: 10,
-    name: 'AUCTION',
-    icon: Icon1,
-    color: '#CCC496'
-  },
-  {
-    price: 20,
-    name: 'MUBI',
-    icon: Icon2,
-    color: '#DBAC48'
-  },
-  {
-    price: 20,
-    name: 'DAII',
-    icon: Icon3,
-    color: '#AB883C'
-  },
-  {
-    price: 20,
-    name: 'BSSB',
-    icon: Icon4,
-    color: '#9E9871'
-  },
-  {
-    price: 20,
-    name: 'AMMX',
-    icon: Icon5,
-    color: '#614C1F'
-  }
-]
+
 const BidTokenPanel = ({
   selectFn,
   selectIndex,
@@ -86,7 +51,7 @@ const BidTokenPanel = ({
 }) => {
   return (
     <Stack gap={8} flexDirection={'row'} justifyContent={'center'} flexWrap={'wrap'}>
-      {bidTokenList.slice(0, poolInfo.tokensAddress.length).map((i, d) => (
+      {tokenInfoList.slice(0, poolInfo.tokensAddress.length).map((i, d) => (
         <TokenBg key={i.name} className={d === selectIndex ? 'select' : ''} onClick={() => selectFn(d)}>
           <P1>{i.price}</P1>
           <img src={i.icon} style={{ width: 20, height: 20 }} />

@@ -112,9 +112,7 @@ export function useRandomNFTUserClaim(
       gasLimit: calculateGasMargin(estimatedGas)
     }).then((response: TransactionResponse) => {
       addTransaction(response, {
-        summary: isWinner
-          ? `Claim NFT ${poolInfo.token0.symbol}`
-          : `Claim token ${poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol}`,
+        summary: `Claim NFT ${poolInfo.token0.symbol}`,
         userSubmitted: {
           account,
           action: `random_selection_user_claim`,
@@ -131,10 +129,8 @@ export function useRandomNFTUserClaim(
     poolInfo.poolId,
     poolInfo.chainId,
     poolInfo.token0.symbol,
-    poolInfo.token1Currency,
     isWinner,
-    addTransaction,
-    selectTokenIndex
+    addTransaction
   ])
 
   const runWithModal = useTransactionModalWrapper(run, 'You have successfully claimed.')

@@ -71,42 +71,42 @@ const Circle = styled(Box)`
   height: 10px;
   border-radius: 10px;
 `
-
+export const tokenInfoList = [
+  {
+    price: 0.35,
+    name: 'AUCTION',
+    icon: Icon1,
+    color: '#CCC496'
+  },
+  {
+    price: 43,
+    name: 'MUBI',
+    icon: Icon2,
+    color: '#DBAC48'
+  },
+  {
+    price: 10,
+    name: 'DAII',
+    icon: Icon3,
+    color: '#AB883C'
+  },
+  {
+    price: 2.38,
+    name: 'BSSB',
+    icon: Icon4,
+    color: '#9E9871'
+  },
+  {
+    price: 2500,
+    name: 'AMMX',
+    icon: Icon5,
+    color: '#614C1F'
+  }
+]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo.burnedTokens[1].toString())
   const isSm = useBreakpoint('sm')
-  const tokenInfoList = [
-    {
-      price: 10,
-      name: 'AUCTION',
-      icon: Icon1,
-      color: '#CCC496'
-    },
-    {
-      price: 20,
-      name: 'MUBI',
-      icon: Icon2,
-      color: '#DBAC48'
-    },
-    {
-      price: 20,
-      name: 'DAII',
-      icon: Icon3,
-      color: '#AB883C'
-    },
-    {
-      price: 20,
-      name: 'BSSB',
-      icon: Icon4,
-      color: '#9E9871'
-    },
-    {
-      price: 20,
-      name: 'AMMX',
-      icon: Icon5,
-      color: '#614C1F'
-    }
-  ]
+
   const datas = [
     { value: 0, name: 'AUCTION', itemStyle: { color: '#CCC496' } },
     { value: 0, name: 'MUBI', itemStyle: { color: '#DBAC48' } },
