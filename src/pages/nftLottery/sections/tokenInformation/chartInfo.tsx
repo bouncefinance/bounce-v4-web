@@ -104,7 +104,7 @@ export const tokenInfoList = [
   }
 ]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
-  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo.burnedTokens[1].toString())
+  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
 
   const datas = [
