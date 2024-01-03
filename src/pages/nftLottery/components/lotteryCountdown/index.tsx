@@ -61,7 +61,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
         src={P6Img}
         style={{
           position: 'absolute',
-          top: '-166%',
+          top: '-212%',
           width: 110,
           height: 73,
           right: '-14%'
@@ -71,7 +71,7 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
         src={P7Img}
         style={{
           position: 'absolute',
-          top: '-120%',
+          top: '-159%',
           width: 110,
           height: 86,
           left: '-19%'

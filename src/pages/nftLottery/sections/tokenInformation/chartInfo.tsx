@@ -104,7 +104,12 @@ export const tokenInfoList = [
   }
 ]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
-  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo)
+  console.log(
+    '🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:',
+    poolInfo.burnedTokens[4].toString(),
+    poolInfo.burnedTokens[0].toString(),
+    poolInfo.burnedTokens[1].toString()
+  )
   const isSm = useBreakpoint('sm')
 
   const datas = [
@@ -114,6 +119,11 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
     { value: 0, name: 'BSSB', itemStyle: { color: '#9E9871' } },
     { value: 0, name: 'AMMX', itemStyle: { color: '#614C1F' } }
   ]
+  const wrapperData = datas.slice(0, poolInfo.burnedTokens.length).map((item, index) => ({
+    ...item,
+    value: Number(CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact())
+  }))
+  console.log('🚀 ~ file: chartInfo.tsx:126 ~ wrapperData ~ wrapperData:', wrapperData)
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item'
@@ -142,12 +152,7 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         labelLine: {
           show: false
         },
-        data: datas.slice(0, poolInfo.burnedTokens.length).map((item, index) => ({
-          ...item,
-          value: Number(
-            CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact()
-          )
-        }))
+        data: wrapperData
       }
     ]
   }
