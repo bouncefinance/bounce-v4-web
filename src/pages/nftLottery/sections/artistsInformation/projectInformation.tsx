@@ -35,7 +35,7 @@ const ProjectInformation = () => {
         <Text style={{ margin: isSm ? '20px 0' : '40px 0' }}>
           This “AI Meets Bitcoin” NFT collection will be auctioned on Bounce via Random Selection, featuring an
           innovative twist in the auction mechanism called “Burning Man” — Each participant can join this auction by
-          burning $50 worth of any of these tokens: $AUCTION, $MUBI, $BSSB, $DAII, $BDID, $AMMX. Our smart contract will
+          burning $10 worth of any of these tokens: $AUCTION, $MUBI, $BSSB, $DAII, $BDID, $AMMX. Our smart contract will
           then randomly select winners to receive the NFTs.
         </Text>
         {/* <Text>

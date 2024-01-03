@@ -15,16 +15,13 @@ import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { getWinnersList } from 'api/pool'
 import { RandomSelectionNFTProps } from 'api/pool/type'
-
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import NoData from 'bounceComponents/common/NoData'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { WithAnimation } from 'components/WithAnimation'
 import { useActiveWeb3React } from 'hooks'
-// import moment from 'moment'
 import { useCallback, useEffect } from 'react'
 import { shortenAddress } from 'utils'
-import { formatNumber } from 'utils/number'
 
 const Container = styled(Box)`
   width: 100%;
@@ -116,11 +113,6 @@ const Title = styled(Typography)`
 const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
-
-  const betAmound = formatNumber(poolInfo.maxAmount1PerWallet, {
-    unit: poolInfo.token1.decimals,
-    decimalPlaces: 6
-  })
   const defaultIdeaPageSize = 8
   const {
     pagination: poolsPagination,
@@ -139,13 +131,12 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
           limit: pageSize,
           poolId,
           chainId: chainConfigInBackend?.id || 0,
-          category: 7
+          category: 10
         })
       } catch (error) {
         console.log('error', error)
       }
 
-      //   if (category === 1) {
       return {
         list: resp.data.list,
         total: resp.data.total
@@ -157,6 +148,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
       debounceWait: 500
     }
   )
+
   const handlePageChange = (_: any, p: number) => {
     poolsPagination.changeCurrent(p)
   }
@@ -166,7 +158,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
       pageSize: defaultIdeaPageSize,
       poolId: poolInfo?.poolId,
       chainId: chainConfigInBackend?.id || 0,
-      category: 7
+      category: 10
     })
   }, [chainConfigInBackend?.id, poolInfo?.poolId, run])
   useEffect(() => {
@@ -209,7 +201,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell>1 Ticket</StyledTableCell>
-                      <StyledTableCell>{`${betAmound} ${poolInfo.token1.symbol}`}</StyledTableCell>
+                      <StyledTableCell>10 USD</StyledTableCell>
                       {/* <StyledTableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Typography>1 Ticket</Typography>
