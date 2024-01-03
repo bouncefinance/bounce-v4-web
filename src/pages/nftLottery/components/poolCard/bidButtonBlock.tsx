@@ -55,7 +55,10 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
   const switchNetwork = useSwitchNetwork()
   const { poolStatus, isUserJoined, isUserWinner } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const isCurrentChainEqualChainOfPool = useMemo(() => poolInfo.ethChainId === chainId, [poolInfo.ethChainId, chainId])
-  const userBalance = useCurrencyBalance(account || undefined, poolInfo?.token1Currency[selectTokenIndex ?? 0])
+  const userBalance = useCurrencyBalance(
+    account || undefined,
+    poolInfo?.token1Currency[selectTokenIndex ?? 0] ?? undefined
+  )
   const currencySlicedBidAmount = useMemo(
     () =>
       CurrencyAmount.fromRawAmount(
@@ -105,7 +108,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
     }
   }, [approveCallback])
 
-  const { runWithModal: bid, submitted: placeBidSubmitted } = useRandomNFTBetCallback(poolInfo)
+  const { runWithModal: bid, submitted: placeBidSubmitted } = useRandomNFTBetCallback(poolInfo, selectTokenIndex)
   const toBid = useCallback(async () => {
     if (!currencySlicedBidAmount || !account) return
     bid(currencySlicedBidAmount)
@@ -113,6 +116,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
 
   const { runWithModal: userClaim, submitted: placeUserSubmitted } = useRandomNFTUserClaim(
     poolInfo,
+    selectTokenIndex,
     isUserWinner,
     poolInfo.contract
   )
@@ -250,7 +254,12 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
       )
     } else {
       return (
-        <BidButton sx={{ mt: 24 }} onClick={toClaim} loading={placeUserSubmitted.submitted}>
+        <BidButton
+          sx={{ mt: 24 }}
+          disabled={!allStatus.isUserWinner}
+          onClick={toClaim}
+          loading={placeUserSubmitted.submitted}
+        >
           Claim
         </BidButton>
       )

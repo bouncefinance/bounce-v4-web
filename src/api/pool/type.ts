@@ -291,7 +291,7 @@ export interface RandomSelectionNFTProps extends FixedSwapPool {
   totalShare: string | number
   maxPlayere: string | number
   curPlayer: string | number
-  burnedTokens: number[]
+  burnedTokens: BigintIsh[]
   tokensAddress: string[]
   betTokenAmount: BigintIsh[]
   whitelistData?: {

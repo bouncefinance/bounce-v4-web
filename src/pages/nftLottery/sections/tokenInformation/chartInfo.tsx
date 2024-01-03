@@ -8,6 +8,7 @@ import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { RandomSelectionNFTProps } from 'api/pool/type'
+import { CurrencyAmount } from 'constants/token'
 const InfoP1 = styled(Typography)`
   color: var(--AI-dark-02, #4c483a);
   font-variant-numeric: lining-nums proportional-nums;
@@ -72,7 +73,7 @@ const Circle = styled(Box)`
 `
 
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
-  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo.burnedTokens[0].toString())
+  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo.burnedTokens[1].toString())
   const isSm = useBreakpoint('sm')
   const tokenInfoList = [
     {
@@ -107,11 +108,11 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
     }
   ]
   const datas = [
-    { value: 25, name: 'AUCTION', itemStyle: { color: '#CCC496' } },
-    { value: 12, name: 'DAII', itemStyle: { color: '#AB883C' } },
-    { value: 13, name: 'AMMX', itemStyle: { color: '#614C1F' } },
-    { value: 25, name: 'MUBI', itemStyle: { color: '#DBAC48' } },
-    { value: 25, name: 'BSSB', itemStyle: { color: '#9E9871' } }
+    { value: 0, name: 'AUCTION', itemStyle: { color: '#CCC496' } },
+    { value: 0, name: 'MUBI', itemStyle: { color: '#DBAC48' } },
+    { value: 0, name: 'DAII', itemStyle: { color: '#AB883C' } },
+    { value: 0, name: 'BSSB', itemStyle: { color: '#9E9871' } },
+    { value: 0, name: 'AMMX', itemStyle: { color: '#614C1F' } }
   ]
   const option: EChartsOption = {
     tooltip: {
@@ -132,7 +133,7 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         label: {
           show: true,
           position: 'inside',
-          formatter: '{d}',
+          formatter: `{d}%`,
           color: '#fff',
           fontFamily: 'Public Sans',
           fontWeight: 400,
@@ -141,9 +142,12 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         labelLine: {
           show: false
         },
-        data: datas
-          .slice(0, poolInfo.burnedTokens.length)
-          .map((item, index) => (item.value = Number(poolInfo.burnedTokens[index])))
+        data: datas.slice(0, poolInfo.burnedTokens.length).map((item, index) => ({
+          ...item,
+          value: Number(
+            CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact()
+          )
+        }))
       }
     ]
   }

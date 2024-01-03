@@ -57,6 +57,9 @@ const BidPanel = ({ setZoom, allStatus, poolInfo }: IProps) => {
     setBidToken(i)
   }
   useEffect(() => {
+    setBidToken(null)
+  }, [account])
+  useEffect(() => {
     if (account && isUserJoined) {
       setAction('BID')
     }

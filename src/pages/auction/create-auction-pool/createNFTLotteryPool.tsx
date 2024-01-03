@@ -32,7 +32,7 @@ const initParams: IParam = {
   token0: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
   token1s: ['0xc390E699b38F14dB884C635bbf843f7B135113ad', '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'],
   amountTotal0: '10',
-  amount1PerWallets: ['20', '10'],
+  amount1PerWallets: ['20000000000000000000', '10000000000000000000'],
   openAt: 1703735918,
   closeAt: 1703735978,
   claimAt: 1703735978,

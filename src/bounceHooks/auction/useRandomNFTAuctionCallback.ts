@@ -6,16 +6,14 @@ import { calculateGasMargin } from 'utils'
 import { TransactionResponse } from '@ethersproject/providers'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { getUserRandomFailedProof, getUserRandomIsWinterProof, getUserWhitelistProof } from 'api/user'
-import { useRandomSelectionNFTContract } from 'hooks/useContract'
+import { useRandomSelectionNFTBurningContract } from 'hooks/useContract'
 import { useUserHasSubmittedRecords } from 'state/transactions/hooks'
 import getTokenType from 'utils/getTokenType'
-import { ZERO_ADDRESS } from '../../constants'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 
 export function useRandomNFTCreatorClaim(poolId: number | string, name: string, contract?: string) {
   const { account } = useActiveWeb3React()
-
-  const randomContract = useRandomSelectionNFTContract(contract)
+  const randomContract = useRandomSelectionNFTBurningContract(contract)
   const addTransaction = useTransactionAdder()
   const funcName = 'creatorClaim'
 
@@ -55,13 +53,18 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
   return { submitted, run, runWithModal }
 }
 
-export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinner: boolean, contract?: string) {
+export function useRandomNFTUserClaim(
+  poolInfo: RandomSelectionNFTProps,
+  selectTokenIndex: number | null | undefined,
+  isWinner: boolean,
+  contract?: string
+) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
   const submitted = useUserHasSubmittedRecords(account || undefined, 'random_nft_user_claim', poolInfo.poolId)
 
-  const randomContract = useRandomSelectionNFTContract(contract)
+  const randomContract = useRandomSelectionNFTBurningContract(contract)
 
   const run = useCallback(async () => {
     if (!account) {
@@ -109,7 +112,9 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
       gasLimit: calculateGasMargin(estimatedGas)
     }).then((response: TransactionResponse) => {
       addTransaction(response, {
-        summary: isWinner ? `Claim NFT ${poolInfo.token0.symbol}` : `Claim token ${poolInfo.token1.symbol}`,
+        summary: isWinner
+          ? `Claim NFT ${poolInfo.token0.symbol}`
+          : `Claim token ${poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol}`,
         userSubmitted: {
           account,
           action: `random_selection_user_claim`,
@@ -126,9 +131,10 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
     poolInfo.poolId,
     poolInfo.chainId,
     poolInfo.token0.symbol,
-    poolInfo.token1.symbol,
+    poolInfo.token1Currency,
     isWinner,
-    addTransaction
+    addTransaction,
+    selectTokenIndex
   ])
 
   const runWithModal = useTransactionModalWrapper(run, 'You have successfully claimed.')
@@ -136,14 +142,19 @@ export function useRandomNFTUserClaim(poolInfo: RandomSelectionNFTProps, isWinne
   return { run, submitted, runWithModal }
 }
 
-export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
-  const idx = 0
+export function useRandomNFTBetCallback(
+  poolInfo: RandomSelectionNFTProps,
+  selectTokenIndex: number | null | undefined
+) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const submitted = useUserHasSubmittedRecords(account || undefined, 'random_NFT_bet', poolInfo.poolId)
-  const randomContract = useRandomSelectionNFTContract(poolInfo.contract)
-  const isToken1Native = poolInfo.token1.address === ZERO_ADDRESS
-  const userTokenAmount = CurrencyAmount.fromRawAmount(poolInfo.token1Currency[idx], poolInfo.betTokenAmount[idx])
+  const randomContract = useRandomSelectionNFTBurningContract(poolInfo.contract)
+  const isToken1Native = false
+  const userTokenAmount = CurrencyAmount.fromRawAmount(
+    poolInfo.token1Currency[selectTokenIndex ?? 0],
+    poolInfo.betTokenAmount[selectTokenIndex ?? 0]
+  )
   const run = useCallback(
     async (bidAmount: CurrencyAmount) => {
       if (!account) {
@@ -172,7 +183,7 @@ export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
         }
       }
 
-      const args = [poolInfo.poolId, proofArr]
+      const args = [poolInfo.poolId, selectTokenIndex, proofArr]
       const estimatedGas = await randomContract.estimateGas
         .bet(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
         .catch((error: Error) => {
@@ -186,9 +197,8 @@ export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
         })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
-            // summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} bid to ${poolInfo.token0.symbol}`,
             summary: `You have successfully purchased a ticket with ${bidAmount.toSignificant()} ${
-              poolInfo.token1.symbol
+              poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol
             }.`,
             userSubmitted: {
               account,
@@ -206,14 +216,17 @@ export function useRandomNFTBetCallback(poolInfo: RandomSelectionNFTProps) {
       poolInfo.poolId,
       poolInfo.category,
       poolInfo.chainId,
-      poolInfo.token1.symbol,
+      poolInfo.token1Currency,
+      selectTokenIndex,
       isToken1Native,
       addTransaction
     ]
   )
   const runWithModal = useTransactionModalWrapper(
     run,
-    `You have successfully purchased a ticket with ${userTokenAmount?.toSignificant()} ${poolInfo.token1.symbol}.`
+    `You have successfully purchased a ticket with ${userTokenAmount?.toSignificant()} ${
+      poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol
+    }.`
   )
 
   return { run, submitted, runWithModal }
