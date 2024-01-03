@@ -2,14 +2,18 @@ import { Box, Typography } from '@mui/material'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useCountDown } from 'ahooks'
 // import AnimatedNumber from './animatedNumber'
+import P6Img from 'assets/imgs/nftLottery/p6.png'
+import P7Img from 'assets/imgs/nftLottery/p7.png'
 import { RandomPoolStatus } from 'api/pool/type'
 import { ReactComponent as Tick } from 'assets/imgs/nftLottery/tick.svg'
 import dayjs from 'dayjs'
+import Image from 'components/Image'
 
 function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeList: number[]; isSm: boolean }) {
+  console.log('🚀 ~ file: index.tsx:13 ~ StepperBox ~ isSm:', isSm)
   const stepName = ['PARTICIPATION', 'LOTTERY DRAWING', 'ANNOUNCEMENT OF WINNERS']
   return isSm ? (
-    <Box width={'100%'}>
+    <Box width={'100%'} sx={{ position: 'relative' }}>
       {timeList.map((time, index) => (
         <Box key={index} display={'flex'} gap={16}>
           <Box width={30} display={'flex'} flexDirection={'column'} alignItems={'center'}>
@@ -53,6 +57,26 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
           </Box>
         </Box>
       ))}
+      <Image
+        src={P6Img}
+        style={{
+          position: 'absolute',
+          top: '-166%',
+          width: 110,
+          height: 73,
+          right: '-14%'
+        }}
+      />
+      <Image
+        src={P7Img}
+        style={{
+          position: 'absolute',
+          top: '-120%',
+          width: 110,
+          height: 86,
+          left: '-19%'
+        }}
+      />
     </Box>
   ) : (
     <Box display={'flex'} alignItems={'flex-end'}>

@@ -84,7 +84,7 @@ export function useRandomNFTUserClaim(
       if (Number(poolInfo.curPlayer) > Number(poolInfo.totalShare)) {
         const userRandomIsWinterProof = await getUserRandomIsWinterProof({
           address: account,
-          category: PoolType.LOTTERY_NFT,
+          category: PoolType.LOTTERY_BURNING,
           chainId: poolInfo.chainId,
           poolId: poolInfo.poolId,
           tokenType: 1
@@ -94,7 +94,7 @@ export function useRandomNFTUserClaim(
     } else {
       const userRandomFailedProof = await getUserRandomFailedProof({
         address: account,
-        category: PoolType.LOTTERY_NFT,
+        category: PoolType.LOTTERY_BURNING,
         chainId: poolInfo.chainId,
         poolId: poolInfo.poolId,
         tokenType: 1
@@ -112,7 +112,7 @@ export function useRandomNFTUserClaim(
       gasLimit: calculateGasMargin(estimatedGas)
     }).then((response: TransactionResponse) => {
       addTransaction(response, {
-        summary: `Claim NFT ${poolInfo.token0.symbol}`,
+        summary: `Claim Lottery NFT`,
         userSubmitted: {
           account,
           action: `random_selection_user_claim`,
@@ -128,7 +128,6 @@ export function useRandomNFTUserClaim(
     poolInfo.curPlayer,
     poolInfo.poolId,
     poolInfo.chainId,
-    poolInfo.token0.symbol,
     isWinner,
     addTransaction
   ])
