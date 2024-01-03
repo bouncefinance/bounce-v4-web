@@ -5,8 +5,8 @@ import P2Img from 'assets/imgs/nftLottery/p6.png'
 import MosaicImg from './mosaicImg'
 import { WithAnimation } from 'components/WithAnimation'
 import { useWithAnimationStyles } from './pc'
-import fontSvg from 'assets/imgs/nftLottery/banner/font.svg'
-import Cards from './step3'
+// import fontSvg from 'assets/imgs/nftLottery/banner/font.svg'
+// import Cards from './step3'
 const BannerStep2 = () => {
   const isSm = useIsSMDown()
   const styleTrans = useWithAnimationStyles()
@@ -14,8 +14,8 @@ const BannerStep2 = () => {
     <Box
       sx={{
         position: 'relative',
-        width: '100%',
-        background: `url(${fontSvg}) no-repeat center 340px`
+        width: '100%'
+        // background: `url(${fontSvg}) no-repeat center 340px`
       }}
     >
       <WithAnimation defaultAnimation={false} className={styleTrans.awaitInView} addClassInView={styleTrans.inView}>
@@ -40,7 +40,7 @@ const BannerStep2 = () => {
             }}
             variant="lotteryh1"
           >
-            The First-Ever AI-Generated NFT Collection on Bitcoin
+            {/* The First-Ever AI-Generated NFT Collection on Bitcoin */}
           </Typography>
           <Stack
             justifyContent={'center'}
@@ -50,21 +50,7 @@ const BannerStep2 = () => {
               width: '100%'
             }}
             mb={40}
-          >
-            {/* <Typography
-              variant="lotteryh1"
-              sx={{
-                display: 'inline-block',
-                color: '#C3A16D',
-                fontSize: isSm ? 100 : 200,
-                fontWeight: 500,
-                lineHeight: '160px',
-                textAlign: 'center'
-              }}
-            >
-              TBD
-            </Typography> */}
-          </Stack>
+          ></Stack>
           <Typography
             sx={{
               width: '100%',
@@ -79,11 +65,11 @@ const BannerStep2 = () => {
               zIndex: '1'
             }}
           >
-            The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450
+            {/* The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450
             exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents
             a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks
             gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their
-            endurance and legacy.
+            endurance and legacy. */}
           </Typography>
           <MosaicImg
             style={{
@@ -111,7 +97,7 @@ const BannerStep2 = () => {
           />
         </Box>
       </WithAnimation>
-      <Cards />
+      {/* <Cards /> */}
     </Box>
   )
 }

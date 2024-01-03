@@ -190,7 +190,11 @@ export default function Countdown({
         color={'var(--AI-dark-02, #4C483A)'}
         textAlign={'center'}
       >
-        {`Token auctions can be conducted on various blockchain platforms, such as Ethereum, which provides a secure and transparent environment for the auction process. The use of blockchain technology also allows for the automatic execution of the auction rules and the issuance of tokens to the winning bidders.`}
+        {`The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450
+            exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents
+            a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks
+            gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their
+            endurance and legacy.`}
       </Typography>
     </Box>
   )
