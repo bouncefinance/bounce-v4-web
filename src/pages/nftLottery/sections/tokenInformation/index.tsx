@@ -15,7 +15,7 @@ const SectionBody = styled(Box)`
   }
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding: 0 16px;
-    padding-bottom: 48px;
+    padding-bottom: 10px;
   }
 `
 
