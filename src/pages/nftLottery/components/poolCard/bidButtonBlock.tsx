@@ -234,6 +234,25 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
     return <DrawedBtn />
   }
   if (RandomPoolStatus.Closed === poolStatus) {
+    if (!allStatus.isUserWinner) {
+      return (
+        <Stack flexDirection={'row'} gap={12} alignItems={'center'} sx={{ width: 'fit-content', margin: ' 0 auto' }}>
+          <CircleExclamationSvg />
+          <Typography
+            sx={{
+              color: '#171717',
+              fontFamily: 'Inter',
+              fontSize: { xs: 15, md: 18 },
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '140%'
+            }}
+          >
+            The assets you use to purchase lottery tickets will be burned by the bounce.
+          </Typography>
+        </Stack>
+      )
+    }
     if (poolInfo.participant.claimed) {
       return (
         <Stack flexDirection={'row'} gap={12} alignItems={'center'} sx={{ width: 'fit-content', margin: ' 0 auto' }}>
@@ -254,12 +273,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
       )
     } else {
       return (
-        <BidButton
-          sx={{ mt: 24 }}
-          disabled={!allStatus.isUserWinner}
-          onClick={toClaim}
-          loading={placeUserSubmitted.submitted}
-        >
+        <BidButton sx={{ mt: 24 }} onClick={toClaim} loading={placeUserSubmitted.submitted}>
           Claim
         </BidButton>
       )

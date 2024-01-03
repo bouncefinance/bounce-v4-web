@@ -20,7 +20,7 @@ const Container = styled(Box)(
     max-width: 1440px;
     margin: 0 auto;
     height: 1168px;
-    ${isUserJoined ? `background: url(${Bg1Svg});` : ''}
+     ${isUserJoined ? `background: url(${Bg1Svg});` : ''}
     
     background-repeat: no-repeat;
     background-position: center;
@@ -32,32 +32,26 @@ const Container = styled(Box)(
     }
 `
 )
-const WinnerBg = styled(Box)(
-  ({ isWinner, theme }: { isWinner: boolean; theme: Theme }) => `  
+const WinnerContainer = styled(Box)(
+  ({ theme }: { theme: Theme }) => `  
     
-    ${
-      isWinner
-        ? `
+    
             position: absolute;
             top: 146px;
             width: 1044px;
             height: 865px;
             left: 50%;
             transform: translateX(-50%);
-            background: url(${Bg2Svg}) transparent -20px 0px / 103.544% 100% no-repeat;
-            mix-blend-mode: darken;
+             background: url(${Bg2Svg}) transparent -20px 0px / 103.544% 100% no-repeat;
+             mix-blend-mode: darken;
             ${theme.breakpoints.down('sm')}{
               width:360px;
-              background: url(${Bg2SvgMobile}) lightgray -7.548px 0px / 103.544% 100% no-repeat;
-              mix-blend-mode: darken;
+               background: url(${Bg2SvgMobile}) lightgray -7.548px 0px / 103.544% 100% no-repeat;
+               mix-blend-mode: darken;
               position: relative;
               top: 94px;
               height: 325px;  
-     }  
-          `
-        : ''
-    }
-   
+    
     `
 )
 const WinnerBox = styled(Box)(
@@ -76,7 +70,7 @@ ${
     top: 50%;
     transform: translate(-50%,-54%);
     ${theme.breakpoints.down('sm')}{
-      top: 91px;
+      top: 185px;
       left: 50%;
       transform: translateX(-50%);} 
     `
@@ -108,18 +102,18 @@ const WinnerResultCard = ({
         </WithAnimation>
       </Box>
 
-      <WinnerBg isWinner={isWinner} theme={theme}>
-        <WinnerBox isWinner={isWinner} theme={theme}>
-          <WithAnimation>
-            {isWinner && <WinnerCard poolInfo={poolInfo} />}
-            {!isWinner && <NotWinnerCard poolInfo={poolInfo} />}
-          </WithAnimation>
-        </WinnerBox>
-      </WinnerBg>
+      {isWinner && <WinnerContainer />}
+
+      <WinnerBox isWinner={isWinner} theme={theme}>
+        <WithAnimation>
+          {isWinner && <WinnerCard poolInfo={poolInfo} />}
+          {!isWinner && <NotWinnerCard poolInfo={poolInfo} />}
+        </WithAnimation>
+      </WinnerBox>
 
       <Stack
         px={isSm ? 20 : 0}
-        gap={isWinner ? (isSm ? 35 : 18) : 55}
+        gap={isWinner ? (isSm ? 35 : 0) : 55}
         // gap={isSm ? 35 : 55}
         sx={{
           width: '100%',
