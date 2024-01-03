@@ -141,7 +141,7 @@ const InfoLabel = ({ title, content, icon }: { title: string; content: string; i
   const isSm = useBreakpoint('sm')
   return (
     <Stack
-      flexDirection={'row'}
+      flexDirection={isSm ? 'column' : 'row'}
       justifyContent={'space-between'}
       sx={{ paddingBottom: isSm ? 12 : 16, borderBottom: '1px solid #A4A79F' }}
     >

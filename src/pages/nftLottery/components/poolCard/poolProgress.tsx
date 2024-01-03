@@ -39,6 +39,24 @@ const Title2 = styled(Typography)`
     font-size: 20px;
   }
 `
+const AvatarGroupStyle = styled(AvatarGroup)`
+  &.MuiAvatarGroup-root {
+    flex-direction: row;
+  }
+  & .MuiAvatar-root,
+  & .MuiAvatar-root:last-child {
+    margin-left: -15px;
+  }
+  ${({ theme }) => theme.breakpoints.down('sm')} {
+    & .MuiAvatar-root {
+      margin-left: -8px;
+    }
+    & .MuiAvatar-root:first-child {
+      margin-left: 0px;
+    }
+  }
+`
+
 const AvatarStyle = styled(Avatar)`
   width: 54px;
   height: 54px;
@@ -64,11 +82,11 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
 
   return (
     <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
-      <AvatarGroup>
+      <AvatarGroupStyle>
         {len.map((i, d) => (
           <AvatarStyle key={i + d} alt="DefaultAvatar" src={i} />
         ))}
-      </AvatarGroup>
+      </AvatarGroupStyle>
     </Stack>
   )
 }

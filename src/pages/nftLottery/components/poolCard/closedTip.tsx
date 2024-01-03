@@ -9,6 +9,8 @@ const Container = styled(Box)`
   margin: 0 auto;
   position: relative;
   margin-top: 37px;
+  display: flex;
+  flex-direction: column;
 `
 const Title = styled(Typography)`
   color: var(--AI-red, #f00);
@@ -41,7 +43,7 @@ const ClosedTip = () => {
         <RedCircle />
         <Title>Auction CLOSED</Title>
       </TextBox>
-      <SvgBox>
+      <SvgBox mt={isSm ? 28 : 0}>
         {!isSm && <ShowSvg />}
         {isSm && <ShowMobileSvg />}
       </SvgBox>
