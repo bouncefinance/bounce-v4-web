@@ -74,9 +74,12 @@ const MobileLiveCard = ({
         </Box>
       </Box>
     )
-  } else if (allStatus.poolStatus === RandomPoolStatus.Waiting) {
+  } else if (
+    allStatus.poolStatus === RandomPoolStatus.Waiting ||
+    (allStatus.poolStatus === RandomPoolStatus.Closed && !allStatus.isUserJoined)
+  ) {
     return (
-      <Box sx={{ padding: '0 33px', mt: 90 }}>
+      <Box sx={{ padding: '0 33px', mt: allStatus.poolStatus === RandomPoolStatus.Waiting ? 90 : 41.5 }}>
         <Box
           sx={{
             width: 294,
