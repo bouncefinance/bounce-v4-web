@@ -27,7 +27,6 @@ const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  margin-top: 80px;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding: 0 16px;
   }

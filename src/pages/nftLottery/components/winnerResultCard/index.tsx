@@ -113,7 +113,7 @@ const WinnerResultCard = ({
 
       <Stack
         px={isSm ? 20 : 0}
-        gap={isWinner ? (isSm ? 35 : 0) : 55}
+        gap={isWinner ? (isSm ? 35 : 0) : isSm ? 25 : 55}
         // gap={isSm ? 35 : 55}
         sx={{
           width: '100%',

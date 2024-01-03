@@ -10,13 +10,13 @@ import AuctionWinnerList from 'pages/nftLottery/components/winnerList/winnerList
 const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   const allStatus = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const { isWinnerSeedDone } = allStatus
-  const isMd = useBreakpoint('md')
+  const isSm = useBreakpoint('sm')
 
   return (
     <Box
       sx={{
         background: `url(${BgImg}) repeat`,
-        padding: isMd ? '48px 0' : '120px 0'
+        pm: isSm ? '48px 0' : '0'
       }}
     >
       {isWinnerSeedDone && allStatus.isUserJoined ? (
@@ -25,10 +25,10 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         <BeforeOpenLottery poolInfo={poolInfo} allStatus={allStatus} />
       )}
       {allStatus.isWinnerSeedDone && (
-        <>
+        <Box mt={isSm ? 48 : 0}>
           {/* <NftReward /> */}
           <AuctionWinnerList poolInfo={poolInfo} />
-        </>
+        </Box>
       )}
     </Box>
   )
