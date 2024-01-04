@@ -10,9 +10,8 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   const chainId = ChainId.SEPOLIA
   // const chainId = ChainId.MAINNET
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
-  const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, chainId)
+  const totalStake = useSingleCallResult(contract, 'getToken1Amounts', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', [poolId], undefined, chainId)
-  const myTotalStake = useSingleCallResult(contract, 'myAmountCommitted1', [account, poolId], undefined, chainId)
   const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId], undefined, chainId)
   const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId], undefined, chainId)
   const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account], undefined, chainId)
@@ -41,9 +40,6 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     if (totalParticipants.result) {
       result.totalParticipants = totalParticipants.result[0]
     }
-    if (myTotalStake.result) {
-      result.myToken1Amount = myTotalStake.result[0]
-    }
     if (swappedtoken0.result) {
       result.swappedtoken0 = swappedtoken0.result[0]
     }
@@ -68,7 +64,6 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     creatorClaimed.result,
     finalAllocation.result,
     myToken1Claimed.result,
-    myTotalStake.result,
     poolInfo.result,
     swappedtoken0.result,
     totalParticipants.result,

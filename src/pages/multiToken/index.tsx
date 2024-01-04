@@ -1,10 +1,9 @@
 import { ProjectHead, Tabs } from 'pages/projectIntro'
-import { AmmxDaiiData, IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
+import { Port3Data, IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/PrivatePadDataList'
 import FooterPc from 'components/Footer/FooterPc'
-import { useApproveCallback } from 'hooks/useApproveCallback'
-import { useStakeTokenWithTimeWeightContract } from 'hooks/useContract'
+import { useRandomSelectionMultiTokenContract } from 'hooks/useContract'
 import { useActiveWeb3React } from 'hooks'
-import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from 'constants/index'
+import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
 import { StakeButton } from 'pages/launchpadCoin/Step'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
@@ -13,31 +12,20 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { useCallback } from 'react'
 import OtherProjectTab from 'pages/projectIntro/components/otherProjectTab'
 import { Box } from '@mui/material'
-import { useGetStakingAuctionInfo, useTokenInfo } from './useStakingInfo'
+import { useGetStakingAuctionInfo } from './useStakingInfo'
 import Header from './header'
 import Charts from './charts'
 import { Steps } from './Step'
 const Page = () => {
   const poolId = 2
-  const item = PrivatePadDataList.find(i => i.keyId === 24) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const { account } = useActiveWeb3React()
-  const chainId = ChainId.MAINNET
+  // const chainId = ChainId.MAINNET
+  const chainId = ChainId.SEPOLIA
   const nowTime = () => new Date().getTime()
-  const contract = useStakeTokenWithTimeWeightContract(chainId)
-  const { token0Amount: token0, token1 } = useTokenInfo()
-  const [approvalState] = useApproveCallback(token0, STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[chainId])
+  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
+  const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId)
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account)
-
-  const params: any = [
-    token0?.currency.address,
-    token1.address,
-    '472500000000000000000000000',
-    '450000000000000000000000',
-    1703390400,
-    1703736000,
-    1703736000,
-    1
-  ]
 
   const toClaim = useCallback(async () => {
     if (!account || !contract || !coinInfo) return
@@ -90,17 +78,9 @@ const Page = () => {
     }
   }, [account, coinInfo, contract])
 
-  const createPool = async () => {
-    // if (approvalState !== ApprovalState.APPROVED) {
-    //   await approveCallback()
-    // }
-    await contract?.create(params)
-  }
-  console.log('createPool', createPool, approvalState)
-
   return (
     <>
-      <ProjectHead item={AmmxDaiiData} />
+      <ProjectHead item={Port3Data} />
       <Box sx={{ width: '100%' }} style={{ background: '#f5f5f1' }}>
         <Box
           padding={{ xs: '0 16px', md: '20px 72px' }}
@@ -112,10 +92,6 @@ const Page = () => {
           <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
         </Box>
       </Box>
-
-      {/* <StakeButton sx={{ margin: '20px 80px' }} onClick={() => createPool()}>
-        Create Pool
-      </StakeButton> */}
       <div style={{ width: '100%' }}>
         {coinInfo?.poolInfo &&
           account &&
@@ -142,7 +118,7 @@ const Page = () => {
             </StakeButton>
           )}
       </div>
-      <Tabs item={AmmxDaiiData} hideTitle />
+      <Tabs item={Port3Data} hideTitle />
       {item.otherProject && <OtherProjectTab item={item} />}
       <FooterPc />
     </>

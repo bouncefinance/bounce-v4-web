@@ -44,45 +44,49 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   const [selectedIdx, setSelectedIdx] = useState<number>(0)
   const [amount, setAmount] = useState('')
   const isDownSm = useBreakpoint('sm')
-  const dataList = [
-    {
-      id: 0,
-      name: 'AUCTION',
-      symbol: 'AUCTION',
-      logo: Icon1,
-      address: '0xc390E699b38F14dB884C635bbf843f7B135113ad'
-    },
-    {
-      id: 1,
-      name: 'MUBI',
-      symbol: 'MUBI',
-      logo: Icon2,
-      address: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E'
-    },
-    {
-      id: 2,
-      name: 'DAII',
-      symbol: 'DAII',
-      logo: Icon3,
-      address: '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E'
-    },
-    {
-      id: 3,
-      name: 'BSSB',
-      symbol: 'BSSB',
-      logo: Icon4,
-      address: '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7'
-    },
-    {
-      id: 4,
-      name: 'AMMX',
-      symbol: 'AMMX',
-      logo: Icon5,
-      address: '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
-    }
-  ]
-
-  const selectedToken = useToken(dataList[selectedIdx].address || '', _chainId) || undefined
+  const dataList = useMemo(
+    () => [
+      {
+        id: 0,
+        name: 'AUCTION',
+        symbol: 'AUCTION',
+        logo: Icon1,
+        address: '0xc390E699b38F14dB884C635bbf843f7B135113ad'
+      },
+      {
+        id: 1,
+        name: 'MUBI',
+        symbol: 'MUBI',
+        logo: Icon2,
+        address: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E'
+      },
+      {
+        id: 2,
+        name: 'DAII',
+        symbol: 'DAII',
+        logo: Icon3,
+        address: '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E'
+      },
+      {
+        id: 3,
+        name: 'BSSB',
+        symbol: 'BSSB',
+        logo: Icon4,
+        address: '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7'
+      },
+      {
+        id: 4,
+        name: 'AMMX',
+        symbol: 'AMMX',
+        logo: Icon5,
+        address: '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
+      }
+    ],
+    []
+  )
+  const [userStakedAddress, setUserStakedAddress] = useState<string>('')
+  const selectedToken =
+    useToken(userStakedAddress ? userStakedAddress : dataList[selectedIdx].address, _chainId) || undefined
   const token1CurrencyAmount = useMemo(() => {
     if (!selectedToken) return undefined
     return CurrencyAmount.fromAmount(selectedToken, amount)
@@ -99,12 +103,12 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   const approveFn = useTransactionModalWrapper(approveCallback as (...arg: any) => Promise<any>)
 
   const toCommit = useCallback(async () => {
-    if (!token1CurrencyAmount || !contract) return
+    if (!token1CurrencyAmount || !contract || !selectedToken) return
     showWaitingTxDialog(() => {
       hideDialogConfirmation()
     })
     try {
-      const params = [poolId, token1CurrencyAmount.raw.toString()]
+      const params = [poolId, selectedToken.address, token1CurrencyAmount.raw.toString()]
       const res = await contract.commit(...params)
       const ret = new Promise((resolve, rpt) => {
         showWaitingTxDialog(() => {
@@ -130,6 +134,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
               handleClose()
             }
           })
+          setUserStakedAddress(dataList[selectedIdx].address)
         })
         .catch()
     } catch (error) {
@@ -147,7 +152,17 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
         }
       })
     }
-  }, [approvalState, approveFn, contract, handleClose, poolId, selectedToken?.symbol, token1CurrencyAmount])
+  }, [
+    approvalState,
+    approveFn,
+    contract,
+    dataList,
+    handleClose,
+    poolId,
+    selectedIdx,
+    selectedToken,
+    token1CurrencyAmount
+  ])
 
   const confirmBtn = useMemo(() => {
     if (!account) {
@@ -250,14 +265,13 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
 
       <DialogContent sx={{ py: 48, px: 6, paddingTop: '48px !important' }}>
         <>
-          <Stack mb={48}>
+          <Stack mb={48} width={'inherit'}>
             <Select
               defaultValue={chainId ?? undefined}
               value={chainId ?? undefined}
-              width="100%"
-              height={isDownSm ? '24px' : '54px'}
+              height={'54px'}
               style={{
-                maxWidth: '100%',
+                width: '100%',
                 background: '#fff',
                 border: '1px solid var(--ps-gray-20)',
                 '&: hover': {

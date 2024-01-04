@@ -92,8 +92,7 @@ function VerticalLinearStepper({
   }, [coinInfo])
   const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
   useEffect(() => {
-    // must update before mainnet
-    setActiveStep(curStatus !== TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
+    setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
   }, [curStatus])
 
   const steps = [
@@ -146,7 +145,7 @@ function Step1({
   const _chainId = useMemo(() => {
     return ChainId.SEPOLIA
   }, [])
-  const [openDialog, setOpenDialog] = useState(true)
+  const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
 
@@ -301,9 +300,9 @@ function Step1({
                       }
                     }}
                   >
-                    BitSwap <b>x</b> Ladder Pool
+                    Bounce Staking Pool
                   </CardLabelStyle>
-                  <CardContentStyle>Stake $DAII to earn proportional $AMMX allocation</CardContentStyle>
+                  <CardContentStyle>Stake tokens to earn proportional $AMMX allocation</CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
