@@ -119,7 +119,7 @@ import AmmxStakeDaiiPool from './stakeDaiiAMMX'
 import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
 import NftLottery from './nftLottery'
 import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
-import MultiToken from 'pages/MultiToken'
+import MultiToken from 'pages/multiToken'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
