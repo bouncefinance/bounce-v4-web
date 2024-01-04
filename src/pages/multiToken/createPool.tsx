@@ -15,7 +15,7 @@ import { useCurrencyBalance, useToken } from 'state/wallet/hooks'
 
 interface IParam {
   token0: string
-  amountTotal0: number
+  amountTotal0: string
   quoteAmountTotal1: number
   openAt: number
   closeAt: number
@@ -27,7 +27,7 @@ interface IParam {
 
 const initParams: IParam = {
   token0: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
-  amountTotal0: 10,
+  amountTotal0: '10',
   quoteAmountTotal1: 1000,
   openAt: 0,
   closeAt: 0,
@@ -86,7 +86,7 @@ const CreateNFTLotteryPool = () => {
   }, [token0, values.amountTotal0])
   const isInsufficientBalance = useMemo(() => {
     if (!token0Balance || !token0Amount) return false
-    return token0Balance.lessThan(token0Amount)
+    return token0Amount.greaterThan(token0Balance)
   }, [token0Amount, token0Balance])
   const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || 5]
   const [approvalState, approveCallback] = useApproveCallback(token0Amount, contractAddress)
@@ -98,7 +98,34 @@ const CreateNFTLotteryPool = () => {
   const onSubmit = () => {
     create()
   }
-
+  const btnsCallback = (newValues: IParam) => {
+    if (values !== newValues) {
+      return (
+        <Button sx={{ flex: 1 }} onClick={() => changeValue(newValues)}>
+          Save
+        </Button>
+      )
+    }
+    if (isInsufficientBalance) {
+      return (
+        <Button sx={{ flex: 1 }} disabled>
+          insufficient balance
+        </Button>
+      )
+    }
+    if (approvalState !== ApprovalState.APPROVED) {
+      return (
+        <Button sx={{ flex: 1 }} onClick={() => approveFn()}>
+          Approval
+        </Button>
+      )
+    }
+    return (
+      <Button type="submit" sx={{ flex: 1 }}>
+        Submit
+      </Button>
+    )
+  }
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
@@ -136,26 +163,7 @@ const CreateNFTLotteryPool = () => {
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <Stack flexDirection={'row'} gap={20}>
-                {_values !== values && (
-                  <Button sx={{ flex: 1 }} onClick={() => changeValue(_values)}>
-                    Save
-                  </Button>
-                )}
-                {_values === values && isInsufficientBalance && (
-                  <Button sx={{ flex: 1 }} disabled>
-                    insufficient balance
-                  </Button>
-                )}
-                {_values === values && approvalState !== ApprovalState.APPROVED && (
-                  <Button sx={{ flex: 1 }} onClick={() => approveFn()}>
-                    Approval
-                  </Button>
-                )}
-                {_values === values && !isInsufficientBalance && approvalState === ApprovalState.APPROVED && (
-                  <Button type="submit" sx={{ flex: 1 }}>
-                    Submit
-                  </Button>
-                )}
+                {btnsCallback(_values)}
               </Stack>
             </Box>
           )
