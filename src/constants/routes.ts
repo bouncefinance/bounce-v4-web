@@ -130,7 +130,8 @@ export const routes = {
     AmmxAuction: '/launchpad/ammx-auction',
     AmmxAuctionTest: '/launchpad/test/stake',
     AmmxDaii: '/launchpad/ammx-daii',
-    AmmxRandom: '/launchpad/ammx-random'
+    AmmxRandom: '/launchpad/ammx-random',
+    MoreTokenStake: '/launchpad/more-token-stake'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
