@@ -86,13 +86,14 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   )
   const [userStakedAddress, setUserStakedAddress] = useState<string>('')
   const selectedToken =
-    useToken(userStakedAddress ? userStakedAddress : dataList[selectedIdx].address, _chainId) || undefined
+    useToken(userStakedAddress ? userStakedAddress : dataList[selectedIdx].address, chainId) || undefined
   const token1CurrencyAmount = useMemo(() => {
     if (!selectedToken) return undefined
     return CurrencyAmount.fromAmount(selectedToken, amount)
   }, [amount, selectedToken])
-  const userTokenBalance = useCurrencyBalance(account, selectedToken, _chainId)
-  const [approvalState, approveCallback] = useApproveCallback(
+  const userTokenBalance = useCurrencyBalance(account, selectedToken, chainId)
+  console.log('🚀 ~ file: stakeModal.tsx:95 ~ userTokenBalance:', userTokenBalance, selectedToken)
+  const [approvalState, , approveCallback] = useApproveCallback(
     token1CurrencyAmount,
     RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[_chainId]
   )
@@ -100,7 +101,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
     onClose()
     setAmount('')
   }, [onClose])
-  const approveFn = useTransactionModalWrapper(approveCallback as (...arg: any) => Promise<any>)
+  const approveFn = useTransactionModalWrapper(approveCallback)
 
   const toCommit = useCallback(async () => {
     if (!token1CurrencyAmount || !contract || !selectedToken) return
@@ -265,48 +266,50 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
 
       <DialogContent sx={{ py: 48, px: 6, paddingTop: '48px !important' }}>
         <>
-          <Stack mb={48} width={'inherit'}>
-            <Select
-              defaultValue={chainId ?? undefined}
-              value={chainId ?? undefined}
-              height={'54px'}
-              style={{
-                width: '100%',
-                background: '#fff',
-                border: '1px solid var(--ps-gray-20)',
-                '&: hover': {
-                  borderColor: 'var(--ps-yellow-1)'
-                },
-                '& .Mui-disabled.MuiSelect-select.MuiInputBase-input': {
-                  paddingRight: isDownSm ? 0 : 10,
-                  color: theme => theme.palette.text.primary,
-                  WebkitTextFillColor: theme => theme.palette.text.primary
-                },
-                '&.Mui-focused': {
-                  borderColor: 'var(--ps-yellow-1)'
-                }
-              }}
-              renderValue={() => (
-                <Stack direction={'row'} alignItems={'center'} justifyContent={'flex-start'} spacing={16}>
-                  <Image src={dataList[selectedIdx]?.logo || ''} width={32} />
-                  <Typography>{dataList[selectedIdx]?.symbol}</Typography>
-                </Stack>
-              )}
-            >
-              {dataList.map((option, index) => (
-                <MenuItem
-                  onClick={() => {
-                    setSelectedIdx(index)
-                  }}
-                  value={option.id}
-                  key={option.id}
-                  selected={selectedIdx === option.id}
-                >
-                  <LogoText logo={option.logo} text={option.name} gapSize={'small'} fontSize={14} />
-                </MenuItem>
-              ))}
-            </Select>
-          </Stack>
+          {userStakedAddress === '' && (
+            <Stack mb={48} width={'inherit'}>
+              <Select
+                defaultValue={chainId ?? undefined}
+                value={chainId ?? undefined}
+                height={'54px'}
+                style={{
+                  width: '100%',
+                  background: '#fff',
+                  border: '1px solid var(--ps-gray-20)',
+                  '&: hover': {
+                    borderColor: 'var(--ps-yellow-1)'
+                  },
+                  '& .Mui-disabled.MuiSelect-select.MuiInputBase-input': {
+                    paddingRight: isDownSm ? 0 : 10,
+                    color: theme => theme.palette.text.primary,
+                    WebkitTextFillColor: theme => theme.palette.text.primary
+                  },
+                  '&.Mui-focused': {
+                    borderColor: 'var(--ps-yellow-1)'
+                  }
+                }}
+                renderValue={() => (
+                  <Stack direction={'row'} alignItems={'center'} justifyContent={'flex-start'} spacing={16}>
+                    <Image src={dataList[selectedIdx]?.logo || ''} width={32} />
+                    <Typography>{dataList[selectedIdx]?.symbol}</Typography>
+                  </Stack>
+                )}
+              >
+                {dataList.map((option, index) => (
+                  <MenuItem
+                    onClick={() => {
+                      setSelectedIdx(index)
+                    }}
+                    value={option.id}
+                    key={option.id}
+                    selected={selectedIdx === option.id}
+                  >
+                    <LogoText logo={option.logo} text={option.name} gapSize={'small'} fontSize={14} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
+          )}
           <Stack gap={12}>
             <Stack flexDirection={'row'} justifyContent={'space-between'}>
               <GrayTitle>Amount</GrayTitle>

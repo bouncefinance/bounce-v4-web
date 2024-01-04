@@ -4,7 +4,7 @@ import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
 import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
-import { CoinResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import dayjs from 'dayjs'
 import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
@@ -35,13 +35,14 @@ import {
 } from 'pages/launchpadCoin/Step'
 import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
 import StakeAuctionInputDialog from './stakeModal'
+import { ZERO_ADDRESS } from '../../constants'
 
 export function Steps({
   coinInfo,
   contract,
   poolId
 }: {
-  coinInfo: CoinResultType | undefined
+  coinInfo: MultiTokenResultType | undefined
   contract: Contract | null
   poolId: number
 }) {
@@ -76,7 +77,7 @@ function VerticalLinearStepper({
   contract,
   poolId
 }: {
-  coinInfo: CoinResultType | undefined
+  coinInfo: MultiTokenResultType | undefined
   contract: Contract | null
   poolId: number
 }) {
@@ -136,7 +137,7 @@ function Step1({
   poolId
 }: {
   status: TStep
-  coinInfo: CoinResultType | undefined
+  coinInfo: MultiTokenResultType | undefined
   contract: Contract | null
   poolId: number
 }) {
@@ -147,7 +148,7 @@ function Step1({
   }, [])
   const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
+  const token1Currency = useToken(ZERO_ADDRESS, _chainId) || undefined
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -302,28 +303,23 @@ function Step1({
                   >
                     Bounce Staking Pool
                   </CardLabelStyle>
-                  <CardContentStyle>Stake tokens to earn proportional $AMMX allocation</CardContentStyle>
+                  <CardContentStyle>Stake tokens to earn proportional $PORT3 allocation</CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>0.00095 DAII</CardLabelStyle>
+                    <CardLabelStyle>0.00095 USD</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
-                    <CardContentStyle>Total Supply of AMMX</CardContentStyle>
+                    <CardContentStyle>Total Supply of PORT3</CardContentStyle>
                     <CardLabelStyle>472,500,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
                   <CardContentStyle>Total Committed Amount / Total Raise</CardContentStyle>
-                  <CardLabelStyle>
-                    {coinInfo?.token1Amount && token1Currency
-                      ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
-                      : '--'}{' '}
-                    {token1Currency?.symbol} / 450,000 DAII
-                  </CardLabelStyle>
+                  <CardLabelStyle>{token1Currency?.symbol} / 450,000</CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
                   <CardContentStyle>Participants</CardContentStyle>
@@ -366,26 +362,13 @@ function Step1({
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
                 <CardLabelStyle>
-                  {coinInfo?.myToken1Amount && token1Currency
-                    ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount.toString()).toSignificant()
-                    : '0'}{' '}
+                  null
                   {token1Currency?.symbol}
                 </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
-                <CardLabelStyle>
-                  {token1Currency &&
-                  coinInfo?.myToken1Amount &&
-                  coinInfo?.token1Amount &&
-                  Number(coinInfo.token1Amount) > 0
-                    ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount?.toString() || '0')
-                        .divide(CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount?.toString() || '0'))
-                        .multiply('100')
-                        .toFixed(2)
-                    : '0'}
-                  %
-                </CardLabelStyle>
+                <CardLabelStyle>null %</CardLabelStyle>
               </Stack>
             </Stack>
             {actionBtn}
@@ -413,35 +396,24 @@ function Step2({
   poolId
 }: {
   status: TStep
-  coinInfo: CoinResultType | undefined
+  coinInfo: MultiTokenResultType | undefined
   contract: Contract | null
   poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     if (!account) {
-      return 1
+      // return 1
+      return 11155111
     }
     return chainId
   }, [account, chainId])
   const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
-    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'AMMX', 'AMMX')
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'PORT3', 'PORT3')
   }, [_token0])
-  const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
-  const token1 = useMemo(() => {
-    if (!_token1) return undefined
-    return new Currency(_token1.chainId, _token1.address, _token1.decimals, 'DAII', 'DAII')
-  }, [_token1])
-  const token0TotalAmount = useMemo(() => {
-    if (!token0 || !coinInfo?.poolInfo?.amountTotal0) return undefined
-    return CurrencyAmount.fromRawAmount(token0, coinInfo?.poolInfo?.amountTotal0.toString())
-  }, [coinInfo?.poolInfo?.amountTotal0, token0])
-  const token1TotalAmount = useMemo(() => {
-    if (!token1 || !coinInfo?.token1Amount) return undefined
-    return CurrencyAmount.fromRawAmount(token1, coinInfo.token1Amount.toString())
-  }, [coinInfo?.token1Amount, token1])
+
   const [, formattedRes] = useCountDown({
     targetDate: coinInfo?.poolInfo?.releaseAt ? coinInfo?.poolInfo?.releaseAt * 1000 : 0
   })
@@ -523,14 +495,7 @@ function Step2({
             iconType: 'success',
             cancelBtn: 'Close',
             title: 'Success! ',
-            content: `You have successfully claimed ${
-              token1 &&
-              coinInfo?.finalAllocation?.myUnSwappedAmount1 &&
-              CurrencyAmount.fromRawAmount(
-                token1,
-                coinInfo.finalAllocation?.myUnSwappedAmount1.toString()
-              ).toSignificant()
-            } ${token1?.symbol}`,
+            content: `You have successfully claimed`,
             onAgain: claimToken1,
             PaperProps: {
               sx: DialogTipsWhiteTheme
@@ -554,7 +519,7 @@ function Step2({
         }
       })
     }
-  }, [coinInfo?.finalAllocation?.myUnSwappedAmount1, contract, poolId, token1])
+  }, [contract, poolId])
   const canClaimToken0 = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) return false
     if (coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')) return false
@@ -617,216 +582,182 @@ function Step2({
         }}
         variant="body1"
       >
-        The allocation calculation is complete. We will deduct the corresponding $DAII from your account based on your
-        final $AMMX allocation, which will be transferred to your spot account along with your remaining $DAII.
+        The allocation calculation is complete. We will deduct the corresponding token from your account based on your
+        final $PORT3 allocation, which will be transferred to your spot account along with your remaining token.
       </Typography>
-      {account &&
-        coinInfo?.myToken1Amount?.eq(0) &&
-        status === TStep.FINAL_TOKEN_DISTRIBUTION &&
-        account !== coinInfo.poolInfo?.creator && (
-          <NotInvolvedContainer>
-            <FailSVG />
-            <NotInvolvedTitle>You did not stake any $DAII for this session.</NotInvolvedTitle>
-          </NotInvolvedContainer>
-        )}
+      {account && coinInfo && status === TStep.FINAL_TOKEN_DISTRIBUTION && account !== coinInfo.poolInfo?.creator && (
+        <NotInvolvedContainer>
+          <FailSVG />
+          <NotInvolvedTitle>You did not stake any token for this session.</NotInvolvedTitle>
+        </NotInvolvedContainer>
+      )}
 
-      {(!account ||
-        coinInfo?.poolInfo?.creator === account ||
-        (coinInfo?.myToken1Amount && coinInfo?.myToken1Amount.gt(0) && coinInfo)) &&
-        status === TStep.FINAL_TOKEN_DISTRIBUTION && (
+      {(!account || coinInfo?.poolInfo?.creator === account || coinInfo) && status === TStep.FINAL_TOKEN_DISTRIBUTION && (
+        <Box
+          sx={{
+            width: { xs: '100%', md: 1000 },
+            borderRadius: '24px',
+            background: '#fff',
+            display: { xs: 'grid', md: 'flex' }
+          }}
+        >
           <Box
             sx={{
-              width: { xs: '100%', md: 1000 },
-              borderRadius: '24px',
-              background: '#fff',
-              display: { xs: 'grid', md: 'flex' }
+              padding: 16
             }}
           >
-            <Box
-              sx={{
-                padding: 16
-              }}
-            >
-              <Stack
-                spacing={{ xs: 20, md: 30 }}
-                sx={{
-                  width: { xs: '100%', md: 500 },
-                  padding: { xs: 16, md: '24px 30px' },
-                  borderRadius: '20px',
-                  background: '#20201E',
-                  height: 306
-                }}
-              >
-                <Stack spacing={16}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 6,
-                      alignItems: 'center'
-                    }}
-                  >
-                    <img
-                      src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
-                      width={17}
-                      height={17}
-                      style={{ borderRadius: '50%' }}
-                    />
-                    <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
-                  </Box>
-                  <CardContentBoldTextStyle>
-                    {token1TotalAmount?.toSignificant() || '0'} {token1?.symbol}
-                  </CardContentBoldTextStyle>
-                </Stack>
-
-                <Stack spacing={16}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 6,
-                      alignItems: 'center'
-                    }}
-                  >
-                    <img src={TokenIcon} width={17} height={17} style={{ borderRadius: '50%' }} />
-                    <CardContentTitleStyle>Token Amount</CardContentTitleStyle>
-                  </Box>
-                  <CardContentBoldTextStyle>
-                    {token0TotalAmount?.toSignificant() || '0'} {token0?.symbol}
-                  </CardContentBoldTextStyle>
-                </Stack>
-
-                <Stack spacing={16}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 6,
-                      alignItems: 'center'
-                    }}
-                  >
-                    <UserSvg />
-                    <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
-                  </Box>
-                  <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
-                </Stack>
-              </Stack>
-            </Box>
-
             <Stack
-              spacing={{ xs: 30, md: 40 }}
+              spacing={{ xs: 20, md: 30 }}
               sx={{
-                width: '100%',
-                padding: { xs: '24px', md: '40px 30px' }
+                width: { xs: '100%', md: 500 },
+                padding: { xs: 16, md: '24px 30px' },
+                borderRadius: '20px',
+                background: '#20201E',
+                height: 306
               }}
             >
-              <Stack spacing={{ xs: 20, md: 30 }}>
-                <Stack spacing={{ xs: 8, md: 16 }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 6,
-                      alignItems: 'center'
-                    }}
-                  >
-                    <CheckSvg />
-                    <CardContentTitleStyle>Your Final Allocation/Total Supply</CardContentTitleStyle>
-                  </Box>
-                  <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                    <BoldTextStyle style={{ fontSize: 20 }}>
-                      {coinInfo?.finalAllocation?.mySwappedAmount0 && coinInfo?.finalAllocation?.mySwappedAmount0.eq(0)
-                        ? '0'
-                        : (token0 &&
-                            coinInfo?.finalAllocation?.mySwappedAmount0 &&
-                            CurrencyAmount.fromRawAmount(
-                              token0,
-                              coinInfo?.finalAllocation?.mySwappedAmount0?.toString()
-                            ).toSignificant()) ||
-                          '0'}{' '}
-                      {token0?.symbol} /{' '}
-                      {claimableToken0Amount && token0 && claimableToken0Amount.gt('0')
-                        ? CurrencyAmount.fromAmount(
-                            token0,
-                            new BigNumber(claimableToken0Amount.toString())
-                              .div(new BigNumber('10').pow(token0.decimals))
-                              .toString()
-                          )?.toSignificant()
-                        : '0'}{' '}
-                      {token0?.symbol}
-                    </BoldTextStyle>
-                    {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
-                      <CountdownBtnStyle style={{ width: 150 }}>
-                        Lock countdown
-                        <Typography>
-                          {formattedRes.days}d {formattedRes.hours}h
-                        </Typography>
-                      </CountdownBtnStyle>
-                    ) : (
-                      <CountdownBtnStyle
-                        style={{ width: 150 }}
-                        disabled={!canClaimToken0}
-                        onClick={() => claimToken0()}
-                      >
-                        {coinInfo && coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')
-                          ? 'Claimed'
-                          : 'Claim'}
-                      </CountdownBtnStyle>
-                    )}
-                  </Stack>
-                </Stack>
-                <Stack spacing={{ xs: 8, md: 16 }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 6,
-                      alignItems: 'center'
-                    }}
-                  >
-                    <WonderSvg />
-                    <CardContentTitleStyle>Total Amount Staked / Remaining Balance</CardContentTitleStyle>
-                  </Box>
+              <Stack spacing={16}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <img
+                    src="https://assets.coingecko.com/coins/images/13860/standard/1_KtgpRIJzuwfHe0Rl0avP_g.jpeg?1696513606"
+                    width={17}
+                    height={17}
+                    style={{ borderRadius: '50%' }}
+                  />
+                  <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
+                </Box>
+                <CardContentBoldTextStyle>
+                  {/* {token1TotalAmount?.toSignificant() || '0'} {token1?.symbol} */}
+                </CardContentBoldTextStyle>
+              </Stack>
 
-                  <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                    <BoldTextStyle style={{ fontSize: 20 }}>
-                      {coinInfo?.myToken1Amount && token1 && coinInfo.myToken1Amount.eq('0')
-                        ? '0'
-                        : (token1 &&
-                            coinInfo?.myToken1Amount &&
-                            CurrencyAmount.fromRawAmount(
-                              token1,
-                              coinInfo?.myToken1Amount.toString()
-                            ).toSignificant()) ||
-                          '0'}{' '}
-                      {token1 && token1.symbol} /{' '}
-                      {coinInfo?.finalAllocation?.myUnSwappedAmount1 && token1 && coinInfo.myToken1Claimed
-                        ? '0'
-                        : (token1 &&
-                            coinInfo?.finalAllocation?.myUnSwappedAmount1 &&
-                            CurrencyAmount.fromRawAmount(
-                              token1,
-                              coinInfo.finalAllocation?.myUnSwappedAmount1.toString()
-                            ).toSignificant()) ||
-                          '0'}{' '}
-                      {token1 && token1.symbol}
-                    </BoldTextStyle>
+              <Stack spacing={16}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <img src={TokenIcon} width={17} height={17} style={{ borderRadius: '50%' }} />
+                  <CardContentTitleStyle>Token Amount</CardContentTitleStyle>
+                </Box>
+                <CardContentBoldTextStyle>null</CardContentBoldTextStyle>
+              </Stack>
 
-                    <StakeButton
-                      style={{ width: 150 }}
-                      disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
-                      onClick={() => claimToken1()}
-                    >
-                      {coinInfo?.myToken1Claimed ? 'Claimed' : 'Claim'}
-                    </StakeButton>
-                  </Stack>
-                  {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {/* {account && chainId !== ChainId.MAINNET && (
-                    <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
-                  )} */}
-                  {account && chainId !== ChainId.SEPOLIA && (
-                    <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
-                  )}
-                </Stack>
+              <Stack spacing={16}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <UserSvg />
+                  <CardContentTitleStyle>Total Participants</CardContentTitleStyle>
+                </Box>
+                <CardContentBoldTextStyle>{coinInfo?.totalParticipants?.toString()}</CardContentBoldTextStyle>
               </Stack>
             </Stack>
           </Box>
-        )}
+
+          <Stack
+            spacing={{ xs: 30, md: 40 }}
+            sx={{
+              width: '100%',
+              padding: { xs: '24px', md: '40px 30px' }
+            }}
+          >
+            <Stack spacing={{ xs: 20, md: 30 }}>
+              <Stack spacing={{ xs: 8, md: 16 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <CheckSvg />
+                  <CardContentTitleStyle>Your Final Allocation/Total Supply</CardContentTitleStyle>
+                </Box>
+                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                  <BoldTextStyle style={{ fontSize: 20 }}>
+                    {coinInfo?.finalAllocation?.mySwappedAmount0 && coinInfo?.finalAllocation?.mySwappedAmount0.eq(0)
+                      ? '0'
+                      : (token0 &&
+                          coinInfo?.finalAllocation?.mySwappedAmount0 &&
+                          CurrencyAmount.fromRawAmount(
+                            token0,
+                            coinInfo?.finalAllocation?.mySwappedAmount0?.toString()
+                          ).toSignificant()) ||
+                        '0'}{' '}
+                    {token0?.symbol} /{' '}
+                    {claimableToken0Amount && token0 && claimableToken0Amount.gt('0')
+                      ? CurrencyAmount.fromAmount(
+                          token0,
+                          new BigNumber(claimableToken0Amount.toString())
+                            .div(new BigNumber('10').pow(token0.decimals))
+                            .toString()
+                        )?.toSignificant()
+                      : '0'}{' '}
+                    {token0?.symbol}
+                  </BoldTextStyle>
+                  {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
+                    <CountdownBtnStyle style={{ width: 150 }}>
+                      Lock countdown
+                      <Typography>
+                        {formattedRes.days}d {formattedRes.hours}h
+                      </Typography>
+                    </CountdownBtnStyle>
+                  ) : (
+                    <CountdownBtnStyle style={{ width: 150 }} disabled={!canClaimToken0} onClick={() => claimToken0()}>
+                      {coinInfo && coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')
+                        ? 'Claimed'
+                        : 'Claim'}
+                    </CountdownBtnStyle>
+                  )}
+                </Stack>
+              </Stack>
+              <Stack spacing={{ xs: 8, md: 16 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 6,
+                    alignItems: 'center'
+                  }}
+                >
+                  <WonderSvg />
+                  <CardContentTitleStyle>Total Amount Staked / Remaining Balance</CardContentTitleStyle>
+                </Box>
+
+                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                  <BoldTextStyle style={{ fontSize: 20 }}>null</BoldTextStyle>
+                  <StakeButton
+                    style={{ width: 150 }}
+                    disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
+                    onClick={() => claimToken1()}
+                  >
+                    {coinInfo?.myToken1Claimed ? 'Claimed' : 'Claim'}
+                  </StakeButton>
+                </Stack>
+                {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
+                {/* {account && chainId !== ChainId.MAINNET && (
+                    <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
+                  )} */}
+                {account && chainId !== ChainId.SEPOLIA && (
+                  <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
+                )}
+              </Stack>
+            </Stack>
+          </Stack>
+        </Box>
+      )}
     </Stack>
   )
 }

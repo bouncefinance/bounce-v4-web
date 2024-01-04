@@ -1,10 +1,12 @@
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { Contract } from '@ethersproject/contracts'
-import { Currency } from 'constants/token/currency'
-import { CurrencyAmount } from 'constants/token/fractions/currencyAmount'
 import { useMemo } from 'react'
 import { ChainId } from 'constants/chain'
-import { CoinResultType, FinalAllocationType, PoolInfoType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import {
+  FinalAllocationType,
+  MultiTokenPoolInfoType,
+  MultiTokenResultType
+} from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 
 export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
   const chainId = ChainId.SEPOLIA
@@ -18,24 +20,23 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId], undefined, chainId)
   const creatorClaimed = useSingleCallResult(contract, 'creatorClaimed', [poolId], undefined, chainId)
 
-  const coinInfo = useMemo<CoinResultType | undefined>(() => {
-    const result: CoinResultType = {}
+  const coinInfo = useMemo<MultiTokenResultType | undefined>(() => {
+    const result: MultiTokenResultType = {}
     if (poolInfo.result) {
-      const _poolInfo: PoolInfoType = {
+      const _poolInfo: MultiTokenPoolInfoType = {
         amountTotal0: poolInfo.result.amountTotal0,
-        amountTotal1: poolInfo.result.amountTotal1,
         closeAt: poolInfo.result.closeAt,
         creator: poolInfo.result.creator,
         openAt: poolInfo.result.openAt,
         releaseAt: poolInfo.result.releaseAt,
         releaseDuration: poolInfo.result.releaseDuration,
         token0: poolInfo.result.token0,
-        token1: poolInfo.result.token1
+        quoteAmountTotal1: poolInfo.result.quoteAmountTotal1
       }
       result.poolInfo = _poolInfo
     }
     if (totalStake.result) {
-      result.token1Amount = totalStake.result[0]
+      result.token1StakedAmount = totalStake.result[0]
     }
     if (totalParticipants.result) {
       result.totalParticipants = totalParticipants.result[0]
@@ -70,10 +71,4 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     totalStake.result
   ])
   return coinInfo
-}
-export const useTokenInfo = () => {
-  const token0 = new Currency(ChainId.MAINNET, '0xC881255e4D639B42E326158c7b8ccb7F33459261', 18, 'AMMX', 'AMMX')
-  const token1 = new Currency(ChainId.MAINNET, '0x1981E32C2154936741aB6541a737b87C68F13cE1', 18, 'DAII', 'DAII')
-  const token0Amount = CurrencyAmount.fromAmount(token0, '472500000000000000000000000')
-  return { token0Amount, token1 }
 }

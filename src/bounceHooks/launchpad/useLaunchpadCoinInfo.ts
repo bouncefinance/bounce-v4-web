@@ -16,6 +16,16 @@ export type PoolInfoType = {
   token0: string
   token1: string
 }
+export type MultiTokenPoolInfoType = {
+  amountTotal0: BigNumber
+  closeAt: number
+  creator: string
+  openAt: number
+  releaseAt: number
+  releaseDuration: number
+  quoteAmountTotal1: BigNumber
+  token0: string
+}
 export type FinalAllocationType = {
   mySwappedAmount0: BigNumber
   myUnSwappedAmount1: BigNumber
@@ -28,6 +38,16 @@ export type CoinResultType = {
   swappedtoken0?: BigNumber
   myToken1Claimed?: boolean
   creatorClaimed?: boolean
+  finalAllocation?: FinalAllocationType
+  claimedToken0?: BigNumber
+}
+export type MultiTokenResultType = {
+  poolInfo?: MultiTokenPoolInfoType
+  totalParticipants?: BigNumber
+  swappedtoken0?: BigNumber
+  myToken1Claimed?: boolean
+  creatorClaimed?: boolean
+  token1StakedAmount?: BigNumber[]
   finalAllocation?: FinalAllocationType
   claimedToken0?: BigNumber
 }

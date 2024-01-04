@@ -20,7 +20,11 @@ export function useApproveCallback(
   amountToApprove?: CurrencyAmount,
   spender?: string,
   useExact?: boolean
-): [ApprovalState, () => Promise<{ transactionReceipt: Promise<TransactionReceipt> }>] {
+): [
+  ApprovalState,
+  () => Promise<{ transactionReceipt: Promise<TransactionReceipt> }>,
+  () => Promise<TransactionResponse>
+] {
   const { account } = useActiveWeb3React()
   const token = amountToApprove instanceof CurrencyAmount ? amountToApprove.currency : undefined
   const currentAllowance = useTokenAllowance(token, account ?? undefined, spender)
@@ -89,5 +93,50 @@ export function useApproveCallback(
       })
   }, [approvalState, token, tokenContract, amountToApprove, spender, useExact, addTransaction])
 
-  return [approvalState, approve]
+  const approveWrap = useCallback(async () => {
+    if (approvalState !== ApprovalState.NOT_APPROVED) {
+      console.error('approve was called unnecessarily')
+      return Promise.reject('approve was called unnecessarily')
+    }
+    if (!token) {
+      console.error('no token')
+      return Promise.reject('no token')
+    }
+
+    if (!tokenContract) {
+      console.error('tokenContract is null')
+      return Promise.reject('tokenContract is null')
+    }
+
+    if (!amountToApprove) {
+      console.error('missing amount to approve')
+      return Promise.reject('missing amount to approve')
+    }
+
+    if (!spender) {
+      console.error('no spender')
+      return Promise.reject('no spender')
+    }
+
+    const estimatedGas = useExact
+      ? await tokenContract.estimateGas.approve(spender, amountToApprove.raw.toString())
+      : await tokenContract.estimateGas.approve(spender, MaxUint256)
+
+    return tokenContract
+      .approve(spender, useExact ? amountToApprove.raw.toString() : MaxUint256, {
+        gasLimit: calculateGasMargin(estimatedGas)
+      })
+      .then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: 'Approve ' + amountToApprove.currency.symbol,
+          approval: { tokenAddress: token.address, spender: spender }
+        })
+        return response
+      })
+      .catch((error: Error) => {
+        console.debug('Failed to approve token', error)
+        throw error
+      })
+  }, [approvalState, token, tokenContract, amountToApprove, spender, useExact, addTransaction])
+  return [approvalState, approve, approveWrap]
 }
