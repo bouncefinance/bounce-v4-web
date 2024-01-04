@@ -120,6 +120,7 @@ import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
 import NftLottery from './nftLottery'
 import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
 import MultiToken from 'pages/multiToken'
+import CreateMultiTokenPool from 'pages/multiToken/createPool'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -227,6 +228,7 @@ export default function App() {
                   <Route path={routes.thirdPart.AmmxAuctionTest} element={<AmmxStakeAuctionPoolTest />} />
                   <Route path={routes.thirdPart.AmmxDaii} element={<AmmxStakeDaiiPool />} />
                   <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomSelection />} />
+                  <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
 
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}
