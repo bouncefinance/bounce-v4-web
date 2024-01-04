@@ -85,7 +85,7 @@ export function UpcomingBtn({ poolInfo }: { poolInfo: RandomSelectionNFTProps })
 const PurchaseBtn = ({ goCheck }: { goCheck: () => void }) => (
   <>
     <BaseBtnStyle onClick={goCheck}>Purchase</BaseBtnStyle>
-    <TipTitle mt={24}>If you failed, you can&apos;t get fund back later</TipTitle>
+    <TipTitle mt={24}>If you failed, you can&apos;t get fund back</TipTitle>
   </>
 )
 
@@ -94,7 +94,7 @@ export const DrawedBtn = () => (
   <>
     <BaseBtnStyle className="dis">You are in the draw...</BaseBtnStyle>
     <TipTitle mt={24} align="center">
-      If you failed, you can&apos;t get fund back later
+      If you failed, you can&apos;t get fund back
     </TipTitle>
   </>
 )

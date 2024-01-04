@@ -104,12 +104,7 @@ export const tokenInfoList = [
   }
 ]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
-  console.log(
-    '🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:',
-    poolInfo.burnedTokens[4].toString(),
-    poolInfo.burnedTokens[0].toString(),
-    poolInfo.burnedTokens[1].toString()
-  )
+  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
 
   const datas = [
@@ -123,7 +118,7 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
     ...item,
     value: Number(CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact())
   }))
-  console.log('🚀 ~ file: chartInfo.tsx:126 ~ wrapperData ~ wrapperData:', wrapperData)
+
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item'
@@ -136,7 +131,7 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
     },
     series: [
       {
-        name: 'Invest Tokens/Lottery',
+        name: 'Token:',
         type: 'pie',
         radius: ['50%', '95%'],
         avoidLabelOverlap: false,
