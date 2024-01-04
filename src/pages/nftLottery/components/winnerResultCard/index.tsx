@@ -5,7 +5,6 @@ import NotWinnerCard from './notWinnerCard'
 import Bg1Svg from 'assets/imgs/nftLottery/winner-bg1.svg'
 import Bg1SvgMobile from 'assets/imgs/nftLottery/winner-bg1-mobile.svg'
 import Bg2Svg from 'assets/imgs/nftLottery/winner-bg2.png'
-import Bg2SvgMobile from 'assets/imgs/nftLottery/winner-bg2-mobile.png'
 import { ReactComponent as ShowSvg } from 'assets/imgs/nftLottery/shadow.svg'
 import { ReactComponent as ShowMobileSvg } from 'assets/imgs/nftLottery/shadow-mobile.svg'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -46,7 +45,7 @@ const WinnerContainer = styled(Box)(
              mix-blend-mode: darken;
             ${theme.breakpoints.down('sm')}{
               width:360px;
-               background: url(${Bg2SvgMobile}) lightgray -7.548px 0px / 103.544% 100% no-repeat;
+               background: url(${Bg2Svg}) transparent -20px 0px / 103.544% 100% no-repeat;
                mix-blend-mode: darken;
               position: relative;
               top: 94px;
