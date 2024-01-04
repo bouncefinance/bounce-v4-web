@@ -27,7 +27,7 @@ const BeforeOpenLottery = ({ allStatus, poolInfo }: IProps) => {
     return !Number(poolInfo.curPlayer) && allStatus.poolStatus === RandomPoolStatus.Waiting
   }, [allStatus.poolStatus, poolInfo.curPlayer])
   return (
-    <Box mt={isSm ? 48 : 120} sx={{ mb: { xs: 48, md: 120 } }}>
+    <Box paddingBottom={isSm ? 48 : 120} paddingTop={isSm ? 48 : 120}>
       <WithAnimation>
         <PoolHeadTitle allStatus={allStatus} isZoom={isZoom} allNotInvolved={allNotInvolved} />
       </WithAnimation>
