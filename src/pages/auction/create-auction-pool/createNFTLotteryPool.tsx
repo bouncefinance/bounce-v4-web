@@ -142,9 +142,9 @@ const useToCreate = (body: IParam, creator: string) => {
     return [
       CurrencyAmount.fromAmount(token1Arr[0], body.amount1PerWallets[0]),
       CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[1]),
-      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[2]),
-      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[3]),
-      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[4])
+      CurrencyAmount.fromAmount(token1Arr[2], body.amount1PerWallets[2]),
+      CurrencyAmount.fromAmount(token1Arr[3], body.amount1PerWallets[3]),
+      CurrencyAmount.fromAmount(token1Arr[4], body.amount1PerWallets[4])
     ]
   }, [body.amount1PerWallets, body.amountTotal0, token1Arr])
 

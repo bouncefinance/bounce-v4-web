@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 import useRandomSelectionNFTPoolInfo from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 
 const NftLottery = () => {
-  const { data: poolInfo } = useRandomSelectionNFTPoolInfo(21371)
+  const { data: poolInfo } = useRandomSelectionNFTPoolInfo()
   useEffect(() => {
     document.getElementById('body')?.setAttribute('style', 'padding-top: 0;')
     return () => {

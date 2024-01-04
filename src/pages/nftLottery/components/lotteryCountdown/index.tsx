@@ -4,10 +4,11 @@ import { useCountDown } from 'ahooks'
 // import AnimatedNumber from './animatedNumber'
 import P6Img from 'assets/imgs/nftLottery/p6.png'
 import P7Img from 'assets/imgs/nftLottery/p7.png'
-import { RandomPoolStatus } from 'api/pool/type'
+import { RandomPoolStatus, RandomSelectionNFTProps } from 'api/pool/type'
 import { ReactComponent as Tick } from 'assets/imgs/nftLottery/tick.svg'
 import dayjs from 'dayjs'
 import Image from 'components/Image'
+import { useEffect, useState } from 'react'
 
 function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeList: number[]; isSm: boolean }) {
   console.log('🚀 ~ file: index.tsx:13 ~ StepperBox ~ isSm:', isSm)
@@ -129,20 +130,37 @@ function StepperBox({ activeStep, timeList, isSm }: { activeStep: number; timeLi
 
 export default function Countdown({
   status,
-  startTime,
-  timeList
+  timeList,
+  poolInfo
 }: {
   status: RandomPoolStatus
-  startTime?: number
   timeList?: number[]
+  poolInfo: RandomSelectionNFTProps
 }) {
   const now = () => new Date().getTime()
+  const [startTime, setStartTime] = useState<number>(0)
+  const [refresh, setRefresh] = useState(false)
   const isSm = useBreakpoint('sm')
   if (!timeList) {
     timeList = [1703127600, 1703127600, 1703127600]
   }
+  useEffect(() => {
+    if (now() < poolInfo.openAt * 1000) {
+      setStartTime(poolInfo.openAt)
+    }
+    if (now() > poolInfo.openAt * 1000 && now() < poolInfo.closeAt * 1000) {
+      setStartTime(poolInfo.closeAt)
+    }
+    if (now() > poolInfo.claimAt * 1000) {
+      setStartTime(poolInfo.claimAt)
+    }
+  }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt, refresh])
+
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
-    targetDate: startTime ? startTime * 1000 : 0
+    targetDate: startTime ? startTime * 1000 : 0,
+    onEnd() {
+      setRefresh(!refresh)
+    }
   })
   const handleActiveStep = (timeList: number[]) => {
     if (now() < timeList[0] * 1000 || (now() > timeList[0] * 1000 && now() < timeList[1] * 1000)) {
@@ -156,6 +174,7 @@ export default function Countdown({
     }
     return 0
   }
+
   return (
     <Box display={'flex'} flexDirection={'column'} alignItems={'center'} padding={isSm ? '0 16px' : '0'}>
       <Typography
