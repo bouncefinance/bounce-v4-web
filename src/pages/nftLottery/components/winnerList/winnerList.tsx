@@ -27,8 +27,12 @@ const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+  margin-bottom: 120px;
+  margin-top: 80px;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding: 0 16px;
+    margin-bottom: 48px;
+    margin-top: 24px;
   }
 `
 const Body = styled(Box)`
