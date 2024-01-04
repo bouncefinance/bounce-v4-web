@@ -1482,10 +1482,10 @@ const PrivateRandomGodidData = {
 const AiMeetsBtcRandomData: IPrivatePadProp = {
   keyId: 22,
   liveTimeStamp: {
-    start: 1705118400000,
-    end: 0
+    start: 1704513600000,
+    end: 1704772800000
   },
-  hideUpcomingCountdown: true,
+  // hideUpcomingCountdown: true,
   poolTypeName: 'Random Selection',
   img: AiMeetsBtcImg,
   avatar: AiMeetsBtsAvatar,
