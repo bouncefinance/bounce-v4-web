@@ -34,6 +34,7 @@ import ToolboxDeployErc20VestingFactory from '../constants/abis/ToolboxDeployErc
 import LAUNCHPAD_COIN_ABI from '../constants/abis/launchpad-coin.json'
 import STAKE_TOKEN_ABI from '../constants/abis/stake-token.json'
 import STAKE_TOKEN_WITH_TIME_ABI from '../constants/abis/stake-token-with-time-weight.json'
+import RANDOM_SELECTION_MULTI_TOKEN_ABI from '../constants/abis/randomSelectionMultiToken.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -52,7 +53,8 @@ import {
   STAKE_TOKEN_CONTRACT_ADDRESSES,
   STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES,
-  RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES
+  RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES,
+  RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -333,4 +335,11 @@ export function useRandomSelectionNFTBurningContract(address?: string, queryChai
   const curAddress =
     address === '' ? undefined : address || (cur ? RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, RANDOM_SELECTION_NFT_BURNING_ABI, true, queryChainId)
+}
+export function useRandomSelectionMultiTokenContract(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress =
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, RANDOM_SELECTION_MULTI_TOKEN_ABI, true, queryChainId)
 }
