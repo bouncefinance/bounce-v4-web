@@ -11,11 +11,9 @@ import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
-import { useApproveCallback } from 'hooks/useApproveCallback'
-import { ApprovalState } from 'hooks/useTokenTimelock'
 import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
-import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
+import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
@@ -35,7 +33,6 @@ import {
   StepLabelStyle,
   StepperStyle
 } from 'pages/launchpadCoin/Step'
-import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from '../../constants'
 import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
 import StakeAuctionInputDialog from './stakeModal'
 
@@ -149,19 +146,9 @@ function Step1({
   const _chainId = useMemo(() => {
     return ChainId.SEPOLIA
   }, [])
-  const [amount, setAmount] = useState('')
   const [openDialog, setOpenDialog] = useState(true)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
-
-  const token1CurrencyAmount = useMemo(() => {
-    if (!token1Currency) return undefined
-    return CurrencyAmount.fromAmount(token1Currency, amount)
-  }, [amount, token1Currency])
-  const [approvalState, approve] = useApproveCallback(
-    token1CurrencyAmount,
-    RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[_chainId]
-  )
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -193,27 +180,25 @@ function Step1({
   }, [coinInfo, days, hours, minutes, seconds])
 
   const showLoginModal = useShowLoginModal()
-  const handleSetAmount = (v: string) => {
-    setAmount(v)
-  }
 
   const handleClickStake = useCallback(() => {
     setOpenDialog(true)
   }, [])
 
   const _switchNetwork = () => {
-    switchNetwork(ChainId.MAINNET)
+    // switchNetwork(ChainId.MAINNET)
+    switchNetwork(ChainId.SEPOLIA)
   }
   const actionBtn = useMemo(() => {
     if (!account) {
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
     }
-    if (chainId !== ChainId.MAINNET) {
+    // if (chainId !== ChainId.MAINNET) {
+    //   return <StakeButton onClick={() => _switchNetwork()}>Switch Network</StakeButton>
+    // }
+    if (chainId !== ChainId.SEPOLIA) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch Network</StakeButton>
     }
-    // if (isBalanceInsufficient) {
-    //   return <StakeButton disabled>Insufficient Balance</StakeButton>
-    // }
     if (status === TStep.COMING_SOON) {
       return (
         <StakeButton disabled>
@@ -236,90 +221,8 @@ function Step1({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, chainId, handleClickStake, showLoginModal, status])
   const handleClose = () => {
-    setAmount('')
     setOpenDialog(false)
   }
-  const toApprove = useCallback(async () => {
-    showRequestApprovalDialog()
-    try {
-      const { transactionReceipt } = await approve()
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
-        transactionReceipt.then(curReceipt => {
-          resolve(curReceipt)
-        })
-      })
-      await ret
-      hideDialogConfirmation()
-    } catch (error) {
-      const err: any = error
-      hideDialogConfirmation()
-      show(DialogTips, {
-        iconType: 'error',
-        againBtn: 'Try Again',
-        cancelBtn: 'Cancel',
-        title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: toApprove,
-        PaperProps: {
-          sx: DialogTipsWhiteTheme
-        }
-      })
-    }
-  }, [approve])
-  const toCommit = useCallback(async () => {
-    if (!token1CurrencyAmount || !contract) return
-    showWaitingTxDialog(() => {
-      hideDialogConfirmation()
-    })
-    try {
-      const params = [poolId, token1CurrencyAmount.raw.toString()]
-      const res = await contract.commit(...params)
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
-        res.wait().then((curReceipt: any) => {
-          resolve(curReceipt)
-        })
-      })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-          show(DialogTips, {
-            iconType: 'success',
-            cancelBtn: 'Close',
-            title: 'Success! ',
-            content: `You have successfully staked ${token1CurrencyAmount.toSignificant()} ${token1Currency?.symbol}`,
-            PaperProps: {
-              sx: DialogTipsWhiteTheme
-            },
-            onCancel: () => {
-              handleClose()
-            }
-          })
-        })
-        .catch()
-    } catch (error) {
-      const err: any = error
-      hideDialogConfirmation()
-      show(DialogTips, {
-        iconType: 'error',
-        againBtn: 'Try Again',
-        cancelBtn: 'Cancel',
-        title: 'Oops..',
-        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: approvalState !== ApprovalState.APPROVED ? toApprove : toCommit,
-        PaperProps: {
-          sx: DialogTipsWhiteTheme
-        }
-      })
-    }
-  }, [approvalState, contract, poolId, toApprove, token1Currency?.symbol, token1CurrencyAmount])
 
   return (
     <>
@@ -491,15 +394,12 @@ function Step1({
         </Box>
       </Stack>
       <StakeAuctionInputDialog
-        token1={token1CurrencyAmount}
         id={'7'}
         open={openDialog}
+        contract={contract}
+        poolId={poolId}
+        setOpenDialog={() => setOpenDialog(false)}
         onClose={() => handleClose()}
-        amount={amount}
-        handleSetAmount={handleSetAmount}
-        confirm={toCommit}
-        toApprove={toApprove}
-        approvalState={approvalState}
         showLoginModal={showLoginModal}
         switchNetwork={_switchNetwork}
       />
@@ -703,7 +603,8 @@ function Step2({
   const switchNetwork = useSwitchNetwork()
   const showLoginModal = useShowLoginModal()
   const _switchNetwork = () => {
-    switchNetwork(ChainId.MAINNET)
+    // switchNetwork(ChainId.MAINNET)
+    switchNetwork(ChainId.SEPOLIA)
   }
 
   return (
@@ -916,7 +817,10 @@ function Step2({
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {account && chainId !== ChainId.MAINNET && (
+                  {/* {account && chainId !== ChainId.MAINNET && (
+                    <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
+                  )} */}
+                  {account && chainId !== ChainId.SEPOLIA && (
                     <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
                   )}
                 </Stack>

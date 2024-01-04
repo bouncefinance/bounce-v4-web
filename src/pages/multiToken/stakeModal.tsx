@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Dialog as MuiDialog, DialogContent, Stack, Typography, DialogTitle, IconButton, MenuItem } from '@mui/material'
-import { NiceModalHocProps } from '@ebay/nice-modal-react'
+import { NiceModalHocProps, show } from '@ebay/nice-modal-react'
 import { ReactComponent as CloseSVG } from '../../bounceComponents/common/DialogConfirmation/assets/close.svg'
 import StakeInput from 'pages/launchpadCoin/components/stakeInput'
-import { ApprovalState } from 'hooks/useApproveCallback'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useActiveWeb3React } from 'hooks'
 import { ChainId } from 'constants/chain'
 import { BalanceTitle, CancelBtnStyle, ConfirmBtnStyle, GrayTitle } from '../../bounceComponents/common/CoinInputDialog'
@@ -17,40 +17,32 @@ import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
 import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
 import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import { useCurrencyBalance, useToken } from 'state/wallet/hooks'
+import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from '../../constants'
+import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 import { CurrencyAmount } from 'constants/token'
+import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
+import { Contract } from 'ethers'
+import DialogTips from 'bounceComponents/common/DialogTips'
+import { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
 
 export interface DialogProps {
-  amount: string
-  handleSetAmount: (v: string) => void
   onClose: () => void
   open: boolean
-  confirm: () => void
-  token1: CurrencyAmount | undefined
-  toApprove: () => void
-  approvalState: ApprovalState
+  setOpenDialog: () => void
   showLoginModal: () => void
   switchNetwork: () => void
+  contract: Contract | null
+  poolId: number
 }
 
 const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
-  const {
-    amount,
-    handleSetAmount,
-    onClose,
-    open,
-    confirm,
-    token1,
-    approvalState,
-    showLoginModal,
-    toApprove,
-    switchNetwork,
-    ...rest
-  } = props
+  const { onClose, open, showLoginModal, switchNetwork, poolId, contract, ...rest } = props
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     return ChainId.SEPOLIA
   }, [])
   const [selectedIdx, setSelectedIdx] = useState<number>(0)
+  const [amount, setAmount] = useState('')
   const isDownSm = useBreakpoint('sm')
   const dataList = [
     {
@@ -89,13 +81,74 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
       address: '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
     }
   ]
-  const selectedToken = useToken(dataList[selectedIdx].address || '', _chainId) || undefined
-  const userTokenBalance = useCurrencyBalance(account, selectedToken, _chainId)
 
-  const handleClose = () => {
+  const selectedToken = useToken(dataList[selectedIdx].address || '', _chainId) || undefined
+  const token1CurrencyAmount = useMemo(() => {
+    if (!selectedToken) return undefined
+    return CurrencyAmount.fromAmount(selectedToken, amount)
+  }, [amount, selectedToken])
+  const userTokenBalance = useCurrencyBalance(account, selectedToken, _chainId)
+  const [approvalState, approveCallback] = useApproveCallback(
+    token1CurrencyAmount,
+    RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[_chainId]
+  )
+  const handleClose = useCallback(() => {
     onClose()
-    handleSetAmount('')
-  }
+    setAmount('')
+  }, [onClose])
+  const approveFn = useTransactionModalWrapper(approveCallback as (...arg: any) => Promise<any>)
+
+  const toCommit = useCallback(async () => {
+    if (!token1CurrencyAmount || !contract) return
+    showWaitingTxDialog(() => {
+      hideDialogConfirmation()
+    })
+    try {
+      const params = [poolId, token1CurrencyAmount.raw.toString()]
+      const res = await contract.commit(...params)
+      const ret = new Promise((resolve, rpt) => {
+        showWaitingTxDialog(() => {
+          hideDialogConfirmation()
+          rpt()
+        })
+        res.wait().then((curReceipt: any) => {
+          resolve(curReceipt)
+        })
+      })
+      ret
+        .then(() => {
+          hideDialogConfirmation()
+          show(DialogTips, {
+            iconType: 'success',
+            cancelBtn: 'Close',
+            title: 'Success! ',
+            content: `You have successfully staked ${token1CurrencyAmount.toSignificant()} ${selectedToken?.symbol}`,
+            PaperProps: {
+              sx: DialogTipsWhiteTheme
+            },
+            onCancel: () => {
+              handleClose()
+            }
+          })
+        })
+        .catch()
+    } catch (error) {
+      const err: any = error
+      hideDialogConfirmation()
+      show(DialogTips, {
+        iconType: 'error',
+        againBtn: 'Try Again',
+        cancelBtn: 'Cancel',
+        title: 'Oops..',
+        content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+        onAgain: approvalState !== ApprovalState.APPROVED ? approveFn : toCommit,
+        PaperProps: {
+          sx: DialogTipsWhiteTheme
+        }
+      })
+    }
+  }, [approvalState, approveFn, contract, handleClose, poolId, selectedToken?.symbol, token1CurrencyAmount])
+
   const confirmBtn = useMemo(() => {
     if (!account) {
       return (
@@ -104,20 +157,20 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
         </ConfirmBtnStyle>
       )
     }
-    if (chainId !== ChainId.MAINNET) {
-      return (
-        <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
-          Switch network
-        </ConfirmBtnStyle>
-      )
-    }
-    // if (chainId !== ChainId.SEPOLIA) {
+    // if (chainId !== ChainId.MAINNET) {
     //   return (
     //     <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
     //       Switch network
     //     </ConfirmBtnStyle>
     //   )
     // }
+    if (chainId !== ChainId.SEPOLIA) {
+      return (
+        <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
+          Switch network
+        </ConfirmBtnStyle>
+      )
+    }
     if (!amount || !Number(amount)) {
       return (
         <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
@@ -125,7 +178,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
         </ConfirmBtnStyle>
       )
     }
-    if (token1 && userTokenBalance && token1.greaterThan(userTokenBalance)) {
+    if (token1CurrencyAmount && userTokenBalance && token1CurrencyAmount.greaterThan(userTokenBalance)) {
       return (
         <ConfirmBtnStyle disabled sx={{ flex: 2 }}>
           Insufficient Balance
@@ -134,14 +187,14 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
     }
     if (approvalState !== ApprovalState.APPROVED) {
       return (
-        <ConfirmBtnStyle onClick={() => toApprove()} sx={{ flex: 2 }}>
+        <ConfirmBtnStyle onClick={() => approveFn()} sx={{ flex: 2 }}>
           Approve
         </ConfirmBtnStyle>
       )
     }
-    if (token1 && userTokenBalance && open && !token1.greaterThan(userTokenBalance)) {
+    if (token1CurrencyAmount && userTokenBalance && open && !token1CurrencyAmount.greaterThan(userTokenBalance)) {
       return (
-        <ConfirmBtnStyle sx={{ flex: 2 }} onClick={() => confirm()}>
+        <ConfirmBtnStyle sx={{ flex: 2 }} onClick={() => toCommit()}>
           Confirm
         </ConfirmBtnStyle>
       )
@@ -155,13 +208,13 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
     account,
     amount,
     approvalState,
+    approveFn,
     chainId,
-    confirm,
     open,
     showLoginModal,
     switchNetwork,
-    toApprove,
-    token1,
+    toCommit,
+    token1CurrencyAmount,
     userTokenBalance
   ])
   return (
@@ -250,7 +303,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
             <StakeInput
               value={amount}
               onChange={v => {
-                handleSetAmount(v)
+                setAmount(v)
               }}
               token1Balance={userTokenBalance}
             />

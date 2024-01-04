@@ -7,7 +7,8 @@ import { ChainId } from 'constants/chain'
 import { CoinResultType, FinalAllocationType, PoolInfoType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 
 export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const chainId = ChainId.MAINNET
+  const chainId = ChainId.SEPOLIA
+  // const chainId = ChainId.MAINNET
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
   const totalStake = useSingleCallResult(contract, 'amountCommitted1', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', [poolId], undefined, chainId)
