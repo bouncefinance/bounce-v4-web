@@ -71,7 +71,8 @@ const ChartLayout = () => {
         height: '100%',
         borderRadius: 16,
         background: 'linear-gradient(152deg, #26273B 10.68%, #363853 104.23%)',
-        paddingBottom: 48
+        paddingBottom: 48,
+        margin: '0 auto'
       }}
     >
       <Box sx={{ width: '100%', height: 82, borderBottom: '2px solid #4F4F4F' }}>
@@ -84,7 +85,7 @@ const ChartLayout = () => {
           <DonutChart option={option} size={{ width: 252, height: 252 }} />
         </Box>
 
-        <Stack flexDirection={'row'} flexWrap={'wrap'}>
+        <Stack flexDirection={'row'} flexWrap={'wrap'} sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr1 1fr' }}>
           {token1Info.map(i => (
             <Stack key={i.name} flexDirection={'row'} alignItems={'center'}>
               <Box sx={{ width: 12, height: 12, background: i.color, borderRadius: 12 }} />
@@ -103,10 +104,10 @@ const ChartLayout = () => {
 const Charts = () => {
   return (
     <Stack flexDirection={'row'} gap={20}>
-      <Box>
+      <Box sx={{ flex: 1 }}>
         <ChartLayout />
       </Box>
-      <Box>
+      <Box sx={{ flex: 0.678 }}>
         <ChartLayout />
       </Box>
     </Stack>

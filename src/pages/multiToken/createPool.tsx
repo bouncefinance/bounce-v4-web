@@ -1,6 +1,7 @@
 import { Box, Button, OutlinedInput, Stack } from '@mui/material'
 
 import FormItem from 'bounceComponents/common/FormItem'
+import { ChainId } from 'constants/chain'
 
 import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { Currency, CurrencyAmount } from 'constants/token'
@@ -11,24 +12,24 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useRandomSelectionMultiTokenContract } from 'hooks/useContract'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 import { useCallback, useMemo, useState } from 'react'
-import { useCurrencyBalance, useToken } from 'state/wallet/hooks'
-
+import { useCurrencyBalance, useToken, useTokens } from 'state/wallet/hooks'
+import _ from 'lodash'
 interface IParam {
   token0: string
   amountTotal0: string
-  quoteAmountTotal1: number
+  quoteAmountTotal1: string
   openAt: number
   closeAt: number
   releaseAt: number
   releaseDuration: number
   token1s: string[]
-  amount1s: number[]
+  amount1s: string[]
 }
 
 const initParams: IParam = {
   token0: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
   amountTotal0: '10',
-  quoteAmountTotal1: 1000,
+  quoteAmountTotal1: '1000',
   openAt: 0,
   closeAt: 0,
   releaseAt: 0,
@@ -40,7 +41,7 @@ const initParams: IParam = {
     '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7',
     '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
   ],
-  amount1s: [500, 200, 1000, 10000, 50]
+  amount1s: ['500', '200', '1000', '10000', '50']
 }
 
 const useCreatePool = () => {
@@ -49,11 +50,14 @@ const useCreatePool = () => {
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId || 5)
 
   return useCallback(
-    async ({ body }: { body: IParam }) => {
+    async (body: IParam) => {
+      console.log('contract', contract)
+
       if (!contract) {
         return
       }
-      console.log('body', Object.values(body))
+
+      console.log('body', body)
       try {
         await contract.create(Object.values(body))
         // localStorage.setItem('NFT_RANDOM_POOL_ID', JSON.stringify(id))
@@ -66,10 +70,32 @@ const useCreatePool = () => {
 }
 const useToCreate = (body: IParam) => {
   const create = useCreatePool()
+  const { chainId } = useActiveWeb3React()
+  const token0 = useToken(body.token0, chainId)
+  const token0Amount = useMemo(() => {
+    if (!token0) return undefined
+    return CurrencyAmount.fromAmount(token0, body.amountTotal0)
+  }, [token0, body.amountTotal0])
+  const quoteAmountTotal1 = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), body.quoteAmountTotal1)
+  const token1Arr = useTokens(body.token1s as string[], chainId || ChainId.SEPOLIA)
+  console.log('token0Amount', token0Amount?.raw.toString())
+
+  const token1CurrencyAmount = useMemo(() => {
+    if (!token1Arr || token1Arr.includes(undefined)) return undefined
+    return token1Arr?.map((i, d) => CurrencyAmount.fromAmount(i as Currency, body.amount1s[d])?.raw.toString())
+  }, [body.amount1s, token1Arr])
 
   return useCallback(() => {
-    create({ body: body })
-  }, [body, create])
+    if (!token1CurrencyAmount || token1CurrencyAmount.some(i => !i) || !token0Amount || !quoteAmountTotal1) return
+    const params: IParam = {
+      ...body,
+      amount1s: token1CurrencyAmount as string[],
+      amountTotal0: token0Amount.raw.toString(),
+      quoteAmountTotal1: quoteAmountTotal1.raw.toString()
+    }
+
+    create(params)
+  }, [body, create, quoteAmountTotal1, token0Amount, token1CurrencyAmount])
 }
 
 const CreateNFTLotteryPool = () => {
@@ -92,6 +118,7 @@ const CreateNFTLotteryPool = () => {
   const [approvalState, approveCallback] = useApproveCallback(token0Amount, contractAddress)
 
   const approveFn = useTransactionModalWrapper(approveCallback as (...arg: any) => Promise<any>)
+  const token1Arr = useTokens(values.token1s as string[], chainId || ChainId.SEPOLIA)
   const changeValue = (values: IParam) => {
     setValues(values)
   }
@@ -99,7 +126,7 @@ const CreateNFTLotteryPool = () => {
     create()
   }
   const btnsCallback = (newValues: IParam) => {
-    if (values !== newValues) {
+    if (!_.eq(values, newValues)) {
       return (
         <Button sx={{ flex: 1 }} onClick={() => changeValue(newValues)}>
           Save
@@ -121,7 +148,7 @@ const CreateNFTLotteryPool = () => {
       )
     }
     return (
-      <Button type="submit" sx={{ flex: 1 }}>
+      <Button type="submit" sx={{ flex: 1 }} disabled={!token1Arr}>
         Submit
       </Button>
     )
@@ -129,7 +156,7 @@ const CreateNFTLotteryPool = () => {
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
-        {({ handleSubmit, values: _values }) => {
+        {({ handleSubmit, values: _values, setFieldValue }) => {
           return (
             <Box component={'form'} onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <FormItem name={'token0'} label="token0 address">
@@ -156,10 +183,26 @@ const CreateNFTLotteryPool = () => {
               <FormItem name={'releaseDuration'} label="releaseDuration">
                 <OutlinedInput placeholder={''} type="number" />
               </FormItem>
-              <FormItem name={'token1s'} label="token1s">
+              <FormItem
+                name={'token1s'}
+                label="token1s"
+                onChange={e => {
+                  const _e = e.target as any as HTMLInputElement
+                  const v = _e.value.split(',')
+                  setFieldValue('token1s', v)
+                }}
+              >
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'amount1s'} label="amount1s">
+              <FormItem
+                name={'amount1s'}
+                label="amount1s"
+                onChange={e => {
+                  const _e = e.target as any as HTMLInputElement
+                  const v = _e.value.split(',')
+                  setFieldValue('amount1s', v)
+                }}
+              >
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <Stack flexDirection={'row'} gap={20}>
