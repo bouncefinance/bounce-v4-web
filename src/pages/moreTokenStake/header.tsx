@@ -59,7 +59,7 @@ const BlackSmallP1 = styled(Typography)`
   line-height: 150%; /* 24px */
   letter-spacing: -0.32px;
 `
-const token1Info = [
+export const token1Info = [
   { name: 'AUCTION', price: 100, weights: 2, icon: Icon1, color: '#7966E7' },
   { name: 'MUBI', price: 100, weights: 1, icon: Icon2, color: '#90BE6D' },
   { name: 'DAII', price: 100, weights: 2, icon: Icon3, color: '#3F90FF' },
@@ -120,7 +120,7 @@ const Header = () => {
   console.log('token1', token1)
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 1440, margin: '0 auto' }}>
+    <Box sx={{ width: '100%' }}>
       <TitleContainer />
       <TokenBoxList token1={token1} />
     </Box>

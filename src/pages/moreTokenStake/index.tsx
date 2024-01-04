@@ -101,11 +101,18 @@ const Page = () => {
   return (
     <>
       <ProjectHead item={AmmxDaiiData} />
-      <Box padding={{ xs: '0 16px', md: '20px 72px' }} mt={{ xs: 50, md: 80 }} style={{ background: '#f5f5f1' }}>
-        <Header />
-        <Charts />
-        <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
+      <Box sx={{ width: '100%' }} style={{ background: '#f5f5f1' }}>
+        <Box
+          padding={{ xs: '0 16px', md: '20px 72px' }}
+          sx={{ width: '100%', maxWidth: 1440, margin: '0 auto' }}
+          mt={{ xs: 50, md: 80 }}
+        >
+          <Header />
+          <Charts />
+          <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
+        </Box>
       </Box>
+
       {/* <StakeButton sx={{ margin: '20px 80px' }} onClick={() => createPool()}>
         Create Pool
       </StakeButton> */}
