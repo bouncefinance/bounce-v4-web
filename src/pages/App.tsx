@@ -119,7 +119,7 @@ import AmmxStakeDaiiPool from './stakeDaiiAMMX'
 import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
 import NftLottery from './nftLottery'
 import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
-import MoreTokenStake from 'pages/moreTokenStake'
+import MultiToken from 'pages/MultiToken'
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -260,7 +260,7 @@ export default function App() {
                   <Route path={routes.thirdPart.Did.dll} element={<DidStakeDaiiPool />} />
                   <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
                   <Route path={routes.thirdPart.Port3} element={<Port3ProjectInfo />} />
-                  <Route path={routes.thirdPart.MoreTokenStake} element={<MoreTokenStake />} />
+                  <Route path={routes.thirdPart.MultiToken} element={<MultiToken />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />
