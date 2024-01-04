@@ -9,7 +9,6 @@ import dayjs from 'dayjs'
 import { useCountDown } from 'ahooks'
 import { useActiveWeb3React } from 'hooks'
 import { useShowLoginModal } from 'state/users/hooks'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import { useApproveCallback } from 'hooks/useApproveCallback'
@@ -22,7 +21,6 @@ import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
-import StakeAuctionInputDialog from 'bounceComponents/common/StakeAuctionInputDialog'
 import {
   BoldTextStyle,
   CardContentBoldTextStyle,
@@ -37,8 +35,9 @@ import {
   StepLabelStyle,
   StepperStyle
 } from 'pages/launchpadCoin/Step'
-import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from '../../constants'
+import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from '../../constants'
 import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
+import StakeAuctionInputDialog from './stakeModal'
 
 export function Steps({
   coinInfo,
@@ -96,7 +95,8 @@ function VerticalLinearStepper({
   }, [coinInfo])
   const [activeStep, setActiveStep] = useState<TStep>(TStep.COMING_SOON)
   useEffect(() => {
-    setActiveStep(curStatus === TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
+    // must update before mainnet
+    setActiveStep(curStatus !== TStep.COMING_SOON ? TStep.SUBSCRIPTION_PERIOD : curStatus)
   }, [curStatus])
 
   const steps = [
@@ -147,10 +147,10 @@ function Step1({
   const { account, chainId } = useActiveWeb3React()
   const switchNetwork = useSwitchNetwork()
   const _chainId = useMemo(() => {
-    return ChainId.MAINNET
+    return ChainId.SEPOLIA
   }, [])
   const [amount, setAmount] = useState('')
-  const [openDialog, setOpenDialog] = useState(false)
+  const [openDialog, setOpenDialog] = useState(true)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token1Currency = useToken(coinInfo?.poolInfo?.token1 || '', _chainId) || undefined
 
@@ -160,9 +160,8 @@ function Step1({
   }, [amount, token1Currency])
   const [approvalState, approve] = useApproveCallback(
     token1CurrencyAmount,
-    STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[_chainId]
+    RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[_chainId]
   )
-  const token1Balance = useCurrencyBalance(account, token1Currency, _chainId)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -199,13 +198,9 @@ function Step1({
   }
 
   const handleClickStake = useCallback(() => {
-    if (!token1Balance) return
     setOpenDialog(true)
-  }, [token1Balance])
-  const isBalanceInsufficient = useMemo(() => {
-    if (!token1Balance) return false
-    return !token1Balance.greaterThan('0')
-  }, [token1Balance])
+  }, [])
+
   const _switchNetwork = () => {
     switchNetwork(ChainId.MAINNET)
   }
@@ -216,9 +211,9 @@ function Step1({
     if (chainId !== ChainId.MAINNET) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch Network</StakeButton>
     }
-    if (isBalanceInsufficient) {
-      return <StakeButton disabled>Insufficient Balance</StakeButton>
-    }
+    // if (isBalanceInsufficient) {
+    //   return <StakeButton disabled>Insufficient Balance</StakeButton>
+    // }
     if (status === TStep.COMING_SOON) {
       return (
         <StakeButton disabled>
@@ -239,7 +234,7 @@ function Step1({
       </StakeButton>
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, chainId, handleClickStake, isBalanceInsufficient, showLoginModal, status])
+  }, [account, chainId, handleClickStake, showLoginModal, status])
   const handleClose = () => {
     setAmount('')
     setOpenDialog(false)
@@ -497,10 +492,9 @@ function Step1({
       </Stack>
       <StakeAuctionInputDialog
         token1={token1CurrencyAmount}
-        id={'4'}
+        id={'7'}
         open={openDialog}
         onClose={() => handleClose()}
-        token1Balance={token1Balance as CurrencyAmount}
         amount={amount}
         handleSetAmount={handleSetAmount}
         confirm={toCommit}
