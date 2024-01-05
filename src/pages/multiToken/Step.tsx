@@ -147,7 +147,18 @@ function Step1({
   }, [])
   const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  console.log('🚀 ~ file: Step.tsx:151 ~ coinInfo:', coinInfo)
+
+  const stakeTokenList = useMemo(() => {
+    if (coinInfo) {
+      const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
+        value: item?.toSignificant(),
+        address: coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightTokenAddr[index]
+      }))
+      return arr
+    }
+    return undefined
+  }, [coinInfo])
+  console.log('🚀 ~ file: Step.tsx:159 ~ stakeTokenList ~ stakeTokenList:', stakeTokenList, coinInfo)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
