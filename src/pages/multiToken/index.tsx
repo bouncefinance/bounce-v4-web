@@ -26,6 +26,7 @@ const Page = () => {
   const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId)
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account)
+  console.log('coinInfo', coinInfo)
 
   const toClaim = useCallback(async () => {
     if (!account || !contract || !coinInfo) return

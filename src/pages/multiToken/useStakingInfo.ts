@@ -47,35 +47,39 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   }, [totalStake.result])
   const token1sCurrency = useTokens(token1sAddress, chainId)
 
-  const [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, poolStakeTokenPrices] = useMemo(() => {
-    if (
-      !token1sCurrency ||
-      token1sCurrency.some(i => !i) ||
-      !poolToken1WeightAmountMapRes.result?.[2] ||
-      !myStakeToken1WeightAmountMapRes.result?.[2]
-    ) {
-      return []
-    }
-    const poolStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
-      CurrencyAmount.fromRawAmount(cr as Currency, poolToken1WeightAmountMapRes.result?.[2][id])
-    )
-
-    const myStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
-      CurrencyAmount.fromRawAmount(cr as Currency, myStakeToken1WeightAmountMapRes.result?.[2][id])
-    )
-    const poolStakeTokenPriceAmount = token1sCurrency.map((cr, id) =>
-      CurrencyAmount.ether(poolInfo.result?.quoteAmountTotal1).div(
+  const [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, totalStakeAmount, poolStakeTokenPrices] =
+    useMemo(() => {
+      if (
+        !token1sCurrency ||
+        token1sCurrency.some(i => !i) ||
+        !poolToken1WeightAmountMapRes.result?.[2] ||
+        !myStakeToken1WeightAmountMapRes.result?.[2]
+      ) {
+        return []
+      }
+      const poolStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
+        CurrencyAmount.fromRawAmount(cr as Currency, poolToken1WeightAmountMapRes.result?.[2][id])
+      )
+      const myStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
+        CurrencyAmount.fromRawAmount(cr as Currency, myStakeToken1WeightAmountMapRes.result?.[2][id])
+      )
+      const totalStakeAmount = token1sCurrency.map((cr, id) =>
         CurrencyAmount.fromRawAmount(cr as Currency, totalStake.result?.[1][id])
       )
-    )
-    return [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, poolStakeTokenPriceAmount]
-  }, [
-    myStakeToken1WeightAmountMapRes.result,
-    poolInfo.result?.quoteAmountTotal1,
-    poolToken1WeightAmountMapRes.result,
-    token1sCurrency,
-    totalStake.result
-  ])
+      const poolStakeTokenPriceAmount = token1sCurrency.map((cr, id) =>
+        CurrencyAmount.ether(poolInfo.result?.quoteAmountTotal1).div(
+          CurrencyAmount.fromRawAmount(cr as Currency, totalStake.result?.[1][id])
+        )
+      )
+
+      return [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, totalStakeAmount, poolStakeTokenPriceAmount]
+    }, [
+      myStakeToken1WeightAmountMapRes.result,
+      poolInfo.result?.quoteAmountTotal1,
+      poolToken1WeightAmountMapRes.result,
+      token1sCurrency,
+      totalStake.result
+    ])
 
   const coinInfo = useMemo<MultiTokenResultType | undefined>(() => {
     const result: MultiTokenResultType = {}
@@ -95,8 +99,9 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     if (totalStake.result) {
       result.token1StakedStats = {
         stakeTokenAddress: totalStake.result[0],
-        totalStakeAmount: totalStake.result[1],
-        stakeTokenPrices: poolStakeTokenPrices
+        totalStakeAmount: totalStakeAmount,
+        stakeTokenPrices: poolStakeTokenPrices,
+        token1sCurrency: token1sCurrency
       } as TotalStakeToken1Type
     }
     if (myStakeToken1WeightAmountMapRes.result) {
@@ -147,8 +152,10 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     poolStakeTokenPrices,
     poolToken1WeightAmountMapRes.result,
     poolTokenWeightsRes.result,
+    token1sCurrency,
     totalParticipants.result,
-    totalStake.result
+    totalStake.result,
+    totalStakeAmount
   ])
   return coinInfo
 }
