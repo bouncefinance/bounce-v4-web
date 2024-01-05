@@ -17,7 +17,7 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
-import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import DialogTips from 'bounceComponents/common/DialogTips'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import {
   BoldTextStyle,
@@ -310,11 +310,11 @@ function Step1({
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>0.00095 USD</CardLabelStyle>
+                    <CardLabelStyle>0.05 USDT</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
                     <CardContentStyle>Total Supply of PORT3</CardContentStyle>
-                    <CardLabelStyle>472,500,000</CardLabelStyle>
+                    <CardLabelStyle>2,000,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
@@ -448,10 +448,7 @@ function Step2({
               CurrencyAmount.fromRawAmount(token0, coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
                 .subtract(CurrencyAmount.fromRawAmount(token0, coinInfo.claimedToken0.toString()))
                 .toSignificant()
-            } ${token0?.symbol}`,
-            PaperProps: {
-              sx: DialogTipsWhiteTheme
-            }
+            } ${token0?.symbol}`
           })
         })
         .catch()
@@ -465,10 +462,7 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken0,
-        PaperProps: {
-          sx: DialogTipsWhiteTheme
-        }
+        onAgain: claimToken0
       })
     }
   }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, contract, poolId, token0])
@@ -496,10 +490,7 @@ function Step2({
             cancelBtn: 'Close',
             title: 'Success! ',
             content: `You have successfully claimed`,
-            onAgain: claimToken1,
-            PaperProps: {
-              sx: DialogTipsWhiteTheme
-            }
+            onAgain: claimToken1
           })
         })
         .catch()
@@ -513,10 +504,7 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken1,
-        PaperProps: {
-          sx: DialogTipsWhiteTheme
-        }
+        onAgain: claimToken1
       })
     }
   }, [contract, poolId])

@@ -30,6 +30,20 @@ export type FinalAllocationType = {
   mySwappedAmount0: BigNumber
   myUnSwappedAmount1: BigNumber
 }
+export type TotalStakeToken1Type = {
+  totalStakeAmount: BigNumber[]
+  stakeTokenAddress: string[]
+}
+export type UserStakeToken1WeightMapType = {
+  myStakeToken1WeightTokenAddr: string[]
+  myStakeToken1Weight: BigNumber[]
+  myStakeToken1WeightAmounts: BigNumber[]
+}
+export type PoolStakeToken1WeightMapType = {
+  poolStakeToken1WeightTokenAddr: string[]
+  poolStakeToken1Weight: BigNumber[]
+  poolStakeToken1WeightAmounts: BigNumber[]
+}
 export type CoinResultType = {
   poolInfo?: PoolInfoType
   token1Amount?: BigNumber
@@ -44,10 +58,11 @@ export type CoinResultType = {
 export type MultiTokenResultType = {
   poolInfo?: MultiTokenPoolInfoType
   totalParticipants?: BigNumber
-  swappedtoken0?: BigNumber
   myToken1Claimed?: boolean
   creatorClaimed?: boolean
-  token1StakedAmount?: BigNumber[]
+  token1StakedStats?: TotalStakeToken1Type
+  myStakeToken1WeightAmountMap?: UserStakeToken1WeightMapType
+  poolStakeToken1WeightAmountMap?: PoolStakeToken1WeightMapType
   finalAllocation?: FinalAllocationType
   claimedToken0?: BigNumber
 }

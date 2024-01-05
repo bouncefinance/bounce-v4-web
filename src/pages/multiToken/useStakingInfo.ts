@@ -5,7 +5,10 @@ import { ChainId } from 'constants/chain'
 import {
   FinalAllocationType,
   MultiTokenPoolInfoType,
-  MultiTokenResultType
+  MultiTokenResultType,
+  PoolStakeToken1WeightMapType,
+  TotalStakeToken1Type,
+  UserStakeToken1WeightMapType
 } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 
 export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
@@ -14,10 +17,23 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
   const totalStake = useSingleCallResult(contract, 'getToken1Amounts', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', [poolId], undefined, chainId)
-  const swappedtoken0 = useSingleCallResult(contract, 'completedCommitment', [poolId], undefined, chainId)
   const myToken1Claimed = useSingleCallResult(contract, 'myToken1Claimed', [account, poolId], undefined, chainId)
   const finalAllocation = useSingleCallResult(contract, 'finalAllocation', [poolId, account], undefined, chainId)
   const claimedToken0 = useSingleCallResult(contract, 'myToken0Claimed', [account, poolId], undefined, chainId)
+  const myStakeToken1WeightAmountMapRes = useSingleCallResult(
+    contract,
+    'getMyToken1WeightAmountMap',
+    [poolId, account],
+    undefined,
+    chainId
+  )
+  const poolToken1WeightAmountMapRes = useSingleCallResult(
+    contract,
+    'getPoolToken1WeightAmountMap',
+    [poolId],
+    undefined,
+    chainId
+  )
   const creatorClaimed = useSingleCallResult(contract, 'creatorClaimed', [poolId], undefined, chainId)
 
   const coinInfo = useMemo<MultiTokenResultType | undefined>(() => {
@@ -36,13 +52,27 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
       result.poolInfo = _poolInfo
     }
     if (totalStake.result) {
-      result.token1StakedAmount = totalStake.result[0]
+      result.token1StakedStats = {
+        stakeTokenAddress: totalStake.result[0],
+        totalStakeAmount: totalStake.result[1]
+      } as TotalStakeToken1Type
+    }
+    if (myStakeToken1WeightAmountMapRes.result) {
+      result.myStakeToken1WeightAmountMap = {
+        myStakeToken1WeightTokenAddr: myStakeToken1WeightAmountMapRes.result[0],
+        myStakeToken1Weight: myStakeToken1WeightAmountMapRes.result[1],
+        myStakeToken1WeightAmounts: myStakeToken1WeightAmountMapRes.result[2]
+      } as UserStakeToken1WeightMapType
+    }
+    if (poolToken1WeightAmountMapRes.result) {
+      result.poolStakeToken1WeightAmountMap = {
+        poolStakeToken1WeightTokenAddr: poolToken1WeightAmountMapRes.result[0],
+        poolStakeToken1Weight: poolToken1WeightAmountMapRes.result[1],
+        poolStakeToken1WeightAmounts: poolToken1WeightAmountMapRes.result[2]
+      } as PoolStakeToken1WeightMapType
     }
     if (totalParticipants.result) {
       result.totalParticipants = totalParticipants.result[0]
-    }
-    if (swappedtoken0.result) {
-      result.swappedtoken0 = swappedtoken0.result[0]
     }
     if (myToken1Claimed.result) {
       result.myToken1Claimed = myToken1Claimed.result[0]
@@ -64,9 +94,10 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     claimedToken0.result,
     creatorClaimed.result,
     finalAllocation.result,
+    myStakeToken1WeightAmountMapRes.result,
     myToken1Claimed.result,
     poolInfo.result,
-    swappedtoken0.result,
+    poolToken1WeightAmountMapRes.result,
     totalParticipants.result,
     totalStake.result
   ])

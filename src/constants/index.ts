@@ -282,7 +282,7 @@ export const RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES: { [chainId in Chai
   [ChainId.ARBITRUM]: '',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
-  [ChainId.SEPOLIA]: '0x892675a8Ba206AaC4d2523b739a4A2c6Aa8f7010',
+  [ChainId.SEPOLIA]: '0x1d8dD43AE2BB018Cf7F9C2a80b84882B038a3E4A',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
