@@ -106,12 +106,7 @@ export const tokenInfoList = [
   }
 ]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
-  console.log(
-    '🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:',
-    poolInfo.burnedTokens[4].toString(),
-    poolInfo.burnedTokens[0].toString(),
-    poolInfo.burnedTokens[1].toString()
-  )
+  console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
 
   const wrapperData = poolInfo.betTokenAmount.map((item, index) => {
@@ -160,7 +155,7 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
     },
     series: [
       {
-        name: 'Invest Tokens/Lottery',
+        name: 'Token:',
         type: 'pie',
         radius: ['50%', '95%'],
         avoidLabelOverlap: false,

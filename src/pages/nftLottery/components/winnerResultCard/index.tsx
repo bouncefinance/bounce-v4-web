@@ -45,6 +45,7 @@ const WinnerContainer = styled(Box)(
              mix-blend-mode: darken;
             ${theme.breakpoints.down('sm')}{
               width:360px;
+               background: url(${Bg2Svg}) transparent -20px 0px / 103.544% 100% no-repeat;
                mix-blend-mode: darken;
               position: relative;
               top: 94px;
