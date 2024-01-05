@@ -434,9 +434,9 @@ function Step1({
                     ? curStackTokenAmount
                         ?.div(coinInfo?.token1StakedStats?.stakeTokenPrices?.[myStakeTokenIndex || 0])
                         .toSignificant()
-                    : '--'}{' '}
+                    : ''}{' '}
                   {` `}
-                  {curStackTokenAmount?.currency.symbol || '--'}
+                  {curStackTokenAmount?.currency.symbol || '0'}
                 </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
@@ -632,7 +632,61 @@ function Step2({
     // switchNetwork(ChainId.MAINNET)
     switchNetwork(ChainId.SEPOLIA)
   }
+  const poolStakeTokens = useTokens(
+    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
+    _chainId
+  )
+  const stakeTokenList = useMemo(() => {
+    if (coinInfo && poolStakeTokens) {
+      const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
+        value: item?.toSignificant(6),
+        data: item,
+        address: coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightTokenAddr[index],
+        token: poolStakeTokens[index],
+        color: colorList[index],
+        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase())
+      }))
+      return arr
+    }
+    return undefined
+  }, [coinInfo, poolStakeTokens])
 
+  const [myStakeTokenIndex, curStackTokenAmount] = useMemo(() => {
+    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
+      i => BigInt(i.toExact()) > BigInt('0')
+    )
+    const curTokenAmount =
+      index !== undefined ? coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.[index] : undefined
+    return [index, curTokenAmount]
+  }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts])
+  const myTotalStakeAmount = useMemo(() => {
+    if (
+      !curStackTokenAmount ||
+      myStakeTokenIndex === undefined ||
+      !coinInfo?.token1StakedStats?.stakeTokenPrices?.[myStakeTokenIndex]
+    )
+      return undefined
+    return curStackTokenAmount.div(coinInfo?.token1StakedStats?.stakeTokenPrices[myStakeTokenIndex])
+  }, [coinInfo?.token1StakedStats?.stakeTokenPrices, curStackTokenAmount, myStakeTokenIndex])
+
+  const myUnClaimStakeAmount = useMemo(() => {
+    if (
+      myStakeTokenIndex === undefined ||
+      !coinInfo?.finalAllocation?.myUnSwappedAmount1 ||
+      !coinInfo?.token1StakedStats?.stakeTokenPrices?.[myStakeTokenIndex] ||
+      !curStackTokenAmount
+    )
+      return undefined
+    return CurrencyAmount.fromRawAmount(
+      curStackTokenAmount.currency,
+      coinInfo?.finalAllocation?.myUnSwappedAmount1.toString()
+    ).div(coinInfo?.token1StakedStats?.stakeTokenPrices[myStakeTokenIndex])
+  }, [
+    coinInfo?.finalAllocation?.myUnSwappedAmount1,
+    coinInfo?.token1StakedStats?.stakeTokenPrices,
+    curStackTokenAmount,
+    myStakeTokenIndex
+  ])
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -695,11 +749,33 @@ function Step2({
                   <CardContentTitleStyle>Total Committed</CardContentTitleStyle>
                 </Box>
                 <CardContentBoldTextStyle>
-                  {/* {token1TotalAmount?.toSignificant() || '0'} {token1?.symbol} */}
+                  <Stack direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'} alignItems={'center'}>
+                    {stakeTokenList?.map((item, index) => (
+                      <Stack
+                        key={item.token?.address}
+                        direction={'row'}
+                        justifyContent={'flex-start'}
+                        spacing={10}
+                        alignItems={'center'}
+                        mr={20}
+                        mb={10}
+                      >
+                        <img src={item.logo || TokenIcon} style={{ width: 20, height: 20, borderRadius: '50%' }} />
+                        <Typography fontSize={16} fontWeight={500} color={'#fff'}>
+                          {coinInfo?.token1StakedStats?.stakeTokenPrices
+                            ? item?.data.div(coinInfo?.token1StakedStats?.stakeTokenPrices[index]).toSignificant()
+                            : '0'}
+                        </Typography>
+                        <Typography fontSize={16} fontWeight={500} width={'fit-content'} color={'#fff'}>
+                          {item?.token?.name?.toLocaleUpperCase()}
+                        </Typography>
+                      </Stack>
+                    ))}
+                  </Stack>
                 </CardContentBoldTextStyle>
               </Stack>
 
-              <Stack spacing={16}>
+              {/* <Stack spacing={16}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -711,7 +787,7 @@ function Step2({
                   <CardContentTitleStyle>Token Amount</CardContentTitleStyle>
                 </Box>
                 <CardContentBoldTextStyle>null</CardContentBoldTextStyle>
-              </Stack>
+              </Stack> */}
 
               <Stack spacing={16}>
                 <Box
@@ -799,7 +875,10 @@ function Step2({
                 </Box>
 
                 <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                  <BoldTextStyle style={{ fontSize: 20 }}>null</BoldTextStyle>
+                  <BoldTextStyle style={{ fontSize: 20 }}>
+                    {myTotalStakeAmount?.toSignificant(4)} {myTotalStakeAmount?.currency.symbol} /{' '}
+                    {myUnClaimStakeAmount?.toSignificant(4)} {myTotalStakeAmount?.currency.symbol}
+                  </BoldTextStyle>
                   <StakeButton
                     style={{ width: 150 }}
                     disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
