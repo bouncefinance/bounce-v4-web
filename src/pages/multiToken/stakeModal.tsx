@@ -12,10 +12,6 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import LogoText from 'components/LogoText'
 import Image from 'components/Image'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
-import Icon2 from 'assets/imgs/nftLottery/tokenInformation/token-icon2.svg'
-import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
-import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
-import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import { useCurrencyBalance, useToken } from 'state/wallet/hooks'
 import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from '../../constants'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
@@ -24,8 +20,11 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { Contract } from 'ethers'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 
 export interface DialogProps {
+  poolInfo: MultiTokenResultType | undefined
   onClose: () => void
   open: boolean
   setOpenDialog: () => void
@@ -36,7 +35,8 @@ export interface DialogProps {
 }
 
 const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
-  const { onClose, open, showLoginModal, switchNetwork, poolId, contract, ...rest } = props
+  const { poolInfo, onClose, open, showLoginModal, switchNetwork, poolId, contract, ...rest } = props
+  console.log('🚀 ~ file: stakeModal.tsx:42 ~ poolInfo:', poolInfo)
   const { account, chainId } = useActiveWeb3React()
   const _chainId = useMemo(() => {
     return ChainId.SEPOLIA
@@ -44,55 +44,24 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   const [selectedIdx, setSelectedIdx] = useState<number>(0)
   const [amount, setAmount] = useState('')
   const isDownSm = useBreakpoint('sm')
-  const dataList = useMemo(
-    () => [
-      {
-        id: 0,
-        name: 'AUCTION',
-        symbol: 'AUCTION',
-        logo: Icon1,
-        address: '0xc390E699b38F14dB884C635bbf843f7B135113ad'
-      },
-      {
-        id: 1,
-        name: 'MUBI',
-        symbol: 'MUBI',
-        logo: Icon2,
-        address: '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E'
-      },
-      {
-        id: 2,
-        name: 'DAII',
-        symbol: 'DAII',
-        logo: Icon3,
-        address: '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E'
-      },
-      {
-        id: 3,
-        name: 'BSSB',
-        symbol: 'BSSB',
-        logo: Icon4,
-        address: '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7'
-      },
-      {
-        id: 4,
-        name: 'AMMX',
-        symbol: 'AMMX',
-        logo: Icon5,
-        address: '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
-      }
-    ],
-    []
-  )
   const [userStakedAddress, setUserStakedAddress] = useState<string>('')
   const selectedToken =
-    useToken(userStakedAddress ? userStakedAddress : dataList[selectedIdx].address, chainId) || undefined
+    useToken(
+      userStakedAddress ? userStakedAddress : poolInfo?.token1StakedStats?.token1sCurrency?.[selectedIdx].address || '',
+      chainId
+    ) || undefined
   const token1CurrencyAmount = useMemo(() => {
     if (!selectedToken) return undefined
     return CurrencyAmount.fromAmount(selectedToken, amount)
   }, [amount, selectedToken])
   const userTokenBalance = useCurrencyBalance(account, selectedToken, chainId)
-  console.log('🚀 ~ file: stakeModal.tsx:95 ~ userTokenBalance:', userTokenBalance, selectedToken)
+  const dataList = useMemo(() => {
+    const ret = poolInfo?.token1StakedStats?.token1sCurrency?.map(item => ({
+      ...item,
+      logo: getIcon(item.symbol?.toLocaleUpperCase())
+    }))
+    return ret
+  }, [poolInfo?.token1StakedStats?.token1sCurrency])
   const [approvalState, , approveCallback] = useApproveCallback(
     token1CurrencyAmount,
     RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[_chainId]
@@ -103,7 +72,19 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   }, [onClose])
 
   useEffect(() => {
+    if (poolInfo) {
+      if (poolInfo.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.some(item => item.greaterThan('0'))) {
+        const idx = poolInfo.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.findIndex(item =>
+          item.greaterThan('0')
+        )
+        setUserStakedAddress(poolInfo.myStakeToken1WeightAmountMap.myStakeToken1WeightTokenAddr[idx])
+      }
+    }
+  }, [poolInfo])
+
+  useEffect(() => {
     setUserStakedAddress('')
+    setSelectedIdx(0)
   }, [account])
   const approveFn = useTransactionModalWrapper(approveCallback)
 
@@ -139,7 +120,6 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
               handleClose()
             }
           })
-          setUserStakedAddress(dataList[selectedIdx].address)
         })
         .catch()
     } catch (error) {
@@ -157,17 +137,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
         }
       })
     }
-  }, [
-    approvalState,
-    approveFn,
-    contract,
-    dataList,
-    handleClose,
-    poolId,
-    selectedIdx,
-    selectedToken,
-    token1CurrencyAmount
-  ])
+  }, [approvalState, approveFn, contract, handleClose, poolId, selectedToken, token1CurrencyAmount])
 
   const confirmBtn = useMemo(() => {
     if (!account) {
@@ -294,21 +264,21 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
                 }}
                 renderValue={() => (
                   <Stack direction={'row'} alignItems={'center'} justifyContent={'flex-start'} spacing={16}>
-                    <Image src={dataList[selectedIdx]?.logo || ''} width={32} />
-                    <Typography>{dataList[selectedIdx]?.symbol}</Typography>
+                    <Image src={dataList?.[selectedIdx]?.logo || ''} width={32} />
+                    <Typography>{dataList?.[selectedIdx]?.symbol}</Typography>
                   </Stack>
                 )}
               >
-                {dataList.map((option, index) => (
+                {dataList?.map((option, index) => (
                   <MenuItem
                     onClick={() => {
                       setSelectedIdx(index)
                     }}
-                    value={option.id}
-                    key={option.id}
-                    selected={selectedIdx === option.id}
+                    value={option.address}
+                    key={option.address}
+                    selected={selectedIdx === index}
                   >
-                    <LogoText logo={option.logo} text={option.name} gapSize={'small'} fontSize={14} />
+                    <LogoText logo={option.logo || Icon1} text={option.name} gapSize={'small'} fontSize={14} />
                   </MenuItem>
                 ))}
               </Select>

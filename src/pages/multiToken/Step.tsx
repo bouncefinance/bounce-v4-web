@@ -170,7 +170,7 @@ function Step1({
         address: coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightTokenAddr[index],
         token: poolStakeTokens[index],
         color: colorList[index],
-        logo: getIcon(poolStakeTokens[index]?.name?.toLocaleUpperCase())
+        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase())
       }))
       return arr
     }
@@ -450,6 +450,7 @@ function Step1({
       </Stack>
       <StakeAuctionInputDialog
         id={'7'}
+        poolInfo={coinInfo}
         open={openDialog}
         contract={contract}
         poolId={poolId}
