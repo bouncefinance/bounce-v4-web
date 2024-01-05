@@ -4,7 +4,9 @@ import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
-
+import { Box } from '@mui/material'
+import Lottie from 'lottie-react'
+import bounce_loading from 'bounceComponents/common/BounceAnime/bounce-loading.json'
 BigNumber.config({ EXPONENTIAL_AT: [-10, 40] })
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
@@ -131,6 +133,14 @@ const UnSupportedMobileRouter = () => {
   // ) : null
 }
 
+function Loading() {
+  return (
+    <Box display={'flex'} justifyContent={'center'} marginTop={200}>
+      <Lottie animationData={bounce_loading} loop={true} autoplay={true} style={{ width: 200, height: 200 }} />
+    </Box>
+  )
+}
+
 export default function App() {
   const { pathname } = useLocation()
   const isSm = useBreakpoint('sm')
@@ -138,7 +148,7 @@ export default function App() {
     window.scrollTo(0, 0)
   }, [pathname])
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<Loading />}>
       <ModalProvider>
         <NiceModalProvider>
           <AppWrapper id="app">
