@@ -10,7 +10,7 @@ import { useCurrentRegionBlock } from 'state/application/hooks'
 import NoService from 'components/NoService'
 import useBreakpoint from 'hooks/useBreakpoint'
 
-export function ProjectInfo() {
+export default function ProjectInfo() {
   const item = PrivatePadDataList.find(i => i.keyId === 2) as IPrivatePadProp
 
   return (

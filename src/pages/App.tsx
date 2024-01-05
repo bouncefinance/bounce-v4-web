@@ -49,27 +49,28 @@ import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
 
-import CreateLaunchpad from './launchpad/create-launchpad'
-
 import LaunchpadCoin from 'pages/launchpadCoin'
 
-import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
 
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
-import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
+
+import NftLottery from './nftLottery'
+import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
 
 import useBreakpoint from '../hooks/useBreakpoint'
-import DidStakeAuctionPool from './stakeAuctionPool'
-import DidStakeDaiiPool from './stakeDAIIPool'
-import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
-import AmmxStakeAuctionPool from './stakeAuctionAMMX'
-import AmmxStakeAuctionPoolTest from './stakeAuctionAMMXTest'
-import AmmxStakeDaiiPool from './stakeDaiiAMMX'
-import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
-import NftLottery from './nftLottery'
-import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
+const CreateLaunchpad = React.lazy(() => import('./launchpad/create-launchpad'))
+const PoseiProjectInfo = React.lazy(() => import('./projectIntro/PoseiProjectInfo'))
+const OkxActivity = React.lazy(() => import('./okxActivity/OkxActivity'))
+const DidStakeAuctionPool = React.lazy(() => import('./stakeAuctionPool'))
+const DidStakeDaiiPool = React.lazy(() => import('./stakeDAIIPool'))
+const GoDidRs = React.lazy(() => import('./auction/randomSelection/GoDID/GoDIDRS'))
+const AmmxStakeAuctionPool = React.lazy(() => import('./stakeAuctionAMMX'))
+const AmmxStakeAuctionPoolTest = React.lazy(() => import('./stakeAuctionAMMXTest'))
+const AmmxStakeDaiiPool = React.lazy(() => import('./stakeDaiiAMMX'))
+const AmmxRandomSelection = React.lazy(() => import('./auction/randomSelection/Ladder-BitSwap/Index'))
+const CreateNFTLotteryPool = React.lazy(() => import('./auction/create-auction-pool/createNFTLotteryPool'))
 const DigitalAssetsOffering = React.lazy(() => import('pages/thirdPart/digitalAssetsOffering'))
 const FundoHome = React.lazy(() => import('pages/fundo/home'))
 const FundoDetail = React.lazy(() => import('pages/fundo/detail'))
@@ -110,7 +111,6 @@ const TypeitProjectInfoWhiteList = React.lazy(() => import('./projectIntro/Typei
 const OpenfabricProjectInfo = React.lazy(() => import('./projectIntro/OpenfabricProjectInfo'))
 const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProjectInfo'))
 const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
-const Port3ProjectInfo = React.lazy(() => import('./projectIntro/Port3ProjectInfo'))
 
 const GlobalHooks = () => {
   useGetOptionsData()
