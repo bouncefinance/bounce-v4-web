@@ -1,11 +1,6 @@
 import { Typography, styled, Box, Stack } from '@mui/material'
 import DonutChart from 'components/DonutChart'
 import { getIcon, colorList } from './config'
-import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
-import Icon2 from 'assets/imgs/nftLottery/tokenInformation/token-icon2.svg'
-import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
-import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
-import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { RandomSelectionNFTProps } from 'api/pool/type'
@@ -73,38 +68,6 @@ const Circle = styled(Box)`
   height: 10px;
   border-radius: 10px;
 `
-export const tokenInfoList = [
-  {
-    price: 0.35,
-    name: 'AUCTION',
-    icon: Icon1,
-    color: '#CCC496'
-  },
-  {
-    price: 43,
-    name: 'MUBI',
-    icon: Icon2,
-    color: '#DBAC48'
-  },
-  {
-    price: 10,
-    name: 'DAII',
-    icon: Icon3,
-    color: '#AB883C'
-  },
-  {
-    price: 2.38,
-    name: 'BSSB',
-    icon: Icon4,
-    color: '#9E9871'
-  },
-  {
-    price: 2500,
-    name: 'AMMX',
-    icon: Icon5,
-    color: '#614C1F'
-  }
-]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
@@ -118,11 +81,9 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
       amount: Number(
         CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact()
       ),
-      price: Number(
-        CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.betTokenAmount[index]).toSignificant(6)
-      ),
+      price: CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], item).toSignificant(6),
       itemStyle: { color: colorList[index] },
-      name: poolInfo.token1Currency?.[index].symbol,
+      name: poolInfo.token1Currency?.[index].symbol.toUpperCase(),
       color: colorList[index],
       icon: getIcon(poolInfo.token1Currency?.[index].symbol)
     }

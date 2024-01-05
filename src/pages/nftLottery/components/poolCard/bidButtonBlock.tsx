@@ -171,7 +171,7 @@ const BidButtonBlock = ({ poolInfo, otherBtns, allStatus, selectTokenIndex, acti
       </BidButton>
     )
   }
-  if (isBalanceInsufficient) {
+  if (isBalanceInsufficient && action === 'BID') {
     return (
       <BidButton variant="contained" fullWidth disabled>
         {!userBalance ? 'Loading' : 'Insufficient balance'}
