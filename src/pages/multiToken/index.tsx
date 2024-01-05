@@ -87,7 +87,7 @@ const Page = () => {
           sx={{ width: '100%', maxWidth: 1440, margin: '0 auto' }}
           mt={{ xs: 110, md: 180 }}
         >
-          <Header />
+          <Header coinInfo={coinInfo} />
           <Charts />
           <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
         </Box>

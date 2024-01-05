@@ -92,7 +92,7 @@ const ChartLayout = () => {
               <WhiteP1 ml={12} mr={4}>
                 {i.name}
               </WhiteP1>
-              <img src={i.icon} style={{ width: 20, height: 20 }} />
+              <img src={i.icon || ''} style={{ width: 20, height: 20 }} />
             </Stack>
           ))}
         </Stack>

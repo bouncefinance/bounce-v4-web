@@ -1,12 +1,8 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
-import Icon2 from 'assets/imgs/nftLottery/tokenInformation/token-icon2.svg'
-import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
-import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
-import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
-import { ChainId } from 'constants/chain'
-import { BAST_TOKEN } from 'constants/index'
-import { Currency } from 'constants/token'
+import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import { Currency, CurrencyAmount } from 'constants/token'
+import { getIcon, iconList } from 'pages/nftLottery/sections/tokenInformation/config'
+import { useMemo } from 'react'
 
 const BlackWeightP1 = styled(Typography)`
   color: var(--black-100, #121212);
@@ -60,11 +56,11 @@ const BlackSmallP1 = styled(Typography)`
   letter-spacing: -0.32px;
 `
 export const token1Info = [
-  { name: 'AUCTION', price: 100, weights: 2, icon: Icon1, color: '#7966E7' },
-  { name: 'MUBI', price: 100, weights: 1, icon: Icon2, color: '#90BE6D' },
-  { name: 'DAII', price: 100, weights: 2, icon: Icon3, color: '#3F90FF' },
-  { name: 'BSSB', price: 100, weights: 2, icon: Icon4, color: '#0BFFDA' },
-  { name: 'AMMX', price: 100, weights: 1, icon: Icon5, color: '#51DCF6' }
+  { name: 'AUCTION', price: 100, weights: 2, icon: getIcon('AUCTION'), color: '#7966E7' },
+  { name: 'MUBI', price: 100, weights: 1, icon: getIcon('MUBI'), color: '#90BE6D' },
+  { name: 'DAII', price: 100, weights: 2, icon: getIcon('DAII'), color: '#3F90FF' },
+  { name: 'BSSB', price: 100, weights: 2, icon: getIcon('BSSB'), color: '#0BFFDA' },
+  { name: 'AMMX', price: 100, weights: 1, icon: getIcon('AMMX'), color: '#51DCF6' }
 ]
 const TitleContainer = () => {
   return (
@@ -82,10 +78,16 @@ const TitleContainer = () => {
     </>
   )
 }
-const TokenBoxList = ({ token1 }: { token1: Currency | undefined }) => {
+interface ITokenList {
+  name: string
+  weights: number
+  price: number
+  icon: string | null
+}
+const TokenBoxList = ({ token1Amounts }: { token1Amounts: ITokenList[] | undefined }) => {
   return (
     <Stack mt={40} flexDirection={'row'} gap={16} flexWrap={'wrap'}>
-      {token1Info.map(i => (
+      {token1Amounts?.map(i => (
         <Box
           key={i.name}
           sx={{
@@ -99,13 +101,9 @@ const TokenBoxList = ({ token1 }: { token1: Currency | undefined }) => {
           }}
         >
           <Stack flexDirection={'row'} alignItems={'center'} gap={4}>
-            <img src={i.icon} style={{ width: 20, height: 20 }} />
+            <img src={i.icon || ''} style={{ width: 20, height: 20 }} />
             <BlackSmallP1> 1 {i.name} = </BlackSmallP1>
-            <img src={token1?.logo || Icon2} style={{ width: 20, height: 20 }} />
-            <BlackSmallP1>
-              {' '}
-              {i.price} {token1?.name}{' '}
-            </BlackSmallP1>
+            <BlackSmallP1> {i.price} USD</BlackSmallP1>
           </Stack>
           <Box>
             <BlackSmallP1>Weights = {i.weights}</BlackSmallP1>
@@ -115,14 +113,31 @@ const TokenBoxList = ({ token1 }: { token1: Currency | undefined }) => {
     </Stack>
   )
 }
-const Header = () => {
-  const token1 = BAST_TOKEN[ChainId.MAINNET]
-  console.log('token1', token1)
+const token1s = Object.keys(iconList)
+const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
+  const quoteAmount = useMemo(() => {
+    if (!coinInfo?.poolInfo?.quoteAmountTotal1) return
+    return CurrencyAmount.fromRawAmount(Currency.getNativeCurrency(), coinInfo?.poolInfo?.quoteAmountTotal1.toString())
+  }, [coinInfo?.poolInfo?.quoteAmountTotal1])
+
+  const poolToken1s = coinInfo?.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts
+
+  const token1Amounts = useMemo(() => {
+    if (!coinInfo || !quoteAmount || !poolToken1s || poolToken1s.some(i => !i)) {
+      return
+    }
+    return token1s.map<ITokenList>((name, id) => ({
+      name: name,
+      price: Number(poolToken1s[id].toExact()) / Number(quoteAmount.toExact()),
+      icon: getIcon(name),
+      weights: 1
+    }))
+  }, [coinInfo, poolToken1s, quoteAmount])
 
   return (
     <Box sx={{ width: '100%' }}>
       <TitleContainer />
-      <TokenBoxList token1={token1} />
+      <TokenBoxList token1Amounts={token1Amounts} />
     </Box>
   )
 }
