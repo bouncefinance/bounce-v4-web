@@ -35,7 +35,6 @@ import {
 } from 'pages/launchpadCoin/Step'
 import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
 import StakeAuctionInputDialog from './stakeModal'
-import { ZERO_ADDRESS } from '../../constants'
 
 export function Steps({
   coinInfo,
@@ -148,7 +147,7 @@ function Step1({
   }, [])
   const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1Currency = useToken(ZERO_ADDRESS, _chainId) || undefined
+  console.log('🚀 ~ file: Step.tsx:151 ~ coinInfo:', coinInfo)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -318,14 +317,19 @@ function Step1({
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
-                  <CardContentStyle>Total Committed Amount / Total Raise</CardContentStyle>
-                  <CardLabelStyle>{token1Currency?.symbol} / 450,000</CardLabelStyle>
+                  <CardContentStyle>Total Stake</CardContentStyle>
                 </Stack>
-                <Stack spacing={8}>
-                  <CardContentStyle>Participants</CardContentStyle>
-                  <CardLabelStyle>
-                    {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
-                  </CardLabelStyle>
+                <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Participants</CardContentStyle>
+                    <CardLabelStyle>
+                      {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
+                    </CardLabelStyle>
+                  </Stack>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Total Raise</CardContentStyle>
+                    <CardLabelStyle>100,000 USDT</CardLabelStyle>
+                  </Stack>
                 </Stack>
               </Stack>
             </Stack>
@@ -361,10 +365,7 @@ function Step1({
 
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
-                <CardLabelStyle>
-                  null
-                  {token1Currency?.symbol}
-                </CardLabelStyle>
+                <CardLabelStyle>null</CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
