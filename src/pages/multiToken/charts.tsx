@@ -170,6 +170,20 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     ]
   }
   const barOption: EChartsOption = {
+    tooltip: {
+      trigger: 'item',
+      position: 'inside',
+      formatter: function (parms: any) {
+        const str =
+          parms.seriesName +
+          '</br>' +
+          parms.marker +
+          parms.data.name +
+          ':  ' +
+          `<span style='font-weight:600;margin-left:20'>$${parms.data.value}</span>`
+        return str
+      }
+    },
     grid: {
       top: '10%',
       right: '5%',
@@ -231,6 +245,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     },
     series: [
       {
+        name: 'Value Distribution',
         type: 'bar',
         barWidth: 30,
         data: barData
