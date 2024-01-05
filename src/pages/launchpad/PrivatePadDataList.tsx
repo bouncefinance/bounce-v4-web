@@ -62,7 +62,7 @@ import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
-import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
+import PORT3Tokenomics from './imgs/PORT3-Tokenomics.jpg'
 import port3Investment from './imgs/port3Investment.jpg'
 import Port3Logo from './imgs/port3Logo.png'
 import LadderImg from './imgs/ladder.png'
@@ -1482,11 +1482,11 @@ const PrivateRandomGodidData = {
 const AiMeetsBtcRandomData: IPrivatePadProp = {
   keyId: 22,
   liveTimeStamp: {
-    start: 1705118400000,
-    end: 0
+    start: 1704513600000,
+    end: 1704772800000
   },
-  hideUpcomingCountdown: true,
-  poolTypeName: 'Random Selection Auction',
+  // hideUpcomingCountdown: true,
+  poolTypeName: 'Random Selection',
   img: AiMeetsBtcImg,
   avatar: AiMeetsBtsAvatar,
   title: 'AI meets Bitcoin',
@@ -1541,7 +1541,7 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: '',
+  desc: `The "AI Meets Bitcoin" Auction features the first-ever AI-generated Ordinals NFT collection, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`,
   social: [],
   moreData: [
     // { title: 'Token Name', content: 'TBD' },
@@ -2511,7 +2511,7 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
     title: 'Port3 Network',
     chainId: 1,
     tokenName: '$PORT3',
-    whitePaperLink: 'https://docsend.com/view/rb64i7ejgbs6ufpn',
+    whitePaperLink: 'https://port3.notion.site/What-is-Port3-Network-c24968b117c54dcebb246c7ef6d9dcb5',
     upcomingLink: '/launchpad/port3',
     liveLink: '/launchpad/port3',
     projectInfo: [
@@ -2600,8 +2600,8 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
               </li>
               <li>
                 <Typography sx={{ fontSize: 16 }}>KOL, media partners & big brands:</Typography>
-                <a href="https://soquest.xyz/spaces" target="_blank" rel="noreferrer">
-                  https://soquest.xyz/spaces
+                <a href="https://soquest.xyz/space" target="_blank" rel="noreferrer">
+                  https://soquest.xyz/space
                 </a>
               </li>
             </ul>

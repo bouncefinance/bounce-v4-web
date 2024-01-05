@@ -332,6 +332,14 @@ export const ResourcesLinks = [
     isDisabled: false,
     extraIcon: '',
     className: ''
+  },
+  {
+    label: 'Private Launchpad Form',
+    isExternal: true,
+    href: 'https://docs.google.com/forms/d/e/1FAIpQLSeSXXbKG6Dk_6NhzGnT1gkZsG5MVvdtDmLVU87sIsnmHdjYWg/viewform?usp=sf_link',
+    isDisabled: false,
+    extraIcon: '',
+    className: ''
   }
 ]
 const FooterPc: React.FC<{ isDark?: boolean }> = ({ isDark }) => {

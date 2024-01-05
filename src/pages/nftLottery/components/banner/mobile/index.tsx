@@ -229,7 +229,7 @@ const MobileBanner = ({ children }: { children?: React.ReactNode }) => {
             mb={8}
             variant="lotteryh1"
           >
-            {/* The First-Ever AI-Generated NFT Collection on Bitcoin */}
+            The First-Ever AI-Generated Ordinals NFT Collection
           </Typography>
           <Typography
             sx={{
@@ -242,7 +242,7 @@ const MobileBanner = ({ children }: { children?: React.ReactNode }) => {
               padding: '0 16px'
             }}
           >
-            {/* {`The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`} */}
+            {`The "AI Meets Bitcoin" Auction features the first-ever AI-generated Ordinals NFT collection, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`}
           </Typography>
         </Box>
         {children}
