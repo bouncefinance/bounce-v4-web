@@ -171,7 +171,7 @@ const ImgCard = ({ erc721Token }: { erc721Token?: Token721 | undefined }) => {
             maxWidth: 150
           }}
         >
-          # {erc721Token?.tokenId}
+          {erc721Token ? `# ${erc721Token?.tokenId}` : 'Unrevealed'}
         </Typography>
       </Box>
     </Box>
