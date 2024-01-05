@@ -17,11 +17,11 @@ import Header from './header'
 import Charts from './charts'
 import { Steps } from './Step'
 const Page = () => {
-  const poolId = 0
+  const poolId = 1
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
-  const { account } = useActiveWeb3React()
+  const { account, chainId: _chainId } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
-  const chainId = ChainId.SEPOLIA
+  const chainId = _chainId || ChainId.SEPOLIA
   const nowTime = () => new Date().getTime()
   const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId)
@@ -85,9 +85,9 @@ const Page = () => {
         <Box
           padding={{ xs: '0 16px', md: '20px 72px' }}
           sx={{ width: '100%', maxWidth: 1440, margin: '0 auto' }}
-          mt={{ xs: 50, md: 80 }}
+          mt={{ xs: 110, md: 180 }}
         >
-          <Header />
+          <Header coinInfo={coinInfo} />
           <Charts />
           <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
         </Box>

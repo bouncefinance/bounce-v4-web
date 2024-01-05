@@ -11,7 +11,6 @@ interface ChartsDataType {
   color: string
   icon: string
   amount: number
-  price: number
 }
 
 const Title = styled(Typography)`

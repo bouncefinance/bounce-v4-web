@@ -12,7 +12,7 @@ import { useShowLoginModal } from 'state/users/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import { Contract } from '@ethersproject/contracts'
-import { useToken } from 'state/wallet/hooks'
+import { useToken, useTokens } from 'state/wallet/hooks'
 import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
@@ -33,9 +33,9 @@ import {
   StepLabelStyle,
   StepperStyle
 } from 'pages/launchpadCoin/Step'
-import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
+import TokenIcon from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import StakeAuctionInputDialog from './stakeModal'
-import { ZERO_ADDRESS } from '../../constants'
+import { colorList, getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 
 export function Steps({
   coinInfo,
@@ -148,7 +148,36 @@ function Step1({
   }, [])
   const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1Currency = useToken(ZERO_ADDRESS, _chainId) || undefined
+  const poolStakeTokens = useTokens(
+    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
+    _chainId
+  )
+
+  const stakeTokenList = useMemo(() => {
+    if (coinInfo && poolStakeTokens) {
+      const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
+        value: item?.toSignificant(6),
+        data: item,
+        address: coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightTokenAddr[index],
+        token: poolStakeTokens[index],
+        color: colorList[index],
+        logo: getIcon(poolStakeTokens[index]?.name?.toLocaleUpperCase())
+      }))
+      return arr
+    }
+    return undefined
+  }, [coinInfo, poolStakeTokens])
+
+  const stakeTokenWeight = useMemo(() => {
+    if (coinInfo && stakeTokenList) {
+      const ret = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1Weight?.map((item, index) =>
+        new BigNumber(stakeTokenList[index].data.raw.toString()).div(item?.toString() || 0).toString()
+      )
+      return ret
+    }
+    return undefined
+  }, [coinInfo, stakeTokenList])
+  console.log('🚀 ~ file: Step.tsx:180 ~ stakeTokenWeight ~ stakeTokenWeight:', stakeTokenWeight)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -276,7 +305,7 @@ function Step1({
                 padding: { xs: 16, md: '24px 30px' },
                 borderRadius: '20px',
                 background: '#F6F6F3',
-                height: { xs: 'auto', md: 376 }
+                height: { xs: 'auto', md: 426 }
               }}
             >
               <Box
@@ -318,14 +347,40 @@ function Step1({
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
-                  <CardContentStyle>Total Committed Amount / Total Raise</CardContentStyle>
-                  <CardLabelStyle>{token1Currency?.symbol} / 450,000</CardLabelStyle>
+                  <CardContentStyle>Total Stake</CardContentStyle>
+                  <Stack direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'} alignItems={'center'}>
+                    {stakeTokenList?.map(item => (
+                      <Stack
+                        key={item.token?.address}
+                        direction={'row'}
+                        justifyContent={'flex-start'}
+                        spacing={10}
+                        alignItems={'center'}
+                        mr={20}
+                        mb={10}
+                      >
+                        <img src={item.logo || TokenIcon} style={{ width: 20, height: 20, borderRadius: '50%' }} />
+                        <Typography fontSize={16} fontWeight={500}>
+                          {item?.value}
+                        </Typography>
+                        <Typography fontSize={16} fontWeight={500} width={'fit-content'}>
+                          {item?.token?.name?.toLocaleUpperCase()}
+                        </Typography>
+                      </Stack>
+                    ))}
+                  </Stack>
                 </Stack>
-                <Stack spacing={8}>
-                  <CardContentStyle>Participants</CardContentStyle>
-                  <CardLabelStyle>
-                    {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
-                  </CardLabelStyle>
+                <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Participants</CardContentStyle>
+                    <CardLabelStyle>
+                      {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
+                    </CardLabelStyle>
+                  </Stack>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Total Raise</CardContentStyle>
+                    <CardLabelStyle>100,000 USDT</CardLabelStyle>
+                  </Stack>
                 </Stack>
               </Stack>
             </Stack>
@@ -361,10 +416,7 @@ function Step1({
 
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
-                <CardLabelStyle>
-                  null
-                  {token1Currency?.symbol}
-                </CardLabelStyle>
+                <CardLabelStyle>null</CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>

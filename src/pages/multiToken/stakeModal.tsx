@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Dialog as MuiDialog, DialogContent, Stack, Typography, DialogTitle, IconButton, MenuItem } from '@mui/material'
 import { NiceModalHocProps, show } from '@ebay/nice-modal-react'
 import { ReactComponent as CloseSVG } from '../../bounceComponents/common/DialogConfirmation/assets/close.svg'
@@ -101,6 +101,10 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
     onClose()
     setAmount('')
   }, [onClose])
+
+  useEffect(() => {
+    setUserStakedAddress('')
+  }, [account])
   const approveFn = useTransactionModalWrapper(approveCallback)
 
   const toCommit = useCallback(async () => {
