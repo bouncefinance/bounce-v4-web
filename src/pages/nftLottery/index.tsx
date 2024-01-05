@@ -9,7 +9,7 @@ import { useEffect } from 'react'
 import useRandomSelectionNFTPoolInfo from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 
 const NftLottery = () => {
-  const { data: poolInfo } = useRandomSelectionNFTPoolInfo(18703)
+  const { data: poolInfo } = useRandomSelectionNFTPoolInfo(18708)
   console.log('🚀 ~ file: index.tsx:13 ~ NftLottery ~ poolInfo:', poolInfo)
   useEffect(() => {
     document.getElementById('body')?.setAttribute('style', 'padding-top: 0;')

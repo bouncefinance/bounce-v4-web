@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
 import { useRandomSelectionNFTBurningContract } from 'hooks/useContract'
 import { useCallback, useMemo, useState } from 'react'
-import { useToken, useTokens } from 'state/wallet/hooks'
+import { useTokens } from 'state/wallet/hooks'
 
 interface IParam {
   name: string
@@ -30,22 +30,10 @@ interface IParam {
 
 const initParams: IParam = {
   name: 'test',
-  token0: '0x245526cfba6A6D92FA76Bf784eEd651C8293996d',
-  token1s: [
-    '0xc390E699b38F14dB884C635bbf843f7B135113ad',
-    '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
-    '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E',
-    '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7',
-    '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
-  ],
+  token0: '0xE684c11F6E90905EF63B16A4FAD3851AC8f432Be',
+  token1s: [],
   amountTotal0: '10',
-  amount1PerWallets: [
-    '20000000000000000000',
-    '10000000',
-    '10000000000000000000',
-    '10000000000000000000',
-    '10000000000000000000'
-  ],
+  amount1PerWallets: [],
   openAt: 1703735918,
   closeAt: 1703735978,
   claimAt: 1703735978,
@@ -60,8 +48,6 @@ const useCreatePool = () => {
   const contractAddress = RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES[chainId || 5]
   const contract = useRandomSelectionNFTBurningContract(contractAddress, chainId || 5)
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || 5)
-  const tk = useToken('0x74a86bB4C6629317f9f5c49a9f27b724bba9068a', chainId)
-  console.log('🚀 ~ file: createNFTLotteryPool.tsx:64 ~ useCreatePool ~ tk:', tk)
 
   return useCallback(
     async ({ body, creator, optId }: { body: IParam; creator: string; optId: number }) => {

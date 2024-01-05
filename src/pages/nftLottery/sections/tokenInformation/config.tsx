@@ -17,7 +17,7 @@ export function getIcon(name: string | undefined) {
     if (iconList[name.toUpperCase()] === undefined) {
       return null
     } else {
-      return iconList[name]
+      return iconList[name.toUpperCase()]
     }
   } else {
     return null
