@@ -168,16 +168,7 @@ function Step1({
     return undefined
   }, [coinInfo, poolStakeTokens])
 
-  // const stakeTokenWeight = useMemo(() => {
-  //   if (coinInfo && stakeTokenList) {
-  //     const ret = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1Weight?.map((item, index) =>
-  //       new BigNumber(stakeTokenList[index].data.raw.toString()).div(item?.toString() || 0).toString()
-  //     )
-  //     return ret
-  //   }
-  //   return undefined
-  // }, [coinInfo, stakeTokenList])
-  console.log('🚀 ~ file: Step.tsx:180 ~ stakeTokenWeight ~ stakeTokenWeight:', coinInfo)
+  console.log('🚀 ~ file: Step.tsx:180 ~ stakeTokenWeight ~ stakeTokenWeight:', coinInfo, stakeTokenList)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -349,7 +340,7 @@ function Step1({
                 <Stack spacing={8}>
                   <CardContentStyle>Total Stake</CardContentStyle>
                   <Stack direction={'row'} flexWrap={'wrap'} justifyContent={'flex-start'} alignItems={'center'}>
-                    {stakeTokenList?.map(item => (
+                    {stakeTokenList?.map((item, index) => (
                       <Stack
                         key={item.token?.address}
                         direction={'row'}
@@ -361,7 +352,9 @@ function Step1({
                       >
                         <img src={item.logo || TokenIcon} style={{ width: 20, height: 20, borderRadius: '50%' }} />
                         <Typography fontSize={16} fontWeight={500}>
-                          {item?.value}
+                          {coinInfo?.token1StakedStats?.stakeTokenPrices
+                            ? item?.data.div(coinInfo?.token1StakedStats?.stakeTokenPrices[index]).toSignificant()
+                            : '0'}
                         </Typography>
                         <Typography fontSize={16} fontWeight={500} width={'fit-content'}>
                           {item?.token?.name?.toLocaleUpperCase()}
