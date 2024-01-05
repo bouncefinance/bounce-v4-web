@@ -86,7 +86,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
     setUserStakedAddress('')
     setSelectedIdx(0)
   }, [account])
-  const approveFn = useTransactionModalWrapper(approveCallback)
+  const approveFn = useTransactionModalWrapper(approveCallback, { isApprove: true })
 
   const toCommit = useCallback(async () => {
     if (!token1CurrencyAmount || !contract || !selectedToken) return

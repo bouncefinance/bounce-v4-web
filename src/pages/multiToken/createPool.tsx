@@ -115,9 +115,9 @@ const CreateNFTLotteryPool = () => {
     return token0Amount.greaterThan(token0Balance)
   }, [token0Amount, token0Balance])
   const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || 5]
-  const [approvalState, approveCallback] = useApproveCallback(token0Amount, contractAddress)
+  const [approvalState, , approveCallback] = useApproveCallback(token0Amount, contractAddress)
 
-  const approveFn = useTransactionModalWrapper(approveCallback as (...arg: any) => Promise<any>)
+  const approveFn = useTransactionModalWrapper(approveCallback, { isApprove: true })
   const token1Arr = useTokens(values.token1s as string[], chainId || ChainId.SEPOLIA)
   const changeValue = (values: IParam) => {
     setValues(values)

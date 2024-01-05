@@ -1,17 +1,27 @@
 import { TransactionResponse } from '@ethersproject/providers'
 import { useRequest } from 'ahooks'
-import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from '../utils/auction'
+import {
+  hideDialogConfirmation,
+  showRequestApprovalDialog,
+  showRequestConfirmDialog,
+  showWaitingTxDialog
+} from '../utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 
 export function useTransactionModalWrapper(
   event: (...args: any) => Promise<TransactionResponse>,
-  successTipsText?: string
+  option?: {
+    isApprove?: boolean
+    successTipsText?: string
+    onSuccess?: () => void
+    hideSuccessTip?: boolean
+  }
 ) {
   const { runAsync } = useRequest(
     async (...args) => {
       try {
-        showRequestConfirmDialog()
+        option?.isApprove ? showRequestApprovalDialog() : showRequestConfirmDialog()
         const { wait } = await event(...args)
         const ret = new Promise((resolve, reject) => {
           showWaitingTxDialog(() => {
@@ -26,12 +36,14 @@ export function useTransactionModalWrapper(
           .then(() => {
             hideDialogConfirmation()
 
-            show(DialogTips, {
-              iconType: 'success',
-              againBtn: 'Close',
-              title: 'Congratulations!',
-              content: successTipsText || `The transaction has been successfully confirmed`
-            })
+            !option?.hideSuccessTip &&
+              show(DialogTips, {
+                iconType: 'success',
+                againBtn: 'Close',
+                title: 'Congratulations!',
+                content: option?.successTipsText || `The transaction has been successfully confirmed`
+              })
+            option?.onSuccess && option.onSuccess()
           })
           .catch()
       } catch (err: any) {
@@ -41,7 +53,13 @@ export function useTransactionModalWrapper(
           againBtn: 'Try Again',
           cancelBtn: 'Cancel',
           title: 'Oops..',
-          content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
+          content:
+            err?.reason ||
+            err?.error?.message ||
+            err?.data?.message ||
+            err?.message ||
+            err?.toString() ||
+            'Something went wrong',
           onAgain: runAsync
         })
       }

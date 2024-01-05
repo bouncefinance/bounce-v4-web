@@ -48,7 +48,9 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
     })
   }, [account, addTransaction, randomContract, name, poolId])
 
-  const runWithModal = useTransactionModalWrapper(run, 'You have successfully claimed.')
+  const runWithModal = useTransactionModalWrapper(run, {
+    successTipsText: 'You have successfully claimed.'
+  })
 
   return { submitted, run, runWithModal }
 }
@@ -132,7 +134,9 @@ export function useRandomNFTUserClaim(
     addTransaction
   ])
 
-  const runWithModal = useTransactionModalWrapper(run, 'You have successfully claimed.')
+  const runWithModal = useTransactionModalWrapper(run, {
+    successTipsText: 'You have successfully claimed.'
+  })
 
   return { run, submitted, runWithModal }
 }
@@ -217,12 +221,11 @@ export function useRandomNFTBetCallback(
       addTransaction
     ]
   )
-  const runWithModal = useTransactionModalWrapper(
-    run,
-    `You have successfully purchased a ticket with ${userTokenAmount?.toSignificant()} ${
+  const runWithModal = useTransactionModalWrapper(run, {
+    successTipsText: `You have successfully purchased a ticket with ${userTokenAmount?.toSignificant()} ${
       poolInfo.token1Currency[selectTokenIndex ?? 0]?.symbol
     }.`
-  )
+  })
 
   return { run, submitted, runWithModal }
 }
