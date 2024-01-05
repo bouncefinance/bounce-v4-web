@@ -19,9 +19,9 @@ import { Steps } from './Step'
 const Page = () => {
   const poolId = 0
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
-  const { account } = useActiveWeb3React()
+  const { account, chainId: _chainId } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
-  const chainId = ChainId.SEPOLIA
+  const chainId = _chainId || ChainId.SEPOLIA
   const nowTime = () => new Date().getTime()
   const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId)

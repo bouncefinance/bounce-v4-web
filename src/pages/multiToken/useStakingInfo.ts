@@ -10,12 +10,14 @@ import {
   TotalStakeToken1Type,
   UserStakeToken1WeightMapType
 } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import { useActiveWeb3React } from 'hooks'
 import { useTokens } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 
 export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: number, account: string | undefined) => {
-  const chainId = ChainId.SEPOLIA
+  const { chainId: _chainId } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
+  const chainId = _chainId || ChainId.SEPOLIA
   const poolInfo = useSingleCallResult(contract, 'pools', [poolId], undefined, chainId)
   const totalStake = useSingleCallResult(contract, 'getToken1Amounts', [poolId], undefined, chainId)
   const totalParticipants = useSingleCallResult(contract, 'participantCount', [poolId], undefined, chainId)
