@@ -8,14 +8,6 @@ import { useMemo } from 'react'
 import { useTokens } from 'state/wallet/hooks'
 import { ChainId } from 'constants/chain'
 
-// interface ChartsDataType {
-//   name: string
-//   value: number
-//   itemStyle: any
-//   color: string
-//   icon: string
-// }
-
 const Title = styled(Typography)`
   color: var(--white, #fff);
 
@@ -37,26 +29,15 @@ const WhiteP1 = styled(Typography)`
   line-height: 150%; /* 21px */
   letter-spacing: -0.28px;
 `
-const data = [
-  {
-    name: 'AUCTION',
-    value: 100,
-    itemStyle: { color: muColorList[0] },
-    color: muColorList[0],
-    icon: getIcon('AUCTION')
-  },
-  { name: 'MUBI', value: 100, itemStyle: { color: muColorList[1] }, color: muColorList[1], icon: getIcon('MUBI') },
-  { name: 'DAII', value: 100, itemStyle: { color: muColorList[2] }, color: muColorList[2], icon: getIcon('DAII') },
-  { name: 'BSSB', value: 100, itemStyle: { color: muColorList[3] }, color: muColorList[3], icon: getIcon('BSSB') },
-  { name: 'AMMX', value: 100, itemStyle: { color: muColorList[4] }, color: muColorList[4], icon: getIcon('AMMX') }
-]
 
 const ChartLayout = ({
+  data,
   title,
   option,
   width,
   height
 }: {
+  data: any
   title: string
   option: EChartsOption
   width: number
@@ -83,7 +64,7 @@ const ChartLayout = ({
         </Box>
 
         <Stack flexDirection={'row'} alignItems={'center'} flexWrap={'wrap'} pl={isSm ? '18%' : '15%'}>
-          {data.map(i => (
+          {data?.map((i: any) => (
             <Stack
               key={i.name}
               flexDirection={'row'}
@@ -113,6 +94,23 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
     _chainId
   )
+
+  const pieData = useMemo(() => {
+    if (coinInfo && poolStakeTokens) {
+      const arr = coinInfo.token1StakedStats?.stakeTokenPrices?.map((item, index) => ({
+        value:
+          Number(coinInfo?.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.[index].div(item).toExact()) ||
+          0,
+        color: muColorList[index],
+        name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
+        logo: getIcon(poolStakeTokens[index]?.name?.toLocaleUpperCase()),
+        itemStyle: { color: muColorList[index] }
+      }))
+      return arr
+    }
+    return undefined
+  }, [coinInfo, poolStakeTokens])
+
   const barData = useMemo(() => {
     if (coinInfo && poolStakeTokens) {
       const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
@@ -126,7 +124,11 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     }
     return undefined
   }, [coinInfo, poolStakeTokens])
-  console.log('222222222222222', barData)
+  const barXAxisData = barData
+    ? barData.map(item => {
+        return item.name ? item.name : ''
+      })
+    : []
 
   const pieOption: EChartsOption = {
     tooltip: {
@@ -163,7 +165,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         labelLine: {
           show: false
         },
-        data: data
+        data: pieData
       }
     ]
   }
@@ -176,7 +178,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     },
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+      data: barXAxisData,
       axisTick: {
         show: false
       },
@@ -238,10 +240,22 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
   return (
     <Stack flexDirection={'row'} flexWrap={isSm ? 'wrap' : 'nowrap'} gap={isSm ? 16 : 20} mt={isSm ? 24 : 60}>
       <Box width={isSm ? '100%' : '60%'}>
-        <ChartLayout title="Token proportion" option={pieOption} width={isSm ? 200 : 252} height={isSm ? 200 : 252} />
+        <ChartLayout
+          data={pieData}
+          title="Token proportion"
+          option={pieOption}
+          width={isSm ? 200 : 252}
+          height={isSm ? 200 : 252}
+        />
       </Box>
       <Box width={isSm ? '100%' : '40%'}>
-        <ChartLayout title="Value Distribution" option={barOption} width={isSm ? 300 : 450} height={isSm ? 200 : 252} />
+        <ChartLayout
+          data={barData}
+          title="Value Distribution"
+          option={barOption}
+          width={isSm ? 300 : 450}
+          height={isSm ? 200 : 252}
+        />
       </Box>
     </Stack>
   )
