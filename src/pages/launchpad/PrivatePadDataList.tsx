@@ -2644,40 +2644,9 @@ export const Port3Data: IPrivatePadProp = {
     { title: 'Token Amount', content: '2,000,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
-  multipleTokenInfo: {
-    title: 'Support multiple stake assets',
-    social: [
-      <Link key={0} href="https://port3.io/" target="_blank">
-        <Web />
-      </Link>,
-      <Link key={4} href="https://t.me/port3network" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      <Link key={5} href="https://t.me/Port3_Network" target="_blank">
-        <img src={Telegram} width={40} />
-      </Link>,
-      // <Link
-      //   key={5}
-      //   sx={{ width: '43px !important', height: '43px !important' }}
-      //   href="https://www.instagram.com/create.protocol/?hl=en"
-      //   target="_blank"
-      // >
-      //   <InstagramSvg width={43} height={43} />
-      // </Link>,
-      <Link key={6} href="https://twitter.com/Port3Network" target="_blank">
-        <Twitter />
-      </Link>,
-      <Link key={7} href="https://discord.com/invite/JV5gT5cGCk" target="_blank">
-        <DiscordSVG />
-      </Link>,
-      <Link key={8} href="https://medium.com/@Port3" target="_blank">
-        <img src={Medium} width={40} />
-      </Link>
-    ]
-  },
   privatePrices: [
-    { title: 'sale price', value: '1 GMT = 0.00002514 BNB' },
-    { title: 'token offered', value: '420,000,000.0000 GMT' }
+    { title: 'sale price', value: '1 PORT3 = 0.05 USDT' },
+    { title: 'token offered', value: '2,000,000 PORT3' }
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [

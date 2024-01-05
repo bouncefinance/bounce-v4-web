@@ -1,8 +1,8 @@
-import { Box, Stack, Typography, styled } from '@mui/material'
+import { Box, Stack, Typography, styled, useTheme } from '@mui/material'
 import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { ChainId } from 'constants/chain'
 import { Currency, CurrencyAmount } from 'constants/token'
-import { getIcon, iconList } from 'pages/nftLottery/sections/tokenInformation/config'
+import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 import { useMemo } from 'react'
 import { useToken } from 'state/wallet/hooks'
 
@@ -93,8 +93,7 @@ const TokenBoxList = ({
   token1Amounts: ITokenList[] | undefined
   token0Currency: Currency | undefined | null
 }) => {
-  console.log('token0Currency', token0Currency)
-
+  const theme = useTheme()
   return (
     <Stack mt={40} flexDirection={'row'} gap={16} flexWrap={'wrap'}>
       {token1Amounts?.map(i => (
@@ -107,7 +106,10 @@ const TokenBoxList = ({
             alignItems: 'flex-start',
             gap: 10,
             borderRadius: 8,
-            background: 'var(--yellow, #E1F25C)'
+            background: 'var(--yellow, #E1F25C)',
+            [theme.breakpoints.down('sm')]: {
+              flex: 1
+            }
           }}
         >
           <Stack flexDirection={'row'} alignItems={'center'} gap={4}>
@@ -127,7 +129,6 @@ const TokenBoxList = ({
     </Stack>
   )
 }
-const token1s = Object.keys(iconList)
 const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
   const chainId = ChainId.SEPOLIA
   const quoteAmount = useMemo(() => {
@@ -138,17 +139,24 @@ const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
   const poolToken1s = coinInfo?.token1StakedStats?.totalStakeAmount
 
   const token1Amounts = useMemo(() => {
-    if (!coinInfo || !quoteAmount || !poolToken1s || poolToken1s.some(i => !i)) {
+    if (
+      !coinInfo ||
+      !quoteAmount ||
+      !poolToken1s ||
+      poolToken1s.some(i => !i) ||
+      !coinInfo.token1StakedStats?.token1sCurrency
+    ) {
       return
     }
-    return token1s.map<ITokenList>((name, id) => ({
-      name: name,
+    return coinInfo.token1StakedStats?.token1sCurrency.map<ITokenList>((cr, id) => ({
+      name: cr.symbol || '--',
       price: quoteAmount.div(poolToken1s[id]).toSignificant(4),
-      icon: getIcon(name),
+      icon: getIcon(cr.symbol) || '',
       weights: 1
     }))
   }, [coinInfo, poolToken1s, quoteAmount])
   const token0Currency = useToken(coinInfo?.poolInfo?.token0 || '', chainId)
+
   return (
     <Box sx={{ width: '100%' }}>
       <TitleContainer />
