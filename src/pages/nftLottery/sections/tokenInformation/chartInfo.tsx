@@ -99,10 +99,10 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
           parms.seriesName +
           '</br>' +
           parms.data.name +
-          '：' +
+          ': ' +
           parms.data.amount +
           '</br>' +
-          'percent：' +
+          'percent: ' +
           parms.percent +
           '%'
         return str
