@@ -10,13 +10,15 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { AppState } from 'state'
 import { routes } from 'constants/routes'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSignMessage } from 'hooks/useWeb3Instance'
 import { useActiveWeb3React } from 'hooks'
 import { IResponse } from 'api/type'
 import { useSignLoginModalControl, useWalletModalToggle } from 'state/application/hooks'
 import { useQueryParams } from 'hooks/useQueryParams'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
+import { getAlchemy } from 'utils/alchemy'
+import { ChainId } from 'constants/chain'
 
 export const hellojs = typeof window !== 'undefined' ? require('hellojs') : null
 export type IAuthName = 'google' | 'twitter'
@@ -373,4 +375,55 @@ export function useUpdateUserLoginInfoWithWindowVisible() {
       })
     }
   }, [dispatch, windowVisible])
+}
+
+export interface Token721 {
+  address: string
+  chainId: number
+  decimals?: number | undefined
+  name?: string | undefined
+  symbol?: string | undefined
+  tokenId?: string | undefined
+  tokenUri?: string | undefined
+  uri?: string | undefined
+}
+
+export function useToken721BalanceTokens(
+  token0Address: string,
+  chainId: ChainId
+): {
+  loading: boolean
+  availableTokens: undefined | Array<Token721> | undefined
+} {
+  const { account } = useActiveWeb3React()
+
+  const { data: tokens, loading } = useRequest(
+    async () => {
+      if (!chainId || !account || !token0Address) return undefined
+      const res = await getAlchemy(chainId).nft.getNftsForOwner(account, {
+        contractAddresses: [token0Address]
+      })
+
+      const tokens: Token721[] = res.ownedNfts.map(data => ({
+        chainId: chainId,
+        address: data.contract.address,
+        tokenId: data.tokenId,
+        name: data?.name ?? data.collection?.name ?? data.contract.openSeaMetadata.collectionName ?? data.contract.name,
+        symbol: data.contract?.symbol ?? data.collection?.slug,
+        tokenUri: data.tokenUri,
+        uri: data.contract.openSeaMetadata.imageUrl ?? undefined
+      }))
+
+      return tokens
+    },
+    {
+      refreshDeps: [chainId, account, token0Address]
+    }
+  )
+
+  const res = useMemo(() => {
+    return { loading, availableTokens: tokens }
+  }, [loading, tokens])
+
+  return res
 }
