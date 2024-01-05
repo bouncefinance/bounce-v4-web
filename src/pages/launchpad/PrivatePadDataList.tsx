@@ -1541,11 +1541,7 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: `The “AI Meets Bitcoin” Auction features the first-ever AI-generated NFT collection on Bitcoin, with 450
-            exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents
-            a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks
-            gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their
-            endurance and legacy.`,
+  desc: `The "AI Meets Bitcoin" Auction features the first-ever AI-generated Ordinals NFT collection, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`,
   social: [],
   moreData: [
     // { title: 'Token Name', content: 'TBD' },

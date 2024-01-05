@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import Title from '../../components/artistsInformation/Title'
 import Text from '../../components/artistsInformation/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -31,8 +31,14 @@ export const DeatailList: List[] = [
   // },
   // { name: 'Hard Cap Per User', value: 'No lockup' },
   { name: 'Contract Address', value: 'TBD' },
+  { name: 'Token Name', value: 'AI_Meets_Bitcoin' },
+  { name: 'Token Symbol', value: 'AIBTC' },
   { name: 'Token Standard', value: 'BRC-721,ERC-721' },
-  { name: 'Blockchain', value: 'Bitcoin, Ethereum' }
+  { name: 'Blockchain', value: 'Bitcoin, Ethereum' },
+  {
+    name: 'Description',
+    value: `"AI Meets Bitcoin": The first-ever AI-generated Ordinals NFT collection, representing a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem.`
+  }
   // { name: 'Token Distribution', value: 'After the end of token sale' }
 ]
 
@@ -41,7 +47,7 @@ const NetDetails = () => {
   return (
     <Box marginBottom={isSm ? '24px' : '0'}>
       {!isSm && <Title text="NFT DETAILS" />}
-      <Typography
+      {/* <Typography
         variant="lotteryh2"
         color={'var(--AI-dark-02, #4C483A)'}
         textTransform={'uppercase'}
@@ -52,7 +58,7 @@ const NetDetails = () => {
         padding={isSm ? '24px 0 16px' : '40px 0'}
       >
         NFT SALE AND ECONOMICS PARAMETERS AND PUBLIC TIME, ETC.
-      </Typography>
+      </Typography> */}
       {DeatailList.map(({ name, value }, idx) => (
         <Box
           key={idx}
