@@ -31,9 +31,10 @@ export type FinalAllocationType = {
   myUnSwappedAmount1: BigNumber
 }
 export type TotalStakeToken1Type = {
-  totalStakeAmount: BigNumber[]
+  totalStakeAmount: CurrencyAmount[] | undefined
   stakeTokenAddress: string[]
   stakeTokenPrices: CurrencyAmount[] | undefined
+  token1sCurrency: Currency[] | undefined
 }
 export type UserStakeToken1WeightMapType = {
   myStakeToken1WeightTokenAddr: string[]

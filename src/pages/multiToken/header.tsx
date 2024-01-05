@@ -1,8 +1,10 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import { ChainId } from 'constants/chain'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { getIcon, iconList } from 'pages/nftLottery/sections/tokenInformation/config'
 import { useMemo } from 'react'
+import { useToken } from 'state/wallet/hooks'
 
 const BlackWeightP1 = styled(Typography)`
   color: var(--black-100, #121212);
@@ -81,10 +83,18 @@ const TitleContainer = () => {
 interface ITokenList {
   name: string
   weights: number
-  price: number
+  price: string
   icon: string | null
 }
-const TokenBoxList = ({ token1Amounts }: { token1Amounts: ITokenList[] | undefined }) => {
+const TokenBoxList = ({
+  token1Amounts,
+  token0Currency
+}: {
+  token1Amounts: ITokenList[] | undefined
+  token0Currency: Currency | undefined | null
+}) => {
+  console.log('token0Currency', token0Currency)
+
   return (
     <Stack mt={40} flexDirection={'row'} gap={16} flexWrap={'wrap'}>
       {token1Amounts?.map(i => (
@@ -103,7 +113,11 @@ const TokenBoxList = ({ token1Amounts }: { token1Amounts: ITokenList[] | undefin
           <Stack flexDirection={'row'} alignItems={'center'} gap={4}>
             <img src={i.icon || ''} style={{ width: 20, height: 20 }} />
             <BlackSmallP1> 1 {i.name} = </BlackSmallP1>
-            <BlackSmallP1> {i.price} USD</BlackSmallP1>
+            <img src={token0Currency?.logo || token1Amounts[0].icon || ''} style={{ width: 20, height: 20 }} />
+            <BlackSmallP1>
+              {' '}
+              {i.price} {token0Currency?.name}
+            </BlackSmallP1>
           </Stack>
           <Box>
             <BlackSmallP1>Weights = {i.weights}</BlackSmallP1>
@@ -115,12 +129,13 @@ const TokenBoxList = ({ token1Amounts }: { token1Amounts: ITokenList[] | undefin
 }
 const token1s = Object.keys(iconList)
 const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
+  const chainId = ChainId.SEPOLIA
   const quoteAmount = useMemo(() => {
     if (!coinInfo?.poolInfo?.quoteAmountTotal1) return
     return CurrencyAmount.fromRawAmount(Currency.getNativeCurrency(), coinInfo?.poolInfo?.quoteAmountTotal1.toString())
   }, [coinInfo?.poolInfo?.quoteAmountTotal1])
 
-  const poolToken1s = coinInfo?.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts
+  const poolToken1s = coinInfo?.token1StakedStats?.totalStakeAmount
 
   const token1Amounts = useMemo(() => {
     if (!coinInfo || !quoteAmount || !poolToken1s || poolToken1s.some(i => !i)) {
@@ -128,16 +143,16 @@ const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     }
     return token1s.map<ITokenList>((name, id) => ({
       name: name,
-      price: Number(poolToken1s[id].toExact()) / Number(quoteAmount.toExact()),
+      price: quoteAmount.div(poolToken1s[id]).toSignificant(4),
       icon: getIcon(name),
       weights: 1
     }))
   }, [coinInfo, poolToken1s, quoteAmount])
-
+  const token0Currency = useToken(coinInfo?.poolInfo?.token0 || '', chainId)
   return (
     <Box sx={{ width: '100%' }}>
       <TitleContainer />
-      <TokenBoxList token1Amounts={token1Amounts} />
+      <TokenBoxList token1Amounts={token1Amounts} token0Currency={token0Currency} />
     </Box>
   )
 }
