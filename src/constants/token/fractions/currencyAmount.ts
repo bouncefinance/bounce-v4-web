@@ -59,7 +59,8 @@ export class CurrencyAmount extends Fraction {
 
   public div(other: CurrencyAmount | JSBI | number | BigNumber): CurrencyAmount {
     const val = other instanceof CurrencyAmount ? other.toExact() : other instanceof JSBI ? other.toString() : other
-    return CurrencyAmount.fromAmount(this.currency, new BigNumber(this.toExact()).div(val).toString()) as CurrencyAmount
+    const ret = CurrencyAmount.fromAmount(this.currency, new BigNumber(this.toExact()).div(val).toString())
+    return ret ?? CurrencyAmount.fromRawAmount(this.currency, '0')
   }
 
   public toSignificant(
