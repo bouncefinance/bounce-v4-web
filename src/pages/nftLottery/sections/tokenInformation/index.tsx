@@ -9,7 +9,6 @@ import { RandomSelectionNFTProps } from 'api/pool/type'
 const SectionBody = styled(Box)`
   width: 100%;
   background: url(${BgImg}) repeat;
-  padding-bottom: 120px;
   @media (max-width: 1440px) {
     padding: 0 20px;
   }
