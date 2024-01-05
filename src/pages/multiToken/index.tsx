@@ -9,15 +9,16 @@ import { StakeButton } from 'pages/launchpadCoin/Step'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { show } from '@ebay/nice-modal-react'
 import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import OtherProjectTab from 'pages/projectIntro/components/otherProjectTab'
 import { Box } from '@mui/material'
 import { useGetStakingAuctionInfo } from './useStakingInfo'
 import Header from './header'
 import Charts from './charts'
 import { Steps } from './Step'
+import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 const Page = () => {
-  const poolId = 4
+  const poolId = 7
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const { account, chainId: _chainId } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
@@ -78,10 +79,21 @@ const Page = () => {
       })
     }
   }, [account, coinInfo, contract])
-
+  const _Prot3Data = useMemo(() => {
+    return {
+      ...Port3Data,
+      multipleTokenInfo: {
+        title: 'Support multiple stake assets',
+        social:
+          coinInfo?.token1StakedStats?.token1sCurrency?.map(i => (
+            <img key={i.symbol} src={getIcon(i.symbol) || ''} style={{ width: 32, height: 32 }} />
+          )) || []
+      }
+    }
+  }, [coinInfo?.token1StakedStats?.token1sCurrency])
   return (
     <>
-      <ProjectHead item={Port3Data} />
+      <ProjectHead item={_Prot3Data} />
       <Box sx={{ width: '100%' }} style={{ background: '#f5f5f1' }}>
         <Box
           padding={{ xs: '0 16px', md: '20px 72px' }}

@@ -103,7 +103,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
           0,
         color: muColorList[index],
         name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
-        logo: getIcon(poolStakeTokens[index]?.name?.toLocaleUpperCase()),
+        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase()),
         itemStyle: { color: muColorList[index] }
       }))
       return arr
@@ -117,7 +117,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         value: Number(item.toExact()),
         color: muColorList[index],
         name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
-        logo: getIcon(poolStakeTokens[index]?.name?.toLocaleUpperCase()),
+        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase()),
         itemStyle: { color: muColorList[index] }
       }))
       return arr

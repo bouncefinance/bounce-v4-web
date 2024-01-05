@@ -252,7 +252,9 @@ function Step1({
   }
 
   const myPoolShare = useMemo(() => {
-    const myStakeToken1Weight = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight?.[myStakeTokenIndex || 0]
+    const myStakeToken1Weight = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight?.reduce((pre: any, cur) => {
+      return new BigNumber(pre.toString()).plus(cur.toString())
+    }, 0)
     if (coinInfo?.poolTokenWeights) {
       return new BigNumber(myStakeToken1Weight?.toString() || 0)
         .times(100)
@@ -260,7 +262,7 @@ function Step1({
         .toFixed(2)
     }
     return '--'
-  }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight, coinInfo?.poolTokenWeights, myStakeTokenIndex])
+  }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight, coinInfo?.poolTokenWeights])
 
   return (
     <>
