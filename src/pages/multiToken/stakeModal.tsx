@@ -84,6 +84,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
 
   useEffect(() => {
     setUserStakedAddress('')
+    setSelectedIdx(0)
   }, [account])
   const approveFn = useTransactionModalWrapper(approveCallback)
 
