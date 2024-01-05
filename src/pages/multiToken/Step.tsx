@@ -153,6 +153,15 @@ function Step1({
     _chainId
   )
 
+  const [myStakeTokenIndex, curStackTokenAmount] = useMemo(() => {
+    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
+      i => BigInt(i.toExact()) > BigInt('0')
+    )
+    const curTokenAmount =
+      index !== undefined ? coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.[index] : undefined
+    return [index, curTokenAmount]
+  }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts])
+
   const stakeTokenList = useMemo(() => {
     if (coinInfo && poolStakeTokens) {
       const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
@@ -167,8 +176,6 @@ function Step1({
     }
     return undefined
   }, [coinInfo, poolStakeTokens])
-
-  console.log('🚀 ~ file: Step.tsx:180 ~ stakeTokenWeight ~ stakeTokenWeight:', coinInfo, stakeTokenList)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -243,6 +250,17 @@ function Step1({
   const handleClose = () => {
     setOpenDialog(false)
   }
+
+  const myPoolShare = useMemo(() => {
+    const myStakeToken1Weight = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight?.[myStakeTokenIndex || 0]
+    if (coinInfo?.poolTokenWeights) {
+      return new BigNumber(myStakeToken1Weight?.toString() || 0)
+        .times(100)
+        .div(coinInfo.poolTokenWeights.toString())
+        .toFixed(2)
+    }
+    return '--'
+  }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight, coinInfo?.poolTokenWeights, myStakeTokenIndex])
 
   return (
     <>
@@ -409,11 +427,19 @@ function Step1({
 
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
-                <CardLabelStyle>null</CardLabelStyle>
+                <CardLabelStyle>
+                  {myStakeTokenIndex !== undefined && coinInfo?.token1StakedStats?.stakeTokenPrices
+                    ? curStackTokenAmount
+                        ?.div(coinInfo?.token1StakedStats?.stakeTokenPrices?.[myStakeTokenIndex || 0])
+                        .toSignificant()
+                    : '--'}{' '}
+                  {` `}
+                  {curStackTokenAmount?.currency.symbol || '--'}
+                </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
-                <CardLabelStyle>null %</CardLabelStyle>
+                <CardLabelStyle>{myPoolShare} %</CardLabelStyle>
               </Stack>
             </Stack>
             {actionBtn}
