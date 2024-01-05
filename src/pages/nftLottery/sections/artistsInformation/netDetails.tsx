@@ -13,25 +13,27 @@ interface List extends Deatail {
 }
 
 export const DeatailList: List[] = [
-  { name: 'Hard Cap', value: '4200000 USD' },
-  { name: 'Total Token Supply', value: '600000000 GMT' },
-  { name: 'Initial Circulating Supply', value: '10% of Total Token SUPPLY' },
-  {
-    name: 'Public Sale Token Price',
-    value: '0.01 USD ( price in BNB will be determined prior to the start of subscription)'
-  },
-  { name: 'Tokens Offered', value: '4200000000 GMT' },
-  {
-    name: 'Hard Cap Per User',
-    value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
-  },
-  {
-    name: 'Token Sale Vesting Period',
-    value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
-  },
-  { name: 'Hard Cap Per User', value: 'No lockup' },
-  { name: 'Token Type', value: 'SPL' },
-  { name: 'Token Distribution', value: 'After the end of token sale' }
+  // { name: 'Hard Cap', value: '4200000 USD' },
+  // { name: 'Total Token Supply', value: '600000000 GMT' },
+  // { name: 'Initial Circulating Supply', value: '10% of Total Token SUPPLY' },
+  // {
+  //   name: 'Public Sale Token Price',
+  //   value: '0.01 USD ( price in BNB will be determined prior to the start of subscription)'
+  // },
+  // { name: 'Tokens Offered', value: '4200000000 GMT' },
+  // {
+  //   name: 'Hard Cap Per User',
+  //   value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
+  // },
+  // {
+  //   name: 'Token Sale Vesting Period',
+  //   value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
+  // },
+  // { name: 'Hard Cap Per User', value: 'No lockup' },
+  { name: 'Contract Address', value: 'TBD' },
+  { name: 'Token Standard', value: 'BRC-721,ERC-721' },
+  { name: 'Blockchain', value: 'Bitcoin, Ethereum' }
+  // { name: 'Token Distribution', value: 'After the end of token sale' }
 ]
 
 const NetDetails = () => {
