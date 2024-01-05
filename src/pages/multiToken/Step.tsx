@@ -702,7 +702,7 @@ function Step2({
         final $PORT3 allocation, which will be transferred to your spot account along with your remaining token.
       </Typography>
       {account && coinInfo && status === TStep.FINAL_TOKEN_DISTRIBUTION && account !== coinInfo.poolInfo?.creator && (
-        <NotInvolvedContainer>
+        <NotInvolvedContainer sx={{ width: { xs: '100%', md: 420 } }}>
           <FailSVG />
           <NotInvolvedTitle>You did not stake any token for this session.</NotInvolvedTitle>
         </NotInvolvedContainer>
@@ -876,8 +876,8 @@ function Step2({
 
                 <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
                   <BoldTextStyle style={{ fontSize: 20 }}>
-                    {myTotalStakeAmount?.toSignificant(4)} {myTotalStakeAmount?.currency.symbol} /{' '}
-                    {myUnClaimStakeAmount?.toSignificant(4)} {myTotalStakeAmount?.currency.symbol}
+                    {myTotalStakeAmount?.toSignificant(4) || '0'} {myTotalStakeAmount?.currency.symbol} /{' '}
+                    {myUnClaimStakeAmount?.toSignificant(4) || '0'} {myTotalStakeAmount?.currency.symbol}
                   </BoldTextStyle>
                   <StakeButton
                     style={{ width: 150 }}
