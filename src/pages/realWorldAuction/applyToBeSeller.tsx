@@ -516,3 +516,4 @@ const FooterBox = styled(Box)({
     margin: '24px auto 32px'
   }
 })
+export default ApplyToBeSeller
