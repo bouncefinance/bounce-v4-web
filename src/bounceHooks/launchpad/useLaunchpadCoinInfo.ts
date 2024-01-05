@@ -37,12 +37,12 @@ export type TotalStakeToken1Type = {
 export type UserStakeToken1WeightMapType = {
   myStakeToken1WeightTokenAddr: string[]
   myStakeToken1Weight: BigNumber[]
-  myStakeToken1WeightAmounts: BigNumber[]
+  myStakeToken1WeightAmounts: CurrencyAmount[] | undefined
 }
 export type PoolStakeToken1WeightMapType = {
   poolStakeToken1WeightTokenAddr: string[]
   poolStakeToken1Weight: BigNumber[]
-  poolStakeToken1WeightAmounts: BigNumber[]
+  poolStakeToken1WeightAmounts: CurrencyAmount[] | undefined
 }
 export type CoinResultType = {
   poolInfo?: PoolInfoType
