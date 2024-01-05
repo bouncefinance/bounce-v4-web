@@ -1491,7 +1491,7 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
   avatar: AiMeetsBtsAvatar,
   title: 'AI meets Bitcoin',
   chainId: 1,
-  tokenName: 'TBD',
+  tokenName: 'AI_Meets_Bitcoin',
   // whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
   upcomingLink: '/launchpad/ai-random',
   liveLink: '/launchpad/ai-random',
@@ -1544,9 +1544,9 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
   desc: `The "AI Meets Bitcoin" Auction features the first-ever AI-generated Ordinals NFT collection, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`,
   social: [],
   moreData: [
-    // { title: 'Token Name', content: 'TBD' },
-    { title: 'NFT Price', content: 'TBD' },
-    { title: 'NFT Amount', content: 'TBD' },
+    { title: 'Token Name', content: 'AI_Meets_Bitcoin' },
+    { title: 'Token Type', content: 'ERC-721' },
+    { title: 'NFT Amount', content: '400' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
@@ -2497,6 +2497,7 @@ const AmmxRandomData: IPrivatePadProp = {
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 26
+  AiMeetsBtcRandomData,
   {
     // hidden: true,
     keyId: 23,
@@ -2646,7 +2647,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
       { title: 'Blockchain', content: 'Ethereum' }
     ]
   },
-  AiMeetsBtcRandomData,
   AmmxAuctionData,
   AmmxDaiiData,
   AmmxRandomData,
