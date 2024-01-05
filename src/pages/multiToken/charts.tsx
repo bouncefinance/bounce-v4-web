@@ -3,15 +3,18 @@ import DonutChart from 'components/DonutChart'
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { getIcon, muColorList } from 'pages/nftLottery/sections/tokenInformation/config'
+import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
+import { useMemo } from 'react'
+import { useTokens } from 'state/wallet/hooks'
+import { ChainId } from 'constants/chain'
 
-interface ChartsDataType {
-  name: string
-  value: number
-  itemStyle: any
-  color: string
-  icon: string
-  amount: number
-}
+// interface ChartsDataType {
+//   name: string
+//   value: number
+//   itemStyle: any
+//   color: string
+//   icon: string
+// }
 
 const Title = styled(Typography)`
   color: var(--white, #fff);
@@ -101,9 +104,29 @@ const ChartLayout = ({
   )
 }
 
-const Charts = ({ chartsData }: { chartsData?: ChartsDataType[] }) => {
+const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
   const isSm = useBreakpoint('sm')
-  console.log(chartsData)
+  const _chainId = useMemo(() => {
+    return ChainId.SEPOLIA
+  }, [])
+  const poolStakeTokens = useTokens(
+    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
+    _chainId
+  )
+  const barData = useMemo(() => {
+    if (coinInfo && poolStakeTokens) {
+      const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
+        value: Number(item.toExact()),
+        color: muColorList[index],
+        name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
+        logo: getIcon(poolStakeTokens[index]?.name?.toLocaleUpperCase()),
+        itemStyle: { color: muColorList[index] }
+      }))
+      return arr
+    }
+    return undefined
+  }, [coinInfo, poolStakeTokens])
+  console.log('222222222222222', barData)
 
   const pieOption: EChartsOption = {
     tooltip: {
@@ -208,7 +231,7 @@ const Charts = ({ chartsData }: { chartsData?: ChartsDataType[] }) => {
       {
         type: 'bar',
         barWidth: 30,
-        data: data
+        data: barData
       }
     ]
   }

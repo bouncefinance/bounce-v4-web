@@ -17,7 +17,7 @@ import Header from './header'
 import Charts from './charts'
 import { Steps } from './Step'
 const Page = () => {
-  const poolId = 1
+  const poolId = 2
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const { account, chainId: _chainId } = useActiveWeb3React()
   // const chainId = ChainId.MAINNET
@@ -88,7 +88,7 @@ const Page = () => {
           mt={{ xs: 110, md: 180 }}
         >
           <Header coinInfo={coinInfo} />
-          <Charts />
+          <Charts coinInfo={coinInfo} />
           <Steps coinInfo={coinInfo} contract={contract} poolId={poolId} />
         </Box>
       </Box>
