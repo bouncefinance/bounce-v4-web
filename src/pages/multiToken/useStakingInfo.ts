@@ -38,7 +38,11 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   )
   const creatorClaimed = useSingleCallResult(contract, 'creatorClaimed', [poolId], undefined, chainId)
 
-  const token1sCurrency = useTokens(totalStake.result?.[0] || [undefined], chainId)
+  const token1sAddress = useMemo(() => {
+    if (!totalStake.result?.[0]) return [undefined]
+    return totalStake.result[0]
+  }, [totalStake.result])
+  const token1sCurrency = useTokens(token1sAddress, chainId)
 
   const [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts] = useMemo(() => {
     if (
