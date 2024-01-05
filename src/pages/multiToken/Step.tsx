@@ -17,7 +17,7 @@ import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
 import { show } from '@ebay/nice-modal-react'
 import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
-import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
+import DialogTips from 'bounceComponents/common/DialogTips'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import {
   BoldTextStyle,
@@ -35,7 +35,6 @@ import {
 } from 'pages/launchpadCoin/Step'
 import TokenIcon from 'assets/imgs/staked/ammx-token.jpg'
 import StakeAuctionInputDialog from './stakeModal'
-import { ZERO_ADDRESS } from '../../constants'
 
 export function Steps({
   coinInfo,
@@ -148,7 +147,7 @@ function Step1({
   }, [])
   const [openDialog, setOpenDialog] = useState(false)
   const token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
-  const token1Currency = useToken(ZERO_ADDRESS, _chainId) || undefined
+  console.log('🚀 ~ file: Step.tsx:151 ~ coinInfo:', coinInfo)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {
@@ -310,22 +309,27 @@ function Step1({
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>0.00095 USD</CardLabelStyle>
+                    <CardLabelStyle>0.05 USDT</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
                     <CardContentStyle>Total Supply of PORT3</CardContentStyle>
-                    <CardLabelStyle>472,500,000</CardLabelStyle>
+                    <CardLabelStyle>2,000,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
-                  <CardContentStyle>Total Committed Amount / Total Raise</CardContentStyle>
-                  <CardLabelStyle>{token1Currency?.symbol} / 450,000</CardLabelStyle>
+                  <CardContentStyle>Total Stake</CardContentStyle>
                 </Stack>
-                <Stack spacing={8}>
-                  <CardContentStyle>Participants</CardContentStyle>
-                  <CardLabelStyle>
-                    {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
-                  </CardLabelStyle>
+                <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Participants</CardContentStyle>
+                    <CardLabelStyle>
+                      {coinInfo?.totalParticipants ? coinInfo?.totalParticipants.toString() : '--'}
+                    </CardLabelStyle>
+                  </Stack>
+                  <Stack spacing={8}>
+                    <CardContentStyle>Total Raise</CardContentStyle>
+                    <CardLabelStyle>100,000 USDT</CardLabelStyle>
+                  </Stack>
                 </Stack>
               </Stack>
             </Stack>
@@ -361,10 +365,7 @@ function Step1({
 
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
-                <CardLabelStyle>
-                  null
-                  {token1Currency?.symbol}
-                </CardLabelStyle>
+                <CardLabelStyle>null</CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
                 <CardContentStyle>My Pool Share</CardContentStyle>
@@ -448,10 +449,7 @@ function Step2({
               CurrencyAmount.fromRawAmount(token0, coinInfo?.finalAllocation?.mySwappedAmount0?.toString())
                 .subtract(CurrencyAmount.fromRawAmount(token0, coinInfo.claimedToken0.toString()))
                 .toSignificant()
-            } ${token0?.symbol}`,
-            PaperProps: {
-              sx: DialogTipsWhiteTheme
-            }
+            } ${token0?.symbol}`
           })
         })
         .catch()
@@ -465,10 +463,7 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken0,
-        PaperProps: {
-          sx: DialogTipsWhiteTheme
-        }
+        onAgain: claimToken0
       })
     }
   }, [coinInfo?.claimedToken0, coinInfo?.finalAllocation?.mySwappedAmount0, contract, poolId, token0])
@@ -496,10 +491,7 @@ function Step2({
             cancelBtn: 'Close',
             title: 'Success! ',
             content: `You have successfully claimed`,
-            onAgain: claimToken1,
-            PaperProps: {
-              sx: DialogTipsWhiteTheme
-            }
+            onAgain: claimToken1
           })
         })
         .catch()
@@ -513,10 +505,7 @@ function Step2({
         cancelBtn: 'Cancel',
         title: 'Oops..',
         content: err?.reason || err?.error?.message || err?.data?.message || err?.message || 'Something went wrong',
-        onAgain: claimToken1,
-        PaperProps: {
-          sx: DialogTipsWhiteTheme
-        }
+        onAgain: claimToken1
       })
     }
   }, [contract, poolId])

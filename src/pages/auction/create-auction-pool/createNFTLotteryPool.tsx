@@ -29,7 +29,7 @@ interface IParam {
 
 const initParams: IParam = {
   name: 'test',
-  token0: '0x4EE6f702aa8d95b23DCb845dBd4eaA73b88791E8',
+  token0: '0x299269CbbEfFd541c077a5Cd16b588a2fbE3ab30',
   token1s: [
     '0xc390E699b38F14dB884C635bbf843f7B135113ad',
     '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
@@ -193,9 +193,6 @@ const CreateNFTLotteryPool = () => {
               <FormItem name={'name'} label="pool name">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              {/* <FormItem name={'token0'} label="token0 address">
-                <OutlinedInput placeholder={''} />
-              </FormItem> */}
               <FormItem name={'token1s'} label="token1 address">
                 <OutlinedInput placeholder={''} />
               </FormItem>
