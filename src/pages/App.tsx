@@ -48,36 +48,22 @@ import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpadComing
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
-// import { BladeDao } from './projectIntro'
-// import { Game } from './game'
-import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
-import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
-import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
-import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteList'
-import OpenfabricProjectInfo from './projectIntro/OpenfabricProjectInfo'
-import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
-import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
-import CreateLaunchpad from './launchpad/create-launchpad'
-import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
-import BitStableProjectInfo from './projectIntro/BitStableProjectInfo'
-import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
-import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
-import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
-import LaunchpadCoin from 'pages/launchpadCoin'
 
-import MultiBitBridgeProjectInfo from './projectIntro/MultiBitBridgeProjectInfo'
+import CreateLaunchpad from './launchpad/create-launchpad'
+
+import LaunchpadCoin from 'pages/launchpadCoin'
 
 import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
 
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
+import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
 
 import useBreakpoint from '../hooks/useBreakpoint'
 import DidStakeAuctionPool from './stakeAuctionPool'
 import DidStakeDaiiPool from './stakeDAIIPool'
 import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
-import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
 import AmmxStakeAuctionPool from './stakeAuctionAMMX'
 import AmmxStakeAuctionPoolTest from './stakeAuctionAMMXTest'
 import AmmxStakeDaiiPool from './stakeDaiiAMMX'
@@ -112,6 +98,19 @@ const LockerInfo = React.lazy(() => import('./tokenToolBox/page/tokenlocker/Lock
 const LockerLpInfo = React.lazy(() => import('./tokenToolBox/page/tokenlocker/LockerLpInfo'))
 const MyToken = React.lazy(() => import('./tokenToolBox/page/tokenMinter/myToken'))
 const MyLock = React.lazy(() => import('./tokenToolBox/page/tokenlocker/myLock'))
+const MultiBitBridgeProjectInfo = React.lazy(() => import('./projectIntro/MultiBitBridgeProjectInfo'))
+const LasmetaProjectInfo = React.lazy(() => import('./projectIntro/LasmetaProjectInfo'))
+const BitStableProjectInfo = React.lazy(() => import('./projectIntro/BitStableProjectInfo'))
+const SolaceProjectInfo = React.lazy(() => import('./projectIntro/SolaceProjectInfo'))
+const CreateProtocolProjectInfo = React.lazy(() => import('./projectIntro/CreateProtocolProjectInfo'))
+const FinceptorProjectInfo = React.lazy(() => import('./projectIntro/FinceptorProjectInfo'))
+const OmegaProjectInfo = React.lazy(() => import('./projectIntro/OmegaProjectInfo'))
+const TypeitProjectInfo = React.lazy(() => import('./projectIntro/TypeitProjectInfo'))
+const TypeitProjectInfoWhiteList = React.lazy(() => import('./projectIntro/TypeitProjectInfoWhiteList'))
+const OpenfabricProjectInfo = React.lazy(() => import('./projectIntro/OpenfabricProjectInfo'))
+const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProjectInfo'))
+const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
+const Port3ProjectInfo = React.lazy(() => import('./projectIntro/Port3ProjectInfo'))
 
 const GlobalHooks = () => {
   useGetOptionsData()
