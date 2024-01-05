@@ -4,8 +4,9 @@ import { GetWhitelistMerkleTreeRootParams, PoolType } from 'api/pool/type'
 import FormItem from 'bounceComponents/common/FormItem'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
+import { ChainId } from 'constants/chain'
 import { NULL_BYTES, RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES } from 'constants/index'
-import { CurrencyAmount } from 'constants/token'
+import { Currency, CurrencyAmount } from 'constants/token'
 import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
 import { useRandomSelectionNFTBurningContract } from 'hooks/useContract'
@@ -124,50 +125,19 @@ const useToCreate = (body: IParam, creator: string) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 
-  const token1Arr = useTokens(body.token1s, chainId)
+  const token1Arr = useTokens(body.token1s as string[], chainId || ChainId.SEPOLIA)
 
   const token1CurrencyAmount = useMemo(() => {
-    if (
-      !token1Arr ||
-      !token1Arr[0] ||
-      !token1Arr[1] ||
-      !token1Arr[2] ||
-      !token1Arr[3] ||
-      !token1Arr[4] ||
-      !body.amountTotal0 ||
-      !body.amount1PerWallets
-    ) {
-      return null
-    }
-    return [
-      CurrencyAmount.fromAmount(token1Arr[0], body.amount1PerWallets[0]),
-      CurrencyAmount.fromAmount(token1Arr[1], body.amount1PerWallets[1]),
-      CurrencyAmount.fromAmount(token1Arr[2], body.amount1PerWallets[2]),
-      CurrencyAmount.fromAmount(token1Arr[3], body.amount1PerWallets[3]),
-      CurrencyAmount.fromAmount(token1Arr[4], body.amount1PerWallets[4])
-    ]
-  }, [body.amount1PerWallets, body.amountTotal0, token1Arr])
+    if (!token1Arr || token1Arr.some(i => !i) || !token1Arr || token1Arr.includes(undefined)) return undefined
+    return token1Arr?.map((i, d) => CurrencyAmount.fromAmount(i as Currency, body.amount1PerWallets[d])?.raw.toString())
+  }, [body.amount1PerWallets, token1Arr])
 
   return useCallback(() => {
-    if (
-      !token1CurrencyAmount?.[0] ||
-      !token1CurrencyAmount?.[1] ||
-      !token1CurrencyAmount?.[2] ||
-      !token1CurrencyAmount?.[3] ||
-      !token1CurrencyAmount?.[4] ||
-      !chainConfigInBackend
-    )
-      return
+    if (!token1CurrencyAmount || !chainConfigInBackend || token1CurrencyAmount.some(i => !i)) return
     const _body = {
       ...body,
       mintContract: body.token0,
-      amount1PerWallet: [
-        token1CurrencyAmount?.[0].raw.toString(),
-        token1CurrencyAmount?.[1].raw.toString(),
-        token1CurrencyAmount?.[2].raw.toString(),
-        token1CurrencyAmount?.[3].raw.toString(),
-        token1CurrencyAmount?.[4].raw.toString()
-      ]
+      amount1PerWallet: token1CurrencyAmount
     } as IParam
     create({ body: _body, creator, optId: chainConfigInBackend.id })
   }, [body, chainConfigInBackend, create, creator, token1CurrencyAmount])
@@ -187,19 +157,35 @@ const CreateNFTLotteryPool = () => {
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <Formik onSubmit={onSubmit} initialValues={initParams}>
-        {({ handleSubmit, values: _values }) => {
+        {({ handleSubmit, values: _values, setFieldValue }) => {
           return (
             <Box component={'form'} onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <FormItem name={'name'} label="pool name">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'token1s'} label="token1 address">
+              <FormItem
+                name={'token1s'}
+                label="token1 address"
+                onChange={e => {
+                  const _e = e.target as any as HTMLInputElement
+                  const v = _e.value.split(',')
+                  setFieldValue('token1s', v)
+                }}
+              >
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <FormItem name={'amountTotal0'} label="nft number">
                 <OutlinedInput placeholder={''} />
               </FormItem>
-              <FormItem name={'amount1PerWallets'} label="token1 perWallet number">
+              <FormItem
+                name={'amount1PerWallets'}
+                label="token1 perWallet number"
+                onChange={e => {
+                  const _e = e.target as any as HTMLInputElement
+                  const v = _e.value.split(',')
+                  setFieldValue('amount1PerWallets', v)
+                }}
+              >
                 <OutlinedInput placeholder={''} />
               </FormItem>
               <FormItem name={'openAt'} label="openAt">

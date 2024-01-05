@@ -4,10 +4,13 @@ import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
 import { WithAnimation } from 'components/WithAnimation'
+import { useToken721BalanceTokens } from 'state/users/hooks'
+import { ChainId } from 'constants/chain'
 const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
+  margin-bottom: 80px;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     margin-top: 48px;
     padding: 0 16px;
@@ -82,29 +85,30 @@ const NftContainer = styled(Box)`
     padding: 0;
   }
 `
-const NftReward = () => {
+const NftReward = ({ token0Address, chainId }: { token0Address: string; chainId: ChainId }) => {
+  const { availableTokens: Erc721Token } = useToken721BalanceTokens(token0Address, chainId)
+  console.log('🚀 ~ file: Erc721Token', chainId, Erc721Token, token0Address)
   const isSm = useBreakpoint('sm')
-  const length = 2
   const nftList = useMemo(() => {
-    if (isSm && length > 1) {
+    if (isSm) {
       return (
         <>
-          <NftSmallImgCard />
-          <NftSmallImgCard />
-          <NftSmallImgCard />
-          {/* <NftSmallImgCard /> */}
+          {Erc721Token?.map((item, index) => (
+            <NftSmallImgCard key={index.toString()} erc721Token={item} />
+          ))}
         </>
       )
     }
     return (
       <>
-        <ImgCard />
-        <ImgCard />
-        <ImgCard />
-        <ImgCard />
+        {Erc721Token?.map((item, index) => (
+          <ImgCard key={index.toString()} erc721Token={item} />
+        ))}
       </>
     )
-  }, [isSm])
+  }, [Erc721Token, isSm])
+
+  if (!Erc721Token?.length) return null
   return (
     <Container>
       <Body>

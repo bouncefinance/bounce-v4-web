@@ -17,9 +17,7 @@ import { getWinnersList } from 'api/pool'
 import { RandomSelectionNFTProps } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import NoData from 'bounceComponents/common/NoData'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { WithAnimation } from 'components/WithAnimation'
-import { useActiveWeb3React } from 'hooks'
 import { useCallback, useEffect } from 'react'
 import { shortenAddress } from 'utils'
 
@@ -27,12 +25,10 @@ const Container = styled(Box)`
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  margin-bottom: 120px;
-  margin-top: 80px;
+  padding-bottom: 120px;
   ${({ theme }) => theme.breakpoints.down('sm')} {
     padding: 0 16px;
-    margin-bottom: 48px;
-    margin-top: 24px;
+    padding-bottom: 48px;
   }
 `
 const Body = styled(Box)`
@@ -115,13 +111,10 @@ const Title = styled(Typography)`
   }
 `
 const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
-  const { chainId } = useActiveWeb3React()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
   const defaultIdeaPageSize = 8
   const {
     pagination: poolsPagination,
     data: winnersData,
-    loading,
     run
   } = usePagination<any, Params>(
     async ({ current, pageSize, chainId, poolId }) => {
@@ -134,7 +127,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
           offset: (current - 1) * pageSize,
           limit: pageSize,
           poolId,
-          chainId: chainConfigInBackend?.id || 0,
+          chainId: poolInfo.chainId,
           category: 10
         })
       } catch (error) {
@@ -161,10 +154,10 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
       current: 1,
       pageSize: defaultIdeaPageSize,
       poolId: poolInfo?.poolId,
-      chainId: chainConfigInBackend?.id || 0,
+      chainId: poolInfo.chainId,
       category: 10
     })
-  }, [chainConfigInBackend?.id, poolInfo?.poolId, run])
+  }, [poolInfo.chainId, poolInfo?.poolId, run])
   useEffect(() => {
     handleSubmit()
   }, [handleSubmit])
@@ -174,7 +167,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
         <WithAnimation>
           <Title mb={32}>Winner list</Title>
         </WithAnimation>
-        {winnersData && winnersData?.list && winnersData?.list.length > 0 && !loading ? (
+        {winnersData && winnersData?.list && winnersData?.list.length > 0 ? (
           <>
             <TableContainer sx={{ mt: 20, maxHeight: 440 }}>
               <TableStyle stickyHeader aria-label="sticky table" sx={{ minWidth: 650 }}>

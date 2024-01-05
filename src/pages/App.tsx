@@ -1,18 +1,16 @@
-import { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Header from '../components/Header'
 import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
-
+import { Box } from '@mui/material'
+import Lottie from 'lottie-react'
+import bounce_loading from 'bounceComponents/common/BounceAnime/bounce-loading.json'
 BigNumber.config({ EXPONENTIAL_AT: [-10, 40] })
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
-// import Footer from 'components/Footer'
-// import { Questions } from 'bounceComponents/common/Questions'
 import { Provider as NiceModalProvider } from '@ebay/nice-modal-react'
-// import { Mobile } from 'bounceComponents/common/Mobile'
-// import { ShowOnMobile } from 'themes/context'
 import { ToastContainer } from 'react-toastify'
 import { useGetOptionsData } from 'bounceHooks/useOptionsData'
 import { AppWrapper, BodyWrapper, ContentWrapper } from './style'
@@ -20,7 +18,6 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import CreateAuctionPool from 'pages/auction/create-auction-pool/index'
 import CreateAuctionPoolType from 'pages/auction/create-auction-pool/auctionType'
-
 import AuctionFixedPricePoolId from 'pages/auction/fixed-price/poolId'
 import RandomSelectionPricePoolId from 'pages/auction/randomSelection/poolId'
 import AuctionFixedSwap1155PoolId from 'pages/auction/fixedSwap1155/poolId'
@@ -49,76 +46,74 @@ import MyTokenOrNFT from 'pages/account/MyTokenOrNFT'
 import AccountRealAuction from 'pages/account/AccountRealAuction'
 import AccountAdsAuction from 'pages/account/AccountAdsAuction'
 import AccountPrivateLaunchpad from 'pages/account/AccountPrivateLaunchpadComing'
-import TelegramBot from 'pages/tgBot/index'
-import TelegramBotGuide from 'pages/tgBot/guider'
-import TelegramBotCreate from 'pages/tgBot/create'
-import TelegramBotHome from 'pages/tgBot/home'
-import DigitalAssetsOffering from 'pages/thirdPart/digitalAssetsOffering'
-import FundoHome from 'pages/fundo/home'
-import FundoDetail from 'pages/fundo/detail'
-import FoundoDetail from 'pages/thirdPart/foundoBidDetail'
-import FoundoNfcDetail from 'pages/thirdPart/nfcDetail'
+
 import { useLocationBlockInit } from 'hooks/useLocationBlock'
 import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
-// import { BladeDao } from './projectIntro'
-// import { Game } from './game'
-import { ProjectInfo as PoseiProjectInfo } from './projectIntro/PoseiProjectInfo'
-import OmegaProjectInfo from './projectIntro/OmegaProjectInfo'
-import TypeitProjectInfo from './projectIntro/TypeitProjectInfo'
-import TypeitProjectInfoWhiteList from './projectIntro/TypeitProjectInfoWhiteList'
-import OpenfabricProjectInfo from './projectIntro/OpenfabricProjectInfo'
-import DeelanceProjectInfo from './projectIntro/DeelanceProjectInfo'
-import DeelanceWhitelistProjectInfo from './projectIntro/DeelanceWhiteListProjectInfo'
-import CreateLaunchpad from './launchpad/create-launchpad'
-import LasmetaProjectInfo from './projectIntro/LasmetaProjectInfo'
-import BitStableProjectInfo from './projectIntro/BitStableProjectInfo'
-// import BitStableProjectInfoAuction from './projectIntro/BitStableProjectInfoAuction'
-import DipExchange from './dipExchange'
-import SolaceProjectInfo from './projectIntro/SolaceProjectInfo'
-import CreateProtocolProjectInfo from './projectIntro/CreateProtocolProjectInfo'
-import FinceptorProjectInfo from './projectIntro/FinceptorProjectInfo'
+
 import LaunchpadCoin from 'pages/launchpadCoin'
 
-import MultiBitBridgeProjectInfo from './projectIntro/MultiBitBridgeProjectInfo'
-// import { Equilibria } from './game/equilibria'
-// import { Rank } from './launchpad/rank'
-
-import OkxActivity from './okxActivity/OkxActivity'
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
-// import PerformKYCVerification from 'bounceComponents/profile/account/components/PerformKYCVerification'
-import { ApplyToBeSeller } from './realWorldAuction/applyToBeSeller'
-import BounceShop from './realWorldAuction/shop/bounce'
-import FoundoShop from './realWorldAuction/shop/foundo'
-import TokenToolBox from './tokenToolBox'
-import TokenLocker from './tokenToolBox/page/tokenlocker/tokenLocker'
-import Loyaltyprogram from './loyaltyprogram'
+
 import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporter'
-// import MetaBlox from './projectIntro/MetaBloxProjectInfo'
-import LaunchpadDetail from './launchpad/detail'
-import Party from './launchpad/detail/party'
-import ZataShop from './realWorldAuction/shop/zeta'
-import IphoneDetail from './thirdPart/iphoneDetail'
-import Disperse from './tokenToolBox/page/disperse/disperse'
-import MyDisperse from './tokenToolBox/page/disperse/myDiperse'
-import TokenMinter from './tokenToolBox/page/tokenMinter/tokenMinter'
-import TokenInfo from './tokenToolBox/page/tokenMinter/TokenInfo'
-import LockerInfo from './tokenToolBox/page/tokenlocker/LockerInfo'
-import LockerLpInfo from './tokenToolBox/page/tokenlocker/LockerLpInfo'
-import MyToken from './tokenToolBox/page/tokenMinter/myToken'
-import MyLock from './tokenToolBox/page/tokenlocker/myLock'
-import useBreakpoint from '../hooks/useBreakpoint'
-import DidStakeAuctionPool from './stakeAuctionPool'
-import DidStakeDaiiPool from './stakeDAIIPool'
-import GoDidRs from './auction/randomSelection/GoDID/GoDIDRS'
-import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
-import AmmxStakeAuctionPool from './stakeAuctionAMMX'
-import AmmxStakeAuctionPoolTest from './stakeAuctionAMMXTest'
-import AmmxStakeDaiiPool from './stakeDaiiAMMX'
-import AmmxRandomSelection from './auction/randomSelection/Ladder-BitSwap/Index'
+
 import NftLottery from './nftLottery'
-import CreateNFTLotteryPool from './auction/create-auction-pool/createNFTLotteryPool'
+import Port3ProjectInfo from './projectIntro/Port3ProjectInfo'
+
+import useBreakpoint from '../hooks/useBreakpoint'
+const CreateLaunchpad = React.lazy(() => import('./launchpad/create-launchpad'))
+const PoseiProjectInfo = React.lazy(() => import('./projectIntro/PoseiProjectInfo'))
+const OkxActivity = React.lazy(() => import('./okxActivity/OkxActivity'))
+const DidStakeAuctionPool = React.lazy(() => import('./stakeAuctionPool'))
+const DidStakeDaiiPool = React.lazy(() => import('./stakeDAIIPool'))
+const GoDidRs = React.lazy(() => import('./auction/randomSelection/GoDID/GoDIDRS'))
+const AmmxStakeAuctionPool = React.lazy(() => import('./stakeAuctionAMMX'))
+const AmmxStakeAuctionPoolTest = React.lazy(() => import('./stakeAuctionAMMXTest'))
+const AmmxStakeDaiiPool = React.lazy(() => import('./stakeDaiiAMMX'))
+const AmmxRandomSelection = React.lazy(() => import('./auction/randomSelection/Ladder-BitSwap/Index'))
+const CreateNFTLotteryPool = React.lazy(() => import('./auction/create-auction-pool/createNFTLotteryPool'))
+const DigitalAssetsOffering = React.lazy(() => import('pages/thirdPart/digitalAssetsOffering'))
+const FundoHome = React.lazy(() => import('pages/fundo/home'))
+const FundoDetail = React.lazy(() => import('pages/fundo/detail'))
+const FoundoDetail = React.lazy(() => import('pages/thirdPart/foundoBidDetail'))
+const FoundoNfcDetail = React.lazy(() => import('pages/thirdPart/nfcDetail'))
+const IphoneDetail = React.lazy(() => import('./thirdPart/iphoneDetail'))
+const ApplyToBeSeller = React.lazy(() => import('./realWorldAuction/applyToBeSeller'))
+const BounceShop = React.lazy(() => import('./realWorldAuction/shop/bounce'))
+const FoundoShop = React.lazy(() => import('./realWorldAuction/shop/foundo'))
+const DipExchange = React.lazy(() => import('./dipExchange'))
+const TelegramBot = React.lazy(() => import('pages/tgBot/index'))
+const TelegramBotGuide = React.lazy(() => import('pages/tgBot/guider'))
+const TelegramBotCreate = React.lazy(() => import('pages/tgBot/create'))
+const TelegramBotHome = React.lazy(() => import('pages/tgBot/home'))
+const Loyaltyprogram = React.lazy(() => import('./loyaltyprogram'))
+const LaunchpadDetail = React.lazy(() => import('./launchpad/detail'))
+const Party = React.lazy(() => import('./launchpad/detail/party'))
+const ZataShop = React.lazy(() => import('./realWorldAuction/shop/zeta'))
+const TokenToolBox = React.lazy(() => import('./tokenToolBox'))
+const TokenLocker = React.lazy(() => import('./tokenToolBox/page/tokenlocker/tokenLocker'))
+const Disperse = React.lazy(() => import('./tokenToolBox/page/disperse/disperse'))
+const MyDisperse = React.lazy(() => import('./tokenToolBox/page/disperse/myDiperse'))
+const TokenMinter = React.lazy(() => import('./tokenToolBox/page/tokenMinter/tokenMinter'))
+const TokenInfo = React.lazy(() => import('./tokenToolBox/page/tokenMinter/TokenInfo'))
+const LockerInfo = React.lazy(() => import('./tokenToolBox/page/tokenlocker/LockerInfo'))
+const LockerLpInfo = React.lazy(() => import('./tokenToolBox/page/tokenlocker/LockerLpInfo'))
+const MyToken = React.lazy(() => import('./tokenToolBox/page/tokenMinter/myToken'))
+const MyLock = React.lazy(() => import('./tokenToolBox/page/tokenlocker/myLock'))
+const MultiBitBridgeProjectInfo = React.lazy(() => import('./projectIntro/MultiBitBridgeProjectInfo'))
+const LasmetaProjectInfo = React.lazy(() => import('./projectIntro/LasmetaProjectInfo'))
+const BitStableProjectInfo = React.lazy(() => import('./projectIntro/BitStableProjectInfo'))
+const SolaceProjectInfo = React.lazy(() => import('./projectIntro/SolaceProjectInfo'))
+const CreateProtocolProjectInfo = React.lazy(() => import('./projectIntro/CreateProtocolProjectInfo'))
+const FinceptorProjectInfo = React.lazy(() => import('./projectIntro/FinceptorProjectInfo'))
+const OmegaProjectInfo = React.lazy(() => import('./projectIntro/OmegaProjectInfo'))
+const TypeitProjectInfo = React.lazy(() => import('./projectIntro/TypeitProjectInfo'))
+const TypeitProjectInfoWhiteList = React.lazy(() => import('./projectIntro/TypeitProjectInfoWhiteList'))
+const OpenfabricProjectInfo = React.lazy(() => import('./projectIntro/OpenfabricProjectInfo'))
+const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProjectInfo'))
+const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
+
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -138,6 +133,14 @@ const UnSupportedMobileRouter = () => {
   // ) : null
 }
 
+function Loading() {
+  return (
+    <Box display={'flex'} justifyContent={'center'} marginTop={200}>
+      <Lottie animationData={bounce_loading} loop={true} autoplay={true} style={{ width: 200, height: 200 }} />
+    </Box>
+  )
+}
+
 export default function App() {
   const { pathname } = useLocation()
   const isSm = useBreakpoint('sm')
@@ -145,7 +148,7 @@ export default function App() {
     window.scrollTo(0, 0)
   }, [pathname])
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<Loading />}>
       <ModalProvider>
         <NiceModalProvider>
           <AppWrapper id="app">

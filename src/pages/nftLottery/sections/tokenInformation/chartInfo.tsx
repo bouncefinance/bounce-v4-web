@@ -1,14 +1,11 @@
 import { Typography, styled, Box, Stack } from '@mui/material'
 import DonutChart from 'components/DonutChart'
-import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
-import Icon2 from 'assets/imgs/nftLottery/tokenInformation/token-icon2.svg'
-import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
-import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
-import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
+import { getIcon, colorList } from './config'
 import { EChartsOption } from 'echarts/types/dist/echarts'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { RandomSelectionNFTProps } from 'api/pool/type'
 import { CurrencyAmount } from 'constants/token'
+import BigNumber from 'bignumber.js'
 const InfoP1 = styled(Typography)`
   color: var(--AI-dark-02, #4c483a);
   font-variant-numeric: lining-nums proportional-nums;
@@ -71,57 +68,45 @@ const Circle = styled(Box)`
   height: 10px;
   border-radius: 10px;
 `
-export const tokenInfoList = [
-  {
-    price: 0.35,
-    name: 'AUCTION',
-    icon: Icon1,
-    color: '#CCC496'
-  },
-  {
-    price: 43,
-    name: 'MUBI',
-    icon: Icon2,
-    color: '#DBAC48'
-  },
-  {
-    price: 10,
-    name: 'DAII',
-    icon: Icon3,
-    color: '#AB883C'
-  },
-  {
-    price: 2.38,
-    name: 'BSSB',
-    icon: Icon4,
-    color: '#9E9871'
-  },
-  {
-    price: 2500,
-    name: 'AMMX',
-    icon: Icon5,
-    color: '#614C1F'
-  }
-]
 const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
   console.log('🚀 ~ file: chartInfo.tsx:107 ~ ChartInfo ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
 
-  const datas = [
-    { value: 0, name: 'AUCTION', itemStyle: { color: '#CCC496' } },
-    { value: 0, name: 'MUBI', itemStyle: { color: '#DBAC48' } },
-    { value: 0, name: 'DAII', itemStyle: { color: '#AB883C' } },
-    { value: 0, name: 'BSSB', itemStyle: { color: '#9E9871' } },
-    { value: 0, name: 'AMMX', itemStyle: { color: '#614C1F' } }
-  ]
-  const wrapperData = datas.slice(0, poolInfo.burnedTokens.length).map((item, index) => ({
-    ...item,
-    value: Number(CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact())
-  }))
-
+  const wrapperData = poolInfo.betTokenAmount.map((item, index) => {
+    const value = new BigNumber(new BigNumber(poolInfo.burnedTokens?.[index].toString())).dividedBy(
+      new BigNumber(item.toString())
+    )
+    const result = {
+      value: value.toNumber(),
+      amount: Number(
+        CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], poolInfo.burnedTokens[index]).toExact()
+      ),
+      price: CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], item).toSignificant(6),
+      itemStyle: { color: colorList[index] },
+      name: poolInfo.token1Currency?.[index].symbol.toUpperCase(),
+      color: colorList[index],
+      icon: getIcon(poolInfo.token1Currency?.[index].symbol)
+    }
+    return result
+  })
+  console.log('🚀 ~ file: chartInfo.tsx:126 ~ wrapperData ~ wrapperData:', wrapperData)
   const option: EChartsOption = {
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+      position: 'inside',
+      formatter: function (parms: any) {
+        const str =
+          parms.seriesName +
+          '</br>' +
+          parms.data.name +
+          ': ' +
+          parms.data.amount +
+          '</br>' +
+          'percent: ' +
+          parms.percent +
+          '%'
+        return str
+      }
     },
     legend: {
       orient: 'vertical',
@@ -138,7 +123,13 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
         label: {
           show: true,
           position: 'inside',
-          formatter: `{d}%`,
+          formatter: function (params: any) {
+            if (params.value == 0) {
+              return ''
+            } else {
+              return params.percent + '%'
+            }
+          },
           color: '#fff',
           fontFamily: 'Public Sans',
           fontWeight: 400,
@@ -161,10 +152,10 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
             </InfoP1>
             <Box mt={16}>
               <Stack flexDirection={'row'} flexWrap={'wrap'} gap={10} sx={{ width: 370 }}>
-                {tokenInfoList.slice(0, poolInfo.burnedTokens.length).map(i => (
+                {wrapperData.slice(0, poolInfo.burnedTokens.length).map(i => (
                   <TokenBg key={i.name}>
                     <InfoP2>{i.price}</InfoP2>
-                    <img src={i.icon} style={{ width: 20, height: 20 }} />
+                    {i.icon && <img src={i.icon} style={{ width: 20, height: 20 }} />}
                     <InfoP2>{i.name}</InfoP2>
                   </TokenBg>
                 ))}
@@ -185,13 +176,13 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
             flexDirection={isSm ? 'row' : 'column'}
             flexWrap={'wrap'}
           >
-            {tokenInfoList.slice(0, poolInfo.burnedTokens.length).map(i => (
+            {wrapperData.slice(0, poolInfo.burnedTokens.length).map(i => (
               <Stack key={i.name} flexDirection={'row'} alignItems={'center'}>
                 <Circle sx={{ background: i.color }} />
                 <InfoP3 ml={12} mr={4}>
                   {i.name}
                 </InfoP3>
-                <img src={i.icon} style={{ width: 24, height: 24 }} />
+                {i.icon && <img src={i.icon} style={{ width: 24, height: 24 }} />}
               </Stack>
             ))}
           </Stack>

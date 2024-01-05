@@ -1,6 +1,7 @@
 import { Box, Typography, styled, Stack } from '@mui/material'
 import { RandomSelectionNFTProps } from 'api/pool/type'
-import { tokenInfoList } from 'pages/nftLottery/sections/tokenInformation/chartInfo'
+import { CurrencyAmount } from 'constants/token'
+import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 
 const TokenBg = styled(Box)(
   ({ theme }) => `
@@ -49,12 +50,19 @@ const BidTokenPanel = ({
   selectIndex: number | null
   poolInfo: RandomSelectionNFTProps
 }) => {
+  const tokenInfoList = poolInfo.betTokenAmount.map((item, index) => {
+    return {
+      price: CurrencyAmount.fromRawAmount(poolInfo.token1Currency[index], item).toSignificant(6),
+      name: poolInfo.token1Currency?.[index].symbol.toUpperCase(),
+      icon: getIcon(poolInfo.token1Currency?.[index].symbol)
+    }
+  })
   return (
     <Stack gap={8} flexDirection={'row'} justifyContent={'center'} flexWrap={'wrap'}>
       {tokenInfoList.slice(0, poolInfo.tokensAddress.length).map((i, d) => (
         <TokenBg key={i.name} className={d === selectIndex ? 'select' : ''} onClick={() => selectFn(d)}>
           <P1>{i.price}</P1>
-          <img src={i.icon} style={{ width: 20, height: 20 }} />
+          {i.icon && <img src={i.icon} style={{ width: 20, height: 20 }} />}
           <P1>{i.name}</P1>
         </TokenBg>
       ))}

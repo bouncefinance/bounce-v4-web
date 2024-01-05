@@ -6,9 +6,6 @@ import BannerStepLine from '../bannerStep'
 import { AnimateStep } from '../../../sections/banner'
 import makeStyles from '@mui/styles/makeStyles'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
-import LotteryCountdown from '../../lotteryCountdown'
-import { RandomSelectionNFTProps } from 'api/pool/type'
-import { useGetRandomSelectionNFTPoolStatus } from 'bounceHooks/auction/useRandomSelectionNFTPoolInfo'
 export const useWithAnimationStyles = makeStyles(() => ({
   awaitInView: {
     width: '100%',
@@ -26,9 +23,8 @@ export const useWithAnimationStyles = makeStyles(() => ({
     }
   }
 }))
-const PcBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
+const PcBanner = ({ children }: { children?: React.ReactNode }) => {
   const theme = useTheme()
-  const { poolStatus } = useGetRandomSelectionNFTPoolStatus(poolInfo)
   const [winH, setWinHeight] = useState<number>(window.innerHeight)
   const [stopScroll, setStopscroll] = useState(true)
   const [animate1Ratio, setAnimate1Ratio] = useState<string>('0')
@@ -100,11 +96,7 @@ const PcBanner = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
       <BannerStep1 />
       <BannerStep2 />
       <BannerStepLine ratio={animate1Ratio} step={animate1Step} />
-      <LotteryCountdown
-        status={poolStatus}
-        timeList={[poolInfo.openAt, poolInfo.closeAt, poolInfo.claimAt]}
-        poolInfo={poolInfo}
-      />
+      {children}
     </Box>
   )
 }
