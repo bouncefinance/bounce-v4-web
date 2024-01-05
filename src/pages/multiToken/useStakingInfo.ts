@@ -66,12 +66,16 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
       const totalStakeAmount = token1sCurrency.map((cr, id) =>
         CurrencyAmount.fromRawAmount(cr as Currency, totalStake.result?.[1][id])
       )
-      const poolStakeTokenPriceAmount = token1sCurrency.map((cr, id) => {
-        return poolStakeToken1WeightAmounts[id].div(totalStake.result?.[1])
-      })
+      const poolStakeTokenPriceAmount = token1sCurrency.map((cr, id) =>
+        CurrencyAmount.ether(poolInfo.result?.quoteAmountTotal1).div(
+          CurrencyAmount.fromRawAmount(cr as Currency, totalStake.result?.[1][id])
+        )
+      )
+
       return [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, totalStakeAmount, poolStakeTokenPriceAmount]
     }, [
       myStakeToken1WeightAmountMapRes.result,
+      poolInfo.result?.quoteAmountTotal1,
       poolToken1WeightAmountMapRes.result,
       token1sCurrency,
       totalStake.result
