@@ -82,7 +82,7 @@ const MobileLiveCard = ({
       <Box
         sx={{
           padding: '0 33px',
-          mt: allStatus.poolStatus === RandomPoolStatus.Waiting ? 90 : 41.5
+          mt: allStatus.poolStatus === RandomPoolStatus.Waiting ? 90 : !allStatus.isUserJoined ? 40 : 41.5
         }}
       >
         <Box
