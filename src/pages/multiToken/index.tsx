@@ -85,7 +85,7 @@ const Page = () => {
         <Box
           padding={{ xs: '0 16px', md: '20px 72px' }}
           sx={{ width: '100%', maxWidth: 1440, margin: '0 auto' }}
-          mt={{ xs: 50, md: 80 }}
+          mt={{ xs: 110, md: 180 }}
         >
           <Header />
           <Charts />

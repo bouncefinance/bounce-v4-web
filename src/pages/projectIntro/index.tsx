@@ -875,6 +875,26 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
               )} */}
             </Box>
           )}
+          {item.multipleTokenInfo && (
+            <Box my={16}>
+              <Typography
+                sx={{
+                  color: 'var(--grey-04, #D7D6D9)',
+                  fontFamily: 'Inter',
+                  fontSize: 13,
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '140% ',
+                  textTransform: 'capitalize',
+                  textAlign: 'center'
+                }}
+                mb={11}
+              >
+                {item.multipleTokenInfo.title}
+              </Typography>
+              <Row sx={{ gap: { xs: 16, md: 24 } }}>{item.multipleTokenInfo.social}</Row>
+            </Box>
+          )}
           {!isMD && (
             <Row
               gap={24}
