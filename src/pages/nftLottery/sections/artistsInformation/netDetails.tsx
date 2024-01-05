@@ -30,7 +30,7 @@ export const DeatailList: List[] = [
   //   value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
   // },
   // { name: 'Hard Cap Per User', value: 'No lockup' },
-  { name: 'Contract Address', value: 'TBD' },
+  { name: 'Contract Address', value: '0xE684c11F6E90905EF63B16A4FAD3851AC8f432Be' },
   { name: 'Token Name', value: 'AI_Meets_Bitcoin' },
   { name: 'Token Symbol', value: 'AIBTC' },
   { name: 'Token Standard', value: 'BRC-721,ERC-721' },

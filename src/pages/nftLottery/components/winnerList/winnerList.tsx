@@ -198,7 +198,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
                         </Typography>
                       </StyledTableCell>
                       <StyledTableCell>1 Ticket</StyledTableCell>
-                      <StyledTableCell>10 USD</StyledTableCell>
+                      <StyledTableCell>50 USD</StyledTableCell>
                       {/* <StyledTableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Typography>1 Ticket</Typography>

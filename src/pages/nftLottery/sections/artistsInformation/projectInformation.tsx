@@ -33,7 +33,7 @@ const ProjectInformation = () => {
           endurance and legacy.`}
         </Text>
         <Text style={{ margin: isSm ? '20px 0' : '40px 0' }}>
-          {`This "AI Meets Bitcoin" Ordinals NFT collection will be auctioned on Bounce via Random Selection, featuring an innovative twist in the auction mechanism called “Burning Man” — Each participant can join this auction by burning $50 worth of any of these tokens: $AUCTION, $MUBI, $BSSB, $DAII, $BDID, $AMMX. Our smart contract will then randomly select winners, with $AUCTION users enjoying higher odds to win.`}
+          {`This "AI Meets Bitcoin" Ordinals NFT collection will be auctioned on Bounce via Random Selection, featuring an innovative twist in the auction mechanism called “Burning Man” — Each participant can join this auction by burning $50 worth of any of these tokens: $AUCTION, $MUBI, $BSSB, $DAII, $AMMX. Our smart contract will then randomly select winners, with $AUCTION users enjoying higher odds to win.`}
         </Text>
         <Text>
           {`The auction will be live on Ethereum mainnet. 400 Ordinals NFTs from this “AI Meets Bitcoin” collection will be bridged from BRC to ERC using MultiBit’s NFT bridge. Each winner of the Random Selection will receive both the original BRC721 NFT and the ERC721 version.`}

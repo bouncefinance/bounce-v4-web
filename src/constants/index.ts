@@ -214,7 +214,7 @@ export const RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: st
 }
 
 export const RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0xD3EC19bbAE51b94C67fC63dE88426191A000d29f',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',
