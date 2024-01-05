@@ -10,6 +10,7 @@ import { BigintIsh, Rounding, SolidityType, TEN } from '../constants'
 import { parseBigintIsh, validateSolidityTypeInstance } from '../utils'
 import { tryParseAmount } from 'utils/parseAmount'
 import { ChainId } from 'constants/chain'
+import BigNumber from 'bignumber.js'
 
 const Big = toFormat(_Big)
 
@@ -46,6 +47,19 @@ export class CurrencyAmount extends Fraction {
   public subtract(other: CurrencyAmount): CurrencyAmount {
     invariant(currencyEquals(this.currency, other.currency), 'TOKEN')
     return new CurrencyAmount(this.currency, JSBI.subtract(this.raw, other.raw))
+  }
+
+  public mul(other: CurrencyAmount | JSBI | number | BigNumber): CurrencyAmount {
+    const val = other instanceof CurrencyAmount ? other.toExact() : other instanceof JSBI ? other.toString() : other
+    return CurrencyAmount.fromAmount(
+      this.currency,
+      new BigNumber(val).times(this.toExact()).toString()
+    ) as CurrencyAmount
+  }
+
+  public div(other: CurrencyAmount | JSBI | number | BigNumber): CurrencyAmount {
+    const val = other instanceof CurrencyAmount ? other.toExact() : other instanceof JSBI ? other.toString() : other
+    return CurrencyAmount.fromAmount(this.currency, new BigNumber(this.toExact()).div(val).toString()) as CurrencyAmount
   }
 
   public toSignificant(

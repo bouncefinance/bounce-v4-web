@@ -33,6 +33,7 @@ export type FinalAllocationType = {
 export type TotalStakeToken1Type = {
   totalStakeAmount: BigNumber[]
   stakeTokenAddress: string[]
+  stakeTokenPrices: CurrencyAmount[] | undefined
 }
 export type UserStakeToken1WeightMapType = {
   myStakeToken1WeightTokenAddr: string[]
@@ -58,6 +59,7 @@ export type CoinResultType = {
 export type MultiTokenResultType = {
   poolInfo?: MultiTokenPoolInfoType
   totalParticipants?: BigNumber
+  poolTokenWeights?: BigNumber[]
   myToken1Claimed?: boolean
   creatorClaimed?: boolean
   token1StakedStats?: TotalStakeToken1Type

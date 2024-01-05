@@ -38,6 +38,7 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     undefined,
     chainId
   )
+  const poolTokenWeightsRes = useSingleCallResult(contract, 'getPoolWeightAmountMap', [poolId], undefined, chainId)
   const creatorClaimed = useSingleCallResult(contract, 'creatorClaimed', [poolId], undefined, chainId)
 
   const token1sAddress = useMemo(() => {
@@ -46,7 +47,7 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
   }, [totalStake.result])
   const token1sCurrency = useTokens(token1sAddress, chainId)
 
-  const [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts] = useMemo(() => {
+  const [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, poolStakeTokenPrices] = useMemo(() => {
     if (
       !token1sCurrency ||
       token1sCurrency.some(i => !i) ||
@@ -61,8 +62,11 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     const myStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
       CurrencyAmount.fromRawAmount(cr as Currency, myStakeToken1WeightAmountMapRes.result?.[2][id])
     )
-    return [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts]
-  }, [myStakeToken1WeightAmountMapRes.result, poolToken1WeightAmountMapRes.result, token1sCurrency])
+    const poolStakeTokenPriceAmount = token1sCurrency.map((cr, id) => {
+      return poolStakeToken1WeightAmounts[id].div(totalStake.result?.[1])
+    })
+    return [poolStakeToken1WeightAmounts, myStakeToken1WeightAmounts, poolStakeTokenPriceAmount]
+  }, [myStakeToken1WeightAmountMapRes.result, poolToken1WeightAmountMapRes.result, token1sCurrency, totalStake.result])
 
   const coinInfo = useMemo<MultiTokenResultType | undefined>(() => {
     const result: MultiTokenResultType = {}
@@ -82,7 +86,8 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     if (totalStake.result) {
       result.token1StakedStats = {
         stakeTokenAddress: totalStake.result[0],
-        totalStakeAmount: totalStake.result[1]
+        totalStakeAmount: totalStake.result[1],
+        stakeTokenPrices: poolStakeTokenPrices
       } as TotalStakeToken1Type
     }
     if (myStakeToken1WeightAmountMapRes.result) {
@@ -98,6 +103,9 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
         poolStakeToken1Weight: poolToken1WeightAmountMapRes.result[1],
         poolStakeToken1WeightAmounts: poolStakeToken1WeightAmounts
       } as PoolStakeToken1WeightMapType
+    }
+    if (poolTokenWeightsRes.result) {
+      result.poolTokenWeights = poolTokenWeightsRes.result[0]
     }
     if (totalParticipants.result) {
       result.totalParticipants = totalParticipants.result[0]
@@ -127,7 +135,9 @@ export const useGetStakingAuctionInfo = (contract: Contract | null, poolId: numb
     myToken1Claimed.result,
     poolInfo.result,
     poolStakeToken1WeightAmounts,
+    poolStakeTokenPrices,
     poolToken1WeightAmountMapRes.result,
+    poolTokenWeightsRes.result,
     totalParticipants.result,
     totalStake.result
   ])

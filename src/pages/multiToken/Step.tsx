@@ -168,16 +168,16 @@ function Step1({
     return undefined
   }, [coinInfo, poolStakeTokens])
 
-  const stakeTokenWeight = useMemo(() => {
-    if (coinInfo && stakeTokenList) {
-      const ret = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1Weight?.map((item, index) =>
-        new BigNumber(stakeTokenList[index].data.raw.toString()).div(item?.toString() || 0).toString()
-      )
-      return ret
-    }
-    return undefined
-  }, [coinInfo, stakeTokenList])
-  console.log('🚀 ~ file: Step.tsx:180 ~ stakeTokenWeight ~ stakeTokenWeight:', stakeTokenWeight)
+  // const stakeTokenWeight = useMemo(() => {
+  //   if (coinInfo && stakeTokenList) {
+  //     const ret = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1Weight?.map((item, index) =>
+  //       new BigNumber(stakeTokenList[index].data.raw.toString()).div(item?.toString() || 0).toString()
+  //     )
+  //     return ret
+  //   }
+  //   return undefined
+  // }, [coinInfo, stakeTokenList])
+  console.log('🚀 ~ file: Step.tsx:180 ~ stakeTokenWeight ~ stakeTokenWeight:', coinInfo)
 
   const curTime = useMemo(() => {
     if (!coinInfo || !coinInfo.poolInfo) {

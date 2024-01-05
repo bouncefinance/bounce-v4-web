@@ -5,7 +5,8 @@ import Polling from '../components/essential/Polling'
 import Popups from '../components/essential/Popups'
 import BigNumber from 'bignumber.js'
 
-BigNumber.config({ EXPONENTIAL_AT: [-10, 40] })
+// BigNumber.config({ EXPONENTIAL_AT: [-10, 40] })
+BigNumber.config({ EXPONENTIAL_AT: [-20, 40], ROUNDING_MODE: BigNumber.ROUND_DOWN })
 import { ModalProvider } from 'context/ModalContext'
 import { routes } from 'constants/routes'
 // import Footer from 'components/Footer'

@@ -58,7 +58,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
         name: 'MUBI',
         symbol: 'MUBI',
         logo: Icon2,
-        address: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E'
+        address: '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E'
       },
       {
         id: 2,
