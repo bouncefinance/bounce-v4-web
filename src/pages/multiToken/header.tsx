@@ -130,7 +130,6 @@ const TokenBoxList = ({
   )
 }
 const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
-  const chainId = ChainId.SEPOLIA
   const quoteAmount = useMemo(() => {
     if (!coinInfo?.poolInfo?.quoteAmountTotal1) return
     return CurrencyAmount.fromRawAmount(Currency.getNativeCurrency(), coinInfo?.poolInfo?.quoteAmountTotal1.toString())
@@ -155,7 +154,7 @@ const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
       weights: 1
     }))
   }, [coinInfo, poolToken1s, quoteAmount])
-  const token0Currency = useToken(coinInfo?.poolInfo?.token0 || '', chainId)
+  const token0Currency = useToken(coinInfo?.poolInfo?.token0 || '', coinInfo?.poolInfo?.chainId || ChainId.MAINNET)
 
   return (
     <Box sx={{ width: '100%' }}>

@@ -253,7 +253,7 @@ export const RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES: { [chainId in Chai
   [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 export const RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
-  [ChainId.MAINNET]: '',
+  [ChainId.MAINNET]: '0xdF59f84F4DAC6B628bAceB43dcF0Fd3E3778e6f5',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',
   [ChainId.CRONOS]: '',

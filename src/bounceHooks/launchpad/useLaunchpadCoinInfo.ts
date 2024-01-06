@@ -25,6 +25,7 @@ export type MultiTokenPoolInfoType = {
   releaseDuration: number
   quoteAmountTotal1: BigNumber
   token0: string
+  chainId: ChainId
 }
 export type FinalAllocationType = {
   mySwappedAmount0: BigNumber

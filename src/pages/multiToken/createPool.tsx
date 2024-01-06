@@ -1,11 +1,8 @@
 import { Box, Button, OutlinedInput, Stack } from '@mui/material'
-
 import FormItem from 'bounceComponents/common/FormItem'
 import { ChainId } from 'constants/chain'
-
 import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { Currency, CurrencyAmount } from 'constants/token'
-
 import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -46,8 +43,8 @@ const initParams: IParam = {
 
 const useCreatePool = () => {
   const { chainId } = useActiveWeb3React()
-  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || 5]
-  const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId || 5)
+  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
+  const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId || ChainId.MAINNET)
 
   return useCallback(
     async (body: IParam) => {
@@ -77,7 +74,7 @@ const useToCreate = (body: IParam) => {
     return CurrencyAmount.fromAmount(token0, body.amountTotal0)
   }, [token0, body.amountTotal0])
   const quoteAmountTotal1 = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), body.quoteAmountTotal1)
-  const token1Arr = useTokens(body.token1s as string[], chainId || ChainId.SEPOLIA)
+  const token1Arr = useTokens(body.token1s as string[], chainId || ChainId.MAINNET)
   console.log('token0Amount', token0Amount?.raw.toString())
 
   const token1CurrencyAmount = useMemo(() => {
@@ -102,7 +99,7 @@ const CreateNFTLotteryPool = () => {
   const [values, setValues] = useState(initParams)
   const create = useToCreate(values)
   const { chainId, account } = useActiveWeb3React()
-  const token0 = useToken(values.token0, chainId)
+  const token0 = useToken(values.token0, chainId || ChainId.MAINNET)
 
   const token0Balance = useCurrencyBalance(account, token0 as Currency | undefined)
 
@@ -114,11 +111,11 @@ const CreateNFTLotteryPool = () => {
     if (!token0Balance || !token0Amount) return false
     return token0Amount.greaterThan(token0Balance)
   }, [token0Amount, token0Balance])
-  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || 5]
+  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
   const [approvalState, , approveCallback] = useApproveCallback(token0Amount, contractAddress)
 
   const approveFn = useTransactionModalWrapper(approveCallback, { isApprove: true })
-  const token1Arr = useTokens(values.token1s as string[], chainId || ChainId.SEPOLIA)
+  const token1Arr = useTokens(values.token1s as string[], chainId || ChainId.MAINNET)
   const changeValue = (values: IParam) => {
     setValues(values)
   }

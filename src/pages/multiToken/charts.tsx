@@ -6,7 +6,6 @@ import { getIcon, muColorList } from 'pages/nftLottery/sections/tokenInformation
 import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { useMemo } from 'react'
 import { useTokens } from 'state/wallet/hooks'
-import { ChainId } from 'constants/chain'
 
 const Title = styled(Typography)`
   color: var(--white, #fff);
@@ -87,12 +86,9 @@ const ChartLayout = ({
 
 const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
   const isSm = useBreakpoint('sm')
-  const _chainId = useMemo(() => {
-    return ChainId.SEPOLIA
-  }, [])
   const poolStakeTokens = useTokens(
     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
-    _chainId
+    coinInfo?.poolInfo?.chainId
   )
 
   const pieData = useMemo(() => {

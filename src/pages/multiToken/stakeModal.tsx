@@ -37,10 +37,7 @@ export interface DialogProps {
 const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
   const { poolInfo, onClose, open, showLoginModal, switchNetwork, poolId, contract, ...rest } = props
   console.log('🚀 ~ file: stakeModal.tsx:42 ~ poolInfo:', poolInfo)
-  const { account, chainId } = useActiveWeb3React()
-  const _chainId = useMemo(() => {
-    return ChainId.SEPOLIA
-  }, [])
+  const { account, chainId: _chainId } = useActiveWeb3React()
   const [selectedIdx, setSelectedIdx] = useState<number>(0)
   const [amount, setAmount] = useState('')
   const isDownSm = useBreakpoint('sm')
@@ -48,13 +45,13 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   const selectedToken =
     useToken(
       userStakedAddress ? userStakedAddress : poolInfo?.token1StakedStats?.token1sCurrency?.[selectedIdx].address || '',
-      chainId
+      poolInfo?.poolInfo?.chainId
     ) || undefined
   const token1CurrencyAmount = useMemo(() => {
     if (!selectedToken) return undefined
     return CurrencyAmount.fromAmount(selectedToken, amount)
   }, [amount, selectedToken])
-  const userTokenBalance = useCurrencyBalance(account, selectedToken, chainId)
+  const userTokenBalance = useCurrencyBalance(account, selectedToken, poolInfo?.poolInfo?.chainId)
   const dataList = useMemo(() => {
     const ret = poolInfo?.token1StakedStats?.token1sCurrency?.map(item => ({
       ...item,
@@ -64,7 +61,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   }, [poolInfo?.token1StakedStats?.token1sCurrency])
   const [approvalState, , approveCallback] = useApproveCallback(
     token1CurrencyAmount,
-    RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[_chainId]
+    RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[poolInfo?.poolInfo?.chainId || ChainId.MAINNET]
   )
   const handleClose = useCallback(() => {
     onClose()
@@ -154,7 +151,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
     //     </ConfirmBtnStyle>
     //   )
     // }
-    if (chainId !== ChainId.SEPOLIA) {
+    if (_chainId !== poolInfo?.poolInfo?.chainId) {
       return (
         <ConfirmBtnStyle onClick={() => switchNetwork()} sx={{ flex: 2 }}>
           Switch network
@@ -195,12 +192,13 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
       </ConfirmBtnStyle>
     )
   }, [
+    _chainId,
     account,
     amount,
     approvalState,
     approveFn,
-    chainId,
     open,
+    poolInfo?.poolInfo?.chainId,
     showLoginModal,
     switchNetwork,
     toCommit,
@@ -243,8 +241,8 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
           {userStakedAddress === '' && (
             <Stack mb={48} width={'inherit'}>
               <Select
-                defaultValue={chainId ?? undefined}
-                value={chainId ?? undefined}
+                defaultValue={poolInfo?.poolInfo?.chainId ?? undefined}
+                value={poolInfo?.poolInfo?.chainId ?? undefined}
                 height={'54px'}
                 style={{
                   width: '100%',
