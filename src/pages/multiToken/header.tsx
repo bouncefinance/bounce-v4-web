@@ -74,8 +74,8 @@ const TitleContainer = () => {
       </GrayP1>
       <Box mt={24} sx={{ padding: '24px 16px', borderRadius: 12, background: '#D6DFF6' }}>
         <BlueP1>
-          Calculation of final limit = number of tokens you staked (USD value) + staked time *Staking auctions will
-          receive additional calculation weight.
+          Calculation of final limit = number of tokens you staked (USD value) + staked time
+          {/* *Staking auctions will receive additional calculation weight. */}
         </BlueP1>
       </Box>
     </>
