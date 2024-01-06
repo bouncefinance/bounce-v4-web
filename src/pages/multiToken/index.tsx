@@ -18,7 +18,7 @@ import Charts from './charts'
 import { Steps } from './Step'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 const Page = () => {
-  const poolId = 0
+  const poolId = 1
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const { account } = useActiveWeb3React()
   //TODO only chainId
@@ -27,7 +27,6 @@ const Page = () => {
   const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId)
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account, chainId)
-  console.log('coinInfo', coinInfo)
 
   const toClaim = useCallback(async () => {
     if (!account || !contract || !coinInfo) return

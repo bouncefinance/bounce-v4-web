@@ -36,7 +36,6 @@ export interface DialogProps {
 
 const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (props: DialogProps) => {
   const { poolInfo, onClose, open, showLoginModal, switchNetwork, poolId, contract, ...rest } = props
-  console.log('🚀 ~ file: stakeModal.tsx:42 ~ poolInfo:', poolInfo)
   const { account, chainId: _chainId } = useActiveWeb3React()
   const [selectedIdx, setSelectedIdx] = useState<number>(0)
   const [amount, setAmount] = useState('')
@@ -276,7 +275,12 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
                     key={option.address}
                     selected={selectedIdx === index}
                   >
-                    <LogoText logo={option.logo || Icon1} text={option.name} gapSize={'small'} fontSize={14} />
+                    <LogoText
+                      logo={option.logo || Icon1}
+                      text={option.symbol?.toLocaleUpperCase()}
+                      gapSize={'small'}
+                      fontSize={14}
+                    />
                   </MenuItem>
                 ))}
               </Select>

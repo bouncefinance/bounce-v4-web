@@ -118,7 +118,7 @@ const TokenBoxList = ({
             <img src={token0Currency?.logo || token1Amounts[0].icon || ''} style={{ width: 20, height: 20 }} />
             <BlackSmallP1>
               {' '}
-              {i.price} {token0Currency?.name}
+              {i.price} {token0Currency?.symbol?.toLocaleUpperCase()}
             </BlackSmallP1>
           </Stack>
           <Box>

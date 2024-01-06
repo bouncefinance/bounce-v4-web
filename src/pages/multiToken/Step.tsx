@@ -35,6 +35,7 @@ import {
 import TokenIcon from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import StakeAuctionInputDialog from './stakeModal'
 import { colorList, getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
+import { ChainId } from 'constants/chain'
 
 export function Steps({
   coinInfo,
@@ -149,12 +150,11 @@ function Step1({
     coinInfo?.poolInfo?.chainId
   )
 
-  const [myStakeTokenIndex, curStackTokenAmount] = useMemo(() => {
+  const [, curStackTokenAmount] = useMemo(() => {
     const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
       i => BigInt(i.toExact()) > BigInt('0')
     )
-    const curTokenAmount =
-      index !== undefined ? coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.[index] : undefined
+    const curTokenAmount = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts
     return [index, curTokenAmount]
   }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts])
 
@@ -216,7 +216,7 @@ function Step1({
       return <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>
     }
 
-    if (_chainId !== coinInfo?.poolInfo?.chainId) {
+    if (_chainId !== (coinInfo?.poolInfo?.chainId || ChainId.MAINNET)) {
       return <StakeButton onClick={() => _switchNetwork()}>Switch Network</StakeButton>
     }
     if (status === TStep.COMING_SOON) {
@@ -370,7 +370,7 @@ function Step1({
                             : '0'}
                         </Typography>
                         <Typography fontSize={16} fontWeight={500} width={'fit-content'}>
-                          {item?.token?.name?.toLocaleUpperCase()}
+                          {item?.token?.symbol?.toLocaleUpperCase()}
                         </Typography>
                       </Stack>
                     ))}
@@ -423,13 +423,19 @@ function Step1({
               <Stack spacing={8}>
                 <CardContentStyle>My Stake</CardContentStyle>
                 <CardLabelStyle>
-                  {myStakeTokenIndex !== undefined && coinInfo?.token1StakedStats?.stakeTokenPrices
-                    ? curStackTokenAmount
-                        ?.div(coinInfo?.token1StakedStats?.stakeTokenPrices?.[myStakeTokenIndex || 0])
-                        .toSignificant()
-                    : ''}{' '}
+                  {coinInfo?.token1StakedStats?.stakeTokenPrices
+                    ? curStackTokenAmount?.map((item, index) =>
+                        item.greaterThan('0') ? (
+                          <Stack key={index}>
+                            {item
+                              ?.div(coinInfo?.token1StakedStats?.stakeTokenPrices?.[index] as CurrencyAmount)
+                              .toSignificant()}{' '}
+                            {item?.currency.symbol?.toLocaleUpperCase()}
+                          </Stack>
+                        ) : null
+                      )
+                    : ''}
                   {` `}
-                  {curStackTokenAmount?.currency.symbol || '0'}
                 </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
@@ -468,6 +474,7 @@ function Step2({
   poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
+
   const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', coinInfo?.poolInfo?.chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
@@ -644,6 +651,7 @@ function Step2({
       index !== undefined ? coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.[index] : undefined
     return [index, curTokenAmount]
   }, [coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts])
+
   const myTotalStakeAmount = useMemo(() => {
     if (
       !curStackTokenAmount ||
@@ -654,6 +662,20 @@ function Step2({
     return curStackTokenAmount.div(coinInfo?.token1StakedStats?.stakeTokenPrices[myStakeTokenIndex])
   }, [coinInfo?.token1StakedStats?.stakeTokenPrices, curStackTokenAmount, myStakeTokenIndex])
 
+  // const myTotalStakeAmountArr = useMemo(() => {
+  //   if (
+  //     !coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts ||
+  //     !coinInfo?.token1StakedStats?.stakeTokenPrices
+  //   )
+  //     return undefined
+  //   return coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.map((item, index) =>
+  //     item.div(coinInfo?.token1StakedStats?.stakeTokenPrices?.[index] as CurrencyAmount)
+  //   )
+  // }, [
+  //   coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts,
+  //   coinInfo?.token1StakedStats?.stakeTokenPrices
+  // ])
+
   const myUnClaimStakeAmount = useMemo(() => {
     if (
       myStakeTokenIndex === undefined ||
@@ -662,9 +684,11 @@ function Step2({
       !curStackTokenAmount
     )
       return undefined
-    return CurrencyAmount.fromRawAmount(
-      curStackTokenAmount.currency,
-      coinInfo?.finalAllocation?.myUnSwappedAmount1.toString()
+    return (
+      CurrencyAmount.fromAmount(
+        curStackTokenAmount.currency,
+        CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString()).toExact()
+      ) || CurrencyAmount.fromRawAmount(curStackTokenAmount.currency as Currency, '0')
     ).div(coinInfo?.token1StakedStats?.stakeTokenPrices[myStakeTokenIndex])
   }, [
     coinInfo?.finalAllocation?.myUnSwappedAmount1,
@@ -672,6 +696,49 @@ function Step2({
     curStackTokenAmount,
     myStakeTokenIndex
   ])
+
+  // const myUnClaimStakeAmountArr = useMemo(() => {
+  //   if (
+  //     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts &&
+  //     myUnClaimStakeAmount &&
+  //     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts &&
+  //     coinInfo.token1StakedStats?.totalStakeAmount &&
+  //     coinInfo?.poolInfo?.quoteAmountTotal1
+  //   ) {
+  //     const total = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.reduce((pre, cur) => {
+  //       return (
+  //         CurrencyAmount.fromAmount(
+  //           Currency.getNativeCurrency(),
+  //           new BigNumber(pre.toExact()).plus(cur.toExact()).toString()
+  //         ) || CurrencyAmount.ether('0')
+  //       )
+  //     })
+  //     return coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.map((myQuoteAmount1, index) => {
+  //       console.log(
+  //         '🚀 ~ file: Step.tsx:715 ~ returncoinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.map ~ myQuoteAmount1:',
+  //         CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString() || '0').toExact(),
+  //         myQuoteAmount1.toExact(),
+  //         total.toExact(),
+  //         coinInfo.token1StakedStats?.totalStakeAmount?.[index].toExact(),
+  //         coinInfo.poolInfo?.quoteAmountTotal1.toString(),
+  //         myUnClaimStakeAmount.toExact()
+  //       )
+  //       return CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString() || '0')
+  //         .mul(myQuoteAmount1)
+  //         .div(total)
+  //         .mul(coinInfo.token1StakedStats?.totalStakeAmount?.[index] as CurrencyAmount)
+  //         .div(CurrencyAmount.ether(coinInfo.poolInfo?.quoteAmountTotal1.toString() as string))
+  //     })
+  //   }
+  //   return []
+  // }, [
+  //   coinInfo?.finalAllocation?.myUnSwappedAmount1,
+  //   coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts,
+  //   coinInfo?.poolInfo?.quoteAmountTotal1,
+  //   coinInfo?.token1StakedStats?.totalStakeAmount,
+  //   myUnClaimStakeAmount
+  // ])
+
   return (
     <Stack spacing={24} mt={24}>
       <Typography
@@ -758,7 +825,7 @@ function Step2({
                               : '0'}
                           </Typography>
                           <Typography fontSize={16} fontWeight={500} width={'fit-content'} color={'#fff'}>
-                            {item?.token?.name?.toLocaleUpperCase()}
+                            {item?.token?.symbol?.toLocaleUpperCase()}
                           </Typography>
                         </Stack>
                       ))}

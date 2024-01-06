@@ -51,10 +51,10 @@ export class CurrencyAmount extends Fraction {
 
   public mul(other: CurrencyAmount | JSBI | number | BigNumber): CurrencyAmount {
     const val = other instanceof CurrencyAmount ? other.toExact() : other instanceof JSBI ? other.toString() : other
-    return CurrencyAmount.fromAmount(
-      this.currency,
-      new BigNumber(val).times(this.toExact()).toString()
-    ) as CurrencyAmount
+    return (
+      CurrencyAmount.fromAmount(this.currency, new BigNumber(val).times(this.toExact()).toString()) ||
+      CurrencyAmount.fromRawAmount(this.currency, '0')
+    )
   }
 
   public div(other: CurrencyAmount | JSBI | number | BigNumber): CurrencyAmount {

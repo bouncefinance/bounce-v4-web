@@ -32,6 +32,7 @@ export const useGetStakingAuctionInfo = (
     undefined,
     chainId
   )
+
   const poolToken1WeightAmountMapRes = useSingleCallResult(
     contract,
     'getPoolToken1WeightAmountMap',
@@ -58,12 +59,21 @@ export const useGetStakingAuctionInfo = (
       ) {
         return []
       }
-      const poolStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
-        CurrencyAmount.fromRawAmount(cr as Currency, poolToken1WeightAmountMapRes.result?.[2][id])
+      const poolStakeToken1WeightAmounts = token1sCurrency.map(
+        (cr, id) =>
+          CurrencyAmount.fromAmount(
+            cr as Currency,
+            CurrencyAmount.ether(poolToken1WeightAmountMapRes.result?.[2][id]).toExact()
+          ) || CurrencyAmount.fromRawAmount(cr as Currency, '0')
       )
-      const myStakeToken1WeightAmounts = token1sCurrency.map((cr, id) =>
-        CurrencyAmount.fromRawAmount(cr as Currency, myStakeToken1WeightAmountMapRes.result?.[2][id])
-      )
+      const myStakeToken1WeightAmounts = token1sCurrency.map((cr, id) => {
+        return (
+          CurrencyAmount.fromAmount(
+            cr as Currency,
+            CurrencyAmount.ether(myStakeToken1WeightAmountMapRes.result?.[2][id]).toExact()
+          ) || CurrencyAmount.fromRawAmount(cr as Currency, '0')
+        )
+      })
       const totalStakeAmount = token1sCurrency.map((cr, id) =>
         CurrencyAmount.fromRawAmount(cr as Currency, totalStake.result?.[1][id])
       )
