@@ -18,7 +18,7 @@ import Charts from './charts'
 import { Steps } from './Step'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 const Page = () => {
-  const poolId = 1
+  const poolId = 2
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const { account } = useActiveWeb3React()
   //TODO only chainId

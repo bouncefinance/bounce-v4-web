@@ -434,7 +434,7 @@ function Step1({
                           </Stack>
                         ) : null
                       )
-                    : ''}
+                    : '--'}
                   {` `}
                 </CardLabelStyle>
               </Stack>
@@ -576,6 +576,7 @@ function Step2({
     }
   }, [contract, poolId])
   const canClaimToken0 = useMemo(() => {
+    if (chainId !== coinInfo?.poolInfo?.chainId) return false
     if (!coinInfo || !coinInfo.poolInfo) return false
     if (coinInfo.claimedToken0?.eq(coinInfo.finalAllocation?.mySwappedAmount0 || '0')) return false
     const now = nowDate()
@@ -597,7 +598,7 @@ function Step2({
       return flag
     }
     return false
-  }, [coinInfo])
+  }, [chainId, coinInfo])
 
   const claimableToken0Amount = useMemo(() => {
     if (!coinInfo?.poolInfo || !coinInfo?.claimedToken0 || !coinInfo?.finalAllocation?.mySwappedAmount0) {
@@ -943,7 +944,11 @@ function Step2({
                     </BoldTextStyle>
                     <StakeButton
                       style={{ width: 150 }}
-                      disabled={coinInfo?.myToken1Claimed || !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0)}
+                      disabled={
+                        coinInfo?.myToken1Claimed ||
+                        !coinInfo?.finalAllocation?.myUnSwappedAmount1.gt(0) ||
+                        chainId !== coinInfo.poolInfo?.chainId
+                      }
                       onClick={() => claimToken1()}
                     >
                       {coinInfo?.myToken1Claimed ? 'Claimed' : 'Claim'}

@@ -75,7 +75,7 @@ const ChartLayout = ({
               <WhiteP1 ml={12} mr={4}>
                 {i.name}
               </WhiteP1>
-              {i.icon && <img src={i.icon} style={{ width: 20, height: 20 }} />}
+              {(i.icon || i.logo) && <img src={i.icon || i.logo} style={{ width: 20, height: 20 }} />}
             </Stack>
           ))}
         </Stack>

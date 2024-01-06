@@ -2504,10 +2504,10 @@ export const Port3Data: IPrivatePadProp = {
   // hidden: true,
   keyId: 23,
   liveTimeStamp: {
-    start: 1732852800000,
-    end: 0
+    start: 1704636000000,
+    end: 1704700800000
   },
-  hideUpcomingCountdown: true,
+  // hideUpcomingCountdown: true,
   poolTypeName: 'Staking Auction',
   img: 'https://images-v3.bounce.finance/e35da230f9eae5479dfe128f256055ec-1703137469.png',
   avatar: Port3Logo,
