@@ -1161,14 +1161,14 @@ function InfoList({ info, isDark }: { info: IProjectInfo[]; isDark?: boolean }) 
 
 const STEPNTokenDark = () => {
   const tokenList: { [key: string]: string }[] = [
-    { 'Hard Cap': '4200000 USD' },
-    { 'Total Token Supply': '6000000000 GMT' },
-    { 'Initial Circulating Supply': '10% of Total Token Supply' },
-    { 'Public Sale Token Price': '0.01 USD (price in BB will be determined prior to the start of subscription)' },
-    { 'Tokens Offered': '420000000 GMT' },
-    { 'Hard Cap Per User': '15000 USD (price in BNB will be determined prior to the start of subscription)' },
-    { 'Token Sale Vesting Period': 'No lockup' },
-    { 'Token Type': 'SPL' },
+    // { 'Hard Cap': '4200000 USD' },
+    // { 'Total Token Supply': '6000000000 GMT' },
+    // { 'Initial Circulating Supply': '10% of Total Token Supply' },
+    // { 'Public Sale Token Price': '0.01 USD (price in BB will be determined prior to the start of subscription)' },
+    // { 'Tokens Offered': '420000000 GMT' },
+    // { 'Hard Cap Per User': '15000 USD (price in BNB will be determined prior to the start of subscription)' },
+    // { 'Token Sale Vesting Period': 'No lockup' },
+    // { 'Token Type': 'SPL' },
     { 'Token Distribution': 'After the end of token sale' }
   ]
   return (

@@ -30,22 +30,10 @@ interface IParam {
 
 const initParams: IParam = {
   name: 'test',
-  token0: '0x299269CbbEfFd541c077a5Cd16b588a2fbE3ab30',
-  token1s: [
-    '0xc390E699b38F14dB884C635bbf843f7B135113ad',
-    '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
-    '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E',
-    '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7',
-    '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
-  ],
+  token0: '0xE684c11F6E90905EF63B16A4FAD3851AC8f432Be',
+  token1s: [],
   amountTotal0: '10',
-  amount1PerWallets: [
-    '20000000000000000000',
-    '10000000',
-    '10000000000000000000',
-    '10000000000000000000',
-    '10000000000000000000'
-  ],
+  amount1PerWallets: [],
   openAt: 1703735918,
   closeAt: 1703735978,
   claimAt: 1703735978,
@@ -125,7 +113,7 @@ const useToCreate = (body: IParam, creator: string) => {
   const { chainId } = useActiveWeb3React()
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', chainId || '')
 
-  const token1Arr = useTokens(body.token1s as string[], chainId || ChainId.SEPOLIA)
+  const token1Arr = useTokens(body.token1s as string[], chainId || ChainId.MAINNET)
 
   const token1CurrencyAmount = useMemo(() => {
     if (!token1Arr || token1Arr.some(i => !i) || !token1Arr || token1Arr.includes(undefined)) return undefined

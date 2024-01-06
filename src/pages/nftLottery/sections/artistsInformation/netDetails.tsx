@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import Title from '../../components/artistsInformation/Title'
 import Text from '../../components/artistsInformation/Text'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -13,25 +13,33 @@ interface List extends Deatail {
 }
 
 export const DeatailList: List[] = [
-  { name: 'Hard Cap', value: '4200000 USD' },
-  { name: 'Total Token Supply', value: '600000000 GMT' },
-  { name: 'Initial Circulating Supply', value: '10% of Total Token SUPPLY' },
+  // { name: 'Hard Cap', value: '4200000 USD' },
+  // { name: 'Total Token Supply', value: '600000000 GMT' },
+  // { name: 'Initial Circulating Supply', value: '10% of Total Token SUPPLY' },
+  // {
+  //   name: 'Public Sale Token Price',
+  //   value: '0.01 USD ( price in BNB will be determined prior to the start of subscription)'
+  // },
+  // { name: 'Tokens Offered', value: '4200000000 GMT' },
+  // {
+  //   name: 'Hard Cap Per User',
+  //   value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
+  // },
+  // {
+  //   name: 'Token Sale Vesting Period',
+  //   value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
+  // },
+  // { name: 'Hard Cap Per User', value: 'No lockup' },
+  { name: 'Contract Address', value: '0xE684c11F6E90905EF63B16A4FAD3851AC8f432Be' },
+  { name: 'Token Name', value: 'AI_Meets_Bitcoin' },
+  { name: 'Token Symbol', value: 'AIBTC' },
+  { name: 'Token Standard', value: 'BRC-721,ERC-721' },
+  { name: 'Blockchain', value: 'Bitcoin, Ethereum' },
   {
-    name: 'Public Sale Token Price',
-    value: '0.01 USD ( price in BNB will be determined prior to the start of subscription)'
-  },
-  { name: 'Tokens Offered', value: '4200000000 GMT' },
-  {
-    name: 'Hard Cap Per User',
-    value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
-  },
-  {
-    name: 'Token Sale Vesting Period',
-    value: '15000 USD ( price in BNB will be determined prior to the start of subscription)'
-  },
-  { name: 'Hard Cap Per User', value: 'No lockup' },
-  { name: 'Token Type', value: 'SPL' },
-  { name: 'Token Distribution', value: 'After the end of token sale' }
+    name: 'Description',
+    value: `"AI Meets Bitcoin": The first-ever AI-generated Ordinals NFT collection, representing a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem.`
+  }
+  // { name: 'Token Distribution', value: 'After the end of token sale' }
 ]
 
 const NetDetails = () => {
@@ -39,7 +47,7 @@ const NetDetails = () => {
   return (
     <Box marginBottom={isSm ? '24px' : '0'}>
       {!isSm && <Title text="NFT DETAILS" />}
-      <Typography
+      {/* <Typography
         variant="lotteryh2"
         color={'var(--AI-dark-02, #4C483A)'}
         textTransform={'uppercase'}
@@ -50,7 +58,7 @@ const NetDetails = () => {
         padding={isSm ? '24px 0 16px' : '40px 0'}
       >
         NFT SALE AND ECONOMICS PARAMETERS AND PUBLIC TIME, ETC.
-      </Typography>
+      </Typography> */}
       {DeatailList.map(({ name, value }, idx) => (
         <Box
           key={idx}

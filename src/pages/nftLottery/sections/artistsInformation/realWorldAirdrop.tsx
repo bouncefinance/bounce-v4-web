@@ -30,9 +30,9 @@ const RealWorldAirdrop = () => {
             REAL WORLD AIRDROP
           </Typography>
           <Text>
-            The Ondo Finance Protocol (“Ondo”) is an open and decentralized investment bank. Ondo enables and
+            {`The Ondo Finance Protocol ("Ondo") is an open and decentralized investment bank. Ondo enables and
             facilitates connections between various stakeholders in the emerging DeFi ecosystem — including DAOs,
-            institutional and retail.
+            institutional and retail.`}
           </Text>
           <Text style={{ marginBottom: '24px' }}>Ondo is based upon three core principles:</Text>
           <Box display={'flex'} gap={6}>

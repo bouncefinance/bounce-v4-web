@@ -92,7 +92,8 @@ const CheckBox = ({ onConfirm }: CheckProps) => {
   const [confirmationState, setConfirmationState] = useState({
     notice1: false,
     notice2: false,
-    notice3: false
+    notice3: false,
+    notice4: false
   })
 
   const handleChange = (event: React.ChangeEvent<any>) => {
@@ -102,7 +103,7 @@ const CheckBox = ({ onConfirm }: CheckProps) => {
     })
   }
 
-  const { notice1, notice2, notice3 } = confirmationState
+  const { notice1, notice2, notice3, notice4 } = confirmationState
   const icons = { icon: <CheckIcon />, checkedIcon: <CheckedIcon /> }
 
   return (
@@ -131,6 +132,13 @@ const CheckBox = ({ onConfirm }: CheckProps) => {
             onChange={handleChange}
             name="notice3"
             label="I checked the price"
+          />
+          <FormControlLabelStyle
+            checked={notice4}
+            control={<CheckboxStyle {...icons} />}
+            onChange={handleChange}
+            name="notice4"
+            label="The assets you use to purchase lottery tickets will be burned by the bounce"
           />
         </FormGroupStyle>
         <Stack justifyContent={'center'}>

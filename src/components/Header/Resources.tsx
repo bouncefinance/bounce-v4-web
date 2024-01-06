@@ -27,6 +27,10 @@ const linkList = [
   {
     label: 'Contact Us',
     href: 'https://docs.google.com/forms/d/1DJxbqqfv6MnN5-kOwDGU-_DGpXDxbJJkUT2UqKgvbUs/viewform?edit_requested=true'
+  },
+  {
+    label: 'Private Launchpad Form',
+    href: 'https://docs.google.com/forms/d/e/1FAIpQLSeSXXbKG6Dk_6NhzGnT1gkZsG5MVvdtDmLVU87sIsnmHdjYWg/viewform?usp=sf_link'
   }
 ]
 
@@ -56,7 +60,7 @@ export default function Resources({ opacity }: { opacity: number }) {
         </Button>
       }
     >
-      <Box width={180}>
+      <Box width={240}>
         {linkList.map(item => (
           <Link key={item.label} underline="none" href={item.href} target="_blank">
             <StyledButton variant="text">{item.label}</StyledButton>

@@ -62,7 +62,7 @@ import DIDNa from './imgs/did-na.png'
 // import GoDIDTokenomics from './imgs/GoDID-Tokenomics.png'
 import AiMeetsBtcImg from './imgs/ai-meets-btc.jpg'
 import AiMeetsBtsAvatar from './imgs/ai-meets-bts-avatar1.jpg'
-import PORT3Tokenomics from './imgs/PORT3-Tokenomics.png'
+import PORT3Tokenomics from './imgs/PORT3-Tokenomics.jpg'
 import port3Investment from './imgs/port3Investment.jpg'
 import Port3Logo from './imgs/port3Logo.png'
 import LadderImg from './imgs/ladder.png'
@@ -1486,16 +1486,16 @@ const PrivateRandomGodidData = {
 const AiMeetsBtcRandomData: IPrivatePadProp = {
   keyId: 22,
   liveTimeStamp: {
-    start: 1705118400000,
-    end: 0
+    start: 1704513600000,
+    end: 1704772800000
   },
-  hideUpcomingCountdown: true,
-  poolTypeName: 'Random Selection Auction',
+  // hideUpcomingCountdown: true,
+  poolTypeName: 'Random Selection',
   img: AiMeetsBtcImg,
   avatar: AiMeetsBtsAvatar,
   title: 'AI meets Bitcoin',
   chainId: 1,
-  tokenName: 'TBD',
+  tokenName: 'AI_Meets_Bitcoin',
   // whitePaperLink: 'https://drive.google.com/file/d/1nl16sKppuS7CA4K_wSSjhrJ6i-OlTtT3/view?usp=sharing',
   upcomingLink: '/launchpad/ai-random',
   liveLink: '/launchpad/ai-random',
@@ -1545,12 +1545,12 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
     }
   ],
   tokenMetrics: [],
-  desc: '',
+  desc: `The "AI Meets Bitcoin" Auction features the first-ever AI-generated Ordinals NFT collection, with 450 exquisite artworks co-created by three top artists: Charlesai, 0009, and RedruM. This collection represents a pioneering fusion of artificial intelligence, art and the Bitcoin ecosystem. Each of the featured artworks gain a unique identity and narrative, permanently inscribed on the Bitcoin network, guaranteeing their endurance and legacy.`,
   social: [],
   moreData: [
-    // { title: 'Token Name', content: 'TBD' },
-    { title: 'NFT Price', content: 'TBD' },
-    { title: 'NFT Amount', content: 'TBD' },
+    { title: 'Token Name', content: 'AI_Meets_Bitcoin' },
+    { title: 'Token Type', content: 'ERC-721' },
+    { title: 'NFT Amount', content: '400' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
@@ -2649,10 +2649,11 @@ export const Port3Data: IPrivatePadProp = {
     { title: 'token offered', value: '2,000,000 PORT3' }
   ]
 }
+
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 26
-  Port3Data,
   AiMeetsBtcRandomData,
+  Port3Data,
   AmmxAuctionData,
   AmmxDaiiData,
   AmmxRandomData,
@@ -2660,7 +2661,6 @@ export const PrivatePadDataList: IPrivatePadProp[] = [
   PrivateStakeDaiiData,
   PrivateRandomGodidData,
   PrivatePadCoinData,
-
   {
     keyId: 17,
     backedId: 18606,

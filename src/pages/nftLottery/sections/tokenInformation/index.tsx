@@ -1,11 +1,12 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
-// import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
+import { ReactComponent as TickGreen } from 'assets/svg/tick-green.svg'
 import ImgCard from '../../components/tokenInformation/imgCard'
 import useBreakpoint from 'hooks/useBreakpoint'
 import BgImg from 'assets/imgs/nftLottery/banner/globalBg.png'
 import { WithAnimation } from 'components/WithAnimation'
 import ChartInfo from './chartInfo'
 import { RandomSelectionNFTProps } from 'api/pool/type'
+import { shortenAddress } from 'utils'
 const SectionBody = styled(Box)`
   width: 100%;
   background: url(${BgImg}) repeat;
@@ -160,8 +161,11 @@ const LeftContent = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
       <Stack gap={isSm ? 0 : 40}>
         <InfoTitle>Token Information</InfoTitle>
         <Stack gap={16} mt={isSm ? 16 : 0}>
-          {/* <InfoLabel title="Contract address" content="TBD" icon={<TickGreen />} /> */}
-          <InfoLabel title="Contract address" content="TBD" />
+          <InfoLabel
+            title="Contract address"
+            content={shortenAddress('0xE684c11F6E90905EF63B16A4FAD3851AC8f432Be')}
+            icon={<TickGreen />}
+          />
           <InfoLabel title="Token Type" content="ERC721" />
         </Stack>
         <InfoTitle mt={isSm ? 24 : 'auto'}>Auction Information</InfoTitle>

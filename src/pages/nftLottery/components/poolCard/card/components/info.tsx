@@ -104,7 +104,7 @@ const Info = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
           <WhiteCard>
             <Title1>Ticket price</Title1>
             <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
-              <PriceTitle>10</PriceTitle>
+              <PriceTitle>50</PriceTitle>
               <Title1 sx={{ color: '#F00' }}>USD</Title1>
             </Stack>
           </WhiteCard>
@@ -162,7 +162,7 @@ export const MobileInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) 
           <WhiteCard>
             <Title1>Ticket price</Title1>
             <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
-              <PriceTitle>10</PriceTitle>
+              <PriceTitle>50</PriceTitle>
               <Title1 sx={{ color: '#F00' }}>USD</Title1>
             </Stack>
           </WhiteCard>
@@ -203,7 +203,7 @@ export const MobileRotateInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTPro
         <WhiteCard className="small">
           <Title1 className="small">Ticket price</Title1>
           <Stack flexDirection={'row'} gap={10} alignItems={'end'}>
-            <PriceTitle className="small">10</PriceTitle>
+            <PriceTitle className="small">50</PriceTitle>
             <Title1 className="small" sx={{ color: '#F00' }}>
               USD
             </Title1>
