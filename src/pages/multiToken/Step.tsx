@@ -468,14 +468,7 @@ function Step2({
   poolId: number
 }) {
   const { account, chainId } = useActiveWeb3React()
-  const _chainId = useMemo(() => {
-    if (!account) {
-      // return 1
-      return 11155111
-    }
-    return chainId
-  }, [account, chainId])
-  const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
+  const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', coinInfo?.poolInfo?.chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
     return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'PORT3', 'PORT3')
@@ -626,7 +619,7 @@ function Step2({
   }
   const poolStakeTokens = useTokens(
     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
-    _chainId
+    coinInfo?.poolInfo?.chainId
   )
   const stakeTokenList = useMemo(() => {
     if (coinInfo && poolStakeTokens) {
@@ -890,7 +883,7 @@ function Step2({
                     </StakeButton>
                   </Stack>
                   {!account && <StakeButton onClick={showLoginModal}>Connect Wallet</StakeButton>}
-                  {account && _chainId !== coinInfo?.poolInfo?.chainId && (
+                  {account && chainId !== coinInfo?.poolInfo?.chainId && (
                     <StakeButton onClick={_switchNetwork}>Switch Network</StakeButton>
                   )}
                 </Stack>
