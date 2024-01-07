@@ -5,7 +5,6 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { getIcon, muColorList } from 'pages/nftLottery/sections/tokenInformation/config'
 import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { useMemo } from 'react'
-import { useTokens } from 'state/wallet/hooks'
 
 const Title = styled(Typography)`
   color: var(--white, #fff);
@@ -86,40 +85,35 @@ const ChartLayout = ({
 
 const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
   const isSm = useBreakpoint('sm')
-  const poolStakeTokens = useTokens(
-    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
-    coinInfo?.poolInfo?.chainId
-  )
-
   const pieData = useMemo(() => {
-    if (coinInfo && poolStakeTokens) {
+    if (coinInfo && coinInfo.token1StakedStats?.token1sCurrency) {
       const arr = coinInfo.token1StakedStats?.stakeTokenPrices?.map((item, index) => ({
         value:
           Number(coinInfo?.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.[index].div(item).toExact()) ||
           0,
         color: muColorList[index],
-        name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
-        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase()),
+        name: coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase(),
+        logo: getIcon(coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase()),
         itemStyle: { color: muColorList[index] }
       }))
       return arr
     }
     return undefined
-  }, [coinInfo, poolStakeTokens])
+  }, [coinInfo])
 
   const barData = useMemo(() => {
-    if (coinInfo && poolStakeTokens) {
+    if (coinInfo && coinInfo.token1StakedStats?.token1sCurrency) {
       const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
         value: Number(item.toExact()),
         color: muColorList[index],
-        name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
-        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase()),
+        name: coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase(),
+        logo: getIcon(coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase()),
         itemStyle: { color: muColorList[index] }
       }))
       return arr
     }
     return undefined
-  }, [coinInfo, poolStakeTokens])
+  }, [coinInfo])
   const barXAxisData = barData
     ? barData.map(item => {
         return item.name ? item.name : ''
