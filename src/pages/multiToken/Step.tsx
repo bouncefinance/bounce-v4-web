@@ -645,9 +645,7 @@ function Step2({
   }, [coinInfo, poolStakeTokens])
 
   const [myStakeTokenIndex, curStackTokenAmount] = useMemo(() => {
-    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
-      i => BigInt(i.toExact()) > BigInt('0')
-    )
+    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(i => i.greaterThan('0'))
     const curTokenAmount =
       index !== undefined ? coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.[index] : undefined
     return [index, curTokenAmount]
