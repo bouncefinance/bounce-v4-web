@@ -59,7 +59,7 @@ const ChartLayout = ({
       </Box>
       <Box>
         <Box margin={isSm ? '24px 0 32px' : '32px 0 28px'} display={'flex'} justifyContent={'center'}>
-          <DonutChart option={option} size={{ width: width, height: height }} />
+          <DonutChart option={option} size={{ width: isSm ? window.innerWidth - 40 : width, height: height }} />
         </Box>
 
         <Stack flexDirection={'row'} alignItems={'center'} flexWrap={'wrap'} pl={isSm ? '18%' : '15%'}>
@@ -238,9 +238,9 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         color: '#FFF',
         formatter(value: number) {
           if (value >= 1000000) {
-            return (value / 1000000).toFixed(1) + 'M'
+            return (value / 1000000).toFixed(0) + 'M'
           } else if (value >= 1000) {
-            return (value / 1000).toFixed(1) + 'K'
+            return (value / 1000).toFixed(0) + 'K'
           } else {
             return value.toString()
           }
