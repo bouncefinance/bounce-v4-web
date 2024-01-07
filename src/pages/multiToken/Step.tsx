@@ -151,8 +151,8 @@ function Step1({
   )
 
   const [, curStackTokenAmount] = useMemo(() => {
-    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
-      i => BigInt(i.toExact()) > BigInt('0')
+    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(i =>
+      new BigNumber(i.toExact()).gt('0')
     )
     const curTokenAmount = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts
     return [index, curTokenAmount]
