@@ -44,13 +44,13 @@ export const fixToDecimals = (value: string | number, decimals: number) => {
 
 export function formatGroupNumber(value: number, currencyText = '', fractionDigits = 1) {
   if (value / 1_000_000_000 >= 1) {
-    return currencyText + Number((value / 1_000_000_000).toFixed(fractionDigits)).toLocaleString() + 'b'
+    return currencyText + BigNumber(value).dividedBy(1_000_000_000).toFixed(fractionDigits).toLocaleString() + 'b'
   }
   if (value / 1_000_000 >= 1) {
-    return currencyText + Number((value / 1_000_000).toFixed(fractionDigits)).toLocaleString() + 'm'
+    return currencyText + BigNumber(value).dividedBy(1_000_000).toFixed(fractionDigits).toLocaleString() + 'm'
   }
   if (value / 1_000 >= 1) {
-    return currencyText + Number((value / 1_000).toFixed(fractionDigits)).toLocaleString() + 'k'
+    return currencyText + BigNumber(value).dividedBy(1_000).toFixed(fractionDigits).toLocaleString() + 'k'
   }
-  return currencyText + Number(value.toFixed(fractionDigits)).toLocaleString()
+  return currencyText + BigNumber(value).toFixed(fractionDigits).toLocaleString()
 }

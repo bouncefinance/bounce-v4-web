@@ -7,7 +7,7 @@ import Icon6 from 'assets/imgs/nftLottery/tokenInformation/bdid.png'
 import Port3Logo from 'pages/launchpad/imgs/port3Logo.png'
 
 export const colorList = ['#CCC496', '#DBAC48', '#AB883C', '#9E9871', '#9E7871', '#614C1F']
-export const muColorList = ['#7966E7', '#90BE6D', '#3F90FF', '#0BFFDA', '#0BF1DA', '#51DCF6']
+export const muColorList = ['#7966E7', '#90BE6D', '#3F90FF', '#01FFDA', '#51DCF6', '#91cCF6']
 export const iconList: { [key in string]: string } = {
   AUCTION: Icon1,
   MUBI: Icon2,

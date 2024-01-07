@@ -5,6 +5,7 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { getIcon, muColorList } from 'pages/nftLottery/sections/tokenInformation/config'
 import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { useMemo } from 'react'
+import { formatGroupNumber } from 'utils/number'
 
 const Title = styled(Typography)`
   color: var(--white, #fff);
@@ -108,12 +109,13 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         color: muColorList[index],
         name: coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase(),
         logo: getIcon(coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase()),
-        itemStyle: { color: muColorList[index] }
+        itemStyle: { color: muColorList[index] },
+        number: pieData?.[index].value || 0
       }))
       return arr
     }
     return undefined
-  }, [coinInfo])
+  }, [coinInfo, pieData])
   const barXAxisData = barData
     ? barData.map(item => {
         return item.name ? item.name : ''
@@ -123,7 +125,17 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
   const pieOption: EChartsOption = {
     tooltip: {
       trigger: 'item',
-      position: 'inside'
+      position: 'inside',
+      formatter: function (parms: any) {
+        const str =
+          parms.seriesName +
+          '</br>' +
+          parms.marker +
+          parms.data.name +
+          ':  ' +
+          `<span style='font-weight:600;margin-left:20'>${formatGroupNumber(Number(parms.data?.number) || 0)}</span>`
+        return str
+      }
     },
     legend: {
       orient: 'vertical',
@@ -133,7 +145,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     },
     series: [
       {
-        name: 'Token proportion',
+        name: 'Token Quantity',
         type: 'pie',
         radius: ['50%', '95%'],
         avoidLabelOverlap: false,
@@ -155,7 +167,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         labelLine: {
           show: false
         },
-        data: pieData
+        data: barData
       }
     ]
   }
@@ -170,7 +182,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
           parms.marker +
           parms.data.name +
           ':  ' +
-          `<span style='font-weight:600;margin-left:20'>$${parms.data.value}</span>`
+          `<span style='font-weight:600;margin-left:20'>$${formatGroupNumber(parms.data.value || 0)}</span>`
         return str
       }
     },
@@ -235,7 +247,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     },
     series: [
       {
-        name: 'Value Distribution',
+        name: 'Value',
         type: 'bar',
         barWidth: 30,
         data: barData
