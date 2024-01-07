@@ -150,7 +150,7 @@ const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     }
     return coinInfo.token1StakedStats?.token1sCurrency.map<ITokenList>((cr, id) => ({
       name: cr.symbol || '--',
-      price: quoteAmount.div(poolToken1s[id]).toSignificant(4),
+      price: quoteAmount.div(poolToken1s[id]).div(0.05).toSignificant(4),
       icon: getIcon(cr.symbol) || '',
       weights: 1
     }))
