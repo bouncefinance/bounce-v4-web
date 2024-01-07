@@ -235,7 +235,16 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         show: true,
         margin: 10,
         fontSize: 10,
-        color: '#FFF'
+        color: '#FFF',
+        formatter(value: number) {
+          if (value >= 1000000) {
+            return (value / 1000000).toFixed(1) + 'M'
+          } else if (value >= 1000) {
+            return (value / 1000).toFixed(1) + 'K'
+          } else {
+            return value.toString()
+          }
+        }
       },
       splitLine: {
         show: true,
