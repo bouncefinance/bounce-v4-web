@@ -183,7 +183,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'OKEX Coin',
       symbol: 'OKT',
       decimals: 18,
-      logo: 'https://pbs.twimg.com/profile_images/1607045883434000385/eP63iKT3_400x400.jpg'
+      logo: 'https://static.okx.com/cdn/assets/imgs/226/EB771F0EE8994DD5.png'
     },
     rpcUrls: ['https://exchainrpc.okex.org'],
     blockExplorerUrls: ['https://www.oklink.com/okexchain/']
@@ -222,7 +222,7 @@ export const SUPPORTED_NETWORKS: {
       name: 'MATIC',
       symbol: 'MATIC',
       decimals: 18,
-      logo: 'https://polygonscan.com/images/svg/brands/poly.png'
+      logo: 'https://polygonscan.com/assets/poly/images/svg/logos/chain-light.svg'
     },
     rpcUrls: ['https://rpc.ankr.com/polygon'],
     blockExplorerUrls: ['https://polygonscan.com/']
