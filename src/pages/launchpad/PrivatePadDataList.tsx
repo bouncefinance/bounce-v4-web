@@ -1487,7 +1487,7 @@ const AiMeetsBtcRandomData: IPrivatePadProp = {
   keyId: 22,
   liveTimeStamp: {
     start: 1704513600000,
-    end: 1704772800000
+    end: 1704765600000
   },
   // hideUpcomingCountdown: true,
   poolTypeName: 'Random Selection',
