@@ -168,7 +168,7 @@ const ChartInfo = ({ poolInfo }: { poolInfo: RandomSelectionNFTProps }) => {
       <Box mb={isSm ? 0 : 57}>
         <InfoP1>Invest Tokens/Lottery </InfoP1>
         <Stack flexDirection={isSm ? 'column' : 'row'} gap={isSm ? 24 : 64} alignItems={'center'} mt={40}>
-          <DonutChart option={option} size={{ width: 252, height: 252 }} />
+          <DonutChart option={option} width={252} height={252} />
           <Stack
             gap={20}
             height={'fit-content'}

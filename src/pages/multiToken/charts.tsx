@@ -39,7 +39,7 @@ const ChartLayout = ({
   data: any
   title: string
   option: EChartsOption
-  width: number
+  width: number | string
   height: number
 }) => {
   const isSm = useBreakpoint('sm')
@@ -54,32 +54,33 @@ const ChartLayout = ({
         margin: '0 auto'
       }}
     >
-      <Box sx={{ padding: isSm ? '24px 24px 16px 24px' : '28px 48px', borderBottom: '2px solid #4F4F4F' }}>
-        <Title fontSize={isSm ? 16 : 20}>{title}</Title>
+      <Title
+        fontSize={isSm ? 16 : 20}
+        sx={{ padding: isSm ? '24px 24px 16px 24px' : '28px 48px', borderBottom: '2px solid #4F4F4F' }}
+      >
+        {title}
+      </Title>
+      <Box margin={isSm ? '24px 0 32px' : '32px 0 28px'} display={'flex'} justifyContent={'center'}>
+        <DonutChart option={option} width={width} height={height} />
       </Box>
-      <Box>
-        <Box margin={isSm ? '24px 0 32px' : '32px 0 28px'} display={'flex'} justifyContent={'center'}>
-          <DonutChart option={option} size={{ width: width, height: height }} />
-        </Box>
 
-        <Stack flexDirection={'row'} alignItems={'center'} flexWrap={'wrap'} pl={isSm ? '18%' : '15%'}>
-          {data?.map((i: any) => (
-            <Stack
-              key={i.name}
-              flexDirection={'row'}
-              alignItems={'center'}
-              width={isSm ? '50%' : '33.3%'}
-              mb={isSm ? 16 : 12}
-            >
-              <Box sx={{ width: 12, height: 12, background: i.color, borderRadius: 12 }} />
-              <WhiteP1 ml={12} mr={4}>
-                {i.name}
-              </WhiteP1>
-              {(i.icon || i.logo) && <img src={i.icon || i.logo} style={{ width: 20, height: 20 }} />}
-            </Stack>
-          ))}
-        </Stack>
-      </Box>
+      <Stack flexDirection={'row'} alignItems={'center'} flexWrap={'wrap'} pl={isSm ? '18%' : '15%'}>
+        {data?.map((i: any) => (
+          <Stack
+            key={i.name}
+            flexDirection={'row'}
+            alignItems={'center'}
+            width={isSm ? '50%' : '33.3%'}
+            mb={isSm ? 16 : 12}
+          >
+            <Box sx={{ width: 12, height: 12, background: i.color, borderRadius: 12 }} />
+            <WhiteP1 ml={12} mr={4}>
+              {i.name}
+            </WhiteP1>
+            {(i.icon || i.logo) && <img src={i.icon || i.logo} style={{ width: 20, height: 20 }} />}
+          </Stack>
+        ))}
+      </Stack>
     </Box>
   )
 }
@@ -249,26 +250,27 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     ]
   }
   return (
-    <Stack flexDirection={'row'} flexWrap={isSm ? 'wrap' : 'nowrap'} gap={isSm ? 16 : 20} mt={isSm ? 24 : 60}>
-      <Box width={isSm ? '100%' : '60%'}>
-        <ChartLayout
-          data={pieData}
-          title="Token proportion"
-          option={pieOption}
-          width={isSm ? 200 : 252}
-          height={isSm ? 200 : 252}
-        />
-      </Box>
-      <Box width={isSm ? '100%' : '40%'}>
-        <ChartLayout
-          data={barData}
-          title="Value Distribution"
-          option={barOption}
-          width={isSm ? 300 : 450}
-          height={isSm ? 200 : 252}
-        />
-      </Box>
-    </Stack>
+    <>
+      {isSm ? (
+        <Box mt={24}>
+          <Box width={'100%'}>
+            <ChartLayout data={pieData} title="Token proportion" option={pieOption} width={200} height={200} />
+          </Box>
+          <Box width={'100%'} mt={16}>
+            <ChartLayout data={barData} title="Value Distribution" option={barOption} width={'90%'} height={200} />
+          </Box>
+        </Box>
+      ) : (
+        <Stack flexDirection={'row'} gap={20} mt={60}>
+          <Box flex={1}>
+            <ChartLayout data={pieData} title="Token proportion" option={pieOption} width={252} height={252} />
+          </Box>
+          <Box flex={'0.6'}>
+            <ChartLayout data={barData} title="Value Distribution" option={barOption} width={'90%'} height={252} />
+          </Box>
+        </Stack>
+      )}
+    </>
   )
 }
 export default Charts
