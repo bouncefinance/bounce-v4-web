@@ -24,11 +24,20 @@ const DonutChart = ({ option, size }: { option: EChartsOption; size: { width: nu
     }
   }
 
+  const echartsResize = () => {
+    if (chartRef.current) {
+      echarts.init(chartRef.current).resize()
+    }
+  }
+
+  window.addEventListener('resize', echartsResize)
+
   useEffect(() => {
     initChart()
 
     return () => {
       disposeChart()
+      window.removeEventListener('resize', echartsResize)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
