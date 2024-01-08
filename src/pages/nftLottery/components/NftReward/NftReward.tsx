@@ -1,6 +1,5 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import ImgCard, { NftSmallImgCard } from '../tokenInformation/imgCard'
-import { BaseBtnStyle } from '../poolCard/bidBtnBox'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
 import { WithAnimation } from 'components/WithAnimation'
@@ -74,13 +73,13 @@ const NftContainer = styled(Box)`
   &.small {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content;
   }
-  /* @media (min-width: 1224px) {
-    justify-content: flex-start;
-  } */
+
   ${({ theme }) => theme.breakpoints.down('sm')} {
     height: fit-content;
+    max-height: 533px;
     margin-top: 40px;
     padding: 0;
   }
@@ -108,7 +107,6 @@ const NftReward = ({ token0Address, chainId }: { token0Address: string; chainId:
     )
   }, [Erc721Token, isSm])
 
-  if (!Erc721Token?.length) return null
   return (
     <Container>
       <Body>
@@ -119,14 +117,16 @@ const NftReward = ({ token0Address, chainId }: { token0Address: string; chainId:
           </Stack>
         </WithAnimation>
         <WithAnimation>
-          <NftContainer className={length > 1 && isSm ? 'small' : ''}>
-            {nftList}
-            {/* <Title2>You don’t have any NFT</Title2> */}
+          <NftContainer className={Erc721Token?.length && Erc721Token?.length > 1 && isSm ? 'small' : ''}>
+            {Erc721Token?.length ? (
+              nftList
+            ) : (
+              <Box py={isSm ? 100 : 'auto'}>
+                <Title2>You don’t have any NFT</Title2>
+              </Box>
+            )}
           </NftContainer>
         </WithAnimation>
-        <Stack justifyContent={'center'} alignItems={'center'} mt={isSm ? 24 : 0} mb={isSm ? 8 : 0}>
-          <BaseBtnStyle disabled> Extract NFT</BaseBtnStyle>
-        </Stack>
       </Body>
     </Container>
   )
