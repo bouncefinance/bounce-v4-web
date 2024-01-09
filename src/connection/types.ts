@@ -11,7 +11,8 @@ export enum ConnectionType {
   OKX_WALLET = 'OKX_WALLET',
   BINANCE_WALLET = 'BINANCE_WALLET',
   GNOSIS_SAFE = 'GNOSIS_SAFE',
-  BIT_GET = 'BIT_GET'
+  BIT_GET = 'BIT_GET',
+  BINANCE_W3W_WALL = 'BINANCE_W3W_WALL'
 }
 
 export interface Connection {

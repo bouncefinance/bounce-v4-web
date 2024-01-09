@@ -92,6 +92,8 @@
     ]
   },
   "dependencies": {
+    "@binance/w3w-ethereum-provider": "^1.1.1",
+    "@binance/w3w-types": "^1.1.0",
     "@coinbase/wallet-sdk": "^3.7.1",
     "@ebay/nice-modal-react": "1.2.8",
     "@emotion/react": "^11.9.3",
