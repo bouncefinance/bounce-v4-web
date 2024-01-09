@@ -9,7 +9,7 @@ import COINBASE_ICON from 'assets/walletIcon/coinbaseWalletIcon.svg'
 import UNIWALLET_ICON from 'assets/walletIcon/uniswap-wallet-icon.png'
 import WALLET_CONNECT_ICON from 'assets/walletIcon/walletConnectIcon.svg'
 import OkxIcon_ICON from 'assets/walletIcon/okxIcon.png'
-import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
+// import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
 import BitGet_ICON from 'assets/walletIcon/bg-wallet-small-icon.svg'
 import Binance_W3w_ICON from 'assets/walletIcon/binance-w3w-wallet-icon.png'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
@@ -202,14 +202,14 @@ export const [binanceWallet, BinanceWalletHooks] = initializeConnector<BinanceWa
     })
 )
 
-const binanceWalletConnection: Connection = {
-  getName: () => 'Binance Wallet',
-  connector: binanceWallet,
-  hooks: BinanceWalletHooks,
-  type: ConnectionType.BINANCE_WALLET,
-  getIcon: () => BinanceWallet_ICON,
-  shouldDisplay: () => true
-}
+// const binanceWalletConnection: Connection = {
+//   getName: () => 'Binance Wallet',
+//   connector: binanceWallet,
+//   hooks: BinanceWalletHooks,
+//   type: ConnectionType.BINANCE_WALLET,
+//   getIcon: () => BinanceWallet_ICON,
+//   shouldDisplay: () => true
+// }
 
 export const bitGetConnection: Connection = {
   getName: () => 'Bitget Wallet',
@@ -252,7 +252,7 @@ export function getConnections() {
     walletConnectV2Connection,
     OKXWalletConnection,
     coinbaseWalletConnection,
-    binanceWalletConnection,
+    // binanceWalletConnection,
     uniwalletWCV2ConnectConnection,
     gnosisSafeConnection,
     networkConnection,
@@ -282,8 +282,8 @@ export function getConnection(c: Connector | ConnectionType) {
         return networkConnection
       case ConnectionType.GNOSIS_SAFE:
         return gnosisSafeConnection
-      case ConnectionType.BINANCE_WALLET:
-        return binanceWalletConnection
+      // case ConnectionType.BINANCE_WALLET:
+      //   return binanceWalletConnection
       case ConnectionType.OKX_WALLET:
         return OKXWalletConnection
       case ConnectionType.BIT_GET:

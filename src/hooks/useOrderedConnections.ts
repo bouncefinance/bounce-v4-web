@@ -22,8 +22,6 @@ export default function useOrderedConnections() {
     // Add network connection last as it should be the fallback.
     orderedConnectionTypes.push(ConnectionType.NETWORK)
 
-    orderedConnectionTypes.push(ConnectionType.BINANCE_W3W_WALL)
-
     return orderedConnectionTypes.map(connectionType => getConnection(connectionType))
   }, [])
 }
