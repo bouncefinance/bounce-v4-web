@@ -16,6 +16,7 @@ import { isMobile, isNonIOSPhone } from 'utils/userAgent'
 import { Connection, ConnectionType } from './types'
 import {
   getInjection,
+  getIsBinanceW3wWallet,
   getIsBitGetWallet,
   getIsCoinbaseWallet,
   getIsInjected,
@@ -231,17 +232,17 @@ const [binanceW3wWallet, binanceW3wHooks] = initializeConnector<BinanceW3WWeb3Co
   return new BinanceW3WWeb3Connector({ actions, options: opt })
 })
 export const binanceW3wConnection: Connection = {
-  getName: () => 'Binance Web3 Wallet',
+  getName: () => 'Binance Wallet',
   connector: binanceW3wWallet,
   hooks: binanceW3wHooks,
   type: ConnectionType.BINANCE_W3W_WALL,
-  shouldDisplay: () => true,
+  shouldDisplay: () => (isMobile ? (getIsBinanceW3wWallet() ? true : false) : true),
   getIcon: () => Binance_W3w_ICON,
   overrideActivate: () => {
-    if (!getIsBitGetWallet()) {
-      window.open('https://www.binance.com/')
-      return true
-    }
+    // if (!getIsBitGetWallet()) {
+    //   window.open('https://www.binance.com/')
+    //   return true
+    // }
     return false
   }
 }
