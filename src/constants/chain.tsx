@@ -567,6 +567,19 @@ export const SUPPORTED_NETWORKS: {
   }
 }
 
+type SUPPORTED_NETWORKS_RPCURL_TYPE = {
+  [chainId in ChainId]: string
+}
+
+export const SUPPORTED_NETWORKS_RPCURL: SUPPORTED_NETWORKS_RPCURL_TYPE = Object.keys(SUPPORTED_NETWORKS).reduce(
+  (result, key) => {
+    const chainId = key as unknown as ChainId
+    result[chainId] = SUPPORTED_NETWORKS[chainId].rpcUrls[0]
+    return result
+  },
+  {} as SUPPORTED_NETWORKS_RPCURL_TYPE
+)
+
 export interface ChainType {
   logo: string
   symbol: string

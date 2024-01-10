@@ -23,7 +23,7 @@ import {
   getIsOkxWallet
 } from './utils'
 import { UniwalletConnect as UniwalletWCV2Connect, WalletConnectV2 } from './WalletConnectV2'
-import { ChainId } from 'constants/chain'
+import { ChainId, SUPPORTED_NETWORKS_RPCURL } from 'constants/chain'
 import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 import { BinanceWallet } from 'web3-react-binance-wallet'
@@ -227,7 +227,7 @@ export const bitGetConnection: Connection = {
   }
 }
 const [binanceW3wWallet, binanceW3wHooks] = initializeConnector<BinanceW3WWeb3Connector>(actions => {
-  const opt: IWCEthRpcConnectionOptions = { showQrCodeModal: true }
+  const opt: IWCEthRpcConnectionOptions = { showQrCodeModal: true, rpc: SUPPORTED_NETWORKS_RPCURL }
   return new BinanceW3WWeb3Connector({ actions, options: opt })
 })
 export const binanceW3wConnection: Connection = {
