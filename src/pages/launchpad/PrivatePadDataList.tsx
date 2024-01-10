@@ -2772,10 +2772,10 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 28
-  AiMeetsBtcRandomData,
-  Port3Data,
   SatoshiVMLPData,
   SatoshiVMRandomData,
+  AiMeetsBtcRandomData,
+  Port3Data,
   AmmxAuctionData,
   AmmxDaiiData,
   AmmxRandomData,
