@@ -2712,8 +2712,9 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Reward Token', content: `$ETH \\ $SAVM` },
-    { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
-    { title: 'Reward Claim Time', content: 'ervery Sunday' },
+    // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: 'TBD' },
+    { title: 'Reward Claim Time', content: 'Ervery Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
@@ -2765,8 +2766,10 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$SAVM' },
-    { title: 'Ticket Price', content: '5.2 AUCTION / Ticket' },
-    { title: 'Token Amount / Ticket', content: '2100 SAVM' },
+    // { title: 'Ticket Price', content: '5.2 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: 'TBD' },
+    // { title: 'Token Amount / Ticket', content: '2100 SAVM' },
+    { title: 'Token Amount / Ticket', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
