@@ -54,7 +54,7 @@ import {
   STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES,
-  RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES
+  STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -340,6 +340,6 @@ export function useRandomSelectionMultiTokenContract(address?: string, queryChai
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   const curAddress =
-    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[cur] : undefined)
+    address === '' ? undefined : address || (cur ? STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, RANDOM_SELECTION_MULTI_TOKEN_ABI, true, queryChainId)
 }

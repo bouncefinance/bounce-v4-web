@@ -13,7 +13,7 @@ import LogoText from 'components/LogoText'
 import Image from 'components/Image'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import { useCurrencyBalance, useToken } from 'state/wallet/hooks'
-import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from '../../constants'
+import { STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES } from '../../constants'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 import { CurrencyAmount } from 'constants/token'
 import { hideDialogConfirmation, showWaitingTxDialog } from 'utils/auction'
@@ -60,7 +60,7 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
   }, [poolInfo?.token1StakedStats?.token1sCurrency])
   const [approvalState, , approveCallback] = useApproveCallback(
     token1CurrencyAmount,
-    RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[poolInfo?.poolInfo?.chainId || ChainId.MAINNET]
+    STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[poolInfo?.poolInfo?.chainId || ChainId.MAINNET]
   )
   const handleClose = useCallback(() => {
     onClose()
