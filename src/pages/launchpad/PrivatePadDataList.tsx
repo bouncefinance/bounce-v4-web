@@ -68,6 +68,7 @@ import Port3Logo from './imgs/port3Logo.png'
 import LadderImg from './imgs/ladder.png'
 import BitSwapImage1 from './imgs/BitSwap-image1.png'
 import LadderImg1 from './imgs/ladder-img1.png'
+import SatoshivmImg from './imgs/satoshivm.jpg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -120,6 +121,20 @@ export interface IPrivatePadProp {
   otherProject?: IOtherProject[]
   multipleTokenInfo?: IMultipleTokenInfo
 }
+
+const GithubSvg = (
+  <svg
+    height="40"
+    aria-hidden="true"
+    viewBox="0 0 16 16"
+    version="1.1"
+    width="40"
+    data-view-component="true"
+    className="octicon octicon-mark-github v-align-middle color-fg-default"
+  >
+    <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+  </svg>
+)
 const participateProjectInfo: IProjectInfo = {
   title: 'How to Participate',
   info: [
@@ -2649,9 +2664,119 @@ export const Port3Data: IPrivatePadProp = {
     { title: 'token offered', value: '2,000,000 PORT3' }
   ]
 }
-
+export const SatoshiVMLPData: IPrivatePadProp = {
+  keyId: 27,
+  liveTimeStamp: {
+    start: 1705593600000,
+    end: 0
+  },
+  hideUpcomingCountdown: true,
+  poolTypeName: 'Initial LP Offering',
+  img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
+  avatar: SatoshivmImg,
+  title: 'SatoshiVM',
+  chainId: 1,
+  tokenName: '$SAVM',
+  whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
+  // upcomingLink: routes.thirdPart.SatoshiVMLp,
+  upcomingLink: '',
+  // liveLink: routes.thirdPart.SatoshiVMLp,
+  liveLink: '',
+  projectInfo: [
+    {
+      title: 'What is Port3 SatoshiVM?',
+      info: [
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+          SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine
+          (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the
+          Bitcoin ecosystem to issue assets and develop applications.
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
+  social: [
+    <Link key={0} href="https://satoshivm.io" target="_blank">
+      <Web />
+    </Link>,
+    <Link key={6} href="https://twitter.com/SatoshiVM" target="_blank">
+      <Twitter />
+    </Link>,
+    <Link key={7} href="https://discord.gg/7h94fyNYBG" target="_blank">
+      <DiscordSVG />
+    </Link>,
+    <Link key={8} href="https://github.com/SatoshiVM" target="_blank">
+      {GithubSvg}
+    </Link>
+  ],
+  moreData: [
+    { title: 'Reward Token', content: `$ETH \\ $SAVM` },
+    // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: 'TBD' },
+    { title: 'Reward Claim Time', content: 'Ervery Sunday' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ]
+}
+export const SatoshiVMRandomData: IPrivatePadProp = {
+  keyId: 28,
+  liveTimeStamp: {
+    start: 1705593600000,
+    end: 0
+  },
+  hideUpcomingCountdown: true,
+  poolTypeName: 'Random Selection',
+  img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
+  avatar: SatoshivmImg,
+  title: 'SatoshiVM',
+  chainId: 1,
+  tokenName: '$SAVM',
+  whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
+  // upcomingLink: routes.thirdPart.SatoshiVMLp,
+  upcomingLink: '',
+  // liveLink: routes.thirdPart.SatoshiVMLp,
+  liveLink: '',
+  projectInfo: [
+    {
+      title: 'What is Port3 SatoshiVM?',
+      info: [
+        <Box key={1} sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+          SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine
+          (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the
+          Bitcoin ecosystem to issue assets and develop applications.
+        </Box>
+      ]
+    }
+  ],
+  tokenMetrics: [],
+  desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
+  social: [
+    <Link key={0} href="https://satoshivm.io" target="_blank">
+      <Web />
+    </Link>,
+    <Link key={6} href="https://twitter.com/SatoshiVM" target="_blank">
+      <Twitter />
+    </Link>,
+    <Link key={7} href="https://discord.gg/7h94fyNYBG" target="_blank">
+      <DiscordSVG />
+    </Link>,
+    <Link key={8} href="https://github.com/SatoshiVM" target="_blank">
+      {GithubSvg}
+    </Link>
+  ],
+  moreData: [
+    { title: 'Token Name', content: '$SAVM' },
+    // { title: 'Ticket Price', content: '5.2 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: 'TBD' },
+    // { title: 'Token Amount / Ticket', content: '2100 SAVM' },
+    { title: 'Token Amount / Ticket', content: 'TBD' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ]
+}
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 26
+  // current privatePad max keyId is 28
+  SatoshiVMLPData,
+  SatoshiVMRandomData,
   AiMeetsBtcRandomData,
   Port3Data,
   AmmxAuctionData,
