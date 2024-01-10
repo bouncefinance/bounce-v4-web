@@ -9,8 +9,9 @@ import COINBASE_ICON from 'assets/walletIcon/coinbaseWalletIcon.svg'
 import UNIWALLET_ICON from 'assets/walletIcon/uniswap-wallet-icon.png'
 import WALLET_CONNECT_ICON from 'assets/walletIcon/walletConnectIcon.svg'
 import OkxIcon_ICON from 'assets/walletIcon/okxIcon.png'
-import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
+// import BinanceWallet_ICON from 'assets/walletIcon/BinanceWalletIcon.svg'
 import BitGet_ICON from 'assets/walletIcon/bg-wallet-small-icon.svg'
+import Binance_W3w_ICON from 'assets/walletIcon/binance-w3w-wallet-icon.png'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
 import { Connection, ConnectionType } from './types'
 import {
@@ -22,12 +23,14 @@ import {
   getIsOkxWallet
 } from './utils'
 import { UniwalletConnect as UniwalletWCV2Connect, WalletConnectV2 } from './WalletConnectV2'
-import { ChainId } from 'constants/chain'
+import { ChainId, SUPPORTED_NETWORKS_RPCURL } from 'constants/chain'
 import { RPC_PROVIDERS, getRpcUrl } from 'connection/MultiNetworkConnector'
 import { OKXWallet } from '@okwallet/web3-react-okxwallet'
 import { BinanceWallet } from 'web3-react-binance-wallet'
 import { BitGet } from './BitGet'
 import { toast } from 'react-toastify'
+import { BinanceW3WWeb3Connector } from './binanceW3wWalletProvider'
+import { IWCEthRpcConnectionOptions } from '@binance/w3w-types'
 
 function onError(error: Error) {
   console.debug(`web3-react error: ${error}`)
@@ -199,14 +202,14 @@ export const [binanceWallet, BinanceWalletHooks] = initializeConnector<BinanceWa
     })
 )
 
-const binanceWalletConnection: Connection = {
-  getName: () => 'Binance Wallet',
-  connector: binanceWallet,
-  hooks: BinanceWalletHooks,
-  type: ConnectionType.BINANCE_WALLET,
-  getIcon: () => BinanceWallet_ICON,
-  shouldDisplay: () => true
-}
+// const binanceWalletConnection: Connection = {
+//   getName: () => 'Binance Wallet',
+//   connector: binanceWallet,
+//   hooks: BinanceWalletHooks,
+//   type: ConnectionType.BINANCE_WALLET,
+//   getIcon: () => BinanceWallet_ICON,
+//   shouldDisplay: () => true
+// }
 
 export const bitGetConnection: Connection = {
   getName: () => 'Bitget Wallet',
@@ -223,6 +226,25 @@ export const bitGetConnection: Connection = {
     return false
   }
 }
+const [binanceW3wWallet, binanceW3wHooks] = initializeConnector<BinanceW3WWeb3Connector>(actions => {
+  const opt: IWCEthRpcConnectionOptions = { showQrCodeModal: true, rpc: SUPPORTED_NETWORKS_RPCURL }
+  return new BinanceW3WWeb3Connector({ actions, options: opt })
+})
+export const binanceW3wConnection: Connection = {
+  getName: () => 'Binance Web3 Wallet',
+  connector: binanceW3wWallet,
+  hooks: binanceW3wHooks,
+  type: ConnectionType.BINANCE_W3W_WALL,
+  shouldDisplay: () => true,
+  getIcon: () => Binance_W3w_ICON,
+  overrideActivate: () => {
+    if (!getIsBitGetWallet()) {
+      window.open('https://www.binance.com/')
+      return true
+    }
+    return false
+  }
+}
 
 export function getConnections() {
   return [
@@ -230,11 +252,12 @@ export function getConnections() {
     walletConnectV2Connection,
     OKXWalletConnection,
     coinbaseWalletConnection,
-    binanceWalletConnection,
+    // binanceWalletConnection,
     uniwalletWCV2ConnectConnection,
     gnosisSafeConnection,
     networkConnection,
-    bitGetConnection
+    bitGetConnection,
+    binanceW3wConnection
   ]
 }
 
@@ -259,12 +282,14 @@ export function getConnection(c: Connector | ConnectionType) {
         return networkConnection
       case ConnectionType.GNOSIS_SAFE:
         return gnosisSafeConnection
-      case ConnectionType.BINANCE_WALLET:
-        return binanceWalletConnection
+      // case ConnectionType.BINANCE_WALLET:
+      //   return binanceWalletConnection
       case ConnectionType.OKX_WALLET:
         return OKXWalletConnection
       case ConnectionType.BIT_GET:
         return bitGetConnection
+      case ConnectionType.BINANCE_W3W_WALL:
+        return binanceW3wConnection
     }
   }
 }

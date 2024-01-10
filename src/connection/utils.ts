@@ -6,7 +6,7 @@ import METAMASK_ICON from 'assets/walletIcon/metamask.png'
 // import RABBY_ICON from 'assets/walletIcon/rabby-icon.svg'
 // import TRUST_WALLET_ICON from 'assets/walletIcon/trustWalletIcon.svg'
 import { Connection, ConnectionType } from 'connection/types'
-
+import { isInBinance } from '@binance/w3w-utils'
 export const getIsInjected = () => Boolean(window.ethereum)
 
 // const InjectedWalletTable: { [key in keyof NonNullable<Window['ethereum']>]?: { name: string; icon: string } } = {
@@ -52,6 +52,7 @@ export const getIsOkxWallet = () => Boolean(window?.okxwallet)
 
 export const getIsBitGetWallet = () => Boolean(window?.bitkeep)
 
+export const getIsBinanceW3wWallet = () => isInBinance() || Boolean(window?.ethereum?.isBinance)
 // https://eips.ethereum.org/EIPS/eip-1193#provider-errors
 export enum ErrorCode {
   USER_REJECTED_REQUEST = 4001,
