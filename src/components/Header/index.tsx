@@ -152,6 +152,8 @@ export const transparentRoutes = [
   routes.thirdPart.AmmxDaii,
   routes.thirdPart.AmmxRandom,
   routes.thirdPart.Port3,
+  routes.thirdPart.SatoshiVMLp,
+  routes.thirdPart.SatoshiVMRandom,
   routes.nftLottery.index
 ]
 
