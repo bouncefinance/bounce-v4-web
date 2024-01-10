@@ -2714,7 +2714,8 @@ export const SatoshiVMLPData: IPrivatePadProp = {
     { title: 'Reward Token', content: `$ETH \\ $SAVM` },
     // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
     { title: 'Ticket Price', content: 'TBD' },
-    { title: 'Reward Claim Time', content: 'Ervery Sunday' },
+    // { title: 'Reward Claim Time', content: 'Ervery Sunday' },
+    { title: 'Reward Claim Time', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
