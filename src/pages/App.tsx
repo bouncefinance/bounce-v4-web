@@ -115,6 +115,7 @@ const TypeitProjectInfoWhiteList = React.lazy(() => import('./projectIntro/Typei
 const OpenfabricProjectInfo = React.lazy(() => import('./projectIntro/OpenfabricProjectInfo'))
 const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProjectInfo'))
 const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
+const CreateStakeErc20Pool = React.lazy(() => import('pages/createStakeErc20Pool/index'))
 
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -285,7 +286,7 @@ export default function App() {
                   <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
 
                   <Route path={routes.nftLottery.index} element={<NftLottery />} />
-
+                  <Route path={routes.createStakeErc20Pool.index} element={<CreateStakeErc20Pool />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

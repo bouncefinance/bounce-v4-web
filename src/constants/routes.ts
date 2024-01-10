@@ -161,5 +161,8 @@ export const routes = {
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'
+  },
+  createStakeErc20Pool: {
+    index: '/create-stake-erc20-pool'
   }
 }
