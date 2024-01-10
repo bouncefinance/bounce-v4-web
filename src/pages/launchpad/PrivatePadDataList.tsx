@@ -2667,7 +2667,7 @@ export const Port3Data: IPrivatePadProp = {
 export const SatoshiVMLPData: IPrivatePadProp = {
   keyId: 27,
   liveTimeStamp: {
-    start: 0,
+    start: 1705593600000,
     end: 0
   },
   hideUpcomingCountdown: true,
@@ -2711,16 +2711,16 @@ export const SatoshiVMLPData: IPrivatePadProp = {
     </Link>
   ],
   moreData: [
-    { title: 'Token Name', content: '$SAVM' },
+    { title: 'Reward Token', content: `$ETH \\ $SAVM` },
     { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
-    // { title: 'Token Amount / Ticket', content: '525,000' },
+    { title: 'Reward Claim Time', content: 'ervery Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
 export const SatoshiVMRandomData: IPrivatePadProp = {
   keyId: 28,
   liveTimeStamp: {
-    start: 0,
+    start: 1705593600000,
     end: 0
   },
   hideUpcomingCountdown: true,
@@ -2771,7 +2771,7 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 27
+  // current privatePad max keyId is 28
   AiMeetsBtcRandomData,
   Port3Data,
   SatoshiVMLPData,
