@@ -10,21 +10,23 @@ const TokenInput = ({
   label,
   name,
   comparisonName,
-  setCurrency
+  setCurrency,
+  value: _value
 }: {
   label: string
   name: string
   comparisonName?: string
   setCurrency: (v: Currency | undefined) => void
+  value?: any
 }) => {
   const formik = useFormikContext<any>()
   const { values, setFieldError, errors } = formik
-  const value = useMemo(() => values[name], [name, values])
   const comparisonValue = useMemo(() => {
     if (comparisonName) {
       return values[comparisonName]
     }
   }, [comparisonName, values])
+  const value = useMemo(() => _value || values[name], [_value, name, values])
   const token = useToken(value)
   const [loading, setLoading] = useState(false)
 
@@ -49,7 +51,7 @@ const TokenInput = ({
     }
     if (token) {
       setLoading(false)
-      setFieldError(name, '')
+      // setFieldError(name, '')
       setCurrency(token)
       return
     }
@@ -61,7 +63,7 @@ const TokenInput = ({
   }, [verifyCallback])
 
   return (
-    <FormItem name={name} label={label}>
+    <FormItem name={name} label={label} firstTrigger>
       <OutlinedInput
         placeholder={''}
         endAdornment={
