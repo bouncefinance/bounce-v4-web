@@ -13,7 +13,7 @@ const TokenInput = ({
 }: {
   label: string
   name: string
-  setCurrency: (v: Currency) => void
+  setCurrency: (v: Currency | undefined) => void
 }) => {
   const formik = useFormikContext<any>()
   const { values, setFieldError, errors } = formik
@@ -22,6 +22,7 @@ const TokenInput = ({
   const [loading, setLoading] = useState(false)
 
   const verifyCallback = useCallback(() => {
+    setCurrency(undefined)
     if (!value) {
       setFieldError(name, `${label} is required`)
       return

@@ -1,7 +1,12 @@
 import { Box } from '@mui/material'
+import SingleTokenPool from './singleTokenPool'
 
 const CreateStakeErc20Pool = () => {
-  return <Box>111</Box>
+  return (
+    <Box>
+      <SingleTokenPool />
+    </Box>
+  )
 }
 
 export default CreateStakeErc20Pool
