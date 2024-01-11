@@ -2706,29 +2706,29 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
       </Stack>
     ]
   },
-  {
-    title: 'Tokenomics',
-    info: [
-      <Box
-        key={1}
-        sx={{
-          ' &>ul': {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10
-          }
-        }}
-      >
-        <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
-        <ul>
-          <li>50% liquidity & bootstrapping</li>
-          <li>30%: Chain rewards</li>
-          <li>15%: Rewards for contributors</li>
-          <li>5%: Token Launch on Bounce</li>
-        </ul>
-      </Box>
-    ]
-  },
+  // {
+  //   title: 'Tokenomics',
+  //   info: [
+  //     <Box
+  //       key={1}
+  //       sx={{
+  //         ' &>ul': {
+  //           display: 'flex',
+  //           flexDirection: 'column',
+  //           gap: 10
+  //         }
+  //       }}
+  //     >
+  //       <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
+  //       <ul>
+  //         <li>50% liquidity & bootstrapping</li>
+  //         <li>30%: Chain rewards</li>
+  //         <li>15%: Rewards for contributors</li>
+  //         <li>5%: Token Launch on Bounce</li>
+  //       </ul>
+  //     </Box>
+  //   ]
+  // },
   {
     title: 'SatoshiVM’s Architecture',
     info: [
@@ -2796,7 +2796,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   avatar: SatoshivmImg,
   title: 'SatoshiVM',
   chainId: 1,
-  tokenName: '$SAVM',
+  tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
   upcomingLink: routes.thirdPart.SatoshiVMLp,
   // upcomingLink: '',
@@ -2844,7 +2844,7 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   avatar: SatoshivmImg,
   title: 'SatoshiVM',
   chainId: 1,
-  tokenName: '$ETH',
+  tokenName: '$SAVM',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
   upcomingLink: routes.thirdPart.SatoshiVMRandom,
   // upcomingLink: '',
