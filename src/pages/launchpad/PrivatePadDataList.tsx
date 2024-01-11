@@ -2719,7 +2719,7 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
           }
         }}
       >
-        <p>Total Supply = 21M $SAVM</p>
+        <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
         <ul>
           <li>50% liquidity & bootstrapping</li>
           <li>30%: Chain rewards</li>
@@ -2733,8 +2733,8 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
     title: 'SatoshiVM’s Architecture',
     info: [
       <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
-        <img src={satoshiVmArchitecture} style={{ width: '100%', height: '100%' }} />
         <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p>
+        <img src={satoshiVmArchitecture} style={{ width: '100%', height: '100%' }} />
         <div>
           <h4>Settlement Layer</h4>
           <p>
@@ -2767,7 +2767,7 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
     title: 'Roadmap',
     info: [
       <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
-        <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p>
+        {/* <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p> */}
         <div>
           <h4>Testnet 2024 Q1</h4>
           <p>✅ Testnet Launch</p>
@@ -2826,6 +2826,10 @@ export const SatoshiVMLPData: IPrivatePadProp = {
     // { title: 'Reward Claim Time', content: 'Ervery Sunday' },
     { title: 'Reward Claim Time', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  privatePrices: [
+    { title: 'Reward Token', value: `$ETH` },
+    { title: 'Blockchain', value: 'Ethereum' }
   ]
 }
 export const SatoshiVMRandomData: IPrivatePadProp = {
@@ -2840,11 +2844,11 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   avatar: SatoshivmImg,
   title: 'SatoshiVM',
   chainId: 1,
-  tokenName: '$SAVM',
+  tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
-  upcomingLink: routes.thirdPart.SatoshiVMLp,
+  upcomingLink: routes.thirdPart.SatoshiVMRandom,
   // upcomingLink: '',
-  liveLink: routes.thirdPart.SatoshiVMLp,
+  liveLink: routes.thirdPart.SatoshiVMRandom,
   // liveLink: '',
   projectInfo: SatoshiVMLPProjectInfo,
   tokenMetrics: [],
