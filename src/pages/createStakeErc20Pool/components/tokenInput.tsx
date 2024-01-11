@@ -5,7 +5,7 @@ import { useToken } from 'state/wallet/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { isAddress } from 'utils'
 import CheckIcon from '@mui/icons-material/Check'
-const TokenInput = ({ label, name }: { label: string; name: string }) => {
+const TokenInput = ({ label, name, onChange }: { label: string; name: string; onChange: (val: string) => void }) => {
   const formik = useFormikContext<any>()
   const { values, setFieldError, errors } = formik
   const value = useMemo(() => values[name], [name, values])
@@ -14,11 +14,11 @@ const TokenInput = ({ label, name }: { label: string; name: string }) => {
 
   const verifyCallback = useCallback(() => {
     if (!value) {
-      setFieldError(name, `${name} is required`)
+      setFieldError(name, `${label} is required`)
       return
     }
     if (!isAddress(value)) {
-      setFieldError(name, `${name} is not a address`)
+      setFieldError(name, `${label} is not an address`)
       return
     }
     if (!token) {
@@ -39,7 +39,13 @@ const TokenInput = ({ label, name }: { label: string; name: string }) => {
   }, [verifyCallback])
 
   return (
-    <FormItem name={name} label={label}>
+    <FormItem
+      name={name}
+      label={label}
+      onChange={e => {
+        onChange((e.target as any).value)
+      }}
+    >
       <OutlinedInput
         placeholder={''}
         endAdornment={
