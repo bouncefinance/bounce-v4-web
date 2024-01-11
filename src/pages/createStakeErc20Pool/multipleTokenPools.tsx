@@ -17,6 +17,9 @@ import _ from 'lodash'
 import { useDebounceFn } from 'ahooks'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
+import { ChainId } from 'constants/chain'
+import { STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
+import { useRandomSelectionMultiTokenContract } from 'hooks/useContract'
 
 interface IParam {
   token0: string
@@ -89,10 +92,23 @@ const validationSchema = Yup.object({
 })
 const MultipleTokenPools = () => {
   const [formValue, setFormValue] = useState<IParam>(initParams)
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const [token0Currency, setToken0Currency] = useState<Currency | undefined>()
   const [token1Currencys, setToken1Currencys] = useState<(Currency | null)[]>([null, null, null, null, null])
+
+  const quoteAmount = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), formValue.quoteAmountTotal1)
+  const token1CurrencyAomunts = useMemo(() => {
+    if (token1Currencys.some(i => !i)) return undefined
+    return token1Currencys.map((c, i) => CurrencyAmount.fromAmount(c as Currency, formValue.amount1s[i]))
+  }, [formValue.amount1s, token1Currencys])
+
+  const token1Aomunts = useMemo(() => {
+    if (!token1CurrencyAomunts || token1CurrencyAomunts.some(i => !i)) return undefined
+
+    return token1CurrencyAomunts.map(i => quoteAmount?.div(i as CurrencyAmount).raw.toString())
+  }, [quoteAmount, token1CurrencyAomunts])
+  const contractAddress = STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
 
   const token0Amount = useMemo(() => {
     if (!token0Currency || !Number(formValue.amountTotal0)) {
@@ -101,7 +117,8 @@ const MultipleTokenPools = () => {
     return CurrencyAmount.fromAmount(token0Currency, formValue.amountTotal0)
   }, [formValue.amountTotal0, token0Currency])
 
-  const [approvalState, approveCallback] = useApproveCallback(token0Amount, token0Amount?.currency.address)
+  const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId || ChainId.MAINNET)
+  const [approvalState, approveCallback] = useApproveCallback(token0Amount, contractAddress)
   const approveFn = useTransactionModalWrapper(approveCallback as any, { isApprove: true })
   const { run: debounceChangeValue } = useDebounceFn(
     (values: IParam, errors: FormikErrors<IParam>) => {
@@ -112,8 +129,41 @@ const MultipleTokenPools = () => {
     },
     { wait: 500 }
   )
+  const create = useCallback(async () => {
+    if (!contract || !token0Amount || !quoteAmount || !token1Aomunts) {
+      return
+    }
+    const openAt = formValue.startTime?.valueOf() || 0
+    const closeAt = formValue.endTime?.valueOf() || 0
+    const releaseAt = formValue.releaseTime?.valueOf() || 0
+    const token1Adds = token1Currencys.map(i => i?.address)
+    const params = [
+      token0Amount.currency.address,
+      token0Amount.raw.toString(),
+      quoteAmount.raw.toString(),
+      openAt,
+      closeAt,
+      releaseAt,
+      formValue.releaseDuration,
+      token1Adds,
+      token1Aomunts
+    ]
+    console.log('params', params)
+
+    await contract.create(params)
+  }, [
+    contract,
+    formValue.endTime,
+    formValue.releaseDuration,
+    formValue.releaseTime,
+    formValue.startTime,
+    quoteAmount,
+    token0Amount,
+    token1Aomunts,
+    token1Currencys
+  ])
   const onSubmit = () => {
-    console.log('onSubmit')
+    create()
   }
   const ActionBtn = useCallback(
     ({ errors }: { errors: FormikErrors<IParam> }) => {
