@@ -81,10 +81,6 @@ const SingleTokenPool = () => {
   }
 
   const validationSchema = Yup.object({
-    // token1: Yup.string().test('TOKEN_IS_Not_SAME', 'Token0 and token1 cannot be the same', (value, context) => {
-    //   console.log(value === context.parent.token0)
-    //   return value === context.parent.token0
-    // }),
     token0Quantity: Yup.number().required('Token0 amount is required'),
     token1Quantity: Yup.number().required('Token1 amount is required'),
     startTime: Yup.date()
@@ -158,11 +154,6 @@ const SingleTokenPool = () => {
   }, [_chainId, account, approvalState, approveCallback, chainId, switchNetwork, toggleWalletModal])
 
   const createPool = async (params: any) => {
-    // if (approvalState !== ApprovalState.APPROVED) {
-    //   await approveCallback()
-    // }
-    console.log(params)
-
     await contract?.create(params)
   }
 
@@ -183,12 +174,7 @@ const SingleTokenPool = () => {
               moment(formValues.releaseTime).valueOf() / 1000,
               Number(formValues.duration)
             ]
-            console.log('formValues', result)
             createPool(result)
-            // valuesDispatch({
-            //   startTime: formValues.startTime,
-            //   endTime: formValues.endTime
-            // })
           }}
         >
           {({ values, setFieldValue }) => {
@@ -219,6 +205,7 @@ const SingleTokenPool = () => {
                   <TokenInput
                     name={'token1'}
                     label="Token1"
+                    comparisonName={'token0'}
                     setCurrency={value => {
                       setToken1Currency(value)
                     }}

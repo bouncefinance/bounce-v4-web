@@ -9,26 +9,37 @@ import { Currency } from 'constants/token'
 const TokenInput = ({
   label,
   name,
+  comparisonName,
   setCurrency
 }: {
   label: string
   name: string
+  comparisonName?: string
   setCurrency: (v: Currency | undefined) => void
 }) => {
   const formik = useFormikContext<any>()
   const { values, setFieldError, errors } = formik
   const value = useMemo(() => values[name], [name, values])
+  const comparisonValue = useMemo(() => {
+    if (comparisonName) {
+      return values[comparisonName]
+    }
+  }, [comparisonName, values])
   const token = useToken(value)
   const [loading, setLoading] = useState(false)
 
   const verifyCallback = useCallback(() => {
     setCurrency(undefined)
     if (!value) {
-      setFieldError(name, `${label} is required`)
+      setFieldError(name, `Token is required`)
       return
     }
     if (!isAddress(value)) {
-      setFieldError(name, `${label} is not an address`)
+      setFieldError(name, `Token is not an address`)
+      return
+    }
+    if (comparisonValue && value === comparisonValue) {
+      setFieldError(name, `Please fill in a different token`)
       return
     }
     if (!token) {
