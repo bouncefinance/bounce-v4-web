@@ -69,6 +69,7 @@ import LadderImg from './imgs/ladder.png'
 import BitSwapImage1 from './imgs/BitSwap-image1.png'
 import LadderImg1 from './imgs/ladder-img1.png'
 import SatoshivmImg from './imgs/satoshivm.jpg'
+import satoshiVmArchitecture from './imgs/satoshiVmArchitecture.jpeg'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -2674,27 +2675,34 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
           (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the
           Bitcoin ecosystem to issue assets and develop applications.
         </p>
-        <p>
-          SatoshiVM possesses the following technological features: ZK EVM: SatoshiVM is a versatile ZK Rollup that
-          employs EVM for off-chain computations. This implies that users can interact with SatoshiVM in a manner
-          similar to interacting with Ethereum, and developers can build on top of SatoshiVM just as they would on
-          Ethereum.
-        </p>
-        <p>
-          ZK Rollup: SatoshiVM utilizes Rollup technology to bundle multiple transactions into a single batch and
-          validate them on the Bitcoin main network as a single transaction. This ensures the same level of security as
-          the Bitcoin main network, guaranteeing data validity and availability.
-        </p>
-        <p>
-          ZK Fraud Proofs: SatoshiVM utilizes technologies such as Taproot and Bitcoin Script to perform on-chain
-          verification of contracts without altering the consensus rules of the Bitcoin network, thereby accomplishing
-          the computation of fraud proofs. Data Availability: SatoshiVM must release transaction data on the Bitcoin
-          main network, enabling anyone to verify the correctness of computations executed off the Bitcoin main network.
-        </p>
-        <p>
-          BTC Native Gas: SatoshiVM employs native BTC as gas for the EVM. Similar to ETH OP Rollup / ZK Rollup Layer 2
-          solutions that use ETH as gas for Layer 2, SatoshiVM utilizes BTC as the gas for EVM transactions.
-        </p>
+        <Box sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+          <h4>SatoshiVM possesses the following technological features:</h4>
+          <ul>
+            <li>
+              ZK EVM: SatoshiVM is a versatile ZK Rollup that employs EVM for off-chain computations. This implies that
+              users can interact with SatoshiVM in a manner similar to interacting with Ethereum, and developers can
+              build on top of SatoshiVM just as they would on Ethereum.
+            </li>
+            <li>
+              ZK Rollup: SatoshiVM utilizes Rollup technology to bundle multiple transactions into a single batch and
+              validate them on the Bitcoin main network as a single transaction. This ensures the same level of security
+              as the Bitcoin main network, guaranteeing data validity and availability.
+            </li>
+            <li>
+              ZK Fraud Proofs: SatoshiVM utilizes technologies such as Taproot and Bitcoin Script to perform on-chain
+              verification of contracts without altering the consensus rules of the Bitcoin network, thereby
+              accomplishing the computation of fraud proofs.
+            </li>
+            <li>
+              Data Availability: SatoshiVM must release transaction data on the Bitcoin main network, enabling anyone to
+              verify the correctness of computations executed off the Bitcoin main network.
+            </li>
+            <li>
+              BTC Native Gas: SatoshiVM employs native BTC as gas for the EVM. Similar to ETH OP Rollup / ZK Rollup
+              Layer 2 solutions that use ETH as gas for Layer 2, SatoshiVM utilizes BTC as the gas for EVM transactions.
+            </li>
+          </ul>
+        </Box>
       </Stack>
     ]
   },
@@ -2725,9 +2733,10 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
     title: 'SatoshiVM’s Architecture',
     info: [
       <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
+        <img src={satoshiVmArchitecture} style={{ width: '100%', height: '100%' }} />
         <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p>
         <div>
-          <h5>Settlement Layer</h5>
+          <h4>Settlement Layer</h4>
           <p>
             This layer provides data availability, ordering, and validation of proofs for the SatoshiVM chain. It allows
             users and dApps to send messages and assets between Bitcoin and SatoshiVM. Bitcoin serves as the settlement
@@ -2735,7 +2744,7 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
           </p>
         </div>
         <div>
-          <h5>Sequencing Layer</h5>
+          <h4>Sequencing Layer</h4>
           <p>
             This layer consists of an execution node responsible for executing transactions submitted to the SatoshiVM
             sequencer and transactions submitted to the L1 bridge script, generating L2 blocks. It also includes a
@@ -2744,7 +2753,7 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
           </p>
         </div>
         <div>
-          <h5>Proving Layer</h5>
+          <h4>Proving Layer</h4>
           <p>
             This layer comprises a coordinator, which assigns proof tasks to provers and relays the generated proofs to
             the Rollup node to complete finality verification on Bitcoin. It also includes a prover pool, responsible
@@ -2760,12 +2769,12 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
       <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
         <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p>
         <div>
-          <h5>Testnet 2024 Q1</h5>
-          <p>✅Testnet Launch</p>
-          <p>✅Blockchain Explorer Launch Bitcoin - SatoshiVM Bridge Release EVM - SatoshiVM Bridge Release</p>
+          <h4>Testnet 2024 Q1</h4>
+          <p>✅ Testnet Launch</p>
+          <p>✅ Blockchain Explorer Launch Bitcoin - SatoshiVM Bridge Release EVM - SatoshiVM Bridge Release</p>
         </div>
         <div>
-          <h5>SatoshiVM Lite 2024 Q1</h5>
+          <h4>SatoshiVM Lite 2024 Q1</h4>
           <p>Yellow Paper Release</p>
           <p>SatoshiVM Lite Release</p>
           <p>Blockchain Explorer Launch</p>
@@ -2811,7 +2820,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
     </Link>
   ],
   moreData: [
-    { title: 'Reward Token', content: `$ETH \\ $SAVM` },
+    { title: 'Reward Token', content: `$ETH` },
     // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
     { title: 'Ticket Price', content: 'TBD' },
     // { title: 'Reward Claim Time', content: 'Ervery Sunday' },
