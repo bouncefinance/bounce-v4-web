@@ -183,7 +183,7 @@ const SingleTokenPool = () => {
                 <Box display={'flex'} flexDirection={'column'} gap={20}>
                   <TokenInput
                     name={'token0'}
-                    label="Token0"
+                    label="Token0 Address"
                     setCurrency={value => {
                       setToken0Currency(value)
                     }}
@@ -198,13 +198,13 @@ const SingleTokenPool = () => {
                     <NumberInput
                       value={values.token0Quantity}
                       onUserInput={(value: string) => {
-                        setFieldValue('token0Quantity', value.replace(/[^\d]|^[0]/g, ''))
+                        setFieldValue('token0Quantity', value)
                       }}
                     />
                   </FormItem>
                   <TokenInput
                     name={'token1'}
-                    label="Token1"
+                    label="Token1 Address"
                     comparisonName={'token0'}
                     setCurrency={value => {
                       setToken1Currency(value)
@@ -220,7 +220,7 @@ const SingleTokenPool = () => {
                     <NumberInput
                       value={values.token1Quantity}
                       onUserInput={(value: string) => {
-                        setFieldValue('token1Quantity', value.replace(/[^\d]|^[0]/g, ''))
+                        setFieldValue('token1Quantity', value)
                       }}
                     />
                   </FormItem>
