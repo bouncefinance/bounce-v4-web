@@ -34,21 +34,21 @@ interface IParam {
 }
 
 const initParams: IParam = {
-  token0: '0x5c58eC0b4A18aFB85f9D6B02FE3e6454f988436E',
-  amountTotal0: '10',
-  quoteAmountTotal1: '1000',
+  token0: '',
+  amountTotal0: '',
+  quoteAmountTotal1: '',
   startTime: null,
   endTime: null,
   releaseTime: null,
   releaseDuration: 1,
   token1s: [
-    '0xc390E699b38F14dB884C635bbf843f7B135113ad',
-    '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E',
-    '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E',
-    '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7',
-    '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
+    // '0xc390E699b38F14dB884C635bbf843f7B135113ad',
+    // '0x21C3ac8c6E5079936A59fF01639c37F36CE5ed9E',
+    // '0xB5D1924aD11D90ED1caaCE7C8792E8B5F6171C7E',
+    // '0xe5260f95BCDe8E2727eaE13f6B17039E910c43F7',
+    // '0xb575400Da99E13e2d1a2B21115290Ae669e361f0'
   ],
-  amount1s: ['500', '200', '1000', '10000', '50']
+  amount1s: []
 }
 
 const validationSchema = Yup.object({
@@ -86,20 +86,27 @@ const validationSchema = Yup.object({
     .test('releaseDuration gt 0', 'Please select a time earlier than end time', (value: any) => {
       return Number(value) > 0
     }),
-  amount1s: Yup.array().test('amount1s gt 0', 'Please select a time earlier than end time', (value: any) => {
-    return value.every((i: any) => Number(i) > 0)
-  })
+  amount1s: Yup.array()
+    .typeError('Please select amount1s')
+    .test('amount1s gt 0', 'Please select amount1s', (value: any) => {
+      return value.length && value.every((i: any) => Number(i) > 0)
+    })
 })
 const MultipleTokenPools = () => {
   const [formValue, setFormValue] = useState<IParam>(initParams)
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const [token0Currency, setToken0Currency] = useState<Currency | undefined>()
-  const [token1Currencys, setToken1Currencys] = useState<(Currency | null)[]>([null, null, null, null, null])
+  const [token1Currencys, setToken1Currencys] = useState<(Currency | null)[]>(
+    Array.from({ length: initParams.token1s.length })
+  )
 
-  const quoteAmount = CurrencyAmount.fromAmount(Currency.getNativeCurrency(), formValue.quoteAmountTotal1)
+  const quoteAmount = Number(formValue.quoteAmountTotal1)
+    ? CurrencyAmount.fromAmount(Currency.getNativeCurrency(), formValue.quoteAmountTotal1)
+    : undefined
   const token1CurrencyAomunts = useMemo(() => {
-    if (token1Currencys.some(i => !i)) return undefined
+    if (token1Currencys.some(i => !i) || !formValue.amount1s.length || formValue.amount1s.some(i => !Number(i)))
+      return undefined
     return token1Currencys.map((c, i) => CurrencyAmount.fromAmount(c as Currency, formValue.amount1s[i]))
   }, [formValue.amount1s, token1Currencys])
 
@@ -162,9 +169,7 @@ const MultipleTokenPools = () => {
     token1Aomunts,
     token1Currencys
   ])
-  const onSubmit = () => {
-    create()
-  }
+  const createFn = useTransactionModalWrapper(create as any)
   const ActionBtn = useCallback(
     ({ errors }: { errors: FormikErrors<IParam> }) => {
       if (!account) {
@@ -185,6 +190,9 @@ const MultipleTokenPools = () => {
     },
     [account, approvalState, approveFn, showLoginModal]
   )
+  const onSubmit = () => {
+    createFn()
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Formik initialValues={initParams} validationSchema={validationSchema} onSubmit={onSubmit}>
@@ -245,45 +253,103 @@ const MultipleTokenPools = () => {
               <FormItem name={'releaseDuration'} label="releaseDuration">
                 <NumberInput onUserInput={v => setFieldValue('releaseDuration', v)} />
               </FormItem>
-              <>
-                {values['token1s'].map((address, index) => (
-                  <Stack flexDirection={'row'} gap={20} key={index}>
-                    <Box width={'70%'}>
-                      <TokenInput
-                        name={`token1s[${index}]`}
-                        label="token1s"
-                        value={values['token1s'][index]}
-                        setCurrency={v => {
-                          if (
-                            v &&
-                            v.address.toLocaleLowerCase() !== token1Currencys[index]?.address.toLocaleLowerCase()
-                          ) {
-                            const newCurArr = [...token1Currencys]
-                            newCurArr.splice(index, 1, v)
-                            setToken1Currencys(newCurArr)
-                            setFieldValue(`token1s[${index}]`, v.address)
-                          }
+              {!!values['token1s'].length ? (
+                <>
+                  {values['token1s'].map((address, index) => (
+                    <Stack flexDirection={'row'} gap={20} key={index}>
+                      <Box width={'70%'}>
+                        <TokenInput
+                          name={`token1s[${index}]`}
+                          label="token1s"
+                          value={values['token1s'][index]}
+                          setCurrency={v => {
+                            if (
+                              v &&
+                              v.address.toLocaleLowerCase() !== token1Currencys[index]?.address.toLocaleLowerCase()
+                            ) {
+                              const newCurArr = [...token1Currencys]
+                              newCurArr.splice(index, 1, v)
+                              setToken1Currencys(newCurArr)
+                              setFieldValue(`token1s[${index}]`, v.address)
+                            }
+                          }}
+                        />
+                      </Box>
+
+                      <Box width={'30%'}>
+                        <FormItem name={`amount1s[${index}]`} label="amount1s">
+                          <NumberInput onUserInput={v => setFieldValue(`amount1s[${index}]`, v)} />
+                        </FormItem>
+                      </Box>
+                      {values['token1s'].length === index + 1 && (
+                        <>
+                          <Button
+                            onClick={() => {
+                              setFieldValue('token1s', [...values.token1s, ''])
+                              setFieldValue('amount1s', [...values.amount1s, ''])
+                            }}
+                          >
+                            add
+                          </Button>
+                          {values['token1s'].length > 1 && (
+                            <Button
+                              onClick={() => {
+                                const _token1s = [...values.token1s]
+                                _token1s.pop()
+                                const _amount1s = [...values.amount1s]
+                                _amount1s.pop()
+                                setFieldValue('token1s', [..._token1s])
+                                setFieldValue('amount1s', [..._amount1s])
+                              }}
+                            >
+                              delete
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </Stack>
+                  ))}
+                </>
+              ) : (
+                <Stack flexDirection={'row'} gap={20}>
+                  <Box width={'70%'}>
+                    <TokenInput
+                      name={`token1s[${0}]`}
+                      label="token1s"
+                      value={values['token1s'][0]}
+                      setCurrency={v => {
+                        if (v) {
+                          setToken1Currencys([v])
+                          setFieldValue('token1s', [v.address || ''])
+                        }
+                      }}
+                    />
+                  </Box>
+
+                  <Box width={'30%'}>
+                    <FormItem name={`amount1s`} label="amount1s">
+                      <NumberInput
+                        onUserInput={v => {
+                          console.log('vvvv', v)
+
+                          setFieldValue(`amount1s`, [v])
                         }}
                       />
-                    </Box>
+                    </FormItem>
+                  </Box>
 
-                    <Box width={'30%'}>
-                      <FormItem name={`amount1s[${index}]`} label="amount1s">
-                        <NumberInput onUserInput={v => setFieldValue(`amount1s[${index}]`, v)} />
-                      </FormItem>
-                    </Box>
-                  </Stack>
-                ))}
-                <Button
-                  onClick={() => {
-                    setFieldValue('token1s', [...values.token1s, ''])
-                    setFieldValue('amount1s', [...values.amount1s, ''])
-                  }}
-                >
-                  add
-                </Button>
-              </>
-
+                  <>
+                    <Button
+                      onClick={() => {
+                        setFieldValue('token1s', [...values.token1s, ''])
+                        setFieldValue('amount1s', [...values.amount1s, ''])
+                      }}
+                    >
+                      add
+                    </Button>
+                  </>
+                </Stack>
+              )}
               <ActionBtn errors={errors} />
             </Box>
           )
