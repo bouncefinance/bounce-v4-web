@@ -5,7 +5,16 @@ import { useToken } from 'state/wallet/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { isAddress } from 'utils'
 import CheckIcon from '@mui/icons-material/Check'
-const TokenInput = ({ label, name, onChange }: { label: string; name: string; onChange: (val: string) => void }) => {
+import { Currency } from 'constants/token'
+const TokenInput = ({
+  label,
+  name,
+  setCurrency
+}: {
+  label: string
+  name: string
+  setCurrency: (v: Currency) => void
+}) => {
   const formik = useFormikContext<any>()
   const { values, setFieldError, errors } = formik
   const value = useMemo(() => values[name], [name, values])
@@ -29,6 +38,7 @@ const TokenInput = ({ label, name, onChange }: { label: string; name: string; on
     if (token) {
       setLoading(false)
       setFieldError(name, '')
+      setCurrency(token)
       return
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,13 +49,7 @@ const TokenInput = ({ label, name, onChange }: { label: string; name: string; on
   }, [verifyCallback])
 
   return (
-    <FormItem
-      name={name}
-      label={label}
-      onChange={e => {
-        onChange((e.target as any).value)
-      }}
-    >
+    <FormItem name={name} label={label}>
       <OutlinedInput
         placeholder={''}
         endAdornment={
