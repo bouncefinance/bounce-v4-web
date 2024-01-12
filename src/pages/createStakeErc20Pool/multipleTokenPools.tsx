@@ -88,7 +88,7 @@ const validationSchema = Yup.object({
   amount1s: Yup.array().of(
     Yup.number()
       .typeError('Please enter a valid number')
-      .min(1, 'Please make sure the number is greater than 0')
+      .positive('Please make sure the number is greater than 0')
       .required('Please enter a valid number')
   )
   // .test('Please enter a valid number', 'Please enter a valid number', v => {
