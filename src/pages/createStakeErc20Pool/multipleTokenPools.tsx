@@ -85,11 +85,17 @@ const validationSchema = Yup.object({
     .test('releaseDuration gt 0', 'Please select a time earlier than end time', (value: any) => {
       return Number(value) > 0
     }),
-  amount1s: Yup.array()
-    .typeError('Please select amount1s')
-    .test('amount1s gt 0', 'Please select amount1s', (value: any) => {
-      return value.length && value.every((i: any) => Number(i) > 0)
-    })
+  amount1s: Yup.array().of(
+    Yup.number()
+      .typeError('Please enter a valid number')
+      .min(1, 'Please make sure the number is greater than 0')
+      .required('Please enter a valid number')
+  )
+  // .test('Please enter a valid number', 'Please enter a valid number', v => {
+  //   console.log('!!(v && Number(v) > 0)', v, Number(v), !!(v && Number(v) > 0))
+
+  //   return !!(v && Number(v) > 0)
+  // })
 })
 const MultipleTokenPools = () => {
   const [formValue, setFormValue] = useState<IParam>(initParams)
@@ -104,7 +110,12 @@ const MultipleTokenPools = () => {
     ? CurrencyAmount.fromAmount(Currency.getNativeCurrency(), formValue.quoteAmountTotal1)
     : undefined
   const token1CurrencyAomunts = useMemo(() => {
-    if (token1Currencys.some(i => !i) || !formValue.amount1s.length || formValue.amount1s.some(i => !Number(i)))
+    if (
+      token1Currencys.length !== formValue.amount1s.length ||
+      token1Currencys.some(i => !i) ||
+      !formValue.amount1s.length ||
+      formValue.amount1s.some(i => !Number(i))
+    )
       return undefined
     return token1Currencys.map((c, i) => CurrencyAmount.fromAmount(c as Currency, formValue.amount1s[i]))
   }, [formValue.amount1s, token1Currencys])
@@ -138,9 +149,9 @@ const MultipleTokenPools = () => {
     if (!contract || !token0Amount || !quoteAmount || !token1Aomunts) {
       return
     }
-    const openAt = formValue.startTime?.valueOf() || 0
-    const closeAt = formValue.endTime?.valueOf() || 0
-    const releaseAt = formValue.releaseTime?.valueOf() || 0
+    const openAt = formValue.startTime?.unix() || 0
+    const closeAt = formValue.endTime?.unix() || 0
+    const releaseAt = formValue.releaseTime?.unix() || 0
     const token1Adds = token1Currencys.map(i => i?.address)
     const params = [
       token0Amount.currency.address,
@@ -155,7 +166,7 @@ const MultipleTokenPools = () => {
     ]
     console.log('params', params)
 
-    await contract.create(params)
+    return await contract.create(params)
   }, [
     contract,
     formValue.endTime,
@@ -221,6 +232,7 @@ const MultipleTokenPools = () => {
               </FormItem>
 
               <Field
+                disabled={false}
                 component={DateTimePickerFormItem}
                 name="startTime"
                 disablePast
@@ -230,6 +242,7 @@ const MultipleTokenPools = () => {
                 }}
               />
               <Field
+                disabled={false}
                 component={DateTimePickerFormItem}
                 name="endTime"
                 disablePast
@@ -239,6 +252,7 @@ const MultipleTokenPools = () => {
                 }}
               />
               <Field
+                disabled={false}
                 component={DateTimePickerFormItem}
                 name="releaseTime"
                 disablePast
@@ -258,7 +272,7 @@ const MultipleTokenPools = () => {
                       <Box width={'70%'}>
                         <TokenInput
                           name={`token1s[${index}]`}
-                          label="token1s"
+                          label="token1 address"
                           value={values['token1s'][index]}
                           setCurrency={v => {
                             if (
@@ -275,7 +289,7 @@ const MultipleTokenPools = () => {
                       </Box>
 
                       <Box width={'30%'}>
-                        <FormItem name={`amount1s[${index}]`} label="amount1s">
+                        <FormItem name={`amount1s[${index}]`} label="token price">
                           <NumberInput onUserInput={v => setFieldValue(`amount1s[${index}]`, v)} />
                         </FormItem>
                       </Box>
@@ -316,7 +330,7 @@ const MultipleTokenPools = () => {
                   <Box width={'70%'}>
                     <TokenInput
                       name={`token1s[${0}]`}
-                      label="token1s"
+                      label="token1s address"
                       value={values['token1s'][0]}
                       setCurrency={v => {
                         if (v) {
@@ -328,11 +342,9 @@ const MultipleTokenPools = () => {
                   </Box>
 
                   <Box width={'30%'}>
-                    <FormItem name={`amount1s`} label="amount1s">
+                    <FormItem name={`amount1s[0]`} label="token price">
                       <NumberInput
                         onUserInput={v => {
-                          console.log('vvvv', v)
-
                           setFieldValue(`amount1s`, [v])
                         }}
                       />

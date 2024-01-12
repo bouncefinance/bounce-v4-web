@@ -1,14 +1,14 @@
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterMoment } from '@mui/x-date-pickers-pro/AdapterMoment'
 import * as Yup from 'yup'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, FormikErrors } from 'formik'
 import moment, { Moment } from 'moment'
 import FormItem from 'bounceComponents/common/FormItem'
 import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTimePickerFormItem'
 import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from 'constants/index'
 import { Stack, Button, Box } from '@mui/material'
 import { useActiveWeb3React } from 'hooks'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useWalletModalToggle } from 'state/application/hooks'
 import { ChainId } from 'constants/chain'
@@ -19,6 +19,7 @@ import NumberInput from 'bounceComponents/common/NumberInput'
 import { useStakeTokenWithTimeWeightContract } from 'hooks/useContract'
 import { useApproveCallback } from 'hooks/useApproveCallback'
 import { ApprovalState } from 'hooks/useApproveCallback'
+import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 
 interface MyFormValues {
   token0: string
@@ -49,6 +50,7 @@ const SingleTokenPool = () => {
     currencyAmount0,
     STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[_chainId]
   )
+  const approveCallbackFn = useTransactionModalWrapper(approveCallback as any)
   useEffect(() => {
     if (token0Currency && token0Amount) {
       const currencyAmount = CurrencyAmount.fromAmount(token0Currency, token0Amount)
@@ -81,8 +83,8 @@ const SingleTokenPool = () => {
   }
 
   const validationSchema = Yup.object({
-    token0Quantity: Yup.number().required('Token0 amount is required'),
-    token1Quantity: Yup.number().required('Token1 amount is required'),
+    token0Quantity: Yup.number().min(1, 'Cannot be less than 0').required('Token0 amount is required'),
+    token1Quantity: Yup.number().min(1, 'Cannot be less than 0').required('Token1 amount is required'),
     startTime: Yup.date()
       // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
       .min(moment(), 'Please select a time earlier than current time')
@@ -105,58 +107,71 @@ const SingleTokenPool = () => {
     duration: Yup.number().required('Duration is required')
   })
 
-  const ActionBtn = useMemo(() => {
-    if (!account)
-      return (
-        <Button
-          onClick={toggleWalletModal}
-          sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
-        >
-          Connect Wallet
-        </Button>
-      )
-    if (chainId !== _chainId)
-      return (
-        <Button
-          onClick={() => switchNetwork(_chainId)}
-          sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
-        >
-          Switch Network
-        </Button>
-      )
-
-    if (approvalState !== ApprovalState.APPROVED) {
-      if (approvalState === ApprovalState.PENDING) {
-        return <Button disabled>Approving...</Button>
-      }
-      if (approvalState === ApprovalState.UNKNOWN) {
-        return <Button disabled>Fill in token0 and quantity</Button>
-      }
-      if (approvalState === ApprovalState.NOT_APPROVED) {
+  const ActionBtn = useCallback(
+    ({ errors }: { errors: FormikErrors<MyFormValues> }) => {
+      if (!account)
         return (
           <Button
-            onClick={approveCallback}
+            onClick={toggleWalletModal}
             sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
           >
-            Approve
+            Connect Wallet
+          </Button>
+        )
+      if (chainId !== _chainId)
+        return (
+          <Button
+            onClick={() => switchNetwork(_chainId)}
+            sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
+          >
+            Switch Network
+          </Button>
+        )
+
+      if (Object.keys(errors).length) {
+        return (
+          <Button
+            disabled
+            sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
+          >
+            Incorrect input
           </Button>
         )
       }
-    }
-    return (
-      <Button
-        type="submit"
-        sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
-      >
-        submit
-      </Button>
-    )
-  }, [_chainId, account, approvalState, approveCallback, chainId, switchNetwork, toggleWalletModal])
+      if (approvalState !== ApprovalState.APPROVED) {
+        if (approvalState === ApprovalState.PENDING) {
+          return <Button disabled>Approving...</Button>
+        }
+        if (approvalState === ApprovalState.UNKNOWN) {
+          return <Button disabled>Fill in token0 and quantity</Button>
+        }
+        if (approvalState === ApprovalState.NOT_APPROVED) {
+          return (
+            <Button
+              onClick={approveCallbackFn}
+              sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
+            >
+              Approve
+            </Button>
+          )
+        }
+      }
+      return (
+        <Button
+          type="submit"
+          sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
+        >
+          submit
+        </Button>
+      )
+    },
+    [_chainId, account, approvalState, approveCallbackFn, chainId, switchNetwork, toggleWalletModal]
+  )
 
   const createPool = async (params: any) => {
     await contract?.create(params)
   }
-
+  const createPoolFn = useTransactionModalWrapper(createPool as any)
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
@@ -174,10 +189,10 @@ const SingleTokenPool = () => {
               moment(formValues.releaseTime).valueOf() / 1000,
               Number(formValues.duration)
             ]
-            createPool(result)
+            createPoolFn(result)
           }}
         >
-          {({ values, setFieldValue }) => {
+          {({ values, setFieldValue, errors }) => {
             return (
               <Form>
                 <Box display={'flex'} flexDirection={'column'} gap={20}>
@@ -226,6 +241,7 @@ const SingleTokenPool = () => {
                   </FormItem>
                   <Stack direction="column" width={'100%'} spacing={20}>
                     <Field
+                      disabled={false}
                       component={DateTimePickerFormItem}
                       name="startTime"
                       disablePast
@@ -235,6 +251,7 @@ const SingleTokenPool = () => {
                       }}
                     />
                     <Field
+                      disabled={false}
                       component={DateTimePickerFormItem}
                       name="endTime"
                       disablePast
@@ -246,6 +263,7 @@ const SingleTokenPool = () => {
                       }}
                     />
                     <Field
+                      disabled={false}
                       component={DateTimePickerFormItem}
                       name="releaseTime"
                       disablePast
@@ -263,7 +281,7 @@ const SingleTokenPool = () => {
                       }}
                     />
                   </FormItem>
-                  {ActionBtn}
+                  <ActionBtn errors={errors} />
                 </Box>
               </Form>
             )
