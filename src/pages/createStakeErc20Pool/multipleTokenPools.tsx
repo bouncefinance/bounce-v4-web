@@ -50,7 +50,6 @@ const initParams: IParam = {
   ],
   amount1s: []
 }
-
 const validationSchema = Yup.object({
   amountTotal0: Yup.string()
     .required('amountTotal0 is required')
@@ -128,9 +127,8 @@ const MultipleTokenPools = () => {
   const [approvalState, approveCallback] = useApproveCallback(token0Amount, contractAddress)
   const approveFn = useTransactionModalWrapper(approveCallback as any, { isApprove: true })
   const { run: debounceChangeValue } = useDebounceFn(
-    (values: IParam, errors: FormikErrors<IParam>) => {
-      console.log('debounceChangeValue')
-      if (!Object.keys(errors).length && !_.eq(formValue, values)) {
+    (values: IParam) => {
+      if (!_.eq(formValue, values)) {
         setFormValue(values)
       }
     },
@@ -197,7 +195,7 @@ const MultipleTokenPools = () => {
     <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
       <Formik initialValues={initParams} validationSchema={validationSchema} onSubmit={onSubmit}>
         {({ values, setFieldValue, handleSubmit, errors }) => {
-          debounceChangeValue(values, errors)
+          debounceChangeValue(values)
           return (
             <Box
               component={'form'}
@@ -285,8 +283,8 @@ const MultipleTokenPools = () => {
                         <>
                           <Button
                             onClick={() => {
-                              setFieldValue('token1s', [...values.token1s, ''])
-                              setFieldValue('amount1s', [...values.amount1s, ''])
+                              setFieldValue('token1s', [...values.token1s, undefined])
+                              setFieldValue('amount1s', [...values.amount1s, undefined])
                             }}
                           >
                             add
@@ -298,6 +296,9 @@ const MultipleTokenPools = () => {
                                 _token1s.pop()
                                 const _amount1s = [...values.amount1s]
                                 _amount1s.pop()
+                                const _token1sCur = [...token1Currencys]
+                                _token1sCur.pop()
+                                setToken1Currencys(_token1sCur)
                                 setFieldValue('token1s', [..._token1s])
                                 setFieldValue('amount1s', [..._amount1s])
                               }}
@@ -341,8 +342,8 @@ const MultipleTokenPools = () => {
                   <>
                     <Button
                       onClick={() => {
-                        setFieldValue('token1s', [...values.token1s, ''])
-                        setFieldValue('amount1s', [...values.amount1s, ''])
+                        setFieldValue('token1s', [...values.token1s, undefined])
+                        setFieldValue('amount1s', [...values.amount1s, undefined])
                       }}
                     >
                       add

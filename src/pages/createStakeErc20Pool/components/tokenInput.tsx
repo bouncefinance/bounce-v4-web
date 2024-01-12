@@ -63,7 +63,7 @@ const TokenInput = ({
   }, [verifyCallback])
 
   return (
-    <FormItem name={name} label={label} firstTrigger>
+    <FormItem name={name} label={label}>
       <OutlinedInput
         placeholder={''}
         endAdornment={
