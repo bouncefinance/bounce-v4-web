@@ -2771,14 +2771,21 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
         <div>
           <h4>Testnet 2024 Q1</h4>
           <p>✅ Testnet Launch</p>
-          <p>✅ Blockchain Explorer Launch Bitcoin - SatoshiVM Bridge Release EVM - SatoshiVM Bridge Release</p>
+          <p>✅ Blockchain Explorer Launch </p>
+          <ul>
+            <li>Bitcoin - SatoshiVM Bridge Release</li>
+            <li>EVM - SatoshiVM Bridge Release</li>
+          </ul>
         </div>
         <div>
           <h4>SatoshiVM Lite 2024 Q1</h4>
-          <p>Yellow Paper Release</p>
-          <p>SatoshiVM Lite Release</p>
-          <p>Blockchain Explorer Launch</p>
-          <p>Bitcoin - SatoshiVM Bridge Release EVM - SatoshiVM Bridge Release</p>
+          <ul>
+            <li>Yellow Paper Release</li>
+            <li>SatoshiVM Lite Release</li>
+            <li>Blockchain Explorer Launch</li>
+            <li>Bitcoin - SatoshiVM Bridge Release </li>
+            <li>EVM - SatoshiVM Bridge Release</li>
+          </ul>
         </div>
       </Stack>
     ]
