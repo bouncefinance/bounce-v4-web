@@ -115,7 +115,7 @@ const TypeitProjectInfoWhiteList = React.lazy(() => import('./projectIntro/Typei
 const OpenfabricProjectInfo = React.lazy(() => import('./projectIntro/OpenfabricProjectInfo'))
 const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProjectInfo'))
 const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
-
+const LPToken = React.lazy(() => import('./LPToken'))
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -285,7 +285,7 @@ export default function App() {
                   <Route path={routes.thirdPart.IphoneAuctionDetail} element={<IphoneDetail />} />
 
                   <Route path={routes.nftLottery.index} element={<NftLottery />} />
-
+                  <Route path={routes.thirdPart.LPToken} element={<LPToken />} />
                   {/* <Route path={routes.game.bladeDaoIndex} element={<Game />} /> */}
                   {/* <Route
                       path={routes.game.bladeDaoIndex}

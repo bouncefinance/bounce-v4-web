@@ -152,7 +152,8 @@ export const transparentRoutes = [
   routes.thirdPart.AmmxDaii,
   routes.thirdPart.AmmxRandom,
   routes.thirdPart.Port3,
-  routes.nftLottery.index
+  routes.nftLottery.index,
+  routes.thirdPart.LPToken
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
@@ -170,7 +171,8 @@ export const whiteLogoRoutes = [
   routes.thirdPart.DipExchange,
   routes.launchpad.account.launchpadParty,
   routes.launchpad.account.launchpadDetail,
-  routes.foundo.foundoDetail + '/*'
+  routes.foundo.foundoDetail + '/*',
+  routes.thirdPart.LPToken
 ]
 
 export default function Header() {
