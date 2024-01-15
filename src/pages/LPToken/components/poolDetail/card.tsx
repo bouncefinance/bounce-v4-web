@@ -2,9 +2,9 @@ import { Box, Typography } from '@mui/material'
 import Image from 'components/Image'
 import Logo from 'assets/imgs/randomSelection/logo.png'
 import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
-
+import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import useBreakpoint from 'hooks/useBreakpoint'
-
+import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
 const LiveCard = () => {
   const isSm = useBreakpoint('sm')
 
@@ -30,7 +30,8 @@ const LiveCard = () => {
             // zoom: zoomNum
             transform: `scale(1)`,
             transformOrigin: '0 0',
-            mt: 40
+            mt: 40,
+            mb: isUpcoming ? 16 : 32
           }}
         >
           <Box
@@ -332,9 +333,61 @@ const LiveCard = () => {
       </>
     )
   }
+  const NoWinnerCard = () => {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            mt: 40,
+            mb: 16
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#121212',
+              textAlign: 'center',
+              fontFamily: 'Public Sans',
+              fontSize: 20,
+              fontStyle: 'normal',
+              fontWeight: 600,
+              lineHeight: '140%' /* 28px */,
+              letterSpacing: '-0.4px'
+            }}
+          >
+            Sorry! You are not selected as a winner
+          </Typography>
+          <Image src={NotWinIcon} width={200} height={250} style={{ marginTop: 16 }} />
+        </Box>
+      </>
+    )
+  }
+  const WaitLotteryDraw = () => {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            mt: 40,
+            mb: 16
+          }}
+        >
+          <Image src={PendingWinIcon} height={250} />
+        </Box>
+      </>
+    )
+  }
   return (
     <>
-      <NoJoinedCard isJoined={false} isUpcoming isClose />
+      {false && <NoJoinedCard isJoined={false} isUpcoming isClose />}
+      {false && <NoWinnerCard />}
+      {true && <WaitLotteryDraw />}
     </>
   )
 }

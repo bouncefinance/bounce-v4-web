@@ -71,7 +71,7 @@ const PoolProgress = () => {
   const isSm = useBreakpoint('sm')
 
   return (
-    <Stack gap={8} mt={32} mb={16}>
+    <Stack gap={8} mb={16}>
       <Stack
         flexDirection={isSm ? 'column' : 'row'}
         justifyContent={'space-between'}
