@@ -308,27 +308,31 @@ const PoolCard = () => {
               }}
             ></Box>
           </Box>
-          <Box sx={{ width: '100%', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
-            <Typography
-              sx={{
-                color: 'var(--blue-d, #2B51DA)',
-                textAlign: 'center',
-                leadingTrim: 'both',
-                textEdge: 'cap',
-
-                /* D/H3 */
-                fontFamily: 'Public Sans',
-                fontSize: '28px',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                lineHeight: '130%' /* 36.4px */,
-                letterSpacing: '-0.56px',
-                textTransform: 'capitalize'
-              }}
+          {isClose && (
+            <Box
+              sx={{ width: '100%', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}
             >
-              Lottery Completed
-            </Typography>
-          </Box>
+              <Typography
+                sx={{
+                  color: 'var(--blue-d, #2B51DA)',
+                  textAlign: 'center',
+                  leadingTrim: 'both',
+                  textEdge: 'cap',
+
+                  /* D/H3 */
+                  fontFamily: 'Public Sans',
+                  fontSize: '28px',
+                  fontStyle: 'normal',
+                  fontWeight: 600,
+                  lineHeight: '130%' /* 36.4px */,
+                  letterSpacing: '-0.56px',
+                  textTransform: 'capitalize'
+                }}
+              >
+                Lottery Completed
+              </Typography>
+            </Box>
+          )}
         </Box>
       </>
     )
@@ -385,9 +389,9 @@ const PoolCard = () => {
   }
   return (
     <>
-      {false && <NoJoinedCard isJoined={false} isUpcoming isClose />}
+      {true && <NoJoinedCard isJoined={false} isUpcoming isClose={false} />}
       {false && <NoWinnerCard />}
-      {true && <WaitLotteryDraw />}
+      {false && <WaitLotteryDraw />}
     </>
   )
 }

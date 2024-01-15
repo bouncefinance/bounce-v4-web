@@ -318,12 +318,12 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
   }
   userTokenAmount?: Currency
   token1Currency: any[]
-  totalShare: string | number
-  maxPlayere: string | number
-  curPlayer: string | number
   burnedTokens: BigintIsh[]
   tokensAddress: string[]
   betTokenAmount: BigintIsh[]
+  totalShare: string | number
+  maxPlayere: string | number
+  curPlayer: string | number
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined

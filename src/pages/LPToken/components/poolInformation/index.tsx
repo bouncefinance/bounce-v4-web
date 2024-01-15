@@ -49,7 +49,7 @@ const PoolInformation = () => {
         <InterLargeTitle>Auction/USDT Pool information</InterLargeTitle>
       </Stack>
       {false && <EmptyPanel />}
-      <DetailPanel />
+      {true && <DetailPanel />}
     </Stack>
   )
 }
