@@ -2,10 +2,10 @@ import { Box, Typography } from '@mui/material'
 import Image from 'components/Image'
 import Logo from 'assets/imgs/randomSelection/logo.png'
 import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
-
+import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import useBreakpoint from 'hooks/useBreakpoint'
-
-const LiveCard = () => {
+import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
+const PoolCard = () => {
   const isSm = useBreakpoint('sm')
 
   const NoJoinedCard = ({
@@ -29,7 +29,9 @@ const LiveCard = () => {
             margin: isSm ? '0 auto' : '0 auto 30px',
             // zoom: zoomNum
             transform: `scale(1)`,
-            transformOrigin: '0 0'
+            transformOrigin: '0 0',
+            mt: 40,
+            mb: isUpcoming ? 16 : 32
           }}
         >
           <Box
@@ -306,36 +308,92 @@ const LiveCard = () => {
               }}
             ></Box>
           </Box>
-          <Box sx={{ width: '100%', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}>
-            <Typography
-              sx={{
-                color: 'var(--blue-d, #2B51DA)',
-                textAlign: 'center',
-                leadingTrim: 'both',
-                textEdge: 'cap',
-
-                /* D/H3 */
-                fontFamily: 'Public Sans',
-                fontSize: '28px',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                lineHeight: '130%' /* 36.4px */,
-                letterSpacing: '-0.56px',
-                textTransform: 'capitalize'
-              }}
+          {isClose && (
+            <Box
+              sx={{ width: '100%', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)' }}
             >
-              Lottery Completed
-            </Typography>
-          </Box>
+              <Typography
+                sx={{
+                  color: 'var(--blue-d, #2B51DA)',
+                  textAlign: 'center',
+                  leadingTrim: 'both',
+                  textEdge: 'cap',
+
+                  /* D/H3 */
+                  fontFamily: 'Public Sans',
+                  fontSize: '28px',
+                  fontStyle: 'normal',
+                  fontWeight: 600,
+                  lineHeight: '130%' /* 36.4px */,
+                  letterSpacing: '-0.56px',
+                  textTransform: 'capitalize'
+                }}
+              >
+                Lottery Completed
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </>
+    )
+  }
+  const NoWinnerCard = () => {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            mt: 40,
+            mb: 16
+          }}
+        >
+          <Typography
+            sx={{
+              color: '#121212',
+              textAlign: 'center',
+              fontFamily: 'Public Sans',
+              fontSize: 20,
+              fontStyle: 'normal',
+              fontWeight: 600,
+              lineHeight: '140%' /* 28px */,
+              letterSpacing: '-0.4px'
+            }}
+          >
+            Sorry! You are not selected as a winner
+          </Typography>
+          <Image src={NotWinIcon} width={200} height={250} style={{ marginTop: 16 }} />
+        </Box>
+      </>
+    )
+  }
+  const WaitLotteryDraw = () => {
+    return (
+      <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            mt: 40,
+            mb: 16
+          }}
+        >
+          <Image src={PendingWinIcon} height={250} />
         </Box>
       </>
     )
   }
   return (
     <>
-      <NoJoinedCard isJoined={false} isUpcoming isClose />
+      {true && <NoJoinedCard isJoined={false} isUpcoming isClose={false} />}
+      {false && <NoWinnerCard />}
+      {false && <WaitLotteryDraw />}
     </>
   )
 }
 
-export default LiveCard
+export default PoolCard

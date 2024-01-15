@@ -54,8 +54,8 @@ export const useGetStakingAuctionInfo = (
       if (
         !token1sCurrency ||
         token1sCurrency.some(i => !i) ||
-        !poolToken1WeightAmountMapRes.result?.[2] ||
-        !myStakeToken1WeightAmountMapRes.result?.[2]
+        !poolToken1WeightAmountMapRes.result?.[2]
+        // !myStakeToken1WeightAmountMapRes.result?.[2]
       ) {
         return []
       }
@@ -70,7 +70,7 @@ export const useGetStakingAuctionInfo = (
         return (
           CurrencyAmount.fromAmount(
             cr as Currency,
-            CurrencyAmount.ether(myStakeToken1WeightAmountMapRes.result?.[2][id]).toExact()
+            CurrencyAmount.ether(myStakeToken1WeightAmountMapRes.result?.[2][id] || '0').toExact()
           ) || CurrencyAmount.fromRawAmount(cr as Currency, '0')
         )
       })

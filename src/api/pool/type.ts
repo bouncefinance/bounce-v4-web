@@ -5,6 +5,7 @@ import { Post } from '../type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import { BigintIsh } from 'constants/token/constants'
+import { Position } from '@uniswap/v3-sdk'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -17,6 +18,7 @@ export enum PoolType {
   MUTANT_ENGLISH_AUCTION_NFT = 9,
   LOTTERY_NFT = 7,
   LOTTERY_BURNING = 10,
+  RANDOM_SELECTION_LP = 11,
   'PlayableAuction' = 100
 }
 
@@ -44,6 +46,8 @@ export function getTextFromPoolType(type: PoolType) {
       return 'Lottery NFT'
     case PoolType.LOTTERY_BURNING:
       return 'Lottery Burning'
+    case PoolType.RANDOM_SELECTION_LP:
+      return 'Random_Selection_Lp'
   }
 }
 export interface BindTgTokenApiParams {
@@ -294,6 +298,27 @@ export interface RandomSelectionNFTProps extends FixedSwapPool {
   burnedTokens: BigintIsh[]
   tokensAddress: string[]
   betTokenAmount: BigintIsh[]
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
+
+export interface RandomSelectionLPProps extends FixedSwapPool {
+  currencyAmountTotal1?: CurrencyAmount
+  currencySwappedTotal1?: CurrencyAmount
+  position?: Position
+  ethChainId: ChainId
+  mintContractAddress: string
+  participant: {
+    isJoined?: boolean
+    address?: string
+    claimed?: boolean
+  }
+  totalShare: string | number
+  maxPlayere: string | number
+  curPlayer: string | number
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined

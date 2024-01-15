@@ -1,19 +1,126 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "contract IWETH9",
-        "name": "_WETH",
+        "indexed": false,
+        "internalType": "address",
+        "name": "previousAdmin",
         "type": "address"
       },
       {
-        "internalType": "contract INonfungiblePositionManager",
-        "name": "_nonfungiblePositionManager",
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "AdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beacon",
+        "type": "address"
+      }
+    ],
+    "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "implementation",
+        "type": "address"
+      }
+    ],
+    "name": "Upgraded",
+    "type": "event"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "admin_",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "constructor"
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "changeAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "implementation",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "implementation_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
   },
   {
     "inputs": [
@@ -423,19 +530,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "WETH",
-    "outputs": [
-      {
-        "internalType": "contract IWETH9",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -868,6 +962,45 @@
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      }
+    ],
+    "name": "getFees",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "claimed0",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "claimed1",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "claimable0",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "claimable1",
         "type": "uint256"
       }
     ],
@@ -1351,6 +1484,63 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_auctionToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minimumAuction",
+        "type": "uint256"
+      }
+    ],
+    "name": "setAuctionHolder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_signer",
+        "type": "address"
+      }
+    ],
+    "name": "setSigner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stakeContract",
+        "type": "address"
+      }
+    ],
+    "name": "setStakeContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_txFeeRatio",
+        "type": "uint256"
+      }
+    ],
+    "name": "setTxFeeRatio",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "signer",
     "outputs": [
@@ -1537,5 +1727,26 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_logic",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "admin_",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_data",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "payable",
+    "type": "constructor"
   }
 ]

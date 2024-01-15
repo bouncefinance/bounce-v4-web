@@ -5,7 +5,7 @@ import useBreakpoint from 'hooks/useBreakpoint'
 import { getIcon, muColorList } from 'pages/nftLottery/sections/tokenInformation/config'
 import { MultiTokenResultType } from 'bounceHooks/launchpad/useLaunchpadCoinInfo'
 import { useMemo } from 'react'
-import { useTokens } from 'state/wallet/hooks'
+import { formatGroupNumber } from 'utils/number'
 
 const Title = styled(Typography)`
   color: var(--white, #fff);
@@ -59,7 +59,7 @@ const ChartLayout = ({
       </Box>
       <Box>
         <Box margin={isSm ? '24px 0 32px' : '32px 0 28px'} display={'flex'} justifyContent={'center'}>
-          <DonutChart option={option} size={{ width: width, height: height }} />
+          <DonutChart option={option} size={{ width: isSm ? window.innerWidth - 40 : width, height: height }} />
         </Box>
 
         <Stack flexDirection={'row'} alignItems={'center'} flexWrap={'wrap'} pl={isSm ? '18%' : '15%'}>
@@ -86,40 +86,36 @@ const ChartLayout = ({
 
 const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) => {
   const isSm = useBreakpoint('sm')
-  const poolStakeTokens = useTokens(
-    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightTokenAddr ?? [],
-    coinInfo?.poolInfo?.chainId
-  )
-
   const pieData = useMemo(() => {
-    if (coinInfo && poolStakeTokens) {
+    if (coinInfo && coinInfo.token1StakedStats?.token1sCurrency) {
       const arr = coinInfo.token1StakedStats?.stakeTokenPrices?.map((item, index) => ({
         value:
           Number(coinInfo?.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.[index].div(item).toExact()) ||
           0,
         color: muColorList[index],
-        name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
-        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase()),
+        name: coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase(),
+        logo: getIcon(coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase()),
         itemStyle: { color: muColorList[index] }
       }))
       return arr
     }
     return undefined
-  }, [coinInfo, poolStakeTokens])
+  }, [coinInfo])
 
   const barData = useMemo(() => {
-    if (coinInfo && poolStakeTokens) {
+    if (coinInfo && coinInfo.token1StakedStats?.token1sCurrency) {
       const arr = coinInfo.poolStakeToken1WeightAmountMap?.poolStakeToken1WeightAmounts?.map((item, index) => ({
         value: Number(item.toExact()),
         color: muColorList[index],
-        name: poolStakeTokens[index]?.symbol?.toLocaleUpperCase(),
-        logo: getIcon(poolStakeTokens[index]?.symbol?.toLocaleUpperCase()),
-        itemStyle: { color: muColorList[index] }
+        name: coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase(),
+        logo: getIcon(coinInfo.token1StakedStats?.token1sCurrency?.[index]?.symbol?.toLocaleUpperCase()),
+        itemStyle: { color: muColorList[index] },
+        number: pieData?.[index].value || 0
       }))
       return arr
     }
     return undefined
-  }, [coinInfo, poolStakeTokens])
+  }, [coinInfo, pieData])
   const barXAxisData = barData
     ? barData.map(item => {
         return item.name ? item.name : ''
@@ -129,7 +125,17 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
   const pieOption: EChartsOption = {
     tooltip: {
       trigger: 'item',
-      position: 'inside'
+      position: 'inside',
+      formatter: function (parms: any) {
+        const str =
+          parms.seriesName +
+          '</br>' +
+          parms.marker +
+          parms.data.name +
+          ':  ' +
+          `<span style='font-weight:600;margin-left:20'>${formatGroupNumber(Number(parms.data?.number) || 0)}</span>`
+        return str
+      }
     },
     legend: {
       orient: 'vertical',
@@ -139,7 +145,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     },
     series: [
       {
-        name: 'Token proportion',
+        name: 'Token Quantity',
         type: 'pie',
         radius: ['50%', '95%'],
         avoidLabelOverlap: false,
@@ -161,7 +167,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         labelLine: {
           show: false
         },
-        data: pieData
+        data: barData
       }
     ]
   }
@@ -176,7 +182,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
           parms.marker +
           parms.data.name +
           ':  ' +
-          `<span style='font-weight:600;margin-left:20'>$${parms.data.value}</span>`
+          `<span style='font-weight:600;margin-left:20'>$${formatGroupNumber(parms.data.value || 0)}</span>`
         return str
       }
     },
@@ -229,7 +235,16 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
         show: true,
         margin: 10,
         fontSize: 10,
-        color: '#FFF'
+        color: '#FFF',
+        formatter(value: number) {
+          if (value >= 1000000) {
+            return (value / 1000000).toFixed(0) + 'M'
+          } else if (value >= 1000) {
+            return (value / 1000).toFixed(0) + 'K'
+          } else {
+            return value.toString()
+          }
+        }
       },
       splitLine: {
         show: true,
@@ -241,7 +256,7 @@ const Charts = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     },
     series: [
       {
-        name: 'Value Distribution',
+        name: 'Value',
         type: 'bar',
         barWidth: 30,
         data: barData

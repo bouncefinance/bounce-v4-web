@@ -1,18 +1,24 @@
 import { Stack, Tab, Tabs, Typography, styled } from '@mui/material'
-// import useBreakpoint from 'hooks/useBreakpoint'
+import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import Icon2 from 'assets/images/eth_logo.png'
+import { ChainId } from 'constants/chain'
+import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
+
 const TabsCom = styled(Tabs)({
   display: 'flex',
   width: '100%',
   height: 'auto',
   minHeight: 40,
-  padding: '6px',
+  padding: '0 6px 6px',
   borderRadius: '100px',
   justifyContent: 'center',
   color: '#959595',
   textAlign: 'center',
+  '& .MuiTabs-flexContainer': {
+    height: 40
+  },
   '& button': {
     padding: '4px 16px',
     height: 32
@@ -37,7 +43,11 @@ export default function Page() {
     }
   ]
   const [curTab, setCurTab] = useState(0)
-  // const isSm = useBreakpoint('sm')
+  const _chainId = ChainId.SEPOLIA
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId)
+  console.log('🚀 ~ Page ~ poolInfo:', poolInfo)
+  const isSm = useBreakpoint('sm')
+
   return (
     <Stack
       spacing={40}
@@ -45,8 +55,8 @@ export default function Page() {
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '24px',
-        margin: '40px 72px',
-        padding: '24px 56px 65px',
+        margin: isSm ? '24px 16px' : '40px 72px',
+        padding: isSm ? '24px 16px' : '24px 56px 65px',
         background: '#fff'
       }}
     >
@@ -75,7 +85,7 @@ export default function Page() {
               className={idx === curTab ? 'active' : ''}
               label={tab.name}
               sx={{ textAlign: 'center', margin: '0 auto', fontSize: 16, fontWeight: 500, color: '#959595' }}
-            ></Tab>
+            />
           </TabsCom>
         ))}
       </Stack>
@@ -88,7 +98,7 @@ export default function Page() {
           sx={{
             width: '100%',
             textAlign: 'center',
-            padding: '20px 40px',
+            padding: isSm ? '10px 16px' : '20px 40px',
             borderRadius: '12px',
             background: '#F6F6F3'
           }}
@@ -104,7 +114,7 @@ export default function Page() {
               </Typography>
             </Stack>
             <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              $ 18.82
+              18.82
             </Typography>
           </Stack>
         </Stack>
@@ -113,7 +123,7 @@ export default function Page() {
           sx={{
             width: '100%',
             textAlign: 'center',
-            padding: '20px 40px',
+            padding: isSm ? '10px 16px' : '20px 40px',
             borderRadius: '12px',
             background: '#F6F6F3'
           }}
@@ -129,7 +139,7 @@ export default function Page() {
               </Typography>
             </Stack>
             <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              $ 18.82
+              18.82
             </Typography>
           </Stack>
         </Stack>
@@ -139,7 +149,7 @@ export default function Page() {
         sx={{
           width: '100%',
           textAlign: 'center',
-          padding: '20px 40px',
+          padding: isSm ? '10px 16px' : '20px 40px',
           borderRadius: '12px',
           background: '#F6F6F3'
         }}
@@ -148,10 +158,10 @@ export default function Page() {
           Current Price
         </Typography>
         <Typography fontSize={36} color={'#2B51DA'} fontWeight={600}>
-          $ 18.82
+          18.82
         </Typography>
         <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-          {Tabs[0].name.toLocaleUpperCase()} per {Tabs[1].name.toLocaleUpperCase()}
+          {Tabs[curTab].name.toLocaleUpperCase()} per {Tabs[curTab === 0 ? 1 : 0].name.toLocaleUpperCase()}
         </Typography>
       </Stack>
     </Stack>

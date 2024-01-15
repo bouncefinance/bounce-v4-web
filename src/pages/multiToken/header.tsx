@@ -67,14 +67,15 @@ export const token1Info = [
 const TitleContainer = () => {
   return (
     <>
-      <BlackWeightP1>Support multiple stake assets</BlackWeightP1>
+      <BlackWeightP1>Choose One Token from a Variety of Token Types for Staking</BlackWeightP1>
       <GrayP1 mt={20}>
-        Once you stake a certain token, you can only stake that token here when you want to increase your stake again.
+        After staking one type of supported token, you are required to use the same token type for any subsequent
+        increases to your stake.
       </GrayP1>
       <Box mt={24} sx={{ padding: '24px 16px', borderRadius: 12, background: '#D6DFF6' }}>
         <BlueP1>
-          Calculation of final limit = number of tokens you staked (USD value) + staked time *Staking auctions will
-          receive additional calculation weight.
+          Each individual’s $PORT3 allocation = Individual staked amount in USD + Individual staked time
+          {/* *Staking auctions will receive additional calculation weight. */}
         </BlueP1>
       </Box>
     </>
@@ -149,7 +150,7 @@ const Header = ({ coinInfo }: { coinInfo: MultiTokenResultType | undefined }) =>
     }
     return coinInfo.token1StakedStats?.token1sCurrency.map<ITokenList>((cr, id) => ({
       name: cr.symbol || '--',
-      price: quoteAmount.div(poolToken1s[id]).toSignificant(4),
+      price: quoteAmount.div(poolToken1s[id]).div(0.05).toSignificant(4),
       icon: getIcon(cr.symbol) || '',
       weights: 1
     }))
