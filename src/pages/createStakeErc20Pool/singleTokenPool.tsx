@@ -83,8 +83,16 @@ const SingleTokenPool = () => {
   }
 
   const validationSchema = Yup.object({
-    token0Quantity: Yup.number().min(1, 'Cannot be less than 0').required('Token0 amount is required'),
-    token1Quantity: Yup.number().min(1, 'Cannot be less than 0').required('Token1 amount is required'),
+    token0Quantity: Yup.number()
+      .required('Token0 quantity is required')
+      .test('EQUAL_TO_ZERO', 'Quantity must be more than 0', value => {
+        return value !== 0
+      }),
+    token1Quantity: Yup.number()
+      .required('Token1 quantity is required')
+      .test('EQUAL_TO_ZERO', 'Quantity must be more than 0', value => {
+        return value !== 0
+      }),
     startTime: Yup.date()
       // .min(new Date(new Date().toDateString()), 'Please select a time earlier than current time')
       .min(moment(), 'Please select a time earlier than current time')
