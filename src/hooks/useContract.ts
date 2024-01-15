@@ -58,9 +58,9 @@ import {
   STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_LP_CONTRACT_ADDRESSES
 } from '../constants'
-
+import INONFUNGIBLE_POSITION_MANAGER from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
 // returns null on errors
-function useContract(
+export function useContract(
   address: string | undefined,
   ABI: any,
   withSignerIfPossible = true,
@@ -352,4 +352,13 @@ export function useRandomSelectionMultiTokenContract(address?: string, queryChai
   const curAddress =
     address === '' ? undefined : address || (cur ? STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, RANDOM_SELECTION_MULTI_TOKEN_ABI, true, queryChainId)
+}
+
+export function useUniV3PositionContract(queryChainId?: ChainId) {
+  return useContract(
+    '0x1238536071E1c677A632429e3655c799b22cDA52',
+    INONFUNGIBLE_POSITION_MANAGER.abi,
+    true,
+    queryChainId
+  )
 }
