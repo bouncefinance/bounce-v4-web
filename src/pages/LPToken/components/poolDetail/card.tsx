@@ -5,7 +5,7 @@ import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
 import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import useBreakpoint from 'hooks/useBreakpoint'
 import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
-const LiveCard = () => {
+const PoolCard = () => {
   const isSm = useBreakpoint('sm')
 
   const NoJoinedCard = ({
@@ -392,4 +392,4 @@ const LiveCard = () => {
   )
 }
 
-export default LiveCard
+export default PoolCard

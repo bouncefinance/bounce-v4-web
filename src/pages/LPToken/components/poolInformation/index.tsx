@@ -14,7 +14,7 @@ const Icon1 = getIcon('AUCTION')
 const Icon2 = getIcon('MUBI')
 const PoolInformation = () => {
   return (
-    <Stack gap={24} sx={{ padding: '40px 32px 64px 32px', borderRadius: 20, background: '#F6F6F3' }}>
+    <Stack gap={24} sx={{ height: '100%', padding: '40px 32px 64px 32px', borderRadius: 20, background: '#F6F6F3' }}>
       <Stack flexDirection={'row'} gap={13}>
         <Stack
           sx={{
