@@ -61,9 +61,9 @@ import GoogleAnalyticsReporter from 'components/analytics/GoogleAnalyticsReporte
 // import MetaBlox from './projectIntro/MetaBloxProjectInfo'
 import MultiToken from 'pages/multiToken'
 import CreateMultiTokenPool from 'pages/multiToken/createPool'
-import NftLottery from './nftLottery'
-
 import useBreakpoint from '../hooks/useBreakpoint'
+
+const NftLottery = React.lazy(() => import('./nftLottery'))
 const CreateLaunchpad = React.lazy(() => import('./launchpad/create-launchpad'))
 const PoseiProjectInfo = React.lazy(() => import('./projectIntro/PoseiProjectInfo'))
 const OkxActivity = React.lazy(() => import('./okxActivity/OkxActivity'))

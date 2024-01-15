@@ -582,10 +582,14 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
       />
       <Box
         sx={{
-          position: isDark && isSm ? 'relative' : 'absolute',
+          position: 'relative',
+          width: `calc(100% - ${isSm ? 40 : 80}px)`,
           display: 'flex',
           flexDirection: 'column',
-          background: `url(${item.pageInImg || item.img})`,
+          // background: `url(${item.pageInImg || item.img})`,
+          backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)), url(${
+            item.pageInImg || item.img
+          })`,
           top: 0,
           right: isDark && isSm ? '' : { xs: 20, sm: '40px' },
           bottom: 0,
@@ -762,9 +766,9 @@ export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: 
             flexDirection: 'column',
             borderRadius: '0 0 20px 20px',
             alignItems: 'center',
-            paddingBottom: isMD ? '0' : '80px',
-            paddingTop: '20px',
-            background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
+            paddingBottom: isMD ? '0' : '50px',
+            paddingTop: '20px'
+            // background: 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%)'
           }}
         >
           {<img src={item.avatar} style={{ width: 60, height: 60, borderRadius: 6 }} />}
