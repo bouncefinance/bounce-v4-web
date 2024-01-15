@@ -204,7 +204,7 @@ export const RANDOM_SELECTION_LP_CONTRACT_ADDRESSES: { [chainId in ChainId]: str
   [ChainId.ARBITRUM]: '',
   [ChainId.CELO]: '',
   [ChainId.AVALANCHE]: '',
-  [ChainId.SEPOLIA]: '0x92f742a243904818e9167725eC3B7b992f8eeB2E',
+  [ChainId.SEPOLIA]: '0xa2D54403cf2d57458a98cEaDa236E6cc205fe40D',
   [ChainId.AUROEA]: '',
   [ChainId.HARMONY]: '',
   [ChainId.SCROLL_ALPHA]: '',
