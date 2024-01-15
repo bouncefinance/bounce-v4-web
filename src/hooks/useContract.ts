@@ -16,6 +16,7 @@ import ERC1155_ABI from '../constants/abis/erc1155.json'
 import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
 import FIXED_SWAP_ABI_BOT from '../constants/abis/fixedSwap_bot.json'
 import RANDOM_SELECTION_ABI from '../constants/abis/randomSelection.json'
+import RANDOM_SELECTION_LP_ABI from '../constants/abis/randomSelectionLP.json'
 import RANDOM_SELECTION_NFT_ABI from '../constants/abis/randomSelectionNFT.json'
 import RANDOM_SELECTION_NFT_BURNING_ABI from '../constants/abis/randomSelectionNFTBurning.json'
 import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
@@ -54,7 +55,8 @@ import {
   STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES,
-  STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES
+  STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES,
+  RANDOM_SELECTION_LP_CONTRACT_ADDRESSES
 } from '../constants'
 
 // returns null on errors
@@ -207,6 +209,14 @@ export function useRandomSelectionERC20Contract(address?: string, queryChainId?:
   const curAddress =
     address === '' ? undefined : address || (cur ? RANDOM_SELECTION_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, RANDOM_SELECTION_ABI, true, queryChainId)
+}
+
+export function useRandomSelectionLPContract(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress =
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_LP_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, RANDOM_SELECTION_LP_ABI, true, queryChainId)
 }
 
 export function useFixedSwapNftContract(address?: string, queryChainId?: ChainId) {
