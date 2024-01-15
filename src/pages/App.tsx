@@ -116,6 +116,8 @@ const OpenfabricProjectInfo = React.lazy(() => import('./projectIntro/Openfabric
 const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProjectInfo'))
 const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
 const LPToken = React.lazy(() => import('./LPToken'))
+const SatoshiLpProjectInfo = React.lazy(() => import('./projectIntro/SatoshiLpProjectInfo'))
+const SatoshiRandomProjectInfo = React.lazy(() => import('./projectIntro/SatoshiRandomProjectInfo'))
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -231,6 +233,9 @@ export default function App() {
                   <Route path={routes.thirdPart.AmmxAuctionTest} element={<AmmxStakeAuctionPoolTest />} />
                   <Route path={routes.thirdPart.AmmxDaii} element={<AmmxStakeDaiiPool />} />
                   <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomSelection />} />
+                  <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
+                  <Route path={routes.thirdPart.SatoshiVMLp} element={<SatoshiLpProjectInfo />} />
+                  <Route path={routes.thirdPart.SatoshiVMRandom} element={<SatoshiRandomProjectInfo />} />
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
 
                   <Route

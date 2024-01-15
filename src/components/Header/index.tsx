@@ -153,7 +153,10 @@ export const transparentRoutes = [
   routes.thirdPart.AmmxRandom,
   routes.thirdPart.Port3,
   routes.nftLottery.index,
-  routes.thirdPart.LPToken
+  routes.thirdPart.LPToken,
+  routes.thirdPart.SatoshiVMLp,
+  routes.thirdPart.SatoshiVMRandom,
+  routes.nftLottery.index
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]

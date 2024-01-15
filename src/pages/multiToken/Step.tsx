@@ -151,8 +151,8 @@ function Step1({
   )
 
   const [, curStackTokenAmount] = useMemo(() => {
-    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
-      i => BigInt(i.toExact()) > BigInt('0')
+    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(i =>
+      new BigNumber(i.toExact()).gt('0')
     )
     const curTokenAmount = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts
     return [index, curTokenAmount]
@@ -645,9 +645,7 @@ function Step2({
   }, [coinInfo, poolStakeTokens])
 
   const [myStakeTokenIndex, curStackTokenAmount] = useMemo(() => {
-    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(
-      i => BigInt(i.toExact()) > BigInt('0')
-    )
+    const index = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.findIndex(i => i.greaterThan('0'))
     const curTokenAmount =
       index !== undefined ? coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts?.[index] : undefined
     return [index, curTokenAmount]
@@ -698,47 +696,59 @@ function Step2({
     myStakeTokenIndex
   ])
 
-  // const myUnClaimStakeAmountArr = useMemo(() => {
-  //   if (
-  //     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts &&
-  //     myUnClaimStakeAmount &&
-  //     coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts &&
-  //     coinInfo.token1StakedStats?.totalStakeAmount &&
-  //     coinInfo?.poolInfo?.quoteAmountTotal1
-  //   ) {
-  //     const total = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.reduce((pre, cur) => {
-  //       return (
-  //         CurrencyAmount.fromAmount(
-  //           Currency.getNativeCurrency(),
-  //           new BigNumber(pre.toExact()).plus(cur.toExact()).toString()
-  //         ) || CurrencyAmount.ether('0')
-  //       )
-  //     })
-  //     return coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.map((myQuoteAmount1, index) => {
-  //       console.log(
-  //         '🚀 ~ file: Step.tsx:715 ~ returncoinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.map ~ myQuoteAmount1:',
-  //         CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString() || '0').toExact(),
-  //         myQuoteAmount1.toExact(),
-  //         total.toExact(),
-  //         coinInfo.token1StakedStats?.totalStakeAmount?.[index].toExact(),
-  //         coinInfo.poolInfo?.quoteAmountTotal1.toString(),
-  //         myUnClaimStakeAmount.toExact()
-  //       )
-  //       return CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString() || '0')
-  //         .mul(myQuoteAmount1)
-  //         .div(total)
-  //         .mul(coinInfo.token1StakedStats?.totalStakeAmount?.[index] as CurrencyAmount)
-  //         .div(CurrencyAmount.ether(coinInfo.poolInfo?.quoteAmountTotal1.toString() as string))
-  //     })
-  //   }
-  //   return []
-  // }, [
-  //   coinInfo?.finalAllocation?.myUnSwappedAmount1,
-  //   coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts,
-  //   coinInfo?.poolInfo?.quoteAmountTotal1,
-  //   coinInfo?.token1StakedStats?.totalStakeAmount,
-  //   myUnClaimStakeAmount
-  // ])
+  const isSuccessPool = true
+  const myUnClaimStakeAmountArr = useMemo(() => {
+    if (
+      coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts &&
+      myUnClaimStakeAmount &&
+      coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts &&
+      coinInfo.token1StakedStats?.totalStakeAmount &&
+      coinInfo?.poolInfo?.quoteAmountTotal1
+    ) {
+      const totalQu = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.reduce((pre, cur) => {
+        return (
+          CurrencyAmount.fromAmount(
+            Currency.getNativeCurrency(),
+            new BigNumber(pre.toExact()).plus(cur.toExact()).toString()
+          ) || CurrencyAmount.ether('0')
+        )
+      })
+      const _totalWeights = coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight.map(
+        i => new BigNumber(i.toString())
+      )
+      const totalWeights = _totalWeights.reduce((pre, cur) => {
+        return new BigNumber(pre).plus(cur)
+      }, BigNumber('0'))
+      if (isSuccessPool)
+        return coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight.map((myTokenWeight1, index) => {
+          return CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString() || '0')
+            .mul(CurrencyAmount.ether(myTokenWeight1.toString()))
+            .div(CurrencyAmount.ether(totalWeights.toString()))
+            .mul(coinInfo.token1StakedStats?.totalStakeAmount?.[index] as CurrencyAmount)
+            .div(CurrencyAmount.ether(coinInfo.poolInfo?.quoteAmountTotal1.toString() as string))
+        })
+      return coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts.map((myQuoteAmount1, index) => {
+        return CurrencyAmount.ether(coinInfo?.finalAllocation?.myUnSwappedAmount1.toString() || '0')
+          .mul(myQuoteAmount1)
+          .div(totalQu)
+          .mul(coinInfo.token1StakedStats?.totalStakeAmount?.[index] as CurrencyAmount)
+          .div(CurrencyAmount.ether(coinInfo.poolInfo?.quoteAmountTotal1.toString() as string))
+      })
+    }
+    return []
+  }, [
+    coinInfo?.finalAllocation?.myUnSwappedAmount1,
+    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1Weight,
+    coinInfo?.myStakeToken1WeightAmountMap?.myStakeToken1WeightAmounts,
+    coinInfo?.poolInfo?.quoteAmountTotal1,
+    coinInfo?.token1StakedStats?.totalStakeAmount,
+    isSuccessPool,
+    myUnClaimStakeAmount
+  ])
+  console.log(
+    '🚀 ~ file: Step.tsx:727 ~ myUnClaimStakeAmountArr ~ myUnClaimStakeAmountArr:',
+    myUnClaimStakeAmountArr.map(i => i.toSignificant())
+  )
 
   return (
     <Stack spacing={24} mt={24}>

@@ -411,7 +411,7 @@ export function useToken721BalanceTokens(
         name: data?.name ?? data.collection?.name ?? data.contract.openSeaMetadata.collectionName ?? data.contract.name,
         symbol: data.contract?.symbol ?? data.collection?.slug,
         tokenUri: data.tokenUri,
-        uri: data.contract.openSeaMetadata.imageUrl ?? undefined
+        uri: (data.image.cachedUrl || data.contract.openSeaMetadata.imageUrl) ?? undefined
       }))
 
       return tokens
