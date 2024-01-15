@@ -20,7 +20,7 @@ import { useRandomSelectionLPContract } from 'hooks/useContract'
 import { useApproveCallback } from 'hooks/useApproveCallback'
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
-import { RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES, NULL_BYTES } from 'constants/index'
+import { NULL_BYTES } from 'constants/index'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { GetWhitelistMerkleTreeRootParams, PoolType } from 'api/pool/type'
 import { getWhitelistMerkleTreeRoot, getPoolBurningCreationSignature } from 'api/pool'
@@ -60,8 +60,7 @@ const SingleTokenPool = () => {
   const switchNetwork = useSwitchNetwork()
   const toggleWalletModal = useWalletModalToggle()
   const _chainId = ChainId.SEPOLIA
-  const contractAddress = RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES[_chainId || 5]
-  const contract = useRandomSelectionLPContract(contractAddress, _chainId)
+  const contract = useRandomSelectionLPContract(undefined, _chainId)
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', _chainId || 5)
 
   const [approvalState, approveCallback] = useApproveCallback(
@@ -241,9 +240,7 @@ const SingleTokenPool = () => {
             const arg = [id, _body, false, expiredTime, signature]
             try {
               console.log('pool id', id, arg)
-              await contract.createV2(...arg, {
-                gasLimit: '3000000'
-              })
+              await contract.createV2(...arg)
               localStorage.setItem('NFT_RANDOM_POOL_ID', JSON.stringify(id))
             } catch (error) {
               console.error(error)
