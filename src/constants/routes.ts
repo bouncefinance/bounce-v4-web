@@ -164,5 +164,8 @@ export const routes = {
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'
+  },
+  createLPOfferingPool: {
+    index: '/create-LP-Offering-pool'
   }
 }

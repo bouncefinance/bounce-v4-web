@@ -5,6 +5,7 @@ import { Post } from '../type'
 import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import { BigintIsh } from 'constants/token/constants'
+import { Position } from '@uniswap/v3-sdk'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -303,9 +304,11 @@ export interface RandomSelectionNFTProps extends FixedSwapPool {
     loading: boolean
   }
 }
+
 export interface RandomSelectionLPProps extends FixedSwapPool {
   currencyAmountTotal1?: CurrencyAmount
   currencySwappedTotal1?: CurrencyAmount
+  position?: Position
   ethChainId: ChainId
   mintContractAddress: string
   participant: {
@@ -313,7 +316,6 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
     address?: string
     claimed?: boolean
   }
-  userTokenAmount?: Currency
   totalShare: string | number
   maxPlayere: string | number
   curPlayer: string | number
@@ -323,6 +325,7 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
     loading: boolean
   }
 }
+
 export interface NFTPoolListProp {
   id: number
   chainId: number

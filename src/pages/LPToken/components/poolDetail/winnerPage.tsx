@@ -49,7 +49,7 @@ const WinnerPage = () => {
           <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#2B51DA' }}>$-</P1>
         </GrayCard>
         <GrayCard sx={{ flex: 1 }}>
-          <P1>Your Total rewards</P1>
+          <P1>Your Total Rewards</P1>
           <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#121212' }}>$-</P1>
         </GrayCard>
       </Stack>
