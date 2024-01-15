@@ -12,7 +12,7 @@ import {
 import { useRequest } from 'ahooks'
 import { getCurrentTimeStamp } from 'utils'
 
-const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
+const useRandomSelectionLPPoolInfo = (backedId?: number) => {
   const _backedId = backedId
   const {
     data: poolInfo,
@@ -81,7 +81,7 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
   }
 }
 
-export const useGetRandomSelectionNFTPoolStatus = (poolInfo: RandomSelectionLPProps): RandomSelectionNFTResultProps => {
+export const useGetRandomSelectionLPPoolStatus = (poolInfo: RandomSelectionLPProps): RandomSelectionNFTResultProps => {
   const { account } = useActiveWeb3React()
   const { participant, claimAt, openAt, closeAt } = poolInfo
   const isJoined = useIsJoinedRandomSelectionPool(poolInfo.poolId, account, poolInfo.contract, poolInfo.ethChainId)
@@ -132,4 +132,4 @@ export const useGetRandomSelectionNFTPoolStatus = (poolInfo: RandomSelectionLPPr
   )
 }
 
-export default useRandomSelectionNFTPoolInfo
+export default useRandomSelectionLPPoolInfo

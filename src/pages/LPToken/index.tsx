@@ -5,14 +5,22 @@ import { ProjectHead, Tabs } from 'pages/projectIntro'
 import AuctionCard from './auctionCard'
 import LPPoolCard from './components/LPPoolCard'
 import PoolStepper from './components/Stepper'
+import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 const LPToken = () => {
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(21423)
+  console.log('poolInfo', poolInfo)
+
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   return (
     <Box>
       <Box>
         <ProjectHead item={item} />
-        <AuctionCard />
-        <PoolStepper poolInfo={{ openAt: 1705298431, closeAt: 1705298432, claimAt: 1705384831 }} />
+        {poolInfo && (
+          <>
+            <AuctionCard poolInfo={poolInfo} />
+            <PoolStepper poolInfo={poolInfo} />
+          </>
+        )}
         <LPPoolCard />
         <Tabs item={item} />
         <FooterPc />

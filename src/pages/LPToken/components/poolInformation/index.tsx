@@ -1,6 +1,8 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 import EmptyImg from 'assets/imgs/lpToken/empty.png'
+import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
+import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
 const InterLargeTitle = styled(Typography)`
   color: #000;
   font-family: Poppins;
@@ -11,8 +13,8 @@ const InterLargeTitle = styled(Typography)`
   text-transform: capitalize;
 `
 const Icon1 = getIcon('AUCTION')
-const Icon2 = getIcon('MUBI')
-const PoolInformation = () => {
+const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  const { poolStatus } = useGetRandomSelectionLPPoolStatus(poolInfo)
   return (
     <Stack gap={24} sx={{ height: '100%', padding: '40px 32px 64px 32px', borderRadius: 20, background: '#F6F6F3' }}>
       <Stack flexDirection={'row'} gap={13}>
@@ -37,7 +39,7 @@ const PoolInformation = () => {
             }}
           />
           <img
-            src={Icon2 || ''}
+            src={Icon1 || ''}
             style={{
               position: 'absolute',
               left: 16,
@@ -46,10 +48,9 @@ const PoolInformation = () => {
             }}
           />
         </Stack>
-        <InterLargeTitle>Auction/USDT Pool information</InterLargeTitle>
+        <InterLargeTitle>Auction/SAVM Pool information</InterLargeTitle>
       </Stack>
-      {false && <EmptyPanel />}
-      {true && <DetailPanel />}
+      {poolStatus === RandomPoolStatus.Closed ? <DetailPanel /> : <EmptyPanel />}
     </Stack>
   )
 }
@@ -127,8 +128,8 @@ const DetailPanel = () => {
           </Stack>
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <img src={Icon2 || ''} style={{ width: 32, height: 32 }} />
-              <TokenNameTitle>USDT</TokenNameTitle>
+              <img src={Icon1 || ''} style={{ width: 32, height: 32 }} />
+              <TokenNameTitle>SAVM</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
               <LabelTitle>2.00</LabelTitle>

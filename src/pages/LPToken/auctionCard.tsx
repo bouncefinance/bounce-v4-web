@@ -1,7 +1,8 @@
 import { Box, Stack, Typography } from '@mui/material'
 import PoolInformation from './components/poolInformation'
 import PoolDetail from './components/poolDetail'
-const AuctionCard = () => {
+import { RandomSelectionLPProps } from 'api/pool/type'
+const AuctionCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   return (
     <Box sx={{ width: '100%', background: '#F6F6F3' }}>
       <Box sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', px: 72, pt: 84, mt: 9 }}>
@@ -28,10 +29,10 @@ const AuctionCard = () => {
         </Stack>
         <Stack flexDirection={'row'} gap={40} sx={{ padding: '48px 56px', borderRadius: 24, background: '#FFF' }}>
           <Box flex="1">
-            <PoolInformation />
+            <PoolInformation poolInfo={poolInfo} />
           </Box>
           <Box flex="1">
-            <PoolDetail />
+            <PoolDetail poolInfo={poolInfo} />
           </Box>
         </Stack>
       </Box>
