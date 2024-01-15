@@ -29,7 +29,8 @@ const LiveCard = () => {
             margin: isSm ? '0 auto' : '0 auto 30px',
             // zoom: zoomNum
             transform: `scale(1)`,
-            transformOrigin: '0 0'
+            transformOrigin: '0 0',
+            mt: 40
           }}
         >
           <Box
