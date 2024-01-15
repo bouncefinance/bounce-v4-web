@@ -316,11 +316,6 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
     address?: string
     claimed?: boolean
   }
-  userTokenAmount?: Currency
-  token1Currency: any[]
-  burnedTokens: BigintIsh[]
-  tokensAddress: string[]
-  betTokenAmount: BigintIsh[]
   totalShare: string | number
   maxPlayere: string | number
   curPlayer: string | number
