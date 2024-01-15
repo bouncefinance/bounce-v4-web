@@ -303,7 +303,26 @@ export interface RandomSelectionNFTProps extends FixedSwapPool {
     loading: boolean
   }
 }
-
+export interface RandomSelectionLPProps extends FixedSwapPool {
+  currencyAmountTotal1?: CurrencyAmount
+  currencySwappedTotal1?: CurrencyAmount
+  ethChainId: ChainId
+  mintContractAddress: string
+  participant: {
+    isJoined?: boolean
+    address?: string
+    claimed?: boolean
+  }
+  userTokenAmount?: Currency
+  totalShare: string | number
+  maxPlayere: string | number
+  curPlayer: string | number
+  whitelistData?: {
+    isUserInWhitelist: boolean | undefined
+    isPermit: boolean | undefined
+    loading: boolean
+  }
+}
 export interface NFTPoolListProp {
   id: number
   chainId: number

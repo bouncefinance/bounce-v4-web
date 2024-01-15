@@ -1,4 +1,4 @@
-import { PoolType, RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
+import { PoolType, RandomPoolStatus, RandomSelectionLPProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useRandomSelectionLPContract } from 'hooks/useContract'
@@ -11,7 +11,6 @@ import {
 } from 'hooks/useRandomSelectionPool'
 import { useRequest } from 'ahooks'
 import { getCurrentTimeStamp } from 'utils'
-import { useTokens } from 'state/wallet/hooks'
 
 const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
   const _backedId = backedId
@@ -43,19 +42,11 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     undefined,
     poolInfo?.ethChainId
   )
-  const tokensInfo = useSingleCallResult(
-    contract,
-    'getBetInfo',
-    [poolInfo?.poolId],
-    undefined,
-    poolInfo?.ethChainId
-  ).result
 
   const poolsInfo = useSingleCallResult(contract, 'pools', [poolInfo?.poolId], undefined, poolInfo?.ethChainId).result
-  const token1Currency = useTokens(tokensInfo?.[0] ?? [], poolInfo?.ethChainId)
 
-  const data: RandomSelectionNFTProps | undefined = useMemo(() => {
-    if (!poolInfo || !token1Currency) return undefined
+  const data: RandomSelectionLPProps | undefined = useMemo(() => {
+    if (!poolInfo) return undefined
 
     return {
       ...poolInfo,
@@ -70,10 +61,6 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
       mintContractAddress: poolsInfo?.mintContract,
       totalShare: poolsInfo?.nShare,
       maxPlayere: poolsInfo?.maxPlayer,
-      burnedTokens: tokensInfo?.[2],
-      tokensAddress: tokensInfo?.[0],
-      betTokenAmount: tokensInfo?.[1],
-      token1Currency: token1Currency,
       curPlayer: playerCount.result?.[0].toString() || 0,
       creatorClaimed: creatorClaimRes?.result?.[0] || false
     }
@@ -83,8 +70,6 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
     poolsInfo?.mintContract,
     poolsInfo?.nShare,
     poolsInfo?.maxPlayer,
-    tokensInfo,
-    token1Currency,
     playerCount.result,
     creatorClaimRes?.result
   ])
@@ -96,16 +81,14 @@ const useRandomSelectionNFTPoolInfo = (backedId?: number) => {
   }
 }
 
-export const useGetRandomSelectionNFTPoolStatus = (
-  poolInfo: RandomSelectionNFTProps
-): RandomSelectionNFTResultProps => {
+export const useGetRandomSelectionNFTPoolStatus = (poolInfo: RandomSelectionLPProps): RandomSelectionNFTResultProps => {
   const { account } = useActiveWeb3React()
   const { participant, claimAt, openAt, closeAt } = poolInfo
   const isJoined = useIsJoinedRandomSelectionPool(poolInfo.poolId, account, poolInfo.contract, poolInfo.ethChainId)
   const isWinnerSeedDone = useIsWinnerSeedDone(
     poolInfo.poolId,
     poolInfo.contract,
-    PoolType.LOTTERY_BURNING,
+    PoolType.RANDOM_SELECTION_LP,
     poolInfo.ethChainId
   )
   const { isWinner } = useIsWinnerForRandomSelectionPool(
@@ -113,7 +96,7 @@ export const useGetRandomSelectionNFTPoolStatus = (
     account,
     poolInfo.contract,
     isWinnerSeedDone,
-    PoolType.LOTTERY_BURNING,
+    PoolType.RANDOM_SELECTION_LP,
     poolInfo.ethChainId
   )
   const { claimed } = participant

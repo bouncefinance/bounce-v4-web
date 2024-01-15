@@ -16,8 +16,8 @@ const PoolDetail = () => {
   return (
     <Box>
       <Header />
-      {false && <Card />}
-      <WinnerPage />
+      {true && <Card />}
+      {false && <WinnerPage />}
       {action === 'GO_TO_CHECK' ? <CheckBox onToBid={() => setAction('BID')} /> : <PoolProgress />}
       {action !== 'GO_TO_CHECK' && <AuctionButtons onCheck={onGoCheckBox} action={action} />}
     </Box>
