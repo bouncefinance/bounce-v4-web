@@ -8,36 +8,16 @@ import UserAvatar5 from 'assets/imgs/nftLottery/user-avatar5.png'
 
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
-const Title1 = styled(Typography)`
-  color: #474543;
-  /* D/H4 */
-  font-family: Inter;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 140%; /* 28px */
-  letter-spacing: -0.4px;
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    font-size: 16px;
-  }
-`
-const Title2 = styled(Typography)`
-  color: #76ba1e;
-  leading-trim: both;
-  text-edge: cap;
-  font-variant-numeric: lining-nums proportional-nums;
+const InterH3 = styled(Typography)`
+  color: var(--yellow-d, var(--yellow-yellow-d, #959595));
 
-  /* D/H3 */
+  /* D/H6 */
   font-family: Inter;
-  font-size: 28px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 600;
-  line-height: 130%; /* 36.4px */
-  letter-spacing: -0.56px;
-  text-transform: capitalize;
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    font-size: 20px;
-  }
+  font-weight: 500;
+  line-height: 150%; /* 21px */
+  letter-spacing: -0.28px;
 `
 const AvatarGroupStyle = styled(AvatarGroup)`
   &.MuiAvatarGroup-root {
@@ -58,14 +38,9 @@ const AvatarGroupStyle = styled(AvatarGroup)`
 `
 
 const AvatarStyle = styled(Avatar)`
-  width: 54px;
-  height: 54px;
-  border-radius: 54px;
-  border: 2.25px solid #fff;
-  ${({ theme }) => theme.breakpoints.down('sm')} {
-    width: 30px;
-    height: 30px;
-  }
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
 `
 
 const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
@@ -74,19 +49,20 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
   const len = useMemo(() => {
     const list = avatarList.splice(0, curPlayer)
     if (isSm && list.length > 3) {
-      return list.slice(0, 3)
+      return list.slice(0, 3).reverse()
     }
-    return list
+    return list.reverse()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [curPlayer, isSm])
 
   return (
-    <Stack sx={{ position: 'relative' }} flexDirection={'row'}>
+    <Stack sx={{ position: 'relative' }} flexDirection={'row'} alignItems={'center'}>
       <AvatarGroupStyle>
         {len.map((i, d) => (
           <AvatarStyle key={i + d} alt="DefaultAvatar" src={i} />
         ))}
       </AvatarGroupStyle>
+      +
     </Stack>
   )
 }
@@ -95,7 +71,7 @@ const PoolProgress = () => {
   const isSm = useBreakpoint('sm')
 
   return (
-    <Stack gap={isSm ? 16 : 20}>
+    <Stack gap={8} mb={16}>
       <Stack
         flexDirection={isSm ? 'column' : 'row'}
         justifyContent={'space-between'}
@@ -103,37 +79,40 @@ const PoolProgress = () => {
         gap={isSm ? 8 : 0}
       >
         {/* <Title1>{allStatus.poolStatus === RandomPoolStatus.Upcoming ? 'Number of entries' : 'Participant'} </Title1> */}
-        <Title1>{'Number of entries'} </Title1>
+        <InterH3 sx={{ fontSize: 12 }}>{'Number of entries'} </InterH3>
 
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
           {/* {allStatus.poolStatus !== RandomPoolStatus.Upcoming && <AvatarList curPlayer={Number(poolInfo.curPlayer)} />} */}
           {<AvatarList curPlayer={Number(5)} />}
-
-          <Stack flexDirection={'row'} alignItems={'center'}>
-            {/* <Title2>{poolInfo.curPlayer} </Title2> */}
-            <Title2>{200} </Title2>
-
-            <span style={{ padding: '0 5px 0 10px' }}>/</span>
-            {/* <Title1>{poolInfo.maxPlayere}</Title1> */}
-            <Title1>{2000}</Title1>
-          </Stack>
         </Stack>
       </Stack>
       <LinearProgress
         sx={{
           '&.MuiLinearProgress-root': {
-            height: 8,
-            background: '#D9D9D9'
+            height: 6,
+            background: '#959595',
+            borderRadius: 4
           },
           '& .MuiLinearProgress-bar': {
-            background: '#76BA1E'
+            background: '#B5E529',
+            borderRadius: 4
           }
         }}
         color="success"
         variant="determinate"
         // value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
-        value={100}
+        value={50}
       />
+      <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+        {/* <Title2>{poolInfo.curPlayer} </Title2> */}
+        <InterH3 sx={{ color: '#B5E529' }}>{200} </InterH3>
+
+        {/* <Title1>{poolInfo.maxPlayere}</Title1> */}
+        <InterH3 sx={{ fontWeight: 400 }}>
+          <span style={{ padding: '0 5px 0 10px', fontWeight: 500 }}>/</span>
+          {2000}
+        </InterH3>
+      </Stack>
     </Stack>
   )
 }
