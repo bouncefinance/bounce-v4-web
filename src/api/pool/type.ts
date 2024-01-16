@@ -6,6 +6,7 @@ import { IReleaseType } from 'bounceComponents/create-auction-pool/types'
 import { BackedTokenType } from 'pages/account/MyTokenOrNFT'
 import { BigintIsh } from 'constants/token/constants'
 import { Position } from '@uniswap/v3-sdk'
+import BigNumber from 'bignumber.js'
 
 export enum PoolType {
   'FixedSwap' = 1,
@@ -319,6 +320,8 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
   totalShare: string | number
   maxPlayere: string | number
   curPlayer: string | number
+  token0Price: BigNumber | undefined
+  token1Price: BigNumber | undefined
   whitelistData?: {
     isUserInWhitelist: boolean | undefined
     isPermit: boolean | undefined

@@ -36,6 +36,7 @@ import LAUNCHPAD_COIN_ABI from '../constants/abis/launchpad-coin.json'
 import STAKE_TOKEN_ABI from '../constants/abis/stake-token.json'
 import STAKE_TOKEN_WITH_TIME_ABI from '../constants/abis/stake-token-with-time-weight.json'
 import RANDOM_SELECTION_MULTI_TOKEN_ABI from '../constants/abis/randomSelectionMultiToken.json'
+import UNI_V3_QUOTER_ABI from '../constants/abis/uniswapv3quoter.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -59,6 +60,7 @@ import {
   RANDOM_SELECTION_LP_CONTRACT_ADDRESSES
 } from '../constants'
 import INONFUNGIBLE_POSITION_MANAGER from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
+import { UNI_V3_POSITION_ADDRESSES, UNI_V3_QUOTER_ADDRESSES } from 'constants/uniswap'
 // returns null on errors
 export function useContract(
   address: string | undefined,
@@ -355,10 +357,21 @@ export function useRandomSelectionMultiTokenContract(address?: string, queryChai
 }
 
 export function useUniV3PositionContract(queryChainId?: ChainId) {
+  const { chainId: _chainId } = useActiveWeb3React()
   return useContract(
-    '0x1238536071E1c677A632429e3655c799b22cDA52',
+    queryChainId || _chainId ? UNI_V3_POSITION_ADDRESSES[(queryChainId || _chainId) as ChainId] : undefined,
     INONFUNGIBLE_POSITION_MANAGER.abi,
-    true,
+    false,
+    queryChainId
+  )
+}
+
+export function useUniV3QuoterContract(queryChainId?: ChainId) {
+  const { chainId: _chainId } = useActiveWeb3React()
+  return useContract(
+    queryChainId || _chainId ? UNI_V3_QUOTER_ADDRESSES[(queryChainId || _chainId) as ChainId] : undefined,
+    UNI_V3_QUOTER_ABI,
+    false,
     queryChainId
   )
 }

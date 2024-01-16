@@ -509,7 +509,6 @@ export function InviteBtn({
 }
 
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
-  console.log('🚀 ~ file: index.tsx:512 ~ ProjectHead ~ item:', item)
   const { data: poolInfo, run: getPoolInfo } = usePoolInfo(item.backedId)
   const { userId } = useUserInfo()
   const isMD = useIsMDDown()
@@ -955,7 +954,6 @@ export function Tabs({ item, isDark, hideTitle }: { item: IPrivatePadProp; isDar
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = isDark ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
   const [tab, setTab] = useState(tabs[0])
-  console.log(setTab)
 
   return (
     <Box
