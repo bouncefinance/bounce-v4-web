@@ -310,10 +310,10 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
   currencySwappedTotal1?: CurrencyAmount
   position?: Position
   userTotalFeesReward?: {
-    claimableToken0: CurrencyAmount
-    claimableToken1: CurrencyAmount
-    claimedToken0: CurrencyAmount
-    claimedToken1: CurrencyAmount
+    claimableToken0?: CurrencyAmount
+    claimableToken1?: CurrencyAmount
+    claimedToken0?: CurrencyAmount
+    claimedToken1?: CurrencyAmount
   }
   PoolTotal0Fees?: CurrencyAmount
   PoolTotal1Fees?: CurrencyAmount

@@ -109,6 +109,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
     undefined,
     poolInfo?.ethChainId
   ).result
+
   const poolTotal0FeesRes = useSingleCallResult(
     contract,
     'feeTotal0',
@@ -139,20 +140,20 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   }, [_token1, poolTotal1FeesRes])
 
   const userTotalFeesReward = useMemo(() => {
-    if (
-      poolFeesRes &&
-      poolFeesRes.claimableToken0 &&
-      poolFeesRes.claimableToken1 &&
-      poolFeesRes.claimedToken0 &&
-      poolFeesRes.claimedToken1 &&
-      _token0 &&
-      _token1
-    ) {
+    if (poolFeesRes && _token0 && _token1) {
       return {
-        claimableToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimableToken0),
-        claimableToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimableToken1),
-        claimedToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimedToken0),
-        claimedToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimedToken1)
+        claimableToken0: poolFeesRes.claimable0
+          ? CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimable0.toString())
+          : undefined,
+        claimableToken1: poolFeesRes.claimable1
+          ? CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimable1.toString())
+          : undefined,
+        claimedToken0: poolFeesRes.claimed0
+          ? CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimed0.toString())
+          : undefined,
+        claimedToken1: poolFeesRes.claimed1
+          ? CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimed1.toString())
+          : undefined
       }
     }
     return undefined

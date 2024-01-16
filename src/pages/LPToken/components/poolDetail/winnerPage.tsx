@@ -5,7 +5,7 @@ import Icon2 from 'assets/images/eth_logo.png'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 const GrayCard = styled(Box)`
   display: flex;
-  padding: 24px 32px;
+  padding: 24px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -61,8 +61,8 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
           <P1 sx={{ fontWeight: 600, fontSize: 20 }}>SAVM</P1>
         </Stack>
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-          <P1>{poolInfo.userTotalFeesReward?.claimableToken0.toSignificant()}</P1>
-          <P1>$2,800</P1>
+          <P1>{poolInfo.userTotalFeesReward?.claimableToken0?.toSignificant(6) || '--'}</P1>
+          {/* <P1>$2,800</P1> */}
         </Stack>
       </GrayCard>
       <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -71,8 +71,8 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
           <P1 sx={{ fontWeight: 600, fontSize: 20 }}>ETH</P1>
         </Stack>
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-          <P1>{poolInfo.userTotalFeesReward?.claimableToken1.toSignificant()}</P1>
-          <P1>$2,800</P1>
+          <P1>{poolInfo.userTotalFeesReward?.claimableToken1?.toSignificant(6) || '--'}</P1>
+          {/* <P1>$2,800</P1> */}
         </Stack>
       </GrayCard>
     </Box>
