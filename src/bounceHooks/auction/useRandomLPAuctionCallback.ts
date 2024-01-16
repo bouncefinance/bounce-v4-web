@@ -1,4 +1,4 @@
-import { PoolType, RandomSelectionLPProps, RandomSelectionNFTProps } from 'api/pool/type'
+import { RandomSelectionLPProps } from 'api/pool/type'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback } from 'react'
 import { CurrencyAmount } from 'constants/token'
@@ -56,18 +56,13 @@ export function useRandomNFTCreatorClaim(poolId: number | string, name: string, 
   return { submitted, run, runWithModal }
 }
 
-export function useRandomNFTUserClaim(
-  poolInfo: RandomSelectionNFTProps,
-  selectTokenIndex: number | null | undefined,
-  isWinner: boolean,
-  contract?: string
-) {
+export function useRandomLPUserClaim(poolInfo: RandomSelectionLPProps, isWinner: boolean, contract?: string) {
   const { account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
 
   const submitted = useUserHasSubmittedRecords(account || undefined, 'random_nft_user_claim', poolInfo.poolId)
 
-  const randomContract = useRandomSelectionNFTBurningContract(contract)
+  const randomContract = useRandomSelectionLPContract(contract)
 
   const run = useCallback(async () => {
     if (!account) {
@@ -87,7 +82,7 @@ export function useRandomNFTUserClaim(
       if (Number(poolInfo.curPlayer) > Number(poolInfo.totalShare)) {
         const userRandomIsWinterProof = await getUserRandomIsWinterProof({
           address: account,
-          category: PoolType.LOTTERY_BURNING,
+          category: poolInfo.category,
           chainId: poolInfo.chainId,
           poolId: poolInfo.poolId,
           tokenType: 1
@@ -97,7 +92,7 @@ export function useRandomNFTUserClaim(
     } else {
       const userRandomFailedProof = await getUserRandomFailedProof({
         address: account,
-        category: PoolType.LOTTERY_BURNING,
+        category: poolInfo.category,
         chainId: poolInfo.chainId,
         poolId: poolInfo.poolId,
         tokenType: 1
@@ -115,7 +110,7 @@ export function useRandomNFTUserClaim(
       gasLimit: calculateGasMargin(estimatedGas)
     }).then((response: TransactionResponse) => {
       addTransaction(response, {
-        summary: `Claim Lottery NFT`,
+        summary: `Claim Random LP`,
         userSubmitted: {
           account,
           action: `random_selection_user_claim`,
@@ -130,6 +125,7 @@ export function useRandomNFTUserClaim(
     poolInfo.totalShare,
     poolInfo.curPlayer,
     poolInfo.poolId,
+    poolInfo.category,
     poolInfo.chainId,
     isWinner,
     addTransaction
