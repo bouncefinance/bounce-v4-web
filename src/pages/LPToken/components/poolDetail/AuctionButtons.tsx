@@ -16,6 +16,7 @@ import { ReactComponent as CountdownSvg } from 'assets/imgs/lpToken/Countdown.sv
 import { ReactComponent as GreenSvg } from 'assets/imgs/lpToken/green.svg'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useMemo } from 'react'
+import dayjs from 'dayjs'
 export const BaseButton = styled(Button)`
   width: 100%;
   padding: 20px;
@@ -50,6 +51,17 @@ const LoadingButtonStyle = styled(LoadingButton)`
   font-weight: 400;
   line-height: 150%; /* 24px */
 `
+const getSundayDate = () => {
+  const today = dayjs()
+  const dayOfWeek = today.day()
+  const daysUntilSunday = 7 - dayOfWeek
+  const nearestSunday = today.add(daysUntilSunday, 'day').startOf('day')
+  const timestamp = nearestSunday.unix()
+  const sundayFormat = nearestSunday.format('YYYY-MM-DD')
+
+  return [sundayFormat, timestamp]
+}
+const [sundayFormat, timestamp] = getSundayDate()
 const AuctionButtons = ({
   onCheck,
   action,
@@ -64,8 +76,11 @@ const AuctionButtons = ({
   const [countdown, { days, hours, minutes, seconds }] = useCountDown({
     targetDate: poolInfo.openAt * 1000
   })
+  const [sundayCountdown, sundayTime] = useCountDown({
+    targetDate: Number(timestamp) * 1000
+  })
   const { runWithModal, submitted } = useRandomLPBetCallback(poolInfo)
-  const { runWithModal: noWinnerClaim, submitted: noWinnerSubmitted } = useRandomLPUserClaim(
+  const { runWithModal: onClaim, submitted: noWinnerSubmitted } = useRandomLPUserClaim(
     poolInfo,
     allStatus.isUserWinner,
     poolInfo.contract
@@ -161,9 +176,35 @@ const AuctionButtons = ({
         )
       }
       return (
-        <LoadingButtonStyle onClick={() => noWinnerClaim()} loading={noWinnerSubmitted.submitted}>
+        <LoadingButtonStyle onClick={() => onClaim()} loading={noWinnerSubmitted.submitted}>
           Claim Token Back
         </LoadingButtonStyle>
+      )
+    }
+    if (allStatus.isUserJoined && allStatus.isUserWinner) {
+      return (
+        <Box>
+          {allStatus.isUserClaimed ? (
+            <BaseButton disabled>
+              <Stack flexDirection={'row'} justifyContent={'space-between'} width={'100%'}>
+                <Typography component={'span'}>Join</Typography>
+                {sundayCountdown > 0 ? (
+                  <Typography component={'span'}>
+                    {sundayTime.days}d : {sundayTime.hours}h : {sundayTime.minutes}m : {sundayTime.seconds}s
+                  </Typography>
+                ) : null}
+              </Stack>
+            </BaseButton>
+          ) : (
+            <LoadingButtonStyle onClick={() => onClaim()} loading={noWinnerSubmitted.submitted}>
+              Claim Token
+            </LoadingButtonStyle>
+          )}
+          <Stack mt={24}>
+            <Typography>We distribute earnings once a week</Typography>
+            <Typography>Next release time:{sundayFormat}</Typography>
+          </Stack>
+        </Box>
       )
     }
   }

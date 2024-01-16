@@ -110,7 +110,7 @@ export function useRandomLPUserClaim(poolInfo: RandomSelectionLPProps, isWinner:
       gasLimit: calculateGasMargin(estimatedGas)
     }).then((response: TransactionResponse) => {
       addTransaction(response, {
-        summary: `Claim Random LP`,
+        summary: `Claim Random Token`,
         userSubmitted: {
           account,
           action: `random_selection_user_claim`,
