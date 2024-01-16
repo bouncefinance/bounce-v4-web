@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material'
-import { PoolStatus } from 'api/pool/type'
+import { PoolStatus, RandomSelectionLPProps } from 'api/pool/type'
 import PoolStatusBox from 'bounceComponents/fixed-swap/ActionBox/PoolStatus'
 
-const Header = () => {
+const Header = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   return (
     <Box sx={{ p: 10, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
       <Typography
@@ -21,7 +21,12 @@ const Header = () => {
         Join The Pool
       </Typography>
 
-      <PoolStatusBox status={PoolStatus.Upcoming} claimAt={0} openTime={1705331413} closeTime={1705331413} />
+      <PoolStatusBox
+        status={PoolStatus.Upcoming}
+        claimAt={poolInfo.claimAt}
+        openTime={poolInfo.openAt}
+        closeTime={poolInfo.closeAt}
+      />
     </Box>
   )
 }

@@ -16,8 +16,14 @@ const LPToken = () => {
     <Box>
       <Box>
         <ProjectHead item={item} />
-        <AuctionCard />
         <PoolStepper poolInfo={{ openAt: 1705298431, closeAt: 1705298432, claimAt: 1705384831 }} />
+        {poolInfo && <LPPoolCard poolInfo={poolInfo} />}
+        {poolInfo && (
+          <>
+            <AuctionCard poolInfo={poolInfo} />
+            <PoolStepper poolInfo={poolInfo} />
+          </>
+        )}
         {poolInfo && <LPPoolCard poolInfo={poolInfo} />}
         <Tabs item={item} />
         <FooterPc />

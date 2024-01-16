@@ -25,6 +25,7 @@ import Erc20EnglishAuctionPool from './Erc20EnglishAuctionPool'
 import DutchAuction from './DutchAuction'
 import { getUserDashboardStat } from 'api/account'
 import MutantEnglish721Pool from './MutantEnglish721Pool'
+import Erc20LpOffering from './Erc20LpOffering'
 
 const steps = ['1. Token Information', '2. Auction Parameters', '3. Advanced Settings']
 
@@ -58,6 +59,9 @@ const CreateAuctionPool = () => {
         ) : null}
         {valuesState.auctionType === AuctionType.FIXED_PRICE && valuesState.tokenType === TokenType.ERC20 ? (
           <Erc20Pool />
+        ) : null}
+        {valuesState.auctionType === AuctionType.INITIAL_LP_OFFERING && valuesState.tokenType === TokenType.ERC20 ? (
+          <Erc20LpOffering />
         ) : null}
         {valuesState.auctionType === AuctionType.DUTCH_AUCTION && valuesState.tokenType === TokenType.ERC20 ? (
           <DutchAuction />

@@ -1,4 +1,5 @@
 import { Avatar, AvatarGroup, LinearProgress, Stack, Typography, styled } from '@mui/material'
+import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
 // import { RandomPoolStatus, RandomSelectionNFTProps, RandomSelectionNFTResultProps } from 'api/pool/type'
 import DefaultAvatar from 'assets/imgs/nftLottery/default-ava.svg'
 import UserAvatar2 from 'assets/imgs/nftLottery/user-avatar2.png'
@@ -67,7 +68,7 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
   )
 }
 
-const PoolProgress = () => {
+const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPProps; poolStatus: RandomPoolStatus }) => {
   const isSm = useBreakpoint('sm')
 
   return (
@@ -82,8 +83,7 @@ const PoolProgress = () => {
         <InterH3 sx={{ fontSize: 12 }}>{'Number of entries'} </InterH3>
 
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
-          {/* {allStatus.poolStatus !== RandomPoolStatus.Upcoming && <AvatarList curPlayer={Number(poolInfo.curPlayer)} />} */}
-          {<AvatarList curPlayer={Number(5)} />}
+          {poolStatus !== RandomPoolStatus.Upcoming && <AvatarList curPlayer={Number(poolInfo.curPlayer)} />}
         </Stack>
       </Stack>
       <LinearProgress
@@ -100,17 +100,13 @@ const PoolProgress = () => {
         }}
         color="success"
         variant="determinate"
-        // value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
-        value={50}
+        value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
       />
       <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-        {/* <Title2>{poolInfo.curPlayer} </Title2> */}
-        <InterH3 sx={{ color: '#B5E529' }}>{200} </InterH3>
-
-        {/* <Title1>{poolInfo.maxPlayere}</Title1> */}
+        <InterH3 sx={{ color: '#B5E529' }}>{poolInfo.curPlayer} </InterH3>
         <InterH3 sx={{ fontWeight: 400 }}>
           <span style={{ padding: '0 5px 0 10px', fontWeight: 500 }}>/</span>
-          {2000}
+          {poolInfo.maxPlayere}
         </InterH3>
       </Stack>
     </Stack>

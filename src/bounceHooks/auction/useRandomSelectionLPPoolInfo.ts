@@ -18,7 +18,7 @@ import { CurrencyAmount } from 'constants/token'
 import { FeeAmount, Pool, Position, computePoolAddress } from '@uniswap/v3-sdk'
 import IUniswapV3PoolABI from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
 
-const useRandomSelectionNFTPoolInfo = (chainId: ChainId, backedId?: number) => {
+const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   const _backedId = backedId
   const {
     data: poolInfo,
@@ -164,7 +164,7 @@ const useRandomSelectionNFTPoolInfo = (chainId: ChainId, backedId?: number) => {
   }
 }
 
-export const useGetRandomSelectionNFTPoolStatus = (poolInfo: RandomSelectionLPProps): RandomSelectionNFTResultProps => {
+export const useGetRandomSelectionLPPoolStatus = (poolInfo: RandomSelectionLPProps): RandomSelectionNFTResultProps => {
   const { account } = useActiveWeb3React()
   const { participant, claimAt, openAt, closeAt } = poolInfo
   const isJoined = useIsJoinedRandomSelectionPool(poolInfo.poolId, account, poolInfo.contract, poolInfo.ethChainId)
@@ -215,4 +215,4 @@ export const useGetRandomSelectionNFTPoolStatus = (poolInfo: RandomSelectionLPPr
   )
 }
 
-export default useRandomSelectionNFTPoolInfo
+export default useRandomSelectionLPPoolInfo
