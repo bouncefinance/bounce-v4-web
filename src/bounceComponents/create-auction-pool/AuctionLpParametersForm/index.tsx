@@ -1,21 +1,15 @@
-import { Button, Stack, OutlinedInput, Box, Typography, FormControlLabel, Alert } from '@mui/material'
-import { Field, Form, Formik } from 'formik'
-import { SetStateAction } from 'react'
+import { Button, Stack, Box, Typography, Alert } from '@mui/material'
+import { Form, Formik } from 'formik'
+import { SetStateAction, useState } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
 import { AllocationStatus } from '../types'
 import FakeOutlinedInput from '../FakeOutlinedInput'
 import TokenDialog from '../TokenDialog'
-import {
-  ActionType,
-  useAuctionERC20Currency,
-  useAuctionInChain,
-  useValuesDispatch,
-  useValuesState
-} from '../ValuesProvider'
-import Radio from '../Radio'
-import RadioGroupFormItem from '../RadioGroupFormItem'
+import { ActionType, useAuctionInChain, useValuesDispatch, useValuesState } from '../ValuesProvider'
+// import Radio from '../Radio'
+// import RadioGroupFormItem from '../RadioGroupFormItem'
 import { BigNumber } from 'bignumber.js'
 // import LogoSVG from 'assets/imgs/components/logo.svg'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -29,7 +23,8 @@ import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
-
+import { isAddress } from 'utils'
+import { Currency } from 'constants/token'
 interface FormValues {
   tokenFromAddress: string
   tokenFromSymbol: string
@@ -39,17 +34,32 @@ interface FormValues {
   tokenToSymbol: string
   tokenToLogoURI?: string
   tokenToDecimals: string | number
-  swapRatio: string
+  // swapRatio: string
   poolSize: string
-  allocationStatus: AllocationStatus
-  allocationPerWallet: string
+  // allocationStatus: AllocationStatus
+  // allocationPerWallet: string
+}
+
+const makeCurrency = (_token: Token) => {
+  if (isAddress(_token.address) && _token.chainId && _token.decimals) {
+    return new Currency(
+      _token.chainId,
+      _token.address,
+      _token.decimals,
+      _token.symbol,
+      _token.name,
+      _token.logoURI,
+      _token.dangerous
+    )
+  }
+  return undefined
 }
 
 const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-  const { currencyFrom } = useAuctionERC20Currency()
-  const balance = useCurrencyBalance(account || undefined, currencyFrom, auctionInChainId)
+  const [currencyTo, setCurrencyTo] = useState<Currency>()
+  const balance = useCurrencyBalance(account || undefined, currencyTo, auctionInChainId)
   const isSm = useBreakpoint('sm')
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
@@ -59,14 +69,14 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
         'Please choose a different token',
         (_, context) => context.parent.tokenFromAddress !== context.parent.tokenToAddress
       ),
-    swapRatio: Yup.number()
-      .positive('Swap ratio must be positive')
-      .typeError('Please input valid number')
-      // .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-      //   const _value = new BigNumber(value || 0).toFixed()
-      //   return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-      // })
-      .required('Swap ratio is required'),
+    // swapRatio: Yup.number()
+    //   .positive('Swap ratio must be positive')
+    //   .typeError('Please input valid number')
+    // .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+    //   const _value = new BigNumber(value || 0).toFixed()
+    //   return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+    // })
+    // .required('Swap ratio is required'),
     poolSize: Yup.number()
       .positive('Amount must be positive')
       .typeError('Please input valid number')
@@ -81,32 +91,32 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
         value =>
           !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
       ),
-    allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus)),
-    allocationPerWallet: Yup.number()
-      .when('allocationStatus', {
-        is: AllocationStatus.Limited,
-        then: Yup.number()
-          .typeError('Please input valid number')
-          .positive('Allocation per wallet must be positive')
-          .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
-            const _value = new BigNumber(value || 0).toFixed()
-            return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
-          })
-          .required('Allocation per wallet is required')
-      })
-      .when('allocationStatus', {
-        is: AllocationStatus.Limited,
-        then: Yup.number()
-          .typeError('Please input valid number')
-          .test(
-            'GREATER_THAN_POOL_SIZE',
-            'Allocation per wallet cannot be greater than pool size times swap ratio',
-            (value, context) =>
-              !context.parent.poolSize ||
-              !context.parent.swapRatio ||
-              (value || 0) <= context.parent.poolSize * context.parent.swapRatio
-          )
-      })
+    allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus))
+    // allocationPerWallet: Yup.number()
+    //   .when('allocationStatus', {
+    //     is: AllocationStatus.Limited,
+    //     then: Yup.number()
+    //       .typeError('Please input valid number')
+    //       .positive('Allocation per wallet must be positive')
+    //       .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
+    //         const _value = new BigNumber(value || 0).toFixed()
+    //         return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
+    //       })
+    //       .required('Allocation per wallet is required')
+    //   })
+    //   .when('allocationStatus', {
+    //     is: AllocationStatus.Limited,
+    //     then: Yup.number()
+    //       .typeError('Please input valid number')
+    //       .test(
+    //         'GREATER_THAN_POOL_SIZE',
+    //         'Allocation per wallet cannot be greater than pool size times swap ratio',
+    //         (value, context) =>
+    //           !context.parent.poolSize ||
+    //           !context.parent.swapRatio ||
+    //           (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+    //       )
+    //   })
   })
 
   const valuesState = useValuesState()
@@ -121,10 +131,10 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     tokenToSymbol: valuesState.tokenTo.symbol || '',
     tokenToLogoURI: valuesState.tokenTo.logoURI || '',
     tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
-    swapRatio: valuesState.swapRatio || '',
-    poolSize: valuesState.poolSize || '',
-    allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
-    allocationPerWallet: valuesState.allocationPerWallet || ''
+    // swapRatio: valuesState.swapRatio || '',
+    poolSize: valuesState.poolSize || ''
+    // allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
+    // allocationPerWallet: valuesState.allocationPerWallet || ''
   }
 
   const showTokenDialog = (
@@ -142,6 +152,14 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
           tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenToDecimals: res.decimals
         })
+        const currency = makeCurrency({
+          chainId: chainId,
+          address: res.address,
+          logoURI: decodeURIComponent(res.smallUrl || ''),
+          symbol: res.symbol?.toLocaleUpperCase() || '',
+          decimals: res.decimals
+        })
+        setCurrencyTo(currency)
       })
       .catch(err => {
         console.log('TokenDialog Rejected: ', err)
@@ -169,10 +187,10 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                 symbol: values.tokenToSymbol,
                 decimals: values.tokenToDecimals
               },
-              swapRatio: values.swapRatio,
-              poolSize: values.poolSize,
-              allocationPerWallet: values.allocationPerWallet,
-              allocationStatus: values.allocationStatus
+              // swapRatio: values.swapRatio,
+              poolSize: values.poolSize
+              // allocationPerWallet: values.allocationPerWallet,
+              // allocationStatus: values.allocationStatus
             }
           })
         }}
@@ -221,7 +239,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
               </Box>
 
               {/* Swap Ratio */}
-              <Box>
+              {/* <Box>
                 <Typography variant="h3" sx={{ fontSize: 16, mb: 8 }}>
                   Swap Ratio
                 </Typography>
@@ -244,7 +262,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                     />
                   </FormItem>
                 </Stack>
-              </Box>
+              </Box> */}
 
               {/* Pool Size */}
               <Box>
@@ -281,8 +299,8 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                         >
                           Max
                         </Button>
-                        <TokenImage alt={values.tokenFromSymbol} src={values.tokenFromLogoURI} size={24} />
-                        <Typography sx={{ ml: 8 }}>{values.tokenFromSymbol}</Typography>
+                        <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                        <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
                       </>
                     }
                   />
@@ -290,7 +308,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
               </Box>
 
               {/* Allocation per Wallet */}
-              <Box>
+              {/* <Box>
                 <Stack direction="row" spacing={8}>
                   <Typography variant="h3" sx={{ fontSize: 16 }}>
                     Allocation per Wallet
@@ -326,7 +344,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                     />
                   </FormItem>
                 )}
-              </Box>
+              </Box> */}
 
               <Stack direction="row" spacing={10} justifyContent="end">
                 <Button

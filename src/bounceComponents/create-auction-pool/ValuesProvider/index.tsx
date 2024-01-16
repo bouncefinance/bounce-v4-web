@@ -148,6 +148,7 @@ export enum ActionType {
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
   CommitRandomSelectionAuctionParameters = 'COMMIT_RANDOM_SELECTION_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
+  CommitLpAdvancedSettings = 'COMMIT_LP_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',
   SetWhitelist = 'SET_WHITELIST',
   SetTgBotActiveStep = 'SET_TG_BOT_ACTIVE_STEP',
@@ -252,6 +253,18 @@ type Payload = {
     creatorRatio?: string
     prevBidderRatio?: string
     lastBidderRatio?: string
+  }
+  [ActionType.CommitLpAdvancedSettings]: {
+    poolName: string
+    startTime: Moment
+    endTime: Moment
+    delayUnlockingTime: Moment
+    whitelist: string[]
+    participantStatus: ParticipantStatus
+    releaseType: IReleaseType
+    releaseDataArr: IReleaseData[]
+    winnerNumber: number
+    maxParticipantAllowed: number
   }
   [ActionType.HandleStep]: {
     activeStep: number
@@ -408,7 +421,21 @@ const reducer = (state: AuctionPool, action: Actions) => {
         prevBidderRatio: action.payload.prevBidderRatio,
         lastBidderRatio: action.payload.lastBidderRatio
       }
-
+    case ActionType.CommitLpAdvancedSettings:
+      return {
+        ...state,
+        poolName: action.payload.poolName,
+        startTime: action.payload.startTime,
+        endTime: action.payload.endTime,
+        whitelist: action.payload.whitelist,
+        releaseType: action.payload.releaseType !== undefined ? action.payload.releaseType : IReleaseType.Cliff,
+        delayUnlockingTime: action.payload.delayUnlockingTime,
+        activeStep: state.activeStep + 1,
+        completed: { ...state.completed, [state.activeStep]: true },
+        participantStatus: action.payload.participantStatus,
+        winnerNumber: action.payload.winnerNumber,
+        maxParticipantAllowed: action.payload.maxParticipantAllowed
+      }
     case ActionType.HandleStep:
       return {
         ...state,

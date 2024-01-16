@@ -1,10 +1,12 @@
 import { Box, Stack, Step, StepLabel, Stepper, Typography, styled } from '@mui/material'
 // import { FixedSwapPoolProp } from 'api/pool/type'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import StepCheckIcon from 'assets/imgs/lpToken/step-check-icon.svg'
 import { ReactComponent as StepDefaultIcon } from 'assets/imgs/lpToken/step-default.svg'
-const StepperStyle = styled(Stepper)(() => ({
+import { useRequest } from 'ahooks'
+import useBreakpoint from 'hooks/useBreakpoint'
+const StepperStyle = styled(Stepper)(({ theme }) => ({
   '& .MuiStep-root': { paddingLeft: 0, paddingRight: 0 },
   '& .MuiStep-root:last-child': {
     display: 'none !important'
@@ -39,11 +41,26 @@ const StepperStyle = styled(Stepper)(() => ({
   '.MuiStepConnector-root.Mui-active .MuiStepConnector-line,.MuiStepConnector-root.Mui-completed .MuiStepConnector-line ':
     {
       borderColor: '#E1F25C'
+    },
+  [theme.breakpoints.down('sm')]: {
+    '&.MuiStepper-root': {
+      width: 'auto !important'
+    },
+    '& .MuiStepConnector-root': {
+      marginLeft: 9
+    },
+    '& .MuiStepConnector-line': {
+      height: 50
+    },
+    '& .MuiStepLabel-root': {
+      padding: 0
     }
+  }
 }))
 
 const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
   const [activeStep, setActiveStep] = useState(0)
+  const isSm = useBreakpoint('sm')
   const nowTime = () => new Date().getTime()
   const steps = Array.from({ length: 4 }).map(() => ({ label: '', time: '' }))
   const textList = [
@@ -60,17 +77,24 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
       time: poolInfo.claimAt * 1000
     }
   ]
-  useEffect(() => {
-    if (nowTime() > poolInfo.openAt * 1000 && nowTime() < poolInfo.closeAt * 1000) {
-      setActiveStep(1)
+  useRequest(
+    async () => {
+      if (nowTime() > poolInfo.openAt * 1000 && nowTime() < poolInfo.closeAt * 1000) {
+        setActiveStep(1)
+      }
+      if (nowTime() > poolInfo.closeAt * 1000 && nowTime() < poolInfo.claimAt * 1000) {
+        setActiveStep(2)
+      }
+      if (nowTime() > poolInfo.claimAt * 1000) {
+        setActiveStep(3)
+      }
+      return null
+    },
+    {
+      pollingInterval: 2000,
+      refreshDeps: [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt]
     }
-    if (nowTime() > poolInfo.closeAt * 1000 && nowTime() < poolInfo.claimAt * 1000) {
-      setActiveStep(2)
-    }
-    if (nowTime() > poolInfo.claimAt * 1000) {
-      setActiveStep(3)
-    }
-  }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
+  )
   return (
     <Box
       sx={{
@@ -79,27 +103,34 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
         maxWidth: 1440,
         margin: '0 auto',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: isSm ? 'row-reverse' : 'column',
+        justifyContent: isSm ? 'flex-end' : 'unset',
         gap: 16,
-        mt: 40,
-        px: 72
+        mt: isSm ? 32 : 40,
+        px: isSm ? 16 : 72
       }}
     >
       <Stack
         direction={'row'}
         sx={{
           display: 'grid',
-          gridTemplateColumns: '33% 33% 34%'
+          gridTemplateColumns: isSm ? '100%' : '33% 33% 34%'
         }}
       >
         {textList.map(item => (
-          <Box key={item.label} display={'flex'} justifyContent={'flex-start'} flexDirection={'column'} pl={16}>
+          <Box
+            key={item.label}
+            display={'flex'}
+            justifyContent={'flex-start'}
+            flexDirection={'column'}
+            pl={isSm ? 0 : 16}
+          >
             <Typography color={'#959595'}>{item.label}</Typography>
             <Typography color={'#959595'}>{dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}</Typography>
           </Box>
         ))}
       </Stack>
-      <StepperStyle activeStep={activeStep}>
+      <StepperStyle activeStep={activeStep} orientation={isSm ? 'vertical' : 'horizontal'}>
         {steps.map(item => (
           <Step key={item.label}>
             <StepLabel icon={<StepDefaultIcon />}></StepLabel>
