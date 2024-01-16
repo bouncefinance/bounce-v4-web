@@ -112,38 +112,47 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   const poolTotal0FeesRes = useSingleCallResult(
     contract,
     'feeTotal0',
-    [poolAddress],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
 
   const PoolTotal0Fees = useMemo(() => {
     if (poolTotal0FeesRes && _token0) {
-      return CurrencyAmount.fromRawAmount(_token0, poolTotal0FeesRes.feesTotal0 || '0')
+      return CurrencyAmount.fromRawAmount(_token0, poolTotal0FeesRes.toString())
     }
     return undefined
   }, [_token0, poolTotal0FeesRes])
   const poolTotal1FeesRes = useSingleCallResult(
     contract,
     'feeTotal1',
-    [poolAddress],
+    [poolInfo?.poolId],
     undefined,
     poolInfo?.ethChainId
   ).result
+
   const PoolTotal1Fees = useMemo(() => {
     if (poolTotal1FeesRes && _token1) {
-      return CurrencyAmount.fromRawAmount(_token1, poolTotal1FeesRes.feesTotal1 || '0')
+      return CurrencyAmount.fromRawAmount(_token1, poolTotal1FeesRes.toString())
     }
     return undefined
   }, [_token1, poolTotal1FeesRes])
 
   const userTotalFeesReward = useMemo(() => {
-    if (poolFeesRes && _token0 && _token1) {
+    if (
+      poolFeesRes &&
+      poolFeesRes.claimableToken0 &&
+      poolFeesRes.claimableToken1 &&
+      poolFeesRes.claimedToken0 &&
+      poolFeesRes.claimedToken1 &&
+      _token0 &&
+      _token1
+    ) {
       return {
-        claimableToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimableToken0 || '0'),
-        claimableToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimableToken1 || '0'),
-        claimedToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimedToken0 || '0'),
-        claimedToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimedToken1 || '0')
+        claimableToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimableToken0),
+        claimableToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimableToken1),
+        claimedToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimedToken0),
+        claimedToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimedToken1)
       }
     }
     return undefined

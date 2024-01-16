@@ -239,7 +239,7 @@ const AuctionButtons = ({
         </LoadingButtonStyle>
       )
     }
-    return <BaseButton> Place a Bid</BaseButton>
+    return <BaseButton>Place a Bid</BaseButton>
   }
   return (
     <Box>

@@ -15,6 +15,7 @@ const Icon1 = getIcon('AUCTION')
 import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  console.log('🚀 ~ PoolInformation ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
   return (
     <Stack
@@ -118,6 +119,7 @@ const TokenNameTitle = styled(Typography)`
 `
 
 const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  console.log('🚀 ~ DetailPanel ~ poolInfo:', poolInfo)
   return (
     <Box pt={24}>
       <Stack flex={'grid'} gridTemplateColumns={'50% 50%'} flexDirection={'row'} gap={16}>
