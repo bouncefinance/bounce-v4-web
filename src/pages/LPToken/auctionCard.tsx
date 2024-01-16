@@ -1,17 +1,21 @@
 import { Box, Stack, Typography } from '@mui/material'
 import PoolInformation from './components/poolInformation'
 import PoolDetail from './components/poolDetail'
-const AuctionCard = () => {
+import { RandomSelectionLPProps } from 'api/pool/type'
+import useBreakpoint from 'hooks/useBreakpoint'
+const AuctionCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  const isSm = useBreakpoint('sm')
   return (
     <Box sx={{ width: '100%', background: '#F6F6F3' }}>
-      <Box sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', px: 72, pt: 84, mt: 9 }}>
+      <Box sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', px: isSm ? 0 : 72, pt: isSm ? 20 : 84, mt: 9 }}>
         <Stack flexDirection={'row'} justifyContent={'space-between'} mb={40}>
           <Typography
             sx={{
               fontFamily: 'Public Sans',
-              fontSize: 36,
+              fontSize: isSm ? 22 : 36,
               fontStyle: 'normal',
               fontWeight: 600,
+              paddingLeft: isSm ? 16 : 0,
               lineHeight: '130%' /* 46.8px */,
               letterSpacing: '-0.72px'
             }}
@@ -26,12 +30,16 @@ const AuctionCard = () => {
             </Typography>
           </Box> */}
         </Stack>
-        <Stack flexDirection={'row'} gap={40} sx={{ padding: '48px 56px', borderRadius: 24, background: '#FFF' }}>
-          <Box flex="1">
-            <PoolInformation />
+        <Stack
+          flexDirection={isSm ? 'column-reverse' : 'row'}
+          gap={40}
+          sx={{ padding: isSm ? '24px 16px' : '48px 56px', borderRadius: 24, background: '#FFF' }}
+        >
+          <Box flex="1" mt={0}>
+            <PoolInformation poolInfo={poolInfo} />
           </Box>
           <Box flex="1">
-            <PoolDetail />
+            <PoolDetail poolInfo={poolInfo} />
           </Box>
         </Stack>
       </Box>

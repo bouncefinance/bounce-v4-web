@@ -5,9 +5,11 @@ import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
 import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
 import useBreakpoint from 'hooks/useBreakpoint'
 import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
-const PoolCard = () => {
+import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
+import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
+const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  const { poolStatus, isUserJoined, isWinnerSeedDone, isUserWinner } = useGetRandomSelectionLPPoolStatus(poolInfo)
   const isSm = useBreakpoint('sm')
-
   const NoJoinedCard = ({
     isJoined,
     isUpcoming,
@@ -56,12 +58,12 @@ const PoolCard = () => {
                 position: 'absolute',
                 left: '50%',
                 top: isUpcoming ? 22 : '50%',
-                transform: isUpcoming ? 'translateX(-50%)' : 'translate(0%,0%)'
+                transform: isUpcoming ? 'translateX(-50%)' : 'translate(-50%,-50%)'
               }}
             >
               <Image src={Logo} width={50} height={50} />
             </Box>
-            {isUpcoming && (
+            {Number(poolInfo.curPlayer) > 0 ? (
               <Typography
                 sx={{
                   position: 'absolute',
@@ -76,10 +78,12 @@ const PoolCard = () => {
                   color: '#959595'
                 }}
               >
-                20% of the
+                {(1 / Number(poolInfo.curPlayer)) * 100} % of the
                 <br /> LP pool
                 <br /> revenue
               </Typography>
+            ) : (
+              <></>
             )}
             <Typography
               sx={{
@@ -191,7 +195,7 @@ const PoolCard = () => {
                     color: '#121212'
                   }}
                 >
-                  10
+                  {poolInfo.totalShare}
                 </Typography>
               </Box>
               <Box
@@ -215,7 +219,7 @@ const PoolCard = () => {
                     marginBottom: 10
                   }}
                 >
-                  Token per ticket
+                  Total lottery tickets
                 </Typography>
                 <Typography
                   sx={{
@@ -225,7 +229,7 @@ const PoolCard = () => {
                     color: '#121212'
                   }}
                 >
-                  125,000
+                  {poolInfo.maxPlayere}
                 </Typography>
               </Box>
             </Box>
@@ -272,7 +276,7 @@ const PoolCard = () => {
                   letterSpacing: 0
                 }}
               >
-                1.25
+                250
               </Typography>
               <Typography
                 sx={{
@@ -282,7 +286,7 @@ const PoolCard = () => {
                   color: '#959595'
                 }}
               >
-                ETH
+                AUCTION
               </Typography>
             </Box>
             <Box
@@ -389,9 +393,20 @@ const PoolCard = () => {
   }
   return (
     <>
-      {true && <NoJoinedCard isJoined={false} isUpcoming isClose={false} />}
-      {false && <NoWinnerCard />}
-      {false && <WaitLotteryDraw />}
+      {(!isUserJoined ||
+        (isUserJoined && poolStatus !== RandomPoolStatus.Closed && poolStatus !== RandomPoolStatus.Waiting)) && (
+        <NoJoinedCard
+          isJoined={isUserJoined}
+          isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
+          isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
+        />
+      )}
+      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && <>{!isWinnerSeedDone && <WaitLotteryDraw />}</>}
+      {isUserJoined && !isUserWinner && isWinnerSeedDone && (
+        <>
+          <NoWinnerCard />
+        </>
+      )}
     </>
   )
 }
