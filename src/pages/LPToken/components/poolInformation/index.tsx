@@ -8,15 +8,28 @@ const InterLargeTitle = styled(Typography)`
   font-family: Poppins;
   font-size: 16px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 25.601px; /* 160.009% */
   text-transform: capitalize;
 `
 const Icon1 = getIcon('AUCTION')
+import Icon2 from 'assets/images/eth_logo.png'
+import useBreakpoint from 'hooks/useBreakpoint'
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   const { poolStatus } = useGetRandomSelectionLPPoolStatus(poolInfo)
+  const isSm = useBreakpoint('sm')
   return (
-    <Stack gap={24} sx={{ height: '100%', padding: '40px 32px 64px 32px', borderRadius: 20, background: '#F6F6F3' }}>
+    <Stack
+      spacing={24}
+      gap={24}
+      sx={{
+        height: '100%',
+        padding: isSm ? '40px 16px' : '40px 32px 64px 32px',
+        borderRadius: 20,
+        marginTop: isSm ? 32 : 0,
+        background: '#F6F6F3'
+      }}
+    >
       <Stack flexDirection={'row'} gap={13}>
         <Stack
           sx={{
@@ -39,7 +52,7 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
             }}
           />
           <img
-            src={Icon1 || ''}
+            src={Icon2 || ''}
             style={{
               position: 'absolute',
               left: 16,
@@ -48,7 +61,7 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
             }}
           />
         </Stack>
-        <InterLargeTitle>Auction/SAVM Pool information</InterLargeTitle>
+        <InterLargeTitle>AUCTION/SAVM Pool Information</InterLargeTitle>
       </Stack>
       {poolStatus === RandomPoolStatus.Closed ? <DetailPanel /> : <EmptyPanel />}
     </Stack>
