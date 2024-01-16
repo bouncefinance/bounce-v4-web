@@ -14,6 +14,9 @@ const InterLargeTitle = styled(Typography)`
 const Icon1 = getIcon('AUCTION')
 import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useMemo } from 'react'
+import { formatGroupNumber } from 'utils/number'
+
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   console.log('🚀 ~ PoolInformation ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
@@ -119,13 +122,23 @@ const TokenNameTitle = styled(Typography)`
 `
 
 const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  console.log('🚀 ~ DetailPanel ~ poolInfo:', poolInfo)
+  console.log('🚀 ~ DetailPanel ~ poolInfo:', poolInfo.token0Price?.toString())
+  const poolTotalReward = useMemo(() => {
+    if (poolInfo.PoolTotal0Fees && poolInfo.PoolTotal1Fees && poolInfo.token0Price && poolInfo.token1Price) {
+      return poolInfo.token0Price
+        .multipliedBy(poolInfo.PoolTotal0Fees.toExact())
+        .plus(poolInfo.token1Price.multipliedBy(poolInfo.PoolTotal1Fees.toExact()))
+    }
+    return undefined
+  }, [poolInfo.PoolTotal0Fees, poolInfo.PoolTotal1Fees, poolInfo.token0Price, poolInfo.token1Price])
   return (
     <Box pt={24}>
       <Stack flex={'grid'} gridTemplateColumns={'50% 50%'} flexDirection={'row'} gap={16}>
         <WhiteCard sx={{ width: '50%' }}>
           <LabelTitle sx={{ textAlign: 'center' }}>Pool Total Revenue Income</LabelTitle>
-          <LargeValueTitle>$ 1000.99</LargeValueTitle>
+          <LargeValueTitle>
+            $ {poolTotalReward ? formatGroupNumber(poolTotalReward.toNumber(), '', 2) : '--'}
+          </LargeValueTitle>
         </WhiteCard>
         <WhiteCard sx={{ width: '50%' }}>
           <LabelTitle sx={{ textAlign: 'center' }}>Liquidity</LabelTitle>

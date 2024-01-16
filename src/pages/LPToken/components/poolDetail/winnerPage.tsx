@@ -3,6 +3,8 @@ import { RandomSelectionLPProps } from 'api/pool/type'
 const Icon1 = getIcon('AUCTION')
 import Icon2 from 'assets/images/eth_logo.png'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
+import { useMemo } from 'react'
+import { formatGroupNumber } from 'utils/number'
 const GrayCard = styled(Box)`
   display: flex;
   padding: 24px;
@@ -24,6 +26,48 @@ const P1 = styled(Typography)`
   letter-spacing: -0.32px;
 `
 const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  const claimableReward = useMemo(() => {
+    if (
+      poolInfo.userTotalFeesReward?.claimableToken0 &&
+      poolInfo.userTotalFeesReward?.claimableToken1 &&
+      poolInfo.token0Price &&
+      poolInfo.token1Price
+    ) {
+      return poolInfo.token0Price
+        .multipliedBy(poolInfo.userTotalFeesReward.claimableToken0.toExact())
+        .plus(poolInfo.token1Price.multipliedBy(poolInfo.userTotalFeesReward.claimableToken1.toExact()))
+    }
+    return undefined
+  }, [
+    poolInfo.token0Price,
+    poolInfo.token1Price,
+    poolInfo.userTotalFeesReward?.claimableToken0,
+    poolInfo.userTotalFeesReward?.claimableToken1
+  ])
+  const TotalReward = useMemo(() => {
+    if (
+      claimableReward &&
+      poolInfo.token0Price &&
+      poolInfo.token1Price &&
+      poolInfo.userTotalFeesReward?.claimedToken0 &&
+      poolInfo.userTotalFeesReward?.claimedToken1
+    ) {
+      return claimableReward.plus(
+        poolInfo.token0Price
+          .multipliedBy(poolInfo.userTotalFeesReward.claimedToken0.toExact())
+          .plus(poolInfo.token1Price.multipliedBy(poolInfo.userTotalFeesReward.claimedToken1.toExact()))
+      )
+    }
+    return undefined
+  }, [
+    claimableReward,
+    poolInfo.token0Price,
+    poolInfo.token1Price,
+    poolInfo.userTotalFeesReward?.claimedToken0,
+    poolInfo.userTotalFeesReward?.claimedToken1
+  ])
+  console.log('🚀 ~ WinnerPage ~ poolInfo1111:', poolInfo, TotalReward)
+
   return (
     <Box mb={24}>
       <Box my={24} sx={{ p: 24, background: '#E1F25C', borderRadius: 12 }} flexDirection={'row'} textAlign={'center'}>
@@ -48,11 +92,15 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
       <Stack flexDirection={'row'} gap={16} mt={16}>
         <GrayCard sx={{ flex: 1 }}>
           <P1>Your Pending Claimable Revenue</P1>
-          <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#2B51DA' }}>$-</P1>
+          <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#2B51DA' }}>
+            $ {claimableReward ? formatGroupNumber(claimableReward.toNumber()) : '--'}
+          </P1>
         </GrayCard>
         <GrayCard sx={{ flex: 1 }}>
           <P1>Your Total Rewards</P1>
-          <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#121212' }}>$-</P1>
+          <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#121212' }}>
+            $ {TotalReward ? formatGroupNumber(TotalReward.toNumber()) : '--'}
+          </P1>
         </GrayCard>
       </Stack>
       <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
