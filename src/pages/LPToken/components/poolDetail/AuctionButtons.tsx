@@ -30,6 +30,23 @@ export const BaseButton = styled(Button)`
   font-weight: 400;
   line-height: 150%; /* 24px */
 `
+const LoadingButtonStyle = styled(LoadingButton)`
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  background: #121212;
+  &:hover {
+    background: #e1f25c;
+    color: #121212;
+  }
+
+  color: #fff;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+`
 const AuctionButtons = ({
   onCheck,
   action,
@@ -53,6 +70,8 @@ const AuctionButtons = ({
     poolInfo.token1.name
   )
   const token1Amount = CurrencyAmount.fromRawAmount(token1Currency, poolInfo.maxAmount1PerWallet)
+  console.log('token1Amount', token1Amount.toSignificant())
+
   const [approvalState, approveCallback] = useApproveCallback(token1Amount, poolInfo.contract)
   const approveCallbackFn = useTransactionModalWrapper(approveCallback as any)
   const { chainId, account } = useActiveWeb3React()
@@ -78,10 +97,13 @@ const AuctionButtons = ({
       </BaseButton>
     )
   }
+  if (allStatus.isUserJoined && allStatus.poolStatus === RandomPoolStatus.Live) {
+    return <BaseButton disabled>You are in the draw...</BaseButton>
+  }
   if (action === 'FIRST') {
     return <BaseButton onClick={onCheck}>To Bid</BaseButton>
   }
-  if (approvalState !== ApprovalState.APPROVED) {
+  if (approvalState !== ApprovalState.APPROVED && action === 'BID') {
     if (approvalState === ApprovalState.PENDING) {
       return <BaseButton disabled>Pending...</BaseButton>
     }
@@ -91,9 +113,14 @@ const AuctionButtons = ({
   if (action === 'BID') {
     if (allStatus.poolStatus === RandomPoolStatus.Live && !allStatus.isUserJoined) {
       return (
-        <LoadingButton onClick={() => runWithModal(token1Amount)} loading={submitted.submitted}>
+        <LoadingButtonStyle
+          onClick={() => {
+            runWithModal(token1Amount)
+          }}
+          loading={submitted.submitted}
+        >
           Place a Bid
-        </LoadingButton>
+        </LoadingButtonStyle>
       )
     }
     return <BaseButton> Place a Bid</BaseButton>
