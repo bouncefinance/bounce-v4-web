@@ -58,7 +58,7 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
                 position: 'absolute',
                 left: '50%',
                 top: isUpcoming ? 22 : '50%',
-                transform: isUpcoming ? 'translateX(-50%)' : 'translate(0%,0%)'
+                transform: isUpcoming ? 'translateX(-50%)' : 'translate(-50%,-50%)'
               }}
             >
               <Image src={Logo} width={50} height={50} />
@@ -217,7 +217,7 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
                     marginBottom: 10
                   }}
                 >
-                  Token per ticket
+                  Total lottery tickets
                 </Typography>
                 <Typography
                   sx={{
@@ -391,7 +391,7 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   }
   return (
     <>
-      {(!(poolStatus !== RandomPoolStatus.Closed) || !isUserJoined) && (
+      {(!isUserJoined || (isUserJoined && poolStatus !== RandomPoolStatus.Closed)) && (
         <NoJoinedCard
           isJoined={isUserJoined}
           isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
