@@ -11,7 +11,10 @@ const FormGroupStyle = styled(FormGroup)`
     }
   }
   & .MuiFormControlLabel-root:nth-child(even) {
-    align-items: center;
+    align-items: start;
+    & .MuiFormControlLabel-label {
+      max-width: 376px;
+    }
   }
 `
 const FormControlLabelStyle = styled(FormControlLabel)`

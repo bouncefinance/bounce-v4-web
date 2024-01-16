@@ -208,9 +208,13 @@ const AuctionButtons = ({
       )
     }
   }
-  if (insufficientBalance) {
+  if (Number(poolInfo.curPlayer) === Number(poolInfo.maxPlayere)) {
+    return <BaseButton disabled>Sold Out</BaseButton>
+  }
+  if (!allStatus.isUserJoined && insufficientBalance) {
     return <BaseButton disabled>insufficient balance</BaseButton>
   }
+
   if (action === 'FIRST') {
     return <BaseButton onClick={onCheck}>Place a Bid</BaseButton>
   }
