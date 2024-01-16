@@ -222,7 +222,6 @@ const SingleTokenPool = () => {
     const {
       data: { id, expiredTime, signature }
     } = await getPoolBurningCreationSignature(signatureParams)
-    formValues.amount1PerWallet = token1Raw
     const result = {
       name: formValues.name,
       token0: formValues.token0,
