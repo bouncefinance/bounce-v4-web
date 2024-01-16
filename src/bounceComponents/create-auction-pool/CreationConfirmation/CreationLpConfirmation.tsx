@@ -13,7 +13,7 @@ import {
 } from '../ValuesProvider'
 import DialogTips from 'bounceComponents/common/DialogTips'
 import TokenImage from 'bounceComponents/common/TokenImage'
-import { useCreateFixedSwapPool } from 'hooks/useCreateFixedSwapPool'
+import { useCreateInitialLPOfferingPool } from 'hooks/useCreateInitialLPOfferingPool'
 import { ReactComponent as CloseSVG } from 'assets/imgs/components/close.svg'
 import { useQueryParams } from 'hooks/useQueryParams'
 import { useNavigate } from 'react-router-dom'
@@ -32,10 +32,7 @@ import {
   showRequestConfirmDialog,
   showWaitingTxDialog
 } from 'utils/auction'
-import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { useShowLoginModal } from 'state/users/hooks'
-import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
-import { PoolType } from 'api/pool/type'
 import AuctionNotification from '../AuctionNotification'
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
@@ -75,16 +72,14 @@ const CreatePoolButton = () => {
   const showLoginModal = useShowLoginModal()
   const auctionInChainId = useAuctionInChain()
   const switchNetwork = useSwitchNetwork()
-  const { currencyFrom } = useAuctionERC20Currency()
-  const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyFrom)
+  const { currencyTo } = useAuctionERC20Currency()
+  const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyTo)
   const values = useValuesState()
-  const createFixedSwapPool = useCreateFixedSwapPool()
+  const createInitialLPOfferingPool = useCreateInitialLPOfferingPool()
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
-  const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
-
   const auctionPoolSizeAmount = useMemo(
-    () => (currencyFrom && values.poolSize ? CurrencyAmount.fromAmount(currencyFrom, values.poolSize) : undefined),
-    [currencyFrom, values.poolSize]
+    () => (currencyTo && values.poolSize ? CurrencyAmount.fromAmount(currencyTo, values.poolSize) : undefined),
+    [currencyTo, values.poolSize]
   )
   const [approvalState, approveCallback] = useApproveCallback(
     auctionPoolSizeAmount,
@@ -96,7 +91,7 @@ const CreatePoolButton = () => {
     showRequestConfirmDialog()
     try {
       setButtonCommitted('wait')
-      const { getPoolId, transactionReceipt, sysId } = await createFixedSwapPool()
+      const { getPoolId, transactionReceipt, sysId } = await createInitialLPOfferingPool()
       setButtonCommitted('inProgress')
 
       const handleCloseDialog = () => {
@@ -132,19 +127,13 @@ const CreatePoolButton = () => {
       })
       ret
         .then(poolId => {
-          const goToPoolInfoPage = () => {
-            const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
-            navigate(route)
-          }
-
+          console.log(poolId)
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
-            againBtn: 'To the pool',
-            cancelBtn: 'Not now',
+            cancelBtn: 'Close',
             title: 'Congratulations!',
-            content: 'You have successfully created the auction.',
-            onAgain: goToPoolInfoPage,
+            content: `You have successfully created the auction.The poolId is ${sysId}`,
             onCancel: handleCloseDialog,
             onClose: handleCloseDialog
           })
@@ -167,7 +156,7 @@ const CreatePoolButton = () => {
         onAgain: toCreate
       })
     }
-  }, [chainConfigInBackend?.id, createFixedSwapPool, navigate, redirect])
+  }, [createInitialLPOfferingPool, navigate, redirect])
 
   const toApprove = useCallback(async () => {
     showRequestApprovalDialog()
@@ -249,7 +238,7 @@ const CreatePoolButton = () => {
     if (approvalState !== ApprovalState.APPROVED) {
       if (approvalState === ApprovalState.PENDING) {
         return {
-          text: `Approving use of ${currencyFrom?.symbol} ...`,
+          text: `Approving use of ${currencyTo?.symbol} ...`,
           loading: true
         }
       }
@@ -261,7 +250,7 @@ const CreatePoolButton = () => {
       }
       if (approvalState === ApprovalState.NOT_APPROVED) {
         return {
-          text: `Approve use of ${currencyFrom?.symbol}`,
+          text: `Approve use of ${currencyTo?.symbol}`,
           run: toApprove
         }
       }
@@ -277,7 +266,7 @@ const CreatePoolButton = () => {
     auctionPoolSizeAmount,
     buttonCommitted,
     chainId,
-    currencyFrom?.symbol,
+    currencyTo?.symbol,
     showLoginModal,
     switchNetwork,
     toApprove,
@@ -331,7 +320,7 @@ const CreationConfirmation = () => {
 
         <Box sx={{ borderRadius: '20px', border: '1px solid #D7D6D9', px: 24, py: 30 }}>
           <Typography variant="h3" sx={{ fontSize: 16, mb: 24 }}>
-            {values.poolName} Pool
+            {values.poolName} Initial LP Offering Auction Pool
           </Typography>
 
           <Stack spacing={24}>
