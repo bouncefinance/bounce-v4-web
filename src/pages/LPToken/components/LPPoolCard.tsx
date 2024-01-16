@@ -42,7 +42,7 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
     }
   ]
   const [curTab] = useState(0)
-  console.log('🚀 ~ Page ~ poolInfo:', poolInfo.position)
+  console.log('🚀 ~ Page ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
 
   return (

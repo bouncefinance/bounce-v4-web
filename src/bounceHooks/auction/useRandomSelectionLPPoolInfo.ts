@@ -28,7 +28,6 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   const contract = useRandomSelectionLPContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const posContract = useUniV3PositionContract(chainId)
   const res = useSingleCallResult(posContract, 'positions', [7204], undefined, chainId)?.result
-  console.log('🚀 ~ useRandomSelectionNFTPoolInfo ~ res111:', res)
   const _token0 = useToken(res?.token0, chainId)
   const token0 = useMemo(() => {
     if (res?.token0) {
@@ -102,6 +101,53 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   }, [liquidity, pool, positionInfo])
 
   const { account } = useActiveWeb3React()
+  const poolFeesRes = useSingleCallResult(
+    contract,
+    'getFees',
+    [poolInfo?.poolId, account || undefined],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const poolTotal0FeesRes = useSingleCallResult(
+    contract,
+    'feeTotal0',
+    [poolAddress],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
+  const PoolTotal0Fees = useMemo(() => {
+    if (poolTotal0FeesRes && _token0) {
+      return CurrencyAmount.fromRawAmount(_token0, poolTotal0FeesRes.feesTotal0 || '0')
+    }
+    return undefined
+  }, [_token0, poolTotal0FeesRes])
+  const poolTotal1FeesRes = useSingleCallResult(
+    contract,
+    'feeTotal1',
+    [poolAddress],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const PoolTotal1Fees = useMemo(() => {
+    if (poolTotal1FeesRes && _token1) {
+      return CurrencyAmount.fromRawAmount(_token1, poolTotal1FeesRes.feesTotal1 || '0')
+    }
+    return undefined
+  }, [_token1, poolTotal1FeesRes])
+
+  const userTotalFeesReward = useMemo(() => {
+    if (poolFeesRes && _token0 && _token1) {
+      return {
+        claimableToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimableToken0 || '0'),
+        claimableToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimableToken1 || '0'),
+        claimedToken0: CurrencyAmount.fromRawAmount(_token0, poolFeesRes.claimedToken0 || '0'),
+        claimedToken1: CurrencyAmount.fromRawAmount(_token1, poolFeesRes.claimedToken1 || '0')
+      }
+    }
+    return undefined
+  }, [_token0, _token1, poolFeesRes])
+
   const myClaimedRes = useSingleCallResult(
     contract,
     'myClaimed',
@@ -132,6 +178,9 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
     return {
       ...poolInfo,
       position,
+      userTotalFeesReward,
+      PoolTotal0Fees,
+      PoolTotal1Fees,
       token1: {
         ...poolInfo.token1,
         symbol: poolInfo.token1.symbol.toUpperCase()
@@ -149,6 +198,9 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   }, [
     poolInfo,
     position,
+    userTotalFeesReward,
+    PoolTotal0Fees,
+    PoolTotal1Fees,
     myClaimedRes,
     poolsInfo?.mintContract,
     poolsInfo?.nShare,

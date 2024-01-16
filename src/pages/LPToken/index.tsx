@@ -11,13 +11,11 @@ import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelection
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const _chainId = ChainId.SEPOLIA
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21423)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21428)
   return (
     <Box>
       <Box>
         <ProjectHead item={item} />
-        <PoolStepper poolInfo={{ openAt: 1705298431, closeAt: 1705298432, claimAt: 1705384831 }} />
-        {poolInfo && <LPPoolCard poolInfo={poolInfo} />}
         {poolInfo && (
           <>
             <AuctionCard poolInfo={poolInfo} />
