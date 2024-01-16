@@ -17,6 +17,7 @@ import { Token } from '@uniswap/sdk-core'
 import { CurrencyAmount } from 'constants/token'
 import { FeeAmount, Pool, Position, computePoolAddress } from '@uniswap/v3-sdk'
 import IUniswapV3PoolABI from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
+import { lpId } from 'pages/LPToken'
 
 const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   const _backedId = backedId
@@ -27,7 +28,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   } = useBackedPoolInfo(PoolType.RANDOM_SELECTION_LP, Number(_backedId))
   const contract = useRandomSelectionLPContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const posContract = useUniV3PositionContract(chainId)
-  const res = useSingleCallResult(posContract, 'positions', [7204], undefined, chainId)?.result
+  const res = useSingleCallResult(posContract, 'positions', [lpId], undefined, chainId)?.result
   const _token0 = useToken(res?.token0, chainId)
   const token0 = useMemo(() => {
     if (res?.token0) {

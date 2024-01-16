@@ -5,7 +5,8 @@ import { useState } from 'react'
 import StepCheckIcon from 'assets/imgs/lpToken/step-check-icon.svg'
 import { ReactComponent as StepDefaultIcon } from 'assets/imgs/lpToken/step-default.svg'
 import { useRequest } from 'ahooks'
-const StepperStyle = styled(Stepper)(() => ({
+import useBreakpoint from 'hooks/useBreakpoint'
+const StepperStyle = styled(Stepper)(({ theme }) => ({
   '& .MuiStep-root': { paddingLeft: 0, paddingRight: 0 },
   '& .MuiStep-root:last-child': {
     display: 'none !important'
@@ -40,11 +41,17 @@ const StepperStyle = styled(Stepper)(() => ({
   '.MuiStepConnector-root.Mui-active .MuiStepConnector-line,.MuiStepConnector-root.Mui-completed .MuiStepConnector-line ':
     {
       borderColor: '#E1F25C'
+    },
+  [theme.breakpoints.down('sm')]: {
+    '&.MuiStepper-root': {
+      width: 'auto !important'
     }
+  }
 }))
 
 const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
   const [activeStep, setActiveStep] = useState(0)
+  const isSm = useBreakpoint('sm')
   const nowTime = () => new Date().getTime()
   const steps = Array.from({ length: 4 }).map(() => ({ label: '', time: '' }))
   const textList = [
@@ -87,17 +94,18 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
         maxWidth: 1440,
         margin: '0 auto',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: isSm ? 'row-reverse' : 'column',
+        justifyContent: isSm ? 'flex-end' : 'unset',
         gap: 16,
-        mt: 40,
-        px: 72
+        mt: isSm ? 32 : 40,
+        px: isSm ? 16 : 72
       }}
     >
       <Stack
         direction={'row'}
         sx={{
           display: 'grid',
-          gridTemplateColumns: '33% 33% 34%'
+          gridTemplateColumns: isSm ? '100%' : '33% 33% 34%'
         }}
       >
         {textList.map(item => (
@@ -107,7 +115,7 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
           </Box>
         ))}
       </Stack>
-      <StepperStyle activeStep={activeStep}>
+      <StepperStyle activeStep={activeStep} orientation={isSm ? 'vertical' : 'horizontal'}>
         {steps.map(item => (
           <Step key={item.label}>
             <StepLabel icon={<StepDefaultIcon />}></StepLabel>

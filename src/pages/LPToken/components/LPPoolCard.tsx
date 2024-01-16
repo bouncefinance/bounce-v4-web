@@ -52,7 +52,7 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '24px',
-        margin: isSm ? '24px 16px' : '40px 72px',
+        margin: isSm ? '24px 0px' : '40px 72px',
         padding: isSm ? '24px 16px' : '24px 56px 65px',
         background: '#fff'
       }}
