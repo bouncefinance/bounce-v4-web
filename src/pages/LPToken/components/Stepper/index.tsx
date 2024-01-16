@@ -1,9 +1,10 @@
 import { Box, Stack, Step, StepLabel, Stepper, Typography, styled } from '@mui/material'
 // import { FixedSwapPoolProp } from 'api/pool/type'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import StepCheckIcon from 'assets/imgs/lpToken/step-check-icon.svg'
 import { ReactComponent as StepDefaultIcon } from 'assets/imgs/lpToken/step-default.svg'
+import { useRequest } from 'ahooks'
 const StepperStyle = styled(Stepper)(() => ({
   '& .MuiStep-root': { paddingLeft: 0, paddingRight: 0 },
   '& .MuiStep-root:last-child': {
@@ -60,17 +61,24 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
       time: poolInfo.claimAt * 1000
     }
   ]
-  useEffect(() => {
-    if (nowTime() > poolInfo.openAt * 1000 && nowTime() < poolInfo.closeAt * 1000) {
-      setActiveStep(1)
+  useRequest(
+    async () => {
+      if (nowTime() > poolInfo.openAt * 1000 && nowTime() < poolInfo.closeAt * 1000) {
+        setActiveStep(1)
+      }
+      if (nowTime() > poolInfo.closeAt * 1000 && nowTime() < poolInfo.claimAt * 1000) {
+        setActiveStep(2)
+      }
+      if (nowTime() > poolInfo.claimAt * 1000) {
+        setActiveStep(3)
+      }
+      return null
+    },
+    {
+      pollingInterval: 2000,
+      refreshDeps: [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt]
     }
-    if (nowTime() > poolInfo.closeAt * 1000 && nowTime() < poolInfo.claimAt * 1000) {
-      setActiveStep(2)
-    }
-    if (nowTime() > poolInfo.claimAt * 1000) {
-      setActiveStep(3)
-    }
-  }, [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt])
+  )
   return (
     <Box
       sx={{
