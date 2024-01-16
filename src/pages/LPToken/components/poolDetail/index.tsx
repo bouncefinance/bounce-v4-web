@@ -28,7 +28,7 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
       {action === 'GO_TO_CHECK' ? (
         <CheckBox onToBid={() => setAction('BID')} />
       ) : (
-        <PoolProgress poolInfo={poolInfo} poolStatus={allStatus.poolStatus} />
+        !allStatus.isUserWinner && <PoolProgress poolInfo={poolInfo} poolStatus={allStatus.poolStatus} />
       )}
       {action !== 'GO_TO_CHECK' && (
         <AuctionButtons onCheck={onGoCheckBox} action={action} poolInfo={poolInfo} allStatus={allStatus} />
