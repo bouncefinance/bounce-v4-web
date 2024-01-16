@@ -52,7 +52,7 @@ const LPToken = () => {
           </>
         )}
         {poolInfo && <LPPoolCard poolInfo={poolInfo} />}
-        {poolInfo && account && (
+        {poolInfo && account && account.toLocaleUpperCase() === poolInfo.creator.toLocaleUpperCase() && (
           <Stack justifyContent={'center'} direction={'column'} spacing={20} alignItems={'center'}>
             <BaseButton sx={{ width: 340 }} onClick={clickHandler}>
               Creator Set TokenId
