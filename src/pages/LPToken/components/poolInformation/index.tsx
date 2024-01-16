@@ -1,8 +1,7 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 import EmptyImg from 'assets/imgs/lpToken/empty.png'
-import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
-import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
+import { RandomSelectionLPProps } from 'api/pool/type'
 const InterLargeTitle = styled(Typography)`
   color: #000;
   font-family: Poppins;
@@ -16,7 +15,6 @@ const Icon1 = getIcon('AUCTION')
 import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  const { poolStatus } = useGetRandomSelectionLPPoolStatus(poolInfo)
   const isSm = useBreakpoint('sm')
   return (
     <Stack
@@ -61,10 +59,10 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
             }}
           />
         </Stack>
-        <InterLargeTitle>AUCTION/SAVM Pool Information</InterLargeTitle>
+        <InterLargeTitle>SAVM/ETH Pool Information</InterLargeTitle>
       </Stack>
-      {poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed ? (
-        <DetailPanel />
+      {poolInfo.PoolTotal0Fees?.greaterThan('0') || poolInfo.PoolTotal1Fees?.greaterThan('0') ? (
+        <DetailPanel poolInfo={poolInfo} />
       ) : (
         <EmptyPanel />
       )}
@@ -73,9 +71,9 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
 }
 const WhiteCard = styled(Box)`
   display: flex;
-  padding: 24px 32px;
+  padding: 24px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 16px;
   border-radius: 12px;
@@ -84,6 +82,7 @@ const WhiteCard = styled(Box)`
 const LabelTitle = styled(Typography)`
   color: var(--grey-01, #20201e);
   /* D/H5 */
+  width: 100%;
   font-family: Inter;
   font-size: 16px;
   font-style: normal;
@@ -96,8 +95,9 @@ const LargeValueTitle = styled(Typography)({
   leadingTrim: 'both',
   textEdge: 'cap',
   fontVariantNumeric: 'lining-nums proportional-nums',
-
+  width: '100%',
   /* D/H2 */
+  wordBreak: 'break-all',
   fontFamily: 'Inter',
   fontSize: 36,
   fontStyle: 'normal',
@@ -117,17 +117,17 @@ const TokenNameTitle = styled(Typography)`
   letter-spacing: -0.4px;
 `
 
-const DetailPanel = () => {
+const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   return (
     <Box pt={24}>
-      <Stack flexDirection={'row'} gap={16}>
-        <WhiteCard>
-          <LabelTitle>Pool Total Revenue Income</LabelTitle>
-          <LargeValueTitle>$-</LargeValueTitle>
+      <Stack flex={'grid'} gridTemplateColumns={'50% 50%'} flexDirection={'row'} gap={16}>
+        <WhiteCard sx={{ width: '50%' }}>
+          <LabelTitle sx={{ textAlign: 'center' }}>Pool Total Revenue Income</LabelTitle>
+          <LargeValueTitle>$ 1000.99</LargeValueTitle>
         </WhiteCard>
-        <WhiteCard>
-          <LabelTitle>Liquidity</LabelTitle>
-          <LargeValueTitle fontSize={'#121212'}>$ 39.43</LargeValueTitle>
+        <WhiteCard sx={{ width: '50%' }}>
+          <LabelTitle sx={{ textAlign: 'center' }}>Liquidity</LabelTitle>
+          <LargeValueTitle color={'#121212 !important'}>$ 999939.11</LargeValueTitle>
         </WhiteCard>
       </Stack>
       <WhiteCard mt={16} sx={{ alignItems: 'start' }}>
@@ -136,21 +136,19 @@ const DetailPanel = () => {
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
               <img src={Icon1 || ''} style={{ width: 32, height: 32 }} />
-              <TokenNameTitle>Auction</TokenNameTitle>
+              <TokenNameTitle>SAVM</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <LabelTitle>2.00</LabelTitle>
-              <LabelTitle>50%</LabelTitle>
+              <LabelTitle>{poolInfo.PoolTotal0Fees?.toSignificant(6)}</LabelTitle>
             </Stack>
           </Stack>
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <img src={Icon1 || ''} style={{ width: 32, height: 32 }} />
-              <TokenNameTitle>SAVM</TokenNameTitle>
+              <img src={Icon2 || ''} style={{ width: 32, height: 32 }} />
+              <TokenNameTitle>ETH</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <LabelTitle>2.00</LabelTitle>
-              <LabelTitle>50%</LabelTitle>
+              <LabelTitle>{poolInfo.PoolTotal1Fees?.toSignificant(6)}</LabelTitle>
             </Stack>
           </Stack>
         </Stack>
