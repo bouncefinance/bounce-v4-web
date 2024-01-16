@@ -70,8 +70,7 @@ export enum AuctionType {
   ENGLISH_AUCTION = 'English Auction',
   MUTANT_ENGLISH = 'Mutant English',
   FIXED_PRICE = 'Fixed Price',
-  RANDOM_SELECTION = 'Random Selection',
-  INITIAL_LP_OFFERING = 'Initial LP Offering'
+  RANDOM_SELECTION = 'Random Selection'
 }
 
 export enum TgBotActiveStep {

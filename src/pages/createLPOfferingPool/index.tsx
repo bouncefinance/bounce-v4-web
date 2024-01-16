@@ -168,83 +168,99 @@ const SingleTokenPool = () => {
     [_chainId, account, approvalState, approveCallbackFn, chainId, switchNetwork, toggleWalletModal]
   )
 
-  // const createPool = async (params: any) => {
-  //   await contract?.createV2(params)
-  // }
-  // const createPoolFn = useTransactionModalWrapper(createPool as any)
+  const createPool = async (formValues: MyFormValues) => {
+    console.log(formValues)
+    if (!formValues) {
+      return Promise.reject('no data')
+    }
+    if (!account) {
+      return Promise.reject('no account')
+    }
+    if (!contract) {
+      return Promise.reject('no contract')
+    }
+    if (!chainConfigInBackend) {
+      return Promise.reject('no chainConfigInBackend')
+    }
+    let merkleroot = ''
+
+    if (formValues.whitelistRoot && formValues.whitelistRoot.split(',').length > 0) {
+      const whitelistParams: GetWhitelistMerkleTreeRootParams = {
+        addresses: formValues.whitelistRoot.split(','),
+        category: PoolType.LOTTERY_BURNING,
+        chainId: chainConfigInBackend.id
+      }
+      const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
+      merkleroot = data.merkleroot
+    }
+    merkleroot = merkleroot || NULL_BYTES
+    const signatureParams = {
+      amountMin1: '',
+      amountTotal0: '0',
+      // amountTotal1: token1Raw,
+      category: 11,
+      chainId: chainConfigInBackend.id,
+      claimAt: moment(formValues.claimAt).valueOf() / 1000,
+      closeAt: moment(formValues.closeAt).valueOf() / 1000,
+      creator: account,
+      maxAmount1PerWallet: token1Raw,
+      merkleroot: '',
+      maxPlayer: Number(formValues.maxPlayer),
+      name: formValues.name,
+      openAt: moment(formValues.openAt).valueOf() / 1000,
+      token0: formValues.token0,
+      token1: formValues.token1,
+      totalShare: Number(formValues.nShare),
+      releaseType: IReleaseType.Cliff,
+      releaseData: [
+        {
+          startAt: moment(formValues.openAt).valueOf() / 1000,
+          endAtOrRatio: 0
+        }
+      ]
+    }
+    const {
+      data: { id, expiredTime, signature }
+    } = await getPoolBurningCreationSignature(signatureParams)
+    formValues.amount1PerWallet = token1Raw
+    const result = {
+      name: formValues.name,
+      token0: formValues.token0,
+      token1: formValues.token1,
+      amount1PerWallet: token1Raw,
+      openAt: moment(formValues.openAt).valueOf() / 1000,
+      closeAt: moment(formValues.closeAt).valueOf() / 1000,
+      claimAt: moment(formValues.claimAt).valueOf() / 1000,
+      maxPlayer: Number(formValues.maxPlayer),
+      nShare: Number(formValues.nShare),
+      whitelistRoot: merkleroot
+    }
+    console.log('formValues', result)
+    const _body = { ...result }
+    const arg = [id, _body, false, expiredTime, signature]
+    try {
+      console.log('pool id', id, arg)
+      const data = await contract.createV2(...arg)
+      localStorage.setItem('LP_OFFERING_POOL_ID', JSON.stringify(id))
+      console.log(data)
+      return data
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(error)
+    }
+  }
+
+  const createPoolFn = useTransactionModalWrapper(createPool as any, {
+    successTipsText: 'You have successfully claimed.'
+  })
   return (
     <Box sx={{ maxWidth: 800, margin: '0 auto', mt: 50 }}>
       <LocalizationProvider dateAdapter={AdapterMoment} localeText={{ start: 'Start time', end: 'End time' }}>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={async (formValues: MyFormValues) => {
-            if (!contract || !chainConfigInBackend || !account) {
-              return
-            }
-            let merkleroot = ''
-
-            if (formValues.whitelistRoot && formValues.whitelistRoot.split(',').length > 0) {
-              const whitelistParams: GetWhitelistMerkleTreeRootParams = {
-                addresses: formValues.whitelistRoot.split(','),
-                category: PoolType.LOTTERY_BURNING,
-                chainId: chainConfigInBackend.id
-              }
-              const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
-              merkleroot = data.merkleroot
-            }
-            merkleroot = merkleroot || NULL_BYTES
-            const signatureParams = {
-              amountMin1: '',
-              amountTotal0: '0',
-              // amountTotal1: token1Raw,
-              category: 11,
-              chainId: chainConfigInBackend.id,
-              claimAt: moment(formValues.claimAt).valueOf() / 1000,
-              closeAt: moment(formValues.closeAt).valueOf() / 1000,
-              creator: account,
-              maxAmount1PerWallet: token1Raw,
-              merkleroot: '',
-              maxPlayer: Number(formValues.maxPlayer),
-              name: formValues.name,
-              openAt: moment(formValues.openAt).valueOf() / 1000,
-              token0: formValues.token0,
-              token1: formValues.token1,
-              totalShare: Number(formValues.nShare),
-              releaseType: IReleaseType.Cliff,
-              releaseData: [
-                {
-                  startAt: moment(formValues.openAt).valueOf() / 1000,
-                  endAtOrRatio: 0
-                }
-              ]
-            }
-            const {
-              data: { id, expiredTime, signature }
-            } = await getPoolBurningCreationSignature(signatureParams)
-            formValues.amount1PerWallet = token1Raw
-            const result = {
-              name: formValues.name,
-              token0: formValues.token0,
-              token1: formValues.token1,
-              amount1PerWallet: token1Raw,
-              openAt: moment(formValues.openAt).valueOf() / 1000,
-              closeAt: moment(formValues.closeAt).valueOf() / 1000,
-              claimAt: moment(formValues.claimAt).valueOf() / 1000,
-              maxPlayer: Number(formValues.maxPlayer),
-              nShare: Number(formValues.nShare),
-              whitelistRoot: merkleroot
-            }
-            console.log('formValues', result)
-            const _body = { ...result }
-            const arg = [id, _body, false, expiredTime, signature]
-            try {
-              console.log('pool id', id, arg)
-              await contract.createV2(...arg)
-              localStorage.setItem('NFT_RANDOM_POOL_ID', JSON.stringify(id))
-            } catch (error) {
-              console.error(error)
-            }
+          onSubmit={(formValues: MyFormValues) => {
+            createPoolFn(formValues)
           }}
         >
           {({ values, setFieldValue, errors }) => {

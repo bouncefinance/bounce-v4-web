@@ -75,21 +75,6 @@ const CreateBtn: React.FC<{ sx?: SxProps<Theme>; onDismiss?: () => void; opacity
       >
         Create an auction
       </MenuItem>
-      <MenuItem
-        sx={{
-          '&:hover': {
-            borderRadius: 100,
-            color: '#121212'
-          }
-        }}
-        onClick={() => {
-          navigate(`${routes.createLPOfferingPool.index}`)
-          setAnchorEl(null)
-          onDismiss && onDismiss()
-        }}
-      >
-        Create initial LP offering auction
-      </MenuItem>
       {userInfo?.isWhitelist === 2 && (
         <MenuItem
           sx={{
