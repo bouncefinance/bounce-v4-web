@@ -63,7 +63,7 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
           <AvatarStyle key={i + d} alt="DefaultAvatar" src={i} />
         ))}
       </AvatarGroupStyle>
-      +
+      {len.length > 0 && '+'}
     </Stack>
   )
 }

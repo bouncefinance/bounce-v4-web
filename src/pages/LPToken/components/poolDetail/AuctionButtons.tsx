@@ -14,6 +14,8 @@ import { useRandomLPBetCallback, useRandomLPUserClaim } from 'bounceHooks/auctio
 import { LoadingButton } from '@mui/lab'
 import { ReactComponent as CountdownSvg } from 'assets/imgs/lpToken/Countdown.svg'
 import { ReactComponent as GreenSvg } from 'assets/imgs/lpToken/green.svg'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+import { useMemo } from 'react'
 export const BaseButton = styled(Button)`
   width: 100%;
   padding: 20px;
@@ -76,11 +78,18 @@ const AuctionButtons = ({
     poolInfo.token1.name
   )
   const token1Amount = CurrencyAmount.fromRawAmount(token1Currency, poolInfo.maxAmount1PerWallet)
-  console.log('token1Amount', token1Amount.toSignificant())
 
   const [approvalState, approveCallback] = useApproveCallback(token1Amount, poolInfo.contract)
-  const approveCallbackFn = useTransactionModalWrapper(approveCallback as any)
+  const approveCallbackFn = useTransactionModalWrapper(approveCallback as any, { isApprove: true })
+
   const { chainId, account } = useActiveWeb3React()
+  const token1Balance = useCurrencyBalance(account, token1Currency, poolInfo.ethChainId)
+  const insufficientBalance = useMemo(() => {
+    if (!token1Balance) {
+      return false
+    }
+    return token1Balance.lessThan(token1Amount)
+  }, [token1Amount, token1Balance])
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
   if (!account) {
@@ -103,6 +112,7 @@ const AuctionButtons = ({
       </BaseButton>
     )
   }
+
   if (allStatus.isUserJoined && allStatus.poolStatus === RandomPoolStatus.Live) {
     return <BaseButton disabled>You are in the draw...</BaseButton>
   }
@@ -157,9 +167,13 @@ const AuctionButtons = ({
       )
     }
   }
+  if (insufficientBalance) {
+    return <BaseButton disabled>insufficient balance</BaseButton>
+  }
   if (action === 'FIRST') {
     return <BaseButton onClick={onCheck}>Place a Bid</BaseButton>
   }
+
   if (approvalState !== ApprovalState.APPROVED && action === 'BID') {
     if (approvalState === ApprovalState.PENDING) {
       return <BaseButton disabled>Pending...</BaseButton>
