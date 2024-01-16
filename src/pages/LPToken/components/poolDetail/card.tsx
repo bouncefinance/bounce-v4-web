@@ -79,7 +79,7 @@ const NoJoinedCard = ({
                 color: '#959595'
               }}
             >
-              {((100 / Number(poolInfo.totalShare)) * 100).toFixed(2)} % of the
+              {(100 / Number(poolInfo.totalShare)).toFixed(2)} % of the
               <br /> LP pool
               <br /> revenue
             </Typography>
