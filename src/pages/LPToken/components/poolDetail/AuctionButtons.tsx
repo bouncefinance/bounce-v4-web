@@ -209,7 +209,7 @@ const AuctionButtons = ({
     }
   }
   if (insufficientBalance) {
-    return <BaseButton disabled>insufficient balance</BaseButton>
+    return <BaseButton disabled>Insufficient balance</BaseButton>
   }
   if (action === 'FIRST') {
     return <BaseButton onClick={onCheck}>Place a Bid</BaseButton>
@@ -235,7 +235,7 @@ const AuctionButtons = ({
         </LoadingButtonStyle>
       )
     }
-    return <BaseButton> Place a Bid</BaseButton>
+    return <BaseButton>Place a Bid</BaseButton>
   }
   return (
     <Box>
