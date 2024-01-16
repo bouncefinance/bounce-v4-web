@@ -7,7 +7,6 @@ import LPPoolCard from './components/LPPoolCard'
 import PoolStepper from './components/Stepper'
 import { ChainId } from 'constants/chain'
 import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
-
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const _chainId = ChainId.SEPOLIA
