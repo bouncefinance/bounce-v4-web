@@ -63,7 +63,7 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
             >
               <Image src={Logo} width={50} height={50} />
             </Box>
-            {isUpcoming && (
+            {Number(poolInfo.curPlayer) > 0 ? (
               <Typography
                 sx={{
                   position: 'absolute',
@@ -78,10 +78,12 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
                   color: '#959595'
                 }}
               >
-                20% of the
+                {(1 / Number(poolInfo.curPlayer)) * 100} % of the
                 <br /> LP pool
                 <br /> revenue
               </Typography>
+            ) : (
+              <></>
             )}
             <Typography
               sx={{
