@@ -18,7 +18,7 @@ import { CurrencyAmount } from 'constants/token'
 import { FeeAmount, Pool, Position, computePoolAddress } from '@uniswap/v3-sdk'
 import IUniswapV3PoolABI from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
 import { UNI_V3_FACTORY_ADDRESSES } from 'constants/uniswap'
-import { useUSDCQuoteSinglePrice } from 'hooks/useUniSwapQuote'
+import { useTokenPriceByUni } from 'hooks/useUniSwapQuote'
 import { lpId } from 'pages/LPToken'
 
 const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
@@ -106,8 +106,14 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
     return undefined
   }, [pool, positionInfo])
 
-  const token0Price = useUSDCQuoteSinglePrice(token0?.address, token0?.decimals, res?.fee.toString(), chainId)
-  const token1Price = useUSDCQuoteSinglePrice(token1?.address, token1?.decimals, res?.fee.toString(), chainId)
+  const [token0Price, token1Price] = useTokenPriceByUni(
+    token0?.address,
+    token0?.decimals,
+    token1?.address,
+    token1?.decimals,
+    res?.fee.toString(),
+    chainId
+  )
 
   const { account } = useActiveWeb3React()
   const poolFeesRes = useSingleCallResult(
