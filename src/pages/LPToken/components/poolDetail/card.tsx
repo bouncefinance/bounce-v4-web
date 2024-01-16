@@ -58,8 +58,8 @@ const NoJoinedCard = ({
             sx={{
               position: 'absolute',
               left: '50%',
-              top: isUpcoming ? 22 : '50%',
-              transform: isUpcoming ? 'translateX(-50%)' : 'translate(-50%,-50%)'
+              top: 22,
+              transform: 'translateX(-50%)'
             }}
           >
             <Image src={Logo} width={50} height={50} />
@@ -79,7 +79,7 @@ const NoJoinedCard = ({
                 color: '#959595'
               }}
             >
-              {(1 / Number(poolInfo.curPlayer)) * 100} % of the
+              {(100 / Number(poolInfo.totalShare)).toFixed(2)} % of the
               <br /> LP pool
               <br /> revenue
             </Typography>

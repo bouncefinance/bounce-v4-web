@@ -1,6 +1,8 @@
 import { Box, Stack, Typography, styled } from '@mui/material'
+import { RandomSelectionLPProps } from 'api/pool/type'
+const Icon1 = getIcon('AUCTION')
+import Icon2 from 'assets/images/eth_logo.png'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
-const Icon2 = getIcon('MUBI')
 const GrayCard = styled(Box)`
   display: flex;
   padding: 24px 32px;
@@ -21,7 +23,7 @@ const P1 = styled(Typography)`
   line-height: 150%;
   letter-spacing: -0.32px;
 `
-const WinnerPage = () => {
+const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   return (
     <Box mb={24}>
       <Box my={24} sx={{ p: 24, background: '#E1F25C', borderRadius: 12 }} flexDirection={'row'} textAlign={'center'}>
@@ -41,7 +43,7 @@ const WinnerPage = () => {
       </Box>
       <GrayCard>
         <P1>Your Pool Revenue Share</P1>
-        <P1>20%</P1>
+        <P1>{(100 / Number(poolInfo.totalShare)).toFixed(2)} %</P1>
       </GrayCard>
       <Stack flexDirection={'row'} gap={16} mt={16}>
         <GrayCard sx={{ flex: 1 }}>
@@ -55,12 +57,22 @@ const WinnerPage = () => {
       </Stack>
       <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+          <img src={Icon1 || ''} style={{ width: 32, height: 32 }} />
+          <P1 sx={{ fontWeight: 600, fontSize: 20 }}>SAVM</P1>
+        </Stack>
+        <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+          <P1>{poolInfo.userTotalFeesReward?.claimableToken0.toSignificant()}</P1>
+          <P1>$2,800</P1>
+        </Stack>
+      </GrayCard>
+      <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
           <img src={Icon2 || ''} style={{ width: 32, height: 32 }} />
           <P1 sx={{ fontWeight: 600, fontSize: 20 }}>ETH</P1>
         </Stack>
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-          <P1>2.00</P1>
-          <P1>50%</P1>
+          <P1>{poolInfo.userTotalFeesReward?.claimableToken1.toSignificant()}</P1>
+          <P1>$2,800</P1>
         </Stack>
       </GrayCard>
     </Box>

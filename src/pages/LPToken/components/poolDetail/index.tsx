@@ -24,7 +24,7 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
     <Box>
       <Header poolInfo={poolInfo} poolStatus={allStatus.poolStatus} isUserJoined={allStatus.isUserJoined} />
       {!allStatus.isUserWinner && <Card poolInfo={poolInfo} />}
-      {allStatus.isUserWinner && <WinnerPage />}
+      {allStatus.isUserWinner && <WinnerPage poolInfo={poolInfo} />}
       {action === 'GO_TO_CHECK' ? (
         <CheckBox onToBid={() => setAction('BID')} />
       ) : (

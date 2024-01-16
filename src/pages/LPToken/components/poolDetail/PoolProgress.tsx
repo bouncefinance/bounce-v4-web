@@ -26,7 +26,7 @@ const AvatarGroupStyle = styled(AvatarGroup)`
   }
   & .MuiAvatar-root,
   & .MuiAvatar-root:last-child {
-    margin-left: -15px;
+    margin-left: -8px;
   }
   ${({ theme }) => theme.breakpoints.down('sm')} {
     & .MuiAvatar-root {
@@ -70,7 +70,7 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
 
 const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPProps; poolStatus: RandomPoolStatus }) => {
   const isSm = useBreakpoint('sm')
-
+  const isNoLive = useMemo(() => poolStatus > RandomPoolStatus.Live, [poolStatus])
   return (
     <Stack gap={8} mb={16}>
       <Stack
@@ -94,7 +94,7 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
             borderRadius: 4
           },
           '& .MuiLinearProgress-bar': {
-            background: '#B5E529',
+            background: isNoLive ? '#2B51DA' : '#B5E529',
             borderRadius: 4
           }
         }}
@@ -102,9 +102,16 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
         variant="determinate"
         value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
       />
-      <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-        <InterH3 sx={{ color: '#B5E529' }}>{poolInfo.curPlayer} </InterH3>
+      <Stack flexDirection={'row'} alignItems={'center'} justifyContent={isNoLive ? 'end' : 'space-between'}>
+        {!isNoLive && (
+          <InterH3 sx={{ color: !Number(poolInfo.curPlayer) ? '#959595' : '#B5E529' }}>{poolInfo.curPlayer} </InterH3>
+        )}
         <InterH3 sx={{ fontWeight: 400 }}>
+          {isNoLive && (
+            <InterH3 sx={{ color: isNoLive ? '#2B51DA' : '#B5E529' }} as={'span'}>
+              {poolInfo.curPlayer}
+            </InterH3>
+          )}
           <span style={{ padding: '0 5px 0 10px', fontWeight: 500 }}>/</span>
           {poolInfo.maxPlayere}
         </InterH3>

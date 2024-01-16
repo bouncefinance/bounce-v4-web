@@ -108,7 +108,7 @@ const AuctionButtons = ({
   const showLoginModal = useShowLoginModal()
   const switchNetwork = useSwitchNetwork()
   if (!account) {
-    return <BaseButton onClick={showLoginModal}>Login</BaseButton>
+    return <BaseButton onClick={showLoginModal}>Connect Wallet</BaseButton>
   }
   if (chainId !== poolInfo.ethChainId) {
     return <BaseButton onClick={() => switchNetwork(poolInfo.ethChainId || ChainId.MAINNET)}>Switch Network</BaseButton>

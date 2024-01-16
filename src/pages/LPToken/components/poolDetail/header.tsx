@@ -30,7 +30,7 @@ const Header = ({
       </Typography>
 
       <PoolStatusBox
-        status={poolStatus}
+        status={poolStatus >= RandomPoolStatus.Waiting ? RandomPoolStatus.Waiting : poolStatus}
         claimAt={poolInfo.claimAt}
         openTime={poolInfo.openAt}
         closeTime={poolInfo.closeAt}
