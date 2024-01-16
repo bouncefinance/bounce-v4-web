@@ -10,6 +10,7 @@ import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelection
 import { useActiveWeb3React } from 'hooks'
 import { BaseButton } from './components/poolDetail/AuctionButtons'
 import { useRandomSelectionLPContract } from 'hooks/useContract'
+import { useCallback } from 'react'
 export const lpId = 7204
 
 const LPToken = () => {
@@ -18,6 +19,13 @@ const LPToken = () => {
   const { account } = useActiveWeb3React()
   const contract = useRandomSelectionLPContract(undefined, _chainId)
   const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21428)
+
+  const clickHandler = useCallback(async () => {
+    if (contract && poolInfo) {
+      // await contract.creatorClaim(poolInfo.poolId)
+      await contract.creatorSetFeePositionId(poolInfo.poolId, lpId)
+    }
+  }, [contract, poolInfo])
   return (
     <Box>
       <Box>
@@ -30,9 +38,7 @@ const LPToken = () => {
         )}
         {poolInfo && <LPPoolCard poolInfo={poolInfo} />}
         {poolInfo && account && account.toLocaleUpperCase() === poolInfo.creator.toLocaleUpperCase() && (
-          <BaseButton onClick={() => contract?.creatorSetFeePositionId(poolInfo?.poolId, lpId)}>
-            Creator Set TokenId
-          </BaseButton>
+          <BaseButton onClick={clickHandler}>Creator Set TokenId</BaseButton>
         )}
         <Tabs item={item} />
         <FooterPc />
