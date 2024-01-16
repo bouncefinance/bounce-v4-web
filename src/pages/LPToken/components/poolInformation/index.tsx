@@ -50,7 +50,11 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
         </Stack>
         <InterLargeTitle>Auction/SAVM Pool information</InterLargeTitle>
       </Stack>
-      {poolStatus === RandomPoolStatus.Closed ? <DetailPanel /> : <EmptyPanel />}
+      {poolStatus === RandomPoolStatus.Waiting || poolStatus === RandomPoolStatus.Closed ? (
+        <DetailPanel />
+      ) : (
+        <EmptyPanel />
+      )}
     </Stack>
   )
 }
