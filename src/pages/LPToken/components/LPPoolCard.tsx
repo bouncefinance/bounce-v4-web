@@ -1,37 +1,36 @@
-import { Stack, Tab, Tabs, Typography, styled } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import Icon2 from 'assets/images/eth_logo.png'
-import { ChainId } from 'constants/chain'
-import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
+import { RandomSelectionLPProps } from 'api/pool/type'
 
-const TabsCom = styled(Tabs)({
-  display: 'flex',
-  width: '100%',
-  height: 'auto',
-  minHeight: 40,
-  padding: '0 6px 6px',
-  borderRadius: '100px',
-  justifyContent: 'center',
-  color: '#959595',
-  textAlign: 'center',
-  '& .MuiTabs-flexContainer': {
-    height: 40
-  },
-  '& button': {
-    padding: '4px 16px',
-    height: 32
-  },
-  '&.active': {
-    background: '#E1F25C',
-    button: {
-      color: '#121212'
-    }
-  }
-})
+// const TabsCom = styled(Tabs)({
+//   display: 'flex',
+//   width: '100%',
+//   height: 'auto',
+//   minHeight: 40,
+//   padding: '0 6px 6px',
+//   borderRadius: '100px',
+//   justifyContent: 'center',
+//   color: '#959595',
+//   textAlign: 'center',
+//   '& .MuiTabs-flexContainer': {
+//     height: 40
+//   },
+//   '& button': {
+//     padding: '4px 16px',
+//     height: 32
+//   },
+//   '&.active': {
+//     background: '#E1F25C',
+//     button: {
+//       color: '#121212'
+//     }
+//   }
+// })
 
-export default function Page() {
+export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps }) {
   const Tabs = [
     {
       name: 'SAVM',
@@ -42,10 +41,8 @@ export default function Page() {
       icon: Icon2
     }
   ]
-  const [curTab, setCurTab] = useState(0)
-  const _chainId = ChainId.SEPOLIA
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId)
-  console.log('🚀 ~ Page ~ poolInfo:', poolInfo)
+  const [curTab] = useState(0)
+  console.log('🚀 ~ Page ~ poolInfo:', poolInfo.position)
   const isSm = useBreakpoint('sm')
 
   return (
@@ -60,7 +57,7 @@ export default function Page() {
         background: '#fff'
       }}
     >
-      <Stack
+      {/* <Stack
         sx={{
           width: '100%',
           maxWidth: 1440,
@@ -88,7 +85,7 @@ export default function Page() {
             />
           </TabsCom>
         ))}
-      </Stack>
+      </Stack> */}
       <Typography sx={{ width: '100%', textAlign: 'center' }} fontSize={28} fontWeight={600} color={'#000'}>
         Price Range
       </Typography>
@@ -158,7 +155,7 @@ export default function Page() {
           Current Price
         </Typography>
         <Typography fontSize={36} color={'#2B51DA'} fontWeight={600}>
-          18.82
+          $
         </Typography>
         <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
           {Tabs[curTab].name.toLocaleUpperCase()} per {Tabs[curTab === 0 ? 1 : 0].name.toLocaleUpperCase()}
