@@ -136,8 +136,7 @@ export const AuctionConfig: {
       AuctionType.FIXED_PRICE,
       AuctionType.ENGLISH_AUCTION,
       AuctionType.RANDOM_SELECTION,
-      AuctionType.DUTCH_AUCTION,
-      AuctionType.INITIAL_LP_OFFERING
+      AuctionType.DUTCH_AUCTION
     ],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION, AuctionType.MUTANT_ENGLISH],
     [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
