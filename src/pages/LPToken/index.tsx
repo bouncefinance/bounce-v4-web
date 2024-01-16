@@ -18,7 +18,7 @@ const LPToken = () => {
   const _chainId = ChainId.SEPOLIA
   const { account } = useActiveWeb3React()
   const contract = useRandomSelectionLPContract(undefined, _chainId)
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21428)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21449)
 
   const clickHandler = useCallback(async () => {
     if (contract && poolInfo) {
