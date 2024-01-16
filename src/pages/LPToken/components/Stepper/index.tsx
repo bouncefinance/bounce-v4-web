@@ -45,6 +45,15 @@ const StepperStyle = styled(Stepper)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     '&.MuiStepper-root': {
       width: 'auto !important'
+    },
+    '& .MuiStepConnector-root': {
+      marginLeft: 9
+    },
+    '& .MuiStepConnector-line': {
+      height: 50
+    },
+    '& .MuiStepLabel-root': {
+      padding: 0
     }
   }
 }))
@@ -109,7 +118,13 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
         }}
       >
         {textList.map(item => (
-          <Box key={item.label} display={'flex'} justifyContent={'flex-start'} flexDirection={'column'} pl={16}>
+          <Box
+            key={item.label}
+            display={'flex'}
+            justifyContent={'flex-start'}
+            flexDirection={'column'}
+            pl={isSm ? 0 : 16}
+          >
             <Typography color={'#959595'}>{item.label}</Typography>
             <Typography color={'#959595'}>{dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}</Typography>
           </Box>
