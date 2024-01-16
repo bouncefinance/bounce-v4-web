@@ -391,17 +391,18 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   }
   return (
     <>
-      {(!isUserJoined || (isUserJoined && poolStatus !== RandomPoolStatus.Closed)) && (
+      {(!isUserJoined ||
+        (isUserJoined && poolStatus !== RandomPoolStatus.Closed && poolStatus !== RandomPoolStatus.Waiting)) && (
         <NoJoinedCard
           isJoined={isUserJoined}
           isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
-          isClose={poolStatus === RandomPoolStatus.Closed}
+          isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
         />
       )}
-      {isUserJoined && poolStatus === RandomPoolStatus.Closed && (
+      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && <>{!isWinnerSeedDone && <WaitLotteryDraw />}</>}
+      {isUserJoined && !isUserWinner && isWinnerSeedDone && (
         <>
-          {!isUserWinner && isWinnerSeedDone && <NoWinnerCard />}
-          {!isWinnerSeedDone && <WaitLotteryDraw />}
+          <NoWinnerCard />
         </>
       )}
     </>
