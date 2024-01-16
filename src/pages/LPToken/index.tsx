@@ -6,8 +6,9 @@ import AuctionCard from './auctionCard'
 import LPPoolCard from './components/LPPoolCard'
 import PoolStepper from './components/Stepper'
 import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
+import { ChainId } from 'constants/chain'
 const LPToken = () => {
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(21423)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(ChainId.SEPOLIA, 21428)
   console.log('poolInfo', poolInfo)
 
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp

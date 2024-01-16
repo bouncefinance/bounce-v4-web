@@ -10,7 +10,7 @@ import { RandomSelectionLPProps } from 'api/pool/type'
 import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 export type ActionStatus = 'FIRST' | 'GO_TO_CHECK' | 'BID'
 const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  const { poolStatus } = useGetRandomSelectionLPPoolStatus(poolInfo)
+  const allStatus = useGetRandomSelectionLPPoolStatus(poolInfo)
   const [action, setAction] = useState<ActionStatus>('FIRST')
   const onGoCheckBox = () => {
     setAction('GO_TO_CHECK')
@@ -19,14 +19,16 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   return (
     <Box>
       <Header poolInfo={poolInfo} />
-      {true && <Card poolInfo={poolInfo} />}
-      {false && <WinnerPage />}
+      {!allStatus.isUserWinner && <Card poolInfo={poolInfo} />}
+      {allStatus.isUserWinner && <WinnerPage />}
       {action === 'GO_TO_CHECK' ? (
         <CheckBox onToBid={() => setAction('BID')} />
       ) : (
-        <PoolProgress poolInfo={poolInfo} poolStatus={poolStatus} />
+        <PoolProgress poolInfo={poolInfo} poolStatus={allStatus.poolStatus} />
       )}
-      {action !== 'GO_TO_CHECK' && <AuctionButtons onCheck={onGoCheckBox} action={action} />}
+      {action !== 'GO_TO_CHECK' && (
+        <AuctionButtons onCheck={onGoCheckBox} action={action} poolInfo={poolInfo} allStatus={allStatus} />
+      )}
     </Box>
   )
 }
