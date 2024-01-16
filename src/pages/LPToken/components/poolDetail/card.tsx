@@ -57,8 +57,8 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
               sx={{
                 position: 'absolute',
                 left: '50%',
-                top: isUpcoming ? 22 : '50%',
-                transform: isUpcoming ? 'translateX(-50%)' : 'translate(-50%,-50%)'
+                top: 22,
+                transform: 'translateX(-50%)'
               }}
             >
               <Image src={Logo} width={50} height={50} />
@@ -401,7 +401,7 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
           isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
         />
       )}
-      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && <>{!isWinnerSeedDone && <WaitLotteryDraw />}</>}
+      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone && <WaitLotteryDraw />}
       {isUserJoined && !isUserWinner && isWinnerSeedDone && (
         <>
           <NoWinnerCard />

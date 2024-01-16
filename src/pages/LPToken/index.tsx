@@ -10,7 +10,7 @@ import useRandomSelectionLPPoolInfo from 'bounceHooks/auction/useRandomSelection
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
   const _chainId = ChainId.SEPOLIA
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21428)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21451)
   return (
     <Box>
       <Box>
