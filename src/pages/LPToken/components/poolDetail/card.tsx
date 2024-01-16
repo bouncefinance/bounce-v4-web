@@ -3,54 +3,63 @@ import Image from 'components/Image'
 import Logo from 'assets/imgs/randomSelection/logo.png'
 import TypeIcon from 'assets/imgs/randomSelection/typeIcon.png'
 import NotWinIcon from 'assets/imgs/randomSelection/Failed.png'
-import useBreakpoint from 'hooks/useBreakpoint'
 import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
 import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
 import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
-const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  const { poolStatus, isUserJoined, isWinnerSeedDone, isUserWinner } = useGetRandomSelectionLPPoolStatus(poolInfo)
+import useBreakpoint from 'hooks/useBreakpoint'
+
+const NoJoinedCard = ({
+  poolInfo,
+  isJoined,
+  isUpcoming,
+  isClose
+}: {
+  poolInfo: RandomSelectionLPProps
+  isJoined: boolean
+  isUpcoming: boolean
+  isClose: boolean
+}) => {
   const isSm = useBreakpoint('sm')
-  const NoJoinedCard = ({
-    isJoined,
-    isUpcoming,
-    isClose
-  }: {
-    isJoined: boolean
-    isUpcoming: boolean
-    isClose: boolean
-  }) => {
-    return (
-      <>
+  return (
+    <>
+      <Box
+        sx={{
+          width: 426,
+          height: 207,
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          overflow: 'visible',
+          margin: isSm ? '0 auto' : '0 auto 30px',
+          // zoom: zoomNum
+          transform: `scale(1)`,
+          transformOrigin: '0 0',
+          mt: 40,
+          mb: isUpcoming ? 16 : 32
+        }}
+      >
         <Box
           sx={{
-            width: 426,
-            height: 207,
+            position: 'relative',
+            width: 122,
+            height: 216,
+            background: '#E1F25C',
             display: 'flex',
-            flexFlow: 'row nowrap',
-            overflow: 'visible',
-            margin: isSm ? '0 auto' : '0 auto 30px',
-            // zoom: zoomNum
-            transform: `scale(1)`,
-            transformOrigin: '0 0',
-            mt: 40,
-            mb: isUpcoming ? 16 : 32
+            flexFlow: 'column nowrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px',
+            borderRight: '1px dashed #959595',
+            transform: isJoined ? 'rotateZ(-10deg)' : 'unset',
+            transformOrigin: isJoined ? `bottom right` : 'unset',
+            opacity: isClose ? 0.2 : 1
           }}
         >
           <Box
             sx={{
-              position: 'relative',
-              width: 122,
-              height: 216,
-              background: '#E1F25C',
-              display: 'flex',
-              flexFlow: 'column nowrap',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '4px',
-              borderRight: '1px dashed #959595',
-              transform: isJoined ? 'rotateZ(-10deg)' : 'unset',
-              transformOrigin: isJoined ? `bottom right` : 'unset',
-              opacity: isClose ? 0.2 : 1
+              position: 'absolute',
+              left: '50%',
+              top: isUpcoming ? 22 : '50%',
+              transform: isUpcoming ? 'translateX(-50%)' : 'translate(-50%,-50%)'
             }}
           >
             <Box
@@ -338,70 +347,81 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
             </Box>
           )}
         </Box>
-      </>
-    )
-  }
-  const NoWinnerCard = () => {
-    return (
-      <>
-        <Box
+      </Box>
+    </>
+  )
+}
+
+const NoWinnerCard = () => {
+  return (
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'column nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          mt: 40,
+          mb: 16
+        }}
+      >
+        <Typography
           sx={{
-            display: 'flex',
-            flexFlow: 'column nowrap',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            mt: 40,
-            mb: 16
+            color: '#121212',
+            textAlign: 'center',
+            fontFamily: 'Public Sans',
+            fontSize: 20,
+            fontStyle: 'normal',
+            fontWeight: 600,
+            lineHeight: '140%' /* 28px */,
+            letterSpacing: '-0.4px'
           }}
         >
-          <Typography
-            sx={{
-              color: '#121212',
-              textAlign: 'center',
-              fontFamily: 'Public Sans',
-              fontSize: 20,
-              fontStyle: 'normal',
-              fontWeight: 600,
-              lineHeight: '140%' /* 28px */,
-              letterSpacing: '-0.4px'
-            }}
-          >
-            Sorry! You are not selected as a winner
-          </Typography>
-          <Image src={NotWinIcon} width={200} height={250} style={{ marginTop: 16 }} />
-        </Box>
-      </>
-    )
-  }
-  const WaitLotteryDraw = () => {
-    return (
-      <>
-        <Box
-          sx={{
-            display: 'flex',
-            flexFlow: 'column nowrap',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            mt: 40,
-            mb: 16
-          }}
-        >
-          <Image src={PendingWinIcon} height={250} />
-        </Box>
-      </>
-    )
-  }
+          Sorry! You are not selected as a winner
+        </Typography>
+        <Image src={NotWinIcon} width={200} height={250} style={{ marginTop: 16 }} />
+      </Box>
+    </>
+  )
+}
+const WaitLotteryDraw = () => {
+  return (
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          flexFlow: 'column nowrap',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          mt: 40,
+          mb: 16
+        }}
+      >
+        <Image src={PendingWinIcon} height={250} />
+      </Box>
+    </>
+  )
+}
+
+const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
+  const { poolStatus, isUserJoined, isWinnerSeedDone, isUserWinner } = useGetRandomSelectionLPPoolStatus(poolInfo)
+
   return (
     <>
       {(!isUserJoined ||
         (isUserJoined && poolStatus !== RandomPoolStatus.Closed && poolStatus !== RandomPoolStatus.Waiting)) && (
         <NoJoinedCard
+          poolInfo={poolInfo}
           isJoined={isUserJoined}
           isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
           isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
         />
       )}
-      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone && <WaitLotteryDraw />}
+      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone && (
+        <>
+          <WaitLotteryDraw />
+        </>
+      )}
       {isUserJoined && !isUserWinner && isWinnerSeedDone && (
         <>
           <NoWinnerCard />

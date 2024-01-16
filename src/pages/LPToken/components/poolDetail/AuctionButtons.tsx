@@ -212,14 +212,14 @@ const AuctionButtons = ({
     return <BaseButton disabled>insufficient balance</BaseButton>
   }
   if (action === 'FIRST') {
-    return <BaseButton onClick={onCheck}>To Bid</BaseButton>
+    return <BaseButton onClick={onCheck}>Place a Bid</BaseButton>
   }
 
   if (approvalState !== ApprovalState.APPROVED && action === 'BID') {
     if (approvalState === ApprovalState.PENDING) {
       return <BaseButton disabled>Pending...</BaseButton>
     }
-    return <BaseButton onClick={approveCallbackFn}>Approval</BaseButton>
+    return <BaseButton onClick={approveCallbackFn}>Approve</BaseButton>
   }
 
   if (action === 'BID') {
