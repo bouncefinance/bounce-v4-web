@@ -118,9 +118,9 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
             gridTemplateColumns: isSm ? '100%' : '33% 33% 34%'
           }}
         >
-          {textList.map(item => (
+          {textList.map((item, index) => (
             <Box
-              key={item.label}
+              key={`${item.label}-${item.time}-${index}`}
               display={'flex'}
               justifyContent={'flex-start'}
               flexDirection={'column'}
@@ -132,8 +132,8 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
           ))}
         </Stack>
         <StepperStyle activeStep={activeStep} orientation={isSm ? 'vertical' : 'horizontal'}>
-          {steps.map(item => (
-            <Step key={item.label}>
+          {steps.map((item, index) => (
+            <Step key={`${item.label}-${item.time}-${index}`}>
               <StepLabel icon={<StepDefaultIcon />}></StepLabel>
             </Step>
           ))}

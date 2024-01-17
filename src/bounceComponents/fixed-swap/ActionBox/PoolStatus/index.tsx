@@ -73,7 +73,7 @@ const PoolStatusBox = ({
               variant="body1"
               component="span"
             >
-              &nbsp;{days}d : {hours}h : {minutes}m
+              &nbsp;{days}d : {hours}h : {minutes}m: {seconds}
             </Typography>
           )}
         </Box>
