@@ -104,15 +104,13 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
         value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
       />
       <Stack flexDirection={'row'} alignItems={'center'} justifyContent={isNoLive ? 'end' : 'space-between'}>
-        {!isNoLive && (
+        {/* {!isNoLive && (
           <InterH3 sx={{ color: !Number(poolInfo.curPlayer) ? '#959595' : '#B5E529' }}>{poolInfo.curPlayer} </InterH3>
-        )}
+        )} */}
         <InterH3 sx={{ fontWeight: 400 }}>
-          {isNoLive && (
-            <InterH3 sx={{ color: isNoLive ? '#2B51DA' : '#B5E529' }} as={'span'}>
-              {poolInfo.curPlayer || '--'}
-            </InterH3>
-          )}
+          <InterH3 sx={{ color: isNoLive ? '#2B51DA' : '#B5E529' }} as={'span'}>
+            {poolInfo.curPlayer || '--'}
+          </InterH3>
           <span style={{ padding: '0 5px 0 10px', fontWeight: 500 }}>/</span>
           {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant() || '--'}
         </InterH3>

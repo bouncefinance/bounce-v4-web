@@ -98,7 +98,10 @@ const AuctionButtons = ({
   const [approvalState, approveCallback] = useApproveCallback(token1Amount, poolInfo.contract)
   const approveCallbackFn = useTransactionModalWrapper(approveCallback as any, {
     isApprove: true,
-    hideSuccessTip: true
+    hideSuccessTip: true,
+    onSuccess: () => {
+      runWithModal(token1Amount)
+    }
   })
 
   const { chainId, account } = useActiveWeb3React()

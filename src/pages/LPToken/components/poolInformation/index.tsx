@@ -64,7 +64,7 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
         </Stack>
         <InterLargeTitle>SAVM/ETH Pool Information</InterLargeTitle>
       </Stack>
-      {poolInfo.positionId ? <DetailPanel poolInfo={poolInfo} /> : <EmptyPanel />}
+      {Number(poolInfo.positionId) ? <DetailPanel poolInfo={poolInfo} /> : <EmptyPanel />}
     </Stack>
   )
 }
