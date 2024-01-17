@@ -299,7 +299,7 @@ const NoJoinedCard = ({
                 letterSpacing: 0
               }}
             >
-              250
+              8.929
             </Typography>
             <Typography
               sx={{

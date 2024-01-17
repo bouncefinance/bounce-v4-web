@@ -1,6 +1,6 @@
 import { Button, Stack, Box, Typography, Alert } from '@mui/material'
 import { Form, Formik } from 'formik'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
@@ -59,6 +59,26 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
   const [currencyTo, setCurrencyTo] = useState<Currency>()
+  const valuesState = useValuesState()
+  const valuesDispatch = useValuesDispatch()
+  useEffect(() => {
+    if (valuesState.tokenTo.address !== '') {
+      const currency = makeCurrency({
+        chainId: valuesState.tokenTo.chainId,
+        address: valuesState.tokenTo.address,
+        logoURI: decodeURIComponent(valuesState.tokenTo.smallUrl || ''),
+        symbol: valuesState.tokenTo.symbol?.toLocaleUpperCase() || '',
+        decimals: valuesState.tokenTo.decimals
+      })
+      setCurrencyTo(currency)
+    }
+  }, [
+    valuesState.tokenTo.address,
+    valuesState.tokenTo.chainId,
+    valuesState.tokenTo.decimals,
+    valuesState.tokenTo.smallUrl,
+    valuesState.tokenTo.symbol
+  ])
   const balance = useCurrencyBalance(account || undefined, currencyTo, auctionInChainId)
   const isSm = useBreakpoint('sm')
   const validationSchema = Yup.object({
@@ -118,9 +138,6 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     //       )
     //   })
   })
-
-  const valuesState = useValuesState()
-  const valuesDispatch = useValuesDispatch()
 
   const internalInitialValues: FormValues = {
     tokenFromAddress: valuesState.tokenFrom.address || '',

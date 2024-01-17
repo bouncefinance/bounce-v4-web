@@ -171,11 +171,12 @@ export const AddLpReleaseTypeAdvanced = () => {
           {({ values, setValues, errors, setFieldValue }) => {
             return (
               <Form>
-                <FormItem label="Pool name" name="poolName">
+                <FormItem label="Pool Name" name="poolName">
                   <OutlinedInput />
                 </FormItem>
                 <Stack direction="column" sx={{ mt: 24, width: '100%' }} spacing={24}>
                   <Field
+                    label="OpenAt"
                     component={DateTimePickerFormItem}
                     name="startTime"
                     disablePast
@@ -186,15 +187,18 @@ export const AddLpReleaseTypeAdvanced = () => {
                   />
 
                   <Field
+                    label="CloseAt"
                     component={DateTimePickerFormItem}
                     name="endTime"
                     disablePast
                     minDateTime={values.startTime}
                     onChange={(endTime: Moment) => {
                       setFieldValue('endTime', endTime)
+                      setFieldValue('delayUnlockingTime', endTime)
                     }}
                   />
                   <Field
+                    label="ClaimAt"
                     component={DateTimePickerFormItem}
                     name="delayUnlockingTime"
                     disablePast
