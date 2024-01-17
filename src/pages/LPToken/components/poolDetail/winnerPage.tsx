@@ -66,7 +66,6 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
     poolInfo.userTotalFeesReward?.claimedToken0,
     poolInfo.userTotalFeesReward?.claimedToken1
   ])
-  console.log('🚀 ~ WinnerPage ~ poolInfo1111:', poolInfo, TotalReward)
 
   return (
     <Box mb={24}>

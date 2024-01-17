@@ -18,7 +18,6 @@ import { useMemo } from 'react'
 import { formatGroupNumber } from 'utils/number'
 
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  console.log('🚀 ~ PoolInformation ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
   return (
     <Stack

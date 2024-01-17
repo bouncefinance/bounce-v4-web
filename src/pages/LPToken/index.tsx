@@ -39,7 +39,6 @@ const LPToken = () => {
   const approveHandler = useCallback(async () => {
     approve()
   }, [approve])
-  console.log('🚀 ~ approveHandler ~ approveHandler:', approveHandler)
 
   return (
     <Box>
