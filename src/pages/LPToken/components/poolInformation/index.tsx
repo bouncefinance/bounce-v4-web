@@ -16,6 +16,8 @@ import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
 import { formatGroupNumber } from 'utils/number'
+import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
+import { shortenAddress } from 'utils'
 
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   const isSm = useBreakpoint('sm')
@@ -188,6 +190,32 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
               <LabelTitle>{poolInfo.PoolTotal1Fees?.toSignificant(6) || '--'}</LabelTitle>
             </Stack>
+          </Stack>
+        </Stack>
+      </WhiteCard>
+      <WhiteCard mt={24} sx={{ alignItems: 'start' }}>
+        <LabelTitle>Pool Information</LabelTitle>
+        <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'} width={'100%'}>
+          <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+            <LabelTitle>Contract Address</LabelTitle>
+          </Stack>
+          <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+            {poolInfo.token0.address ? (
+              <>
+                <LabelTitle>{shortenAddress(poolInfo.token0.address) || '--'}</LabelTitle>
+                <CopyToClipboard text={poolInfo.token0.address} />
+              </>
+            ) : (
+              '--'
+            )}
+          </Stack>
+        </Stack>
+        <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'} width={'100%'}>
+          <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+            <LabelTitle>Pool Id</LabelTitle>
+          </Stack>
+          <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
+            <LabelTitle>{poolInfo.positionId || '--'}</LabelTitle>
           </Stack>
         </Stack>
       </WhiteCard>

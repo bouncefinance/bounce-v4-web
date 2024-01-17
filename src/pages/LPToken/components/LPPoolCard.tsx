@@ -58,7 +58,8 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
         padding: isSm ? '24px 16px' : '24px 56px 65px',
         background: '#fff',
         width: '100%',
-        maxWidth: 1440
+        maxWidth: 1440,
+        px: 72
       }}
     >
       {/* <Stack
