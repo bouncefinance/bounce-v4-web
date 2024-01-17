@@ -79,6 +79,7 @@ const AuctionWinnerList = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
         offset: (current - 1) * pageSize,
         limit: pageSize,
         poolId,
+        category: poolInfo.category,
         chainId: chainConfigInBackend?.id || 0
       })
       //   if (category === 1) {
