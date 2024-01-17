@@ -416,29 +416,19 @@ const WaitLotteryDraw = () => {
 
 const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   const { poolStatus, isUserJoined, isWinnerSeedDone, isUserWinner } = useGetRandomSelectionLPPoolStatus(poolInfo)
-
+  if (isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone) {
+    return <WaitLotteryDraw />
+  }
+  if (isUserJoined && !isUserWinner && isWinnerSeedDone) {
+    return <NoWinnerCard />
+  }
   return (
-    <>
-      {(!isUserJoined ||
-        (isUserJoined && poolStatus !== RandomPoolStatus.Closed && poolStatus !== RandomPoolStatus.Waiting)) && (
-        <NoJoinedCard
-          poolInfo={poolInfo}
-          isJoined={isUserJoined}
-          isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
-          isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
-        />
-      )}
-      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone && (
-        <>
-          <WaitLotteryDraw />
-        </>
-      )}
-      {isUserJoined && !isUserWinner && isWinnerSeedDone && (
-        <>
-          <NoWinnerCard />
-        </>
-      )}
-    </>
+    <NoJoinedCard
+      poolInfo={poolInfo}
+      isJoined={isUserJoined}
+      isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
+      isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
+    />
   )
 }
 

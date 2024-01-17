@@ -13,6 +13,7 @@ import { useRandomSelectionLPContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 27) as IPrivatePadProp
@@ -20,7 +21,7 @@ const LPToken = () => {
   const nftAddr = '0x1238536071E1c677A632429e3655c799b22cDA52'
   const { account } = useActiveWeb3React()
   const contract = useRandomSelectionLPContract(undefined, _chainId)
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, item.backedId)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21446 || item.backedId)
   const [, approve] = useNFTApproveAllCallback(nftAddr, contract?.address)
 
   const clickHandler = useCallback(async () => {
@@ -49,6 +50,11 @@ const LPToken = () => {
     <Box sx={{ background: '#F6F6F3' }}>
       <Box>
         <ProjectHead item={item} />
+        {!poolInfo && (
+          <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <BounceAnime />
+          </Box>
+        )}
         {poolInfo && (
           <>
             <AuctionCard poolInfo={poolInfo} />
