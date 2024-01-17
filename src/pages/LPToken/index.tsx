@@ -12,7 +12,6 @@ import { BaseButton } from './components/poolDetail/AuctionButtons'
 import { useRandomSelectionLPContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
-export const lpId = 7269
 
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
@@ -24,15 +23,20 @@ const LPToken = () => {
   const [, approve] = useNFTApproveAllCallback(nftAddr, contract?.address)
 
   const clickHandler = useCallback(async () => {
-    if (contract && poolInfo) {
-      // await contract.creatorClaim(poolInfo.poolId)
-      await contract.creatorSetFeePositionId(poolInfo.poolId, lpId)
+    if (contract && poolInfo && poolInfo.positionId) {
+      await contract.creatorSetFeePositionId(poolInfo.poolId, poolInfo.positionId)
     }
   }, [contract, poolInfo])
 
   const distributeHandler = useCallback(() => {
     if (contract && poolInfo) {
       contract.distributeFee(poolInfo.poolId)
+    }
+  }, [contract, poolInfo])
+
+  const claimHandler = useCallback(() => {
+    if (contract && poolInfo) {
+      contract.creatorClaim(poolInfo.poolId)
     }
   }, [contract, poolInfo])
 
@@ -51,11 +55,14 @@ const LPToken = () => {
             <PoolStepper poolInfo={poolInfo} />
           </>
         )}
-        {poolInfo && <LPPoolCard poolInfo={poolInfo} />}
+        {poolInfo && poolInfo.positionId && <LPPoolCard poolInfo={poolInfo} />}
         {poolInfo && account && account.toLocaleUpperCase() === poolInfo.creator.toLocaleUpperCase() && (
           <Stack justifyContent={'center'} direction={'column'} spacing={20} alignItems={'center'}>
             <BaseButton sx={{ width: 340 }} onClick={clickHandler}>
               Creator Set TokenId
+            </BaseButton>
+            <BaseButton sx={{ width: 340 }} onClick={claimHandler}>
+              Creator Claim
             </BaseButton>
             <BaseButton sx={{ width: 340 }} onClick={distributeHandler}>
               Distribute Fee
