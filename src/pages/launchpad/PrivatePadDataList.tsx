@@ -2790,10 +2790,11 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
   }
 ]
 export const SatoshiVMLPData: IPrivatePadProp = {
+  backedId: 21469,
   keyId: 27,
   liveTimeStamp: {
-    start: 1705507680,
-    end: 1705594080
+    start: 1705536000000,
+    end: 1705622400000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
@@ -2803,10 +2804,8 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   chainId: 1,
   tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
-  upcomingLink: routes.thirdPart.LPToken,
-  // upcomingLink: '',
-  liveLink: routes.thirdPart.LPToken,
-  // liveLink: '',
+  upcomingLink: routes.thirdPart.SatoshiVMLp,
+  liveLink: routes.thirdPart.SatoshiVMLp,
   projectInfo: SatoshiVMLPProjectInfo,
   tokenMetrics: [],
   desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
@@ -2826,10 +2825,8 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Reward Token', content: `$ETH` },
-    // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
-    { title: 'Ticket Price', content: '8.929 AUCTION / Ticket' },
-    // { title: 'Reward Claim Time', content: 'Ervery Sunday' },
-    { title: 'Reward Claim Time', content: 'TBD' },
+    { title: 'Ticket Price', content: '9.30 AUCTION / Ticket' },
+    { title: 'Reward Claim Time', content: 'Ervery Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   privatePrices: [
@@ -2841,8 +2838,8 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   backedId: 21464,
   keyId: 28,
   liveTimeStamp: {
-    start: 1705507680,
-    end: 1705594080
+    start: 1705536000000,
+    end: 1705622400000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Random Selection',
@@ -2875,7 +2872,7 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$SAVM' },
-    { title: 'Ticket Price', content: '3.57 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: '3.72 AUCTION / Ticket' },
     // { title: 'Ticket Price', content: 'TBD' },
     { title: 'Token Amount / Ticket', content: '420,000 SAVM' },
     { title: 'Blockchain', content: 'Ethereum' }
