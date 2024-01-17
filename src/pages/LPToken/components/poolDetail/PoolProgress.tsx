@@ -103,7 +103,7 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
         variant="determinate"
         value={(Number(poolInfo.curPlayer) / Number(poolInfo.maxPlayere)) * 100}
       />
-      <Stack flexDirection={'row'} alignItems={'center'} justifyContent={isNoLive ? 'end' : 'space-between'}>
+      <Stack flexDirection={'row'} alignItems={'center'} justifyContent={'end'}>
         {/* {!isNoLive && (
           <InterH3 sx={{ color: !Number(poolInfo.curPlayer) ? '#959595' : '#B5E529' }}>{poolInfo.curPlayer} </InterH3>
         )} */}
