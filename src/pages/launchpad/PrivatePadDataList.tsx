@@ -2706,29 +2706,42 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
       </Stack>
     ]
   },
-  // {
-  //   title: 'Tokenomics',
-  //   info: [
-  //     <Box
-  //       key={1}
-  //       sx={{
-  //         ' &>ul': {
-  //           display: 'flex',
-  //           flexDirection: 'column',
-  //           gap: 10
-  //         }
-  //       }}
-  //     >
-  //       <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
-  //       <ul>
-  //         <li>50% liquidity & bootstrapping</li>
-  //         <li>30%: Chain rewards</li>
-  //         <li>15%: Rewards for contributors</li>
-  //         <li>5%: Token Launch on Bounce</li>
-  //       </ul>
-  //     </Box>
-  //   ]
-  // },
+  {
+    title: 'Tokenomics',
+    info: [
+      <Box
+        key={1}
+        sx={{
+          ' &>ul': {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }}
+      >
+        <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
+        <ul>
+          <li>
+            30% Liquidity: added to Uniswap liquidity/active liquidity management with Range Protocol + CEX liquidity
+            (100% Unlocked)
+          </li>
+          <li>
+            36.5% Ecosystem growth: Dedicated to different airdrops and incentives for the ecosystem. Unlock 5% per
+            month
+          </li>
+          <li>15% Contributors: Locked for 6 months then vested lineary over 3 years</li>
+          <li>
+            15% Bootstrapping: 10% - A total of $200,000 was raised in a round at $2M FDV. 50% unlocked on TGE, 3 months
+            cliff then monthly vestings. 5% reseved for technical and marketing advisors
+          </li>
+          <li>2% Bounce Finance IDO</li>
+          <li>1% APE terminal IDO</li>
+          <li>0.4% Mubi farming pool</li>
+          <li>0.1% BSSB farming pool</li>
+        </ul>
+      </Box>
+    ]
+  },
   {
     title: 'SatoshiVM’s Architecture',
     info: [
@@ -2824,13 +2837,13 @@ export const SatoshiVMLPData: IPrivatePadProp = {
     </Link>
   ],
   moreData: [
-    { title: 'Reward Token', content: `$ETH` },
+    { title: 'Reward Token', content: `$ETH | $SAVM` },
     { title: 'Ticket Price', content: '10 AUCTION / Ticket' },
     { title: 'Reward Claim Time', content: 'Every Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   privatePrices: [
-    { title: 'Reward Token', value: `$ETH` },
+    { title: 'Reward Token', value: `$ETH | $SAVM` },
     { title: 'Blockchain', value: 'Ethereum' }
   ]
 }
