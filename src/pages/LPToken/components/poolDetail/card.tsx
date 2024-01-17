@@ -204,7 +204,7 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
-                  fontSize: 12,
+                  fontSize: isSm ? 10 : 13,
                   color: '#959595'
                   // marginBottom: 10
                 }}
@@ -215,11 +215,11 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
-                  fontSize: 28,
+                  fontSize: isSm ? 24 : 28,
                   color: '#121212'
                 }}
               >
-                {poolInfo.totalShare}
+                {poolInfo.totalShare || '--'}
               </Typography>
             </Box>
             <Box
@@ -238,7 +238,7 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
-                  fontSize: 12,
+                  fontSize: isSm ? 10 : 13,
                   color: '#959595'
                   // marginBottom: 10
                 }}
@@ -249,11 +249,12 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
-                  fontSize: 28,
+                  fontSize: isSm ? 24 : 28,
                   color: '#121212'
                 }}
               >
-                {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant()}
+                {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant() ||
+                  '--'}
               </Typography>
             </Box>
           </Box>
@@ -274,7 +275,7 @@ const NoJoinedCard = ({
               sx={{
                 fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                 fontWeight: 400,
-                fontSize: 12,
+                fontSize: isSm ? 10 : 13,
                 color: '#959595',
                 textAlign: 'center',
                 marginBottom: 20
@@ -300,13 +301,13 @@ const NoJoinedCard = ({
                 letterSpacing: 0
               }}
             >
-              8.929
+              10
             </Typography>
             <Typography
               sx={{
                 fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                 fontWeight: 400,
-                fontSize: 12,
+                fontSize: isSm ? 10 : 13,
                 color: '#959595'
               }}
             >

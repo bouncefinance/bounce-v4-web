@@ -2790,7 +2790,7 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
   }
 ]
 export const SatoshiVMLPData: IPrivatePadProp = {
-  backedId: 21469,
+  backedId: 21476,
   keyId: 27,
   liveTimeStamp: {
     start: 1705536000000,
@@ -2825,7 +2825,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Reward Token', content: `$ETH` },
-    { title: 'Ticket Price', content: '9.30 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: '10 AUCTION / Ticket' },
     { title: 'Reward Claim Time', content: 'Ervery Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
@@ -2835,7 +2835,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ]
 }
 export const SatoshiVMRandomData: IPrivatePadProp = {
-  backedId: 21464,
+  backedId: 21475,
   keyId: 28,
   liveTimeStamp: {
     start: 1705536000000,
@@ -2872,7 +2872,7 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$SAVM' },
-    { title: 'Ticket Price', content: '3.72 AUCTION / Ticket' },
+    { title: 'Ticket Price', content: '4 AUCTION / Ticket' },
     // { title: 'Ticket Price', content: 'TBD' },
     { title: 'Token Amount / Ticket', content: '420,000 SAVM' },
     { title: 'Blockchain', content: 'Ethereum' }

@@ -17,6 +17,7 @@ import { ReactComponent as GreenSvg } from 'assets/imgs/lpToken/green.svg'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useMemo } from 'react'
 import dayjs from 'dayjs'
+import { Dots } from 'themes'
 export const BaseButton = styled(Button)`
   width: 100%;
   padding: 20px;
@@ -233,7 +234,14 @@ const AuctionButtons = ({
     if (approvalState === ApprovalState.PENDING) {
       return <BaseButton disabled>Pending...</BaseButton>
     }
-    return <BaseButton onClick={approveCallbackFn}>Approve</BaseButton>
+    if (approvalState === ApprovalState.UNKNOWN) {
+      return (
+        <LoadingButtonStyle loadingPosition="start" loading>
+          Loading <Dots />
+        </LoadingButtonStyle>
+      )
+    }
+    return <BaseButton onClick={approveCallbackFn}> Approve use of {poolInfo.token1.symbol}</BaseButton>
   }
 
   if (action === 'BID') {

@@ -110,11 +110,11 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
         <InterH3 sx={{ fontWeight: 400 }}>
           {isNoLive && (
             <InterH3 sx={{ color: isNoLive ? '#2B51DA' : '#B5E529' }} as={'span'}>
-              {poolInfo.curPlayer}
+              {poolInfo.curPlayer || '--'}
             </InterH3>
           )}
           <span style={{ padding: '0 5px 0 10px', fontWeight: 500 }}>/</span>
-          {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant()}
+          {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant() || '--'}
         </InterH3>
       </Stack>
     </Stack>
