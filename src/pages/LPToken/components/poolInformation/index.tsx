@@ -172,6 +172,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   )
 }
 const EmptyPanel = () => {
+  const isSm = useBreakpoint('sm')
   return (
     <Stack gap={32} pt={24} justifyContent={'center'} alignItems={'center'}>
       <img src={EmptyImg} style={{ width: '280.109px', height: '186.958px' }} />
@@ -179,11 +180,12 @@ const EmptyPanel = () => {
         sx={{
           color: '#000',
           fontFamily: 'Poppins',
-          fontSize: 16,
+          fontSize: isSm ? 14 : 16,
           fontStyle: 'normal',
           fontWeight: 500,
           lineHeight: '25.601px' /* 160.009% */,
-          textTransform: 'capitalize'
+          textTransform: isSm ? 'none' : 'capitalize',
+          textAlign: isSm ? 'center' : 'start'
         }}
       >
         After the lottery is drawn, the detailed information of the pool will be displayed.
