@@ -112,7 +112,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
     return undefined
   }, [pool, positionInfo])
 
-  const { token0Price, token1Price, singleQuoteTokenNumber } = useTokenPriceByUni(
+  const { token0Price, token1Price, singleQuoteTokenNumber, tokenPrice } = useTokenPriceByUni(
     token0?.address,
     token0?.decimals,
     token1?.address,
@@ -228,6 +228,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
       creatorClaimed: creatorClaimRes?.result?.[0] || false,
       token0Price,
       token1Price,
+      tokenPrice,
       singleQuoteTokenNumber
     }
   }, [
@@ -245,6 +246,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
     creatorClaimRes?.result,
     token0Price,
     token1Price,
+    tokenPrice,
     singleQuoteTokenNumber
   ])
 

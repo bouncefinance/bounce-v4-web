@@ -331,6 +331,7 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
   curPlayer: string | number
   token0Price: BigNumber | undefined
   token1Price: BigNumber | undefined
+  tokenPrice: BigNumber | undefined
   singleQuoteTokenNumber: BigNumber | undefined
   whitelistData?: {
     isUserInWhitelist: boolean | undefined

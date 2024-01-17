@@ -127,6 +127,7 @@ export function useTokenPriceByUni(
 ): {
   token0Price: BigNumber | undefined
   token1Price: BigNumber | undefined
+  tokenPrice: BigNumber | undefined
   singleQuoteTokenNumber: BigNumber | undefined
 } {
   const { chainId: _chainId } = useActiveWeb3React()
@@ -192,6 +193,7 @@ export function useTokenPriceByUni(
       return {
         token0Price: undefined,
         token1Price: undefined,
+        tokenPrice: undefined,
         singleQuoteTokenNumber: undefined
       }
     const tokenPrice = pricingPrice.times(quoteTokenNumber)
@@ -200,6 +202,7 @@ export function useTokenPriceByUni(
     return {
       token0Price: _token0IsPricing ? pricingPrice : tokenPrice,
       token1Price: _token0IsPricing ? tokenPrice : pricingPrice,
+      tokenPrice,
       singleQuoteTokenNumber: quoteTokenNumber
     }
   }, [pricingPrice, quoteTokenNumber, token0Address, _pricingAddresses])
