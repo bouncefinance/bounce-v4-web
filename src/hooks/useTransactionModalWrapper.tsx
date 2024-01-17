@@ -9,8 +9,8 @@ import {
 import { show } from '@ebay/nice-modal-react'
 import DialogTips from 'bounceComponents/common/DialogTips'
 
-export function useTransactionModalWrapper(
-  event: (...args: any) => Promise<TransactionResponse>,
+export function useTransactionModalWrapper<T extends any[]>(
+  event: (...args: T) => Promise<TransactionResponse>,
   option?: {
     isApprove?: boolean
     successTipsText?: string
@@ -19,7 +19,7 @@ export function useTransactionModalWrapper(
   }
 ) {
   const { runAsync } = useRequest(
-    async (...args) => {
+    async (...args: T) => {
       try {
         option?.isApprove ? showRequestApprovalDialog() : showRequestConfirmDialog()
         const { wait } = await event(...args)
