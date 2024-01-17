@@ -72,7 +72,9 @@ const LPToken = () => {
             </BaseButton>
           </Stack>
         )}
-        <Tabs item={item} />
+        <Box sx={{ width: '100%', background: '#F6F6F3' }}>
+          <Tabs item={item} />
+        </Box>
         <FooterPc />
       </Box>
     </Box>
