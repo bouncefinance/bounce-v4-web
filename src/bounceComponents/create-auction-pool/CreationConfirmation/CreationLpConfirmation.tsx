@@ -409,7 +409,7 @@ const CreationConfirmation = () => {
                   <Typography>{values.winnerNumber}</Typography>
                 </ConfirmationInfoItem>
                 <ConfirmationInfoItem title="Whitelist">
-                  <Typography>{values.whitelist.toString()}</Typography>
+                  <Typography>{values.whitelist.length ? values.whitelist.length.toString() : '--'}</Typography>
                 </ConfirmationInfoItem>
               </Stack>
             </Box>
