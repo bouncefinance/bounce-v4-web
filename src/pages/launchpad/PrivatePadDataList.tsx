@@ -2826,7 +2826,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   moreData: [
     { title: 'Reward Token', content: `$ETH` },
     { title: 'Ticket Price', content: '9.30 AUCTION / Ticket' },
-    { title: 'Reward Claim Time', content: 'Ervery Sunday' },
+    { title: 'Reward Claim Time', content: 'Every Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   privatePrices: [

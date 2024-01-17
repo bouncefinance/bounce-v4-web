@@ -54,9 +54,11 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
         display: 'flex',
         flexDirection: 'column',
         borderRadius: '24px',
-        margin: isSm ? '24px 0px' : '40px 72px',
+        margin: isSm ? '24px auto' : '40px auto',
         padding: isSm ? '24px 16px' : '24px 56px 65px',
-        background: '#fff'
+        background: '#fff',
+        width: '100%',
+        maxWidth: 1440
       }}
     >
       {/* <Stack

@@ -95,7 +95,7 @@ const AuctionButtons = ({
   )
   const token1Amount = CurrencyAmount.fromRawAmount(token1Currency, poolInfo.maxAmount1PerWallet)
 
-  const [approvalState, approveCallback] = useApproveCallback(token1Amount, poolInfo.contract)
+  const [approvalState, , approveCallback] = useApproveCallback(token1Amount, poolInfo.contract)
   const approveCallbackFn = useTransactionModalWrapper(approveCallback as any, {
     isApprove: true,
     hideSuccessTip: true,
@@ -205,7 +205,9 @@ const AuctionButtons = ({
           ) : (
             <LoadingButtonStyle
               disabled={
-                poolInfo.userTotalFeesReward?.claimableToken0?.equalTo('0') &&
+                poolInfo.userTotalFeesReward?.claimableToken1 === undefined ||
+                poolInfo.userTotalFeesReward?.claimableToken0 === undefined ||
+                poolInfo.userTotalFeesReward?.claimableToken0?.equalTo('0') ||
                 poolInfo.userTotalFeesReward?.claimableToken1?.equalTo('0')
               }
               onClick={() => onClaim()}
