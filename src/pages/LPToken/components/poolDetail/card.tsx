@@ -8,6 +8,7 @@ import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
 import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useEffect, useState } from 'react'
+import { Currency, CurrencyAmount } from 'constants/token'
 
 const NoJoinedCard = ({
   poolInfo,
@@ -251,7 +252,7 @@ const NoJoinedCard = ({
                   color: '#121212'
                 }}
               >
-                {poolInfo.maxPlayere}
+                {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant()}
               </Typography>
             </Box>
           </Box>

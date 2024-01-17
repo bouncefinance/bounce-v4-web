@@ -113,7 +113,7 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
               </Typography>
             </Stack>
             <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              18.82
+              0
             </Typography>
           </Stack>
         </Stack>
@@ -138,7 +138,7 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
               </Typography>
             </Stack>
             <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              18.82
+              ∞
             </Typography>
           </Stack>
         </Stack>

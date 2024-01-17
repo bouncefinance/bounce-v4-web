@@ -96,47 +96,49 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
     }
   )
   return (
-    <Box
-      sx={{
-        borderRadius: 20,
-        width: '100%',
-        maxWidth: 1440,
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: isSm ? 'row-reverse' : 'column',
-        justifyContent: isSm ? 'flex-end' : 'unset',
-        gap: 16,
-        mt: isSm ? 32 : 40,
-        px: isSm ? 16 : 72
-      }}
-    >
-      <Stack
-        direction={'row'}
+    <Box sx={{ width: '100%', background: '#F6F6F3' }}>
+      <Box
         sx={{
-          display: 'grid',
-          gridTemplateColumns: isSm ? '100%' : '33% 33% 34%'
+          borderRadius: 20,
+          width: '100%',
+          maxWidth: 1440,
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: isSm ? 'row-reverse' : 'column',
+          justifyContent: isSm ? 'flex-end' : 'unset',
+          gap: 16,
+          mt: isSm ? 32 : 40,
+          px: isSm ? 16 : 72
         }}
       >
-        {textList.map(item => (
-          <Box
-            key={item.label}
-            display={'flex'}
-            justifyContent={'flex-start'}
-            flexDirection={'column'}
-            pl={isSm ? 0 : 16}
-          >
-            <Typography color={'#959595'}>{item.label}</Typography>
-            <Typography color={'#959595'}>{dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}</Typography>
-          </Box>
-        ))}
-      </Stack>
-      <StepperStyle activeStep={activeStep} orientation={isSm ? 'vertical' : 'horizontal'}>
-        {steps.map(item => (
-          <Step key={item.label}>
-            <StepLabel icon={<StepDefaultIcon />}></StepLabel>
-          </Step>
-        ))}
-      </StepperStyle>
+        <Stack
+          direction={'row'}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: isSm ? '100%' : '33% 33% 34%'
+          }}
+        >
+          {textList.map((item, index) => (
+            <Box
+              key={`${item.label}-${item.time}-${index}`}
+              display={'flex'}
+              justifyContent={'flex-start'}
+              flexDirection={'column'}
+              pl={isSm ? 0 : 16}
+            >
+              <Typography color={'#959595'}>{item.label}</Typography>
+              <Typography color={'#959595'}>{dayjs(item.time).format('YYYY-MM-DD HH:mm:ss')}</Typography>
+            </Box>
+          ))}
+        </Stack>
+        <StepperStyle activeStep={activeStep} orientation={isSm ? 'vertical' : 'horizontal'}>
+          {steps.map((item, index) => (
+            <Step key={`${item.label}-${item.time}-${index}`}>
+              <StepLabel icon={<StepDefaultIcon />}></StepLabel>
+            </Step>
+          ))}
+        </StepperStyle>
+      </Box>
     </Box>
   )
 }

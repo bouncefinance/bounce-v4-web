@@ -310,6 +310,7 @@ export interface RandomSelectionLPProps extends FixedSwapPool {
   currencyAmountTotal1?: CurrencyAmount
   currencySwappedTotal1?: CurrencyAmount
   position?: Position
+  positionId?: string
   userTotalFeesReward?: {
     claimableToken0?: CurrencyAmount
     claimableToken1?: CurrencyAmount
