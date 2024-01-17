@@ -196,11 +196,18 @@ const AuctionButtons = ({
               </Stack>
             </BaseButton>
           ) : (
-            <LoadingButtonStyle onClick={() => onClaim()} loading={noWinnerSubmitted.submitted}>
+            <LoadingButtonStyle
+              disabled={
+                poolInfo.userTotalFeesReward?.claimableToken0?.equalTo('0') &&
+                poolInfo.userTotalFeesReward?.claimableToken1?.equalTo('0')
+              }
+              onClick={() => onClaim()}
+              loading={noWinnerSubmitted.submitted}
+            >
               Claim Token
             </LoadingButtonStyle>
           )}
-          <Stack mt={24}>
+          <Stack mt={24} direction={'row'} justifyContent={'space-between'}>
             <Typography>We distribute earnings once a week</Typography>
             <Typography>Next release time:{sundayFormat}</Typography>
           </Stack>
@@ -208,9 +215,13 @@ const AuctionButtons = ({
       )
     }
   }
-  if (insufficientBalance) {
-    return <BaseButton disabled>Insufficient balance</BaseButton>
+  if (Number(poolInfo.curPlayer) === Number(poolInfo.maxPlayere)) {
+    return <BaseButton disabled>Sold Out</BaseButton>
   }
+  if (!allStatus.isUserJoined && insufficientBalance) {
+    return <BaseButton disabled>insufficient balance</BaseButton>
+  }
+
   if (action === 'FIRST') {
     return <BaseButton onClick={onCheck}>Place a Bid</BaseButton>
   }

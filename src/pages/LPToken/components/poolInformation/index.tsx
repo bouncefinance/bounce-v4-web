@@ -14,8 +14,10 @@ const InterLargeTitle = styled(Typography)`
 const Icon1 = getIcon('AUCTION')
 import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useMemo } from 'react'
+import { formatGroupNumber } from 'utils/number'
+
 const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  console.log('🚀 ~ PoolInformation ~ poolInfo:', poolInfo)
   const isSm = useBreakpoint('sm')
   return (
     <Stack
@@ -62,11 +64,7 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
         </Stack>
         <InterLargeTitle>SAVM/ETH Pool Information</InterLargeTitle>
       </Stack>
-      {poolInfo.PoolTotal0Fees?.greaterThan('0') || poolInfo.PoolTotal1Fees?.greaterThan('0') ? (
-        <DetailPanel poolInfo={poolInfo} />
-      ) : (
-        <EmptyPanel />
-      )}
+      {poolInfo.positionId ? <DetailPanel poolInfo={poolInfo} /> : <EmptyPanel />}
     </Stack>
   )
 }
@@ -119,17 +117,37 @@ const TokenNameTitle = styled(Typography)`
 `
 
 const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  console.log('🚀 ~ DetailPanel ~ poolInfo:', poolInfo)
+  console.log('🚀 ~ DetailPanel ~ poolInfo:', poolInfo?.token0Price?.toString())
+  const poolTotalReward = useMemo(() => {
+    if (poolInfo.PoolTotal0Fees && poolInfo.PoolTotal1Fees && poolInfo.token0Price && poolInfo.token1Price) {
+      return poolInfo.token0Price
+        .multipliedBy(poolInfo.PoolTotal0Fees.toExact())
+        .plus(poolInfo.token1Price.multipliedBy(poolInfo.PoolTotal1Fees.toExact()))
+    }
+    return undefined
+  }, [poolInfo.PoolTotal0Fees, poolInfo.PoolTotal1Fees, poolInfo.token0Price, poolInfo.token1Price])
+  const liqAmount = useMemo(() => {
+    if (poolInfo.position && poolInfo.token0Price && poolInfo.token1Price) {
+      return poolInfo.token0Price
+        .multipliedBy(poolInfo.position.amount0.toExact())
+        .plus(poolInfo.token1Price.multipliedBy(poolInfo.position.amount1.toExact()))
+    }
+    return undefined
+  }, [poolInfo.position, poolInfo.token0Price, poolInfo.token1Price])
   return (
     <Box pt={24}>
       <Stack flex={'grid'} gridTemplateColumns={'50% 50%'} flexDirection={'row'} gap={16}>
         <WhiteCard sx={{ width: '50%' }}>
           <LabelTitle sx={{ textAlign: 'center' }}>Pool Total Revenue Income</LabelTitle>
-          <LargeValueTitle>$ 1000.99</LargeValueTitle>
+          <LargeValueTitle sx={{ textAlign: 'center' }}>
+            $ {poolTotalReward ? formatGroupNumber(poolTotalReward.toNumber(), '', 2) : '--'}
+          </LargeValueTitle>
         </WhiteCard>
         <WhiteCard sx={{ width: '50%' }}>
           <LabelTitle sx={{ textAlign: 'center' }}>Liquidity</LabelTitle>
-          <LargeValueTitle color={'#121212 !important'}>$ 999939.11</LargeValueTitle>
+          <LargeValueTitle color={'#121212 !important'} sx={{ textAlign: 'center' }}>
+            $ {liqAmount ? formatGroupNumber(liqAmount.toNumber(), '', 2) : '--'}
+          </LargeValueTitle>
         </WhiteCard>
       </Stack>
       <WhiteCard mt={16} sx={{ alignItems: 'start' }}>
@@ -141,7 +159,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
               <TokenNameTitle>SAVM</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <LabelTitle>{poolInfo.PoolTotal0Fees?.toSignificant(6)}</LabelTitle>
+              <LabelTitle>{poolInfo.PoolTotal0Fees?.toSignificant(6) || '--'}</LabelTitle>
             </Stack>
           </Stack>
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
@@ -150,7 +168,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
               <TokenNameTitle>ETH</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <LabelTitle>{poolInfo.PoolTotal1Fees?.toSignificant(6)}</LabelTitle>
+              <LabelTitle>{poolInfo.PoolTotal1Fees?.toSignificant(6) || '--'}</LabelTitle>
             </Stack>
           </Stack>
         </Stack>
@@ -159,6 +177,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   )
 }
 const EmptyPanel = () => {
+  const isSm = useBreakpoint('sm')
   return (
     <Stack gap={32} pt={24} justifyContent={'center'} alignItems={'center'}>
       <img src={EmptyImg} style={{ width: '280.109px', height: '186.958px' }} />
@@ -166,11 +185,12 @@ const EmptyPanel = () => {
         sx={{
           color: '#000',
           fontFamily: 'Poppins',
-          fontSize: 16,
+          fontSize: isSm ? 14 : 16,
           fontStyle: 'normal',
           fontWeight: 500,
           lineHeight: '25.601px' /* 160.009% */,
-          textTransform: 'capitalize'
+          textTransform: isSm ? 'none' : 'capitalize',
+          textAlign: isSm ? 'center' : 'start'
         }}
       >
         After the lottery is drawn, the detailed information of the pool will be displayed.

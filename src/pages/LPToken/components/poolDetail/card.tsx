@@ -7,6 +7,8 @@ import PendingWinIcon from 'assets/imgs/randomSelection/pending_drawn.png'
 import { RandomPoolStatus, RandomSelectionLPProps } from 'api/pool/type'
 import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useEffect, useState } from 'react'
+import { Currency, CurrencyAmount } from 'constants/token'
 
 const NoJoinedCard = ({
   poolInfo,
@@ -20,6 +22,26 @@ const NoJoinedCard = ({
   poolInfo: RandomSelectionLPProps
 }) => {
   const isSm = useBreakpoint('sm')
+  const [zoomNum, setZoomNum] = useState(1)
+  const handleZoom = () => {
+    if (isSm) {
+      const w = window.innerWidth
+      const zoom = (w - 32) / 426
+
+      setZoomNum(zoom)
+    } else {
+      setZoomNum(1)
+    }
+  }
+
+  useEffect(() => {
+    handleZoom()
+    window.addEventListener('resize', handleZoom)
+    return () => {
+      window.removeEventListener('resize', handleZoom)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <>
       <Box
@@ -30,8 +52,8 @@ const NoJoinedCard = ({
           flexFlow: 'row nowrap',
           overflow: 'visible',
           margin: isSm ? '0 auto' : '0 auto 30px',
-          // zoom: zoomNum
-          transform: `scale(1)`,
+          zoom: isSm && isJoined ? zoomNum - 0.1 : zoomNum,
+          transform: `${isSm && isJoined ? 'translateX(13px)' : 'translateX(0px)'} scale(1) `,
           transformOrigin: '0 0',
           mt: 40,
           mb: isUpcoming ? 16 : 32
@@ -230,7 +252,7 @@ const NoJoinedCard = ({
                   color: '#121212'
                 }}
               >
-                {poolInfo.maxPlayere}
+                {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant()}
               </Typography>
             </Box>
           </Box>
@@ -277,7 +299,7 @@ const NoJoinedCard = ({
                 letterSpacing: 0
               }}
             >
-              250
+              8.929
             </Typography>
             <Typography
               sx={{

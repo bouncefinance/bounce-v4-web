@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import Icon2 from 'assets/images/eth_logo.png'
 import { RandomSelectionLPProps } from 'api/pool/type'
+import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 
 // const TabsCom = styled(Tabs)({
 //   display: 'flex',
@@ -31,6 +32,7 @@ import { RandomSelectionLPProps } from 'api/pool/type'
 // })
 
 export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps }) {
+  const { isUserWinner } = useGetRandomSelectionLPPoolStatus(poolInfo)
   const Tabs = [
     {
       name: 'SAVM',
@@ -42,9 +44,9 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
     }
   ]
   const [curTab] = useState(0)
-  console.log('🚀 ~ Page ~ poolInfo:', poolInfo)
-  const isSm = useBreakpoint('sm')
 
+  const isSm = useBreakpoint('sm')
+  if (!isUserWinner) return <></>
   return (
     <Stack
       spacing={40}
@@ -111,7 +113,7 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
               </Typography>
             </Stack>
             <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              18.82
+              0
             </Typography>
           </Stack>
         </Stack>
@@ -136,7 +138,7 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
               </Typography>
             </Stack>
             <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              18.82
+              ∞
             </Typography>
           </Stack>
         </Stack>

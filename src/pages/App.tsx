@@ -74,6 +74,7 @@ const AmmxStakeAuctionPool = React.lazy(() => import('./stakeAuctionAMMX'))
 const AmmxStakeAuctionPoolTest = React.lazy(() => import('./stakeAuctionAMMXTest'))
 const AmmxStakeDaiiPool = React.lazy(() => import('./stakeDaiiAMMX'))
 const AmmxRandomSelection = React.lazy(() => import('./auction/randomSelection/Ladder-BitSwap/Index'))
+const SavmRandomSelection = React.lazy(() => import('./auction/randomSelection/SAVM/Index'))
 const CreateNFTLotteryPool = React.lazy(() => import('./auction/create-auction-pool/createNFTLotteryPool'))
 const DigitalAssetsOffering = React.lazy(() => import('pages/thirdPart/digitalAssetsOffering'))
 const FundoHome = React.lazy(() => import('pages/fundo/home'))
@@ -118,7 +119,6 @@ const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/Dee
 const CreateLPOfferingPool = React.lazy(() => import('pages/createLPOfferingPool/index'))
 const LPToken = React.lazy(() => import('./LPToken'))
 const SatoshiLpProjectInfo = React.lazy(() => import('./projectIntro/SatoshiLpProjectInfo'))
-const SatoshiRandomProjectInfo = React.lazy(() => import('./projectIntro/SatoshiRandomProjectInfo'))
 const GlobalHooks = () => {
   useGetOptionsData()
   useLocationBlockInit()
@@ -236,7 +236,7 @@ export default function App() {
                   <Route path={routes.thirdPart.AmmxRandom} element={<AmmxRandomSelection />} />
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
                   <Route path={routes.thirdPart.SatoshiVMLp} element={<SatoshiLpProjectInfo />} />
-                  <Route path={routes.thirdPart.SatoshiVMRandom} element={<SatoshiRandomProjectInfo />} />
+                  <Route path={routes.thirdPart.SatoshiVMRandom} element={<SavmRandomSelection />} />
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
 
                   <Route
