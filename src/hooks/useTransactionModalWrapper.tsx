@@ -60,7 +60,7 @@ export function useTransactionModalWrapper(
             err?.message ||
             err?.toString() ||
             'Something went wrong',
-          onAgain: runAsync
+          onAgain: () => runAsync(...args)
         })
       }
     },
