@@ -85,14 +85,17 @@ export function useTokenAQuoteTokenB(
         const currency = new Currency(chainId, quoteToken.tokenAddress, quoteToken.tokenDecimals)
         const oneCurrency = CurrencyAmount.fromAmount(currency, 1)?.raw.toString() as string
 
-        const ret = await contract.callStatic.quoteExactInputSingle([
+        const _ret = await contract.callStatic.quoteExactInputSingle([
           quoteToken.tokenAddress,
           pricingToken.tokenAddress,
           oneCurrency,
           fee,
           0
         ])
-        return ret?.[0].toString()
+        const ret = _ret?.[0].toString()
+        return BigNumber(ret)
+          .dividedBy(`1e${Math.abs(pricingToken.tokenDecimals - quoteToken.tokenDecimals)}`)
+          .toString()
       } catch (error) {
         console.log('🚀fdasfdafdasafsd ~ error:2222', error)
         return undefined
