@@ -5,6 +5,7 @@ import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
 import Icon2 from 'assets/images/eth_logo.png'
 import { RandomSelectionLPProps } from 'api/pool/type'
 import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
+import { Currency, CurrencyAmount } from 'constants/token'
 
 // const TabsCom = styled(Tabs)({
 //   display: 'flex',
@@ -44,7 +45,6 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
     }
   ]
   const [curTab] = useState(0)
-
   const isSm = useBreakpoint('sm')
   if (!isUserWinner) return <></>
   return (
@@ -157,10 +157,13 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
           Current Price
         </Typography>
         <Typography fontSize={36} color={'#2B51DA'} fontWeight={600}>
-          $
+          ${' '}
+          {poolInfo.tokenPrice
+            ? CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.tokenPrice.toString())?.toSignificant(6)
+            : '--'}
         </Typography>
         <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-          {Tabs[curTab].name.toLocaleUpperCase()} per {Tabs[curTab === 0 ? 1 : 0].name.toLocaleUpperCase()}
+          {Tabs[1].name.toLocaleUpperCase()} per {Tabs[0].name.toLocaleUpperCase()}
         </Typography>
       </Stack>
     </Stack>
