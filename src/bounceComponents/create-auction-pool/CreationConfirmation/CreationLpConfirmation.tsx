@@ -24,14 +24,7 @@ import { ChainListMap } from 'constants/chain'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { CurrencyAmount } from 'constants/token'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { FIXED_SWAP_ERC20_ADDRESSES } from '../../../constants'
-import {
-  hideDialogConfirmation,
-  showRequestApprovalDialog,
-  showRequestConfirmDialog,
-  showWaitingTxDialog
-} from 'utils/auction'
+import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { useShowLoginModal } from 'state/users/hooks'
 import AuctionNotification from '../AuctionNotification'
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
@@ -78,13 +71,8 @@ const CreatePoolButton = () => {
   const createInitialLPOfferingPool = useCreateInitialLPOfferingPool()
   const [buttonCommitted, setButtonCommitted] = useState<TypeButtonCommitted>()
   const auctionPoolSizeAmount = useMemo(
-    () => (currencyTo && values.poolSize ? CurrencyAmount.fromAmount(currencyTo, values.poolSize) : undefined),
-    [currencyTo, values.poolSize]
-  )
-  const [approvalState, approveCallback] = useApproveCallback(
-    auctionPoolSizeAmount,
-    chainId === auctionInChainId ? FIXED_SWAP_ERC20_ADDRESSES[auctionInChainId] : undefined,
-    true
+    () => (currencyTo && values.ticketPrice ? CurrencyAmount.fromAmount(currencyTo, values.ticketPrice) : undefined),
+    [currencyTo, values.ticketPrice]
   )
 
   const toCreate = useCallback(async () => {
@@ -158,47 +146,6 @@ const CreatePoolButton = () => {
     }
   }, [createInitialLPOfferingPool, navigate, redirect])
 
-  const toApprove = useCallback(async () => {
-    showRequestApprovalDialog()
-    try {
-      const { transactionReceipt } = await approveCallback()
-      // show(DialogTips, {
-      //   iconType: 'success',
-      //   cancelBtn: 'Close',
-      //   title: 'Transaction Submitted!',
-      //   content: `Approving use of ${currencyFrom?.symbol} ...`,
-      //   handleCancel: () => hide(DialogTips)
-      // })
-      const ret = new Promise((resolve, rpt) => {
-        showWaitingTxDialog(() => {
-          hideDialogConfirmation()
-          rpt()
-        })
-        transactionReceipt.then(curReceipt => {
-          resolve(curReceipt)
-        })
-      })
-      ret
-        .then(() => {
-          hideDialogConfirmation()
-          toCreate()
-        })
-        .catch()
-    } catch (error) {
-      const err: any = error
-      console.error(err)
-      hideDialogConfirmation()
-      show(DialogTips, {
-        iconType: 'error',
-        againBtn: 'Try Again',
-        cancelBtn: 'Cancel',
-        title: 'Oops..',
-        content: typeof err === 'string' ? err : err?.error?.message || err?.message || 'Something went wrong',
-        onAgain: toApprove
-      })
-    }
-  }, [approveCallback, toCreate])
-
   const confirmBtn: {
     disabled?: boolean
     loading?: boolean
@@ -235,41 +182,18 @@ const CreatePoolButton = () => {
         disabled: true
       }
     }
-    if (approvalState !== ApprovalState.APPROVED) {
-      if (approvalState === ApprovalState.PENDING) {
-        return {
-          text: `Approving use of ${currencyTo?.symbol} ...`,
-          loading: true
-        }
-      }
-      if (approvalState === ApprovalState.UNKNOWN) {
-        return {
-          text: 'Loading...',
-          loading: true
-        }
-      }
-      if (approvalState === ApprovalState.NOT_APPROVED) {
-        return {
-          text: `Approve use of ${currencyTo?.symbol}`,
-          run: toApprove
-        }
-      }
-    }
     return {
       run: toCreate
     }
   }, [
     account,
-    approvalState,
     auctionAccountBalance,
     auctionInChainId,
     auctionPoolSizeAmount,
     buttonCommitted,
     chainId,
-    currencyTo?.symbol,
     showLoginModal,
     switchNetwork,
-    toApprove,
     toCreate
   ])
 
@@ -340,66 +264,61 @@ const CreationConfirmation = () => {
             </ConfirmationInfoItem>
             <Box>
               <Typography variant="h3" sx={{ fontSize: 14, mb: 12 }}>
-                Token0 Information
+                Token Information
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Token0 Contract address">
+                <ConfirmationInfoItem title="Token Contract address">
                   <Typography>{shortenAddress(values.tokenFrom.address)}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Token0 symbol">
+                <ConfirmationInfoItem title="Token symbol">
                   <Stack direction="row" spacing={8} alignItems="center">
                     <TokenImage alt={values.tokenFrom.symbol} src={values.tokenFrom.logoURI} size={20} />
                     <Typography>{values.tokenFrom.symbol}</Typography>
                   </Stack>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Token0 decimal">
+                <ConfirmationInfoItem title="Token decimal">
                   <Typography>{values.tokenFrom.decimals}</Typography>
                 </ConfirmationInfoItem>
               </Stack>
             </Box>
+
             <Box>
               <Typography variant="h3" sx={{ fontSize: 14, mb: 12 }}>
-                Token1 Information
+                Auction Parameters
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Token1 Contract address">
-                  <Typography>{shortenAddress(values.tokenTo.address)}</Typography>
+                <ConfirmationInfoItem title="Pool type">
+                  <Typography>{auctionType}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Token1 symbol">
+                <ConfirmationInfoItem title="To">
                   <Stack direction="row" spacing={8} alignItems="center">
                     <TokenImage alt={values.tokenTo.symbol} src={values.tokenTo.logoURI} size={20} />
                     <Typography>{values.tokenTo.symbol}</Typography>
                   </Stack>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Token1 decimal">
-                  <Typography>{values.tokenTo.decimals}</Typography>
-                </ConfirmationInfoItem>
-
-                <ConfirmationInfoItem title="Amount">
-                  <Typography>{values.poolSize}</Typography>
+                <ConfirmationInfoItem title="Ticket Price">
+                  <Typography>{values.ticketPrice}</Typography>
                 </ConfirmationInfoItem>
               </Stack>
             </Box>
-
             <Box>
               <Typography variant="h3" sx={{ fontSize: 14, mb: 12 }}>
                 Advanced Settings
               </Typography>
 
               <Stack spacing={15}>
-                <ConfirmationInfoItem title="Pool openAt">
-                  <Typography>{values.startTime?.format('MM.DD.Y HH:mm')}</Typography>
+                <ConfirmationInfoItem title="Pool duration">
+                  <Typography>
+                    From {values.startTime?.format('MM.DD.Y HH:mm')} - To {values.endTime?.format('MM.DD.Y HH:mm')}
+                  </Typography>
                 </ConfirmationInfoItem>
-                <ConfirmationInfoItem title="Pool closeAt">
-                  <Typography>{values.endTime?.format('MM.DD.Y HH:mm')}</Typography>
-                </ConfirmationInfoItem>
-                <ConfirmationInfoItem title="Pool claimAt">
+                <ConfirmationInfoItem title="Delay Unlocking Token">
                   <Typography>{values.delayUnlockingTime?.format('MM.DD.Y HH:mm')}</Typography>
                 </ConfirmationInfoItem>
                 <ConfirmationInfoItem title="Max Participant Allowed">

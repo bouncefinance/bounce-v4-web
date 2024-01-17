@@ -1,6 +1,6 @@
 import { Button, Stack, Box, Typography, Alert } from '@mui/material'
 import { Form, Formik } from 'formik'
-import { SetStateAction, useEffect, useState } from 'react'
+import { SetStateAction } from 'react'
 import * as Yup from 'yup'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { show } from '@ebay/nice-modal-react'
@@ -17,14 +17,9 @@ import Tooltip from 'bounceComponents/common/Tooltip'
 import TokenImage from 'bounceComponents/common/TokenImage'
 import { ChainId } from 'constants/chain'
 import { useActiveWeb3React } from 'hooks'
-import { CurrencyAmount } from 'constants/token'
-import { useCurrencyBalance } from 'state/wallet/hooks'
-import { ZERO } from 'constants/token/constants'
 import { Token } from 'bounceComponents/fixed-swap/type'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import useBreakpoint from 'hooks/useBreakpoint'
-import { isAddress } from 'utils'
-import { Currency } from 'constants/token'
 interface FormValues {
   tokenFromAddress: string
   tokenFromSymbol: string
@@ -35,51 +30,16 @@ interface FormValues {
   tokenToLogoURI?: string
   tokenToDecimals: string | number
   // swapRatio: string
-  poolSize: string
+  ticketPrice: string
   // allocationStatus: AllocationStatus
   // allocationPerWallet: string
-}
-
-const makeCurrency = (_token: Token) => {
-  if (isAddress(_token.address) && _token.chainId && _token.decimals) {
-    return new Currency(
-      _token.chainId,
-      _token.address,
-      _token.decimals,
-      _token.symbol,
-      _token.name,
-      _token.logoURI,
-      _token.dangerous
-    )
-  }
-  return undefined
 }
 
 const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
   const { account } = useActiveWeb3React()
   const auctionInChainId = useAuctionInChain()
-  const [currencyTo, setCurrencyTo] = useState<Currency>()
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
-  useEffect(() => {
-    if (valuesState.tokenTo.address !== '') {
-      const currency = makeCurrency({
-        chainId: valuesState.tokenTo.chainId,
-        address: valuesState.tokenTo.address,
-        logoURI: decodeURIComponent(valuesState.tokenTo.smallUrl || ''),
-        symbol: valuesState.tokenTo.symbol?.toLocaleUpperCase() || '',
-        decimals: valuesState.tokenTo.decimals
-      })
-      setCurrencyTo(currency)
-    }
-  }, [
-    valuesState.tokenTo.address,
-    valuesState.tokenTo.chainId,
-    valuesState.tokenTo.decimals,
-    valuesState.tokenTo.smallUrl,
-    valuesState.tokenTo.symbol
-  ])
-  const balance = useCurrencyBalance(account || undefined, currencyTo, auctionInChainId)
   const isSm = useBreakpoint('sm')
   const validationSchema = Yup.object({
     tokenToSymbol: Yup.string()
@@ -97,20 +57,14 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     //   return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
     // })
     // .required('Swap ratio is required'),
-    poolSize: Yup.number()
-      .positive('Amount must be positive')
+    ticketPrice: Yup.number()
+      .positive('ticket price must be positive')
       .typeError('Please input valid number')
-      .required('Amount is required')
       .test('DIGITS_LESS_THAN_6', 'Should be no more than 6 digits after point', value => {
         const _value = new BigNumber(value || 0).toFixed()
         return !_value || !String(_value).includes('.') || String(_value).split('.')[1]?.length <= 6
       })
-      .test(
-        'POOL_SIZE_LESS_THAN_BALANCE',
-        'Pool size cannot be greater than your balance',
-        value =>
-          !value || (balance ? !balance.lessThan(CurrencyAmount.fromAmount(balance.currency, value) || ZERO) : false)
-      ),
+      .required('ticket price is required'),
     allocationStatus: Yup.string().oneOf(Object.values(AllocationStatus))
     // allocationPerWallet: Yup.number()
     //   .when('allocationStatus', {
@@ -132,9 +86,9 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     //         'GREATER_THAN_POOL_SIZE',
     //         'Allocation per wallet cannot be greater than pool size times swap ratio',
     //         (value, context) =>
-    //           !context.parent.poolSize ||
+    //           !context.parent.ticketPrice ||
     //           !context.parent.swapRatio ||
-    //           (value || 0) <= context.parent.poolSize * context.parent.swapRatio
+    //           (value || 0) <= context.parent.ticketPrice * context.parent.swapRatio
     //       )
     //   })
   })
@@ -149,7 +103,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
     tokenToLogoURI: valuesState.tokenTo.logoURI || '',
     tokenToDecimals: String(valuesState.tokenTo.decimals || ''),
     // swapRatio: valuesState.swapRatio || '',
-    poolSize: valuesState.poolSize || ''
+    ticketPrice: valuesState.ticketPrice || ''
     // allocationStatus: valuesState.allocationStatus || AllocationStatus.NoLimits,
     // allocationPerWallet: valuesState.allocationPerWallet || ''
   }
@@ -169,14 +123,6 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
           tokenToLogoURI: decodeURIComponent(res.smallUrl || ''),
           tokenToDecimals: res.decimals
         })
-        const currency = makeCurrency({
-          chainId: chainId,
-          address: res.address,
-          logoURI: decodeURIComponent(res.smallUrl || ''),
-          symbol: res.symbol?.toLocaleUpperCase() || '',
-          decimals: res.decimals
-        })
-        setCurrencyTo(currency)
       })
       .catch(err => {
         console.log('TokenDialog Rejected: ', err)
@@ -195,7 +141,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
         onSubmit={values => {
           console.log('on submit')
           valuesDispatch({
-            type: ActionType.CommitAuctionParameters,
+            type: ActionType.CommitLpAuctionParameters,
             payload: {
               tokenTo: {
                 chainId: auctionInChainId,
@@ -205,7 +151,7 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                 decimals: values.tokenToDecimals
               },
               // swapRatio: values.swapRatio,
-              poolSize: values.poolSize
+              ticketPrice: values.ticketPrice
               // allocationPerWallet: values.allocationPerWallet,
               // allocationStatus: values.allocationStatus
             }
@@ -281,47 +227,33 @@ const AuctionParametersForm = ({ title }: { title?: string }): JSX.Element => {
                 </Stack>
               </Box> */}
 
-              {/* Pool Size */}
+              {/* Ticket Price */}
               <Box>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 8 }}>
-                  <Stack direction="row" spacing={8}>
-                    <Typography variant="h3" sx={{ fontSize: 16 }}>
-                      Amount
-                    </Typography>
-
-                    <Tooltip title="The amount of tokens that you want to put in for auction">
-                      <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
-                    </Tooltip>
-                  </Stack>
-
-                  {values.tokenFromSymbol && <Typography>Balance: {balance?.toSignificant() || '-'}</Typography>}
+                <Stack direction="row" spacing={8} sx={{ mb: 20 }}>
+                  <Typography variant="h3" sx={{ fontSize: 16 }}>
+                    Ticket Price
+                  </Typography>
+                  <Tooltip title="Ticket price is not price per unit token">
+                    <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
+                  </Tooltip>
                 </Stack>
-
-                <FormItem name="poolSize" placeholder="0.00" required sx={{ flex: 1 }}>
-                  <NumberInput
-                    value={values.poolSize}
-                    onUserInput={value => {
-                      setFieldValue('poolSize', value)
-                    }}
-                    endAdornment={
-                      <>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          sx={{ mr: 20, minWidth: 60 }}
-                          disabled={!balance}
-                          onClick={() => {
-                            setFieldValue('poolSize', balance?.toSignificant(64, { groupSeparator: '' }))
-                          }}
-                        >
-                          Max
-                        </Button>
-                        <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
-                        <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
-                      </>
-                    }
-                  />
-                </FormItem>
+                <Stack direction="row" alignItems="center" spacing={15}>
+                  <FormItem name="ticketPrice" placeholder="0.00" required sx={{ flex: 1 }}>
+                    <NumberInput
+                      value={values.ticketPrice + ''}
+                      onUserInput={value => {
+                        setFieldValue('ticketPrice', value)
+                      }}
+                      endAdornment={
+                        <>
+                          <TokenImage alt={values.tokenToSymbol} src={values.tokenToLogoURI} size={24} />
+                          <Typography sx={{ ml: 8 }}>{values.tokenToSymbol}</Typography>
+                        </>
+                      }
+                    />
+                  </FormItem>
+                </Stack>
+                <Typography sx={{ margin: '20px 0' }}>Unit price of one token</Typography>
               </Box>
 
               {/* Allocation per Wallet */}

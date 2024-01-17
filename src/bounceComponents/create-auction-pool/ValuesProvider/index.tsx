@@ -146,6 +146,7 @@ export enum ActionType {
   CommitToken1155Information = 'COMMIT_TOKEN_1155_INFORMATION',
   CommitToken721Information = 'COMMIT_TOKEN_721_INFORMATION',
   CommitAuctionParameters = 'COMMIT_AUCTION_PARAMETERS',
+  CommitLpAuctionParameters = 'COMMIT_LP_AUCTION_PARAMETERS',
   CommitRandomSelectionAuctionParameters = 'COMMIT_RANDOM_SELECTION_AUCTION_PARAMETERS',
   CommitAdvancedSettings = 'COMMIT_ADVANCED_SETTINGS',
   CommitLpAdvancedSettings = 'COMMIT_LP_ADVANCED_SETTINGS',
@@ -253,6 +254,19 @@ type Payload = {
     creatorRatio?: string
     prevBidderRatio?: string
     lastBidderRatio?: string
+  }
+  [ActionType.CommitLpAuctionParameters]: {
+    tokenTo: Token
+    tokenFrom: Token
+    swapRatio: string
+    ticketPrice: string
+    allocationStatus: AllocationStatus
+    allocationPerWallet: string
+    participantStatus: ParticipantStatus
+    startTime: Moment
+    endTime: Moment
+    poolName: string
+    auctionInChain: ChainId | number | undefined
   }
   [ActionType.CommitLpAdvancedSettings]: {
     poolName: string
@@ -381,6 +395,20 @@ const reducer = (state: AuctionPool, action: Actions) => {
         endTime: action.payload.endTime,
         poolName: action.payload.poolName,
         auctionInChain: action.payload.auctionInChain
+      }
+    case ActionType.CommitLpAuctionParameters:
+      return {
+        ...state,
+        tokenTo: {
+          ...state.tokenTo,
+          ...action.payload.tokenTo
+        },
+        swapRatio: action.payload.swapRatio,
+        ticketPrice: action.payload.ticketPrice,
+        allocationStatus: action.payload.allocationStatus,
+        allocationPerWallet: action.payload.allocationPerWallet,
+        activeStep: state.activeStep + 1,
+        completed: { ...state.completed, [state.activeStep]: true }
       }
     case ActionType.CommitRandomSelectionAuctionParameters:
       return {

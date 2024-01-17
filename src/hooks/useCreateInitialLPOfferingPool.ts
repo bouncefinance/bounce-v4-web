@@ -15,7 +15,7 @@ import { Contract } from 'ethers'
 
 export interface Params {
   whitelist: string[]
-  poolSize: string
+  ticketPrice: string
   startTime: number
   endTime: number
   delayUnlockingTime: number
@@ -50,7 +50,7 @@ export function useCreateInitialLPOfferingPool() {
   }> => {
     const params: Params = {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
-      poolSize: values.poolSize,
+      ticketPrice: values.ticketPrice || '',
       startTime: values.startTime?.unix() || 0,
       endTime: values.endTime?.unix() || 0,
       delayUnlockingTime: values.endTime?.unix() || 0,
@@ -73,7 +73,7 @@ export function useCreateInitialLPOfferingPool() {
     if (!currencyFrom || !currencyTo) {
       return Promise.reject('currencyFrom or currencyTo error')
     }
-    const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.poolSize)
+    const amountTotal1 = CurrencyAmount.fromAmount(currencyTo, params.ticketPrice)
 
     if (!amountTotal1) {
       return Promise.reject('amountTotal1 error')

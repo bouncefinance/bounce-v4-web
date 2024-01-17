@@ -35,8 +35,8 @@ interface MyFormValues {
   releaseDataArr: IReleaseData[]
   whitelist: string[]
   participantStatus: ParticipantStatus
-  winnerNumber: number
-  maxParticipantAllowed: number
+  winnerNumber: string
+  maxParticipantAllowed: string
 }
 // const useValuesDispatch = () => {
 //   const context = useContext(ValuesDispatchContext)
@@ -59,8 +59,8 @@ export const AddLpReleaseTypeAdvanced = () => {
     releaseDataArr: valuesState.releaseDataArr,
     whitelist: valuesState.whitelist,
     participantStatus: valuesState.participantStatus,
-    winnerNumber: valuesState.winnerNumber || 1,
-    maxParticipantAllowed: valuesState.maxParticipantAllowed || 1
+    winnerNumber: valuesState.winnerNumber?.toString() || '',
+    maxParticipantAllowed: valuesState.maxParticipantAllowed?.toString() || ''
   }
 
   const validationSchema = Yup.object({
@@ -102,14 +102,8 @@ export const AddLpReleaseTypeAdvanced = () => {
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status'),
     maxParticipantAllowed: Yup.number()
       .required('MaxParticipantAllowed is required')
-      .test('Number_TO_ZERO', 'MaxParticipantAllowed must be more than 0', value => {
-        return value !== 0
-      }),
-    winnerNumber: Yup.number()
-      .required('WinnerNumber is required')
-      .test('Number_TO_ZERO', 'WinnerNumber must be more than 0', value => {
-        return value !== 0
-      })
+      .positive('MaxParticipantAllowed must be positive'),
+    winnerNumber: Yup.number().required('WinnerNumber is required').positive('WinnerNumber must be positive')
   })
 
   const showImportWhitelistDialog = (
@@ -162,8 +156,8 @@ export const AddLpReleaseTypeAdvanced = () => {
                 delayUnlockingTime: formValues.delayUnlockingTime,
                 whitelist: formValues.whitelist,
                 participantStatus: formValues.participantStatus,
-                winnerNumber: formValues.winnerNumber,
-                maxParticipantAllowed: formValues.maxParticipantAllowed
+                winnerNumber: Number(formValues.winnerNumber),
+                maxParticipantAllowed: Number(formValues.maxParticipantAllowed)
               }
             })
           }}
@@ -208,19 +202,19 @@ export const AddLpReleaseTypeAdvanced = () => {
                     }}
                   />
                 </Stack>
-                <FormItem name={'maxParticipantAllowed'} label="Max Participant Allowed" sx={{ mt: 24 }}>
+                <FormItem name={'winnerNumber'} label="Number Of Winners" sx={{ mt: 24 }}>
                   <NumberInput
-                    value={values.maxParticipantAllowed.toString()}
-                    onUserInput={(value: string) => {
-                      setFieldValue('maxParticipantAllowed', Number(value.replace(/[^\d]|^[0]/g, '')))
+                    value={values.winnerNumber + ''}
+                    onUserInput={value => {
+                      setFieldValue('winnerNumber', value)
                     }}
                   />
                 </FormItem>
-                <FormItem name={'winnerNumber'} label="Number Of Winners" sx={{ mt: 24 }}>
+                <FormItem name={'maxParticipantAllowed'} label="Max Participant Allowed" sx={{ mt: 24 }}>
                   <NumberInput
-                    value={values.winnerNumber.toString()}
-                    onUserInput={(value: string) => {
-                      setFieldValue('winnerNumber', Number(value.replace(/[^\d]|^[0]/g, '')))
+                    value={values.maxParticipantAllowed + ''}
+                    onUserInput={value => {
+                      setFieldValue('maxParticipantAllowed', value)
                     }}
                   />
                 </FormItem>
