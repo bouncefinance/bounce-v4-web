@@ -13,6 +13,7 @@ import { Currency, CurrencyAmount } from 'constants/token'
 const NoJoinedCard = ({
   poolInfo,
   isJoined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isUpcoming,
   isClose
 }: {
@@ -56,7 +57,7 @@ const NoJoinedCard = ({
           transform: `${isSm && isJoined ? 'translateX(13px)' : 'translateX(0px)'} scale(1) `,
           transformOrigin: '0 0',
           mt: 40,
-          mb: isUpcoming ? 16 : 32
+          mb: 32
         }}
       >
         <Box
@@ -203,9 +204,9 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
-                  fontSize: 12,
-                  color: '#959595',
-                  marginBottom: 10
+                  fontSize: isSm ? 10 : 13,
+                  color: '#959595'
+                  // marginBottom: 10
                 }}
               >
                 Number of winners
@@ -214,11 +215,11 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
-                  fontSize: 28,
+                  fontSize: isSm ? 24 : 28,
                   color: '#121212'
                 }}
               >
-                {poolInfo.totalShare}
+                {poolInfo.totalShare || '--'}
               </Typography>
             </Box>
             <Box
@@ -237,9 +238,9 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
-                  fontSize: 12,
-                  color: '#959595',
-                  marginBottom: 10
+                  fontSize: isSm ? 10 : 13,
+                  color: '#959595'
+                  // marginBottom: 10
                 }}
               >
                 Total lottery tickets
@@ -248,11 +249,12 @@ const NoJoinedCard = ({
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
-                  fontSize: 28,
+                  fontSize: isSm ? 24 : 28,
                   color: '#121212'
                 }}
               >
-                {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant()}
+                {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant() ||
+                  '--'}
               </Typography>
             </Box>
           </Box>
@@ -273,7 +275,7 @@ const NoJoinedCard = ({
               sx={{
                 fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                 fontWeight: 400,
-                fontSize: 12,
+                fontSize: isSm ? 10 : 13,
                 color: '#959595',
                 textAlign: 'center',
                 marginBottom: 20
@@ -299,13 +301,13 @@ const NoJoinedCard = ({
                 letterSpacing: 0
               }}
             >
-              8.929
+              10
             </Typography>
             <Typography
               sx={{
                 fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                 fontWeight: 400,
-                fontSize: 12,
+                fontSize: isSm ? 10 : 13,
                 color: '#959595'
               }}
             >
@@ -372,7 +374,7 @@ const NoWinnerCard = () => {
           justifyContent: 'flex-start',
           alignItems: 'center',
           mt: 40,
-          mb: 16
+          mb: 32
         }}
       >
         <Typography
@@ -415,29 +417,19 @@ const WaitLotteryDraw = () => {
 
 const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   const { poolStatus, isUserJoined, isWinnerSeedDone, isUserWinner } = useGetRandomSelectionLPPoolStatus(poolInfo)
-
+  if (isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone) {
+    return <WaitLotteryDraw />
+  }
+  if (isUserJoined && !isUserWinner && isWinnerSeedDone) {
+    return <NoWinnerCard />
+  }
   return (
-    <>
-      {(!isUserJoined ||
-        (isUserJoined && poolStatus !== RandomPoolStatus.Closed && poolStatus !== RandomPoolStatus.Waiting)) && (
-        <NoJoinedCard
-          poolInfo={poolInfo}
-          isJoined={isUserJoined}
-          isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
-          isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
-        />
-      )}
-      {isUserJoined && poolStatus === RandomPoolStatus.Waiting && !isWinnerSeedDone && (
-        <>
-          <WaitLotteryDraw />
-        </>
-      )}
-      {isUserJoined && !isUserWinner && isWinnerSeedDone && (
-        <>
-          <NoWinnerCard />
-        </>
-      )}
-    </>
+    <NoJoinedCard
+      poolInfo={poolInfo}
+      isJoined={isUserJoined}
+      isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
+      isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
+    />
   )
 }
 

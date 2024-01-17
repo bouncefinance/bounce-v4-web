@@ -49,6 +49,9 @@ const FormControlLabelStyle = styled(FormControlLabel)`
   ${({ theme }) => theme.breakpoints.down('sm')} {
     font-size: 17px;
   }
+  &.check .MuiFormControlLabel-label {
+    font-weight: 500;
+  }
 `
 const CheckIcon = styled(Box)`
   width: 20px;
@@ -104,7 +107,7 @@ const CheckBox = ({ onToBid }: { onToBid: () => void }) => {
   return (
     <Box sx={{ margin: '0 auto', mt: 40, width: '100%', maxWidth: 753, mb: 32 }}>
       <Box sx={{ maxWidth: 574 }}>
-        <Title>Please check the following information before your participation</Title>
+        <Title sx={{ fontWeight: 600 }}>Please check the following information before your participation</Title>
 
         <FormGroupStyle>
           <FormControlLabelStyle
@@ -113,6 +116,7 @@ const CheckBox = ({ onToBid }: { onToBid: () => void }) => {
             control={<CheckboxStyle defaultChecked {...icons} />}
             onChange={handleChange}
             label="I researched the creator"
+            className={notice1 ? 'check' : ''}
           />
           <FormControlLabelStyle
             checked={notice2}
@@ -120,6 +124,7 @@ const CheckBox = ({ onToBid }: { onToBid: () => void }) => {
             onChange={handleChange}
             name="notice2"
             label="I checked the token and contract address to make sure it is not fake token"
+            className={notice2 ? 'check' : ''}
           />
           <FormControlLabelStyle
             checked={notice3}
@@ -127,6 +132,7 @@ const CheckBox = ({ onToBid }: { onToBid: () => void }) => {
             onChange={handleChange}
             name="notice3"
             label="I checked the price"
+            className={notice3 ? 'check' : ''}
           />
         </FormGroupStyle>
         <BaseButton

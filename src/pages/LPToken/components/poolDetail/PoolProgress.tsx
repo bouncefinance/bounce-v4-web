@@ -6,6 +6,7 @@ import UserAvatar2 from 'assets/imgs/nftLottery/user-avatar2.png'
 import UserAvatar3 from 'assets/imgs/nftLottery/user-avatar3.svg'
 import UserAvatar4 from 'assets/imgs/nftLottery/user-avatar4.png'
 import UserAvatar5 from 'assets/imgs/nftLottery/user-avatar5.png'
+import { Currency, CurrencyAmount } from 'constants/token'
 
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
@@ -74,13 +75,13 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
   return (
     <Stack gap={8} mb={16}>
       <Stack
-        flexDirection={isSm ? 'column' : 'row'}
+        flexDirection={'row'}
         justifyContent={'space-between'}
         alignItems={isSm ? 'start' : 'center'}
         gap={isSm ? 8 : 0}
       >
         {/* <Title1>{allStatus.poolStatus === RandomPoolStatus.Upcoming ? 'Number of entries' : 'Participant'} </Title1> */}
-        <InterH3 sx={{ fontSize: 12 }}>{'Number of entries'} </InterH3>
+        <InterH3 sx={{ fontSize: 12 }}>{'Number Of Entries'} </InterH3>
 
         <Stack flexDirection={'row'} alignItems={'center'} gap={11}>
           {poolStatus !== RandomPoolStatus.Upcoming && <AvatarList curPlayer={Number(poolInfo.curPlayer)} />}
@@ -109,11 +110,11 @@ const PoolProgress = ({ poolInfo, poolStatus }: { poolInfo: RandomSelectionLPPro
         <InterH3 sx={{ fontWeight: 400 }}>
           {isNoLive && (
             <InterH3 sx={{ color: isNoLive ? '#2B51DA' : '#B5E529' }} as={'span'}>
-              {poolInfo.curPlayer}
+              {poolInfo.curPlayer || '--'}
             </InterH3>
           )}
           <span style={{ padding: '0 5px 0 10px', fontWeight: 500 }}>/</span>
-          {poolInfo.maxPlayere}
+          {CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.maxPlayere || '0')?.toSignificant() || '--'}
         </InterH3>
       </Stack>
     </Stack>

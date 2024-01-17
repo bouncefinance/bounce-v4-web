@@ -32,8 +32,12 @@ const AuctionCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
         </Stack>
         <Stack
           flexDirection={isSm ? 'column-reverse' : 'row'}
-          gap={40}
-          sx={{ padding: isSm ? '24px 16px' : '48px 56px', borderRadius: 24, background: '#FFF' }}
+          gap={isSm ? 20 : 40}
+          sx={{
+            padding: isSm ? '24px 16px' : '48px 56px',
+            borderRadius: isSm ? '24px 24px 0 0' : 24,
+            background: '#FFF'
+          }}
         >
           <Box flex="1" mt={0}>
             <PoolInformation poolInfo={poolInfo} />

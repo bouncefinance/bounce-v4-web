@@ -2,6 +2,7 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { RandomSelectionLPProps } from 'api/pool/type'
 const Icon1 = getIcon('AUCTION')
 import Icon2 from 'assets/images/eth_logo.png'
+import useBreakpoint from 'hooks/useBreakpoint'
 import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 import { useMemo } from 'react'
 import { formatGroupNumber } from 'utils/number'
@@ -66,7 +67,7 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
     poolInfo.userTotalFeesReward?.claimedToken0,
     poolInfo.userTotalFeesReward?.claimedToken1
   ])
-
+  const isMd = useBreakpoint('lg')
   return (
     <Box mb={24}>
       <Box my={24} sx={{ p: 24, background: '#E1F25C', borderRadius: 12 }} flexDirection={'row'} textAlign={'center'}>
@@ -90,7 +91,7 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
       </GrayCard>
       <Stack flexDirection={'row'} gap={16} mt={16}>
         <GrayCard sx={{ flex: 1 }}>
-          <P1>Your Pending Claimable Revenue</P1>
+          <P1 sx={{ whiteSpace: isMd ? 'normal' : 'pre' }}>Your Pending Claimable Revenue</P1>
           <P1 sx={{ fontSize: 36, fontWeight: 600, color: '#2B51DA' }}>
             $ {claimableReward ? formatGroupNumber(claimableReward.toNumber()) : '--'}
           </P1>
