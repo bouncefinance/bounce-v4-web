@@ -1,11 +1,11 @@
 import { Box, Typography, styled } from '@mui/material'
 import React from 'react'
 import { useCountDown } from 'ahooks'
-import { PoolStatus } from 'api/pool/type'
+import { PoolStatus, RandomPoolStatus } from 'api/pool/type'
 import { ReactComponent as WarningIcon } from 'assets/imgs/auction/warning-icon.svg'
 import { useActiveWeb3React } from 'hooks'
 export interface PoolStatusBoxProps {
-  status: PoolStatus
+  status: PoolStatus | RandomPoolStatus
   openTime: number
   closeTime: number
   claimAt: number
@@ -73,7 +73,7 @@ const PoolStatusBox = ({
               variant="body1"
               component="span"
             >
-              &nbsp;{days}d : {hours}h : {minutes}m
+              &nbsp;{days}d : {hours}h : {minutes}m: {seconds}
             </Typography>
           )}
         </Box>

@@ -133,6 +133,7 @@ export const routes = {
     AmmxDaii: '/launchpad/ammx-daii',
     AmmxRandom: '/launchpad/ammx-random',
     MultiToken: '/launchpad/multi-token',
+    LPToken: '/launchpad/lp-token',
     SatoshiVMLp: '/launchpad/satoshivm-ilo',
     SatoshiVMRandom: '/launchpad/satoshivm-random'
   },
@@ -163,5 +164,8 @@ export const routes = {
   },
   loyaltyprogram: {
     index: '/Loyaltyprogram'
+  },
+  createLPOfferingPool: {
+    index: '/create-LP-Offering-pool'
   }
 }

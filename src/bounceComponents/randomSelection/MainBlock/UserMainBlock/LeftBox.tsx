@@ -40,7 +40,7 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
     : undefined
   const singleShare = poolInfo.totalShare
     ? formatNumber(new BigNumber(poolInfo.amountTotal0).div(poolInfo.totalShare).toString(), {
-        unit: 18,
+        unit: poolInfo.token0.decimals,
         decimalPlaces: poolInfo.token0.decimals
       })
     : undefined

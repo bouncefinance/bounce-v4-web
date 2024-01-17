@@ -14,6 +14,7 @@ interface Window {
     isTrust?: true
     isLedgerConnect?: true
     isCoinbaseWallet?: true
+    isBinance?: boolean
   }
   okxwallet?: {
     isMetaMask?: false

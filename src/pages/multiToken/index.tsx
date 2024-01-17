@@ -3,7 +3,7 @@ import { Port3Data, IPrivatePadProp, PrivatePadDataList } from 'pages/launchpad/
 import FooterPc from 'components/Footer/FooterPc'
 import { useRandomSelectionMultiTokenContract } from 'hooks/useContract'
 import { useActiveWeb3React } from 'hooks'
-import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
+import { STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ChainId } from 'constants/chain'
 import { StakeButton } from 'pages/launchpadCoin/Step'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
@@ -24,7 +24,7 @@ const Page = () => {
   //TODO only chainId
   const chainId = ChainId.MAINNET
   const nowTime = () => new Date().getTime()
-  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
+  const contractAddress = STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId]
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId)
   const coinInfo = useGetStakingAuctionInfo(contract, poolId, account, chainId)
 

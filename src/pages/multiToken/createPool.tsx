@@ -1,7 +1,7 @@
 import { Box, Button, OutlinedInput, Stack } from '@mui/material'
 import FormItem from 'bounceComponents/common/FormItem'
 import { ChainId } from 'constants/chain'
-import { RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
+import { STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { Formik } from 'formik'
 import { useActiveWeb3React } from 'hooks'
@@ -43,7 +43,7 @@ const initParams: IParam = {
 
 const useCreatePool = () => {
   const { chainId } = useActiveWeb3React()
-  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
+  const contractAddress = STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
   const contract = useRandomSelectionMultiTokenContract(contractAddress, chainId || ChainId.MAINNET)
 
   return useCallback(
@@ -111,7 +111,7 @@ const CreateNFTLotteryPool = () => {
     if (!token0Balance || !token0Amount) return false
     return token0Amount.greaterThan(token0Balance)
   }, [token0Amount, token0Balance])
-  const contractAddress = RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
+  const contractAddress = STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[chainId || ChainId.MAINNET]
   const [approvalState, , approveCallback] = useApproveCallback(token0Amount, contractAddress)
 
   const approveFn = useTransactionModalWrapper(approveCallback, { isApprove: true })

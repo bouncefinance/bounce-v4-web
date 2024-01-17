@@ -2790,10 +2790,11 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
   }
 ]
 export const SatoshiVMLPData: IPrivatePadProp = {
+  backedId: 21479,
   keyId: 27,
   liveTimeStamp: {
-    start: 1705593600000,
-    end: 0
+    start: 1705536000000,
+    end: 1705622400000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
@@ -2804,9 +2805,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
   upcomingLink: routes.thirdPart.SatoshiVMLp,
-  // upcomingLink: '',
   liveLink: routes.thirdPart.SatoshiVMLp,
-  // liveLink: '',
   projectInfo: SatoshiVMLPProjectInfo,
   tokenMetrics: [],
   desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
@@ -2826,10 +2825,8 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Reward Token', content: `$ETH` },
-    // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
-    { title: 'Ticket Price', content: 'TBD' },
-    // { title: 'Reward Claim Time', content: 'Ervery Sunday' },
-    { title: 'Reward Claim Time', content: 'TBD' },
+    { title: 'Ticket Price', content: '10 AUCTION / Ticket' },
+    { title: 'Reward Claim Time', content: 'Every Sunday' },
     { title: 'Blockchain', content: 'Ethereum' }
   ],
   privatePrices: [
@@ -2838,10 +2835,11 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ]
 }
 export const SatoshiVMRandomData: IPrivatePadProp = {
+  backedId: 21478,
   keyId: 28,
   liveTimeStamp: {
-    start: 1705593600000,
-    end: 0
+    start: 1705536000000,
+    end: 1705622400000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Random Selection',
@@ -2874,10 +2872,9 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$SAVM' },
-    // { title: 'Ticket Price', content: '5.2 AUCTION / Ticket' },
-    { title: 'Ticket Price', content: 'TBD' },
-    // { title: 'Token Amount / Ticket', content: '2100 SAVM' },
-    { title: 'Token Amount / Ticket', content: 'TBD' },
+    { title: 'Ticket Price', content: '4 AUCTION / Ticket' },
+    // { title: 'Ticket Price', content: 'TBD' },
+    { title: 'Token Amount / Ticket', content: '2100  SAVM' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }

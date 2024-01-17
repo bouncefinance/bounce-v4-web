@@ -22,9 +22,10 @@ export const SELECTABLE_ENABLE_WALLETS: ConnectionType[] = [
   ConnectionType.UNISWAP_WALLET_V2,
   ConnectionType.OKX_WALLET,
   ConnectionType.GNOSIS_SAFE,
-  ConnectionType.BINANCE_WALLET,
+  // ConnectionType.BINANCE_WALLET,
   ConnectionType.COINBASE_WALLET,
-  ConnectionType.BIT_GET
+  ConnectionType.BIT_GET,
+  ConnectionType.BINANCE_W3W_WALL
 ]
 
 // default allowed slippage, in bips
@@ -173,6 +174,46 @@ export const RANDOM_SELECTION_CONTRACT_ADDRESSES: { [chainId in ChainId]: string
   [ChainId.CORE_CHAIN_TESTNET]: ''
 }
 
+export const RANDOM_SELECTION_LP_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+  [ChainId.MAINNET]: '0xfc3F1Be6467C41a4c70aa0515b0Ca00CA3C2af22',
+  [ChainId.GÖRLI]: '',
+  [ChainId.OPTIMISM]: '',
+  [ChainId.CRONOS]: '',
+  [ChainId.BSC]: '',
+  [ChainId.OKEX]: '',
+  [ChainId.BSCTEST]: '',
+  [ChainId.KLAYTN]: '',
+  [ChainId.BASE]: '',
+  [ChainId.BASE_TESTNET]: '',
+  [ChainId.GNOSIS]: '',
+  [ChainId.POLYGON]: '',
+  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM_TESTNET]: '',
+  [ChainId.ZETA_CHAIN_TESTNET]: '',
+  [ChainId.OMNI_TESTNET]: '',
+  [ChainId.ROLLUX]: '',
+  [ChainId.ZKSYNC_ERA]: '',
+  [ChainId.ZKSYNC_ERA_TESTNET]: '',
+  [ChainId.POLYGON_ZK_EVM]: '',
+  [ChainId.POLYGON_ZK_EVM_TESTNET]: '',
+  [ChainId.MOONBEAM]: '',
+  [ChainId.MOONRIVER]: '',
+  [ChainId.DOGECHAIN]: '',
+  [ChainId.KAVA]: '',
+  [ChainId.FUSION]: '',
+  [ChainId.ARBITRUM]: '',
+  [ChainId.CELO]: '',
+  [ChainId.AVALANCHE]: '',
+  [ChainId.SEPOLIA]: '0xa2D54403cf2d57458a98cEaDa236E6cc205fe40D',
+  [ChainId.AUROEA]: '',
+  [ChainId.HARMONY]: '',
+  [ChainId.SCROLL_ALPHA]: '',
+  [ChainId.PALM]: '',
+  [ChainId.LINEA]: '',
+  [ChainId.LINEA_GORLI]: '',
+  [ChainId.CORE_CHAIN_TESTNET]: ''
+}
+
 export const RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '',
   [ChainId.GÖRLI]: '',
@@ -252,7 +293,7 @@ export const RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES: { [chainId in Chai
   [ChainId.LINEA_GORLI]: '',
   [ChainId.CORE_CHAIN_TESTNET]: ''
 }
-export const RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
+export const STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES: { [chainId in ChainId]: string } = {
   [ChainId.MAINNET]: '0xdF59f84F4DAC6B628bAceB43dcF0Fd3E3778e6f5',
   [ChainId.GÖRLI]: '',
   [ChainId.OPTIMISM]: '',

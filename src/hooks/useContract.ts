@@ -16,6 +16,7 @@ import ERC1155_ABI from '../constants/abis/erc1155.json'
 import FIXED_SWAP_ABI from '../constants/abis/fixedSwap.json'
 import FIXED_SWAP_ABI_BOT from '../constants/abis/fixedSwap_bot.json'
 import RANDOM_SELECTION_ABI from '../constants/abis/randomSelection.json'
+import RANDOM_SELECTION_LP_ABI from '../constants/abis/randomSelectionLP.json'
 import RANDOM_SELECTION_NFT_ABI from '../constants/abis/randomSelectionNFT.json'
 import RANDOM_SELECTION_NFT_BURNING_ABI from '../constants/abis/randomSelectionNFTBurning.json'
 import FIXED_SWAP_NFT_ABI from '../constants/abis/fixedSwapNft.json'
@@ -35,6 +36,7 @@ import LAUNCHPAD_COIN_ABI from '../constants/abis/launchpad-coin.json'
 import STAKE_TOKEN_ABI from '../constants/abis/stake-token.json'
 import STAKE_TOKEN_WITH_TIME_ABI from '../constants/abis/stake-token-with-time-weight.json'
 import RANDOM_SELECTION_MULTI_TOKEN_ABI from '../constants/abis/randomSelectionMultiToken.json'
+import UNI_V3_QUOTER_ABI from '../constants/abis/uniswapv3quoter.json'
 import {
   DUTCH_AUCTION_CONTRACT_ADDRESSES,
   ENGLISH_AUCTION_NFT_CONTRACT_ADDRESSES,
@@ -54,11 +56,13 @@ import {
   STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_CONTRACT_ADDRESSES,
   RANDOM_SELECTION_NFT_BURNING_CONTRACT_ADDRESSES,
-  RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES
+  STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES,
+  RANDOM_SELECTION_LP_CONTRACT_ADDRESSES
 } from '../constants'
-
+import INONFUNGIBLE_POSITION_MANAGER from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
+import { UNI_V3_POSITION_ADDRESSES, UNI_V3_QUOTER_ADDRESSES } from 'constants/uniswap'
 // returns null on errors
-function useContract(
+export function useContract(
   address: string | undefined,
   ABI: any,
   withSignerIfPossible = true,
@@ -209,6 +213,14 @@ export function useRandomSelectionERC20Contract(address?: string, queryChainId?:
   return useContract(curAddress, RANDOM_SELECTION_ABI, true, queryChainId)
 }
 
+export function useRandomSelectionLPContract(address?: string, queryChainId?: ChainId) {
+  const { chainId } = useActiveWeb3React()
+  const cur = queryChainId || chainId
+  const curAddress =
+    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_LP_CONTRACT_ADDRESSES[cur] : undefined)
+  return useContract(curAddress, RANDOM_SELECTION_LP_ABI, true, queryChainId)
+}
+
 export function useFixedSwapNftContract(address?: string, queryChainId?: ChainId) {
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
@@ -340,6 +352,26 @@ export function useRandomSelectionMultiTokenContract(address?: string, queryChai
   const { chainId } = useActiveWeb3React()
   const cur = queryChainId || chainId
   const curAddress =
-    address === '' ? undefined : address || (cur ? RANDOM_SELECTION_MULTI_TOKEN_CONTRACT_ADDRESSES[cur] : undefined)
+    address === '' ? undefined : address || (cur ? STAKE_MULTI_TOKEN_CONTRACT_ADDRESSES[cur] : undefined)
   return useContract(curAddress, RANDOM_SELECTION_MULTI_TOKEN_ABI, true, queryChainId)
+}
+
+export function useUniV3PositionContract(queryChainId?: ChainId) {
+  const { chainId: _chainId } = useActiveWeb3React()
+  return useContract(
+    queryChainId || _chainId ? UNI_V3_POSITION_ADDRESSES[(queryChainId || _chainId) as ChainId] : undefined,
+    INONFUNGIBLE_POSITION_MANAGER.abi,
+    false,
+    queryChainId
+  )
+}
+
+export function useUniV3QuoterContract(queryChainId?: ChainId) {
+  const { chainId: _chainId } = useActiveWeb3React()
+  return useContract(
+    queryChainId || _chainId ? UNI_V3_QUOTER_ADDRESSES[(queryChainId || _chainId) as ChainId] : undefined,
+    UNI_V3_QUOTER_ABI,
+    false,
+    queryChainId
+  )
 }

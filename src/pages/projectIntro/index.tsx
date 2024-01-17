@@ -26,11 +26,11 @@ import { useWalletModalToggle } from 'state/application/hooks'
 import { useBladeDaoSharer } from 'hooks/useBladeDaoShare'
 import LikeUnlike from 'bounceComponents/common/LikeUnlike'
 import { LIKE_OBJ } from 'api/idea/type'
-import usePoolInfo from 'bounceHooks/auction/usePoolInfo'
+import { useBackedPoolInfo } from 'bounceHooks/auction/usePoolInfo'
 import Favorite from 'bounceComponents/common/Favorite'
 import { useUserInfo } from 'state/users/hooks'
 import { routes } from 'constants/routes'
-import { PoolStatus } from 'api/pool/type'
+import { PoolStatus, PoolType } from 'api/pool/type'
 import { useRequest } from 'ahooks'
 import { getInviteList } from 'api/bladeDao/index'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
@@ -509,8 +509,7 @@ export function InviteBtn({
 }
 
 export function ProjectHead({ item, isDark }: { item: IPrivatePadProp; isDark?: boolean }) {
-  console.log('🚀 ~ file: index.tsx:512 ~ ProjectHead ~ item:', item)
-  const { data: poolInfo, run: getPoolInfo } = usePoolInfo(item.backedId)
+  const { data: poolInfo, run: getPoolInfo } = useBackedPoolInfo(PoolType.FixedSwap, item.backedId)
   const { userId } = useUserInfo()
   const isMD = useIsMDDown()
   const isSm = useBreakpoint('sm')
@@ -959,7 +958,6 @@ export function Tabs({ item, isDark, hideTitle }: { item: IPrivatePadProp; isDar
   // const tabs = ['Project Information', 'STEPN Token', 'Token Metrics']
   const tabs = isDark ? ['Project Information', 'STEPN Token', 'Token Metrics'] : ['Project Information']
   const [tab, setTab] = useState(tabs[0])
-  console.log(setTab)
 
   return (
     <Box
