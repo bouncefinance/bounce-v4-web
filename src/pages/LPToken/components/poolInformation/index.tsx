@@ -11,7 +11,7 @@ const InterLargeTitle = styled(Typography)`
   line-height: 25.601px; /* 160.009% */
   text-transform: capitalize;
 `
-const Icon1 = getIcon('AUCTION')
+const Icon1 = getIcon('SAVM')
 import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useMemo } from 'react'
@@ -49,6 +49,7 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
             src={Icon1 || ''}
             style={{
               position: 'absolute',
+              borderRadius: '100%',
               left: 0,
               top: 0,
               zIndex: 1

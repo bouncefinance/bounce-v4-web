@@ -4,6 +4,7 @@ import Icon3 from 'assets/imgs/nftLottery/tokenInformation/token-icon3.svg'
 import Icon4 from 'assets/imgs/nftLottery/tokenInformation/token-icon4.svg'
 import Icon5 from 'assets/imgs/nftLottery/tokenInformation/token-icon5.png'
 import Icon6 from 'assets/imgs/nftLottery/tokenInformation/bdid.png'
+import Icon7 from 'assets/imgs/nftLottery/tokenInformation/savm-token.jpg'
 import Port3Logo from 'pages/launchpad/imgs/port3Logo.png'
 
 export const colorList = ['#CCC496', '#DBAC48', '#AB883C', '#9E9871', '#9E7871', '#614C1F']
@@ -15,6 +16,7 @@ export const iconList: { [key in string]: string } = {
   BSSB: Icon4,
   BDID: Icon6,
   AMMX: Icon5,
+  SAVM: Icon7,
   PORT3: Port3Logo
 }
 export function getIcon(name: string | undefined) {

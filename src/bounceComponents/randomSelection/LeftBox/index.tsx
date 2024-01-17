@@ -14,6 +14,7 @@ import { useActiveWeb3React } from 'hooks'
 import CertifiedTokenImage from 'components/CertifiedTokenImage'
 import useBreakpoint from '../../../hooks/useBreakpoint'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
+import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 
 const Title = ({ children }: { children: ReactNode }): JSX.Element => (
   <Typography variant="h6" sx={{ mb: 10 }}>
@@ -62,7 +63,11 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
 
           <PoolInfoItem title="Token symbol">
             <Stack direction="row" spacing={4} sx={{ alignItems: 'center' }}>
-              <TokenImage src={poolInfo.token0.largeUrl} alt={poolInfo.token0.symbol} size={20} />
+              <TokenImage
+                src={poolInfo.token0.largeUrl || getIcon(poolInfo.token0.symbol.toLocaleUpperCase()) || ''}
+                alt={poolInfo.token0.symbol}
+                size={20}
+              />
               <Typography>{poolInfo.token0.symbol}</Typography>
             </Stack>
           </PoolInfoItem>

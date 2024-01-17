@@ -17,8 +17,8 @@ import { BounceAnime } from 'bounceComponents/common/BounceAnime'
 
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 27) as IPrivatePadProp
-  const _chainId = ChainId.SEPOLIA
-  const nftAddr = '0x1238536071E1c677A632429e3655c799b22cDA52'
+  const _chainId = ChainId.MAINNET
+  const nftAddr = '0xc36442b4a4522e871399cd717abdd847ab11fe88'
   const { account } = useActiveWeb3React()
   const contract = useRandomSelectionLPContract(undefined, _chainId)
   const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, item.backedId)
@@ -26,7 +26,7 @@ const LPToken = () => {
 
   const clickHandler = useCallback(async () => {
     if (contract && poolInfo && poolInfo.positionId) {
-      await contract.creatorSetFeePositionId(poolInfo.poolId, poolInfo.positionId)
+      await contract.creatorSetFeePositionId(poolInfo.poolId, 649834)
     }
   }, [contract, poolInfo])
 

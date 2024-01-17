@@ -5,7 +5,6 @@ import { Formik, Form, Field, FormikErrors } from 'formik'
 import moment, { Moment } from 'moment'
 import FormItem from 'bounceComponents/common/FormItem'
 import DateTimePickerFormItem from 'bounceComponents/create-auction-pool/DateTimePickerFormItem'
-import { STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES } from 'constants/index'
 import { Stack, Button, Box, OutlinedInput } from '@mui/material'
 import { useActiveWeb3React } from 'hooks'
 import { useCallback, useEffect, useState } from 'react'
@@ -17,8 +16,6 @@ import { CurrencyAmount } from 'constants/token'
 import TokenInput from './components/tokenInput'
 import NumberInput from 'bounceComponents/common/NumberInput'
 import { useRandomSelectionLPContract } from 'hooks/useContract'
-import { useApproveCallback } from 'hooks/useApproveCallback'
-import { ApprovalState } from 'hooks/useApproveCallback'
 import { useTransactionModalWrapper } from 'hooks/useTransactionModalWrapper'
 import { NULL_BYTES } from 'constants/index'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
@@ -56,18 +53,13 @@ const SingleTokenPool = () => {
   const [token1Currency, setToken1Currency] = useState<Currency>()
   const [token1Amount, setToken1Amount] = useState('')
   const [token1Raw, setToken1Raw] = useState('')
-  const [currencyAmount1, setCurrencyAmount1] = useState<CurrencyAmount | undefined>()
+  const [, setCurrencyAmount1] = useState<CurrencyAmount | undefined>()
   const switchNetwork = useSwitchNetwork()
   const toggleWalletModal = useWalletModalToggle()
-  const _chainId = ChainId.SEPOLIA
+  const _chainId = ChainId.MAINNET
   const contract = useRandomSelectionLPContract(undefined, _chainId)
   const chainConfigInBackend = useChainConfigInBackend('ethChainId', _chainId || 5)
 
-  const [approvalState, approveCallback] = useApproveCallback(
-    currencyAmount1,
-    STAKE_TOKEN_WITH_TIME_WEIGHT_CONTRACT_ADDRESSES[_chainId]
-  )
-  const approveCallbackFn = useTransactionModalWrapper(approveCallback as any)
   useEffect(() => {
     if (token1Currency && token1Amount) {
       const currencyAmount = CurrencyAmount.fromAmount(token1Currency, token1Amount)
@@ -138,24 +130,6 @@ const SingleTokenPool = () => {
           </Button>
         )
       }
-      if (approvalState !== ApprovalState.APPROVED) {
-        if (approvalState === ApprovalState.PENDING) {
-          return <Button disabled>Approving...</Button>
-        }
-        if (approvalState === ApprovalState.UNKNOWN) {
-          return <Button disabled>Fill in token0 and quantity</Button>
-        }
-        if (approvalState === ApprovalState.NOT_APPROVED) {
-          return (
-            <Button
-              onClick={approveCallbackFn}
-              sx={{ backgroundColor: 'rgba(225,242,92,1)', '&:hover': { backgroundColor: 'rgba(225,242,92,0.7)' } }}
-            >
-              Approve
-            </Button>
-          )
-        }
-      }
       return (
         <Button
           type="submit"
@@ -165,7 +139,7 @@ const SingleTokenPool = () => {
         </Button>
       )
     },
-    [_chainId, account, approvalState, approveCallbackFn, chainId, switchNetwork, toggleWalletModal]
+    [_chainId, account, chainId, switchNetwork, toggleWalletModal]
   )
 
   const createPool = async (formValues: MyFormValues) => {

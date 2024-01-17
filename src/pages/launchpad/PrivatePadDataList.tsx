@@ -2790,13 +2790,13 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
   }
 ]
 export const SatoshiVMLPData: IPrivatePadProp = {
-  backedId: 21479,
+  backedId: 18744,
   keyId: 27,
   liveTimeStamp: {
     start: 1705536000000,
     end: 1705622400000
   },
-  hideUpcomingCountdown: true,
+  // hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
   img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
   avatar: SatoshivmImg,
@@ -2835,13 +2835,13 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   ]
 }
 export const SatoshiVMRandomData: IPrivatePadProp = {
-  backedId: 21478,
+  backedId: 18745,
   keyId: 28,
   liveTimeStamp: {
     start: 1705536000000,
     end: 1705622400000
   },
-  hideUpcomingCountdown: true,
+  // hideUpcomingCountdown: true,
   poolTypeName: 'Random Selection',
   img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
   avatar: SatoshivmImg,
