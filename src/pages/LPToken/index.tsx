@@ -12,6 +12,7 @@ import { BaseButton } from './components/poolDetail/AuctionButtons'
 import { useRandomSelectionLPContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
+import useBreakpoint from 'hooks/useBreakpoint'
 
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 23) as IPrivatePadProp
@@ -19,7 +20,7 @@ const LPToken = () => {
   const nftAddr = '0x1238536071E1c677A632429e3655c799b22cDA52'
   const { account } = useActiveWeb3React()
   const contract = useRandomSelectionLPContract(undefined, _chainId)
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21453)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21469)
   const [, approve] = useNFTApproveAllCallback(nftAddr, contract?.address)
 
   const clickHandler = useCallback(async () => {
@@ -43,9 +44,9 @@ const LPToken = () => {
   const approveHandler = useCallback(async () => {
     approve()
   }, [approve])
-
+  const isSm = useBreakpoint('sm')
   return (
-    <Box>
+    <Box sx={{ background: '#F6F6F3' }}>
       <Box>
         <ProjectHead item={item} />
         {poolInfo && (
@@ -71,7 +72,7 @@ const LPToken = () => {
             </BaseButton>
           </Stack>
         )}
-        <Box sx={{ width: '100%', background: '#F6F6F3' }}>
+        <Box mt={isSm ? '-168px' : 0} sx={{ width: '100%', background: '#F6F6F3' }}>
           <Tabs item={item} />
         </Box>
         <FooterPc />

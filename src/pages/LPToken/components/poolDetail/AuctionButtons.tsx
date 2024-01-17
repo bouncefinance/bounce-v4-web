@@ -95,7 +95,10 @@ const AuctionButtons = ({
   const token1Amount = CurrencyAmount.fromRawAmount(token1Currency, poolInfo.maxAmount1PerWallet)
 
   const [approvalState, approveCallback] = useApproveCallback(token1Amount, poolInfo.contract)
-  const approveCallbackFn = useTransactionModalWrapper(approveCallback as any, { isApprove: true })
+  const approveCallbackFn = useTransactionModalWrapper(approveCallback as any, {
+    isApprove: true,
+    hideSuccessTip: true
+  })
 
   const { chainId, account } = useActiveWeb3React()
   const token1Balance = useCurrencyBalance(account, token1Currency, poolInfo.ethChainId)

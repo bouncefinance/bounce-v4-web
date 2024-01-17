@@ -13,6 +13,7 @@ import { Currency, CurrencyAmount } from 'constants/token'
 const NoJoinedCard = ({
   poolInfo,
   isJoined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isUpcoming,
   isClose
 }: {
@@ -56,7 +57,7 @@ const NoJoinedCard = ({
           transform: `${isSm && isJoined ? 'translateX(13px)' : 'translateX(0px)'} scale(1) `,
           transformOrigin: '0 0',
           mt: 40,
-          mb: isUpcoming ? 16 : 32
+          mb: 32
         }}
       >
         <Box
@@ -204,8 +205,8 @@ const NoJoinedCard = ({
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
                   fontSize: 12,
-                  color: '#959595',
-                  marginBottom: 10
+                  color: '#959595'
+                  // marginBottom: 10
                 }}
               >
                 Number of winners
@@ -238,8 +239,8 @@ const NoJoinedCard = ({
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
                   fontSize: 12,
-                  color: '#959595',
-                  marginBottom: 10
+                  color: '#959595'
+                  // marginBottom: 10
                 }}
               >
                 Total lottery tickets
@@ -372,7 +373,7 @@ const NoWinnerCard = () => {
           justifyContent: 'flex-start',
           alignItems: 'center',
           mt: 40,
-          mb: 16
+          mb: 32
         }}
       >
         <Typography

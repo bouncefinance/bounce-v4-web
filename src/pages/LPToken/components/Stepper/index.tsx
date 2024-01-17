@@ -96,10 +96,16 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
     }
   )
   return (
-    <Box sx={{ width: '100%', background: '#F6F6F3' }}>
+    <Box
+      sx={{
+        width: '100%',
+        background: isSm ? '#fff' : '#F6F6F3',
+        borderRadius: isSm ? '0 0 20px 20px' : 0,
+        pb: isSm ? 24 : 0
+      }}
+    >
       <Box
         sx={{
-          borderRadius: 20,
           width: '100%',
           maxWidth: 1440,
           margin: '0 auto',
@@ -107,7 +113,7 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
           flexDirection: isSm ? 'row-reverse' : 'column',
           justifyContent: isSm ? 'flex-end' : 'unset',
           gap: 16,
-          mt: isSm ? 32 : 40,
+          pt: isSm ? 32 : 40,
           px: isSm ? 16 : 72
         }}
       >

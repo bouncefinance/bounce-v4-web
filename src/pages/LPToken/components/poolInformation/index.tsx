@@ -21,7 +21,7 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
   const isSm = useBreakpoint('sm')
   return (
     <Stack
-      spacing={24}
+      spacing={isSm ? 12 : 24}
       gap={24}
       sx={{
         height: '100%',
@@ -38,8 +38,8 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
             flexDirection: 'row',
             position: 'relative',
             img: {
-              width: 32,
-              height: 32
+              width: isSm ? 28 : 32,
+              height: isSm ? 28 : 32
             }
           }}
         >
@@ -68,17 +68,27 @@ const PoolInformation = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => 
     </Stack>
   )
 }
-const WhiteCard = styled(Box)`
+const WhiteCard = styled(Box)(
+  ({ theme }) => `
   display: flex;
   padding: 24px;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   gap: 16px;
   border-radius: 12px;
   background: #fff;
+  ${
+    theme.breakpoints.down('sm')
+      ? `
+    padding:24px 16px;
+  `
+      : ''
+  }
 `
-const LabelTitle = styled(Typography)`
+)
+const LabelTitle = styled(Typography)(
+  ({ theme }) => `
   color: var(--grey-01, #20201e);
   /* D/H5 */
   width: 100%;
@@ -88,7 +98,15 @@ const LabelTitle = styled(Typography)`
   font-weight: 500;
   line-height: 150%; /* 24px */
   letter-spacing: -0.32px;
+  ${
+    theme.breakpoints.down('sm')
+      ? `
+      font-size: 14px;
+  `
+      : ''
+  }
 `
+)
 const LargeValueTitle = styled(Typography)({
   color: 'var(--blue-d, #2B51DA)',
   leadingTrim: 'both',
@@ -117,7 +135,7 @@ const TokenNameTitle = styled(Typography)`
 `
 
 const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
-  console.log('🚀 ~ DetailPanel ~ poolInfo:', poolInfo?.token0Price?.toString())
+  const isSm = useBreakpoint('sm')
   const poolTotalReward = useMemo(() => {
     if (poolInfo.PoolTotal0Fees && poolInfo.PoolTotal1Fees && poolInfo.token0Price && poolInfo.token1Price) {
       return poolInfo.token0Price
@@ -135,7 +153,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
     return undefined
   }, [poolInfo.position, poolInfo.token0Price, poolInfo.token1Price])
   return (
-    <Box pt={24}>
+    <Box pt={isSm ? 0 : 24}>
       <Stack flex={'grid'} gridTemplateColumns={'50% 50%'} flexDirection={'row'} gap={16}>
         <WhiteCard sx={{ width: '50%' }}>
           <LabelTitle sx={{ textAlign: 'center' }}>Pool Total Revenue Income</LabelTitle>
@@ -150,12 +168,12 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
           </LargeValueTitle>
         </WhiteCard>
       </Stack>
-      <WhiteCard mt={16} sx={{ alignItems: 'start' }}>
+      <WhiteCard mt={24} sx={{ alignItems: 'start' }}>
         <LabelTitle>Total Tokens Earned</LabelTitle>
         <Stack gap={16} width={'100%'}>
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <img src={Icon1 || ''} style={{ width: 32, height: 32 }} />
+              <img src={Icon1 || ''} style={{ width: isSm ? 28 : 32, height: isSm ? 24 : 32 }} />
               <TokenNameTitle>SAVM</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
@@ -164,7 +182,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
           </Stack>
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
-              <img src={Icon2 || ''} style={{ width: 32, height: 32 }} />
+              <img src={Icon2 || ''} style={{ width: isSm ? 28 : 32, height: isSm ? 24 : 32 }} />
               <TokenNameTitle>ETH</TokenNameTitle>
             </Stack>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
