@@ -21,7 +21,7 @@ const LPToken = () => {
   const nftAddr = '0x1238536071E1c677A632429e3655c799b22cDA52'
   const { account } = useActiveWeb3React()
   const contract = useRandomSelectionLPContract(undefined, _chainId)
-  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, 21446 || item.backedId)
+  const { data: poolInfo } = useRandomSelectionLPPoolInfo(_chainId, item.backedId)
   const [, approve] = useNFTApproveAllCallback(nftAddr, contract?.address)
 
   const clickHandler = useCallback(async () => {
