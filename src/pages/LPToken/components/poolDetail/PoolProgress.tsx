@@ -50,9 +50,9 @@ const AvatarList = ({ curPlayer }: { curPlayer: number }) => {
   const isSm = useBreakpoint('sm')
   const len = useMemo(() => {
     const list = avatarList.splice(0, curPlayer)
-    if (isSm && list.length > 3) {
-      return list.slice(0, 3).reverse()
-    }
+    // if (isSm && list.length > 3) {
+    //   return list.slice(0, 3).reverse()
+    // }
     return list.reverse()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [curPlayer, isSm])

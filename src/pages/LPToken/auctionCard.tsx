@@ -3,8 +3,13 @@ import PoolInformation from './components/poolInformation'
 import PoolDetail from './components/poolDetail'
 import { RandomSelectionLPProps } from 'api/pool/type'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 const AuctionCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   const isSm = useBreakpoint('sm')
+  const allStatus = useGetRandomSelectionLPPoolStatus(poolInfo)
+  if (allStatus.isUserWinner) {
+    return <></>
+  }
   return (
     <Box sx={{ width: '100%', background: '#F6F6F3' }}>
       <Box sx={{ width: '100%', maxWidth: 1440, margin: '0 auto', px: isSm ? 0 : 72, pt: isSm ? 20 : 84, mt: 9 }}>
