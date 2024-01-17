@@ -2792,8 +2792,8 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
 export const SatoshiVMLPData: IPrivatePadProp = {
   keyId: 27,
   liveTimeStamp: {
-    start: 1705593600000,
-    end: 0
+    start: 1705507680,
+    end: 1705594080
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
@@ -2803,9 +2803,9 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   chainId: 1,
   tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
-  upcomingLink: routes.thirdPart.SatoshiVMLp,
+  upcomingLink: routes.thirdPart.LPToken,
   // upcomingLink: '',
-  liveLink: routes.thirdPart.SatoshiVMLp,
+  liveLink: routes.thirdPart.LPToken,
   // liveLink: '',
   projectInfo: SatoshiVMLPProjectInfo,
   tokenMetrics: [],
@@ -2827,7 +2827,7 @@ export const SatoshiVMLPData: IPrivatePadProp = {
   moreData: [
     { title: 'Reward Token', content: `$ETH` },
     // { title: 'Ticket Price', content: '26 AUCTION / Ticket' },
-    { title: 'Ticket Price', content: 'TBD' },
+    { title: 'Ticket Price', content: '8.929 AUCTION / Ticket' },
     // { title: 'Reward Claim Time', content: 'Ervery Sunday' },
     { title: 'Reward Claim Time', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
@@ -2840,8 +2840,8 @@ export const SatoshiVMLPData: IPrivatePadProp = {
 export const SatoshiVMRandomData: IPrivatePadProp = {
   keyId: 28,
   liveTimeStamp: {
-    start: 1705593600000,
-    end: 0
+    start: 1705507680,
+    end: 1705594080
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Random Selection',
@@ -2874,10 +2874,9 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$SAVM' },
-    // { title: 'Ticket Price', content: '5.2 AUCTION / Ticket' },
-    { title: 'Ticket Price', content: 'TBD' },
-    // { title: 'Token Amount / Ticket', content: '2100 SAVM' },
-    { title: 'Token Amount / Ticket', content: 'TBD' },
+    { title: 'Ticket Price', content: '3.57 AUCTION / Ticket' },
+    // { title: 'Ticket Price', content: 'TBD' },
+    { title: 'Token Amount / Ticket', content: '420,000 SAVM' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
