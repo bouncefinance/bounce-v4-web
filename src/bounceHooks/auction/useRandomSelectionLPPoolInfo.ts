@@ -19,7 +19,6 @@ import { FeeAmount, Pool, Position, computePoolAddress } from '@uniswap/v3-sdk'
 import IUniswapV3PoolABI from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
 import { UNI_V3_FACTORY_ADDRESSES } from 'constants/uniswap'
 import { useTokenPriceByUni } from 'hooks/useUniSwapQuote'
-import { lpId } from 'pages/LPToken'
 
 const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   const _backedId = backedId
@@ -30,7 +29,14 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   } = useBackedPoolInfo(PoolType.RANDOM_SELECTION_LP, Number(_backedId))
   const contract = useRandomSelectionLPContract(poolInfo?.contract || '', poolInfo?.ethChainId)
   const posContract = useUniV3PositionContract(chainId)
-  const res = useSingleCallResult(posContract, 'positions', [lpId], undefined, chainId)?.result
+  const positionIdRes = useSingleCallResult(
+    contract,
+    'feePositionIds',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+  const res = useSingleCallResult(posContract, 'positions', [positionIdRes?.[0].toString()], undefined, chainId)?.result
   const _token0 = useToken(res?.token0, chainId)
   const token0 = useMemo(() => {
     if (res?.token0) {
@@ -215,6 +221,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
         claimed: myClaimedRes?.[0] || poolInfo.participant.claimed
       },
       mintContractAddress: poolsInfo?.mintContract,
+      positionId: positionIdRes?.[0].toString(),
       totalShare: poolsInfo?.nShare,
       maxPlayere: poolsInfo?.maxPlayer,
       curPlayer: playerCount.result?.[0].toString() || 0,
@@ -232,6 +239,7 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
     poolsInfo?.mintContract,
     poolsInfo?.nShare,
     poolsInfo?.maxPlayer,
+    positionIdRes,
     playerCount.result,
     creatorClaimRes?.result,
     token0Price,
