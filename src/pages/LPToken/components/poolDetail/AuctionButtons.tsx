@@ -18,6 +18,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { useMemo } from 'react'
 import dayjs from 'dayjs'
 import { Dots } from 'themes'
+import { getCurrentTimeStamp } from 'utils'
 export const BaseButton = styled(Button)`
   width: 100%;
   padding: 20px;
@@ -79,6 +80,10 @@ const AuctionButtons = ({
   })
   const [sundayCountdown, sundayTime] = useCountDown({
     targetDate: Number(timestamp) * 1000
+  })
+
+  const [, claimTime] = useCountDown({
+    targetDate: Number(poolInfo.claimAt) * 1000
   })
   const { runWithModal, submitted } = useRandomLPBetCallback(poolInfo)
   const { runWithModal: onClaim, submitted: noWinnerSubmitted } = useRandomLPUserClaim(
@@ -183,8 +188,14 @@ const AuctionButtons = ({
         )
       }
       return (
-        <LoadingButtonStyle onClick={() => onClaim()} loading={noWinnerSubmitted.submitted}>
-          Claim Token Back
+        <LoadingButtonStyle
+          onClick={() => onClaim()}
+          loading={noWinnerSubmitted.submitted}
+          disabled={getCurrentTimeStamp() < poolInfo.claimAt}
+        >
+          {getCurrentTimeStamp() < poolInfo.claimAt
+            ? `Claim Token Back (${claimTime.hours}h : ${claimTime.minutes}m : ${claimTime.seconds}s)`
+            : 'Claim Token Back'}
         </LoadingButtonStyle>
       )
     }
