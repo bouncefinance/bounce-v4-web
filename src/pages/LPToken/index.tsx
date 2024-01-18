@@ -14,6 +14,7 @@ import { useCallback } from 'react'
 import { useNFTApproveAllCallback } from 'hooks/useNFTApproveAllCallback'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { BounceAnime } from 'bounceComponents/common/BounceAnime'
+import AuctionWinnerList from './components/winnerList'
 
 const LPToken = () => {
   const item = PrivatePadDataList.find(i => i.keyId === 27) as IPrivatePadProp
@@ -62,6 +63,8 @@ const LPToken = () => {
           </>
         )}
         {poolInfo && poolInfo.positionId && <LPPoolCard poolInfo={poolInfo} />}
+        {/* #todo after openseed */}
+        {poolInfo && <AuctionWinnerList poolInfo={poolInfo} />}
         {poolInfo && account && account.toLocaleUpperCase() === poolInfo.creator.toLocaleUpperCase() && (
           <Stack justifyContent={'center'} direction={'column'} spacing={20} alignItems={'center'}>
             <BaseButton sx={{ width: 340 }} onClick={clickHandler}>
