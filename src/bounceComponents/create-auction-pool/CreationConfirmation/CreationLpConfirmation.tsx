@@ -27,6 +27,9 @@ import { CurrencyAmount } from 'constants/token'
 import { hideDialogConfirmation, showRequestConfirmDialog, showWaitingTxDialog } from 'utils/auction'
 import { useShowLoginModal } from 'state/users/hooks'
 import AuctionNotification from '../AuctionNotification'
+// import getAuctionPoolLink from 'utils/auction/getAuctionPoolRouteLink'
+// import { PoolType } from 'api/pool/type'
+// import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 const ConfirmationSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[900],
   opacity: 0.5,
@@ -64,6 +67,8 @@ const CreatePoolButton = () => {
   const { account, chainId } = useActiveWeb3React()
   const showLoginModal = useShowLoginModal()
   const auctionInChainId = useAuctionInChain()
+  // const chainConfigInBackend = useChainConfigInBackend('ethChainId', auctionInChainId)
+
   const switchNetwork = useSwitchNetwork()
   const { currencyTo } = useAuctionERC20Currency()
   const auctionAccountBalance = useCurrencyBalance(account || undefined, currencyTo)
@@ -116,12 +121,18 @@ const CreatePoolButton = () => {
       ret
         .then(poolId => {
           console.log(poolId)
+          // const goToPoolInfoPage = () => {
+          //   const route = getAuctionPoolLink(sysId, PoolType.FixedSwap, chainConfigInBackend?.id as number, poolId)
+          //   navigate(route)
+          // }
           hideDialogConfirmation()
           show(DialogTips, {
             iconType: 'success',
             cancelBtn: 'Close',
+            // againBtn: 'To the pool',
             title: 'Congratulations!',
             content: `You have successfully created the auction.The poolId is ${sysId}`,
+            // onAgain: goToPoolInfoPage,
             onCancel: handleCloseDialog,
             onClose: handleCloseDialog
           })
