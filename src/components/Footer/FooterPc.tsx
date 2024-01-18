@@ -1,10 +1,10 @@
 import { Box, Link as ExternalLink, SxProps, Typography, useTheme } from '@mui/material'
 import React, { createContext, useContext, useMemo } from 'react'
-import APIIcon from 'assets/socialLinksIcon/API-mini.svg'
-import GithubIcon from 'assets/socialLinksIcon/github-mini.svg'
-import MediumIcon from 'assets/socialLinksIcon/midium-mini.svg'
-import TelegramIcon from 'assets/socialLinksIcon/telegram-mini.svg'
-import TwitterIcon from 'assets/socialLinksIcon/twitter-mini.svg'
+import { ReactComponent as APIIcon } from 'assets/socialLinksIcon/API-mini.svg'
+import { ReactComponent as GithubIcon } from 'assets/socialLinksIcon/github-mini.svg'
+import { ReactComponent as MediumIcon } from 'assets/socialLinksIcon/midium-mini.svg'
+import { ReactComponent as TelegramIcon } from 'assets/socialLinksIcon/telegram-mini.svg'
+import { ReactComponent as TwitterIcon } from 'assets/socialLinksIcon/twitter-mini.svg'
 import WhiteFooterLogo from 'assets/svg/logo-white.svg'
 import { routes } from 'constants/routes'
 // import ArrowSvg from 'assets/imgs/common/footerArrow.svg'
@@ -27,27 +27,27 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
     () => [
       {
         title: 'Medium',
-        icon: MediumIcon,
+        icon: <MediumIcon />,
         href: 'https://medium.com/@bouncefinance'
       },
       {
         title: 'Twitter',
-        icon: TwitterIcon,
+        icon: <TwitterIcon />,
         href: 'https://twitter.com/bounce_finance?s=21'
       },
       {
         title: 'Telegram',
-        icon: TelegramIcon,
+        icon: <TelegramIcon />,
         href: 'https://t.me/bounce_finance'
       },
       {
         title: 'Github',
-        icon: GithubIcon,
+        icon: <GithubIcon />,
         href: 'https://github.com/bouncefinance'
       },
       {
         title: 'API',
-        icon: APIIcon,
+        icon: <APIIcon />,
         href: 'https://docs.bounce.finance/'
       }
     ],
@@ -72,10 +72,9 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
     >
       <Box
         sx={{
-          [theme.breakpoints.down('md')]: {
-            display: 'flex',
-            gap: 12
-          }
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 12
         }}
       >
         {Links.map((item, index) => {
@@ -91,9 +90,10 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
               }}
             >
               <Box
-                component="img"
-                src={item.icon}
                 sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   width: isSm ? 44 : 48,
                   height: isSm ? 44 : 48,
                   marginRight: isSm ? 0 : 8,
@@ -104,10 +104,12 @@ export function SocialLinkList({ sx }: { sx?: SxProps }) {
                   '&:hover': {
                     background: 'transparent',
                     border: '1px solid var(--ps-yellow-1)',
-                    '.svg': { fill: 'var(--ps-yellow-1)' }
+                    '& svg path,& svg ellipse,& svg rect ': { fill: 'var(--ps-yellow-1)' }
                   }
                 }}
-              />
+              >
+                {item.icon}
+              </Box>
             </ExternalLink>
           )
         })}
