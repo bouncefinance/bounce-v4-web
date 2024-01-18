@@ -11,241 +11,158 @@ import { AuctionProgressPrimaryColor } from 'constants/auction/color'
 import PoolInfoItem from 'bounceComponents/fixed-swap/PoolInfoItem'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useEffect, useState } from 'react'
+interface NoJoinedCardParam {
+  isJoined: boolean
+  poolInfo: FixedSwapPoolProp
+}
 
-const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoined: boolean }) => {
+const NoJoinedCard = (props: NoJoinedCardParam) => {
+  const { isJoined, poolInfo } = props
   const singleShare = poolInfo.totalShare
     ? formatNumber(new BigNumber(poolInfo.amountTotal0).div(poolInfo.totalShare).toString(), {
         unit: poolInfo.token0.decimals,
         decimalPlaces: poolInfo.token0.decimals
       })
     : undefined
-  const swapedPercent =
-    poolInfo?.curPlayer && poolInfo.maxPlayere
-      ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
-      : 0
-  interface NoJoinedCardParam {
-    isJoined: boolean
-  }
-  const NoJoinedCard = (props: NoJoinedCardParam) => {
-    const { isJoined } = props
-    const [zoomNum, setZoomNum] = useState(1)
-    const isSm = useBreakpoint('sm')
-    const handleZoom = () => {
-      if (isSm) {
-        const w = window.innerWidth
-        setZoomNum((w - 40) / 444)
-      } else {
-        setZoomNum(1)
-      }
+  const [zoomNum, setZoomNum] = useState(1)
+  const isSm = useBreakpoint('sm')
+  const handleZoom = () => {
+    if (isSm) {
+      const w = window.innerWidth
+      setZoomNum((w - 40) / 444)
+    } else {
+      setZoomNum(1)
     }
+  }
 
-    useEffect(() => {
-      handleZoom()
-      window.addEventListener('resize', handleZoom)
-      return () => {
-        window.removeEventListener('resize', handleZoom)
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-    return (
-      <>
+  useEffect(() => {
+    handleZoom()
+    window.addEventListener('resize', handleZoom)
+    return () => {
+      window.removeEventListener('resize', handleZoom)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return (
+    <>
+      <Box
+        sx={{
+          width: 444,
+          height: 216,
+          display: 'flex',
+          flexFlow: 'row nowrap',
+          overflow: 'visible',
+          margin: isSm ? '0 auto' : '0 auto 30px',
+          // zoom: zoomNum
+          transform: `scale(${zoomNum})`,
+          transformOrigin: '0 0'
+        }}
+      >
         <Box
           sx={{
-            width: 444,
+            position: 'relative',
+            width: 122,
             height: 216,
+            background: '#2B51DA',
+            display: 'flex',
+            flexFlow: 'column nowrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px',
+            borderRight: '1px dashed #FFFFFF',
+            transform: isJoined ? 'rotateZ(-10deg)' : 'unset',
+            transformOrigin: isJoined ? `bottom right` : 'unset'
+          }}
+        >
+          <Image src={Logo} width={50} height={50} />
+          <Typography
+            sx={{
+              position: 'absolute',
+              left: 0,
+              bottom: '12px',
+              width: '100%',
+              textAlign: 'center',
+              fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+              fontWeight: 400,
+              fontSize: 12,
+              color: '#E8E8E8',
+              transform: 'scale(0.8)'
+            }}
+          >
+            Random selection
+          </Typography>
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '-30px',
+              top: '50%',
+              width: 41,
+              height: 21,
+              marginTop: '-11px',
+              background: '#fff',
+              borderRadius: '50%'
+            }}
+          ></Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              right: '-1px',
+              top: '0',
+              width: 0,
+              height: 0,
+              border: '8px solid',
+              borderColor: `#fff #fff transparent transparent`
+            }}
+          ></Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              right: '-1px',
+              bottom: '0',
+              width: 0,
+              height: 0,
+              border: '8px solid',
+              borderColor: `transparent #fff #fff transparent`
+            }}
+          ></Box>
+        </Box>
+        <Box
+          sx={{
+            position: 'relative',
+            width: 322,
+            height: 216,
+            background: '#2B51DA',
             display: 'flex',
             flexFlow: 'row nowrap',
-            overflow: 'visible',
-            margin: isSm ? '0 auto' : '0 auto 30px',
-            // zoom: zoomNum
-            transform: `scale(${zoomNum})`,
-            transformOrigin: '0 0'
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px',
+            padding: '0 15px 0 10px',
+            borderLeft: isJoined ? '1px dashed #FFFFFF' : 'unset'
           }}
         >
           <Box
             sx={{
-              position: 'relative',
-              width: 122,
-              height: 216,
-              background: '#2B51DA',
+              flex: 1,
+              height: '100%',
               display: 'flex',
               flexFlow: 'column nowrap',
               justifyContent: 'center',
               alignItems: 'center',
-              borderRadius: '4px',
-              borderRight: '1px dashed #FFFFFF',
-              transform: isJoined ? 'rotateZ(-10deg)' : 'unset',
-              transformOrigin: isJoined ? `bottom right` : 'unset'
+              marginRight: '10px'
             }}
           >
-            <Image src={Logo} width={50} height={50} />
-            <Typography
+            <Box
               sx={{
-                position: 'absolute',
-                left: 0,
-                bottom: '12px',
                 width: '100%',
-                textAlign: 'center',
-                fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                fontWeight: 400,
-                fontSize: 12,
-                color: '#E8E8E8',
-                transform: 'scale(0.8)'
-              }}
-            >
-              Random selection
-            </Typography>
-            <Box
-              sx={{
-                position: 'absolute',
-                left: '-30px',
-                top: '50%',
-                width: 41,
-                height: 21,
-                marginTop: '-11px',
-                background: '#fff',
-                borderRadius: '50%'
-              }}
-            ></Box>
-            <Box
-              sx={{
-                position: 'absolute',
-                right: '-1px',
-                top: '0',
-                width: 0,
-                height: 0,
-                border: '8px solid',
-                borderColor: `#fff #fff transparent transparent`
-              }}
-            ></Box>
-            <Box
-              sx={{
-                position: 'absolute',
-                right: '-1px',
-                bottom: '0',
-                width: 0,
-                height: 0,
-                border: '8px solid',
-                borderColor: `transparent #fff #fff transparent`
-              }}
-            ></Box>
-          </Box>
-          <Box
-            sx={{
-              position: 'relative',
-              width: 322,
-              height: 216,
-              background: '#2B51DA',
-              display: 'flex',
-              flexFlow: 'row nowrap',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '4px',
-              padding: '0 15px 0 10px',
-              borderLeft: isJoined ? '1px dashed #FFFFFF' : 'unset'
-            }}
-          >
-            <Box
-              sx={{
                 flex: 1,
-                height: '100%',
+                height: 93,
                 display: 'flex',
                 flexFlow: 'column nowrap',
                 justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: '10px'
-              }}
-            >
-              <Box
-                sx={{
-                  width: '100%',
-                  flex: 1,
-                  height: 93,
-                  display: 'flex',
-                  flexFlow: 'column nowrap',
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  borderBottom: '1px dashed #FFFFFF',
-                  paddingLeft: 20
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                    fontWeight: 400,
-                    fontSize: 12,
-                    color: '#E8E8E8',
-                    marginBottom: 10
-                  }}
-                >
-                  Number of winners
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
-                    fontWeight: 400,
-                    fontSize: 28,
-                    color: '#fff'
-                  }}
-                >
-                  {poolInfo.totalShare}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  width: '100%',
-                  flex: 1,
-                  height: 93,
-                  display: 'flex',
-                  flexFlow: 'column nowrap',
-                  justifyContent: 'center',
-                  alignItems: 'flex-start',
-                  paddingLeft: 20
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
-                    fontWeight: 400,
-                    fontSize: 12,
-                    color: '#E8E8E8',
-                    marginBottom: 10
-                  }}
-                >
-                  Token per ticket
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
-                    fontWeight: 400,
-                    fontSize: 28,
-                    color: '#fff'
-                  }}
-                >
-                  {singleShare}
-                  <span
-                    style={{
-                      fontSize: 12,
-                      marginLeft: 8,
-                      color: '#DFDFDF'
-                    }}
-                  >
-                    {poolInfo.token0.symbol}
-                  </span>
-                </Typography>
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                width: 113,
-                height: 186,
-                background: '#4568E4',
-                borderRadius: '6px',
-                paddingTop: 12,
-                display: 'flex',
-                flexFlow: 'column nowrap',
-                justifyContent: 'flex-start',
-                alignItems: 'center'
+                alignItems: 'flex-start',
+                borderBottom: '1px dashed #FFFFFF',
+                paddingLeft: 20
               }}
             >
               <Typography
@@ -253,76 +170,161 @@ const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoine
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
                   fontSize: 12,
-                  color: '#fff',
-                  textAlign: 'center',
-                  marginBottom: 20
+                  color: '#E8E8E8',
+                  marginBottom: 10
                 }}
               >
-                Ticket price
+                Number of winners
               </Typography>
-              <Image
-                src={TypeIcon}
-                width={41}
-                height={41}
-                style={{
-                  marginBottom: 19
-                }}
-              />
               <Typography
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
                   fontWeight: 400,
-                  fontSize: 24,
-                  color: '#fff',
-                  marginBottom: 5,
-                  letterSpacing: 0
+                  fontSize: 28,
+                  color: '#fff'
                 }}
               >
-                {formatNumber(poolInfo.maxAmount1PerWallet, {
-                  unit: poolInfo.token1.decimals
-                })}
+                {poolInfo.totalShare}
               </Typography>
+            </Box>
+            <Box
+              sx={{
+                width: '100%',
+                flex: 1,
+                height: 93,
+                display: 'flex',
+                flexFlow: 'column nowrap',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                paddingLeft: 20
+              }}
+            >
               <Typography
                 sx={{
                   fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
                   fontWeight: 400,
                   fontSize: 12,
-                  color: '#E8E8E8'
+                  color: '#E8E8E8',
+                  marginBottom: 10
                 }}
               >
-                {poolInfo.token1.symbol}
+                Token per ticket
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+                  fontWeight: 400,
+                  fontSize: 28,
+                  color: '#fff'
+                }}
+              >
+                {singleShare}
+                <span
+                  style={{
+                    fontSize: 12,
+                    marginLeft: 8,
+                    color: '#DFDFDF'
+                  }}
+                >
+                  {poolInfo.token0.symbol}
+                </span>
               </Typography>
             </Box>
-            <Box
-              sx={{
-                position: 'absolute',
-                left: '-1px',
-                top: '0',
-                width: 0,
-                height: 0,
-                border: '8px solid',
-                borderColor: `#fff transparent transparent #fff`
-              }}
-            ></Box>
-            <Box
-              sx={{
-                position: 'absolute',
-                left: '-1px',
-                bottom: '0',
-                width: 0,
-                height: 0,
-                border: '8px solid',
-                borderColor: `transparent transparent #fff #fff`
-              }}
-            ></Box>
           </Box>
+          <Box
+            sx={{
+              width: 113,
+              height: 186,
+              background: '#4568E4',
+              borderRadius: '6px',
+              paddingTop: 12,
+              display: 'flex',
+              flexFlow: 'column nowrap',
+              justifyContent: 'flex-start',
+              alignItems: 'center'
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+                fontWeight: 400,
+                fontSize: 12,
+                color: '#fff',
+                textAlign: 'center',
+                marginBottom: 20
+              }}
+            >
+              Ticket price
+            </Typography>
+            <Image
+              src={TypeIcon}
+              width={41}
+              height={41}
+              style={{
+                marginBottom: 19
+              }}
+            />
+            <Typography
+              sx={{
+                fontFamily: `'Sharp Grotesk DB Cyr Medium 22'`,
+                fontWeight: 400,
+                fontSize: 24,
+                color: '#fff',
+                marginBottom: 5,
+                letterSpacing: 0
+              }}
+            >
+              {formatNumber(poolInfo.maxAmount1PerWallet, {
+                unit: poolInfo.token1.decimals
+              })}
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: `'Sharp Grotesk DB Cyr Book 20'`,
+                fontWeight: 400,
+                fontSize: 12,
+                color: '#E8E8E8'
+              }}
+            >
+              {poolInfo.token1.symbol}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '-1px',
+              top: '0',
+              width: 0,
+              height: 0,
+              border: '8px solid',
+              borderColor: `#fff transparent transparent #fff`
+            }}
+          ></Box>
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '-1px',
+              bottom: '0',
+              width: 0,
+              height: 0,
+              border: '8px solid',
+              borderColor: `transparent transparent #fff #fff`
+            }}
+          ></Box>
         </Box>
-      </>
-    )
-  }
+      </Box>
+    </>
+  )
+}
+const LiveCard = ({ poolInfo, isJoined }: { poolInfo: FixedSwapPoolProp; isJoined: boolean }) => {
+  const swapedPercent =
+    poolInfo?.curPlayer && poolInfo.maxPlayere
+      ? new BigNumber(poolInfo.curPlayer).div(poolInfo.maxPlayere).times(100).toNumber()
+      : 0
+
   return (
     <>
-      <NoJoinedCard isJoined={isJoined} />
+      <NoJoinedCard isJoined={isJoined} poolInfo={poolInfo} />
       <Box
         sx={{
           marginBottom: '30px'
