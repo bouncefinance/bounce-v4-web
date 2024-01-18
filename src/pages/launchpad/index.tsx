@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Container, MenuItem, Select, Stack, styled } from '@mui/material'
+import { Box, Button, Container, MenuItem, Select, Stack, styled } from '@mui/material'
 // import HeaderTab from '../../bounceComponents/auction/HeaderTab'
 import ArrowBanner from '../../bounceComponents/auction/ArrowBanner'
 import { H2 } from '../../components/Text'
@@ -46,7 +46,7 @@ const PrivatePad: React.FC = () => {
   const optionDatas = useOptionDatas()
   const [auction, setAuction] = useState(0)
   const [chainFilter, setChainFilter] = useState<number>(0)
-
+  const [isViewAll, setIsViewAll] = useState(false)
   return (
     <PrivatePadBg sx={{ padding: { xs: '80px 16px 100px', md: '80px 40px 100px' } }}>
       <Container>
@@ -84,9 +84,19 @@ const PrivatePad: React.FC = () => {
       <LaunchCardUpcoming /> */}
       <Stack spacing={40} alignItems={'center'}>
         <LaunchpadList />
-        {PrivatePadDataList.filter(v => v.hidden !== true).map(item => (
-          <LaunchCardSocial key={item.keyId} data={item} />
-        ))}
+        {PrivatePadDataList.filter(v => v.hidden !== true)
+          .slice(0, !isViewAll ? 8 : PrivatePadDataList.length)
+          .map(item => (
+            <LaunchCardSocial key={item.keyId} data={item} />
+          ))}
+        {!isViewAll && (
+          <Button
+            sx={{ width: '100%', maxWidth: 400, borderRadius: 50, background: 'var(--ps-yellow-1)' }}
+            onClick={() => setIsViewAll(true)}
+          >
+            View All
+          </Button>
+        )}
       </Stack>
       {/* <TokenCardFinish />
       <TokenCardLive />
