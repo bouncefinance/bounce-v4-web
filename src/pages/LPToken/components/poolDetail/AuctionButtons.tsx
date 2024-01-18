@@ -235,6 +235,11 @@ const AuctionButtons = ({
       )
     }
   }
+
+  if (!allStatus.isUserJoined && allStatus.poolStatus >= RandomPoolStatus.OpenSeed) {
+    return <BaseButton disabled>Auction closed</BaseButton>
+  }
+
   if (Number(poolInfo.curPlayer) === Number(poolInfo.maxPlayere)) {
     return <BaseButton disabled>Sold Out</BaseButton>
   }
