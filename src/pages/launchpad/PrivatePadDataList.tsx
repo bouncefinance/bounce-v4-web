@@ -2721,10 +2721,7 @@ const SatoshiVMLPProjectInfo: IProjectInfo[] = [
       >
         <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
         <ul>
-          <li>
-            30% Liquidity: added to Uniswap liquidity/active liquidity management with Range Protocol + CEX liquidity
-            (100% Unlocked)
-          </li>
+          <li>30% add to Uniswap liquidity.</li>
           <li>
             36.5% Ecosystem growth: Dedicated to different airdrops and incentives for the ecosystem. Unlock 5% per
             month
