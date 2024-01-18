@@ -39,15 +39,15 @@ const useRandomSelectionLPPoolInfo = (chainId: ChainId, backedId?: number) => {
   const res = useSingleCallResult(posContract, 'positions', [positionIdRes?.[0].toString()], undefined, chainId)?.result
   const _token0 = useToken(res?.token0, chainId)
   const token0 = useMemo(() => {
-    if (res?.token0) {
-      return new Token(chainId, res?.token0, _token0?.decimals || 18, _token0?.symbol, _token0?.name)
+    if (res?.token0 && _token0?.decimals) {
+      return new Token(chainId, res?.token0, _token0?.decimals, _token0?.symbol, _token0?.name)
     }
     return undefined
   }, [res?.token0, chainId, _token0?.decimals, _token0?.symbol, _token0?.name])
   const _token1 = useToken(res?.token1, chainId)
   const token1 = useMemo(() => {
-    if (res?.token1) {
-      return new Token(chainId, res?.token1, _token1?.decimals || 18, _token1?.symbol, _token1?.name)
+    if (res?.token1 && _token1?.decimals) {
+      return new Token(chainId, res?.token1, _token1?.decimals, _token1?.symbol, _token1?.name)
     }
     return undefined
   }, [res?.token1, chainId, _token1?.decimals, _token1?.symbol, _token1?.name])
