@@ -428,7 +428,7 @@ const PoolCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
       poolInfo={poolInfo}
       isJoined={isUserJoined}
       isUpcoming={poolStatus === RandomPoolStatus.Upcoming}
-      isClose={poolStatus === RandomPoolStatus.Closed || poolStatus === RandomPoolStatus.Waiting}
+      isClose={poolStatus >= RandomPoolStatus.Live}
     />
   )
 }

@@ -6,6 +6,7 @@ import StepCheckIcon from 'assets/imgs/lpToken/step-check-icon.svg'
 import { ReactComponent as StepDefaultIcon } from 'assets/imgs/lpToken/step-default.svg'
 import { useRequest } from 'ahooks'
 import useBreakpoint from 'hooks/useBreakpoint'
+import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 const StepperStyle = styled(Stepper)(({ theme }) => ({
   '& .MuiStep-root': { paddingLeft: 0, paddingRight: 0 },
   '& .MuiStep-root:last-child': {
@@ -59,6 +60,7 @@ const StepperStyle = styled(Stepper)(({ theme }) => ({
 }))
 
 const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
+  const allStatus = useGetRandomSelectionLPPoolStatus(poolInfo)
   const [activeStep, setActiveStep] = useState(0)
   const isSm = useBreakpoint('sm')
   const nowTime = () => new Date().getTime()
@@ -95,6 +97,10 @@ const PoolStepper = ({ poolInfo }: { poolInfo: any }): JSX.Element => {
       refreshDeps: [poolInfo.claimAt, poolInfo.closeAt, poolInfo.openAt]
     }
   )
+  if (allStatus.isUserWinner) {
+    return <></>
+  }
+
   return (
     <Box
       sx={{

@@ -14,9 +14,10 @@ import {
 import { usePagination } from 'ahooks'
 import { Params } from 'ahooks/lib/usePagination/types'
 import { getWinnersList } from 'api/pool'
-import { RandomSelectionLPProps, RandomSelectionNFTProps } from 'api/pool/type'
+import { RandomSelectionLPProps } from 'api/pool/type'
 import CopyToClipboard from 'bounceComponents/common/CopyToClipboard'
 import NoData from 'bounceComponents/common/NoData'
+import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 import { WithAnimation } from 'components/WithAnimation'
 import { useCallback, useEffect } from 'react'
 import { shortenAddress } from 'utils'
@@ -116,9 +117,10 @@ const AuctionWinnerList = ({
   poolInfo,
   style
 }: {
-  poolInfo: RandomSelectionNFTProps | RandomSelectionLPProps
+  poolInfo: RandomSelectionLPProps
   style?: React.CSSProperties | undefined
 }) => {
+  const allStatus = useGetRandomSelectionLPPoolStatus(poolInfo)
   const defaultIdeaPageSize = 8
   const {
     pagination: poolsPagination,
@@ -169,6 +171,9 @@ const AuctionWinnerList = ({
   useEffect(() => {
     handleSubmit()
   }, [handleSubmit])
+  if (!allStatus.isWinnerSeedDone) {
+    return <></>
+  }
   return (
     <Container style={style}>
       <Body>

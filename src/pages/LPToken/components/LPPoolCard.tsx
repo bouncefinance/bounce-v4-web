@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, Box } from '@mui/material'
 import useBreakpoint from 'hooks/useBreakpoint'
 import { useState } from 'react'
 import Icon1 from 'assets/imgs/nftLottery/tokenInformation/token-icon1.svg'
@@ -48,21 +48,20 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
   const isSm = useBreakpoint('sm')
   if (!isUserWinner) return <></>
   return (
-    <Stack
-      spacing={40}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '24px',
-        margin: isSm ? '24px auto' : '40px auto',
-        padding: isSm ? '24px 16px' : '24px 56px 65px',
-        background: '#fff',
-        width: '100%',
-        maxWidth: 1440,
-        px: 72
-      }}
-    >
-      {/* <Stack
+    <Box sx={{ width: '100%', maxWidth: 1440, px: 72, margin: '0 auto' }}>
+      <Stack
+        spacing={40}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: '24px',
+          margin: isSm ? '24px auto' : '40px auto',
+          padding: isSm ? '24px 16px' : '24px 56px 65px',
+          background: '#fff',
+          width: '100%'
+        }}
+      >
+        {/* <Stack
         sx={{
           width: '100%',
           maxWidth: 1440,
@@ -91,33 +90,59 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
           </TabsCom>
         ))}
       </Stack> */}
-      <Typography sx={{ width: '100%', textAlign: 'center' }} fontSize={28} fontWeight={600} color={'#000'}>
-        Price Range
-      </Typography>
-      <Stack direction={'row'} alignItems={'center'} spacing={16}>
-        <Stack
-          spacing={24}
-          sx={{
-            width: '100%',
-            textAlign: 'center',
-            padding: isSm ? '10px 16px' : '20px 40px',
-            borderRadius: '12px',
-            background: '#F6F6F3'
-          }}
-        >
-          <Typography sx={{ width: '100%', textAlign: 'left' }} fontSize={20} color={'#20201E'} fontWeight={600}>
-            Min Price
-          </Typography>
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Stack direction={'row'} alignItems={'center'} spacing={16}>
-              <img width={32} height={32} src={Tabs[curTab].icon} alt="icon-eth" />
+        <Typography sx={{ width: '100%', textAlign: 'center' }} fontSize={28} fontWeight={600} color={'#000'}>
+          Price Range
+        </Typography>
+        <Stack direction={'row'} alignItems={'center'} spacing={16}>
+          <Stack
+            spacing={24}
+            sx={{
+              width: '100%',
+              textAlign: 'center',
+              padding: isSm ? '10px 16px' : '20px 40px',
+              borderRadius: '12px',
+              background: '#F6F6F3'
+            }}
+          >
+            <Typography sx={{ width: '100%', textAlign: 'left' }} fontSize={20} color={'#20201E'} fontWeight={600}>
+              Min Price
+            </Typography>
+            <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+              <Stack direction={'row'} alignItems={'center'} spacing={16}>
+                <img width={32} height={32} src={Tabs[curTab].icon} alt="icon-eth" />
+                <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
+                  {Tabs[curTab].name.toLocaleUpperCase()}
+                </Typography>
+              </Stack>
               <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-                {Tabs[curTab].name.toLocaleUpperCase()}
+                0
               </Typography>
             </Stack>
-            <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              0
+          </Stack>
+          <Stack
+            spacing={24}
+            sx={{
+              width: '100%',
+              textAlign: 'center',
+              padding: isSm ? '10px 16px' : '20px 40px',
+              borderRadius: '12px',
+              background: '#F6F6F3'
+            }}
+          >
+            <Typography sx={{ width: '100%', textAlign: 'left' }} fontSize={20} color={'#20201E'} fontWeight={600}>
+              Max Price
             </Typography>
+            <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+              <Stack direction={'row'} alignItems={'center'} spacing={16}>
+                <img width={32} height={32} src={Tabs[curTab].icon} alt="icon-eth" />
+                <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
+                  {Tabs[curTab].name.toLocaleUpperCase()}
+                </Typography>
+              </Stack>
+              <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
+                ∞
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
         <Stack
@@ -130,45 +155,22 @@ export default function Page({ poolInfo }: { poolInfo: RandomSelectionLPProps })
             background: '#F6F6F3'
           }}
         >
-          <Typography sx={{ width: '100%', textAlign: 'left' }} fontSize={20} color={'#20201E'} fontWeight={600}>
-            Max Price
+          <Typography fontSize={20} color={'#20201E'} fontWeight={600}>
+            Current Price
           </Typography>
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Stack direction={'row'} alignItems={'center'} spacing={16}>
-              <img width={32} height={32} src={Tabs[curTab].icon} alt="icon-eth" />
-              <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-                {Tabs[curTab].name.toLocaleUpperCase()}
-              </Typography>
-            </Stack>
-            <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-              ∞
-            </Typography>
-          </Stack>
+          <Typography fontSize={36} color={'#2B51DA'} fontWeight={600}>
+            ${' '}
+            {poolInfo.tokenPrice
+              ? CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.tokenPrice.toString())?.toSignificant(
+                  6
+                )
+              : '--'}
+          </Typography>
+          <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
+            {Tabs[1].name.toLocaleUpperCase()} per {Tabs[0].name.toLocaleUpperCase()}
+          </Typography>
         </Stack>
       </Stack>
-      <Stack
-        spacing={24}
-        sx={{
-          width: '100%',
-          textAlign: 'center',
-          padding: isSm ? '10px 16px' : '20px 40px',
-          borderRadius: '12px',
-          background: '#F6F6F3'
-        }}
-      >
-        <Typography fontSize={20} color={'#20201E'} fontWeight={600}>
-          Current Price
-        </Typography>
-        <Typography fontSize={36} color={'#2B51DA'} fontWeight={600}>
-          ${' '}
-          {poolInfo.tokenPrice
-            ? CurrencyAmount.fromAmount(Currency.getNativeCurrency(), poolInfo.tokenPrice.toString())?.toSignificant(6)
-            : '--'}
-        </Typography>
-        <Typography fontSize={16} color={'#20201E'} fontWeight={500}>
-          {Tabs[1].name.toLocaleUpperCase()} per {Tabs[0].name.toLocaleUpperCase()}
-        </Typography>
-      </Stack>
-    </Stack>
+    </Box>
   )
 }
