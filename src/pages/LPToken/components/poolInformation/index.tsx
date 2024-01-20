@@ -174,7 +174,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
       <WhiteCard mt={24} sx={{ alignItems: 'start' }}>
         <LabelTitle>Total Tokens Earned</LabelTitle>
         <Stack gap={16} width={'100%'}>
-          <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
+          {/* <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
               <img src={Icon1 || ''} style={{ width: isSm ? 28 : 32, height: isSm ? 24 : 32 }} />
               <TokenNameTitle>SAVM</TokenNameTitle>
@@ -182,7 +182,7 @@ const DetailPanel = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
               <LabelTitle>{poolInfo.PoolTotal0Fees?.toSignificant(6) || '--'}</LabelTitle>
             </Stack>
-          </Stack>
+          </Stack> */}
           <Stack flexDirection={'row'} justifyContent={'space-between'} alignContent={'center'}>
             <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
               <img src={Icon2 || ''} style={{ width: isSm ? 28 : 32, height: isSm ? 24 : 32 }} />

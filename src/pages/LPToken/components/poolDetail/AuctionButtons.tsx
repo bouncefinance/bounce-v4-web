@@ -217,9 +217,9 @@ const AuctionButtons = ({
             <LoadingButtonStyle
               disabled={
                 poolInfo.userTotalFeesReward?.claimableToken1 === undefined ||
-                poolInfo.userTotalFeesReward?.claimableToken0 === undefined ||
-                poolInfo.userTotalFeesReward?.claimableToken0?.equalTo('0') ||
-                poolInfo.userTotalFeesReward?.claimableToken1?.equalTo('0')
+                // poolInfo.userTotalFeesReward?.claimableToken0 === undefined ||
+                (poolInfo.userTotalFeesReward?.claimableToken0?.equalTo('0') &&
+                  poolInfo.userTotalFeesReward?.claimableToken1?.equalTo('0'))
               }
               onClick={() => onClaim()}
               loading={noWinnerSubmitted.submitted}
