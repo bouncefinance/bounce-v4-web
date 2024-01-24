@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, styled } from '@mui/material'
 import Header from './header'
 import Card from './card'
 import PoolProgress from './PoolProgress'
@@ -10,6 +10,11 @@ import { RandomSelectionLPProps } from 'api/pool/type'
 import { useGetRandomSelectionLPPoolStatus } from 'bounceHooks/auction/useRandomSelectionLPPoolInfo'
 import { useActiveWeb3React } from 'hooks'
 export type ActionStatus = 'FIRST' | 'GO_TO_CHECK' | 'BID'
+const Container = styled(Box)(
+  () => `
+     max-width: 800px; margin: 0 auto
+`
+)
 const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
   const { chainId, account } = useActiveWeb3React()
   const allStatus = useGetRandomSelectionLPPoolStatus(poolInfo)
@@ -21,7 +26,7 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
     setAction('FIRST')
   }, [chainId, account])
   return (
-    <Box>
+    <Container>
       <Header poolInfo={poolInfo} poolStatus={allStatus.poolStatus} isUserJoined={allStatus.isUserJoined} />
       {!allStatus.isUserWinner && <Card poolInfo={poolInfo} />}
       {allStatus.isUserWinner && <WinnerPage poolInfo={poolInfo} />}
@@ -33,7 +38,7 @@ const PoolDetail = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
       {action !== 'GO_TO_CHECK' && (
         <AuctionButtons onCheck={onGoCheckBox} action={action} poolInfo={poolInfo} allStatus={allStatus} />
       )}
-    </Box>
+    </Container>
   )
 }
 

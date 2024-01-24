@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material'
-import PoolInformation from './components/poolInformation'
+// import PoolInformation from './components/poolInformation'
 import PoolDetail from './components/poolDetail'
 import { RandomSelectionLPProps } from 'api/pool/type'
 import useBreakpoint from 'hooks/useBreakpoint'
@@ -22,9 +22,9 @@ const AuctionCard = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
             background: '#FFF'
           }}
         >
-          <Box flex="1" mt={0}>
+          {/* <Box flex="1" mt={0}>
             <PoolInformation poolInfo={poolInfo} />
-          </Box>
+          </Box> */}
           <Box flex="1">
             <PoolDetail poolInfo={poolInfo} />
           </Box>
