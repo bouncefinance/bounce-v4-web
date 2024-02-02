@@ -19,7 +19,33 @@ import { useMemo } from 'react'
 import dayjs from 'dayjs'
 import { Dots } from 'themes'
 import { getCurrentTimeStamp } from 'utils'
-export const BaseButton = styled(Button)`
+export const BaseButton = styled(Button)(
+  ({ theme }) => `
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background: #121212;
+    &:hover {
+      background: #e1f25c;
+      color: #121212;
+    }
+
+    color: #fff;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 24px */
+    ${
+      theme.breakpoints.up('sm')
+        ? `max-width: 550px; margin: 0 auto;
+            display: block;`
+        : ''
+    }
+`
+)
+const LoadingButtonStyle = styled(LoadingButton)(
+  ({ theme }) => `
   width: 100%;
   padding: 20px;
   border-radius: 8px;
@@ -35,24 +61,14 @@ export const BaseButton = styled(Button)`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 24px */
-`
-const LoadingButtonStyle = styled(LoadingButton)`
-  width: 100%;
-  padding: 20px;
-  border-radius: 8px;
-  background: #121212;
-  &:hover {
-    background: #e1f25c;
-    color: #121212;
+  ${
+    theme.breakpoints.up('sm')
+      ? `max-width: 550px; margin: 0 auto;
+            display: block;`
+      : ''
   }
-
-  color: #fff;
-  font-family: Inter;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
 `
+)
 const getSundayDate = () => {
   const today = dayjs()
   const dayOfWeek = today.day()
@@ -217,7 +233,7 @@ const AuctionButtons = ({
             <LoadingButtonStyle
               disabled={
                 poolInfo.userTotalFeesReward?.claimableToken1 === undefined ||
-                // poolInfo.userTotalFeesReward?.claimableToken0 === undefined ||
+                poolInfo.userTotalFeesReward?.claimableToken0 === undefined ||
                 (poolInfo.userTotalFeesReward?.claimableToken0?.equalTo('0') &&
                   poolInfo.userTotalFeesReward?.claimableToken1?.equalTo('0'))
               }
