@@ -42,6 +42,7 @@ export enum ChainId {
   MOONRIVER = 1285,
   DOGECHAIN = 2000,
   KAVA = 2222,
+  ZETACHAIN = 7000,
   KLAYTN = 8217,
   BASE = 8453,
   BASE_TESTNET = 84531,
@@ -265,6 +266,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://fantom-testnet.publicnode.com'],
     blockExplorerUrls: ['https://testnet.ftmscan.com']
+  },
+  [ChainId.ZETACHAIN]: {
+    id: ChainId.ZETACHAIN,
+    hexChainId: numberToHex(ChainId.ZETACHAIN),
+    chainName: 'ZetaChain Mainnet',
+    nativeCurrency: {
+      name: 'ZETA',
+      symbol: 'ZETA',
+      decimals: 18,
+      logo: ZetaLogo
+    },
+    rpcUrls: ['https://zetachain-evm.blockpi.network/v1/rpc/public'],
+    blockExplorerUrls: ['https://zetachain.blockscout.com/']
   },
   [ChainId.ZETA_CHAIN_TESTNET]: {
     id: ChainId.ZETA_CHAIN_TESTNET,
