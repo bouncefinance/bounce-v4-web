@@ -4,12 +4,14 @@ import { CurrencyAmount } from 'constants/token'
 
 export function useMaxSwapAmount1Limit(poolInfo: FixedSwapPoolProp) {
   return useMemo(() => {
+    const _curPoolQuota = poolInfo.currencyAmountTotal1.subtract(poolInfo.currencySwappedTotal1)
     const hasBidLimit = poolInfo.currencyMaxAmount1PerWallet.greaterThan('0')
-    return hasBidLimit
-      ? poolInfo.participant.currencySwappedAmount1
-        ? poolInfo.currencyMaxAmount1PerWallet.subtract(poolInfo.participant.currencySwappedAmount1)
-        : poolInfo.currencyMaxAmount1PerWallet
-      : poolInfo.currencyAmountTotal1.subtract(poolInfo.currencySwappedTotal1)
+    if (!hasBidLimit) return _curPoolQuota
+    let myMax = poolInfo.currencyMaxAmount1PerWallet
+    if (poolInfo.participant.currencySwappedAmount1) {
+      myMax = poolInfo.currencyMaxAmount1PerWallet.subtract(poolInfo.participant.currencySwappedAmount1)
+    }
+    return myMax.greaterThan(_curPoolQuota) ? _curPoolQuota : myMax
   }, [
     poolInfo.currencyAmountTotal1,
     poolInfo.currencyMaxAmount1PerWallet,
