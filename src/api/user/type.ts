@@ -165,6 +165,7 @@ export interface GetUserWhitelistProofParams {
 
 export interface GetUserWhitelistProofResponse {
   proof: string
+  amount?: string
 }
 
 export interface GetUserRandomFailedResponse {

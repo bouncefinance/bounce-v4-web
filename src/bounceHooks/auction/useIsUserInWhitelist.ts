@@ -61,12 +61,14 @@ export function useIsUserInAllWhitelist(
   backedChainId: number | undefined,
   poolId: string | number | undefined,
   enableWhiteList: boolean,
-  category: PoolType = PoolType.FixedSwap
+  category: PoolType = PoolType.FixedSwap,
+  isPlayableAuction?: boolean
 ) {
   const { account } = useActiveWeb3React()
   const { token } = useUserInfo()
 
   const [isUserInWhitelist, setIsUserInWhitelist] = useState<boolean>()
+  const [playableAuctionUserAmount, setPlayableAuctionUserAmount] = useState<string>('')
   const [isUserPermitWhitelist, setIsUserPermitWhitelist] = useState<boolean>()
 
   const [isCheckingWhitelist1, setIsCheckingWhitelist1] = useState(true)
@@ -94,7 +96,9 @@ export function useIsUserInAllWhitelist(
         tokenType: getTokenType(category)
       }
       const proofOrSign = await getUserWhitelistProof(params)
-
+      if (isPlayableAuction && proofOrSign.data.amount) {
+        setPlayableAuctionUserAmount(proofOrSign.data.amount)
+      }
       setIsUserInWhitelist(!!proofOrSign.data.proof)
     } catch (error) {
       setIsUserInWhitelist(false)
@@ -102,7 +106,7 @@ export function useIsUserInAllWhitelist(
       setIsCheckingWhitelist1(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, category, backedChainId, enableWhiteList, poolId])
+  }, [token, category, backedChainId, enableWhiteList, poolId, isPlayableAuction])
 
   const checkIsUserInPermitWhitelist = useCallback(async () => {
     if (!enableWhiteList) {
@@ -147,6 +151,7 @@ export function useIsUserInAllWhitelist(
   return {
     isUserInWhitelist: isUserInWhitelist || isUserPermitWhitelist,
     isPermit: isUserPermitWhitelist,
-    loading: isCheckingWhitelist1 || isCheckingWhitelist2
+    loading: isCheckingWhitelist1 || isCheckingWhitelist2,
+    playableAuctionUserAmount
   }
 }

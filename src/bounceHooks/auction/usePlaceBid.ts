@@ -14,10 +14,9 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
   const addTransaction = useTransactionAdder()
 
   const submitted = useUserHasSubmittedRecords(account || undefined, 'fixed_price_swap', poolInfo.poolId)
-
   const isToken1Native = poolInfo.currencySwappedTotal1.currency.isNative
   const fixedSwapERC20Contract = useFixedSwapERC20Contract(poolInfo.currentBounceContractAddress)
-
+  const method = poolInfo.isPlayableAuction ? 'swapPlayable' : 'swap'
   const swapCallback = useCallback(
     async (
       bidAmount: CurrencyAmount
@@ -32,10 +31,10 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
         return Promise.reject('no contract')
       }
       let proofArr: string[] = []
-
+      let playableAmount = ''
       if (poolInfo.enableWhiteList) {
         const {
-          data: { proof: rawProofStr }
+          data: { proof: rawProofStr, amount }
         } = await getUserWhitelistProof({
           address: account,
           category: poolInfo.category,
@@ -43,7 +42,7 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
           poolId: String(poolInfo.poolId),
           tokenType: getTokenType(poolInfo.category)
         })
-
+        playableAmount = amount ?? ''
         const rawProofJson = JSON.parse(rawProofStr)
 
         if (Array.isArray(rawProofJson)) {
@@ -51,39 +50,42 @@ export default function usePlaceBid(poolInfo: FixedSwapPoolProp) {
         }
       }
 
-      const args = [poolInfo.poolId, bidAmount.raw.toString(), proofArr]
+      let args = [poolInfo.poolId, bidAmount.raw.toString(), proofArr]
+      if (method === 'swapPlayable' && playableAmount) {
+        args = [poolInfo.poolId, bidAmount.raw.toString(), playableAmount, proofArr]
+      }
+      console.log('args', args, method)
 
-      const estimatedGas = await fixedSwapERC20Contract.estimateGas
-        .swap(...args, { value: isToken1Native ? bidAmount.raw.toString() : undefined })
-        .catch((error: Error) => {
-          console.debug('Failed to swap', error)
-          throw error
-        })
-      return fixedSwapERC20Contract
-        .swap(...args, {
-          gasLimit: calculateGasMargin(estimatedGas),
-          value: isToken1Native ? bidAmount.raw.toString() : undefined
-        })
-        .then((response: TransactionResponse) => {
-          addTransaction(response, {
-            summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} swap to ${poolInfo.token0.symbol}`,
-            userSubmitted: {
-              account,
-              action: `fixed_price_swap`,
-              key: poolInfo.poolId
-            }
-          })
-          return {
-            hash: response.hash,
-            transactionReceipt: response.wait(1)
+      const estimatedGas = await fixedSwapERC20Contract.estimateGas[method](...args, {
+        value: isToken1Native ? bidAmount.raw.toString() : undefined
+      }).catch((error: Error) => {
+        console.debug('Failed to swap', error)
+        throw error
+      })
+      return fixedSwapERC20Contract[method](...args, {
+        gasLimit: calculateGasMargin(estimatedGas),
+        value: isToken1Native ? bidAmount.raw.toString() : undefined
+      }).then((response: TransactionResponse) => {
+        addTransaction(response, {
+          summary: `Use ${bidAmount.toSignificant()} ${poolInfo.token1.symbol} swap to ${poolInfo.token0.symbol}`,
+          userSubmitted: {
+            account,
+            action: `fixed_price_swap`,
+            key: poolInfo.poolId
           }
         })
+        return {
+          hash: response.hash,
+          transactionReceipt: response.wait(1)
+        }
+      })
     },
     [
       account,
       addTransaction,
       fixedSwapERC20Contract,
       isToken1Native,
+      method,
       poolInfo.category,
       poolInfo.chainId,
       poolInfo.enableWhiteList,

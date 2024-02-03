@@ -143,14 +143,22 @@ const usePoolInfo = (backedId?: number) => {
     poolInfo?.ethChainId
   ).result
 
+  const isPlayableAuction = useSingleCallResult(
+    fixedSwapERC20Contract,
+    'isPlayableAuction',
+    [poolInfo?.poolId],
+    undefined,
+    poolInfo?.ethChainId
+  ).result
+
   const v2FixedSwapData = useV2FixedSwapData(poolInfo?.poolVersion === 2, poolInfo?.poolId, poolInfo)
   const whitelistData = useIsUserInAllWhitelist(
     poolInfo?.chainId,
     poolInfo?.poolId,
     poolInfo?.enableWhiteList || false,
-    poolInfo?.category
+    poolInfo?.category,
+    !!isPlayableAuction?.[0]
   )
-
   const data: FixedSwapPoolProp | undefined = useMemo(() => {
     if (!poolInfo) return undefined
     const _t0 = poolInfo.token0
@@ -201,7 +209,10 @@ const usePoolInfo = (backedId?: number) => {
         t0,
         amountSwap0PRes?.[0].toString() || poolInfo.swappedAmount0
       ),
-      currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(t1, poolInfo.maxAmount1PerWallet),
+      currencyMaxAmount1PerWallet: CurrencyAmount.fromRawAmount(
+        t1,
+        isPlayableAuction?.[0] ? whitelistData.playableAuctionUserAmount : poolInfo.maxAmount1PerWallet
+      ),
       currencySurplusTotal0: CurrencyAmount.fromRawAmount(t0, poolInfo.amountTotal0).subtract(
         CurrencyAmount.fromRawAmount(t0, amountSwap0PRes?.[0].toString() || poolInfo.swappedAmount0)
       ),
@@ -211,7 +222,8 @@ const usePoolInfo = (backedId?: number) => {
       ),
       enableReverses: v2FixedSwapData.enableReverses,
       releaseType: v2FixedSwapData.releaseType,
-      releaseData: v2FixedSwapData.releaseData
+      releaseData: v2FixedSwapData.releaseData,
+      isPlayableAuction: isPlayableAuction?.[0]
     }
   }, [
     amountSwap0PRes,
@@ -223,7 +235,8 @@ const usePoolInfo = (backedId?: number) => {
     myClaimedRes,
     poolInfo,
     v2FixedSwapData,
-    whitelistData
+    whitelistData,
+    isPlayableAuction
   ])
 
   return {

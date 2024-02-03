@@ -130,10 +130,17 @@ export interface GetPoolCreationSignatureResponse {
   id: number
 }
 
+export enum WhitelistType {
+  ONLY_ADDRESS,
+  ADDRESS_AND_AMOUNT
+}
+
 export interface GetWhitelistMerkleTreeRootParams {
   addresses: string[]
   category: PoolType
   chainId: number
+  amounts?: string[]
+  whitelistType?: WhitelistType
 }
 
 export interface GetWhitelistMerkleTreeRootResponse {
@@ -279,6 +286,7 @@ export interface FixedSwapPoolProp extends FixedSwapPool {
     isPermit: boolean | undefined
     loading: boolean
   }
+  isPlayableAuction?: boolean
 }
 
 export interface RandomSelectionNFTProps extends FixedSwapPool {

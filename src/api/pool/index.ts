@@ -12,7 +12,8 @@ import {
   GetWinnersListParams,
   GetWinnersListResponse,
   BindTgTokenApiParams,
-  GetPoolBurningCreationSignatureParams
+  GetPoolBurningCreationSignatureParams,
+  WhitelistType
 } from './type'
 
 /**
@@ -47,7 +48,10 @@ export const bindTgTokenApi = (params: BindTgTokenApiParams) => {
  * Get merkle tree root of whitelist
  */
 export const getWhitelistMerkleTreeRoot = (params: GetWhitelistMerkleTreeRootParams) => {
-  return ApiInstance.post<GetWhitelistMerkleTreeRootResponse>('/user/import_whitelist', params)
+  return ApiInstance.post<GetWhitelistMerkleTreeRootResponse>('/user/import_whitelist', {
+    ...params,
+    whitelistType: params.whitelistType ?? WhitelistType.ONLY_ADDRESS
+  })
 }
 
 /**

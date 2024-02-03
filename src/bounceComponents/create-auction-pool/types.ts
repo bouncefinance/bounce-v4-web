@@ -47,7 +47,8 @@ export type CompletedSteps = { [k: number]: boolean }
 
 export enum ParticipantStatus {
   'Public' = 'PUBLIC',
-  'Whitelist' = 'WHITELIST'
+  'Whitelist' = 'WHITELIST',
+  'WhitelistWithAmount' = 'WhitelistWithAmount'
 }
 
 export enum AllocationStatus {
@@ -106,6 +107,7 @@ export interface AuctionPool {
   releaseType: IReleaseType | 1000
   releaseDataArr: IReleaseData[]
   whitelist: string[]
+  whitelistWithAmount?: string[]
   activeStep: CreationStep
   completed: CompletedSteps
   participantStatus: ParticipantStatus

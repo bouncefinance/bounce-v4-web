@@ -20,6 +20,7 @@ import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import Radio from '../Radio'
 import ImportWhitelistDialog from '../ImportWhitelistDialog'
+import ImportWhitelistWithAmountDialog from '../ImportWhitelistWithAmountDialog'
 import { AuctionType, IReleaseData, IReleaseType, ParticipantStatus, PriceSegmentType } from '../types'
 import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -54,6 +55,7 @@ interface MyFormValues {
   segmentAmount: string | undefined
   participantStatus: ParticipantStatus
   fragmentReleaseSize?: string
+  whitelistWithAmount?: string[]
 }
 
 const defaultFragmentRelease = {
@@ -102,7 +104,8 @@ export const AddIReleaseTypeAdvanced = ({
     whitelist: valuesState.whitelist,
     segmentAmount: valuesState.segmentAmount,
     enableReverse: !!valuesState.enableReverse,
-    participantStatus: valuesState.participantStatus
+    participantStatus: valuesState.participantStatus,
+    whitelistWithAmount: []
   }
 
   const validationSchema = Yup.object({
@@ -255,28 +258,50 @@ export const AddIReleaseTypeAdvanced = ({
       }),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status')
   })
-
+  /*
+0xB7912cCB16F4CBfB807e23ff4BD1eD1B001B70dF: 4000,0xeeD4F9e2d60a315d171F6d034b8D08c5E905f30D:5000,0x1ED99D7564B93E9a1086F36ea42bad5B7dC4923F:1000,0x876712CDFB60BFaEeDcAfBa7468ed342450B1247:2000,0x5aEFAA34EaDaC483ea542077D30505eF2472cfe3:3000
+*/
   const showImportWhitelistDialog = (
     values: MyFormValues,
     setValues: (values: any, shouldValidate?: boolean) => void
   ) => {
-    show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
-      .then(whitelist => {
-        console.log('ImportWhitelistDialog Resolved: ', whitelist)
-        valuesDispatch({
-          type: ActionType.SetWhitelist,
-          payload: {
+    if (values.participantStatus === ParticipantStatus.Whitelist) {
+      show(ImportWhitelistDialog, { whitelist: valuesState.whitelist })
+        .then(whitelist => {
+          console.log('ImportWhitelistDialog Resolved: ', whitelist)
+          valuesDispatch({
+            type: ActionType.SetWhitelist,
+            payload: {
+              whitelist
+            }
+          })
+          setValues({
+            ...values,
             whitelist
-          }
+          })
         })
-        setValues({
-          ...values,
-          whitelist
+        .catch(err => {
+          console.log('ImportWhitelistDialog Rejected: ', err)
         })
-      })
-      .catch(err => {
-        console.log('ImportWhitelistDialog Rejected: ', err)
-      })
+    } else if (values.participantStatus === ParticipantStatus.WhitelistWithAmount) {
+      show(ImportWhitelistWithAmountDialog, { whitelistWithAmount: valuesState.whitelistWithAmount })
+        .then(whitelistWithAmount => {
+          console.log('ImportWhitelistDialog Resolved2222: ', whitelistWithAmount)
+          valuesDispatch({
+            type: ActionType.SetWhitelistWithAmount,
+            payload: {
+              whitelistWithAmount
+            }
+          })
+          setValues({
+            ...values,
+            whitelistWithAmount
+          })
+        })
+        .catch(err => {
+          console.log('ImportWhitelistDialog Rejected: ', err)
+        })
+    }
   }
 
   return (
@@ -530,25 +555,35 @@ export const AddIReleaseTypeAdvanced = ({
                       control={<Radio disableRipple />}
                       label="Public"
                     />
+
                     <FormControlLabel
                       value={ParticipantStatus.Whitelist}
                       control={<Radio disableRipple />}
                       label="Whitelist"
                     />
+                    <FormControlLabel
+                      value={ParticipantStatus.WhitelistWithAmount}
+                      control={<Radio disableRipple />}
+                      label="Whitelist With Amount"
+                    />
                   </Field>
                   <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
                   <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
+                  {/* <FormHelperText error={!!errors.whitelistWithAmount}>{errors.whitelistWithAmount}</FormHelperText> */}
                 </Box>
                 <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} spacing={10} justifyContent="space-between">
                   <ButtonBase
                     sx={{ width: 'fit-content', textDecorationLine: 'underline', mr: 8 }}
-                    disabled={values.participantStatus !== ParticipantStatus.Whitelist}
+                    disabled={values.participantStatus === ParticipantStatus.Public}
                     onClick={() => {
                       showImportWhitelistDialog(values, setValues)
                     }}
                   >
                     {values.participantStatus === ParticipantStatus.Whitelist && (
                       <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist</Typography>
+                    )}
+                    {values.participantStatus === ParticipantStatus.WhitelistWithAmount && (
+                      <Typography sx={{ color: 'var(--ps-gray-700)' }}>Import Whitelist and Amount</Typography>
                     )}
                   </ButtonBase>
                   <Box>

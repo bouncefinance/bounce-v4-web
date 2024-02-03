@@ -1,5 +1,10 @@
 import { getPoolCreationSignature, getWhitelistMerkleTreeRoot } from 'api/pool'
-import { GetPoolCreationSignatureParams, GetWhitelistMerkleTreeRootParams, PoolType } from 'api/pool/type'
+import {
+  GetPoolCreationSignatureParams,
+  GetWhitelistMerkleTreeRootParams,
+  PoolType,
+  WhitelistType
+} from 'api/pool/type'
 import useChainConfigInBackend from 'bounceHooks/web3/useChainConfigInBackend'
 import { NULL_BYTES } from '../constants'
 import { useActiveWeb3React } from 'hooks'
@@ -38,6 +43,7 @@ export interface Params {
     startAt: number | string
     endAtOrRatio: number | string
   }[]
+  whitelistWithAmount?: string[]
 }
 const NO_LIMIT_ALLOCATION = '0'
 
@@ -124,6 +130,7 @@ export function useCreateFixedSwapPool() {
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
+    const isPlayableAuction = !!(values.whitelistWithAmount && values.whitelistWithAmount.length > 0)
     const params: Params = {
       whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
       poolSize: values.poolSize,
@@ -150,7 +157,8 @@ export function useCreateFixedSwapPool() {
       tokenToAddress: values.tokenTo.address,
       tokenToDecimal: values.tokenTo.decimals,
       releaseType: values.releaseType === 1000 ? IReleaseType.Cliff : values.releaseType,
-      releaseData: makeValuesReleaseData(values)
+      releaseData: makeValuesReleaseData(values),
+      whitelistWithAmount: values.whitelistWithAmount
     }
 
     if (!currencyFrom || !currencyTo) {
@@ -183,7 +191,22 @@ export function useCreateFixedSwapPool() {
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
       merkleroot = data.merkleroot
     }
+    if (isPlayableAuction && params.whitelistWithAmount) {
+      const address = params.whitelistWithAmount.filter((v, i) => (i + 1) % 2 !== 0)
+      const amounts = params.whitelistWithAmount
+        .filter((v, i) => (i + 1) % 2 === 0)
+        .map(i => CurrencyAmount.fromAmount(currencyTo, i)?.raw.toString() || '0')
+      const whitelistParams: GetWhitelistMerkleTreeRootParams = {
+        addresses: address,
+        category: PoolType.FixedSwap,
+        chainId: chainConfigInBackend.id,
+        amounts,
+        whitelistType: WhitelistType.ADDRESS_AND_AMOUNT
+      }
 
+      const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
+      merkleroot = data.merkleroot
+    }
     const signatureParams: GetPoolCreationSignatureParams = {
       amountTotal0: amountTotal0.raw.toString(),
       amountTotal1: new BigNumber(amountTotal1.raw.toString())
@@ -222,6 +245,7 @@ export function useCreateFixedSwapPool() {
       whitelistRoot: merkleroot || NULL_BYTES
     }
 
+    const method = isPlayableAuction ? 'createPlayableV2' : 'createV2'
     const args = [
       id,
       contractCallParams,
@@ -232,31 +256,29 @@ export function useCreateFixedSwapPool() {
       expiredTime,
       signature
     ]
-    console.log('🚀 ~ file: useCreateFixedSwapPool.ts:230 ~ returnuseCallback ~ args:', args)
+    console.log('🚀 ~ file: useCreateFixedSwapPool.ts:230 ~ returnuseCallback ~ args:', args, method)
 
-    const estimatedGas = await fixedSwapERC20Contract.estimateGas.createV2(...args).catch((error: Error) => {
+    const estimatedGas = await fixedSwapERC20Contract.estimateGas[method](...args).catch((error: Error) => {
       console.debug('Failed to create fixedSwap', error)
       throw error
     })
-    return fixedSwapERC20Contract
-      .createV2(...args, {
-        gasLimit: calculateGasMargin(estimatedGas)
-      })
-      .then((response: TransactionResponse) => {
-        addTransaction(response, {
-          summary: 'Create fixedSwap auction',
-          userSubmitted: {
-            account,
-            action: 'createERC20FixedSwapAuction'
-          }
-        })
-        return {
-          hash: response.hash,
-          transactionReceipt: response.wait(1),
-          sysId: id,
-          getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
+    return fixedSwapERC20Contract[method](...args, {
+      gasLimit: calculateGasMargin(estimatedGas)
+    }).then((response: TransactionResponse) => {
+      addTransaction(response, {
+        summary: 'Create fixedSwap auction',
+        userSubmitted: {
+          account,
+          action: 'createERC20FixedSwapAuction'
         }
       })
+      return {
+        hash: response.hash,
+        transactionReceipt: response.wait(1),
+        sysId: id,
+        getPoolId: (logs: Log[]) => getEventLog(fixedSwapERC20Contract, logs, 'Created', 'index')
+      }
+    })
   }, [account, addTransaction, chainConfigInBackend?.id, currencyFrom, currencyTo, fixedSwapERC20Contract, values])
 }
 

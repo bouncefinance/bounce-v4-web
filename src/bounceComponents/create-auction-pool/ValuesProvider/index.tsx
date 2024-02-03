@@ -134,7 +134,8 @@ const initialValues: AuctionPool = {
   tgBotActiveStep: TgBotActiveStep.GETAPITOKEN,
   tgToken: '',
   auctionInChain: NETWORK_CHAIN_ID,
-  tgBotTabValue: TgBotTabValue.AUCTION
+  tgBotTabValue: TgBotTabValue.AUCTION,
+  whitelistWithAmount: []
 }
 
 export enum ActionType {
@@ -151,6 +152,7 @@ export enum ActionType {
   CommitLpAdvancedSettings = 'COMMIT_LP_ADVANCED_SETTINGS',
   HandleStep = 'HANDLE_STEP',
   SetWhitelist = 'SET_WHITELIST',
+  SetWhitelistWithAmount = 'SET_WHITELIST_AMOUNT',
   SetTgBotActiveStep = 'SET_TG_BOT_ACTIVE_STEP',
   SetTgToken = 'SET_API_TOKEN',
   CommitBotAuctionParameters = 'COMMIT_BOT_AUCTION_PARAMETERS',
@@ -271,6 +273,9 @@ type Payload = {
   }
   [ActionType.SetWhitelist]: {
     whitelist: string[]
+  }
+  [ActionType.SetWhitelistWithAmount]: {
+    whitelistWithAmount: string[]
   }
   [ActionType.SetTgBotActiveStep]: {
     tgBotActiveStep: TgBotActiveStep
@@ -446,6 +451,11 @@ const reducer = (state: AuctionPool, action: Actions) => {
       return {
         ...state,
         whitelist: action.payload.whitelist
+      }
+    case ActionType.SetWhitelistWithAmount:
+      return {
+        ...state,
+        whitelistWithAmount: action.payload.whitelistWithAmount
       }
     case ActionType.SetAuctionType:
       return {
