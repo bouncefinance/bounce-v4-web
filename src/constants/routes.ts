@@ -135,7 +135,9 @@ export const routes = {
     MultiToken: '/launchpad/multi-token',
     LPToken: '/launchpad/lp-token',
     SatoshiVMLp: '/launchpad/satoshivm-ilo',
-    SatoshiVMRandom: '/launchpad/satoshivm-random'
+    SatoshiVMRandom: '/launchpad/satoshivm-random',
+    XrgbLP: '/launchpad/xrgb-ilo',
+    XrgbFixedSwap: '/launchpad/xrgb'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',

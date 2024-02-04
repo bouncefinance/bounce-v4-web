@@ -118,6 +118,9 @@ const DeelanceProjectInfo = React.lazy(() => import('./projectIntro/DeelanceProj
 const DeelanceWhitelistProjectInfo = React.lazy(() => import('./projectIntro/DeelanceWhiteListProjectInfo'))
 const CreateLPOfferingPool = React.lazy(() => import('pages/createLPOfferingPool/index'))
 const LPToken = React.lazy(() => import('./LPToken'))
+const LPXrgbToken = React.lazy(() => import('./LPXrgbToken'))
+const XrgbProjectInfo = React.lazy(() => import('./projectIntro/XrgbProjectInfo'))
+
 // const SatoshiLpProjectInfo = React.lazy(() => import('./projectIntro/SatoshiLpProjectInfo'))
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -237,6 +240,8 @@ export default function App() {
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
                   <Route path={routes.thirdPart.SatoshiVMLp} element={<LPToken />} />
                   <Route path={routes.thirdPart.SatoshiVMRandom} element={<SavmRandomSelection />} />
+                  <Route path={routes.thirdPart.XrgbLP} element={<LPXrgbToken />} />
+                  <Route path={routes.thirdPart.XrgbFixedSwap} element={<XrgbProjectInfo />} />
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
 
                   <Route

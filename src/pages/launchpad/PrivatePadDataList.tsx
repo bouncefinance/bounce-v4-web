@@ -2888,8 +2888,230 @@ export const SatoshiVMRandomData: IPrivatePadProp = {
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
+const XRGBLPProjectInfo: IProjectInfo[] = [
+  {
+    title: 'What is SatoshiVM?',
+    info: [
+      <Stack key={0}>
+        <p>
+          SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine
+          (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the
+          Bitcoin ecosystem to issue assets and develop applications.
+        </p>
+        <Box sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
+          <h4>SatoshiVM possesses the following technological features:</h4>
+          <ul>
+            <li>
+              ZK EVM: SatoshiVM is a versatile ZK Rollup that employs EVM for off-chain computations. This implies that
+              users can interact with SatoshiVM in a manner similar to interacting with Ethereum, and developers can
+              build on top of SatoshiVM just as they would on Ethereum.
+            </li>
+            <li>
+              ZK Rollup: SatoshiVM utilizes Rollup technology to bundle multiple transactions into a single batch and
+              validate them on the Bitcoin main network as a single transaction. This ensures the same level of security
+              as the Bitcoin main network, guaranteeing data validity and availability.
+            </li>
+            <li>
+              ZK Fraud Proofs: SatoshiVM utilizes technologies such as Taproot and Bitcoin Script to perform on-chain
+              verification of contracts without altering the consensus rules of the Bitcoin network, thereby
+              accomplishing the computation of fraud proofs.
+            </li>
+            <li>
+              Data Availability: SatoshiVM must release transaction data on the Bitcoin main network, enabling anyone to
+              verify the correctness of computations executed off the Bitcoin main network.
+            </li>
+            <li>
+              BTC Native Gas: SatoshiVM employs native BTC as gas for the EVM. Similar to ETH OP Rollup / ZK Rollup
+              Layer 2 solutions that use ETH as gas for Layer 2, SatoshiVM utilizes BTC as the gas for EVM transactions.
+            </li>
+          </ul>
+        </Box>
+      </Stack>
+    ]
+  },
+  {
+    title: 'Tokenomics',
+    info: [
+      <Box
+        key={1}
+        sx={{
+          ' &>ul': {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }}
+      >
+        <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
+        <ul>
+          <li>22% add to Uniswap liquidity.</li>
+          <li>
+            36.5% Ecosystem growth: Dedicated to different airdrops and incentives for the ecosystem. Unlock 5% per
+            month
+          </li>
+          <li>15% Contributors: Locked for 6 months then vested lineary over 3 years</li>
+          <li>
+            15% Bootstrapping: 10% - A total of $200,000 was raised in a round at $2M FDV. 50% unlocked on TGE, 3 months
+            cliff then monthly vestings. 5% reseved for technical and marketing advisors
+          </li>
+          <li>2% Bounce Finance IDO</li>
+          <li>1% APE terminal IDO</li>
+          <li>0.4% Mubi farming pool</li>
+          <li>0.1% BSSB farming pool</li>
+        </ul>
+      </Box>
+    ]
+  },
+  {
+    title: 'SatoshiVM’s Architecture',
+    info: [
+      <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
+        <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p>
+        <img src={satoshiVmArchitecture} style={{ width: '100%', height: '100%' }} />
+        <div>
+          <h4>Settlement Layer</h4>
+          <p>
+            This layer provides data availability, ordering, and validation of proofs for the SatoshiVM chain. It allows
+            users and dApps to send messages and assets between Bitcoin and SatoshiVM. Bitcoin serves as the settlement
+            layer, and bridges and rollup scripts are deployed on the Bitcoin network.
+          </p>
+        </div>
+        <div>
+          <h4>Sequencing Layer</h4>
+          <p>
+            This layer consists of an execution node responsible for executing transactions submitted to the SatoshiVM
+            sequencer and transactions submitted to the L1 bridge script, generating L2 blocks. It also includes a
+            Rollup node that handles batched transactions, publishes transaction data and block information to Bitcoin
+            to ensure data availability, and submits validity proofs to Bitcoin for finality.
+          </p>
+        </div>
+        <div>
+          <h4>Proving Layer</h4>
+          <p>
+            This layer comprises a coordinator, which assigns proof tasks to provers and relays the generated proofs to
+            the Rollup node to complete finality verification on Bitcoin. It also includes a prover pool, responsible
+            for generating validity proofs that verify the correctness of L2 transactions.
+          </p>
+        </div>
+      </Stack>
+    ]
+  },
+  {
+    title: 'Roadmap',
+    info: [
+      <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
+        {/* <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p> */}
+        <div>
+          <h4>Testnet 2024 Q1</h4>
+          <p>✅ Testnet Launch</p>
+          <p>✅ Blockchain Explorer Launch </p>
+
+          <p>Bitcoin - SatoshiVM Bridge Release</p>
+          <p>EVM - SatoshiVM Bridge Release</p>
+        </div>
+        <div>
+          <h4>SatoshiVM Lite 2024 Q1</h4>
+
+          <p>Yellow Paper Release</p>
+          <p>SatoshiVM Lite Release</p>
+          <p>Blockchain Explorer Launch</p>
+          <p>Bitcoin - SatoshiVM Bridge Release </p>
+          <p>EVM - SatoshiVM Bridge Release</p>
+        </div>
+      </Stack>
+    ]
+  }
+]
+export const XRGBLPData: IPrivatePadProp = {
+  // backedId: 18744,
+  keyId: 29,
+  liveTimeStamp: {
+    start: 1707132900000,
+    end: 1707219300000
+  },
+  hideUpcomingCountdown: true,
+  poolTypeName: 'Initial LP Offering',
+  img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
+  avatar: SatoshivmImg,
+  title: 'XRGB Chain',
+  chainId: 1,
+  tokenName: '$ETH',
+  whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
+  upcomingLink: routes.thirdPart.XrgbLP,
+  liveLink: routes.thirdPart.XrgbLP,
+  projectInfo: XRGBLPProjectInfo,
+  tokenMetrics: [],
+  desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
+  social: [
+    <Link key={0} href="https://www.satoshivm.io" target="_blank">
+      <Web />
+    </Link>,
+    <Link key={6} href="https://twitter.com/SatoshiVM" target="_blank">
+      <Twitter />
+    </Link>,
+    <Link key={7} href="https://discord.gg/satoshivm" target="_blank">
+      <DiscordSVG />
+    </Link>,
+    <Link key={8} href="https://github.com/SatoshiVM" target="_blank">
+      {GithubSvg}
+    </Link>
+  ],
+  moreData: [
+    { title: 'Reward Token', content: `$ETH | $XRGB` },
+    { title: 'Ticket Price', content: '10 AUCTION / Ticket' },
+    { title: 'Reward Claim Time', content: 'TBD' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ],
+  privatePrices: [
+    { title: 'Reward Token', value: `$ETH | $XRGB` },
+    { title: 'Blockchain', value: 'Ethereum' }
+  ]
+}
+export const XRGBFixedSwapData: IPrivatePadProp = {
+  // backedId: 18744,
+  keyId: 30,
+  liveTimeStamp: {
+    start: 1707132900000,
+    end: 1707219300000
+  },
+  hideUpcomingCountdown: true,
+  poolTypeName: 'Fixed Price Auction',
+  img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
+  avatar: SatoshivmImg,
+  title: 'XRGB Chain',
+  chainId: 1,
+  tokenName: '$ETH',
+  whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
+  upcomingLink: routes.thirdPart.XrgbFixedSwap,
+  liveLink: routes.thirdPart.XrgbFixedSwap,
+  projectInfo: XRGBLPProjectInfo,
+  tokenMetrics: [],
+  desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
+  social: [
+    <Link key={0} href="https://www.satoshivm.io" target="_blank">
+      <Web />
+    </Link>,
+    <Link key={6} href="https://twitter.com/SatoshiVM" target="_blank">
+      <Twitter />
+    </Link>,
+    <Link key={7} href="https://discord.gg/satoshivm" target="_blank">
+      <DiscordSVG />
+    </Link>,
+    <Link key={8} href="https://github.com/SatoshiVM" target="_blank">
+      {GithubSvg}
+    </Link>
+  ],
+  moreData: [
+    { title: 'Token Name', content: '$XRGB' },
+    { title: 'Token Price', content: '0.0000233 ETH' },
+    { title: 'Token Amount', content: '21,000,000' },
+    { title: 'Blockchain', content: 'Ethereum' }
+  ]
+}
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 28
+  // current privatePad max keyId is 30
+  XRGBLPData,
+  XRGBFixedSwapData,
   SatoshiVMLPData,
   SatoshiVMRandomData,
   AiMeetsBtcRandomData,
