@@ -407,7 +407,7 @@ const CreationErc20EnglishAuctionConfirmation = () => {
                   <Typography>{values.poolSize}</Typography>
                 </ConfirmationInfoItem>
 
-                <ConfirmationInfoItem title="Allocation Per Wallet">
+                <ConfirmationInfoItem title={'Allocation Per Wallet'}>
                   <Typography>
                     {values.allocationStatus === AllocationStatus.NoLimits
                       ? 'No'

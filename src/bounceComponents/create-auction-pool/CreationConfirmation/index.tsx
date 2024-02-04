@@ -423,7 +423,7 @@ const CreationConfirmation = () => {
                     {values.participantStatus === ParticipantStatus.Public
                       ? 'Public'
                       : values.participantStatus === ParticipantStatus.WhitelistWithAmount
-                      ? 'White list With Amount'
+                      ? 'WhiteListWithAmount'
                       : 'Whitelist'}
                   </Typography>
                 </ConfirmationInfoItem>

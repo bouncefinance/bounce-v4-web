@@ -256,20 +256,16 @@ export const AddIReleaseTypeAdvanced = ({
           (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
         )
       }),
-    whitelistWithAmount: Yup.string()
-      .required('whitelistWithAmount is required')
-      .test(
-        'NOT_EMPTY_AMOUNT_ARRAY',
-        'whitelistWithAmount is required',
-        (inputValue, context) =>
-          context.parent.participantStatus !== ParticipantStatus.WhitelistWithAmount ||
-          formatInput(inputValue || '')[2].length > 0
-      ),
+    whitelistWithAmount: Yup.string().test(
+      'NOT_EMPTY_AMOUNT_ARRAY',
+      'whitelistWithAmount is required',
+      (inputValue, context) =>
+        context.parent.participantStatus !== ParticipantStatus.WhitelistWithAmount ||
+        formatInput(inputValue || '')[2].length > 0
+    ),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status')
   })
-  /*
-0xB7912cCB16F4CBfB807e23ff4BD1eD1B001B70dF: 4000,0xeeD4F9e2d60a315d171F6d034b8D08c5E905f30D:5000,0x1ED99D7564B93E9a1086F36ea42bad5B7dC4923F:1000,0x876712CDFB60BFaEeDcAfBa7468ed342450B1247:2000,0x5aEFAA34EaDaC483ea542077D30505eF2472cfe3:3000
-*/
+
   const showImportWhitelistDialog = (
     values: MyFormValues,
     setValues: (values: any, shouldValidate?: boolean) => void

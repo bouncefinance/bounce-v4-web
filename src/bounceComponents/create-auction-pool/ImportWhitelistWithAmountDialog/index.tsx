@@ -1,6 +1,6 @@
 import { muiDialogV5, useModal, create } from '@ebay/nice-modal-react'
 import { Form, Formik } from 'formik'
-import * as Yup from 'yup'
+// import * as Yup from 'yup'
 
 import { Box, Button, FormHelperText, Typography, styled } from '@mui/material'
 // import FormItem from 'bounceComponents/common/FormItem'
@@ -34,20 +34,52 @@ const DialogStyle = styled(Dialog)({
     padding: '10px !important'
   }
 })
+const isEqLength = (str1: string, str2: string[]) => {
+  const s1 = str1
+    .split('\n')
+    .join('')
+    .split('')
+    .map(i => i.trim())
+    .join('')
+  const s2 = str2.join('')
+  return s1 === s2
+}
 export function formatInput(input: string) {
   const regexNumber = /\b\d+(\.\d+)?\b/g
+  console.log(
+    'input',
+    input
+      .split('\n')
+      .join('')
+      .split('')
+      .map(i => i.trim())
+      .join('')
+  )
+
   const arr = input
     .split('\n')
     .filter(v => v.length > 42)
     .filter(v => isAddress(v.substring(0, 42)))
-    .filter(v => v.substring(42).match(regexNumber)) // contain number
-    .map(v => [v.substring(0, 42), v.substring(42).match(regexNumber)?.[0]])
+    .filter(v => {
+      const result = v.substring(42).match(regexNumber)
+      return result && Number(result[0]) > 0 && isFinite(Number(result[0]))
+    }) // contain number
+    .map(v => {
+      return [v.substring(0, 42), v.substring(42).match(regexNumber)?.[0]]
+    })
+    .filter((v, i, arr) => {
+      const _arr = arr.slice(i + 1)
+      return _arr.flat().findIndex(i => i?.toLocaleLowerCase() === v[0]?.toLocaleLowerCase()) === -1
+    })
+
   const recipients: string[] = []
   const amount: string[] = []
+
   arr.forEach(v => {
     v[0] && recipients.push(v[0])
     v[1] && amount.push(v[1])
   })
+
   return [recipients, amount, arr]
 }
 
@@ -62,19 +94,6 @@ const ImportWhitelistWithAmountDialog = create<{ whitelistWithAmount: string }>(
     modal.reject(new Error('Rejected'))
     modal.hide()
   }
-
-  const validationSchema = Yup.object({
-    whitelistWithAmount: Yup.string().test({
-      name: 'VALID_FORMAT',
-      test: (addressInput, ctx) => {
-        if (!addressInput) {
-          return ctx.createError({ message: 'Enter one address and amount per line' })
-        }
-        return true
-      }
-    })
-  })
-
   const initialValues: FormValues = {
     whitelistWithAmount: whitelistWithAmount
   }
@@ -85,7 +104,7 @@ const ImportWhitelistWithAmountDialog = create<{ whitelistWithAmount: string }>(
         Enter one address and amount per line.{' '}
       </Typography>
       <Formik
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         initialValues={initialValues}
         onSubmit={values => {
           handleResolve(values.whitelistWithAmount)
@@ -97,7 +116,12 @@ const ImportWhitelistWithAmountDialog = create<{ whitelistWithAmount: string }>(
           return (
             <Form>
               {/* <FormItem name="whitelistWithAmount"> */}
-              <Box sx={{ width: '100%', '& .MuiInputBase-root': { width: '100%', padding: 0 } }}>
+              <Box
+                sx={{
+                  width: '100%',
+                  '& .MuiInputBase-root': { width: '100%', padding: 0, maxHeight: 250, overflow: 'scroll' }
+                }}
+              >
                 <ToolBoxInput
                   multiline={true}
                   sx={{ width: '100%', minHeight: '200px', marginTop: 20, marginBottom: 12, alignItems: 'flex-start' }}
@@ -118,10 +142,9 @@ const ImportWhitelistWithAmountDialog = create<{ whitelistWithAmount: string }>(
                 />
               </Box>
 
-              {errors.whitelistWithAmount && <FormHelperText>{errors.whitelistWithAmount}</FormHelperText>}
               <ConfirmBox>
                 <H4>Confirm</H4>
-                <ConfirmDetailBox>
+                <ConfirmDetailBox sx={{ maxHeight: 250, overflow: 'scroll' }}>
                   <BoxSpaceBetween>
                     <SmallText>Address</SmallText>
                     <SmallText>Amount</SmallText>
@@ -153,11 +176,14 @@ const ImportWhitelistWithAmountDialog = create<{ whitelistWithAmount: string }>(
                     })}
                 </ConfirmDetailBox>
               </ConfirmBox>
-
+              {!isEqLength(
+                values.whitelistWithAmount,
+                (formatInput(values.whitelistWithAmount)?.[2] as string[]).flat()
+              ) && <FormHelperText style={{ marginTop: 10 }}>Some invalid data has been filtered out</FormHelperText>}
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: 300 }}
+                sx={{ display: 'block', margin: '0 auto', width: '100%', maxWidth: 300, marginTop: 20 }}
               >
                 Save
               </Button>

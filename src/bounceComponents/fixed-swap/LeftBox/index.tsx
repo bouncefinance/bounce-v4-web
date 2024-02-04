@@ -75,11 +75,17 @@ const LeftBox = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }): JSX.Element => 
 
           <PoolInfoItem title="Auction Type">Fixed-Price</PoolInfoItem>
           <PoolInfoItem title="Participant">
-            {poolInfo.enableWhiteList && !isIgnoreWhitelistPool ? 'Whitelist' : 'Public'}
+            {poolInfo.isPlayableAuction
+              ? 'WhiteListWithAmount'
+              : poolInfo.enableWhiteList && !isIgnoreWhitelistPool
+              ? 'Whitelist'
+              : 'Public'}
           </PoolInfoItem>
-          <PoolInfoItem title="Allocation per Wallet">
+          <PoolInfoItem title={poolInfo.isPlayableAuction ? 'Current wallet allocation' : 'Allocation per Wallet'}>
             {poolInfo.currencyMaxAmount1PerWallet.greaterThan('0')
               ? poolInfo.currencyMaxAmount1PerWallet.toSignificant() + ' ' + poolInfo.token1.symbol
+              : poolInfo.isPlayableAuction && !poolInfo.whitelistData?.isUserInWhitelist
+              ? 'Not allocated'
               : 'No Limit'}
           </PoolInfoItem>
           <PoolInfoItem title="Total available Amount">
