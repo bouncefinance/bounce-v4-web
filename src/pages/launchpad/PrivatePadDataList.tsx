@@ -3024,14 +3024,14 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
 ]
 export const XRGBLPData: IPrivatePadProp = {
   // backedId: 18744,
-  keyId: 29,
+  keyId: 30,
   liveTimeStamp: {
     start: 1707132900000,
     end: 1707219300000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
-  img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
+  img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
   avatar: SatoshivmImg,
   title: 'XRGB Chain',
   chainId: 1,
@@ -3069,14 +3069,14 @@ export const XRGBLPData: IPrivatePadProp = {
 }
 export const XRGBFixedSwapData: IPrivatePadProp = {
   // backedId: 18744,
-  keyId: 30,
+  keyId: 29,
   liveTimeStamp: {
     start: 1707132900000,
     end: 1707219300000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price Auction',
-  img: 'https://images-v3.bounce.finance/a3d14b59ccffc2b476938141e4cb0964-1704859678.png',
+  img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
   avatar: SatoshivmImg,
   title: 'XRGB Chain',
   chainId: 1,

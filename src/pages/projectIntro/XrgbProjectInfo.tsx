@@ -11,7 +11,7 @@ import UserMainBlock from 'bounceComponents/fixed-swap/MainBlock/UserMainBlock'
 import ActionHistory from 'bounceComponents/fixed-swap/ActionHistory'
 
 export default function ProjectInfo() {
-  const item = PrivatePadDataList.find(i => i.keyId === 30) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 29) as IPrivatePadProp
 
   return (
     <Box>

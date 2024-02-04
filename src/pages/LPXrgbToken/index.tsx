@@ -17,7 +17,7 @@ import AuctionWinnerList from './components/winnerList'
 import { BaseButton } from 'pages/LPToken/components/poolDetail/AuctionButtons'
 
 const LPXRGBToken = () => {
-  const item = PrivatePadDataList.find(i => i.keyId === 27) as IPrivatePadProp
+  const item = PrivatePadDataList.find(i => i.keyId === 30) as IPrivatePadProp
   const _chainId = ChainId.MAINNET
   const nftAddr = '0xc36442b4a4522e871399cd717abdd847ab11fe88'
   const { account } = useActiveWeb3React()
