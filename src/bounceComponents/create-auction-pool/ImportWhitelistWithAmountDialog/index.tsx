@@ -11,6 +11,8 @@ import { LineCom, ToolBoxInput } from 'pages/tokenToolBox/components/tokenLocker
 // import Papa from 'papaparse'
 import { BoxSpaceBetween, ConfirmBox, ConfirmDetailBox } from 'pages/tokenToolBox/page/disperse/disperse'
 import { Body01, H4, SmallText } from 'components/Text'
+import DropZone from 'bounceComponents/common/DropZone/DropZone'
+import Papa from 'papaparse'
 interface FormValues {
   whitelistWithAmount: string
 }
@@ -102,6 +104,16 @@ const ImportWhitelistWithAmountDialog = create<{ whitelistWithAmount: string }>(
                   value={values.whitelistWithAmount}
                   onChange={event => {
                     setFieldValue('whitelistWithAmount', event.target.value)
+                  }}
+                />
+                <DropZone
+                  getFile={file => {
+                    Papa.parse(file, {
+                      skipEmptyLines: true,
+                      complete: function (results: any) {
+                        setFieldValue('whitelistWithAmount', results.data.join('\n').replaceAll(',', ' '))
+                      }
+                    })
                   }}
                 />
               </Box>
