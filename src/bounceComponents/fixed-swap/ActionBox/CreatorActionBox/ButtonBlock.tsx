@@ -27,9 +27,10 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
 
   const successDialogContent = useMemo(() => {
     const hasToken0ToClaim = poolInfo.currencySurplusTotal0.greaterThan('0')
-    const token1ToClaimText = `${claimAmount1Data?.receivedAmount?.toSignificant()} ${
-      poolInfo?.token1.symbol
-    } (fees: ${claimAmount1Data?.fee?.toSignificant()} ${poolInfo?.token1.symbol})`
+    const token1ToClaimText = `${
+      claimAmount1Data?.receivedAmount?.toSignificant() || poolInfo.currencyAmountTotal1.toSignificant()
+    } ${poolInfo?.token1.symbol} (fees: ${claimAmount1Data?.fee?.toSignificant() || '0'} ${poolInfo?.token1.symbol})`
+
     const token0ToClaimText =
       hasToken0ToClaim && poolInfo.currencySurplusTotal0.toSignificant() && poolInfo.token0.symbol
         ? ` and ${poolInfo.currencySurplusTotal0.toSignificant()} ${poolInfo.token0.symbol}`
@@ -38,6 +39,7 @@ const ButtonBlock = ({ poolInfo }: { poolInfo: FixedSwapPoolProp }) => {
   }, [
     claimAmount1Data?.fee,
     claimAmount1Data?.receivedAmount,
+    poolInfo.currencyAmountTotal1,
     poolInfo.currencySurplusTotal0,
     poolInfo.token0.symbol,
     poolInfo?.token1.symbol

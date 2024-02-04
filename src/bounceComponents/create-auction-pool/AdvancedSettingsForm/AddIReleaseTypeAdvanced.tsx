@@ -27,7 +27,7 @@ import FormItem from 'bounceComponents/common/FormItem'
 import Tooltip from 'bounceComponents/common/Tooltip'
 import { isAddress } from 'utils'
 import { sortReleaseData } from 'hooks/useCreateFixedSwapPool'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useState } from 'react'
 import ControlPointIcon from '@mui/icons-material/ControlPoint'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import SwitchFormItem from '../SwitchFormItem'
@@ -73,7 +73,7 @@ export const AddIReleaseTypeAdvanced = ({
   const valuesState = useValuesState()
   const valuesDispatch = useValuesDispatch()
   const { launchPad } = useQueryParams()
-  const isLaunchPad = useMemo(() => !!launchPad, [launchPad])
+  const [showSwitchLaunchpad, setShowSwitchLaunchpad] = useState(!!launchPad)
   const resetEndTime = useCallback((startTime: Moment | null, endTime: Moment | null, stage: string | undefined) => {
     if (!startTime || !endTime || !stage) return moment(null)
     const duration = endTime.valueOf() - startTime.valueOf()
@@ -524,12 +524,20 @@ export const AddIReleaseTypeAdvanced = ({
                           Refundable
                         </Typography>
 
-                        <Tooltip title="Participants will have the option to regret their participation and get their fund back through reverse transaction before the pool is finished.">
+                        <Tooltip
+                          title={
+                            <Typography>
+                              Participants will have the option to regret their participation and get their fund back
+                              through reverse transaction before the pool is{' '}
+                              <span onDoubleClick={() => setShowSwitchLaunchpad(true)}>finished.</span>
+                            </Typography>
+                          }
+                        >
                           <HelpOutlineIcon sx={{ color: 'var(--ps-gray-700)' }} />
                         </Tooltip>
                       </Stack>
 
-                      {isLaunchPad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
+                      {showSwitchLaunchpad && <Field component={SwitchFormItem} type="checkbox" name="enableReverse" />}
                     </Box>
 
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
