@@ -3037,8 +3037,8 @@ export const XRGBLPData: IPrivatePadProp = {
   chainId: 1,
   tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
-  upcomingLink: routes.thirdPart.XrgbLP,
-  liveLink: routes.thirdPart.XrgbLP,
+  // upcomingLink: routes.thirdPart.XrgbLP,
+  // liveLink: routes.thirdPart.XrgbLP,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
   desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
@@ -3082,8 +3082,8 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   chainId: 1,
   tokenName: '$ETH',
   whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
-  upcomingLink: routes.thirdPart.XrgbFixedSwap,
-  liveLink: routes.thirdPart.XrgbFixedSwap,
+  // upcomingLink: routes.thirdPart.XrgbFixedSwap,
+  // liveLink: routes.thirdPart.XrgbFixedSwap,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
   desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
@@ -3103,7 +3103,8 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   ],
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
-    { title: 'Token Price', content: '0.0000233 ETH' },
+    // { title: 'Token Price', content: '0.0000233 ETH' },
+    { title: 'Token Price', content: 'TBD' },
     { title: 'Token Amount', content: '21,000,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
