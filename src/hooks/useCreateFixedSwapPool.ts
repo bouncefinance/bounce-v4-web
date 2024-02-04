@@ -130,9 +130,11 @@ export function useCreateFixedSwapPool() {
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
-    const isPlayableAuction = !!(values.whitelistWithAmount && values.whitelistWithAmount.length > 0)
+    const isPlayableAuction =
+      values.participantStatus === ParticipantStatus.WhitelistWithAmount &&
+      !!(values.whitelistWithAmount && values.whitelistWithAmount.length > 0)
     const params: Params = {
-      whitelist: values.participantStatus === ParticipantStatus.Whitelist ? values.whitelist : [],
+      whitelist: values.participantStatus !== ParticipantStatus.Public ? values.whitelist : [],
       poolSize: values.poolSize,
       swapRatio: values.swapRatio,
       allocationPerWallet:
