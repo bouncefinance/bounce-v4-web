@@ -20,7 +20,7 @@ import { ActionType, useValuesDispatch, useValuesState } from '../ValuesProvider
 import RadioGroupFormItem from '../RadioGroupFormItem'
 import Radio from '../Radio'
 import ImportWhitelistDialog from '../ImportWhitelistDialog'
-import ImportWhitelistWithAmountDialog from '../ImportWhitelistWithAmountDialog'
+import ImportWhitelistWithAmountDialog, { formatInput } from '../ImportWhitelistWithAmountDialog'
 import { AuctionType, IReleaseData, IReleaseType, ParticipantStatus, PriceSegmentType } from '../types'
 import DateTimePickerFormItem from '../DateTimePickerFormItem'
 import FormItem from 'bounceComponents/common/FormItem'
@@ -55,7 +55,7 @@ interface MyFormValues {
   segmentAmount: string | undefined
   participantStatus: ParticipantStatus
   fragmentReleaseSize?: string
-  whitelistWithAmount?: string[]
+  whitelistWithAmount?: string
 }
 
 const defaultFragmentRelease = {
@@ -105,7 +105,7 @@ export const AddIReleaseTypeAdvanced = ({
     segmentAmount: valuesState.segmentAmount,
     enableReverse: !!valuesState.enableReverse,
     participantStatus: valuesState.participantStatus,
-    whitelistWithAmount: []
+    whitelistWithAmount: ''
   }
 
   const validationSchema = Yup.object({
@@ -256,6 +256,15 @@ export const AddIReleaseTypeAdvanced = ({
           (inputArray instanceof Array && inputArray.every(input => isAddress(input)))
         )
       }),
+    whitelistWithAmount: Yup.string()
+      .required('whitelistWithAmount is required')
+      .test(
+        'NOT_EMPTY_AMOUNT_ARRAY',
+        'whitelistWithAmount is required',
+        (inputValue, context) =>
+          context.parent.participantStatus !== ParticipantStatus.WhitelistWithAmount ||
+          formatInput(inputValue || '')[2].length > 0
+      ),
     participantStatus: Yup.string().oneOf(Object.values(ParticipantStatus), 'Invalid participant status')
   })
   /*
@@ -353,6 +362,7 @@ export const AddIReleaseTypeAdvanced = ({
                 <FormItem label="Pool name" name="poolName">
                   <OutlinedInput />
                 </FormItem>
+
                 <Stack direction="row" sx={{ mt: 24, width: '100%' }} spacing={20}>
                   <Field
                     component={DateTimePickerFormItem}
@@ -564,12 +574,12 @@ export const AddIReleaseTypeAdvanced = ({
                     <FormControlLabel
                       value={ParticipantStatus.WhitelistWithAmount}
                       control={<Radio disableRipple />}
-                      label="Whitelist With Amount"
+                      label="whitelistWithAmount"
                     />
                   </Field>
                   <FormHelperText error={!!errors.participantStatus}>{errors.participantStatus}</FormHelperText>
                   <FormHelperText error={!!errors.whitelist}>{errors.whitelist}</FormHelperText>
-                  {/* <FormHelperText error={!!errors.whitelistWithAmount}>{errors.whitelistWithAmount}</FormHelperText> */}
+                  <FormHelperText error={!!errors.whitelistWithAmount}>{errors.whitelistWithAmount}</FormHelperText>
                 </Box>
                 <Stack sx={{ flexDirection: { xs: 'column', md: 'row' } }} spacing={10} justifyContent="space-between">
                   <ButtonBase

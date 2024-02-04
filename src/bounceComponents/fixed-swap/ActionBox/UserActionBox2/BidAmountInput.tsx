@@ -19,14 +19,15 @@ interface BidAmountInputProps {
 const BidAmountInput = ({ bidAmount, setBidAmount, poolInfo }: BidAmountInputProps) => {
   const { account } = useActiveWeb3React()
   const userToken1Balance = useCurrencyBalance(account || undefined, poolInfo.currencyAmountTotal1.currency)
+  console.log('poolInfo0', poolInfo)
 
   const maxSwapAmount1Limit = useMaxSwapAmount1Limit(poolInfo)
-
   const handleMaxButtonClick = useCallback(() => {
     if (!userToken1Balance) {
       setBidAmount('0')
       return
     }
+
     const minimum = [userToken1Balance, maxSwapAmount1Limit].reduce((pre, cur) => {
       return !pre ? cur : cur.greaterThan(pre) ? pre : cur
     }, userToken1Balance)

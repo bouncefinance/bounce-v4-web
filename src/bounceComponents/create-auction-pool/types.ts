@@ -107,7 +107,7 @@ export interface AuctionPool {
   releaseType: IReleaseType | 1000
   releaseDataArr: IReleaseData[]
   whitelist: string[]
-  whitelistWithAmount?: string[]
+  whitelistWithAmount?: string
   activeStep: CreationStep
   completed: CompletedSteps
   participantStatus: ParticipantStatus

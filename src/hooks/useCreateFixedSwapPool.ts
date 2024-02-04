@@ -24,6 +24,7 @@ import {
   ParticipantStatus
 } from 'bounceComponents/create-auction-pool/types'
 import { Contract } from 'ethers'
+import { formatInput } from 'bounceComponents/create-auction-pool/ImportWhitelistWithAmountDialog'
 
 export interface Params {
   whitelist: string[]
@@ -43,7 +44,7 @@ export interface Params {
     startAt: number | string
     endAtOrRatio: number | string
   }[]
-  whitelistWithAmount?: string[]
+  whitelistWithAmount?: string
 }
 const NO_LIMIT_ALLOCATION = '0'
 
@@ -130,15 +131,18 @@ export function useCreateFixedSwapPool() {
     transactionReceipt: Promise<TransactionReceipt>
     getPoolId: (logs: Log[]) => string | undefined
   }> => {
+    const [whitelistAddress, whitelistAmounts] = values.whitelistWithAmount
+      ? formatInput(values.whitelistWithAmount)
+      : []
     const isPlayableAuction =
       values.participantStatus === ParticipantStatus.WhitelistWithAmount &&
-      !!(values.whitelistWithAmount && values.whitelistWithAmount.length > 0)
+      !!(whitelistAddress.length > 0 && whitelistAmounts.length > 0)
     const params: Params = {
       whitelist: values.participantStatus !== ParticipantStatus.Public ? values.whitelist : [],
       poolSize: values.poolSize,
       swapRatio: values.swapRatio,
       allocationPerWallet:
-        values.allocationStatus === AllocationStatus.Limited
+        values.allocationStatus === AllocationStatus.Limited && !isPlayableAuction
           ? new BigNumber(values.allocationPerWallet).toString()
           : NO_LIMIT_ALLOCATION,
       startTime: values.startTime?.unix() || 0,
@@ -193,13 +197,12 @@ export function useCreateFixedSwapPool() {
       const { data } = await getWhitelistMerkleTreeRoot(whitelistParams)
       merkleroot = data.merkleroot
     }
-    if (isPlayableAuction && params.whitelistWithAmount) {
-      const address = params.whitelistWithAmount.filter((v, i) => (i + 1) % 2 !== 0)
-      const amounts = params.whitelistWithAmount
-        .filter((v, i) => (i + 1) % 2 === 0)
-        .map(i => CurrencyAmount.fromAmount(currencyTo, i)?.raw.toString() || '0')
+    if (isPlayableAuction) {
+      const amounts = (whitelistAmounts as string[]).map(
+        i => CurrencyAmount.fromAmount(currencyTo, i)?.raw.toString() || '0'
+      )
       const whitelistParams: GetWhitelistMerkleTreeRootParams = {
-        addresses: address,
+        addresses: whitelistAddress as string[],
         category: PoolType.FixedSwap,
         chainId: chainConfigInBackend.id,
         amounts,
@@ -220,7 +223,9 @@ export function useCreateFixedSwapPool() {
       claimAt: params.delayUnlockingTime,
       closeAt: params.endTime,
       creator: account,
-      maxAmount1PerWallet: CurrencyAmount.fromAmount(currencyTo, params.allocationPerWallet)?.raw.toString() || '0',
+      maxAmount1PerWallet:
+        (!isPlayableAuction && CurrencyAmount.fromAmount(currencyTo, params.allocationPerWallet)?.raw.toString()) ||
+        '0',
       merkleroot: merkleroot,
       name: params.poolName,
       openAt: params.startTime,

@@ -135,7 +135,7 @@ const initialValues: AuctionPool = {
   tgToken: '',
   auctionInChain: NETWORK_CHAIN_ID,
   tgBotTabValue: TgBotTabValue.AUCTION,
-  whitelistWithAmount: []
+  whitelistWithAmount: ''
 }
 
 export enum ActionType {
@@ -275,7 +275,7 @@ type Payload = {
     whitelist: string[]
   }
   [ActionType.SetWhitelistWithAmount]: {
-    whitelistWithAmount: string[]
+    whitelistWithAmount: string
   }
   [ActionType.SetTgBotActiveStep]: {
     tgBotActiveStep: TgBotActiveStep

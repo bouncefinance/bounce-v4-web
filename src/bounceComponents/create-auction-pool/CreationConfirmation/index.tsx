@@ -420,7 +420,11 @@ const CreationConfirmation = () => {
 
                 <ConfirmationInfoItem title="Participant">
                   <Typography>
-                    {values.participantStatus === ParticipantStatus.Public ? 'Public' : 'Whitelist'}
+                    {values.participantStatus === ParticipantStatus.Public
+                      ? 'Public'
+                      : values.participantStatus === ParticipantStatus.WhitelistWithAmount
+                      ? 'White list With Amount'
+                      : 'Whitelist'}
                   </Typography>
                 </ConfirmationInfoItem>
 

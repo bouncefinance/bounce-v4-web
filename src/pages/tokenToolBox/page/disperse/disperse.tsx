@@ -628,13 +628,13 @@ const GreenToolbox = styled(Box)`
   border-radius: 8px;
   background: var(--yellow, #e1f25c);
 `
-const ConfirmBox = styled(Box)`
+export const ConfirmBox = styled(Box)`
   border-radius: 16px;
   margin-top: 32px;
   padding: 24px;
   background: var(--grey-06, #f6f6f3);
 `
-const ConfirmDetailBox = styled(Box)`
+export const ConfirmDetailBox = styled(Box)`
   padding: 24px;
   border-radius: 16px;
   margin-top: 16px;
