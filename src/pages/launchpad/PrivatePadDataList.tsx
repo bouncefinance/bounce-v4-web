@@ -3022,40 +3022,44 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
     ]
   }
 ]
+const XRGBSocial = [
+  <Link key={0} href="https://www.xrgb.xyz/" target="_blank">
+    <Web />
+  </Link>,
+  <Link key={6} href="https://twitter.com/xrgbchain" target="_blank">
+    <Twitter />
+  </Link>,
+  <Link key={7} href="https://discord.gg/9zYEZwBY9H" target="_blank">
+    <DiscordSVG />
+  </Link>,
+  <Link key={9} href="https://t.me/xrgbchain_office" target="_blank">
+    <img src={Telegram} width={40} />
+  </Link>,
+  <Link key={8} href="https://github.com/XRGB" target="_blank">
+    {GithubSvg}
+  </Link>
+]
 export const XRGBLPData: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 30,
   liveTimeStamp: {
-    start: 1707132900000,
-    end: 1707219300000
+    start: 1807132900000,
+    end: 1807219300000
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
   img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
-  avatar: SatoshivmImg,
+  avatar: 'https://pbs.twimg.com/profile_images/1738205337977769984/3iyoZyPa_400x400.jpg',
   title: 'XRGB Chain',
   chainId: 1,
   tokenName: '$ETH',
-  whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
+  // whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
   // upcomingLink: routes.thirdPart.XrgbLP,
   // liveLink: routes.thirdPart.XrgbLP,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
-  social: [
-    <Link key={0} href="https://www.satoshivm.io" target="_blank">
-      <Web />
-    </Link>,
-    <Link key={6} href="https://twitter.com/SatoshiVM" target="_blank">
-      <Twitter />
-    </Link>,
-    <Link key={7} href="https://discord.gg/satoshivm" target="_blank">
-      <DiscordSVG />
-    </Link>,
-    <Link key={8} href="https://github.com/SatoshiVM" target="_blank">
-      {GithubSvg}
-    </Link>
-  ],
+  desc: 'XRGB Chain is the first Bitcoin L2 developed based on the RGB protocol.',
+  social: XRGBSocial,
   moreData: [
     { title: 'Reward Token', content: `$ETH | $XRGB` },
     { title: 'Ticket Price', content: '10 AUCTION / Ticket' },
@@ -3071,36 +3075,23 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 29,
   liveTimeStamp: {
-    start: 1707132900000,
-    end: 1707219300000
+    start: 1807132900000,
+    end: 1807219300000
   },
   hideUpcomingCountdown: true,
-  poolTypeName: 'Fixed Price Auction',
+  poolTypeName: 'Fixed Price - Whitelist',
   img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
-  avatar: SatoshivmImg,
+  avatar: 'https://pbs.twimg.com/profile_images/1738205337977769984/3iyoZyPa_400x400.jpg',
   title: 'XRGB Chain',
   chainId: 1,
   tokenName: '$ETH',
-  whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
+  // whitePaperLink: 'https://github.com/SatoshiVM/whitepaper',
   // upcomingLink: routes.thirdPart.XrgbFixedSwap,
   // liveLink: routes.thirdPart.XrgbFixedSwap,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the Bitcoin ecosystem to issue assets and develop applications.',
-  social: [
-    <Link key={0} href="https://www.satoshivm.io" target="_blank">
-      <Web />
-    </Link>,
-    <Link key={6} href="https://twitter.com/SatoshiVM" target="_blank">
-      <Twitter />
-    </Link>,
-    <Link key={7} href="https://discord.gg/satoshivm" target="_blank">
-      <DiscordSVG />
-    </Link>,
-    <Link key={8} href="https://github.com/SatoshiVM" target="_blank">
-      {GithubSvg}
-    </Link>
-  ],
+  desc: 'XRGB Chain is the first Bitcoin L2 developed based on the RGB protocol.',
+  social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
     // { title: 'Token Price', content: '0.0000233 ETH' },

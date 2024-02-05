@@ -219,7 +219,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
             claimAt={0}
             closeTime={closeAt / 1000}
             openTime={openAt / 1000}
-            hideUpcomingCountdown={!closeAt}
+            hideUpcomingCountdown={data.hideUpcomingCountdown}
           />
         </LaunchpadHeadContent>
       </LaunchpadHead>
