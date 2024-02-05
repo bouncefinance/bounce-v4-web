@@ -185,7 +185,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
   const isSm = useBreakpoint('sm')
   const theme = useTheme()
   return (
-    <LaunchpadContainer onClick={() => navigate(link)}>
+    <LaunchpadContainer onClick={() => navigate(link)} sx={{ cursor: link ? 'pointer' : 'auto' }}>
       <LaunchpadHead>
         <Image
           style={{
@@ -247,7 +247,12 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
           >
             {data.desc}
           </LaunchpadDescription>
-          <Row mt={10} gap={6} sx={{ overflow: 'hidden', height: isSm ? 46 : 'auto' }}>
+          <Row
+            onClick={e => e.stopPropagation()}
+            mt={10}
+            gap={6}
+            sx={{ overflow: 'hidden', height: isSm ? 46 : 'auto' }}
+          >
             {data.social}
           </Row>
         </Stack>
@@ -264,7 +269,7 @@ const LaunchpadCardItem = ({ data }: { data: IPrivatePadProp }) => {
               </LaunchpadLabelContainer>
             ))}
           </Stack>
-          <MoreButton onClick={() => navigate('/launchpad')}>View more</MoreButton>
+          {link && <MoreButton>View more</MoreButton>}
         </Stack>
       </LaunchpadContent>
     </LaunchpadContainer>
