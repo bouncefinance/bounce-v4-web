@@ -3102,7 +3102,7 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 30
-  XRGBLPData,
+  // XRGBLPData,
   XRGBFixedSwapData,
   SatoshiVMLPData,
   SatoshiVMRandomData,
