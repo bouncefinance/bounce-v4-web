@@ -3096,7 +3096,7 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
     { title: 'Token Name', content: '$XRGB' },
     // { title: 'Token Price', content: '0.0000233 ETH' },
     { title: 'Token Price', content: 'TBD' },
-    { title: 'Token Amount', content: '21,000,000' },
+    { title: 'Token Amount', content: '4,200,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
