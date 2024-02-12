@@ -3400,7 +3400,7 @@ export const Weave6FixedSwapData: IPrivatePadProp = {
   avatar: 'https://images-v3.bounce.finance/3c0a6de1f64e2c9ccee8e25e0882aaa5-1707411721.png',
   title: 'Weave6',
   chainId: 1,
-  tokenName: '$ETH',
+  tokenName: '$WX',
   whitePaperLink: 'https://docsend.com/view/tjr9cvfdf67czawy',
   // upcomingLink: routes.thirdPart.XrgbFixedSwap,
   // liveLink: routes.thirdPart.XrgbFixedSwap,
@@ -3409,7 +3409,7 @@ export const Weave6FixedSwapData: IPrivatePadProp = {
   desc: 'Weave6 is an omnichain asset trading infrastructure that incorporates an indexer, marketplace, and launchpad to form a one-stop access for dApps and users to launch, mint, and trade omnichain assets (NFT&Inscription).',
   social: Weave6Social,
   moreData: [
-    { title: 'Token Name', content: 'TBD' },
+    { title: 'Token Name', content: '$WX' },
     { title: 'Token Price', content: 'TBD' },
     { title: 'Token Amount', content: 'TBD' },
     { title: 'Blockchain', content: 'Ethereum' }
