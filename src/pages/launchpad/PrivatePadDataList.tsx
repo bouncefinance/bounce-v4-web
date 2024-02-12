@@ -3194,7 +3194,7 @@ export const XRGBLPData: IPrivatePadProp = {
   hideUpcomingCountdown: true,
   poolTypeName: 'Initial LP Offering',
   img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
-  avatar: 'https://pbs.twimg.com/profile_images/1738205337977769984/3iyoZyPa_400x400.jpg',
+  avatar: '/imgs/xrgb_avatar.jpg',
   title: 'XRGB Chain',
   chainId: 1,
   tokenName: '$ETH',
@@ -3203,7 +3203,7 @@ export const XRGBLPData: IPrivatePadProp = {
   // liveLink: routes.thirdPart.XrgbLP,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'XRGB Chain is the first Bitcoin L2 developed based on the RGB protocol.',
+  desc: 'XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability protocol designed for Bitcoin assets and layer2s. It aims to improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implemented XRGB protocol and introduced the enhanced transactional privacy of RGB protocol. It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.',
   social: XRGBSocial,
   moreData: [
     { title: 'Reward Token', content: `$ETH | $XRGB` },
@@ -3226,7 +3226,7 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
   img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
-  avatar: 'https://pbs.twimg.com/profile_images/1738205337977769984/3iyoZyPa_400x400.jpg',
+  avatar: '/imgs/xrgb_avatar.jpg',
   title: 'XRGB Chain',
   chainId: 1,
   tokenName: '$ETH',
@@ -3235,13 +3235,13 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   // liveLink: routes.thirdPart.XrgbFixedSwap,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'XRGB Chain is the first Bitcoin L2 developed based on the RGB protocol.',
+  desc: 'XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability protocol designed for Bitcoin assets and layer2s. It aims to improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implemented XRGB protocol and introduced the enhanced transactional privacy of RGB protocol. It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.',
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
     // { title: 'Token Price', content: '0.0000233 ETH' },
     { title: 'Token Price', content: 'TBD' },
-    { title: 'Token Amount', content: '21,000,000' },
+    { title: 'Token Amount', content: '4,200,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }

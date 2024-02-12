@@ -2,10 +2,10 @@ import { Box, Stack, Typography, styled } from '@mui/material'
 import { RandomSelectionLPProps } from 'api/pool/type'
 import Icon2 from 'assets/images/eth_logo.png'
 import useBreakpoint from 'hooks/useBreakpoint'
-// import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
+import { getIcon } from 'pages/nftLottery/sections/tokenInformation/config'
 import { useMemo } from 'react'
 import { formatGroupNumber } from 'utils/number'
-// const Icon1 = getIcon('SAVM')
+const Icon1 = getIcon('SAVM')
 const GrayCard = styled(Box)`
   display: flex;
   padding: 24px;
@@ -103,7 +103,7 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
           </P1>
         </GrayCard>
       </Stack>
-      {/* <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+      <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
           <img src={Icon1 || ''} style={{ width: 32, height: 32, borderRadius: '100%' }} />
           <P1 sx={{ fontWeight: 600, fontSize: 20 }}>SAVM</P1>
@@ -111,7 +111,7 @@ const WinnerPage = ({ poolInfo }: { poolInfo: RandomSelectionLPProps }) => {
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
           <P1>{poolInfo.userTotalFeesReward?.claimableToken0?.toSignificant(6) || '--'}</P1>
         </Stack>
-      </GrayCard> */}
+      </GrayCard>
       <GrayCard sx={{ mt: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Stack flexDirection={'row'} gap={16} alignItems={'center'}>
           <img src={Icon2 || ''} style={{ width: 32, height: 32 }} />
