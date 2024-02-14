@@ -156,6 +156,7 @@ export const transparentRoutes = [
   routes.thirdPart.LPToken,
   routes.thirdPart.SatoshiVMLp,
   routes.thirdPart.SatoshiVMRandom,
+  routes.thirdPart.XrgbFixedSwap,
   routes.nftLottery.index
 ]
 
