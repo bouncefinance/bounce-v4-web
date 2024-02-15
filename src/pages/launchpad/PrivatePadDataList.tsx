@@ -2977,7 +2977,7 @@ const XRGBSocial = [
   <Link key={0} href="https://www.xrgb.xyz/" target="_blank">
     <Web />
   </Link>,
-  <Link key={6} href="https://twitter.com/xrgbchain" target="_blank">
+  <Link key={6} href="https://twitter.com/XRGB404" target="_blank">
     <Twitter />
   </Link>,
   <Link key={7} href="https://discord.gg/9zYEZwBY9H" target="_blank">
