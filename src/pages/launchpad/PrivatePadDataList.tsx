@@ -27,9 +27,9 @@ import { ReactComponent as DiscordSvg } from 'assets/socialLinksIcon/Discord.svg
 import { ReactComponent as TgSvg } from 'assets/socialLinksIcon/Tg.svg'
 import { ReactComponent as InstagramSvg } from 'assets/imgs/profile/links/instagram.svg'
 import { ReactComponent as LinkinSvg } from 'assets/socialLinksIcon/linkin.svg'
-
 import BlodeAvatar from './avatar/blade-icon.ico'
 import EquilibriaAvatar from './avatar/equilibria-logo.png'
+import XrgbAvatar from './avatar/xrgb.png'
 import poseiswapAvatar from './avatar/poseiswap.jpeg'
 import typeltpAvatar from './avatar/typelt.png'
 import LasmetAvatar from './avatar/lasmet-avatar.png'
@@ -54,6 +54,7 @@ import CreateProtocolPage from './imgs/CreateProtocolPage.jpg'
 // import Finceptor from './imgs/Finceptor.png'
 import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 import MultibitContent1 from './imgs/multibit-content1.png'
+import XrgbBanner from './imgs/XrgbBanner.png'
 import MultiBitAva from './imgs/multi-bit-ava.png'
 import MultibitBanner from './imgs/multibit-banner.png'
 import BitStableInfo from './imgs/BitStable-info.png'
@@ -2918,13 +2919,14 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
       >
         <p style={{ fontWeight: 500 }}>Total Supply = 210,000,000</p>
         <ul>
-          <li>Public Sale: 5%. (Bounce 2% Pancake 1.5% Satori 1.5%) TGE 100% across three platforms</li>
-          <li>Private Sale: 2.5% (TGE 0% 12 month linear vesting)</li>
-          <li>Airdrop after RGB mainnet launch: 25.0%</li>
-          <li>Ecosystem: 35.0% (TGE 10% 12 month linear vesting)</li>
-          <li>Marketing: 10.0% (TGE 20% 12 month linear vesting)</li>
-          <li>Staking Rewards: 12.5% (Distribute after mainnet)</li>
-          <li>Team: 10% (TGE 0% 24 month linear vesting)</li>
+          <li>Public Sale: 5% TGE 100% across three platforms</li>
+          <li>Private Sale: 2.5% TGE 0% 12 month linear vesting</li>
+          <li>Airdrop after RGB mainnet launch: 20% Distribute after mainnet</li>
+          <li>Ecosystem: 30% TGE 10% 12 month linear vesting</li>
+          <li>Marketing: 10% TGE 20% 12 month linear vesting</li>
+          <li>LP: 10% TGE 50% 6 month linear vesting. Liquidity on Swap</li>
+          <li>Staking Rewards: 12.5% Distribute after mainnet</li>
+          <li>Team: 10% TGE 0% 24 month linear vesting</li>
         </ul>
         <div>
           <img width={'100%'} src="/imgs/xrgb-tokenomics.png" />
@@ -3318,17 +3320,17 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
-  img: 'https://images-v3.bounce.finance/c5937d0e504430dc625d62e764881cd3-1707022012.png',
-  avatar: '/imgs/xrgb_avatar.jpg',
+  img: XrgbBanner,
+  avatar: XrgbAvatar,
   title: 'XRGB Chain',
   chainId: 1,
-  tokenName: '$ETH',
+  tokenName: '$XRGB',
   whitePaperLink: 'https://docs.xrgb.xyz/',
   upcomingLink: routes.thirdPart.XrgbFixedSwap,
   liveLink: routes.thirdPart.XrgbFixedSwap,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability protocol designed for Bitcoin assets and layer2s. It aims to improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implemented XRGB protocol and introduced the enhanced transactional privacy of RGB protocol. It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.',
+  desc: 'XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability protocol designed for Bitcoin assets and ERC404 assets.  It aims to improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implements the XRGB protocol and introduces the enhanced transactional privacy of the RGB protocol. It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.',
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
