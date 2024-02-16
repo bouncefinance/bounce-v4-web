@@ -3317,7 +3317,7 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 29,
   liveTimeStamp: {
-    start: 1708473600000,
+    start: 1708488000000,
     end: 1807219300000
   },
   // hideUpcomingCountdown: true,
