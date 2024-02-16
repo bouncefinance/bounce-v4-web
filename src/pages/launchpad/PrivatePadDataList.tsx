@@ -2895,13 +2895,14 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
       <Stack key={0}>
         <p>XRGB is composed of two components: the protocol and the blockchain.</p>
         <p>
-          XRGB protocol is an interoperability protocol designed for Bitcoin assets and layer2s. It aims to improve the
-          liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism.
+          XRGB protocol is an interoperability protocol designed for Bitcoin assets and ERC404 assets. It aims to
+          improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer
+          mechanism.
         </p>
         <p>
-          XRGB chain implemented XRGB protocol and introduced the enhanced transactional privacy of RGB protocol. It
-          aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a
-          vibrant asset liquidity.
+          XRGB chain implements the XRGB protocol and introduces the enhanced transactional privacy of the RGB protocol.
+          It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering
+          a vibrant asset liquidity.
         </p>
       </Stack>
     ]
@@ -3322,7 +3323,7 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   },
   // hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
-  img: 'https://images-v3.bounce.finance/e92ca00626f9d3fc96bae91ca04cc37d-1708067373.png',
+  img: 'https://images-v3.bounce.finance/833948ad4292b4bda411cc5cca82d168-1708070668.png',
   avatar: XrgbAvatar,
   title: 'XRGB Chain',
   chainId: 1,
