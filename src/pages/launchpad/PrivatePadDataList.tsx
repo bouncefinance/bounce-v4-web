@@ -54,7 +54,6 @@ import CreateProtocolPage from './imgs/CreateProtocolPage.jpg'
 // import Finceptor from './imgs/Finceptor.png'
 import FinceptorAvatar from './imgs/Finceptor_Avatar.jpeg'
 import MultibitContent1 from './imgs/multibit-content1.png'
-import XrgbBanner from './imgs/XrgbBanner.png'
 import MultiBitAva from './imgs/multi-bit-ava.png'
 import MultibitBanner from './imgs/multibit-banner.png'
 import BitStableInfo from './imgs/BitStable-info.png'
@@ -2894,12 +2893,15 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
     title: 'What is XRGB?',
     info: [
       <Stack key={0}>
+        <p>XRGB is composed of two components: the protocol and the blockchain.</p>
         <p>
-          XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability
-          protocol designed for Bitcoin assets and layer2s. It aims to improve the liquidity and efficiency of Bitcoin
-          assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implemented XRGB protocol
-          and introduced the enhanced transactional privacy of RGB protocol. It aspires to be the quintessential Bitcoin
-          DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.
+          XRGB protocol is an interoperability protocol designed for Bitcoin assets and layer2s. It aims to improve the
+          liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism.
+        </p>
+        <p>
+          XRGB chain implemented XRGB protocol and introduced the enhanced transactional privacy of RGB protocol. It
+          aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a
+          vibrant asset liquidity.
         </p>
       </Stack>
     ]
@@ -3315,12 +3317,12 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 29,
   liveTimeStamp: {
-    start: 1807132900000,
+    start: 1708473600000,
     end: 1807219300000
   },
-  hideUpcomingCountdown: true,
+  // hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
-  img: XrgbBanner,
+  img: 'https://images-v3.bounce.finance/e92ca00626f9d3fc96bae91ca04cc37d-1708067373.png',
   avatar: XrgbAvatar,
   title: 'XRGB Chain',
   chainId: 1,
