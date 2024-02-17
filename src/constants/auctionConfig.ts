@@ -68,6 +68,10 @@ export const AuctionConfig: {
     ],
     [TokenType.ERC721]: [AuctionType.ENGLISH_AUCTION]
   },
+  [ChainId.X1_TESTNET]: {
+    [TokenType.ERC20]: [AuctionType.FIXED_PRICE],
+    [TokenType.ERC1155]: [AuctionType.FIXED_PRICE]
+  },
   [ChainId.FANTOM]: {
     [TokenType.ERC20]: [
       AuctionType.FIXED_PRICE,
