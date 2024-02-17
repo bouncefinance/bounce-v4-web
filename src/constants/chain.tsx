@@ -28,6 +28,7 @@ export enum ChainId {
   // HECO = 128,
   POLYGON = 137,
   OMNI_TESTNET = 165,
+  X1_TESTNET = 195,
   FANTOM = 250,
   FANTOM_TESTNET = 4002,
   ZETA_CHAIN_TESTNET = 7001,
@@ -253,6 +254,19 @@ export const SUPPORTED_NETWORKS: {
     },
     rpcUrls: ['https://rpc.ankr.com/fantom'],
     blockExplorerUrls: ['https://ftmscan.com']
+  },
+  [ChainId.X1_TESTNET]: {
+    id: ChainId.X1_TESTNET,
+    hexChainId: numberToHex(ChainId.X1_TESTNET),
+    chainName: 'X1 Testnet',
+    nativeCurrency: {
+      name: 'OKB',
+      symbol: 'OKB',
+      decimals: 18,
+      logo: 'https://static.okx.com/cdn/assets/imgs/226/EB771F0EE8994DD5.png'
+    },
+    rpcUrls: ['https://x1-testnet.blockpi.network/v1/rpc/public'],
+    blockExplorerUrls: ['https://www.oklink.com/x1-test']
   },
   [ChainId.FANTOM_TESTNET]: {
     id: ChainId.FANTOM_TESTNET,
