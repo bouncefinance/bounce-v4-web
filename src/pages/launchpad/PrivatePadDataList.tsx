@@ -2922,14 +2922,14 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
       >
         <p style={{ fontWeight: 500 }}>Total Supply = 210,000,000</p>
         <ul>
-          <li>Public Sale: 5% TGE 100% across three platforms</li>
-          <li>Private Sale: 2.5% TGE 0% 12 month linear vesting</li>
-          <li>Airdrop after RGB mainnet launch: 20% Distribute after mainnet</li>
-          <li>Ecosystem: 30% TGE 10% 12 month linear vesting</li>
-          <li>Marketing: 10% TGE 20% 12 month linear vesting</li>
-          <li>LP: 10% TGE 50% 6 month linear vesting. Liquidity on Swap</li>
-          <li>Staking Rewards: 12.5% Distribute after mainnet</li>
-          <li>Team: 10% TGE 0% 24 month linear vesting</li>
+          <li>Public Sale: 5%</li>
+          <li>Private Sale: 2.5% </li>
+          <li>Airdrop after RGB mainnet launch: 20%</li>
+          <li>Ecosystem: 30%</li>
+          <li>Marketing: 10%</li>
+          <li>LP: 10% </li>
+          <li>Staking Rewards: 12.5%</li>
+          <li>Team: 10%</li>
         </ul>
         <div>
           <img width={'100%'} src="/imgs/xrgb-tokenomics.png" />
@@ -3339,7 +3339,7 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
     { title: 'Token Name', content: '$XRGB' },
     // { title: 'Token Price', content: '0.0000233 ETH' },
     { title: 'Token Price', content: 'TBD' },
-    { title: 'Token Amount', content: '4,200,000' },
+    { title: 'Token Amount', content: '6,300,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
