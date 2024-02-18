@@ -2935,13 +2935,13 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
       >
         <p style={{ fontWeight: 500 }}>Total Supply = 210,000,000</p>
         <ul>
-          <li>Public Sale: 5%</li>
-          <li>Private Sale: 2.5% </li>
-          <li>Community Incentive: 50%</li>
-          <li>Ecosystem: 17.5%</li>
-          <li>Marketing Reserve: 10%</li>
+          <li>Public Sale: 5% TGE 100% across two platforms</li>
+          <li>Private Sale: 2.5% TGE 0% 12 month linear vesting</li>
+          <li>Community Incentive: 50% Distribute after mainnet</li>
+          <li>Ecosystem: 17.5% TGE 10% 12 month linear vesting</li>
+          <li>Marketing Reserve: 10% CEX listing, KOL payment and so on</li>
           <li>LP: 5% </li>
-          <li>Team: 10%</li>
+          <li>Team: 10% TGE 0% 24 month linear vesting</li>
         </ul>
         <div>
           <img width={'100%'} src="/imgs/xrgb-tokenomics.png" />
