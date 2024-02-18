@@ -3314,14 +3314,7 @@ export const XRGBLPData: IPrivatePadProp = {
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
   desc: `XRGB is dedicated to enhancing both the liquidity and the utility of assets within the BTC ecosystem.
-Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating seamless interactions and transactions, fostering a vibrant and integrated financial environment, and unlocking the full potential of digital assets within the Bitcoin framework.
-Core Features:
-· Open-Source messaging protocol for every BTC layer 2
-· Interoperable applications for BTC ecosystem.
-· Cross-Chain BRC-404 assets powered by RGB infrastracture
-XRGB comprises two principal elements: the protocol and the blockchain.
-The XRGB protocol serves as an interoperability framework specifically crafted for Bitcoin and ERC404 assets. Its primary objective is to augment the liquidity and efficiency of Bitcoin assets through decentralized message passing and a fluid transfer mechanism.
-On the other hand, the XRGB chain, built on the XRGB protocol, incorporates the advanced transactional privacy features of the RGB protocol. It aims to establish itself as the definitive layer2 solution for Bitcoin DeFi, emphasizing scalability and privacy. In doing so, it seeks to nurture a dynamic environment for asset liquidity.`,
+Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating seamless interactions and transactions, fostering a vibrant and integrated financial environment, and unlocking the full potential of digital assets within the Bitcoin framework.`,
   social: XRGBSocial,
   moreData: [
     { title: 'Reward Token', content: `$ETH | $XRGB` },
@@ -3354,19 +3347,12 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
   desc: `XRGB is dedicated to enhancing both the liquidity and the utility of assets within the BTC ecosystem.
-Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating seamless interactions and transactions, fostering a vibrant and integrated financial environment, and unlocking the full potential of digital assets within the Bitcoin framework.
-Core Features:
-· Open-Source messaging protocol for every BTC layer 2
-· Interoperable applications for BTC ecosystem.
-· Cross-Chain BRC-404 assets powered by RGB infrastracture
-XRGB comprises two principal elements: the protocol and the blockchain.
-The XRGB protocol serves as an interoperability framework specifically crafted for Bitcoin and ERC404 assets. Its primary objective is to augment the liquidity and efficiency of Bitcoin assets through decentralized message passing and a fluid transfer mechanism.
-On the other hand, the XRGB chain, built on the XRGB protocol, incorporates the advanced transactional privacy features of the RGB protocol. It aims to establish itself as the definitive layer2 solution for Bitcoin DeFi, emphasizing scalability and privacy. In doing so, it seeks to nurture a dynamic environment for asset liquidity.`,
+Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating seamless interactions and transactions, fostering a vibrant and integrated financial environment, and unlocking the full potential of digital assets within the Bitcoin framework.`,
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
     // { title: 'Token Price', content: '0.0000233 ETH' },
-    { title: 'Token Price', content: 'TBD' },
+    { title: 'Token Price', content: '$0.0476' },
     { title: 'Token Amount', content: '6,300,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
