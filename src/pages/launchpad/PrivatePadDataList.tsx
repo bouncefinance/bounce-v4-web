@@ -2893,16 +2893,29 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
     title: 'What is XRGB?',
     info: [
       <Stack key={0}>
-        <p>XRGB is composed of two components: the protocol and the blockchain.</p>
+        <p>XRGB is dedicated to enhancing both the liquidity and the utility of assets within the BTC ecosystem.</p>
         <p>
-          XRGB protocol is an interoperability protocol designed for Bitcoin assets and ERC404 assets. It aims to
-          improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer
-          mechanism.
+          Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating
+          seamless interactions and transactions, fostering a vibrant and integrated financial environment, and
+          unlocking the full potential of digital assets within the Bitcoin framework.
+        </p>
+        <p>Core Features:</p>
+        <ul>
+          <li>Open-Source messaging protocol for every BTC layer 2</li>
+          <li>Interoperable applications for BTC ecosystem</li>
+          <li>Cross-Chain BRC-404 assets powered by RGB infrastracture</li>
+        </ul>
+        <p>XRGB comprises two principal elements: the protocol and the blockchain.</p>
+        <p>
+          The XRGB protocol serves as an interoperability framework specifically crafted for Bitcoin and ERC404 assets.
+          Its primary objective is to augment the liquidity and efficiency of Bitcoin assets through decentralized
+          message passing and a fluid transfer mechanism.
         </p>
         <p>
-          XRGB chain implements the XRGB protocol and introduces the enhanced transactional privacy of the RGB protocol.
-          It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering
-          a vibrant asset liquidity.
+          On the other hand, the XRGB chain, built on the XRGB protocol, incorporates the advanced transactional privacy
+          features of the RGB protocol. It aims to establish itself as the definitive layer2 solution for Bitcoin DeFi,
+          emphasizing scalability and privacy. In doing so, it seeks to nurture a dynamic environment for asset
+          liquidity.
         </p>
       </Stack>
     ]
@@ -2924,11 +2937,10 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
         <ul>
           <li>Public Sale: 5%</li>
           <li>Private Sale: 2.5% </li>
-          <li>Airdrop after RGB mainnet launch: 20%</li>
-          <li>Ecosystem: 30%</li>
-          <li>Marketing: 10%</li>
-          <li>LP: 10% </li>
-          <li>Staking Rewards: 12.5%</li>
+          <li>Community Incentive: 50%</li>
+          <li>Ecosystem: 17.5%</li>
+          <li>Marketing Reserve: 10%</li>
+          <li>LP: 5% </li>
           <li>Team: 10%</li>
         </ul>
         <div>
@@ -2949,19 +2961,19 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
       <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
         {/* <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p> */}
         <div>
-          <h4>2023 Q4 XRGB web wallet</h4>
+          <h4>2023 Q2 XRGB web wallet</h4>
           <p>Support social login, BTC, BRC20, RGB20, etc.</p>
         </div>
         <div>
-          <h4>2024 Q1 XRGB extension wallet</h4>
+          <h4>2024 Q1 XRGB Protocol</h4>
           <p>More assets supported: Ordinals, RGB21, SRC20, ARC20, etc</p>
         </div>
         <div>
-          <h4>2024 Q2 XRGB mobile wallet</h4>
+          <h4>2024 Q2 XRGB Mainnet Launch</h4>
           <p>Android & IOS version</p>
         </div>
         <div>
-          <h4>2024 Q3 XRGB DEX, DID, Domain, and NFT Marketplace</h4>
+          <h4>2024 Q3 XRGB Phone&Mobile Wallet</h4>
           <p>Integrate more DeFi, NFT, and naming protocols</p>
         </div>
         <div>
@@ -3301,7 +3313,15 @@ export const XRGBLPData: IPrivatePadProp = {
   // liveLink: routes.thirdPart.XrgbLP,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability protocol designed for Bitcoin assets and layer2s. It aims to improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implemented XRGB protocol and introduced the enhanced transactional privacy of RGB protocol. It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.',
+  desc: `XRGB is dedicated to enhancing both the liquidity and the utility of assets within the BTC ecosystem.
+Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating seamless interactions and transactions, fostering a vibrant and integrated financial environment, and unlocking the full potential of digital assets within the Bitcoin framework.
+Core Features:
+· Open-Source messaging protocol for every BTC layer 2
+· Interoperable applications for BTC ecosystem.
+· Cross-Chain BRC-404 assets powered by RGB infrastracture
+XRGB comprises two principal elements: the protocol and the blockchain.
+The XRGB protocol serves as an interoperability framework specifically crafted for Bitcoin and ERC404 assets. Its primary objective is to augment the liquidity and efficiency of Bitcoin assets through decentralized message passing and a fluid transfer mechanism.
+On the other hand, the XRGB chain, built on the XRGB protocol, incorporates the advanced transactional privacy features of the RGB protocol. It aims to establish itself as the definitive layer2 solution for Bitcoin DeFi, emphasizing scalability and privacy. In doing so, it seeks to nurture a dynamic environment for asset liquidity.`,
   social: XRGBSocial,
   moreData: [
     { title: 'Reward Token', content: `$ETH | $XRGB` },
@@ -3318,8 +3338,8 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 29,
   liveTimeStamp: {
-    start: 1708488000000,
-    end: 1807219300000
+    start: 1708430400000,
+    end: 1708516800000
   },
   // hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
@@ -3333,7 +3353,15 @@ export const XRGBFixedSwapData: IPrivatePadProp = {
   liveLink: routes.thirdPart.XrgbFixedSwap,
   projectInfo: XRGBLPProjectInfo,
   tokenMetrics: [],
-  desc: 'XRGB is composed of two components: the protocol and the blockchain. XRGB protocol is an interoperability protocol designed for Bitcoin assets and ERC404 assets.  It aims to improve the liquidity and efficiency of Bitcoin assets via decentralized massage passing and liquid transfer mechanism. XRGB chain implements the XRGB protocol and introduces the enhanced transactional privacy of the RGB protocol. It aspires to be the quintessential Bitcoin DeFi layer2, prioritizing scalability and privacy while fostering a vibrant asset liquidity.',
+  desc: `XRGB is dedicated to enhancing both the liquidity and the utility of assets within the BTC ecosystem.
+Our vision is to provide a comprehensive, one-stop service for users in the BTC ecosystem, facilitating seamless interactions and transactions, fostering a vibrant and integrated financial environment, and unlocking the full potential of digital assets within the Bitcoin framework.
+Core Features:
+· Open-Source messaging protocol for every BTC layer 2
+· Interoperable applications for BTC ecosystem.
+· Cross-Chain BRC-404 assets powered by RGB infrastracture
+XRGB comprises two principal elements: the protocol and the blockchain.
+The XRGB protocol serves as an interoperability framework specifically crafted for Bitcoin and ERC404 assets. Its primary objective is to augment the liquidity and efficiency of Bitcoin assets through decentralized message passing and a fluid transfer mechanism.
+On the other hand, the XRGB chain, built on the XRGB protocol, incorporates the advanced transactional privacy features of the RGB protocol. It aims to establish itself as the definitive layer2 solution for Bitcoin DeFi, emphasizing scalability and privacy. In doing so, it seeks to nurture a dynamic environment for asset liquidity.`,
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
