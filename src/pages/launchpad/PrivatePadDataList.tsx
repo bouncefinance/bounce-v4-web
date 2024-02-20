@@ -3328,7 +3328,7 @@ Our vision is to provide a comprehensive, one-stop service for users in the BTC 
   ]
 }
 export const XRGBFixedSwapData: IPrivatePadProp = {
-  // backedId: 18744,
+  backedId: 18832,
   keyId: 29,
   liveTimeStamp: {
     start: 1708430400000,
@@ -3351,8 +3351,7 @@ Our vision is to provide a comprehensive, one-stop service for users in the BTC 
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
-    // { title: 'Token Price', content: '0.0000233 ETH' },
-    { title: 'Token Price', content: '$0.0476' },
+    { title: 'Token Price', content: '0.00001641 ETH' },
     { title: 'Token Amount', content: '6,300,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
