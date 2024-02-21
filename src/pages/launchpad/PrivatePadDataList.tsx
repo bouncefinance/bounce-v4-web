@@ -2937,13 +2937,13 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
       >
         <p style={{ fontWeight: 500 }}>Total Supply = 210,000,000</p>
         <ul>
-          <li>Public Sale: 5%</li>
-          <li>Private Sale: 2.5% </li>
-          <li>Community Incentive: 50%</li>
-          <li>Ecosystem: 17.5%</li>
-          <li>Marketing Reserve: 10%</li>
+          <li>Public Sale: 5% TGE 100% across two platforms</li>
+          <li>Private Sale: 2.5% TGE 0% 12 month linear vesting</li>
+          <li>Community Incentive: 50% Distribute after mainnet</li>
+          <li>Ecosystem: 17.5% TGE 10% 12 month linear vesting</li>
+          <li>Marketing Reserve: 10% CEX listing, KOL payment and so on</li>
           <li>LP: 5% </li>
-          <li>Team: 10%</li>
+          <li>Team: 10% TGE 0% 24 month linear vesting</li>
         </ul>
         <div>
           <img width={'100%'} src="/imgs/xrgb-tokenomics.png" />
@@ -3186,7 +3186,7 @@ Our vision is to provide a comprehensive, one-stop service for users in the BTC 
   ]
 }
 export const XRGBFixedSwapData: IPrivatePadProp = {
-  // backedId: 18744,
+  backedId: 18832,
   keyId: 29,
   liveTimeStamp: {
     start: 1708430400000,
@@ -3209,8 +3209,7 @@ Our vision is to provide a comprehensive, one-stop service for users in the BTC 
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
-    // { title: 'Token Price', content: '0.0000233 ETH' },
-    { title: 'Token Price', content: '$0.0476' },
+    { title: 'Token Price', content: '0.00001641 ETH' },
     { title: 'Token Amount', content: '6,300,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
