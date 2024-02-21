@@ -121,7 +121,7 @@ const LPToken = React.lazy(() => import('./LPToken'))
 const LPXrgbToken = React.lazy(() => import('./LPXrgbToken'))
 const XrgbProjectInfo = React.lazy(() => import('./projectIntro/XrgbProjectInfo'))
 const WeaveFixedSwapProjectInfo = React.lazy(() => import('./projectIntro/WeaveFixedSwapProjectInfo'))
-
+const XRGBRandomSelection = React.lazy(() => import('./auction/randomSelection/XRGB/Index'))
 // const SatoshiLpProjectInfo = React.lazy(() => import('./projectIntro/SatoshiLpProjectInfo'))
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -278,6 +278,7 @@ export default function App() {
                   <Route path={routes.thirdPart.Did.dll} element={<DidStakeDaiiPool />} />
                   <Route path={routes.thirdPart.Did.pool} element={<GoDidRs />} />
                   <Route path={routes.thirdPart.Port3} element={<MultiToken />} />
+                  <Route path={routes.thirdPart.XrgbRandomSelection} element={<XRGBRandomSelection />} />
 
                   <Route path={routes.tokenToolBox.index} element={<TokenToolBox />} />
                   <Route path={routes.tokenToolBox.tokenLocker} element={<TokenLocker />} />

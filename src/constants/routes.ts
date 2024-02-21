@@ -138,6 +138,7 @@ export const routes = {
     SatoshiVMRandom: '/launchpad/satoshivm-random',
     XrgbLP: '/launchpad/xrgb-ilo',
     XrgbFixedSwap: '/launchpad/xrgb',
+    XrgbRandomSelection: '/launchpad/xrgb-random',
     WeaveFixedSwap: '/launchpad/weave6'
   },
   game: {

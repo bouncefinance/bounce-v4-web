@@ -71,6 +71,7 @@ import LadderImg1 from './imgs/ladder-img1.png'
 import SatoshivmImg from './imgs/satoshivm.jpg'
 import satoshiVmArchitecture from './imgs/satoshiVmArchitecture.jpeg'
 import Weave6FixedSwapData from './PrivatePadDataListItem/Weave6'
+import XRGBRandomSelection from './PrivatePadDataListItem/XRGBRandomSelection'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -3244,9 +3245,10 @@ export const EuclidFixedSwapData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 32
+  // current privatePad max keyId is 33
   // XRGBLPData,
   XRGBFixedSwapData,
+  XRGBRandomSelection,
   Weave6FixedSwapData,
   EuclidFixedSwapData,
   SatoshiVMLPData,
