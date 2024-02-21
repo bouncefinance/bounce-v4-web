@@ -258,7 +258,7 @@ export const SUPPORTED_NETWORKS: {
   [ChainId.X1_TESTNET]: {
     id: ChainId.X1_TESTNET,
     hexChainId: numberToHex(ChainId.X1_TESTNET),
-    chainName: 'X1 Testnet',
+    chainName: 'OKX L2 Testnet',
     nativeCurrency: {
       name: 'OKB',
       symbol: 'OKB',

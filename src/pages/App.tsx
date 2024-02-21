@@ -120,6 +120,7 @@ const CreateLPOfferingPool = React.lazy(() => import('pages/createLPOfferingPool
 const LPToken = React.lazy(() => import('./LPToken'))
 const LPXrgbToken = React.lazy(() => import('./LPXrgbToken'))
 const XrgbProjectInfo = React.lazy(() => import('./projectIntro/XrgbProjectInfo'))
+const WeaveFixedSwapProjectInfo = React.lazy(() => import('./projectIntro/WeaveFixedSwapProjectInfo'))
 
 // const SatoshiLpProjectInfo = React.lazy(() => import('./projectIntro/SatoshiLpProjectInfo'))
 const GlobalHooks = () => {
@@ -242,6 +243,7 @@ export default function App() {
                   <Route path={routes.thirdPart.SatoshiVMRandom} element={<SavmRandomSelection />} />
                   <Route path={routes.thirdPart.XrgbLP} element={<LPXrgbToken />} />
                   <Route path={routes.thirdPart.XrgbFixedSwap} element={<XrgbProjectInfo />} />
+                  <Route path={routes.thirdPart.WeaveFixedSwap} element={<WeaveFixedSwapProjectInfo />} />
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
 
                   <Route
