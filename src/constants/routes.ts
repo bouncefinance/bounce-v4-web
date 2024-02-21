@@ -138,7 +138,7 @@ export const routes = {
     SatoshiVMRandom: '/launchpad/satoshivm-random',
     XrgbLP: '/launchpad/xrgb-ilo',
     XrgbFixedSwap: '/launchpad/xrgb',
-    WeaveFixedSwap: '/launchpad/weave'
+    WeaveFixedSwap: '/launchpad/weave6'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
