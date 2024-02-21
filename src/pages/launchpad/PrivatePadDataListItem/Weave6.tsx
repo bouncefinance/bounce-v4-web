@@ -144,7 +144,7 @@ const Weave6FixedSwapData: IPrivatePadProp = {
     start: 1708574400000,
     end: 1708747200
   },
-  hideUpcomingCountdown: true,
+  // hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
   img: 'https://images-v3.bounce.finance/419abe7450671fc9159b9c293d9dae56-1708506572.png',
   avatar: 'https://images-v3.bounce.finance/419abe7450671fc9159b9c293d9dae56-1708506572.png',
