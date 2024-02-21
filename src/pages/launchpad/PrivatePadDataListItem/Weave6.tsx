@@ -146,8 +146,8 @@ const Weave6FixedSwapData: IPrivatePadProp = {
   },
   hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
-  img: 'https://images-v3.bounce.finance/2293e688d09506dc9b98d0e62427e246-1707411672.png',
-  avatar: 'https://images-v3.bounce.finance/3c0a6de1f64e2c9ccee8e25e0882aaa5-1707411721.png',
+  img: 'https://images-v3.bounce.finance/419abe7450671fc9159b9c293d9dae56-1708506572.png',
+  avatar: 'https://images-v3.bounce.finance/419abe7450671fc9159b9c293d9dae56-1708506572.png',
   title: 'Weave6',
   chainId: 1,
   tokenName: '$WX',
@@ -161,7 +161,7 @@ const Weave6FixedSwapData: IPrivatePadProp = {
   moreData: [
     { title: 'Token Name', content: '$WX' },
     { title: 'Token Price', content: '0.015 USDT' },
-    { title: 'Token Amount', content: '6666666.67' },
+    { title: 'Token Amount', content: '6666666.7' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
