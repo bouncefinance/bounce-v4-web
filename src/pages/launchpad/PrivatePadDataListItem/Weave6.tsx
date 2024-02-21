@@ -12,8 +12,15 @@ const Weave6ProjectInfo: IProjectInfo[] = [
     title: 'What is Weave6?',
     info: [
       <Box key={1}>
-        Weave6 is an omnichain asset trading infrastructure that incorporates an indexer, marketplace, and launchpad to
-        form a one-stop access for dApps and users to launch, mint, and trade omnichain assets (NFT&Inscription).
+        <Typography>
+          Weave6 is an omnichain asset trading infrastructure that incorporates an indexer, marketplace, and launchpad
+          to form a one-stop access for dApps and users to launch, mint, and trade omnichain assets (NFT&Inscription).
+        </Typography>
+        <Typography sx={{ marginTop: 15 }}>
+          By leveraging the cross-chain and Omnichain standard infrastructure, users on Weave6 can manage their
+          multi-chain assets with a chain-agnostic, seamless experience. dApps on Weave6 can launch their Omnichain NFT
+          and inscription assets with cross-chain interoperability.
+        </Typography>
       </Box>
     ]
   },
@@ -153,8 +160,8 @@ const Weave6FixedSwapData: IPrivatePadProp = {
   social: Weave6Social,
   moreData: [
     { title: 'Token Name', content: '$WX' },
-    { title: 'Token Price', content: 'TBD' },
-    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Token Price', content: '0.015 USDT' },
+    { title: 'Token Amount', content: '6666666.67' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
