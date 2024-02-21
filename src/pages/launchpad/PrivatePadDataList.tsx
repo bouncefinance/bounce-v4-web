@@ -70,6 +70,7 @@ import BitSwapImage1 from './imgs/BitSwap-image1.png'
 import LadderImg1 from './imgs/ladder-img1.png'
 import SatoshivmImg from './imgs/satoshivm.jpg'
 import satoshiVmArchitecture from './imgs/satoshiVmArchitecture.jpeg'
+import Weave6FixedSwapData from './PrivatePadDataListItem/Weave6'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -3007,151 +3008,7 @@ const XRGBSocial = [
     {GithubSvg}
   </Link>
 ]
-const Weave6Social = [
-  <Link key={0} href="https://www.weave6.com/" target="_blank">
-    <Web />
-  </Link>,
-  <Link key={6} href="https://twitter.com/weave6official" target="_blank">
-    <Twitter />
-  </Link>,
-  <Link key={7} href="https://discord.com/invite/3xE2tumaeE" target="_blank">
-    <DiscordSVG />
-  </Link>
-]
-const Weave6ProjectInfo: IProjectInfo[] = [
-  {
-    title: 'What is SatoshiVM?',
-    info: [
-      <Stack key={0}>
-        <p>
-          SatoshiVM is a decentralized Bitcoin ZK Rollup Layer 2 solution compatible with the Ethereum Virtual Machine
-          (EVM) ecosystem, using native BTC as gas. SatoshiVM bridges the EVM ecosystem with Bitcoin, enabling the
-          Bitcoin ecosystem to issue assets and develop applications.
-        </p>
-        <Box sx={{ ul: { display: 'flex', flexDirection: 'column', gap: 10 } }}>
-          <h4>SatoshiVM possesses the following technological features:</h4>
-          <ul>
-            <li>
-              ZK EVM: SatoshiVM is a versatile ZK Rollup that employs EVM for off-chain computations. This implies that
-              users can interact with SatoshiVM in a manner similar to interacting with Ethereum, and developers can
-              build on top of SatoshiVM just as they would on Ethereum.
-            </li>
-            <li>
-              ZK Rollup: SatoshiVM utilizes Rollup technology to bundle multiple transactions into a single batch and
-              validate them on the Bitcoin main network as a single transaction. This ensures the same level of security
-              as the Bitcoin main network, guaranteeing data validity and availability.
-            </li>
-            <li>
-              ZK Fraud Proofs: SatoshiVM utilizes technologies such as Taproot and Bitcoin Script to perform on-chain
-              verification of contracts without altering the consensus rules of the Bitcoin network, thereby
-              accomplishing the computation of fraud proofs.
-            </li>
-            <li>
-              Data Availability: SatoshiVM must release transaction data on the Bitcoin main network, enabling anyone to
-              verify the correctness of computations executed off the Bitcoin main network.
-            </li>
-            <li>
-              BTC Native Gas: SatoshiVM employs native BTC as gas for the EVM. Similar to ETH OP Rollup / ZK Rollup
-              Layer 2 solutions that use ETH as gas for Layer 2, SatoshiVM utilizes BTC as the gas for EVM transactions.
-            </li>
-          </ul>
-        </Box>
-      </Stack>
-    ]
-  },
-  {
-    title: 'Tokenomics',
-    info: [
-      <Box
-        key={1}
-        sx={{
-          ' &>ul': {
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10
-          }
-        }}
-      >
-        <p style={{ fontWeight: 500 }}>Total Supply = 21M $SAVM</p>
-        <ul>
-          <li>22% add to Uniswap liquidity.</li>
-          <li>
-            36.5% Ecosystem growth: Dedicated to different airdrops and incentives for the ecosystem. Unlock 5% per
-            month
-          </li>
-          <li>15% Contributors: Locked for 6 months then vested lineary over 3 years</li>
-          <li>
-            15% Bootstrapping: 10% - A total of $200,000 was raised in a round at $2M FDV. 50% unlocked on TGE, 3 months
-            cliff then monthly vestings. 5% reseved for technical and marketing advisors
-          </li>
-          <li>2% Bounce Finance IDO</li>
-          <li>1% APE terminal IDO</li>
-          <li>0.4% Mubi farming pool</li>
-          <li>0.1% BSSB farming pool</li>
-        </ul>
-      </Box>
-    ]
-  },
-  {
-    title: 'SatoshiVM’s Architecture',
-    info: [
-      <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
-        <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p>
-        <img src={satoshiVmArchitecture} style={{ width: '100%', height: '100%' }} />
-        <div>
-          <h4>Settlement Layer</h4>
-          <p>
-            This layer provides data availability, ordering, and validation of proofs for the SatoshiVM chain. It allows
-            users and dApps to send messages and assets between Bitcoin and SatoshiVM. Bitcoin serves as the settlement
-            layer, and bridges and rollup scripts are deployed on the Bitcoin network.
-          </p>
-        </div>
-        <div>
-          <h4>Sequencing Layer</h4>
-          <p>
-            This layer consists of an execution node responsible for executing transactions submitted to the SatoshiVM
-            sequencer and transactions submitted to the L1 bridge script, generating L2 blocks. It also includes a
-            Rollup node that handles batched transactions, publishes transaction data and block information to Bitcoin
-            to ensure data availability, and submits validity proofs to Bitcoin for finality.
-          </p>
-        </div>
-        <div>
-          <h4>Proving Layer</h4>
-          <p>
-            This layer comprises a coordinator, which assigns proof tasks to provers and relays the generated proofs to
-            the Rollup node to complete finality verification on Bitcoin. It also includes a prover pool, responsible
-            for generating validity proofs that verify the correctness of L2 transactions.
-          </p>
-        </div>
-      </Stack>
-    ]
-  },
-  {
-    title: 'Roadmap',
-    info: [
-      <Stack key={0} sx={{ '& h5': { mb: 5 } }}>
-        {/* <p>As depicted in the diagram, the SatoshiVM chain comprises three layers:</p> */}
-        <div>
-          <h4>Testnet 2024 Q1</h4>
-          <p>✅ Testnet Launch</p>
-          <p>✅ Blockchain Explorer Launch </p>
 
-          <p>Bitcoin - SatoshiVM Bridge Release</p>
-          <p>EVM - SatoshiVM Bridge Release</p>
-        </div>
-        <div>
-          <h4>SatoshiVM Lite 2024 Q1</h4>
-
-          <p>Yellow Paper Release</p>
-          <p>SatoshiVM Lite Release</p>
-          <p>Blockchain Explorer Launch</p>
-          <p>Bitcoin - SatoshiVM Bridge Release </p>
-          <p>EVM - SatoshiVM Bridge Release</p>
-        </div>
-      </Stack>
-    ]
-  }
-]
 const EuclidSocial = [
   <Link key={0} href="https://euclidfinance.io/home" target="_blank">
     <Web />
@@ -3357,34 +3214,7 @@ Our vision is to provide a comprehensive, one-stop service for users in the BTC 
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
-export const Weave6FixedSwapData: IPrivatePadProp = {
-  // backedId: 18744,
-  keyId: 31,
-  liveTimeStamp: {
-    start: 1807132900000,
-    end: 1807219300000
-  },
-  hideUpcomingCountdown: true,
-  poolTypeName: 'Fixed Price - Whitelist',
-  img: 'https://images-v3.bounce.finance/2293e688d09506dc9b98d0e62427e246-1707411672.png',
-  avatar: 'https://images-v3.bounce.finance/3c0a6de1f64e2c9ccee8e25e0882aaa5-1707411721.png',
-  title: 'Weave6',
-  chainId: 1,
-  tokenName: '$WX',
-  whitePaperLink: 'https://docsend.com/view/tjr9cvfdf67czawy',
-  // upcomingLink: routes.thirdPart.XrgbFixedSwap,
-  // liveLink: routes.thirdPart.XrgbFixedSwap,
-  projectInfo: Weave6ProjectInfo,
-  tokenMetrics: [],
-  desc: 'Weave6 is an omnichain asset trading infrastructure that incorporates an indexer, marketplace, and launchpad to form a one-stop access for dApps and users to launch, mint, and trade omnichain assets (NFT&Inscription).',
-  social: Weave6Social,
-  moreData: [
-    { title: 'Token Name', content: '$WX' },
-    { title: 'Token Price', content: 'TBD' },
-    { title: 'Token Amount', content: 'TBD' },
-    { title: 'Blockchain', content: 'Ethereum' }
-  ]
-}
+
 export const EuclidFixedSwapData: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 32,
