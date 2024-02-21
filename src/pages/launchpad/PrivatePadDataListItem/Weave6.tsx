@@ -142,7 +142,7 @@ const Weave6FixedSwapData: IPrivatePadProp = {
   keyId: 31,
   liveTimeStamp: {
     start: 1708574400000,
-    end: 1708747200
+    end: 1708747200000
   },
   // hideUpcomingCountdown: true,
   poolTypeName: 'Fixed Price - Whitelist',
