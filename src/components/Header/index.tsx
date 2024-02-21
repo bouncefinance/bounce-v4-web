@@ -157,6 +157,8 @@ export const transparentRoutes = [
   routes.thirdPart.SatoshiVMLp,
   routes.thirdPart.SatoshiVMRandom,
   routes.thirdPart.XrgbFixedSwap,
+  routes.thirdPart.XrgbRandomSelection,
+  routes.thirdPart.WeaveFixedSwap,
   routes.nftLottery.index
 ]
 

@@ -139,14 +139,14 @@ const XRGBLPProjectInfo: IProjectInfo[] = [
   }
 ]
 const XRGBRandomSelection: IPrivatePadProp = {
-  backedId: 18832,
+  backedId: 18835,
   keyId: 33,
   liveTimeStamp: {
-    start: 1708430400000,
-    end: 1708516800000
+    start: 1708524000000,
+    end: 1708560000000
   },
   // hideUpcomingCountdown: true,
-  poolTypeName: 'Fixed Price - Random Selection',
+  poolTypeName: 'Random Selection',
   img: 'https://images-v3.bounce.finance/833948ad4292b4bda411cc5cca82d168-1708070668.png',
   avatar: XrgbAvatar,
   title: 'XRGB Chain',
@@ -162,8 +162,7 @@ const XRGBRandomSelection: IPrivatePadProp = {
   social: XRGBSocial,
   moreData: [
     { title: 'Token Name', content: '$XRGB' },
-    { title: 'Token Price', content: '0.00001641 ETH' },
-    { title: 'Token Amount', content: 'TBD' },
+    { title: 'Ticket Price', content: '22Auction' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }

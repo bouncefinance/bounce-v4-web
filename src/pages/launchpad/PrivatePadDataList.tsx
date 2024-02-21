@@ -3247,9 +3247,9 @@ export const EuclidFixedSwapData: IPrivatePadProp = {
 export const PrivatePadDataList: IPrivatePadProp[] = [
   // current privatePad max keyId is 33
   // XRGBLPData,
-  XRGBFixedSwapData,
   XRGBRandomSelection,
   Weave6FixedSwapData,
+  XRGBFixedSwapData,
   EuclidFixedSwapData,
   SatoshiVMLPData,
   SatoshiVMRandomData,
