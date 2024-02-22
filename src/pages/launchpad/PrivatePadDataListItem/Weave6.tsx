@@ -138,7 +138,7 @@ const Weave6Social = [
   </Link>
 ]
 const Weave6FixedSwapData: IPrivatePadProp = {
-  // backedId: 18744,
+  backedId: 18836,
   keyId: 31,
   liveTimeStamp: {
     start: 1708574400000,
@@ -160,7 +160,7 @@ const Weave6FixedSwapData: IPrivatePadProp = {
   social: Weave6Social,
   moreData: [
     { title: 'Token Name', content: '$WX' },
-    { title: 'Token Price', content: '0.015 USDT' },
+    { title: 'Token Price', content: '0.0005 AUCTION' },
     { title: 'Token Amount', content: '6666666.7' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
