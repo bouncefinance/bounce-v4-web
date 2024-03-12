@@ -7,7 +7,7 @@ import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.
 import Telegram from 'assets/imgs/common/Telegram.png'
 const SchrödingerProjectInfo: IProjectInfo[] = [
   {
-    title: 'What is Weave6?',
+    title: 'What is Schrödinger?',
     info: [
       <Box key={1}>
         <Typography>
@@ -48,7 +48,7 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
     ]
   },
   {
-    title: 'Vision & Goals:',
+    title: 'Vision & Goals',
     info: [
       <Box
         key={1}
