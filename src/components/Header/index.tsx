@@ -157,7 +157,8 @@ export const transparentRoutes = [
   routes.thirdPart.SatoshiVMLp,
   routes.thirdPart.SatoshiVMRandom,
   routes.thirdPart.XrgbFixedSwap,
-  routes.nftLottery.index
+  routes.nftLottery.index,
+  routes.thirdPart.Schrödinger
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]
