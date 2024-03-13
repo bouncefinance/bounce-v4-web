@@ -5,6 +5,7 @@ import { ReactComponent as Web } from 'assets/imgs/auction/round-icon-web.svg'
 import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitter.svg'
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import Telegram from 'assets/imgs/common/Telegram.png'
+import SchrodingerAvatar from '../avatar/Schrodinger.png'
 const SchrödingerProjectInfo: IProjectInfo[] = [
   {
     title: 'What is Schrödinger?',
@@ -111,7 +112,7 @@ const Schrödinger: IPrivatePadProp = {
   //   hideUpcomingCountdown: true,
   poolTypeName: 'Fixed-Price',
   img: 'https://images-v3.bounce.finance/ea3ceeceea28ce7e31d40a16b7b81352-1710218558.png',
-  avatar: 'https://images-v3.bounce.finance/bbcabd38a8abca0cb2621280729aae3e-1710218807.png',
+  avatar: SchrodingerAvatar,
   title: 'Schrödinger',
   chainId: 1,
   tokenName: '$SGR',
