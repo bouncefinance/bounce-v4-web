@@ -74,7 +74,7 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
             NFTs.
           </li>
         </ul>
-        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>
+        <Typography>
           We want to establish a functional, purposeful, and usable 404 function for the whole blockchain community. Our
           project aims to eventually create a platform for all creators to build their own AI-powered dynamic 404 NFT
           collection.
