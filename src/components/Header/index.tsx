@@ -159,7 +159,8 @@ export const transparentRoutes = [
   routes.thirdPart.XrgbFixedSwap,
   routes.thirdPart.XrgbRandomSelection,
   routes.thirdPart.WeaveFixedSwap,
-  routes.nftLottery.index
+  routes.nftLottery.index,
+  routes.thirdPart.Schrödinger
 ]
 
 // const transparentRoutesWithParams = [routes.launchpad.projectInfo]

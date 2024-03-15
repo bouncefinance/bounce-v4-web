@@ -72,6 +72,7 @@ import SatoshivmImg from './imgs/satoshivm.jpg'
 import satoshiVmArchitecture from './imgs/satoshiVmArchitecture.jpeg'
 import Weave6FixedSwapData from './PrivatePadDataListItem/Weave6'
 import XRGBRandomSelection from './PrivatePadDataListItem/XRGBRandomSelection'
+import Schrödinger from './PrivatePadDataListItem/Schrödinger'
 export interface IProjectInfo {
   title: string
   info: (string | JSX.Element)[]
@@ -3244,8 +3245,11 @@ export const EuclidFixedSwapData: IPrivatePadProp = {
   ]
 }
 export const PrivatePadDataList: IPrivatePadProp[] = [
-  // current privatePad max keyId is 33
+  // current privatePad max keyId is 34
   // XRGBLPData,
+  Schrödinger,
+  XRGBFixedSwapData,
+  XRGBRandomSelection,
   Weave6FixedSwapData,
   XRGBRandomSelection,
   XRGBFixedSwapData,

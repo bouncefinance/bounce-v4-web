@@ -122,6 +122,7 @@ const LPXrgbToken = React.lazy(() => import('./LPXrgbToken'))
 const XrgbProjectInfo = React.lazy(() => import('./projectIntro/XrgbProjectInfo'))
 const WeaveFixedSwapProjectInfo = React.lazy(() => import('./projectIntro/WeaveFixedSwapProjectInfo'))
 const XRGBRandomSelection = React.lazy(() => import('./auction/randomSelection/XRGB/Index'))
+const SchrödingerProjectInfo = React.lazy(() => import('./projectIntro/SchrödingerProjectInfo'))
 // const SatoshiLpProjectInfo = React.lazy(() => import('./projectIntro/SatoshiLpProjectInfo'))
 const GlobalHooks = () => {
   useGetOptionsData()
@@ -245,6 +246,7 @@ export default function App() {
                   <Route path={routes.thirdPart.XrgbFixedSwap} element={<XrgbProjectInfo />} />
                   <Route path={routes.thirdPart.WeaveFixedSwap} element={<WeaveFixedSwapProjectInfo />} />
                   <Route path={routes.auction.createMultiTokenPool} element={<CreateMultiTokenPool />} />
+                  <Route path={routes.thirdPart.Schrödinger} element={<SchrödingerProjectInfo />} />
 
                   <Route
                     path={routes.thirdPart.digitalAssetsOffering + '/:referral'}

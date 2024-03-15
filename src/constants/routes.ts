@@ -139,7 +139,8 @@ export const routes = {
     XrgbLP: '/launchpad/xrgb-ilo',
     XrgbFixedSwap: '/launchpad/xrgb',
     XrgbRandomSelection: '/launchpad/xrgb-random',
-    WeaveFixedSwap: '/launchpad/weave6'
+    WeaveFixedSwap: '/launchpad/weave6',
+    Schrödinger: '/launchpad/Schrodinger'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
