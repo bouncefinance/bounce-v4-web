@@ -81,6 +81,56 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
         </Typography>
       </Box>
     ]
+  },
+  {
+    title: 'Roadmap',
+    info: [
+      <Box
+        key={1}
+        sx={{
+          ' &>ul': {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }}
+      >
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 12`}</Typography>
+        <ul>
+          <li>Launch NFT collection.</li>
+          <li>Launch Gitbook.</li>
+          <li>Reveal the details of the minting process, including date, time, and pricing.</li>
+        </ul>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 13`}</Typography>
+        <ul>
+          <li>Reveal tokenomics of $SGR.</li>
+        </ul>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 14`}</Typography>
+        <ul>
+          <li>
+            Release a comprehensive minting guide through all community channels, detailing step-by-step instructions
+            and requirements for participation.
+          </li>
+        </ul>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 15`}</Typography>
+        <ul>
+          <li>Build a platform for creators to build their own AI-powered dynamic NFT collection.</li>
+          <li>Introduce a rewards system for active traders and creators of the platform.</li>
+        </ul>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 16`}</Typography>
+        <ul>
+          <li>Bring on 3 established creators to launch their collection on the platform.</li>
+        </ul>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 17`}</Typography>
+        <ul>
+          <li>Host our first community AMA.</li>
+        </ul>
+        <Typography sx={{ fontSize: 16, fontWeight: 500 }}>{`End of Week 18`}</Typography>
+        <ul>
+          <li>{`Launch Schrödinger's Cat merchandise.`}</li>
+        </ul>
+      </Box>
+    ]
   }
 ]
 const SchrödingerSocial = [
