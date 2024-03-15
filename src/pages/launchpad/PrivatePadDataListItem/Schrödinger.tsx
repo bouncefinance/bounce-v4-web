@@ -12,14 +12,11 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
     info: [
       <Box key={1}>
         <Typography>
-          {`  The Schrödinger's Cat Project transcends the limitations of static digital art. We integrate AI into NFTs,
-            granting them dynamic behaviours and emergent properties. Imagine an NFT that evolves through community
-            interaction. This creates a unique and engaging experience, where the fate of each NFT is perpetually in flux.`}
+          {`The Schrödinger's Cat Project transcends the limitations of static digital art. We integrate AI into NFTs, granting them dynamic behaviours and emergent properties. Imagine an NFT that evolves through community interaction. This creates a unique and engaging experience, where the fate of each NFT is perpetually in flux.`}
         </Typography>
         <Typography sx={{ marginTop: 15 }}>
-          {`This is made possible by using an experimental ACS-404 on the aelf blockchain. We propose ACS-404 to be a
-          token issuance standard that natively achieves the behaviour of digital assets like ERC-20, ERC-721, ERC-1155
-          and ERC-404. The Schrödinger's Cat Project pushes the boundaries of what NFTs can be.`}
+          <span style={{ fontSize: 16, fontWeight: 500 }}>Our NFT is also an fungible token (FT).</span>
+          {` This is made possible by using an experimental ACS-404 on the aelf blockchain. We propose ACS-404 to be a token issuance standard that natively achieves the behaviour of digital assets like ERC-20, ERC-721, ERC-1155 and the experimental ERC-404. Schrödinger's Cat Project pushes the boundaries of what NFTs can be.`}
         </Typography>
       </Box>
     ]
@@ -62,9 +59,7 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
         }}
       >
         <Typography sx={{ fontSize: 16, fontWeight: 500 }}>
-          {`Existing token standards like ERC-20 (fungible) and ERC-721 (non-fungible) have limitations. ERC-20 lacks the
-          unique identity of NFTs, while ERC-721's rigidity restricts fractional ownership and liquidity. We propose a
-          novel idea inspired by (but surpassing) both the unofficial and experimental ERC-404 and Inscription.`}
+          {`Existing token standards like ERC-20 (fungible) and ERC-721 (non-fungible) have limitations. ERC-20 lacks the unique identity of NFTs, while ERC-721's rigidity restricts fractional ownership and liquidity. We propose a novel idea inspired by (but surpassing) both the unofficial and experimental ERC-404 and Inscription.`}
         </Typography>
         <Typography sx={{ fontSize: 16, fontWeight: 500 }}>
           This experimental ACS-404, with AI integration, on the aelf blockchain enables:
