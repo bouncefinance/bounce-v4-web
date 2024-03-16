@@ -6,6 +6,7 @@ import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitte
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import SchrodingerAvatar from '../avatar/Schrodinger.png'
+import SchrodingerImg from '../imgs/Schrödinger-Tokenomics.jpg'
 const SchrödingerProjectInfo: IProjectInfo[] = [
   {
     title: 'What is Schrödinger?',
@@ -42,6 +43,7 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
           <li>Marketing：2%</li>
           <li>Airdrop：1%</li>
         </ul>
+        <img src={SchrodingerImg} style={{ width: '100%', height: ' 100%' }} />
       </Box>
     ]
   },
