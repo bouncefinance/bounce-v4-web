@@ -53,6 +53,7 @@ import { useRefreshUserInfoByFirstLoad } from 'state/users/hooks'
 import { Launchpad } from './launchpad'
 
 import LaunchpadCoin from 'pages/launchpadCoin'
+import StakeAuctionSGR from 'pages/stakeAuctionSGR/index'
 
 import LoginModal from 'components/Header/LoginModal'
 import ERC20EnglishAuctionPoolId from './auction/erc20EnglishAuction/poolId'
@@ -264,6 +265,7 @@ export default function App() {
                   <Route path={routes.thirdPart.DeelanceAuctionWhitelist} element={<DeelanceWhitelistProjectInfo />} />
                   {/* <Route path={routes.thirdPart.BitStable} element={<BitStableProjectInfoAuction />} /> */}
                   <Route path={routes.thirdPart.BitStableAuction} element={<LaunchpadCoin />} />
+                  <Route path={routes.thirdPart.SchrödingerAuction} element={<StakeAuctionSGR />} />
                   <Route path={routes.thirdPart.LasMetaAuction} element={<LasmetaProjectInfo />} />
                   <Route path={routes.thirdPart.DipExchange} element={<DipExchange />} />
                   {/* <Route path={routes.thirdPart.MetaBloxAuction} element={<MetaBlox />} /> */}

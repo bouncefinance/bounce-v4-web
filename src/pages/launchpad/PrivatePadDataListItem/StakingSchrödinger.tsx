@@ -6,7 +6,6 @@ import { ReactComponent as Twitter } from 'assets/imgs/auction/round-icon-twitte
 import { ReactComponent as DiscordSVG } from 'assets/imgs/profile/links/discord.svg'
 import Telegram from 'assets/imgs/common/Telegram.png'
 import SchrodingerAvatar from '../avatar/Schrodinger.png'
-import SchrodingerImg from '../imgs/Schrödinger-Tokenomics.jpg'
 const SchrödingerProjectInfo: IProjectInfo[] = [
   {
     title: 'What is Schrödinger?',
@@ -43,7 +42,6 @@ const SchrödingerProjectInfo: IProjectInfo[] = [
           <li>Marketing：2%</li>
           <li>Airdrop：1%</li>
         </ul>
-        <img src={SchrodingerImg} style={{ width: '100%', height: ' 100%' }} />
       </Box>
     ]
   },
@@ -149,32 +147,32 @@ const SchrödingerSocial = [
     <img src={Telegram} width={40} />
   </Link>
 ]
-const Schrödinger: IPrivatePadProp = {
-  backedId: 18969,
-  keyId: 34,
+const StakingSchrödinger: IPrivatePadProp = {
+  // backedId: 18744,
+  keyId: 35,
   liveTimeStamp: {
     start: 1710828000000,
     end: 1710914400000
   },
   //   hideUpcomingCountdown: true,
-  poolTypeName: 'Fixed-Price',
+  poolTypeName: 'Staking Auction',
   img: 'https://images-v3.bounce.finance/ea3ceeceea28ce7e31d40a16b7b81352-1710218558.png',
   avatar: SchrodingerAvatar,
   title: 'Schrödinger',
   chainId: 1,
   tokenName: '$SGR',
   whitePaperLink: '',
-  upcomingLink: routes.thirdPart.Schrödinger,
-  liveLink: routes.thirdPart.Schrödinger,
+  upcomingLink: routes.thirdPart.SchrödingerAuction,
+  liveLink: routes.thirdPart.SchrödingerAuction,
   projectInfo: SchrödingerProjectInfo,
   tokenMetrics: [],
   desc: `The Schrödinger's Cat Project transcends the limitations of static digital art. We integrate AI into NFTs, granting them dynamic behaviours and emergent properties. Imagine an NFT that evolves through community interaction. This creates a unique and engaging experience, where the fate of each NFT is perpetually in flux.`,
   social: SchrödingerSocial,
   moreData: [
     { title: 'Token Name', content: '$SGR' },
-    { title: 'Token Price', content: '0.5 USDT' },
-    { title: 'Token Amount', content: '54,000' },
+    { title: 'Token Price', content: '0.025 AUCTION' },
+    { title: 'Token Amount', content: '30,000' },
     { title: 'Blockchain', content: 'Ethereum' }
   ]
 }
-export default Schrödinger
+export default StakingSchrödinger

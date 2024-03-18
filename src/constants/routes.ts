@@ -140,7 +140,8 @@ export const routes = {
     XrgbFixedSwap: '/launchpad/xrgb',
     XrgbRandomSelection: '/launchpad/xrgb-random',
     WeaveFixedSwap: '/launchpad/weave6',
-    Schrödinger: '/launchpad/Schrodinger'
+    Schrödinger: '/launchpad/Schrodinger',
+    SchrödingerAuction: '/launchpad/schrodinger-staking'
   },
   game: {
     bladeDaoIndex: '/playable/ghositerunner',
