@@ -153,8 +153,8 @@ const Schrödinger: IPrivatePadProp = {
   // backedId: 18744,
   keyId: 34,
   liveTimeStamp: {
-    start: 1710720000000,
-    end: 1710892800000
+    start: 1710828000000,
+    end: 1710914400000
   },
   //   hideUpcomingCountdown: true,
   poolTypeName: 'Fixed-Price',
