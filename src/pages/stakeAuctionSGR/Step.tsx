@@ -1,8 +1,6 @@
 import { Box, Button, Stack, Typography, Stepper, StepLabel, StepContent, Step, styled } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ReactComponent as AddSvg } from 'assets/imgs/staked/add.svg'
-// import { ReactComponent as StakeTokensSvg } from 'assets/imgs/staked/tokensIcon.svg'
-// import { ReactComponent as BnBTokenSvg } from 'assets/imgs/staked/bnbIcon.svg'
 import { ReactComponent as UserSvg } from 'assets/imgs/staked/userIcon.svg'
 import { ReactComponent as CheckSvg } from 'assets/imgs/staked/check_green.svg'
 import { ReactComponent as WonderSvg } from 'assets/imgs/staked/wonderIcon_black.svg'
@@ -14,7 +12,6 @@ import { useShowLoginModal } from 'state/users/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
-import CoinInputDialog from 'bounceComponents/common/CoinInputDialog'
 import { useApproveCallback } from 'hooks/useApproveCallback'
 import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
 import { ApprovalState } from 'hooks/useTokenTimelock'
@@ -26,6 +23,7 @@ import { ReactComponent as FailSVG } from 'assets/svg/dark_fail.svg'
 import BigNumber from 'bignumber.js'
 import DialogTips, { DialogTipsWhiteTheme } from 'bounceComponents/common/DialogTips/DialogDarkTips'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import StakeAuctionInputDialog from 'bounceComponents/common/StakeAuctionInputDialog'
 export const StepperStyle = styled(Stepper)(({ theme }) => ({
   '.MuiStepConnector-root': {
     marginLeft: '16px'
@@ -217,20 +215,6 @@ export function Steps({
         }}
       >
         <BoldTextStyle>Subscription Timeline</BoldTextStyle>
-        {/* <Button
-          sx={{
-            padding: { xs: '8px 30px', md: '12px 24px' },
-            color: '#171717',
-            fontSize: { xs: '12px', md: '14px' },
-            fontWeight: '400',
-            borderRadius: '100px',
-            border: ' 1px solid #20201E',
-            height: 34,
-            whiteSpace: { xs: 'nowrap' }
-          }}
-        >
-          My private launchpad
-        </Button> */}
         <></>
       </Box>
       <VerticalLinearStepper poolId={poolId} coinInfo={coinInfo} contract={contract} />
@@ -574,20 +558,20 @@ function Step1({
                       }
                     }}
                   >
-                    BitStable <b>x</b> Auction Pool
+                    Schrödinger <b>x</b> Auction Pool
                   </CardLabelStyle>
-                  <CardContentStyle>Stake $AUCTION to earn proportional $BSSB allocation</CardContentStyle>
+                  <CardContentStyle>Stake $AUCTION to earn proportional $SGR allocation</CardContentStyle>
                 </Stack>
               </Box>
               <Stack spacing={{ xs: 20, md: 30 }}>
                 <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                   <Stack spacing={8}>
                     <CardContentStyle>Sale Price</CardContentStyle>
-                    <CardLabelStyle>0.005 AUCTION</CardLabelStyle>
+                    <CardLabelStyle>0.025 AUCTION</CardLabelStyle>
                   </Stack>
                   <Stack spacing={8}>
-                    <CardContentStyle>Total Supply of BSSB</CardContentStyle>
-                    <CardLabelStyle>6,300,000</CardLabelStyle>
+                    <CardContentStyle>Total Supply of SGR</CardContentStyle>
+                    <CardLabelStyle>30,000</CardLabelStyle>
                   </Stack>
                 </Stack>
                 <Stack spacing={8}>
@@ -596,7 +580,7 @@ function Step1({
                     {coinInfo?.token1Amount && token1Currency
                       ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.token1Amount.toString())?.toSignificant()
                       : '--'}{' '}
-                    {token1Currency?.symbol} / 31,580 AUCTION
+                    {token1Currency?.symbol?.toLocaleUpperCase()} / 750 AUCTION
                   </CardLabelStyle>
                 </Stack>
                 <Stack spacing={8}>
@@ -666,8 +650,7 @@ function Step1({
           </Stack>
         </Box>
       </Stack>
-
-      <CoinInputDialog
+      <StakeAuctionInputDialog
         token1={token1CurrencyAmount}
         id={'1'}
         open={openDialog}
@@ -726,7 +709,7 @@ function Step2({
   const _token0 = useToken(coinInfo?.poolInfo?.token0 || '', _chainId)
   const token0 = useMemo(() => {
     if (!_token0) return undefined
-    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'BSSB', 'BSSB')
+    return new Currency(_token0.chainId, _token0.address, _token0.decimals, 'SGR', 'SGR')
   }, [_token0])
   const _token1 = useToken(coinInfo?.poolInfo?.token1 || '', _chainId)
   const token1 = useMemo(() => {
@@ -912,7 +895,7 @@ function Step2({
         variant="body1"
       >
         The allocation calculation is complete. We will deduct the corresponding $AUCTION from your account based on
-        your final $BSSB allocation, which will be transferred to your spot account along with your remaining $AUCTION.
+        your final $SGR allocation, which will be transferred to your spot account along with your remaining $AUCTION.
       </Typography>
       {account &&
         coinInfo?.myToken1Amount?.eq(0) &&
