@@ -65,6 +65,13 @@ const StakeAuctionInputDialog: React.FC<DialogProps & NiceModalHocProps> = (prop
       )
     }
     if (approvalState !== ApprovalState.APPROVED) {
+      if (approvalState === ApprovalState.UNKNOWN || approvalState === ApprovalState.PENDING) {
+        return (
+          <ConfirmBtnStyle disabled={true} sx={{ flex: 2 }}>
+            Pending...
+          </ConfirmBtnStyle>
+        )
+      }
       return (
         <ConfirmBtnStyle onClick={() => toApprove()} sx={{ flex: 2 }}>
           Approve
