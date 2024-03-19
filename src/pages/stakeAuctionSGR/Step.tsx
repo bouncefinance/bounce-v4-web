@@ -13,7 +13,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Currency, CurrencyAmount } from 'constants/token'
 import { ChainId } from 'constants/chain'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { LAUNCHPAD_COIN_CONTRACT_ADDRESSES } from 'constants/index'
+import { STAKE_TOKEN_CONTRACT_ADDRESSES } from 'constants/index'
 import { Contract } from '@ethersproject/contracts'
 import { useToken } from 'state/wallet/hooks'
 import { hideDialogConfirmation, showRequestApprovalDialog, showWaitingTxDialog } from 'utils/auction'
@@ -312,7 +312,7 @@ function Step1({
     if (!token1Currency) return undefined
     return CurrencyAmount.fromAmount(token1Currency, amount)
   }, [amount, token1Currency])
-  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, LAUNCHPAD_COIN_CONTRACT_ADDRESSES[_chainId])
+  const [approvalState, approve] = useApproveCallback(token1CurrencyAmount, STAKE_TOKEN_CONTRACT_ADDRESSES[_chainId])
   const token1Balance = useCurrencyBalance(account, token1Currency, _chainId)
 
   const curTime = useMemo(() => {
