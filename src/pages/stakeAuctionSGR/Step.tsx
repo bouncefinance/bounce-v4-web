@@ -519,11 +519,7 @@ function Step1({
             display: { xs: 'grid', md: 'flex' }
           }}
         >
-          <Box
-            sx={{
-              padding: 16
-            }}
-          >
+          <Box p={16}>
             <Stack
               spacing={{ xs: 30, md: 40 }}
               sx={{
@@ -626,7 +622,7 @@ function Step1({
                   {coinInfo?.myToken1Amount && token1Currency
                     ? CurrencyAmount.fromRawAmount(token1Currency, coinInfo?.myToken1Amount.toString()).toSignificant()
                     : '0'}{' '}
-                  {token1Currency?.symbol}
+                  {token1Currency?.symbol?.toLocaleUpperCase()}
                 </CardLabelStyle>
               </Stack>
               <Stack spacing={8}>
@@ -1013,10 +1009,10 @@ function Step2({
                       {token0?.symbol}
                     </BoldTextStyle>
                     {coinInfo?.poolInfo?.releaseAt && nowDate() < coinInfo.poolInfo?.releaseAt * 1000 ? (
-                      <CountdownBtnStyle style={{ width: 150 }}>
-                        Lock countdown
+                      <CountdownBtnStyle style={{ width: 150 }} disabled>
+                        Lock Countdown
                         <Typography>
-                          {formattedRes.days}d {formattedRes.hours}h
+                          {formattedRes.hours}h {formattedRes.minutes}m {formattedRes.seconds}s
                         </Typography>
                       </CountdownBtnStyle>
                     ) : (
